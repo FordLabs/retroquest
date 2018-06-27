@@ -11,7 +11,7 @@
     "unit": "ng test --watch=false --code-coverage",
     "lint": "ng lint",
     "lint-fix": "./node_modules/tslint/bin/tslint --fix -p .",
-    "e2e": "ng e2e",
+    "e2e": "ng e2e --port 4201",
     "sass-lint": "sass-lint -v",
     "sass-lint-fix": "sass-lint-auto-fix && sass-lint -v"
   },
