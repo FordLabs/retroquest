@@ -58,20 +58,30 @@ describe('Create Page', () => {
       });
     });
 
-    it('should create a board and navigate to that boards team page', () => {
-      page.createRandomBoard('team name').then((boardId) => {
-        browser.getCurrentUrl().then((url: string) => {
-          expect(url).toContain(`/team/${boardId}`);
-        });
-      });
-    });
-
     it('should display error message if board name is already taken', () => {
       page.createBoard('team name').then(() => {
         page.createBoard('team name').then(() => {
           page.errorMessage().getText().then((errorMessageText) => {
             expect(errorMessageText).toBe('This board name is already in use. Please try another one.');
           });
+        });
+      });
+    });
+
+    it('should display error message if board name contains special characters', () => {
+      page.createBoard('team-name').then(() => {
+        page.errorMessage().getText().then((errorMessageText) => {
+          expect(errorMessageText).toBe('Please enter a board name without any special characters.');
+        });
+      });
+    });
+  });
+
+  describe('successfuly creating a team board', () => {
+    it('should create a board and navigate to that boards team page', () => {
+      page.createRandomBoard('team name').then((boardId) => {
+        browser.getCurrentUrl().then((url: string) => {
+          expect(url).toContain(`/team/${boardId}`);
         });
       });
     });
