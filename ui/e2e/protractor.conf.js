@@ -9,7 +9,11 @@ exports.config = {
     './src/**/*.e2e-spec.ts'
   ],
   capabilities: {
-    'browserName': 'chrome'
+    'browserName': 'chrome',
+    'proxy': {
+      'proxyType': 'manual',
+      'httpProxy': 'localhost:8080'
+    }
   },
   directConnect: true,
   baseUrl: 'http://localhost:4201/',

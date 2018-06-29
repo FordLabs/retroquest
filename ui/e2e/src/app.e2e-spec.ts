@@ -1,14 +1,14 @@
 import { AppPage } from './app.po';
 import { browser } from 'protractor';
 
-describe('workspace-project App', () => {
+describe('App root page', () => {
   let page: AppPage;
 
   beforeEach(() => {
     page = new AppPage();
   });
 
-  it('should navigate to create', () => {
+  it('home page should redirect to create', () => {
     page.navigateTo();
     expect(browser.getCurrentUrl()).toContain('create');
   });
