@@ -10,7 +10,17 @@ describe('Create Page', () => {
   });
 
   it('should be able to navigate to /create', () => {
-    expect(browser.getCurrentUrl()).toContain('create');
+    browser.getCurrentUrl().then((url: string) => {
+      expect(url).toContain('/create');
+    });
+  });
+
+  it('should be able to navigate to /login from link', () => {
+    page.loginBoardLink().click().then(() => {
+      browser.getCurrentUrl().then((url: string) => {
+        expect(url).toContain('/login');
+      });
+    });
   });
 
   describe('failing to create team', () => {

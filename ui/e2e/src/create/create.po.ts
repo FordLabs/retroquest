@@ -48,6 +48,10 @@ export class CreatePage {
     return element(by.css('#createRetroButton'));
   }
 
+  loginBoardLink(): ElementFinder {
+    return element(by.tagName('a'));
+  }
+
   errorMessage(): ElementFinder {
     return element(by.css('#errorMessage'));
   }
