@@ -1,0 +1,88 @@
+import java.text.SimpleDateFormat
+
+buildscript {
+    ext {
+        springBootVersion = '1.5.9.RELEASE'
+        cfAppVersion = '2.3.0-rc.1'
+    }
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath 'com.moowork.gradle:gradle-node-plugin:1.2.0'
+        classpath("com.github.pivotalservices:ya-cf-app-gradle-plugin:${cfAppVersion}")
+        classpath "org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.4.2"
+        classpath "com.avast.gradle:gradle-docker-compose-plugin:0.7.1"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'com.moowork.node'
+apply plugin: 'cf-app'
+apply plugin: 'org.unbroken-dome.test-sets'
+apply plugin: 'docker-compose'
+
+group = 'com.fordfacto'
+archivesBaseName = 'retroquest'
+version = '0.5-beta'
+sourceCompatibility = 1.8
+def timeFormat = new SimpleDateFormat("yyyy-MM-dd:HH:mm")
+timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
+def buildTime = timeFormat.format(new Date())
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile("org.springframework.boot:spring-boot-devtools")
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-security'
+    compile 'org.springframework.boot:spring-boot-starter-websocket'
+    compile 'io.jsonwebtoken:jjwt:0.9.0'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    compile 'org.jsoup:jsoup:1.11.2'
+    compile 'org.apache.commons:commons-csv:1.5'
+    compile 'org.apache.commons:commons-lang3:3.7'
+    compile('org.flywaydb:flyway-core')
+    runtime('mysql:mysql-connector-java')
+    compileOnly 'org.projectlombok:lombok'
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile 'org.seleniumhq.selenium:selenium-java'
+}
+
+bootRun {
+    addResources = true
+}
+
+node {
+    npmWorkDir = file("${project.buildDir}/ui")
+}
+
+testSets {
+    apiTest
+}
+
+task runAllTests(dependsOn: [test, apiTest]) {
+}
+    
+jar {
+    archiveName = "${archivesBaseName}-${version}-${buildTime}.jar"
+}
+
+dockerCompose {
+
+    apiTests {
+        useComposeFiles = ['docker-compose.yml']
+        isRequiredBy(project.tasks.apiTest)
+    }
+
+    waitForTcpPorts = true
+}

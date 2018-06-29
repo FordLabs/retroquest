@@ -1,0 +1,6 @@
+.gradle
+/build/
+!gradle/wrapper/gradle-wrapper.jar
+/out/
+
+/src/main/resources/static/

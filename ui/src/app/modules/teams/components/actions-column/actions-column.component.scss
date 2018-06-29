@@ -1,0 +1,152 @@
+/*!
+ * Copyright (c) 2018 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import 'color-vars';
+
+.rq-action-item-list {
+  display: flex;
+  flex: 1;
+  flex-basis: 0;
+  flex-flow: column nowrap;
+  font-size: 1.3rem;
+
+  .action-item {
+    align-items: center;
+    background-color: $background-gray;
+    border: 0;
+    border-radius: 2px;
+    box-shadow: 0 1px 3px opacity($black, .12), 0 1px 2px opacity($black, .24);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    margin-bottom: 16px;
+    transition: .3s cubic-bezier(.25, .8, .25, 1);
+    word-break: break-all;
+
+    .action-item-body {
+      box-sizing: border-box;
+      padding: 16px 16px 0;
+      text-align: center;
+      width: 100%;
+    }
+
+    .task {
+      cursor: default;
+      flex-grow: 1;
+      order: 2;
+      padding: 6px 18px;
+    }
+
+    &.completed {
+      opacity: .4;
+      order: 99;
+    }
+
+    &.edit {
+      .edit-task {
+        display: block;
+      }
+
+      .task {
+        display: none;
+      }
+    }
+
+    .edit-task {
+      border-color: $text-gray;
+      border-radius: 3px;
+      box-sizing: border-box;
+      display: none;
+      margin-bottom: 5px;
+      resize: none;
+      width: 100%;
+    }
+
+    .action-item-footer {
+      width: 100%;
+
+      .completed {
+        cursor: pointer;
+        transform: scale(1.5);
+        vertical-align: top;
+      }
+
+      .edit,
+      .delete {
+        color: $icon-gray;
+        margin-right: 10px;
+
+        &:hover {
+          color: opacity($black, .8);
+          cursor: pointer;
+        }
+      }
+
+      .button-group {
+        margin-bottom: 8px;
+        padding-right: 16px;
+        text-align: right;
+      }
+
+      .assignee {
+        background-color: $action-yellow;
+        border-bottom-left-radius: 2px;
+        border-bottom-right-radius: 2px;
+        cursor: pointer;
+        font-size: 14px;
+        order: 4;
+        padding: 4px 8px;
+        text-align: left;
+
+        .remove {
+          float: right;
+        }
+
+        i {
+          margin-left: 4px;
+        }
+
+        &.expanded {
+          border-radius: 0;
+          transition: .5s;
+
+          i {
+            transform: rotate(90deg);
+          }
+        }
+      }
+
+      .assignee-edit {
+        background-color: $action-yellow;
+        border-bottom-left-radius: 2px;
+        border-bottom-right-radius: 2px;
+        box-sizing: border-box;
+        order: 5;
+        padding: 4px 8px 8px;
+        text-align: left;
+        width: 100%;
+
+        input {
+          border: 1px solid;
+          border-radius: 2px;
+          padding: 4px 2px;
+          width: calc(100% - 6px);
+        }
+      }
+    }
+  }
+}

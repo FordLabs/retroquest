@@ -1,0 +1,9 @@
+version: '2.1'
+services:
+  mysql:
+    image: mariadb:10.1
+    environment:
+      MYSQL_ROOT_PASSWORD: "retroquest"
+      MYSQL_DATABASE: "retroquest"
+    ports:
+      - "3306:3306"

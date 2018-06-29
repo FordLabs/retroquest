@@ -1,0 +1,159 @@
+/*!
+ * Copyright (c) 2018 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+@import 'color-vars';
+
+.rq-thought-list {
+  display: flex;
+  flex: 1;
+  flex-basis: 0;
+  flex-flow: column nowrap;
+  font-size: 1.3rem;
+
+  .thought {
+    align-items: center;
+    background-color: $background-gray;
+    border: 0;
+    border-radius: 2px;
+    box-shadow: 0 1px 3px opacity($black, .12), 0 1px 2px opacity($black, .24);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    margin-bottom: 16px;
+    padding: 1rem;
+    transition: .3s cubic-bezier(.25, .8, .25, 1);
+    word-break: break-all;
+
+    &:hover {
+      box-shadow: 0 10px 20px opacity($black, .19), 0 6px 6px opacity($black, .23);
+    }
+
+    &.discussed {
+      opacity: .4;
+      order: 99;
+
+      &:hover {
+        background-color: $background-hover-gray;
+        box-shadow: none;
+      }
+    }
+
+    .thought-body {
+      text-align: center;
+      width: 100%;
+    }
+
+    .message {
+      cursor: default;
+      flex-grow: 1;
+      order: 2;
+      padding: 6px 18px;
+    }
+
+    &.edit {
+      .edit-message {
+        display: block;
+      }
+
+      .message {
+        display: none;
+      }
+    }
+
+    .edit-message {
+      border-color: $text-gray;
+      border-radius: 3px;
+      box-sizing: border-box;
+      display: none;
+      margin-bottom: 5px;
+      resize: none;
+      width: 100%;
+    }
+
+
+    .thought-footer {
+      display: flex;
+      justify-content: space-between;
+      order: 3;
+      width: 100%;
+
+      .hearts {
+        align-self: flex-end;
+        border-radius: 10px;
+        color: $icon-gray;
+        flex-grow: 0;
+        font-size: 1em;
+        order: 1;
+        padding: .3rem;
+
+        &:hover {
+          color: opacity($black, .8);
+          cursor: pointer;
+        }
+
+        i {
+          padding-left: .3rem;
+        }
+      }
+
+      .footer-right {
+        align-content: baseline;
+
+        .delete,
+        .edit {
+          color: $icon-gray;
+          cursor: pointer;
+          margin-right: 10px;
+
+          &:hover {
+            color: opacity($black, .8);
+            cursor: pointer;
+          }
+        }
+
+        .discussed {
+          cursor: pointer;
+          transform: scale(1.5);
+          vertical-align: top;
+        }
+      }
+    }
+  }
+
+  &.happy {
+    .thought {
+      &:hover {
+        background-color: $happy-hover-green;
+      }
+    }
+  }
+
+  &.confused {
+    .thought {
+      &:hover {
+        background-color: $confused-hover-blue;
+      }
+    }
+  }
+
+  &.unhappy {
+    .thought {
+      &:hover {
+        background-color: $unhappy-hover-red;
+      }
+    }
+  }
+}

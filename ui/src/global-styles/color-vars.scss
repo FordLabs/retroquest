@@ -1,0 +1,42 @@
+$white: #fff;
+$black: #000;
+
+$happy-green: #2ecc71;
+$happy-hover-green: #d6f9d6;
+$confused-blue: #3498db;
+$confused-hover-blue: #d1f0f8;
+$unhappy-red: #e74c3c;
+$unhappy-hover-red: #ffdfde;
+$action-yellow: #f1c40f;
+
+$link-blue: #1b89ef;
+
+$text-gray: #a5a5a5;
+$text-error: #d22e36;
+$text-off-white: #f2f2f2;
+
+$border-gray: #6b6b6b;
+
+$button-green: #6a9f19;
+$button-blue: #056ccb;
+$button-hover-blue: #058ceb;
+$button-active-blue: #0550a0;
+
+$background-blue: #34495e;
+$background-gray: #ecf0f1;
+$background-hover-gray: #dbdbdb;
+
+$header-background: #f3f3f3;
+
+$app-header: #f5f5f5;
+
+$icon-gray: #555;
+
+$modal-blur: #333;
+
+$positive-action: #65d68a;
+$negative-action: #f16a6a;
+
+@function opacity($color, $level) {
+  @return rgba($color, $level);
+}

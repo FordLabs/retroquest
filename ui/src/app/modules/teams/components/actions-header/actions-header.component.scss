@@ -1,0 +1,62 @@
+/*!
+ * Copyright (c) 2018 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+@import 'color-vars';
+
+.rq-action-column-header {
+  margin-bottom: 8px;
+
+  .column-title {
+    background-color: $action-yellow;
+    border-radius: 3px;
+    box-shadow: 0 1px 3px opacity($black, .12), 0 1px 2px opacity($black, .24);
+    color: $text-off-white;
+    flex-grow: 1;
+    font-size: 1.5rem;
+    font-weight: bolder;
+    letter-spacing: 2px;
+    padding: .3em 0;
+    position: relative;
+    text-align: center;
+    width: 100%;
+  }
+
+  .action-input-wrapper {
+    padding: .3rem 0;
+    width: 100%;
+
+    .action-input {
+      background-color: $white;
+      border: 3px solid $action-yellow;
+      border-radius: 3px;
+      box-shadow: none;
+      box-sizing: border-box;
+      height: 35px;
+      outline: none;
+      overflow: auto;
+      padding-left: 12px;
+      padding-right: 12px;
+
+      width: 100%;
+
+      &:focus {
+        background-color: $white;
+        box-shadow: 0 1px 3px $action-yellow;
+        color: $black;
+      }
+    }
+  }
+}

@@ -1,0 +1,54 @@
+/*!
+ * Copyright (c) 2018 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+@import 'color-vars';
+
+#header {
+  background-color: $header-background;
+  box-shadow: 0 1px 4px 0 opacity($black, .5);
+  color: $button-blue;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1.5rem 20px;
+
+  #headerLeft {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+
+    #logo {
+      max-width: 255px;
+    }
+
+    #teamName {
+      font-size: 1.6rem;
+      font-weight: 300;
+      margin-left: 20px;
+    }
+  }
+
+  #headerRight {
+    align-self: center;
+    display: flex;
+    flex-direction: row;
+
+    & > * {
+      margin-left: 24px;
+    }
+  }
+}

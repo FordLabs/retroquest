@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 201.73 201.73">
+    <defs>
+        <style>.cls-1{fill:#00467f;}</style>
+    </defs>
+    <title>Asset 2</title>
+    <g id="Layer_2" data-name="Layer 2">
+        <g id="FLCircle">
+            <path class="cls-1"
+                  d="M100.86,0A100.87,100.87,0,1,0,201.73,100.86,100.86,100.86,0,0,0,100.86,0Zm10.63,62.28h31.05L134,81.44H102.94ZM58.4,134.71H37.55L69.73,62.28H90.62L75.53,96.11h0Zm60.4-19.16h-31L96.3,96.39h31.05ZM164,134.71h-31l8.54-19.16h31Z"/>
+        </g>
+    </g>
+</svg>
