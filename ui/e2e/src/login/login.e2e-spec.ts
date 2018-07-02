@@ -17,27 +17,21 @@ describe('Login Page', () => {
 
   it('should be able to navigate to /create from link', () => {
     page.createBoardLink().click().then(() => {
-      browser.getCurrentUrl().then((url: string) => {
-        expect(url).toContain('/create');
-      });
+      expect(browser.getCurrentUrl()).toContain('/create');
     });
   });
 
   describe('failing to login', () => {
     it('should display error message if no board name input', () => {
       page.signInButton().click().then(() => {
-        page.errorMessage().getText().then((errorMessageText) => {
-          expect(errorMessageText).toBe('Please enter a team name');
-        });
+        expect(page.errorMessage().getText()).toBe('Please enter a team name');
       });
     });
 
     it('should display error message if there is no password', () => {
       page.teamNameInput().sendKeys('team name').then(() => {
         page.signInButton().click().then(() => {
-          page.errorMessage().getText().then((errorMessageText) => {
-            expect(errorMessageText).toBe('Please enter a password');
-          });
+          expect(page.errorMessage().getText()).toBe('Please enter a password');
         });
       });
     });
@@ -46,9 +40,7 @@ describe('Login Page', () => {
       page.teamNameInput().sendKeys('team name').then(() => {
         page.teamPasswordInput().sendKeys('passwrd').then(() => {
           page.signInButton().click().then(() => {
-            page.errorMessage().getText().then((errorMessageText) => {
-              expect(errorMessageText).toBe('Incorrect board or password. Please try again.');
-            });
+            expect(page.errorMessage().getText()).toBe('Incorrect board or password. Please try again.');
           });
         });
       });
@@ -58,9 +50,7 @@ describe('Login Page', () => {
       page.teamNameInput().sendKeys('team name that does not exist').then(() => {
         page.teamPasswordInput().sendKeys('passwrd').then(() => {
           page.signInButton().click().then(() => {
-            page.errorMessage().getText().then((errorMessageText) => {
-              expect(errorMessageText).toBe('Incorrect board name. Please try again.');
-            });
+            expect(page.errorMessage().getText()).toBe('Incorrect board name. Please try again.');
           });
         });
       });
@@ -74,9 +64,7 @@ describe('Login Page', () => {
           page.teamPasswordInput().sendKeys('password').then(() => {
             page.signInButton().click().then(() => {
               browser.waitForAngular();
-              browser.driver.getCurrentUrl().then((url: string) => {
-                expect(url).toContain(`/team/${boardName}`);
-              });
+              expect(browser.driver.getCurrentUrl()).toContain(`/team/${boardName}`);
             });
           });
         });

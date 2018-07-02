@@ -10,34 +10,26 @@ describe('Create Page', () => {
   });
 
   it('should be able to navigate to /create', () => {
-    browser.getCurrentUrl().then((url: string) => {
-      expect(url).toContain('/create');
-    });
+    expect(browser.getCurrentUrl()).toContain('/create');
   });
 
   it('should be able to navigate to /login from link', () => {
     page.loginBoardLink().click().then(() => {
-      browser.getCurrentUrl().then((url: string) => {
-        expect(url).toContain('/login');
-      });
+      expect(browser.getCurrentUrl()).toContain('/login');
     });
   });
 
   describe('failing to create team', () => {
     it('should display error message if no board name input', () => {
       page.createRetroButton().click().then(() => {
-        page.errorMessage().getText().then((errorMessageText) => {
-          expect(errorMessageText).toBe('Please enter a team name');
-        });
+        expect(page.errorMessage().getText()).toBe('Please enter a team name');
       });
     });
 
     it('should display error message if there is no password', () => {
       page.teamNameInput().sendKeys('team name').then(() => {
         page.createRetroButton().click().then(() => {
-          page.errorMessage().getText().then((errorMessageText) => {
-            expect(errorMessageText).toBe('Please enter a password');
-          });
+          expect(page.errorMessage().getText()).toBe('Please enter a password');
         });
       });
     });
@@ -46,9 +38,7 @@ describe('Create Page', () => {
       page.teamNameInput().sendKeys('team name').then(() => {
         page.teamPasswordInput().sendKeys('password').then(() => {
           page.createRetroButton().click().then(() => {
-            page.errorMessage().getText().then((errorMessageText) => {
-              expect(errorMessageText).toBe('Please enter matching passwords');
-            });
+            expect(page.errorMessage().getText()).toBe('Please enter matching passwords');
           });
         });
       });
@@ -59,9 +49,7 @@ describe('Create Page', () => {
         page.teamPasswordInput().sendKeys('passwrd').then(() => {
           page.teamPasswordConfirm().sendKeys('passwrd').then(() => {
             page.createRetroButton().click().then(() => {
-              page.errorMessage().getText().then((errorMessageText) => {
-                expect(errorMessageText).toBe('Password must be 8 characters or longer.');
-              });
+              expect(page.errorMessage().getText()).toBe('Password must be 8 characters or longer.');
             });
           });
         });
@@ -70,9 +58,9 @@ describe('Create Page', () => {
 
     it('should display error message if board name is already taken', () => {
       page.createBoard('team name').then(() => {
-        page.createBoard('team name').then(() => {
-          page.errorMessage().getText().then((errorMessageText) => {
-            expect(errorMessageText).toBe('This board name is already in use. Please try another one.');
+        page.navigateTo().then(() => {
+          page.createBoard('team name').then(() => {
+            expect(page.errorMessage().getText()).toBe('This board name is already in use. Please try another one.');
           });
         });
       });
@@ -80,9 +68,7 @@ describe('Create Page', () => {
 
     it('should display error message if board name contains special characters', () => {
       page.createBoard('team-name').then(() => {
-        page.errorMessage().getText().then((errorMessageText) => {
-          expect(errorMessageText).toBe('Please enter a board name without any special characters.');
-        });
+        expect(page.errorMessage().getText()).toBe('Please enter a board name without any special characters.');
       });
     });
   });
@@ -90,9 +76,7 @@ describe('Create Page', () => {
   describe('successfuly creating a team board', () => {
     it('should create a board and navigate to that boards team page', () => {
       page.createRandomBoard('team name').then((boardId) => {
-        browser.driver.getCurrentUrl().then((url: string) => {
-          expect(url).toContain(`/team/${boardId}`);
-        });
+        expect(browser.driver.getCurrentUrl()).toContain(`/team/${boardId}`);
       });
     });
   });
