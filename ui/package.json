@@ -4,14 +4,14 @@
   "sasslintConfig": ".sasslintrc",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config local-proxy.config.json",
+    "start": "ng serve --configuration local",
     "build": "ng build",
     "build-prod": "ng build --prod --build-optimizer --output-path=../api/src/main/resources/static",
     "test": "ng test --code-coverage",
     "unit": "ng test --watch=false --code-coverage",
     "lint": "ng lint",
     "lint-fix": "./node_modules/tslint/bin/tslint --fix -p .",
-    "e2e": "ng e2e --port 4201",
+    "e2e": "ng e2e",
     "sass-lint": "sass-lint -v",
     "sass-lint-fix": "sass-lint-auto-fix && sass-lint -v"
   },

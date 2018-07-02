@@ -18,18 +18,18 @@
 <header id="header">
 
   <div id="headerLeft">
-    <img src="/assets/RetroQuest.png" title="RetroQuest Logo" id="logo"/>
+    <img src="/assets/RetroQuest.png" title="RetroQuest Logo" id="logo" />
     <span id="teamName">{{teamName}}</span>
   </div>
 
   <div id="headerRight">
-    <button class="rq-button-secondary" (click)="feedbackModal.isOpen = true">
+    <button id="giveFeedback" class="rq-button-secondary" (click)="feedbackModal.isOpen = true">
       <span class="button-text">Give Feedback</span>
     </button>
-    <a class="rq-button-secondary" [href]="getCsvUrl()">
+    <a id="downloadCsv" class="rq-button-secondary" [href]="getCsvUrl()">
       <span class="button-text">Download CSV</span>
     </a>
-    <button class="rq-button-primary" (click)="endRetroModal.isOpen = true">
+    <button id="endRetro" class="rq-button-primary" (click)="endRetroModal.isOpen = true">
       <span class="button-text">End Retro</span>
     </button>
   </div>

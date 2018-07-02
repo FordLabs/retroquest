@@ -34,6 +34,6 @@ export class TeamPage {
   }
 
   feedbackButton() {
-    return element(by.id('feedbackButton'));
+    return element(by.id('giveFeedback'));
   }
 }
