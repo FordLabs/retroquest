@@ -1,0 +1,30 @@
+language: java
+
+sudo: required
+
+services:
+  - docker
+  - mysql
+
+addons:
+  chrome: stable
+  apt:
+    packages:
+      - oracle-java8-installer
+
+cache:
+  directories:
+    - node_modules
+
+before_install:
+  - cd ./ui
+  - npm install
+  - cd ../api
+  - ./gradlew assemble
+  - cd ..
+
+before_script:
+  - sudo /etc/init.d/mysql stop
+
+script:
+  - ./prepare.sh
