@@ -1,7 +1,7 @@
 import { LoginPage } from './login.po';
 import { browser } from 'protractor';
 
-describe('Create Page', () => {
+describe('Login Page', () => {
   let page: LoginPage;
 
   beforeEach(() => {
@@ -68,13 +68,13 @@ describe('Create Page', () => {
   });
 
   describe('successfuly signing into a team board', () => {
-
     it('should create a board and navigate to that boards team page', () => {
       page.createRandomBoard().then((boardName) => {
         page.teamNameInput().sendKeys(boardName).then(() => {
           page.teamPasswordInput().sendKeys('password').then(() => {
             page.signInButton().click().then(() => {
-              browser.getCurrentUrl().then((url: string) => {
+              browser.waitForAngular();
+              browser.driver.getCurrentUrl().then((url: string) => {
                 expect(url).toContain(`/team/${boardName}`);
               });
             });

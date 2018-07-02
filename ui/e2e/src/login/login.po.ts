@@ -18,7 +18,7 @@ export class LoginPage {
   }
 
   createRandomBoard(boardName: string = '') {
-    return this.createBoard(boardName + new Date().getDate());
+    return this.createBoard(boardName + new Date().getTime());
   }
 
   navigateTo() {
@@ -26,22 +26,22 @@ export class LoginPage {
   }
 
   teamNameInput(): ElementFinder {
-    return element(by.css('#teamNameInput'));
+    return element(by.id('teamNameInput'));
   }
 
   teamPasswordInput(): ElementFinder {
-    return element(by.css('#teamPasswordInput'));
+    return element(by.id('teamPasswordInput'));
   }
 
   signInButton(): ElementFinder {
-    return element(by.css('#signInButton'));
+    return element(by.id('signInButton'));
   }
 
   createBoardLink(): ElementFinder {
-    return element(by.css('#createBoard'));
+    return element(by.id('createBoard'));
   }
 
   errorMessage(): ElementFinder {
-    return element(by.css('#errorMessage'));
+    return element(by.id('errorMessage'));
   }
 }

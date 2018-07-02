@@ -90,7 +90,7 @@ describe('Create Page', () => {
   describe('successfuly creating a team board', () => {
     it('should create a board and navigate to that boards team page', () => {
       page.createRandomBoard('team name').then((boardId) => {
-        browser.getCurrentUrl().then((url: string) => {
+        browser.driver.getCurrentUrl().then((url: string) => {
           expect(url).toContain(`/team/${boardId}`);
         });
       });

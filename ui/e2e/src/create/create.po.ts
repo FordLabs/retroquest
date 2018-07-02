@@ -13,7 +13,8 @@ export class CreatePage {
           this.teamPasswordConfirm().sendKeys(password).then(() => {
             browser.sleep(1); // make sure timestamps are at least 1 mili apart
             this.createRetroButton().click().then(() => {
-              browser.getCurrentUrl().then((url: string) => {
+              browser.waitForAngular();
+              browser.driver.getCurrentUrl().then((url: string) => {
                 const boardId = boardName.replace(' ', '-');
                 if (url.endsWith(`/team/${boardId}`)) {
                   resolve(boardId);
@@ -33,26 +34,26 @@ export class CreatePage {
   }
 
   teamNameInput(): ElementFinder {
-    return element(by.css('#teamNameInput'));
+    return element(by.id('teamNameInput'));
   }
 
   teamPasswordInput(): ElementFinder {
-    return element(by.css('#teamPasswordInput'));
+    return element(by.id('teamPasswordInput'));
   }
 
   teamPasswordConfirm(): ElementFinder {
-    return element(by.css('#teamPasswordConfirmInput'));
+    return element(by.id('teamPasswordConfirmInput'));
   }
 
   createRetroButton(): ElementFinder {
-    return element(by.css('#createRetroButton'));
+    return element(by.id('createRetroButton'));
   }
 
   loginBoardLink(): ElementFinder {
-    return element(by.tagName('a'));
+    return element(by.id('loginBoard'));
   }
 
   errorMessage(): ElementFinder {
-    return element(by.css('#errorMessage'));
+    return element(by.id('errorMessage'));
   }
 }
