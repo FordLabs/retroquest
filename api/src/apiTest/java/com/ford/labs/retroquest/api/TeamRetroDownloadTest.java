@@ -1,6 +1,6 @@
 package com.ford.labs.retroquest.api;
 
-import com.ford.labs.retroquest.FordfactoWebApplication;
+import com.ford.labs.retroquest.MainApplication;
 import com.ford.labs.retroquest.security.JwtBuilder;
 import com.ford.labs.retroquest.team.RequestedTeam;
 import org.junit.Test;
@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {FordfactoWebApplication.class})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {MainApplication.class})
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class TeamRetroDownloadTest {

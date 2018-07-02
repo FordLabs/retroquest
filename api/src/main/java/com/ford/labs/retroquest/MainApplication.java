@@ -21,9 +21,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FordfactoWebApplication {
+public class MainApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FordfactoWebApplication.class, args);
+        SpringApplication.run(MainApplication.class, args);
     }
 }

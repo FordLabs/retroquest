@@ -27,7 +27,7 @@ apply plugin: 'cf-app'
 apply plugin: 'org.unbroken-dome.test-sets'
 apply plugin: 'docker-compose'
 
-group = 'com.fordfacto'
+group = 'com.ford.labs'
 archivesBaseName = 'retroquest'
 version = '0.5-beta'
 sourceCompatibility = 1.8
