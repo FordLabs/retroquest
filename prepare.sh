@@ -45,7 +45,7 @@ pushd ui
 popd
 
 pushd api
-  ./gradlew clean build test apiTest
+  SPRING_PROFILES_ACTIVE=docker ./gradlew clean build test apiTest
 popd
 
 set +x
