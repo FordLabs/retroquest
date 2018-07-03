@@ -29,11 +29,8 @@ apply plugin: 'docker-compose'
 
 group = 'com.ford.labs'
 archivesBaseName = 'retroquest'
-version = '0.5-beta'
+version = '1.0'
 sourceCompatibility = 1.8
-def timeFormat = new SimpleDateFormat("yyyy-MM-dd:HH:mm")
-timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
-def buildTime = timeFormat.format(new Date())
 
 repositories {
     mavenCentral()
@@ -74,7 +71,7 @@ task runAllTests(dependsOn: [test, apiTest]) {
 }
     
 jar {
-    archiveName = "${archivesBaseName}-${version}-${buildTime}.jar"
+    archiveName = "${archivesBaseName}-${version}.jar"
 }
 
 dockerCompose {
