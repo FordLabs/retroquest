@@ -34,4 +34,16 @@ describe('Team Page', () => {
   it('should render the feedback button', () => {
     expect(page.feedbackButton().isPresent()).toBeTruthy();
   });
+
+  it('should render the download csv button', () => {
+    expect(page.downloadCsvButton().isPresent()).toBeTruthy();
+  });
+
+  it('should render the end retro button', () => {
+    expect(page.endRetroButton().isPresent()).toBeTruthy();
+  });
+
+  it('should render four retroquest columns', () => {
+    expect(page.rqColumns().count()).toBe(4);
+  });
 });

@@ -1,4 +1,4 @@
-import { browser, by, element, ElementFinder } from 'protractor';
+import { browser, by, element, ElementFinder, ElementArrayFinder } from 'protractor';
 import { CreatePage } from '../create/create.po';
 
 export class TeamPage {
@@ -29,11 +29,23 @@ export class TeamPage {
     return browser.get(`/team/${teamId}`);
   }
 
-  teamName() {
+  teamName(): ElementFinder {
     return element(by.id('teamName'));
   }
 
-  feedbackButton() {
+  feedbackButton(): ElementFinder {
     return element(by.id('giveFeedback'));
+  }
+
+  downloadCsvButton(): ElementFinder {
+    return element(by.id('downloadCsv'));
+  }
+
+  endRetroButton(): ElementFinder {
+    return element(by.id('endRetro'));
+  }
+
+  rqColumns(): ElementArrayFinder {
+    return element.all(by.css('.rq-column'));
   }
 }
