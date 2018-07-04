@@ -71,7 +71,7 @@ public class ActionItem {
 
     @JsonIgnore
     public List<String> getCSVFields() {
-        return Arrays.asList("action item", task, "", getCompletedString());
+        return Arrays.asList("action item", task, "", getCompletedString(), assignee);
     }
 
     public void toggleCompleted() {
