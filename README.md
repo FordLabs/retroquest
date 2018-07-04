@@ -4,7 +4,7 @@
 - [Request new features](https://github.com/FordLabs/retroquest/issues)
 - [Contribute](https://github.com/FordLabs/retroquest/pulls)
 
-[![Build Status](https://secure.travis-ci.org/FordLabs/retroquest.png)](http://travis-ci.org/FordLabs/retroquest)
+[![Build Status](https://secure.travis-ci.org/FordLabs/retroquest.svg?branch=develop)](http://travis-ci.org/FordLabs/retroquest)
 
 RetroQuest is a website that enables teams to run retrospectives online.  
 A retrospective is a meeting that’s held at the end of an iteration on Agile teams.  
