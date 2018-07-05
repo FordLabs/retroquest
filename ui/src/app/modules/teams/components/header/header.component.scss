@@ -15,40 +15,64 @@
  * limitations under the License.
  */
 @import 'color-vars';
+@import 'global-vars';
 
 #header {
-  background-color: $header-background;
-  box-shadow: 0 1px 4px 0 opacity($black, .5);
+  background-color: $clouds;
   color: $button-blue;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 1.5rem 20px;
+  padding-bottom: 1.5rem;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 1.5rem;
 
-  #headerLeft {
+  #headerTop {
     align-items: center;
     display: flex;
+
     flex-direction: row;
     justify-content: left;
+    margin: 0 auto;
+    max-width: $desktop-max-width;
+    min-width: $desktop-min-width;
+    padding-bottom: 12px;
+
+    .horizontal-separator {
+      background-color: $wet-asphalt;
+      border-radius: 3px;
+      height: 36px;
+      margin-left: 24px;
+      opacity: .2;
+      width: 3px;
+    }
 
     #logo {
       max-width: 255px;
     }
 
     #teamName {
-      font-size: 1.6rem;
-      font-weight: 300;
-      margin-left: 20px;
+      color: opacity($wet-asphalt, .8);
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-left: 24px;
     }
   }
 
-  #headerRight {
-    align-self: center;
-    display: flex;
-    flex-direction: row;
+  #headerBottom {
+    background: $white;
 
-    & > * {
-      margin-left: 24px;
+    .header-bottom-content {
+      align-self: center;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+
+      margin: 0 auto;
+      max-width: $desktop-max-width;
+      min-width: $desktop-min-width;
+
+      #downloadCsv {
+        margin-right: 24px;
+      }
     }
   }
 }
