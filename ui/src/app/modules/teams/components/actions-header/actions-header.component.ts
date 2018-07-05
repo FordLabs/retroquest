@@ -30,7 +30,12 @@ export class ActionsHeaderComponent {
   }
 
   @Input() teamId: string;
-  newTask: string;
+  newTask = '';
+  maxInputLength = 255;
+
+  public getCharactersRemaining(): number {
+    return this.maxInputLength - this.newTask.length;
+  }
 
   addActionItem(): void {
     if (this.newTask && this.newTask.length) {

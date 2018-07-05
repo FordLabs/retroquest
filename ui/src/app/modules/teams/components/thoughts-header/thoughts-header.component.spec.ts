@@ -43,6 +43,15 @@ describe('ThoughtsHeaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  describe('getCharactersRemaining', () => {
+    it('should return the number of remaining characters', () => {
+      component.newThought = 'new task';
+      component.maxThoughtLength = 20;
+      expect(component.getCharactersRemaining()).toBe(component.maxThoughtLength - component.newThought.length);
+    });
+  });
+
+
   describe('addThought', () => {
     it('should construct the thought and call ThoughtService.addThought', () => {
       const newThoughtMessage = 'a new thought';

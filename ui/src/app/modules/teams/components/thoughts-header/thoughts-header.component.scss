@@ -142,6 +142,20 @@
     padding: .3rem 0;
     width: 100%;
 
+    .thought-countdown {
+      box-sizing: border-box;
+      display: flex;
+      font-size: .8rem;
+      justify-content: flex-end;
+      padding-right: 6px;
+      padding-top: 6px;
+      width: 100%;
+    }
+
+    .thought-countdown-red {
+      color: $unhappy-red;
+    }
+
     .thought-input {
       background-color: $white;
       border: 3px solid;

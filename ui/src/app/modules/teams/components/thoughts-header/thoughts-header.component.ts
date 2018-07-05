@@ -31,6 +31,8 @@ export class ThoughtsHeaderComponent implements OnInit {
   constructor (private thoughtService: ThoughtService, private columnService: ColumnService) {
   }
 
+  maxThoughtLength = 255;
+
   @Input() column: Column;
   @Input() thoughtCount: number;
 
@@ -38,7 +40,7 @@ export class ThoughtsHeaderComponent implements OnInit {
 
   editing = false;
   newTitle: string;
-  newThought: string;
+  newThought = '';
 
   ngOnInit (): void {
     this.newTitle = this.column.title;
@@ -69,6 +71,10 @@ export class ThoughtsHeaderComponent implements OnInit {
 
       this.thoughtService.addThought(thought);
     }
+  }
+
+  public getCharactersRemaining(): number {
+    return this.maxThoughtLength - this.newThought.length;
   }
 
   toggleEdit () {

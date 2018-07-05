@@ -35,9 +35,13 @@
     <input class="thought-input"
            type="text"
            placeholder="enter thought"
-           maxlength="255"
+           maxlength="{{maxThoughtLength}}"
            autofocus
            [(ngModel)]="newThought"
-           (keydown.enter)="addThought()"/>
+           (keydown.enter)="addThought()">
+    <div 
+      [ngClass]="{'thought-countdown-red': getCharactersRemaining() < 50}"
+      [style.visibility]="getCharactersRemaining() === maxThoughtLength ? 'hidden' : 'visible'"
+      class="thought-countdown">{{getCharactersRemaining()}}</div>
   </div>
 </div>

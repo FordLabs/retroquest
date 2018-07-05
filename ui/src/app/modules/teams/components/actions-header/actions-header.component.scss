@@ -38,6 +38,20 @@
     padding: .3rem 0;
     width: 100%;
 
+    .action-countdown {
+      box-sizing: border-box;
+      display: flex;
+      font-size: .8rem;
+      justify-content: flex-end;
+      padding-right: 6px;
+      padding-top: 6px;
+      width: 100%;
+    }
+
+    .action-countdown-red {
+      color: $unhappy-red;
+    }
+
     .action-input {
       background-color: $white;
       border: 3px solid $action-yellow;
