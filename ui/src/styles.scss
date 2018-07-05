@@ -90,10 +90,12 @@ p {
 
 .rq-button-primary,
 .rq-button-secondary {
-  border-radius: 3px;
+  border-radius: 6px;
   font-family: 'Quicksand', sans-serif;
   font-size: 1rem;
-  padding: 1rem .8rem;
+  font-weight: 800;
+  padding: 12px 36px;
+
 
   .button-text {
     white-space: nowrap;
@@ -101,13 +103,12 @@ p {
 }
 
 .rq-button-primary {
-  background-color: $button-blue;
+  background-color: $midnight-blue;
+  box-shadow: 0 4px 15px opacity($black, .25);
   color: $white;
-  font-weight: bold;
-  text-transform: uppercase;
 
   &:hover {
-    background-color: $button-hover-blue;
+    background-color: $turquoise;
     cursor: pointer;
   }
 
@@ -118,13 +119,11 @@ p {
 
 .rq-button-secondary {
   background-color: transparent;
-  border: 1px $button-blue solid;
-  color: $button-blue;
-  font-weight: 200;
+  border: 0;
+  color: $wet-asphalt;
 
   &:hover {
-    background-color: $button-blue;
-    color: $white;
+    color: $turquoise;
     cursor: pointer;
   }
 }

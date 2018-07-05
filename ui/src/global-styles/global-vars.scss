@@ -14,26 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@import 'color-vars';
-@import 'global-vars';
 
-#page {
-  background-color: $white;
-  font-family: 'Quicksand', sans-serif;
-  height: 100%;
-  padding: 0;
-
-  #team-content {
-    display: flex;
-    justify-content: space-around;
-    margin: 0 auto;
-    max-width: $desktop-max-width;
-    min-width: $desktop-min-width;
-    padding-top: 1rem;
-
-    .rq-column {
-      flex-grow: 1;
-      max-width: 23.5%;
-    }
-  }
-}
+$desktop-max-width: 1440px;
+$desktop-min-width: 1200px;
