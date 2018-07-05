@@ -50,6 +50,7 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.7'
     compile('org.flywaydb:flyway-core')
     runtime('mysql:mysql-connector-java')
+    runtime group: 'com.h2database', name: 'h2', version: '1.4.197'
     compileOnly 'org.projectlombok:lombok'
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'org.seleniumhq.selenium:selenium-java'
@@ -67,6 +68,12 @@ testSets {
     apiTest
 }
 
+task dockerApiTest() {
+}
+
+
+dockerApiTest.finalizedBy apiTest
+
 task runAllTests(dependsOn: [test, apiTest]) {
 }
     
@@ -78,7 +85,7 @@ dockerCompose {
 
     apiTests {
         useComposeFiles = ['docker-compose.yml']
-        isRequiredBy(project.tasks.apiTest)
+        isRequiredBy(project.tasks.dockerApiTest)
     }
 
     waitForTcpPorts = true

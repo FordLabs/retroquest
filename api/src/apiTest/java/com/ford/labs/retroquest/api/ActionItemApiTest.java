@@ -18,7 +18,6 @@ import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -36,7 +35,9 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 import static java.util.Arrays.asList;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -45,7 +46,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-@ActiveProfiles("test")
 public class ActionItemApiTest extends AbstractTransactionalJUnit4SpringContextTests{
 
     @Autowired
@@ -86,6 +86,7 @@ public class ActionItemApiTest extends AbstractTransactionalJUnit4SpringContextT
 
     @Test
     public void canCreateAnActionItemUsingWebsockets() throws Exception {
+
         String jwt = jwtBuilder.buildJwt("beach-bums");
         String actionItemJsonBody = "{\"task\" : \"Do the thing\"}";
 
@@ -278,7 +279,7 @@ public class ActionItemApiTest extends AbstractTransactionalJUnit4SpringContextT
         assertEquals(1, actionItems.length);
         assertEquals("Please don't be deleted", actionItems[0].getTask());
     }
-    
+
     @Test
     public void canEditActionItem() throws Exception {
 
