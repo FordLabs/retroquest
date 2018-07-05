@@ -49,7 +49,7 @@ public class CsvFile {
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
 
         CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT
-                .withHeader("Column", "Message", "Likes", "Completed"));
+                .withHeader("Column", "Message", "Likes", "Completed", "Assigned To"));
         for (Thought thought: thoughts) {
             csvPrinter.printRecord(thought.getCSVFields());
         }

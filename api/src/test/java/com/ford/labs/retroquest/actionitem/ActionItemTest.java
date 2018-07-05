@@ -41,8 +41,9 @@ public class ActionItemTest {
     public void shouldBuildActionCSVField() {
         ActionItem actionItem = new ActionItem();
         actionItem.setTask("task");
+        actionItem.setAssignee("user");
         List<String> actual = actionItem.getCSVFields();
-        assertThat(actual, contains("action item", "task", "", "no"));
+        assertThat(actual, contains("action item", "task", "", "no", "user"));
     }
 
     @Test

@@ -42,7 +42,8 @@ public class CsvFileTest {
                 .message("a thought, with a comma").hearts(2).discussed(true).build();
         Thought thirdThought = Thought.builder().topic("unhappy").message("sad").hearts(0).discussed(false).build();
 
-        ActionItem actionItem = ActionItem.builder().task("tasks and \"stuff, yo\"").completed(false).build();
+        ActionItem actionItem = ActionItem.builder().task("tasks and \"stuff, yo\"").completed(false)
+                .assignee("test user").build();
         String actual = new CsvFile("teamName", Arrays.asList(firstThought, secondThoght, thirdThought),
                 Collections.singletonList(actionItem) ).getCSVString();
 
