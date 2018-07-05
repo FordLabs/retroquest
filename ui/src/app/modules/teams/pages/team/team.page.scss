@@ -18,10 +18,11 @@
 @import 'global-vars';
 
 #page {
-  background-color: $white;
+  background-color: $clouds;
   font-family: 'Quicksand', sans-serif;
   height: 100%;
   padding: 0;
+
 
   #team-content {
     display: flex;
