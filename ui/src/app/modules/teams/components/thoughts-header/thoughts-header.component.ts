@@ -77,12 +77,21 @@ export class ThoughtsHeaderComponent implements OnInit {
     return this.maxThoughtLength - this.newThought.length;
   }
 
-  toggleEdit () {
+  public toggleEdit(): void {
     if (this.editing) {
       this.editTitle();
+      this.editing = !this.editing;
     } else {
       this.newTitle = this.column.title;
+      this.editing = !this.editing;
+      this.focusInput();
     }
-    this.editing = !this.editing;
   }
+
+  private focusInput(): void {
+    setTimeout(() => {
+      this.titleInput.nativeElement.focus();
+    }, 0);
+  }
+
 }
