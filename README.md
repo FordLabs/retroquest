@@ -1,10 +1,10 @@
 
 ## Welcome to the RetroQuest repo!
 
+[![Build Status](https://secure.travis-ci.org/FordLabs/retroquest.svg?branch=develop)](http://travis-ci.org/FordLabs/retroquest)
+
 - [Request new features](https://github.com/FordLabs/retroquest/issues)
 - [Contribute](https://github.com/FordLabs/retroquest/pulls)
-
-[![Build Status](https://secure.travis-ci.org/FordLabs/retroquest.svg?branch=develop)](http://travis-ci.org/FordLabs/retroquest)
 
 RetroQuest is a website that enables teams to run retrospectives online.  
 A retrospective is a meeting that’s held at the end of an iteration on Agile teams.  
@@ -33,8 +33,19 @@ What you need to install before building our project.  This guide will assume yo
   - This will place the compiled output into the `api/src/main/resources/static` and will be bundled in the next backend build
 
 ## Running the Application
-Running the application locally will require a running instance of MySQL on default port 3306. We utilize a Docker container 
-for local development, which can be brought up by the following command using Docker Compose:  
+Running the application locally can be done with either an H2 in-memory database or with a docker container of MySQL.
+
+### In-Memory
+The simplest way to get the application spun up is by using the in-memory database:
+```
+SPRING_PROFILES_ACTIVE=h2 ./gradlew bootRun
+```
+
+The schema produced for H2 may not conform exactly to the MySQL schema used in production.
+
+### Docker
+Running the application locally with MySQL requires a running instance of the Docker MySQL container:
+
 ```
 docker-compose up
 ```  
@@ -60,10 +71,11 @@ After navigating to the `api` folder, the following Gradle targets will run the 
 
 ```
 ./gradlew test -- Java Unit Tests
-./gradlew apiTest -- API Level integration tests
+./gradlew apiTest -- API Level integration tests with and H2 database
+SPRING_PROFILES_ACTIVE=docker ./gradlew apiTest -- API Level integration tests with the Docker MySQL database
 ```
 
-To run all the of the above tests at once:
+To run both the backend api and unit tests at once:
 
 ```
 ./gradlew runAllTests
