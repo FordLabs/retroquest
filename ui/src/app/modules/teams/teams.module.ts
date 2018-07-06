@@ -38,6 +38,7 @@ import {EndRetroModalComponent} from './components/end-retro-modal/end-retro-mod
 import {ThoughtModalComponent} from './components/thought-modal/thought-modal.component';
 import {AuthGuard} from '../auth/auth-guard/auth.guard';
 import {TeamPageQueryParamGuard} from './services/team-page-query-param-guard';
+import { CountSeperatorComponent } from './components/count-seperator/count-seperator.component';
 
 @NgModule({
   imports: [
@@ -67,7 +68,8 @@ import {TeamPageQueryParamGuard} from './services/team-page-query-param-guard';
     ModalComponent,
     FeedbackFormComponent,
     EndRetroModalComponent,
-    ThoughtModalComponent
+    ThoughtModalComponent,
+    CountSeperatorComponent
   ],
   entryComponents: [FeedbackModalComponent]
 })

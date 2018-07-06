@@ -37,6 +37,7 @@
     }
 
     .title {
+      font-size: 1.2rem;
       max-width: calc(100% - 90px);
     }
   }
@@ -44,7 +45,8 @@
 
 #thoughtModalBody {
   &.modal-body {
-    font-size: 1.8rem;
+    font-size: 1.1rem;
+    font-weight: normal;
   }
 }
 

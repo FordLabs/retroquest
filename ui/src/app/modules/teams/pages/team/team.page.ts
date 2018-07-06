@@ -108,6 +108,10 @@ export class TeamPageComponent implements OnInit {
     return 0;
   }
 
+  public getActionItemColumnCount(): number {
+    return this.actionItems.filter( (actionItem) => !actionItem.completed).length;
+  }
+
   public getThoughtsInColumn(column: Column): Array<Thought> {
     let thoughts = this.indexedThoughts.get(column.id);
 
