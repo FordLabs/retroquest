@@ -56,6 +56,21 @@ public class GlobalExceptionHandler {
     public void passwordTooShortExceptionHandler() {
     }
 
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Password must contain at least one numeric character.")
+    @ExceptionHandler(PasswordMissingNumberException.class)
+    public void passwordMissingNumberExceptionHandler() {
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Password must contain at least one capital letter.")
+    @ExceptionHandler(PasswordMissingUpperCaseAlphaException.class)
+    public void passwordMissingUpperCaseAlphaExceptionHandler() {
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Password must contain at least one lower case letter.")
+    @ExceptionHandler(PasswordMissingLowerCaseAlphaException.class)
+    public void passwordMissingLowerCaseAlphaExceptionHandler() {
+    }
+
     @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Team already has a password")
     @ExceptionHandler(TeamAlreadyHasPasswordException.class)
     public void teamAlreadyHasPasswordExceptionHandler() {

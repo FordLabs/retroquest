@@ -63,7 +63,7 @@ public class TeamController {
     }
 
     @GetMapping("/team/{teamUri}/name")
-    public String getTeamName(@PathVariable("teamUri") String teamUri) throws BoardDoesNotExistException {
+    public String getTeamName(@PathVariable("teamUri") String teamUri) {
         Team team = teamRepository.findOne(teamUri.toLowerCase());
         if (team == null) {
             throw new BoardDoesNotExistException();
