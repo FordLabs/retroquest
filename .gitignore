@@ -29,3 +29,6 @@ nbdist/
 package-lock.json
 
 /tools
+
+.gradle
+!gradle/wrapper/gradle-wrapper.jar
