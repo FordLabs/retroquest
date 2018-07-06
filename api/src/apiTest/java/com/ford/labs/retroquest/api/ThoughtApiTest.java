@@ -343,6 +343,7 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
         session.subscribe(thoughtSubscribeEndpoint, new DefaultStompFrameHandler());
         String thoughJsonBody = "{\"message\":\"Message\"}";
         session.send(thoughtEndpoint + "/create", thoughJsonBody.getBytes());
+        getLatestThoughtInQueue();
         session.send(thoughtEndpoint + "/delete", null);
 
         final Long returnVal = getLatestIdInQueue();
