@@ -3,6 +3,8 @@ package com.ford.labs.retroquest.api;
 import com.ford.labs.retroquest.MainApplication;
 import com.ford.labs.retroquest.security.JwtBuilder;
 import com.ford.labs.retroquest.team.RequestedTeam;
+import com.ford.labs.retroquest.team.TeamRepository;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {MainApplication.class})
 @AutoConfigureMockMvc
-public class TeamRetroDownloadTest {
+public class TeamRetroDownloadTest{
+
+    @Autowired
+    private TeamRepository teamRepository;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -57,6 +62,11 @@ public class TeamRetroDownloadTest {
         mockMvc.perform(get("/api/team/beach-bums/csv")
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("not-beach-bums")))
                 .andExpect(status().isForbidden());
+    }
+
+    @After
+    public void cleanUpTestData(){
+        teamRepository.deleteAll();
     }
 
 }
