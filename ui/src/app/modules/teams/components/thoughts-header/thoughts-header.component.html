@@ -17,25 +17,28 @@
 
 <div class="rq-thought-column-header {{column.topic}}">
   <div class="column-title" [ngClass]="{'edit' : editing}" [title]="column.title">
-    <span class="edit-button">
-      <i class="fas fa-pencil-alt" (click)="toggleEdit()"></i>
-    </span>
     <input #titleInput
+           id="title-input"
            class="edit-title"
            maxlength="16"
+           (blur)="toggleEdit()"
            (keydown.enter)="toggleEdit()"
            [(ngModel)]="newTitle"/>
     <label class="column-title-label">{{column.title}}</label>
-    <i class="fas  sort-icon"
-       [ngClass]="{'fa-sort-down': column.sorted, 'fa-sort': !column.sorted}"
+    <i class="fas fa-sort-down sort-icon"
+       [ngClass]="{'sort-icon-translucent': !column.sorted}"
        (click)="sortByHearts()"></i>
+
+    <span class="edit-button">
+      <i class="fas fa-pencil-alt" (click)="toggleEdit()"></i>
+    </span>
+
   </div>
   <div class="thought-input-wrapper">
     <input class="thought-input"
            type="text"
            placeholder="enter thought"
            maxlength="{{maxThoughtLength}}"
-           autofocus
            [(ngModel)]="newThought"
            (keydown.enter)="addThought()">
     <div

@@ -17,36 +17,37 @@
 @import 'color-vars';
 
 .rq-thought-column-header {
+  $column-title-font-size: 1.7rem;
+
   margin-bottom: 8px;
 
   .column-title {
     align-items: center;
-    border-radius: 3px;
+    border-radius: 6px;
     box-shadow: 0 1px 3px opacity($black, .12), 0 1px 2px opacity($black, .24);
     color: $text-off-white;
     display: flex;
-    flex-grow: 1;
-    font-size: 1.5rem;
-    font-weight: bolder;
-    height: 30px;
+    font-size: $column-title-font-size;
+    font-weight: bold;
+    height: 50px;
     justify-content: center;
-    letter-spacing: 2px;
     margin-bottom: 12px;
-    padding: .3em 0;
+    padding: .2em 0;
     position: relative;
     text-align: center;
     width: 100%;
 
     .edit-button {
+      bottom: 5px;
       color: $white;
       cursor: pointer;
-      left: 10px;
+      font-size: 1rem;
       position: absolute;
+      right: 5px;
     }
 
     .column-title-label {
       display: inline-block;
-      height: 100%;
       max-width: 65%;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -55,7 +56,15 @@
 
     &.edit {
       .edit-title {
+        background-color: transparent;
+        border: 0;
+        color: $text-off-white;
         display: inline-block;
+        font-family: inherit;
+        font-size: $column-title-font-size;
+        font-weight: bold;
+        outline: none;
+        text-align: center;
       }
 
       .sort-icon {
@@ -74,7 +83,12 @@
 
     .sort-icon {
       cursor: pointer;
-      margin-left: 10px;
+      font-size: 1.5rem;
+      margin-left: 6px;
+
+      &.sort-icon-translucent {
+        opacity: .4;
+      }
     }
 
   }
