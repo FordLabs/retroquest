@@ -44,12 +44,12 @@ dependencies {
     compile 'org.jsoup:jsoup:1.11.2'
     compile 'org.apache.commons:commons-csv:1.5'
     compile 'org.apache.commons:commons-lang3:3.7'
+    compile 'commons-io:commons-io:2.6'
     compile 'org.flywaydb:flyway-core'
     runtime 'mysql:mysql-connector-java'
     runtime 'com.h2database:h2:1.4.197'
     compileOnly 'org.projectlombok:lombok'
     testCompile 'org.springframework.boot:spring-boot-starter-test'
-    testCompile 'org.seleniumhq.selenium:selenium-java'
 }
 
 bootRun {

@@ -20,9 +20,10 @@ package com.ford.labs.retroquest.security;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.xerces.impl.dv.util.Base64;
 import org.junit.Test;
+import org.springframework.security.crypto.codec.Base64;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class JwtBuilderTest {
@@ -38,7 +39,7 @@ public class JwtBuilderTest {
         String jwt = jwtBuilder.buildJwt(teamId);
         String jwtHeader = StringUtils.substringBefore(jwt,".");
 
-        assertTrue(new String(Base64.decode(jwtHeader)).equals("{\"alg\":\"HS512\"}"));
+        assertEquals("{\"alg\":\"HS512\"}", new String(Base64.decode(jwtHeader.getBytes())));
 
         JwtParser parser = Jwts.parser();
         parser.requireIssuer("RetroQuest")
