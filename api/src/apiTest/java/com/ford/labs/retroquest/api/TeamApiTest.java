@@ -1,17 +1,16 @@
 package com.ford.labs.retroquest.api;
 
-import com.ford.labs.retroquest.team.Team;
-import com.ford.labs.retroquest.team.TeamRepository;
 import com.ford.labs.retroquest.security.JwtBuilder;
 import com.ford.labs.retroquest.team.RequestedTeam;
-import org.junit.Ignore;
+import com.ford.labs.retroquest.team.Team;
+import com.ford.labs.retroquest.team.TeamRepository;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -26,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class TeamApiTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class TeamApiTest{
 
     @Autowired
     private MockMvc mockMvc;
@@ -40,15 +39,12 @@ public class TeamApiTest extends AbstractTransactionalJUnit4SpringContextTests {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @Ignore
     @Test
     public void canCreateTeamWithValidTeamNameAndPassword() throws Exception {
         String teamJsonBody = "{ \"name\" : \"Beach Bums\", \"password\" : \"superSecure\"}";
-        String expectedJwt = jwtBuilder.buildJwt("beach-bums");
 
         MvcResult mvcResult = mockMvc.perform(post("/api/team")
                 .contentType(APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("beach-bums"))
                 .content(teamJsonBody)).andReturn();
 
 
@@ -58,7 +54,7 @@ public class TeamApiTest extends AbstractTransactionalJUnit4SpringContextTests {
         assertEquals("Beach Bums", teamEntity.getName());
         assertEquals("beach-bums", teamEntity.getUri());
         assertEquals(60, teamEntity.getPassword().length());
-        assertEquals(expectedJwt, mvcResult.getResponse().getContentAsString());
+        assertNotNull(mvcResult.getResponse().getContentAsString());
     }
 
     @Test
@@ -262,5 +258,10 @@ public class TeamApiTest extends AbstractTransactionalJUnit4SpringContextTests {
         mockMvc.perform(get("/api/team/wrongTeamId/validate")
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("teamId")))
             .andExpect(status().isUnauthorized());
+    }
+
+    @After
+    public void cleanUpTestData(){
+        teamRepository.deleteAll();
     }
 }
