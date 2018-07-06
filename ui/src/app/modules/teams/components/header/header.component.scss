@@ -20,6 +20,7 @@
 #header {
   background-color: $clouds;
   color: $button-blue;
+  font-weight: normal;
   padding-bottom: 1.5rem;
   padding-left: 0;
   padding-right: 0;
@@ -52,7 +53,6 @@
     #teamName {
       color: opacity($wet-asphalt, .8);
       font-size: 1.5rem;
-      font-weight: 800;
       margin-left: 24px;
     }
   }

@@ -30,6 +30,8 @@ export class ActionsHeaderComponent {
   }
 
   @Input() teamId: string;
+  @Input() thoughtCount: number;
+
   newTask = '';
   maxInputLength = 255;
 

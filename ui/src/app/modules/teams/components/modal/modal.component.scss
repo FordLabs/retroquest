@@ -43,7 +43,6 @@
 
     &::ng-deep {
       .modal-body {
-        color: $black;
         font-size: 1rem;
         padding: 1.4rem;
       }
@@ -51,7 +50,6 @@
       .modal-header {
         background-color: $button-blue;
         border-radius: 6px 6px 0 0;
-        color: $black;
         padding: 1.4rem;
 
         &:empty {
