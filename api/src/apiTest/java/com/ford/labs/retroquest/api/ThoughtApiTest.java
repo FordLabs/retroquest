@@ -7,7 +7,6 @@ import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.security.JwtBuilder;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
-import org.apache.catalina.connector.Response;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,18 +32,16 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-import static java.util.Arrays.asList;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -67,10 +64,8 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
     private int port;
 
     private ObjectMapper mapper = new ObjectMapper();
-
-    BlockingQueue<String> blockingQueue;
-    WebSocketStompClient stompClient;
-
+    private BlockingQueue<String> blockingQueue;
+    private WebSocketStompClient stompClient;
     private String websocketUri;
     private String thoughtSubscribeEndpoint;
     private String thoughtEndpoint;
@@ -82,38 +77,23 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
         thoughtEndpoint = "/app/beach-bums/thought";
         blockingQueue = new LinkedBlockingDeque<>();
         stompClient = new WebSocketStompClient(new SockJsClient(
-                asList(new WebSocketTransport(new StandardWebSocketClient()))));
-    }
-
-    private Thought getLatestThoughtInQueue() throws IOException, InterruptedException {
-        ObjectNode response = mapper.readValue(blockingQueue.poll(1, SECONDS), ObjectNode.class);
-        return mapper.treeToValue(response.get("payload"), Thought.class);
-    }
-
-    private Long getLatestIdInQueue() throws IOException, InterruptedException {
-        ObjectNode response = mapper.readValue(blockingQueue.poll(1, SECONDS), ObjectNode.class);
-        return mapper.treeToValue(response.get("payload"), Long.class);
+                Collections.singletonList(new WebSocketTransport(new StandardWebSocketClient()))));
     }
 
     @Test
-    public void canCreateThoughtForTeam() throws Exception {
-        String thoughtJsonBody = "{ \"message\" : \"Great Thought.\", " +
+    public void canSaveAndRetrieveThoughtsForTeam() throws Exception {
+        String thoughtJsonBody = "{ \"message\" : \"Great Thought\", " +
                 "\"topic\" : \"happy\",  \"teamId\" : \"BeachBums\"}";
-        MvcResult mvcResult = mockMvc.perform(post("/api/team/BeachBums/thought")
+        mockMvc.perform(post("/api/team/BeachBums/thought")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(thoughtJsonBody)
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")));
+
+        mockMvc.perform(get("/api/team/BeachBums/thoughts").contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-            .andReturn();
-        String httpLocation = mvcResult.getResponse().getHeader("Location");
-
-        Thought thought = thoughtRepository.findAllByTeamId("BeachBums").get(0);
-
-        assertThat(httpLocation, containsString("/api/team/BeachBums/thought/" + thought.getId()));
-        assertEquals(201, mvcResult.getResponse().getStatus());
-
-        assertEquals("Great Thought.", thought.getMessage());
-        assertEquals(0, thought.getHearts());
-        assertEquals("happy", thought.getTopic());
+                .andExpect(jsonPath("$[0].message", is("Great Thought")))
+                .andExpect(jsonPath("$[0].topic", is("happy")))
+                .andExpect(jsonPath("$[0].teamId", is("BeachBums")));
     }
 
     @Test
@@ -143,19 +123,12 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
         newThought.setTeamId("BeachBums");
         Thought savedThought = thoughtRepository.save(newThought);
 
-        MvcResult firstLikeHttpRequest = mockMvc.perform(put("/api/team/BeachBums/thought/" + savedThought.getId() + "/heart")
+        mockMvc.perform(put("/api/team/BeachBums/thought/" + savedThought.getId() + "/heart")
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")));
+
+        mockMvc.perform(get("/api/team/BeachBums/thoughts")
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-            .andReturn();
-
-        assertEquals(200, firstLikeHttpRequest.getResponse().getStatus());
-        assertEquals("1", firstLikeHttpRequest.getResponse().getContentAsString());
-
-        MvcResult secondLikeHttpRequest = mockMvc.perform(put("/api/team/BeachBums/thought/" + savedThought.getId() + "/heart")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-            .andReturn();
-
-        assertEquals(200, secondLikeHttpRequest.getResponse().getStatus());
-        assertEquals("2", secondLikeHttpRequest.getResponse().getContentAsString());
+                .andExpect(jsonPath("$[0].hearts", is(1)));
     }
 
     @Test
@@ -163,121 +136,61 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
         Thought thought = new Thought();
         thought.setTeamId("BeachBums");
         Thought savedThought = thoughtRepository.save(thought);
-        MvcResult discussHttpRequest = mockMvc.perform(put("/api/team/BeachBums/thought/" + savedThought.getId() + "/discuss")
+
+        mockMvc.perform(put("/api/team/BeachBums/thought/" + savedThought.getId() + "/discuss")
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-            .andReturn();
+                .andExpect(status().isOk());
 
-        assertEquals(Response.SC_OK, discussHttpRequest.getResponse().getStatus());
-
-
-        MvcResult checkThoughtsRequest = mockMvc.perform(get("/api/team/BeachBums/thoughts")
+        mockMvc.perform(get("/api/team/BeachBums/thoughts")
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-            .andReturn();
-        Thought resultThought = mapper.readValue(checkThoughtsRequest.getResponse().getContentAsByteArray(), Thought[].class)[0];
-
-        assertEquals(true, resultThought.isDiscussed());
+                .andExpect(jsonPath("$[0].discussed", is(true)));
     }
 
     @Test
-    public void markingAThoughtThatHasAlreadyBeenDiscussedUnmarkTheThoughtAsDiscussed() throws Exception {
+    public void canUnmarkThoughtAsDiscussed() throws Exception {
         Thought thought = new Thought();
         thought.setDiscussed(true);
         thought.setTeamId("BeachBums");
         Thought savedThought = thoughtRepository.save(thought);
 
-        MvcResult discussHttpRequest = mockMvc.perform(put("/api/team/BeachBums/thought/" + savedThought.getId() + "/discuss")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-            .andReturn();
-        assertEquals(Response.SC_OK, discussHttpRequest.getResponse().getStatus());
+        mockMvc.perform(put("/api/team/BeachBums/thought/" + savedThought.getId() + "/discuss")
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")));
 
-        MvcResult checkThoughtsRequest = mockMvc.perform(get("/api/team/BeachBums/thoughts")
+        mockMvc.perform(get("/api/team/BeachBums/thoughts")
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-            .andReturn();
-        Thought resultThought = mapper.readValue(checkThoughtsRequest.getResponse().getContentAsByteArray(), Thought[].class)[0];
-
-        assertEquals(false, resultThought.isDiscussed());
+                .andExpect(jsonPath("$[0].discussed", is(false)));
     }
 
     @Test
-    public void canRetrieveListOfThoughtsForTeam() throws Exception {
+    public void canClearThoughtsForTeam() throws Exception {
         Thought thought1 = new Thought();
         thought1.setTeamId("BeachBums");
-        Thought thought2 = new Thought();
-        thought2.setTeamId("BeachBums");
-        Thought thought3 = new Thought();
-        thought3.setTeamId("BeachBums");
 
-        thoughtRepository.save(Arrays.asList(thought1, thought2, thought3));
+        thoughtRepository.save(Collections.singletonList(thought1));
 
-        mockMvc.perform(get("/api/team/BeachBums/thoughts").contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(delete("/api/team/BeachBums/thoughts")
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-            .andExpect(jsonPath("$", hasSize(3)));
-        mockMvc.perform(get("/api/team/theMildOnes/thoughts").contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("theMildOnes")))
-            .andExpect(jsonPath("$", hasSize(0)));
+                .andReturn();
+        mockMvc.perform(get("/api/team/BeachBums/thoughts")
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
+                .andExpect(content().string("[]"));
     }
 
     @Test
-    public void callingClearThoughtsClearsThoughtsForTeam() throws Exception {
+    public void canClearIndividualThoughts() throws Exception {
         Thought thought1 = new Thought();
-        thought1.setTeamId("BeachBums");
-        Thought thought2 = new Thought();
-        thought2.setTeamId("BeachBums");
-        Thought thought3 = new Thought();
-        thought3.setTeamId("theMildOnes");
-        thoughtRepository.save(Arrays.asList(thought1, thought2, thought3));
+        thought1.setTeamId("TestTeam");
+        thought1.setMessage("Test Content");
 
-        MvcResult thoughtsDelete = mockMvc.perform(delete("/api/team/BeachBums/thoughts")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-            .andReturn();
+        thoughtRepository.save(Collections.singletonList(thought1));
 
-        MvcResult beachBumsThoughtList = mockMvc.perform(get("/api/team/BeachBums/thoughts")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-            .andReturn();
-        MvcResult mildThoughtList = mockMvc.perform(get("/api/team/theMildOnes/thoughts")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("theMildOnes")))
-            .andReturn();
+        mockMvc.perform(delete("/api/team/TestTeam/thought/" + thought1.getId())
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("TestTeam")))
+                .andExpect(status().isOk());
 
-        Thought[] beachBumsThoughts = mapper.readValue(beachBumsThoughtList.getResponse().getContentAsByteArray(), Thought[].class);
-        Thought[] mildThoughts = mapper.readValue(mildThoughtList.getResponse().getContentAsByteArray(), Thought[].class);
-
-        assertEquals(Response.SC_OK, thoughtsDelete.getResponse().getStatus());
-        assertEquals(0, beachBumsThoughts.length);
-        assertEquals(1, mildThoughts.length);
-    }
-
-    @Test
-    public void callingClearIndividualThoughtClearsTheIndividualThoughtForThatTeam() throws Exception {
-        Thought thought1 = new Thought();
-        thought1.setTeamId("BeachBums");
-        thought1.setMessage("I hope this one is gone");
-
-        Thought thought2 = new Thought();
-        thought2.setTeamId("BeachBums");
-        thought2.setMessage("Please still be there");
-
-        Thought thought3 = new Thought();
-        thought3.setTeamId("BeachBums");
-        thought3.setMessage("I hope this one is gone");
-
-        thoughtRepository.save(Arrays.asList(thought1, thought2, thought3));
-
-        MvcResult firstDeletedThought = mockMvc.perform(delete("/api/team/BeachBums/thought/" + thought1.getId())
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-            .andReturn();
-        MvcResult thirdDeletedThought = mockMvc.perform(delete("/api/team/BeachBums/thought/" + thought3.getId())
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-            .andReturn();
-
-        assertEquals(Response.SC_OK, firstDeletedThought.getResponse().getStatus());
-        assertEquals(Response.SC_OK, thirdDeletedThought.getResponse().getStatus());
-
-        MvcResult beachBumsThoughtList = mockMvc.perform(get("/api/team/BeachBums/thoughts")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-            .andReturn();
-        Thought[] beachBumsThoughts = mapper.readValue(beachBumsThoughtList.getResponse().getContentAsByteArray(), Thought[].class);
-        assertEquals(1, beachBumsThoughts.length);
-        assertEquals("Please still be there", beachBumsThoughts[0].getMessage());
+        mockMvc.perform(get("/api/team/TestTeam/thoughts")
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("TestTeam")))
+                .andExpect(content().string("[]"));
     }
 
     @Test
@@ -293,13 +206,11 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(thoughtJsonBody)
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-            .andExpect((status().isOk()));
+                .andExpect((status().isOk()));
 
-        MvcResult beachBumsThoughtList = mockMvc.perform(get("/api/team/BeachBums/thoughts")
+        mockMvc.perform(get("/api/team/BeachBums/thoughts")
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-            .andReturn();
-        Thought[] beachBumsThoughts = mapper.readValue(beachBumsThoughtList.getResponse().getContentAsByteArray(), Thought[].class);
-        assertEquals("modified message", beachBumsThoughts[0].getMessage());
+                .andExpect(jsonPath("$[0].message", is("modified message")));
     }
 
     @Test
@@ -358,7 +269,9 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
         headers.add("Authorization", "Bearer " + jwt);
 
         StompSession session = stompClient
-                .connect(websocketUri, new WebSocketHttpHeaders() {}, headers, new StompSessionHandlerAdapter() {})
+                .connect(websocketUri, new WebSocketHttpHeaders() {
+                }, headers, new StompSessionHandlerAdapter() {
+                })
                 .get(1, SECONDS);
         session.subscribe(thoughtSubscribeEndpoint, new DefaultStompFrameHandler());
         String thoughJsonBody = "{\"message\":\"Message\"}";
@@ -375,7 +288,9 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
         headers.add("Authorization", "Bearer " + jwt);
 
         StompSession session = stompClient
-                .connect(websocketUri, new WebSocketHttpHeaders() {}, headers, new StompSessionHandlerAdapter() {})
+                .connect(websocketUri, new WebSocketHttpHeaders() {
+                }, headers, new StompSessionHandlerAdapter() {
+                })
                 .get(1, SECONDS);
         session.subscribe(thoughtSubscribeEndpoint, new DefaultStompFrameHandler());
         String thoughJsonBody = "{\"message\":\"Message\"}";
@@ -395,7 +310,9 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
         headers.add("Authorization", "Bearer " + jwt);
 
         StompSession session = stompClient
-                .connect(websocketUri, new WebSocketHttpHeaders() {}, headers, new StompSessionHandlerAdapter() {})
+                .connect(websocketUri, new WebSocketHttpHeaders() {
+                }, headers, new StompSessionHandlerAdapter() {
+                })
                 .get(1, SECONDS);
         session.subscribe(thoughtSubscribeEndpoint, new DefaultStompFrameHandler());
         String thoughJsonBody = "{\"message\":\"Message\"}";
@@ -417,20 +334,30 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
         headers.add("Authorization", "Bearer " + jwt);
 
         StompSession session = stompClient
-                .connect(websocketUri, new WebSocketHttpHeaders() {}, headers, new StompSessionHandlerAdapter() {})
+                .connect(websocketUri, new WebSocketHttpHeaders() {
+                }, headers, new StompSessionHandlerAdapter() {
+                })
                 .get(1, SECONDS);
         session.subscribe(thoughtSubscribeEndpoint, new DefaultStompFrameHandler());
         String thoughJsonBody = "{\"message\":\"Message\"}";
         session.send(thoughtEndpoint + "/create", thoughJsonBody.getBytes());
-
-        Thought thought = getLatestThoughtInQueue();
-
+        getLatestThoughtInQueue();
         session.send(thoughtEndpoint + "/delete", null);
 
         final Long returnVal = getLatestIdInQueue();
 
         Assertions.assertThat(returnVal).isNotNull();
         Assertions.assertThat(returnVal).isEqualTo(-1L);
+    }
+
+    private Thought getLatestThoughtInQueue() throws IOException, InterruptedException {
+        ObjectNode response = mapper.readValue(blockingQueue.poll(1, SECONDS), ObjectNode.class);
+        return mapper.treeToValue(response.get("payload"), Thought.class);
+    }
+
+    private Long getLatestIdInQueue() throws IOException, InterruptedException {
+        ObjectNode response = mapper.readValue(blockingQueue.poll(1, SECONDS), ObjectNode.class);
+        return mapper.treeToValue(response.get("payload"), Long.class);
     }
 
     class DefaultStompFrameHandler implements StompFrameHandler {
