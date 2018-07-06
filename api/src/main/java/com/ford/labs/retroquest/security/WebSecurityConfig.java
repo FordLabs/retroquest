@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -60,44 +61,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-            if (requireHttps) {
-                httpSecurity.requiresChannel().antMatchers("/*").requiresSecure();
-            }
-            httpSecurity
-            .authorizeRequests()
-            .antMatchers(
-                    // Frontend patterns
-                    "/*.js",
-                    "/assets/*",
-                    "/*.css",
-                    "/create",
-                    "/login",
-                    "/js/**",
-                    "/",
-                    "/set-password*",
-                    "/app/**",
-                    "/img/**",
-                    "/style.css",
-                    "/api/team/login",
-                    "/api/team",
-                    "/api/team/",
-                    "/api/feedback/**",
-                    "/api/team/*/set-password",
-                    "/team/**",
-                    "/api/team/*/name",
-                    "/styleguide/*",
-                    "/h2-console/*",
-                    "/websocket/**")
-                .permitAll()
-            .anyRequest()
-            .authenticated()
-            .and().addFilterAfter(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
+        if (requireHttps) {
+            httpSecurity.requiresChannel().antMatchers("/*").requiresSecure();
+        }
+        httpSecurity
+        .authorizeRequests()
+        .antMatchers("/**")
+            .permitAll()
+        .anyRequest()
+        .authenticated()
+        .and().addFilterAfter(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
+
+        httpSecurity.authorizeRequests().antMatchers("/api/feedback/all")
+                .hasRole("ADMIN").and().httpBasic();
+
         httpSecurity.csrf().disable();
-        httpSecurity.headers().frameOptions().disable();
     }
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(jwtAuthenticationProvider);
+        auth.inMemoryAuthentication().withUser(adminUsername).password(adminPassword).roles("ADMIN");
+
     }
 }
