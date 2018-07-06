@@ -5,6 +5,7 @@ import com.ford.labs.retroquest.team.RequestedTeam;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import org.junit.After;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class TeamApiTest{
 
+    private static final String VALID_PASSWORD="Passw0rd";
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -41,7 +44,7 @@ public class TeamApiTest{
 
     @Test
     public void canCreateTeamWithValidTeamNameAndPassword() throws Exception {
-        String teamJsonBody = "{ \"name\" : \"Beach Bums\", \"password\" : \"superSecure\"}";
+        String teamJsonBody = "{ \"name\" : \"Beach Bums\", \"password\" : \"" + VALID_PASSWORD + "\"}";
 
         MvcResult mvcResult = mockMvc.perform(post("/api/team")
                 .contentType(APPLICATION_JSON)
@@ -70,7 +73,7 @@ public class TeamApiTest{
 
     @Test
     public void cannotCreateURIWithEmptyString() throws Exception {
-        String teamJsonBody = "{ \"name\" : \"\", \"password\" : \"superSecure\"}";
+        String teamJsonBody = "{ \"name\" : \"\", \"password\" : \"" + VALID_PASSWORD + "\"}";
 
         mockMvc.perform(post("/api/team")
                 .contentType(APPLICATION_JSON)
@@ -81,7 +84,7 @@ public class TeamApiTest{
 
     @Test
     public void cannotCreateURIWithSpecialCharactersInTeamName() throws Exception {
-        String teamJsonBody = "{ \"name\" : \"The@Mild$Ones\", \"password\" : \"superSecure\"}";
+        String teamJsonBody = "{ \"name\" : \"The@Mild$Ones\", \"password\" : \"" + VALID_PASSWORD + "\"}";
 
         mockMvc.perform(post("/api/team")
                 .contentType(APPLICATION_JSON)
@@ -92,8 +95,8 @@ public class TeamApiTest{
 
     @Test
     public void cannotCreateTeamWithDuplicateKey() throws Exception {
-        String teamJsonBody = "{ \"name\" : \"Beach Bums A Team\", \"password\" : \"superSecure\"}";
-        String teamJsonSameBody = "{ \"name\" : \"Beach Bums A Team\", \"password\" : \"superSecure\"}";
+        String teamJsonBody = "{ \"name\" : \"Beach Bums A Team\", \"password\" : \"" + VALID_PASSWORD + "\"}";
+        String teamJsonSameBody = "{ \"name\" : \"Beach Bums A Team\", \"password\" : \""+ VALID_PASSWORD +"\"}";
 
         MvcResult mvcResult = mockMvc.perform(post("/api/team")
                 .contentType(APPLICATION_JSON)
@@ -114,7 +117,7 @@ public class TeamApiTest{
 
         RequestedTeam team = new RequestedTeam();
         team.setName("Beachity Bums");
-        team.setPassword("password");
+        team.setPassword(VALID_PASSWORD);
 
         restTemplate.postForObject("/api/team/", team, String.class);
 
@@ -138,12 +141,12 @@ public class TeamApiTest{
     public void canLoginWithTeamNameAndPassword() throws Exception {
         RequestedTeam team = new RequestedTeam();
         team.setName("PEACHY BEACHY");
-        team.setPassword("password");
+        team.setPassword(VALID_PASSWORD);
 
         restTemplate.postForObject("/api/team/", team, String.class);
 
         MvcResult mvcResult = mockMvc.perform(post("/api/team/login")
-                .content("{\"name\":\"PEACHY BEACHY\", \"password\":\"password\"}")
+                .content("{\"name\":\"PEACHY BEACHY\", \"password\":\"" + VALID_PASSWORD + "\"}")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -167,12 +170,12 @@ public class TeamApiTest{
     public void loginWithBadPasswordReturns403() throws Exception {
         RequestedTeam team = new RequestedTeam();
         team.setName("PEACHY BEACHY");
-        team.setPassword("password");
+        team.setPassword(VALID_PASSWORD);
 
         restTemplate.postForObject("/api/team/", team, String.class);
 
         MvcResult mvcResult = mockMvc.perform(post("/api/team/login")
-                .content("{\"name\":\"PEACHY BEACHY\"}")
+                .content("{\"name\":\"PEACHY BEACHY\", \"password\":\"wr0ngPassw0rd\"}")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isForbidden())
                 .andReturn();
@@ -188,7 +191,7 @@ public class TeamApiTest{
         teamRepository.save(team);
 
         mockMvc.perform(post("/api/team/a-team/set-password")
-                .content("{\"password\":\"password\"}")
+                .content("{\"password\":\"" + VALID_PASSWORD + "\"}")
                 .contentType(APPLICATION_JSON))
             .andExpect(status().isOk())
             .andReturn();
@@ -206,7 +209,7 @@ public class TeamApiTest{
         teamRepository.save(team);
 
         MvcResult mvcResult = mockMvc.perform(post("/api/team/a-team/set-password")
-                .content("{\"password\":\"password\"}")
+                .content("{\"password\":\"" + VALID_PASSWORD + "\"}")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isConflict())
                 .andReturn();
@@ -244,6 +247,54 @@ public class TeamApiTest{
                 .andReturn();
 
         assertTrue(mvcResult.getResponse().getErrorMessage().contains("Password must be 8 characters or longer."));
+    }
+
+    @Test
+    public void shouldErrorWhenSettingPasswordWithNoNumbers() throws Exception {
+        Team team = new Team();
+        team.setUri("a-team");
+        team.setName("A Team");
+        teamRepository.save(team);
+
+        MvcResult mvcResult = mockMvc.perform(post("/api/team/a-team/set-password")
+                .content("{\"password\":\"passwordWithNoNumbers\"}")
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        assertTrue(mvcResult.getResponse().getErrorMessage().contains("Password must contain at least one numeric character."));
+    }
+
+    @Test
+    public void shouldErrorWhenSettingPasswordWithNoLowerCaseLetter() throws Exception {
+        Team team = new Team();
+        team.setUri("a-team");
+        team.setName("A Team");
+        teamRepository.save(team);
+
+        MvcResult mvcResult = mockMvc.perform(post("/api/team/a-team/set-password")
+                .content("{\"password\":\"PASSW0RDWITHNOLOWERCASE\"}")
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        assertTrue(mvcResult.getResponse().getErrorMessage().contains("Password must contain at least one lower case letter."));
+    }
+
+    @Test
+    public void shouldErrorWhenSettingPasswordWithNoUpperCaseLetter() throws Exception {
+        Team team = new Team();
+        team.setUri("a-team");
+        team.setName("A Team");
+        teamRepository.save(team);
+
+        MvcResult mvcResult = mockMvc.perform(post("/api/team/a-team/set-password")
+                .content("{\"password\":\"passw0rdwithnouppercase\"}")
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        assertTrue(mvcResult.getResponse().getErrorMessage().contains("Password must contain at least one capital letter."));
     }
 
     @Test
