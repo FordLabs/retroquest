@@ -17,17 +17,18 @@
 @import 'color-vars';
 
 .rq-action-column-header {
-  margin-bottom: 8px;
 
   .column-title {
     background-color: $action-yellow;
     border-radius: 3px;
     box-shadow: 0 1px 3px opacity($black, .12), 0 1px 2px opacity($black, .24);
+    box-sizing: border-box;
     color: $text-off-white;
     flex-grow: 1;
     font-size: 1.5rem;
     font-weight: bolder;
     letter-spacing: 2px;
+    margin-bottom: 12px;
     padding: .3em 0;
     position: relative;
     text-align: center;
@@ -35,7 +36,7 @@
   }
 
   .action-input-wrapper {
-    padding: .3rem 0;
+    padding: 0;
     width: 100%;
 
     .action-countdown {

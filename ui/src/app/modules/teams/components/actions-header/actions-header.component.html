@@ -27,10 +27,12 @@
            autofocus
            [(ngModel)]="newTask"
            (keydown.enter)="addActionItem()"/>
-    <div 
+    <div
       [ngClass]="{'action-countdown-red': getCharactersRemaining() < 50}"
       [style.visibility]="getCharactersRemaining() === maxInputLength ? 'hidden' : 'visible'"
       class="action-countdown">{{getCharactersRemaining()}}
     </div>
   </div>
+
+  <rq-count-seperator [count]="thoughtCount"></rq-count-seperator>
 </div>

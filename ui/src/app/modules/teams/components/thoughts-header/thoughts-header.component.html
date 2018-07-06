@@ -29,7 +29,6 @@
     <i class="fas  sort-icon"
        [ngClass]="{'fa-sort-down': column.sorted, 'fa-sort': !column.sorted}"
        (click)="sortByHearts()"></i>
-    <span class="count">{{thoughtCount}}</span>
   </div>
   <div class="thought-input-wrapper">
     <input class="thought-input"
@@ -39,9 +38,11 @@
            autofocus
            [(ngModel)]="newThought"
            (keydown.enter)="addThought()">
-    <div 
+    <div
       [ngClass]="{'thought-countdown-red': getCharactersRemaining() < 50}"
       [style.visibility]="getCharactersRemaining() === maxThoughtLength ? 'hidden' : 'visible'"
       class="thought-countdown">{{getCharactersRemaining()}}</div>
   </div>
+
+  <rq-count-seperator [count]="thoughtCount"></rq-count-seperator>
 </div>

@@ -31,6 +31,7 @@
     height: 30px;
     justify-content: center;
     letter-spacing: 2px;
+    margin-bottom: 12px;
     padding: .3em 0;
     position: relative;
     text-align: center;
@@ -76,19 +77,36 @@
       margin-left: 10px;
     }
 
-    .count {
-      border: 1px $white solid;
-      border-radius: 50%;
-      font-size: 18px;
-      height: 25px;
-      letter-spacing: 0;
-      line-height: 25px;
-      position: absolute;
-      right: 10px;
-      top: 10px;
-      width: 25px;
+  }
+
+  .header-separator-container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    width: 100%;
+
+    .left-count-separator {
+      background: linear-gradient(to right, transparent, opacity($wet-asphalt, .1) 15%, opacity($wet-asphalt, .15));
+      border-radius: 3px;
+      height: 2px;
+      width: 50%;
+    }
+
+    .right-count-separator {
+      background: linear-gradient(to right, opacity($wet-asphalt, .15) 0%, opacity($wet-asphalt, .1) 85%, transparent);
+      border-radius: 3px;
+      height: 2px;
+      width: 50%;
+    }
+
+    .count-value {
+      font-size: 1.1rem;
+      font-weight: normal;
+      margin: 0 12px;
     }
   }
+
 
   &.happy {
     .column-title {
@@ -139,7 +157,7 @@
   }
 
   .thought-input-wrapper {
-    padding: .3rem 0;
+    height: auto;
     width: 100%;
 
     .thought-countdown {
@@ -171,7 +189,6 @@
 
       &:focus {
         background-color: $white;
-        color: $black;
       }
     }
   }

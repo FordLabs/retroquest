@@ -23,7 +23,7 @@
       <rq-thoughts-column [column]="column" [thoughts]="getThoughtsInColumn(column)"></rq-thoughts-column>
     </div>
     <div class="rq-column">
-        <rq-actions-header [teamId]="teamId"></rq-actions-header>
+        <rq-actions-header [teamId]="teamId" [thoughtCount]="getActionItemColumnCount()"></rq-actions-header>
         <rq-actions-column [actionItems]="actionItems"></rq-actions-column>
     </div>
   </div>

@@ -26,6 +26,7 @@ import {ThoughtService} from '../../services/thought.service';
 import {ColumnService} from '../../services/column.service';
 import {ActionItemService} from '../../services/action.service';
 import {WebsocketService} from '../../services/websocket.service';
+import {ActionItem, emptyActionItem} from '../../domain/action-item';
 
 describe('TeamPageComponent', () => {
 
@@ -109,6 +110,25 @@ describe('TeamPageComponent', () => {
       const thoughtCount = component.getColumnThoughtCount(testColumn);
 
       expect(thoughtCount).toEqual(2);
+    });
+  });
+
+  describe('getActionItemColumnCount', () => {
+    it('should return count of non-discussed action items', () => {
+      const completedActionItem = emptyActionItem();
+      completedActionItem.completed = true;
+
+      const testThoughts: Array<ActionItem> = [
+        completedActionItem,
+        emptyActionItem(),
+        emptyActionItem()
+      ];
+
+      component.actionItems = testThoughts;
+
+      const actualCount = component.getActionItemColumnCount();
+
+      expect(actualCount).toEqual(2);
     });
   });
 
