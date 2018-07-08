@@ -45,7 +45,7 @@
                    class="rq-input"
                    name="password"
                    type="password"
-                   placeholder="Password must be at least 8 characters"
+                   placeholder="8 or more characters with a mix of numbers and letters"
                    [(ngModel)]="password"/>
           </div>
           <div class="rq-input-group">
@@ -54,6 +54,7 @@
                    class="rq-input"
                    name="confirmPassword"
                    type="password"
+                   placeholder="ex. G0Furth3r"
                    [(ngModel)]="confirmPassword"/>
           </div>
           <span id="errorMessage" class="rq-error-message">{{errorMessage}}</span>
