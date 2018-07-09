@@ -13,17 +13,40 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
 import {Component} from '@angular/core';
+import {emptyTask, Task} from '../../teams/domain/task';
 
 @Component({
-  selector: 'rq-root',
-  template: '<router-outlet></router-outlet>'
+  selector: 'rq-style-guide-page',
+  templateUrl: './style-guide-page.component.html',
+  styleUrls: ['./style-guide-page.component.scss']
 })
-export class AppComponent {
+export class StyleGuidePageComponent {
+
+  happyThoughtTask: Task = {
+    id: 1,
+    teamId: 'id',
+    topic: 'happy',
+    message: 'Who am I, am I a fish?',
+    hearts: 3,
+    completed: false
+  };
 
   constructor() {
+  }
+
+  public displayAlert(message: string): void {
+    window.alert(message);
+  }
+
+  public scrollToId(id: string): void {
+    const element = document.querySelector('#' + id);
+    if (element) {
+      element.scrollIntoView();
+    }
   }
 
 }

@@ -13,35 +13,33 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
 @import 'color-vars';
+@import 'global-vars';
 
+$height: 50px;
 
-.header-separator-container {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
+:host {
+  background-color: $white;
+  display: block;
+  height: $height;
   width: 100%;
 
-  .left-count-separator {
-    background: linear-gradient(to right, transparent, opacity($wet-asphalt, .1) 15%, opacity($wet-asphalt, .15));
-    border-radius: 3px;
-    height: 2px;
-    width: 50%;
-  }
+  .content {
+    align-self: center;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    justify-content: flex-end;
+    margin: 0 auto;
 
-  .right-count-separator {
-    background: linear-gradient(to right, opacity($wet-asphalt, .15) 0%, opacity($wet-asphalt, .1) 85%, transparent);
-    border-radius: 3px;
-    height: 2px;
-    width: 50%;
-  }
+    max-width: $desktop-max-width;
 
-  .count-value {
-    font-size: 1.1rem;
-    font-weight: normal;
-    margin: 0 12px;
+    ::ng-deep * {
+      margin-left: 24px;
+    }
+
   }
 }

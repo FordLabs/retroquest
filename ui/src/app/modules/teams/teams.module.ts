@@ -38,7 +38,7 @@ import {EndRetroModalComponent} from './components/end-retro-modal/end-retro-mod
 import {ThoughtModalComponent} from './components/thought-modal/thought-modal.component';
 import {AuthGuard} from '../auth/auth-guard/auth.guard';
 import {TeamPageQueryParamGuard} from './services/team-page-query-param-guard';
-import { CountSeperatorComponent } from './components/count-seperator/count-seperator.component';
+import {ControlsModule} from '../controls/controls.module';
 
 @NgModule({
   imports: [
@@ -47,7 +47,8 @@ import { CountSeperatorComponent } from './components/count-seperator/count-sepe
     RouterModule.forChild([
       {path: 'team/:teamId', component: TeamPageComponent, canActivate: [AuthGuard]},
       {path: 'team', component: TeamPageComponent, canActivate: [TeamPageQueryParamGuard]},
-    ])
+    ]),
+    ControlsModule
   ],
   providers: [
     ThoughtService,
@@ -68,8 +69,7 @@ import { CountSeperatorComponent } from './components/count-seperator/count-sepe
     ModalComponent,
     FeedbackFormComponent,
     EndRetroModalComponent,
-    ThoughtModalComponent,
-    CountSeperatorComponent
+    ThoughtModalComponent
   ],
   entryComponents: [FeedbackModalComponent]
 })

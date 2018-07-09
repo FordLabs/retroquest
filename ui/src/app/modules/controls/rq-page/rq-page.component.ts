@@ -13,17 +13,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'rq-root',
-  template: '<router-outlet></router-outlet>'
+  selector: 'rq-page',
+  templateUrl: './rq-page.component.html',
+  styleUrls: ['./rq-page.component.scss']
 })
-export class AppComponent {
+export class RqPageComponent implements OnInit {
 
-  constructor() {
+  constructor() { }
+
+  ngOnInit() {
   }
 
 }
