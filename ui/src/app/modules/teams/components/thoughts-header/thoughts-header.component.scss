@@ -93,34 +93,10 @@
 
   }
 
-  .header-separator-container {
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
+  rq-count-seperator {
+    margin-bottom: 24px;
     width: 100%;
-
-    .left-count-separator {
-      background: linear-gradient(to right, transparent, opacity($wet-asphalt, .1) 15%, opacity($wet-asphalt, .15));
-      border-radius: 3px;
-      height: 2px;
-      width: 50%;
-    }
-
-    .right-count-separator {
-      background: linear-gradient(to right, opacity($wet-asphalt, .15) 0%, opacity($wet-asphalt, .1) 85%, transparent);
-      border-radius: 3px;
-      height: 2px;
-      width: 50%;
-    }
-
-    .count-value {
-      font-size: 1.1rem;
-      font-weight: normal;
-      margin: 0 12px;
-    }
   }
-
 
   &.happy {
     .column-title {

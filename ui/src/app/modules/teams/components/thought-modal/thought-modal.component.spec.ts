@@ -16,8 +16,7 @@
  */
 
 import {ThoughtModalComponent} from './thought-modal.component';
-import {emptyThoughtWithColumn, emptyThought} from '../../domain/thought';
-import {Column} from '../../domain/column';
+import {emptyThought, emptyThoughtWithColumn} from '../../domain/thought';
 
 describe('ThoughtModalComponent', () => {
   let component: ThoughtModalComponent;

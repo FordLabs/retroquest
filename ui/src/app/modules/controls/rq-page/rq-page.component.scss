@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright (c) 2018 Ford Motor Company
  * All rights reserved.
  *
@@ -13,17 +13,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-import {Component} from '@angular/core';
+@import 'global-vars';
+@import 'color-vars';
 
-@Component({
-  selector: 'rq-root',
-  template: '<router-outlet></router-outlet>'
-})
-export class AppComponent {
-
-  constructor() {
-  }
-
+:host {
+  background-color: $clouds;
+  box-sizing: border-box;
+  color: $wet-asphalt;
+  display: block;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 700;
+  height: 100%;
+  overflow: auto;
+  padding: 12px;
+  position: relative;
+  width: 100%;
 }

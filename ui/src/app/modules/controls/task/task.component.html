@@ -1,0 +1,105 @@
+<!--
+  ~ Copyright (c) 2018 Ford Motor Company
+  ~ All rights reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
+<div class="content-area"
+     (click)="emitTaskContentClicked()"
+     [ngClass]="{'disable': task.completed}"
+>
+  <span
+    class="content-message"
+    *ngIf="!taskEditModeEnabled; else content_textarea"
+  >{{task.message}}</span>
+  <ng-template #content_textarea>
+    <div
+      #content_value
+      class="content-message editable-div"
+      contenteditable="true"
+      [textContent]="task.message"
+      (input)="task.message = content_value.textContent"
+      (keydown.enter)="forceBlur()"
+      (blur)="toggleEditMode()"
+    >{{task.message}}
+    </div>
+  </ng-template>
+
+</div>
+
+<div class="footer">
+  <div
+    class="container star-count-container"
+    [ngClass]="{'disable': task.completed}"
+    (click)="addStar()"
+    *ngIf="type !== 'action'; else date_created_container"
+  >
+    <div class="star-background">
+      <i class="fas fa-star star-icon"></i>
+    </div>
+    <div class="star-count">{{task.hearts}}</div>
+  </div>
+
+  <ng-template #date_created_container>
+    <div
+      class="container date-created-container"
+    >
+      <span class="date-created-header">created</span>
+      <span class="date-created-value">Jan 10</span>
+    </div>
+  </ng-template>
+  <div
+    class="container edit-container"
+    [ngClass]="{'disable': task.completed}"
+    (click)="toggleEditMode()"
+    *ngIf="!taskEditModeEnabled; else exit_edit_mode_icon"
+  >
+    <i class="fas fa-edit"></i>
+  </div>
+
+  <ng-template #exit_edit_mode_icon>
+    <div
+      class="container edit-container"
+      (click)="forceBlur()"
+    >
+      <i class="fas fa-times exit-edit-mode-icon"></i>
+    </div>
+  </ng-template>
+
+  <div
+    class="container delete-container"
+    [ngClass]="{'disable': task.completed}"
+    (click)="emitDeleteItem()">
+    <i class="fas fa-trash-alt"></i>
+  </div>
+
+  <div
+    class="complete-container"
+    (click)="toggleTaskComplete()"
+  >
+    <div
+      class="checkbox"
+      [ngClass]="{'completed-task':  task.completed}"
+    >
+    </div>
+
+    <i
+      class="fas fa-check checkmark"
+      [ngClass]="{'show-checkmark':  task.completed}"
+    ></i>
+
+  </div>
+
+</div>

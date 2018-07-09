@@ -1,0 +1,66 @@
+/*!
+ * Copyright (c) 2018 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+@import 'color-vars';
+@import 'global-vars';
+
+:host {
+  align-items: center;
+  border: 0;
+  border-radius: 6px;
+  box-shadow: none;
+  box-sizing: border-box;
+  display: flex;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  height: 45px;
+  justify-content: center;
+  outline: 0;
+  padding: 0 24px;
+  text-transform: capitalize;
+  width: 125px;
+
+  .button-text {
+    white-space: nowrap;
+  }
+
+  &.primary {
+    background-color: $midnight-blue;
+    box-shadow: 0 4px 15px opacity($black, .25);
+    color: $white;
+
+    &:hover {
+      background-color: $turquoise;
+      cursor: pointer;
+    }
+
+  }
+
+  &.secondary {
+    background: transparent;
+    color: $midnight-blue;
+
+    &:hover {
+      color: $turquoise;
+      cursor: pointer;
+    }
+  }
+}
+
+
