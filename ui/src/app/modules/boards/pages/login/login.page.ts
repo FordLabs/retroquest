@@ -15,11 +15,13 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-import {Router} from '@angular/router';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
-import {AuthService} from '../../../auth/auth.service';
-import {TeamService} from '../../../teams/services/team.service';
+import { AuthService } from '../../../auth/auth.service';
+import { TeamService } from '../../../teams/services/team.service';
+import { RecaptchaComponent } from 'ng-recaptcha';
+import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'rq-login',
@@ -30,6 +32,8 @@ export class LoginComponent {
 
   constructor (private teamService: TeamService, private router: Router) {
   }
+
+  @ViewChild(RecaptchaComponent) recaptchaComponent: RecaptchaComponent;
 
   teamName: string;
   password: string;
@@ -50,9 +54,10 @@ export class LoginComponent {
     return true;
   }
 
-  login (): void {
+  login (captchaResponse: string): void {
+    this.recaptchaComponent.reset();
     if (this.validateInput()) {
-      this.teamService.login(this.teamName, this.password)
+      this.teamService.login(this.teamName, this.password, captchaResponse)
         .subscribe(
           (response) => {
             this.handleLoginResponse(response);

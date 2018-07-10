@@ -15,14 +15,15 @@
  * limitations under the License.
  */
 
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {LoginComponent} from './pages/login/login.page';
-import {CreateComponent} from './pages/create/create.page';
-import {RouterModule} from '@angular/router';
-import {AppTitleComponent} from './components/app-title/app-title.component';
-import {BrandFooterComponent} from './components/brand-footer/brand-footer.component';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { LoginComponent } from './pages/login/login.page';
+import { CreateComponent } from './pages/create/create.page';
+import { RouterModule } from '@angular/router';
+import { AppTitleComponent } from './components/app-title/app-title.component';
+import { BrandFooterComponent } from './components/brand-footer/brand-footer.component';
+import { RecaptchaModule } from 'ng-recaptcha';
 
 @NgModule({
   imports: [
@@ -31,7 +32,9 @@ import {BrandFooterComponent} from './components/brand-footer/brand-footer.compo
     RouterModule.forChild([
       {path: 'create', component: CreateComponent},
       {path: 'login', component: LoginComponent}
-    ])
+    ]),
+    RecaptchaModule.forRoot(),
+    RecaptchaModule
   ],
   declarations: [
     LoginComponent,

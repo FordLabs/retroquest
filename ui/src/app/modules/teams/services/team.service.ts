@@ -35,10 +35,10 @@ export class TeamService {
     );
   }
 
-  login(name: string, password: string): Observable<HttpResponse<string>> {
+  login(name: string, password: string, captchaResponse: string): Observable<HttpResponse<string>> {
     return this.http.post(
       '/api/team/login',
-      {name, password},
+      {name, password, captchaResponse},
       {observe: 'response', responseType: 'text'}
     );
   }
