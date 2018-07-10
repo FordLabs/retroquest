@@ -16,6 +16,12 @@
   -->
 
 <div class="login-container">
+  <re-captcha
+    #captchaRef="reCaptcha"
+    size="invisible"
+    siteKey="6LeZOmMUAAAAAOq4uXmluNuIio7XGx7U-ncmOzGT"
+    (resolved)="$event && login($event)"
+  ></re-captcha>
   <div id="app-content">
     <img src="/assets/RetroQuest.png" title="RetroQuest Logo" id="logo"/>
     <div class="rq-team-controls">
@@ -44,7 +50,7 @@
                    [(ngModel)]="password"/>
           </div>
           <span id="errorMessage" class="rq-error-message">{{errorMessage}}</span>
-          <button id="signInButton" class="rq-button" (click)="login()">
+          <button id="signInButton" class="rq-button" (click)="captchaRef.execute()">
             Sign In
           </button>
         </div>

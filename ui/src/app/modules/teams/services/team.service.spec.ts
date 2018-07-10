@@ -49,12 +49,13 @@ describe('TeamService', () => {
     it('should send a post request to the api with valid body', () => {
       const name = 'Team Name';
       const password = 'p4ssw0rd';
+      const captchaResponse = 'someHash';
 
-      const returnObj = service.login(name, password);
+      const returnObj = service.login(name, password, captchaResponse);
 
       expect(mockHttpClient.post).toHaveBeenCalledWith(
         '/api/team/login',
-        {name, password},
+        {name, password, captchaResponse},
         {observe: 'response', responseType: 'text'}
       );
 
