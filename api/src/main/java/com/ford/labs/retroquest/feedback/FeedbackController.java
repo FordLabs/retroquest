@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.OptionalDouble;
 
 @RestController
 @RequestMapping("/api/feedback")
@@ -45,6 +46,13 @@ public class FeedbackController {
     @GetMapping("/all")
     public List<Feedback> getAllFeedBack() {
         return feedbackRepository.findAll();
+    }
+
+    @GetMapping("/average")
+    public double getAverageRating() {
+        List<Feedback> allFeedback = feedbackRepository.findAll();
+        OptionalDouble average = allFeedback.stream().mapToDouble(Feedback::getStars).average();
+        return average.isPresent() ? average.getAsDouble() : 0.0;
     }
 
 }
