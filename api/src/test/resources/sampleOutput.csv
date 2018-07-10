@@ -1,5 +1,5 @@
 Column,Message,Likes,Completed,Assigned To
-confused,"stuff ""goes here""",5,no
-happy,"a thought, with a comma",2,yes
-unhappy,sad,0,no
+CONFUSED,"stuff ""goes here""",5,no
+HAPPY,"a thought, with a comma",2,yes
+SAD,sad,0,no
 action item,"tasks and ""stuff, yo""",,no,test user

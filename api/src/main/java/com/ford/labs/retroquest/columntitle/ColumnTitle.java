@@ -43,7 +43,7 @@ public class ColumnTitle implements Serializable {
     private Long id;
     @NaturalId
     private String topic;
-    private String title;
+    private String title = "";
     @NaturalId
     private String teamId;
 
