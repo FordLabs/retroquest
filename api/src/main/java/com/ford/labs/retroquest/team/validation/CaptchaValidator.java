@@ -2,23 +2,18 @@ package com.ford.labs.retroquest.team.validation;
 
 import com.ford.labs.retroquest.exception.CaptchaInvalidException;
 import com.ford.labs.retroquest.exception.CaptchaMissingException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
 public class CaptchaValidator {
 
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
+    private final CaptchaProperties captchaProperties;
 
-    @Value("${com.retroquest.captcha.secret}")
-    private String secret = "secret";
-
-    @Value("${com.retroquest.captcha.url}")
-    private String url = "url";
-
-    public CaptchaValidator (RestTemplate restTemplate) {
+    public CaptchaValidator (RestTemplate restTemplate, CaptchaProperties captchaProperties) {
         this.restTemplate = restTemplate;
+        this.captchaProperties = captchaProperties;
     }
 
     public boolean isValid (String captcha) throws CaptchaMissingException, CaptchaInvalidException {
@@ -26,8 +21,8 @@ public class CaptchaValidator {
             throw new CaptchaMissingException();
         }
 
-        ReCaptchaRequestBody reCaptchaRequestBody = new ReCaptchaRequestBody(secret, captcha);
-        ReCaptchaResponse reCaptchaResponse = restTemplate.postForObject(url, reCaptchaRequestBody, ReCaptchaResponse.class);
+        ReCaptchaRequestBody reCaptchaRequestBody = new ReCaptchaRequestBody(captchaProperties.getSecret(), captcha);
+        ReCaptchaResponse reCaptchaResponse = restTemplate.postForObject(captchaProperties.getUrl(), reCaptchaRequestBody, ReCaptchaResponse.class);
 
         if (!reCaptchaResponse.isSuccess()) {
             throw new CaptchaInvalidException();
