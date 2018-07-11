@@ -20,11 +20,15 @@ public class CaptchaValidatorTest {
     @Mock
     private RestTemplate restTemplate;
 
+    private CaptchaProperties captchaProperties = new CaptchaProperties();
+
     private CaptchaValidator validator;
 
     @Before
-    public void setUp() {
-        validator = new CaptchaValidator(restTemplate);
+    public void setUp () {
+        captchaProperties.setSecret("secret");
+        captchaProperties.setUrl("http://myUrl");
+        validator = new CaptchaValidator(restTemplate, captchaProperties);
     }
 
     @Test(expected = CaptchaMissingException.class)
@@ -35,7 +39,7 @@ public class CaptchaValidatorTest {
     @Test(expected = CaptchaInvalidException.class)
     public void whenCaptchaIsInvalid_throwsCaptchaInvalidException () {
         ReCaptchaRequestBody request = new ReCaptchaRequestBody("secret", "Invalid Captcha");
-        when(restTemplate.postForObject("url", request, ReCaptchaResponse.class))
+        when(restTemplate.postForObject("http://myUrl", request, ReCaptchaResponse.class))
                 .thenReturn(new ReCaptchaResponse(false, Collections.emptyList()));
 
         validator.isValid("Invalid Captcha");
@@ -44,7 +48,7 @@ public class CaptchaValidatorTest {
     @Test
     public void whenCaptchaIsValid_returnsTrue () {
         ReCaptchaRequestBody request = new ReCaptchaRequestBody("secret", "Valid Captcha");
-        when(restTemplate.postForObject("url", request, ReCaptchaResponse.class))
+        when(restTemplate.postForObject("http://myUrl", request, ReCaptchaResponse.class))
                 .thenReturn(new ReCaptchaResponse(true, Collections.emptyList()));
 
         assertTrue(validator.isValid("Valid Captcha"));
