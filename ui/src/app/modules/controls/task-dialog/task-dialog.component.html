@@ -15,23 +15,8 @@
   ~ limitations under the License.
   -->
 
-<input [ngClass]="{
-  'happy': type === 'happy',
-  'confused': type === 'confused',
-  'sad': type === 'sad',
-  'action': type === 'action'
-}"
-       type="text"
-       placeholder="{{placeholder}}"
-       maxlength="255"
-       [(ngModel)]="text"
-       (keydown.enter)="emitNewTaskMessage()"
-/>
-
-<div
-  class="chars-remaining-counter"
-  [ngClass]="{'display-warning-text': charactersRemainingAreAboutToRunOut()}"
-  [style.visibility]="textIsEmpty() ? 'hidden' : 'visible'"
->
-  {{charactersRemaining()}}
-</div>
+<rq-task
+  [type]="type"
+  [task]="task"
+  (click)="$event.stopPropagation()"
+></rq-task>

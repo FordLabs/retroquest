@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 import {StyleGuidePageComponent} from './style-guide-page.component';
@@ -56,6 +55,13 @@ describe('StyleGuidePageComponent', () => {
       expect(elementNotFound).toBeNull();
     });
 
+  });
+
+  describe('showDialog', () => {
+    it('should display the dialog when called', () => {
+      component.showDialog();
+      expect(component.dialogIsVisible).toBeTruthy();
+    });
   });
 
 });

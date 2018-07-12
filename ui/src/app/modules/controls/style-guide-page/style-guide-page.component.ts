@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 import {Component} from '@angular/core';
@@ -35,6 +34,8 @@ export class StyleGuidePageComponent {
     completed: false
   };
 
+  dialogIsVisible = false;
+
   constructor() {
   }
 
@@ -49,4 +50,7 @@ export class StyleGuidePageComponent {
     }
   }
 
+  public showDialog(): void {
+    this.dialogIsVisible = true;
+  }
 }
