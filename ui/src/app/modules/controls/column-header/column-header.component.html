@@ -14,7 +14,6 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  ~
   -->
 
 <input
@@ -38,18 +37,17 @@
   <i class="fas fa-sort-down sort"
      [ngClass]="{
         'sort-icon-translucent': !sorted,
-        'hide': !readOnlyEnabled
+        'hide': !readOnlyEnabled || type === 'action'
      }"
+
      (click)="toggleSort()"
   ></i>
 
-
-
-
-
 <span
   class="edit-button"
-  [ngClass]="{'edit-button-enabled': !readOnlyEnabled}"
+  [ngClass]="{
+    'edit-button-enabled': !readOnlyEnabled || type === 'action'
+    }"
 >
   <i class="fas fa-pencil-alt"
      (click)="toggleEdit()"

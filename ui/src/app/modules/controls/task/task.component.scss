@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 @import 'color-vars';
@@ -134,16 +133,17 @@
       cursor: pointer;
 
       .checkbox {
-        $size: 9.5px;
+        $size: 11px;
 
         background-color: opacity($wet-asphalt, .14);
-        border: 3px solid $wet-asphalt;
-        border-radius: $size;
+        border: 2px solid $wet-asphalt;
+        border-radius: 4px;
         height: $size;
         width: $size;
 
         &.completed-task {
-          display: none;
+          opacity: .2;
+          position: absolute;
         }
 
       }

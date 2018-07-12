@@ -13,7 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
@@ -26,7 +25,7 @@ import {Column} from '../../teams/domain/column';
   host: {
     '[class.happy]': 'type === \'happy\'',
     '[class.confused]': 'type === \'confused\'',
-    '[class.sad]': 'type === \'sad\'',
+    '[class.sad]': 'type === \'unhappy\'',
     '[class.action]': 'type === \'action\''
   }
 })
