@@ -3,6 +3,8 @@ import { browser } from 'protractor';
 
 describe('Login Page', () => {
   let page: LoginPage;
+  const validPassword = 'Passw0rd';
+  const invalidPassword = 'passwrd';
 
   beforeEach(() => {
     page = new LoginPage();
@@ -38,7 +40,7 @@ describe('Login Page', () => {
 
     it('should display error message if password is incorrect', () => {
       page.teamNameInput().sendKeys('team name').then(() => {
-        page.teamPasswordInput().sendKeys('passwrd').then(() => {
+        page.teamPasswordInput().sendKeys(invalidPassword).then(() => {
           page.signInButton().click().then(() => {
             expect(page.errorMessage().getText()).toBe('Incorrect board or password. Please try again.');
           });
@@ -48,7 +50,7 @@ describe('Login Page', () => {
 
     it('should display error message if board name is does not exist', () => {
       page.teamNameInput().sendKeys('team name that does not exist').then(() => {
-        page.teamPasswordInput().sendKeys('passwrd').then(() => {
+        page.teamPasswordInput().sendKeys(validPassword).then(() => {
           page.signInButton().click().then(() => {
             expect(page.errorMessage().getText()).toBe('Incorrect board name. Please try again.');
           });
@@ -57,11 +59,11 @@ describe('Login Page', () => {
     });
   });
 
-  describe('successfuly signing into a team board', () => {
+  describe('successfully signing into a team board', () => {
     it('should create a board and navigate to that boards team page', () => {
       page.createRandomBoard().then((boardName) => {
         page.teamNameInput().sendKeys(boardName).then(() => {
-          page.teamPasswordInput().sendKeys('password').then(() => {
+          page.teamPasswordInput().sendKeys(validPassword).then(() => {
             page.signInButton().click().then(() => {
               browser.waitForAngular();
               expect(browser.driver.getCurrentUrl()).toContain(`/team/${boardName}`);
