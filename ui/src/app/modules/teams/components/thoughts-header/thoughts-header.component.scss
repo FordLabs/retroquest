@@ -17,7 +17,6 @@
 @import 'color-vars';
 
 .rq-thought-column-header {
-  $column-title-font-size: 1.7rem;
   margin-bottom: 8px;
 
   rq-column-header {
@@ -32,76 +31,10 @@
     width: 100%;
   }
 
-  &.happy {
-    .thought-input-wrapper {
-      .thought-input {
-        border-color: $happy-green;
-
-        &:focus {
-          box-shadow: 0 1px 3px $happy-green;
-        }
-      }
-    }
-  }
-
-  &.confused {
-    .thought-input-wrapper {
-      .thought-input {
-        border-color: $confused-blue;
-
-        &:focus {
-          box-shadow: 0 1px 3px $confused-blue;
-        }
-      }
-    }
-  }
-
-  &.unhappy {
-    .thought-input-wrapper {
-      .thought-input {
-        border-color: $unhappy-red;
-
-        &:focus {
-          box-shadow: 0 1px 3px $unhappy-red;
-        }
-      }
-    }
-  }
-
-  .thought-input-wrapper {
-    height: auto;
+  rq-text-field {
+    height: 45px;
+    margin-bottom: 24px;
     width: 100%;
-
-    .thought-countdown {
-      box-sizing: border-box;
-      display: flex;
-      font-size: .8rem;
-      justify-content: flex-end;
-      padding-right: 6px;
-      padding-top: 6px;
-      width: 100%;
-    }
-
-    .thought-countdown-red {
-      color: $unhappy-red;
-    }
-
-    .thought-input {
-      background-color: $white;
-      border: 3px solid;
-      border-radius: 3px;
-      box-shadow: none;
-      box-sizing: border-box;
-      height: 35px;
-      outline: none;
-      overflow: auto;
-      padding-left: 12px;
-      padding-right: 12px;
-      width: 100%;
-
-      &:focus {
-        background-color: $white;
-      }
-    }
   }
+
 }

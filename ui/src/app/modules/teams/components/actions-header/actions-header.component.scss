@@ -30,43 +30,9 @@
     width: 100%;
   }
 
-  .action-input-wrapper {
-    padding: 0;
+  rq-text-field {
+    height: 45px;
+    margin-bottom: 24px;
     width: 100%;
-
-    .action-countdown {
-      box-sizing: border-box;
-      display: flex;
-      font-size: .8rem;
-      justify-content: flex-end;
-      padding-right: 6px;
-      padding-top: 6px;
-      width: 100%;
-    }
-
-    .action-countdown-red {
-      color: $unhappy-red;
-    }
-
-    .action-input {
-      background-color: $white;
-      border: 3px solid $action-yellow;
-      border-radius: 3px;
-      box-shadow: none;
-      box-sizing: border-box;
-      height: 35px;
-      outline: none;
-      overflow: auto;
-      padding-left: 12px;
-      padding-right: 12px;
-
-      width: 100%;
-
-      &:focus {
-        background-color: $white;
-        box-shadow: 0 1px 3px $action-yellow;
-        color: $black;
-      }
-    }
   }
 }

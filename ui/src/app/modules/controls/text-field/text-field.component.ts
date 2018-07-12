@@ -27,10 +27,9 @@ export class TextFieldComponent {
 
   @Input() placeholder = '';
   @Input() type = '';
+  text = '';
 
   @Output() newMessageAdded: EventEmitter<string> = new EventEmitter<string>();
-
-  text = '';
 
   maxCharLength = 255;
   charsAreRunningOutThreshold = 50;
@@ -52,5 +51,6 @@ export class TextFieldComponent {
 
   public emitNewTaskMessage(): void {
     this.newMessageAdded.emit(this.text);
+    this.text = '';
   }
 }

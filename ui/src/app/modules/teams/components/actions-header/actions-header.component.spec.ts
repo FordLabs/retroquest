@@ -36,14 +36,6 @@ describe('ActionsHeaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('getCharactersRemaining', () => {
-    it('should return the number of remaining characters', () => {
-      component.newTask = 'new task';
-      component.maxInputLength = 20;
-      expect(component.getCharactersRemaining()).toBe(component.maxInputLength - component.newTask.length);
-    });
-  });
-
   describe('addThought', () => {
     it('should construct the thought and call ThoughtService.addThought', () => {
       const newTask = 'a new task';
@@ -56,9 +48,7 @@ describe('ActionsHeaderComponent', () => {
         assignee: null
       };
 
-      component.newTask = newTask;
-
-      component.addActionItem();
+      component.addActionItem(newTask);
 
       expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(expectedActionItem);
     });
