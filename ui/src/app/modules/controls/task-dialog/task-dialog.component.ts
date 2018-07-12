@@ -16,41 +16,34 @@
  */
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {emptyTask, Task} from '../../teams/domain/task';
 
 @Component({
-  selector: 'rq-text-field',
-  templateUrl: './text-field.component.html',
-  styleUrls: ['./text-field.component.scss']
+  selector: 'rq-task-dialog',
+  templateUrl: './task-dialog.component.html',
+  styleUrls: ['./task-dialog.component.scss'],
+  host: {
+    '(click)': 'hide()',
+    '[style.display]': 'visible ? "flex": "none"',
+    '[class.edit-mode]': 'taskEditModeEnabled'
+  }
 })
-export class TextFieldComponent {
+export class TaskDialogComponent {
 
-
-  @Input() placeholder = '';
   @Input() type = '';
+  @Input() task: Task = emptyTask();
+  @Input() visible = true;
 
-  @Output() newMessageAdded: EventEmitter<string> = new EventEmitter<string>();
+  @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  text = '';
-
-  maxCharLength = 255;
-  charsAreRunningOutThreshold = 50;
-
-  constructor() {
+  public hide(): void {
+    this.visible = false;
+    this.visibilityChanged.emit(this.visible);
   }
 
-  public charactersRemaining(): number {
-    return this.maxCharLength - this.text.length;
+  public show(): void {
+    this.visible = true;
   }
 
-  public textIsEmpty(): boolean {
-    return this.text.length === 0;
-  }
-
-  public charactersRemainingAreAboutToRunOut(): boolean {
-    return this.charactersRemaining() < this.charsAreRunningOutThreshold;
-  }
-
-  public emitNewTaskMessage(): void {
-    this.newMessageAdded.emit(this.text);
-  }
 }
+

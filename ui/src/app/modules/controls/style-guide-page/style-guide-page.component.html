@@ -13,7 +13,6 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  ~
   -->
 
 <rq-page>
@@ -84,38 +83,57 @@
     </div>
 
     <div class="control-section thought-section">
-      <rq-thought
+      <rq-task
         [task]="happyThoughtTask"
         [type]="'happy'"
-      ></rq-thought>
+      ></rq-task>
     </div>
 
     <div class="control-section thought-section">
-      <rq-thought
+      <rq-task
         [type]="'confused'"
         [task]="{
         completed: false,
         hearts: 7,
         message: 'Who am I, am I a fish? NOafkjakjfjkajkfajfjafjkafkakf'
       }"
-      ></rq-thought>
+      ></rq-task>
     </div>
 
     <div class="control-section thought-section">
-      <rq-thought
+      <rq-task
         [type]="'sad'"
         [task]="{
         completed: false,
         hearts: 3,
         message: 'I am sad because it is who I am!'
       }"
-      ></rq-thought>
+      ></rq-task>
     </div>
 
     <div class="control-section thought-section">
-      <rq-thought
+      <rq-task
         [type]="'action'"
-      ></rq-thought>
+      ></rq-task>
+    </div>
+
+    <div class="control-section">
+      <rq-button
+        [text]="'Click Me!'"
+        [type]="'primary'"
+        (click)="showDialog()"
+      >
+      </rq-button>
+      <rq-task-dialog
+        [visible]="dialogIsVisible"
+        [type]="'happy'"
+        [task]="{
+          completed: false,
+          hearts: 3,
+          message: 'Beanie babies were once cool but now they are uncool'
+        }"
+        (visibilityChanged)="dialogIsVisible = $event"
+      ></rq-task-dialog>
     </div>
   </div>
 
