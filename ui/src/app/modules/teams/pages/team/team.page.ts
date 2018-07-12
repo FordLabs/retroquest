@@ -114,6 +114,9 @@ export class TeamPageComponent implements OnInit {
 
   public getThoughtsInColumn(column: Column): Array<Thought> {
     let thoughts = this.indexedThoughts.get(column.id);
+    if ( !thoughts ) {
+      thoughts = [];
+    }
 
     if (column.sorted) {
       thoughts = thoughts.slice().sort((a, b) => b.hearts - a.hearts);

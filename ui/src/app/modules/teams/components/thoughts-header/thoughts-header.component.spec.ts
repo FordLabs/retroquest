@@ -75,69 +75,32 @@ describe('ThoughtsHeaderComponent', () => {
   });
 
   describe('sortByHearts', () => {
-    it('toggle sorting by hearts flag from false', () => {
-      component.column.sorted = false;
-      component.sortByHearts();
-      expect(component.column.sorted).toBe(true);
+    it('disables sorting by hearts', () => {
+      component.sortByHearts(false);
+      expect(component.column.sorted).toBeFalsy();
     });
 
-    it('toggle sorting by hearts flag from true', () => {
-      component.column.sorted = true;
-      component.sortByHearts();
-      expect(component.column.sorted).toBe(false);
+    it('enables sorting by hearts', () => {
+      component.sortByHearts(true);
+      expect(component.column.sorted).toBeTruthy();
     });
   });
 
-  describe('toggleEdit', () => {
-    it('should pass the column with updated title to column service', () => {
-      const newTitle = 'new title';
-      const expectedColumn = { ...testColumn };
-      expectedColumn.title = newTitle;
+  describe( 'editTitle', () => {
+    it('should send column service the new title', function () {
 
-      component.editing = true;
-      component.newTitle = newTitle;
-      component.toggleEdit();
-
-      expect(mockColumnService.updateColumn).toHaveBeenCalledWith(expectedColumn);
-      expect(component.editing).toBeFalsy();
-    });
-
-    it('should set the newTitle to the existing title when toggled to editing', () => {
-      component.editing = false;
-      component.titleInput = {
-        nativeElement: jasmine.createSpyObj( {
-          focus: null
-        })
+      component.column = {
+        sorted: false,
+        id: null,
+        topic: null,
+        title: 'newTitle',
+        teamId: null,
       };
 
-      const originalSetTimeout = window.setTimeout;
-      window.setTimeout = (cb) => cb();
-
-      component.toggleEdit();
-
-      expect(component.newTitle).toBe(testColumn.title);
-      expect(component.editing).toBeTruthy();
-
-      window.setTimeout = originalSetTimeout;
-
-    });
-
-    it('should call focus on the title input field', async () => {
-      component.editing = false;
-      component.titleInput = {
-        nativeElement: jasmine.createSpyObj( {
-          focus: null
-        })
-      };
-
-      const originalSetTimeout = window.setTimeout;
-      window.setTimeout = (cb) => cb();
-
-      component.toggleEdit();
-
-      expect(component.titleInput.nativeElement.focus).toHaveBeenCalled();
-
-      window.setTimeout = originalSetTimeout;
+      component.editTitle('someTitle');
+      expect(mockColumnService.updateColumn).toHaveBeenCalledWith(component.column);
+      expect(component.column.title).toEqual('someTitle');
     });
   });
+
 });

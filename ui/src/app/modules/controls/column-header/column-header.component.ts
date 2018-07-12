@@ -25,7 +25,7 @@ import {Column} from '../../teams/domain/column';
   host: {
     '[class.happy]': 'type === \'happy\'',
     '[class.confused]': 'type === \'confused\'',
-    '[class.sad]': 'type === \'sad\'',
+    '[class.sad]': 'type === \'unhappy\'',
     '[class.action]': 'type === \'action\''
   }
 })
