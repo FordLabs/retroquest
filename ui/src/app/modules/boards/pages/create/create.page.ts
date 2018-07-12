@@ -36,7 +36,17 @@ export class CreateComponent {
   confirmPassword: string;
   errorMessage: string;
 
-  validateInput (): boolean {
+  create (): void {
+    if (this.validateInput()) {
+      this.teamService.create(this.teamName, this.password)
+        .subscribe(
+          response => this.handleRegistrationResponse(response),
+          error => this.handleRegistrationError(error)
+        );
+    }
+  }
+
+  private validateInput (): boolean {
     if (!this.teamName || this.teamName === '') {
       this.errorMessage = 'Please enter a team name';
       return false;
@@ -56,35 +66,15 @@ export class CreateComponent {
     return true;
   }
 
-  create (): void {
-    if (this.validateInput()) {
-      this.teamService.create(this.teamName, this.password)
-        .subscribe(
-          (response) => {
-            this.handleRegistrationResponse(response);
-          },
-          (error) => {
-            this.handleRegistrationError(error);
-          }
-        );
-    }
-  }
-
-  handleRegistrationResponse (response): void {
+  private handleRegistrationResponse (response): void {
     AuthService.setToken(response.body);
     const teamUrl = response.headers.get('location');
-    this.router.navigateByUrl( teamUrl);
+    this.router.navigateByUrl(teamUrl);
   }
 
-  handleRegistrationError (error) {
+  private handleRegistrationError (error) {
     error.error = JSON.parse(error.error);
-
-    if (error.error.message) {
-      this.errorMessage = error.error.message;
-    } else {
-      this.errorMessage = `${error.status} ${error.error}`;
-    }
-
+    this.errorMessage = error.error.message ? error.error.message : `${error.status} ${error.error}`;
     console.error('A registration error occurred:', this.errorMessage);
   }
 }

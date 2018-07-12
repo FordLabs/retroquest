@@ -39,7 +39,18 @@ export class LoginComponent {
   password: string;
   errorMessage: string;
 
-  validateInput (): boolean {
+  login (captchaResponse: string): void {
+    this.recaptchaComponent.reset();
+    if (this.validateInput()) {
+      this.teamService.login(this.teamName, this.password, captchaResponse)
+        .subscribe(
+          response => this.handleLoginResponse(response),
+          error => this.handleLoginError(error)
+        );
+    }
+  }
+
+  private validateInput (): boolean {
     if (!this.teamName || this.teamName === '') {
       this.errorMessage = 'Please enter a team name';
       return false;
@@ -54,28 +65,13 @@ export class LoginComponent {
     return true;
   }
 
-  login (captchaResponse: string): void {
-    this.recaptchaComponent.reset();
-    if (this.validateInput()) {
-      this.teamService.login(this.teamName, this.password, captchaResponse)
-        .subscribe(
-          (response) => {
-            this.handleLoginResponse(response);
-          },
-          (error) => {
-            this.handleLoginError(error);
-          }
-        );
-    }
-  }
-
-  handleLoginResponse (response): void {
+  private handleLoginResponse (response): void {
     AuthService.setToken(response.body);
     const teamId = response.headers.get('location');
     this.router.navigateByUrl( `/team/${teamId}`);
   }
 
-  handleLoginError (error) {
+  private handleLoginError (error) {
     error.error = JSON.parse(error.error);
 
     if (error.error.message) {
