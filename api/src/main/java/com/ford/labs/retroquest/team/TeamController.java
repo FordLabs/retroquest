@@ -89,7 +89,7 @@ public class TeamController {
     }
 
     @PostMapping("/team/login")
-    public ResponseEntity<String> login(@RequestBody RequestedTeam team) {
+    public ResponseEntity<String> login(@RequestBody @Valid RequestedTeam team) {
         Team savedTeamEntity = teamService.login(team);
         String jwt = jwtBuilder.buildJwt(savedTeamEntity.getUri());
 

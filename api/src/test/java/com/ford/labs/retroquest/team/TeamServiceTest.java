@@ -91,7 +91,7 @@ public class TeamServiceTest {
 
     @Test
     public void returnsSavedTeamOnSuccessfulLogin() {
-        RequestedTeam requestedTeam = new RequestedTeam("beach-bums", "password");
+        RequestedTeam requestedTeam = new RequestedTeam("beach-bums", "password", "captcha");
         Team expectedTeam = new Team();
         expectedTeam.setPassword("encryptedPassword");
 
@@ -104,7 +104,7 @@ public class TeamServiceTest {
 
     @Test(expected = BoardDoesNotExistException.class)
     public void throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
-        RequestedTeam requestedTeam = new RequestedTeam("beach-bums", "password");
+        RequestedTeam requestedTeam = new RequestedTeam("beach-bums", "password", "captcha");
 
         when(teamRepository.findTeamByName("beach-bums")).thenReturn(null);
         teamService.login(requestedTeam);
@@ -112,7 +112,7 @@ public class TeamServiceTest {
 
     @Test(expected = PasswordInvalidException.class)
     public void throwsPasswordInvalidExceptionWhenNoPasswordGiven() {
-        RequestedTeam requestedTeam = new RequestedTeam("beach-bums", null);
+        RequestedTeam requestedTeam = new RequestedTeam("beach-bums", null, "captcha");
         when(teamRepository.findTeamByName("beach-bums")).thenReturn(new Team());
 
         teamService.login(requestedTeam);
@@ -120,7 +120,7 @@ public class TeamServiceTest {
 
     @Test(expected = PasswordInvalidException.class)
     public void throwsPasswordInvalidExceptionWhenPasswordsDoNotMatch() {
-        RequestedTeam requestedTeam = new RequestedTeam("beach-bums", "notPassword");
+        RequestedTeam requestedTeam = new RequestedTeam("beach-bums", "notPassword", "captcha");
         Team expectedTeam = new Team();
 
         expectedTeam.setPassword("encryptedPassword");
@@ -136,7 +136,7 @@ public class TeamServiceTest {
     public void creatingTeamAlsoCreatesThreeColumnTitles() {
         when(this.teamRepository.save(any(Team.class))).then(returnsFirstArg());
 
-        RequestedTeam requestedTeam = new RequestedTeam("beach-bums", "password");
+        RequestedTeam requestedTeam = new RequestedTeam("beach-bums", "password", "captcha");
         teamService.createNewTeam(requestedTeam);
 
         ColumnTitle happyColumnTitle = ColumnTitle.builder().teamId("beach-bums").topic("happy").title("Happy").build();

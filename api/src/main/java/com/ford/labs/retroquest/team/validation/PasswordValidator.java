@@ -36,33 +36,34 @@ public class PasswordValidator implements ConstraintValidator<PasswordConstraint
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        for(PasswordValidityChecker cur:PasswordValidityChecker.values()) {
+        for (PasswordValidityChecker cur : PasswordValidityChecker.values()) {
             cur.validate(scrubForNull(value));
         }
 
         return true;
     }
-    private String scrubForNull(String value){
-        return  value==null?"":value;
+
+    private String scrubForNull(String value) {
+        return value == null ? "" : value;
     }
 
-    private enum PasswordValidityChecker{
-        LENGTH("^.{8,}$",  new PasswordTooShortException()),
-        CONTAINS_NUMBER("^.*\\d.*$",new PasswordMissingNumberException()),
+    private enum PasswordValidityChecker {
+        LENGTH("^.{8,}$", new PasswordTooShortException()),
+        CONTAINS_NUMBER("^.*\\d.*$", new PasswordMissingNumberException()),
         CONTAINS_LOWER("^.*[\\p{javaLowerCase}].*$", new PasswordMissingLowerCaseAlphaException()),
         CONTAINS_UPPER("^.*[\\p{javaUpperCase}].*$", new PasswordMissingUpperCaseAlphaException());
 
         private final Pattern pattern;
         private final RuntimeException ex;
 
-        PasswordValidityChecker (final String regexp, final RuntimeException ex){
-            this.pattern=Pattern.compile(regexp);
-            this.ex=ex;
+        PasswordValidityChecker(final String regexp, final RuntimeException ex) {
+            this.pattern = Pattern.compile(regexp);
+            this.ex = ex;
         }
 
-        private void validate(final String value){
+        private void validate(final String value) {
 
-            if(!pattern.matcher(value).matches()){
+            if (!pattern.matcher(value).matches()) {
                 throw ex;
             }
         }

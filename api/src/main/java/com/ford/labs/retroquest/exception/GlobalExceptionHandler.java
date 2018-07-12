@@ -25,7 +25,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
+    @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Incorrect board or password. Please try again.")
+    @ExceptionHandler(CaptchaInvalidException.class)
+    public void invalidCaptchaExceptionHandler() {
+    }
+    
     @ResponseStatus(value = HttpStatus.CONFLICT, reason = "This board name is already in use. Please try another one.")
     @ExceptionHandler(DataIntegrityViolationException.class)
     public void duplicateUriConflict() {
@@ -75,5 +79,4 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TeamAlreadyHasPasswordException.class)
     public void teamAlreadyHasPasswordExceptionHandler() {
     }
-
 }
