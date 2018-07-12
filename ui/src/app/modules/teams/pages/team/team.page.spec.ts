@@ -133,6 +133,12 @@ describe('TeamPageComponent', () => {
   });
 
   describe('getThoughtsInColumn', () => {
+
+    it('should return an empty list of no thoughts are in the list', () => {
+      const actualThoughts = component.getThoughtsInColumn(testColumn);
+      expect(actualThoughts.length).toBe(0);
+    });
+
     it('should return thoughts for given column', () => {
 
       const testThoughts: Array<Thought> = [

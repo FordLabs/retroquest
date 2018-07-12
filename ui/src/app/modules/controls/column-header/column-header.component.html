@@ -37,18 +37,17 @@
   <i class="fas fa-sort-down sort"
      [ngClass]="{
         'sort-icon-translucent': !sorted,
-        'hide': !readOnlyEnabled
+        'hide': !readOnlyEnabled || type === 'action'
      }"
+
      (click)="toggleSort()"
   ></i>
 
-
-
-
-
 <span
   class="edit-button"
-  [ngClass]="{'edit-button-enabled': !readOnlyEnabled}"
+  [ngClass]="{
+    'edit-button-enabled': !readOnlyEnabled || type === 'action'
+    }"
 >
   <i class="fas fa-pencil-alt"
      (click)="toggleEdit()"

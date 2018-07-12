@@ -26,7 +26,7 @@ import {ColumnService} from '../../services/column.service';
   templateUrl: './thoughts-header.component.html',
   styleUrls: ['./thoughts-header.component.scss']
 })
-export class ThoughtsHeaderComponent implements OnInit {
+export class ThoughtsHeaderComponent {
 
   constructor (private thoughtService: ThoughtService, private columnService: ColumnService) {
   }
@@ -38,21 +38,15 @@ export class ThoughtsHeaderComponent implements OnInit {
 
   @ViewChild('titleInput') titleInput;
 
-  editing = false;
-  newTitle: string;
   newThought = '';
 
-  ngOnInit (): void {
-    this.newTitle = this.column.title;
-  }
-
-  private editTitle () {
-    this.column.title = this.newTitle;
+  public editTitle (newTitle: string) {
+    this.column.title = newTitle;
     this.columnService.updateColumn(this.column);
   }
 
-  public sortByHearts (): void {
-    this.column.sorted = !this.column.sorted;
+  public sortByHearts (sortState: boolean): void {
+    this.column.sorted = sortState;
   }
 
   public addThought (): void {
@@ -75,23 +69,6 @@ export class ThoughtsHeaderComponent implements OnInit {
 
   public getCharactersRemaining(): number {
     return this.maxThoughtLength - this.newThought.length;
-  }
-
-  public toggleEdit(): void {
-    if (this.editing) {
-      this.editTitle();
-      this.editing = !this.editing;
-    } else {
-      this.newTitle = this.column.title;
-      this.editing = !this.editing;
-      this.focusInput();
-    }
-  }
-
-  private focusInput(): void {
-    setTimeout(() => {
-      this.titleInput.nativeElement.focus();
-    }, 0);
   }
 
 }
