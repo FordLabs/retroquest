@@ -105,7 +105,6 @@ export class TeamPageComponent implements OnInit {
   }
 
   public getThoughtsInColumn(column: Column): Array<Thought> {
-
     let thoughtsInColumn = this.thoughtsArray.filter( (thought) => thought.topic === column.topic);
     if (!thoughtsInColumn) {
       return [];
