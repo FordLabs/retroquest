@@ -50,18 +50,6 @@ pushd api
   SPRING_PROFILES_ACTIVE=docker ./gradlew clean build test dockerApiTest
 popd
 
-### Set up required for E2E Tests ###
-pushd api
-    docker-compose up &
-    SPRING_PROFILES_ACTIVE=docker ./gradlew bootRun &
-popd
-
-pushd ui
-  npm run e2e
-
-  docker-compose down
-popd
-
 set +x
 echo '
   /$$$$$$                                                            
