@@ -42,8 +42,6 @@ pushd ui
     exit 1
   fi
 
-  npm run e2e
-
 popd
 
 pushd api
