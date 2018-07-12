@@ -17,6 +17,7 @@
 
 import {CreateComponent} from './create.page';
 import {AuthService} from '../../../auth/auth.service';
+import {Subject} from 'rxjs';
 
 describe('CreateComponent', () => {
   let component: CreateComponent;
@@ -24,8 +25,8 @@ describe('CreateComponent', () => {
   let mockRouter;
 
   beforeEach(() => {
-    mockTeamService = jasmine.createSpyObj(['create']);
-    mockRouter = jasmine.createSpyObj(['navigateByUrl']);
+    mockTeamService = jasmine.createSpyObj({'create': new Subject()});
+    mockRouter = jasmine.createSpyObj({'navigateByUrl': null});
 
     spyOn(AuthService, 'setToken');
     spyOn(console, 'error');
@@ -33,23 +34,21 @@ describe('CreateComponent', () => {
     component = new CreateComponent(mockTeamService, mockRouter);
   });
 
-  describe('validateInput', () => {
-    it('should set the error message and return false with empty teamName', () => {
+  describe('create', () => {
+    it('should set the error message for empty teamName', () => {
       component.teamName = '';
 
-      const isValid = component.validateInput();
+      component.create();
 
-      expect(isValid).toBe(false);
       expect(component.errorMessage).toEqual('Please enter a team name');
     });
 
-    it('should set the error message and return false with empty password', () => {
+    it('should set the error message for empty password', () => {
       component.teamName = 'Team Name';
       component.password = '';
 
-      const isValid = component.validateInput();
+      component.create();
 
-      expect(isValid).toBe(false);
       expect(component.errorMessage).toEqual('Please enter a password');
     });
 
@@ -58,60 +57,59 @@ describe('CreateComponent', () => {
       component.password = 'p4ssw0rd';
       component.confirmPassword = 'password';
 
-      const isValid = component.validateInput();
+      component.create();
 
-      expect(isValid).toBe(false);
       expect(component.errorMessage).toEqual('Please enter matching passwords');
     });
 
-    it('should return true when the teamName and password are not empty and the passwords match', () => {
+    it('should not set an error when the teamName and password are not empty and the passwords match', () => {
       component.teamName = 'Team Name';
       component.password = 'p4ssw0rd';
       component.confirmPassword = 'p4ssw0rd';
 
-      const isValid = component.validateInput();
+      component.create();
 
-      expect(isValid).toBe(true);
       expect(component.errorMessage).toEqual('');
     });
-  });
-
-  describe('handleRegistrationResponse', () => {
 
     it('should set jwt as cookie and navigate to team page', () => {
+      component.teamName = 'Team Name';
+      component.password = 'p4ssw0rd';
+      component.confirmPassword = 'p4ssw0rd';
+
       const teamUrl = 'team/teamId';
       const jwt = 'im.a.jwt';
       const httpResponse = {
         body: jwt,
         headers: {
-          get () {
+          get() {
             return teamUrl;
           }
         }
       };
 
-      component.handleRegistrationResponse(httpResponse);
+      component.create();
+      mockTeamService.create().next(httpResponse);
 
       expect(AuthService.setToken).toHaveBeenCalledWith(jwt);
       expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(teamUrl);
     });
-  });
 
-  describe('handleRegistrationError', () => {
     it('should set the error message and log it', () => {
+      component.teamName = 'Team Name';
+      component.password = 'p4ssw0rd';
+      component.confirmPassword = 'p4ssw0rd';
+
       const httpErrorMessage = 'server error message';
       const error = {
-        error: JSON.stringify({message: httpErrorMessage })
+        error: JSON.stringify({message: httpErrorMessage})
       };
 
-      component.handleRegistrationError(error);
+      component.create();
+      mockTeamService.create().error(error);
 
       expect(component.errorMessage).toEqual(httpErrorMessage);
       expect(console.error).toHaveBeenCalledWith('A registration error occurred:', httpErrorMessage);
     });
-  });
-
-  describe('create', () => {
-    // TODO: test create() with http Observable responses
   });
 });

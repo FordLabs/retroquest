@@ -17,6 +17,7 @@
 
 import {LoginComponent} from './login.page';
 import {AuthService} from '../../../auth/auth.service';
+import {Subject} from 'rxjs';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -24,82 +25,79 @@ describe('LoginComponent', () => {
   let mockRouter;
 
   beforeEach(() => {
-    mockTeamService = jasmine.createSpyObj(['login']);
-    mockRouter = jasmine.createSpyObj(['navigateByUrl']);
+    mockTeamService = jasmine.createSpyObj({login: new Subject()});
+    mockRouter = jasmine.createSpyObj({navigateByUrl: null});
 
     spyOn(AuthService, 'setToken');
     spyOn(console, 'error');
 
     component = new LoginComponent(mockTeamService, mockRouter);
+    component.recaptchaComponent = jasmine.createSpyObj({reset: null})
   });
 
-  describe('validateInput', () => {
-    it('should set the error message and return false with empty teamName', () => {
+  describe('login', () => {
+    it('should set the error message for empty teamName', () => {
       component.teamName = '';
 
-      const isValid = component.validateInput();
+      component.login("some captcha");
 
-      expect(isValid).toBe(false);
       expect(component.errorMessage).toEqual('Please enter a team name');
     });
 
-    it('should set the error message and return false with empty password', () => {
+    it('should set the error message for empty password', () => {
       component.teamName = 'Team Name';
       component.password = '';
 
-      const isValid = component.validateInput();
+      component.login("some captcha");
 
-      expect(isValid).toBe(false);
       expect(component.errorMessage).toEqual('Please enter a password');
     });
 
-    it('should return true when the teamName and password are not empty', () => {
+    it('should not set an error message when the teamName and password are not empty', () => {
       component.teamName = 'Team Name';
       component.password = 'p4ssw0rd';
 
-      const isValid = component.validateInput();
+      component.login("some captcha");
 
-      expect(isValid).toBe(true);
       expect(component.errorMessage).toEqual('');
     });
-  });
-
-  describe('handleLoginResponse', () => {
 
     it('should set jwt as cookie and navigate to team page', () => {
+      component.teamName = 'Team Name';
+      component.password = 'p4ssw0rd';
+
       const teamId = 'teamId';
       const jwt = 'im.a.jwt';
       const httpResponse = {
         body: jwt,
         headers: {
-          get () {
+          get() {
             return teamId;
           }
         }
       };
 
-      component.handleLoginResponse(httpResponse);
+      component.login("some captcha");
+      mockTeamService.login().next(httpResponse);
 
       expect(AuthService.setToken).toHaveBeenCalledWith(jwt);
       expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(`/team/${teamId}`);
     });
-  });
 
-  describe('handleLoginError', () => {
     it('should set the error message and log it', () => {
+      component.teamName = "some team";
+      component.password = "some password";
+
       const httpErrorMessage = 'server error message';
       const error = {
-        error: JSON.stringify({message: httpErrorMessage })
+        error: JSON.stringify({message: httpErrorMessage})
       };
 
-      component.handleLoginError(error);
+      component.login("some captcha");
+      mockTeamService.login().error(error);
 
       expect(component.errorMessage).toEqual(httpErrorMessage);
       expect(console.error).toHaveBeenCalledWith('A login error occurred:', httpErrorMessage);
     });
-  });
-
-  describe('login', () => {
-    // TODO: test login() with http Observable responses
   });
 });
