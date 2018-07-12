@@ -1,0 +1,152 @@
+/*!
+ * Copyright (c) 2018 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+@import 'color-vars';
+
+.all-caps {
+  text-transform: uppercase;
+}
+
+$control-link-section-width: 200px;
+
+.control-section {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 48px 0;
+  width: 100%;
+}
+
+.control-link-section {
+  background-color: $white;
+  bottom: 0;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+  left: 0;
+  padding: 12px;
+  position: fixed;
+  top: 0;
+  width: $control-link-section-width;
+
+  .guide-link {
+    box-sizing: border-box;
+    color: $guide-link-text-color;
+    cursor: pointer;
+    display: block;
+    font-weight: bold;
+    padding: 6px;
+    width: 100%;
+
+    &:hover {
+      color: $turquoise;
+    }
+  }
+
+  .guide-sub-link {
+    box-sizing: border-box;
+    color: $guide-link-text-color;
+    cursor: pointer;
+    display: block;
+    opacity: .7;
+    padding: 6px 24px;
+    width: 100%;
+
+    &:hover {
+      color: $turquoise;
+    }
+  }
+}
+
+.control-gallery-section {
+  $header-font-color: #333;
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+
+  flex-direction: column;
+  margin-left: $control-link-section-width;
+
+  h1 {
+    color: $header-font-color;
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    text-transform: uppercase;
+    width: 100%;
+  }
+
+  h2 {
+    color: $header-font-color;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    text-transform: capitalize;
+    width: 100%;
+  }
+
+  h3 {
+    color: $header-font-color;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    text-transform: capitalize;
+    width: 100%;
+  }
+}
+
+
+rq-action-bar {
+  height: 50px;
+  width: 500px;
+
+  rq-button {
+    height: 100%;
+  }
+}
+
+.text-field-section {
+  rq-text-field {
+    margin-right: 24px;
+  }
+}
+
+.count-seperator-section {
+  width: 200px;
+
+  rq-count-seperator {
+    width: 200px;
+  }
+}
+
+.column-header-section {
+  rq-column-header {
+    height: 75px;
+    margin-right: 24px;
+    width: 200px;
+  }
+}
+
+.thought-section {
+  rq-thought {
+    height: auto;
+    margin-right: 24px;
+    width: 225px;
+  }
+}
+
+
+

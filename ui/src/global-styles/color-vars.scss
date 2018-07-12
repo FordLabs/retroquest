@@ -26,6 +26,7 @@ $unhappy-red: #e74c3c;
 $unhappy-hover-red: #ffdfde;
 $action-yellow: #f1c40f;
 
+$guide-link-text-color: #333;
 $link-blue: #1b89ef;
 
 $text-gray: #a5a5a5;
@@ -62,6 +63,7 @@ $turquoise: #1abc9c;
 $green-sea: #16a085;
 
 $clouds: #ecf0f1;
+$grape: #a56de2;
 
 @function opacity($color, $level) {
   @return rgba($color, $level);

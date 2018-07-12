@@ -13,17 +13,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-import {Component} from '@angular/core';
+import {ButtonComponent} from './button.component';
 
-@Component({
-  selector: 'rq-root',
-  template: '<router-outlet></router-outlet>'
-})
-export class AppComponent {
+describe('ButtonComponent', () => {
+  let component: ButtonComponent;
 
-  constructor() {
-  }
+  beforeEach(() => {
+    component = new ButtonComponent();
+  });
 
-}
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+});

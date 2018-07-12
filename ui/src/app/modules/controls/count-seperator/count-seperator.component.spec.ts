@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright (c) 2018 Ford Motor Company
  * All rights reserved.
  *
@@ -13,19 +13,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-import {Component, Input} from '@angular/core';
+import {CountSeperatorComponent} from './count-seperator.component';
 
-@Component({
-  selector: 'rq-count-seperator',
-  templateUrl: './count-seperator.component.html',
-  styleUrls: ['./count-seperator.component.scss']
-})
-export class CountSeperatorComponent {
+describe('CountSeperatorComponent', () => {
+  let component: CountSeperatorComponent;
 
-  @Input() count: number;
+  beforeEach(() => {
+    component = new CountSeperatorComponent();
+  });
 
-  constructor() { }
-
-}
+});

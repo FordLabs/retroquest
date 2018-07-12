@@ -13,17 +13,25 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
 
-import {Component} from '@angular/core';
+import {Component, HostBinding, Input} from '@angular/core';
 
 @Component({
-  selector: 'rq-root',
-  template: '<router-outlet></router-outlet>'
-})
-export class AppComponent {
-
-  constructor() {
+  selector: 'rq-button',
+  templateUrl: './button.component.html',
+  styleUrls: ['./button.component.scss'],
+  host: {
+    '[class.primary]': 'type === \'primary\'',
+    '[class.secondary]': 'type === \'secondary\''
   }
+})
+export class ButtonComponent {
+
+  @Input() type: string;
+  @Input() text = '';
+
+  constructor() { }
 
 }

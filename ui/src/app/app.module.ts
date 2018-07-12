@@ -25,6 +25,7 @@ import {TeamsModule} from './modules/teams/teams.module';
 import {BoardsModule} from './modules/boards/boards.module';
 import {TokenInterceptor} from './modules/auth/token-interceptor/token.interceptor';
 import {TeamService} from './modules/teams/services/team.service';
+import {ControlsModule} from './modules/controls/controls.module';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import {TeamService} from './modules/teams/services/team.service';
   ],
   imports: [
     TeamsModule,
+    ControlsModule,
     BoardsModule,
     BrowserModule,
     HttpClientModule,
