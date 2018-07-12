@@ -31,14 +31,10 @@ export class ThoughtsHeaderComponent {
   constructor (private thoughtService: ThoughtService, private columnService: ColumnService) {
   }
 
-  maxThoughtLength = 255;
-
   @Input() column: Column;
   @Input() thoughtCount: number;
 
   @ViewChild('titleInput') titleInput;
-
-  newThought = '';
 
   public editTitle (newTitle: string) {
     this.column.title = newTitle;
@@ -49,26 +45,20 @@ export class ThoughtsHeaderComponent {
     this.column.sorted = sortState;
   }
 
-  public addThought (): void {
-    if (this.newThought && this.newThought.length) {
+  public addThought (newMessage: string): void {
+    if (newMessage && newMessage.length) {
       const thought: Thought = {
         id: null,
         teamId: this.column.teamId,
         topic: this.column.topic,
-        message: this.newThought,
+        message: newMessage,
         hearts: 0,
         discussed: false,
         columnTitle: this.column
       };
 
-      this.newThought = '';
-
       this.thoughtService.addThought(thought);
     }
-  }
-
-  public getCharactersRemaining(): number {
-    return this.maxThoughtLength - this.newThought.length;
   }
 
 }

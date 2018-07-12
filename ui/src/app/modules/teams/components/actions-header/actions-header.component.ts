@@ -32,24 +32,17 @@ export class ActionsHeaderComponent {
   @Input() teamId: string;
   @Input() thoughtCount: number;
 
-  newTask = '';
   maxInputLength = 255;
 
-  public getCharactersRemaining(): number {
-    return this.maxInputLength - this.newTask.length;
-  }
-
-  addActionItem(): void {
-    if (this.newTask && this.newTask.length) {
+  addActionItem(newMessage: string): void {
+    if (newMessage && newMessage.length) {
       const actionItem: ActionItem = {
         id: null,
         teamId: this.teamId,
-        task: this.newTask,
+        task: newMessage,
         completed: false,
         assignee: null
       };
-
-      this.newTask = '';
 
       this.actionItemService.addActionItem(actionItem);
     }

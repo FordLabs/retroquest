@@ -78,6 +78,14 @@ describe('TextFieldComponent', () => {
       expect(component.newMessageAdded.emit).toHaveBeenCalledWith(fakeMessage);
     });
 
+    it('should clear out the text from the text field', () => {
+      const fakeMessage = 'FAKE MESSAGE';
+      component.text = fakeMessage;
+
+      component.emitNewTaskMessage();
+      expect(component.text).toEqual('');
+    });
+
   });
 
 });

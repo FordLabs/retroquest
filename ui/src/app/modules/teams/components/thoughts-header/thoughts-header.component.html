@@ -23,18 +23,11 @@
     (titleChanged)="editTitle($event)"
   ></rq-column-header>
 
-  <div class="thought-input-wrapper">
-    <input class="thought-input"
-           type="text"
-           placeholder="enter thought"
-           maxlength="{{maxThoughtLength}}"
-           [(ngModel)]="newThought"
-           (keydown.enter)="addThought()">
-    <div
-      [ngClass]="{'thought-countdown-red': getCharactersRemaining() < 50}"
-      [style.visibility]="getCharactersRemaining() === maxThoughtLength ? 'hidden' : 'visible'"
-      class="thought-countdown">{{getCharactersRemaining()}}</div>
-  </div>
+  <rq-text-field
+    [type]="column.topic"
+    [placeholder]="'enter a thought'"
+    (newMessageAdded)="addThought($event)"
+  ></rq-text-field>
 
   <rq-count-seperator [count]="thoughtCount"></rq-count-seperator>
 </div>
