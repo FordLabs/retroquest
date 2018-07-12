@@ -17,19 +17,11 @@
 
 <div class="rq-action-column-header">
   <rq-column-header [title]="'Action Items'" [type]="'action'"></rq-column-header>
-  <div class="action-input-wrapper">
-    <input class="action-input"
-           type="text"
-           placeholder="enter action item"
-           maxlength="255"
-           [(ngModel)]="newTask"
-           (keydown.enter)="addActionItem()"/>
-    <div
-      [ngClass]="{'action-countdown-red': getCharactersRemaining() < 50}"
-      [style.visibility]="getCharactersRemaining() === maxInputLength ? 'hidden' : 'visible'"
-      class="action-countdown">{{getCharactersRemaining()}}
-    </div>
-  </div>
+  <rq-text-field
+    [type]="'action'"
+    [placeholder]="'enter action item'"
+    (newMessageAdded)="addActionItem($event)"
+  ></rq-text-field>
 
   <rq-count-seperator [count]="thoughtCount"></rq-count-seperator>
 </div>
