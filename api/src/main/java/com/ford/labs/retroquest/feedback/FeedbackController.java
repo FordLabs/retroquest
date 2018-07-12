@@ -50,9 +50,8 @@ public class FeedbackController {
 
     @GetMapping("/average")
     public double getAverageRating() {
-        List<Feedback> allFeedback = feedbackRepository.findAll();
+        List<Feedback> allFeedback = feedbackRepository.findAllByStarsIsGreaterThanEqual(1);
         OptionalDouble average = allFeedback.stream().mapToDouble(Feedback::getStars).average();
         return average.isPresent() ? average.getAsDouble() : 0.0;
     }
-
 }
