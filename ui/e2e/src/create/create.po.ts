@@ -1,12 +1,12 @@
 import { browser, by, element, ElementFinder } from 'protractor';
 
 export class CreatePage {
-  createRandomBoard(boardName: string = '', password: string = 'password'): Promise<string> {
+  createRandomBoard(boardName: string = '', password: string = 'Passw0rd'): Promise<string> {
     const randomBoardName = boardName + new Date().getTime();
     return this.createBoard(randomBoardName, password);
   }
 
-  createBoard(boardName: string, password: string = 'password'): Promise<string> {
+  createBoard(boardName: string, password: string = 'Passw0rd'): Promise<string> {
     return new Promise<string>((resolve) => {
       this.teamNameInput().sendKeys(boardName).then(() => {
         this.teamPasswordInput().sendKeys(password).then(() => {

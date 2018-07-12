@@ -20,6 +20,8 @@ then
 fi
 
 set -x
+
+### Test UI Unit Tests ###
 pushd ui
   npm install
   npm run lint-fix
@@ -31,7 +33,7 @@ pushd ui
     git add -A
     git commit --amend --no-edit
     echo "Amended lint fixes to last commit"
-    
+
   fi
   set -x
 
@@ -41,9 +43,9 @@ pushd ui
   then
     exit 1
   fi
-
 popd
 
+### Test API ###
 pushd api
   SPRING_PROFILES_ACTIVE=docker ./gradlew clean build test dockerApiTest
 popd
