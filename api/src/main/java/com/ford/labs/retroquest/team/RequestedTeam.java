@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.team;
 
+import com.ford.labs.retroquest.team.validation.CaptchaConstraint;
 import com.ford.labs.retroquest.team.validation.PasswordConstraint;
 import com.ford.labs.retroquest.team.validation.TeamNameConstraint;
 import lombok.AllArgsConstructor;
@@ -33,4 +34,7 @@ public class RequestedTeam {
 
     @PasswordConstraint
     private String password;
+
+    @CaptchaConstraint
+    private String captchaResponse;
 }

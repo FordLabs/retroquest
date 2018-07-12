@@ -1,7 +1,6 @@
 package com.ford.labs.retroquest.team.validation;
 
 import com.ford.labs.retroquest.exception.CaptchaInvalidException;
-import com.ford.labs.retroquest.exception.CaptchaMissingException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,9 +30,9 @@ public class CaptchaValidatorTest {
         validator = new CaptchaValidator(restTemplate, captchaProperties);
     }
 
-    @Test(expected = CaptchaMissingException.class)
-    public void whenCaptchaIsEmpty_throwsCaptchaMissingException () {
-        validator.isValid("");
+    @Test(expected = CaptchaInvalidException.class)
+    public void whenCaptchaIsEmpty_throwsCaptchaInvalidException () {
+        validator.isValid("", null);
     }
 
     @Test(expected = CaptchaInvalidException.class)
@@ -42,7 +41,7 @@ public class CaptchaValidatorTest {
         when(restTemplate.postForObject("http://myUrl", request, ReCaptchaResponse.class))
                 .thenReturn(new ReCaptchaResponse(false, Collections.emptyList()));
 
-        validator.isValid("Invalid Captcha");
+        validator.isValid("Invalid Captcha", null);
     }
 
     @Test
@@ -51,6 +50,6 @@ public class CaptchaValidatorTest {
         when(restTemplate.postForObject("http://myUrl", request, ReCaptchaResponse.class))
                 .thenReturn(new ReCaptchaResponse(true, Collections.emptyList()));
 
-        assertTrue(validator.isValid("Valid Captcha"));
+        assertTrue(validator.isValid("Valid Captcha", null));
     }
 }

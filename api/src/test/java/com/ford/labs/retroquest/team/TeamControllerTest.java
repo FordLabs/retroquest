@@ -66,7 +66,7 @@ public class TeamControllerTest {
     @Test
     public void returnsJwtOnSuccessfulLogin() {
         String expectedJwt = "I am a JWT";
-        RequestedTeam requestedTeam = new RequestedTeam("A Team", "password");
+        RequestedTeam requestedTeam = new RequestedTeam("A Team", "password", "captcha");
         Team savedTeam = new Team();
         savedTeam.setUri("a-team");
         savedTeam.setPassword("password");
@@ -83,7 +83,7 @@ public class TeamControllerTest {
     @Test
     public void returnsJwtOnTeamCreation() {
         String expectedJwt = "I am a JWT";
-        RequestedTeam requestedTeam = new RequestedTeam("A Team", "password");
+        RequestedTeam requestedTeam = new RequestedTeam("A Team", "password", "captcha");
         Team savedTeam = new Team();
         savedTeam.setUri("a-team");
         savedTeam.setPassword("password");
