@@ -1,5 +1,7 @@
 package com.ford.labs.retroquest.api;
 
+import com.ford.labs.retroquest.feedback.Feedback;
+import com.ford.labs.retroquest.feedback.FeedbackRepository;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import org.junit.Test;
@@ -35,6 +37,9 @@ public class MetricsApiTest {
     @Autowired
     private TeamRepository teamRepository;
 
+    @Autowired
+    private FeedbackRepository feedbackRepository;
+
     @Test
     public void canReadTheTotalNumberOfTeamsCreated() throws Exception {
         String token = getToken(adminUsername, adminPassword);
@@ -55,6 +60,28 @@ public class MetricsApiTest {
     public void cannotReadTheTotalNumberOfTeamsWithoutAuthorization() throws Exception {
         String token = getToken("notAdmin", "notAdminPassword");
         mockMvc.perform(get("/api/metrics/team/count")
+                .header("Authorization", "Basic " + token))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void canGetFeedbackCount() throws Exception {
+        String token = getToken(adminUsername, adminPassword);
+
+        Feedback feedback = new Feedback();
+        feedbackRepository.save(feedback);
+
+        MvcResult result = mockMvc.perform(get("/api/metrics/feedback/count")
+                .header("Authorization", "Basic " + token))
+            .andExpect(status().isOk())
+            .andReturn();
+        assertEquals("1", result.getResponse().getContentAsString());
+    }
+
+    @Test
+    public void cannotGetFeedbackWithoutAuthorization() throws Exception {
+        String token = getToken("notAdmin", "notAdminPassword");
+        mockMvc.perform(get("/api/metrics/feedback/count")
                 .header("Authorization", "Basic " + token))
             .andExpect(status().isUnauthorized());
     }
