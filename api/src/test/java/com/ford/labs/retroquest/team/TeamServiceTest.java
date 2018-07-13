@@ -91,44 +91,6 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void shouldSavePasswordWhenNoneInDatabase() {
-        SetPasswordRequest requestedPassword = new SetPasswordRequest();
-        requestedPassword.setPassword("password");
-
-        Team savedTeam = new Team();
-        savedTeam.setUri("a-team");
-        savedTeam.setName("A Team");
-
-        Team expectedTeam = new Team();
-        expectedTeam.setUri("a-team");
-        expectedTeam.setName("A Team");
-        expectedTeam.setPassword("encryptedPassword");
-
-        when(teamRepository.findOne("a-team")).thenReturn(savedTeam);
-        when(passwordEncoder.encode("password")).thenReturn("encryptedPassword");
-
-        teamService.setTeamPassword("a-team", requestedPassword);
-
-        verify(teamRepository).save(expectedTeam);
-    }
-
-    @Test(expected = TeamAlreadyHasPasswordException.class)
-    public void setPasswordShouldThrowExceptionWhenTeamAlreadyHasPassword() {
-        SetPasswordRequest requestedPassword = new SetPasswordRequest();
-        requestedPassword.setPassword("password");
-
-        Team savedTeam = new Team();
-        savedTeam.setUri("a-team");
-        savedTeam.setName("A Team");
-        savedTeam.setPassword("otherPassword");
-
-        when(teamRepository.findOne("a-team")).thenReturn(savedTeam);
-        when(passwordEncoder.encode("password")).thenReturn("encryptedPassword");
-
-        teamService.setTeamPassword("a-team", requestedPassword);
-    }
-
-    @Test
     public void returnsSavedTeamOnSuccessfulLogin() {
         RequestedTeam requestedTeam = new RequestedTeam("beach-bums", "password");
         Team expectedTeam = new Team();
