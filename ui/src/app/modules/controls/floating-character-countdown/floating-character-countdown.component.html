@@ -1,4 +1,4 @@
-<!--
+{{charactersRemaining()}}<!--
   ~ Copyright (c) 2018 Ford Motor Company
   ~ All rights reserved.
   ~
@@ -15,21 +15,4 @@
   ~ limitations under the License.
   -->
 
-<input [ngClass]="{
-  'happy': type === 'happy',
-  'confused': type === 'confused',
-  'sad': type === 'unhappy',
-  'action': type === 'action'
-}"
-       type="text"
-       placeholder="{{placeholder}}"
-       maxlength="255"
-       [(ngModel)]="text"
-       (keydown.enter)="emitNewTaskMessage()"
-/>
 
-<rq-floating-character-countdown
-  [maxCharacterCount]="255"
-  [charsAreRunningOutThreshold]="50"
-  [characterCount]="text.length"
-></rq-floating-character-countdown>

@@ -62,18 +62,5 @@
       border-color: $action-yellow;
     }
   }
-
-  .chars-remaining-counter {
-    bottom: -24px;
-    height: auto;
-    position: absolute;
-    right: 0;
-    width: auto;
-  }
-
-  .display-warning-text {
-    color: $unhappy-red;
-  }
-
 }
 

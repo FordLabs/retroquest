@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright (c) 2018 Ford Motor Company
  * All rights reserved.
  *
@@ -15,28 +15,16 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+@import 'color-vars';
 
-@Component({
-  selector: 'rq-text-field',
-  templateUrl: './text-field.component.html',
-  styleUrls: ['./text-field.component.scss']
-})
-export class TextFieldComponent {
+:host {
+  bottom: -24px;
+  height: auto;
+  position: absolute;
+  right: 0;
+  width: auto;
 
-
-  @Input() placeholder = '';
-  @Input() type = '';
-
-  @Output() newMessageAdded: EventEmitter<string> = new EventEmitter<string>();
-
-  text = '';
-
-  constructor() {
-  }
-
-  public emitNewTaskMessage(): void {
-    this.newMessageAdded.emit(this.text);
-    this.text = '';
+  &.display-warning-text {
+    color: $unhappy-red;
   }
 }
