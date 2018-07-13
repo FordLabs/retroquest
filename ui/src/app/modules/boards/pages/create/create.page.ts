@@ -20,6 +20,8 @@ import {Router} from '@angular/router';
 
 import {AuthService} from '../../../auth/auth.service';
 import {TeamService} from '../../../teams/services/team.service';
+import {ViewChild} from '@angular/core';
+import {RecaptchaComponent} from 'ng-recaptcha';
 
 @Component({
   selector: 'rq-create',
@@ -31,17 +33,20 @@ export class CreateComponent {
   constructor (private teamService: TeamService, private router: Router) {
   }
 
+  @ViewChild(RecaptchaComponent) recaptchaComponent: RecaptchaComponent;
+
   teamName: string;
   password: string;
   confirmPassword: string;
   errorMessage: string;
 
-  create (): void {
+  create (captchaResponse: string): void {
+    this.recaptchaComponent.reset();
     if (this.validateInput()) {
-      this.teamService.create(this.teamName, this.password)
+      this.teamService.create(this.teamName, this.password, captchaResponse)
         .subscribe(
-          response => this.handleRegistrationResponse(response),
-          error => this.handleRegistrationError(error)
+          response => this.handleResponse(response),
+          error => this.handleError(error)
         );
     }
   }
@@ -66,13 +71,13 @@ export class CreateComponent {
     return true;
   }
 
-  private handleRegistrationResponse (response): void {
+  private handleResponse (response): void {
     AuthService.setToken(response.body);
     const teamUrl = response.headers.get('location');
     this.router.navigateByUrl(teamUrl);
   }
 
-  private handleRegistrationError (error) {
+  private handleError (error) {
     error.error = JSON.parse(error.error);
     this.errorMessage = error.error.message ? error.error.message : `${error.status} ${error.error}`;
     console.error('A registration error occurred:', this.errorMessage);

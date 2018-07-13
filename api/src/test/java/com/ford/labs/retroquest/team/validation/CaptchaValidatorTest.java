@@ -37,19 +37,17 @@ public class CaptchaValidatorTest {
 
     @Test(expected = CaptchaInvalidException.class)
     public void whenCaptchaIsInvalid_throwsCaptchaInvalidException () {
-        ReCaptchaRequestBody request = new ReCaptchaRequestBody("secret", "Invalid Captcha");
-        when(restTemplate.postForObject("http://myUrl", request, ReCaptchaResponse.class))
+        when(restTemplate.getForObject("http://myUrl?secret={secret}&response={response}", ReCaptchaResponse.class, "secret", "InvalidCaptcha"))
                 .thenReturn(new ReCaptchaResponse(false, Collections.emptyList()));
 
-        validator.isValid("Invalid Captcha", null);
+        validator.isValid("InvalidCaptcha", null);
     }
 
     @Test
     public void whenCaptchaIsValid_returnsTrue () {
-        ReCaptchaRequestBody request = new ReCaptchaRequestBody("secret", "Valid Captcha");
-        when(restTemplate.postForObject("http://myUrl", request, ReCaptchaResponse.class))
+        when(restTemplate.getForObject("http://myUrl?secret={secret}&response={response}", ReCaptchaResponse.class, "secret", "ValidCaptcha"))
                 .thenReturn(new ReCaptchaResponse(true, Collections.emptyList()));
 
-        assertTrue(validator.isValid("Valid Captcha", null));
+        assertTrue(validator.isValid("ValidCaptcha", null));
     }
 }

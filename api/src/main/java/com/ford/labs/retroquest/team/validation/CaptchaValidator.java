@@ -25,13 +25,16 @@ public class CaptchaValidator implements ConstraintValidator<CaptchaConstraint, 
             throw new CaptchaInvalidException();
         }
 
-        ReCaptchaRequestBody reCaptchaRequestBody = new ReCaptchaRequestBody(captchaProperties.getSecret(), captcha);
-        ReCaptchaResponse reCaptchaResponse = restTemplate.postForObject(captchaProperties.getUrl(), reCaptchaRequestBody, ReCaptchaResponse.class);
+        ReCaptchaResponse response = restTemplate.getForObject(
+                captchaProperties.getUrl() + "?secret={secret}&response={response}",
+                ReCaptchaResponse.class,
+                captchaProperties.getSecret(),
+                captcha
+        );
 
-        if (!reCaptchaResponse.isSuccess()) {
+        if (!response.isSuccess()) {
             throw new CaptchaInvalidException();
         }
-
         return true;
     }
 
