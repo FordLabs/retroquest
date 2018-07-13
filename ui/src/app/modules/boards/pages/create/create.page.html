@@ -16,8 +16,13 @@
   -->
 
 <div id="createContainer">
-
   <div id="app-content">
+    <re-captcha
+      #captchaRef="reCaptcha"
+      size="invisible"
+      siteKey="6LeZOmMUAAAAAOq4uXmluNuIio7XGx7U-ncmOzGT"
+      (resolved)="$event && create($event)"
+    ></re-captcha>
     <img src="/assets/RetroQuest.png" title="RetroQuest Logo" id="logo"/>
     <div class="rq-team-controls">
       <form id="createForm" class="rq-form">
@@ -58,7 +63,7 @@
                    [(ngModel)]="confirmPassword"/>
           </div>
           <span id="errorMessage" class="rq-error-message">{{errorMessage}}</span>
-          <button id="createRetroButton" class="rq-button" (click)="create()">
+          <button id="createRetroButton" class="rq-button" (click)="captchaRef.execute()">
             Create Board
           </button>
         </div>

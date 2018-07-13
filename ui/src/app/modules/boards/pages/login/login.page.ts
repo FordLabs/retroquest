@@ -44,8 +44,8 @@ export class LoginComponent {
     if (this.validateInput()) {
       this.teamService.login(this.teamName, this.password, captchaResponse)
         .subscribe(
-          response => this.handleLoginResponse(response),
-          error => this.handleLoginError(error)
+          response => this.handleResponse(response),
+          error => this.handleError(error)
         );
     }
   }
@@ -65,21 +65,15 @@ export class LoginComponent {
     return true;
   }
 
-  private handleLoginResponse (response): void {
+  private handleResponse (response): void {
     AuthService.setToken(response.body);
     const teamId = response.headers.get('location');
     this.router.navigateByUrl( `/team/${teamId}`);
   }
 
-  private handleLoginError (error) {
+  private handleError (error) {
     error.error = JSON.parse(error.error);
-
-    if (error.error.message) {
-      this.errorMessage = error.error.message;
-    } else {
-      this.errorMessage = `${error.status} ${error.error}`;
-    }
-
+    this.errorMessage = error.error.message ? error.error.message : `${error.status} ${error.error}`;
     console.error('A login error occurred:', this.errorMessage);
   }
 }

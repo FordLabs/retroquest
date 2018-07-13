@@ -27,10 +27,10 @@ export class TeamService {
   constructor(private http: HttpClient) {
   }
 
-  create(name: string, password: string): Observable<HttpResponse<string>> {
+  create(name: string, password: string, captchaResponse: string): Observable<HttpResponse<string>> {
     return this.http.post(
       '/api/team',
-      {name, password},
+      {name, password, captchaResponse},
       {observe: 'response', responseType: 'text'}
     );
   }

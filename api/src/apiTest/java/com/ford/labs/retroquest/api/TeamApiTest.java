@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.servlet.MockMvc;
@@ -55,7 +54,8 @@ public class TeamApiTest {
     @Test
     public void canCreateTeamWithValidTeamNameAndPassword() throws Exception {
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
-        server.expect(requestTo("http://captcha.url")).andRespond(withSuccess("{\"success\":true}", MediaType.APPLICATION_JSON));
+        server.expect(requestTo(containsString("http://captcha.url")))
+                .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
 
         String teamJsonBody = "{ \"name\" : \"Beach Bums\", \"password\" : \"" + VALID_PASSWORD + "\", \"captchaResponse\":\"some captcha\"}";
 
@@ -76,7 +76,8 @@ public class TeamApiTest {
     @Test
     public void cannotCreateTeamWithEmptyPassword() throws Exception {
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
-        server.expect(requestTo("http://captcha.url")).andRespond(withSuccess("{\"success\":true}", MediaType.APPLICATION_JSON));
+        server.expect(requestTo(containsString("http://captcha.url")))
+                .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
 
         String teamJsonBody = "{ \"name\" : \"A name\", \"captchaResponse\":\"some captcha\"}";
 
@@ -88,11 +89,27 @@ public class TeamApiTest {
     }
 
     @Test
+    public void cannotCreateTeamWithInvalidCaptcha() throws Exception {
+        MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
+        server.expect(requestTo(containsString("http://captcha.url")))
+                .andRespond(withSuccess("{\"success\":false}", APPLICATION_JSON));
+
+        String teamJsonBody = "{ \"name\":\"A name\",\"password\":\"" + VALID_PASSWORD + "\", \"captchaResponse\":\"someCaptcha\"}";
+
+        mockMvc.perform(post("/api/team")
+                .contentType(APPLICATION_JSON)
+                .content(teamJsonBody)).andExpect(status()
+                .reason(containsString("Incorrect board or password. Please try again.")))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     public void cannotCreateURIWithEmptyString() throws Exception {
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
-        server.expect(requestTo("http://captcha.url")).andRespond(withSuccess("{\"success\":true}", MediaType.APPLICATION_JSON));
+        server.expect(requestTo(containsString("http://captcha.url")))
+                .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
 
-        String teamJsonBody = "{ \"name\" : \"\", \"password\" : \"" + VALID_PASSWORD + "\", \"captchaResponse\":\"some captcha\"}";
+        String teamJsonBody = "{ \"name\":\"\", \"password\":\"" + VALID_PASSWORD + "\", \"captchaResponse\":\"some captcha\"}";
 
         mockMvc.perform(post("/api/team")
                 .contentType(APPLICATION_JSON)
@@ -104,9 +121,10 @@ public class TeamApiTest {
     @Test
     public void cannotCreateURIWithSpecialCharactersInTeamName() throws Exception {
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
-        server.expect(requestTo("http://captcha.url")).andRespond(withSuccess("{\"success\":true}", MediaType.APPLICATION_JSON));
+        server.expect(requestTo(containsString("http://captcha.url")))
+                .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
 
-        String teamJsonBody = "{ \"name\" : \"The@Mild$Ones\", \"password\" : \"" + VALID_PASSWORD + "\", \"captchaResponse\":\"some captcha\"}";
+        String teamJsonBody = "{ \"name\":\"The@Mild$Ones\", \"password\":\"" + VALID_PASSWORD + "\", \"captchaResponse\":\"some captcha\"}";
 
         mockMvc.perform(post("/api/team")
                 .contentType(APPLICATION_JSON)
@@ -118,10 +136,11 @@ public class TeamApiTest {
     @Test
     public void cannotCreateTeamWithDuplicateKey() throws Exception {
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
-        server.expect(times(2), requestTo("http://captcha.url")).andRespond(withSuccess("{\"success\":true}", MediaType.APPLICATION_JSON));
+        server.expect(times(2), requestTo(containsString("http://captcha.url")))
+                .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
 
-        String teamJsonBody = "{ \"name\" : \"Beach Bums A Team\", \"password\" : \"" + VALID_PASSWORD + "\", \"captchaResponse\":\"some captcha\"}";
-        String teamJsonSameBody = "{ \"name\" : \"Beach Bums A Team\", \"password\" : \"" + VALID_PASSWORD + "\", \"captchaResponse\":\"some captcha\"}";
+        String teamJsonBody = "{ \"name\":\"Beach Bums A Team\", \"password\":\"" + VALID_PASSWORD + "\", \"captchaResponse\":\"some captcha\"}";
+        String teamJsonSameBody = "{ \"name\":\"Beach Bums A Team\", \"password\":\"" + VALID_PASSWORD + "\", \"captchaResponse\":\"some captcha\"}";
 
         MvcResult mvcResult = mockMvc.perform(post("/api/team")
                 .contentType(APPLICATION_JSON)
@@ -139,7 +158,8 @@ public class TeamApiTest {
     @Test
     public void canRetrieveNameFromTeamId() throws Exception {
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
-        server.expect(requestTo("http://captcha.url")).andRespond(withSuccess("{\"success\":true}", MediaType.APPLICATION_JSON));
+        server.expect(requestTo(containsString("http://captcha.url")))
+                .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
 
         String expectedName = "Beachity Bums";
 
@@ -169,7 +189,8 @@ public class TeamApiTest {
     @Test
     public void canLoginWithTeamNameAndPassword() throws Exception {
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
-        server.expect(times(2), requestTo("http://captcha.url")).andRespond(withSuccess("{\"success\":true}", MediaType.APPLICATION_JSON));
+        server.expect(times(2), requestTo(containsString("http://captcha.url")))
+                .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
 
         RequestedTeam team = new RequestedTeam();
         team.setName("PEACHY BEACHY");
@@ -191,8 +212,10 @@ public class TeamApiTest {
     @Test
     public void loginWithBadCaptchaResponseReturns403() throws Exception {
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
-        server.expect(once(), requestTo("http://captcha.url")).andRespond(withSuccess("{\"success\":true}", MediaType.APPLICATION_JSON));
-        server.expect(once(), requestTo("http://captcha.url")).andRespond(withSuccess("{\"success\":false}", MediaType.APPLICATION_JSON));
+        server.expect(once(), requestTo(containsString("http://captcha.url")))
+                .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
+        server.expect(once(), requestTo(containsString("http://captcha.url")))
+                .andRespond(withSuccess("{\"success\":false}", APPLICATION_JSON));
 
         RequestedTeam team = new RequestedTeam();
         team.setName("PEACHY BEACHY");
@@ -213,7 +236,8 @@ public class TeamApiTest {
     @Test
     public void loginWithBadTeamNameReturns403() throws Exception {
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
-        server.expect(once(), requestTo("http://captcha.url")).andRespond(withSuccess("{\"success\":true}", MediaType.APPLICATION_JSON));
+        server.expect(once(), requestTo(containsString("http://captcha.url")))
+                .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
 
         MvcResult mvcResult = mockMvc.perform(post("/api/team/login")
                 .content("{\"name\":\"NOT A TEAM\", \"password\":\"" + VALID_PASSWORD + "\", \"captchaResponse\":\"some captcha\"}")
@@ -227,7 +251,8 @@ public class TeamApiTest {
     @Test
     public void loginWithBadPasswordReturns403() throws Exception {
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
-        server.expect(times(2), requestTo("http://captcha.url")).andRespond(withSuccess("{\"success\":true}", MediaType.APPLICATION_JSON));
+        server.expect(times(2), requestTo(containsString("http://captcha.url")))
+                .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
 
         RequestedTeam team = new RequestedTeam();
         team.setName("PEACHY BEACHY");

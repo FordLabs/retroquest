@@ -32,12 +32,13 @@ describe('TeamService', () => {
     it('should send a post request to the api with valid body', () => {
       const name = 'Team Name';
       const password = 'p4ssw0rd';
+      const captchaResponse = 'someHash';
 
-      const returnObj = service.create(name, password);
+      const returnObj = service.create(name, password, captchaResponse);
 
       expect(mockHttpClient.post).toHaveBeenCalledWith(
         '/api/team',
-        {name, password},
+        {name, password, captchaResponse},
         {observe: 'response', responseType: 'text'}
       );
 
