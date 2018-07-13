@@ -70,11 +70,11 @@ export class TeamPageComponent implements OnInit {
 
   teamId: string;
   teamName: string;
-  columns: Array<Column> = TeamPageComponent.defaultColumns;
-  thoughts: Map<number, Thought> = new Map<number, Thought>();
-  indexedThoughts: Map<number, Array<Thought>> = new Map<number, Array<Thought>>();
-  actionItems: Array<ActionItem> = [];
   globalWindowRef: Window = window;
+
+  columns: Array<Column> = TeamPageComponent.defaultColumns;
+  actionItems: Array<ActionItem> = [];
+  thoughtsArray: Array<Thought> = [];
 
   ngOnInit(): void {
 
@@ -96,16 +96,8 @@ export class TeamPageComponent implements OnInit {
   }
 
   public getColumnThoughtCount(column: Column): number {
-    const columnId = column.id;
-
-    if (this.indexedThoughts.has(columnId)) {
-      const columnThoughts = this.indexedThoughts.get(columnId);
-      if (columnThoughts) {
-        return columnThoughts.filter((thought) => !thought.discussed).length;
-      }
-    }
-
-    return 0;
+    return this.thoughtsArray.filter(
+      (thought) => thought.topic === column.topic && !thought.discussed).length;
   }
 
   public getActionItemColumnCount(): number {
@@ -113,41 +105,25 @@ export class TeamPageComponent implements OnInit {
   }
 
   public getThoughtsInColumn(column: Column): Array<Thought> {
-    let thoughts = this.indexedThoughts.get(column.id);
-    if ( !thoughts ) {
-      thoughts = [];
+
+    let thoughtsInColumn = this.thoughtsArray.filter( (thought) => thought.topic === column.topic);
+    if (!thoughtsInColumn) {
+      return [];
     }
 
     if (column.sorted) {
-      thoughts = thoughts.slice().sort((a, b) => b.hearts - a.hearts);
+      thoughtsInColumn = thoughtsInColumn.slice().sort((a, b) => b.hearts - a.hearts);
     }
 
-    return thoughts;
+    return thoughtsInColumn;
   }
 
   public resetThoughts(): void {
-    this.thoughts.clear();
-    this.indexThoughts();
-  }
-
-  private indexThoughts(): void {
-    this.indexedThoughts = new Map<number, Array<Thought>>();
-
-    this.thoughts.forEach((thought) => {
-      const columnId = thought.columnTitle.id;
-
-      if (!this.indexedThoughts.has(columnId)) {
-        this.indexedThoughts.set(columnId, []);
-      }
-
-      this.indexedThoughts.get(columnId).push(thought);
-    });
+    this.thoughtsArray.splice(0, this.thoughtsArray.length);
   }
 
   private subscribeToResetThoughts() {
-    this.thoughtService.resetThoughtsObserver.subscribe(
-      () => this.resetThoughts()
-    );
+    this.thoughtService.resetThoughtsObserver.subscribe(() => this.resetThoughts());
   }
 
   private websocketInit() {
@@ -158,17 +134,10 @@ export class TeamPageComponent implements OnInit {
         const response: WebsocketResponse = message.bodyJson;
 
         if (response.type === 'delete') {
-          const thoughtId = response.payload as number;
-          if ( thoughtId > -1 ) {
-            this.thoughts.delete(thoughtId);
-          } else {
-            this.thoughts.clear();
-          }
+          this.deleteThought(response);
         } else {
-          const thought: Thought = response.payload as Thought;
-          this.thoughts.set(thought.id, thought);
+          this.updateThoughts(response);
         }
-        this.indexThoughts();
       });
 
       this.websocketService.actionItemTopic().subscribe((message) => {
@@ -188,6 +157,25 @@ export class TeamPageComponent implements OnInit {
         }
       });
     });
+  }
+
+  private deleteThought(response: WebsocketResponse) {
+    const thoughtId = response.payload as number;
+    if ( thoughtId === -1 ) {
+      this.resetThoughts();
+    } else {
+      this.thoughtsArray = this.thoughtsArray.filter((item) => item.id !== thoughtId);
+    }
+  }
+
+  private updateThoughts(response: WebsocketResponse) {
+    const thought: Thought = response.payload as Thought;
+    const thoughtIndex = this.thoughtsArray.findIndex((item) => item.id === thought.id);
+    if (thoughtIndex === -1) {
+      this.thoughtsArray.push(thought);
+    } else {
+      this.thoughtsArray[thoughtIndex] = thought;
+    }
   }
 
   private deleteActionItem(response: WebsocketResponse) {
@@ -215,39 +203,24 @@ export class TeamPageComponent implements OnInit {
 
   private getThoughts(): void {
     this.thoughtService.fetchThoughts(this.teamId).subscribe(
-      (thoughts: Array<Thought>) => {
-        this.thoughts = new Map<number, Thought>();
-
-        thoughts.forEach((thought) => {
-          this.thoughts.set(thought.id, thought);
-        });
-
-        this.indexThoughts();
-      }
-    );
+      (thoughts: Array<Thought>) =>  this.thoughtsArray = thoughts);
   }
 
   private getColumns(): void {
     this.columnService.fetchColumns(this.teamId).subscribe(
-      (columns: Array<Column>) => {
-        this.columns = columns;
-      }
+      (columns: Array<Column>) => this.columns = columns
     );
   }
 
   private getTeamName(): void {
     this.teamsService.fetchTeamName(this.teamId).subscribe(
-      (teamName) => {
-        this.teamName = teamName;
-      }
+      (teamName) => this.teamName = teamName
     );
   }
 
   private getActionItems(): void {
     this.actionItemService.fetchActionItems(this.teamId).subscribe(
-      (actionItems: Array<ActionItem>) => {
-        this.actionItems = actionItems;
-      }
+      (actionItems: Array<ActionItem>) => this.actionItems = actionItems
     );
   }
 }
