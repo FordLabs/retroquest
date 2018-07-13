@@ -71,12 +71,6 @@ public class TeamController {
         return team.getName();
     }
 
-    @PostMapping("/team/{teamUri}/set-password")
-    public ResponseEntity setPassword(@PathVariable("teamUri") String teamUri, @RequestBody @Valid SetPasswordRequest requestedPassword) {
-        teamService.setTeamPassword(teamUri, requestedPassword);
-        return ResponseEntity.ok().build();
-    }
-
     @GetMapping(value = "/team/{teamId}/csv", produces = "application/board.csv")
     @PreAuthorize("#teamId == authentication.principal")
     public ResponseEntity<byte[]> downloadTeamBoard(@PathVariable("teamId") String teamId) throws IOException {

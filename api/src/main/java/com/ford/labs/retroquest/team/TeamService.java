@@ -93,21 +93,6 @@ public class TeamService {
         return teamEntity;
     }
 
-    public void setTeamPassword(String teamUri, SetPasswordRequest requestedPassword) {
-        Team savedTeam = teamRepository.findOne(teamUri);
-        if(savedTeam.getPassword() == null) {
-            String password = requestedPassword.getPassword();
-            String encryptedPassword = passwordEncoder.encode(password);
-
-            savedTeam.setPassword(encryptedPassword);
-
-            teamRepository.save(savedTeam);
-        }
-        else {
-            throw new TeamAlreadyHasPasswordException();
-        }
-    }
-
     public Team login(RequestedTeam requestedTeam) {
         Team savedTeam = teamRepository.findTeamByName(requestedTeam.getName());
 

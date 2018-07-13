@@ -64,16 +64,6 @@ public class TeamControllerTest {
         assertEquals("[text/csv]", response.getHeaders().get(HttpHeaders.CONTENT_TYPE).toString());
         assertEquals("[attachment; filename="+ expectedFilename +"]", response.getHeaders().get(HttpHeaders.CONTENT_DISPOSITION).toString());
     }
-    @Test
-    public void returnsOKWhenNoPasswordInDatabase() {
-        SetPasswordRequest requestedPassword = new SetPasswordRequest();
-        requestedPassword.setPassword("password");
-
-        ResponseEntity actualResponse = controller.setPassword("a-team", requestedPassword);
-
-        assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
-        verify(teamService).setTeamPassword("a-team", requestedPassword);
-    }
 
     @Test
     public void returnsJwtOnSuccessfulLogin() {
