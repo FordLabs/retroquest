@@ -5,7 +5,6 @@ import com.ford.labs.retroquest.team.RequestedTeam;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import org.junit.After;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -181,120 +181,6 @@ public class TeamApiTest{
                 .andReturn();
 
         assertEquals("Incorrect board or password. Please try again.", mvcResult.getResponse().getErrorMessage());
-    }
-
-    @Test
-    public void canSetPasswordWhenTeamPasswordIsNull() throws Exception {
-        Team team = new Team();
-        team.setUri("a-team");
-        team.setName("A Team");
-        teamRepository.save(team);
-
-        mockMvc.perform(post("/api/team/a-team/set-password")
-                .content("{\"password\":\"" + VALID_PASSWORD + "\"}")
-                .contentType(APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andReturn();
-
-        Team actualTeam = teamRepository.findOne("a-team");
-        assertTrue(actualTeam.getPassword() != null);
-    }
-    
-    @Test
-    public void shouldErrorWhenTryingToSetPasswordOnTeamThatAlreadyHasOne() throws Exception {
-        Team team = new Team();
-        team.setUri("a-team");
-        team.setName("A Team");
-        team.setPassword("password");
-        teamRepository.save(team);
-
-        MvcResult mvcResult = mockMvc.perform(post("/api/team/a-team/set-password")
-                .content("{\"password\":\"" + VALID_PASSWORD + "\"}")
-                .contentType(APPLICATION_JSON))
-                .andExpect(status().isConflict())
-                .andReturn();
-
-        assertTrue(mvcResult.getResponse().getErrorMessage().contains("Team already has a password"));
-    }
-
-    @Test
-    public void shouldErrorWhenTryingToSetTooShortPassword() throws Exception {
-        Team team = new Team();
-        team.setUri("a-team");
-        team.setName("A Team");
-        teamRepository.save(team);
-
-        MvcResult mvcResult = mockMvc.perform(post("/api/team/a-team/set-password")
-                .content("{\"password\":\"passwor\"}")
-                .contentType(APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andReturn();
-
-        assertTrue(mvcResult.getResponse().getErrorMessage().contains("Password must be 8 characters or longer."));
-    }
-
-    @Test
-    public void shouldErrorWhenTryingToSetNoPassword() throws Exception {
-        Team team = new Team();
-        team.setUri("a-team");
-        team.setName("A Team");
-        teamRepository.save(team);
-
-        MvcResult mvcResult = mockMvc.perform(post("/api/team/a-team/set-password")
-                .content("{}")
-                .contentType(APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andReturn();
-
-        assertTrue(mvcResult.getResponse().getErrorMessage().contains("Password must be 8 characters or longer."));
-    }
-
-    @Test
-    public void shouldErrorWhenSettingPasswordWithNoNumbers() throws Exception {
-        Team team = new Team();
-        team.setUri("a-team");
-        team.setName("A Team");
-        teamRepository.save(team);
-
-        MvcResult mvcResult = mockMvc.perform(post("/api/team/a-team/set-password")
-                .content("{\"password\":\"passwordWithNoNumbers\"}")
-                .contentType(APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andReturn();
-
-        assertTrue(mvcResult.getResponse().getErrorMessage().contains("Password must contain at least one numeric character."));
-    }
-
-    @Test
-    public void shouldErrorWhenSettingPasswordWithNoLowerCaseLetter() throws Exception {
-        Team team = new Team();
-        team.setUri("a-team");
-        team.setName("A Team");
-        teamRepository.save(team);
-
-        MvcResult mvcResult = mockMvc.perform(post("/api/team/a-team/set-password")
-                .content("{\"password\":\"PASSW0RDWITHNOLOWERCASE\"}")
-                .contentType(APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andReturn();
-
-        assertTrue(mvcResult.getResponse().getErrorMessage().contains("Password must contain at least one lower case letter."));
-    }
-
-    @Test
-    public void shouldErrorWhenSettingPasswordWithNoUpperCaseLetter() throws Exception {
-        Team team = new Team();
-        team.setUri("a-team");
-        team.setName("A Team");
-        teamRepository.save(team);
-
-        MvcResult mvcResult = mockMvc.perform(post("/api/team/a-team/set-password")
-                .content("{\"password\":\"passw0rdwithnouppercase\"}")
-                .contentType(APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andReturn();
-
-        assertTrue(mvcResult.getResponse().getErrorMessage().contains("Password must contain at least one capital letter."));
     }
 
     @Test

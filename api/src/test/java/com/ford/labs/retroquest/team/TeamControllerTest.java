@@ -24,7 +24,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
@@ -32,7 +31,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -63,16 +61,6 @@ public class TeamControllerTest {
         assertEquals(OK, response.getStatusCode());
         assertEquals("[text/csv]", response.getHeaders().get(HttpHeaders.CONTENT_TYPE).toString());
         assertEquals("[attachment; filename="+ expectedFilename +"]", response.getHeaders().get(HttpHeaders.CONTENT_DISPOSITION).toString());
-    }
-    @Test
-    public void returnsOKWhenNoPasswordInDatabase() {
-        SetPasswordRequest requestedPassword = new SetPasswordRequest();
-        requestedPassword.setPassword("password");
-
-        ResponseEntity actualResponse = controller.setPassword("a-team", requestedPassword);
-
-        assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
-        verify(teamService).setTeamPassword("a-team", requestedPassword);
     }
 
     @Test
