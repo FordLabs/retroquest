@@ -44,6 +44,7 @@ dependencies {
     compile 'org.jsoup:jsoup:1.11.2'
     compile 'org.apache.commons:commons-csv:1.5'
     compile 'org.apache.commons:commons-lang3:3.7'
+    compile 'org.apache.httpcomponents:httpclient:4.5.5'
     compile 'commons-io:commons-io:2.6'
     compile 'org.flywaydb:flyway-core'
     runtime 'mysql:mysql-connector-java'
@@ -67,7 +68,7 @@ dockerApiTest.finalizedBy apiTest
 
 task runAllTests(dependsOn: [test, apiTest]) {
 }
-    
+
 jar {
     archiveName = "${archivesBaseName}-${version}.jar"
 }
