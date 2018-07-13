@@ -80,9 +80,8 @@ describe('ColumnHeaderComponent', () => {
 
     let originalSetTimeoutFunction = null;
     const mockInputFieldRef = {
-      nativeElement: jasmine.createSpyObj({focus: null})
-  }
-    ;
+      nativeElement: jasmine.createSpyObj({focus: null, select: null})
+    };
 
     beforeEach(() => {
       component.inputFieldRef = mockInputFieldRef;
@@ -103,6 +102,10 @@ describe('ColumnHeaderComponent', () => {
     it('should focus on the input field', () => {
       component.toggleEdit();
       expect(component.inputFieldRef.nativeElement.focus).toHaveBeenCalled();
+    });
+    it('should call select on the input field', () => {
+      component.toggleEdit();
+      expect(component.inputFieldRef.nativeElement.select).toHaveBeenCalled();
     });
   });
 
