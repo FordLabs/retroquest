@@ -67,6 +67,7 @@ export class ColumnHeaderComponent {
   private focusInput(): void {
     setTimeout(() => {
       this.inputFieldRef.nativeElement.focus();
+      this.inputFieldRef.nativeElement.select();
     }, 0);
   }
 
@@ -74,6 +75,7 @@ export class ColumnHeaderComponent {
     setTimeout(() => {
       this.inputFieldRef.nativeElement.blur();
     }, 0);
+
   }
 
 }
