@@ -28,42 +28,6 @@ describe('TextFieldComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('charactersRemaining', () => {
-    it('should return the number of remaining characters', () => {
-      component.text = 'new task';
-      component.maxCharLength = 20;
-      expect(component.charactersRemaining()).toBe(component.maxCharLength - component.text.length);
-    });
-  });
-
-  describe('textIsEmpty', () => {
-    it('should return false of the title has a value', () => {
-      component.text = 'X';
-      expect(component.textIsEmpty()).toBeFalsy();
-    });
-
-    it('should return true if the title is an empty string', () => {
-      component.text = '';
-      expect(component.textIsEmpty()).toBeTruthy();
-    });
-  });
-
-  describe('charactersRemainingAreAboutToRunOut', () => {
-    it('should return true if the remaining characters to input are less than threshold', () => {
-      component.text = '12';
-      component.maxCharLength = 3;
-      component.charsAreRunningOutThreshold = 2;
-      expect(component.charactersRemainingAreAboutToRunOut()).toBeTruthy();
-    });
-
-    it('should return false if the remaining characters to input are greater than or equal to the threshold', () => {
-      component.text = '1';
-      component.maxCharLength = 3;
-      component.charsAreRunningOutThreshold = 2;
-      expect(component.charactersRemainingAreAboutToRunOut()).toBeFalsy();
-    });
-  });
-
   describe('emitNewTaskMessage', () => {
 
     it('should emit the new task message', () => {

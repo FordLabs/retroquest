@@ -28,6 +28,7 @@ import { CountSeperatorComponent } from './count-seperator/count-seperator.compo
 import { ColumnHeaderComponent } from './column-header/column-header.component';
 import {TaskComponent} from './task/task.component';
 import { TaskDialogComponent } from './task-dialog/task-dialog.component';
+import { FloatingCharacterCountdownComponent } from './floating-character-countdown/floating-character-countdown.component';
 
 @NgModule({
   imports: [
@@ -46,7 +47,8 @@ import { TaskDialogComponent } from './task-dialog/task-dialog.component';
     CountSeperatorComponent,
     ColumnHeaderComponent,
     TaskComponent,
-    TaskDialogComponent
+    TaskDialogComponent,
+    FloatingCharacterCountdownComponent
   ],
 
   exports: [
@@ -58,7 +60,8 @@ import { TaskDialogComponent } from './task-dialog/task-dialog.component';
     CountSeperatorComponent,
     ColumnHeaderComponent,
     TaskComponent,
-    TaskDialogComponent
+    TaskDialogComponent,
+    FloatingCharacterCountdownComponent
   ]
 
 })
