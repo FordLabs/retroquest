@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 
-import {async} from '@angular/core/testing';
-
 import {TeamPageComponent} from './team.page';
 import {Observable, Subject} from 'rxjs/index';
 import {Column} from '../../domain/column';
@@ -51,7 +49,13 @@ describe('TeamPageComponent', () => {
     sorted: false
   };
 
-  beforeEach(async(() => {
+  const fakeThoughtWithTestTopic = () => {
+    const thought: Thought = emptyThought();
+    thought.topic = testColumn.topic;
+    return thought;
+  };
+
+  beforeEach((() => {
     thoughtsTopic = new Subject<any>();
     actionItemTopic = new Subject<any>();
     columnTitleTopic = new Subject<any>();
@@ -85,7 +89,6 @@ describe('TeamPageComponent', () => {
       mockWebsocketService);
 
     component.columns = [];
-    component.indexedThoughts = new Map<number, Array<Thought>>();
   }));
 
   it('should create', () => {
@@ -96,16 +99,15 @@ describe('TeamPageComponent', () => {
     it('should return count of non-discussed thoughts', () => {
       const discussedThought = emptyThought();
       discussedThought.discussed = true;
+      discussedThought.topic = testColumn.topic;
 
-      const testThoughts: Array<Thought> = [
+      component.thoughtsArray = [
         discussedThought,
-        emptyThought(),
-        emptyThought()
+        fakeThoughtWithTestTopic(),
+        fakeThoughtWithTestTopic()
       ];
 
       component.columns.push(testColumn);
-
-      component.indexedThoughts.set(testColumn.id, testThoughts);
 
       const thoughtCount = component.getColumnThoughtCount(testColumn);
 
@@ -142,16 +144,15 @@ describe('TeamPageComponent', () => {
     it('should return thoughts for given column', () => {
 
       const testThoughts: Array<Thought> = [
-        emptyThought(),
-        emptyThought(),
-        emptyThought()
+        fakeThoughtWithTestTopic(),
+        fakeThoughtWithTestTopic(),
+        fakeThoughtWithTestTopic()
       ];
 
       component.columns.push(testColumn);
-      component.indexedThoughts.set(testColumn.id, testThoughts);
+      component.thoughtsArray = testThoughts;
 
       const thoughts = component.getThoughtsInColumn(testColumn);
-
       expect(thoughts).toEqual(testThoughts);
     });
 
@@ -159,9 +160,9 @@ describe('TeamPageComponent', () => {
 
       testColumn.sorted = true;
 
-      const thought1 = emptyThought();
-      const thought2 = emptyThought();
-      const thought3 = emptyThought();
+      const thought1 = fakeThoughtWithTestTopic();
+      const thought2 = fakeThoughtWithTestTopic();
+      const thought3 = fakeThoughtWithTestTopic();
 
       thought1.hearts = 0;
       thought2.hearts = 3;
@@ -174,7 +175,7 @@ describe('TeamPageComponent', () => {
       ];
 
       component.columns.push(testColumn);
-      component.indexedThoughts.set(testColumn.id, testThoughts);
+      component.thoughtsArray = testThoughts;
 
       const thoughts = component.getThoughtsInColumn(testColumn);
 
@@ -187,9 +188,9 @@ describe('TeamPageComponent', () => {
 
       testColumn.sorted = false;
 
-      const thought1 = emptyThought();
-      const thought2 = emptyThought();
-      const thought3 = emptyThought();
+      const thought1 = fakeThoughtWithTestTopic();
+      const thought2 = fakeThoughtWithTestTopic();
+      const thought3 = fakeThoughtWithTestTopic();
 
       thought1.hearts = 0;
       thought2.hearts = 3;
@@ -202,7 +203,7 @@ describe('TeamPageComponent', () => {
       ];
 
       component.columns.push(testColumn);
-      component.indexedThoughts.set(testColumn.id, testThoughts);
+      component.thoughtsArray = testThoughts;
 
       const thoughts = component.getThoughtsInColumn(testColumn);
 
@@ -258,11 +259,10 @@ describe('TeamPageComponent', () => {
       mockActiveRoute.params.next({teamId: 1});
       (mockWebsocketService.openWebsocket('team1') as Subject<any>).next({bodyJson: {}});
 
-      expect(component.thoughts.size).toEqual(0);
+      expect(component.thoughtsArray.length).toEqual(0);
 
       thoughtsTopic.next({bodyJson: {type: 'put', payload: {id: 1, columnTitle: {id: 1}}, body: ''}});
-      expect(component.thoughts.size).toEqual(1);
-      expect(component.indexedThoughts.get(1).length).toEqual(1);
+      expect(component.thoughtsArray.length).toEqual(1);
     });
 
     it('should delete thoughts when delete message is received', () => {
@@ -270,13 +270,13 @@ describe('TeamPageComponent', () => {
       mockActiveRoute.params.next({teamId: 1});
       (mockWebsocketService.openWebsocket('team1') as Subject<any>).next({bodyJson: {}});
 
-      expect(component.thoughts.size).toEqual(0);
+      expect(component.thoughtsArray.length).toEqual(0);
 
       thoughtsTopic.next({bodyJson: {type: 'post', payload: {id: 1, columnTitle: {id: 1}}, body: ''}});
-      expect(component.thoughts.size).toEqual(1);
+      expect(component.thoughtsArray.length).toEqual(1);
 
       thoughtsTopic.next({bodyJson: {type: 'delete', payload: 1}});
-      expect(component.thoughts.size).toEqual(0);
+      expect(component.thoughtsArray.length).toEqual(0);
     });
 
     it('should delete all thoughts when delete message is received with -1', () => {
@@ -284,14 +284,14 @@ describe('TeamPageComponent', () => {
       mockActiveRoute.params.next({teamId: 1});
       (mockWebsocketService.openWebsocket('team1') as Subject<any>).next({bodyJson: {}});
 
-      expect(component.thoughts.size).toEqual(0);
+      expect(component.thoughtsArray.length).toEqual(0);
 
       thoughtsTopic.next({bodyJson: {type: 'post', payload: {id: 1, columnTitle: {id: 1}}, body: ''}});
       thoughtsTopic.next({bodyJson: {type: 'post', payload: {id: 2, columnTitle: {id: 2}}, body: ''}});
-      expect(component.thoughts.size).toEqual(2);
+      expect(component.thoughtsArray.length).toEqual(2);
 
       thoughtsTopic.next({bodyJson: {type: 'delete', payload: -1}});
-      expect(component.thoughts.size).toEqual(0);
+      expect(component.thoughtsArray.length).toEqual(0);
     });
 
     it('should delete action items when delete message is recieved', () => {
@@ -365,16 +365,9 @@ describe('TeamPageComponent', () => {
 
   describe('resetThoughts', () => {
     it('should clear the thoughts map', () => {
-      component.thoughts.set(-1, emptyThought());
+      component.thoughtsArray = [emptyThought()];
       component.resetThoughts();
-      expect(component.thoughts.size).toEqual(0);
-    });
-
-    it('should reindex the thoughts', () => {
-      spyOn(component, 'indexThoughts');
-      component.thoughts.set(-1, emptyThought());
-      component.resetThoughts();
-      expect(component.indexThoughts).toHaveBeenCalled();
+      expect(component.thoughtsArray.length).toEqual(0);
     });
   });
 });
