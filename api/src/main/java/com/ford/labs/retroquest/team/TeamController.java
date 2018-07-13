@@ -19,7 +19,6 @@ package com.ford.labs.retroquest.team;
 
 import com.ford.labs.retroquest.exception.BoardDoesNotExistException;
 import com.ford.labs.retroquest.security.JwtBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -39,15 +38,15 @@ import static org.springframework.http.HttpStatus.*;
 @RequestMapping(value = "/api")
 public class TeamController {
 
-    @Autowired
-    private TeamRepository teamRepository;
+    private final TeamRepository teamRepository;
+    private final TeamService teamService;
+    private final JwtBuilder jwtBuilder;
 
-    @Autowired
-    private TeamService teamService;
-
-    @Autowired
-    private JwtBuilder jwtBuilder;
-
+    public TeamController(TeamRepository teamRepository, TeamService teamService, JwtBuilder jwtBuilder) {
+        this.teamRepository = teamRepository;
+        this.teamService = teamService;
+        this.jwtBuilder = jwtBuilder;
+    }
 
     @PostMapping("/team")
     @Transactional(rollbackOn = URISyntaxException.class)
@@ -69,12 +68,6 @@ public class TeamController {
             throw new BoardDoesNotExistException();
         }
         return team.getName();
-    }
-
-    @PostMapping("/team/{teamUri}/set-password")
-    public ResponseEntity setPassword(@PathVariable("teamUri") String teamUri, @RequestBody @Valid SetPasswordRequest requestedPassword) {
-        teamService.setTeamPassword(teamUri, requestedPassword);
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/team/{teamId}/csv", produces = "application/board.csv")
