@@ -1,46 +1,45 @@
-
-  <!--
-  ~ Copyright (c) 2018 Ford Motor Company
-  ~ All rights reserved.
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~ http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
+<!--
+~ Copyright (c) 2018 Ford Motor Company
+~ All rights reserved.
+~
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~
+~ http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing, software
+~ distributed under the License is distributed on an "AS IS" BASIS,
+~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~ See the License for the specific language governing permissions and
+~ limitations under the License.
+-->
 
 <input
-    #inputField
-    [readonly]="readOnlyEnabled"
-    [maxlength]="maxTextLength"
-    [(ngModel)]="title"
-    (blur)="emitTitleChangedAndEnableReadonlyMode()"
-    (keydown.enter)="blurInput()"
-    [ngClass]="{'hide': readOnlyEnabled}"
-  />
+  #inputField
+  [readonly]="readOnlyEnabled"
+  [maxlength]="maxTextLength"
+  [(ngModel)]="title"
+  (blur)="emitTitleChangedAndEnableReadonlyMode()"
+  (keydown.enter)="blurInput()"
+  [ngClass]="{'hide': readOnlyEnabled}"
+/>
 
-  <div
-    class="display-text"
-    [ngClass]="{'hide': !readOnlyEnabled}"
-  >
-    {{title}}
-  </div>
+<div
+  class="display-text"
+  [ngClass]="{'hide': !readOnlyEnabled}"
+>
+  {{title}}
+</div>
 
-  <i class="fas fa-sort-down sort"
-     [ngClass]="{
+<i class="fas fa-sort-down sort"
+   [ngClass]="{
         'sort-icon-translucent': !sorted,
         'hide': !readOnlyEnabled || type === 'action'
      }"
 
-     (click)="toggleSort()"
-  ></i>
+   (click)="toggleSort()"
+></i>
 
 <span
   class="edit-button"
@@ -52,3 +51,11 @@
      (click)="toggleEdit()"
   ></i>
 </span>
+
+<rq-floating-character-countdown
+  [characterCount]="readOnlyEnabled ? 0 : title.length"
+  [maxCharacterCount]="maxTextLength"
+  [charsAreRunningOutThreshold]="5"
+>
+
+</rq-floating-character-countdown>
