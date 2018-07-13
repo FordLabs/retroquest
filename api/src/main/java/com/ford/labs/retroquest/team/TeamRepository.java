@@ -25,6 +25,5 @@ import java.util.List;
 
 @Repository
 public interface TeamRepository extends JpaRepository<Team, String> {
-    List<Team> findAllByDateCreatedBetween(LocalDate startDate, LocalDate endDate);
     Team findTeamByName(String name);
 }
