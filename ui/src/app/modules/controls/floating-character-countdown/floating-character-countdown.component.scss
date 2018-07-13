@@ -19,9 +19,12 @@
 
 :host {
   bottom: -24px;
+  color: $wet-asphalt;
+  font-size: .8rem;
+  font-weight: normal;
   height: auto;
   position: absolute;
-  right: 0;
+  right: 12px;
   width: auto;
 
   &.display-warning-text {
