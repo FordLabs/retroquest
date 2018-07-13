@@ -10,12 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Base64;
 
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class MetricsApiTest {
+public class MetricsApiTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Value("${com.retroquest.adminUsername}")
     private String adminUsername;
@@ -84,6 +87,52 @@ public class MetricsApiTest {
         mockMvc.perform(get("/api/metrics/feedback/count")
                 .header("Authorization", "Basic " + token))
             .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void canGetAverageFeedbackAverageAsAdmin() throws Exception {
+
+        Feedback feedback1 = new Feedback();
+        feedback1.setStars(4);
+        Feedback feedback2 = new Feedback();
+        feedback2.setStars(2);
+        feedbackRepository.save(asList(feedback1, feedback2));
+
+        String token = getToken(adminUsername, adminPassword);
+
+        MvcResult result = mockMvc.perform(get("/api/metrics/feedback/average")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authoirzation", "Basic " + token))
+                .andExpect(status().isOk())
+                .andReturn();
+        assertEquals("3.0", result.getResponse().getContentAsString());
+    }
+
+    @Test
+    public void cannotGetAverageFeedbackAsUserThatIsNotAdmin() throws Exception {
+        String token = getToken("notadmin", "notadminpassword");
+        mockMvc.perform(get("/api/metrics/feedback/adverage")
+                .header("Authorization", "Basic " + token))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void averageFeedbackIgnoresStartsWithAZeroValue() throws Exception {
+
+        Feedback feedback1 = new Feedback();
+        feedback1.setStars(4);
+        Feedback feedback2 = new Feedback();
+        feedback2.setStars(0);
+        feedbackRepository.save(asList(feedback1, feedback2));
+
+        String token = getToken(adminUsername, adminPassword);
+
+        MvcResult result = mockMvc.perform(get("/api/metrics/feedback/average")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Basic " + token))
+                .andExpect(status().isOk())
+                .andReturn();
+        assertEquals("4.0", result.getResponse().getContentAsString());
     }
 
     private String getToken(String adminUsername, String adminPassword) {
