@@ -23,10 +23,8 @@ import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.exception.BoardDoesNotExistException;
 import com.ford.labs.retroquest.exception.PasswordInvalidException;
-import com.ford.labs.retroquest.exception.TeamAlreadyHasPasswordException;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,20 +32,19 @@ import java.util.List;
 
 @Service
 public class TeamService {
-    @Autowired
-    private ThoughtRepository thoughtRepository;
+    private final ThoughtRepository thoughtRepository;
+    private final ActionItemRepository actionItemRepository;
+    private final TeamRepository teamRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final ColumnTitleRepository columnTitleRepository;
 
-    @Autowired
-    private ActionItemRepository actionItemRepository;
-
-    @Autowired
-    private TeamRepository teamRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private ColumnTitleRepository columnTitleRepository;
+    public TeamService(ThoughtRepository thoughtRepository, ActionItemRepository actionItemRepository, TeamRepository teamRepository, PasswordEncoder passwordEncoder, ColumnTitleRepository columnTitleRepository) {
+        this.thoughtRepository = thoughtRepository;
+        this.actionItemRepository = actionItemRepository;
+        this.teamRepository = teamRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.columnTitleRepository = columnTitleRepository;
+    }
 
     public String convertTeamNameToURI(String teamName) {
         return teamName.toLowerCase().replace(" ", "-");

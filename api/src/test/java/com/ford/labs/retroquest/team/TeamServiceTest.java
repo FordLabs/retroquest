@@ -22,7 +22,6 @@ import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.exception.BoardDoesNotExistException;
 import com.ford.labs.retroquest.exception.PasswordInvalidException;
-import com.ford.labs.retroquest.exception.TeamAlreadyHasPasswordException;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,7 +54,7 @@ public class TeamServiceTest {
     private PasswordEncoder passwordEncoder;
 
     @InjectMocks
-    private TeamService teamService = new TeamService();
+    private TeamService teamService;
 
     @Test
     public void convertValidTeamNametoURI() {
