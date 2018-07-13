@@ -21,6 +21,7 @@
   background-color: $modal-blur;
   display: flex;
   height: 100%;
+  overflow: auto;
   width: 100%;
 
   #app-content {

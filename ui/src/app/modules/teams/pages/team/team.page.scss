@@ -21,8 +21,8 @@
   background-color: $clouds;
   font-family: 'Quicksand', sans-serif;
   height: 100%;
+  overflow: auto;
   padding: 0;
-
 
   #team-content {
     display: flex;
