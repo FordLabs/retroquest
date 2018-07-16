@@ -65,7 +65,6 @@ describe('Login Page', () => {
         page.teamNameInput().sendKeys(boardName).then(() => {
           page.teamPasswordInput().sendKeys(validPassword).then(() => {
             page.signInButton().click().then(() => {
-              browser.waitForAngular();
               expect(browser.driver.getCurrentUrl()).toContain(`/team/${boardName}`);
             });
           });
