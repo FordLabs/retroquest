@@ -23,16 +23,26 @@ describe('LoginComponent', () => {
   let component: LoginComponent;
   let mockTeamService;
   let mockRouter;
+  let mockRecaptchaComponent;
 
   beforeEach(() => {
     mockTeamService = jasmine.createSpyObj({login: new Subject()});
     mockRouter = jasmine.createSpyObj({navigateByUrl: null});
+    mockRecaptchaComponent = jasmine.createSpyObj({reset: null, execute: null});
 
     spyOn(AuthService, 'setToken');
     spyOn(console, 'error');
 
     component = new LoginComponent(mockTeamService, mockRouter);
-    component.recaptchaComponent = jasmine.createSpyObj({reset: null})
+    component.recaptchaComponent = mockRecaptchaComponent
+  });
+
+  describe('useCaptchaForProd', () => {
+    it('should not use captcha in dev mode', () => {
+      component.useCaptchaForProd();
+
+      expect(mockRecaptchaComponent.execute).not.toHaveBeenCalled();
+    });
   });
 
   describe('login', () => {

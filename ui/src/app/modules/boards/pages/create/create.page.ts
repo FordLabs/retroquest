@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, isDevMode} from '@angular/core';
 import {Router} from '@angular/router';
 
 import {AuthService} from '../../../auth/auth.service';
@@ -40,7 +40,15 @@ export class CreateComponent {
   confirmPassword: string;
   errorMessage: string;
 
-  create (captchaResponse: string): void {
+  useCaptchaForProd () {
+    if (isDevMode()) {
+      this.create();
+      return;
+    }
+    this.recaptchaComponent.execute();
+  }
+
+  create (captchaResponse: string = null): void {
     this.recaptchaComponent.reset();
     if (this.validateInput()) {
       this.teamService.create(this.teamName, this.password, captchaResponse)
