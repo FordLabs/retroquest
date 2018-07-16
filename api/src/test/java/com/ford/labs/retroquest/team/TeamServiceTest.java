@@ -74,7 +74,7 @@ public class TeamServiceTest {
         savedEntity.setPassword("encryptedPassword");
         savedEntity.setDateCreated();
 
-        RequestedTeam requestedTeam = new RequestedTeam();
+        CreateTeamRequest requestedTeam = new CreateTeamRequest();
         requestedTeam.setName("A name");
         requestedTeam.setPassword("password");
 
@@ -91,36 +91,36 @@ public class TeamServiceTest {
 
     @Test
     public void returnsSavedTeamOnSuccessfulLogin() {
-        RequestedTeam requestedTeam = new RequestedTeam("beach-bums", "password", "captcha");
+        LoginRequest loginRequest = new LoginRequest("beach-bums", "password", "captcha");
         Team expectedTeam = new Team();
         expectedTeam.setPassword("encryptedPassword");
 
         when(passwordEncoder.matches("password", "encryptedPassword")).thenReturn(true);
         when(teamRepository.findTeamByName("beach-bums")).thenReturn(expectedTeam);
-        Team actualTeam = teamService.login(requestedTeam);
+        Team actualTeam = teamService.login(loginRequest);
 
         assertEquals(expectedTeam, actualTeam);
     }
 
     @Test(expected = BoardDoesNotExistException.class)
     public void throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
-        RequestedTeam requestedTeam = new RequestedTeam("beach-bums", "password", "captcha");
+        LoginRequest loginRequest = new LoginRequest("beach-bums", "password", "captcha");
 
         when(teamRepository.findTeamByName("beach-bums")).thenReturn(null);
-        teamService.login(requestedTeam);
+        teamService.login(loginRequest);
     }
 
     @Test(expected = PasswordInvalidException.class)
     public void throwsPasswordInvalidExceptionWhenNoPasswordGiven() {
-        RequestedTeam requestedTeam = new RequestedTeam("beach-bums", null, "captcha");
+        LoginRequest loginRequest = new LoginRequest("beach-bums", null, "captcha");
         when(teamRepository.findTeamByName("beach-bums")).thenReturn(new Team());
 
-        teamService.login(requestedTeam);
+        teamService.login(loginRequest);
     }
 
     @Test(expected = PasswordInvalidException.class)
     public void throwsPasswordInvalidExceptionWhenPasswordsDoNotMatch() {
-        RequestedTeam requestedTeam = new RequestedTeam("beach-bums", "notPassword", "captcha");
+        LoginRequest loginRequest = new LoginRequest("beach-bums", "notPassword", "captcha");
         Team expectedTeam = new Team();
 
         expectedTeam.setPassword("encryptedPassword");
@@ -129,14 +129,14 @@ public class TeamServiceTest {
         when(passwordEncoder.matches("notPassword", "encryptedPassword")).thenReturn(false);
         when(teamRepository.findTeamByName("beach-bums")).thenReturn(expectedTeam);
 
-        teamService.login(requestedTeam);
+        teamService.login(loginRequest);
     }
 
     @Test
     public void creatingTeamAlsoCreatesThreeColumnTitles() {
         when(this.teamRepository.save(any(Team.class))).then(returnsFirstArg());
 
-        RequestedTeam requestedTeam = new RequestedTeam("beach-bums", "password", "captcha");
+        CreateTeamRequest requestedTeam = new CreateTeamRequest("beach-bums", "password", "captcha");
         teamService.createNewTeam(requestedTeam);
 
         ColumnTitle happyColumnTitle = ColumnTitle.builder().teamId("beach-bums").topic("happy").title("Happy").build();

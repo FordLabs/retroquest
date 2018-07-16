@@ -50,8 +50,8 @@ public class TeamController {
 
     @PostMapping("/team")
     @Transactional(rollbackOn = URISyntaxException.class)
-    public ResponseEntity<String> createTeam(@RequestBody @Valid RequestedTeam requestedTeam) {
-        Team team = teamService.createNewTeam(requestedTeam);
+    public ResponseEntity<String> createTeam(@RequestBody @Valid CreateTeamRequest createTeamRequest) {
+        Team team = teamService.createNewTeam(createTeamRequest);
 
         MultiValueMap<String, String> headers = new HttpHeaders();
         headers.add("Location", "/team/" + team.getUri());
@@ -89,7 +89,7 @@ public class TeamController {
     }
 
     @PostMapping("/team/login")
-    public ResponseEntity<String> login(@RequestBody @Valid RequestedTeam team) {
+    public ResponseEntity<String> login(@RequestBody @Valid LoginRequest team) {
         Team savedTeamEntity = teamService.login(team);
         String jwt = jwtBuilder.buildJwt(savedTeamEntity.getUri());
 

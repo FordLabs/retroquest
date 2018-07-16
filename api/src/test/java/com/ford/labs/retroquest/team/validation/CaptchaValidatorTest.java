@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.mock.env.MockEnvironment;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
@@ -23,11 +24,13 @@ public class CaptchaValidatorTest {
 
     private CaptchaValidator validator;
 
+    private MockEnvironment environment = new MockEnvironment();
+
     @Before
     public void setUp () {
         captchaProperties.setSecret("secret");
         captchaProperties.setUrl("http://myUrl");
-        validator = new CaptchaValidator(restTemplate, captchaProperties);
+        validator = new CaptchaValidator(restTemplate, captchaProperties, environment);
     }
 
     @Test(expected = CaptchaInvalidException.class)
@@ -49,5 +52,14 @@ public class CaptchaValidatorTest {
                 .thenReturn(new ReCaptchaResponse(true, Collections.emptyList()));
 
         assertTrue(validator.isValid("ValidCaptcha", null));
+    }
+
+    @Test
+    public void whenCaptchaIsDisabled_returnsTrue () {
+        environment.setProperty("spring.profiles.active", "captchaDisabled");
+
+        validator = new CaptchaValidator(restTemplate, captchaProperties, environment);
+
+        assertTrue(validator.isValid("invalidCaptcha", null));
     }
 }
