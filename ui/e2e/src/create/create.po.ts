@@ -13,7 +13,6 @@ export class CreatePage {
           this.teamPasswordConfirm().sendKeys(password).then(() => {
             browser.sleep(1); // make sure timestamps are at least 1 mili apart
             this.createRetroButton().click().then(() => {
-              browser.waitForAngular();
               browser.driver.getCurrentUrl().then((url: string) => {
                 const boardId = boardName.replace(' ', '-');
                 if (url.endsWith(`/team/${boardId}`)) {
