@@ -63,7 +63,7 @@
                    [(ngModel)]="confirmPassword"/>
           </div>
           <span id="errorMessage" class="rq-error-message">{{errorMessage}}</span>
-          <button id="createRetroButton" class="rq-button" (click)="captchaRef.execute()">
+          <button id="createRetroButton" class="rq-button" (click)="useCaptchaForProd()">
             Create Board
           </button>
         </div>

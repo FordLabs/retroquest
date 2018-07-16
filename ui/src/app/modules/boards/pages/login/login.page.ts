@@ -22,6 +22,7 @@ import { AuthService } from '../../../auth/auth.service';
 import { TeamService } from '../../../teams/services/team.service';
 import { RecaptchaComponent } from 'ng-recaptcha';
 import { ViewChild } from '@angular/core';
+import {isDevMode} from '@angular/core';
 
 @Component({
   selector: 'rq-login',
@@ -39,7 +40,15 @@ export class LoginComponent {
   password: string;
   errorMessage: string;
 
-  login (captchaResponse: string): void {
+  useCaptchaForProd() {
+    if (isDevMode()) {
+      this.login();
+      return;
+    }
+    this.recaptchaComponent.execute();
+  }
+
+  login (captchaResponse: string = null): void {
     this.recaptchaComponent.reset();
     if (this.validateInput()) {
       this.teamService.login(this.teamName, this.password, captchaResponse)
