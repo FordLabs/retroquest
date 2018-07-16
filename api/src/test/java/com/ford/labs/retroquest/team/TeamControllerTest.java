@@ -66,16 +66,16 @@ public class TeamControllerTest {
     @Test
     public void returnsJwtOnSuccessfulLogin() {
         String expectedJwt = "I am a JWT";
-        RequestedTeam requestedTeam = new RequestedTeam("A Team", "password", "captcha");
+        LoginRequest loginRequest = new LoginRequest("A Team", "password", "captcha");
         Team savedTeam = new Team();
         savedTeam.setUri("a-team");
         savedTeam.setPassword("password");
 
-        when(teamService.login(requestedTeam)).thenReturn(savedTeam);
+        when(teamService.login(loginRequest)).thenReturn(savedTeam);
         when(jwtBuilder.buildJwt("a-team")).thenReturn(expectedJwt);
         when(teamRepository.findTeamByName("A Team")).thenReturn(savedTeam);
 
-        ResponseEntity<String> actualResponse = controller.login(requestedTeam);
+        ResponseEntity<String> actualResponse = controller.login(loginRequest);
 
         assertEquals(expectedJwt, actualResponse.getBody());
     }
@@ -83,16 +83,16 @@ public class TeamControllerTest {
     @Test
     public void returnsJwtOnTeamCreation() {
         String expectedJwt = "I am a JWT";
-        RequestedTeam requestedTeam = new RequestedTeam("A Team", "password", "captcha");
+        CreateTeamRequest createTeamRequest = new CreateTeamRequest("A Team", "password", "captcha");
         Team savedTeam = new Team();
         savedTeam.setUri("a-team");
         savedTeam.setPassword("password");
 
-        when(teamService.createNewTeam(requestedTeam)).thenReturn(savedTeam);
+        when(teamService.createNewTeam(createTeamRequest)).thenReturn(savedTeam);
         when(jwtBuilder.buildJwt("a-team")).thenReturn(expectedJwt);
         when(teamRepository.findTeamByName("A Team")).thenReturn(savedTeam);
 
-        ResponseEntity<String> actualResponse = controller.createTeam(requestedTeam);
+        ResponseEntity<String> actualResponse = controller.createTeam(createTeamRequest);
 
         assertEquals(expectedJwt, actualResponse.getBody());
     }

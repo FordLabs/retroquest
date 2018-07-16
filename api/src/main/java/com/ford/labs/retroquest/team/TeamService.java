@@ -56,14 +56,14 @@ public class TeamService {
         return new CsvFile(team, thoughts, actionItems);
     }
 
-    public Team createNewTeam(RequestedTeam requestedTeam){
-        String requestedName = requestedTeam.getName();
+    public Team createNewTeam(CreateTeamRequest createTeamRequest){
+        String requestedName = createTeamRequest.getName();
 
         Team teamEntity = new Team();
         teamEntity.setName(requestedName);
         teamEntity.setUri(convertTeamNameToURI(requestedName));
 
-        String encryptedPassword = passwordEncoder.encode(requestedTeam.getPassword());
+        String encryptedPassword = passwordEncoder.encode(createTeamRequest.getPassword());
         teamEntity.setPassword(encryptedPassword);
 
         teamEntity = teamRepository.save(teamEntity);
@@ -90,14 +90,14 @@ public class TeamService {
         return teamEntity;
     }
 
-    public Team login(RequestedTeam requestedTeam) {
-        Team savedTeam = teamRepository.findTeamByName(requestedTeam.getName());
+    public Team login(LoginRequest loginRequest) {
+        Team savedTeam = teamRepository.findTeamByName(loginRequest.getName());
 
         if(savedTeam == null) {
             throw new BoardDoesNotExistException();
         }
 
-        if(requestedTeam.getPassword() == null || !passwordEncoder.matches(requestedTeam.getPassword(), savedTeam.getPassword())) {
+        if(loginRequest.getPassword() == null || !passwordEncoder.matches(loginRequest.getPassword(), savedTeam.getPassword())) {
             throw new PasswordInvalidException();
         }
 

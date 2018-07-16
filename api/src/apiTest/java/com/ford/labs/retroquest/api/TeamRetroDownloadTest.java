@@ -2,7 +2,7 @@ package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.MainApplication;
 import com.ford.labs.retroquest.security.JwtBuilder;
-import com.ford.labs.retroquest.team.RequestedTeam;
+import com.ford.labs.retroquest.team.LoginRequest;
 import com.ford.labs.retroquest.team.TeamRepository;
 import org.junit.After;
 import org.junit.Test;
@@ -38,7 +38,7 @@ public class TeamRetroDownloadTest{
 
     @Test
     public void canRetrieveCsvOfActionItemsAndThoughts() throws Exception {
-        RequestedTeam teamEntity = new RequestedTeam();
+        LoginRequest teamEntity = new LoginRequest();
         teamEntity.setName("Beach Bums");
         teamEntity.setPassword("password");
 
@@ -53,7 +53,7 @@ public class TeamRetroDownloadTest{
 
     @Test
     public void cannotDownloadRetroIfNotAuthorizedForBoard() throws Exception {
-        RequestedTeam teamEntity = new RequestedTeam();
+        LoginRequest teamEntity = new LoginRequest();
         teamEntity.setName("Beach Bums");
         teamEntity.setPassword("password");
 

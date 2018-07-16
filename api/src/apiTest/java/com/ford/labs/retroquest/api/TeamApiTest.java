@@ -1,7 +1,7 @@
 package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.security.JwtBuilder;
-import com.ford.labs.retroquest.team.RequestedTeam;
+import com.ford.labs.retroquest.team.LoginRequest;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import org.junit.After;
@@ -98,9 +98,9 @@ public class TeamApiTest {
 
         mockMvc.perform(post("/api/team")
                 .contentType(APPLICATION_JSON)
-                .content(teamJsonBody)).andExpect(status()
-                .reason(containsString("Incorrect board or password. Please try again.")))
-                .andExpect(status().isForbidden());
+                .content(teamJsonBody))
+                .andExpect(status().isForbidden())
+                .andExpect(status().reason(containsString("Incorrect board or password. Please try again.")));
     }
 
     @Test
@@ -163,7 +163,7 @@ public class TeamApiTest {
 
         String expectedName = "Beachity Bums";
 
-        RequestedTeam team = new RequestedTeam();
+        LoginRequest team = new LoginRequest();
         team.setName("Beachity Bums");
         team.setPassword(VALID_PASSWORD);
         team.setCaptchaResponse("some captcha");
@@ -192,7 +192,7 @@ public class TeamApiTest {
         server.expect(times(2), requestTo(containsString("http://captcha.url")))
                 .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
 
-        RequestedTeam team = new RequestedTeam();
+        LoginRequest team = new LoginRequest();
         team.setName("PEACHY BEACHY");
         team.setPassword(VALID_PASSWORD);
         team.setCaptchaResponse("some captcha");
@@ -217,7 +217,7 @@ public class TeamApiTest {
         server.expect(once(), requestTo(containsString("http://captcha.url")))
                 .andRespond(withSuccess("{\"success\":false}", APPLICATION_JSON));
 
-        RequestedTeam team = new RequestedTeam();
+        LoginRequest team = new LoginRequest();
         team.setName("PEACHY BEACHY");
         team.setPassword(VALID_PASSWORD);
         team.setCaptchaResponse("some captcha");
@@ -254,7 +254,7 @@ public class TeamApiTest {
         server.expect(times(2), requestTo(containsString("http://captcha.url")))
                 .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
 
-        RequestedTeam team = new RequestedTeam();
+        LoginRequest team = new LoginRequest();
         team.setName("PEACHY BEACHY");
         team.setPassword(VALID_PASSWORD);
         team.setCaptchaResponse("some captcha");
