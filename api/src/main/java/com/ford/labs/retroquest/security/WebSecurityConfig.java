@@ -63,6 +63,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         if (requireHttps) {
             httpSecurity.requiresChannel().antMatchers("/*").requiresSecure();
         }
+
+        httpSecurity.authorizeRequests().antMatchers("/api/feedback/all")
+                .hasRole("ADMIN").and().httpBasic();
+
         httpSecurity
         .authorizeRequests()
         .antMatchers("/**")
@@ -71,8 +75,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         .authenticated()
         .and().addFilterAfter(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
 
-        httpSecurity.authorizeRequests().antMatchers("/api/feedback/all")
-                .hasRole("ADMIN").and().httpBasic();
 
         httpSecurity.csrf().disable();
     }
