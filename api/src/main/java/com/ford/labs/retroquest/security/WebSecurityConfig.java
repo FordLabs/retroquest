@@ -60,44 +60,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-            if (requireHttps) {
-                httpSecurity.requiresChannel().antMatchers("/*").requiresSecure();
-            }
-            httpSecurity
-            .authorizeRequests()
-            .antMatchers(
-                    // Frontend patterns
-                    "/*.js",
-                    "/assets/*",
-                    "/*.css",
-                    "/create",
-                    "/login",
-                    "/js/**",
-                    "/",
-                    "/set-password*",
-                    "/app/**",
-                    "/img/**",
-                    "/style.css",
-                    "/api/team/login",
-                    "/api/team",
-                    "/api/team/",
-                    "/api/feedback/**",
-                    "/api/team/*/set-password",
-                    "/team/**",
-                    "/api/team/*/name",
-                    "/styleguide/*",
-                    "/h2-console/*",
-                    "/websocket/**")
-                .permitAll()
-            .anyRequest()
-            .authenticated()
-            .and().addFilterAfter(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
+        if (requireHttps) {
+            httpSecurity.requiresChannel().antMatchers("/*").requiresSecure();
+        }
+
+        httpSecurity.authorizeRequests().antMatchers("/api/feedback/all")
+                .hasRole("ADMIN").and().httpBasic();
+
+        httpSecurity
+        .authorizeRequests()
+        .antMatchers("/**")
+            .permitAll()
+        .anyRequest()
+        .authenticated()
+        .and().addFilterAfter(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
+
+
         httpSecurity.csrf().disable();
-        httpSecurity.headers().frameOptions().disable();
     }
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(jwtAuthenticationProvider);
+        auth.inMemoryAuthentication().withUser(adminUsername).password(adminPassword).roles("ADMIN");
+
     }
 }

@@ -17,21 +17,24 @@
 
 <header id="header">
 
-  <div id="headerLeft">
-    <img src="/assets/RetroQuest.png" title="RetroQuest Logo" id="logo" />
-    <span id="teamName">{{teamName}}</span>
+  <div id="headerTop">
+      <img src="/assets/RetroQuest.png" title="RetroQuest Logo" id="logo" />
+      <div class="horizontal-separator"></div>
+      <span id="teamName">{{teamName}}</span>
   </div>
 
-  <div id="headerRight">
-    <button id="giveFeedback" class="rq-button-secondary" (click)="feedbackModal.isOpen = true">
-      <span class="button-text">Give Feedback</span>
-    </button>
-    <a id="downloadCsv" class="rq-button-secondary" [href]="getCsvUrl()">
-      <span class="button-text">Download CSV</span>
-    </a>
-    <button id="endRetro" class="rq-button-primary" (click)="endRetroModal.isOpen = true">
-      <span class="button-text">End Retro</span>
-    </button>
+  <div id="headerBottom">
+    <div class="header-bottom-content">
+      <button id="giveFeedback" class="rq-button-secondary" (click)="feedbackModal.isOpen = true">
+        <span class="button-text">Give Feedback</span>
+      </button>
+      <a id="downloadCsv" class="rq-button-secondary" [href]="getCsvUrl()">
+        <span class="button-text">Download CSV</span>
+      </a>
+      <button id="endRetro" class="rq-button-primary" (click)="endRetroModal.isOpen = true">
+        <span class="button-text">End Retro</span>
+      </button>
+    </div>
   </div>
 
 </header>

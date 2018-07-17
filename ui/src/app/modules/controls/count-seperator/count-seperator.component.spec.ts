@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Ford Motor Company
+ * Copyright (c) 2018 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,17 +15,13 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.thought;
+import {CountSeperatorComponent} from './count-seperator.component';
 
-import lombok.NoArgsConstructor;
+describe('CountSeperatorComponent', () => {
+  let component: CountSeperatorComponent;
 
-@NoArgsConstructor
-public class DeleteResponse {
-    public Long id;
-    public boolean deleted;
+  beforeEach(() => {
+    component = new CountSeperatorComponent();
+  });
 
-    public DeleteResponse(Long thoughtId, boolean deleted) {
-        this.id = thoughtId;
-        this.deleted = deleted;
-    }
-}
+});

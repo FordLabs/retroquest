@@ -33,7 +33,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/notFound").setViewName("forward:/index.html");
     }
 
-
     @Bean
     public EmbeddedServletContainerCustomizer containerCustomizer() {
         return container -> {

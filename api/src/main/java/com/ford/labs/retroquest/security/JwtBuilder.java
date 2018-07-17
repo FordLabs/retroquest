@@ -19,7 +19,6 @@ package com.ford.labs.retroquest.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +30,6 @@ public class JwtBuilder {
 
     private String jwtSecret;
 
-    @Autowired
     public JwtBuilder(@Value("${jwt.signing.secret}") String jwtSecret){
         this.jwtSecret = jwtSecret;
     }

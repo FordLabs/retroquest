@@ -1,23 +1,23 @@
 package com.ford.labs.retroquest.api;
 
-import com.ford.labs.retroquest.team.Team;
-import com.ford.labs.retroquest.team.TeamRepository;
 import com.ford.labs.retroquest.security.JwtBuilder;
 import com.ford.labs.retroquest.team.RequestedTeam;
-import org.junit.Ignore;
+import com.ford.labs.retroquest.team.Team;
+import com.ford.labs.retroquest.team.TeamRepository;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -26,7 +26,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class TeamApiTest extends AbstractTransactionalJUnit4SpringContextTests {
+public class TeamApiTest{
+
+    private static final String VALID_PASSWORD="Passw0rd";
 
     @Autowired
     private MockMvc mockMvc;
@@ -40,15 +42,12 @@ public class TeamApiTest extends AbstractTransactionalJUnit4SpringContextTests {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    @Ignore
     @Test
     public void canCreateTeamWithValidTeamNameAndPassword() throws Exception {
-        String teamJsonBody = "{ \"name\" : \"Beach Bums\", \"password\" : \"superSecure\"}";
-        String expectedJwt = jwtBuilder.buildJwt("beach-bums");
+        String teamJsonBody = "{ \"name\" : \"Beach Bums\", \"password\" : \"" + VALID_PASSWORD + "\"}";
 
         MvcResult mvcResult = mockMvc.perform(post("/api/team")
                 .contentType(APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("beach-bums"))
                 .content(teamJsonBody)).andReturn();
 
 
@@ -58,7 +57,7 @@ public class TeamApiTest extends AbstractTransactionalJUnit4SpringContextTests {
         assertEquals("Beach Bums", teamEntity.getName());
         assertEquals("beach-bums", teamEntity.getUri());
         assertEquals(60, teamEntity.getPassword().length());
-        assertEquals(expectedJwt, mvcResult.getResponse().getContentAsString());
+        assertNotNull(mvcResult.getResponse().getContentAsString());
     }
 
     @Test
@@ -74,7 +73,7 @@ public class TeamApiTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Test
     public void cannotCreateURIWithEmptyString() throws Exception {
-        String teamJsonBody = "{ \"name\" : \"\", \"password\" : \"superSecure\"}";
+        String teamJsonBody = "{ \"name\" : \"\", \"password\" : \"" + VALID_PASSWORD + "\"}";
 
         mockMvc.perform(post("/api/team")
                 .contentType(APPLICATION_JSON)
@@ -85,7 +84,7 @@ public class TeamApiTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Test
     public void cannotCreateURIWithSpecialCharactersInTeamName() throws Exception {
-        String teamJsonBody = "{ \"name\" : \"The@Mild$Ones\", \"password\" : \"superSecure\"}";
+        String teamJsonBody = "{ \"name\" : \"The@Mild$Ones\", \"password\" : \"" + VALID_PASSWORD + "\"}";
 
         mockMvc.perform(post("/api/team")
                 .contentType(APPLICATION_JSON)
@@ -96,8 +95,8 @@ public class TeamApiTest extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Test
     public void cannotCreateTeamWithDuplicateKey() throws Exception {
-        String teamJsonBody = "{ \"name\" : \"Beach Bums A Team\", \"password\" : \"superSecure\"}";
-        String teamJsonSameBody = "{ \"name\" : \"Beach Bums A Team\", \"password\" : \"superSecure\"}";
+        String teamJsonBody = "{ \"name\" : \"Beach Bums A Team\", \"password\" : \"" + VALID_PASSWORD + "\"}";
+        String teamJsonSameBody = "{ \"name\" : \"Beach Bums A Team\", \"password\" : \""+ VALID_PASSWORD +"\"}";
 
         MvcResult mvcResult = mockMvc.perform(post("/api/team")
                 .contentType(APPLICATION_JSON)
@@ -118,7 +117,7 @@ public class TeamApiTest extends AbstractTransactionalJUnit4SpringContextTests {
 
         RequestedTeam team = new RequestedTeam();
         team.setName("Beachity Bums");
-        team.setPassword("password");
+        team.setPassword(VALID_PASSWORD);
 
         restTemplate.postForObject("/api/team/", team, String.class);
 
@@ -142,12 +141,12 @@ public class TeamApiTest extends AbstractTransactionalJUnit4SpringContextTests {
     public void canLoginWithTeamNameAndPassword() throws Exception {
         RequestedTeam team = new RequestedTeam();
         team.setName("PEACHY BEACHY");
-        team.setPassword("password");
+        team.setPassword(VALID_PASSWORD);
 
         restTemplate.postForObject("/api/team/", team, String.class);
 
         MvcResult mvcResult = mockMvc.perform(post("/api/team/login")
-                .content("{\"name\":\"PEACHY BEACHY\", \"password\":\"password\"}")
+                .content("{\"name\":\"PEACHY BEACHY\", \"password\":\"" + VALID_PASSWORD + "\"}")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -171,83 +170,17 @@ public class TeamApiTest extends AbstractTransactionalJUnit4SpringContextTests {
     public void loginWithBadPasswordReturns403() throws Exception {
         RequestedTeam team = new RequestedTeam();
         team.setName("PEACHY BEACHY");
-        team.setPassword("password");
+        team.setPassword(VALID_PASSWORD);
 
         restTemplate.postForObject("/api/team/", team, String.class);
 
         MvcResult mvcResult = mockMvc.perform(post("/api/team/login")
-                .content("{\"name\":\"PEACHY BEACHY\"}")
+                .content("{\"name\":\"PEACHY BEACHY\", \"password\":\"wr0ngPassw0rd\"}")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isForbidden())
                 .andReturn();
 
         assertEquals("Incorrect board or password. Please try again.", mvcResult.getResponse().getErrorMessage());
-    }
-
-    @Test
-    public void canSetPasswordWhenTeamPasswordIsNull() throws Exception {
-        Team team = new Team();
-        team.setUri("a-team");
-        team.setName("A Team");
-        teamRepository.save(team);
-
-        mockMvc.perform(post("/api/team/a-team/set-password")
-                .content("{\"password\":\"password\"}")
-                .contentType(APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andReturn();
-
-        Team actualTeam = teamRepository.findOne("a-team");
-        assertTrue(actualTeam.getPassword() != null);
-    }
-    
-    @Test
-    public void shouldErrorWhenTryingToSetPasswordOnTeamThatAlreadyHasOne() throws Exception {
-        Team team = new Team();
-        team.setUri("a-team");
-        team.setName("A Team");
-        team.setPassword("password");
-        teamRepository.save(team);
-
-        MvcResult mvcResult = mockMvc.perform(post("/api/team/a-team/set-password")
-                .content("{\"password\":\"password\"}")
-                .contentType(APPLICATION_JSON))
-                .andExpect(status().isConflict())
-                .andReturn();
-
-        assertTrue(mvcResult.getResponse().getErrorMessage().contains("Team already has a password"));
-    }
-
-    @Test
-    public void shouldErrorWhenTryingToSetTooShortPassword() throws Exception {
-        Team team = new Team();
-        team.setUri("a-team");
-        team.setName("A Team");
-        teamRepository.save(team);
-
-        MvcResult mvcResult = mockMvc.perform(post("/api/team/a-team/set-password")
-                .content("{\"password\":\"passwor\"}")
-                .contentType(APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andReturn();
-
-        assertTrue(mvcResult.getResponse().getErrorMessage().contains("Password must be 8 characters or longer."));
-    }
-
-    @Test
-    public void shouldErrorWhenTryingToSetNoPassword() throws Exception {
-        Team team = new Team();
-        team.setUri("a-team");
-        team.setName("A Team");
-        teamRepository.save(team);
-
-        MvcResult mvcResult = mockMvc.perform(post("/api/team/a-team/set-password")
-                .content("{}")
-                .contentType(APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andReturn();
-
-        assertTrue(mvcResult.getResponse().getErrorMessage().contains("Password must be 8 characters or longer."));
     }
 
     @Test
@@ -262,5 +195,10 @@ public class TeamApiTest extends AbstractTransactionalJUnit4SpringContextTests {
         mockMvc.perform(get("/api/team/wrongTeamId/validate")
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("teamId")))
             .andExpect(status().isUnauthorized());
+    }
+
+    @After
+    public void cleanUpTestData(){
+        teamRepository.deleteAll();
     }
 }

@@ -16,32 +16,20 @@
   -->
 
 <div class="rq-thought-column-header {{column.topic}}">
-  <div class="column-title" [ngClass]="{'edit' : editing}" [title]="column.title">
-    <span class="edit-button">
-      <i class="fas fa-pencil-alt" (click)="toggleEdit()"></i>
-    </span>
-    <input #titleInput
-           class="edit-title"
-           maxlength="16"
-           (keydown.enter)="toggleEdit()"
-           [(ngModel)]="newTitle"/>
-    <label class="column-title-label">{{column.title}}</label>
-    <i class="fas  sort-icon"
-       [ngClass]="{'fa-sort-down': column.sorted, 'fa-sort': !column.sorted}"
-       (click)="sortByHearts()"></i>
-    <span class="count">{{thoughtCount}}</span>
-  </div>
-  <div class="thought-input-wrapper">
-    <input class="thought-input"
-           type="text"
-           placeholder="enter thought"
-           maxlength="{{maxThoughtLength}}"
-           autofocus
-           [(ngModel)]="newThought"
-           (keydown.enter)="addThought()">
-    <div 
-      [ngClass]="{'thought-countdown-red': getCharactersRemaining() < 50}"
-      [style.visibility]="getCharactersRemaining() === maxThoughtLength ? 'hidden' : 'visible'"
-      class="thought-countdown">{{getCharactersRemaining()}}</div>
-  </div>
+
+  <rq-column-header
+    [type]="column.topic"
+    [title]="column.title"
+    (sortedChanged)="sortByHearts($event)"
+    (titleChanged)="editTitle($event)"
+  ></rq-column-header>
+
+  <rq-text-field
+    [type]="column.topic"
+    [placeholder]="'enter a thought'"
+    (newMessageAdded)="addThought($event)"
+  ></rq-text-field>
+
+  <rq-count-seperator [count]="thoughtCount"></rq-count-seperator>
+
 </div>

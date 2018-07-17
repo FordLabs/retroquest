@@ -17,6 +17,9 @@
 
 package com.ford.labs.retroquest.team.validation;
 
+import com.ford.labs.retroquest.exception.PasswordMissingLowerCaseAlphaException;
+import com.ford.labs.retroquest.exception.PasswordMissingNumberException;
+import com.ford.labs.retroquest.exception.PasswordMissingUpperCaseAlphaException;
 import com.ford.labs.retroquest.exception.PasswordTooShortException;
 import org.junit.Test;
 
@@ -38,12 +41,27 @@ public class PasswordValidatorTest {
 
     @Test(expected = PasswordTooShortException.class)
     public void whenPasswordShorterThanEightCharactersIsSubmitted_ThrowPasswordTooShortException() {
-        validator.isValid("passwor", null);
+        validator.isValid("Passw0r", null);
+    }
+
+    @Test(expected = PasswordMissingNumberException.class)
+    public void whenPasswordIsMissingANumber_ThrowPasswordMissingNumberException() {
+        validator.isValid("Password", null);
+    }
+
+    @Test(expected = PasswordMissingLowerCaseAlphaException.class)
+    public void whenPasswordIsMissingALowerCaseAlpha_ThrowPasswordMissingLowerCaseAlphaException() {
+        validator.isValid("PASSW0RD", null);
+    }
+
+    @Test(expected = PasswordMissingUpperCaseAlphaException.class)
+    public void whenPasswordIsMissingAUpperCaseAlpha_ThrowPasswordMissingUpperCaseAlphaException() {
+        validator.isValid("passw0rd", null);
     }
 
     @Test
     public void validPasswordReturnsTrue() {
-        boolean isValid = validator.isValid("password", null);
+        boolean isValid = validator.isValid("Passw0rd", null);
         assertTrue(isValid);
     }
 

@@ -20,7 +20,6 @@ package com.ford.labs.retroquest.actionitem;
 
 import com.ford.labs.retroquest.websocket.WebsocketDeleteResponse;
 import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -37,8 +36,11 @@ import java.util.List;
 @RestController
 public class ActionItemController {
 
-    @Autowired
-    private ActionItemRepository actionItemRepository;
+    private final ActionItemRepository actionItemRepository;
+
+    public ActionItemController(ActionItemRepository actionItemRepository) {
+        this.actionItemRepository = actionItemRepository;
+    }
 
     @PutMapping("/api/team/{teamId}/action-item/{thoughtId}/complete")
     @PreAuthorize("#teamId == authentication.principal")

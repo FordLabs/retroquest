@@ -1,3 +1,20 @@
+/*!
+ * Copyright (c) 2018 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 $white: #fff;
 $black: #000;
 
@@ -9,6 +26,7 @@ $unhappy-red: #e74c3c;
 $unhappy-hover-red: #ffdfde;
 $action-yellow: #f1c40f;
 
+$guide-link-text-color: #333;
 $link-blue: #1b89ef;
 
 $text-gray: #a5a5a5;
@@ -36,6 +54,16 @@ $modal-blur: #333;
 
 $positive-action: #65d68a;
 $negative-action: #f16a6a;
+
+$wet-asphalt: #34495e;
+$midnight-blue: #2c3e50;
+$concrete: #95a5a6;
+
+$turquoise: #1abc9c;
+$green-sea: #16a085;
+
+$clouds: #ecf0f1;
+$grape: #a56de2;
 
 @function opacity($color, $level) {
   @return rgba($color, $level);

@@ -1,0 +1,216 @@
+/*!
+ * Copyright (c) 2018 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import 'color-vars';
+
+:host {
+  $host-border-width: 2px;
+  background-color: $white;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px opacity($black, .25);
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  font-size: .8rem;
+  height: 75px;
+  justify-content: flex-end;
+  transition: box-shadow .2s cubic-bezier(.25, .8, .25, 1);
+  width: 100px;
+
+  .remove {
+    display: none;
+  }
+
+  &.happy {
+    &:hover {
+      box-shadow: 0 0 0 $host-border-width $happy-green;
+    }
+  }
+
+  &.confused {
+    &:hover {
+      box-shadow: 0 0 0 $host-border-width $confused-blue;
+    }
+  }
+
+  &.sad {
+    &:hover {
+      box-shadow: 0 0 0 $host-border-width $unhappy-red;
+    }
+  }
+
+  &.action {
+    &:hover {
+      box-shadow: 0 0 0 $host-border-width $action-yellow;
+    }
+  }
+
+
+  &.edit-mode {
+    &:hover {
+      box-shadow: 0 0 0 4px $grape;
+    }
+  }
+
+
+  .disable {
+    opacity: .2;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .content-area {
+
+    $content-area-padding: 12px;
+
+    background-color: inherit;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+    display: block;
+    flex: 1 1 auto;
+    font-size: inherit;
+    position: relative;
+    word-break: break-word;
+    word-wrap: break-word;
+
+    .content-message {
+      box-sizing: border-box;
+      display: block;
+      height: 100%;
+      min-height: 40px;
+      padding: 12px;
+      width: 100%;
+
+      &.editable-div {
+        border-radius: inherit;
+        box-shadow: 0 0 0 1px $grape;
+        outline: none;
+      }
+    }
+  }
+
+  .footer {
+    background-color: inherit;
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+    border-top: 2px solid opacity($wet-asphalt, .06);
+    display: flex;
+    height: 35px;
+    justify-content: flex-start;
+    width: 100%;
+
+    .container,
+    .complete-container {
+      align-items: center;
+      box-sizing: border-box;
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      width: 25%;
+    }
+
+    .container {
+      border-right: 2px solid opacity($wet-asphalt, .06);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .complete-container {
+      cursor: pointer;
+
+      .checkbox {
+        $size: 11px;
+
+        background-color: opacity($wet-asphalt, .14);
+        border: 2px solid $wet-asphalt;
+        border-radius: 4px;
+        height: $size;
+        width: $size;
+
+        &.completed-task {
+          opacity: .2;
+          position: absolute;
+        }
+
+      }
+
+      .checkmark {
+        display: none;
+
+        &.show-checkmark {
+          display: block;
+          font-size: 1.1rem;
+        }
+      }
+    }
+
+    .edit-container,
+    .delete-container {
+      font-size: 1rem;
+    }
+
+    .date-created-container {
+      cursor: default;
+      flex-direction: column;
+
+      .date-created-header {
+        font-size: .5rem;
+        opacity: .5;
+      }
+
+      .date-created-value {
+        font-size: .7rem;
+      }
+    }
+
+    .star-count-container {
+      flex-direction: row;
+      font-size: 1rem;
+      position: relative;
+
+      .star-count {
+        box-sizing: border-box;
+        font-size: .9rem;
+        margin-left: 3px;
+        padding-bottom: 2px;
+        width: 10px;
+      }
+
+      .star-background {
+        background-color: $action-yellow;
+        border-radius: 12px / 6px;
+        height: 10px;
+        margin-top: 10px;
+        position: relative;
+        width: 25px;
+
+        .star-icon {
+          bottom: 0;
+          box-sizing: border-box;
+          display: block;
+          font-size: 1rem;
+          left: 4px;
+          margin: auto;
+          position: absolute;
+          right: 0;
+
+          top: -10px;
+        }
+      }
+    }
+  }
+}

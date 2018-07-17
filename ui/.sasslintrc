@@ -61,7 +61,7 @@
     "leading-zero": 2,
     "max-line-length": 0,
     "max-file-line-count": 0,
-    "nesting-depth": 2,
+    "nesting-depth": 3,
     "property-sort-order": 2,
     "pseudo-element": 2,
     "quotes": 2,

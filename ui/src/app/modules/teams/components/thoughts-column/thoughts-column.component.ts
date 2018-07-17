@@ -30,7 +30,7 @@ export class ThoughtsColumnComponent {
   }
 
   @Input() column: Column;
-  @Input() thoughts: Array<Thought>;
+  @Input() thoughts: Array<Thought> = [];
   currentThoughtId: number = null;
   currentThoughtMessage: string;
 

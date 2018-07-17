@@ -86,7 +86,7 @@ public class Thought {
 
     @JsonIgnore
     public List<String> getCSVFields() {
-        return Arrays.asList(topic, message, String.valueOf(hearts), getDiscussedString());
+        return Arrays.asList(columnTitle.getTitle(), message, String.valueOf(hearts), getDiscussedString());
     }
 
     public void toggleDiscussed() {

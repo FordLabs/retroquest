@@ -38,7 +38,6 @@ import java.util.List;
 public class ThoughtController {
 
     private ThoughtRepository thoughtRepository;
-
     private ColumnTitleRepository columnTitleRepository;
 
     public ThoughtController(ThoughtRepository thoughtRepository, ColumnTitleRepository columnTitleRepository) {

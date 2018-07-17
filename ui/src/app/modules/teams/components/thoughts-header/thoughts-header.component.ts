@@ -26,63 +26,39 @@ import {ColumnService} from '../../services/column.service';
   templateUrl: './thoughts-header.component.html',
   styleUrls: ['./thoughts-header.component.scss']
 })
-export class ThoughtsHeaderComponent implements OnInit {
+export class ThoughtsHeaderComponent {
 
   constructor (private thoughtService: ThoughtService, private columnService: ColumnService) {
   }
-
-  maxThoughtLength = 255;
 
   @Input() column: Column;
   @Input() thoughtCount: number;
 
   @ViewChild('titleInput') titleInput;
 
-  editing = false;
-  newTitle: string;
-  newThought = '';
-
-  ngOnInit (): void {
-    this.newTitle = this.column.title;
-  }
-
-  private editTitle () {
-    this.column.title = this.newTitle;
+  public editTitle (newTitle: string) {
+    this.column.title = newTitle;
     this.columnService.updateColumn(this.column);
   }
 
-  public sortByHearts (): void {
-    this.column.sorted = !this.column.sorted;
+  public sortByHearts (sortState: boolean): void {
+    this.column.sorted = sortState;
   }
 
-  public addThought (): void {
-    if (this.newThought && this.newThought.length) {
+  public addThought (newMessage: string): void {
+    if (newMessage && newMessage.length) {
       const thought: Thought = {
         id: null,
         teamId: this.column.teamId,
         topic: this.column.topic,
-        message: this.newThought,
+        message: newMessage,
         hearts: 0,
         discussed: false,
         columnTitle: this.column
       };
 
-      this.newThought = '';
-
       this.thoughtService.addThought(thought);
     }
   }
 
-  public getCharactersRemaining(): number {
-    return this.maxThoughtLength - this.newThought.length;
-  }
-
-  toggleEdit () {
-    if (this.editing) {
-      this.editTitle();
-    } else {
-      this.newTitle = this.column.title;
-    }
-    this.editing = !this.editing;
-  }
 }

@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-import { Observable } from 'rxjs/index';
-import { ThoughtsHeaderComponent } from './thoughts-header.component';
+import {Observable} from 'rxjs/index';
+import {ThoughtsHeaderComponent} from './thoughts-header.component';
 
 describe('ThoughtsHeaderComponent', () => {
   let component: ThoughtsHeaderComponent;
@@ -43,15 +43,6 @@ describe('ThoughtsHeaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('getCharactersRemaining', () => {
-    it('should return the number of remaining characters', () => {
-      component.newThought = 'new task';
-      component.maxThoughtLength = 20;
-      expect(component.getCharactersRemaining()).toBe(component.maxThoughtLength - component.newThought.length);
-    });
-  });
-
-
   describe('addThought', () => {
     it('should construct the thought and call ThoughtService.addThought', () => {
       const newThoughtMessage = 'a new thought';
@@ -66,49 +57,39 @@ describe('ThoughtsHeaderComponent', () => {
         columnTitle: testColumn
       };
 
-      component.newThought = newThoughtMessage;
-
-      component.addThought();
+      component.addThought(newThoughtMessage);
 
       expect(mockThoughtService.addThought).toHaveBeenCalledWith(expectedThought);
     });
   });
 
   describe('sortByHearts', () => {
-    it('toggle sorting by hearts flag from false', () => {
-      component.column.sorted = false;
-      component.sortByHearts();
-      expect(component.column.sorted).toBe(true);
+    it('disables sorting by hearts', () => {
+      component.sortByHearts(false);
+      expect(component.column.sorted).toBeFalsy();
     });
 
-    it('toggle sorting by hearts flag from true', () => {
-      component.column.sorted = true;
-      component.sortByHearts();
-      expect(component.column.sorted).toBe(false);
+    it('enables sorting by hearts', () => {
+      component.sortByHearts(true);
+      expect(component.column.sorted).toBeTruthy();
     });
   });
 
-  describe('toggleEdit', () => {
-    it('should pass the column with updated title to column service', () => {
-      const newTitle = 'new title';
-      const expectedColumn = { ...testColumn };
-      expectedColumn.title = newTitle;
+  describe( 'editTitle', () => {
+    it('should send column service the new title', function () {
 
-      component.editing = true;
-      component.newTitle = newTitle;
-      component.toggleEdit();
+      component.column = {
+        sorted: false,
+        id: null,
+        topic: null,
+        title: 'newTitle',
+        teamId: null,
+      };
 
-      expect(mockColumnService.updateColumn).toHaveBeenCalledWith(expectedColumn);
-      expect(component.editing).toBeFalsy();
-    });
-
-    it('should set the newTitle to the existing title when toggled to editing', () => {
-      component.editing = false;
-
-      component.toggleEdit();
-
-      expect(component.newTitle).toBe(testColumn.title);
-      expect(component.editing).toBeTruthy();
+      component.editTitle('someTitle');
+      expect(mockColumnService.updateColumn).toHaveBeenCalledWith(component.column);
+      expect(component.column.title).toEqual('someTitle');
     });
   });
+
 });

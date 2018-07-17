@@ -1,3 +1,20 @@
+/*!
+ * Copyright (c) 2018 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import 'color-vars';
 
@@ -7,9 +24,10 @@ html {
 }
 
 body {
+  color: $wet-asphalt;
   font-family: 'Quicksand', sans-serif;
-  font-size: 2rem;
-  font-weight: 300;
+  font-size: 1rem;
+  font-weight: normal;
   height: 100%;
   margin: 0;
   padding: 0;
@@ -90,10 +108,12 @@ p {
 
 .rq-button-primary,
 .rq-button-secondary {
-  border-radius: 3px;
+  border: 0;
+  border-radius: 6px;
   font-family: 'Quicksand', sans-serif;
   font-size: 1rem;
-  padding: 1rem .8rem;
+  font-weight: 800;
+  padding: 12px 36px;
 
   .button-text {
     white-space: nowrap;
@@ -101,13 +121,12 @@ p {
 }
 
 .rq-button-primary {
-  background-color: $button-blue;
+  background-color: $midnight-blue;
+  box-shadow: 0 4px 15px opacity($black, .25);
   color: $white;
-  font-weight: bold;
-  text-transform: uppercase;
 
   &:hover {
-    background-color: $button-hover-blue;
+    background-color: $turquoise;
     cursor: pointer;
   }
 
@@ -118,13 +137,10 @@ p {
 
 .rq-button-secondary {
   background-color: transparent;
-  border: 1px $button-blue solid;
-  color: $button-blue;
-  font-weight: 200;
+  color: $wet-asphalt;
 
   &:hover {
-    background-color: $button-blue;
-    color: $white;
+    color: $turquoise;
     cursor: pointer;
   }
 }

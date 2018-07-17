@@ -1,0 +1,138 @@
+/*!
+ * Copyright (c) 2018 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import 'color-vars';
+
+:host {
+  align-items: center;
+  background-color: $black;
+  border-radius: 6px;
+  box-shadow: 0 2px 20px opacity($black, .25);
+  box-sizing: border-box;
+  color: $white;
+  cursor: default;
+  display: flex;
+  font-size: 1.7rem;
+  font-weight: bold;
+  height: 75px;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+  text-align: center;
+  width: 100px;
+
+  .input-container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    position: relative;
+  }
+
+  input {
+    background-color: transparent;
+    border: 0;
+    color: $text-off-white;
+    cursor: inherit;
+    display: inline-block;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    outline: none;
+    padding: 0;
+    text-align: center;
+    width: 100%;
+
+    &[readonly] {
+      cursor: default;
+    }
+
+    &.hide {
+      display: none;
+    }
+  }
+
+  .display-text {
+    background-color: transparent;
+    border: 0;
+    box-sizing: border-box;
+    color: $text-off-white;
+    cursor: inherit;
+    display: inline-block;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    height: auto;
+    margin-right: 8px;
+    outline: none;
+    overflow: hidden;
+    padding: 0;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: auto;
+
+    &.hide {
+      display: none;
+    }
+  }
+
+  .sort {
+    cursor: pointer;
+    display: block;
+    font-size: 1.5rem;
+
+    &.sort-icon-translucent {
+      opacity: .45;
+    }
+
+    &.hide {
+      display: none;
+    }
+
+  }
+
+  .edit-button {
+    color: $white;
+    cursor: pointer;
+    font-size: 1rem;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+
+    &.edit-button-enabled {
+      color: $wet-asphalt;
+      display: none;
+    }
+  }
+
+  &.happy {
+    background-color: $happy-green;
+  }
+
+  &.confused {
+    background-color: $confused-blue;
+  }
+
+  &.sad {
+    background-color: $unhappy-red;
+  }
+
+  &.action {
+    background-color: $action-yellow;
+  }
+
+}

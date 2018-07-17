@@ -18,6 +18,7 @@
 package com.ford.labs.retroquest.team;
 
 import com.ford.labs.retroquest.actionitem.ActionItem;
+import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.thought.Thought;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -36,15 +37,38 @@ public class CsvFileTest {
     @Test
     public void shouldConvertThoughtsAndActionItemsToACSV() throws IOException {
 
-        Thought firstThought = Thought.builder().topic("confused")
-                .message("stuff \"goes here\"").hearts(5).discussed(false).build();
-        Thought secondThoght = Thought.builder().topic("happy")
-                .message("a thought, with a comma").hearts(2).discussed(true).build();
-        Thought thirdThought = Thought.builder().topic("unhappy").message("sad").hearts(0).discussed(false).build();
+        Thought firstThought = Thought.builder()
+                .topic("confused")
+                .message("stuff \"goes here\"")
+                .hearts(5)
+                .discussed(false)
+                .columnTitle(ColumnTitle.builder().title("CONFUSED").build())
+                .build();
 
-        ActionItem actionItem = ActionItem.builder().task("tasks and \"stuff, yo\"").completed(false)
-                .assignee("test user").build();
-        String actual = new CsvFile("teamName", Arrays.asList(firstThought, secondThoght, thirdThought),
+        Thought secondThoght = Thought.builder()
+                .topic("happy")
+                .message("a thought, with a comma")
+                .hearts(2)
+                .columnTitle(ColumnTitle.builder().title("HAPPY").build())
+                .discussed(true)
+                .build();
+
+        Thought thirdThought = Thought.builder()
+                .topic("unhappy")
+                .message("sad")
+                .hearts(0)
+                .discussed(false)
+                .columnTitle(ColumnTitle.builder().title("SAD").build())
+                .build();
+
+        ActionItem actionItem = ActionItem.builder()
+                .task("tasks and \"stuff, yo\"")
+                .completed(false)
+                .assignee("test user")
+                .build();
+
+        String actual = new CsvFile("teamName",
+                Arrays.asList(firstThought, secondThoght, thirdThought),
                 Collections.singletonList(actionItem) ).getCSVString();
 
         String expected = FileUtils.readFileToString(new File("src/test/resources/sampleOutput.csv"));

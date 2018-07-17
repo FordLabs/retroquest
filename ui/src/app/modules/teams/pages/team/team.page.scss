@@ -15,20 +15,22 @@
  * limitations under the License.
  */
 @import 'color-vars';
+@import 'global-vars';
 
 #page {
-  background-color: $white;
+  background-color: $clouds;
   font-family: 'Quicksand', sans-serif;
   height: 100%;
-  margin: 0 auto;
-  max-width: 1440px;
-  min-width: 1200px;
+  overflow: auto;
   padding: 0;
 
   #team-content {
     display: flex;
     justify-content: space-around;
-    margin-top: 1rem;
+    margin: 0 auto;
+    max-width: $desktop-max-width;
+    min-width: $desktop-min-width;
+    padding-top: 1rem;
 
     .rq-column {
       flex-grow: 1;

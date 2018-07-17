@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.thought;
 
+import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import org.junit.Test;
 
 import java.util.List;
@@ -40,12 +41,13 @@ public class ThoughtTest {
     @Test
     public void shouldBuildThoughtCSVField() {
         Thought thought = new Thought();
-        thought.setTopic("topic");
+        thought.setColumnTitle(ColumnTitle.builder().title("Heyya").build());
         thought.setMessage("message");
         thought.setHearts(9);
         List<String> actual = thought.getCSVFields();
-        assertThat(actual, contains("topic", "message", "9", "no"));
+        assertThat(actual, contains("Heyya", "message", "9", "no"));
     }
+
 
     @Test
     public void shouldSanitizeMessage() {
