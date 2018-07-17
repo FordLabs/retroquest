@@ -55,16 +55,18 @@ public class FeedbackApiTest extends AbstractTransactionalJUnit4SpringContextTes
     }
 
     @Test
-    public void cannotGetFeedbackWithoutAuth() throws Exception {
-        Feedback feedback = new Feedback();
-        feedbackRepository.save(feedback);
-
-        int size = feedbackRepository.findAll().size();
-
+    public void cannotGetFeedbackWithBadAuth() throws Exception {
         String token = Base64.getEncoder().encodeToString("notadmin:pass".getBytes());
 
         mockMvc.perform(get("/api/feedback/all").contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Basic " + token))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void cannotGetFeedbackWithNoAuth() throws Exception {
+
+        mockMvc.perform(get("/api/feedback/all").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
     }
 }
