@@ -64,7 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
             httpSecurity.requiresChannel().antMatchers("/*").requiresSecure();
         }
 
-        httpSecurity.authorizeRequests().antMatchers("/api/feedback/all")
+        httpSecurity.authorizeRequests().antMatchers("/api/admin/**")
                 .hasRole("ADMIN").and().httpBasic();
 
         httpSecurity

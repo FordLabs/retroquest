@@ -49,7 +49,7 @@ public class FeedbackApiTest extends AbstractTransactionalJUnit4SpringContextTes
 
         String token = Base64.getEncoder().encodeToString((adminUsername + ":"+ adminPassword).getBytes());
 
-        mockMvc.perform(get("/api/feedback/all").contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(get("/api/admin/feedback/all").contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", "Basic " + token)).andExpect(status().isOk())
         .andExpect(jsonPath("$", hasSize(size)));
     }
@@ -58,7 +58,7 @@ public class FeedbackApiTest extends AbstractTransactionalJUnit4SpringContextTes
     public void cannotGetFeedbackWithBadAuth() throws Exception {
         String token = Base64.getEncoder().encodeToString("notadmin:pass".getBytes());
 
-        mockMvc.perform(get("/api/feedback/all").contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(get("/api/admin/feedback/all").contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Basic " + token))
                 .andExpect(status().isUnauthorized());
     }
@@ -66,7 +66,7 @@ public class FeedbackApiTest extends AbstractTransactionalJUnit4SpringContextTes
     @Test
     public void cannotGetFeedbackWithNoAuth() throws Exception {
 
-        mockMvc.perform(get("/api/feedback/all").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/admin/feedback/all").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
     }
 }
