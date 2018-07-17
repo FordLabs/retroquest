@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.OptionalDouble;
 
 @RestController
-@RequestMapping("/api/metrics")
+@RequestMapping("/api/admin/metrics")
 public class MetricsController {
 
     @Autowired

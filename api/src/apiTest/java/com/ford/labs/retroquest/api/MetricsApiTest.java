@@ -52,7 +52,7 @@ public class MetricsApiTest extends AbstractTransactionalJUnit4SpringContextTest
         team.setUri(teamUri);
         teamRepository.save(team);
 
-        MvcResult result = mockMvc.perform(get("/api/metrics/team/count")
+        MvcResult result = mockMvc.perform(get("/api/admin/metrics/team/count")
                 .header("Authorization", "Basic " + token))
             .andExpect(status().isOk())
             .andReturn();
@@ -62,7 +62,7 @@ public class MetricsApiTest extends AbstractTransactionalJUnit4SpringContextTest
     @Test
     public void cannotReadTheTotalNumberOfTeamsWithoutAuthorization() throws Exception {
         String token = getToken("notAdmin", "notAdminPassword");
-        mockMvc.perform(get("/api/metrics/team/count")
+        mockMvc.perform(get("/api/admin/metrics/team/count")
                 .header("Authorization", "Basic " + token))
             .andExpect(status().isUnauthorized());
     }
@@ -74,7 +74,7 @@ public class MetricsApiTest extends AbstractTransactionalJUnit4SpringContextTest
         Feedback feedback = new Feedback();
         feedbackRepository.save(feedback);
 
-        MvcResult result = mockMvc.perform(get("/api/metrics/feedback/count")
+        MvcResult result = mockMvc.perform(get("/api/admin/metrics/feedback/count")
                 .header("Authorization", "Basic " + token))
             .andExpect(status().isOk())
             .andReturn();
@@ -84,7 +84,7 @@ public class MetricsApiTest extends AbstractTransactionalJUnit4SpringContextTest
     @Test
     public void cannotGetFeedbackWithoutAuthorization() throws Exception {
         String token = getToken("notAdmin", "notAdminPassword");
-        mockMvc.perform(get("/api/metrics/feedback/count")
+        mockMvc.perform(get("/api/admin/metrics/feedback/count")
                 .header("Authorization", "Basic " + token))
             .andExpect(status().isUnauthorized());
     }
@@ -100,9 +100,9 @@ public class MetricsApiTest extends AbstractTransactionalJUnit4SpringContextTest
 
         String token = getToken(adminUsername, adminPassword);
 
-        MvcResult result = mockMvc.perform(get("/api/metrics/feedback/average")
+        MvcResult result = mockMvc.perform(get("/api/admin/metrics/feedback/average")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authoirzation", "Basic " + token))
+                .header("Authorization", "Basic " + token))
                 .andExpect(status().isOk())
                 .andReturn();
         assertEquals("3.0", result.getResponse().getContentAsString());
@@ -111,7 +111,7 @@ public class MetricsApiTest extends AbstractTransactionalJUnit4SpringContextTest
     @Test
     public void cannotGetAverageFeedbackAsUserThatIsNotAdmin() throws Exception {
         String token = getToken("notadmin", "notadminpassword");
-        mockMvc.perform(get("/api/metrics/feedback/adverage")
+        mockMvc.perform(get("/api/metrics/admin/feedback/adverage")
                 .header("Authorization", "Basic " + token))
                 .andExpect(status().isUnauthorized());
     }
@@ -127,7 +127,7 @@ public class MetricsApiTest extends AbstractTransactionalJUnit4SpringContextTest
 
         String token = getToken(adminUsername, adminPassword);
 
-        MvcResult result = mockMvc.perform(get("/api/metrics/feedback/average")
+        MvcResult result = mockMvc.perform(get("/api/admin/metrics/feedback/average")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Basic " + token))
                 .andExpect(status().isOk())

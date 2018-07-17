@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.OptionalDouble;
 
 @RestController
-@RequestMapping("/api/feedback")
+@RequestMapping("/api/admin/feedback")
 public class FeedbackController {
 
     private FeedbackRepository feedbackRepository;
