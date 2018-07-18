@@ -25,6 +25,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -71,7 +72,7 @@ public class CsvFileTest {
                 Arrays.asList(firstThought, secondThoght, thirdThought),
                 Collections.singletonList(actionItem) ).getCSVString();
 
-        String expected = FileUtils.readFileToString(new File("src/test/resources/sampleOutput.csv"));
+        String expected = FileUtils.readFileToString(new File("src/test/resources/sampleOutput.csv"), Charset.defaultCharset());
 
         assertThat(actual, is(equalTo(expected)));
     }

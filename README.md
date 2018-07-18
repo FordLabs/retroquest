@@ -61,11 +61,6 @@ Start the frontend with npm for live development:
 ```
 npm run start
 ```
-If you start the frontend using `npm run start` you will need to disable captcha on the backend using the spring profile `captchaDisabled`
-
-```
-SPRING_PROFILES_ACTIVE=captchaDisabled ./gradlew bootRun
-```
 
 This will start the frontend with a proxy to direct all requests to localhost:8080 where the api is running. The application will start at [localhost:4200](http://localhost:4200)
 
@@ -96,9 +91,9 @@ npm run test -- Hot runs all tests
 ```
 
 ## Running the E2E Tests
-Start the backend application with captcha disabled
+Start the backend application
 ```
-SPRING_PROFILES_ACTIVE=captchaDisabled ./gradlew bootRun
+./gradlew bootRun
 ```
 Start the database
 ```
