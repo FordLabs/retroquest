@@ -1,27 +1,42 @@
 language: java
+jdk:
+  - oraclejdk8
 
 sudo: required
 
 services:
   - docker
-  - mysql
-
-addons:
-  chrome: stable
 
 cache:
   directories:
-    - node_modules
+    - ./ui/node_modules
+    - $HOME/.npm
+    - $HOME/.m2
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+env:
+  - TEST_SUITE=ui
+  - TEST_SUITE=api
 
 before_install:
-  - cd ./ui
-  - npm install
-  - cd ../api
-  - ./gradlew assemble
-  - cd ..
+  - sudo service mysql stop
 
-before_script:
-  - sudo /etc/init.d/mysql stop
-
+install:
+  - |
+    if [ "${TEST_SUITE}" == "ui" ]; then
+      cd ./ui && npm install && cd ..
+    fi
+  - |
+    if [ "${TEST_SUITE}" == "api" ]; then
+      ./gradlew assemble
+    fi
 script:
-  - ./prepare.sh
+  - |
+    if [ "${TEST_SUITE}" == "ui" ]; then
+      cd ./ui && npm run lint && npm run sass-lint && npm run unit && cd ..
+    fi
+  - |
+    if [ "${TEST_SUITE}" == "api" ]; then
+      SPRING_PROFILES_ACTIVE=docker ./gradlew check dockerApiTest
+    fi
