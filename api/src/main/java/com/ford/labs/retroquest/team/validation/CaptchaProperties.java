@@ -6,8 +6,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Data
 @Configuration
-@ConfigurationProperties(prefix ="com.retroquest.captcha")
+@ConfigurationProperties(prefix = "com.retroquest.captcha")
 public class CaptchaProperties {
     private String secret;
     private String url;
+    private boolean enabled = true;
 }
