@@ -54,15 +54,21 @@ Start the backend with Gradle:
 ```
 ./gradlew bootRun
 ```
-
+### Frontend
 If you are only working on the backend, a static build will be accessible from [localhost:8080](http://localhost:8080) after running `npm run build-prod`
 
 Start the frontend with npm for live development:  
 ```
 npm run start
 ```
+If you start the frontend using `npm run start` you will need to disable captcha on the backend using the spring profile `captchaDisabled`
+
+```
+SPRING_PROFILES_ACTIVE=captchaDisabled ./gradlew bootRun
+```
 
 This will start the frontend with a proxy to direct all requests to localhost:8080 where the api is running. The application will start at [localhost:4200](http://localhost:4200)
+
 
 ## Running the Backend Tests
 This project includes unit tests, API tests, and Selenium tests.
@@ -87,6 +93,20 @@ Navigate to the `ui` folder, making sure you've already followed the build steps
 ```
 npm run unit -- Runs all tests and closes
 npm run test -- Hot runs all tests
+```
+
+## Running the E2E Tests
+Start the backend application with captcha disabled
+```
+SPRING_PROFILES_ACTIVE=captchaDisabled ./gradlew bootRun
+```
+Start the database
+```
+cd /api && docker-compose up
+```
+Run the end to end tests
+```
+cd /ui && npm run e2e
 ```
 
 ## Connecting to the local Database
