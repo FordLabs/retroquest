@@ -8,9 +8,6 @@ services:
 
 addons:
   chrome: stable
-  apt:
-    packages:
-      - oracle-java8-installer
 
 cache:
   directories:
