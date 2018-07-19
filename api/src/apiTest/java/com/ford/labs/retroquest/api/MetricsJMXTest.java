@@ -19,7 +19,6 @@ package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.feedback.Feedback;
 import com.ford.labs.retroquest.feedback.FeedbackRepository;
-import com.ford.labs.retroquest.metrics.MetricsController;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import org.junit.After;
@@ -30,7 +29,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.management.*;
-
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
@@ -54,7 +52,7 @@ public class MetricsJMXTest {
         team.setUri("some uri");
         teamRepository.save(team);
 
-        Object teamCount = mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metricsController,type=MetricsController"), "TeamCount");
+        Object teamCount = mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metrics,type=Metrics"), "TeamCount");
         assertEquals(1, teamCount);
     }
 
@@ -62,7 +60,7 @@ public class MetricsJMXTest {
     public void canGetFeedbackCount() throws MalformedObjectNameException, AttributeNotFoundException, MBeanException, ReflectionException, InstanceNotFoundException {
         feedbackRepository.save(new Feedback());
 
-        Object feedbackCount = mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metricsController,type=MetricsController"), "FeedbackCount");
+        Object feedbackCount = mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metrics,type=Metrics"), "FeedbackCount");
         assertEquals(1, feedbackCount);
     }
 
@@ -72,7 +70,7 @@ public class MetricsJMXTest {
         feedback.setStars(5);
         feedbackRepository.save(feedback);
 
-        Object feedbackCount = mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metricsController,type=MetricsController"), "AverageRating");
+        Object feedbackCount = mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metrics,type=Metrics"), "AverageRating");
         assertEquals(5.0, feedbackCount);
     }
 
@@ -84,9 +82,8 @@ public class MetricsJMXTest {
         zeroStarFeedback.setStars(0);
         feedbackRepository.save(Arrays.asList(fiveStarFeedback, zeroStarFeedback));
 
-        Object feedbackCount = mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metricsController,type=MetricsController"), "AverageRating");
+        Object feedbackCount = mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metrics,type=Metrics"), "AverageRating");
         assertEquals(5.0, feedbackCount);
-
     }
 
     @After

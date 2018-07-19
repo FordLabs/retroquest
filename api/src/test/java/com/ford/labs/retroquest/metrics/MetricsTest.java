@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class MetricsControllerTest {
+public class MetricsTest {
 
     @Mock
     private FeedbackRepository mockFeedbackRepository;
@@ -26,19 +26,19 @@ public class MetricsControllerTest {
     private TeamRepository mockTeamRepository;
 
     @InjectMocks
-    private MetricsController metricsController;
+    private Metrics metrics;
 
 
     @Test
     public void returnsTheTotalNumberOfTeamsCreated() {
         when(mockTeamRepository.findAll()).thenReturn(Arrays.asList(new Team(), new Team()));
-        assertEquals(2, metricsController.getTeamCount());
+        assertEquals(2, metrics.getTeamCount());
     }
 
     @Test
     public void returnsTheFeedbackCount() {
         when(mockFeedbackRepository.findAll()).thenReturn(Arrays.asList(new Feedback(), new Feedback()));
-        assertEquals(2, metricsController.getFeedbackCount());
+        assertEquals(2, metrics.getFeedbackCount());
     }
 
     @Test
@@ -49,12 +49,12 @@ public class MetricsControllerTest {
         threeStarFeedback.setStars(3);
 
         when(mockFeedbackRepository.findAllByStarsIsGreaterThanEqual(1)).thenReturn(Arrays.asList(twoStarFeeback, threeStarFeedback));
-        assertEquals(2.5, metricsController.getAverageRating(), 0);
+        assertEquals(2.5, metrics.getAverageRating(), 0);
     }
 
     @Test
     public void returnsZeroWhenNoFeedbackIsPresent() {
         when(mockFeedbackRepository.findAllByStarsIsGreaterThanEqual(1)).thenReturn(Collections.emptyList());
-        assertEquals(0.0, metricsController.getAverageRating(), 0);
+        assertEquals(0.0, metrics.getAverageRating(), 0);
     }
 }
