@@ -15,11 +15,14 @@ import java.util.OptionalDouble;
 @RequestMapping("/api/admin/metrics")
 public class MetricsController {
 
-    @Autowired
-    private TeamRepository teamRepository;
+    private final TeamRepository teamRepository;
 
-    @Autowired
-    private FeedbackRepository feedbackRepository;
+    private final FeedbackRepository feedbackRepository;
+
+    public MetricsController(TeamRepository teamRepository, FeedbackRepository feedbackRepository) {
+        this.teamRepository = teamRepository;
+        this.feedbackRepository = feedbackRepository;
+    }
 
     @GetMapping("/team/count")
     public int getTeamCount() {
