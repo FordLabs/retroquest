@@ -3,7 +3,6 @@ package com.ford.labs.retroquest.metrics;
 import com.ford.labs.retroquest.feedback.Feedback;
 import com.ford.labs.retroquest.feedback.FeedbackRepository;
 import com.ford.labs.retroquest.team.TeamRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.web.bind.annotation.GetMapping;
