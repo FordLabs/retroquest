@@ -34,7 +34,7 @@ describe('LoginComponent', () => {
     spyOn(console, 'error');
 
     component = new LoginComponent(mockTeamService, mockRouter);
-    component.recaptchaComponent = mockRecaptchaComponent
+    component.recaptchaComponent = mockRecaptchaComponent;
   });
 
   describe('useCaptchaForProd', () => {
@@ -49,7 +49,7 @@ describe('LoginComponent', () => {
     it('should set the error message for empty teamName', () => {
       component.teamName = '';
 
-      component.login("some captcha");
+      component.login('some captcha');
 
       expect(component.errorMessage).toEqual('Please enter a team name');
     });
@@ -58,7 +58,7 @@ describe('LoginComponent', () => {
       component.teamName = 'Team Name';
       component.password = '';
 
-      component.login("some captcha");
+      component.login('some captcha');
 
       expect(component.errorMessage).toEqual('Please enter a password');
     });
@@ -67,7 +67,7 @@ describe('LoginComponent', () => {
       component.teamName = 'Team Name';
       component.password = 'p4ssw0rd';
 
-      component.login("some captcha");
+      component.login('some captcha');
 
       expect(component.errorMessage).toEqual('');
     });
@@ -87,7 +87,7 @@ describe('LoginComponent', () => {
         }
       };
 
-      component.login("some captcha");
+      component.login('some captcha');
       mockTeamService.login().next(httpResponse);
 
       expect(AuthService.setToken).toHaveBeenCalledWith(jwt);
@@ -95,15 +95,15 @@ describe('LoginComponent', () => {
     });
 
     it('should set the error message and log it', () => {
-      component.teamName = "some team";
-      component.password = "some password";
+      component.teamName = 'some team';
+      component.password = 'some password';
 
       const httpErrorMessage = 'server error message';
       const error = {
         error: JSON.stringify({message: httpErrorMessage})
       };
 
-      component.login("some captcha");
+      component.login('some captcha');
       mockTeamService.login().error(error);
 
       expect(component.errorMessage).toEqual(httpErrorMessage);

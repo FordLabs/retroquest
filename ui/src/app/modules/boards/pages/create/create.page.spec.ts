@@ -49,7 +49,7 @@ describe('CreateComponent', () => {
     it('should set the error message for empty teamName', () => {
       component.teamName = '';
 
-      component.create("some captcha");
+      component.create('some captcha');
 
       expect(component.errorMessage).toEqual('Please enter a team name');
     });
@@ -58,7 +58,7 @@ describe('CreateComponent', () => {
       component.teamName = 'Team Name';
       component.password = '';
 
-      component.create("some captcha");
+      component.create('some captcha');
 
       expect(component.errorMessage).toEqual('Please enter a password');
     });
@@ -68,7 +68,7 @@ describe('CreateComponent', () => {
       component.password = 'p4ssw0rd';
       component.confirmPassword = 'password';
 
-      component.create("some captcha");
+      component.create('some captcha');
 
       expect(component.errorMessage).toEqual('Please enter matching passwords');
     });
@@ -78,7 +78,7 @@ describe('CreateComponent', () => {
       component.password = 'p4ssw0rd';
       component.confirmPassword = 'p4ssw0rd';
 
-      component.create("some captcha");
+      component.create('some captcha');
 
       expect(component.errorMessage).toEqual('');
     });
@@ -99,7 +99,7 @@ describe('CreateComponent', () => {
         }
       };
 
-      component.create("some captcha");
+      component.create('some captcha');
       mockTeamService.create().next(httpResponse);
 
       expect(AuthService.setToken).toHaveBeenCalledWith(jwt);
@@ -116,7 +116,7 @@ describe('CreateComponent', () => {
         error: JSON.stringify({message: httpErrorMessage})
       };
 
-      component.create("some captcha");
+      component.create('some captcha');
       mockTeamService.create().error(error);
 
       expect(component.errorMessage).toEqual(httpErrorMessage);
