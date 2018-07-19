@@ -4,6 +4,7 @@ import com.ford.labs.retroquest.feedback.Feedback;
 import com.ford.labs.retroquest.feedback.FeedbackRepository;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,5 +156,11 @@ public class MetricsApiTest extends AbstractTransactionalJUnit4SpringContextTest
 
     private String getToken(String adminUsername, String adminPassword) {
         return Base64.getEncoder().encodeToString((adminUsername + ":"+ adminPassword).getBytes());
+    }
+
+    @After
+    public void cleanUpTestData() {
+        teamRepository.deleteAll();
+        feedbackRepository.deleteAll();
     }
 }

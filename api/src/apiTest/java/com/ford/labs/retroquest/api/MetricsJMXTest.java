@@ -22,6 +22,7 @@ import com.ford.labs.retroquest.feedback.FeedbackRepository;
 import com.ford.labs.retroquest.metrics.MetricsController;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,5 +87,11 @@ public class MetricsJMXTest {
         Object feedbackCount = mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metricsController,type=MetricsController"), "AverageRating");
         assertEquals(5.0, feedbackCount);
 
+    }
+
+    @After
+    public void cleanUpTestData() {
+        teamRepository.deleteAll();
+        feedbackRepository.deleteAll();
     }
 }
