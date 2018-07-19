@@ -5,7 +5,6 @@ import com.ford.labs.retroquest.feedback.FeedbackRepository;
 import com.ford.labs.retroquest.team.TeamRepository;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedResource;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.OptionalDouble;
