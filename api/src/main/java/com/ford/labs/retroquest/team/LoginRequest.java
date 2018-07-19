@@ -18,7 +18,6 @@
 package com.ford.labs.retroquest.team;
 
 import com.ford.labs.retroquest.team.validation.CaptchaConstraint;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
