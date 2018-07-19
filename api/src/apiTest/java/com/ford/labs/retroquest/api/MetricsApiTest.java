@@ -102,7 +102,7 @@ public class MetricsApiTest extends AbstractTransactionalJUnit4SpringContextTest
     }
 
     @Test
-    public void canGetAverageFeedbackAverageAsAdmin() throws Exception {
+    public void canGetAverageRatingAsAdmin() throws Exception {
 
         Feedback feedback1 = new Feedback();
         feedback1.setStars(4);
@@ -121,7 +121,7 @@ public class MetricsApiTest extends AbstractTransactionalJUnit4SpringContextTest
     }
 
     @Test
-    public void averageFeedbackIgnoresStartsWithAZeroValue() throws Exception {
+    public void averageRatingIgnoresStarsWithAZeroValue() throws Exception {
 
         Feedback feedback1 = new Feedback();
         feedback1.setStars(4);
@@ -140,7 +140,7 @@ public class MetricsApiTest extends AbstractTransactionalJUnit4SpringContextTest
     }
 
     @Test
-    public void cannotGetAverageFeedbackWithInvalidAuthorization() throws Exception {
+    public void cannotGetAverageRatingWithInvalidAuthorization() throws Exception {
         String token = getToken("notadmin", "notadminpassword");
         mockMvc.perform(get("/api/admin/metrics/feedback/average")
                 .header("Authorization", "Basic " + token))
@@ -148,7 +148,7 @@ public class MetricsApiTest extends AbstractTransactionalJUnit4SpringContextTest
     }
 
     @Test
-    public void cannotGetAverageFeedbackWithoutAuthorization() throws Exception {
+    public void cannotGetAverageRatingWithoutAuthorization() throws Exception {
         mockMvc.perform(get("/api/admin/metrics/feedback/average"))
                 .andExpect(status().isUnauthorized());
     }
