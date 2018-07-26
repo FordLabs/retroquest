@@ -11,11 +11,13 @@ describe('Team Page', () => {
     page.loginToRandomBoard().then((randomTeamData) => {
       teamData = randomTeamData;
       page.navigateTo(teamData.id).then(() => {
-        // waiting for anuglar is broken when using websockets
+        // waiting for angular is broken when using websockets
         // we are toggling waitForAngularEnabled as a workaround
         browser.waitForAngularEnabled(false);
         done();
       });
+    }).catch((error) => {
+      console.error('failed to log into board: ', error);
     });
   });
 

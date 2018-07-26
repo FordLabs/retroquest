@@ -17,7 +17,9 @@
 
 import {CreateComponent} from './create.page';
 import {AuthService} from '../../../auth/auth.service';
-import {Subject} from 'rxjs';
+import {Subject, throwError} from 'rxjs';
+import {of} from 'rxjs/internal/observable/of';
+import {HttpHeaders, HttpResponse} from '@angular/common/http';
 
 describe('CreateComponent', () => {
   let component: CreateComponent;
@@ -26,7 +28,10 @@ describe('CreateComponent', () => {
   let mockRecaptchaComponent;
 
   beforeEach(() => {
-    mockTeamService = jasmine.createSpyObj({'create': new Subject()});
+    mockTeamService = jasmine.createSpyObj('teamService', {
+      create: new Subject(),
+      isCaptchaEnabled: new Subject()
+    });
     mockRouter = jasmine.createSpyObj({'navigateByUrl': null});
     mockRecaptchaComponent = jasmine.createSpyObj({reset: null, execute: null});
 
@@ -37,19 +42,11 @@ describe('CreateComponent', () => {
     component.recaptchaComponent = mockRecaptchaComponent;
   });
 
-  describe('useCaptchaForProd', () => {
-    it('should not use captcha in dev mode', () => {
-      component.useCaptchaForProd();
-
-      expect(mockRecaptchaComponent.execute).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('create', () => {
+  describe('requestCaptchaStateAndCreateTeam', () => {
     it('should set the error message for empty teamName', () => {
       component.teamName = '';
 
-      component.create('some captcha');
+      component.requestCaptchaStateAndCreateTeam();
 
       expect(component.errorMessage).toEqual('Please enter a team name');
     });
@@ -58,7 +55,7 @@ describe('CreateComponent', () => {
       component.teamName = 'Team Name';
       component.password = '';
 
-      component.create('some captcha');
+      component.requestCaptchaStateAndCreateTeam();
 
       expect(component.errorMessage).toEqual('Please enter a password');
     });
@@ -68,7 +65,7 @@ describe('CreateComponent', () => {
       component.password = 'p4ssw0rd';
       component.confirmPassword = 'password';
 
-      component.create('some captcha');
+      component.requestCaptchaStateAndCreateTeam();
 
       expect(component.errorMessage).toEqual('Please enter matching passwords');
     });
@@ -78,11 +75,91 @@ describe('CreateComponent', () => {
       component.password = 'p4ssw0rd';
       component.confirmPassword = 'p4ssw0rd';
 
-      component.create('some captcha');
+      component.requestCaptchaStateAndCreateTeam();
 
       expect(component.errorMessage).toEqual('');
     });
 
+    it('should set jwt as cookie and navigate to team page when captcha is disabled', () => {
+      component.teamName = 'Team Name';
+      component.password = 'p4ssw0rd';
+      component.confirmPassword = 'p4ssw0rd';
+
+      const teamUrl = 'team/teamId';
+      const jwt = 'im.a.jwt';
+      const createTeamResponse: HttpResponse<string> = new HttpResponse({
+        body: jwt,
+        headers: new HttpHeaders({location: teamUrl})
+      });
+
+      const captchaResponse: HttpResponse<string> = new HttpResponse({
+        body: JSON.stringify({captchaEnabled: false})
+      });
+
+      mockTeamService.isCaptchaEnabled.and.returnValue(of(captchaResponse));
+      mockTeamService.create.and.returnValue(of(createTeamResponse));
+
+      component.requestCaptchaStateAndCreateTeam();
+
+      expect(AuthService.setToken).toHaveBeenCalledWith(jwt);
+      expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(teamUrl);
+    });
+
+    it('should set the error message and log it when create has an error', () => {
+      component.teamName = 'Team Name';
+      component.password = 'p4ssw0rd';
+      component.confirmPassword = 'p4ssw0rd';
+
+      const httpErrorMessage = 'server error message';
+      const error = {error: JSON.stringify({message: httpErrorMessage})};
+
+      const captchaResponse: HttpResponse<string> = new HttpResponse({
+        body: JSON.stringify({captchaEnabled: false})
+      });
+
+      mockTeamService.isCaptchaEnabled.and.returnValue(of(captchaResponse));
+      mockTeamService.create.and.returnValue(throwError(error));
+
+      component.requestCaptchaStateAndCreateTeam();
+
+      expect(component.errorMessage).toEqual(httpErrorMessage);
+      expect(console.error).toHaveBeenCalledWith('A registration error occurred: ', httpErrorMessage);
+    });
+
+    it('should set the error message and log it when isCaptchaEnabled has an error', () => {
+      component.teamName = 'Team Name';
+      component.password = 'p4ssw0rd';
+      component.confirmPassword = 'p4ssw0rd';
+
+      const httpErrorMessage = 'server error message';
+      const error = {
+        error: JSON.stringify({message: httpErrorMessage})
+      };
+
+      mockTeamService.isCaptchaEnabled.and.returnValue(throwError(error));
+
+      component.requestCaptchaStateAndCreateTeam();
+
+      expect(component.errorMessage).toEqual(httpErrorMessage);
+      expect(console.error).toHaveBeenCalledWith('A registration error occurred: ', httpErrorMessage);
+    });
+
+    it('should not call create when isCaptchaEnabled has an error', () => {
+      component.teamName = 'Team Name';
+      component.password = 'p4ssw0rd';
+      component.confirmPassword = 'p4ssw0rd';
+
+      const error = {error: JSON.stringify({message: 'error'})};
+
+      mockTeamService.isCaptchaEnabled.and.returnValue(throwError(error));
+
+      component.requestCaptchaStateAndCreateTeam();
+
+      expect(mockTeamService.create).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('create', () => {
     it('should set jwt as cookie and navigate to team page', () => {
       component.teamName = 'Team Name';
       component.password = 'p4ssw0rd';
@@ -90,17 +167,15 @@ describe('CreateComponent', () => {
 
       const teamUrl = 'team/teamId';
       const jwt = 'im.a.jwt';
-      const httpResponse = {
+
+      const loginResponse: HttpResponse<string> = new HttpResponse({
         body: jwt,
-        headers: {
-          get() {
-            return teamUrl;
-          }
-        }
-      };
+        headers: new HttpHeaders({location: teamUrl})
+      });
+
+      mockTeamService.create.and.returnValue(of(loginResponse));
 
       component.create('some captcha');
-      mockTeamService.create().next(httpResponse);
 
       expect(AuthService.setToken).toHaveBeenCalledWith(jwt);
       expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(teamUrl);
@@ -116,11 +191,11 @@ describe('CreateComponent', () => {
         error: JSON.stringify({message: httpErrorMessage})
       };
 
+      mockTeamService.create.and.returnValue(throwError(error));
       component.create('some captcha');
-      mockTeamService.create().error(error);
 
       expect(component.errorMessage).toEqual(httpErrorMessage);
-      expect(console.error).toHaveBeenCalledWith('A registration error occurred:', httpErrorMessage);
+      expect(console.error).toHaveBeenCalledWith('A registration error occurred: ', httpErrorMessage);
     });
   });
 });

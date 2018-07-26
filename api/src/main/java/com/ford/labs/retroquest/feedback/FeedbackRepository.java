@@ -23,8 +23,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface FeedbackRepository extends JpaRepository<Feedback, Long>{
+public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
 
-    public List<Feedback> findAllByStarsIsGreaterThanEqual(int minimumValue);
+    List<Feedback> findAllByStarsIsGreaterThanEqual(int minimumValue);
 
 }
