@@ -29,6 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TeamService {
@@ -38,7 +39,13 @@ public class TeamService {
     private final PasswordEncoder passwordEncoder;
     private final ColumnTitleRepository columnTitleRepository;
 
-    public TeamService(ThoughtRepository thoughtRepository, ActionItemRepository actionItemRepository, TeamRepository teamRepository, PasswordEncoder passwordEncoder, ColumnTitleRepository columnTitleRepository) {
+    public TeamService(
+            ThoughtRepository thoughtRepository,
+            ActionItemRepository actionItemRepository,
+            TeamRepository teamRepository,
+            PasswordEncoder passwordEncoder,
+            ColumnTitleRepository columnTitleRepository
+    ) {
         this.thoughtRepository = thoughtRepository;
         this.actionItemRepository = actionItemRepository;
         this.teamRepository = teamRepository;
@@ -56,7 +63,7 @@ public class TeamService {
         return new CsvFile(team, thoughts, actionItems);
     }
 
-    public Team createNewTeam(CreateTeamRequest createTeamRequest){
+    public Team createNewTeam(CreateTeamRequest createTeamRequest) {
         String requestedName = createTeamRequest.getName();
 
         Team teamEntity = new Team();
@@ -91,16 +98,35 @@ public class TeamService {
     }
 
     public Team login(LoginRequest loginRequest) {
-        Team savedTeam = teamRepository.findTeamByName(loginRequest.getName());
+        Team savedTeam = getTeamByName(loginRequest.getName());
 
-        if(savedTeam == null) {
-            throw new BoardDoesNotExistException();
-        }
-
-        if(loginRequest.getPassword() == null || !passwordEncoder.matches(loginRequest.getPassword(), savedTeam.getPassword())) {
+        if (loginRequest.getPassword() == null || !passwordEncoder.matches(loginRequest.getPassword(), savedTeam.getPassword())) {
+            updateFailedAttempts(savedTeam, savedTeam.getFailedAttempts() + 1);
             throw new PasswordInvalidException();
         }
 
+        updateFailedAttempts(savedTeam, 0);
         return savedTeam;
+    }
+
+    private void updateFailedAttempts(Team savedTeam, int failedAttempts) {
+        savedTeam.setFailedAttempts(failedAttempts);
+        teamRepository.save(savedTeam);
+    }
+
+    public Team getTeamByName(String teamName) {
+        Optional<Team> team = teamRepository.findTeamByName(teamName);
+        if (team.isPresent()) {
+            return team.get();
+        }
+        throw new BoardDoesNotExistException();
+    }
+
+    public Team getTeamByUri(String teamUri) {
+        Optional<Team> team = teamRepository.findTeamByUri(teamUri.toLowerCase());
+        if (team.isPresent()) {
+            return team.get();
+        }
+        throw new BoardDoesNotExistException();
     }
 }

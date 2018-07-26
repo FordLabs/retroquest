@@ -1,5 +1,6 @@
-import { CreatePage } from './create.po';
-import { browser } from 'protractor';
+import {CreatePage} from './create.po';
+import {browser} from 'protractor';
+import {ZoneJsBugWorkaround as workaround} from '../util/zone-js-bug-workaround';
 
 describe('Create Page', () => {
   let page: CreatePage;
@@ -49,6 +50,7 @@ describe('Create Page', () => {
         page.teamPasswordInput().sendKeys('passwrd').then(() => {
           page.teamPasswordConfirm().sendKeys('passwrd').then(() => {
             page.createRetroButton().click().then(() => {
+              workaround.wait();
               expect(page.errorMessage().getText()).toBe('Password must be 8 characters or longer.');
             });
           });

@@ -86,4 +86,15 @@ describe('TeamService', () => {
       expect(returnObj instanceof Observable).toBeTruthy();
     });
   });
+
+  describe('isCaptchaEnabledForTeam', () => {
+    it('should request captcha state from the team api', () => {
+      const teamName = 'team-name';
+
+      const returnObj = service.isCaptchaEnabledForTeam(teamName);
+
+      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamName}/captcha`, {observe: 'response', responseType: 'text' });
+      expect(returnObj instanceof Observable).toBe(true);
+    });
+  });
 });

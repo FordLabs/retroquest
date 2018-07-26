@@ -1,5 +1,6 @@
-import { LoginPage } from './login.po';
-import { browser } from 'protractor';
+import {LoginPage} from './login.po';
+import {browser} from 'protractor';
+import {ZoneJsBugWorkaround as workaround} from '../util/zone-js-bug-workaround';
 
 describe('Login Page', () => {
   let page: LoginPage;
@@ -42,16 +43,18 @@ describe('Login Page', () => {
       page.teamNameInput().sendKeys('team name').then(() => {
         page.teamPasswordInput().sendKeys(invalidPassword).then(() => {
           page.signInButton().click().then(() => {
+            workaround.wait();
             expect(page.errorMessage().getText()).toBe('Incorrect board or password. Please try again.');
           });
         });
       });
     });
 
-    it('should display error message if board name is does not exist', () => {
+    it('should display error message if board name does not exist', () => {
       page.teamNameInput().sendKeys('team name that does not exist').then(() => {
         page.teamPasswordInput().sendKeys(validPassword).then(() => {
           page.signInButton().click().then(() => {
+            workaround.wait();
             expect(page.errorMessage().getText()).toBe('Incorrect board name. Please try again.');
           });
         });
@@ -65,6 +68,7 @@ describe('Login Page', () => {
         page.teamNameInput().sendKeys(boardName).then(() => {
           page.teamPasswordInput().sendKeys(validPassword).then(() => {
             page.signInButton().click().then(() => {
+              workaround.wait();
               expect(browser.driver.getCurrentUrl()).toContain(`/team/${boardName}`);
             });
           });

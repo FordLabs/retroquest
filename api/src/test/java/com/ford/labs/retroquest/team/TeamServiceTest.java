@@ -17,18 +17,18 @@
 
 package com.ford.labs.retroquest.team;
 
-import com.ford.labs.retroquest.actionitem.ActionItemRepository;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.exception.BoardDoesNotExistException;
 import com.ford.labs.retroquest.exception.PasswordInvalidException;
-import com.ford.labs.retroquest.thought.ThoughtRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -40,12 +40,6 @@ public class TeamServiceTest {
 
     @Mock
     private TeamRepository teamRepository;
-
-    @Mock
-    private ThoughtRepository thoughtRepository;
-
-    @Mock
-    private ActionItemRepository actionItemRepository;
 
     @Mock
     private ColumnTitleRepository columnTitleRepository;
@@ -96,24 +90,24 @@ public class TeamServiceTest {
         expectedTeam.setPassword("encryptedPassword");
 
         when(passwordEncoder.matches("password", "encryptedPassword")).thenReturn(true);
-        when(teamRepository.findTeamByName("beach-bums")).thenReturn(expectedTeam);
+        when(teamRepository.findTeamByName("beach-bums")).thenReturn(Optional.of(expectedTeam));
         Team actualTeam = teamService.login(loginRequest);
 
         assertEquals(expectedTeam, actualTeam);
     }
 
     @Test(expected = BoardDoesNotExistException.class)
-    public void throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
+    public void login_throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
         LoginRequest loginRequest = new LoginRequest("beach-bums", "password", "captcha");
 
-        when(teamRepository.findTeamByName("beach-bums")).thenReturn(null);
+        when(teamRepository.findTeamByName("beach-bums")).thenReturn(Optional.empty());
         teamService.login(loginRequest);
     }
 
     @Test(expected = PasswordInvalidException.class)
     public void throwsPasswordInvalidExceptionWhenNoPasswordGiven() {
         LoginRequest loginRequest = new LoginRequest("beach-bums", null, "captcha");
-        when(teamRepository.findTeamByName("beach-bums")).thenReturn(new Team());
+        when(teamRepository.findTeamByName("beach-bums")).thenReturn(Optional.of(new Team()));
 
         teamService.login(loginRequest);
     }
@@ -127,9 +121,48 @@ public class TeamServiceTest {
         expectedTeam.setName("beach-bums");
 
         when(passwordEncoder.matches("notPassword", "encryptedPassword")).thenReturn(false);
-        when(teamRepository.findTeamByName("beach-bums")).thenReturn(expectedTeam);
+        when(teamRepository.findTeamByName("beach-bums")).thenReturn(Optional.of(expectedTeam));
 
         teamService.login(loginRequest);
+    }
+
+    @Test
+    public void shouldIncrementFailedAttemptsCountWhenPasswordsDoNotMatch() {
+        String teamName = "beach-bums";
+        String teamPassword = "encryptedPassword";
+
+        LoginRequest loginRequest = new LoginRequest(teamName, "notPassword", "captcha");
+
+        Team team = new Team("", teamName, teamPassword);
+        Team teamAfterFailedAttempt = new Team("", teamName, teamPassword);
+        teamAfterFailedAttempt.setFailedAttempts(1);
+
+        when(teamRepository.findTeamByName(teamName)).thenReturn(Optional.of(team));
+        when(passwordEncoder.matches("notPassword", teamPassword)).thenReturn(false);
+
+        try {
+            teamService.login(loginRequest);
+        } catch (PasswordInvalidException ex) {
+            verify(teamRepository).save(teamAfterFailedAttempt);
+        }
+    }
+
+    @Test
+    public void shouldResetFailedAttemptsCountWhenPasswordsMatch() {
+        String teamName = "beach-bums";
+        String teamPassword = "encryptedPassword";
+
+        LoginRequest loginRequest = new LoginRequest(teamName, teamPassword, "captcha");
+
+        Team team = new Team("", teamName, teamPassword);
+        team.setFailedAttempts(1);
+
+        when(teamRepository.findTeamByName(teamName)).thenReturn(Optional.of(team));
+        when(passwordEncoder.matches(teamPassword, teamPassword)).thenReturn(true);
+
+        teamService.login(loginRequest);
+
+        assertEquals(0, team.getFailedAttempts());
     }
 
     @Test
@@ -147,5 +180,41 @@ public class TeamServiceTest {
 
         ColumnTitle unhappyColumnTitle = ColumnTitle.builder().teamId("beach-bums").topic("unhappy").title("Sad").build();
         verify(columnTitleRepository, times(1)).save(unhappyColumnTitle);
+    }
+
+    @Test(expected = BoardDoesNotExistException.class)
+    public void getTeamByName_throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
+        when(teamRepository.findTeamByName("beach-bums")).thenReturn(Optional.empty());
+        teamService.getTeamByName("beach-bums");
+    }
+
+    @Test
+    public void getTeamByName_ReturnsTeam() {
+        Team expectedTeam = new Team();
+        String name = "expected-name";
+        expectedTeam.setName(name);
+        when(teamRepository.findTeamByName(name)).thenReturn(Optional.of(expectedTeam));
+
+        Team actualTeam = teamService.getTeamByName(name);
+
+        assertEquals(name, actualTeam.getName());
+    }
+
+    @Test(expected = BoardDoesNotExistException.class)
+    public void getTeamByUri_throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
+        when(teamRepository.findTeamByUri("beach-bums")).thenReturn(Optional.empty());
+        teamService.getTeamByUri("beach-bums");
+    }
+
+    @Test
+    public void getTeamByUri_ReturnsTeam() {
+        Team expectedTeam = new Team();
+        String uri = "expected-uri";
+        expectedTeam.setUri(uri);
+        when(teamRepository.findTeamByUri(uri)).thenReturn(Optional.of(expectedTeam));
+
+        Team actualTeam = teamService.getTeamByUri(uri);
+
+        assertEquals(uri, actualTeam.getUri());
     }
 }

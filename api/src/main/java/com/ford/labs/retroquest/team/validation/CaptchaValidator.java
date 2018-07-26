@@ -18,6 +18,7 @@
 package com.ford.labs.retroquest.team.validation;
 
 import com.ford.labs.retroquest.exception.CaptchaInvalidException;
+import com.ford.labs.retroquest.team.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -26,23 +27,41 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 @Service
-public class CaptchaValidator implements ConstraintValidator<CaptchaConstraint, String> {
+public class CaptchaValidator implements ConstraintValidator<CaptchaConstraint, TeamRequest> {
 
     private final RestTemplate restTemplate;
     private final CaptchaProperties captchaProperties;
+    private CaptchaService captchaService;
 
-    public CaptchaValidator(RestTemplate restTemplate, CaptchaProperties captchaProperties) {
+    public CaptchaValidator(RestTemplate restTemplate, CaptchaProperties captchaProperties, CaptchaService captchaService) {
         this.restTemplate = restTemplate;
         this.captchaProperties = captchaProperties;
+        this.captchaService = captchaService;
     }
 
     @Override
-    public boolean isValid(String captcha, ConstraintValidatorContext context) {
+    public boolean isValid(TeamRequest teamRequest, ConstraintValidatorContext context) {
         if (!captchaProperties.isEnabled()) {
             return true;
         }
 
-        if (StringUtils.isBlank(captcha)) {
+        if(teamRequest instanceof LoginRequest) {
+            return validateLoginCaptcha(teamRequest);
+        }
+
+        return validateCaptcha(teamRequest);
+    }
+
+    private boolean validateLoginCaptcha(TeamRequest teamRequest) {
+        if(!captchaService.isCaptchaEnabledForTeam(teamRequest.getName())) {
+            return true;
+        }
+
+        return validateCaptcha(teamRequest);
+    }
+
+    private boolean validateCaptcha(TeamRequest teamRequest) {
+        if (StringUtils.isBlank(teamRequest.getCaptchaResponse())) {
             throw new CaptchaInvalidException();
         }
 
@@ -50,7 +69,7 @@ public class CaptchaValidator implements ConstraintValidator<CaptchaConstraint, 
                 captchaProperties.getUrl() + "?secret={secret}&response={response}",
                 ReCaptchaResponse.class,
                 captchaProperties.getSecret(),
-                captcha
+                teamRequest.getCaptchaResponse()
         );
 
         if (!response.isSuccess()) {
@@ -61,6 +80,5 @@ public class CaptchaValidator implements ConstraintValidator<CaptchaConstraint, 
 
     @Override
     public void initialize(CaptchaConstraint constraintAnnotation) {
-
     }
 }

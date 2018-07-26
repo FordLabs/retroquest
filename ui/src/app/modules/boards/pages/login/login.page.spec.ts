@@ -17,7 +17,9 @@
 
 import {LoginComponent} from './login.page';
 import {AuthService} from '../../../auth/auth.service';
-import {Subject} from 'rxjs';
+import {Subject, throwError} from 'rxjs';
+import {of} from 'rxjs/internal/observable/of';
+import {HttpHeaders, HttpResponse} from '@angular/common/http';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -26,7 +28,10 @@ describe('LoginComponent', () => {
   let mockRecaptchaComponent;
 
   beforeEach(() => {
-    mockTeamService = jasmine.createSpyObj({login: new Subject()});
+    mockTeamService = jasmine.createSpyObj('teamService', {
+      login: new Subject(),
+      isCaptchaEnabledForTeam: new Subject()
+    });
     mockRouter = jasmine.createSpyObj({navigateByUrl: null});
     mockRecaptchaComponent = jasmine.createSpyObj({reset: null, execute: null});
 
@@ -37,19 +42,11 @@ describe('LoginComponent', () => {
     component.recaptchaComponent = mockRecaptchaComponent;
   });
 
-  describe('useCaptchaForProd', () => {
-    it('should not use captcha in dev mode', () => {
-      component.useCaptchaForProd();
-
-      expect(mockRecaptchaComponent.execute).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('login', () => {
+  describe('requestCaptchaStateAndLogIn', () => {
     it('should set the error message for empty teamName', () => {
       component.teamName = '';
 
-      component.login('some captcha');
+      component.requestCaptchaStateAndLogIn();
 
       expect(component.errorMessage).toEqual('Please enter a team name');
     });
@@ -58,7 +55,7 @@ describe('LoginComponent', () => {
       component.teamName = 'Team Name';
       component.password = '';
 
-      component.login('some captcha');
+      component.requestCaptchaStateAndLogIn();
 
       expect(component.errorMessage).toEqual('Please enter a password');
     });
@@ -67,28 +64,111 @@ describe('LoginComponent', () => {
       component.teamName = 'Team Name';
       component.password = 'p4ssw0rd';
 
-      component.login('some captcha');
+      component.requestCaptchaStateAndLogIn();
 
       expect(component.errorMessage).toEqual('');
     });
 
+    it('should execute recaptcha when captcha is enabled', () => {
+      component.teamName = 'some team';
+      component.password = 'some password';
+
+      const captchaResponse: HttpResponse<string> = new HttpResponse({
+        body: JSON.stringify({captchaEnabled: true})
+      });
+
+      const loginResponse: HttpResponse<string> = new HttpResponse({
+        body: 'im.a.jwt',
+        headers: new HttpHeaders({location: 'teamId'})
+      });
+
+      mockTeamService.isCaptchaEnabledForTeam.and.returnValue(of(captchaResponse));
+      mockTeamService.login.and.returnValue(loginResponse);
+
+      component.requestCaptchaStateAndLogIn();
+
+      expect(mockRecaptchaComponent.execute).toHaveBeenCalled();
+    });
+
+    it('should not execute recaptcha when captcha is disabled', () => {
+      component.teamName = 'some team';
+      component.password = 'some password';
+
+      const captchaResponse: HttpResponse<string> = new HttpResponse({
+        body: JSON.stringify({captchaEnabled: false})
+      });
+      mockTeamService.isCaptchaEnabledForTeam.and.returnValue(of(captchaResponse));
+
+      component.requestCaptchaStateAndLogIn();
+
+      expect(mockTeamService.login).toHaveBeenCalled();
+      expect(mockRecaptchaComponent.execute).not.toHaveBeenCalled();
+    });
+
+    it('should set the error message and log it when login has an error', () => {
+      component.teamName = 'some team';
+      component.password = 'some password';
+
+      const captchaResponse: HttpResponse<string> = new HttpResponse({
+        body: JSON.stringify({captchaEnabled: false})
+      });
+
+      const httpErrorMessage = 'server error message';
+      const error = {error: JSON.stringify({message: httpErrorMessage})};
+
+      mockTeamService.isCaptchaEnabledForTeam.and.returnValue(of(captchaResponse));
+      mockTeamService.login.and.returnValue(throwError(error));
+
+      component.requestCaptchaStateAndLogIn();
+
+      expect(console.error).toHaveBeenCalledWith('A login error occurred: ', httpErrorMessage);
+    });
+
+    it('should set the error message and log it when isCaptchaEnabledForTeam has an error', () => {
+      component.teamName = 'some team';
+      component.password = 'some password';
+
+      const httpErrorMessage = 'server error message';
+      const error = {error: JSON.stringify({message: httpErrorMessage})};
+
+      mockTeamService.isCaptchaEnabledForTeam.and.returnValue(throwError(error));
+
+      component.requestCaptchaStateAndLogIn();
+
+      expect(console.error).toHaveBeenCalledWith('A login error occurred: ', httpErrorMessage);
+    });
+
+    it('should not call login when isCaptchaEnabledForTeam has an error', () => {
+      component.teamName = 'Team Name';
+      component.password = 'p4ssw0rd';
+
+      const error = {error: JSON.stringify({message: 'error'})};
+
+      mockTeamService.isCaptchaEnabledForTeam.and.returnValue(throwError(error));
+
+      component.requestCaptchaStateAndLogIn();
+
+      expect(mockTeamService.login).not.toHaveBeenCalled();
+    });
+
+  });
+
+  describe('login', () => {
     it('should set jwt as cookie and navigate to team page', () => {
       component.teamName = 'Team Name';
       component.password = 'p4ssw0rd';
 
       const teamId = 'teamId';
       const jwt = 'im.a.jwt';
-      const httpResponse = {
+
+      const loginResponse: HttpResponse<string> = new HttpResponse({
         body: jwt,
-        headers: {
-          get() {
-            return teamId;
-          }
-        }
-      };
+        headers: new HttpHeaders({location: teamId})
+      });
+
+      mockTeamService.login.and.returnValue(of(loginResponse));
 
       component.login('some captcha');
-      mockTeamService.login().next(httpResponse);
 
       expect(AuthService.setToken).toHaveBeenCalledWith(jwt);
       expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(`/team/${teamId}`);
@@ -103,11 +183,11 @@ describe('LoginComponent', () => {
         error: JSON.stringify({message: httpErrorMessage})
       };
 
+      mockTeamService.login.and.returnValue(throwError(error));
       component.login('some captcha');
-      mockTeamService.login().error(error);
 
       expect(component.errorMessage).toEqual(httpErrorMessage);
-      expect(console.error).toHaveBeenCalledWith('A login error occurred:', httpErrorMessage);
+      expect(console.error).toHaveBeenCalledWith('A login error occurred: ', httpErrorMessage);
     });
   });
 });

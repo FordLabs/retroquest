@@ -50,7 +50,7 @@
                    [(ngModel)]="password"/>
           </div>
           <span id="errorMessage" class="rq-error-message">{{errorMessage}}</span>
-          <button id="signInButton" class="rq-button" (click)="useCaptchaForProd()">
+          <button id="signInButton" class="rq-button" (click)="requestCaptchaStateAndLogIn()">
             Sign In
           </button>
         </div>

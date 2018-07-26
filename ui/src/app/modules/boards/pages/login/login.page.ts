@@ -15,14 +15,17 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import {Component, ViewChild} from '@angular/core';
+import {Router} from '@angular/router';
 
-import { AuthService } from '../../../auth/auth.service';
-import { TeamService } from '../../../teams/services/team.service';
-import { RecaptchaComponent } from 'ng-recaptcha';
-import { ViewChild } from '@angular/core';
-import {isDevMode} from '@angular/core';
+import {AuthService} from '../../../auth/auth.service';
+import {TeamService} from '../../../teams/services/team.service';
+import {RecaptchaComponent} from 'ng-recaptcha';
+import {concatMap, map} from 'rxjs/operators';
+import {EMPTY} from 'rxjs';
+import {Observable} from 'rxjs/internal/Observable';
+import {HttpResponse} from '@angular/common/http';
+import {of} from 'rxjs/internal/observable/of';
 
 @Component({
   selector: 'rq-login',
@@ -31,7 +34,7 @@ import {isDevMode} from '@angular/core';
 })
 export class LoginComponent {
 
-  constructor (private teamService: TeamService, private router: Router) {
+  constructor(private teamService: TeamService, private router: Router) {
   }
 
   @ViewChild(RecaptchaComponent) recaptchaComponent: RecaptchaComponent;
@@ -40,26 +43,38 @@ export class LoginComponent {
   password: string;
   errorMessage: string;
 
-  useCaptchaForProd() {
-    if (isDevMode()) {
-      this.login();
+  requestCaptchaStateAndLogIn(): void {
+    if (!this.validateInput()) {
       return;
     }
-    this.recaptchaComponent.execute();
+
+    this.teamService.isCaptchaEnabledForTeam(this.teamName).pipe(
+      map(response => JSON.parse(response.body).captchaEnabled),
+      concatMap(captchaEnabled => this.loginOrExecuteReCaptcha(captchaEnabled))
+    ).subscribe(
+      response => this.handleResponse(response),
+      error => this.handleError(error)
+    );
   }
 
-  login (captchaResponse: string = null): void {
-    this.recaptchaComponent.reset();
-    if (this.validateInput()) {
-      this.teamService.login(this.teamName, this.password, captchaResponse)
-        .subscribe(
-          response => this.handleResponse(response),
-          error => this.handleError(error)
-        );
+  login(captchaResponse: string): void {
+    this.teamService.login(this.teamName, this.password, captchaResponse)
+      .subscribe(
+        response => this.handleResponse(response),
+        error => this.handleError(error)
+      );
+  }
+
+  private loginOrExecuteReCaptcha(captchaEnabled): Observable<HttpResponse<Object>> {
+    if (captchaEnabled) {
+      this.recaptchaComponent.reset();
+      this.recaptchaComponent.execute();
+      return EMPTY;
     }
+    return this.teamService.login(this.teamName, this.password, null);
   }
 
-  private validateInput (): boolean {
+  private validateInput(): boolean {
     if (!this.teamName || this.teamName === '') {
       this.errorMessage = 'Please enter a team name';
       return false;
@@ -74,15 +89,16 @@ export class LoginComponent {
     return true;
   }
 
-  private handleResponse (response): void {
+  private handleResponse(response): void {
     AuthService.setToken(response.body);
     const teamId = response.headers.get('location');
-    this.router.navigateByUrl( `/team/${teamId}`);
+    this.router.navigateByUrl(`/team/${teamId}`);
   }
 
-  private handleError (error) {
+  private handleError(error) {
     error.error = JSON.parse(error.error);
     this.errorMessage = error.error.message ? error.error.message : `${error.status} ${error.error}`;
-    console.error('A login error occurred:', this.errorMessage);
+    console.error('A login error occurred: ', this.errorMessage);
+    return of(this.errorMessage);
   }
 }

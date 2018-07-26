@@ -1,4 +1,5 @@
-import { browser, by, element, ElementFinder } from 'protractor';
+import {browser, by, element, ElementFinder} from 'protractor';
+import {ZoneJsBugWorkaround as workaround} from '../util/zone-js-bug-workaround';
 
 export class CreatePage {
   createRandomBoard(boardName: string = '', password: string = 'Passw0rd'): Promise<string> {
@@ -13,6 +14,7 @@ export class CreatePage {
           this.teamPasswordConfirm().sendKeys(password).then(() => {
             browser.sleep(1); // make sure timestamps are at least 1 mili apart
             this.createRetroButton().click().then(() => {
+              workaround.wait();
               browser.driver.getCurrentUrl().then((url: string) => {
                 const boardId = boardName.replace(' ', '-');
                 if (url.endsWith(`/team/${boardId}`)) {

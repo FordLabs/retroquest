@@ -43,9 +43,6 @@ public class TeamControllerTest {
     @Mock
     private JwtBuilder jwtBuilder;
 
-    @Mock
-    private TeamRepository teamRepository;
-
     @InjectMocks
     private TeamController controller;
 
@@ -73,7 +70,7 @@ public class TeamControllerTest {
 
         when(teamService.login(loginRequest)).thenReturn(savedTeam);
         when(jwtBuilder.buildJwt("a-team")).thenReturn(expectedJwt);
-        when(teamRepository.findTeamByName("A Team")).thenReturn(savedTeam);
+        when(teamService.getTeamByName("A Team")).thenReturn(savedTeam);
 
         ResponseEntity<String> actualResponse = controller.login(loginRequest);
 
@@ -90,7 +87,7 @@ public class TeamControllerTest {
 
         when(teamService.createNewTeam(createTeamRequest)).thenReturn(savedTeam);
         when(jwtBuilder.buildJwt("a-team")).thenReturn(expectedJwt);
-        when(teamRepository.findTeamByName("A Team")).thenReturn(savedTeam);
+        when(teamService.getTeamByName("A Team")).thenReturn(savedTeam);
 
         ResponseEntity<String> actualResponse = controller.createTeam(createTeamRequest);
 

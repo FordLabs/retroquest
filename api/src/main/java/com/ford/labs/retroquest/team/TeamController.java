@@ -17,7 +17,6 @@
 
 package com.ford.labs.retroquest.team;
 
-import com.ford.labs.retroquest.exception.BoardDoesNotExistException;
 import com.ford.labs.retroquest.security.JwtBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -38,14 +37,14 @@ import static org.springframework.http.HttpStatus.*;
 @RequestMapping(value = "/api")
 public class TeamController {
 
-    private final TeamRepository teamRepository;
     private final TeamService teamService;
     private final JwtBuilder jwtBuilder;
+    private final CaptchaService captchaService;
 
-    public TeamController(TeamRepository teamRepository, TeamService teamService, JwtBuilder jwtBuilder) {
-        this.teamRepository = teamRepository;
+    public TeamController(TeamService teamService, JwtBuilder jwtBuilder, CaptchaService captchaService) {
         this.teamService = teamService;
         this.jwtBuilder = jwtBuilder;
+        this.captchaService = captchaService;
     }
 
     @PostMapping("/team")
@@ -63,11 +62,7 @@ public class TeamController {
 
     @GetMapping("/team/{teamUri}/name")
     public String getTeamName(@PathVariable("teamUri") String teamUri) {
-        Team team = teamRepository.findOne(teamUri.toLowerCase());
-        if (team == null) {
-            throw new BoardDoesNotExistException();
-        }
-        return team.getName();
+        return teamService.getTeamByUri(teamUri).getName();
     }
 
     @GetMapping(value = "/team/{teamId}/csv", produces = "application/board.csv")
@@ -93,9 +88,19 @@ public class TeamController {
         Team savedTeamEntity = teamService.login(team);
         String jwt = jwtBuilder.buildJwt(savedTeamEntity.getUri());
 
-        MultiValueMap<String, String> headers = new HttpHeaders();
+        HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.LOCATION, savedTeamEntity.getUri());
 
         return new ResponseEntity<>(jwt, headers, OK);
+    }
+
+    @GetMapping("/team/{teamName}/captcha")
+    public CaptchaResponse isCaptchaEnabledForTeam(@PathVariable("teamName") String teamName) {
+        return new CaptchaResponse(captchaService.isCaptchaEnabledForTeam(teamName));
+    }
+
+    @GetMapping("/captcha")
+    public CaptchaResponse isCaptchaEnabled() {
+        return new CaptchaResponse(captchaService.isCaptchaEnabled());
     }
 }

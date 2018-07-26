@@ -39,21 +39,35 @@ export class TeamService {
     return this.http.post(
       '/api/team/login',
       {name, password, captchaResponse},
-      {observe: 'response', responseType: 'text'}
+      {observe: 'response' , responseType: 'text'}
     );
   }
 
-  fetchTeamName(teamId): Observable<string> {
+  fetchTeamName(teamId: string): Observable<string> {
     return this.http.get(
       `/api/team/${teamId}/name`,
       {responseType: 'text'}
     );
   }
 
-  validateTeamId(teamId): Observable<HttpResponse<Object>> {
+  validateTeamId(teamId: string): Observable<HttpResponse<Object>> {
     return this.http.get(
       `/api/team/${teamId}/validate`,
       {observe: 'response'}
+    );
+  }
+
+  isCaptchaEnabledForTeam(teamName: string): Observable<HttpResponse<string>> {
+    return this.http.get(
+      `/api/team/${teamName}/captcha`,
+      {observe: 'response', responseType: 'text'}
+    );
+  }
+
+  isCaptchaEnabled(): Observable<HttpResponse<string>> {
+    return this.http.get(
+      `/api/captcha`,
+      {observe: 'response', responseType: 'text'}
     );
   }
 }

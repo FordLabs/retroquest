@@ -11,4 +11,5 @@ public class CaptchaProperties {
     private String secret;
     private String url;
     private boolean enabled = true;
+    private int failedLoginThreshold;
 }

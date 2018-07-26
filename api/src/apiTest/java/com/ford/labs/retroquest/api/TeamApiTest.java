@@ -1,9 +1,8 @@
 package com.ford.labs.retroquest.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ford.labs.retroquest.security.JwtBuilder;
-import com.ford.labs.retroquest.team.LoginRequest;
-import com.ford.labs.retroquest.team.Team;
-import com.ford.labs.retroquest.team.TeamRepository;
+import com.ford.labs.retroquest.team.*;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -128,8 +127,8 @@ public class TeamApiTest {
 
         mockMvc.perform(post("/api/team")
                 .contentType(APPLICATION_JSON)
-                .content(teamJsonBody)).andExpect(status()
-                .reason(containsString("Please enter a board name without any special characters.")))
+                .content(teamJsonBody))
+                .andExpect(status().reason(containsString("Please enter a board name without any special characters.")))
                 .andExpect(status().isBadRequest());
     }
 
@@ -163,12 +162,12 @@ public class TeamApiTest {
 
         String expectedName = "Beachity Bums";
 
-        LoginRequest team = new LoginRequest();
-        team.setName("Beachity Bums");
-        team.setPassword(VALID_PASSWORD);
-        team.setCaptchaResponse("some captcha");
+        CreateTeamRequest createTeamRequest = new CreateTeamRequest();
+        createTeamRequest.setName("Beachity Bums");
+        createTeamRequest.setPassword(VALID_PASSWORD);
+        createTeamRequest.setCaptchaResponse("some captcha");
 
-        testRestTemplate.postForObject("/api/team/", team, String.class);
+        testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
 
         String actualName = mockMvc.perform(get("/api/team/beachity-bums/name")
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("beachity-bums")))
@@ -187,20 +186,16 @@ public class TeamApiTest {
     }
 
     @Test
-    public void canLoginWithTeamNameAndPassword() throws Exception {
+    public void canLoginWithTeamNameAndPasswordAndEmptyCaptcha_whenFailedLoginThresholdNotExceeded() throws Exception {
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
-        server.expect(times(2), requestTo(containsString("http://captcha.url")))
+        server.expect(requestTo(containsString("http://captcha.url")))
                 .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
 
-        LoginRequest team = new LoginRequest();
-        team.setName("PEACHY BEACHY");
-        team.setPassword(VALID_PASSWORD);
-        team.setCaptchaResponse("some captcha");
-
-        testRestTemplate.postForObject("/api/team/", team, String.class);
+        CreateTeamRequest createTeamRequest = new CreateTeamRequest("PEACHY BEACHY", VALID_PASSWORD, "some captcha");
+        testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
 
         MvcResult mvcResult = mockMvc.perform(post("/api/team/login")
-                .content("{\"name\":\"PEACHY BEACHY\", \"password\":\"" + VALID_PASSWORD + "\", \"captchaResponse\":\"captcha\"}")
+                .content("{\"name\":\"PEACHY BEACHY\", \"password\":\"" + VALID_PASSWORD + "\", \"captchaResponse\":\"\"}")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -210,27 +205,25 @@ public class TeamApiTest {
     }
 
     @Test
-    public void loginWithBadCaptchaResponseReturns403() throws Exception {
+    public void loginWithBadCaptchaResponseReturns403_whenFailedLoginThresholdIsExceeded() throws Exception {
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
         server.expect(once(), requestTo(containsString("http://captcha.url")))
                 .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
         server.expect(once(), requestTo(containsString("http://captcha.url")))
                 .andRespond(withSuccess("{\"success\":false}", APPLICATION_JSON));
 
-        LoginRequest team = new LoginRequest();
-        team.setName("PEACHY BEACHY");
-        team.setPassword(VALID_PASSWORD);
-        team.setCaptchaResponse("some captcha");
+        CreateTeamRequest createTeamRequest = new CreateTeamRequest("PEACHY BEACHY", VALID_PASSWORD, "some captcha");
+        testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
 
-        testRestTemplate.postForObject("/api/team/", team, String.class);
+        LoginRequest invalidPasswordLoginRequest = new LoginRequest("PEACHY BEACHY", "invalid password", "some captcha");
+        testRestTemplate.postForObject("/api/team/login", invalidPasswordLoginRequest, String.class);
 
-        MvcResult mvcResult = mockMvc.perform(post("/api/team/login")
+        mockMvc.perform(post("/api/team/login")
                 .content("{\"name\":\"PEACHY BEACHY\", \"password\":\"" + VALID_PASSWORD + "\", \"captchaResponse\":\"invalid captcha\"}")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isForbidden())
+                .andExpect(status().reason("Incorrect board or password. Please try again."))
                 .andReturn();
-
-        assertEquals("Incorrect board or password. Please try again.", mvcResult.getResponse().getErrorMessage());
     }
 
     @Test
@@ -261,13 +254,12 @@ public class TeamApiTest {
 
         testRestTemplate.postForObject("/api/team/", team, String.class);
 
-        MvcResult mvcResult = mockMvc.perform(post("/api/team/login")
+        mockMvc.perform(post("/api/team/login")
                 .content("{\"name\":\"PEACHY BEACHY\", \"password\":\"wr0ngPassw0rd\", \"captchaResponse\":\"some captcha\"}")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isForbidden())
+                .andExpect(status().reason("Incorrect board or password. Please try again."))
                 .andReturn();
-
-        assertEquals("Incorrect board or password. Please try again.", mvcResult.getResponse().getErrorMessage());
     }
 
     @Test
