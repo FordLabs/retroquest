@@ -101,7 +101,8 @@ public class TeamService {
         Team savedTeam = getTeamByName(loginRequest.getName());
 
         if (loginRequest.getPassword() == null || !passwordEncoder.matches(loginRequest.getPassword(), savedTeam.getPassword())) {
-            updateFailedAttempts(savedTeam, savedTeam.getFailedAttempts() + 1);
+            Integer failedAttempts = savedTeam.getFailedAttempts() != null ? savedTeam.getFailedAttempts() : 0;
+            updateFailedAttempts(savedTeam, failedAttempts + 1);
             throw new PasswordInvalidException();
         }
 
