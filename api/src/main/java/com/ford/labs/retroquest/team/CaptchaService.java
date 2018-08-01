@@ -23,7 +23,8 @@ public class CaptchaService {
 
         Optional<Team> team = teamRepository.findTeamByName(teamName);
         if(team.isPresent()) {
-            return team.get().getFailedAttempts() > captchaProperties.getFailedLoginThreshold();
+            Integer failedAttempts = team.get().getFailedAttempts() != null ? team.get().getFailedAttempts() : 0;
+            return failedAttempts > captchaProperties.getFailedLoginThreshold();
         }
         throw new BoardDoesNotExistException();
     }
