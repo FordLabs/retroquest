@@ -127,7 +127,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void shouldIncrementFailedAttemptsCountWhenPasswordsDoNotMatch() {
+    public void incrementFailedAttemptsCountWhenPasswordsDoNotMatch() {
         String teamName = "beach-bums";
         String teamPassword = "encryptedPassword";
 
@@ -148,7 +148,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void shouldResetFailedAttemptsCountWhenPasswordsMatch() {
+    public void resetsFailedAttemptsCountWhenPasswordsMatch() {
         String teamName = "beach-bums";
         String teamPassword = "encryptedPassword";
 
@@ -162,7 +162,7 @@ public class TeamServiceTest {
 
         teamService.login(loginRequest);
 
-        assertEquals(0, team.getFailedAttempts());
+        assertEquals(Integer.valueOf(0), team.getFailedAttempts());
     }
 
     @Test
