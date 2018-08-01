@@ -28,13 +28,13 @@
     display: flex;
     justify-content: space-around;
     margin: 0 auto;
-    max-width: $desktop-max-width;
-    min-width: $desktop-min-width;
     padding-top: 1rem;
+    width: $desktop-max-width;
 
     .rq-column {
       flex-grow: 1;
-      max-width: 23.5%;
+      margin-right: 48px;
+      width: 23.5%;
     }
   }
 }

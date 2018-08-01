@@ -31,7 +31,7 @@ export class StyleGuidePageComponent {
     topic: 'happy',
     message: 'Who am I, am I a fish?',
     hearts: 3,
-    completed: false
+    discussed: false
   };
 
   dialogIsVisible = false;

@@ -23,6 +23,13 @@
   flex-flow: column nowrap;
   font-size: 1rem;
 
+  rq-task {
+    font-size: .9rem;
+    height: auto;
+    margin-bottom: 24px;
+    width: 100%;
+  }
+
   .thought {
     align-items: center;
     background-color: $white;

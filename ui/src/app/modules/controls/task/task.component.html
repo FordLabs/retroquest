@@ -17,7 +17,7 @@
 
 <div class="content-area"
      (click)="emitTaskContentClicked()"
-     [ngClass]="{'disable': task.completed}"
+     [ngClass]="{'disable': task.discussed}"
 >
   <span
     class="content-message"
@@ -41,7 +41,7 @@
 <div class="footer">
   <div
     class="container star-count-container"
-    [ngClass]="{'disable': task.completed}"
+    [ngClass]="{'disable': task.discussed}"
     (click)="addStar()"
     *ngIf="type !== 'action'; else date_created_container"
   >
@@ -61,7 +61,7 @@
   </ng-template>
   <div
     class="container edit-container"
-    [ngClass]="{'disable': task.completed}"
+    [ngClass]="{'disable': task.discussed}"
     (click)="toggleEditMode()"
     *ngIf="!taskEditModeEnabled; else exit_edit_mode_icon"
   >
@@ -79,7 +79,7 @@
 
   <div
     class="container delete-container"
-    [ngClass]="{'disable': task.completed}"
+    [ngClass]="{'disable': task.discussed}"
     (click)="emitDeleteItem()">
     <i class="fas fa-trash-alt"></i>
   </div>
@@ -90,13 +90,13 @@
   >
     <div
       class="checkbox"
-      [ngClass]="{'completed-task':  task.completed}"
+      [ngClass]="{'completed-task':  task.discussed}"
     >
     </div>
 
     <i
       class="fas fa-check checkmark"
-      [ngClass]="{'show-checkmark':  task.completed}"
+      [ngClass]="{'show-checkmark':  task.discussed}"
     ></i>
 
   </div>
