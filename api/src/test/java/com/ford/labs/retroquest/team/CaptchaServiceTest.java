@@ -59,4 +59,16 @@ public class CaptchaServiceTest {
 
         assertFalse(captchaService.isCaptchaEnabledForTeam("some team"));
     }
+
+    @Test
+    public void handlesNullFailedAttempts() {
+        Team team = new Team();
+        captchaProperties.setEnabled(true);
+        captchaProperties.setFailedLoginThreshold(1);
+        when(teamRepository.findTeamByName("some team")).thenReturn(Optional.of(team));
+
+        CaptchaService captchaService = new CaptchaService(teamRepository, captchaProperties);
+
+        assertFalse(captchaService.isCaptchaEnabledForTeam("some team"));
+    }
 }
