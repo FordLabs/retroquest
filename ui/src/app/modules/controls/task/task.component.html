@@ -23,6 +23,7 @@
     class="content-message"
     *ngIf="!taskEditModeEnabled; else content_textarea"
   >{{task.message}}</span>
+
   <ng-template #content_textarea>
     <div
       #content_value
@@ -35,7 +36,6 @@
     >{{task.message}}
     </div>
   </ng-template>
-
 </div>
 
 <div class="footer">
@@ -55,8 +55,6 @@
     <div
       class="container date-created-container"
     >
-      <span class="date-created-header">created</span>
-      <span class="date-created-value">Jan 10</span>
     </div>
   </ng-template>
   <div

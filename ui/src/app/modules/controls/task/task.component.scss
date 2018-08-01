@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 @import 'color-vars';
 
 :host {
@@ -59,13 +58,11 @@
     }
   }
 
-
   &.edit-mode {
     &:hover {
       box-shadow: 0 0 0 4px $grape;
     }
   }
-
 
   .disable {
     opacity: .2;
@@ -87,12 +84,37 @@
     word-break: break-word;
     word-wrap: break-word;
 
+    .assigned-to-section {
+      box-sizing: border-box;
+      margin-bottom: 12px;
+      padding: 0 12px;
+      width: 100%;
+
+      $label-color: #a9a9a9;
+
+      .label {
+        color: $label-color;
+        font-size: .5rem;
+      }
+
+      .value {
+        border: 0;
+        border-bottom: 2px solid $action-yellow;
+        display: inline-block;
+        font-size: .65rem;
+        height: 14px;
+        margin-top: 3px;
+        min-width: 64px;
+        outline: none;
+      }
+    }
+
     .content-message {
       box-sizing: border-box;
       display: block;
-      height: 100%;
+      height: auto;
       min-height: 40px;
-      padding: 12px;
+      padding: 12px 18px;
       width: 100%;
 
       &.editable-div {
