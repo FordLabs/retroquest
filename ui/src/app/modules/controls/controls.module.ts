@@ -29,6 +29,7 @@ import { ColumnHeaderComponent } from './column-header/column-header.component';
 import {TaskComponent} from './task/task.component';
 import { TaskDialogComponent } from './task-dialog/task-dialog.component';
 import { FloatingCharacterCountdownComponent } from './floating-character-countdown/floating-character-countdown.component';
+import {ActionItemTaskComponent} from './action-item-task/action-item-task.component';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import { FloatingCharacterCountdownComponent } from './floating-character-countd
     ColumnHeaderComponent,
     TaskComponent,
     TaskDialogComponent,
-    FloatingCharacterCountdownComponent
+    FloatingCharacterCountdownComponent,
+    ActionItemTaskComponent
   ],
 
   exports: [
@@ -61,7 +63,8 @@ import { FloatingCharacterCountdownComponent } from './floating-character-countd
     ColumnHeaderComponent,
     TaskComponent,
     TaskDialogComponent,
-    FloatingCharacterCountdownComponent
+    FloatingCharacterCountdownComponent,
+    ActionItemTaskComponent
   ]
 
 })

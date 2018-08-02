@@ -38,7 +38,7 @@ describe('ActionsHeaderComponent', () => {
 
   describe('addThought', () => {
     it('should construct the thought and call ThoughtService.addThought', () => {
-      const newTask = 'a new task';
+      const newTask = 'a new actionItem';
 
       const expectedActionItem: ActionItem = {
         id: null,

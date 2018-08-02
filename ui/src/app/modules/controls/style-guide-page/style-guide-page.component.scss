@@ -140,11 +140,13 @@ rq-action-bar {
 }
 
 .thought-section {
+  rq-action-item-task,
   rq-task {
     height: auto;
     margin-right: 24px;
     width: 225px;
   }
+
 }
 
 

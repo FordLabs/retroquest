@@ -30,7 +30,7 @@ describe('TextFieldComponent', () => {
 
   describe('emitNewTaskMessage', () => {
 
-    it('should emit the new task message', () => {
+    it('should emit the new actionItem message', () => {
 
       component.newMessageAdded = jasmine.createSpyObj({emit: null});
 

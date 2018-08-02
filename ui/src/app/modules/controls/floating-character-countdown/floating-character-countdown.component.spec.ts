@@ -30,7 +30,7 @@ describe('FloatingCharacterCountdownComponent', () => {
 
   describe('charactersRemaining', () => {
     it('should return the number of remaining characters', () => {
-      component.characterCount = 'new task'.length;
+      component.characterCount = 'new actionItem'.length;
       component.maxCharacterCount = 20;
       expect(component.charactersRemaining()).toBe(component.maxCharacterCount - component.characterCount);
     });

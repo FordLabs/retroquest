@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-import {TaskComponent} from './task.component';
-import {emptyThought} from '../../teams/domain/thought';
+import {ActionItemTaskComponent} from './action-item-task.component';
+import {emptyActionItem} from '../../teams/domain/action-item';
 
 describe('ThoughtComponent', () => {
-  let component: TaskComponent;
+  let component: ActionItemTaskComponent;
 
   beforeEach(() => {
-    component = new TaskComponent();
+    component = new ActionItemTaskComponent();
   });
 
   it('should create', () => {
@@ -101,39 +101,16 @@ describe('ThoughtComponent', () => {
     });
   });
 
-  describe('addStar', () => {
-
-    it('should increase the star count by one', () => {
-      component.starCountIncreased = jasmine.createSpyObj({emit: null});
-
-      component.task = emptyThought();
-      component.task.hearts = 1;
-      component.addStar();
-
-      expect(component.task.hearts).toEqual(2);
-    });
-
-    it('should emit the star', () => {
-      component.starCountIncreased = jasmine.createSpyObj({emit: null});
-
-      component.task = emptyThought();
-      component.task.hearts = 1;
-      component.addStar();
-
-      expect(component.starCountIncreased.emit).toHaveBeenCalledWith(2);
-    });
-  });
-
   describe('emitDeleteItem', () => {
 
     it('should emit the actionItem to be deleted', () => {
       component.deleted = jasmine.createSpyObj({emit: null});
 
-      component.task = emptyThought();
-      component.task.hearts = 1;
+      component.actionItem = emptyActionItem();
+      component.actionItem.task = 'FAKE TASK';
       component.emitDeleteItem();
 
-      expect(component.deleted.emit).toHaveBeenCalledWith(component.task);
+      expect(component.deleted.emit).toHaveBeenCalledWith(component.actionItem);
     });
 
   });
@@ -144,19 +121,19 @@ describe('ThoughtComponent', () => {
       component.taskEditModeEnabled = false;
       component.messageClicked = jasmine.createSpyObj({emit: null});
 
-      component.task = emptyThought();
-      component.task.hearts = 1;
+      component.actionItem = emptyActionItem();
+      component.actionItem.task = 'FAKE TASK';
       component.emitTaskContentClicked();
 
-      expect(component.messageClicked.emit).toHaveBeenCalledWith(component.task);
+      expect(component.messageClicked.emit).toHaveBeenCalledWith(component.actionItem);
     });
 
     it('should not emit the actionItem when edit mode is enabled', () => {
       component.taskEditModeEnabled = true;
       component.messageClicked = jasmine.createSpyObj({emit: null});
 
-      component.task = emptyThought();
-      component.task.hearts = 1;
+      component.actionItem = emptyActionItem();
+      component.actionItem.task = 'FAKE TASK';
       component.emitTaskContentClicked();
 
       expect(component.messageClicked.emit).not.toHaveBeenCalled();

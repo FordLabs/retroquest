@@ -16,72 +16,55 @@
  */
 
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {emptyThought, Thought} from '../../teams/domain/thought';
+import {ActionItem, emptyActionItem} from '../../teams/domain/action-item';
 
 @Component({
-  selector: 'rq-task',
-  templateUrl: './task.component.html',
-  styleUrls: ['./task.component.scss'],
+  selector: 'rq-action-item-task',
+  templateUrl: './action-item-task.component.html',
+  styleUrls: ['./action-item-task.component.scss'],
   host: {
-    '[class.edit-mode]': 'taskEditModeEnabled',
-    '[class.happy]': 'type === \'happy\'',
-    '[class.confused]': 'type === \'confused\'',
-    '[class.sad]': 'type === \'unhappy\'',
-    '[class.action]': 'type === \'action\''
+    '[class.edit-mode]': 'taskEditModeEnabled'
   }
 })
-export class TaskComponent {
+export class ActionItemTaskComponent {
 
-  @Input() type = '';
-  @Input() task = emptyThought();
+  @Input() actionItem = emptyActionItem();
 
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
-  @Output() deleted: EventEmitter<Thought> = new EventEmitter<Thought>();
-  @Output() messageClicked: EventEmitter<Thought> = new EventEmitter<Thought>();
-  @Output() starCountIncreased: EventEmitter<number> = new EventEmitter<number>();
+  @Output() deleted: EventEmitter<ActionItem> = new EventEmitter<ActionItem>();
+  @Output() messageClicked: EventEmitter<ActionItem> = new EventEmitter<ActionItem>();
   @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() assigneeUpdated: EventEmitter<string> = new EventEmitter<string>();
 
   @ViewChild('content_value') editableTextArea: ElementRef;
 
-  starCountMax = 99;
   taskEditModeEnabled = false;
 
   constructor() {
   }
 
-
   public toggleEditMode(): void {
     if (this.taskEditModeEnabled) {
-      this.messageChanged.emit(this.task.message);
+      this.messageChanged.emit(this.actionItem.task);
     } else {
       this.focusInput();
     }
     this.taskEditModeEnabled = !this.taskEditModeEnabled;
   }
 
-  public addStar(): void {
-    if (this.task.hearts < this.starCountMax) {
-      this.starCountIncreased.emit(++this.task.hearts);
-    }
-  }
-
   public emitDeleteItem(): void {
-    this.deleted.emit(this.task);
-  }
-
-  public editContentArea(): void {
-
+    this.deleted.emit(this.actionItem);
   }
 
   public emitTaskContentClicked(): void {
     if (!this.taskEditModeEnabled) {
-      this.messageClicked.emit(this.task);
+      this.messageClicked.emit(this.actionItem);
     }
   }
 
   public toggleTaskComplete(): void {
-    this.task.discussed = !this.task.discussed;
-    this.completed.emit(this.task.discussed);
+    this.actionItem.completed = !this.actionItem.completed;
+    this.completed.emit(this.actionItem.completed);
   }
 
   private focusInput(): void {
@@ -91,14 +74,23 @@ export class TaskComponent {
     }, 0);
   }
 
-  private selectAllText(): void {
-    document.execCommand('selectAll', false, null);
-  }
-
   public forceBlur() {
     setTimeout(() => {
       this.editableTextArea.nativeElement.blur();
     }, 0);
+  }
+
+  public emitAssigneeUpdated(value: string) {
+    this.assigneeUpdated.emit(value);
+  }
+
+  public emitRemoveAssignee(actionItem: ActionItem) {
+    actionItem.assignee = null;
+    this.assigneeUpdated.emit(actionItem.assignee);
+  }
+
+  private selectAllText(): void {
+    document.execCommand('selectAll', false, null);
   }
 }
 

@@ -1,0 +1,118 @@
+<!--
+  ~ Copyright (c) 2018 Ford Motor Company
+  ~ All rights reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<div class="content-area"
+     (click)="emitTaskContentClicked()"
+     [ngClass]="{'disable': actionItem.completed}"
+>
+  <span
+    class="content-message"
+    *ngIf="!taskEditModeEnabled; else content_textarea"
+  >{{actionItem.task}}</span>
+
+  <ng-template #content_textarea>
+    <div
+      #content_value
+      class="content-message editable-div"
+      contenteditable="true"
+      [textContent]="actionItem.task"
+      (input)="actionItem.task = content_value.textContent"
+      (keydown.enter)="forceBlur()"
+      (blur)="toggleEditMode()"
+    >{{actionItem.task}}
+    </div>
+  </ng-template>
+</div>
+
+<div class="footer">
+  <div
+    class="container date-created-container"
+  >
+  </div>
+
+  <div
+    class="container edit-container"
+    [ngClass]="{'disable': actionItem.completed}"
+    (click)="toggleEditMode()"
+    *ngIf="!taskEditModeEnabled; else exit_edit_mode_icon"
+  >
+    <i class="fas fa-edit"></i>
+  </div>
+
+  <ng-template #exit_edit_mode_icon>
+    <div
+      class="container edit-container"
+      (click)="forceBlur()"
+    >
+      <i class="fas fa-times exit-edit-mode-icon"></i>
+    </div>
+  </ng-template>
+
+  <div
+    class="container delete-container"
+    [ngClass]="{'disable': actionItem.completed}"
+    (click)="emitDeleteItem()">
+    <i class="fas fa-trash-alt"></i>
+  </div>
+
+  <div
+    class="complete-container"
+    (click)="toggleTaskComplete()"
+  >
+    <div
+      class="checkbox"
+      [ngClass]="{'completed-task':  actionItem.completed}"
+    >
+    </div>
+
+    <i
+      class="fas fa-check checkmark"
+      [ngClass]="{'show-checkmark':  actionItem.completed}"
+    ></i>
+
+  </div>
+
+</div>
+
+<div class="assignee"
+     [ngClass]="{
+          'expanded': actionItem.expanded,
+          'disable': actionItem.completed
+         }"
+     (click)="actionItem.expanded = !actionItem.expanded;">
+      <span *ngIf="actionItem.assignee; else unassigned" class="assignee-label">
+      Assigned to: <b>{{actionItem.assignee}}</b>
+      </span>
+  <ng-template #unassigned>
+    <span class="assignee-label">Assign</span>
+  </ng-template>
+  <i class="fas fa-caret-right"></i>
+  <div
+    class="remove"
+    *ngIf="actionItem.assignee"
+    (click)="emitRemoveAssignee(actionItem); $event.stopPropagation()"
+  >
+    <i class="fas fa-times"></i>
+  </div>
+</div>
+<div class="assignee-edit" [hidden]="!actionItem.expanded">
+  <input type="text"
+         placeholder="Team Member Name"
+         [ngModel]="actionItem.assignee"
+         (keydown.enter)="emitAssigneeUpdated($event.target.value)"
+  />
+</div>
