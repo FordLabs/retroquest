@@ -15,10 +15,11 @@
  * limitations under the License.
  */
 
-import {Component, Input} from '@angular/core';
-import {Thought} from '../../domain/thought';
+import {Component, ElementRef, Input, ViewChild} from '@angular/core';
+import {emptyThought, Thought} from '../../domain/thought';
 import {Column} from '../../domain/column';
 import {ThoughtService} from '../../services/thought.service';
+import {TaskDialogComponent} from '../../../controls/task-dialog/task-dialog.component';
 
 @Component({
   selector: 'rq-thoughts-column',
@@ -31,8 +32,14 @@ export class ThoughtsColumnComponent {
 
   @Input() column: Column;
   @Input() thoughts: Array<Thought> = [];
+
+  @ViewChild('thoughtDialog') thoughtDialog: TaskDialogComponent;
+
+  selectedThought: Thought = emptyThought();
   currentThoughtId: number = null;
   currentThoughtMessage: string;
+  dialogIsVisible = false;
+  selectedThoughtIndex = 0;
 
   private updateCurrentThought (): void {
     if (this.currentThoughtId !== null) {
@@ -89,5 +96,11 @@ export class ThoughtsColumnComponent {
     thought.discussed = completedState;
     console.log(thought.discussed);
     this.thoughtService.updateThought(thought);
+  }
+
+  displayPopup(index: number) {
+    this.selectedThoughtIndex = index;
+    this.selectedThought = this.thoughts[this.selectedThoughtIndex];
+    this.thoughtDialog.show();
   }
 }
