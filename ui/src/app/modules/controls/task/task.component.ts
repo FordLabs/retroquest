@@ -23,6 +23,7 @@ import {emptyThought, Thought} from '../../teams/domain/thought';
   templateUrl: './task.component.html',
   styleUrls: ['./task.component.scss'],
   host: {
+    '[class.push-order-to-bottom]': 'task.discussed',
     '[class.edit-mode]': 'taskEditModeEnabled',
     '[class.happy]': 'type === \'happy\'',
     '[class.confused]': 'type === \'confused\'',

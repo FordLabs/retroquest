@@ -30,6 +30,10 @@
   transition: box-shadow .2s cubic-bezier(.25, .8, .25, 1);
   width: 100px;
 
+  &.push-order-to-bottom {
+    order: 99;
+  }
+
   .remove {
     display: none;
   }

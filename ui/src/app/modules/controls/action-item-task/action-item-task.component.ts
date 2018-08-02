@@ -23,6 +23,7 @@ import {ActionItem, emptyActionItem} from '../../teams/domain/action-item';
   templateUrl: './action-item-task.component.html',
   styleUrls: ['./action-item-task.component.scss'],
   host: {
+    '[class.push-order-to-bottom]': 'actionItem.completed',
     '[class.edit-mode]': 'taskEditModeEnabled'
   }
 })
