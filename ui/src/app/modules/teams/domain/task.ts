@@ -21,7 +21,7 @@ export interface Task {
   topic: string;
   message: string;
   hearts: number;
-  completed: boolean;
+  discussed: boolean;
 }
 
 export function emptyTask (): Task {
@@ -31,6 +31,6 @@ export function emptyTask (): Task {
     topic: '',
     teamId: '',
     hearts: 0,
-    completed: false,
+    discussed: false,
   };
 }

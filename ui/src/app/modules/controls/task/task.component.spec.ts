@@ -76,6 +76,29 @@ describe('ThoughtComponent', () => {
       expect(component.editableTextArea.nativeElement.focus).not.toHaveBeenCalled();
     });
 
+    it('should select all the text in the div when focused', () => {
+      const originalExecCommand = document.execCommand;
+
+      const mockExecCommand = spyOn(document, 'execCommand');
+
+      component.taskEditModeEnabled = false;
+      component.toggleEditMode();
+      expect(mockExecCommand).toHaveBeenCalled();
+
+      document.execCommand = originalExecCommand;
+    });
+
+    it('should not select all the text in the div when not focused', () => {
+      const originalExecCommand = document.execCommand;
+
+      const mockExecCommand = spyOn(document, 'execCommand');
+
+      component.taskEditModeEnabled = true;
+      component.toggleEditMode();
+      expect(mockExecCommand).not.toHaveBeenCalled();
+
+      document.execCommand = originalExecCommand;
+    });
   });
 
   describe('addStar', () => {
@@ -117,7 +140,8 @@ describe('ThoughtComponent', () => {
 
   describe('emitTaskContentClicked', () => {
 
-    it('should emit the task', () => {
+    it('should emit the task when edit mode is not enabled', () => {
+      component.taskEditModeEnabled = false;
       component.messageClicked = jasmine.createSpyObj({emit: null});
 
       component.task = emptyTask();
@@ -125,6 +149,17 @@ describe('ThoughtComponent', () => {
       component.emitTaskContentClicked();
 
       expect(component.messageClicked.emit).toHaveBeenCalledWith(component.task);
+    });
+
+    it('should not emit the task when edit mode is enabled', () => {
+      component.taskEditModeEnabled = true;
+      component.messageClicked = jasmine.createSpyObj({emit: null});
+
+      component.task = emptyTask();
+      component.task.hearts = 1;
+      component.emitTaskContentClicked();
+
+      expect(component.messageClicked.emit).not.toHaveBeenCalled();
     });
 
   });

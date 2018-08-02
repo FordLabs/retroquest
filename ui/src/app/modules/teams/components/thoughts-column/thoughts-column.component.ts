@@ -68,4 +68,26 @@ export class ThoughtsColumnComponent {
     thought.hearts++;
     this.thoughtService.updateThought(thought);
   }
+
+  onMessageChanged(message: string, index: number) {
+    this.thoughts[index].message = message;
+    this.thoughtService.updateThought(this.thoughts[index]);
+  }
+
+  onDeleted(thought: Thought) {
+    this.thoughtService.deleteThought(thought);
+  }
+
+  starCountChanged(starCount: number, index: number) {
+    const thought = this.thoughts[index];
+    thought.hearts = starCount;
+    this.thoughtService.updateThought(thought);
+  }
+
+  onCompleted(completedState: boolean, index: number) {
+    const thought = this.thoughts[index];
+    thought.discussed = completedState;
+    console.log(thought.discussed);
+    this.thoughtService.updateThought(thought);
+  }
 }

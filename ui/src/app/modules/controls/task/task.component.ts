@@ -26,7 +26,7 @@ import {emptyTask, Task} from '../../teams/domain/task';
     '[class.edit-mode]': 'taskEditModeEnabled',
     '[class.happy]': 'type === \'happy\'',
     '[class.confused]': 'type === \'confused\'',
-    '[class.sad]': 'type === \'sad\'',
+    '[class.sad]': 'type === \'unhappy\'',
     '[class.action]': 'type === \'action\''
   }
 })
@@ -74,18 +74,25 @@ export class TaskComponent {
   }
 
   public emitTaskContentClicked(): void {
-    this.messageClicked.emit(this.task);
+    if (!this.taskEditModeEnabled) {
+      this.messageClicked.emit(this.task);
+    }
   }
 
   public toggleTaskComplete(): void {
-    this.task.completed = !this.task.completed;
-    this.completed.emit(this.task.completed);
+    this.task.discussed = !this.task.discussed;
+    this.completed.emit(this.task.discussed);
   }
 
   private focusInput(): void {
     setTimeout(() => {
       this.editableTextArea.nativeElement.focus();
+      this.selectAllText();
     }, 0);
+  }
+
+  private selectAllText(): void {
+    document.execCommand('selectAll', false, null);
   }
 
   public forceBlur() {

@@ -19,9 +19,15 @@
   <div
     *ngFor="let actionItem of actionItems"
     class="action-item"
-    [ngClass]="{'completed': actionItem.completed, 'edit': currentActionItemId === actionItem.id }">
-    <div class="action-item-body">
-      <span class="task">{{actionItem.task}}</span>
+    [ngClass]="{
+    'edit': currentActionItemId === actionItem.id
+    }">
+    <div class="action-item-body"
+         [ngClass]="{
+        'disable': actionItem.completed
+    }"
+    >
+      <div class="task">{{actionItem.task}}</div>
       <textarea class="edit-task"
                 rows="2"
                 maxlength="255"
@@ -33,41 +39,70 @@
 
     <div class="action-item-footer">
       <div class="button-group">
-        <span class="edit"
-              (click)="setCurrentActionItem(actionItem)">
-          <i class="fas fa-pencil-alt"></i>
-        </span>
-        <span class="delete"
-              (click)="deleteActionItem(actionItem)">
-          <i class="fas fa-trash-alt"></i></span>
-        <input class="completed"
-               type="checkbox"
-               [ngModel]="actionItem.completed"
-               (click)="completeActionItem(actionItem)">
-      </div>
 
-      <div class="assignee"
-           [ngClass]="{'expanded': actionItem.expanded}"
-           (click)="actionItem.expanded = !actionItem.expanded;">
-        <span *ngIf="actionItem.assignee; else unassigned" class="assignee-label">
-          Assigned to: <b>{{actionItem.assignee}}</b>
-        </span>
-        <ng-template #unassigned>
-          <span class="assignee-label">Assign</span>
-        </ng-template>
-        <i class="fas fa-caret-right"></i>
-        <span *ngIf="actionItem.assignee"
-              class="remove"
-              (click)="updateAssignee(actionItem); $event.stopPropagation();">
-          <i class="fas fa-times"></i>
-        </span>
-      </div>
-      <div class="assignee-edit" [hidden]="!actionItem.expanded">
-        <input type="text"
-               placeholder="Team Member Name"
-               [ngModel]="actionItem.assignee"
-               (keydown.enter)="updateAssignee(actionItem, $event.target.value)"/>
+        <div class="container"></div>
+        <div class="container"
+             (click)="setCurrentActionItem(actionItem)"
+        >
+          <span class="edit"
+                [ngClass]="{
+                  'disable': actionItem.completed
+                }">
+            <i class="fas fa-edit"></i>
+          </span>
+        </div>
+
+        <div class="container"
+             (click)="deleteActionItem(actionItem)"
+        >
+          <span class="delete"
+                [ngClass]="{
+                  'disable': actionItem.completed
+                }">
+            <i class="fas fa-trash-alt"></i>
+          </span>
+        </div>
+
+        <div class="container complete-container"
+             (click)="completeActionItem(actionItem)"
+        >
+          <div
+            class="checkbox"
+            [ngClass]="{'completed-task': actionItem.completed}"
+          ></div>
+          <i
+            class="fas fa-check checkmark"
+            [ngClass]="{'show-checkmark': actionItem.completed}"
+          ></i>
+        </div>
       </div>
     </div>
+
+    <div class="assignee"
+         [ngClass]="{
+          'expanded': actionItem.expanded,
+          'disable': actionItem.completed
+         }"
+         (click)="actionItem.expanded = !actionItem.expanded;">
+    <span *ngIf="actionItem.assignee; else unassigned" class="assignee-label">
+    Assigned to: <b>{{actionItem.assignee}}</b>
+    </span>
+      <ng-template #unassigned>
+        <span class="assignee-label">Assign</span>
+      </ng-template>
+      <i class="fas fa-caret-right"></i>
+      <span *ngIf="actionItem.assignee"
+            class="remove"
+            (click)="updateAssignee(actionItem); $event.stopPropagation();">
+    <i class="fas fa-times"></i>
+    </span>
+    </div>
+    <div class="assignee-edit" [hidden]="!actionItem.expanded">
+      <input type="text"
+             placeholder="Team Member Name"
+             [ngModel]="actionItem.assignee"
+             (keydown.enter)="updateAssignee(actionItem, $event.target.value)"/>
+    </div>
+
   </div>
 </div>
