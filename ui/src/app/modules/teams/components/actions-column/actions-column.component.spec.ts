@@ -48,81 +48,76 @@ describe('ActionsColumnComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  describe('onCompleted', () => {
 
+    it('should update the action item on the backend with the passed in state', () => {
+      component.onCompleted(true, 0);
+      expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(component.actionItems[0]);
+    });
 
-  // describe('completeActionItem', () => {
-  //   it('should toggle completion flag', () => {
-  //     component.completeActionItem(fakeActionItem);
-  //     expect(mockActionItemService.updateActionItem).toHaveBeenCalled();
-  //     expect(fakeActionItem.completed).toBeTruthy();
-  //   });
-  // });
-  //
-  // describe('setCurrentActionItem', () => {
-  //   it('should copy the selected action item to the editedActionItem', () => {
-  //     component.setCurrentActionItem(fakeActionItem);
-  //
-  //     expect(component.currentActionItemId).toEqual(fakeActionItem.id);
-  //   });
-  //
-  //   it('should update action item when editing a different action item', () => {
-  //     const newActionItem = {
-  //       id: 1,
-  //       teamId: null,
-  //       task: '',
-  //       completed: false,
-  //       assignee: null
-  //     };
-  //     component.setCurrentActionItem(fakeActionItem);
-  //     component.setCurrentActionItem(newActionItem);
-  //
-  //     expect(component.currentActionItemId).toEqual(newActionItem.id);
-  //   });
-  //
-  //   it('should call ActionService.updateActionItem when closing edit box', () => {
-  //     component.setCurrentActionItem(fakeActionItem);
-  //     component.setCurrentActionItem(fakeActionItem);
-  //     expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(fakeActionItem);
-  //   });
-  //
-  //   it('should maintain changes while editing', () => {
-  //     const expectedActionItem = {...fakeActionItem};
-  //     expectedActionItem.assignee = 'assignee';
-  //
-  //     component.setCurrentActionItem(fakeActionItem);
-  //     component.actionItems[0].assignee = 'assignee';
-  //     component.setCurrentActionItem();
-  //     expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(expectedActionItem);
-  //   });
-  //
-  // });
-  //
-  // describe('deleteActionItem', () => {
-  //   it('should call ActionItemService.deleteActionItem', () => {
-  //     const originalConfirmFunction = window.confirm;
-  //
-  //     window.confirm = () => true;
-  //
-  //     component.deleteActionItem(fakeActionItem);
-  //
-  //     expect(mockActionItemService.deleteActionItem).toHaveBeenCalledWith(fakeActionItem);
-  //
-  //     window.confirm = originalConfirmFunction;
-  //   });
-  //
-  // });
-  //
-  // describe('updateAssignee', () => {
-  //   it('should call ActionItemService.updateActionItem', () => {
-  //     const newActionItem = {...fakeActionItem};
-  //     const newAssignee = 'bob';
-  //
-  //     component.updateAssignee(fakeActionItem, newAssignee);
-  //     newActionItem.assignee = newAssignee;
-  //     newActionItem.expanded = false;
-  //
-  //     expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(newActionItem);
-  //   });
-  //
-  // });
+    it('should set the action item with the passed in index to false', () => {
+      component.onCompleted(false, 0);
+      expect(component.actionItems[0].completed).toBeFalsy();
+    });
+
+    it('should set the action item with the passed in index to true', () => {
+      component.onCompleted(true, 0);
+      expect(component.actionItems[0].completed).toBeTruthy();
+    });
+  });
+
+  describe('onDeleted', () => {
+
+    it('should display a confirm dialog', () => {
+      const mockConfirm = spyOn(window, 'confirm').and.returnValue(true);
+      component.onDeleted(0);
+      expect(mockConfirm).toHaveBeenCalled();
+    });
+
+    it('should delete the action item on the backend if the user confirms the deletion', () => {
+      spyOn(window, 'confirm').and.returnValue(true);
+      component.onDeleted(0);
+
+      expect(mockActionItemService.deleteActionItem).toHaveBeenCalledWith(component.actionItems[0]);
+    });
+
+    it('should not delete the action item on the backend if the user cancels the deletion', () => {
+      spyOn(window, 'confirm').and.returnValue(false);
+      component.onDeleted(0);
+
+      expect(mockActionItemService.deleteActionItem).not.toHaveBeenCalled();
+    });
+
+  });
+
+  describe('onMessageChanged', () => {
+
+    const fakeMessage = 'I AM A FAKE MESSAGE';
+
+    it('should update the action item on the backend', () => {
+      component.onMessageChanged(fakeMessage, 0);
+      expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(component.actionItems[0]);
+    });
+
+    it('should set the message on the action item with the passed in index', () => {
+      component.onMessageChanged(fakeMessage, 0);
+      expect(component.actionItems[0].task).toEqual(fakeMessage);
+    });
+
+  });
+
+  describe('onAssigneeUpdated', () => {
+
+    const fakeAssignee = 'I AM A FAKE ASSIGNEE';
+
+    it('should update the action item on the backend', () => {
+      component.onAssigneeUpdated(fakeAssignee, 0);
+      expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(component.actionItems[0]);
+    });
+
+    it('should set the assignee on the action item with the passed in index', () => {
+      component.onAssigneeUpdated(fakeAssignee, 0);
+      expect(component.actionItems[0].assignee).toEqual(fakeAssignee);
+    });
+  });
 });
