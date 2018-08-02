@@ -19,4 +19,6 @@
   [type]="type"
   [task]="task"
   (click)="$event.stopPropagation()"
+  (completed)="this.hide()"
+  (deleted)="emitDeleted()"
 ></rq-task>

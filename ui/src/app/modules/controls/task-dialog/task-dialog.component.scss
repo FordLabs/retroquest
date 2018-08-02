@@ -31,19 +31,23 @@
   right: 0;
   top: 0;
   width: 100%;
+  z-index: 100;
 
   rq-task {
+    $border-width: 8px;
     $base-drop-shadow: 0 19px 38px opacity($black, .3);
 
-    $action-shadow: 0 0 0 9px $action-yellow, $base-drop-shadow;
-    $confused-shadow: 0 0 0 9px $confused-blue, $base-drop-shadow;
-    $happy-shadow: 0 0 0 9px $happy-green, $base-drop-shadow;
+    $action-shadow: 0 0 0 $border-width $action-yellow, $base-drop-shadow;
 
-    $sad-shadow: 0 0 0 9px $unhappy-red, $base-drop-shadow;
+    $confused-shadow: 0 0 0 $border-width $confused-blue, $base-drop-shadow;
+    $happy-shadow: 0 0 0 $border-width $happy-green, $base-drop-shadow;
+    $sad-shadow: 0 0 0 $border-width $unhappy-red, $base-drop-shadow;
 
-    border-radius: 12px;
+    border-radius: 6px;
     font-size: 1rem;
     height: auto;
+    transform: scale(1.3);
+
     width: 450px;
 
     &.happy {

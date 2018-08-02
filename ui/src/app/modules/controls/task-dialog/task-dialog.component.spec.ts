@@ -50,4 +50,31 @@ describe('TaskDialogComponent', () => {
 
   });
 
+  describe('emitDeleted', () => {
+
+    beforeEach(() => {
+      component.visibilityChanged = jasmine.createSpyObj({
+        emit: null
+      });
+      component.deleted = jasmine.createSpyObj({
+        emit: null
+      });
+    });
+
+    it('should emit the deleted signal when the delete button is clicked', () => {
+      component.task.message = 'I AM A FAKE TASK';
+
+      component.emitDeleted();
+
+      expect(component.deleted.emit).toHaveBeenCalledWith(component.task);
+    });
+
+    it('should hide the dialog', () => {
+      component.emitDeleted();
+
+      expect(component.visible).toEqual(false);
+      expect(component.visibilityChanged.emit).toHaveBeenCalledWith(false);
+    });
+
+  });
 });

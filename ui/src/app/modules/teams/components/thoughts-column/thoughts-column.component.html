@@ -22,11 +22,18 @@
     [type]="column.topic"
     (messageChanged)="onMessageChanged($event, i)"
     (deleted)="onDeleted($event)"
-    (messageClicked)="thoughtModal.open(thought, column.title)"
+    (messageClicked)="displayPopup(thought)"
     (starCountIncreased)="starCountChanged($event, i)"
     (completed)="onCompleted($event, i)"
   >
   </rq-task>
 </div>
 
-<rq-thought-modal #thoughtModal></rq-thought-modal>
+<rq-task-dialog
+  #thoughtDialog
+  [visible]="dialogIsVisible"
+  [type]="column.topic"
+  [task]="selectedThought"
+  (visibilityChanged)="dialogIsVisible = $event"
+  (deleted)="onDeleted($event)"
+></rq-task-dialog>

@@ -35,6 +35,7 @@ export class TaskDialogComponent {
   @Input() visible = true;
 
   @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() deleted: EventEmitter<Task> = new EventEmitter<Task>();
 
   public hide(): void {
     this.visible = false;
@@ -45,5 +46,9 @@ export class TaskDialogComponent {
     this.visible = true;
   }
 
+  public emitDeleted(): void {
+    this.deleted.emit(this.task);
+    this.hide();
+  }
 }
 
