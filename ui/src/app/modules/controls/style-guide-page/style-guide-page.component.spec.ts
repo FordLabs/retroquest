@@ -16,7 +16,6 @@
  */
 
 import {StyleGuidePageComponent} from './style-guide-page.component';
-import {emptyTask} from '../../teams/domain/task';
 
 describe('StyleGuidePageComponent', () => {
   let component: StyleGuidePageComponent;

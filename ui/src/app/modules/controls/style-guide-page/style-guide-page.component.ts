@@ -16,7 +16,7 @@
  */
 
 import {Component} from '@angular/core';
-import {emptyTask, Task} from '../../teams/domain/task';
+import {Thought} from '../../teams/domain/thought';
 
 @Component({
   selector: 'rq-style-guide-page',
@@ -25,13 +25,14 @@ import {emptyTask, Task} from '../../teams/domain/task';
 })
 export class StyleGuidePageComponent {
 
-  happyThoughtTask: Task = {
+  happyThoughtTask: Thought = {
     id: 1,
     teamId: 'id',
     topic: 'happy',
     message: 'Who am I, am I a fish?',
     hearts: 3,
-    discussed: false
+    discussed: false,
+    columnTitle: null
   };
 
   dialogIsVisible = false;

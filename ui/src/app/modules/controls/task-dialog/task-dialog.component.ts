@@ -16,7 +16,7 @@
  */
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {emptyTask, Task} from '../../teams/domain/task';
+import {emptyThought, Thought} from '../../teams/domain/thought';
 
 @Component({
   selector: 'rq-task-dialog',
@@ -31,12 +31,12 @@ import {emptyTask, Task} from '../../teams/domain/task';
 export class TaskDialogComponent {
 
   @Input() type = '';
-  @Input() task: Task = emptyTask();
+  @Input() task: Thought = emptyThought();
   @Input() visible = true;
 
   @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
-  @Output() deleted: EventEmitter<Task> = new EventEmitter<Task>();
+  @Output() deleted: EventEmitter<Thought> = new EventEmitter<Thought>();
   @Output() starCountIncreased: EventEmitter<number> = new EventEmitter<number>();
   @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
 

@@ -34,28 +34,8 @@
     display: none;
   }
 
-  &.happy {
-    &:hover {
-      box-shadow: 0 0 0 $host-border-width $happy-green;
-    }
-  }
-
-  &.confused {
-    &:hover {
-      box-shadow: 0 0 0 $host-border-width $confused-blue;
-    }
-  }
-
-  &.sad {
-    &:hover {
-      box-shadow: 0 0 0 $host-border-width $unhappy-red;
-    }
-  }
-
-  &.action {
-    &:hover {
-      box-shadow: 0 0 0 $host-border-width $action-yellow;
-    }
+  &:hover {
+    box-shadow: 0 0 0 $host-border-width $action-yellow;
   }
 
   &.edit-mode {
@@ -202,41 +182,56 @@
         font-size: .7rem;
       }
     }
+  }
 
-    .star-count-container {
-      flex-direction: row;
-      font-size: 1rem;
-      position: relative;
+  .assignee {
+    background-color: $action-yellow;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    box-sizing: border-box;
+    cursor: pointer;
+    font-size: 14px;
+    order: 4;
+    padding: 4px 8px;
+    text-align: left;
+    width: 100%;
 
-      .star-count {
-        box-sizing: border-box;
-        font-size: .9rem;
-        margin-left: 3px;
-        padding-bottom: 2px;
-        width: 10px;
+    .remove {
+      display: block;
+      float: right;
+      height:  18px;
+      width: 18px;
+    }
+
+    i {
+      margin-left: 4px;
+    }
+
+    &.expanded {
+      border-radius: 0;
+      transition: .5s;
+
+      i {
+        transform: rotate(90deg);
       }
+    }
+  }
 
-      .star-background {
-        background-color: $action-yellow;
-        border-radius: 12px / 6px;
-        height: 10px;
-        margin-top: 10px;
-        position: relative;
-        width: 25px;
+  .assignee-edit {
+    background-color: $action-yellow;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    box-sizing: border-box;
+    order: 5;
+    padding: 4px 8px 8px;
+    text-align: left;
+    width: 100%;
 
-        .star-icon {
-          bottom: 0;
-          box-sizing: border-box;
-          display: block;
-          font-size: 1rem;
-          left: 4px;
-          margin: auto;
-          position: absolute;
-          right: 0;
-
-          top: -10px;
-        }
-      }
+    input {
+      border: 1px solid;
+      border-radius: 2px;
+      padding: 4px 2px;
+      width: calc(100% - 6px);
     }
   }
 }

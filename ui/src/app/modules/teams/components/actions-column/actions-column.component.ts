@@ -30,42 +30,26 @@ export class ActionsColumnComponent {
   }
 
   @Input() actionItems: Array<ActionItem>;
-  currentActionItemId: number = null;
-  currentActionItemTask: string = null;
 
-  private updateCurrentActionItem (): void {
-    if (this.currentActionItemId !== null) {
-      const currentActionItem = this.actionItems.filter((actionItem) => actionItem.id === this.currentActionItemId)[0];
-      currentActionItem.task = this.currentActionItemTask;
-      this.actionItemService.updateActionItem(currentActionItem);
-    }
+  public onCompleted(state: boolean, index: number) {
+    const actionItem = this.actionItems[index];
+    actionItem.completed = state;
+    this.actionItemService.updateActionItem(actionItem);
   }
 
-  setCurrentActionItem (actionItem?: ActionItem): void {
-    this.updateCurrentActionItem();
-    if (!actionItem || actionItem.id === this.currentActionItemId) {
-      this.currentActionItemId = null;
-      this.currentActionItemTask = null;
-    } else {
-      this.currentActionItemId = actionItem.id;
-      this.currentActionItemTask = actionItem.task;
-    }
-  }
-
-  deleteActionItem (actionItem: ActionItem): void {
+  public onDeleted(index: number) {
     if (confirm('Are you sure you want to delete this action item?')) {
-      this.actionItemService.deleteActionItem(actionItem);
+      this.actionItemService.deleteActionItem(this.actionItems[index]);
     }
   }
 
-  completeActionItem (actionItem: ActionItem): void {
-    actionItem.completed = !actionItem.completed;
-    this.actionItemService.updateActionItem(actionItem);
+  public onMessageChanged(message: string, index: number): void {
+    this.actionItems[index].task = message;
+    this.actionItemService.updateActionItem(this.actionItems[index]);
   }
 
-  updateAssignee (actionItem: ActionItem, newAssignee: string = null): void {
-    actionItem.assignee = newAssignee;
-    this.actionItemService.updateActionItem(actionItem);
-    actionItem.expanded = false;
+  public onAssigneeUpdated(assignee: string, index: number): void {
+    this.actionItems[index].assignee = assignee;
+    this.actionItemService.updateActionItem(this.actionItems[index]);
   }
 }

@@ -29,7 +29,7 @@ describe('ActionItemService', () => {
   const actionItem: ActionItem = {
     id: 0,
     teamId: 'team-id',
-    task: 'action task',
+    task: 'action actionItem',
     completed: false,
     assignee: null,
   };
