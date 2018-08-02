@@ -35,9 +35,12 @@ export class TaskDialogComponent {
   @Input() visible = true;
 
   @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
   @Output() deleted: EventEmitter<Task> = new EventEmitter<Task>();
+  @Output() starCountIncreased: EventEmitter<number> = new EventEmitter<number>();
+  @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  public hide(): void {
+  private hide(): void {
     this.visible = false;
     this.visibilityChanged.emit(this.visible);
   }
@@ -48,6 +51,19 @@ export class TaskDialogComponent {
 
   public emitDeleted(): void {
     this.deleted.emit(this.task);
+    this.hide();
+  }
+
+  public emitMessageChanged(message: string) {
+    this.messageChanged.emit(message);
+  }
+
+  public emitStarCountIncreased(count: number) {
+    this.starCountIncreased.emit(count);
+  }
+
+  public emitCompleted(state: boolean) {
+    this.completed.emit(state);
     this.hide();
   }
 }

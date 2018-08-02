@@ -28,15 +28,30 @@ describe('TaskDialogComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('hide', () => {
-    it('should hide the dialog when called', () => {
-      component.hide();
+  describe('emitCompleted', () => {
+
+    beforeEach(() => {
+      component.completed = jasmine.createSpyObj({emit: null});
+      component.visibilityChanged = jasmine.createSpyObj({emit: null});
+    });
+
+    it('should emit the completed signal with a state of true', () => {
+      component.emitCompleted(true);
+      expect(component.completed.emit).toHaveBeenCalledWith(true);
+    });
+
+    it('should emit the completed signal with a state of false', () => {
+      component.emitCompleted(false);
+      expect(component.completed.emit).toHaveBeenCalledWith(false);
+    });
+
+    it('should hide the dialog when called with any value', () => {
+      component.emitCompleted(true);
       expect(component.visible).toBeFalsy();
     });
 
     it('should emit that the visibility is false', () => {
-      component.visibilityChanged = jasmine.createSpyObj({emit: null});
-      component.hide();
+      component.emitCompleted(true);
 
       expect(component.visibilityChanged.emit).toHaveBeenCalledWith(false);
     });
@@ -74,6 +89,40 @@ describe('TaskDialogComponent', () => {
 
       expect(component.visible).toEqual(false);
       expect(component.visibilityChanged.emit).toHaveBeenCalledWith(false);
+    });
+
+  });
+
+  describe('emitMessageChanged', () => {
+
+    beforeEach(() => {
+      component.messageChanged = jasmine.createSpyObj({
+        emit: null
+      });
+    });
+
+    it('should emit the passed in message', () => {
+      const fakeMessage = 'I AM A FAKE MESSAGE';
+      component.emitMessageChanged(fakeMessage);
+
+      expect(component.messageChanged.emit).toHaveBeenCalledWith(fakeMessage);
+    });
+
+  });
+
+  describe('emitStarCountIncreased', () => {
+
+    beforeEach(() => {
+      component.starCountIncreased = jasmine.createSpyObj({
+        emit: null
+      });
+    });
+
+    it('should emit the passed in star count', () => {
+      const fakeCount = 2;
+      component.emitStarCountIncreased(fakeCount);
+
+      expect(component.starCountIncreased.emit).toHaveBeenCalledWith(fakeCount);
     });
 
   });

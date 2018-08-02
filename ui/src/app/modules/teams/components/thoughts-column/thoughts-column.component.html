@@ -22,7 +22,7 @@
     [type]="column.topic"
     (messageChanged)="onMessageChanged($event, i)"
     (deleted)="onDeleted($event)"
-    (messageClicked)="displayPopup(thought)"
+    (messageClicked)="displayPopup(i)"
     (starCountIncreased)="starCountChanged($event, i)"
     (completed)="onCompleted($event, i)"
   >
@@ -35,5 +35,8 @@
   [type]="column.topic"
   [task]="selectedThought"
   (visibilityChanged)="dialogIsVisible = $event"
+  (messageChanged)="onMessageChanged($event, selectedThoughtIndex)"
   (deleted)="onDeleted($event)"
+  (starCountIncreased)="starCountChanged($event, selectedThoughtIndex)"
+  (completed)="onCompleted($event, selectedThoughtIndex)"
 ></rq-task-dialog>

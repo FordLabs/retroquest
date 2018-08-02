@@ -39,6 +39,7 @@ export class ThoughtsColumnComponent {
   currentThoughtId: number = null;
   currentThoughtMessage: string;
   dialogIsVisible = false;
+  selectedThoughtIndex = 0;
 
   private updateCurrentThought (): void {
     if (this.currentThoughtId !== null) {
@@ -97,8 +98,9 @@ export class ThoughtsColumnComponent {
     this.thoughtService.updateThought(thought);
   }
 
-  displayPopup(thought: Thought) {
-    this.selectedThought = thought;
+  displayPopup(index: number) {
+    this.selectedThoughtIndex = index;
+    this.selectedThought = this.thoughts[this.selectedThoughtIndex];
     this.thoughtDialog.show();
   }
 }

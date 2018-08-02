@@ -19,6 +19,8 @@
   [type]="type"
   [task]="task"
   (click)="$event.stopPropagation()"
-  (completed)="this.hide()"
+  (completed)="emitCompleted($event)"
   (deleted)="emitDeleted()"
+  (messageChanged)="emitMessageChanged($event)"
+  (starCountIncreased)="emitStarCountIncreased($event)"
 ></rq-task>
