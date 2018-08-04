@@ -53,17 +53,19 @@ describe('ThoughtColumnComponent', () => {
   });
 
   describe('deleteThought', () => {
-    it('should call ThoughtService.deleteThought', () => {
 
-      const originalConfirmFunction = window.confirm;
-
-      window.confirm = () => true;
-
+    it('should only delete a thought when it has been confirmed', () => {
+      spyOn(window, 'confirm').and.returnValue(true);
       component.deleteThought(testThought);
 
       expect(mockThoughtService.deleteThought).toHaveBeenCalledWith(testThought);
+    });
 
-      window.confirm = originalConfirmFunction;
+    it('should not delete a thought when it has not been confirmed', () => {
+      spyOn(window, 'confirm').and.returnValue(false);
+      component.deleteThought(testThought);
+
+      expect(mockThoughtService.deleteThought).not.toHaveBeenCalled();
     });
   });
 

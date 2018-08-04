@@ -15,5 +15,7 @@
  * limitations under the License.
  */
 
-$desktop-max-width: 1440px;
-$desktop-min-width: 1200px;
+
+$global-side-padding: 24px;
+
+$desktop-max-width: 1440px + (2 * $global-side-padding);
