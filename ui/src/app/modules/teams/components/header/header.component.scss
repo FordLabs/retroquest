@@ -28,14 +28,18 @@
 
   #headerTop {
     align-items: center;
-    display: flex;
+    box-sizing: border-box;
 
+    display: flex;
     flex-direction: row;
     justify-content: left;
     margin: 0 auto;
     max-width: $desktop-max-width;
-    min-width: $desktop-min-width;
+    min-width: $desktop-max-width;
     padding-bottom: 12px;
+
+    padding-left: $global-side-padding;
+    padding-right: $global-side-padding;
 
     .horizontal-separator {
       background-color: $wet-asphalt;
@@ -59,16 +63,22 @@
 
   #headerBottom {
     background: $white;
+    box-sizing: border-box;
+    min-width: $desktop-max-width;
 
     .header-bottom-content {
       align-self: center;
+      box-sizing: inherit;
       display: flex;
       flex-direction: row;
-      justify-content: flex-end;
 
+      justify-content: flex-end;
       margin: 0 auto;
       max-width: $desktop-max-width;
-      min-width: $desktop-min-width;
+      min-width: inherit;
+
+      padding-left: $global-side-padding;
+      padding-right: $global-side-padding;
 
       #downloadCsv {
         margin-right: 24px;

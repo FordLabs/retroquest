@@ -27,7 +27,7 @@ import {TaskDialogComponent} from '../../../controls/task-dialog/task-dialog.com
   styleUrls: ['./thoughts-column.component.scss']
 })
 export class ThoughtsColumnComponent {
-  constructor (private thoughtService: ThoughtService) {
+  constructor(private thoughtService: ThoughtService) {
   }
 
   @Input() column: Column;
@@ -41,7 +41,7 @@ export class ThoughtsColumnComponent {
   dialogIsVisible = false;
   selectedThoughtIndex = 0;
 
-  private updateCurrentThought (): void {
+  private updateCurrentThought(): void {
     if (this.currentThoughtId !== null) {
       const currentThought = this.thoughts.filter((thought) => thought.id === this.currentThoughtId)[0];
       currentThought.message = this.currentThoughtMessage;
@@ -49,7 +49,7 @@ export class ThoughtsColumnComponent {
     }
   }
 
-  setCurrentThought (newThought?: Thought): void {
+  setCurrentThought(newThought?: Thought): void {
     this.updateCurrentThought();
     if (!newThought || newThought.id === this.currentThoughtId) {
       this.currentThoughtId = null;
@@ -60,18 +60,18 @@ export class ThoughtsColumnComponent {
     }
   }
 
-  deleteThought (thought: Thought): void {
+  deleteThought(thought: Thought): void {
     if (confirm('Are you sure you want to delete this thought?')) {
       this.thoughtService.deleteThought(thought);
     }
   }
 
-  discussThought (thought: Thought): void {
+  discussThought(thought: Thought): void {
     thought.discussed = !thought.discussed;
     this.thoughtService.updateThought(thought);
   }
 
-  heartThought (thought: Thought): void {
+  heartThought(thought: Thought): void {
     thought.hearts++;
     this.thoughtService.updateThought(thought);
   }
@@ -82,7 +82,9 @@ export class ThoughtsColumnComponent {
   }
 
   onDeleted(thought: Thought) {
-    this.thoughtService.deleteThought(thought);
+    if (confirm('Are you sure you want to delete this thought?')) {
+      this.thoughtService.deleteThought(thought);
+    }
   }
 
   starCountChanged(starCount: number, index: number) {
@@ -94,7 +96,6 @@ export class ThoughtsColumnComponent {
   onCompleted(completedState: boolean, index: number) {
     const thought = this.thoughts[index];
     thought.discussed = completedState;
-    console.log(thought.discussed);
     this.thoughtService.updateThought(thought);
   }
 
