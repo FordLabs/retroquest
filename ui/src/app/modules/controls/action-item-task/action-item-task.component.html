@@ -36,12 +36,25 @@
     >{{actionItem.task}}
     </div>
   </ng-template>
+
+  <div
+    class="assigned-to-section"
+    [ngClass]="{'disable': taskEditModeEnabled}"
+  >
+    <div class="label">assigned to</div>
+    <input
+      class="value"
+      [type]="'text'"
+      [value]="actionItem.assignee"
+      (keydown.enter)="emitAssigneeUpdated($event.target.value)"
+    >
+  </div>
 </div>
 
 <div class="footer">
   <div
     class="container date-created-container"
-    [ngClass]="{'disable': actionItem.completed}"
+    [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled}"
   >
     <div class="date-created-header">created</div>
     <div class="date-created-value">{{getDateCreated()}}</div>
@@ -49,7 +62,7 @@
 
   <div
     class="container edit-container"
-    [ngClass]="{'disable': actionItem.completed}"
+    [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled}"
     (click)="toggleEditMode()"
     *ngIf="!taskEditModeEnabled; else exit_edit_mode_icon"
   >
@@ -67,13 +80,14 @@
 
   <div
     class="container delete-container"
-    [ngClass]="{'disable': actionItem.completed}"
+    [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled}"
     (click)="emitDeleteItem()">
     <i class="fas fa-trash-alt"></i>
   </div>
 
   <div
     class="complete-container"
+    [ngClass]="{'disable': taskEditModeEnabled}"
     (click)="toggleTaskComplete()"
   >
     <div
@@ -91,31 +105,31 @@
 
 </div>
 
-<div class="assignee"
-     [ngClass]="{
-          'expanded': actionItem.expanded,
-          'disable': actionItem.completed
-         }"
-     (click)="actionItem.expanded = !actionItem.expanded;">
-      <span *ngIf="actionItem.assignee; else unassigned" class="assignee-label">
-      Assigned to: <b>{{actionItem.assignee}}</b>
-      </span>
-  <ng-template #unassigned>
-    <span class="assignee-label">Assign</span>
-  </ng-template>
-  <i class="fas fa-caret-right"></i>
-  <div
-    class="remove"
-    *ngIf="actionItem.assignee"
-    (click)="emitRemoveAssignee(actionItem); $event.stopPropagation()"
-  >
-    <i class="fas fa-times"></i>
-  </div>
-</div>
-<div class="assignee-edit" [hidden]="!actionItem.expanded">
-  <input type="text"
-         placeholder="Team Member Name"
-         [ngModel]="actionItem.assignee"
-         (keydown.enter)="emitAssigneeUpdated($event.target.value)"
-  />
-</div>
+<!--<div class="assignee"-->
+     <!--[ngClass]="{-->
+          <!--'expanded': actionItem.expanded,-->
+          <!--'disable': actionItem.completed-->
+         <!--}"-->
+     <!--(click)="actionItem.expanded = !actionItem.expanded;">-->
+      <!--<span *ngIf="actionItem.assignee; else unassigned" class="assignee-label">-->
+      <!--Assigned to: <b>{{actionItem.assignee}}</b>-->
+      <!--</span>-->
+  <!--<ng-template #unassigned>-->
+    <!--<span class="assignee-label">Assign</span>-->
+  <!--</ng-template>-->
+  <!--<i class="fas fa-caret-right"></i>-->
+  <!--<div-->
+    <!--class="remove"-->
+    <!--*ngIf="actionItem.assignee"-->
+    <!--(click)="emitRemoveAssignee(actionItem); $event.stopPropagation()"-->
+  <!--&gt;-->
+    <!--<i class="fas fa-times"></i>-->
+  <!--</div>-->
+<!--</div>-->
+<!--<div class="assignee-edit" [hidden]="!actionItem.expanded">-->
+  <!--<input type="text"-->
+         <!--placeholder="Team Member Name"-->
+         <!--[ngModel]="actionItem.assignee"-->
+         <!--(keydown.enter)="emitAssigneeUpdated($event.target.value)"-->
+  <!--/>-->
+<!--</div>-->

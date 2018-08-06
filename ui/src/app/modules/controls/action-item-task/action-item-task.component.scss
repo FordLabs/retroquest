@@ -74,24 +74,27 @@
       $label-color: #a9a9a9;
       box-sizing: border-box;
       margin-bottom: 12px;
-      padding: 0 12px;
-
+      padding: 0 18px;
       width: 100%;
 
       .label {
-        color: $label-color;
-        font-size: .5rem;
+        font-size: .7rem;
+        font-weight: bold;
+        opacity: .4;
+        text-transform: capitalize;
       }
 
       .value {
         border: 0;
         border-bottom: 2px solid $action-yellow;
+        color: inherit;
         display: inline-block;
-        font-size: .65rem;
-        height: 14px;
-        margin-top: 3px;
-        min-width: 64px;
+        font-size: .8rem;
+        font-weight: bold;
+        height: 18px;
         outline: none;
+        text-overflow: ellipsis;
+        width: 100%;
       }
     }
 
@@ -180,7 +183,7 @@
       .date-created-header {
         font-size: .65rem;
         font-weight: bold;
-        opacity: .5;
+        opacity: .4;
       }
 
       .date-created-value {
@@ -205,7 +208,7 @@
     .remove {
       display: block;
       float: right;
-      height:  18px;
+      height: 18px;
       width: 18px;
     }
 
