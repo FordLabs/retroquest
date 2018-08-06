@@ -41,7 +41,10 @@
 <div class="footer">
   <div
     class="container date-created-container"
+    [ngClass]="{'disable': actionItem.completed}"
   >
+    <div class="date-created-header">created</div>
+    <div class="date-created-value">{{getDateCreated()}}</div>
   </div>
 
   <div

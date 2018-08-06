@@ -178,12 +178,14 @@
       flex-direction: column;
 
       .date-created-header {
-        font-size: .5rem;
+        font-size: .65rem;
+        font-weight: bold;
         opacity: .5;
       }
 
       .date-created-value {
-        font-size: .7rem;
+        font-size: .75rem;
+        font-weight: bold;
       }
     }
   }

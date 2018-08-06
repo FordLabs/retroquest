@@ -32,6 +32,7 @@
     "@elderbyte/ts-stomp": "^2.1.2",
     "core-js": "^2.5.4",
     "jquery": "^3.3.1",
+    "moment": "^2.22.2",
     "ng-recaptcha": "^4.0.0-beta.1",
     "npm": "^6.1.0",
     "rxjs": "^6.0.0",

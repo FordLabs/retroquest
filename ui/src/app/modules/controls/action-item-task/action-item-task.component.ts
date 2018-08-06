@@ -17,6 +17,7 @@
 
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {ActionItem, emptyActionItem} from '../../teams/domain/action-item';
+import * as moment from 'moment';
 
 @Component({
   selector: 'rq-action-item-task',
@@ -66,6 +67,10 @@ export class ActionItemTaskComponent {
   public toggleTaskComplete(): void {
     this.actionItem.completed = !this.actionItem.completed;
     this.completed.emit(this.actionItem.completed);
+  }
+
+  public getDateCreated(): string {
+    return moment(this.actionItem.dateCreated).format('MMM Do');
   }
 
   private focusInput(): void {
