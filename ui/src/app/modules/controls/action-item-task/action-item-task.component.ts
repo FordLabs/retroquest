@@ -70,6 +70,9 @@ export class ActionItemTaskComponent {
   }
 
   public getDateCreated(): string {
+    if (!this.actionItem.dateCreated) {
+      return '—';
+    }
     return moment(this.actionItem.dateCreated).format('MMM Do');
   }
 

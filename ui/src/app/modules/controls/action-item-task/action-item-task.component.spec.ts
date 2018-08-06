@@ -164,4 +164,34 @@ describe('ThoughtComponent', () => {
       expect(component.editableTextArea.nativeElement.blur).toHaveBeenCalled();
     });
   });
+
+  describe('getDateCreated', () => {
+    it('should return formatted date', () => {
+      component.actionItem = {
+        id: 0,
+        task: '',
+        completed: false,
+        teamId: '',
+        assignee: '',
+        expanded: false,
+        dateCreated: '2018-08-08'
+      };
+      const dateString = component.getDateCreated();
+      expect(dateString).toEqual('Aug 8th');
+    });
+
+    it('should return null for undefined or empty dates', () => {
+      component.actionItem = {
+        id: 0,
+        task: '',
+        completed: false,
+        teamId: '',
+        assignee: '',
+        expanded: false,
+        dateCreated: undefined
+      };
+      const dateString = component.getDateCreated();
+      expect(dateString).toEqual('—');
+    });
+  });
 });
