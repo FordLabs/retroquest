@@ -16,24 +16,24 @@
   -->
 
 <div class="content-area"
-     (click)="emitTaskContentClicked()"
      [ngClass]="{'disable': actionItem.completed}"
 >
   <span
     class="content-message"
+    (click)="emitTaskContentClicked()"
     *ngIf="!taskEditModeEnabled; else content_textarea"
-  >{{actionItem.task}}</span>
+  >{{actionItem.actionItem}}</span>
 
   <ng-template #content_textarea>
     <div
       #content_value
       class="content-message editable-div"
       contenteditable="true"
-      [textContent]="actionItem.task"
-      (input)="actionItem.task = content_value.textContent"
+      [textContent]="actionItem.actionItem"
+      (input)="actionItem.actionItem = content_value.textContent"
       (keydown.enter)="forceBlur()"
       (blur)="toggleEditMode()"
-    >{{actionItem.task}}
+    >{{actionItem.actionItem}}
     </div>
   </ng-template>
 
@@ -43,6 +43,7 @@
   >
     <div class="label">assigned to</div>
     <input
+      #assignee_text_field
       class="value"
       [type]="'text'"
       [value]="actionItem.assignee"
@@ -104,32 +105,3 @@
   </div>
 
 </div>
-
-<!--<div class="assignee"-->
-     <!--[ngClass]="{-->
-          <!--'expanded': actionItem.expanded,-->
-          <!--'disable': actionItem.completed-->
-         <!--}"-->
-     <!--(click)="actionItem.expanded = !actionItem.expanded;">-->
-      <!--<span *ngIf="actionItem.assignee; else unassigned" class="assignee-label">-->
-      <!--Assigned to: <b>{{actionItem.assignee}}</b>-->
-      <!--</span>-->
-  <!--<ng-template #unassigned>-->
-    <!--<span class="assignee-label">Assign</span>-->
-  <!--</ng-template>-->
-  <!--<i class="fas fa-caret-right"></i>-->
-  <!--<div-->
-    <!--class="remove"-->
-    <!--*ngIf="actionItem.assignee"-->
-    <!--(click)="emitRemoveAssignee(actionItem); $event.stopPropagation()"-->
-  <!--&gt;-->
-    <!--<i class="fas fa-times"></i>-->
-  <!--</div>-->
-<!--</div>-->
-<!--<div class="assignee-edit" [hidden]="!actionItem.expanded">-->
-  <!--<input type="text"-->
-         <!--placeholder="Team Member Name"-->
-         <!--[ngModel]="actionItem.assignee"-->
-         <!--(keydown.enter)="emitAssigneeUpdated($event.target.value)"-->
-  <!--/>-->
-<!--</div>-->
