@@ -121,4 +121,28 @@ describe('ActionsColumnComponent', () => {
       expect(component.actionItems[0].assignee).toEqual(fakeAssignee);
     });
   });
+
+  describe('displayPopup', () => {
+
+    beforeEach(() => {
+      component.actionItemDialog = jasmine.createSpyObj({
+        show: null
+      });
+    });
+
+    it('should show the action item dialog', () => {
+      component.displayPopup(0);
+      expect(component.actionItemDialog.show).toHaveBeenCalled();
+    });
+
+    it('should set the selected action item index to the index passed in', () => {
+      component.displayPopup(0);
+      expect(component.selectedActionItemIndex).toEqual(0);
+    });
+
+    it('should set the selected action item index to the index passed in', () => {
+      component.displayPopup(0);
+      expect(component.selectedActionItem).toEqual(component.actionItems[0]);
+    });
+  });
 });

@@ -15,9 +15,10 @@
  * limitations under the License.
  */
 
-import {Component, Input} from '@angular/core';
-import {ActionItem} from '../../domain/action-item';
+import {Component, Input, ViewChild} from '@angular/core';
+import {ActionItem, emptyActionItem} from '../../domain/action-item';
 import {ActionItemService} from '../../services/action.service';
+import {ActionItemDialogComponent} from '../../../controls/action-item-dialog/action-item-dialog.component';
 
 @Component({
   selector: 'rq-actions-column',
@@ -26,10 +27,16 @@ import {ActionItemService} from '../../services/action.service';
 })
 export class ActionsColumnComponent {
 
-  constructor (private actionItemService: ActionItemService) {
+  constructor(private actionItemService: ActionItemService) {
   }
 
   @Input() actionItems: Array<ActionItem>;
+
+  @ViewChild('actionItemDialog') actionItemDialog: ActionItemDialogComponent;
+
+  selectedActionItem: ActionItem = emptyActionItem();
+  selectedActionItemIndex = 0;
+  dialogIsVisible = false;
 
   public onCompleted(state: boolean, index: number) {
     const actionItem = this.actionItems[index];
@@ -51,5 +58,11 @@ export class ActionsColumnComponent {
   public onAssigneeUpdated(assignee: string, index: number): void {
     this.actionItems[index].assignee = assignee;
     this.actionItemService.updateActionItem(this.actionItems[index]);
+  }
+
+  public displayPopup(index: number): void {
+    this.selectedActionItemIndex = index;
+    this.selectedActionItem = this.actionItems[this.selectedActionItemIndex];
+    this.actionItemDialog.show();
   }
 }

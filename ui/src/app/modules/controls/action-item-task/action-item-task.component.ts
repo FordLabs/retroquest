@@ -39,6 +39,7 @@ export class ActionItemTaskComponent {
   @Output() assigneeUpdated: EventEmitter<string> = new EventEmitter<string>();
 
   @ViewChild('content_value') editableTextArea: ElementRef;
+  @ViewChild('assignee_text_field') assigneeTextField: ElementRef;
 
   taskEditModeEnabled = false;
 
@@ -89,8 +90,15 @@ export class ActionItemTaskComponent {
     }, 0);
   }
 
+
+  private forceBlurOnAssigneeTextField() {
+    setTimeout(() => {
+      this.assigneeTextField.nativeElement.blur();
+    }, 0);
+  }
   public emitAssigneeUpdated(value: string) {
     this.assigneeUpdated.emit(value);
+    this.forceBlurOnAssigneeTextField();
   }
 
   public emitRemoveAssignee(actionItem: ActionItem) {

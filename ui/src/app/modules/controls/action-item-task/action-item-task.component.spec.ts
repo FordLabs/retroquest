@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-import {ActionItemTaskComponent} from './action-item-task.component';
 import {emptyActionItem} from '../../teams/domain/action-item';
+import {ActionItemTaskComponent} from './action-item-task.component';
 
 describe('ThoughtComponent', () => {
   let component: ActionItemTaskComponent;
