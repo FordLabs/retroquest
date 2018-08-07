@@ -77,6 +77,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
 
         httpSecurity.csrf().disable();
+        displayH2ConsoleToDevs(httpSecurity);
     }
 
     @Override
@@ -84,5 +85,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         auth.authenticationProvider(jwtAuthenticationProvider);
         auth.inMemoryAuthentication().withUser(adminUsername).password(adminPassword).roles("ADMIN");
 
+    }
+
+    private void displayH2ConsoleToDevs(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.headers().frameOptions().sameOrigin();
     }
 }

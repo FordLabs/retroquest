@@ -17,6 +17,7 @@
 
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {ActionItem, emptyActionItem} from '../../teams/domain/action-item';
+import * as moment from 'moment';
 
 @Component({
   selector: 'rq-action-item-task',
@@ -38,6 +39,7 @@ export class ActionItemTaskComponent {
   @Output() assigneeUpdated: EventEmitter<string> = new EventEmitter<string>();
 
   @ViewChild('content_value') editableTextArea: ElementRef;
+  @ViewChild('assignee_text_field') assigneeTextField: ElementRef;
 
   taskEditModeEnabled = false;
 
@@ -68,6 +70,13 @@ export class ActionItemTaskComponent {
     this.completed.emit(this.actionItem.completed);
   }
 
+  public getDateCreated(): string {
+    if (!this.actionItem.dateCreated) {
+      return '—';
+    }
+    return moment(this.actionItem.dateCreated).format('MMM Do');
+  }
+
   private focusInput(): void {
     setTimeout(() => {
       this.editableTextArea.nativeElement.focus();
@@ -81,8 +90,15 @@ export class ActionItemTaskComponent {
     }, 0);
   }
 
+
+  private forceBlurOnAssigneeTextField() {
+    setTimeout(() => {
+      this.assigneeTextField.nativeElement.blur();
+    }, 0);
+  }
   public emitAssigneeUpdated(value: string) {
     this.assigneeUpdated.emit(value);
+    this.forceBlurOnAssigneeTextField();
   }
 
   public emitRemoveAssignee(actionItem: ActionItem) {

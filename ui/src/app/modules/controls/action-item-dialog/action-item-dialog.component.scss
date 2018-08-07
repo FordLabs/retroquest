@@ -37,24 +37,24 @@
     justify-content: flex-end;
   }
 
-  rq-task {
-    $border-width: 8px;
+  rq-action-item-task {
     $base-drop-shadow: 0 19px 38px opacity($black, .3);
-
+    $border-width: 8px;
     $action-shadow: 0 0 0 $border-width $action-yellow, $base-drop-shadow;
 
-
-    $confused-shadow: 0 0 0 $border-width $confused-blue, $base-drop-shadow;
-    $happy-shadow: 0 0 0 $border-width $happy-green, $base-drop-shadow;
-    $sad-shadow: 0 0 0 $border-width $unhappy-red, $base-drop-shadow;
-
     border-radius: 6px;
+    box-shadow: $action-shadow;
     box-sizing: border-box;
     font-size: 1rem;
-    height: auto;
 
+    height: auto;
     transform: scale(1.3);
+
     width: 450px;
+
+    &:hover {
+      box-shadow: $action-shadow;
+    }
 
     @media only screen and (max-width: 610px) {
       height: 280px;
@@ -62,30 +62,6 @@
       max-height: 280px;
       transform: none;
       width: calc(100% - 16px);
-    }
-
-    &.happy {
-      box-shadow: $happy-shadow;
-
-      &:hover {
-        box-shadow: $happy-shadow;
-      }
-    }
-
-    &.confused {
-      box-shadow: $confused-shadow;
-
-      &:hover {
-        box-shadow: $confused-shadow;
-      }
-    }
-
-    &.sad {
-      box-shadow: $sad-shadow;
-
-      &:hover {
-        box-shadow: $sad-shadow;
-      }
     }
   }
 }
