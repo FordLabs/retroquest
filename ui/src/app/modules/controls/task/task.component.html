@@ -33,6 +33,7 @@
       (input)="task.message = content_value.textContent"
       (keydown.enter)="forceBlur()"
       (blur)="toggleEditMode()"
+      (keydown)="onKeyDown($event)"
     >{{task.message}}
     </div>
   </ng-template>

@@ -187,4 +187,55 @@ describe('ThoughtComponent', () => {
       expect(component.editableTextArea.nativeElement.blur).toHaveBeenCalled();
     });
   });
+
+  describe('onKeyDown', () => {
+
+    it('should prevent the key event from being processed if the task has reached the max length', () => {
+      const fakeKeyEvent = jasmine.createSpyObj({
+        preventDefault: null
+      });
+
+      component.maxMessageLength = 2;
+      component.task.message = 'XX';
+      component.onKeyDown(fakeKeyEvent);
+      expect(fakeKeyEvent.preventDefault).toHaveBeenCalled();
+    });
+
+    it('should allow the key event if the max message length has not been reached', () => {
+      const fakeKeyEvent = jasmine.createSpyObj({
+        preventDefault: null
+      });
+
+      component.maxMessageLength = 3;
+      component.task.message = 'XX';
+      component.onKeyDown(fakeKeyEvent);
+      expect(fakeKeyEvent.preventDefault).not.toHaveBeenCalled();
+    });
+
+    it('should allow the backspace key event even if the max length has been reached', () => {
+      const fakeBackspaceEvent = jasmine.createSpyObj({
+        preventDefault: null
+      });
+
+      fakeBackspaceEvent.keyCode = 8;
+
+      component.maxMessageLength = 2;
+      component.task.message = 'XX';
+      component.onKeyDown(fakeBackspaceEvent);
+      expect(fakeBackspaceEvent.preventDefault).not.toHaveBeenCalled();
+    });
+
+    it('should allow the delete key event even if the max length has been reached', () => {
+      const fakeDeleteKeyEvent = jasmine.createSpyObj({
+        preventDefault: null,
+      });
+
+      fakeDeleteKeyEvent.keyCode = 46;
+
+      component.maxMessageLength = 2;
+      component.task.message = 'XX';
+      component.onKeyDown(fakeDeleteKeyEvent);
+      expect(fakeDeleteKeyEvent.preventDefault).not.toHaveBeenCalled();
+    });
+  });
 });
