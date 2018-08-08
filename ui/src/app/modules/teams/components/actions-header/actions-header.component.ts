@@ -18,6 +18,7 @@
 import {Component, Input} from '@angular/core';
 import {ActionItem} from '../../domain/action-item';
 import {ActionItemService} from '../../services/action.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'rq-actions-header',
@@ -36,12 +37,14 @@ export class ActionsHeaderComponent {
 
   addActionItem(newMessage: string): void {
     if (newMessage && newMessage.length) {
+      const todaysDate = moment().format();
       const actionItem: ActionItem = {
         id: null,
         teamId: this.teamId,
         task: newMessage,
         completed: false,
-        assignee: null
+        assignee: null,
+        dateCreated: todaysDate
       };
 
       this.actionItemService.addActionItem(actionItem);

@@ -62,7 +62,6 @@
 
     border-top-left-radius: inherit;
     border-top-right-radius: inherit;
-    cursor: pointer;
     display: block;
     flex: 1 1 auto;
     font-size: inherit;
@@ -74,29 +73,44 @@
       $label-color: #a9a9a9;
       box-sizing: border-box;
       margin-bottom: 12px;
-      padding: 0 12px;
-
+      padding: 0 18px;
       width: 100%;
 
       .label {
-        color: $label-color;
-        font-size: .5rem;
+        cursor: default;
+        font-size: .7rem;
+        font-weight: bold;
+        opacity: .6;
+        text-transform: lowercase;
       }
 
       .value {
         border: 0;
         border-bottom: 2px solid $action-yellow;
+        color: inherit;
         display: inline-block;
-        font-size: .65rem;
-        height: 14px;
-        margin-top: 3px;
-        min-width: 64px;
+        font-size: .8rem;
+        font-weight: bold;
+        height: 18px;
         outline: none;
+        text-overflow: ellipsis;
+        transition: border-bottom-color .2s cubic-bezier(.25, .8, .25, 1);
+
+        width: 100%;
+
+        &:hover {
+          border-bottom-color: $grape;
+        }
+
+        &:focus {
+          border-bottom-color: $grape;
+        }
       }
     }
 
     .content-message {
       box-sizing: border-box;
+      cursor: pointer;
       display: block;
       height: auto;
       min-height: 40px;
@@ -178,64 +192,15 @@
       flex-direction: column;
 
       .date-created-header {
-        font-size: .5rem;
-        opacity: .5;
+        font-size: .65rem;
+        font-weight: bold;
+        opacity: .6;
       }
 
       .date-created-value {
-        font-size: .7rem;
+        font-size: .75rem;
+        font-weight: bold;
       }
-    }
-  }
-
-  .assignee {
-    background-color: $action-yellow;
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
-    box-sizing: border-box;
-    cursor: pointer;
-    font-size: 14px;
-    order: 4;
-    padding: 4px 8px;
-    text-align: left;
-    width: 100%;
-
-    .remove {
-      display: block;
-      float: right;
-      height:  18px;
-      width: 18px;
-    }
-
-    i {
-      margin-left: 4px;
-    }
-
-    &.expanded {
-      border-radius: 0;
-      transition: .5s;
-
-      i {
-        transform: rotate(90deg);
-      }
-    }
-  }
-
-  .assignee-edit {
-    background-color: $action-yellow;
-    border-bottom-left-radius: 2px;
-    border-bottom-right-radius: 2px;
-    box-sizing: border-box;
-    order: 5;
-    padding: 4px 8px 8px;
-    text-align: left;
-    width: 100%;
-
-    input {
-      border: 1px solid;
-      border-radius: 2px;
-      padding: 4px 2px;
-      width: calc(100% - 6px);
     }
   }
 }

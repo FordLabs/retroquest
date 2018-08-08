@@ -28,6 +28,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,13 +47,15 @@ public class ActionItem {
     private boolean completed;
     private String teamId;
     private String assignee;
+    private Date dateCreated;
 
-    public ActionItem(Long id, String task, boolean completed, String teamId, String assignee) {
+    public ActionItem(Long id, String task, boolean completed, String teamId, String assignee, Date dateCreated) {
         this.id = id;
         setTask(task);
         this.completed = completed;
         this.teamId = teamId;
         setAssignee(assignee);
+        this.dateCreated = dateCreated;
     }
 
     /**
@@ -77,4 +80,5 @@ public class ActionItem {
     public void toggleCompleted() {
         completed = !completed;
     }
+
 }

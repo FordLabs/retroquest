@@ -18,6 +18,7 @@
 import {ActionsHeaderComponent} from './actions-header.component';
 import {Observable} from 'rxjs/index';
 import {ActionItem} from '../../domain/action-item';
+import * as moment from 'moment';
 
 describe('ActionsHeaderComponent', () => {
   let component: ActionsHeaderComponent;
@@ -37,6 +38,18 @@ describe('ActionsHeaderComponent', () => {
   });
 
   describe('addThought', () => {
+
+    const mockDateString = '2018-01-01';
+    const mockDate = moment(mockDateString).toDate();
+
+    beforeEach(() => {
+      jasmine.clock().mockDate(mockDate);
+    });
+
+    afterEach(() => {
+      jasmine.clock().uninstall();
+    });
+
     it('should construct the thought and call ThoughtService.addThought', () => {
       const newTask = 'a new actionItem';
 
@@ -45,7 +58,8 @@ describe('ActionsHeaderComponent', () => {
         teamId: teamId,
         task: newTask,
         completed: false,
-        assignee: null
+        assignee: null,
+        dateCreated: moment(mockDateString).format()
       };
 
       component.addActionItem(newTask);

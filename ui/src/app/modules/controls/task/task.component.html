@@ -42,7 +42,7 @@
 <div class="footer">
   <div
     class="container star-count-container"
-    [ngClass]="{'disable': task.discussed}"
+    [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
     (click)="addStar()"
     *ngIf="type !== 'action'; else date_created_container"
   >
@@ -60,7 +60,7 @@
   </ng-template>
   <div
     class="container edit-container"
-    [ngClass]="{'disable': task.discussed}"
+    [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
     (click)="toggleEditMode()"
     *ngIf="!taskEditModeEnabled; else exit_edit_mode_icon"
   >
@@ -78,13 +78,14 @@
 
   <div
     class="container delete-container"
-    [ngClass]="{'disable': task.discussed}"
+    [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
     (click)="emitDeleteItem()">
     <i class="fas fa-trash-alt"></i>
   </div>
 
   <div
     class="complete-container"
+    [ngClass]="{'disable': taskEditModeEnabled}"
     (click)="toggleTaskComplete()"
   >
     <div

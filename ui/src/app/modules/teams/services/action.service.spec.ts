@@ -32,6 +32,7 @@ describe('ActionItemService', () => {
     task: 'action actionItem',
     completed: false,
     assignee: null,
+    dateCreated: null
   };
 
   beforeEach(() => {

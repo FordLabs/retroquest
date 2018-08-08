@@ -23,6 +23,19 @@
     (deleted)="onDeleted(i)"
     (messageChanged)="onMessageChanged($event, i)"
     (assigneeUpdated)="onAssigneeUpdated($event, i)"
+    (messageClicked)="displayPopup(i)"
   >
   </rq-action-item-task>
 </div>
+
+<rq-action-item-dialog
+  #actionItemDialog
+  [visible]="dialogIsVisible"
+  [actionItem]="selectedActionItem"
+  (visibilityChanged)="dialogIsVisible = $event"
+  (messageChanged)="onMessageChanged($event, selectedActionItemIndex)"
+  (deleted)="onDeleted(selectedActionItemIndex)"
+  (completed)="onCompleted($event, selectedActionItemIndex)"
+  (assignedUpdated)="onAssigneeUpdated($event, selectedActionItemIndex)"
+>
+</rq-action-item-dialog>
