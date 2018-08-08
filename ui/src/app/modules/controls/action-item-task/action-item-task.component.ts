@@ -19,6 +19,9 @@ import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@an
 import {ActionItem, emptyActionItem} from '../../teams/domain/action-item';
 import * as moment from 'moment';
 
+const BACKSPACE_KEY = 8;
+const DELETE_KEY = 46;
+
 @Component({
   selector: 'rq-action-item-task',
   templateUrl: './action-item-task.component.html',
@@ -42,6 +45,7 @@ export class ActionItemTaskComponent {
   @ViewChild('assignee_text_field') assigneeTextField: ElementRef;
 
   taskEditModeEnabled = false;
+  maxMessageLength = 255;
 
   constructor() {
   }
@@ -108,6 +112,17 @@ export class ActionItemTaskComponent {
 
   private selectAllText(): void {
     document.execCommand('selectAll', false, null);
+  }
+
+  public onKeyDown(keyEvent: KeyboardEvent) {
+    if ((this.actionItem.task.length >= this.maxMessageLength)
+      && !this.keyEventIsAnAction(keyEvent)) {
+      keyEvent.preventDefault();
+    }
+  }
+
+  private keyEventIsAnAction(keyEvent: KeyboardEvent): boolean {
+    return keyEvent.keyCode === BACKSPACE_KEY || keyEvent.keyCode === DELETE_KEY;
   }
 }
 

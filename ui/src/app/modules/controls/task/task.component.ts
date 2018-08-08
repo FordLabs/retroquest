@@ -18,6 +18,10 @@
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {emptyThought, Thought} from '../../teams/domain/thought';
 
+
+const BACKSPACE_KEY = 8;
+const DELETE_KEY = 46;
+
 @Component({
   selector: 'rq-task',
   templateUrl: './task.component.html',
@@ -45,11 +49,11 @@ export class TaskComponent {
   @ViewChild('content_value') editableTextArea: ElementRef;
 
   starCountMax = 99;
+  maxMessageLength = 255;
   taskEditModeEnabled = false;
 
   constructor() {
   }
-
 
   public toggleEditMode(): void {
     if (this.taskEditModeEnabled) {
@@ -100,6 +104,17 @@ export class TaskComponent {
     setTimeout(() => {
       this.editableTextArea.nativeElement.blur();
     }, 0);
+  }
+
+  public onKeyDown(keyEvent: KeyboardEvent) {
+    if ((this.task.message.length >= this.maxMessageLength)
+    && !this.keyEventIsAnAction(keyEvent)) {
+      keyEvent.preventDefault();
+    }
+  }
+
+  private keyEventIsAnAction(keyEvent: KeyboardEvent): boolean {
+    return keyEvent.keyCode === BACKSPACE_KEY || keyEvent.keyCode === DELETE_KEY;
   }
 }
 
