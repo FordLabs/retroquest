@@ -80,8 +80,8 @@
         cursor: default;
         font-size: .7rem;
         font-weight: bold;
-        opacity: .4;
-        text-transform: capitalize;
+        opacity: .6;
+        text-transform: lowercase;
       }
 
       .value {
@@ -94,7 +94,17 @@
         height: 18px;
         outline: none;
         text-overflow: ellipsis;
+        transition: border-bottom-color .2s cubic-bezier(.25, .8, .25, 1);
+
         width: 100%;
+
+        &:hover {
+          border-bottom-color: $grape;
+        }
+
+        &:focus {
+          border-bottom-color: $grape;
+        }
       }
     }
 
@@ -184,7 +194,7 @@
       .date-created-header {
         font-size: .65rem;
         font-weight: bold;
-        opacity: .4;
+        opacity: .6;
       }
 
       .date-created-value {

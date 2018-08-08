@@ -100,8 +100,8 @@ export class ActionItemTaskComponent {
       this.assigneeTextField.nativeElement.blur();
     }, 0);
   }
-  public emitAssigneeUpdated(value: string) {
-    this.assigneeUpdated.emit(value);
+  public emitAssigneeUpdated() {
+    this.assigneeUpdated.emit(this.actionItem.assignee);
     this.forceBlurOnAssigneeTextField();
   }
 

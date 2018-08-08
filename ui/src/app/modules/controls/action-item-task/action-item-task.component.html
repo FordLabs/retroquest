@@ -47,8 +47,9 @@
       #assignee_text_field
       class="value"
       [type]="'text'"
-      [value]="actionItem.assignee"
-      (keydown.enter)="emitAssigneeUpdated($event.target.value)"
+      [(ngModel)]="actionItem.assignee"
+      (blur)="emitAssigneeUpdated()"
+      (keydown.enter)="forceBlurOnAssigneeTextField()"
     >
   </div>
 </div>
