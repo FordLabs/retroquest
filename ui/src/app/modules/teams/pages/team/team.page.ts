@@ -222,4 +222,8 @@ export class TeamPageComponent implements OnInit {
       (actionItems: Array<ActionItem>) => this.actionItems = actionItems
     );
   }
+
+  public onEndRetro(): void {
+    this.thoughtService.deleteAllThoughts();
+  }
 }
