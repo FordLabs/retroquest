@@ -370,4 +370,14 @@ describe('TeamPageComponent', () => {
       expect(component.thoughtsArray.length).toEqual(0);
     });
   });
+
+  describe('onEndRetro', () => {
+    it('should delete all thoughts', () => {
+      component.thoughtService = jasmine.createSpyObj({
+        deleteAllThoughts: null
+      });
+      component.onEndRetro();
+      expect(component.thoughtService.deleteAllThoughts).toHaveBeenCalled();
+    });
+  });
 });

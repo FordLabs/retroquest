@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-import {Component, Input, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {FeedbackModalComponent} from '../feedback-modal/feedback-modal.component';
-import {EndRetroModalComponent} from '../end-retro-modal/end-retro-modal.component';
+import {EndRetroDialogComponent} from '../../../controls/end-retro-dialog/end-retro-dialog.component';
 
 @Component({
   selector: 'rq-header',
@@ -28,11 +28,20 @@ export class HeaderComponent {
   @Input() teamName: string;
   @Input() teamId: string;
 
-  @ViewChild(FeedbackModalComponent) feedbackModal: FeedbackModalComponent;
-  @ViewChild(EndRetroModalComponent) endRetroModal: EndRetroModalComponent;
+  @Output() endRetro: EventEmitter<void> = new EventEmitter<void>();
 
-  getCsvUrl (): string {
+  @ViewChild(FeedbackModalComponent) feedbackModal: FeedbackModalComponent;
+  @ViewChild(EndRetroDialogComponent) endRetroDialog: EndRetroDialogComponent;
+
+  getCsvUrl(): string {
     return `api/team/${this.teamId}/csv`;
   }
 
+  public showEndRetroDialog(): void {
+    this.endRetroDialog.show();
+  }
+
+  public onEndRetroDialogSubmitted(): void {
+    this.endRetro.emit();
+  }
 }

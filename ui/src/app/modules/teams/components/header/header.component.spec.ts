@@ -31,11 +31,29 @@ describe('HeaderComponent', () => {
   describe('getCsvUrl', () => {
     it('should return the cvs api url', () => {
       const teamId = 'team-id';
-
       component.teamId = teamId;
-
       expect(component.getCsvUrl()).toEqual(`api/team/${teamId}/csv`);
     });
+  });
 
+  describe('showEndRetroDialog', () => {
+    it('should show the dialog', () => {
+      component.endRetroDialog = jasmine.createSpyObj({
+        show: null
+      });
+      component.showEndRetroDialog();
+      expect(component.endRetroDialog.show).toHaveBeenCalled();
+    });
+  });
+
+  describe('onEndRetroDialogSubmitted', () => {
+    it('should emit the end retro signal', () => {
+      component.endRetro = jasmine.createSpyObj({
+        emit: null
+      });
+
+      component.onEndRetroDialogSubmitted();
+      expect(component.endRetro.emit).toHaveBeenCalled();
+    });
   });
 });

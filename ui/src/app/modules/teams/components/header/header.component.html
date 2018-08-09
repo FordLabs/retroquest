@@ -31,12 +31,18 @@
       <a id="downloadCsv" class="rq-button-secondary" [href]="getCsvUrl()">
         <span class="button-text">Download CSV</span>
       </a>
-      <button id="endRetro" class="rq-button-primary" (click)="endRetroModal.isOpen = true">
+      <button id="endRetro" class="rq-button-primary" (click)="showEndRetroDialog()">
         <span class="button-text">End Retro</span>
       </button>
     </div>
   </div>
 
 </header>
+
 <rq-feedback-modal [teamId]="teamId" #feedbackModal></rq-feedback-modal>
-<rq-end-retro-modal [teamId]="teamId" #endRetroModal></rq-end-retro-modal>
+
+<rq-end-retro-dialog
+  #endRetroModal
+  [visible]="false"
+  (submitted)="onEndRetroDialogSubmitted()"
+></rq-end-retro-dialog>

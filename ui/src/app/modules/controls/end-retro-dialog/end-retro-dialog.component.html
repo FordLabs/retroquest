@@ -15,22 +15,25 @@
   ~ limitations under the License.
   -->
 
-<div id="page">
-  <rq-header
-    [teamName]="teamName"
-    [teamId]="teamId"
-    (endRetro)="onEndRetro()"
-  >
 
-  </rq-header>
-  <div id="team-content">
-    <div class="rq-column" *ngFor="let column of columns">
-      <rq-thoughts-header [column]="column" [thoughtCount]="getColumnThoughtCount(column)"></rq-thoughts-header>
-      <rq-thoughts-column [column]="column" [thoughts]="getThoughtsInColumn(column)"></rq-thoughts-column>
+<div class="dialog">
+
+  <div class="content-area">Do you want to end the retro?</div>
+
+  <div class="footer">
+    <div class="container" id="cancel-button-container">
+      <rq-button
+        [type]="'secondary'"
+        text="nope"
+        (click)="hide()"
+      ></rq-button>
     </div>
-    <div class="rq-column">
-        <rq-actions-header [teamId]="teamId" [thoughtCount]="getActionItemColumnCount()"></rq-actions-header>
-        <rq-actions-column [actionItems]="actionItems"></rq-actions-column>
+    <div class="container" id="end-button-container">
+      <rq-button
+      [type]="'primary'"
+      text="yes!"
+      (click)="submit()"
+      ></rq-button>
     </div>
   </div>
 </div>
