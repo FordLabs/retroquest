@@ -94,12 +94,12 @@ export class ActionItemTaskComponent {
     }, 0);
   }
 
-
-  private forceBlurOnAssigneeTextField() {
+  public forceBlurOnAssigneeTextField() {
     setTimeout(() => {
       this.assigneeTextField.nativeElement.blur();
     }, 0);
   }
+
   public emitAssigneeUpdated() {
     this.assigneeUpdated.emit(this.actionItem.assignee);
     this.forceBlurOnAssigneeTextField();
