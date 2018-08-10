@@ -17,7 +17,7 @@
 
 import {ColumnService} from './column.service';
 import {Observable} from 'rxjs/index';
-import {Column} from '../domain/column';
+import {Column} from '../../domain/column';
 
 describe('ColumnService', () => {
   let service: ColumnService;

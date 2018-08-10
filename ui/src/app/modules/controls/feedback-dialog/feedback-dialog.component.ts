@@ -16,7 +16,7 @@
  */
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {emptyFeedback, Feedback} from '../../teams/domain/feedback';
+import {emptyFeedback, Feedback} from '../../domain/feedback';
 
 @Component({
   selector: 'rq-feedback-dialog',

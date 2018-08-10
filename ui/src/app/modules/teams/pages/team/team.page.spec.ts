@@ -17,14 +17,14 @@
 
 import {TeamPageComponent} from './team.page';
 import {Observable, Subject} from 'rxjs/index';
-import {Column} from '../../domain/column';
-import {emptyThought, Thought} from '../../domain/thought';
+import {Column} from '../../../domain/column';
+import {emptyThought, Thought} from '../../../domain/thought';
 import {TeamService} from '../../services/team.service';
 import {ThoughtService} from '../../services/thought.service';
 import {ColumnService} from '../../services/column.service';
 import {ActionItemService} from '../../services/action.service';
 import {WebsocketService} from '../../services/websocket.service';
-import {ActionItem, emptyActionItem} from '../../domain/action-item';
+import {ActionItem, emptyActionItem} from '../../../domain/action-item';
 
 describe('TeamPageComponent', () => {
 

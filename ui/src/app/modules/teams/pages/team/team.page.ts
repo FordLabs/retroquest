@@ -18,16 +18,16 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 
-import {Column} from '../../domain/column';
-import {Thought} from '../../domain/thought';
-import {ActionItem} from '../../domain/action-item';
+import {Column} from '../../../domain/column';
+import {Thought} from '../../../domain/thought';
+import {ActionItem} from '../../../domain/action-item';
 import {WebsocketService} from '../../services/websocket.service';
 
 import {ThoughtService} from '../../services/thought.service';
 import {TeamService} from '../../services/team.service';
 import {ActionItemService} from '../../services/action.service';
 import {ColumnService} from '../../services/column.service';
-import {WebsocketResponse} from '../../domain/websocket-response';
+import {WebsocketResponse} from '../../../domain/websocket-response';
 
 @Component({
   selector: 'rq-team',

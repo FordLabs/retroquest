@@ -17,7 +17,7 @@
 
 import {ActionsHeaderComponent} from './actions-header.component';
 import {Observable} from 'rxjs/index';
-import {ActionItem} from '../../domain/action-item';
+import {ActionItem} from '../../../domain/action-item';
 import * as moment from 'moment';
 
 describe('ActionsHeaderComponent', () => {

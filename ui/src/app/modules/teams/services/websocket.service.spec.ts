@@ -17,7 +17,7 @@
 
 import {WebsocketService} from './websocket.service';
 import {Observable} from 'rxjs/internal/Observable';
-import {Column} from '../domain/column';
+import {Column} from '../../domain/column';
 import createSpyObj = jasmine.createSpyObj;
 
 describe('WebsocketService', () => {

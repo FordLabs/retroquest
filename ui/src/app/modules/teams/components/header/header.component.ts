@@ -18,7 +18,7 @@
 import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {EndRetroDialogComponent} from '../../../controls/end-retro-dialog/end-retro-dialog.component';
 import {FeedbackService} from '../../services/feedback.service';
-import {Feedback} from '../../domain/feedback';
+import {Feedback} from '../../../domain/feedback';
 import {FeedbackDialogComponent} from '../../../controls/feedback-dialog/feedback-dialog.component';
 
 @Component({

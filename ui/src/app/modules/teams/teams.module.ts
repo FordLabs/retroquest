@@ -30,11 +30,7 @@ import {TeamService} from './services/team.service';
 import {ActionItemService} from './services/action.service';
 import {ColumnService} from './services/column.service';
 import {WebsocketService} from './services/websocket.service';
-import {FeedbackModalComponent} from './components/feedback-modal/feedback-modal.component';
 import {FeedbackService} from './services/feedback.service';
-import {ModalComponent} from './components/modal/modal.component';
-import {FeedbackFormComponent} from './components/feedback-form/feedback-form.component';
-import {ThoughtModalComponent} from './components/thought-modal/thought-modal.component';
 import {AuthGuard} from '../auth/auth-guard/auth.guard';
 import {TeamPageQueryParamGuard} from './services/team-page-query-param-guard';
 import {ControlsModule} from '../controls/controls.module';
@@ -63,13 +59,8 @@ import {ControlsModule} from '../controls/controls.module';
     ThoughtsColumnComponent,
     ThoughtsHeaderComponent,
     ActionsHeaderComponent,
-    ActionsColumnComponent,
-    FeedbackModalComponent,
-    ModalComponent,
-    FeedbackFormComponent,
-    ThoughtModalComponent
-  ],
-  entryComponents: [FeedbackModalComponent]
+    ActionsColumnComponent
+  ]
 })
 export class TeamsModule {
 }

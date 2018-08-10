@@ -16,7 +16,7 @@
  */
 
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {Column} from '../../teams/domain/column';
+import {Column} from '../../domain/column';
 
 @Component({
   selector: 'rq-column-header',

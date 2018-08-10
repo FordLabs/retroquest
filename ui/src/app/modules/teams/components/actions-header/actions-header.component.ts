@@ -16,7 +16,7 @@
  */
 
 import {Component, Input} from '@angular/core';
-import {ActionItem} from '../../domain/action-item';
+import {ActionItem} from '../../../domain/action-item';
 import {ActionItemService} from '../../services/action.service';
 import * as moment from 'moment';
 

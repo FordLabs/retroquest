@@ -16,7 +16,7 @@
  */
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {emptyThought, Thought} from '../../teams/domain/thought';
+import {emptyThought, Thought} from '../../domain/thought';
 
 @Component({
   selector: 'rq-task-dialog',

@@ -16,7 +16,7 @@
  */
 
 import {ActionItemTaskComponent} from './action-item-task.component';
-import {emptyActionItem} from '../../teams/domain/action-item';
+import {emptyActionItem} from '../../domain/action-item';
 
 describe('ThoughtComponent', () => {
   let component: ActionItemTaskComponent;

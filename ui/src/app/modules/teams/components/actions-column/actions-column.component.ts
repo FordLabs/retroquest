@@ -16,7 +16,7 @@
  */
 
 import {Component, Input, ViewChild} from '@angular/core';
-import {ActionItem, emptyActionItem} from '../../domain/action-item';
+import {ActionItem, emptyActionItem} from '../../../domain/action-item';
 import {ActionItemService} from '../../services/action.service';
 import {ActionItemDialogComponent} from '../../../controls/action-item-dialog/action-item-dialog.component';
 

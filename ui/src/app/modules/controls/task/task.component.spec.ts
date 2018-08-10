@@ -16,7 +16,7 @@
  */
 
 import {TaskComponent} from './task.component';
-import {emptyThought} from '../../teams/domain/thought';
+import {emptyThought} from '../../domain/thought';
 
 describe('ThoughtComponent', () => {
   let component: TaskComponent;

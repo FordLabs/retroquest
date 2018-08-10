@@ -17,7 +17,7 @@
 
 import {HeaderComponent} from './header.component';
 import {FeedbackService} from '../../services/feedback.service';
-import {emptyFeedback, Feedback} from '../../domain/feedback';
+import {emptyFeedback, Feedback} from '../../../domain/feedback';
 import {Subject} from 'rxjs';
 
 describe('HeaderComponent', () => {

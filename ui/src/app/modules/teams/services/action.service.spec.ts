@@ -17,7 +17,7 @@
 
 import {ActionItemService} from './action.service';
 import {Observable} from 'rxjs/index';
-import {ActionItem} from '../domain/action-item';
+import {ActionItem} from '../../domain/action-item';
 import {HttpClient} from '@angular/common/http';
 import {WebsocketService} from './websocket.service';
 

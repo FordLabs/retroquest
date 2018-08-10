@@ -18,7 +18,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs/index';
-import {Feedback} from '../domain/feedback';
+import {Feedback} from '../../domain/feedback';
 
 @Injectable()
 export class FeedbackService {
