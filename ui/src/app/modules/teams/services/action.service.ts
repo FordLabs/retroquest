@@ -19,7 +19,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/index';
 
-import {ActionItem} from '../domain/action-item';
+import {ActionItem} from '../../domain/action-item';
 import {WebsocketService} from './websocket.service';
 
 @Injectable()

@@ -16,8 +16,8 @@
  */
 
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {Column} from '../../domain/column';
-import {Thought} from '../../domain/thought';
+import {Column} from '../../../domain/column';
+import {Thought} from '../../../domain/thought';
 import {ThoughtService} from '../../services/thought.service';
 import {ColumnService} from '../../services/column.service';
 

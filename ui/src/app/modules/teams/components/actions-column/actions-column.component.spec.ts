@@ -16,7 +16,7 @@
  */
 
 import {ActionsColumnComponent} from './actions-column.component';
-import {ActionItem} from '../../domain/action-item';
+import {ActionItem} from '../../../domain/action-item';
 import {ActionItemService} from '../../services/action.service';
 
 describe('ActionsColumnComponent', () => {

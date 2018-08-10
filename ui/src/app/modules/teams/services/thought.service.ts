@@ -19,7 +19,7 @@ import {Injectable} from '@angular/core';
 import {Observable, Subject} from 'rxjs/index';
 import {HttpClient} from '@angular/common/http';
 
-import {Thought} from '../domain/thought';
+import {Thought} from '../../domain/thought';
 import {WebsocketService} from './websocket.service';
 
 @Injectable()

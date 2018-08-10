@@ -16,7 +16,7 @@
  */
 
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {emptyThought, Thought} from '../../teams/domain/thought';
+import {emptyThought, Thought} from '../../domain/thought';
 
 
 const BACKSPACE_KEY = 8;

@@ -16,7 +16,7 @@
  */
 
 import {Component} from '@angular/core';
-import {Thought} from '../../teams/domain/thought';
+import {Thought} from '../../domain/thought';
 
 @Component({
   selector: 'rq-style-guide-page',

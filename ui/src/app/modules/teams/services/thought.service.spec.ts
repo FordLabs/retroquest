@@ -17,7 +17,7 @@
 
 import {Observable} from 'rxjs/index';
 import {ThoughtService} from './thought.service';
-import {Thought} from '../domain/thought';
+import {Thought} from '../../domain/thought';
 
 describe('ThoughtService', () => {
   let service: ThoughtService;

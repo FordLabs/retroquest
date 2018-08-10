@@ -20,9 +20,9 @@ import {AuthService} from '../../auth/auth.service';
 import {LoggerFactory} from '@elderbyte/ts-logger';
 import {StompClient} from '@elderbyte/ts-stomp';
 import {Observable} from 'rxjs/internal/Observable';
-import {Thought} from '../domain/thought';
-import {ActionItem} from '../domain/action-item';
-import {Column} from '../domain/column';
+import {Thought} from '../../domain/thought';
+import {ActionItem} from '../../domain/action-item';
+import {Column} from '../../domain/column';
 
 @Injectable()
 export class WebsocketService {

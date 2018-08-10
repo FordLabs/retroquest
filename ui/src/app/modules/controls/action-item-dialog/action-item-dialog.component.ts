@@ -16,7 +16,7 @@
  */
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {ActionItem, emptyActionItem} from '../../teams/domain/action-item';
+import {ActionItem, emptyActionItem} from '../../domain/action-item';
 
 @Component({
   selector: 'rq-action-item-dialog',

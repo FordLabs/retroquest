@@ -16,8 +16,8 @@
  */
 
 import {Component, ElementRef, Input, ViewChild} from '@angular/core';
-import {emptyThought, Thought} from '../../domain/thought';
-import {Column} from '../../domain/column';
+import {emptyThought, Thought} from '../../../domain/thought';
+import {Column} from '../../../domain/column';
 import {ThoughtService} from '../../services/thought.service';
 import {TaskDialogComponent} from '../../../controls/task-dialog/task-dialog.component';
 

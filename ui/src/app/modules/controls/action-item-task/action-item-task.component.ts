@@ -16,7 +16,7 @@
  */
 
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {ActionItem, emptyActionItem} from '../../teams/domain/action-item';
+import {ActionItem, emptyActionItem} from '../../domain/action-item';
 import * as moment from 'moment';
 
 const BACKSPACE_KEY = 8;
