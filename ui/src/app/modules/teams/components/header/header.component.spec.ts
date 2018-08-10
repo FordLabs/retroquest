@@ -16,12 +16,18 @@
  */
 
 import {HeaderComponent} from './header.component';
+import {FeedbackService} from '../../services/feedback.service';
+import {emptyFeedback, Feedback} from '../../domain/feedback';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
+  let mockFeedbackService: FeedbackService;
 
   beforeEach(() => {
-    component = new HeaderComponent();
+    mockFeedbackService = jasmine.createSpyObj({
+      addFeedback: null
+    });
+    component = new HeaderComponent(mockFeedbackService);
   });
 
   it('should create', () => {
@@ -55,5 +61,25 @@ describe('HeaderComponent', () => {
       component.onEndRetroDialogSubmitted();
       expect(component.endRetro.emit).toHaveBeenCalled();
     });
+  });
+
+  describe('onFeedbackSubmitted', () => {
+
+    const fakeFeedback: Feedback = emptyFeedback();
+
+    beforeEach(() => {
+      component.teamId = 'I AM A FAKE TEAM ID';
+      fakeFeedback.comment = 'I AM A FAKE COMMENT';
+      component.onFeedbackSubmitted(fakeFeedback);
+    });
+
+    it('should send the feedback to the backend', () => {
+      expect(mockFeedbackService.addFeedback).toHaveBeenCalledWith(fakeFeedback);
+    });
+
+    it('should send the feedback to the backend', () => {
+      expect(fakeFeedback.teamId).toEqual(component.teamId);
+    });
+
   });
 });

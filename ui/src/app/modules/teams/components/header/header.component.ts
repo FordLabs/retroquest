@@ -16,8 +16,10 @@
  */
 
 import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {FeedbackModalComponent} from '../feedback-modal/feedback-modal.component';
 import {EndRetroDialogComponent} from '../../../controls/end-retro-dialog/end-retro-dialog.component';
+import {FeedbackService} from '../../services/feedback.service';
+import {Feedback} from '../../domain/feedback';
+import {FeedbackDialogComponent} from '../../../controls/feedback-dialog/feedback-dialog.component';
 
 @Component({
   selector: 'rq-header',
@@ -30,10 +32,14 @@ export class HeaderComponent {
 
   @Output() endRetro: EventEmitter<void> = new EventEmitter<void>();
 
-  @ViewChild(FeedbackModalComponent) feedbackModal: FeedbackModalComponent;
+  @ViewChild(FeedbackDialogComponent) feedbackDialog: FeedbackDialogComponent;
   @ViewChild(EndRetroDialogComponent) endRetroDialog: EndRetroDialogComponent;
 
-  getCsvUrl(): string {
+  constructor(private feedbackService: FeedbackService) {
+
+  }
+
+  public getCsvUrl(): string {
     return `api/team/${this.teamId}/csv`;
   }
 
@@ -43,5 +49,10 @@ export class HeaderComponent {
 
   public onEndRetroDialogSubmitted(): void {
     this.endRetro.emit();
+  }
+
+  public onFeedbackSubmitted(feedback: Feedback) {
+    feedback.teamId = this.teamId;
+    this.feedbackService.addFeedback(feedback);
   }
 }

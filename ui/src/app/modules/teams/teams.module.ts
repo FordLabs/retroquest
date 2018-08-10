@@ -34,7 +34,6 @@ import {FeedbackModalComponent} from './components/feedback-modal/feedback-modal
 import {FeedbackService} from './services/feedback.service';
 import {ModalComponent} from './components/modal/modal.component';
 import {FeedbackFormComponent} from './components/feedback-form/feedback-form.component';
-import {EndRetroModalComponent} from './components/end-retro-modal/end-retro-modal.component';
 import {ThoughtModalComponent} from './components/thought-modal/thought-modal.component';
 import {AuthGuard} from '../auth/auth-guard/auth.guard';
 import {TeamPageQueryParamGuard} from './services/team-page-query-param-guard';
@@ -68,7 +67,6 @@ import {ControlsModule} from '../controls/controls.module';
     FeedbackModalComponent,
     ModalComponent,
     FeedbackFormComponent,
-    EndRetroModalComponent,
     ThoughtModalComponent
   ],
   entryComponents: [FeedbackModalComponent]

@@ -133,6 +133,19 @@
         (visibilityChanged)="dialogIsVisible = $event"
       ></rq-task-dialog>
     </div>
+
+    <div class="control-section">
+      <rq-button
+        [text]="'dialog'"
+        [type]="'primary'"
+        (click)="rq_dialog.show()"
+      >
+      </rq-button>
+
+      <rq-feedback-dialog #rq_dialog [visible]="true">
+      </rq-feedback-dialog>
+    </div>
+
   </div>
 
 </rq-page>

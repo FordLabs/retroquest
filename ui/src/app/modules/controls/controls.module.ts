@@ -20,18 +20,19 @@ import {CommonModule} from '@angular/common';
 import {ButtonComponent} from './button/button.component';
 import {StyleGuidePageComponent} from './style-guide-page/style-guide-page.component';
 import {RouterModule} from '@angular/router';
-import { RqPageComponent } from './rq-page/rq-page.component';
-import { ActionBarComponent } from './action-bar/action-bar.component';
-import { TextFieldComponent } from './text-field/text-field.component';
+import {RqPageComponent} from './rq-page/rq-page.component';
+import {ActionBarComponent} from './action-bar/action-bar.component';
+import {TextFieldComponent} from './text-field/text-field.component';
 import {FormsModule} from '@angular/forms';
-import { CountSeperatorComponent } from './count-seperator/count-seperator.component';
-import { ColumnHeaderComponent } from './column-header/column-header.component';
-import { FloatingCharacterCountdownComponent } from './floating-character-countdown/floating-character-countdown.component';
+import {CountSeperatorComponent} from './count-seperator/count-seperator.component';
+import {ColumnHeaderComponent} from './column-header/column-header.component';
+import {FloatingCharacterCountdownComponent} from './floating-character-countdown/floating-character-countdown.component';
 import {TaskComponent} from './task/task.component';
 import {ActionItemTaskComponent} from './action-item-task/action-item-task.component';
 import {TaskDialogComponent} from './task-dialog/task-dialog.component';
 import {ActionItemDialogComponent} from './action-item-dialog/action-item-dialog.component';
 import {EndRetroDialogComponent} from './end-retro-dialog/end-retro-dialog.component';
+import {FeedbackDialogComponent} from './feedback-dialog/feedback-dialog.component';
 
 @NgModule({
   imports: [
@@ -54,7 +55,8 @@ import {EndRetroDialogComponent} from './end-retro-dialog/end-retro-dialog.compo
     FloatingCharacterCountdownComponent,
     ActionItemTaskComponent,
     ActionItemDialogComponent,
-    EndRetroDialogComponent
+    EndRetroDialogComponent,
+    FeedbackDialogComponent,
   ],
 
   exports: [
@@ -70,7 +72,8 @@ import {EndRetroDialogComponent} from './end-retro-dialog/end-retro-dialog.compo
     FloatingCharacterCountdownComponent,
     ActionItemTaskComponent,
     ActionItemDialogComponent,
-    EndRetroDialogComponent
+    EndRetroDialogComponent,
+    FeedbackDialogComponent,
   ]
 
 })
