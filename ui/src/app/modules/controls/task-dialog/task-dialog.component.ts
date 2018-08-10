@@ -40,7 +40,7 @@ export class TaskDialogComponent {
   @Output() starCountIncreased: EventEmitter<number> = new EventEmitter<number>();
   @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  private hide(): void {
+  public hide(): void {
     this.visible = false;
     this.visibilityChanged.emit(this.visible);
   }

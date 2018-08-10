@@ -36,7 +36,7 @@ export class EndRetroDialogComponent {
 
   @Output() submitted: EventEmitter<void> = new EventEmitter<void>();
 
-  private hide(): void {
+  public hide(): void {
     this.visible = false;
   }
 
