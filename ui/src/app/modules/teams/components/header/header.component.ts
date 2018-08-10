@@ -53,6 +53,6 @@ export class HeaderComponent {
 
   public onFeedbackSubmitted(feedback: Feedback) {
     feedback.teamId = this.teamId;
-    this.feedbackService.addFeedback(feedback);
+    this.feedbackService.addFeedback(feedback).subscribe();
   }
 }

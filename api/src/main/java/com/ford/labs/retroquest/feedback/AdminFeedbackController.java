@@ -17,29 +17,27 @@
 
 package com.ford.labs.retroquest.feedback;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/feedback")
-public class FeedbackController {
+@RequestMapping("/api/admin/feedback")
+public class AdminFeedbackController {
 
     private FeedbackRepository feedbackRepository;
 
-    public FeedbackController(FeedbackRepository feedbackRepository) {
+    @Autowired
+    AdminFeedbackController(FeedbackRepository feedbackRepository) {
         this.feedbackRepository = feedbackRepository;
     }
 
-    @PostMapping
-    public ResponseEntity saveFeedback(@RequestBody Feedback feedback) throws URISyntaxException {
-        Feedback savedFeedback = feedbackRepository.save(feedback);
-        return ResponseEntity.created(new URI("/api/feedback/" + savedFeedback.getId())).build();
+    @GetMapping("/all")
+    public List<Feedback> getAllFeedBack() {
+        return feedbackRepository.findAll();
     }
-
 }
