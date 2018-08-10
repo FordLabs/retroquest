@@ -38,7 +38,6 @@ public class FeedbackController {
 
     @PostMapping
     public ResponseEntity saveFeedback(@RequestBody Feedback feedback) throws URISyntaxException {
-        System.out.println("saving some feedback");
         Feedback savedFeedback = feedbackRepository.save(feedback);
         return ResponseEntity.created(new URI("/api/feedback/" + savedFeedback.getId())).build();
     }
