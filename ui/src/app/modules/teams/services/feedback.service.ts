@@ -25,11 +25,12 @@ export class FeedbackService {
 
   constructor(
     private http: HttpClient
-  ) { }
+  ) {
+  }
 
-  addFeedback (feedback: Feedback): Observable<HttpResponse<Object>> {
+  addFeedback(feedback: Feedback): Observable<HttpResponse<Object>> {
     return this.http.post(
-      '/api/feedback/', feedback, {observe: 'response'}
+      '/api/feedback/', feedback, {observe: 'response'},
     );
   }
 }
