@@ -43,6 +43,7 @@
     background-color: $midnight-blue;
     box-shadow: 0 4px 15px opacity($black, .25);
     color: $white;
+    outline: none;
 
     &:hover {
       background-color: $turquoise;

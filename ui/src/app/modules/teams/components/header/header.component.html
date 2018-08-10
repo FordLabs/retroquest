@@ -18,14 +18,14 @@
 <header id="header">
 
   <div id="headerTop">
-      <img src="/assets/RetroQuest.png" title="RetroQuest Logo" id="logo" />
-      <div class="horizontal-separator"></div>
-      <span id="teamName">{{teamName}}</span>
+    <img src="/assets/RetroQuest.png" title="RetroQuest Logo" id="logo"/>
+    <div class="horizontal-separator"></div>
+    <span id="teamName">{{teamName}}</span>
   </div>
 
   <div id="headerBottom">
     <div class="header-bottom-content">
-      <button id="giveFeedback" class="rq-button-secondary" (click)="feedbackModal.isOpen = true">
+      <button id="giveFeedback" class="rq-button-secondary" (click)="feedbackDialog.show()">
         <span class="button-text">Give Feedback</span>
       </button>
       <a id="downloadCsv" class="rq-button-secondary" [href]="getCsvUrl()">
@@ -39,7 +39,10 @@
 
 </header>
 
-<rq-feedback-modal [teamId]="teamId" #feedbackModal></rq-feedback-modal>
+<rq-feedback-dialog
+  #feedbackDialog
+  (submitted)="onFeedbackSubmitted($event)"
+></rq-feedback-dialog>
 
 <rq-end-retro-dialog
   #endRetroModal

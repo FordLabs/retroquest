@@ -80,12 +80,18 @@
       padding-left: $global-side-padding;
       padding-right: $global-side-padding;
 
+      #giveFeedback {
+        outline: none;
+      }
+
       #downloadCsv {
         margin-right: 24px;
+        outline: none;
       }
 
       #endRetro {
         height: 100%;
+        outline: none;
       }
     }
   }

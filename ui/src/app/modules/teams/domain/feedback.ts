@@ -21,3 +21,12 @@ export interface Feedback {
   userEmail: string;
   teamId: string;
 }
+
+export function emptyFeedback(): Feedback {
+  return {
+    stars: 0,
+    comment: '',
+    userEmail: '',
+    teamId: ''
+  };
+}
