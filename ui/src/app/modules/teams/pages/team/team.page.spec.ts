@@ -35,6 +35,7 @@ describe('TeamPageComponent', () => {
   let mockColumnService: ColumnService;
   let mockWebsocketService: WebsocketService;
 
+  let heartbeatTopic: Subject<any>;
   let thoughtsTopic: Subject<any>;
   let actionItemTopic: Subject<any>;
   let columnTitleTopic: Subject<any>;
@@ -56,6 +57,7 @@ describe('TeamPageComponent', () => {
   };
 
   beforeEach((() => {
+    heartbeatTopic = new Subject<any>();
     thoughtsTopic = new Subject<any>();
     actionItemTopic = new Subject<any>();
     columnTitleTopic = new Subject<any>();
@@ -75,9 +77,12 @@ describe('TeamPageComponent', () => {
       closeWebsocket: null,
       getWebsocketState: WebSocket.CLOSED,
 
+      heartbeatTopic: heartbeatTopic,
       thoughtsTopic: thoughtsTopic,
       actionItemTopic: actionItemTopic,
-      columnTitleTopic: columnTitleTopic
+      columnTitleTopic: columnTitleTopic,
+
+      sendHeartbeat: null,
     });
 
     component = new TeamPageComponent(
@@ -230,12 +235,28 @@ describe('TeamPageComponent', () => {
       expect(mockWebsocketService.openWebsocket).toHaveBeenCalled();
     });
 
-    it('should call not open the websocket if it is already opened', () => {
+    it('should send a heartbeat with a open connected', () => {
+      mockWebsocketService.getWebsocketState = () => WebSocket.OPEN;
+      component.ngOnInit();
+      mockActiveRoute.params.next({teamId: 1});
+
+      expect(mockWebsocketService.sendHeartbeat).toHaveBeenCalled();
+    });
+
+    it('should not open the websocket if it is already opened', () => {
       mockWebsocketService.getWebsocketState = () => WebSocket.OPEN;
       component.ngOnInit();
       mockActiveRoute.params.next({teamId: 1});
 
       expect(mockWebsocketService.openWebsocket).not.toHaveBeenCalled();
+    });
+
+    it('should call heartbeatTopic', () => {
+      component.ngOnInit();
+      mockActiveRoute.params.next({teamId: 1});
+      (mockWebsocketService.openWebsocket('team1') as Subject<any>).next({bodyJson: {}});
+
+      expect(mockWebsocketService.heartbeatTopic).toHaveBeenCalled();
     });
 
     it('should call thoughtsTopic', () => {

@@ -40,7 +40,7 @@ export class WebsocketService {
   }
 
   public getWebsocketState(): number {
-    if ( !this.websocket) {
+    if (!this.websocket) {
       return WebSocket.CLOSED;
     }
     return this.websocket.readyState;
@@ -83,6 +83,22 @@ export class WebsocketService {
             headers: headers
           });
         });
+    });
+  }
+
+  public sendHeartbeat() {
+    this.checkForOpenSocket();
+    this.stompClient.send(`/app/heartbeat/ping`, '');
+  }
+
+  public heartbeatTopic(): Observable<any> {
+    this.checkForOpenSocket();
+
+    return new Observable<any>(observer => {
+      const sub = this.stompClient.subscribe(`/topic/heartbeat/pong`);
+      sub.messages.subscribe(m => {
+        observer.next(m);
+      });
     });
   }
 

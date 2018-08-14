@@ -86,12 +86,18 @@ export class TeamPageComponent implements OnInit {
       this.getActionItems();
       this.subscribeToResetThoughts();
 
+      if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
+        this.websocketInit();
+      }
+
       this.globalWindowRef.setInterval(() => {
         if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
           this.websocketService.closeWebsocket();
           this.websocketInit();
+        } else if (this.websocketService.getWebsocketState() === WebSocket.OPEN) {
+          this.websocketService.sendHeartbeat();
         }
-      }, 500);
+      }, 1000 * 60);
     });
   }
 
@@ -101,11 +107,11 @@ export class TeamPageComponent implements OnInit {
   }
 
   public getActionItemColumnCount(): number {
-    return this.actionItems.filter( (actionItem) => !actionItem.completed).length;
+    return this.actionItems.filter((actionItem) => !actionItem.completed).length;
   }
 
   public getThoughtsInColumn(column: Column): Array<Thought> {
-    let thoughtsInColumn = this.thoughtsArray.filter( (thought) => thought.topic === column.topic);
+    let thoughtsInColumn = this.thoughtsArray.filter((thought) => thought.topic === column.topic);
     if (!thoughtsInColumn) {
       return [];
     }
@@ -127,6 +133,9 @@ export class TeamPageComponent implements OnInit {
 
   private websocketInit() {
     this.websocketService.openWebsocket(this.teamId).subscribe(() => {
+
+      this.websocketService.heartbeatTopic().subscribe(message => {
+      });
 
       this.websocketService.thoughtsTopic().subscribe((message) => {
 
@@ -151,7 +160,7 @@ export class TeamPageComponent implements OnInit {
       this.websocketService.columnTitleTopic().subscribe((message) => {
         const response: WebsocketResponse = message.bodyJson;
 
-        if ( response.type === 'put') {
+        if (response.type === 'put') {
           this.updateColumns(response);
         }
       });
@@ -160,7 +169,7 @@ export class TeamPageComponent implements OnInit {
 
   private deleteThought(response: WebsocketResponse) {
     const thoughtId = response.payload as number;
-    if ( thoughtId === -1 ) {
+    if (thoughtId === -1) {
       this.resetThoughts();
     } else {
       this.thoughtsArray = this.thoughtsArray.filter((item) => item.id !== thoughtId);
@@ -202,7 +211,7 @@ export class TeamPageComponent implements OnInit {
 
   private getThoughts(): void {
     this.thoughtService.fetchThoughts(this.teamId).subscribe(
-      (thoughts: Array<Thought>) =>  this.thoughtsArray = thoughts);
+      (thoughts: Array<Thought>) => this.thoughtsArray = thoughts);
   }
 
   private getColumns(): void {
