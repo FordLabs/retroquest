@@ -45,6 +45,7 @@
   input {
     background-color: transparent;
     border: 0;
+    box-sizing: border-box;
     color: $text-off-white;
     cursor: inherit;
     display: inline-block;
@@ -69,7 +70,7 @@
     background-color: transparent;
     border: 0;
     box-sizing: border-box;
-    color: $text-off-white;
+    color: inherit;
     cursor: inherit;
     display: inline-block;
     font-family: inherit;
