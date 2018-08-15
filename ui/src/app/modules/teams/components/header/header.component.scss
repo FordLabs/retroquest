@@ -50,9 +50,16 @@
       width: 3px;
     }
 
-    #logo {
-      max-width: 255px;
+    .logo-link {
+      padding: 0;
+      margin: 0;
+
+      #logo {
+        max-width: 255px;
+      }
     }
+
+
 
     #teamName {
       color: opacity($wet-asphalt, .8);
