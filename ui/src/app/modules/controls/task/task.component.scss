@@ -94,6 +94,11 @@
     word-break: break-word;
     word-wrap: break-word;
 
+    rq-floating-character-countdown {
+      bottom: 2px;
+      right: 18px;
+    }
+
     .assigned-to-section {
       $label-color: #a9a9a9;
       box-sizing: border-box;

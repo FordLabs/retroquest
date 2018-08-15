@@ -36,7 +36,17 @@
       (keydown)="onKeyDown($event)"
     >{{task.message}}
     </div>
+
+    <rq-floating-character-countdown
+      [characterCount]="task.message.length"
+      [charsAreRunningOutThreshold]="50"
+      [maxCharacterCount]="maxMessageLength"
+    >
+    </rq-floating-character-countdown>
+
   </ng-template>
+
+
 </div>
 
 <div class="footer">
