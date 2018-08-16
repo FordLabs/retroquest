@@ -19,10 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {MainApplication.class})
-@AutoConfigureMockMvc
-public class TeamRetroDownloadTest{
+public class TeamRetroDownloadTest extends ControllerTest {
 
     @Autowired
     private TeamRepository teamRepository;
@@ -33,39 +30,37 @@ public class TeamRetroDownloadTest{
     @Autowired
     private JwtBuilder jwtBuilder;
 
-    @Autowired
-    private MockMvc mockMvc;
-
     @Test
     public void canRetrieveCsvOfActionItemsAndThoughts() throws Exception {
         LoginRequest teamEntity = new LoginRequest();
-        teamEntity.setName("Beach Bums");
+        teamEntity.setName(teamId);
         teamEntity.setPassword("password");
 
         restTemplate.postForObject("/api/team/", teamEntity, String.class);
 
-        MvcResult response = mockMvc.perform(get("/api/team/beach-bums/csv")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("beach-bums")))
+        MvcResult response = mockMvc.perform(get("/api/team/" + teamId + "/csv")
+                .header("Authorization", getBearerAuthToken()))
                 .andReturn();
 
-        assertEquals(200, response.getResponse().getStatus());
+        assertEquals(200, response.getResponse()
+                .getStatus());
     }
 
     @Test
     public void cannotDownloadRetroIfNotAuthorizedForBoard() throws Exception {
         LoginRequest teamEntity = new LoginRequest();
-        teamEntity.setName("Beach Bums");
+        teamEntity.setName(teamId);
         teamEntity.setPassword("password");
 
         restTemplate.postForObject("/api/team/", teamEntity, String.class);
 
-        mockMvc.perform(get("/api/team/beach-bums/csv")
+        mockMvc.perform(get("/api/team/" + teamId + "/csv")
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("not-beach-bums")))
                 .andExpect(status().isForbidden());
     }
 
     @After
-    public void cleanUpTestData(){
+    public void cleanUpTestData() {
         teamRepository.deleteAll();
     }
 
