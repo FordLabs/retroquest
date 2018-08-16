@@ -18,25 +18,39 @@
 <div class="content-area"
      [ngClass]="{'disable': actionItem.completed}"
 >
+
+  <div class="content-container">
+
   <span
     class="content-message"
     (click)="emitTaskContentClicked()"
     *ngIf="!taskEditModeEnabled; else content_textarea"
   >{{actionItem.task}}</span>
 
-  <ng-template #content_textarea>
-    <div
-      #content_value
-      class="content-message editable-div"
-      contenteditable="true"
-      [textContent]="actionItem.task"
-      (input)="actionItem.task = content_value.textContent"
-      (keydown.enter)="forceBlur()"
-      (blur)="toggleEditMode()"
-      (keydown)="onKeyDown($event)"
-    >{{actionItem.task}}
-    </div>
-  </ng-template>
+    <ng-template #content_textarea>
+      <div
+        #content_value
+        class="content-message editable-div"
+        contenteditable="true"
+        [textContent]="actionItem.task"
+        (input)="actionItem.task = content_value.textContent"
+        (keydown.enter)="forceBlur()"
+        (blur)="toggleEditMode()"
+        (keydown)="onKeyDown($event)"
+      >{{actionItem.task}}
+      </div>
+
+      <rq-floating-character-countdown
+        [characterCount]="actionItem.task.length"
+        [charsAreRunningOutThreshold]="50"
+        [maxCharacterCount]="maxMessageLength"
+      >
+      </rq-floating-character-countdown>
+
+    </ng-template>
+
+
+  </div>
 
   <div
     class="assigned-to-section"
