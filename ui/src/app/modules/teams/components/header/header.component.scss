@@ -30,48 +30,79 @@
     align-items: center;
     box-sizing: border-box;
 
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
+    height: 64px;
     margin: 0 auto;
     max-width: $desktop-max-width;
     min-width: $desktop-max-width;
-    padding-bottom: 12px;
 
+    padding-bottom: 12px;
     padding-left: $global-side-padding;
     padding-right: $global-side-padding;
 
-    .horizontal-separator {
-      background-color: $wet-asphalt;
-      border-radius: 3px;
-      height: 36px;
-      margin-left: 24px;
-      opacity: .2;
-      width: 3px;
+    position: relative;
+
+    @media only screen and (max-width: 610px) {
+      height: 44px;
     }
 
-    .logo-link {
-      margin: 0;
-      padding: 0;
+    .header-top-content {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      height: 100%;
+      justify-content: left;
+      width: 100%;
 
-      #logo {
-        max-width: 255px;
+      @media only screen and (max-width: 610px) {
+        height: 32px;
+        min-width: 0;
+        position: fixed;
+        width: 100%;
+      }
+
+      .horizontal-separator {
+        background-color: $wet-asphalt;
+        border-radius: 2px;
+        height: 35%;
+        margin-left: 24px;
+        opacity: .1;
+        padding-top: 12px;
+        width: 3px;
+      }
+
+      .logo-link {
+        height: inherit;
+        margin: 0;
+        padding: 0;
+
+        #logo {
+          height: inherit;
+        }
+      }
+
+      #teamName {
+        color: opacity($wet-asphalt, .8);
+        font-size: 1.5rem;
+        margin-left: 24px;
+
+        @media only screen and (max-width: 610px) {
+          font-size: 1rem;
+        }
       }
     }
 
-
-
-    #teamName {
-      color: opacity($wet-asphalt, .8);
-      font-size: 1.5rem;
-      margin-left: 24px;
-    }
   }
 
   #headerBottom {
     background: $white;
     box-sizing: border-box;
+    height: 45px;
     min-width: $desktop-max-width;
+    position: relative;
+
+    @media only screen and (max-width: 610px) {
+      height: 30px;
+    }
 
     .header-bottom-content {
       align-self: center;
@@ -84,21 +115,72 @@
       max-width: $desktop-max-width;
       min-width: inherit;
 
+      @media only screen and (max-width: 610px) {
+        height: 30px;
+        min-width: 0;
+        position: fixed;
+        width: 100%;
+      }
+
       padding-left: $global-side-padding;
       padding-right: $global-side-padding;
 
+      .button-icon {
+        display: none;
+
+        @media only screen and (max-width: 610px) {
+          display: block;
+        }
+      }
+
       #giveFeedback {
         outline: none;
+
+        @media only screen and (max-width: 610px) {
+          font-size: .8rem;
+          height: 100%;
+          padding: 0 18px;
+        }
+
+        .button-text {
+          @media only screen and (max-width: 610px) {
+            display: none;
+          }
+        }
       }
 
       #downloadCsv {
         margin-right: 24px;
         outline: none;
+        padding: 0;
+
+        button {
+
+          .button-text {
+            @media only screen and (max-width: 610px) {
+              display: none;
+            }
+          }
+
+          @media only screen and (max-width: 610px) {
+            font-size: .8rem;
+            height: 100%;
+            padding: 0 18px;
+          }
+        }
+
       }
 
       #endRetro {
         height: 100%;
         outline: none;
+
+        @media only screen and (max-width: 610px) {
+          font-size: .8rem;
+          height: 100%;
+          padding: 0 18px;
+        }
+
       }
     }
   }

@@ -18,20 +18,26 @@
 <header id="header">
 
   <div id="headerTop">
-    <a routerLink="/" class="logo-link">
-      <img src="/assets/RetroQuest.png" title="RetroQuest Logo" id="logo"/>
-    </a>
-    <div class="horizontal-separator"></div>
-    <span id="teamName">{{teamName}}</span>
+    <div class="header-top-content">
+      <a routerLink="/" class="logo-link">
+        <img src="/assets/RetroQuest.png" title="RetroQuest Logo" id="logo"/>
+      </a>
+      <div class="horizontal-separator"></div>
+      <span id="teamName">{{teamName}}</span>
+    </div>
   </div>
 
   <div id="headerBottom">
     <div class="header-bottom-content">
       <button id="giveFeedback" class="rq-button-secondary" (click)="feedbackDialog.show()">
         <span class="button-text">Give Feedback</span>
+        <i class="far fa-comments button-icon"></i>
       </button>
-      <a id="downloadCsv" class="rq-button-secondary" [href]="getCsvUrl()">
-        <span class="button-text">Download CSV</span>
+      <a id="downloadCsv" [href]="getCsvUrl()">
+        <button class="rq-button-secondary">
+          <span class="button-text">Download CSV</span>
+          <i class="fas fa-download button-icon"></i>
+        </button>
       </a>
       <button id="endRetro" class="rq-button-primary" (click)="showEndRetroDialog()">
         <span class="button-text">End Retro</span>
