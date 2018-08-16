@@ -182,7 +182,7 @@ export class TeamPageComponent implements OnInit {
     if (thoughtIndex === -1) {
       this.thoughtsArray.push(thought);
     } else {
-      this.thoughtsArray[thoughtIndex] = thought;
+      Object.assign(this.thoughtsArray[thoughtIndex], thought);
     }
   }
 
@@ -197,7 +197,7 @@ export class TeamPageComponent implements OnInit {
     if (actionItemIndex === -1) {
       this.actionItems.push(actionItem);
     } else {
-      this.actionItems[actionItemIndex] = actionItem;
+      Object.assign(this.actionItems[actionItemIndex], actionItem);
     }
   }
 
