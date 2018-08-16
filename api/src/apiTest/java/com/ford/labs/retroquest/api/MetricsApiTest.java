@@ -6,15 +6,8 @@ import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import org.junit.After;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Base64;
@@ -24,19 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
-public class MetricsApiTest extends AbstractTransactionalJUnit4SpringContextTests {
-
-    @Value("${com.retroquest.adminUsername}")
-    private String adminUsername;
-
-    @Value("${com.retroquest.adminPassword}")
-    private String adminPassword;
-
-    @Autowired
-    private MockMvc mockMvc;
+public class MetricsApiTest extends ControllerTest {
 
     @Autowired
     private TeamRepository teamRepository;
@@ -46,15 +27,13 @@ public class MetricsApiTest extends AbstractTransactionalJUnit4SpringContextTest
 
     @Test
     public void canReadTheTotalNumberOfTeamsCreated() throws Exception {
-        String token = getToken(adminUsername, adminPassword);
-
         Team team = new Team();
         String teamUri = "teamUri";
         team.setUri(teamUri);
         teamRepository.save(team);
 
         MvcResult result = mockMvc.perform(get("/api/admin/metrics/team/count")
-                .header("Authorization", "Basic " + token))
+                .header("Authorization", getBasicAuthToken()))
             .andExpect(status().isOk())
             .andReturn();
         assertEquals("1", result.getResponse().getContentAsString());
@@ -76,13 +55,12 @@ public class MetricsApiTest extends AbstractTransactionalJUnit4SpringContextTest
 
     @Test
     public void canGetFeedbackCount() throws Exception {
-        String token = getToken(adminUsername, adminPassword);
 
         Feedback feedback = new Feedback();
         feedbackRepository.save(feedback);
 
         MvcResult result = mockMvc.perform(get("/api/admin/metrics/feedback/count")
-                .header("Authorization", "Basic " + token))
+                .header("Authorization", getBasicAuthToken()))
                 .andExpect(status().isOk())
                 .andReturn();
         assertEquals("1", result.getResponse().getContentAsString());
@@ -111,11 +89,10 @@ public class MetricsApiTest extends AbstractTransactionalJUnit4SpringContextTest
         feedback2.setStars(2);
         feedbackRepository.save(asList(feedback1, feedback2));
 
-        String token = getToken(adminUsername, adminPassword);
 
         MvcResult result = mockMvc.perform(get("/api/admin/metrics/feedback/average")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Basic " + token))
+                .header("Authorization", getBasicAuthToken()))
                 .andExpect(status().isOk())
                 .andReturn();
         assertEquals("3.0", result.getResponse().getContentAsString());
@@ -130,13 +107,12 @@ public class MetricsApiTest extends AbstractTransactionalJUnit4SpringContextTest
         feedback2.setStars(0);
         feedbackRepository.save(asList(feedback1, feedback2));
 
-        String token = getToken(adminUsername, adminPassword);
-
         MvcResult result = mockMvc.perform(get("/api/admin/metrics/feedback/average")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Basic " + token))
+                .header("Authorization", getBasicAuthToken()))
                 .andExpect(status().isOk())
                 .andReturn();
+
         assertEquals("4.0", result.getResponse().getContentAsString());
     }
 
