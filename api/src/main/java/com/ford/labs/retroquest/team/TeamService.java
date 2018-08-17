@@ -28,6 +28,7 @@ import com.ford.labs.retroquest.thought.ThoughtRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,6 +70,7 @@ public class TeamService {
         Team teamEntity = new Team();
         teamEntity.setName(requestedName);
         teamEntity.setUri(convertTeamNameToURI(requestedName));
+        teamEntity.setDateCreated(LocalDate.now());
 
         String encryptedPassword = passwordEncoder.encode(createTeamRequest.getPassword());
         teamEntity.setPassword(encryptedPassword);

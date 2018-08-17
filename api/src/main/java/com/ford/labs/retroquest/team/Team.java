@@ -62,9 +62,4 @@ public class Team implements Persistable<String> {
     public boolean isNew() {
         return uri != null;
     }
-
-    @PrePersist
-    void setDateCreated() {
-        dateCreated = LocalDate.now();
-    }
 }

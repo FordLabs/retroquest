@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Base64;
 
@@ -33,6 +34,7 @@ public class MetricsApiTest extends ControllerTest {
         Team team = new Team();
         String teamUri = "teamUri";
         team.setUri(teamUri);
+        team.setDateCreated(LocalDate.now());
         teamRepository.save(team);
 
         MvcResult result = mockMvc.perform(get("/api/admin/metrics/team/count")
@@ -245,6 +247,24 @@ public class MetricsApiTest extends ControllerTest {
                 .header("Authorization", getBasicAuthToken()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", Matchers.is(1.0)));
+    }
+
+    @Test
+    public void whenGettingTeamCount_providingOnlyAStartDate_getsAllFromNowToThatDate() throws Exception {
+
+        Team team1 = new Team();
+        team1.setUri("team" + LocalDate.now().toEpochDay());
+        team1.setDateCreated(LocalDate.of(1996, 2, 13));
+        Team team2 = new Team();
+        team2.setUri("team" + (LocalDate.now().toEpochDay() + 1));
+        team2.setDateCreated(LocalDate.of(1995, 5, 8));
+        teamRepository.save(asList(team1, team2));
+
+        mockMvc.perform(get("/api/admin/metrics/team/count?start=1996-01-01")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", getBasicAuthToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", Matchers.is(1)));
     }
 
     private String getToken(String adminUsername, String adminPassword) {

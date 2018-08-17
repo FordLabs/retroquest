@@ -19,8 +19,15 @@ public class MetricsController {
     }
 
     @GetMapping("/team/count")
-    public int getTeamCount() {
-        return metrics.getTeamCount();
+    public int getTeamCount(
+            @RequestParam(name = "start", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                    LocalDate startDate,
+            @RequestParam(name = "end", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                    LocalDate endDate
+    ) {
+        return metrics.getTeamCount(startDate, endDate);
     }
 
     @GetMapping("/feedback/count")

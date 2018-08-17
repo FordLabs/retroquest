@@ -28,6 +28,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -66,14 +67,14 @@ public class TeamServiceTest {
         savedEntity.setUri("a-name");
         savedEntity.setName("A name");
         savedEntity.setPassword("encryptedPassword");
-        savedEntity.setDateCreated();
+        savedEntity.setDateCreated(LocalDate.now());
 
         CreateTeamRequest requestedTeam = new CreateTeamRequest();
         requestedTeam.setName("A name");
         requestedTeam.setPassword("password");
 
         when(passwordEncoder.encode("password")).thenReturn("encryptedPassword");
-        when(this.teamRepository.save(expectedSaveEntity)).thenReturn(savedEntity);
+        when(this.teamRepository.save(any(Team.class))).then(returnsFirstArg());
 
         Team actualTeam = teamService.createNewTeam(requestedTeam);
 
