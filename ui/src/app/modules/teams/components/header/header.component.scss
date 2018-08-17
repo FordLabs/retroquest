@@ -19,12 +19,21 @@
 
 #header {
   background-color: $clouds;
+  box-shadow: 0 1px 2px opacity($black, .1);
+  box-sizing: border-box;
   color: $button-blue;
   font-weight: normal;
-  padding-bottom: 1.5rem;
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 1.5rem;
+  padding: 1.5rem 0;
+  z-index: 3;
+
+
+  @media only screen and (max-width: 610px) {
+    left: 0;
+    padding-bottom: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+  }
 
   #headerTop {
     align-items: center;
@@ -39,14 +48,15 @@
     padding-left: $global-side-padding;
     padding-right: $global-side-padding;
 
-    position: relative;
-
     @media only screen and (max-width: 610px) {
       height: 44px;
+      min-width: 0;
+      width: 100%;
     }
 
     .header-top-content {
       align-items: center;
+      box-sizing: border-box;
       display: flex;
       flex-direction: row;
       height: 100%;
@@ -56,7 +66,6 @@
       @media only screen and (max-width: 610px) {
         height: 32px;
         min-width: 0;
-        position: fixed;
         width: 100%;
       }
 
@@ -94,14 +103,18 @@
   }
 
   #headerBottom {
+    $header-bottom-height: 32px;
     background: $white;
     box-sizing: border-box;
     height: 45px;
     min-width: $desktop-max-width;
+
     position: relative;
 
     @media only screen and (max-width: 610px) {
-      height: 30px;
+      height: $header-bottom-height;
+      min-width: 0;
+      width: 100%;
     }
 
     .header-bottom-content {
@@ -116,7 +129,7 @@
       min-width: inherit;
 
       @media only screen and (max-width: 610px) {
-        height: 30px;
+        height: $header-bottom-height;
         min-width: 0;
         position: fixed;
         width: 100%;
@@ -137,7 +150,6 @@
         outline: none;
 
         @media only screen and (max-width: 610px) {
-          font-size: .8rem;
           height: 100%;
           padding: 0 18px;
         }
@@ -163,7 +175,6 @@
           }
 
           @media only screen and (max-width: 610px) {
-            font-size: .8rem;
             height: 100%;
             padding: 0 18px;
           }
@@ -176,7 +187,7 @@
         outline: none;
 
         @media only screen and (max-width: 610px) {
-          font-size: .8rem;
+          font-size: .9rem;
           height: 100%;
           padding: 0 18px;
         }

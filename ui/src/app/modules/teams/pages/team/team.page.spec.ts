@@ -401,4 +401,50 @@ describe('TeamPageComponent', () => {
       expect(component.thoughtService.deleteAllThoughts).toHaveBeenCalled();
     });
   });
+
+  describe('isSelectedIndex', () => {
+
+    it('should have a default selected index of 0', () => {
+      const result = component.isSelectedIndex(0);
+      expect(result).toBeTruthy();
+    });
+
+    it('should return false when the index passed in is not the selected index', () => {
+      const fakeIndex = 1;
+      component.selectedIndex = 0;
+      const result = component.isSelectedIndex(fakeIndex);
+      expect(result).toBeFalsy();
+    });
+
+    it('should return true when the index passed in is the selected index', () => {
+      const fakeIndex = 0;
+      component.selectedIndex = 0;
+      const result = component.isSelectedIndex(fakeIndex);
+      expect(result).toBeTruthy();
+    });
+  });
+
+  describe('setSelectedIndex', () => {
+
+    it('should set the selected index to the index passed in', () => {
+      const fakeIndex = 2;
+      component.setSelectedIndex(fakeIndex);
+      expect(component.selectedIndex).toEqual(fakeIndex);
+    });
+  });
+
+  describe('actionItemsIndexIsSelected', () => {
+
+    it('should return true if the selected index is 3', () => {
+      const fakeIndex = 3;
+      component.setSelectedIndex(fakeIndex);
+      expect(component.actionItemsIndexIsSelected()).toBeTruthy();
+    });
+
+    it('should return false if the selected index is not 3', () => {
+      const fakeIndex = 2;
+      component.setSelectedIndex(fakeIndex);
+      expect(component.actionItemsIndexIsSelected()).toBeFalsy();
+    });
+  });
 });

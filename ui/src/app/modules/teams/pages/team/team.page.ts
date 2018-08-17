@@ -75,6 +75,7 @@ export class TeamPageComponent implements OnInit {
   columns: Array<Column> = TeamPageComponent.defaultColumns;
   actionItems: Array<ActionItem> = [];
   thoughtsArray: Array<Thought> = [];
+  selectedIndex = 0;
 
   ngOnInit(): void {
 
@@ -234,5 +235,17 @@ export class TeamPageComponent implements OnInit {
 
   public onEndRetro(): void {
     this.thoughtService.deleteAllThoughts();
+  }
+
+  public isSelectedIndex(index: number): boolean {
+    return (index === this.selectedIndex);
+  }
+
+  public setSelectedIndex(index: number): void {
+    this.selectedIndex = index;
+  }
+
+  public actionItemsIndexIsSelected(): boolean {
+    return (this.selectedIndex === 3);
   }
 }
