@@ -180,11 +180,71 @@ public class MetricsApiTest extends ControllerTest {
 
         feedbackRepository.save(asList(feedback1, feedback2, feedback3));
 
-        mockMvc.perform(get("/api/admin/metrics/feedback/count?start=2018-05-01&end=2018-12-31")
+        mockMvc.perform(get("/api/admin/metrics/feedback/count?start=2018-05-01&end=2018-12-01")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", getBasicAuthToken()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", Matchers.is(2)));
+                .andExpect(jsonPath("$", Matchers.is(1)));
+    }
+
+    @Test
+    public void whenGettingTheAverageRating_providingAStartAndEndDate_getsTheBetweenDates() throws Exception {
+
+        Feedback feedback1 = new Feedback();
+        feedback1.setDateCreated(LocalDateTime.of(2018, 4, 1, 1, 1));
+        feedback1.setStars(1);
+        Feedback feedback2 = new Feedback();
+        feedback2.setDateCreated(LocalDateTime.of(2018, 10, 31, 1, 1));
+        feedback2.setStars(1);
+        Feedback feedback3 = new Feedback();
+        feedback3.setDateCreated(LocalDateTime.of(2018, 12, 25, 1, 1));
+        feedback3.setStars(1);
+
+        feedbackRepository.save(asList(feedback1, feedback2, feedback3));
+
+        mockMvc.perform(get("/api/admin/metrics/feedback/average?start=2018-05-01&end2018-12-31")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", getBasicAuthToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", Matchers.is(1.0)));
+    }
+
+    @Test
+    public void whenGettingTheAverageRating_providingOnlyAStartDate_getsAllFromThatDateUntilNow() throws Exception {
+
+        Feedback feedback1 = new Feedback();
+        feedback1.setDateCreated(LocalDateTime.of(1995, 5, 8, 1, 1));
+        feedback1.setStars(1);
+        Feedback feedback2 = new Feedback();
+        feedback2.setDateCreated(LocalDateTime.of(1996, 2, 13, 1, 1));
+        feedback2.setStars(1);
+
+        feedbackRepository.save(asList(feedback1, feedback2));
+
+        mockMvc.perform(get("/api/admin/metrics/feedback/average?start=1996-01-01")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", getBasicAuthToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", Matchers.is(1.0)));
+    }
+
+    @Test
+    public void whenGettingTheAverageRating_providingOnlyAnEndDate_getsAllFromNowToThatDate() throws Exception {
+
+        Feedback feedback1 = new Feedback();
+        feedback1.setStars(1);
+        feedback1.setDateCreated(LocalDateTime.of(1995, 5, 8, 1, 1));
+        Feedback feedback2 = new Feedback();
+        feedback2.setStars(1);
+        feedback2.setDateCreated(LocalDateTime.of(1996, 2, 13, 1, 1));
+
+        feedbackRepository.save(asList(feedback1, feedback2));
+
+        mockMvc.perform(get("/api/admin/metrics/feedback/average?end=1996-01-01")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", getBasicAuthToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", Matchers.is(1.0)));
     }
 
     private String getToken(String adminUsername, String adminPassword) {

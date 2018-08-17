@@ -72,7 +72,7 @@ public class MetricsTest {
     }
 
     @Test
-    public void returnsAppropraiteFeedbackCount_whenGivenAStartAndEndDate() {
+    public void returnsAppropriateFeedbackCount_whenGivenAStartAndEndDate() {
 
         Feedback feedback1 = new Feedback();
         feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
@@ -86,7 +86,7 @@ public class MetricsTest {
     }
 
     @Test
-    public void returnsAppropriatFeedbackCount_whenOnlyGivenAndEndDate() {
+    public void returnsAppropriateFeedbackCount_whenOnlyGivenAndEndDate() {
         Feedback feedback1 = new Feedback();
         feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         Feedback feedback2 = new Feedback();
@@ -94,5 +94,47 @@ public class MetricsTest {
         when(mockFeedbackRepository.findAll()).thenReturn(asList(feedback1, feedback2));
 
         assertEquals(1, metrics.getFeedbackCount(null, LocalDate.of(2018, 2, 2)));
+    }
+
+    @Test
+    public void returnsAppropriateFeedbackAverage_whenOnlyGivenAStartTime() {
+        Feedback feedback1 = new Feedback();
+        feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
+        feedback1.setStars(1);
+        Feedback feedback2 = new Feedback();
+        feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
+        feedback2.setStars(1);
+        when(mockFeedbackRepository.findAllByStarsIsGreaterThanEqual(1)).thenReturn(asList(feedback1, feedback2));
+
+        assertEquals(1.0, metrics.getAverageRating(LocalDate.of(2018, 1, 1), null), .001);
+    }
+
+    @Test
+    public void returnsAppropriateFeedbackAverage_whenOnlyGivenBothAStartAndEndTime() {
+        Feedback feedback1 = new Feedback();
+        feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
+        feedback1.setStars(1);
+        Feedback feedback2 = new Feedback();
+        feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
+        feedback2.setStars(1);
+        Feedback feedback3 = new Feedback();
+        feedback3.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
+        feedback3.setStars(1);
+        when(mockFeedbackRepository.findAllByStarsIsGreaterThanEqual(1)).thenReturn(asList(feedback1, feedback2));
+
+        assertEquals(1.0, metrics.getAverageRating(LocalDate.of(2018, 2, 2), LocalDate.of(2018, 4, 4)), .001);
+    }
+
+    @Test
+    public void returnsAppropriateFeedbackAverage_whenOnlyGivenAnEndTime() {
+        Feedback feedback1 = new Feedback();
+        feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
+        feedback1.setStars(1);
+        Feedback feedback2 = new Feedback();
+        feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
+        feedback2.setStars(1);
+        when(mockFeedbackRepository.findAllByStarsIsGreaterThanEqual(1)).thenReturn(asList(feedback1, feedback2));
+
+        assertEquals(1.0, metrics.getAverageRating(null, LocalDate.of(2018, 4, 4)), .001);
     }
 }

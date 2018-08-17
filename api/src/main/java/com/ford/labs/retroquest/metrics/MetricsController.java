@@ -36,7 +36,14 @@ public class MetricsController {
     }
 
     @GetMapping("/feedback/average")
-    public double getAverageRating() {
+    public double getAverageRating(
+            @RequestParam(name = "start", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                    LocalDate startDate,
+            @RequestParam(name = "end", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                    LocalDate endDate
+    ) {
         return metrics.getAverageRating();
     }
 }

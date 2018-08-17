@@ -49,4 +49,15 @@ public class Metrics {
         OptionalDouble average = allFeedback.stream().mapToDouble(Feedback::getStars).average();
         return average.isPresent() ? average.getAsDouble() : 0.0;
     }
+
+    double getAverageRating(LocalDate startTime, LocalDate endTime) {
+        LocalDateTime finalEndTime = endTime == null ? LocalDateTime.now() : endTime.atStartOfDay();
+        LocalDateTime finalStartTime = startTime == null ? LocalDateTime.MIN : startTime.atStartOfDay();
+        return feedbackRepository.findAllByStarsIsGreaterThanEqual(1).stream()
+                .filter(feedback -> !feedback.getDateCreated().isBefore(finalStartTime))
+                .filter(feedback -> !feedback.getDateCreated().isAfter(finalEndTime))
+                .mapToInt(Feedback::getStars)
+                .average()
+                .orElse(0);
+    }
 }
