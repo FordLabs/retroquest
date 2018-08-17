@@ -17,8 +17,11 @@
 @import 'color-vars';
 @import 'global-vars';
 
+// sass-lint:disable no-vendor-prefixes
+
 #page {
   $guide-button-section-height: 35px;
+  -webkit-overflow-scrolling: touch;
   background-color: $clouds;
   font-family: 'Quicksand', sans-serif;
   height: 100%;
