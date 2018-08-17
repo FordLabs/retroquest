@@ -6,8 +6,12 @@ import com.ford.labs.retroquest.team.TeamRepository;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.OptionalDouble;
+
+import static java.util.stream.Collectors.toList;
 
 @ManagedResource
 public class Metrics {
@@ -27,6 +31,16 @@ public class Metrics {
     @ManagedAttribute
     public int getFeedbackCount() {
         return feedbackRepository.findAll().size();
+    }
+
+    int getFeedbackCount(LocalDate startTime, LocalDate endTime) {
+        LocalDateTime finalEndTime = endTime == null ? LocalDateTime.now() : endTime.atStartOfDay();
+        LocalDateTime finalStartTime = startTime == null ? LocalDateTime.MIN : startTime.atStartOfDay();
+        List<Feedback> feedbackList =  feedbackRepository.findAll().stream()
+                .filter(feedback -> !feedback.getDateCreated().isBefore(finalStartTime))
+                .filter(feedback -> !feedback.getDateCreated().isAfter(finalEndTime))
+                .collect(toList());
+        return feedbackList.size();
     }
 
     @ManagedAttribute

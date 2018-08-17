@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/feedback")
@@ -38,6 +39,7 @@ public class FeedbackController {
 
     @PostMapping
     public ResponseEntity saveFeedback(@RequestBody Feedback feedback) throws URISyntaxException {
+        feedback.setDateCreated(LocalDateTime.now());
         Feedback savedFeedback = feedbackRepository.save(feedback);
         return ResponseEntity.created(new URI("/api/feedback/" + savedFeedback.getId())).build();
     }
