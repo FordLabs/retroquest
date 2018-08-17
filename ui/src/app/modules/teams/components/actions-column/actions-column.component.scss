@@ -28,5 +28,13 @@
     height: auto;
     margin-bottom: 24px;
     width: 100%;
+
+    @media only screen and (max-width: 610px) {
+      font-size: 1rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
   }
 }
