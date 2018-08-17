@@ -30,6 +30,7 @@
     box-shadow: 0 1px 2px opacity($black, .1);
     left: 0;
     padding-bottom: 0;
+    padding-top: 6px;
     position: fixed;
     right: 0;
     top: 0;
@@ -51,6 +52,9 @@
     @media only screen and (max-width: 610px) {
       height: 44px;
       min-width: 0;
+      padding-bottom: 6px;
+      padding-left: 6px;
+      padding-right: 6px;
       width: 100%;
     }
 
@@ -128,15 +132,17 @@
       max-width: $desktop-max-width;
       min-width: inherit;
 
+      padding-left: $global-side-padding;
+      padding-right: $global-side-padding;
+
       @media only screen and (max-width: 610px) {
         height: $header-bottom-height;
         min-width: 0;
+        padding-left: 12px;
+        padding-right: 12px;
         position: fixed;
         width: 100%;
       }
-
-      padding-left: $global-side-padding;
-      padding-right: $global-side-padding;
 
       .button-icon {
         display: none;
