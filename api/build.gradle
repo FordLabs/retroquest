@@ -69,6 +69,14 @@ dockerApiTest.finalizedBy apiTest
 task runAllTests(dependsOn: [test, apiTest]) {
 }
 
+task withH2(type: org.springframework.boot.gradle.run.BootRunTask, dependsOn: 'build') {
+    doFirst() {
+        main = project.mainClassName
+        classpath = sourceSets.main.runtimeClasspath
+        systemProperty 'spring.profiles.active', 'h2'
+    }
+}
+
 jar {
     archiveName = "${archivesBaseName}-${version}.jar"
 }
