@@ -26,15 +26,11 @@
   rq-action-item-task {
     font-size: .9rem;
     height: auto;
-    margin-bottom: 24px;
+    margin-bottom: 12px;
     width: 100%;
 
     @media only screen and (max-width: 610px) {
       font-size: 1rem;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
     }
   }
 }
