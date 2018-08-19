@@ -20,19 +20,33 @@
 
   rq-column-header {
     height: 60px;
-    margin-bottom: 12px;
+    margin-bottom: 30px;
     padding: .2em 24px;
     width: 100%;
+
+    @media only screen and (max-width: 610px) {
+      margin-bottom: 12px;
+    }
   }
 
   rq-count-seperator {
-    margin-bottom: 12px;
+    margin-bottom: 24px;
     width: 100%;
+
+    @media only screen and (max-width: 610px) {
+      margin-bottom: 12px;
+    }
+
   }
 
   rq-text-field {
     height: 45px;
-    margin-bottom: 12px;
+    margin-bottom: 24px;
     width: 100%;
+
+    @media only screen and (max-width: 610px) {
+      font-size: 1rem;
+      margin-bottom: 12px;
+    }
   }
 }
