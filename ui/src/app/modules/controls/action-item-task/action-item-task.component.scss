@@ -45,6 +45,12 @@
     box-shadow: 0 0 0 $host-border-width $action-yellow;
   }
 
+  @media only screen and (max-width: 610px) {
+    &:hover {
+      box-shadow: none;
+    }
+  }
+
   &.edit-mode {
     &:hover {
       box-shadow: 0 0 0 4px $grape;

@@ -33,7 +33,6 @@
 
   width: 100px;
 
-
   &.push-order-to-bottom {
     box-shadow: none;
     order: 99;
@@ -65,6 +64,19 @@
     &:hover {
       box-shadow: 0 0 0 $host-border-width $action-yellow;
     }
+  }
+
+  @media only screen and (max-width: 610px) {
+
+    &.action,
+    &.sad,
+    &.confused,
+    &.happy {
+      &:hover {
+        box-shadow: none;
+      }
+    }
+
   }
 
   &.edit-mode {
