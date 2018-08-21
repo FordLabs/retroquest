@@ -42,6 +42,12 @@
     position: relative;
   }
 
+  @media only screen and (max-width: 610px) {
+    rq-floating-character-countdown {
+      bottom: -18px;
+    }
+  }
+
   input {
     background-color: transparent;
     border: 0;

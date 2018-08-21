@@ -37,7 +37,7 @@
     left: 0;
     position: fixed;
     right: 0;
-    z-index: 3;
+    z-index: 100000;
 
     @media only screen and (max-width: 610px) {
       align-items: center;
@@ -101,7 +101,6 @@
       display: block;
       justify-content: normal;
       margin-bottom: $guide-button-section-height + 12px;
-      margin-top: 94px;
       padding-left: 12px;
       padding-right: 12px;
       padding-top: 0;
