@@ -46,6 +46,9 @@ public class Team implements Persistable<String> {
 
     private Integer failedAttempts;
 
+    @JsonIgnore
+    private LocalDate lastLoginDate;
+
     Team(String uri, String name, String password) {
         this.uri = uri;
         this.name = name;

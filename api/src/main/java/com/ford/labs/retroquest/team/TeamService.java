@@ -108,6 +108,8 @@ public class TeamService {
             throw new PasswordInvalidException();
         }
 
+        savedTeam.setLastLoginDate(LocalDate.now());
+        teamRepository.save(savedTeam);
         updateFailedAttempts(savedTeam, 0);
         return savedTeam;
     }

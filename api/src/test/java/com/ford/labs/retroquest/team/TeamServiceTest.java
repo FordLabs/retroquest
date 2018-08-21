@@ -218,4 +218,23 @@ public class TeamServiceTest {
 
         assertEquals(uri, actualTeam.getUri());
     }
+
+    @Test
+    public void loggingInUpdatesLastLoginDateOfTeam() {
+
+        Team savedTeam = new Team();
+        savedTeam.setName("Name");
+        savedTeam.setPassword("Password");
+        when(teamRepository.findTeamByName(savedTeam.getName())).thenReturn(Optional.of(savedTeam));
+
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setName("Name");
+        loginRequest.setPassword("Password");
+        when(passwordEncoder.matches(loginRequest.getPassword(), savedTeam.getPassword())).thenReturn(true);
+
+        teamService.login(loginRequest);
+
+        assertTrue(savedTeam.getLastLoginDate().isEqual(LocalDate.now()));
+        verify(teamRepository, times(2)).save(savedTeam);
+    }
 }
