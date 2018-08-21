@@ -51,6 +51,6 @@ public class MetricsController {
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                     LocalDate endDate
     ) {
-        return metrics.getAverageRating();
+        return metrics.getAverageRating(startDate, endDate);
     }
 }

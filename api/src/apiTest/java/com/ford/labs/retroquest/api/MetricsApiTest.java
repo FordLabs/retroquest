@@ -91,8 +91,10 @@ public class MetricsApiTest extends ControllerTest {
 
         Feedback feedback1 = new Feedback();
         feedback1.setStars(4);
+        feedback1.setDateCreated(LocalDateTime.now());
         Feedback feedback2 = new Feedback();
         feedback2.setStars(2);
+        feedback2.setDateCreated(LocalDateTime.now());
         feedbackRepository.save(asList(feedback1, feedback2));
 
 
@@ -109,8 +111,10 @@ public class MetricsApiTest extends ControllerTest {
 
         Feedback feedback1 = new Feedback();
         feedback1.setStars(4);
+        feedback1.setDateCreated(LocalDateTime.now());
         Feedback feedback2 = new Feedback();
         feedback2.setStars(0);
+        feedback2.setDateCreated(LocalDateTime.now());
         feedbackRepository.save(asList(feedback1, feedback2));
 
         MvcResult result = mockMvc.perform(get("/api/admin/metrics/feedback/average")
@@ -197,18 +201,18 @@ public class MetricsApiTest extends ControllerTest {
         feedback1.setStars(1);
         Feedback feedback2 = new Feedback();
         feedback2.setDateCreated(LocalDateTime.of(2018, 10, 31, 1, 1));
-        feedback2.setStars(1);
+        feedback2.setStars(2);
         Feedback feedback3 = new Feedback();
         feedback3.setDateCreated(LocalDateTime.of(2018, 12, 25, 1, 1));
         feedback3.setStars(1);
 
         feedbackRepository.save(asList(feedback1, feedback2, feedback3));
 
-        mockMvc.perform(get("/api/admin/metrics/feedback/average?start=2018-05-01&end2018-12-31")
+        mockMvc.perform(get("/api/admin/metrics/feedback/average?start=2018-05-01&end=2018-12-01")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", getBasicAuthToken()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", Matchers.is(1.0)));
+                .andExpect(jsonPath("$", Matchers.is(2.0)));
     }
 
     @Test
@@ -219,7 +223,7 @@ public class MetricsApiTest extends ControllerTest {
         feedback1.setStars(1);
         Feedback feedback2 = new Feedback();
         feedback2.setDateCreated(LocalDateTime.of(1996, 2, 13, 1, 1));
-        feedback2.setStars(1);
+        feedback2.setStars(3);
 
         feedbackRepository.save(asList(feedback1, feedback2));
 
@@ -227,14 +231,14 @@ public class MetricsApiTest extends ControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", getBasicAuthToken()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", Matchers.is(1.0)));
+                .andExpect(jsonPath("$", Matchers.is(3.0)));
     }
 
     @Test
     public void whenGettingTheAverageRating_providingOnlyAnEndDate_getsAllFromNowToThatDate() throws Exception {
 
         Feedback feedback1 = new Feedback();
-        feedback1.setStars(1);
+        feedback1.setStars(3);
         feedback1.setDateCreated(LocalDateTime.of(1995, 5, 8, 1, 1));
         Feedback feedback2 = new Feedback();
         feedback2.setStars(1);
@@ -246,7 +250,7 @@ public class MetricsApiTest extends ControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", getBasicAuthToken()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", Matchers.is(1.0)));
+                .andExpect(jsonPath("$", Matchers.is(3.0)));
     }
 
     @Test
