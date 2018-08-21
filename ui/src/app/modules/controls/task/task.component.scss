@@ -73,7 +73,7 @@
     &.confused,
     &.happy {
       &:hover {
-        box-shadow: none;
+        box-shadow: 0 1px 2px opacity($black, .25);
       }
     }
 
@@ -217,7 +217,6 @@
     }
 
     .star-count-container {
-      flex-direction: row;
       font-size: 1rem;
       position: relative;
 
@@ -226,7 +225,7 @@
         font-size: .9rem;
         margin-left: 3px;
         padding-bottom: 2px;
-        width: 10px;
+        width: 15px;
       }
 
       .star-background {
