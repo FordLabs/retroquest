@@ -19,11 +19,37 @@ import {Component, Input, ViewChild} from '@angular/core';
 import {ActionItem, emptyActionItem} from '../../../domain/action-item';
 import {ActionItemService} from '../../services/action.service';
 import {ActionItemDialogComponent} from '../../../controls/action-item-dialog/action-item-dialog.component';
+import {animate, sequence, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'rq-actions-column',
   templateUrl: './actions-column.component.html',
-  styleUrls: ['./actions-column.component.scss']
+  styleUrls: ['./actions-column.component.scss'],
+  animations: [
+    trigger('anim', [
+      transition('* => void', [
+        style({height: '*', opacity: '1'}),
+        sequence([
+          animate('.1s ease', style({
+            height: '*',
+            opacity: '.2',
+          })),
+          animate('.2s ease', style({height: '0', opacity: 0}))
+        ])
+      ]),
+      transition('void => active', [
+        style({height: '0', opacity: '0', transform: 'translateX(20px)'}),
+        sequence([
+          animate('.1s ease', style({height: '*', opacity: '.2', transform: 'translateX(20px)'})),
+          animate('.1s ease', style({
+            height: '*',
+            opacity: 1,
+            transform: 'translateX(0)',
+          }))
+        ])
+      ])
+    ])
+  ]
 })
 export class ActionsColumnComponent {
 

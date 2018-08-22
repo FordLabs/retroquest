@@ -20,11 +20,37 @@ import {emptyThought, Thought} from '../../../domain/thought';
 import {Column} from '../../../domain/column';
 import {ThoughtService} from '../../services/thought.service';
 import {TaskDialogComponent} from '../../../controls/task-dialog/task-dialog.component';
+import {animate, sequence, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'rq-thoughts-column',
   templateUrl: './thoughts-column.component.html',
-  styleUrls: ['./thoughts-column.component.scss']
+  styleUrls: ['./thoughts-column.component.scss'],
+  animations: [
+    trigger('anim', [
+      transition('* => void', [
+        style({height: '*', opacity: '1'}),
+        sequence([
+          animate('.1s ease', style({
+            height: '*',
+            opacity: '.2',
+          })),
+          animate('.2s ease', style({height: '0', opacity: 0}))
+        ])
+      ]),
+      transition('void => active', [
+        style({height: '0', opacity: '0', transform: 'translateX(20px)'}),
+        sequence([
+          animate('.1s ease', style({height: '*', opacity: '.2', transform: 'translateX(20px)'})),
+          animate('.1s ease', style({
+            height: '*',
+            opacity: 1,
+            transform: 'translateX(0)',
+          }))
+        ])
+      ])
+    ])
+  ]
 })
 export class ThoughtsColumnComponent {
   constructor(private thoughtService: ThoughtService) {
