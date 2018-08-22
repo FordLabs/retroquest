@@ -90,8 +90,11 @@
 
       #teamName {
         color: opacity($wet-asphalt, .8);
+        flex: 1;
         font-size: 1.5rem;
         margin-left: 24px;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         @media only screen and (max-width: 610px) {
           font-size: 1rem;
