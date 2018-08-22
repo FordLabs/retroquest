@@ -28,6 +28,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -66,14 +67,14 @@ public class TeamServiceTest {
         savedEntity.setUri("a-name");
         savedEntity.setName("A name");
         savedEntity.setPassword("encryptedPassword");
-        savedEntity.setDateCreated();
+        savedEntity.setDateCreated(LocalDate.now());
 
         CreateTeamRequest requestedTeam = new CreateTeamRequest();
         requestedTeam.setName("A name");
         requestedTeam.setPassword("password");
 
         when(passwordEncoder.encode("password")).thenReturn("encryptedPassword");
-        when(this.teamRepository.save(expectedSaveEntity)).thenReturn(savedEntity);
+        when(this.teamRepository.save(any(Team.class))).then(returnsFirstArg());
 
         Team actualTeam = teamService.createNewTeam(requestedTeam);
 
@@ -216,5 +217,24 @@ public class TeamServiceTest {
         Team actualTeam = teamService.getTeamByUri(uri);
 
         assertEquals(uri, actualTeam.getUri());
+    }
+
+    @Test
+    public void loggingInUpdatesLastLoginDateOfTeam() {
+
+        Team savedTeam = new Team();
+        savedTeam.setName("Name");
+        savedTeam.setPassword("Password");
+        when(teamRepository.findTeamByName(savedTeam.getName())).thenReturn(Optional.of(savedTeam));
+
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setName("Name");
+        loginRequest.setPassword("Password");
+        when(passwordEncoder.matches(loginRequest.getPassword(), savedTeam.getPassword())).thenReturn(true);
+
+        teamService.login(loginRequest);
+
+        assertTrue(savedTeam.getLastLoginDate().isEqual(LocalDate.now()));
+        verify(teamRepository, times(2)).save(savedTeam);
     }
 }

@@ -18,7 +18,9 @@
 package com.ford.labs.retroquest.team.validation;
 
 import com.ford.labs.retroquest.exception.CaptchaInvalidException;
-import com.ford.labs.retroquest.team.*;
+import com.ford.labs.retroquest.team.CaptchaService;
+import com.ford.labs.retroquest.team.LoginRequest;
+import com.ford.labs.retroquest.team.TeamRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;

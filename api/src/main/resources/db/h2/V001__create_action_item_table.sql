@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS `team` (
   `name` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `failed_attempts` int,
+  `last_login_date` varbinary,
   PRIMARY KEY (`uri`)
 );
 
