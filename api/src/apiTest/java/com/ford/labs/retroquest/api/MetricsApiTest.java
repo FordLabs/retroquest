@@ -144,13 +144,13 @@ public class MetricsApiTest extends ControllerTest {
     public void whenGettingTheTotalNumberofReviews_providingOnlyAStartDate_getsAllFromThatDateUntilNow() throws Exception {
 
         Feedback feedback1 = new Feedback();
-        feedback1.setDateCreated(LocalDateTime.of(1995, 5, 8, 1, 1));
+        feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         Feedback feedback2 = new Feedback();
-        feedback2.setDateCreated(LocalDateTime.of(1996, 2, 13, 1, 1));
+        feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
 
         feedbackRepository.save(asList(feedback1, feedback2));
 
-        mockMvc.perform(get("/api/admin/metrics/feedback/count?start=1996-01-01")
+        mockMvc.perform(get("/api/admin/metrics/feedback/count?start=2018-02-02")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", getBasicAuthToken()))
                 .andExpect(status().isOk())
@@ -161,13 +161,13 @@ public class MetricsApiTest extends ControllerTest {
     public void whenGettingTheTotalNumberofReviews_providingOnlyAnEndDate_getsAllFromNowToThatDate() throws Exception {
 
         Feedback feedback1 = new Feedback();
-        feedback1.setDateCreated(LocalDateTime.of(1995, 5, 8, 1, 1));
+        feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         Feedback feedback2 = new Feedback();
-        feedback2.setDateCreated(LocalDateTime.of(1996, 2, 13, 1, 1));
+        feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
 
         feedbackRepository.save(asList(feedback1, feedback2));
 
-        mockMvc.perform(get("/api/admin/metrics/feedback/count?end=1996-01-01")
+        mockMvc.perform(get("/api/admin/metrics/feedback/count?end=2018-02-02")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", getBasicAuthToken()))
                 .andExpect(status().isOk())
@@ -219,15 +219,15 @@ public class MetricsApiTest extends ControllerTest {
     public void whenGettingTheAverageRating_providingOnlyAStartDate_getsAllFromThatDateUntilNow() throws Exception {
 
         Feedback feedback1 = new Feedback();
-        feedback1.setDateCreated(LocalDateTime.of(1995, 5, 8, 1, 1));
+        feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         feedback1.setStars(1);
         Feedback feedback2 = new Feedback();
-        feedback2.setDateCreated(LocalDateTime.of(1996, 2, 13, 1, 1));
+        feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
         feedback2.setStars(3);
 
         feedbackRepository.save(asList(feedback1, feedback2));
 
-        mockMvc.perform(get("/api/admin/metrics/feedback/average?start=1996-01-01")
+        mockMvc.perform(get("/api/admin/metrics/feedback/average?start=2018-02-02")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", getBasicAuthToken()))
                 .andExpect(status().isOk())
@@ -239,14 +239,14 @@ public class MetricsApiTest extends ControllerTest {
 
         Feedback feedback1 = new Feedback();
         feedback1.setStars(3);
-        feedback1.setDateCreated(LocalDateTime.of(1995, 5, 8, 1, 1));
+        feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         Feedback feedback2 = new Feedback();
         feedback2.setStars(1);
-        feedback2.setDateCreated(LocalDateTime.of(1996, 2, 13, 1, 1));
+        feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
 
         feedbackRepository.save(asList(feedback1, feedback2));
 
-        mockMvc.perform(get("/api/admin/metrics/feedback/average?end=1996-01-01")
+        mockMvc.perform(get("/api/admin/metrics/feedback/average?end=2018-02-02")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", getBasicAuthToken()))
                 .andExpect(status().isOk())
@@ -258,13 +258,13 @@ public class MetricsApiTest extends ControllerTest {
 
         Team team1 = new Team();
         team1.setUri("team" + LocalDate.now().toEpochDay());
-        team1.setDateCreated(LocalDate.of(1996, 2, 13));
+        team1.setDateCreated(LocalDate.of(2018, 2, 2));
         Team team2 = new Team();
         team2.setUri("team" + (LocalDate.now().toEpochDay() + 1));
-        team2.setDateCreated(LocalDate.of(1995, 5, 8));
+        team2.setDateCreated(LocalDate.of(2018, 4, 4));
         teamRepository.save(asList(team1, team2));
 
-        mockMvc.perform(get("/api/admin/metrics/team/count?start=1996-01-01")
+        mockMvc.perform(get("/api/admin/metrics/team/count?start=2018-03-03")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", getBasicAuthToken()))
                 .andExpect(status().isOk())
