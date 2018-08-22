@@ -67,4 +67,22 @@ describe('ActionsHeaderComponent', () => {
       expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(expectedActionItem);
     });
   });
+
+  describe('onSortChanged', () => {
+    beforeEach(() => {
+      component.sortChanged = jasmine.createSpyObj({
+        emit: null
+      });
+    });
+
+    it('should emit the sort state passed in as true', () => {
+      component.onSortChanged(true);
+      expect(component.sortChanged.emit).toHaveBeenCalledWith(true);
+    });
+
+    it('should emit the sort state passed in as false', () => {
+      component.onSortChanged(false);
+      expect(component.sortChanged.emit).toHaveBeenCalledWith(false);
+    });
+  });
 });

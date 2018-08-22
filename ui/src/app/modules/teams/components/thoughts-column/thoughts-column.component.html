@@ -25,6 +25,7 @@
     (messageClicked)="displayPopup(i)"
     (starCountIncreased)="starCountChanged($event, i)"
     (completed)="onCompleted($event, i)"
+    [@fadeInOutAnimation]="thought.state"
   >
   </rq-task>
 </div>

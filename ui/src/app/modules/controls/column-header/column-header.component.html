@@ -35,7 +35,7 @@
 <i class="fas fa-sort-down sort"
    [ngClass]="{
         'sort-icon-translucent': !sorted,
-        'hide': !readOnlyEnabled || type === 'action'
+        'hide': !readOnlyEnabled
      }"
      (click)="toggleSort()"
   ></i>

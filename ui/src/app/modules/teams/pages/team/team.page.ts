@@ -29,6 +29,8 @@ import {ActionItemService} from '../../services/action.service';
 import {ColumnService} from '../../services/column.service';
 import {WebsocketResponse} from '../../../domain/websocket-response';
 
+import * as moment from 'moment';
+
 @Component({
   selector: 'rq-team',
   templateUrl: './team.page.html',
@@ -75,6 +77,8 @@ export class TeamPageComponent implements OnInit {
   columns: Array<Column> = TeamPageComponent.defaultColumns;
   actionItems: Array<ActionItem> = [];
   thoughtsArray: Array<Thought> = [];
+  selectedIndex = 0;
+  actionItemsAreSorted = false;
 
   ngOnInit(): void {
 
@@ -83,7 +87,7 @@ export class TeamPageComponent implements OnInit {
       this.getTeamName();
       this.getColumns();
       this.getThoughts();
-      this.getActionItems();
+      this.subscribeToActionItems();
       this.subscribeToResetThoughts();
 
       if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
@@ -180,6 +184,7 @@ export class TeamPageComponent implements OnInit {
     const thought: Thought = response.payload as Thought;
     const thoughtIndex = this.thoughtsArray.findIndex((item) => item.id === thought.id);
     if (thoughtIndex === -1) {
+      thought.state = 'active';
       this.thoughtsArray.push(thought);
     } else {
       Object.assign(this.thoughtsArray[thoughtIndex], thought);
@@ -195,6 +200,7 @@ export class TeamPageComponent implements OnInit {
     const actionItem: ActionItem = response.payload as ActionItem;
     const actionItemIndex = this.actionItems.findIndex((item) => item.id === actionItem.id);
     if (actionItemIndex === -1) {
+      actionItem.state = 'active';
       this.actionItems.push(actionItem);
     } else {
       Object.assign(this.actionItems[actionItemIndex], actionItem);
@@ -226,7 +232,7 @@ export class TeamPageComponent implements OnInit {
     );
   }
 
-  private getActionItems(): void {
+  private subscribeToActionItems(): void {
     this.actionItemService.fetchActionItems(this.teamId).subscribe(
       (actionItems: Array<ActionItem>) => this.actionItems = actionItems
     );
@@ -234,5 +240,39 @@ export class TeamPageComponent implements OnInit {
 
   public onEndRetro(): void {
     this.thoughtService.deleteAllThoughts();
+  }
+
+  public isSelectedIndex(index: number): boolean {
+    return (index === this.selectedIndex);
+  }
+
+  public setSelectedIndex(index: number): void {
+    this.selectedIndex = index;
+  }
+
+  public actionItemsIndexIsSelected(): boolean {
+    return (this.selectedIndex === 3);
+  }
+
+  public onActionItemsSortChanged(sortState: boolean): void {
+    this.actionItemsAreSorted = sortState;
+  }
+
+  public getActionItems(): Array<ActionItem> {
+    if (this.actionItemsAreSorted) {
+      return this.actionItems.slice().sort((a, b) => moment
+        .utc(this.checkForNullDate(b.dateCreated))
+        .diff(moment.utc(this.checkForNullDate(a.dateCreated))));
+    }
+
+    return this.actionItems;
+  }
+
+  private checkForNullDate(dateCreated: string): string {
+    if (!dateCreated) {
+      const earliestDatePlaceholder = '1999-01-01';
+      return earliestDatePlaceholder;
+    }
+    return dateCreated;
   }
 }

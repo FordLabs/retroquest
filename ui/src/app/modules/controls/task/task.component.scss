@@ -66,6 +66,19 @@
     }
   }
 
+  @media only screen and (max-width: 610px) {
+
+    &.action,
+    &.sad,
+    &.confused,
+    &.happy {
+      &:hover {
+        box-shadow: 0 1px 2px opacity($black, .25);
+      }
+    }
+
+  }
+
   &.edit-mode {
     &:hover {
       box-shadow: 0 0 0 4px $grape;
@@ -136,6 +149,7 @@
         border-radius: inherit;
         box-shadow: none;
         cursor: text;
+        display: inline-block;
         outline: none;
       }
     }
@@ -203,7 +217,6 @@
     }
 
     .star-count-container {
-      flex-direction: row;
       font-size: 1rem;
       position: relative;
 
@@ -212,7 +225,7 @@
         font-size: .9rem;
         margin-left: 3px;
         padding-bottom: 2px;
-        width: 10px;
+        width: 15px;
       }
 
       .star-background {

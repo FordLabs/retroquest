@@ -17,15 +17,73 @@
 @import 'color-vars';
 @import 'global-vars';
 
+// sass-lint:disable no-vendor-prefixes
+
 #page {
+  $guide-button-section-height: 35px;
+  -webkit-overflow-scrolling: touch;
   background-color: $clouds;
   font-family: 'Quicksand', sans-serif;
   height: 100%;
   overflow: auto;
   padding: 0;
 
-  @media only screen and (max-width: 610px) {
-    overflow: scroll;
+  .guide-button-section {
+    background-color: $white;
+    bottom: 0;
+    box-shadow: 1px 0 2px opacity($black, .1);
+    display: none;
+    height: $guide-button-section-height;
+    left: 0;
+    position: fixed;
+    right: 0;
+    z-index: 3;
+
+    @media only screen and (max-width: 610px) {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+    }
+
+    ::ng-deep * {
+      background-color: $happy-green;
+      box-sizing: border-box;
+      height: 100%;
+      opacity: .2;
+      width: 25%;
+
+      &.happy-guide-button {
+        background-color: $happy-green;
+
+        &.selected {
+          opacity: 1;
+        }
+      }
+
+      &.confused-guide-button {
+        background-color: $confused-blue;
+
+        &.selected {
+          opacity: 1;
+        }
+      }
+
+      &.sad-guide-button {
+        background-color: $unhappy-red;
+
+        &.selected {
+          opacity: 1;
+        }
+      }
+
+      &.action-guide-button {
+        background-color: $action-yellow;
+
+        &.selected {
+          opacity: 1;
+        }
+      }
+    }
   }
 
   #team-content {
@@ -37,13 +95,39 @@
     padding-right: $global-side-padding;
     padding-top: 1rem;
     width: $desktop-max-width;
+    z-index: 2;
+
+    @media only screen and (max-width: 610px) {
+      display: block;
+      justify-content: normal;
+      margin-bottom: $guide-button-section-height + 12px;
+      padding-left: 12px;
+      padding-right: 12px;
+      padding-top: 0;
+      width: 100%;
+    }
 
     .rq-column {
       flex-grow: 1;
       width: 300px;
 
+      @media only screen and (max-width: 610px) {
+        width: 100%;
+      }
+
+      &:not(.selected) {
+        @media only screen and (max-width: 610px) {
+          display: none;
+          visibility: hidden;
+        }
+      }
+
       &:not(:last-child) {
         margin-right: 48px;
+
+        @media only screen and (max-width: 610px) {
+          margin-right: 0;
+        }
       }
     }
 

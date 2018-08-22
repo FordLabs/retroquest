@@ -24,13 +24,50 @@
 
   </rq-header>
   <div id="team-content">
-    <div class="rq-column" *ngFor="let column of columns">
-      <rq-thoughts-header [column]="column" [thoughtCount]="getColumnThoughtCount(column)"></rq-thoughts-header>
-      <rq-thoughts-column [column]="column" [thoughts]="getThoughtsInColumn(column)"></rq-thoughts-column>
+    <div
+      class="rq-column"
+      *ngFor="let column of columns; let i = index"
+      [ngClass]="{'selected': isSelectedIndex(i)}"
+    >
+      <rq-thoughts-header [column]="column" [thoughtCount]="getColumnThoughtCount(column)"
+      ></rq-thoughts-header>
+      <rq-thoughts-column [column]="column" [thoughts]="getThoughtsInColumn(column)"
+      ></rq-thoughts-column>
     </div>
-    <div class="rq-column">
-        <rq-actions-header [teamId]="teamId" [thoughtCount]="getActionItemColumnCount()"></rq-actions-header>
-        <rq-actions-column [actionItems]="actionItems"></rq-actions-column>
+    <div
+      class="rq-column"
+      [ngClass]="{'selected': actionItemsIndexIsSelected()}"
+    >
+      <rq-actions-header
+        [teamId]="teamId"
+        [thoughtCount]="getActionItemColumnCount()"
+        (sortChanged)="onActionItemsSortChanged($event)"
+      ></rq-actions-header>
+      <rq-actions-column [actionItems]="getActionItems()"></rq-actions-column>
     </div>
   </div>
+
+  <div class="guide-button-section">
+    <div
+      class="guide-button happy-guide-button"
+      (click)="setSelectedIndex(0)"
+      [ngClass]="{'selected': isSelectedIndex(0)}"
+    ></div>
+    <div
+      class="guide-button confused-guide-button"
+      (click)="setSelectedIndex(1)"
+      [ngClass]="{'selected': isSelectedIndex(1)}"
+    ></div>
+    <div
+      class="guide-button sad-guide-button"
+      (click)="setSelectedIndex(2)"
+      [ngClass]="{'selected': isSelectedIndex(2)}"
+    ></div>
+    <div
+      class="guide-button action-guide-button"
+      (click)="setSelectedIndex(3)"
+      [ngClass]="{'selected': isSelectedIndex(3)}"
+    ></div>
+  </div>
+
 </div>

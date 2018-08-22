@@ -36,7 +36,11 @@ What you need to install before building our project.  This guide will assume yo
 Running the application locally can be done with either an H2 in-memory database or with a docker container of MySQL.
 
 ### In-Memory
-The simplest way to get the application spun up is by using the in-memory database:
+The simplest way to get the application spun up is by using the in-memory database via Gradle:
+```
+./gradlew withH2
+```
+or
 ```
 SPRING_PROFILES_ACTIVE=h2 ./gradlew bootRun
 ```
