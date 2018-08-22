@@ -25,6 +25,7 @@ export interface Thought {
   hearts: number;
   discussed: boolean;
   columnTitle: Column;
+  state?: string;
 }
 
 export function emptyThought (): Thought {

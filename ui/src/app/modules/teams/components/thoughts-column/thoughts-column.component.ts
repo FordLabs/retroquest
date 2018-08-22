@@ -20,11 +20,14 @@ import {emptyThought, Thought} from '../../../domain/thought';
 import {Column} from '../../../domain/column';
 import {ThoughtService} from '../../services/thought.service';
 import {TaskDialogComponent} from '../../../controls/task-dialog/task-dialog.component';
+import {animate, sequence, style, transition, trigger} from '@angular/animations';
+import {fadeInOutAnimation} from '../../../animations/add-delete-animation';
 
 @Component({
   selector: 'rq-thoughts-column',
   templateUrl: './thoughts-column.component.html',
-  styleUrls: ['./thoughts-column.component.scss']
+  styleUrls: ['./thoughts-column.component.scss'],
+  animations: [fadeInOutAnimation]
 })
 export class ThoughtsColumnComponent {
   constructor(private thoughtService: ThoughtService) {

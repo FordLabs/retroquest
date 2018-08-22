@@ -24,6 +24,7 @@
     (messageChanged)="onMessageChanged($event, i)"
     (assigneeUpdated)="onAssigneeUpdated($event, i)"
     (messageClicked)="displayPopup(i)"
+    [@fadeInOutAnimation]="actionItem.state"
   >
   </rq-action-item-task>
 </div>

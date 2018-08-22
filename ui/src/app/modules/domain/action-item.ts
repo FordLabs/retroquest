@@ -23,6 +23,7 @@ export interface ActionItem {
   assignee: string;
   expanded?: boolean;
   dateCreated: string;
+  state?: string;
 }
 
 export function emptyActionItem (): ActionItem {

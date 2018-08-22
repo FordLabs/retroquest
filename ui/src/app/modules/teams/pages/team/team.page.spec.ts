@@ -25,6 +25,7 @@ import {ColumnService} from '../../services/column.service';
 import {ActionItemService} from '../../services/action.service';
 import {WebsocketService} from '../../services/websocket.service';
 import {ActionItem, emptyActionItem} from '../../../domain/action-item';
+import * as moment from 'moment';
 
 describe('TeamPageComponent', () => {
 
@@ -368,7 +369,7 @@ describe('TeamPageComponent', () => {
 
       expect(component.actionItems.length).toEqual(1);
 
-      const updatedActionItem = {'id': 1, 'task': 'hi phil', 'completed': false, 'teamId': 'test', 'assignee': ''};
+      const updatedActionItem = {'id': 1, 'task': 'hi phil', 'completed': false, 'teamId': 'test', 'assignee': '', state: 'active'};
       actionItemTopic.next({bodyJson: {type: 'put', payload: updatedActionItem}});
 
       expect(component.actionItems.length).toEqual(1);
@@ -445,6 +446,91 @@ describe('TeamPageComponent', () => {
       const fakeIndex = 2;
       component.setSelectedIndex(fakeIndex);
       expect(component.actionItemsIndexIsSelected()).toBeFalsy();
+    });
+  });
+
+  describe('getActionItems', () => {
+
+    const nullDateActionItem = emptyActionItem();
+    const earliestActionItem = emptyActionItem();
+    const middleActionItem = emptyActionItem();
+    const latestActionItem = emptyActionItem();
+
+    beforeEach(() => {
+      nullDateActionItem.id = 4;
+      nullDateActionItem.dateCreated = null;
+
+      earliestActionItem.id = 1;
+      earliestActionItem.dateCreated = moment().format();
+
+      middleActionItem.id = 2;
+      middleActionItem.dateCreated = moment().subtract(1, 'd').format();
+
+      latestActionItem.id = 3;
+      latestActionItem.dateCreated = moment().subtract(2, 'd').format();
+
+      component.actionItems = [
+        latestActionItem,
+        earliestActionItem,
+        middleActionItem
+      ];
+    });
+
+    it('should default to returning an unsorted list', () => {
+      const actionItems = component.getActionItems();
+      expect(actionItems[0].id).toEqual(3);
+      expect(actionItems[1].id).toEqual(1);
+      expect(actionItems[2].id).toEqual(2);
+    });
+
+    it('should return a decending sorted list of action items', () => {
+      component.actionItemsAreSorted = true;
+      const actionItems = component.getActionItems();
+      expect(actionItems[0].id).toEqual(1);
+      expect(actionItems[1].id).toEqual(2);
+      expect(actionItems[2].id).toEqual(3);
+    });
+
+    it('should return a unsort a previously sorted list of action items', () => {
+      component.actionItemsAreSorted = true;
+      component.getActionItems();
+
+      component.actionItemsAreSorted = false;
+      const actionItems = component.getActionItems();
+      expect(actionItems[0].id).toEqual(3);
+      expect(actionItems[1].id).toEqual(1);
+      expect(actionItems[2].id).toEqual(2);
+    });
+
+    it('should return a decending sorted list of action items with null dates at the bottom', () => {
+      component.actionItems = [
+        latestActionItem,
+        earliestActionItem,
+        nullDateActionItem,
+        middleActionItem
+      ];
+
+      component.actionItemsAreSorted = true;
+      const actionItems = component.getActionItems();
+      expect(actionItems[0].id).toEqual(1);
+      expect(actionItems[1].id).toEqual(2);
+      expect(actionItems[2].id).toEqual(3);
+      expect(actionItems[3].id).toEqual(nullDateActionItem.id);
+    });
+
+  });
+
+  describe('onActionItemsSortChanged', () => {
+
+    it('should set the sort flag on action items to true', () => {
+      component.onActionItemsSortChanged(true);
+      expect(component.actionItemsAreSorted).toBeTruthy();
+    });
+
+    it('should set the sort flag on action items to false', () => {
+      component.onActionItemsSortChanged(true);
+      component.onActionItemsSortChanged(false);
+      expect(component.actionItemsAreSorted).toBeFalsy();
     });
   });
 });
