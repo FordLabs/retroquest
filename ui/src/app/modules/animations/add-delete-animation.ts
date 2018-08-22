@@ -39,4 +39,4 @@ export const fadeInOutAnimation = trigger('fadeInOutAnimation', [
       }))
     ])
   ])
-])
+]);
