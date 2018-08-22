@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ActionItem} from '../../../domain/action-item';
 import {ActionItemService} from '../../services/action.service';
 import * as moment from 'moment';
@@ -33,9 +33,11 @@ export class ActionsHeaderComponent {
   @Input() teamId: string;
   @Input() thoughtCount: number;
 
+  @Output() sortChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   maxInputLength = 255;
 
-  addActionItem(newMessage: string): void {
+  public addActionItem(newMessage: string): void {
     if (newMessage && newMessage.length) {
       const todaysDate = moment().format();
       const actionItem: ActionItem = {
@@ -49,5 +51,9 @@ export class ActionsHeaderComponent {
 
       this.actionItemService.addActionItem(actionItem);
     }
+  }
+
+  public onSortChanged(sortState: boolean): void {
+    this.sortChanged.emit(sortState);
   }
 }
