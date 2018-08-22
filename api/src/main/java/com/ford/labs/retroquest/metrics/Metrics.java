@@ -69,4 +69,13 @@ public class Metrics {
                 .average()
                 .orElse(0);
     }
+
+    public int getTeamLogins(LocalDate startDate, LocalDate endDate) {
+        LocalDate finalEndDate = endDate == null ? LocalDate.now() : endDate;
+        LocalDate finalStartDate = startDate == null ? LocalDate.MIN : startDate;
+        return teamRepository.findAll().stream()
+                .filter(team -> !team.getLastLoginDate().isBefore(finalStartDate))
+                .filter(team -> !team.getLastLoginDate().isAfter(finalEndDate))
+                .collect(toList()).size();
+    }
 }

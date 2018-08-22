@@ -271,6 +271,60 @@ public class MetricsApiTest extends ControllerTest {
                 .andExpect(jsonPath("$", Matchers.is(1)));
     }
 
+    @Test
+    public void whenGettingTeamLogins_providingOnlyAStartDate_getsAllFromThenToNow() throws Exception {
+        Team team1 = new Team();
+        team1.setUri("teamLoginOnlyStartDate1");
+        team1.setLastLoginDate(LocalDate.of(2018, 1, 1));
+        Team team2 = new Team();
+        team2.setUri("teamLoginOnlyStartDate2");
+        team2.setLastLoginDate(LocalDate.of(2018, 3, 3));
+        teamRepository.save(asList(team1, team2));
+
+        mockMvc.perform(get("/api/admin/metrics/team/logins?start=2018-02-02")
+                .header("Authorization", getBasicAuthToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", Matchers.is(1)));
+    }
+
+    @Test
+    public void whenGettingTeamLogins_providingOnlyAnEndDate_getsAllFromTheBegginingOfTimeToThatDate() throws Exception {
+        Team team1 = new Team();
+        team1.setUri("teamLoginsOnlyEndDate1");
+        team1.setLastLoginDate(LocalDate.of(2018, 1, 1));
+        Team team2 = new Team();
+        team2.setUri("teamLoginsOnlyEndDate2");
+        team2.setLastLoginDate(LocalDate.of(2018, 3, 3));
+        teamRepository.save(asList(team1, team2));
+
+        mockMvc.perform(get("/api/admin/metrics/team/logins?end=2018-02-02")
+                .header("Authorization", getBasicAuthToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", Matchers.is(1)));
+    }
+
+    @Test
+    public void whenGettingTeamLogins_providingAStartAndEndDate_getsAllBetweenThem() throws Exception {
+        Team team1 = new Team();
+        team1.setUri("teamLoginStartAndEndDate1");
+        team1.setName("teamLoginStartAndEndDate1");
+        team1.setLastLoginDate(LocalDate.of(2018, 1, 1));
+        Team team2 = new Team();
+        team2.setUri("teamLoginStartAndEndDate2");
+        team2.setName("teamLoginStartAndEndDate2");
+        team2.setLastLoginDate(LocalDate.of(2018, 3, 3));
+        Team team3 = new Team();
+        team3.setUri("teamLoginStartAndEndDate3");
+        team3.setName("teamLoginStartAndEndDate3");
+        team3.setLastLoginDate(LocalDate.of(2018, 5, 5));
+        teamRepository.save(asList(team1, team2, team3));
+
+        mockMvc.perform(get("/api/admin/metrics/team/logins?start=2018-02-02&end=2018-04-04")
+                .header("Authorization", getBasicAuthToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", Matchers.is(1)));
+    }
+
     private String getToken(String adminUsername, String adminPassword) {
         return Base64.getEncoder().encodeToString((adminUsername + ":"+ adminPassword).getBytes());
     }

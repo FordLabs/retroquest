@@ -169,4 +169,39 @@ public class MetricsTest {
 
         assertEquals(1.0, metrics.getAverageRating(null, LocalDate.of(2018, 4, 4)), .001);
     }
+
+    @Test
+    public void returnsOnlyLoginsBeforeEndDate_whenOnlyGivenEndDate() {
+        Team team1 = new Team();
+        team1.setLastLoginDate(LocalDate.of(2018, 1, 1));
+        Team team2 = new Team();
+        team2.setLastLoginDate(LocalDate.of(2018, 3, 3));
+        when(mockTeamRepository.findAll()).thenReturn(asList(team1, team2));
+
+        assertEquals(1, metrics.getTeamLogins(null, LocalDate.of(2018, 2, 2)));
+    }
+
+    @Test
+    public void returnsOnlyLoginsAfterStart_whenOnlyGivenStartDate() {
+        Team team1 = new Team();
+        team1.setLastLoginDate(LocalDate.of(2018, 1, 1));
+        Team team2 = new Team();
+        team2.setLastLoginDate(LocalDate.of(2018, 3, 3));
+        when(mockTeamRepository.findAll()).thenReturn(asList(team1, team2));
+
+        assertEquals(1, metrics.getTeamLogins(LocalDate.of(2018, 2, 2), null));
+    }
+
+    @Test
+    public void returnsOnlyLoginsBetweenDates_whenGivenStartAndEndDate() {
+        Team team1 = new Team();
+        team1.setLastLoginDate(LocalDate.of(2018, 1, 1));
+        Team team2 = new Team();
+        team2.setLastLoginDate(LocalDate.of(2018, 3, 3));
+        Team team3 = new Team();
+        team3.setLastLoginDate(LocalDate.of(2018, 5, 5));
+        when(mockTeamRepository.findAll()).thenReturn(asList(team1, team2, team3));
+
+        assertEquals(1, metrics.getTeamLogins(LocalDate.of(2018, 2, 2), LocalDate.of(2018, 4, 4)));
+    }
 }

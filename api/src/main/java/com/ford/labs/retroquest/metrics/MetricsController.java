@@ -53,4 +53,16 @@ public class MetricsController {
     ) {
         return metrics.getAverageRating(startDate, endDate);
     }
+
+    @GetMapping("/team/logins")
+    public int getLogins(
+            @RequestParam(name = "start", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                    LocalDate startDate,
+            @RequestParam(name = "end", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                    LocalDate endDate
+    ) {
+        return metrics.getTeamLogins(startDate, endDate);
+    }
 }
