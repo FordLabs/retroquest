@@ -26,6 +26,7 @@ import {BoardsModule} from './modules/boards/boards.module';
 import {TokenInterceptor} from './modules/auth/token-interceptor/token.interceptor';
 import {TeamService} from './modules/teams/services/team.service';
 import {ControlsModule} from './modules/controls/controls.module';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import {ControlsModule} from './modules/controls/controls.module';
     ControlsModule,
     BoardsModule,
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     RouterModule.forRoot([
       {path: '', redirectTo: 'create', pathMatch: 'full'}

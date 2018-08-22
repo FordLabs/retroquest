@@ -184,6 +184,7 @@ export class TeamPageComponent implements OnInit {
     const thought: Thought = response.payload as Thought;
     const thoughtIndex = this.thoughtsArray.findIndex((item) => item.id === thought.id);
     if (thoughtIndex === -1) {
+      thought.state = 'active';
       this.thoughtsArray.push(thought);
     } else {
       Object.assign(this.thoughtsArray[thoughtIndex], thought);
@@ -199,6 +200,7 @@ export class TeamPageComponent implements OnInit {
     const actionItem: ActionItem = response.payload as ActionItem;
     const actionItemIndex = this.actionItems.findIndex((item) => item.id === actionItem.id);
     if (actionItemIndex === -1) {
+      actionItem.state = 'active';
       this.actionItems.push(actionItem);
     } else {
       Object.assign(this.actionItems[actionItemIndex], actionItem);

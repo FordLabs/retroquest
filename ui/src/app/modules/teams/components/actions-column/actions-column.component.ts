@@ -19,11 +19,14 @@ import {Component, Input, ViewChild} from '@angular/core';
 import {ActionItem, emptyActionItem} from '../../../domain/action-item';
 import {ActionItemService} from '../../services/action.service';
 import {ActionItemDialogComponent} from '../../../controls/action-item-dialog/action-item-dialog.component';
+import {animate, sequence, style, transition, trigger} from '@angular/animations';
+import {fadeInOutAnimation} from '../../../animations/add-delete-animation';
 
 @Component({
   selector: 'rq-actions-column',
   templateUrl: './actions-column.component.html',
-  styleUrls: ['./actions-column.component.scss']
+  styleUrls: ['./actions-column.component.scss'],
+  animations: [fadeInOutAnimation]
 })
 export class ActionsColumnComponent {
 

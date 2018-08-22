@@ -369,7 +369,7 @@ describe('TeamPageComponent', () => {
 
       expect(component.actionItems.length).toEqual(1);
 
-      const updatedActionItem = {'id': 1, 'task': 'hi phil', 'completed': false, 'teamId': 'test', 'assignee': ''};
+      const updatedActionItem = {'id': 1, 'task': 'hi phil', 'completed': false, 'teamId': 'test', 'assignee': '', state: 'active'};
       actionItemTopic.next({bodyJson: {type: 'put', payload: updatedActionItem}});
 
       expect(component.actionItems.length).toEqual(1);
