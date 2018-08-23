@@ -14,39 +14,113 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 @import 'color-vars';
 
 #createContainer {
-  background-color: $modal-blur;
+  background-color: $clouds;
   display: flex;
   height: 100%;
+  overflow: auto;
   width: 100%;
 
   #app-content {
-    background-color: $white;
+    background-color: transparent;
     border-radius: 3px;
-    box-shadow: 0 3px 30px 0 opacity($black, .25);
     display: block;
     margin: auto;
-    max-width: 450px;
+    max-width: 380px;
     padding: 24px 48px;
 
-    #logo {
+    .logo-container {
+      align-items: center;
+      display: flex;
+      height: 45px;
+      justify-items: center;
+      margin-bottom: 36px;
       max-width: 100%;
-      width: auto;
+      width: 100%;
+
+      #logo {
+        height: 100%;
+        margin: 0 auto;
+      }
     }
 
     .rq-team-controls {
       align-items: center;
       display: flex;
       justify-content: center;
+
+      .rq-form-header {
+        margin-bottom: 24px;
+
+        .header-text {
+          font-size: 1.8rem;
+          font-weight: bold;
+        }
+
+        #loginBoard {
+          color: $confused-blue;
+          font-size: .8rem;
+        }
+
+      }
+
+      .rq-input-group {
+        box-sizing: border-box;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        margin-top: 12px;
+        position: relative;
+        width: 100%;
+
+        ::ng-deep {
+
+          .rq-validation-message {
+            font-size: .8rem;
+          }
+
+          label {
+            font-size: .9rem;
+            font-weight: bold;
+          }
+
+          input {
+            background-color: $white;
+            border: 0;
+            border-radius: 3px;
+            box-sizing: border-box;
+            color: $wet-asphalt;
+            font-size: .9rem;
+            font-weight: bold;
+            height: 35px;
+            margin: 12px 0 0;
+            outline: none;
+            padding: 12px 36px 12px 12px;
+            width: 100%;
+
+            &::placeholder {
+              opacity: .3;
+            }
+
+            &:focus {
+              box-shadow: 0 0 0 1px $turquoise;
+            }
+          }
+        }
+      }
     }
 
-    #createRetroButton {
-      background: linear-gradient(to right, $confused-blue, $button-blue);
-      box-shadow: 0 3px 30px 0 opacity($black, .25);
-      margin-top: 1.5rem;
+    rq-button {
+      background-color: $turquoise;
+      border-radius: 3px;
+      box-shadow: none;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 24px;
+      text-transform: capitalize;
+      width: 100%;
     }
   }
 }
