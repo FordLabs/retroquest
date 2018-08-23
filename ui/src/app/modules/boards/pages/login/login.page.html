@@ -23,23 +23,24 @@
     (resolved)="$event && login($event)"
   ></re-captcha>
   <div id="app-content">
-    <img src="/assets/RetroQuest.png" title="RetroQuest Logo" id="logo"/>
+    <div class="logo-container">
+      <img src="/assets/RetroQuest.png" title="RetroQuest Logo" id="logo"/>
+    </div>
     <div class="rq-team-controls">
       <form id="loginForm" class="rq-form">
         <div class="rq-form-header">
-          <div>Sign into your retro board</div>
-          <a id="createBoard" routerLink="/create">Don’t have a board? Create one!</a>
+          <div class="header-text">Sign into your board!</div>
+          <a id="createBoard" routerLink="/create">Don’t have a board?</a>
         </div>
 
         <div class="rq-form-body">
           <div class="rq-input-group">
             <label for="teamNameInput">Board name</label>
             <input
-                   id="teamNameInput"
-                   class="rq-input"
-                   name="teamName"
-                   placeholder="ex. Mustang Design Retro"
-                   [(ngModel)]="teamName"/>
+              id="teamNameInput"
+              class="rq-input"
+              name="teamName"
+              [(ngModel)]="teamName"/>
           </div>
           <div class="rq-input-group">
             <label for="teamPasswordInput">Password</label>
@@ -50,9 +51,14 @@
                    [(ngModel)]="password"/>
           </div>
           <span id="errorMessage" class="rq-error-message">{{errorMessage}}</span>
-          <button id="signInButton" class="rq-button" (click)="requestCaptchaStateAndLogIn()">
-            Sign In
-          </button>
+          <rq-button
+            id="signInButton"
+            class="rq-button"
+            (click)="requestCaptchaStateAndLogIn()"
+            type="primary"
+            text="Sign In"
+          >
+          </rq-button>
         </div>
       </form>
     </div>

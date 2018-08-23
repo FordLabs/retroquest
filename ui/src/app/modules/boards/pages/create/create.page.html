@@ -23,23 +23,24 @@
       siteKey="6LeZOmMUAAAAAOq4uXmluNuIio7XGx7U-ncmOzGT"
       (resolved)="$event && create($event)"
     ></re-captcha>
-    <img src="/assets/RetroQuest.png" title="RetroQuest Logo" id="logo"/>
+    <div class="logo-container">
+      <img src="/assets/RetroQuest.png" title="RetroQuest Logo" id="logo"/>
+    </div>
     <div class="rq-team-controls">
       <form id="createForm" class="rq-form">
         <div class="rq-form-header">
-          <div>Create a new retro board</div>
-          <a id="loginBoard" routerLink="/login">Already have a board? Log in!</a>
+          <div class="header-text">Create a board!</div>
+          <a id="loginBoard" routerLink="/login">Already have a board?</a>
         </div>
 
         <div class="rq-form-body">
           <div class="rq-input-group">
             <label for="teamNameInput">Board name</label>
             <input
-                   id="teamNameInput"
-                   class="rq-input"
-                   name="teamName"
-                   placeholder="ex. Mustang Design Retro"
-                   [(ngModel)]="teamName"/>
+              id="teamNameInput"
+              class="rq-input"
+              name="teamName"
+              [(ngModel)]="teamName"/>
             <span class="rq-validation-message">
               Names must not contain special characters.
             </span>
@@ -50,8 +51,11 @@
                    class="rq-input"
                    name="password"
                    type="password"
-                   placeholder="8 or more characters with a mix of numbers and letters"
                    [(ngModel)]="password"/>
+
+            <span class="rq-validation-message"
+            >8 or more characters with a mix of numbers and letters</span>
+
           </div>
           <div class="rq-input-group">
             <label for="teamPasswordConfirmInput">Confirm Password</label>
@@ -59,13 +63,15 @@
                    class="rq-input"
                    name="confirmPassword"
                    type="password"
-                   placeholder="ex. G0Furth3r"
                    [(ngModel)]="confirmPassword"/>
           </div>
           <span id="errorMessage" class="rq-error-message">{{errorMessage}}</span>
-          <button id="createRetroButton" class="rq-button" (click)="requestCaptchaStateAndCreateTeam()">
-            Create Board
-          </button>
+          <rq-button
+            id="createRetroButton"
+            type='primary'
+            text="create board"
+            (click)="requestCaptchaStateAndCreateTeam()">
+          </rq-button>
         </div>
       </form>
     </div>
