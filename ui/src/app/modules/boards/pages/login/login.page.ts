@@ -101,4 +101,5 @@ export class LoginComponent {
     console.error('A login error occurred: ', this.errorMessage);
     return of(this.errorMessage);
   }
+
 }
