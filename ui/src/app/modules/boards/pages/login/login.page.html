@@ -33,14 +33,16 @@
           <a id="createBoard" routerLink="/create">Don’t have a board?</a>
         </div>
 
-        <div class="rq-form-body">
+        <form class="rq-form-body" (keydown.enter)="requestCaptchaStateAndLogIn()">
           <div class="rq-input-group">
             <label for="teamNameInput">Board name</label>
             <input
               id="teamNameInput"
               class="rq-input"
               name="teamName"
-              [(ngModel)]="teamName"/>
+              [(ngModel)]="teamName"
+              rqFocusOnLoad
+            />
           </div>
           <div class="rq-input-group">
             <label for="teamPasswordInput">Password</label>
@@ -59,7 +61,7 @@
             text="Sign In"
           >
           </rq-button>
-        </div>
+        </form>
       </form>
     </div>
     <rq-brand-footer></rq-brand-footer>
