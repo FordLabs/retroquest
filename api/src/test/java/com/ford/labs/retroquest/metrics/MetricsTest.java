@@ -204,4 +204,11 @@ public class MetricsTest {
 
         assertEquals(1, metrics.getTeamLogins(LocalDate.of(2018, 2, 2), LocalDate.of(2018, 4, 4)));
     }
+
+    @Test
+    public void doesntReturnTeamsWithNoLoginDates() {
+        Team team1 = new Team();
+        when(mockTeamRepository.findAll()).thenReturn(asList(team1));
+        assertEquals(0, metrics.getTeamLogins(null, null));
+    }
 }

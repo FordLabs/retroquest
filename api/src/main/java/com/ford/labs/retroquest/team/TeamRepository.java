@@ -20,10 +20,13 @@ package com.ford.labs.retroquest.team;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface TeamRepository extends JpaRepository<Team, String> {
     Optional<Team> findTeamByName(String name);
     Optional<Team> findTeamByUri(String uri);
+    List<Team> findAllByLastLoginDateAfterAndLastLoginDateBefore(LocalDate start, LocalDate end);
 }
