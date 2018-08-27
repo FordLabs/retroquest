@@ -72,11 +72,7 @@ public class Metrics {
 
     public int getTeamLogins(LocalDate startDate, LocalDate endDate) {
         LocalDate finalEndDate = endDate == null ? LocalDate.now() : endDate;
-        LocalDate finalStartDate = startDate == null ? LocalDate.MIN : startDate;
-        return teamRepository.findAll().stream()
-                .filter(team -> team.getLastLoginDate() != null)
-                .filter(team -> !team.getLastLoginDate().isBefore(finalStartDate))
-                .filter(team -> !team.getLastLoginDate().isAfter(finalEndDate))
-                .collect(toList()).size();
+        LocalDate finalStartDate = startDate == null ? LocalDate.of(1900, 1, 1) : startDate;
+        return teamRepository.findAllByLastLoginDateBetween(finalStartDate, finalEndDate).size();
     }
 }
