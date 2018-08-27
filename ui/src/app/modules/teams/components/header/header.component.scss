@@ -125,6 +125,8 @@
       display: flex;
       flex-direction: row;
 
+      height: inherit;
+
       justify-content: flex-end;
       margin: 0 auto;
       max-width: $desktop-max-width;
