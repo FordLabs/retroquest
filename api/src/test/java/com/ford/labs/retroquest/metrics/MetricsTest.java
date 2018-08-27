@@ -16,6 +16,8 @@ import java.util.Collections;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -171,37 +173,14 @@ public class MetricsTest {
     }
 
     @Test
-    public void returnsOnlyLoginsBeforeEndDate_whenOnlyGivenEndDate() {
-        Team team1 = new Team();
-        team1.setLastLoginDate(LocalDate.of(2018, 1, 1));
-        Team team2 = new Team();
-        team2.setLastLoginDate(LocalDate.of(2018, 3, 3));
-        when(mockTeamRepository.findAll()).thenReturn(asList(team1, team2));
-
-        assertEquals(1, metrics.getTeamLogins(null, LocalDate.of(2018, 2, 2)));
+    public void nullStartDate_becomesDefaultStatDate() {
+        metrics.getTeamLogins(null, LocalDate.of(2018, 1, 1));
+        verify(mockTeamRepository).findAllByLastLoginDateBetween(LocalDate.of(1900, 1, 1), LocalDate.of(2018, 1, 1));
     }
 
     @Test
-    public void returnsOnlyLoginsAfterStart_whenOnlyGivenStartDate() {
-        Team team1 = new Team();
-        team1.setLastLoginDate(LocalDate.of(2018, 1, 1));
-        Team team2 = new Team();
-        team2.setLastLoginDate(LocalDate.of(2018, 3, 3));
-        when(mockTeamRepository.findAll()).thenReturn(asList(team1, team2));
-
-        assertEquals(1, metrics.getTeamLogins(LocalDate.of(2018, 2, 2), null));
-    }
-
-    @Test
-    public void returnsOnlyLoginsBetweenDates_whenGivenStartAndEndDate() {
-        Team team1 = new Team();
-        team1.setLastLoginDate(LocalDate.of(2018, 1, 1));
-        Team team2 = new Team();
-        team2.setLastLoginDate(LocalDate.of(2018, 3, 3));
-        Team team3 = new Team();
-        team3.setLastLoginDate(LocalDate.of(2018, 5, 5));
-        when(mockTeamRepository.findAll()).thenReturn(asList(team1, team2, team3));
-
-        assertEquals(1, metrics.getTeamLogins(LocalDate.of(2018, 2, 2), LocalDate.of(2018, 4, 4)));
+    public void nullEndDate_becomesDefaulEndDate() {
+        metrics.getTeamLogins(LocalDate.of(2018, 1, 1), null);
+        verify(mockTeamRepository).findAllByLastLoginDateBetween(LocalDate.of(2018, 1, 1), LocalDate.now());
     }
 }
