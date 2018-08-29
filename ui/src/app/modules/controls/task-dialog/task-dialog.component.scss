@@ -53,8 +53,12 @@
     font-size: 1rem;
     height: auto;
 
-    transform: scale(1.3);
+    transform: scale(1.65);
     width: 450px;
+
+    @media only screen and (max-width: 770px) {
+      transform: scale(1.3);
+    }
 
     @media only screen and (max-width: 610px) {
       height: 280px;
