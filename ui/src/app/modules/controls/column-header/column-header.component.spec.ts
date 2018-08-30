@@ -52,9 +52,15 @@ describe('ColumnHeaderComponent', () => {
 
   describe('emitTitleChangedAndEnableReadonlyMode', () => {
 
+    const fakeText = 'MODIFIED TEXT';
+
+    beforeEach(() => {
+      component.escapeKeyPressed = false;
+      component.titleCopy = fakeText;
+    });
+
     it('should emit the modified title', () => {
       component.titleChanged = jasmine.createSpyObj({emit: null});
-      component.title = 'MODIFIED TEXT';
 
       component.emitTitleChangedAndEnableReadonlyMode();
 
@@ -73,6 +79,35 @@ describe('ColumnHeaderComponent', () => {
       component.emitTitleChangedAndEnableReadonlyMode();
 
       expect(component.readOnlyEnabled).toBeTruthy();
+    });
+
+    it('should copy the value of temp title into the title variable ' +
+      'if the escape key was not pressed', () => {
+      component.emitTitleChangedAndEnableReadonlyMode();
+
+      expect(component.title).toEqual(fakeText);
+    });
+
+    it('should not copy the value of temp title into the title variable' +
+      'if the escape key was pressed', () => {
+      component.escapeKeyPressed = true;
+      component.emitTitleChangedAndEnableReadonlyMode();
+
+      expect(component.title).toEqual('');
+    });
+
+    it('should set the temp title to empty string' +
+      'if the escape key was pressed', () => {
+      component.escapeKeyPressed = true;
+      component.emitTitleChangedAndEnableReadonlyMode();
+
+      expect(component.titleCopy).toEqual('');
+    });
+
+    it('should set the escape key pressed flag to false', () => {
+      component.escapeKeyPressed = true;
+      component.emitTitleChangedAndEnableReadonlyMode();
+      expect(component.escapeKeyPressed).toBeFalsy();
     });
   });
 
@@ -129,6 +164,36 @@ describe('ColumnHeaderComponent', () => {
 
     it('should blur the input field', () => {
       component.blurInput();
+      expect(component.inputFieldRef.nativeElement.blur).toHaveBeenCalled();
+    });
+  });
+
+  describe('onEscapeKeyPressed', () => {
+
+    let originalSetTimeoutFunction = null;
+    const mockInputFieldRef = {
+      nativeElement: jasmine.createSpyObj({blur: null})
+    };
+
+    beforeEach(() => {
+      component.inputFieldRef = mockInputFieldRef;
+      originalSetTimeoutFunction = window.setTimeout;
+      window.setTimeout = (fn) => fn();
+
+      component.escapeKeyPressed = false;
+      component.onEscapeKeyPressed();
+    });
+
+    afterEach(() => {
+      window.setTimeout = originalSetTimeoutFunction;
+      mockInputFieldRef.nativeElement.blur.calls.reset();
+    });
+
+    it('should set the escape key was pressed flag to true', () => {
+      expect(component.escapeKeyPressed).toBeTruthy();
+    });
+
+    it('should blur the input field', () => {
       expect(component.inputFieldRef.nativeElement.blur).toHaveBeenCalled();
     });
   });

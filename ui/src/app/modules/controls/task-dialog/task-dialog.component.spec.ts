@@ -63,6 +63,17 @@ describe('TaskDialogComponent', () => {
       expect(component.visible).toBeTruthy();
     });
 
+    it('should set a function callback to document.onkeydown', () => {
+      expect(document.onkeydown).not.toBeNull();
+    });
+
+  });
+
+  describe('hide', () => {
+    it('should set the document.onkeydown callback to null', () => {
+      component.hide();
+      expect(document.onkeydown).toBeNull();
+    });
   });
 
   describe('emitDeleted', () => {

@@ -17,24 +17,42 @@
 @import 'color-vars';
 
 .rq-brand-footer {
-  margin-top: 12px;
+  align-items: center;
+  display: flex;
+  font-size: .8rem;
+  height: auto;
+  justify-content: center;
+  margin-top: 36px;
+  width: 100%;
 
-  a {
-    color: $black;
+  .labs-text {
+    color: opacity($wet-asphalt, .5);
+    font-size: inherit;
+
+    .labs-link {
+      color: $confused-blue;
+      font-size: inherit;
+      font-weight: bold;
+      margin: 0;
+      padding: 0;
+    }
   }
 
-  #github-logo {
-    font-size: 32px;
-    margin-left: 6px;
-  }
-
-  #ford-labs-logo {
-    width: 32px;
-  }
-
-  #ford-labs-logo,
-  #github-logo {
+  .vertical-seperator {
+    background-color: $wet-asphalt;
+    border-radius: 3px;
     display: inline-block;
-    vertical-align: middle;
+    height: 16px;
+    margin: 0 12px;
+    opacity: .1;
+    width: 2px;
+  }
+
+  .github-link {
+    color: inherit;
+    font-size: inherit;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
   }
 }

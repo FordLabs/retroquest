@@ -55,12 +55,6 @@ p {
   width: 100%;
 }
 
-.rq-form-header {
-  font-size: 1.6rem;
-  font-weight: 500;
-  margin-bottom: 1.5rem;
-}
-
 .rq-validation-message {
   color: $text-gray;
   font-size: 1rem;
@@ -71,20 +65,6 @@ p {
   color: $text-error;
   font-size: medium;
   margin: 0;
-}
-
-.rq-input-group {
-  display: flex;
-  flex-direction: column;
-  padding: 1rem 0;
-
-  & > label {
-    font-size: 1.4rem;
-  }
-
-  & > .rq-input {
-    width: 100%;
-  }
 }
 
 .rq-input {

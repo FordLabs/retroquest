@@ -18,6 +18,8 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {emptyFeedback, Feedback} from '../../domain/feedback';
 
+const ESC_KEY = 27;
+
 @Component({
   selector: 'rq-feedback-dialog',
   templateUrl: './feedback-dialog.component.html',
@@ -44,10 +46,16 @@ export class FeedbackDialogComponent {
     this.feedback = emptyFeedback();
     this.starsClicked = false;
     this.clearStars();
+    document.onkeydown = null;
   }
 
   public show(): void {
     this.visible = true;
+    document.onkeydown = event => {
+      if (event.keyCode === ESC_KEY) {
+        this.hide();
+      }
+    };
   }
 
   public onSendButtonClicked(): void {

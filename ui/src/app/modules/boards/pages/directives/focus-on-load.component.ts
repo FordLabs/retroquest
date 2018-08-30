@@ -15,24 +15,20 @@
  * limitations under the License.
  */
 
-export interface ActionItem {
-  id: number;
-  task: string;
-  completed: boolean;
-  teamId: string;
-  assignee: string;
-  expanded?: boolean;
-  dateCreated: string;
-  state?: string;
-}
+import {AfterViewInit, Directive, ElementRef} from '@angular/core';
 
-export function emptyActionItem (): ActionItem {
-  return {
-    id: -1,
-    task: '',
-    completed: false,
-    teamId: null,
-    assignee: null,
-    dateCreated: null
-  };
+@Directive({
+  selector: '[rqFocusOnLoad]'
+})
+export class FocusOnLoadDirective implements AfterViewInit {
+
+  constructor(private elementRef: ElementRef) {
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.elementRef.nativeElement.focus();
+    }, 0);
+
+  }
 }

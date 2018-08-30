@@ -15,20 +15,23 @@
  * limitations under the License.
  */
 
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { LoginComponent } from './pages/login/login.page';
-import { CreateComponent } from './pages/create/create.page';
-import { RouterModule } from '@angular/router';
-import { AppTitleComponent } from './components/app-title/app-title.component';
-import { BrandFooterComponent } from './components/brand-footer/brand-footer.component';
-import { RecaptchaModule } from 'ng-recaptcha';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {LoginComponent} from './pages/login/login.page';
+import {CreateComponent} from './pages/create/create.page';
+import {RouterModule} from '@angular/router';
+import {AppTitleComponent} from './components/app-title/app-title.component';
+import {BrandFooterComponent} from './components/brand-footer/brand-footer.component';
+import {RecaptchaModule} from 'ng-recaptcha';
+import {ControlsModule} from '../controls/controls.module';
+import {FocusOnLoadDirective} from './pages/directives/focus-on-load.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    ControlsModule,
     RouterModule.forChild([
       {path: 'create', component: CreateComponent},
       {path: 'login', component: LoginComponent}
@@ -40,7 +43,8 @@ import { RecaptchaModule } from 'ng-recaptcha';
     LoginComponent,
     CreateComponent,
     AppTitleComponent,
-    BrandFooterComponent
+    BrandFooterComponent,
+    FocusOnLoadDirective,
   ],
   exports: [CreateComponent]
 })

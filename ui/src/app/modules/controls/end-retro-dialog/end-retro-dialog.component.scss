@@ -84,7 +84,6 @@
       background-color: inherit;
       border-bottom-left-radius: inherit;
       border-bottom-right-radius: inherit;
-      border-top: 2px solid opacity($wet-asphalt, .06);
       display: flex;
       height: 50px;
       justify-content: flex-start;
@@ -102,6 +101,8 @@
       }
 
       #cancel-button-container {
+        border-top: 2px solid opacity($wet-asphalt, .06);
+
         rq-button {
           color: opacity($wet-asphalt, .5);
           font-size: 1.2rem;
@@ -113,6 +114,7 @@
           background-color: $end-retro-button-red;
           border-radius: 0 0 4px;
           box-shadow: none;
+          box-sizing: border-box;
           font-size: 1.2rem;
           height: 100%;
           width: 100%;

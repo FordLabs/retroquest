@@ -18,6 +18,7 @@
 package com.ford.labs.retroquest.thought;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import lombok.Builder;
 import lombok.Data;
@@ -40,7 +41,9 @@ public class Thought {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private String message;
+
     private int hearts;
     private String topic;
     private boolean discussed;
@@ -77,7 +80,8 @@ public class Thought {
      * @param message
      */
     public void setMessage(String message) {
-        this.message = Jsoup.clean(defaultString(message), Whitelist.basic());
+        this.message = Jsoup.clean(defaultString(message), Whitelist.basic())
+                .replaceAll("&amp;", "&");
     }
 
     private String getDiscussedString() {
