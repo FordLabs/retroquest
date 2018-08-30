@@ -34,6 +34,10 @@ describe('DialogComponent', () => {
       component.show();
       expect(component.visible).toBeTruthy();
     });
+
+    it('should set a function callback to document.onkeydown', () => {
+      expect(document.onkeydown).not.toBeNull();
+    });
   });
 
   describe('hide', () => {
@@ -52,6 +56,11 @@ describe('DialogComponent', () => {
     it('should emit the visibility changed signal', () => {
       expect(component.visibilityChanged.emit).toHaveBeenCalled();
     });
+
+    it('should set the document.onkeydown callback to null', () => {
+      expect(document.onkeydown).toBeNull();
+    });
+
   });
 
   describe('onStarClicked', () => {

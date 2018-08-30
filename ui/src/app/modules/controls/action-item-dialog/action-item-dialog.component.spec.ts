@@ -64,6 +64,9 @@ describe('ActionItemDialogComponent', () => {
       expect(component.visible).toBeTruthy();
     });
 
+    it('should set a function callback to document.onkeydown', () => {
+      expect(document.onkeydown).not.toBeNull();
+    });
   });
 
   describe('emitDeleted', () => {
@@ -90,6 +93,11 @@ describe('ActionItemDialogComponent', () => {
 
       expect(component.visible).toEqual(false);
       expect(component.visibilityChanged.emit).toHaveBeenCalledWith(false);
+    });
+
+    it('should set the document.onkeydown callback to null', () => {
+      component.emitDeleted();
+      expect(document.onkeydown).toBeNull();
     });
 
   });
