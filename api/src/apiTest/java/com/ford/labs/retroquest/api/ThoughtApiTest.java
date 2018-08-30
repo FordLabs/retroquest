@@ -68,6 +68,7 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
     private String websocketUri;
     private String thoughtSubscribeEndpoint;
     private String thoughtEndpoint;
+    private int websocketTestTimeoutInSeconds = 10;
 
     @Before
     public void setup() {
@@ -271,7 +272,7 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
                 .connect(websocketUri, new WebSocketHttpHeaders() {
                 }, headers, new StompSessionHandlerAdapter() {
                 })
-                .get(1, SECONDS);
+                .get(websocketTestTimeoutInSeconds, SECONDS);
         session.subscribe(thoughtSubscribeEndpoint, new DefaultStompFrameHandler());
         String thoughJsonBody = "{\"message\":\"Message\"}";
         session.send(thoughtEndpoint + "/create", thoughJsonBody.getBytes());
@@ -290,7 +291,7 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
                 .connect(websocketUri, new WebSocketHttpHeaders() {
                 }, headers, new StompSessionHandlerAdapter() {
                 })
-                .get(1, SECONDS);
+                .get(10, SECONDS);
         session.subscribe(thoughtSubscribeEndpoint, new DefaultStompFrameHandler());
         String thoughJsonBody = "{\"message\":\"Message\"}";
         session.send(thoughtEndpoint + "/create", thoughJsonBody.getBytes());
@@ -312,7 +313,7 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
                 .connect(websocketUri, new WebSocketHttpHeaders() {
                 }, headers, new StompSessionHandlerAdapter() {
                 })
-                .get(1, SECONDS);
+                .get(websocketTestTimeoutInSeconds, SECONDS);
         session.subscribe(thoughtSubscribeEndpoint, new DefaultStompFrameHandler());
         String thoughJsonBody = "{\"message\":\"Message\"}";
         session.send(thoughtEndpoint + "/create", thoughJsonBody.getBytes());
@@ -336,7 +337,7 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
                 .connect(websocketUri, new WebSocketHttpHeaders() {
                 }, headers, new StompSessionHandlerAdapter() {
                 })
-                .get(1, SECONDS);
+                .get(websocketTestTimeoutInSeconds, SECONDS);
         session.subscribe(thoughtSubscribeEndpoint, new DefaultStompFrameHandler());
         String thoughJsonBody = "{\"message\":\"Message\"}";
         session.send(thoughtEndpoint + "/create", thoughJsonBody.getBytes());
@@ -350,12 +351,12 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
     }
 
     private Thought getLatestThoughtInQueue() throws IOException, InterruptedException {
-        ObjectNode response = mapper.readValue(blockingQueue.poll(1, SECONDS), ObjectNode.class);
+        ObjectNode response = mapper.readValue(blockingQueue.poll(websocketTestTimeoutInSeconds, SECONDS), ObjectNode.class);
         return mapper.treeToValue(response.get("payload"), Thought.class);
     }
 
     private Long getLatestIdInQueue() throws IOException, InterruptedException {
-        ObjectNode response = mapper.readValue(blockingQueue.poll(1, SECONDS), ObjectNode.class);
+        ObjectNode response = mapper.readValue(blockingQueue.poll(websocketTestTimeoutInSeconds, SECONDS), ObjectNode.class);
         return mapper.treeToValue(response.get("payload"), Long.class);
     }
 
