@@ -221,7 +221,7 @@ describe('ThoughtComponent', () => {
 
       component.maxMessageLength = 2;
       component.actionItem.task = 'XX';
-      component.onKeyDown(fakeDeleteKeyEvent);
+      component.onKeyDown(fakeDeleteKeyEvent, fakeTextValue);
       expect(fakeDeleteKeyEvent.preventDefault).not.toHaveBeenCalled();
     });
   });
