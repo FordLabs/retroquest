@@ -54,11 +54,13 @@ export class ColumnHeaderComponent implements OnInit {
 
   public emitTitleChangedAndEnableReadonlyMode(): void {
     if (this.escapeKeyPressed) {
+      this.escapeKeyPressed = false;
       this.titleCopy = '';
     } else {
       this.title = this.titleCopy.slice(0);
       this.titleChanged.emit(this.titleCopy);
     }
+
     this.readOnlyEnabled = true;
   }
 

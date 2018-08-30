@@ -103,6 +103,12 @@ describe('ColumnHeaderComponent', () => {
 
       expect(component.titleCopy).toEqual('');
     });
+
+    it('should set the escape key pressed flag to false', () => {
+      component.escapeKeyPressed = true;
+      component.emitTitleChangedAndEnableReadonlyMode();
+      expect(component.escapeKeyPressed).toBeFalsy();
+    });
   });
 
   describe('toggleEdit', () => {
