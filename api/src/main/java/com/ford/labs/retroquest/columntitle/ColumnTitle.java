@@ -55,6 +55,7 @@ public class ColumnTitle implements Serializable {
     }
 
     public void setTitle(String title) {
-        this.title = Jsoup.clean(defaultString(title), Whitelist.basic());
+        this.title = Jsoup.clean(defaultString(title), Whitelist.basic())
+                .replaceAll("&amp;", "&");
     }
 }

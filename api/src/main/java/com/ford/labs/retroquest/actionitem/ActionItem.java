@@ -60,13 +60,18 @@ public class ActionItem {
 
     /**
      * Sets task body. Will sanitize the string for html.
+     *
      * @param task
      */
     public void setTask(String task) {
-        this.task = Jsoup.clean(defaultString(task), Whitelist.basic());
+        this.task = Jsoup.clean(defaultString(task), Whitelist.basic())
+                .replaceAll("&amp;", "&");
     }
 
-    public void setAssignee(String assignee) { this.assignee = Jsoup.clean(defaultString(assignee), Whitelist.basic()); }
+    public void setAssignee(String assignee) {
+        this.assignee = Jsoup.clean(defaultString(assignee), Whitelist.basic())
+                .replaceAll("&amp;", "&");
+    }
 
     private String getCompletedString() {
         return completed ? "yes" : "no";
