@@ -19,9 +19,10 @@
   #inputField
   [readonly]="readOnlyEnabled"
   [maxlength]="maxTextLength"
-  [(ngModel)]="title"
+  [(ngModel)]="titleCopy"
   (blur)="emitTitleChangedAndEnableReadonlyMode()"
   (keydown.enter)="blurInput()"
+  (keydown.escape)="onEscapeKeyPressed()"
   [ngClass]="{'hide': readOnlyEnabled}"
 />
 
@@ -52,7 +53,7 @@
 </span>
 
 <rq-floating-character-countdown
-  [characterCount]="readOnlyEnabled ? 0 : title.length"
+  [characterCount]="readOnlyEnabled ? 0 : titleCopy.length"
   [maxCharacterCount]="maxTextLength"
   [charsAreRunningOutThreshold]="5"
 >

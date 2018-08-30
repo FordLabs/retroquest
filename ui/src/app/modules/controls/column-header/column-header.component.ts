@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Column} from '../../domain/column';
 
 @Component({
@@ -29,7 +29,7 @@ import {Column} from '../../domain/column';
     '[class.action]': 'type === \'action\''
   }
 })
-export class ColumnHeaderComponent {
+export class ColumnHeaderComponent implements OnInit {
 
   @Input() title = '';
   @Input() type = '';
@@ -42,15 +42,23 @@ export class ColumnHeaderComponent {
 
   @ViewChild('inputField') inputFieldRef: ElementRef;
 
+  titleCopy: string;
   readOnlyEnabled = true;
   sorted = false;
   maxTextLength = 16;
+  escapeKeyPressed = false;
 
-  constructor () {
+  public ngOnInit() {
+    this.titleCopy = this.title.slice(0);
   }
 
   public emitTitleChangedAndEnableReadonlyMode(): void {
-    this.titleChanged.emit(this.title);
+    if (this.escapeKeyPressed) {
+      this.titleCopy = '';
+    } else {
+      this.title = this.titleCopy.slice(0);
+      this.titleChanged.emit(this.titleCopy);
+    }
     this.readOnlyEnabled = true;
   }
 
@@ -75,7 +83,10 @@ export class ColumnHeaderComponent {
     setTimeout(() => {
       this.inputFieldRef.nativeElement.blur();
     }, 0);
-
   }
 
+  public onEscapeKeyPressed(): void {
+    this.escapeKeyPressed = true;
+    this.blurInput();
+  }
 }
