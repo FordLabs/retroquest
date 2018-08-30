@@ -32,16 +32,15 @@
         #content_value
         class="content-message editable-div"
         contenteditable="true"
-        [textContent]="actionItem.task"
-        (input)="actionItem.task = content_value.textContent"
-        (keydown.enter)="forceBlur()"
-        (blur)="toggleEditMode()"
-        (keydown)="onKeyDown($event)"
+        (keydown.enter)="updateActionItemMessage(content_value.textContent); forceBlur()"
+        (blur)="updateActionItemMessage(content_value.textContent); toggleEditMode()"
+        (keydown)="onKeyDown($event, content_value.textContent)"
+        (keyup)="onKeyUp(content_value.textContent, content_value.innerText)"
       >{{actionItem.task}}
       </div>
 
       <rq-floating-character-countdown
-        [characterCount]="actionItem.task.length"
+        [characterCount]="textValueLength"
         [charsAreRunningOutThreshold]="50"
         [maxCharacterCount]="maxMessageLength"
       >

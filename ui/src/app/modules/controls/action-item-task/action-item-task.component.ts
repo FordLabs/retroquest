@@ -47,6 +47,7 @@ export class ActionItemTaskComponent {
 
   taskEditModeEnabled = false;
   maxMessageLength = 255;
+  _textValueLength = 0;
 
   constructor() {
   }
@@ -86,6 +87,7 @@ export class ActionItemTaskComponent {
     setTimeout(() => {
       this.editableTextArea.nativeElement.focus();
       this.selectAllText();
+      this._textValueLength = this.actionItem.task.length;
     }, 0);
   }
 
@@ -115,15 +117,28 @@ export class ActionItemTaskComponent {
     document.execCommand('selectAll', false, null);
   }
 
-  public onKeyDown(keyEvent: KeyboardEvent) {
-    if ((this.actionItem.task.length >= this.maxMessageLength)
-      && !this.keyEventIsAnAction(keyEvent)) {
-      keyEvent.preventDefault();
+  public onKeyDown(keyEvent: KeyboardEvent, innerText: string) {
+    if (!this.keyEventIsAnAction(keyEvent)) {
+      if (innerText.length + keyEvent.key.length > this.maxMessageLength) {
+        keyEvent.preventDefault();
+      }
     }
+  }
+
+  public onKeyUp(textContent: string, innerText: string): void {
+    this._textValueLength = Math.min(textContent.length, innerText.length);
+  }
+
+  public updateActionItemMessage(innerText: string): void {
+    this.actionItem.task = innerText;
   }
 
   private keyEventIsAnAction(keyEvent: KeyboardEvent): boolean {
     return keyEvent.keyCode === BACKSPACE_KEY || keyEvent.keyCode === DELETE_KEY;
+  }
+
+  get textValueLength(): number {
+    return this._textValueLength;
   }
 }
 
