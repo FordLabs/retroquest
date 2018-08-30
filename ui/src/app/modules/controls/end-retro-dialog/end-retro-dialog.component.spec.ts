@@ -45,5 +45,20 @@ describe('EndRetroDialogComponent', () => {
       expect(component.visible).toBeFalsy();
     });
 
+    it('should set the document.onkeydown callback to null', () => {
+      expect(document.onkeydown).toBeNull();
+    });
+
+  });
+
+  describe('show', () => {
+
+    beforeEach(() => {
+      component.show();
+    });
+
+    it('should set a function callback to document.onkeydown', () => {
+      expect(document.onkeydown).not.toBeNull();
+    });
   });
 });

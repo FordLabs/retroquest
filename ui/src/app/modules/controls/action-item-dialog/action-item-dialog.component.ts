@@ -18,6 +18,8 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ActionItem, emptyActionItem} from '../../domain/action-item';
 
+const ESC_KEY = 27;
+
 @Component({
   selector: 'rq-action-item-dialog',
   templateUrl: './action-item-dialog.component.html',
@@ -42,10 +44,16 @@ export class ActionItemDialogComponent {
   private hide(): void {
     this.visible = false;
     this.visibilityChanged.emit(this.visible);
+    document.onkeydown = null;
   }
 
   public show(): void {
     this.visible = true;
+    document.onkeydown = event => {
+      if (event.keyCode === ESC_KEY) {
+        this.hide();
+      }
+    };
   }
 
   public emitDeleted(): void {

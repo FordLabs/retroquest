@@ -18,6 +18,8 @@
 import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {ThoughtService} from '../../teams/services/thought.service';
 
+const ESC_KEY = 27;
+
 @Component({
   selector: 'rq-end-retro-dialog',
   templateUrl: './end-retro-dialog.component.html',
@@ -38,10 +40,16 @@ export class EndRetroDialogComponent {
 
   public hide(): void {
     this.visible = false;
+    document.onkeydown = null;
   }
 
   public show(): void {
     this.visible = true;
+    document.onkeydown = event => {
+      if (event.keyCode === ESC_KEY) {
+        this.hide();
+      }
+    };
   }
 
   public submit(): void {
