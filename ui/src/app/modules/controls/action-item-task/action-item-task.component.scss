@@ -31,6 +31,7 @@
   justify-content: flex-end;
   transition: box-shadow .2s cubic-bezier(.25, .8, .25, 1);
   width: 100px;
+  box-sizing: border-box;
 
   &.push-order-to-bottom {
     box-shadow: none;

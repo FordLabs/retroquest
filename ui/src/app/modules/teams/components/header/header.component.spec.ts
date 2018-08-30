@@ -19,6 +19,7 @@ import {HeaderComponent} from './header.component';
 import {FeedbackService} from '../../services/feedback.service';
 import {emptyFeedback, Feedback} from '../../../domain/feedback';
 import {Subject} from 'rxjs';
+import {before} from 'selenium-webdriver/testing';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -82,5 +83,19 @@ describe('HeaderComponent', () => {
       expect(fakeFeedback.teamId).toEqual(component.teamId);
     });
 
+  });
+
+  describe('onActionsRadiatorViewClicked', () => {
+
+    beforeEach(() => {
+      component.actionsRadiatorViewClicked = jasmine.createSpyObj({
+        emit: null
+      });
+      component.onActionsRadiatorViewClicked();
+    })
+
+    it('should emit the actions radiator view signal', () => {
+      expect(component.actionsRadiatorViewClicked.emit).toHaveBeenCalled();
+    });
   });
 });

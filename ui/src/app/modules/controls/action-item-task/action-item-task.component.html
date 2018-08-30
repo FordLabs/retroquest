@@ -58,6 +58,7 @@
   >
     <div class="label">assigned to</div>
     <input
+      [readonly]="readOnly"
       #assignee_text_field
       class="value"
       [type]="'text'"
@@ -79,7 +80,7 @@
 
   <div
     class="container edit-container"
-    [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled}"
+    [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled || readOnly}"
     (click)="toggleEditMode()"
     *ngIf="!taskEditModeEnabled; else exit_edit_mode_icon"
   >
@@ -97,14 +98,14 @@
 
   <div
     class="container delete-container"
-    [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled}"
+    [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled || readOnly}"
     (click)="emitDeleteItem()">
     <i class="fas fa-trash-alt"></i>
   </div>
 
   <div
     class="complete-container"
-    [ngClass]="{'disable': taskEditModeEnabled}"
+    [ngClass]="{'disable': taskEditModeEnabled || readOnly}"
     (click)="toggleTaskComplete()"
   >
     <div

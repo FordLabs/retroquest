@@ -20,6 +20,7 @@ import {EndRetroDialogComponent} from '../../../controls/end-retro-dialog/end-re
 import {FeedbackService} from '../../services/feedback.service';
 import {Feedback} from '../../../domain/feedback';
 import {FeedbackDialogComponent} from '../../../controls/feedback-dialog/feedback-dialog.component';
+import {ActionItem} from '../../../domain/action-item';
 
 @Component({
   selector: 'rq-header',
@@ -31,6 +32,7 @@ export class HeaderComponent {
   @Input() teamId: string;
 
   @Output() endRetro: EventEmitter<void> = new EventEmitter<void>();
+  @Output() actionsRadiatorViewClicked: EventEmitter<void> = new EventEmitter<void>();
 
   @ViewChild(FeedbackDialogComponent) feedbackDialog: FeedbackDialogComponent;
   @ViewChild(EndRetroDialogComponent) endRetroDialog: EndRetroDialogComponent;
@@ -54,5 +56,9 @@ export class HeaderComponent {
   public onFeedbackSubmitted(feedback: Feedback) {
     feedback.teamId = this.teamId;
     this.feedbackService.addFeedback(feedback).subscribe();
+  }
+
+  public onActionsRadiatorViewClicked(): void {
+    this.actionsRadiatorViewClicked.emit();
   }
 }

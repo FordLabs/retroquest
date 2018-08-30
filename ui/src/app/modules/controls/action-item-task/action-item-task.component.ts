@@ -34,6 +34,7 @@ const DELETE_KEY = 46;
 export class ActionItemTaskComponent {
 
   @Input() actionItem = emptyActionItem();
+  @Input() readOnly = false;
 
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
   @Output() deleted: EventEmitter<ActionItem> = new EventEmitter<ActionItem>();

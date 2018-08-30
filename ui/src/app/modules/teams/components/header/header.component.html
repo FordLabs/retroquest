@@ -29,6 +29,14 @@
 
   <div id="headerBottom">
     <div class="header-bottom-content">
+
+      <rq-button
+        class="actions-radiator-button"
+        type="secondary"
+        text="actions radiator"
+        (click)="onActionsRadiatorViewClicked()"
+      ></rq-button>
+
       <button id="giveFeedback" class="rq-button-secondary" (click)="feedbackDialog.show()">
         <span class="button-text">Give Feedback</span>
         <i class="far fa-comments button-icon"></i>
@@ -46,6 +54,7 @@
   </div>
 
 </header>
+
 
 <rq-feedback-dialog
   #feedbackDialog
