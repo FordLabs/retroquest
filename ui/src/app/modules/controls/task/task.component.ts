@@ -17,6 +17,7 @@
 
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {emptyThought, Thought} from '../../domain/thought';
+import {text} from '../../../../../node_modules/@angular/core/src/render3/instructions';
 
 
 const BACKSPACE_KEY = 8;
@@ -51,6 +52,7 @@ export class TaskComponent {
   starCountMax = 99;
   maxMessageLength = 255;
   taskEditModeEnabled = false;
+  _textValueLength = 0;
 
   constructor() {
   }
@@ -74,10 +76,6 @@ export class TaskComponent {
     this.deleted.emit(this.task);
   }
 
-  public editContentArea(): void {
-
-  }
-
   public emitTaskContentClicked(): void {
     if (!this.taskEditModeEnabled) {
       this.messageClicked.emit(this.task);
@@ -93,6 +91,7 @@ export class TaskComponent {
     setTimeout(() => {
       this.editableTextArea.nativeElement.focus();
       this.selectAllText();
+      this._textValueLength = this.task.message.length;
     }, 0);
   }
 
@@ -106,15 +105,28 @@ export class TaskComponent {
     }, 0);
   }
 
-  public onKeyDown(keyEvent: KeyboardEvent) {
-    if ((this.task.message.length >= this.maxMessageLength)
-    && !this.keyEventIsAnAction(keyEvent)) {
-      keyEvent.preventDefault();
+  public onKeyDown(keyEvent: KeyboardEvent, innerText: string) {
+    if (!this.keyEventIsAnAction(keyEvent)) {
+      if (innerText.length + keyEvent.key.length > this.maxMessageLength) {
+        keyEvent.preventDefault();
+      }
     }
+  }
+
+  public onKeyUp(textContent: string, innerText: string): void {
+    this._textValueLength = Math.min(textContent.length, innerText.length);
+  }
+
+  public updateTaskMessage(innerText: string): void {
+    this.task.message = innerText;
   }
 
   private keyEventIsAnAction(keyEvent: KeyboardEvent): boolean {
     return keyEvent.keyCode === BACKSPACE_KEY || keyEvent.keyCode === DELETE_KEY;
+  }
+
+  get textValueLength(): number {
+    return this._textValueLength;
   }
 }
 
