@@ -29,7 +29,7 @@ export interface ActionItem {
 export function emptyActionItem (): ActionItem {
   return {
     id: -1,
-    task: null,
+    task: '',
     completed: false,
     teamId: null,
     assignee: null,

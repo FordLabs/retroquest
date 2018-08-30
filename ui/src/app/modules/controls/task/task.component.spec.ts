@@ -57,6 +57,14 @@ describe('ThoughtComponent', () => {
       expect(component.taskEditModeEnabled).toBeTruthy();
     });
 
+    it('should set the inner text value length to the task message length', () => {
+      component.taskEditModeEnabled = false;
+      component.task.message = 'aa';
+      component.toggleEditMode();
+
+      expect(component.textValueLength).toEqual(2);
+    });
+
     it('should set the edit mode value to false', () => {
       component.taskEditModeEnabled = true;
       component.toggleEditMode();
@@ -190,14 +198,17 @@ describe('ThoughtComponent', () => {
 
   describe('onKeyDown', () => {
 
+    const fakeTextValue = 'XX';
+
     it('should prevent the key event from being processed if the task has reached the max length', () => {
       const fakeKeyEvent = jasmine.createSpyObj({
         preventDefault: null
       });
 
+      fakeKeyEvent.key = 'a';
+
       component.maxMessageLength = 2;
-      component.task.message = 'XX';
-      component.onKeyDown(fakeKeyEvent);
+      component.onKeyDown(fakeKeyEvent, fakeTextValue);
       expect(fakeKeyEvent.preventDefault).toHaveBeenCalled();
     });
 
@@ -205,10 +216,10 @@ describe('ThoughtComponent', () => {
       const fakeKeyEvent = jasmine.createSpyObj({
         preventDefault: null
       });
+      fakeKeyEvent.key = 'a';
 
       component.maxMessageLength = 3;
-      component.task.message = 'XX';
-      component.onKeyDown(fakeKeyEvent);
+      component.onKeyDown(fakeKeyEvent, fakeTextValue);
       expect(fakeKeyEvent.preventDefault).not.toHaveBeenCalled();
     });
 
@@ -216,12 +227,10 @@ describe('ThoughtComponent', () => {
       const fakeBackspaceEvent = jasmine.createSpyObj({
         preventDefault: null
       });
-
       fakeBackspaceEvent.keyCode = 8;
 
       component.maxMessageLength = 2;
-      component.task.message = 'XX';
-      component.onKeyDown(fakeBackspaceEvent);
+      component.onKeyDown(fakeBackspaceEvent, fakeTextValue);
       expect(fakeBackspaceEvent.preventDefault).not.toHaveBeenCalled();
     });
 
@@ -233,9 +242,23 @@ describe('ThoughtComponent', () => {
       fakeDeleteKeyEvent.keyCode = 46;
 
       component.maxMessageLength = 2;
-      component.task.message = 'XX';
-      component.onKeyDown(fakeDeleteKeyEvent);
+      component.onKeyDown(fakeDeleteKeyEvent, fakeTextValue);
       expect(fakeDeleteKeyEvent.preventDefault).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('onKeyUp', () => {
+    it('should set the text value length to the min between both parameter string lengths', () => {
+      component.onKeyUp('aa', 'a');
+      expect(component.textValueLength).toEqual(1);
+    });
+  });
+
+  describe('updateTaskMessage', () => {
+    it('should set the thought message to the passed in string', () => {
+      const fakeText = 'HELLO I AM TEXT';
+      component.updateTaskMessage(fakeText);
+      expect(component.task.message).toEqual(fakeText);
     });
   });
 });
