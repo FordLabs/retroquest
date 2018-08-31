@@ -28,8 +28,12 @@
   position: relative;
   width: 500px;
 
-  :first-child {
-    margin-top: 64px;
+  .heading {
+    color: inherit;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 36px;
+    text-transform: capitalize;
   }
 
   rq-action-item-task {
@@ -38,6 +42,10 @@
     pointer-events: none;
     transform: scale(1.65);
     width: 450px;
+
+    &:first-of-type {
+      margin-top: 64px;
+    }
 
     &:last-of-type {
       margin-bottom: 48px;
