@@ -32,7 +32,7 @@ export class HeaderComponent {
   @Input() teamId: string;
 
   @Output() endRetro: EventEmitter<void> = new EventEmitter<void>();
-  @Output() actionsRadiatorViewClicked: EventEmitter<void> = new EventEmitter<void>();
+  @Output() actionsRadiatorViewClicked: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @ViewChild(FeedbackDialogComponent) feedbackDialog: FeedbackDialogComponent;
   @ViewChild(EndRetroDialogComponent) endRetroDialog: EndRetroDialogComponent;
@@ -62,7 +62,6 @@ export class HeaderComponent {
 
   public onActionsRadiatorViewClicked(): void {
     this.actionsRadiatorViewEnabled = !this.actionsRadiatorViewEnabled;
-    console.log(this.actionsRadiatorViewEnabled);
-    this.actionsRadiatorViewClicked.emit();
+    this.actionsRadiatorViewClicked.emit(this.actionsRadiatorViewEnabled);
   }
 }

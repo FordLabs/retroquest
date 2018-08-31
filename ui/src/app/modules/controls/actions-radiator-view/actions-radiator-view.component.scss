@@ -45,16 +45,16 @@
   }
 
   rq-button {
-    position: fixed;
-    bottom: 0;
+    background-color: $happy-green;
+    border-radius: 6px 6px 0 0;
 
+    bottom: 0;
+    font-size: 1.5rem;
+    height: 60px;
     margin: auto 0 0;
     padding: 0;
+    position: fixed;
     width: 400px;
-    height: 60px;
-    border-radius: 6px 6px 0 0;
-    font-size: 1.5rem;
-    background-color: $happy-green;
 
     &.stop {
       background-color: $unhappy-red;

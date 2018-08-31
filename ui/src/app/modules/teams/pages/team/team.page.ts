@@ -277,12 +277,8 @@ export class TeamPageComponent implements OnInit {
     return dateCreated;
   }
 
-  public toggleActionsRadiatorAndNormalView(): void {
-    if (this.currentView === 'actionsRadiatorView') {
-      this.currentView = 'normalView';
-    } else {
-      this.currentView = 'actionsRadiatorView';
-    }
+  public toggleActionsRadiatorAndNormalView(state: boolean): void {
+    this.currentView = (state) ? 'actionsRadiatorView' : 'normalView';
   }
 
   public actionsRadiatorViewIsSelected(): boolean {
