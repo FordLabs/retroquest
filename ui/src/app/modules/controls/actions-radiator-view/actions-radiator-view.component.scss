@@ -17,20 +17,16 @@
 @import 'color-vars';
 
 :host {
-  box-sizing: border-box;
-  height: 500px;
-  width: 500px;
-  padding: 24px;
-
-  display: flex;
-  justify-content: flex-start;
   align-items: center;
+  box-sizing: border-box;
+  display: flex;
   flex-direction: column;
-  position: relative;
 
-  :last-child {
-    margin-bottom: 36px;
-  }
+  height: 500px;
+  justify-content: flex-start;
+  padding: 24px;
+  position: relative;
+  width: 500px;
 
   :first-child {
     margin-top: 64px;
@@ -38,32 +34,30 @@
 
   rq-action-item-task {
     height: auto;
-    transform: scale(1.65);
-    pointer-events: none;
-    width: 450px;
     margin-bottom: 150px;
+    pointer-events: none;
+    transform: scale(1.65);
+    width: 450px;
+
+    &:last-of-type {
+      margin-bottom: 48px;
+    }
   }
 
-  .autoscroll-button {
+  rq-button {
     position: fixed;
     bottom: 0;
-    width: 400px;
-    height: 75px;
-    background-color: black;
-    margin: auto 0;
+
+    margin: auto 0 0;
     padding: 0;
+    width: 400px;
+    height: 60px;
+    border-radius: 6px 6px 0 0;
+    font-size: 1.5rem;
+    background-color: $happy-green;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    border-top-right-radius: 6px;
-    border-top-left-radius: 6px;
-
-    rq-button {
-      width: auto;
-      margin: 0;
-      box-shadow: none;
+    &.stop {
+      background-color: $unhappy-red;
     }
   }
 

@@ -22,12 +22,11 @@
   [readOnly]="true"
 ></rq-action-item-task>
 
-<div
-  class="autoscroll-button"
->
-  <rq-button
-    type="primary"
-    [text]="pageIsAutoScrolling ? 'stop autoscroll': 'start autoscroll'"
-    (click)="toggleAutoScroll()"
-  ></rq-button>
-</div>
+<rq-button
+  type="primary"
+  [text]="pageIsAutoScrolling ? 'stop autoscroll': 'start autoscroll'"
+  (click)="toggleAutoScroll()"
+  [ngClass]="{
+      'stop': pageIsAutoScrolling
+    }"
+></rq-button>

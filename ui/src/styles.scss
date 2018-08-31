@@ -19,10 +19,10 @@
 @import 'color-vars';
 
 html {
-  height: 100%;
-  padding: 0;
-  overflow: scroll;
   background-color: $clouds;
+  height: 100%;
+  overflow: scroll;
+  padding: 0;
 }
 
 body {

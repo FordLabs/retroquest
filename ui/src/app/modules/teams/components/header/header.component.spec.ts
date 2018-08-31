@@ -92,7 +92,7 @@ describe('HeaderComponent', () => {
         emit: null
       });
       component.onActionsRadiatorViewClicked();
-    })
+    });
 
     it('should emit the actions radiator view signal', () => {
       expect(component.actionsRadiatorViewClicked.emit).toHaveBeenCalled();

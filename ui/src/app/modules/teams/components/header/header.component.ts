@@ -37,6 +37,8 @@ export class HeaderComponent {
   @ViewChild(FeedbackDialogComponent) feedbackDialog: FeedbackDialogComponent;
   @ViewChild(EndRetroDialogComponent) endRetroDialog: EndRetroDialogComponent;
 
+  actionsRadiatorViewEnabled = false;
+
   constructor(private feedbackService: FeedbackService) {
 
   }
@@ -59,6 +61,8 @@ export class HeaderComponent {
   }
 
   public onActionsRadiatorViewClicked(): void {
+    this.actionsRadiatorViewEnabled = !this.actionsRadiatorViewEnabled;
+    console.log(this.actionsRadiatorViewEnabled);
     this.actionsRadiatorViewClicked.emit();
   }
 }
