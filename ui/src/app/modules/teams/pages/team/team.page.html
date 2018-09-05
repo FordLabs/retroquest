@@ -20,10 +20,22 @@
     [teamName]="teamName"
     [teamId]="teamId"
     (endRetro)="onEndRetro()"
+    (actionsRadiatorViewClicked)="toggleActionsRadiatorAndNormalView($event)"
   >
-
   </rq-header>
-  <div id="team-content">
+
+  <rq-actions-radiator-view
+    [actionItems]="actionItems"
+    [visible]="actionsRadiatorViewIsSelected()"
+  >
+  </rq-actions-radiator-view>
+
+  <div
+    id="team-content"
+    [ngClass]="{
+      'hidden': actionsRadiatorViewIsSelected()
+    }"
+  >
     <div
       class="rq-column"
       *ngFor="let column of columns; let i = index"
@@ -47,7 +59,12 @@
     </div>
   </div>
 
-  <div class="guide-button-section">
+  <div
+    class="guide-button-section"
+    [ngClass]="{
+      'hidden': actionsRadiatorViewIsSelected()
+    }"
+  >
     <div
       class="guide-button happy-guide-button"
       (click)="setSelectedIndex(0)"

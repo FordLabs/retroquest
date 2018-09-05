@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-import {Component, HostBinding, Input} from '@angular/core';
+import {Component, Input} from '@angular/core';
 
-@Component({
+@ Component({
   selector: 'rq-button',
   templateUrl: './button.component.html',
   styleUrls: ['./button.component.scss'],

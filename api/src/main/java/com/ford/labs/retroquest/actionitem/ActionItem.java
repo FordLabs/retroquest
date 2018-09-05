@@ -65,12 +65,14 @@ public class ActionItem {
      */
     public void setTask(String task) {
         this.task = Jsoup.clean(defaultString(task), Whitelist.basic())
-                .replaceAll("&amp;", "&");
+                .replaceAll("&amp;", "&")
+                .replaceAll("&nbsp;", " ");
     }
 
     public void setAssignee(String assignee) {
         this.assignee = Jsoup.clean(defaultString(assignee), Whitelist.basic())
-                .replaceAll("&amp;", "&");
+                .replaceAll("&amp;", "&")
+                .replaceAll("&nbsp;", " ");
     }
 
     private String getCompletedString() {
