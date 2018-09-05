@@ -22,11 +22,11 @@
 #page {
   $guide-button-section-height: 35px;
   -webkit-overflow-scrolling: touch;
-  background-color: $clouds;
+  background-color: transparent;
   font-family: 'Quicksand', sans-serif;
   height: 100%;
-  overflow: auto;
   padding: 0;
+  transition: top .5s;
 
   .guide-button-section {
     background-color: $white;
@@ -43,6 +43,10 @@
       align-items: center;
       display: flex;
       justify-content: center;
+    }
+
+    &.hidden {
+      display: none;
     }
 
     ::ng-deep * {
@@ -86,6 +90,11 @@
     }
   }
 
+  rq-actions-radiator-view {
+    height: auto;
+    width: 100%;
+  }
+
   #team-content {
     box-sizing: border-box;
     display: flex;
@@ -105,6 +114,10 @@
       padding-right: 12px;
       padding-top: 0;
       width: 100%;
+    }
+
+    &.hidden {
+      display: none;
     }
 
     .rq-column {

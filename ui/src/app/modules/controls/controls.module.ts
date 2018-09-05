@@ -33,6 +33,7 @@ import {TaskDialogComponent} from './task-dialog/task-dialog.component';
 import {ActionItemDialogComponent} from './action-item-dialog/action-item-dialog.component';
 import {EndRetroDialogComponent} from './end-retro-dialog/end-retro-dialog.component';
 import {FeedbackDialogComponent} from './feedback-dialog/feedback-dialog.component';
+import {ActionsRadiatorViewComponent} from './actions-radiator-view/actions-radiator-view.component';
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ import {FeedbackDialogComponent} from './feedback-dialog/feedback-dialog.compone
     ActionItemDialogComponent,
     EndRetroDialogComponent,
     FeedbackDialogComponent,
+    ActionsRadiatorViewComponent
   ],
 
   exports: [
@@ -74,6 +76,7 @@ import {FeedbackDialogComponent} from './feedback-dialog/feedback-dialog.compone
     ActionItemDialogComponent,
     EndRetroDialogComponent,
     FeedbackDialogComponent,
+    ActionsRadiatorViewComponent
   ]
 
 })

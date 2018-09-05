@@ -17,6 +17,10 @@
 @import 'color-vars';
 @import 'global-vars';
 
+.hide {
+  display: none;
+}
+
 #header {
   background-color: $clouds;
   box-sizing: border-box;
@@ -24,7 +28,6 @@
   font-weight: normal;
   padding: 1.5rem 0;
   z-index: 3;
-
 
   @media only screen and (max-width: 610px) {
     padding-bottom: 12px;
@@ -143,11 +146,26 @@
         width: 100%;
       }
 
+      &.center-content {
+        justify-content: center;
+      }
+
       .button-icon {
         display: none;
 
         @media only screen and (max-width: 610px) {
           display: block;
+        }
+      }
+
+      rq-button {
+        height: 100%;
+        width: auto;
+      }
+
+      .actions-radiator-button {
+        @media only screen and (max-width: 610px) {
+          display: none;
         }
       }
 

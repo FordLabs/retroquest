@@ -28,24 +28,51 @@
   </div>
 
   <div id="headerBottom">
-    <div class="header-bottom-content">
+    <div
+      class="header-bottom-content"
+      [ngClass]="{
+          'center-content': actionsRadiatorViewEnabled
+      }"
+    >
+
+      <rq-button
+        class="actions-radiator-button"
+        type="secondary"
+        [text]="actionsRadiatorViewEnabled ? 'view retro' : 'actions radiator'"
+        (click)="onActionsRadiatorViewClicked()"
+      ></rq-button>
+
       <button id="giveFeedback" class="rq-button-secondary" (click)="feedbackDialog.show()">
         <span class="button-text">Give Feedback</span>
         <i class="far fa-comments button-icon"></i>
       </button>
-      <a id="downloadCsv" [href]="getCsvUrl()">
+
+      <a id="downloadCsv"
+         [href]="getCsvUrl()"
+         [ngClass]="{
+            'hide': actionsRadiatorViewEnabled
+         }"
+      >
         <button class="rq-button-secondary">
           <span class="button-text">Download CSV</span>
           <i class="fas fa-download button-icon"></i>
         </button>
       </a>
-      <button id="endRetro" class="rq-button-primary" (click)="showEndRetroDialog()">
+      <button
+        id="endRetro"
+        class="rq-button-primary"
+        (click)="showEndRetroDialog()"
+        [ngClass]="{
+            'hide': actionsRadiatorViewEnabled
+         }"
+      >
         <span class="button-text">End Retro</span>
       </button>
     </div>
   </div>
 
 </header>
+
 
 <rq-feedback-dialog
   #feedbackDialog
