@@ -128,6 +128,10 @@ export class TeamPageComponent implements OnInit {
     return thoughtsInColumn;
   }
 
+  get unsortedAndUncompletedActionItems(): Array<ActionItem> {
+    return this.actionItems.filter((actionItem) => !actionItem.completed);
+  }
+
   public resetThoughts(): void {
     this.thoughtsArray.splice(0, this.thoughtsArray.length);
   }

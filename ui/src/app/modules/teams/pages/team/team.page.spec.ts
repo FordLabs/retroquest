@@ -369,7 +369,14 @@ describe('TeamPageComponent', () => {
 
       expect(component.actionItems.length).toEqual(1);
 
-      const updatedActionItem = {'id': 1, 'task': 'hi phil', 'completed': false, 'teamId': 'test', 'assignee': '', state: 'active'};
+      const updatedActionItem = {
+        'id': 1,
+        'task': 'hi phil',
+        'completed': false,
+        'teamId': 'test',
+        'assignee': '',
+        state: 'active'
+      };
       actionItemTopic.next({bodyJson: {type: 'put', payload: updatedActionItem}});
 
       expect(component.actionItems.length).toEqual(1);
@@ -531,6 +538,18 @@ describe('TeamPageComponent', () => {
       component.onActionItemsSortChanged(true);
       component.onActionItemsSortChanged(false);
       expect(component.actionItemsAreSorted).toBeFalsy();
+    });
+  });
+
+  describe('unsortedAndUncompletedActionItems', () => {
+
+    beforeEach(() => {
+      component.actionItems = [emptyActionItem(), emptyActionItem(), emptyActionItem()];
+      component.actionItems[1].completed = true;
+    });
+
+    it('should return the list of action items that are unsorted and not completed', () => {
+      expect(component.unsortedAndUncompletedActionItems.length).toEqual(2);
     });
   });
 });
