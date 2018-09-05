@@ -19,7 +19,9 @@
 @import 'color-vars';
 
 html {
+  background-color: $clouds;
   height: 100%;
+  overflow: auto;
   padding: 0;
 }
 

@@ -79,6 +79,7 @@ export class TeamPageComponent implements OnInit {
   thoughtsArray: Array<Thought> = [];
   selectedIndex = 0;
   actionItemsAreSorted = false;
+  currentView = 'normalView';
 
   ngOnInit(): void {
 
@@ -274,5 +275,17 @@ export class TeamPageComponent implements OnInit {
       return earliestDatePlaceholder;
     }
     return dateCreated;
+  }
+
+  public toggleActionsRadiatorAndNormalView(state: boolean): void {
+    this.currentView = (state) ? 'actionsRadiatorView' : 'normalView';
+  }
+
+  public actionsRadiatorViewIsSelected(): boolean {
+    return this.currentView === 'actionsRadiatorView';
+  }
+
+  public normalViewIsSelected(): boolean {
+    return this.currentView === 'normalView';
   }
 }
