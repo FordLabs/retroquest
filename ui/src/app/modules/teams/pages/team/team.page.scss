@@ -49,11 +49,11 @@
       display: none;
     }
 
-    ::ng-deep * {
+    .guide-button {
       background-color: $happy-green;
       box-sizing: border-box;
       height: 100%;
-      opacity: .2;
+      opacity: .35;
       width: 25%;
 
       &.happy-guide-button {
