@@ -17,7 +17,6 @@
 
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {emptyThought, Thought} from '../../domain/thought';
-import {text} from '../../../../../node_modules/@angular/core/src/render3/instructions';
 
 
 const BACKSPACE_KEY = 8;

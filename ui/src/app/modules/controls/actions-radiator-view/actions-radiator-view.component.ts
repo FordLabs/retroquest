@@ -58,6 +58,7 @@ export class ActionsRadiatorViewComponent {
   }
 
   public autoScrollPage() {
+    this.scrollToTopWithoutAnimation();
     this.scrollToBottomOfPage();
     this.scrollToTopOfPage();
 
@@ -96,6 +97,25 @@ export class ActionsRadiatorViewComponent {
         this.scrollingIntervalId = null;
       }
     }
+  }
+
+  public resetScroll(): void {
+    this.pageIsAutoScrolling = false;
+
+    const rootPage = $('html');
+    rootPage.stop(true);
+
+    window.clearInterval(this.scrollingIntervalId);
+
+    this.scrollingIntervalId = null;
+  }
+
+  private scrollToTopWithoutAnimation() {
+    const rootPage = $('html');
+    rootPage.animate(
+      {scrollTop: 0},
+      0
+    );
   }
 }
 
