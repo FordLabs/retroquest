@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ElementRef} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 
 import {Column} from '../../../domain/column';
@@ -30,6 +30,8 @@ import {ColumnService} from '../../services/column.service';
 import {WebsocketResponse} from '../../../domain/websocket-response';
 
 import * as moment from 'moment';
+import {ViewChild} from '@angular/core';
+import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-view/actions-radiator-view.component';
 
 @Component({
   selector: 'rq-team',
@@ -80,6 +82,8 @@ export class TeamPageComponent implements OnInit {
   selectedIndex = 0;
   actionItemsAreSorted = false;
   currentView = 'normalView';
+
+  @ViewChild('radiatorView') radiatorView: ActionsRadiatorViewComponent;
 
   ngOnInit(): void {
 
@@ -282,6 +286,9 @@ export class TeamPageComponent implements OnInit {
   }
 
   public toggleActionsRadiatorAndNormalView(state: boolean): void {
+    if (!state) {
+      this.radiatorView.resetScroll();
+    }
     this.currentView = (state) ? 'actionsRadiatorView' : 'normalView';
   }
 
