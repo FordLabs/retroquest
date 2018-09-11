@@ -31,7 +31,7 @@ import {WebsocketResponse} from '../../../domain/websocket-response';
 
 import * as moment from 'moment';
 import {ViewChild} from '@angular/core';
-import {ActionsRadiatorViewComponent} from "../../../controls/actions-radiator-view/actions-radiator-view.component";
+import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-view/actions-radiator-view.component';
 
 @Component({
   selector: 'rq-team',
@@ -286,7 +286,7 @@ export class TeamPageComponent implements OnInit {
   }
 
   public toggleActionsRadiatorAndNormalView(state: boolean): void {
-    if(!state) {
+    if (!state) {
       this.radiatorView.resetScroll();
     }
     this.currentView = (state) ? 'actionsRadiatorView' : 'normalView';
