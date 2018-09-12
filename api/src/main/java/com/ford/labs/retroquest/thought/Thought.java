@@ -77,11 +77,13 @@ public class Thought {
 
     /**
      * Sets message body. Will sanitize the string for html.
+     *
      * @param message
      */
     public void setMessage(String message) {
         this.message = Jsoup.clean(defaultString(message), Whitelist.basic())
-                .replaceAll("&amp;", "&");
+                .replaceAll("&amp;", "&")
+                .replaceAll("&nbsp;", " ");
     }
 
     private String getDiscussedString() {
