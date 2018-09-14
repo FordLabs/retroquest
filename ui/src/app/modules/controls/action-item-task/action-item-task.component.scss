@@ -30,9 +30,9 @@
   font-weight: bold;
   height: 75px;
   justify-content: flex-end;
+  position: relative;
   transition: box-shadow .2s cubic-bezier(.25, .8, .25, 1);
   width: 100px;
-  position: relative;
 
   &.dialog-overlay-border {
     rq-deletion-overlay {

@@ -18,28 +18,28 @@
 @import 'color-vars';
 
 :host {
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 20;
   background-color: opacity($white, .98);
   border-radius: 6px;
+  bottom: 0;
   box-shadow: 0 0 0 4px $unhappy-red;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 20;
 
   .hidden-input {
-    border: none;
-    padding: 0;
+    border: 0;
+    height: 0;
     margin: 0;
     opacity: 0;
+    padding: 0;
     pointer-events: none;
-    height: 0;
     width: 0;
   }
 
@@ -47,28 +47,28 @@
     align-items: center;
     box-sizing: border-box;
     display: flex;
+    flex: 1;
     font-size: 1rem;
     justify-content: center;
     min-height: 40px;
-    flex: 1;
   }
 
   .button-container {
     align-items: center;
+    border-top: 2px solid opacity($wet-asphalt, .06);
     display: flex;
     height: 40px;
     justify-content: center;
-    border-top: 2px solid opacity($wet-asphalt, .06);
 
     rq-button {
+      border-radius: 0;
       flex: 1;
       font-size: 1rem;
       height: 100%;
-      border-radius: 0;
 
       &.delete-decline-button {
-        box-sizing: border-box;
         border-right: 2px solid opacity($wet-asphalt, .06);
+        box-sizing: border-box;
 
         &:hover {
           color: $wet-asphalt;
@@ -77,8 +77,8 @@
 
       &.delete-accept-button {
         background-color: transparent;
+        border-radius: 0 0 6px;
         box-shadow: none;
-        border-radius: 0 0 6px 0;
         color: $unhappy-red;
       }
     }
