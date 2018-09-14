@@ -17,14 +17,14 @@
 
 <div class="content-area"
      (click)="emitTaskContentClicked()"
-     [ngClass]="{'disable': task.discussed}"
 >
   <span
     class="content-message"
-    *ngIf="!taskEditModeEnabled; else content_textarea"
+    [ngClass]="{'disable': task.discussed || deleteWasToggled}"
+    *ngIf="!taskEditModeEnabled && !deleteWasToggled"
   >{{task.message}}</span>
 
-  <ng-template #content_textarea>
+  <div *ngIf="taskEditModeEnabled">
     <div
       #content_value
       class="content-message editable-div"
@@ -43,7 +43,30 @@
     >
     </rq-floating-character-countdown>
 
-  </ng-template>
+  </div>
+
+  <div
+    class="delete-confirmation"
+    *ngIf="deleteWasToggled"
+  >
+    <div class="heading">
+      <div>Delete this thought?</div>
+    </div>
+    <div class="button-container">
+      <rq-button
+        class="delete-decline-button"
+        type="secondary"
+        text="no"
+        (click)="deleteWasToggled = false; $event.stopPropagation()"
+      ></rq-button>
+      <rq-button
+        class="delete-accept-button"
+        type="primary"
+        text="yes"
+        (click)="emitDeleteItem(); $event.stopPropagation()"
+      ></rq-button>
+    </div>
+  </div>
 
 
 </div>
@@ -51,14 +74,20 @@
 <div class="footer">
   <div
     class="container star-count-container"
-    [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
     (click)="addStar()"
     *ngIf="type !== 'action'; else date_created_container"
   >
-    <div class="star-background">
+    <div
+      class="star-background"
+      [ngClass]="{'disable': task.discussed || taskEditModeEnabled || deleteWasToggled}"
+    >
       <i class="fas fa-star star-icon"></i>
     </div>
-    <div class="star-count">{{task.hearts}}</div>
+    <div
+      class="star-count"
+      [ngClass]="{'disable': task.discussed || taskEditModeEnabled || deleteWasToggled}"
+    >{{task.hearts}}
+    </div>
   </div>
 
   <ng-template #date_created_container>
@@ -69,11 +98,13 @@
   </ng-template>
   <div
     class="container edit-container"
-    [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
     (click)="toggleEditMode()"
     *ngIf="!taskEditModeEnabled; else exit_edit_mode_icon"
   >
-    <i class="fas fa-edit"></i>
+    <i
+      class="fas fa-edit"
+      [ngClass]="{'disable': task.discussed || taskEditModeEnabled || deleteWasToggled}"
+    ></i>
   </div>
 
   <ng-template #exit_edit_mode_icon>
@@ -87,14 +118,16 @@
 
   <div
     class="container delete-container"
-    [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
-    (click)="emitDeleteItem()">
-    <i class="fas fa-trash-alt"></i>
+    (click)="toggleDeleteConfirmation()">
+    <i
+      class="fas fa-trash-alt"
+      [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
+    ></i>
   </div>
 
   <div
     class="complete-container"
-    [ngClass]="{'disable': taskEditModeEnabled}"
+    [ngClass]="{'disable': taskEditModeEnabled || deleteWasToggled}"
     (click)="toggleTaskComplete()"
   >
     <div

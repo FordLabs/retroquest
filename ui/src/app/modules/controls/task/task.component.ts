@@ -32,7 +32,8 @@ const DELETE_KEY = 46;
     '[class.happy]': 'type === \'happy\'',
     '[class.confused]': 'type === \'confused\'',
     '[class.sad]': 'type === \'unhappy\'',
-    '[class.action]': 'type === \'action\''
+    '[class.action]': 'type === \'action\'',
+    '[class.delete-mode]': 'deleteWasToggled'
   }
 })
 export class TaskComponent {
@@ -52,6 +53,7 @@ export class TaskComponent {
   maxMessageLength = 255;
   taskEditModeEnabled = false;
   _textValueLength = 0;
+  deleteWasToggled = false;
 
   constructor() {
   }
@@ -72,7 +74,10 @@ export class TaskComponent {
   }
 
   public emitDeleteItem(): void {
-    this.deleted.emit(this.task);
+    this.toggleDeleteConfirmation();
+    if (!this.deleteWasToggled) {
+      this.deleted.emit(this.task);
+    }
   }
 
   public emitTaskContentClicked(): void {
@@ -126,6 +131,10 @@ export class TaskComponent {
 
   get textValueLength(): number {
     return this._textValueLength;
+  }
+
+  public toggleDeleteConfirmation(): void {
+    this.deleteWasToggled = !this.deleteWasToggled;
   }
 }
 

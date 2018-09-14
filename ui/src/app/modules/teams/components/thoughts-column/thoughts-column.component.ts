@@ -85,9 +85,7 @@ export class ThoughtsColumnComponent {
   }
 
   onDeleted(thought: Thought) {
-    if (confirm('Are you sure you want to delete this thought?')) {
-      this.thoughtService.deleteThought(thought);
-    }
+    this.thoughtService.deleteThought(thought);
   }
 
   starCountChanged(starCount: number, index: number) {

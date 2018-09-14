@@ -153,6 +153,48 @@
         outline: none;
       }
     }
+
+    .delete-confirmation {
+      box-sizing: border-box;
+      height: auto;
+      min-height: 40px;
+      padding: 18px;
+      width: 100%;
+
+      .heading {
+        align-items: center;
+        box-sizing: border-box;
+        display: flex;
+        font-size: .9rem;
+        justify-content: center;
+        margin-bottom: 12px;
+      }
+
+      .button-container {
+        align-items: center;
+        box-sizing: border-box;
+        display: flex;
+        height: 30px;
+        justify-content: center;
+        padding: 0 48px;
+
+        rq-button {
+          flex: 1;
+          font-size: 1rem;
+          height: 100%;
+
+          &.delete-decline-button {
+            opacity: .5;
+          }
+
+          &.delete-accept-button {
+            background-color: $unhappy-red;
+            box-shadow: none;
+          }
+        }
+
+      }
+    }
   }
 
   .footer {
@@ -182,6 +224,7 @@
     }
 
     .complete-container {
+      box-sizing: border-box;
       cursor: pointer;
       position: relative;
 
