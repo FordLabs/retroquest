@@ -111,14 +111,28 @@ describe('ThoughtComponent', () => {
 
   describe('emitDeleteItem', () => {
 
-    it('should emit the actionItem to be deleted', () => {
+    it('should emit the actionItem to be deleted if the deletion flag is set to true', () => {
       component.deleted = jasmine.createSpyObj({emit: null});
 
       component.actionItem = emptyActionItem();
       component.actionItem.task = 'FAKE TASK';
+      component.deleteWasToggled = true;
+
       component.emitDeleteItem();
 
       expect(component.deleted.emit).toHaveBeenCalledWith(component.actionItem);
+    });
+
+    it('should not emit the actionItem to be deleted if the deletion flag is set to false', () => {
+      component.deleted = jasmine.createSpyObj({emit: null});
+
+      component.actionItem = emptyActionItem();
+      component.actionItem.task = 'FAKE TASK';
+      component.deleteWasToggled = false;
+
+      component.emitDeleteItem();
+
+      expect(component.deleted.emit).not.toHaveBeenCalledWith(component.actionItem);
     });
 
   });

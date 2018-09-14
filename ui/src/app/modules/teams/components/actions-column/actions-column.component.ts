@@ -48,9 +48,7 @@ export class ActionsColumnComponent {
   }
 
   public onDeleted(index: number) {
-    if (confirm('Are you sure you want to delete this action item?')) {
-      this.actionItemService.deleteActionItem(this.actionItems[index]);
-    }
+    this.actionItemService.deleteActionItem(this.actionItems[index]);
   }
 
   public onMessageChanged(message: string, index: number): void {

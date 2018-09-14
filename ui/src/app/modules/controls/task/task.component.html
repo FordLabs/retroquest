@@ -15,16 +15,24 @@
   ~ limitations under the License.
   -->
 
+<rq-deletion-overlay
+  *ngIf="deleteWasToggled"
+  (declineButtonClicked)="deleteWasToggled = false"
+  (acceptButtonClicked)="emitDeleteItem()"
+  (blur)="onDeleteConfirmationBlur()"
+  heading="Delete this thought?"
+></rq-deletion-overlay>
+
 <div class="content-area"
      (click)="emitTaskContentClicked()"
-     [ngClass]="{'disable': task.discussed}"
 >
   <span
     class="content-message"
-    *ngIf="!taskEditModeEnabled; else content_textarea"
+    [ngClass]="{'disable': task.discussed}"
+    *ngIf="!taskEditModeEnabled"
   >{{task.message}}</span>
 
-  <ng-template #content_textarea>
+  <div *ngIf="taskEditModeEnabled">
     <div
       #content_value
       class="content-message editable-div"
@@ -43,10 +51,10 @@
     >
     </rq-floating-character-countdown>
 
-  </ng-template>
-
+  </div>
 
 </div>
+
 
 <div class="footer">
   <div
@@ -111,3 +119,4 @@
   </div>
 
 </div>
+

@@ -69,24 +69,10 @@ describe('ActionsColumnComponent', () => {
 
   describe('onDeleted', () => {
 
-    it('should display a confirm dialog', () => {
-      const mockConfirm = spyOn(window, 'confirm').and.returnValue(true);
-      component.onDeleted(0);
-      expect(mockConfirm).toHaveBeenCalled();
-    });
-
-    it('should delete the action item on the backend if the user confirms the deletion', () => {
-      spyOn(window, 'confirm').and.returnValue(true);
+    it('should delete the action item on the backend', () => {
       component.onDeleted(0);
 
       expect(mockActionItemService.deleteActionItem).toHaveBeenCalledWith(component.actionItems[0]);
-    });
-
-    it('should not delete the action item on the backend if the user cancels the deletion', () => {
-      spyOn(window, 'confirm').and.returnValue(false);
-      component.onDeleted(0);
-
-      expect(mockActionItemService.deleteActionItem).not.toHaveBeenCalled();
     });
 
   });
