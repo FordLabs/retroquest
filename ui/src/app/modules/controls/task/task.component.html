@@ -15,38 +15,13 @@
   ~ limitations under the License.
   -->
 
-<div
-  class="delete-confirmation"
+<rq-deletion-overlay
   *ngIf="deleteWasToggled"
-  (focusout)="onDeleteConfirmationBlur($event)"
->
-
-  <input
-    #hiddenDeleteInput
-    class="hidden-input"
-    (blur)="onDeleteConfirmationBlur($event)"
-  >
-
-  <div class="heading">
-    <div>Delete this thought?</div>
-  </div>
-  <div class="button-container">
-    <rq-button
-      class="delete-decline-button"
-      type="secondary"
-      text="no"
-      (click)="deleteWasToggled = false;"
-    ></rq-button>
-    <rq-button
-      class="delete-accept-button"
-      type="primary"
-      text="yes"
-      (mousedown)="$event.preventDefault()"
-      (click)="emitDeleteItem(); hiddenDeleteInput.blur()"
-    ></rq-button>
-  </div>
-
-</div>
+  (declineButtonClicked)="deleteWasToggled = false"
+  (acceptButtonClicked)="emitDeleteItem()"
+  (blur)="onDeleteConfirmationBlur()"
+  heading="Delete this thought?"
+></rq-deletion-overlay>
 
 <div class="content-area"
      (click)="emitTaskContentClicked()"

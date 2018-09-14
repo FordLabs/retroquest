@@ -15,6 +15,14 @@
   ~ limitations under the License.
   -->
 
+<rq-deletion-overlay
+  *ngIf="deleteWasToggled"
+  (declineButtonClicked)="deleteWasToggled = false"
+  (acceptButtonClicked)="emitDeleteItem()"
+  (blur)="onDeleteConfirmationBlur()"
+  heading="Delete this Action Item?"
+></rq-deletion-overlay>
+
 <div class="content-area"
      [ngClass]="{'disable': actionItem.completed}"
 >

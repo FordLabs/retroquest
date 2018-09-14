@@ -48,8 +48,13 @@ export class ActionItemTaskComponent {
   taskEditModeEnabled = false;
   maxMessageLength = 255;
   _textValueLength = 0;
+  deleteWasToggled = false;
 
   constructor() {
+  }
+
+  public onDeleteConfirmationBlur(): void {
+    this.toggleDeleteConfirmation();
   }
 
   public toggleEditMode(): void {
@@ -62,7 +67,10 @@ export class ActionItemTaskComponent {
   }
 
   public emitDeleteItem(): void {
-    this.deleted.emit(this.actionItem);
+    this.toggleDeleteConfirmation();
+    if (!this.deleteWasToggled) {
+      this.deleted.emit(this.actionItem);
+    }
   }
 
   public emitTaskContentClicked(): void {
@@ -139,6 +147,10 @@ export class ActionItemTaskComponent {
 
   get textValueLength(): number {
     return this._textValueLength;
+  }
+
+  public toggleDeleteConfirmation(): void {
+    this.deleteWasToggled = !this.deleteWasToggled;
   }
 }
 

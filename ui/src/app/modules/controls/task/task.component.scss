@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 @import 'color-vars';
 
 :host {
@@ -94,75 +95,6 @@
     opacity: $host-opacity;
     pointer-events: none;
     user-select: none;
-  }
-
-  .delete-confirmation {
-    box-sizing: border-box;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 20;
-    background-color: opacity($white, .98);
-    border-radius: 6px;
-    box-shadow: 0 0 0 4px $unhappy-red;
-    display: flex;
-    flex-direction: column;
-
-    .hidden-input {
-      border: none;
-      padding: 0;
-      margin: 0;
-      opacity: 0;
-      pointer-events: none;
-      height: 0;
-      width: 0;
-    }
-
-    .heading {
-      align-items: center;
-      box-sizing: border-box;
-      display: flex;
-      font-size: 1rem;
-      justify-content: center;
-      min-height: 40px;
-      flex: 1;
-    }
-
-    .button-container {
-      align-items: center;
-      display: flex;
-      height: 40px;
-      justify-content: center;
-      border-top: 2px solid opacity($wet-asphalt, .06);
-
-      rq-button {
-        flex: 1;
-        font-size: 1rem;
-        height: 100%;
-        border-radius: 0;
-
-        &.delete-decline-button {
-          box-sizing: border-box;
-          border-right: 2px solid opacity($wet-asphalt, .06);
-
-          &:hover {
-            color: $wet-asphalt;
-          }
-        }
-
-        &.delete-accept-button {
-          background-color: transparent;
-          box-shadow: none;
-          border-radius: 0 0 6px 0;
-          color: $unhappy-red;
-        }
-      }
-
-    }
   }
 
   .content-area {
