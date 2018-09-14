@@ -16,6 +16,7 @@
   -->
 
 <rq-action-item-task
+  [enableOverlayBorder]="true"
   [actionItem]="actionItem"
   (click)="$event.stopPropagation()"
   (completed)="emitCompleted($event)"

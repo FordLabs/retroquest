@@ -35,6 +35,16 @@
   width: 100px;
   position: relative;
 
+  &.dialog-overlay-border {
+    rq-deletion-overlay {
+      $border-width: 8px;
+
+      box-shadow: 0 0 0 $border-width $unhappy-red;
+    }
+  }
+
+
+
   &.delete-mode {
     box-shadow: none;
   }

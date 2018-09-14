@@ -33,13 +33,15 @@ const DELETE_KEY = 46;
     '[class.confused]': 'type === \'confused\'',
     '[class.sad]': 'type === \'unhappy\'',
     '[class.action]': 'type === \'action\'',
-    '[class.delete-mode]': 'deleteWasToggled'
+    '[class.delete-mode]': 'deleteWasToggled',
+    '[class.dialog-overlay-border]': 'enableOverlayBorder'
   }
 })
 export class TaskComponent {
 
   @Input() type = '';
   @Input() task = emptyThought();
+  @Input() enableOverlayBorder = false;
 
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
   @Output() deleted: EventEmitter<Thought> = new EventEmitter<Thought>();

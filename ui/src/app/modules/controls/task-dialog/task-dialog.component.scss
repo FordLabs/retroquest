@@ -68,6 +68,10 @@
       width: calc(100% - 16px);
     }
 
+    rq-deletion-overlay {
+      background-color: pink;
+    }
+
     &.happy {
       box-shadow: $happy-shadow;
 

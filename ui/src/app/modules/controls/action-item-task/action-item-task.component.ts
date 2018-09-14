@@ -28,13 +28,15 @@ const DELETE_KEY = 46;
   styleUrls: ['./action-item-task.component.scss'],
   host: {
     '[class.push-order-to-bottom]': 'actionItem.completed',
-    '[class.edit-mode]': 'taskEditModeEnabled'
+    '[class.edit-mode]': 'taskEditModeEnabled',
+    '[class.dialog-overlay-border]': 'enableOverlayBorder'
   }
 })
 export class ActionItemTaskComponent {
 
   @Input() actionItem = emptyActionItem();
   @Input() readOnly = false;
+  @Input() enableOverlayBorder = false;
 
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
   @Output() deleted: EventEmitter<ActionItem> = new EventEmitter<ActionItem>();
