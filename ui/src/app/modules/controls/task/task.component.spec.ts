@@ -273,4 +273,20 @@ describe('ThoughtComponent', () => {
       expect(component.task.message).toEqual(fakeText);
     });
   });
+
+  describe('toggleDeleteConfirmation', () => {
+    it('should set the deletion flag to true if it was false before', () => {
+      component.deleteWasToggled = false;
+      component.toggleDeleteConfirmation();
+      expect(component.deleteWasToggled).toBeTruthy();
+    });
+  });
+
+  describe('toggleDeleteConfirmation', () => {
+    it('should set the deletion flag to false if it was true before', () => {
+      component.deleteWasToggled = true;
+      component.toggleDeleteConfirmation();
+      expect(component.deleteWasToggled).toBeFalsy();
+    });
+  });
 });

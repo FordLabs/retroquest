@@ -27,4 +27,46 @@ describe('DeletionOverlayComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('emitAcceptButtonClicked', () => {
+
+    beforeEach(() => {
+      component.acceptButtonClicked = jasmine.createSpyObj({
+        emit: null
+      });
+      component.emitAcceptButtonClicked();
+    });
+
+    it('should emit the accept button clicked signal', () => {
+      expect(component.acceptButtonClicked.emit).toHaveBeenCalled();
+    });
+  });
+
+  describe('emitDeclineButtonClicked', () => {
+
+    beforeEach(() => {
+      component.declineButtonClicked = jasmine.createSpyObj({
+        emit: null
+      });
+      component.emitDeclineButtonClicked();
+    });
+
+    it('should emit the accept button clicked signal', () => {
+      expect(component.declineButtonClicked.emit).toHaveBeenCalled();
+    });
+  });
+
+  describe('emitBlur', () => {
+
+    beforeEach(() => {
+      component.blur = jasmine.createSpyObj({
+        emit: null
+      });
+      component.emitBlur();
+    });
+
+    it('should emit the accept button clicked signal', () => {
+      expect(component.blur.emit).toHaveBeenCalled();
+    });
+  });
 });
