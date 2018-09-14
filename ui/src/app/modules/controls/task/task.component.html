@@ -15,13 +15,46 @@
   ~ limitations under the License.
   -->
 
+<div
+  class="delete-confirmation"
+  *ngIf="deleteWasToggled"
+  (focusout)="onDeleteConfirmationBlur($event)"
+>
+
+  <input
+    #hiddenDeleteInput
+    class="hidden-input"
+    (blur)="onDeleteConfirmationBlur($event)"
+  >
+
+  <div class="heading">
+    <div>Delete this thought?</div>
+  </div>
+  <div class="button-container">
+    <rq-button
+      class="delete-decline-button"
+      type="secondary"
+      text="no"
+      (click)="deleteWasToggled = false;"
+    ></rq-button>
+    <rq-button
+      class="delete-accept-button"
+      type="primary"
+      text="yes"
+      (mousedown)="$event.preventDefault()"
+      (click)="emitDeleteItem(); hiddenDeleteInput.blur()"
+    ></rq-button>
+  </div>
+
+</div>
+
 <div class="content-area"
      (click)="emitTaskContentClicked()"
 >
   <span
     class="content-message"
-    [ngClass]="{'disable': task.discussed || deleteWasToggled}"
-    *ngIf="!taskEditModeEnabled && !deleteWasToggled"
+    [ngClass]="{'disable': task.discussed}"
+    *ngIf="!taskEditModeEnabled"
   >{{task.message}}</span>
 
   <div *ngIf="taskEditModeEnabled">
@@ -45,49 +78,20 @@
 
   </div>
 
-  <div
-    class="delete-confirmation"
-    *ngIf="deleteWasToggled"
-  >
-    <div class="heading">
-      <div>Delete this thought?</div>
-    </div>
-    <div class="button-container">
-      <rq-button
-        class="delete-decline-button"
-        type="secondary"
-        text="no"
-        (click)="deleteWasToggled = false; $event.stopPropagation()"
-      ></rq-button>
-      <rq-button
-        class="delete-accept-button"
-        type="primary"
-        text="yes"
-        (click)="emitDeleteItem(); $event.stopPropagation()"
-      ></rq-button>
-    </div>
-  </div>
-
-
 </div>
+
 
 <div class="footer">
   <div
     class="container star-count-container"
+    [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
     (click)="addStar()"
     *ngIf="type !== 'action'; else date_created_container"
   >
-    <div
-      class="star-background"
-      [ngClass]="{'disable': task.discussed || taskEditModeEnabled || deleteWasToggled}"
-    >
+    <div class="star-background">
       <i class="fas fa-star star-icon"></i>
     </div>
-    <div
-      class="star-count"
-      [ngClass]="{'disable': task.discussed || taskEditModeEnabled || deleteWasToggled}"
-    >{{task.hearts}}
-    </div>
+    <div class="star-count">{{task.hearts}}</div>
   </div>
 
   <ng-template #date_created_container>
@@ -98,13 +102,11 @@
   </ng-template>
   <div
     class="container edit-container"
+    [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
     (click)="toggleEditMode()"
     *ngIf="!taskEditModeEnabled; else exit_edit_mode_icon"
   >
-    <i
-      class="fas fa-edit"
-      [ngClass]="{'disable': task.discussed || taskEditModeEnabled || deleteWasToggled}"
-    ></i>
+    <i class="fas fa-edit"></i>
   </div>
 
   <ng-template #exit_edit_mode_icon>
@@ -118,16 +120,14 @@
 
   <div
     class="container delete-container"
-    (click)="toggleDeleteConfirmation()">
-    <i
-      class="fas fa-trash-alt"
-      [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
-    ></i>
+    [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
+    (click)="emitDeleteItem()">
+    <i class="fas fa-trash-alt"></i>
   </div>
 
   <div
     class="complete-container"
-    [ngClass]="{'disable': taskEditModeEnabled || deleteWasToggled}"
+    [ngClass]="{'disable': taskEditModeEnabled}"
     (click)="toggleTaskComplete()"
   >
     <div
@@ -144,3 +144,4 @@
   </div>
 
 </div>
+

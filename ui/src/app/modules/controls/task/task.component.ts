@@ -48,6 +48,7 @@ export class TaskComponent {
   @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @ViewChild('content_value') editableTextArea: ElementRef;
+  @ViewChild('hiddenDeleteInput') hiddenDeleteInput: ElementRef;
 
   starCountMax = 99;
   maxMessageLength = 255;
@@ -56,6 +57,11 @@ export class TaskComponent {
   deleteWasToggled = false;
 
   constructor() {
+  }
+
+
+  public onDeleteConfirmationBlur(event): void {
+    this.toggleDeleteConfirmation();
   }
 
   public toggleEditMode(): void {
@@ -77,6 +83,10 @@ export class TaskComponent {
     this.toggleDeleteConfirmation();
     if (!this.deleteWasToggled) {
       this.deleted.emit(this.task);
+    } else {
+      setTimeout(() => {
+        this.hiddenDeleteInput.nativeElement.focus();
+      }, 0);
     }
   }
 
