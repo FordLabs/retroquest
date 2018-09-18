@@ -32,6 +32,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 public class TeamService {
     private final ThoughtRepository thoughtRepository;
@@ -134,4 +136,9 @@ public class TeamService {
         }
         throw new BoardDoesNotExistException();
     }
+
+    public long getTeamCount() {
+        return teamRepository.count();
+    }
+
 }

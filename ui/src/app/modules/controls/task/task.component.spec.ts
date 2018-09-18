@@ -134,14 +134,26 @@ describe('ThoughtComponent', () => {
 
   describe('emitDeleteItem', () => {
 
-    it('should emit the actionItem to be deleted', () => {
+    it('should emit the actionItem to be deleted is the deletion flag is set to true', () => {
       component.deleted = jasmine.createSpyObj({emit: null});
-
       component.task = emptyThought();
       component.task.hearts = 1;
+
+      component.deleteWasToggled = true;
       component.emitDeleteItem();
 
       expect(component.deleted.emit).toHaveBeenCalledWith(component.task);
+    });
+
+    it('should not emit the actionItem to be deleted is the deletion flag is set to false', () => {
+      component.deleted = jasmine.createSpyObj({emit: null});
+      component.task = emptyThought();
+      component.task.hearts = 1;
+
+      component.deleteWasToggled = false;
+      component.emitDeleteItem();
+
+      expect(component.deleted.emit).not.toHaveBeenCalledWith(component.task);
     });
 
   });
@@ -259,6 +271,22 @@ describe('ThoughtComponent', () => {
       const fakeText = 'HELLO I AM TEXT';
       component.updateTaskMessage(fakeText);
       expect(component.task.message).toEqual(fakeText);
+    });
+  });
+
+  describe('toggleDeleteConfirmation', () => {
+    it('should set the deletion flag to true if it was false before', () => {
+      component.deleteWasToggled = false;
+      component.toggleDeleteConfirmation();
+      expect(component.deleteWasToggled).toBeTruthy();
+    });
+  });
+
+  describe('toggleDeleteConfirmation', () => {
+    it('should set the deletion flag to false if it was true before', () => {
+      component.deleteWasToggled = true;
+      component.toggleDeleteConfirmation();
+      expect(component.deleteWasToggled).toBeFalsy();
     });
   });
 });

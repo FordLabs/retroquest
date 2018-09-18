@@ -15,13 +15,27 @@
   ~ limitations under the License.
   -->
 
-<rq-action-item-task
-  [enableOverlayBorder]="true"
-  [actionItem]="actionItem"
-  (click)="$event.stopPropagation()"
-  (completed)="emitCompleted($event)"
-  (deleted)="emitDeleted()"
-  (messageChanged)="emitMessageChanged($event)"
-  (assigneeUpdated)="emitAssigneeUpdated($event)"
+<input
+  #hiddenDeleteInput
+  class="hidden-input"
+  (blur)="emitBlur()"
 >
-</rq-action-item-task>
+
+<div class="heading">
+  <div>{{heading}}</div>
+</div>
+<div class="button-container">
+  <rq-button
+    class="delete-decline-button"
+    type="secondary"
+    text="no"
+    (click)="emitDeclineButtonClicked()"
+  ></rq-button>
+  <rq-button
+    class="delete-accept-button"
+    type="primary"
+    text="yes"
+    (mousedown)="$event.preventDefault()"
+    (click)="emitAcceptButtonClicked(); hiddenDeleteInput.blur()"
+  ></rq-button>
+</div>

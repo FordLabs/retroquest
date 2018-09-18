@@ -32,13 +32,16 @@ const DELETE_KEY = 46;
     '[class.happy]': 'type === \'happy\'',
     '[class.confused]': 'type === \'confused\'',
     '[class.sad]': 'type === \'unhappy\'',
-    '[class.action]': 'type === \'action\''
+    '[class.action]': 'type === \'action\'',
+    '[class.delete-mode]': 'deleteWasToggled',
+    '[class.dialog-overlay-border]': 'enableOverlayBorder'
   }
 })
 export class TaskComponent {
 
   @Input() type = '';
   @Input() task = emptyThought();
+  @Input() enableOverlayBorder = false;
 
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
   @Output() deleted: EventEmitter<Thought> = new EventEmitter<Thought>();
@@ -52,8 +55,14 @@ export class TaskComponent {
   maxMessageLength = 255;
   taskEditModeEnabled = false;
   _textValueLength = 0;
+  deleteWasToggled = false;
 
   constructor() {
+  }
+
+
+  public onDeleteConfirmationBlur(): void {
+    this.toggleDeleteConfirmation();
   }
 
   public toggleEditMode(): void {
@@ -72,7 +81,10 @@ export class TaskComponent {
   }
 
   public emitDeleteItem(): void {
-    this.deleted.emit(this.task);
+    this.toggleDeleteConfirmation();
+    if (!this.deleteWasToggled) {
+      this.deleted.emit(this.task);
+    }
   }
 
   public emitTaskContentClicked(): void {
@@ -126,6 +138,10 @@ export class TaskComponent {
 
   get textValueLength(): number {
     return this._textValueLength;
+  }
+
+  public toggleDeleteConfirmation(): void {
+    this.deleteWasToggled = !this.deleteWasToggled;
   }
 }
 
