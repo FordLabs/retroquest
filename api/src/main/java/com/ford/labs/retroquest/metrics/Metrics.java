@@ -24,20 +24,6 @@ public class Metrics {
     }
 
     @ManagedAttribute
-    public int getTeamCount() {
-        return teamRepository.findAll().size();
-    }
-
-    public int getTeamCount(LocalDate startDate, LocalDate endDate) {
-        LocalDate finalStartTime = startDate == null ? LocalDate.MIN : startDate;
-        LocalDate finalEndTime = endDate == null ? LocalDate.now() : endDate;
-        return teamRepository.findAll().stream()
-                .filter(team -> !team.getDateCreated().isBefore(finalStartTime))
-                .filter(team -> !team.getDateCreated().isAfter(finalEndTime))
-                .collect(toList()).size();
-    }
-
-    @ManagedAttribute
     public int getFeedbackCount() {
         return feedbackRepository.findAll().size();
     }
