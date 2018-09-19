@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.columntitle;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,7 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
 @Data
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class ColumnTitle implements Serializable {
 
@@ -47,15 +49,4 @@ public class ColumnTitle implements Serializable {
     @NaturalId
     private String teamId;
 
-    public ColumnTitle(Long id, String topic, String title, String teamId) {
-        this.id = id;
-        this.topic = topic;
-        setTitle(title);
-        this.teamId = teamId;
-    }
-
-    public void setTitle(String title) {
-        this.title = Jsoup.clean(defaultString(title), Whitelist.basic())
-                .replaceAll("&amp;", "&");
-    }
 }

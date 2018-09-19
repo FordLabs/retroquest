@@ -18,6 +18,7 @@
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {ActionItem, emptyActionItem} from '../../domain/action-item';
 import * as moment from 'moment';
+import {emojify} from "../../utils/EmojiGenerator";
 
 const BACKSPACE_KEY = 8;
 const DELETE_KEY = 46;
@@ -153,6 +154,10 @@ export class ActionItemTaskComponent {
 
   public toggleDeleteConfirmation(): void {
     this.deleteWasToggled = !this.deleteWasToggled;
+  }
+
+  public emojifyText(text: string): string {
+    return emojify(text);
   }
 }
 

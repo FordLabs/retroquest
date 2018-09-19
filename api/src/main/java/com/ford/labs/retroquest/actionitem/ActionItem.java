@@ -51,22 +51,11 @@ public class ActionItem {
 
     public ActionItem(Long id, String task, boolean completed, String teamId, String assignee, Date dateCreated) {
         this.id = id;
-        setTask(task);
+        this.task = task;
         this.completed = completed;
         this.teamId = teamId;
         setAssignee(assignee);
         this.dateCreated = dateCreated;
-    }
-
-    /**
-     * Sets task body. Will sanitize the string for html.
-     *
-     * @param task
-     */
-    public void setTask(String task) {
-        this.task = Jsoup.clean(defaultString(task), Whitelist.basic())
-                .replaceAll("&amp;", "&")
-                .replaceAll("&nbsp;", " ");
     }
 
     public void setAssignee(String assignee) {

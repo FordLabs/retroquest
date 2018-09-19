@@ -30,7 +30,7 @@
     class="content-message"
     [ngClass]="{'disable': task.discussed}"
     *ngIf="!taskEditModeEnabled"
-  >{{task.message}}</span>
+  >{{emojifyText(task.message)}}</span>
 
   <div *ngIf="taskEditModeEnabled">
     <div
