@@ -24,7 +24,6 @@ import org.springframework.data.domain.Persistable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
 import java.time.LocalDate;
 
 @Data

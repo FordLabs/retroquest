@@ -19,8 +19,6 @@ package com.ford.labs.retroquest.columntitle;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
 public class ColumnTitleTest {
 
     @Test
