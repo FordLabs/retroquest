@@ -231,6 +231,12 @@
         font-size: .65rem;
         font-weight: bold;
         opacity: .6;
+
+        &.disable {
+          opacity: $host-opacity;
+          pointer-events: none;
+          user-select: none;
+        }
       }
 
       .date-created-value {

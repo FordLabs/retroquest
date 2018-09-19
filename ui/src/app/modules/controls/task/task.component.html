@@ -59,14 +59,18 @@
 <div class="footer">
   <div
     class="container star-count-container"
-    [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
     (click)="addStar()"
     *ngIf="type !== 'action'; else date_created_container"
   >
-    <div class="star-background">
+    <div class="star-background"
+         [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
+    >
       <i class="fas fa-star star-icon"></i>
     </div>
-    <div class="star-count">{{task.hearts}}</div>
+    <div class="star-count"
+         [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
+    >{{task.hearts}}
+    </div>
   </div>
 
   <ng-template #date_created_container>
@@ -77,11 +81,12 @@
   </ng-template>
   <div
     class="container edit-container"
-    [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
     (click)="toggleEditMode()"
     *ngIf="!taskEditModeEnabled; else exit_edit_mode_icon"
   >
-    <i class="fas fa-edit"></i>
+    <i class="fas fa-edit"
+       [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
+    ></i>
   </div>
 
   <ng-template #exit_edit_mode_icon>
@@ -95,9 +100,10 @@
 
   <div
     class="container delete-container"
-    [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
     (click)="emitDeleteItem()">
-    <i class="fas fa-trash-alt"></i>
+    <i class="fas fa-trash-alt"
+       [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
+    ></i>
   </div>
 
   <div
