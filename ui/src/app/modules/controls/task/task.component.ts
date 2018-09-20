@@ -17,7 +17,7 @@
 
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {emptyThought, Thought} from '../../domain/thought';
-import {emojify} from "../../utils/EmojiGenerator";
+import {emojify} from '../../utils/EmojiGenerator';
 
 
 const BACKSPACE_KEY = 8;
