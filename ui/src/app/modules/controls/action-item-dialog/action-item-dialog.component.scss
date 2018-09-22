@@ -41,6 +41,7 @@
     $base-drop-shadow: 0 19px 38px opacity($black, .3);
     $border-width: 8px;
     $action-shadow: 0 0 0 $border-width $action-yellow, $base-drop-shadow;
+    $edit-mode-shadow:  0 0 0 8px $grape, $base-drop-shadow;
 
     border-radius: 6px;
     box-shadow: $action-shadow;
@@ -54,6 +55,14 @@
 
     &:hover {
       box-shadow: $action-shadow;
+    }
+
+    &.edit-mode {
+      box-shadow: $edit-mode-shadow;
+
+      &:hover {
+        box-shadow: $edit-mode-shadow;
+      }
     }
 
     @media only screen and (max-width: 770px) {
