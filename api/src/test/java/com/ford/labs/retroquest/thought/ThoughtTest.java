@@ -48,13 +48,6 @@ public class ThoughtTest {
         assertThat(actual, contains("Heyya", "message", "9", "no"));
     }
 
-
-    @Test
-    public void shouldSanitizeMessage() {
-        Thought thought = Thought.builder().message("<div>Sanitized</div>").build();
-        assertThat(thought.getMessage(), is(equalTo("Sanitized")));
-    }
-
     @Test
     public void shouldIncrementHearts() {
         Thought thought = new Thought();

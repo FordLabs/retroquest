@@ -17,6 +17,7 @@
 
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Column} from '../../domain/column';
+import {emojify} from '../../utils/EmojiGenerator';
 
 @Component({
   selector: 'rq-column-header',
@@ -91,4 +92,9 @@ export class ColumnHeaderComponent implements OnInit {
     this.escapeKeyPressed = true;
     this.blurInput();
   }
+
+  public emojifyText(text: string): string {
+    return emojify(text);
+  }
+
 }

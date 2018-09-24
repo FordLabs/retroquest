@@ -33,7 +33,7 @@
     class="content-message"
     (click)="emitTaskContentClicked()"
     *ngIf="!taskEditModeEnabled; else content_textarea"
-  >{{actionItem.task}}</span>
+  >{{emojifyText(actionItem.task)}}</span>
 
     <ng-template #content_textarea>
       <div
