@@ -77,7 +77,15 @@
       font-weight: inherit;
       padding: 24px 48px;
       position: relative;
-      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+
+      .sub-heading {
+        font-size: 1rem;
+        color: opacity($wet-asphalt, .5);
+      }
     }
 
     .footer {
