@@ -62,6 +62,14 @@
     &:hover {
       box-shadow: 0 0 0 $host-border-width $happy-green;
     }
+
+    &.edit-mode {
+      box-shadow: 0 0 0 4px $grape;
+
+      &:hover {
+        box-shadow: 0 0 0 4px $grape;
+      }
+    }
   }
 
   &.confused {
