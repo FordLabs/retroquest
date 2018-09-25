@@ -109,10 +109,7 @@
     @media only screen and (max-width: 610px) {
       display: block;
       justify-content: normal;
-      margin-bottom: $guide-button-section-height + 12px;
-      padding-left: 12px;
-      padding-right: 12px;
-      padding-top: 0;
+      padding: 0 12px $guide-button-section-height + 48px;
       width: 100%;
     }
 
