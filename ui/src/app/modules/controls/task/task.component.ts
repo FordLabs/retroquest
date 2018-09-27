@@ -17,6 +17,7 @@
 
 import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {emptyThought, Thought} from '../../domain/thought';
+import {emojify} from '../../utils/EmojiGenerator';
 
 
 const BACKSPACE_KEY = 8;
@@ -142,6 +143,10 @@ export class TaskComponent {
 
   public toggleDeleteConfirmation(): void {
     this.deleteWasToggled = !this.deleteWasToggled;
+  }
+
+  public emojifyText(text: string): string {
+    return emojify(text);
   }
 }
 

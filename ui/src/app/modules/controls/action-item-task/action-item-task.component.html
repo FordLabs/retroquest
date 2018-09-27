@@ -33,7 +33,7 @@
     class="content-message"
     (click)="emitTaskContentClicked()"
     *ngIf="!taskEditModeEnabled; else content_textarea"
-  >{{actionItem.task}}</span>
+  >{{emojifyText(actionItem.task)}}</span>
 
     <ng-template #content_textarea>
       <div
@@ -79,19 +79,25 @@
 <div class="footer">
   <div
     class="container date-created-container"
-    [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled}"
   >
-    <div class="date-created-header">created</div>
-    <div class="date-created-value">{{getDateCreated()}}</div>
+    <div class="date-created-header"
+         [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled}"
+    >created
+    </div>
+    <div class="date-created-value"
+         [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled}"
+    >{{getDateCreated()}}
+    </div>
   </div>
 
   <div
     class="container edit-container"
-    [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled || readOnly}"
     (click)="toggleEditMode()"
     *ngIf="!taskEditModeEnabled; else exit_edit_mode_icon"
   >
-    <i class="fas fa-edit"></i>
+    <i class="fas fa-edit"
+       [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled || readOnly}"
+    ></i>
   </div>
 
   <ng-template #exit_edit_mode_icon>
@@ -105,9 +111,10 @@
 
   <div
     class="container delete-container"
-    [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled || readOnly}"
     (click)="emitDeleteItem()">
-    <i class="fas fa-trash-alt"></i>
+    <i class="fas fa-trash-alt"
+       [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled || readOnly}"
+    ></i>
   </div>
 
   <div

@@ -45,17 +45,4 @@ public class ActionItemTest {
         List<String> actual = actionItem.getCSVFields();
         assertThat(actual, contains("action item", "task", "", "no", "user"));
     }
-
-    @Test
-    public void shouldSanitizeTask() {
-        ActionItem actionItem = ActionItem.builder().task("<div>Sanitized</div>").build();
-        assertThat(actionItem.getTask(), is(equalTo("Sanitized")));
-    }
-
-    @Test
-    public void shouldSanitizeAssignee() {
-        ActionItem actionItem = ActionItem.builder().assignee("<div>Henry Ford</div>").build();
-        assertThat(actionItem.getAssignee(), is(equalTo("Henry Ford")));
-    }
-
 }

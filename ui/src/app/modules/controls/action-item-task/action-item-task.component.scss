@@ -62,6 +62,8 @@
   }
 
   &.edit-mode {
+    box-shadow: 0 0 0 4px $grape;
+
     &:hover {
       box-shadow: 0 0 0 4px $grape;
     }
@@ -231,6 +233,12 @@
         font-size: .65rem;
         font-weight: bold;
         opacity: .6;
+
+        &.disable {
+          opacity: $host-opacity;
+          pointer-events: none;
+          user-select: none;
+        }
       }
 
       .date-created-value {

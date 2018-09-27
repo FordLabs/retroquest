@@ -67,17 +67,33 @@
     .content-area {
       $content-area-padding: 12px;
 
-      background-color: inherit;
+      align-items: center;
 
+      background-color: inherit;
       border-top-left-radius: inherit;
       border-top-right-radius: inherit;
       cursor: default;
+      display: flex;
       flex: 1;
+      flex-direction: column;
       font-size: inherit;
       font-weight: inherit;
+      justify-content: center;
       padding: 24px 48px;
       position: relative;
-      text-align: center;
+
+      .sub-heading {
+        color: opacity($wet-asphalt, .5);
+        font-size: 1rem;
+      }
+
+      @media only screen and (max-width: 610px) {
+        padding: 24px 12px;
+
+        .heading {
+          font-size: 1.1rem;
+        }
+      }
     }
 
     .footer {

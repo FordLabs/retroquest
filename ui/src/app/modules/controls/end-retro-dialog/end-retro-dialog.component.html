@@ -16,9 +16,12 @@
   -->
 
 
-<div class="dialog">
+<div class="dialog" (click)="$event.stopPropagation()">
 
-  <div class="content-area">Do you want to end the retro?</div>
+  <div class="content-area">
+    <div class="heading">Do you want to end the retro?</div>
+    <div class="sub-heading">This will delete all thoughts!</div>
+  </div>
 
   <div class="footer">
     <div class="container" id="cancel-button-container">

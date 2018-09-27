@@ -37,7 +37,6 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -112,7 +111,8 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
                 .andReturn();
 
-        Thought thought = thoughtRepository.findAllByTeamId("BeachBums").get(0);
+        Thought thought = thoughtRepository.findAllByTeamId("BeachBums")
+                .get(0);
 
         assertNotNull(thought.getColumnTitle());
     }
@@ -278,7 +278,8 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
         session.send(thoughtEndpoint + "/create", thoughJsonBody.getBytes());
 
         Thought thought = getLatestThoughtInQueue();
-        assertEquals("Message", thought.getMessage());
+        Assertions.assertThat("Message")
+                .isEqualTo(thought.getMessage());
     }
 
     @Test
@@ -300,7 +301,8 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
         String editThoughtJsonBody = "{\"message\":\"Edited message\"}";
         session.send(thoughtEndpoint + "/" + thought.getId() + "/edit", editThoughtJsonBody.getBytes());
         Thought editedThought = getLatestThoughtInQueue();
-        assertEquals("Edited message", editedThought.getMessage());
+
+        Assertions.assertThat("Edited message").isEqualTo(editedThought.getMessage());
     }
 
     @Test
@@ -323,8 +325,10 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
 
         Long returnVal = getLatestIdInQueue();
 
-        Assertions.assertThat(returnVal).isNotNull();
-        Assertions.assertThat(returnVal).isEqualTo(thought.getId());
+        Assertions.assertThat(returnVal)
+                .isNotNull();
+        Assertions.assertThat(returnVal)
+                .isEqualTo(thought.getId());
     }
 
     @Test
@@ -346,8 +350,10 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
 
         final Long returnVal = getLatestIdInQueue();
 
-        Assertions.assertThat(returnVal).isNotNull();
-        Assertions.assertThat(returnVal).isEqualTo(-1L);
+        Assertions.assertThat(returnVal)
+                .isNotNull();
+        Assertions.assertThat(returnVal)
+                .isEqualTo(-1L);
     }
 
     private Thought getLatestThoughtInQueue() throws IOException, InterruptedException {

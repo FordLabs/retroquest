@@ -18,19 +18,14 @@
 package com.ford.labs.retroquest.thought;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
 
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.apache.commons.lang3.StringUtils.defaultString;
 
 @Data
 @Entity
@@ -67,23 +62,12 @@ public class Thought {
 
     public Thought(Long id, String message, int hearts, String topic, boolean discussed, String teamId, ColumnTitle columnTitle) {
         this.id = id;
-        setMessage(message);
+        this.message = message;
         this.hearts = hearts;
         this.topic = topic;
         this.discussed = discussed;
         this.teamId = teamId;
         this.columnTitle = columnTitle;
-    }
-
-    /**
-     * Sets message body. Will sanitize the string for html.
-     *
-     * @param message
-     */
-    public void setMessage(String message) {
-        this.message = Jsoup.clean(defaultString(message), Whitelist.basic())
-                .replaceAll("&amp;", "&")
-                .replaceAll("&nbsp;", " ");
     }
 
     private String getDiscussedString() {

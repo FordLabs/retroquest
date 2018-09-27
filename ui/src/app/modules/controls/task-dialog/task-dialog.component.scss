@@ -43,10 +43,11 @@
 
     $action-shadow: 0 0 0 $border-width $action-yellow, $base-drop-shadow;
 
-
     $confused-shadow: 0 0 0 $border-width $confused-blue, $base-drop-shadow;
     $happy-shadow: 0 0 0 $border-width $happy-green, $base-drop-shadow;
     $sad-shadow: 0 0 0 $border-width $unhappy-red, $base-drop-shadow;
+
+    $edit-mode-shadow: 0 0 0 8px $grape, $base-drop-shadow;
 
     border-radius: 6px;
     box-sizing: border-box;
@@ -74,6 +75,15 @@
       &:hover {
         box-shadow: $happy-shadow;
       }
+
+      &.edit-mode {
+        box-shadow: $edit-mode-shadow;
+
+        &:hover {
+          box-shadow: $edit-mode-shadow;
+        }
+      }
+
     }
 
     &.confused {
@@ -82,6 +92,14 @@
       &:hover {
         box-shadow: $confused-shadow;
       }
+
+      &.edit-mode {
+        box-shadow: $edit-mode-shadow;
+
+        &:hover {
+          box-shadow: $edit-mode-shadow;
+        }
+      }
     }
 
     &.sad {
@@ -89,6 +107,14 @@
 
       &:hover {
         box-shadow: $sad-shadow;
+      }
+
+      &.edit-mode {
+        box-shadow: $edit-mode-shadow;
+
+        &:hover {
+          box-shadow: $edit-mode-shadow;
+        }
       }
     }
   }

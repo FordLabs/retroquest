@@ -18,11 +18,10 @@
 package com.ford.labs.retroquest.actionitem;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,11 +31,10 @@ import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.apache.commons.lang3.StringUtils.defaultString;
-
 @Data
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class ActionItem {
 
@@ -48,32 +46,6 @@ public class ActionItem {
     private String teamId;
     private String assignee;
     private Date dateCreated;
-
-    public ActionItem(Long id, String task, boolean completed, String teamId, String assignee, Date dateCreated) {
-        this.id = id;
-        setTask(task);
-        this.completed = completed;
-        this.teamId = teamId;
-        setAssignee(assignee);
-        this.dateCreated = dateCreated;
-    }
-
-    /**
-     * Sets task body. Will sanitize the string for html.
-     *
-     * @param task
-     */
-    public void setTask(String task) {
-        this.task = Jsoup.clean(defaultString(task), Whitelist.basic())
-                .replaceAll("&amp;", "&")
-                .replaceAll("&nbsp;", " ");
-    }
-
-    public void setAssignee(String assignee) {
-        this.assignee = Jsoup.clean(defaultString(assignee), Whitelist.basic())
-                .replaceAll("&amp;", "&")
-                .replaceAll("&nbsp;", " ");
-    }
 
     private String getCompletedString() {
         return completed ? "yes" : "no";

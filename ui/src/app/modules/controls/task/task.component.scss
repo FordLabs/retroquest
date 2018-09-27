@@ -26,7 +26,7 @@
   color: inherit;
   display: flex;
   flex-direction: column;
-  font-size: .8rem;
+  font-size: 1rem;
   font-weight: bold;
   height: 75px;
   justify-content: flex-end;
@@ -62,6 +62,14 @@
     &:hover {
       box-shadow: 0 0 0 $host-border-width $happy-green;
     }
+
+    &.edit-mode {
+      box-shadow: 0 0 0 4px $grape;
+
+      &:hover {
+        box-shadow: 0 0 0 4px $grape;
+      }
+    }
   }
 
   &.confused {
@@ -96,6 +104,8 @@
   }
 
   &.edit-mode {
+    box-shadow: 0 0 0 4px $grape;
+
     &:hover {
       box-shadow: 0 0 0 4px $grape;
     }
