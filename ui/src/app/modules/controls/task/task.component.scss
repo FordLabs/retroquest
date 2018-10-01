@@ -169,14 +169,21 @@
       height: auto;
       min-height: 40px;
       padding: 18px;
+      white-space: pre-wrap;
       width: 100%;
 
-      &.editable-div {
-        border-radius: inherit;
+      &.edit-input {
+        border: 0;
+        border-radius: 6px 6px 0 0;
         box-shadow: none;
         cursor: text;
         display: inline-block;
+        font-family: inherit;
+        font-size: inherit;
+        font-weight: inherit;
         outline: none;
+        overflow: auto;
+        resize: none;
       }
     }
   }
