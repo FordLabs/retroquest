@@ -288,4 +288,15 @@
       }
     }
   }
+
+  &.dialog-task {
+    .content-area {
+      margin-bottom: 42px;
+      overflow: auto;
+    }
+
+    .footer {
+      position: absolute;
+    }
+  }
 }
