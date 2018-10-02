@@ -26,18 +26,18 @@
 <div
   class="content-area"
   [ngClass]="{
-    'disable': actionItem.completed || taskEditModeEnabled,
-    'opacify': actionItem.completed || taskEditModeEnabled
+    'disable': actionItem.completed,
+    'opacify': actionItem.completed
   }"
 >
 
   <div class="content-container">
 
-  <span
-    class="content-message"
-    (click)="emitTaskContentClicked()"
-    *ngIf="!taskEditModeEnabled; else content_textarea"
-  >{{emojifyText(actionItem.task)}}</span>
+    <span
+      class="content-message"
+      (click)="emitTaskContentClicked()"
+      *ngIf="!taskEditModeEnabled; else content_textarea"
+    >{{emojifyText(actionItem.task)}}</span>
 
     <ng-template #content_textarea>
       <textarea #content_value [ngModel]="actionItem.task"
