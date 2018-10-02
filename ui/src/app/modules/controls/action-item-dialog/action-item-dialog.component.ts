@@ -45,10 +45,12 @@ export class ActionItemDialogComponent {
     this.visible = false;
     this.visibilityChanged.emit(this.visible);
     document.onkeydown = null;
+    document.body.style.overflow = null;
   }
 
   public show(): void {
     this.visible = true;
+    document.body.style.overflow = 'hidden';
     document.onkeydown = event => {
       if (event.keyCode === ESC_KEY) {
         this.hide();

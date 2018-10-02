@@ -20,9 +20,6 @@ import {ActionItem, emptyActionItem} from '../../domain/action-item';
 import * as moment from 'moment';
 import {emojify} from '../../utils/EmojiGenerator';
 
-const BACKSPACE_KEY = 8;
-const DELETE_KEY = 46;
-
 @Component({
   selector: 'rq-action-item-task',
   templateUrl: './action-item-task.component.html',
@@ -128,24 +125,13 @@ export class ActionItemTaskComponent {
     document.execCommand('selectAll', false, null);
   }
 
-  public onKeyDown(keyEvent: KeyboardEvent, innerText: string) {
-    if (!this.keyEventIsAnAction(keyEvent)) {
-      if (innerText.length + keyEvent.key.length > this.maxMessageLength) {
-        keyEvent.preventDefault();
-      }
-    }
+  public setMessageLength(textContent: string): void {
+    this._textValueLength = textContent.length;
   }
 
-  public onKeyUp(textContent: string, innerText: string): void {
-    this._textValueLength = Math.min(textContent.length, innerText.length);
-  }
-
-  public updateActionItemMessage(innerText: string): void {
+  public updateActionItemMessage(event, innerText: string): void {
+    event.preventDefault();
     this.actionItem.task = innerText;
-  }
-
-  private keyEventIsAnAction(keyEvent: KeyboardEvent): boolean {
-    return keyEvent.keyCode === BACKSPACE_KEY || keyEvent.keyCode === DELETE_KEY;
   }
 
   get textValueLength(): number {

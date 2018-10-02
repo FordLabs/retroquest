@@ -92,48 +92,6 @@
     word-break: break-word;
     word-wrap: break-word;
 
-    .assigned-to-section {
-      $label-color: #a9a9a9;
-      box-sizing: border-box;
-      margin-bottom: 12px;
-      padding: 0 18px;
-      width: 100%;
-
-      .label {
-        cursor: default;
-        font-size: .7rem;
-        opacity: .6;
-        text-transform: lowercase;
-      }
-
-      .value {
-        border: 0;
-        border-bottom: 2px solid $action-yellow;
-        color: inherit;
-        display: inline-block;
-        font-size: .8rem;
-        font-weight: bold;
-        height: 18px;
-        outline: none;
-        text-overflow: ellipsis;
-        transition: border-bottom-color .2s cubic-bezier(.25, .8, .25, 1);
-
-        width: 100%;
-
-        @media only screen and (max-width: 610px) {
-          font-size: 1rem;
-        }
-
-        &:hover {
-          border-bottom-color: $grape;
-        }
-
-        &:focus {
-          border-bottom-color: $grape;
-        }
-      }
-    }
-
     .content-container {
       flex: auto;
       position: relative;
@@ -151,15 +109,64 @@
         height: auto;
         min-height: 40px;
         padding: 18px;
+        white-space: pre-wrap;
         width: 100%;
 
-        &.editable-div {
-          border-radius: inherit;
+        &.edit-input {
+          border: 0;
+          border-radius: 6px 6px 0 0;
           box-shadow: none;
           cursor: text;
           display: inline-block;
+          font-family: inherit;
+          font-size: inherit;
+          font-weight: inherit;
           outline: none;
+          overflow: auto;
+          resize: none;
         }
+      }
+    }
+  }
+
+  .assigned-to-section {
+    $label-color: #a9a9a9;
+    box-sizing: border-box;
+    margin-bottom: 12px;
+    padding: 0 18px;
+    width: 100%;
+
+    .label {
+      cursor: default;
+      font-size: .7rem;
+      opacity: .6;
+      text-transform: lowercase;
+    }
+
+    .value {
+      border: 0;
+      border-bottom: 2px solid $action-yellow;
+      color: inherit;
+      display: inline-block;
+      font-size: .8rem;
+      font-weight: bold;
+      height: 18px;
+      outline: none;
+      text-overflow: ellipsis;
+      transition: border-bottom-color .2s cubic-bezier(.25, .8, .25, 1);
+
+      width: 100%;
+
+      @media only screen and (max-width: 610px) {
+        font-size: 1rem;
+      }
+
+      &:hover {
+        border-bottom-color: $grape;
+      }
+
+      &:focus {
+        border-bottom-color: $grape;
       }
     }
   }
@@ -245,6 +252,20 @@
         font-size: .75rem;
         font-weight: bold;
       }
+    }
+  }
+
+  &.dialog-task {
+    .content-area {
+      overflow: auto;
+    }
+
+    .assigned-to-section {
+      margin-bottom: 54px;
+    }
+
+    .footer {
+      position: absolute;
     }
   }
 }

@@ -47,11 +47,12 @@
     box-shadow: $action-shadow;
     box-sizing: border-box;
     font-size: 1rem;
-
     height: auto;
+    max-height: 50%;
+    max-width: 650px;
+    overflow: hidden;
     transform: scale(1.65);
-
-    width: 450px;
+    width: 50%;
 
     &:hover {
       box-shadow: $action-shadow;

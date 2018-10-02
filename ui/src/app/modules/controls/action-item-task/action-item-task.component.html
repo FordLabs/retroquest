@@ -36,16 +36,16 @@
   >{{emojifyText(actionItem.task)}}</span>
 
     <ng-template #content_textarea>
-      <div
-        #content_value
-        class="content-message editable-div"
-        contenteditable="true"
-        (keydown.enter)="updateActionItemMessage(content_value.textContent); forceBlur()"
-        (blur)="updateActionItemMessage(content_value.textContent); toggleEditMode()"
-        (keydown)="onKeyDown($event, content_value.textContent)"
-        (keyup)="onKeyUp(content_value.textContent, content_value.innerText)"
-      >{{actionItem.task}}
-      </div>
+      <textarea #content_value [ngModel]="actionItem.task"
+                class="content-message edit-input"
+                (blur)="updateActionItemMessage($event, content_value.value); toggleEditMode()"
+                (keydown.enter)="updateActionItemMessage($event, content_value.value); forceBlur()"
+                (keydown.escape)="updateActionItemMessage($event, content_value.value); forceBlur()"
+                (input)="setMessageLength(content_value.value)"
+                [maxlength]="maxMessageLength"
+                onfocus="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
+                oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
+      ></textarea>
 
       <rq-floating-character-countdown
         [characterCount]="textValueLength"
@@ -55,31 +55,24 @@
       </rq-floating-character-countdown>
 
     </ng-template>
-
-
-  </div>
-
-  <div
-    class="assigned-to-section"
-    [ngClass]="{'disable': taskEditModeEnabled}"
-  >
-    <div class="label">assigned to</div>
-    <input
-      [readonly]="readOnly"
-      #assignee_text_field
-      class="value"
-      [type]="'text'"
-      [(ngModel)]="actionItem.assignee"
-      (blur)="emitAssigneeUpdated()"
-      (keydown.enter)="forceBlurOnAssigneeTextField()"
-    >
   </div>
 </div>
 
-<div class="footer">
-  <div
-    class="container date-created-container"
+<div class="assigned-to-section" [ngClass]="{'disable': taskEditModeEnabled || actionItem.completed}">
+  <div class="label">assigned to</div>
+  <input
+    [readonly]="readOnly"
+    #assignee_text_field
+    class="value"
+    [type]="'text'"
+    [(ngModel)]="actionItem.assignee"
+    (blur)="emitAssigneeUpdated()"
+    (keydown.enter)="forceBlurOnAssigneeTextField()"
   >
+</div>
+
+<div class="footer">
+  <div class="container date-created-container">
     <div class="date-created-header"
          [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled}"
     >created
