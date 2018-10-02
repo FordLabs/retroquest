@@ -62,7 +62,7 @@
   </div>
 </div>
 
-<div class="assigned-to-section" [ngClass]="{'disable': taskEditModeEnabled}">
+<div class="assigned-to-section" [ngClass]="{'disable': taskEditModeEnabled || actionItem.completed}">
   <div class="label">assigned to</div>
   <input
     [readonly]="readOnly"
