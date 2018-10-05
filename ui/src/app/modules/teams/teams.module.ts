@@ -34,6 +34,7 @@ import {FeedbackService} from './services/feedback.service';
 import {AuthGuard} from '../auth/auth-guard/auth.guard';
 import {TeamPageQueryParamGuard} from './services/team-page-query-param-guard';
 import {ControlsModule} from '../controls/controls.module';
+import {SaveCheckerService} from "./services/save-checker.service";
 
 @NgModule({
   imports: [
@@ -51,7 +52,8 @@ import {ControlsModule} from '../controls/controls.module';
     ActionItemService,
     ColumnService,
     WebsocketService,
-    FeedbackService
+    FeedbackService,
+    SaveCheckerService
   ],
   declarations: [
     TeamPageComponent,

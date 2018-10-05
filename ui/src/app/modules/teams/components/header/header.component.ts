@@ -21,6 +21,7 @@ import {FeedbackService} from '../../services/feedback.service';
 import {Feedback} from '../../../domain/feedback';
 import {FeedbackDialogComponent} from '../../../controls/feedback-dialog/feedback-dialog.component';
 import {ActionItem} from '../../../domain/action-item';
+import {SaveCheckerService} from "../../services/save-checker.service";
 
 @Component({
   selector: 'rq-header',
@@ -39,7 +40,7 @@ export class HeaderComponent {
 
   actionsRadiatorViewEnabled = false;
 
-  constructor(private feedbackService: FeedbackService) {
+  constructor(private feedbackService: FeedbackService, private saveChecker: SaveCheckerService) {
 
   }
 
@@ -63,5 +64,13 @@ export class HeaderComponent {
   public onActionsRadiatorViewClicked(): void {
     this.actionsRadiatorViewEnabled = !this.actionsRadiatorViewEnabled;
     this.actionsRadiatorViewClicked.emit(this.actionsRadiatorViewEnabled);
+  }
+
+  get lastSavedText(): string {
+    if (this.saveChecker.lastSavedDateTime === '') {
+      return 'All changes saved'
+    }
+
+    return 'Last change saved ' + this.saveChecker.lastSavedDateTime;
   }
 }

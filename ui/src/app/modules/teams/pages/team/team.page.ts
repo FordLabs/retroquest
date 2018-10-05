@@ -32,6 +32,7 @@ import {WebsocketResponse} from '../../../domain/websocket-response';
 import * as moment from 'moment';
 import {ViewChild} from '@angular/core';
 import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-view/actions-radiator-view.component';
+import {SaveCheckerService} from "../../services/save-checker.service";
 
 @Component({
   selector: 'rq-team',
@@ -69,7 +70,8 @@ export class TeamPageComponent implements OnInit {
               private thoughtService: ThoughtService,
               private columnService: ColumnService,
               private actionItemService: ActionItemService,
-              private websocketService: WebsocketService) {
+              private websocketService: WebsocketService,
+              private saveCheckerService: SaveCheckerService) {
   }
 
   teamId: string;
@@ -159,6 +161,8 @@ export class TeamPageComponent implements OnInit {
         } else {
           this.updateThoughts(response);
         }
+
+        this.saveCheckerService.updateTimestamp();
       });
 
       this.websocketService.actionItemTopic().subscribe((message) => {
@@ -168,6 +172,8 @@ export class TeamPageComponent implements OnInit {
         } else {
           this.updateActionItems(response);
         }
+
+        this.saveCheckerService.updateTimestamp();
       });
 
       this.websocketService.columnTitleTopic().subscribe((message) => {
@@ -176,6 +182,8 @@ export class TeamPageComponent implements OnInit {
         if (response.type === 'put') {
           this.updateColumns(response);
         }
+
+        this.saveCheckerService.updateTimestamp();
       });
     });
   }
