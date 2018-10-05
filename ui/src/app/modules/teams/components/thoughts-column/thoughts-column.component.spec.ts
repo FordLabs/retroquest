@@ -52,56 +52,6 @@ describe('ThoughtColumnComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('deleteThought', () => {
-
-    it('should only delete a thought when it has been confirmed', () => {
-      spyOn(window, 'confirm').and.returnValue(true);
-      component.deleteThought(testThought);
-
-      expect(mockThoughtService.deleteThought).toHaveBeenCalledWith(testThought);
-    });
-
-    it('should not delete a thought when it has not been confirmed', () => {
-      spyOn(window, 'confirm').and.returnValue(false);
-      component.deleteThought(testThought);
-
-      expect(mockThoughtService.deleteThought).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('setCurrentThought', () => {
-    it('should call ThoughtService.updateThought when closing edit box', () => {
-      component.setCurrentThought(testThought);
-      component.setCurrentThought();
-      expect(mockThoughtService.updateThought).toHaveBeenCalledWith(testThought);
-    });
-
-    it('should update thought when editing a different thought', () => {
-      const newThought = {
-        id: 1,
-        teamId: 'team-id',
-        topic: null,
-        message: null,
-        hearts: 0,
-        discussed: false,
-        columnTitle: null
-      };
-      component.setCurrentThought(testThought);
-      component.setCurrentThought(newThought);
-      expect(component.currentThoughtId).toEqual(newThought.id);
-    });
-
-    it('should maintain changes while editing', () => {
-      const expectedThought = {...testThought};
-      expectedThought.hearts = 5;
-
-      component.setCurrentThought(testThought);
-      component.thoughts[0].hearts = 5;
-      component.setCurrentThought();
-      expect(mockThoughtService.updateThought).toHaveBeenCalledWith(expectedThought);
-    });
-  });
-
   describe('discussThought', () => {
     it('should toggle the discussed flag', () => {
       component.discussThought(testThought);

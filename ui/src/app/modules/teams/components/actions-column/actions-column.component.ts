@@ -38,32 +38,29 @@ export class ActionsColumnComponent {
   @ViewChild('actionItemDialog') actionItemDialog: ActionItemDialogComponent;
 
   selectedActionItem: ActionItem = emptyActionItem();
-  selectedActionItemIndex = 0;
   dialogIsVisible = false;
 
-  public onCompleted(state: boolean, index: number) {
-    const actionItem = this.actionItems[index];
+  public onCompleted(state: boolean, actionItem: ActionItem) {
     actionItem.completed = state;
     this.actionItemService.updateActionItem(actionItem);
   }
 
-  public onDeleted(index: number) {
-    this.actionItemService.deleteActionItem(this.actionItems[index]);
+  public onDeleted(actionItem: ActionItem) {
+    this.actionItemService.deleteActionItem(actionItem);
   }
 
-  public onMessageChanged(message: string, index: number): void {
-    this.actionItems[index].task = message;
-    this.actionItemService.updateActionItem(this.actionItems[index]);
+  public onMessageChanged(message: string, actionItem: ActionItem): void {
+    actionItem.task = message;
+    this.actionItemService.updateActionItem(actionItem);
   }
 
-  public onAssigneeUpdated(assignee: string, index: number): void {
-    this.actionItems[index].assignee = assignee;
-    this.actionItemService.updateActionItem(this.actionItems[index]);
+  public onAssigneeUpdated(assignee: string, actionItem: ActionItem): void {
+    actionItem.assignee = assignee;
+    this.actionItemService.updateActionItem(actionItem);
   }
 
-  public displayPopup(index: number): void {
-    this.selectedActionItemIndex = index;
-    this.selectedActionItem = this.actionItems[this.selectedActionItemIndex];
+  public displayPopup(actionItem: ActionItem): void {
+    this.selectedActionItem = actionItem;
     this.actionItemDialog.show();
   }
 }

@@ -39,35 +39,7 @@ export class ThoughtsColumnComponent {
   @ViewChild('thoughtDialog') thoughtDialog: TaskDialogComponent;
 
   selectedThought: Thought = emptyThought();
-  currentThoughtId: number = null;
-  currentThoughtMessage: string;
   dialogIsVisible = false;
-  selectedThoughtIndex = 0;
-
-  private updateCurrentThought(): void {
-    if (this.currentThoughtId !== null) {
-      const currentThought = this.thoughts.filter((thought) => thought.id === this.currentThoughtId)[0];
-      currentThought.message = this.currentThoughtMessage;
-      this.thoughtService.updateThought(currentThought);
-    }
-  }
-
-  setCurrentThought(newThought?: Thought): void {
-    this.updateCurrentThought();
-    if (!newThought || newThought.id === this.currentThoughtId) {
-      this.currentThoughtId = null;
-      this.currentThoughtMessage = null;
-    } else {
-      this.currentThoughtId = newThought.id;
-      this.currentThoughtMessage = newThought.message;
-    }
-  }
-
-  deleteThought(thought: Thought): void {
-    if (confirm('Are you sure you want to delete this thought?')) {
-      this.thoughtService.deleteThought(thought);
-    }
-  }
 
   discussThought(thought: Thought): void {
     thought.discussed = !thought.discussed;
@@ -79,30 +51,28 @@ export class ThoughtsColumnComponent {
     this.thoughtService.updateThought(thought);
   }
 
-  onMessageChanged(message: string, index: number) {
-    this.thoughts[index].message = message;
-    this.thoughtService.updateThought(this.thoughts[index]);
+  onMessageChanged(message: string, thought: Thought) {
+    thought.message = message;
+    this.thoughtService.updateThought(thought);
   }
 
   onDeleted(thought: Thought) {
     this.thoughtService.deleteThought(thought);
   }
 
-  starCountChanged(starCount: number, index: number) {
-    const thought = this.thoughts[index];
+  starCountChanged(starCount: number, thought: Thought) {
     thought.hearts = starCount;
     this.thoughtService.updateThought(thought);
   }
 
-  onCompleted(completedState: boolean, index: number) {
-    const thought = this.thoughts[index];
+  onCompleted(completedState: boolean, thought: Thought) {
     thought.discussed = completedState;
     this.thoughtService.updateThought(thought);
   }
 
-  displayPopup(index: number) {
-    this.selectedThoughtIndex = index;
-    this.selectedThought = this.thoughts[this.selectedThoughtIndex];
+  displayPopup(thought: Thought) {
+    this.selectedThought = thought;
     this.thoughtDialog.show();
   }
+
 }

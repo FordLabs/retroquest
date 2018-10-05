@@ -52,27 +52,27 @@ describe('ActionsColumnComponent', () => {
   describe('onCompleted', () => {
 
     it('should update the action item on the backend with the passed in state', () => {
-      component.onCompleted(true, 0);
-      expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(component.actionItems[0]);
+      component.onCompleted(true, fakeActionItem);
+      expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(fakeActionItem);
     });
 
     it('should set the action item with the passed in index to false', () => {
-      component.onCompleted(false, 0);
-      expect(component.actionItems[0].completed).toBeFalsy();
+      component.onCompleted(false, fakeActionItem);
+      expect(fakeActionItem.completed).toBeFalsy();
     });
 
     it('should set the action item with the passed in index to true', () => {
-      component.onCompleted(true, 0);
-      expect(component.actionItems[0].completed).toBeTruthy();
+      component.onCompleted(true, fakeActionItem);
+      expect(fakeActionItem.completed).toBeTruthy();
     });
   });
 
   describe('onDeleted', () => {
 
     it('should delete the action item on the backend', () => {
-      component.onDeleted(0);
+      component.onDeleted(fakeActionItem);
 
-      expect(mockActionItemService.deleteActionItem).toHaveBeenCalledWith(component.actionItems[0]);
+      expect(mockActionItemService.deleteActionItem).toHaveBeenCalledWith(fakeActionItem);
     });
 
   });
@@ -82,13 +82,13 @@ describe('ActionsColumnComponent', () => {
     const fakeMessage = 'I AM A FAKE MESSAGE';
 
     it('should update the action item on the backend', () => {
-      component.onMessageChanged(fakeMessage, 0);
-      expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(component.actionItems[0]);
+      component.onMessageChanged(fakeMessage, fakeActionItem);
+      expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(fakeActionItem);
     });
 
     it('should set the message on the action item with the passed in index', () => {
-      component.onMessageChanged(fakeMessage, 0);
-      expect(component.actionItems[0].task).toEqual(fakeMessage);
+      component.onMessageChanged(fakeMessage, fakeActionItem);
+      expect(fakeActionItem.task).toEqual(fakeMessage);
     });
 
   });
@@ -98,13 +98,13 @@ describe('ActionsColumnComponent', () => {
     const fakeAssignee = 'I AM A FAKE ASSIGNEE';
 
     it('should update the action item on the backend', () => {
-      component.onAssigneeUpdated(fakeAssignee, 0);
-      expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(component.actionItems[0]);
+      component.onAssigneeUpdated(fakeAssignee, fakeActionItem);
+      expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(fakeActionItem);
     });
 
     it('should set the assignee on the action item with the passed in index', () => {
-      component.onAssigneeUpdated(fakeAssignee, 0);
-      expect(component.actionItems[0].assignee).toEqual(fakeAssignee);
+      component.onAssigneeUpdated(fakeAssignee, fakeActionItem);
+      expect(fakeActionItem.assignee).toEqual(fakeAssignee);
     });
   });
 
@@ -117,18 +117,13 @@ describe('ActionsColumnComponent', () => {
     });
 
     it('should show the action item dialog', () => {
-      component.displayPopup(0);
+      component.displayPopup(fakeActionItem);
       expect(component.actionItemDialog.show).toHaveBeenCalled();
     });
 
     it('should set the selected action item index to the index passed in', () => {
-      component.displayPopup(0);
-      expect(component.selectedActionItemIndex).toEqual(0);
-    });
-
-    it('should set the selected action item index to the index passed in', () => {
-      component.displayPopup(0);
-      expect(component.selectedActionItem).toEqual(component.actionItems[0]);
+      component.displayPopup(fakeActionItem);
+      expect(component.selectedActionItem).toEqual(fakeActionItem);
     });
   });
 });
