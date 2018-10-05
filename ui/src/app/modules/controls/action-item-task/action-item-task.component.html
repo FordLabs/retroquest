@@ -112,7 +112,9 @@
   <div
     class="container delete-container"
     (click)="emitDeleteItem()">
-    <i class="fas fa-trash-alt"></i>
+    <i class="fas fa-trash-alt"
+       [ngClass]="{'opacify': readOnly}"
+    ></i>
   </div>
 
   <div
