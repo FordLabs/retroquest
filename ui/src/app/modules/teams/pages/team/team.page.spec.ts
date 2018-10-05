@@ -26,7 +26,7 @@ import {ActionItemService} from '../../services/action.service';
 import {WebsocketService} from '../../services/websocket.service';
 import {ActionItem, emptyActionItem} from '../../../domain/action-item';
 import * as moment from 'moment';
-import {SaveCheckerService} from "../../services/save-checker.service";
+import {SaveCheckerService} from '../../services/save-checker.service';
 
 describe('TeamPageComponent', () => {
 

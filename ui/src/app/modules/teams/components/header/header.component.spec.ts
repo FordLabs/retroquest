@@ -20,12 +20,12 @@ import {FeedbackService} from '../../services/feedback.service';
 import {emptyFeedback, Feedback} from '../../../domain/feedback';
 import {Subject} from 'rxjs';
 import {before} from 'selenium-webdriver/testing';
-import {SaveCheckerService} from "../../services/save-checker.service";
+import {SaveCheckerService} from '../../services/save-checker.service';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let mockFeedbackService: FeedbackService;
-  let mockSaveCheckerService: SaveCheckerService;
+  const mockSaveCheckerService: SaveCheckerService;
 
   beforeEach(() => {
     mockFeedbackService = jasmine.createSpyObj({

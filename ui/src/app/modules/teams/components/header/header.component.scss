@@ -104,11 +104,15 @@
       }
 
       .last-saved-text {
-        font-size: .8rem;
-        flex: 1;
-        text-align: right;
         color: $wet-asphalt;
+        flex: 1;
+        font-size: .8rem;
         opacity: .5;
+        text-align: right;
+
+        @media only screen and (max-width: 610px) {
+          display: none;
+        }
       }
     }
 

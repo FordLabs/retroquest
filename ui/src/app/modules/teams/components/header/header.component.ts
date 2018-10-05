@@ -21,7 +21,7 @@ import {FeedbackService} from '../../services/feedback.service';
 import {Feedback} from '../../../domain/feedback';
 import {FeedbackDialogComponent} from '../../../controls/feedback-dialog/feedback-dialog.component';
 import {ActionItem} from '../../../domain/action-item';
-import {SaveCheckerService} from "../../services/save-checker.service";
+import {SaveCheckerService} from '../../services/save-checker.service';
 
 @Component({
   selector: 'rq-header',
@@ -68,7 +68,7 @@ export class HeaderComponent {
 
   get lastSavedText(): string {
     if (this.saveChecker.lastSavedDateTime === '') {
-      return 'All changes saved'
+      return 'All changes saved';
     }
 
     return 'Last change saved ' + this.saveChecker.lastSavedDateTime;

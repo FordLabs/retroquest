@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-import {SaveCheckerService} from "./save-checker.service";
+import {SaveCheckerService} from './save-checker.service';
 
 describe('SaveCheckerService', () => {
   let service: SaveCheckerService;
@@ -32,7 +32,7 @@ describe('SaveCheckerService', () => {
     it('should return the last saved date time string', () => {
       service._lastSavedDateTime = '1:00 am';
       expect(service.lastSavedDateTime).toEqual('1:00 am');
-    })
+    });
   });
 
 });

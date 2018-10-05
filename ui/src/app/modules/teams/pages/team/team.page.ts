@@ -32,7 +32,7 @@ import {WebsocketResponse} from '../../../domain/websocket-response';
 import * as moment from 'moment';
 import {ViewChild} from '@angular/core';
 import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-view/actions-radiator-view.component';
-import {SaveCheckerService} from "../../services/save-checker.service";
+import {SaveCheckerService} from '../../services/save-checker.service';
 
 @Component({
   selector: 'rq-team',

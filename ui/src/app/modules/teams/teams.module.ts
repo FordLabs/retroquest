@@ -34,7 +34,7 @@ import {FeedbackService} from './services/feedback.service';
 import {AuthGuard} from '../auth/auth-guard/auth.guard';
 import {TeamPageQueryParamGuard} from './services/team-page-query-param-guard';
 import {ControlsModule} from '../controls/controls.module';
-import {SaveCheckerService} from "./services/save-checker.service";
+import {SaveCheckerService} from './services/save-checker.service';
 
 @NgModule({
   imports: [
