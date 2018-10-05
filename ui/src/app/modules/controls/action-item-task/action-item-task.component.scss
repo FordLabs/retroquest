@@ -69,8 +69,11 @@
     }
   }
 
-  .disable {
+  .opacify {
     opacity: $host-opacity;
+  }
+
+  .disable {
     pointer-events: none;
     user-select: none;
   }
@@ -235,8 +238,11 @@
         font-weight: bold;
         opacity: .6;
 
-        &.disable {
+        &.opacify {
           opacity: $host-opacity;
+        }
+
+        &.disable {
           pointer-events: none;
           user-select: none;
         }
