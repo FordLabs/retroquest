@@ -18,7 +18,7 @@
 import {ActionItemTaskComponent} from './action-item-task.component';
 import {emptyActionItem} from '../../domain/action-item';
 
-describe('ThoughtComponent', () => {
+describe('ActionItemTaskComponent', () => {
   let component: ActionItemTaskComponent;
 
   beforeEach(() => {
