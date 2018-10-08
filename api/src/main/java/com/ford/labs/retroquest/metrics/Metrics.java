@@ -28,13 +28,13 @@ public class Metrics {
         return teamRepository.findAll().size();
     }
 
-    public int getTeamCount(LocalDate startDate, LocalDate endDate) {
-        LocalDate finalStartTime = startDate == null ? LocalDate.MIN : startDate;
-        LocalDate finalEndTime = endDate == null ? LocalDate.now() : endDate;
-        return teamRepository.findAll().stream()
-                .filter(team -> !team.getDateCreated().isBefore(finalStartTime))
-                .filter(team -> !team.getDateCreated().isAfter(finalEndTime))
-                .collect(toList()).size();
+    public long getTeamCount(LocalDate startDate, LocalDate endDate) {
+        if (startDate == null && endDate == null) {
+            return teamRepository.count();
+        } else if (endDate == null) {
+            return teamRepository.countAllByDateCreatedAfterAndDateCreatedIsNotNull(startDate);
+        }
+        return teamRepository.countAllByDateCreatedBetweenAndDateCreatedNotNull(startDate, endDate);
     }
 
     @ManagedAttribute
@@ -45,7 +45,7 @@ public class Metrics {
     int getFeedbackCount(LocalDate startTime, LocalDate endTime) {
         LocalDateTime finalEndTime = endTime == null ? LocalDateTime.now() : endTime.atStartOfDay();
         LocalDateTime finalStartTime = startTime == null ? LocalDateTime.MIN : startTime.atStartOfDay();
-        List<Feedback> feedbackList =  feedbackRepository.findAll().stream()
+        List<Feedback> feedbackList = feedbackRepository.findAll().stream()
                 .filter(feedback -> !feedback.getDateCreated().isBefore(finalStartTime))
                 .filter(feedback -> !feedback.getDateCreated().isAfter(finalEndTime))
                 .collect(toList());
