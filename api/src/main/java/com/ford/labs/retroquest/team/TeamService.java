@@ -134,9 +134,4 @@ public class TeamService {
         }
         throw new BoardDoesNotExistException();
     }
-
-    public long getTeamCount() {
-        return teamRepository.count();
-    }
-
 }

@@ -46,6 +46,16 @@ public class MetricsJMXTest {
     private FeedbackRepository feedbackRepository;
 
     @Test
+    public void canReadTheTotalNumberOfTeamsCreated() throws MalformedObjectNameException, AttributeNotFoundException, MBeanException, ReflectionException, InstanceNotFoundException {
+        Team team = new Team();
+        team.setUri("some uri");
+        teamRepository.save(team);
+
+        Object teamCount = mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metrics,type=Metrics"), "TeamCount");
+        assertEquals(1, teamCount);
+    }
+
+    @Test
     public void canGetFeedbackCount() throws MalformedObjectNameException, AttributeNotFoundException, MBeanException, ReflectionException, InstanceNotFoundException {
         feedbackRepository.save(new Feedback());
 

@@ -17,14 +17,14 @@
 
 <div class="rq-thought-list {{column.topic}}">
   <rq-task
-    *ngFor="let thought of thoughts; let i = index"
+    *ngFor="let thought of thoughts"
     [task]="thought"
     [type]="column.topic"
-    (messageChanged)="onMessageChanged($event, i)"
+    (messageChanged)="onMessageChanged($event, thought)"
     (deleted)="onDeleted($event)"
-    (messageClicked)="displayPopup(i)"
-    (starCountIncreased)="starCountChanged($event, i)"
-    (completed)="onCompleted($event, i)"
+    (messageClicked)="displayPopup(thought)"
+    (starCountIncreased)="starCountChanged($event, thought)"
+    (completed)="onCompleted($event, thought)"
     [@fadeInOutAnimation]="thought.state"
   >
   </rq-task>
@@ -36,8 +36,8 @@
   [type]="column.topic"
   [task]="selectedThought"
   (visibilityChanged)="dialogIsVisible = $event"
-  (messageChanged)="onMessageChanged($event, selectedThoughtIndex)"
+  (messageChanged)="onMessageChanged($event, selectedThought)"
   (deleted)="onDeleted($event)"
-  (starCountIncreased)="starCountChanged($event, selectedThoughtIndex)"
-  (completed)="onCompleted($event, selectedThoughtIndex)"
+  (starCountIncreased)="starCountChanged($event, selectedThought)"
+  (completed)="onCompleted($event, selectedThought)"
 ></rq-task-dialog>

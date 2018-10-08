@@ -18,7 +18,7 @@
 import {TaskComponent} from './task.component';
 import {emptyThought} from '../../domain/thought';
 
-describe('ThoughtComponent', () => {
+describe('TaskComponent', () => {
   let component: TaskComponent;
 
   beforeEach(() => {

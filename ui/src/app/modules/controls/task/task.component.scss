@@ -111,8 +111,11 @@
     }
   }
 
-  .disable {
+  .opacify {
     opacity: $host-opacity;
+  }
+
+  .disable {
     pointer-events: none;
     user-select: none;
   }

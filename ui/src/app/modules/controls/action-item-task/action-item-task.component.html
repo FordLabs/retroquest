@@ -23,8 +23,12 @@
   heading="Delete this Action Item?"
 ></rq-deletion-overlay>
 
-<div class="content-area"
-     [ngClass]="{'disable': actionItem.completed}"
+<div
+  class="content-area"
+  [ngClass]="{
+    'disable': actionItem.completed || taskEditModeEnabled,
+    'opacify': actionItem.completed || taskEditModeEnabled
+  }"
 >
 
   <div class="content-container">
@@ -56,13 +60,9 @@
 
     </ng-template>
 
-
   </div>
 
-  <div
-    class="assigned-to-section"
-    [ngClass]="{'disable': taskEditModeEnabled}"
-  >
+  <div class="assigned-to-section">
     <div class="label">assigned to</div>
     <input
       [readonly]="readOnly"
@@ -77,15 +77,14 @@
 </div>
 
 <div class="footer">
-  <div
-    class="container date-created-container"
-  >
+
+  <div class="container date-created-container">
     <div class="date-created-header"
-         [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled}"
+         [ngClass]="{'opacify': actionItem.completed || taskEditModeEnabled}"
     >created
     </div>
     <div class="date-created-value"
-         [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled}"
+         [ngClass]="{'opacify': actionItem.completed || taskEditModeEnabled}"
     >{{getDateCreated()}}
     </div>
   </div>
@@ -94,9 +93,10 @@
     class="container edit-container"
     (click)="toggleEditMode()"
     *ngIf="!taskEditModeEnabled; else exit_edit_mode_icon"
+    [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled}"
   >
     <i class="fas fa-edit"
-       [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled || readOnly}"
+       [ngClass]="{'opacify': actionItem.completed || taskEditModeEnabled || readOnly}"
     ></i>
   </div>
 
@@ -113,13 +113,13 @@
     class="container delete-container"
     (click)="emitDeleteItem()">
     <i class="fas fa-trash-alt"
-       [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled || readOnly}"
+       [ngClass]="{'opacify': readOnly}"
     ></i>
   </div>
 
   <div
     class="complete-container"
-    [ngClass]="{'disable': taskEditModeEnabled || readOnly}"
+    [ngClass]="{'opacify': taskEditModeEnabled || readOnly}"
     (click)="toggleTaskComplete()"
   >
     <div

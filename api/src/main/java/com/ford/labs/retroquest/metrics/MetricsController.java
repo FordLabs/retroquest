@@ -1,6 +1,5 @@
 package com.ford.labs.retroquest.metrics;
 
-import com.ford.labs.retroquest.team.TeamService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,16 +14,20 @@ public class MetricsController {
 
     private final Metrics metrics;
 
-    private final TeamService teamService;
-
-    public MetricsController(Metrics metrics, TeamService teamService) {
+    public MetricsController(Metrics metrics) {
         this.metrics = metrics;
-        this.teamService = teamService;
     }
 
     @GetMapping("/team/count")
-    public long getTeamCount() {
-        return teamService.getTeamCount();
+    public long getTeamCount(
+            @RequestParam(name = "start", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                    LocalDate startDate,
+            @RequestParam(name = "end", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                    LocalDate endDate
+    ) {
+        return metrics.getTeamCount(startDate, endDate);
     }
 
     @GetMapping("/feedback/count")

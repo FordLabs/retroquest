@@ -17,13 +17,13 @@
 
 <div class="rq-action-item-list">
   <rq-action-item-task
-    *ngFor="let actionItem of actionItems; let i=index"
+    *ngFor="let actionItem of actionItems"
     [actionItem]="actionItem"
-    (completed)="onCompleted($event, i)"
-    (deleted)="onDeleted(i)"
-    (messageChanged)="onMessageChanged($event, i)"
-    (assigneeUpdated)="onAssigneeUpdated($event, i)"
-    (messageClicked)="displayPopup(i)"
+    (completed)="onCompleted($event, actionItem)"
+    (deleted)="onDeleted(actionItem)"
+    (messageChanged)="onMessageChanged($event, actionItem)"
+    (assigneeUpdated)="onAssigneeUpdated($event, actionItem)"
+    (messageClicked)="displayPopup(actionItem)"
     [@fadeInOutAnimation]="actionItem.state"
   >
   </rq-action-item-task>
@@ -34,9 +34,9 @@
   [visible]="dialogIsVisible"
   [actionItem]="selectedActionItem"
   (visibilityChanged)="dialogIsVisible = $event"
-  (messageChanged)="onMessageChanged($event, selectedActionItemIndex)"
-  (deleted)="onDeleted(selectedActionItemIndex)"
-  (completed)="onCompleted($event, selectedActionItemIndex)"
-  (assignedUpdated)="onAssigneeUpdated($event, selectedActionItemIndex)"
+  (messageChanged)="onMessageChanged($event, selectedActionItem)"
+  (deleted)="onDeleted(selectedActionItem)"
+  (completed)="onCompleted($event, selectedActionItem)"
+  (assignedUpdated)="onAssigneeUpdated($event, selectedActionItem)"
 >
 </rq-action-item-dialog>

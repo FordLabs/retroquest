@@ -69,8 +69,11 @@
     }
   }
 
-  .disable {
+  .opacify {
     opacity: $host-opacity;
+  }
+
+  .disable {
     pointer-events: none;
     user-select: none;
   }
@@ -136,6 +139,7 @@
 
     .content-container {
       flex: auto;
+      font-size: 1rem;
       position: relative;
 
       rq-floating-character-countdown {
@@ -234,8 +238,11 @@
         font-weight: bold;
         opacity: .6;
 
-        &.disable {
+        &.opacify {
           opacity: $host-opacity;
+        }
+
+        &.disable {
           pointer-events: none;
           user-select: none;
         }

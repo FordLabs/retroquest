@@ -93,7 +93,6 @@
 
       #teamName {
         color: opacity($wet-asphalt, .8);
-        flex: 1;
         font-size: 1.5rem;
         margin-left: 24px;
         overflow: hidden;
@@ -101,6 +100,18 @@
 
         @media only screen and (max-width: 610px) {
           font-size: 1rem;
+        }
+      }
+
+      .last-saved-text {
+        color: $wet-asphalt;
+        flex: 1;
+        font-size: .8rem;
+        opacity: .5;
+        text-align: right;
+
+        @media only screen and (max-width: 610px) {
+          display: none;
         }
       }
     }

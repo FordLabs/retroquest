@@ -2,6 +2,7 @@ package com.ford.labs.retroquest.metrics;
 
 import com.ford.labs.retroquest.feedback.Feedback;
 import com.ford.labs.retroquest.feedback.FeedbackRepository;
+import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +16,8 @@ import java.util.Collections;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -29,6 +32,27 @@ public class MetricsTest {
 
     @InjectMocks
     private Metrics metrics;
+
+
+    @Test
+    public void returnsTheTotalNumberOfTeamsCreated() {
+        when(mockTeamRepository.findAll()).thenReturn(asList(new Team(), new Team()));
+        assertEquals(2, metrics.getTeamCount());
+    }
+
+    @Test
+    public void callsDateCreatedAfter_whenGivenOnlyAStartDate() {
+        when(mockTeamRepository.countAllByDateCreatedAfterAndDateCreatedIsNotNull(any())).thenReturn(1L);
+        metrics.getTeamCount(LocalDate.of(2018, 2, 2), null);
+        verify(mockTeamRepository, times(1)).countAllByDateCreatedAfterAndDateCreatedIsNotNull(any());
+    }
+
+    @Test
+    public void callsDateCreatedBetween_whenGivenBothAStartAndEndDate() {
+        when(mockTeamRepository.countAllByDateCreatedBetweenAndDateCreatedNotNull(any(), any())).thenReturn(1L);
+        metrics.getTeamCount(LocalDate.of(2018, 2, 2), LocalDate.of(2018, 4, 4));
+        verify(mockTeamRepository, times(1)).countAllByDateCreatedBetweenAndDateCreatedNotNull(any(), any());
+    }
 
     @Test
     public void returnsTheFeedbackCount() {
