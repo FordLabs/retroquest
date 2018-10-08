@@ -62,7 +62,7 @@
   <div
     class="container star-count-container"
     (click)="addStar()"
-    *ngIf="type !== 'action'; else date_created_container"
+    *ngIf="type !== 'action'"
     [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
   >
     <div class="star-background"

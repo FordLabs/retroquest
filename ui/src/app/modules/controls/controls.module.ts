@@ -34,7 +34,7 @@ import {ActionItemDialogComponent} from './action-item-dialog/action-item-dialog
 import {EndRetroDialogComponent} from './end-retro-dialog/end-retro-dialog.component';
 import {FeedbackDialogComponent} from './feedback-dialog/feedback-dialog.component';
 import {ActionsRadiatorViewComponent} from './actions-radiator-view/actions-radiator-view.component';
-import { DeletionOverlayComponent } from './deletion-overlay/deletion-overlay.component';
+import {DeletionOverlayComponent} from './deletion-overlay/deletion-overlay.component';
 
 @NgModule({
   imports: [
@@ -83,4 +83,5 @@ import { DeletionOverlayComponent } from './deletion-overlay/deletion-overlay.co
   ]
 
 })
-export class ControlsModule { }
+export class ControlsModule {
+}
