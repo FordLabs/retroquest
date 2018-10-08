@@ -101,7 +101,9 @@ export class TaskComponent implements AfterViewInit {
   }
 
   public initializeTextAreaHeight(): void {
-    this.editableTextArea.nativeElement.style.height = this.contentMessage.nativeElement.scrollHeight + 'px';
+    if (this.contentMessage && this.editableTextArea) {
+      this.editableTextArea.nativeElement.style.height = this.contentMessage.nativeElement.scrollHeight + 'px';
+    }
   }
 
   private focusInput(): void {
