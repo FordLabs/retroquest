@@ -254,6 +254,24 @@ public class MetricsApiTest extends ControllerTest {
     }
 
     @Test
+    public void whenGettingTeamCount_providingOnlyAStartDate_getsAllFromNowToThatDate() throws Exception {
+
+        Team team1 = new Team();
+        team1.setUri("team" + LocalDate.now().toEpochDay());
+        team1.setDateCreated(LocalDate.of(2018, 2, 2));
+        Team team2 = new Team();
+        team2.setUri("team" + (LocalDate.now().toEpochDay() + 1));
+        team2.setDateCreated(LocalDate.of(2018, 4, 4));
+        teamRepository.save(asList(team1, team2));
+
+        mockMvc.perform(get("/api/admin/metrics/team/count?start=2018-03-03")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", getBasicAuthToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", Matchers.is(1)));
+    }
+
+    @Test
     public void whenGettingTeamLogins_providingOnlyAStartDate_getsAllFromThenToNow() throws Exception {
         Team team1 = new Team();
         team1.setUri("teamLoginOnlyStartDate1");
