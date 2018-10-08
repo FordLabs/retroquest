@@ -25,7 +25,7 @@ import {SaveCheckerService} from '../../services/save-checker.service';
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let mockFeedbackService: FeedbackService;
-  let mockSaveCheckerService: SaveCheckerService;
+  const mockSaveCheckerService: SaveCheckerService = null;
 
   beforeEach(() => {
     mockFeedbackService = jasmine.createSpyObj({
