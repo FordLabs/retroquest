@@ -32,32 +32,25 @@
 >
 
   <div class="content-container">
+    <textarea #content_value [ngModel]="actionItem.task"
+              class="content-message edit-input"
+              (blur)="updateActionItemMessage($event, content_value.value); editModeOff()"
+              (keydown.enter)="updateActionItemMessage($event, content_value.value); forceBlur()"
+              (keydown.escape)="updateActionItemMessage($event, content_value.value); forceBlur()"
+              (input)="setMessageLength(content_value.value)"
+              [maxlength]="maxMessageLength"
+              oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
+              [readonly]="!taskEditModeEnabled"
+              (click)="emitTaskContentClicked()"
+    ></textarea>
 
-    <span
-      #content_message
-      class="content-message"
-      (click)="emitTaskContentClicked()"
-      *ngIf="!taskEditModeEnabled"
-    >{{emojifyText(actionItem.task)}}</span>
-
-    <div [ngClass]="{'remove': !taskEditModeEnabled}">
-      <textarea #content_value [ngModel]="actionItem.task"
-                class="content-message edit-input"
-                (blur)="updateActionItemMessage($event, content_value.value); toggleEditMode()"
-                (keydown.enter)="updateActionItemMessage($event, content_value.value); forceBlur()"
-                (keydown.escape)="updateActionItemMessage($event, content_value.value); forceBlur()"
-                (input)="setMessageLength(content_value.value)"
-                [maxlength]="maxMessageLength"
-                oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
-      ></textarea>
-
-      <rq-floating-character-countdown
-        [characterCount]="textValueLength"
-        [charsAreRunningOutThreshold]="50"
-        [maxCharacterCount]="maxMessageLength"
-      >
-      </rq-floating-character-countdown>
-    </div>
+    <rq-floating-character-countdown
+      [characterCount]="textValueLength"
+      [charsAreRunningOutThreshold]="50"
+      [maxCharacterCount]="maxMessageLength"
+      [ngClass]="{'remove': !taskEditModeEnabled}"
+    >
+    </rq-floating-character-countdown>
 
   </div>
 </div>

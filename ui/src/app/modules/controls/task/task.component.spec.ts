@@ -109,6 +109,26 @@ describe('TaskComponent', () => {
     });
   });
 
+  describe(`editModeOff`, () => {
+    it(`should emit message changed`, () => {
+      component.messageChanged = jasmine.createSpyObj({emit: null});
+      component.editModeOff();
+      expect(component.messageChanged.emit).toHaveBeenCalled();
+    });
+
+    it(`should change taskEditModeEnabled to false`, () => {
+      component.taskEditModeEnabled = true;
+      component.editModeOff();
+      expect(component.taskEditModeEnabled).toEqual(false);
+    });
+
+    it(`should not change taskEditModeEnabled to true`, () => {
+      component.taskEditModeEnabled = false;
+      component.editModeOff();
+      expect(component.taskEditModeEnabled).toEqual(false);
+    });
+  });
+
   describe('addStar', () => {
 
     it('should increase the star count by one', () => {
@@ -214,12 +234,7 @@ describe('TaskComponent', () => {
         nativeElement: {
           style: {
             height: ''
-          }
-        }
-      };
-
-      component.contentMessage = {
-        nativeElement: {
+          },
           scrollHeight: 40
         }
       };

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {emptyThought, Thought} from '../../domain/thought';
 import {emojify} from '../../utils/EmojiGenerator';
 
@@ -35,7 +35,7 @@ import {emojify} from '../../utils/EmojiGenerator';
     '[class.dialog-overlay-border]': 'enableOverlayBorder'
   }
 })
-export class TaskComponent implements AfterViewInit {
+export class TaskComponent implements AfterViewChecked {
 
   @Input() type = '';
   @Input() task = emptyThought();
@@ -47,7 +47,6 @@ export class TaskComponent implements AfterViewInit {
   @Output() starCountIncreased: EventEmitter<number> = new EventEmitter<number>();
   @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  @ViewChild('content_message') contentMessage: ElementRef;
   @ViewChild('content_value') editableTextArea: ElementRef;
 
   starCountMax = 99;
@@ -59,7 +58,7 @@ export class TaskComponent implements AfterViewInit {
   constructor() {
   }
 
-  ngAfterViewInit() {
+  ngAfterViewChecked() {
     this.initializeTextAreaHeight();
   }
 
@@ -74,6 +73,11 @@ export class TaskComponent implements AfterViewInit {
       this.focusInput();
     }
     this.taskEditModeEnabled = !this.taskEditModeEnabled;
+  }
+
+  public editModeOff(): void {
+    this.messageChanged.emit(this.task.message);
+    this.taskEditModeEnabled = false;
   }
 
   public addStar(): void {
@@ -101,9 +105,7 @@ export class TaskComponent implements AfterViewInit {
   }
 
   public initializeTextAreaHeight(): void {
-    if (this.contentMessage && this.editableTextArea) {
-      this.editableTextArea.nativeElement.style.height = this.contentMessage.nativeElement.scrollHeight + 'px';
-    }
+    this.editableTextArea.nativeElement.style.height = this.editableTextArea.nativeElement.scrollHeight + 'px';
   }
 
   private focusInput(): void {

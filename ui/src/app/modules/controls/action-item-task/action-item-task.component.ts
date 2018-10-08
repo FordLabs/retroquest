@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {ActionItem, emptyActionItem} from '../../domain/action-item';
 import * as moment from 'moment';
 import {emojify} from '../../utils/EmojiGenerator';
@@ -30,7 +30,7 @@ import {emojify} from '../../utils/EmojiGenerator';
     '[class.dialog-overlay-border]': 'enableOverlayBorder'
   }
 })
-export class ActionItemTaskComponent implements AfterViewInit {
+export class ActionItemTaskComponent implements AfterViewChecked {
 
   @Input() actionItem = emptyActionItem();
   @Input() readOnly = false;
@@ -42,7 +42,6 @@ export class ActionItemTaskComponent implements AfterViewInit {
   @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() assigneeUpdated: EventEmitter<string> = new EventEmitter<string>();
 
-  @ViewChild('content_message') contentMessage: ElementRef;
   @ViewChild('content_value') editableTextArea: ElementRef;
   @ViewChild('assignee_text_field') assigneeTextField: ElementRef;
 
@@ -54,7 +53,7 @@ export class ActionItemTaskComponent implements AfterViewInit {
   constructor() {
   }
 
-  ngAfterViewInit() {
+  ngAfterViewChecked() {
     this.initializeTextAreaHeight();
   }
 
@@ -69,6 +68,11 @@ export class ActionItemTaskComponent implements AfterViewInit {
       this.focusInput();
     }
     this.taskEditModeEnabled = !this.taskEditModeEnabled;
+  }
+
+  public editModeOff(): void {
+    this.messageChanged.emit(this.actionItem.task);
+    this.taskEditModeEnabled = false;
   }
 
   public emitDeleteItem(): void {
@@ -97,9 +101,7 @@ export class ActionItemTaskComponent implements AfterViewInit {
   }
 
   public initializeTextAreaHeight(): void {
-    if (this.editableTextArea && this.contentMessage) {
-      this.editableTextArea.nativeElement.style.height = this.contentMessage.nativeElement.scrollHeight + 20 + 'px';
-    }
+    this.editableTextArea.nativeElement.style.height = this.editableTextArea.nativeElement.scrollHeight + 'px';
   }
 
   private focusInput(): void {

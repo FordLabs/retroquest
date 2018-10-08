@@ -28,32 +28,25 @@
   (click)="emitTaskContentClicked()"
   [ngClass]="{'disable': task.discussed }"
 >
-  <span
-    #content_message
-    class="content-message"
-    [ngClass]="{'opacify': task.discussed}"
-    *ngIf="!taskEditModeEnabled"
-  >{{emojifyText(task.message)}}</span>
+  <textarea #content_value [ngModel]="task.message"
+            class="content-message edit-input"
+            (blur)="updateTaskMessage($event, content_value.value); editModeOff()"
+            (keydown.enter)="updateTaskMessage($event, content_value.value); forceBlur()"
+            (keydown.escape)="updateTaskMessage($event, content_value.value); forceBlur()"
+            (input)="setMessageLength(content_value.value)"
+            [maxlength]="maxMessageLength"
+            oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
+            [readonly]="!taskEditModeEnabled"
+            [ngClass]="{'disable opacify': task.discussed }"
+  ></textarea>
 
-  <div [ngClass]="{'remove': !taskEditModeEnabled}">
-    <textarea #content_value [ngModel]="task.message"
-           class="content-message edit-input"
-           (blur)="updateTaskMessage($event, content_value.value); toggleEditMode()"
-           (keydown.enter)="updateTaskMessage($event, content_value.value); forceBlur()"
-           (keydown.escape)="updateTaskMessage($event, content_value.value); forceBlur()"
-           (input)="setMessageLength(content_value.value)"
-           [maxlength]="maxMessageLength"
-           oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
-    ></textarea>
-
-    <rq-floating-character-countdown
-      [characterCount]="textValueLength"
-      [charsAreRunningOutThreshold]="50"
-      [maxCharacterCount]="maxMessageLength"
-    >
-    </rq-floating-character-countdown>
-
-  </div>
+  <rq-floating-character-countdown
+    [characterCount]="textValueLength"
+    [charsAreRunningOutThreshold]="50"
+    [maxCharacterCount]="maxMessageLength"
+    [ngClass]="{'remove': !taskEditModeEnabled}"
+  >
+  </rq-floating-character-countdown>
 
 </div>
 

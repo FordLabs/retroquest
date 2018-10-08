@@ -187,6 +187,10 @@
         outline: none;
         overflow: auto;
         resize: none;
+
+        &[readonly] {
+          cursor: pointer;
+        }
       }
     }
   }
