@@ -208,6 +208,27 @@ describe('TaskComponent', () => {
     });
   });
 
+  describe('initializeTextAreaHeight', () => {
+    it(`should set the height of the nativeElement of the text area to the content message height`, () => {
+      component.editableTextArea = {
+        nativeElement: {
+          style: {
+            height: ''
+          }
+        }
+      };
+
+      component.contentMessage = {
+        nativeElement: {
+          scrollHeight: 40
+        }
+      };
+
+      component.initializeTextAreaHeight();
+      expect(component.editableTextArea.nativeElement.style.height).toEqual('40px');
+    });
+  });
+
   describe('setMessageLength', () => {
     it('should set the text value length to the length of the input string', () => {
       component.setMessageLength('a');

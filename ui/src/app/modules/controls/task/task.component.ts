@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {emptyThought, Thought} from '../../domain/thought';
 import {emojify} from '../../utils/EmojiGenerator';
 
@@ -35,7 +35,7 @@ import {emojify} from '../../utils/EmojiGenerator';
     '[class.dialog-overlay-border]': 'enableOverlayBorder'
   }
 })
-export class TaskComponent {
+export class TaskComponent implements AfterViewInit {
 
   @Input() type = '';
   @Input() task = emptyThought();
@@ -47,6 +47,7 @@ export class TaskComponent {
   @Output() starCountIncreased: EventEmitter<number> = new EventEmitter<number>();
   @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+  @ViewChild('content_message') contentMessage: ElementRef;
   @ViewChild('content_value') editableTextArea: ElementRef;
 
   starCountMax = 99;
@@ -58,6 +59,9 @@ export class TaskComponent {
   constructor() {
   }
 
+  ngAfterViewInit() {
+    this.initializeTextAreaHeight();
+  }
 
   public onDeleteConfirmationBlur(): void {
     this.toggleDeleteConfirmation();
@@ -94,6 +98,10 @@ export class TaskComponent {
   public toggleTaskComplete(): void {
     this.task.discussed = !this.task.discussed;
     this.completed.emit(this.task.discussed);
+  }
+
+  public initializeTextAreaHeight(): void {
+    this.editableTextArea.nativeElement.style.height = this.contentMessage.nativeElement.scrollHeight + 'px';
   }
 
   private focusInput(): void {

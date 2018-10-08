@@ -34,12 +34,13 @@
   <div class="content-container">
 
     <span
+      #content_message
       class="content-message"
       (click)="emitTaskContentClicked()"
-      *ngIf="!taskEditModeEnabled; else content_textarea"
+      *ngIf="!taskEditModeEnabled"
     >{{emojifyText(actionItem.task)}}</span>
 
-    <ng-template #content_textarea>
+    <div [ngClass]="{'remove': !taskEditModeEnabled}">
       <textarea #content_value [ngModel]="actionItem.task"
                 class="content-message edit-input"
                 (blur)="updateActionItemMessage($event, content_value.value); toggleEditMode()"
@@ -47,7 +48,6 @@
                 (keydown.escape)="updateActionItemMessage($event, content_value.value); forceBlur()"
                 (input)="setMessageLength(content_value.value)"
                 [maxlength]="maxMessageLength"
-                onfocus="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
                 oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
       ></textarea>
 
@@ -57,12 +57,16 @@
         [maxCharacterCount]="maxMessageLength"
       >
       </rq-floating-character-countdown>
+    </div>
 
-    </ng-template>
   </div>
 </div>
 
-<div class="assigned-to-section" [ngClass]="{'disable': taskEditModeEnabled || actionItem.completed}">
+<div class="assigned-to-section"
+     [ngClass]="{
+     'disable': taskEditModeEnabled || actionItem.completed,
+     'opacify': taskEditModeEnabled || actionItem.completed
+     }">
   <div class="label">assigned to</div>
   <input
     [readonly]="readOnly"

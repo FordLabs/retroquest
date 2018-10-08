@@ -26,15 +26,16 @@
 <div
   class="content-area"
   (click)="emitTaskContentClicked()"
-  [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
+  [ngClass]="{'disable': task.discussed }"
 >
   <span
+    #content_message
     class="content-message"
     [ngClass]="{'opacify': task.discussed}"
     *ngIf="!taskEditModeEnabled"
   >{{emojifyText(task.message)}}</span>
 
-  <div *ngIf="taskEditModeEnabled">
+  <div [ngClass]="{'remove': !taskEditModeEnabled}">
     <textarea #content_value [ngModel]="task.message"
            class="content-message edit-input"
            (blur)="updateTaskMessage($event, content_value.value); toggleEditMode()"
@@ -42,7 +43,6 @@
            (keydown.escape)="updateTaskMessage($event, content_value.value); forceBlur()"
            (input)="setMessageLength(content_value.value)"
            [maxlength]="maxMessageLength"
-           onfocus="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
            oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
     ></textarea>
 

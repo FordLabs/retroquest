@@ -17,6 +17,7 @@
 
 import {ActionItemTaskComponent} from './action-item-task.component';
 import {emptyActionItem} from '../../domain/action-item';
+import {elementDef} from "@angular/core/src/view";
 
 describe('ActionItemTaskComponent', () => {
   let component: ActionItemTaskComponent;
@@ -184,6 +185,27 @@ describe('ActionItemTaskComponent', () => {
       component.forceBlur();
 
       expect(component.editableTextArea.nativeElement.blur).toHaveBeenCalled();
+    });
+  });
+
+  describe('initializeTextAreaHeight', () => {
+    it(`should set the height of the nativeElement of the text area to the content message height + 20px`, () => {
+      component.editableTextArea = {
+        nativeElement: {
+          style: {
+            height: ''
+          }
+        }
+      };
+
+      component.contentMessage = {
+        nativeElement: {
+          scrollHeight: 40
+        }
+      };
+
+      component.initializeTextAreaHeight();
+      expect(component.editableTextArea.nativeElement.style.height).toEqual('60px');
     });
   });
 
