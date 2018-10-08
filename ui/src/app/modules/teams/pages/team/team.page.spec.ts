@@ -26,6 +26,7 @@ import {ActionItemService} from '../../services/action.service';
 import {WebsocketService} from '../../services/websocket.service';
 import {ActionItem, emptyActionItem} from '../../../domain/action-item';
 import * as moment from 'moment';
+import {SaveCheckerService} from '../../services/save-checker.service';
 
 describe('TeamPageComponent', () => {
 
@@ -35,6 +36,7 @@ describe('TeamPageComponent', () => {
   let mockActionItemService: ActionItemService;
   let mockColumnService: ColumnService;
   let mockWebsocketService: WebsocketService;
+  let mockSaveCheckerService: SaveCheckerService;
 
   let heartbeatTopic: Subject<any>;
   let thoughtsTopic: Subject<any>;
@@ -86,13 +88,19 @@ describe('TeamPageComponent', () => {
       sendHeartbeat: null,
     });
 
+    mockSaveCheckerService = jasmine.createSpyObj({
+      updateTimestamp: null
+    });
+
     component = new TeamPageComponent(
       mockActiveRoute,
       mockTeamService,
       mockThoughtService,
       mockColumnService,
       mockActionItemService,
-      mockWebsocketService);
+      mockWebsocketService,
+      mockSaveCheckerService
+    );
 
     component.columns = [];
   }));
@@ -287,6 +295,15 @@ describe('TeamPageComponent', () => {
       expect(component.thoughtsArray.length).toEqual(1);
     });
 
+    it('should update the save checker timestamp when any thought message is recieved successfully', () => {
+      component.ngOnInit();
+      mockActiveRoute.params.next({teamId: 1});
+      (mockWebsocketService.openWebsocket('team1') as Subject<any>).next({bodyJson: {}});
+
+      thoughtsTopic.next({bodyJson: {type: 'put', payload: {id: 1, columnTitle: {id: 1}}, body: ''}});
+      expect(mockSaveCheckerService.updateTimestamp).toHaveBeenCalled();
+    });
+
     it('should delete thoughts when delete message is received', () => {
       component.ngOnInit();
       mockActiveRoute.params.next({teamId: 1});
@@ -353,6 +370,21 @@ describe('TeamPageComponent', () => {
       expect(component.actionItems.length).toEqual(1);
     });
 
+    it('should update the save checker timestamp when any thought message is recieved successfully', () => {
+      component.ngOnInit();
+      mockActiveRoute.params.next({teamId: 1});
+      (mockWebsocketService.openWebsocket('team1') as Subject<any>).next({bodyJson: {}});
+
+      actionItemTopic.next({
+        bodyJson: {
+          type: 'post',
+          payload: {}
+        }
+      });
+
+      expect(mockSaveCheckerService.updateTimestamp).toHaveBeenCalled();
+    });
+
     it('should update action items when a message is received', () => {
       component.ngOnInit();
       mockActiveRoute.params.next({teamId: 1});
@@ -390,6 +422,7 @@ describe('TeamPageComponent', () => {
 
       expect(mockThoughtService.resetThoughtsObserver.subscribe).toHaveBeenCalled();
     });
+
   });
 
   describe('resetThoughts', () => {
