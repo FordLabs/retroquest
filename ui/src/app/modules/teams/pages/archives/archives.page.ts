@@ -15,7 +15,9 @@
  * limitations under the License.
  */
 
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {TeamService} from '../../services/team.service';
 
 @Component({
   selector: 'rq-archives',
@@ -23,10 +25,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./archives.page.scss']
 })
 export class ArchivesPageComponent implements OnInit {
+  teamId: string;
+  teamName: string;
 
-  constructor() { }
+  constructor(private activeRoute: ActivatedRoute,
+              private teamsService: TeamService) {
+  }
 
   ngOnInit() {
+    this.activeRoute.params.subscribe((params) => {
+      this.teamId = params.teamId;
+      this.teamsService.fetchTeamName(this.teamId).subscribe(teamName => {
+        this.teamName = teamName;
+      });
+    });
   }
 
 }

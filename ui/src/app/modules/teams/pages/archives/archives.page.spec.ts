@@ -16,15 +16,29 @@
  */
 
 import {ArchivesPageComponent} from './archives.page';
+import {Subject} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
+import {TeamService} from '../../services/team.service';
 
 describe('ArchivesPageComponent', () => {
   let component: ArchivesPageComponent;
+  let mockActivatedRoute: ActivatedRoute;
+  let mockTeamService: TeamService;
 
   beforeEach(() => {
-    component = new ArchivesPageComponent();
+    mockActivatedRoute = {
+      params: jasmine.createSpyObj({subscribe: new Subject()})
+    } as ActivatedRoute;
+    mockTeamService = jasmine.createSpyObj({fetchTeamName: new Subject()});
+    component = new ArchivesPageComponent(mockActivatedRoute, mockTeamService);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it(`should subscribe to params on the activated route on init`, () => {
+    component.ngOnInit();
+    expect(mockActivatedRoute.params.subscribe).toHaveBeenCalled();
   });
 });

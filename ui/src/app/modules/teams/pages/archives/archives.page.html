@@ -15,6 +15,17 @@
   ~ limitations under the License.
   -->
 
-<p>
-  archives works!
-</p>
+<div id="page">
+  <header>
+    <rq-top-header [teamName]="teamName"></rq-top-header>
+    <div id="headerBottom">
+      <div class="header-bottom-content">
+        <a routerLink="/team/{{teamId}}">
+          <button class="rq-button-secondary">
+            <span class="button-text">Current Board</span>
+          </button>
+        </a>
+      </div>
+    </div>
+  </header>
+</div>
