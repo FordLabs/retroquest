@@ -36,6 +36,7 @@ import {TeamPageQueryParamGuard} from './services/team-page-query-param-guard';
 import {ControlsModule} from '../controls/controls.module';
 import {SaveCheckerService} from './services/save-checker.service';
 import {ArchivesPageComponent} from './pages/archives/archives.page';
+import {TopHeaderComponent} from './components/top-header/top-header.component';
 
 @NgModule({
   imports: [
@@ -64,7 +65,8 @@ import {ArchivesPageComponent} from './pages/archives/archives.page';
     ThoughtsHeaderComponent,
     ActionsHeaderComponent,
     ActionsColumnComponent,
-    ArchivesPageComponent
+    ArchivesPageComponent,
+    TopHeaderComponent
   ]
 })
 export class TeamsModule {

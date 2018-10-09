@@ -17,16 +17,7 @@
 
 <header id="header">
 
-  <div id="headerTop">
-    <div class="header-top-content">
-      <a routerLink="/" class="logo-link">
-        <img src="/assets/RetroQuest.png" title="RetroQuest Logo" id="logo"/>
-      </a>
-      <div class="horizontal-separator"></div>
-      <div id="teamName">{{teamName}}</div>
-      <div class="last-saved-text">{{lastSavedText}}</div>
-    </div>
-  </div>
+  <rq-top-header [teamName]="teamName" [lastSavedText]="lastSavedText"></rq-top-header>
 
   <div id="headerBottom">
     <div
