@@ -15,8 +15,9 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {AfterContentChecked, Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {emptyThought, Thought} from '../../domain/thought';
+import {TaskComponent} from '../task/task.component';
 
 const ESC_KEY = 27;
 
@@ -30,7 +31,7 @@ const ESC_KEY = 27;
     '[class.edit-mode]': 'taskEditModeEnabled'
   }
 })
-export class TaskDialogComponent {
+export class TaskDialogComponent implements AfterContentChecked {
 
   @Input() type = '';
   @Input() task: Thought = emptyThought();
@@ -42,14 +43,24 @@ export class TaskDialogComponent {
   @Output() starCountIncreased: EventEmitter<number> = new EventEmitter<number>();
   @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+  @ViewChild('task_component') taskComponent: TaskComponent;
+
+  ngAfterContentChecked() {
+    if (this.taskComponent && this.visible) {
+      this.taskComponent.initializeTextAreaHeight();
+    }
+  }
+
   public hide(): void {
     this.visible = false;
     this.visibilityChanged.emit(this.visible);
     document.onkeydown = null;
+    document.body.style.overflow = null;
   }
 
   public show(): void {
     this.visible = true;
+    document.body.style.overflow = 'hidden';
     document.onkeydown = event => {
       if (event.keyCode === ESC_KEY) {
         this.hide();

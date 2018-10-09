@@ -26,34 +26,27 @@
 <div
   class="content-area"
   (click)="emitTaskContentClicked()"
-  [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
+  [ngClass]="{'disable': task.discussed }"
 >
-  <span
-    class="content-message"
-    [ngClass]="{'opacify': task.discussed}"
-    *ngIf="!taskEditModeEnabled"
-  >{{emojifyText(task.message)}}</span>
+  <textarea #content_value [ngModel]="task.message"
+            class="content-message edit-input"
+            (blur)="updateTaskMessage($event, content_value.value); editModeOff()"
+            (keydown.enter)="updateTaskMessage($event, content_value.value); forceBlur()"
+            (keydown.escape)="updateTaskMessage($event, content_value.value); forceBlur()"
+            (input)="setMessageLength(content_value.value)"
+            [maxlength]="maxMessageLength"
+            oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
+            [readonly]="!taskEditModeEnabled"
+            [ngClass]="{'disable opacify': task.discussed }"
+  ></textarea>
 
-  <div *ngIf="taskEditModeEnabled">
-    <div
-      #content_value
-      class="content-message editable-div"
-      contenteditable="true"
-      (keydown.enter)="updateTaskMessage(content_value.textContent); forceBlur()"
-      (blur)="updateTaskMessage(content_value.textContent); toggleEditMode()"
-      (keydown)="onKeyDown($event, content_value.textContent)"
-      (keyup)="onKeyUp(content_value.textContent, content_value.innerText)"
-    >{{task.message}}
-    </div>
-
-    <rq-floating-character-countdown
-      [characterCount]="textValueLength"
-      [charsAreRunningOutThreshold]="50"
-      [maxCharacterCount]="maxMessageLength"
-    >
-    </rq-floating-character-countdown>
-
-  </div>
+  <rq-floating-character-countdown
+    [characterCount]="textValueLength"
+    [charsAreRunningOutThreshold]="50"
+    [maxCharacterCount]="maxMessageLength"
+    [ngClass]="{'remove': !taskEditModeEnabled}"
+  >
+  </rq-floating-character-countdown>
 
 </div>
 

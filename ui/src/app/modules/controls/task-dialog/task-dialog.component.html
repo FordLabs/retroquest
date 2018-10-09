@@ -16,6 +16,7 @@
   -->
 
 <rq-task
+  #task_component
   [enableOverlayBorder]="true"
   [type]="type"
   [task]="task"
@@ -24,4 +25,5 @@
   (deleted)="emitDeleted()"
   (messageChanged)="emitMessageChanged($event)"
   (starCountIncreased)="emitStarCountIncreased($event)"
+  class="dialog-task"
 ></rq-task>

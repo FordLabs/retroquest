@@ -53,7 +53,9 @@
     box-sizing: border-box;
     font-size: 1rem;
     height: auto;
-
+    max-height: 50%;
+    max-width: 650px;
+    overflow: hidden;
     transform: scale(1.65);
     width: 450px;
 
@@ -62,9 +64,8 @@
     }
 
     @media only screen and (max-width: 610px) {
-      height: 280px;
       margin: $border-width;
-      max-height: 280px;
+      max-height: 80%;
       transform: none;
       width: calc(100% - 16px);
     }

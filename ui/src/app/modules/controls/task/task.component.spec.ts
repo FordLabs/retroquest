@@ -109,6 +109,26 @@ describe('TaskComponent', () => {
     });
   });
 
+  describe(`editModeOff`, () => {
+    it(`should emit message changed`, () => {
+      component.messageChanged = jasmine.createSpyObj({emit: null});
+      component.editModeOff();
+      expect(component.messageChanged.emit).toHaveBeenCalled();
+    });
+
+    it(`should change taskEditModeEnabled to false`, () => {
+      component.taskEditModeEnabled = true;
+      component.editModeOff();
+      expect(component.taskEditModeEnabled).toEqual(false);
+    });
+
+    it(`should not change taskEditModeEnabled to true`, () => {
+      component.taskEditModeEnabled = false;
+      component.editModeOff();
+      expect(component.taskEditModeEnabled).toEqual(false);
+    });
+  });
+
   describe('addStar', () => {
 
     it('should increase the star count by one', () => {
@@ -208,69 +228,45 @@ describe('TaskComponent', () => {
     });
   });
 
-  describe('onKeyDown', () => {
+  describe('initializeTextAreaHeight', () => {
+    it(`should set the height of the nativeElement of the text area to the content message height`, () => {
+      component.editableTextArea = {
+        nativeElement: {
+          style: {
+            height: ''
+          },
+          scrollHeight: 40
+        }
+      };
 
-    const fakeTextValue = 'XX';
-
-    it('should prevent the key event from being processed if the task has reached the max length', () => {
-      const fakeKeyEvent = jasmine.createSpyObj({
-        preventDefault: null
-      });
-
-      fakeKeyEvent.key = 'a';
-
-      component.maxMessageLength = 2;
-      component.onKeyDown(fakeKeyEvent, fakeTextValue);
-      expect(fakeKeyEvent.preventDefault).toHaveBeenCalled();
-    });
-
-    it('should allow the key event if the max message length has not been reached', () => {
-      const fakeKeyEvent = jasmine.createSpyObj({
-        preventDefault: null
-      });
-      fakeKeyEvent.key = 'a';
-
-      component.maxMessageLength = 3;
-      component.onKeyDown(fakeKeyEvent, fakeTextValue);
-      expect(fakeKeyEvent.preventDefault).not.toHaveBeenCalled();
-    });
-
-    it('should allow the backspace key event even if the max length has been reached', () => {
-      const fakeBackspaceEvent = jasmine.createSpyObj({
-        preventDefault: null
-      });
-      fakeBackspaceEvent.keyCode = 8;
-
-      component.maxMessageLength = 2;
-      component.onKeyDown(fakeBackspaceEvent, fakeTextValue);
-      expect(fakeBackspaceEvent.preventDefault).not.toHaveBeenCalled();
-    });
-
-    it('should allow the delete key event even if the max length has been reached', () => {
-      const fakeDeleteKeyEvent = jasmine.createSpyObj({
-        preventDefault: null,
-      });
-
-      fakeDeleteKeyEvent.keyCode = 46;
-
-      component.maxMessageLength = 2;
-      component.onKeyDown(fakeDeleteKeyEvent, fakeTextValue);
-      expect(fakeDeleteKeyEvent.preventDefault).not.toHaveBeenCalled();
+      component.initializeTextAreaHeight();
+      expect(component.editableTextArea.nativeElement.style.height).toEqual('40px');
     });
   });
 
-  describe('onKeyUp', () => {
-    it('should set the text value length to the min between both parameter string lengths', () => {
-      component.onKeyUp('aa', 'a');
+  describe('setMessageLength', () => {
+    it('should set the text value length to the length of the input string', () => {
+      component.setMessageLength('a');
       expect(component.textValueLength).toEqual(1);
     });
   });
 
   describe('updateTaskMessage', () => {
+    const fakeText = 'HELLO I AM TEXT';
+    let fakeEvent;
+
+    beforeEach(() => {
+      fakeEvent = jasmine.createSpyObj(['preventDefault']);
+    });
+
     it('should set the thought message to the passed in string', () => {
-      const fakeText = 'HELLO I AM TEXT';
-      component.updateTaskMessage(fakeText);
+      component.updateTaskMessage(fakeEvent, fakeText);
       expect(component.task.message).toEqual(fakeText);
+    });
+
+    it(`should prevent the default event`, () => {
+      component.updateTaskMessage(fakeEvent, fakeText);
+      expect(fakeEvent.preventDefault).toHaveBeenCalled();
     });
   });
 

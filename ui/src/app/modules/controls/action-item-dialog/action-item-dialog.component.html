@@ -16,6 +16,7 @@
   -->
 
 <rq-action-item-task
+  #action_item_component
   [enableOverlayBorder]="true"
   [actionItem]="actionItem"
   (click)="$event.stopPropagation()"
@@ -23,5 +24,6 @@
   (deleted)="emitDeleted()"
   (messageChanged)="emitMessageChanged($event)"
   (assigneeUpdated)="emitAssigneeUpdated($event)"
+  class="dialog-task"
 >
 </rq-action-item-task>

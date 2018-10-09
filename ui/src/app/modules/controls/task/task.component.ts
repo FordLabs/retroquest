@@ -15,13 +15,10 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {emptyThought, Thought} from '../../domain/thought';
 import {emojify} from '../../utils/EmojiGenerator';
 
-
-const BACKSPACE_KEY = 8;
-const DELETE_KEY = 46;
 
 @Component({
   selector: 'rq-task',
@@ -38,7 +35,7 @@ const DELETE_KEY = 46;
     '[class.dialog-overlay-border]': 'enableOverlayBorder'
   }
 })
-export class TaskComponent {
+export class TaskComponent implements AfterViewChecked {
 
   @Input() type = '';
   @Input() task = emptyThought();
@@ -61,6 +58,9 @@ export class TaskComponent {
   constructor() {
   }
 
+  ngAfterViewChecked() {
+    this.initializeTextAreaHeight();
+  }
 
   public onDeleteConfirmationBlur(): void {
     this.toggleDeleteConfirmation();
@@ -73,6 +73,11 @@ export class TaskComponent {
       this.focusInput();
     }
     this.taskEditModeEnabled = !this.taskEditModeEnabled;
+  }
+
+  public editModeOff(): void {
+    this.messageChanged.emit(this.task.message);
+    this.taskEditModeEnabled = false;
   }
 
   public addStar(): void {
@@ -99,6 +104,10 @@ export class TaskComponent {
     this.completed.emit(this.task.discussed);
   }
 
+  public initializeTextAreaHeight(): void {
+    this.editableTextArea.nativeElement.style.height = this.editableTextArea.nativeElement.scrollHeight + 'px';
+  }
+
   private focusInput(): void {
     setTimeout(() => {
       this.editableTextArea.nativeElement.focus();
@@ -117,24 +126,13 @@ export class TaskComponent {
     }, 0);
   }
 
-  public onKeyDown(keyEvent: KeyboardEvent, innerText: string) {
-    if (!this.keyEventIsAnAction(keyEvent)) {
-      if (innerText.length + keyEvent.key.length > this.maxMessageLength) {
-        keyEvent.preventDefault();
-      }
-    }
+  public setMessageLength(textContent: string): void {
+    this._textValueLength = textContent.length;
   }
 
-  public onKeyUp(textContent: string, innerText: string): void {
-    this._textValueLength = Math.min(textContent.length, innerText.length);
-  }
-
-  public updateTaskMessage(innerText: string): void {
-    this.task.message = innerText;
-  }
-
-  private keyEventIsAnAction(keyEvent: KeyboardEvent): boolean {
-    return keyEvent.keyCode === BACKSPACE_KEY || keyEvent.keyCode === DELETE_KEY;
+  public updateTaskMessage(event, value: string): void {
+    event.preventDefault();
+    this.task.message = value;
   }
 
   get textValueLength(): number {
