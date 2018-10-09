@@ -48,6 +48,12 @@
         <i class="far fa-comments button-icon"></i>
       </button>
 
+      <a routerLink="archives">
+        <button class="rq-button-secondary">
+          <span class="button-text">Archives</span>
+        </button>
+      </a>
+
       <a id="downloadCsv"
          [href]="getCsvUrl()"
          [ngClass]="{
@@ -59,6 +65,7 @@
           <i class="fas fa-download button-icon"></i>
         </button>
       </a>
+
       <button
         id="endRetro"
         class="rq-button-primary"

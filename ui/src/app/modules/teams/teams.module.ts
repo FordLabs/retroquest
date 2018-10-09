@@ -35,6 +35,7 @@ import {AuthGuard} from '../auth/auth-guard/auth.guard';
 import {TeamPageQueryParamGuard} from './services/team-page-query-param-guard';
 import {ControlsModule} from '../controls/controls.module';
 import {SaveCheckerService} from './services/save-checker.service';
+import {ArchivesPageComponent} from './pages/archives/archives.page';
 
 @NgModule({
   imports: [
@@ -42,6 +43,7 @@ import {SaveCheckerService} from './services/save-checker.service';
     FormsModule,
     RouterModule.forChild([
       {path: 'team/:teamId', component: TeamPageComponent, canActivate: [AuthGuard]},
+      {path: 'team/:teamId/archives', component: ArchivesPageComponent, canActivate: [AuthGuard]},
       {path: 'team', component: TeamPageComponent, canActivate: [TeamPageQueryParamGuard]},
     ]),
     ControlsModule
@@ -61,7 +63,8 @@ import {SaveCheckerService} from './services/save-checker.service';
     ThoughtsColumnComponent,
     ThoughtsHeaderComponent,
     ActionsHeaderComponent,
-    ActionsColumnComponent
+    ActionsColumnComponent,
+    ArchivesPageComponent
   ]
 })
 export class TeamsModule {
