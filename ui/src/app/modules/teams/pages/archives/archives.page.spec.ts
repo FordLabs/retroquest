@@ -17,28 +17,71 @@
 
 import {ArchivesPageComponent} from './archives.page';
 import {Subject} from 'rxjs';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Params} from '@angular/router';
 import {TeamService} from '../../services/team.service';
+import {BoardsService} from '../../services/boards.service';
+import {Board, emptyBoardWithThought} from '../../../domain/board';
 
 describe('ArchivesPageComponent', () => {
-  let component: ArchivesPageComponent;
+  let paramsSubject: Subject<Object>;
+  let fetchTeamNameSubject: Subject<string>;
+  let fetchBoardsSubject: Subject<Array<Board>>;
+
   let mockActivatedRoute: ActivatedRoute;
   let mockTeamService: TeamService;
+  let mockBoardsService: BoardsService;
+
+  let component: ArchivesPageComponent;
+
+  let paramsObj;
+  let returnBoard;
 
   beforeEach(() => {
+    paramsSubject = new Subject();
+    fetchTeamNameSubject = new Subject();
+    fetchBoardsSubject = new Subject();
+
     mockActivatedRoute = {
-      params: jasmine.createSpyObj({subscribe: new Subject()})
+      params: paramsSubject as Params
     } as ActivatedRoute;
-    mockTeamService = jasmine.createSpyObj({fetchTeamName: new Subject()});
-    component = new ArchivesPageComponent(mockActivatedRoute, mockTeamService);
+    mockTeamService = jasmine.createSpyObj({fetchTeamName: fetchTeamNameSubject});
+    mockBoardsService = jasmine.createSpyObj({fetchBoards: fetchBoardsSubject});
+
+    component = new ArchivesPageComponent(mockActivatedRoute, mockTeamService, mockBoardsService);
+
+    paramsObj = {
+      teamId: 'test-id'
+    };
+
+    returnBoard = emptyBoardWithThought();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it(`should subscribe to params on the activated route on init`, () => {
-    component.ngOnInit();
-    expect(mockActivatedRoute.params.subscribe).toHaveBeenCalled();
+  describe(`ngOnInit`, () => {
+    it(`should subscribe to params on the activated route on init`, () => {
+      spyOn(mockActivatedRoute.params, 'subscribe');
+      component.ngOnInit();
+      expect(mockActivatedRoute.params.subscribe).toHaveBeenCalled();
+    });
+
+    it(`should subscribe to fetchTeamName and assign the result to the teamName attribute on the component`, () => {
+      component.teamName = '';
+      component.ngOnInit();
+      paramsSubject.next(paramsObj);
+      expect(mockTeamService.fetchTeamName).toHaveBeenCalledWith('test-id');
+      fetchTeamNameSubject.next('the team name');
+      expect(component.teamName).toEqual('the team name');
+    });
+
+    it(`should subscribe to fetchBoards and assign the result to the boards attribute on the component`, () => {
+      component.ngOnInit();
+      paramsSubject.next(paramsObj);
+      expect(mockBoardsService.fetchBoards).toHaveBeenCalledWith('test-id');
+      fetchBoardsSubject.next([returnBoard]);
+      expect(component.boards).toEqual([returnBoard]);
+    });
   });
 });

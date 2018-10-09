@@ -37,6 +37,7 @@ import {ControlsModule} from '../controls/controls.module';
 import {SaveCheckerService} from './services/save-checker.service';
 import {ArchivesPageComponent} from './pages/archives/archives.page';
 import {TopHeaderComponent} from './components/top-header/top-header.component';
+import {BoardSummaryComponent} from './components/board-summary/board-summary.component';
 
 @NgModule({
   imports: [
@@ -66,7 +67,8 @@ import {TopHeaderComponent} from './components/top-header/top-header.component';
     ActionsHeaderComponent,
     ActionsColumnComponent,
     ArchivesPageComponent,
-    TopHeaderComponent
+    TopHeaderComponent,
+    BoardSummaryComponent
   ]
 })
 export class TeamsModule {

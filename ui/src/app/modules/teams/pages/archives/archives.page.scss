@@ -70,65 +70,12 @@ header {
           display: block;
         }
       }
-
-      rq-button {
-        height: 100%;
-        width: auto;
-      }
-
-      .actions-radiator-button {
-        @media only screen and (max-width: 610px) {
-          display: none;
-        }
-      }
-
-      #giveFeedback {
-        outline: none;
-
-        @media only screen and (max-width: 610px) {
-          height: 100%;
-          padding: 0 18px;
-        }
-
-        .button-text {
-          @media only screen and (max-width: 610px) {
-            display: none;
-          }
-        }
-      }
-
-      #downloadCsv {
-        margin-right: 24px;
-        outline: none;
-        padding: 0;
-
-        button {
-
-          .button-text {
-            @media only screen and (max-width: 610px) {
-              display: none;
-            }
-          }
-
-          @media only screen and (max-width: 610px) {
-            height: 100%;
-            padding: 0 18px;
-          }
-        }
-
-      }
-
-      #endRetro {
-        height: 100%;
-        outline: none;
-
-        @media only screen and (max-width: 610px) {
-          font-size: .9rem;
-          height: 100%;
-          padding: 0 18px;
-        }
-
-      }
     }
+  }
+}
+
+#archives {
+  h1 {
+    text-align: center;
   }
 }

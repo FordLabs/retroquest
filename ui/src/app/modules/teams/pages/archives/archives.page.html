@@ -19,7 +19,7 @@
   <header>
     <rq-top-header [teamName]="teamName"></rq-top-header>
     <div id="headerBottom">
-      <div class="header-bottom-content">
+      <div class="header-bottom-content center-content">
         <a routerLink="/team/{{teamId}}">
           <button class="rq-button-secondary">
             <span class="button-text">Current Board</span>
@@ -28,4 +28,9 @@
       </div>
     </div>
   </header>
+
+  <div id="archives">
+    <h1>Archived Boards</h1>
+    <rq-board-summary *ngFor="let board of boards"></rq-board-summary>
+  </div>
 </div>
