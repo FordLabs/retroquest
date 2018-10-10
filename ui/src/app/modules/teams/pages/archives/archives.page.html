@@ -31,6 +31,6 @@
 
   <div id="archives">
     <h1>Archived Boards</h1>
-    <rq-board-summary *ngFor="let board of boards"></rq-board-summary>
+    <rq-board-summary *ngFor="let board of boards" [board]="board" [teamId]="teamId"></rq-board-summary>
   </div>
 </div>

@@ -1,0 +1,71 @@
+/*!
+ * Copyright (c) 2018 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+@import 'color-vars';
+
+:host {
+  $host-border-width: 2px;
+  $host-opacity: .1;
+  background-color: $white;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px opacity($black, .25);
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  font-weight: bold;
+  height: 95px;
+  margin: 10px 0;
+  position: relative;
+  transition: box-shadow .2s cubic-bezier(.25, .8, .25, 1);
+  width: 600px;
+}
+
+.content-area {
+  padding: 20px;
+  text-align: center;
+}
+
+.footer {
+  background-color: inherit;
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
+  border-top: 2px solid opacity($wet-asphalt, .06);
+  display: flex;
+  height: 40px;
+  justify-content: flex-start;
+
+  a {
+    align-items: center;
+    display: flex;
+    justify-content: space-around;
+    padding: 0;
+    transition: .5s;
+    width: 50%;
+
+    &.view {
+      border-bottom-left-radius: inherit;
+      border-right: 1px solid opacity($wet-asphalt, .06);
+      color: inherit;
+    }
+
+    &.delete {
+      background-color: $end-retro-button-red;
+      border-bottom-right-radius: inherit;
+      color: $white;
+    }
+  }
+}
