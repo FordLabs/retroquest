@@ -18,6 +18,7 @@
 package com.ford.labs.retroquest.thought;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ford.labs.retroquest.board.Board;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import lombok.Builder;
 import lombok.Data;
@@ -59,8 +60,11 @@ public class Thought {
             )
     })
     private ColumnTitle columnTitle;
+    @ManyToOne
+    @JoinColumn(name = "boardId")
+    private Board board;
 
-    public Thought(Long id, String message, int hearts, String topic, boolean discussed, String teamId, ColumnTitle columnTitle) {
+    public Thought(Long id, String message, int hearts, String topic, boolean discussed, String teamId, ColumnTitle columnTitle, Board board) {
         this.id = id;
         this.message = message;
         this.hearts = hearts;
@@ -68,6 +72,7 @@ public class Thought {
         this.discussed = discussed;
         this.teamId = teamId;
         this.columnTitle = columnTitle;
+        this.board = board;
     }
 
     private String getDiscussedString() {

@@ -18,15 +18,27 @@
 package com.ford.labs.retroquest.board;
 
 
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
+@RequestMapping(value = "/api")
 public class BoardController {
 
-    private final BoardRepository boardRepository;
+    private final BoardService boardService;
 
-    public BoardController (BoardRepository boardRepository) {
-        this.boardRepository = boardRepository;
+    public BoardController (BoardService boardService) {
+        this.boardService = boardService;
     }
 
+    @GetMapping("/team/{teamId}/boards")
+    @PreAuthorize("#teamId == authentication.principal")
+    public List<Board> getBoardsForTeamId(@PathVariable("teamId") String teamId) {
+        return this.boardService.getBoardsForTeamId(teamId);
+    }
 }
