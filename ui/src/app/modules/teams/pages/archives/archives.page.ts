@@ -19,7 +19,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TeamService} from '../../services/team.service';
 import {Board} from '../../../domain/board';
-import {BoardsService} from '../../services/boards.service';
+import {BoardService} from '../../services/board.service';
 
 @Component({
   selector: 'rq-archives',
@@ -33,7 +33,7 @@ export class ArchivesPageComponent implements OnInit {
 
   constructor(private activeRoute: ActivatedRoute,
               private teamsService: TeamService,
-              private boardsService: BoardsService) {
+              private boardService: BoardService) {
   }
 
   ngOnInit() {
@@ -42,7 +42,7 @@ export class ArchivesPageComponent implements OnInit {
       this.teamsService.fetchTeamName(this.teamId).subscribe(teamName => {
         this.teamName = teamName;
       });
-      this.boardsService.fetchBoards(this.teamId).subscribe(boards => {
+      this.boardService.fetchBoards(this.teamId).subscribe(boards => {
         this.boards = boards;
       });
     });

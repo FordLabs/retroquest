@@ -15,21 +15,21 @@
  * limitations under the License.
  */
 
-import {BoardsService} from './boards.service';
+import {BoardService} from './board.service';
 import {HttpClient} from '@angular/common/http';
 import {Subject} from 'rxjs';
 import * as moment from 'moment';
 
 
-describe('BoardsService', () => {
-  let service: BoardsService;
+describe('BoardService', () => {
+  let service: BoardService;
   let mockHttpClient: HttpClient;
   let getRequestSubject: Subject<Array<Object>>;
 
   beforeEach(() => {
     getRequestSubject = new Subject();
     mockHttpClient = jasmine.createSpyObj({get: getRequestSubject});
-    service = new BoardsService(mockHttpClient);
+    service = new BoardService(mockHttpClient);
   });
 
   it('should be created', () => {

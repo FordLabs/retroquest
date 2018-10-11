@@ -19,7 +19,7 @@ import {ArchivesPageComponent} from './archives.page';
 import {Subject} from 'rxjs';
 import {ActivatedRoute, Params} from '@angular/router';
 import {TeamService} from '../../services/team.service';
-import {BoardsService} from '../../services/boards.service';
+import {BoardService} from '../../services/board.service';
 import {Board, emptyBoardWithThought} from '../../../domain/board';
 
 describe('ArchivesPageComponent', () => {
@@ -29,7 +29,7 @@ describe('ArchivesPageComponent', () => {
 
   let mockActivatedRoute: ActivatedRoute;
   let mockTeamService: TeamService;
-  let mockBoardsService: BoardsService;
+  let mockBoardService: BoardService;
 
   let component: ArchivesPageComponent;
 
@@ -45,9 +45,9 @@ describe('ArchivesPageComponent', () => {
       params: paramsSubject as Params
     } as ActivatedRoute;
     mockTeamService = jasmine.createSpyObj({fetchTeamName: fetchTeamNameSubject});
-    mockBoardsService = jasmine.createSpyObj({fetchBoards: fetchBoardsSubject});
+    mockBoardService = jasmine.createSpyObj({fetchBoards: fetchBoardsSubject});
 
-    component = new ArchivesPageComponent(mockActivatedRoute, mockTeamService, mockBoardsService);
+    component = new ArchivesPageComponent(mockActivatedRoute, mockTeamService, mockBoardService);
 
     paramsObj = {
       teamId: 'test-id'
@@ -79,7 +79,7 @@ describe('ArchivesPageComponent', () => {
     it(`should subscribe to fetchBoards and assign the result to the boards attribute on the component`, () => {
       component.ngOnInit();
       paramsSubject.next(paramsObj);
-      expect(mockBoardsService.fetchBoards).toHaveBeenCalledWith('test-id');
+      expect(mockBoardService.fetchBoards).toHaveBeenCalledWith('test-id');
       fetchBoardsSubject.next([returnBoard]);
       expect(component.boards).toEqual([returnBoard]);
     });

@@ -24,7 +24,7 @@ import * as moment from 'moment';
 @Injectable({
   providedIn: 'root'
 })
-export class BoardsService {
+export class BoardService {
 
   constructor(private http: HttpClient) {
   }
