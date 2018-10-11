@@ -26,4 +26,5 @@ import java.util.List;
 public interface BoardRepository extends JpaRepository<Board, Long>{
     List<Board> findAllByTeamId(String teamId);
     void deleteActionItemByTeamIdAndId(String teamId, Long id);
+    Board save(Board board);
 }

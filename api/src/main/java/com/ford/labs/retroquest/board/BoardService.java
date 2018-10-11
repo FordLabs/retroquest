@@ -19,6 +19,7 @@ package com.ford.labs.retroquest.board;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -34,5 +35,10 @@ public class BoardService {
 
     public List<Board> getBoardsForTeamId(String teamId) {
         return this.boardRepository.findAllByTeamId(teamId);
+    }
+
+    public Board saveBoard(Board board) {
+        board.setDateCreated(LocalDate.now());
+        return this.boardRepository.save(board);
     }
 }

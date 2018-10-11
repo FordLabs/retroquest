@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.board;
 
+import com.ford.labs.retroquest.thought.Thought;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -57,5 +58,25 @@ public class BoardServiceTest {
         List<Board> actualBoards = boardService.getBoardsForTeamId("team1");
 
         assertEquals(Arrays.asList(expectedBoard), actualBoards);
+    }
+
+    @Test
+    public void saveBoard() {
+        Board boardToSave = Board.builder()
+                .teamId("team1")
+                .thoughts(Arrays.asList(Thought.builder().message("hello").build()))
+                .build();
+
+        Board savedBoard = Board.builder()
+                .id(1L)
+                .teamId("team1")
+                .dateCreated(LocalDate.now())
+                .thoughts(Arrays.asList(Thought.builder().message("hello").build()))
+                .build();
+
+        when(boardRepository.save(boardToSave)).thenReturn(savedBoard);
+
+        Board returnedBoard = boardService.saveBoard(boardToSave);
+        assertEquals(savedBoard, returnedBoard);
     }
 }
