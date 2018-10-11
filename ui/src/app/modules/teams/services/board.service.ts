@@ -20,6 +20,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Board} from '../../domain/board';
 import * as moment from 'moment';
+import {Thought} from '../../domain/thought';
 
 @Injectable({
   providedIn: 'root'
@@ -33,10 +34,17 @@ export class BoardService {
     return new Observable((subscriber) => {
       this.http.get(`/api/team/${teamId}/boards`).subscribe((data: Array<Object>) => {
         data.map((boardObject) => {
-          console.log(boardObject);
           boardObject['dateCreated'] = moment(boardObject['dateCreated']);
         });
         subscriber.next(data as Array<Board>);
+      });
+    });
+  }
+
+  createBoard(teamId: string, thoughts: Array<Thought>): Observable<Board> {
+    return new Observable(subscriber => {
+      this.http.post(`/api/team/${teamId}/board`, {teamId: teamId, thoughts: thoughts}).subscribe(data => {
+        subscriber.next(data as Board);
       });
     });
   }

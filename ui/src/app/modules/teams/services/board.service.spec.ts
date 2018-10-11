@@ -19,16 +19,19 @@ import {BoardService} from './board.service';
 import {HttpClient} from '@angular/common/http';
 import {Subject} from 'rxjs';
 import * as moment from 'moment';
+import {emptyThoughtWithColumn} from '../../domain/thought';
 
 
 describe('BoardService', () => {
   let service: BoardService;
   let mockHttpClient: HttpClient;
   let getRequestSubject: Subject<Array<Object>>;
+  let postRequestSubject: Subject<any>;
 
   beforeEach(() => {
     getRequestSubject = new Subject();
-    mockHttpClient = jasmine.createSpyObj({get: getRequestSubject});
+    postRequestSubject = new Subject();
+    mockHttpClient = jasmine.createSpyObj({get: getRequestSubject, post: postRequestSubject});
     service = new BoardService(mockHttpClient);
   });
 
@@ -45,7 +48,7 @@ describe('BoardService', () => {
       expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/boards`);
     });
 
-    it('should send the boards on successful request', function () {
+    it('should send the boards on successful request', () => {
       const teamId = 'team-id';
       const expectedBoards = [
         {
@@ -60,6 +63,17 @@ describe('BoardService', () => {
         expect(boards).toBe(expectedBoards);
       });
       getRequestSubject.next(expectedBoards);
+    });
+  });
+
+  describe('createBoard', () => {
+    it('should call the create board endpoint', () => {
+      const thoughts = [emptyThoughtWithColumn()];
+      const teamId = 'team-id';
+
+      service.createBoard(teamId, thoughts).subscribe();
+
+      expect(mockHttpClient.post).toHaveBeenCalledWith(`/api/team/${teamId}/board`, {teamId: teamId, thoughts: thoughts});
     });
   });
 });

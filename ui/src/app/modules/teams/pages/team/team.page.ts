@@ -33,6 +33,7 @@ import * as moment from 'moment';
 import {ViewChild} from '@angular/core';
 import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-view/actions-radiator-view.component';
 import {SaveCheckerService} from '../../services/save-checker.service';
+import {BoardService} from "../../services/board.service";
 
 @Component({
   selector: 'rq-team',
@@ -71,7 +72,8 @@ export class TeamPageComponent implements OnInit {
               private columnService: ColumnService,
               private actionItemService: ActionItemService,
               private websocketService: WebsocketService,
-              private saveCheckerService: SaveCheckerService) {
+              private saveCheckerService: SaveCheckerService,
+              private boardService: BoardService) {
   }
 
   teamId: string;
@@ -256,7 +258,9 @@ export class TeamPageComponent implements OnInit {
   }
 
   public onEndRetro(): void {
-    this.thoughtService.deleteAllThoughts();
+    this.boardService.createBoard(this.teamId, this.thoughtsArray).subscribe(() => {
+      this.thoughtsArray = [];
+    });
   }
 
   public isSelectedIndex(index: number): boolean {

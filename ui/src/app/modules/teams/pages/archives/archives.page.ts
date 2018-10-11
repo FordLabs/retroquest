@@ -29,7 +29,7 @@ import {BoardService} from '../../services/board.service';
 export class ArchivesPageComponent implements OnInit {
   teamId: string;
   teamName: string;
-  boards: Array<Board>;
+  boards: Array<Board> = [];
 
   constructor(private activeRoute: ActivatedRoute,
               private teamsService: TeamService,
