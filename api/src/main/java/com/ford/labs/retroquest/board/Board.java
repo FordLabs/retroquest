@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.board;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ford.labs.retroquest.thought.Thought;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,7 +39,8 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String teamId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-dd")
     private LocalDate dateCreated;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "board")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "board")
     private List<Thought> thoughts;
 }

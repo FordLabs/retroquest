@@ -18,20 +18,26 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {Board, emptyBoardWithThought} from '../../domain/board';
+import {Board} from '../../domain/board';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BoardsService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   fetchBoards(teamId: string): Observable<Array<Board>> {
     return new Observable((subscriber) => {
-      const board1 = emptyBoardWithThought();
-      const board2 = emptyBoardWithThought();
-      subscriber.next([board1, board2]);
+      this.http.get(`/api/team/${teamId}/boards`).subscribe((data: Array<Object>) => {
+        data.map((boardObject) => {
+          console.log(boardObject);
+          boardObject['dateCreated'] = moment(boardObject['dateCreated']);
+        });
+        subscriber.next(data as Array<Board>);
+      });
     });
   }
 }

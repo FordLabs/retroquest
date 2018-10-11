@@ -17,14 +17,18 @@
 
 import {BoardsService} from './boards.service';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Subject} from 'rxjs';
+import * as moment from 'moment';
+
 
 describe('BoardsService', () => {
   let service: BoardsService;
   let mockHttpClient: HttpClient;
+  let getRequestSubject: Subject<Array<Object>>;
 
   beforeEach(() => {
-    mockHttpClient = jasmine.createSpyObj({get: new Observable()});
+    getRequestSubject = new Subject();
+    mockHttpClient = jasmine.createSpyObj({get: getRequestSubject});
     service = new BoardsService(mockHttpClient);
   });
 
@@ -36,10 +40,26 @@ describe('BoardsService', () => {
     it(`should request thoughts from the thoughts api`, () => {
       const teamId = 'team-id';
 
-      const returnObj = service.fetchBoards(teamId);
+      service.fetchBoards(teamId).subscribe();
 
-      // expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/boards`);
-      expect(returnObj instanceof Observable).toBe(true);
+      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/boards`);
+    });
+
+    it('should send the boards on successful request', function () {
+      const teamId = 'team-id';
+      const expectedBoards = [
+        {
+          id: 1,
+          dateCreated: moment(),
+          teamId: teamId,
+          thoughts: []
+        }
+      ];
+
+      service.fetchBoards(teamId).subscribe(boards => {
+        expect(boards).toBe(expectedBoards);
+      });
+      getRequestSubject.next(expectedBoards);
     });
   });
 });
