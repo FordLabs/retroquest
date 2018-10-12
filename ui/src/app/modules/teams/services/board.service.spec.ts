@@ -27,11 +27,13 @@ describe('BoardService', () => {
   let mockHttpClient: HttpClient;
   let getRequestSubject: Subject<Array<Object>>;
   let postRequestSubject: Subject<any>;
+  let deleteRequestSubject: Subject<any>;
 
   beforeEach(() => {
     getRequestSubject = new Subject();
     postRequestSubject = new Subject();
-    mockHttpClient = jasmine.createSpyObj({get: getRequestSubject, post: postRequestSubject});
+    deleteRequestSubject = new Subject();
+    mockHttpClient = jasmine.createSpyObj({get: getRequestSubject, post: postRequestSubject, delete: deleteRequestSubject});
     service = new BoardService(mockHttpClient);
   });
 
@@ -74,6 +76,15 @@ describe('BoardService', () => {
       service.createBoard(teamId, thoughts).subscribe();
 
       expect(mockHttpClient.post).toHaveBeenCalledWith(`/api/team/${teamId}/board`, {teamId: teamId, thoughts: thoughts});
+    });
+  });
+
+  describe('deleteBoard', () => {
+    it('should call the delete board endpoint', () => {
+      const teamId = 'team-id';
+      const boardId = -1;
+      service.deleteBoard(teamId, boardId).subscribe();
+      expect(mockHttpClient.delete).toHaveBeenCalledWith(`/api/team/${teamId}/board/${boardId}`);
     });
   });
 });

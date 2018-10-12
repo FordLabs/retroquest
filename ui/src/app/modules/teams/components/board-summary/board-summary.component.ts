@@ -15,8 +15,9 @@
  * limitations under the License.
  */
 
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Board} from '../../../domain/board';
+import {BoardService} from '../../services/board.service';
 
 @Component({
   selector: 'rq-board-summary',
@@ -26,13 +27,19 @@ import {Board} from '../../../domain/board';
 export class BoardSummaryComponent implements OnInit {
   @Input() board: Board;
   @Input() teamId: string;
+  @Output() boardDeleted: EventEmitter<number>;
 
-  constructor() { }
+  constructor(private boardService: BoardService) {
+    this.boardDeleted = new EventEmitter();
+  }
 
   ngOnInit() {
   }
 
   deleteBoard(board: Board, event: Event) {
     event.preventDefault();
+    this.boardService.deleteBoard(this.teamId, board.id).subscribe(() => {
+      this.boardDeleted.emit(board.id);
+    });
   }
 }

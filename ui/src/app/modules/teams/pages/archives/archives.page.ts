@@ -53,4 +53,9 @@ export class ArchivesPageComponent implements OnInit {
     });
   }
 
+  removeBoardFromBoards(boardId: number) {
+    this.boards = this.boards.filter(board => {
+      return board.id !== boardId;
+    });
+  }
 }

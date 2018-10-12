@@ -31,7 +31,7 @@
 
   <div id="archives">
     <h1>Archived Boards</h1>
-    <rq-board-summary *ngFor="let board of boards" [board]="board" [teamId]="teamId"></rq-board-summary>
+    <rq-board-summary *ngFor="let board of boards" [board]="board" [teamId]="teamId" (boardDeleted)="removeBoardFromBoards($event)"></rq-board-summary>
     <h2 *ngIf="boards.length === 0">No archived boards were found for your team. Boards will appear here after ending a retro.</h2>
   </div>
 </div>

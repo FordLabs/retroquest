@@ -101,4 +101,16 @@ describe('ArchivesPageComponent', () => {
       expect(mockWindow.clearInterval).toHaveBeenCalledWith(1);
     });
   });
+
+  describe('removeBoardFromBoard', () => {
+    it('should remove a board given a boardId', () => {
+      const board1 = emptyBoardWithThought();
+      board1.id = 1;
+      const board2 = emptyBoardWithThought();
+      board2.id = 2;
+      component.boards = [board1, board2];
+      component.removeBoardFromBoards(1);
+      expect(component.boards).not.toContain(board1);
+    });
+  });
 });
