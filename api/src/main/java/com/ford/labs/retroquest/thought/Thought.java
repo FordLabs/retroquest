@@ -60,11 +60,9 @@ public class Thought {
             )
     })
     private ColumnTitle columnTitle;
-    @ManyToOne
-    @JoinColumn(name = "boardId")
-    private Board board;
+    private Long boardId;
 
-    public Thought(Long id, String message, int hearts, String topic, boolean discussed, String teamId, ColumnTitle columnTitle, Board board) {
+    public Thought(Long id, String message, int hearts, String topic, boolean discussed, String teamId, ColumnTitle columnTitle, Long boardId) {
         this.id = id;
         this.message = message;
         this.hearts = hearts;
@@ -72,7 +70,7 @@ public class Thought {
         this.discussed = discussed;
         this.teamId = teamId;
         this.columnTitle = columnTitle;
-        this.board = board;
+        this.boardId = boardId;
     }
 
     private String getDiscussedString() {

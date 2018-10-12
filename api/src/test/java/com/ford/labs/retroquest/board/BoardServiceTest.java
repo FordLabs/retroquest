@@ -18,6 +18,7 @@
 package com.ford.labs.retroquest.board;
 
 import com.ford.labs.retroquest.thought.Thought;
+import com.ford.labs.retroquest.thought.ThoughtRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -35,6 +36,9 @@ import static org.mockito.Mockito.when;
 public class BoardServiceTest {
     @Mock
     private BoardRepository boardRepository;
+
+    @Mock
+    private ThoughtRepository thoughtRepository;
 
     @InjectMocks
     private BoardService boardService;

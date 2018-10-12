@@ -17,6 +17,8 @@
 
 package com.ford.labs.retroquest.board;
 
+import com.ford.labs.retroquest.thought.Thought;
+import com.ford.labs.retroquest.thought.ThoughtRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,11 +27,14 @@ import java.util.List;
 @Service
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final ThoughtRepository thoughtRepository;
 
     public BoardService(
-            BoardRepository boardRepository
+            BoardRepository boardRepository,
+            ThoughtRepository thoughtRepository
     ) {
         this.boardRepository = boardRepository;
+        this.thoughtRepository = thoughtRepository;
     }
 
 
@@ -39,6 +44,11 @@ public class BoardService {
 
     public Board saveBoard(Board board) {
         board.setDateCreated(LocalDate.now());
-        return this.boardRepository.save(board);
+        board = this.boardRepository.save(board);
+        for (Thought thought: board.getThoughts()) {
+            thought.setBoardId(board.getId());
+            thoughtRepository.save(thought);
+        }
+        return board;
     }
 }

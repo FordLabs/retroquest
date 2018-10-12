@@ -41,6 +41,6 @@ public class Board {
     private String teamId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-dd")
     private LocalDate dateCreated;
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "board")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "boardId", orphanRemoval = true)
     private List<Thought> thoughts;
 }
