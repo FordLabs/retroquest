@@ -76,7 +76,7 @@ public class ThoughtController {
     @GetMapping("/api/team/{teamId}/thoughts")
     @PreAuthorize("#teamId == authentication.principal")
     public List<Thought> getThoughtsForTeam(@PathVariable("teamId") String teamId) {
-        return thoughtRepository.findAllByTeamId(teamId);
+        return thoughtRepository.findAllByTeamIdAndBoardIdIsNull(teamId);
     }
 
     @Transactional
