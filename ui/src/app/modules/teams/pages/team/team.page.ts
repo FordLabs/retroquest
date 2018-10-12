@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import {Component, OnInit, ElementRef} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 
 import {Column} from '../../../domain/column';
@@ -30,10 +30,9 @@ import {ColumnService} from '../../services/column.service';
 import {WebsocketResponse} from '../../../domain/websocket-response';
 
 import * as moment from 'moment';
-import {ViewChild} from '@angular/core';
 import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-view/actions-radiator-view.component';
 import {SaveCheckerService} from '../../services/save-checker.service';
-import {BoardService} from "../../services/board.service";
+import {BoardService} from '../../services/board.service';
 
 @Component({
   selector: 'rq-team',
