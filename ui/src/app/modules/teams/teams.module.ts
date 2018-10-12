@@ -46,6 +46,7 @@ import {BoardSummaryComponent} from './components/board-summary/board-summary.co
     RouterModule.forChild([
       {path: 'team/:teamId', component: TeamPageComponent, canActivate: [AuthGuard]},
       {path: 'team/:teamId/archives', component: ArchivesPageComponent, canActivate: [AuthGuard]},
+      {path: 'team/:teamId/archives/:boardId', component: TeamPageComponent, canActivate: [AuthGuard]},
       {path: 'team', component: TeamPageComponent, canActivate: [TeamPageQueryParamGuard]},
     ]),
     ControlsModule
