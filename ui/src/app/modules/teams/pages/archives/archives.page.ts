@@ -31,6 +31,7 @@ export class ArchivesPageComponent implements OnInit {
   teamId: string;
   teamName: string;
   boards: Array<Board> = [];
+  globalWindowRef: Window = window;
 
   constructor(private activeRoute: ActivatedRoute,
               private teamsService: TeamService,
@@ -39,6 +40,7 @@ export class ArchivesPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.globalWindowRef.clearInterval(this.websocketService.intervalId);
     this.websocketService.closeWebsocket();
     this.activeRoute.params.subscribe((params) => {
       this.teamId = params.teamId;

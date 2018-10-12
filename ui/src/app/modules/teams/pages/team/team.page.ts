@@ -102,7 +102,7 @@ export class TeamPageComponent implements OnInit {
         this.websocketInit();
       }
 
-      this.globalWindowRef.setInterval(() => {
+      this.websocketService.intervalId = this.globalWindowRef.setInterval(() => {
         if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
           this.websocketService.closeWebsocket();
           this.websocketInit();

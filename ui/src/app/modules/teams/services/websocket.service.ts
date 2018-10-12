@@ -31,6 +31,7 @@ export class WebsocketService {
   stompClient: StompClient;
   teamId: String;
   websocket;
+  intervalId = null;
 
   constructor() {
   }
@@ -49,6 +50,7 @@ export class WebsocketService {
   public closeWebsocket() {
     this.stompClient = null;
     this.websocket = null;
+    this.intervalId = null;
   }
 
   public openWebsocket(teamId: String): Observable<any> {

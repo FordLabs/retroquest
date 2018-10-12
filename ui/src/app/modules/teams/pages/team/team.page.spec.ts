@@ -93,6 +93,7 @@ describe('TeamPageComponent', () => {
 
       sendHeartbeat: null,
     });
+    mockWebsocketService.intervalId = null;
 
     mockSaveCheckerService = jasmine.createSpyObj({
       updateTimestamp: null
@@ -253,6 +254,13 @@ describe('TeamPageComponent', () => {
       mockActiveRoute.params.next({teamId: 1});
 
       expect(mockWebsocketService.openWebsocket).toHaveBeenCalled();
+    });
+
+    it('should set websocket.intervalId to return value of setInterval', function () {
+      component.ngOnInit();
+      mockActiveRoute.params.next({teamId: 1});
+
+      expect(mockWebsocketService.intervalId).not.toBeNull();
     });
 
     it('should send a heartbeat with a open connected', () => {

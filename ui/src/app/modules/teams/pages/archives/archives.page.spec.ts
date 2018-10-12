@@ -21,6 +21,7 @@ import {ActivatedRoute, Params} from '@angular/router';
 import {TeamService} from '../../services/team.service';
 import {BoardService} from '../../services/board.service';
 import {Board, emptyBoardWithThought} from '../../../domain/board';
+import {WebsocketService} from '../../services/websocket.service';
 
 describe('ArchivesPageComponent', () => {
   let paramsSubject: Subject<Object>;
@@ -30,6 +31,8 @@ describe('ArchivesPageComponent', () => {
   let mockActivatedRoute: ActivatedRoute;
   let mockTeamService: TeamService;
   let mockBoardService: BoardService;
+  let mockWebSocketService: WebsocketService;
+  let mockWindow: Window;
 
   let component: ArchivesPageComponent;
 
@@ -46,8 +49,11 @@ describe('ArchivesPageComponent', () => {
     } as ActivatedRoute;
     mockTeamService = jasmine.createSpyObj({fetchTeamName: fetchTeamNameSubject});
     mockBoardService = jasmine.createSpyObj({fetchBoards: fetchBoardsSubject});
+    mockWebSocketService = jasmine.createSpyObj({closeWebsocket: new Subject()});
+    mockWindow = jasmine.createSpyObj({clearInterval: null});
 
-    component = new ArchivesPageComponent(mockActivatedRoute, mockTeamService, mockBoardService);
+    component = new ArchivesPageComponent(mockActivatedRoute, mockTeamService, mockBoardService, mockWebSocketService);
+    component.globalWindowRef = mockWindow;
 
     paramsObj = {
       teamId: 'test-id'
@@ -82,6 +88,17 @@ describe('ArchivesPageComponent', () => {
       expect(mockBoardService.fetchBoards).toHaveBeenCalledWith('test-id');
       fetchBoardsSubject.next([returnBoard]);
       expect(component.boards).toEqual([returnBoard]);
+    });
+
+    it('should close the websocketservice', function () {
+      component.ngOnInit();
+      expect(mockWebSocketService.closeWebsocket).toHaveBeenCalled();
+    });
+
+    it('should clear setInterval on window', function () {
+      mockWebSocketService.intervalId = 1;
+      component.ngOnInit();
+      expect(mockWindow.clearInterval).toHaveBeenCalledWith(1);
     });
   });
 });
