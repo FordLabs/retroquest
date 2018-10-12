@@ -15,11 +15,18 @@
   ~ limitations under the License.
   -->
 
+<rq-deletion-overlay
+  *ngIf="deleteWasToggled"
+  (declineButtonClicked)="deleteWasToggled = false"
+  (acceptButtonClicked)="deleteBoard(board)"
+  heading="Delete this board?"
+></rq-deletion-overlay>
+
 <div class="content-area">
   <span>{{board.dateCreated.format("MMM Do YYYY")}}</span>
 </div>
 
 <div class="footer">
   <a routerLink="/team/{{teamId}}/archives/{{board.id}}" class="view">View Board</a>
-  <a href="#delete" (click)="deleteBoard(board, $event)" class="delete">Delete Board</a>
+  <a href="#delete" (click)="$event.preventDefault(); deleteWasToggled = true" class="delete">Delete Board</a>
 </div>

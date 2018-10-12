@@ -28,16 +28,17 @@ export class BoardSummaryComponent implements OnInit {
   @Input() board: Board;
   @Input() teamId: string;
   @Output() boardDeleted: EventEmitter<number>;
+  deleteWasToggled: boolean;
 
   constructor(private boardService: BoardService) {
     this.boardDeleted = new EventEmitter();
+    this.deleteWasToggled = false;
   }
 
   ngOnInit() {
   }
 
-  deleteBoard(board: Board, event: Event) {
-    event.preventDefault();
+  deleteBoard(board: Board) {
     this.boardService.deleteBoard(this.teamId, board.id).subscribe(() => {
       this.boardDeleted.emit(board.id);
     });

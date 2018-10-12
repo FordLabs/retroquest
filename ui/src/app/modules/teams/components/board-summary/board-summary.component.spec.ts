@@ -40,29 +40,23 @@ describe('BoardSummaryComponent', () => {
   });
 
   describe('deleteBoard', () => {
-    it('should call event.preventDefault in the boardService', () => {
-      const boardToDelete: Board = emptyBoardWithThought();
-      component.deleteBoard(boardToDelete, mockEvent);
-      expect(mockEvent.preventDefault).toHaveBeenCalled();
-    });
-
     it('should call deleteBoard in the boardService', () => {
       const boardToDelete: Board = emptyBoardWithThought();
-      component.deleteBoard(boardToDelete, mockEvent);
+      component.deleteBoard(boardToDelete);
       expect(mockBoardService.deleteBoard).toHaveBeenCalledWith('team-id', boardToDelete.id);
     });
 
     it('should subscribe to the return value of deleteBoard', () => {
       const boardToDelete: Board = emptyBoardWithThought();
       spyOn(mockBoardService.deleteBoard('team-id', boardToDelete.id), 'subscribe');
-      component.deleteBoard(boardToDelete, mockEvent);
+      component.deleteBoard(boardToDelete);
       expect(mockBoardService.deleteBoard('team-id', boardToDelete.id).subscribe).toHaveBeenCalledWith(any(Function));
     });
 
     it('should emit a boardDeleted event', () => {
       const boardToDelete: Board = emptyBoardWithThought();
       component.boardDeleted = jasmine.createSpyObj({emit: null});
-      component.deleteBoard(boardToDelete, mockEvent);
+      component.deleteBoard(boardToDelete);
       deleteBoardSubject.next();
       expect(component.boardDeleted.emit).toHaveBeenCalledWith(boardToDelete.id);
     });
