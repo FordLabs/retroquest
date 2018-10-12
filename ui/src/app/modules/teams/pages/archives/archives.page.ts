@@ -20,6 +20,7 @@ import {ActivatedRoute} from '@angular/router';
 import {TeamService} from '../../services/team.service';
 import {Board} from '../../../domain/board';
 import {BoardService} from '../../services/board.service';
+import {WebsocketService} from '../../services/websocket.service';
 
 @Component({
   selector: 'rq-archives',
@@ -33,10 +34,12 @@ export class ArchivesPageComponent implements OnInit {
 
   constructor(private activeRoute: ActivatedRoute,
               private teamsService: TeamService,
-              private boardService: BoardService) {
+              private boardService: BoardService,
+              private websocketService: WebsocketService) {
   }
 
   ngOnInit() {
+    this.websocketService.closeWebsocket();
     this.activeRoute.params.subscribe((params) => {
       this.teamId = params.teamId;
       this.teamsService.fetchTeamName(this.teamId).subscribe(teamName => {
