@@ -21,6 +21,7 @@ package com.ford.labs.retroquest.board;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -44,5 +45,12 @@ public class BoardController {
     @PreAuthorize("#teamId == authentication.principal")
     public Board saveBoard(@PathVariable("teamId") String teamId, @RequestBody @Valid Board board) {
         return this.boardService.saveBoard(board);
+    }
+
+    @Transactional
+    @DeleteMapping("/team/{teamId}/board/{boardId}")
+    @PreAuthorize("#teamId == authentication.principal")
+    public void deleteBoard(@PathVariable("teamId") String teamId, @PathVariable("boardId") Long boardId) {
+        this.boardService.deleteBoard(teamId, boardId);
     }
 }

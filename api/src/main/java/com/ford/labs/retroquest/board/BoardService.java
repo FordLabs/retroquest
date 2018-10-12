@@ -51,4 +51,8 @@ public class BoardService {
         }
         return board;
     }
+
+    public void deleteBoard(String teamId, Long boardId) {
+        this.boardRepository.deleteBoardByTeamIdAndId(teamId, boardId);
+    }
 }
