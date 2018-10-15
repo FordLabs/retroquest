@@ -18,7 +18,10 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import 'color-vars';
 
+// sass-lint:disable no-vendor-prefixes
+
 html {
+  -webkit-overflow-scrolling: touch;   // Enables smooth scrolling for IOS devices.
   background-color: $clouds;
   height: 100%;
   overflow: auto;
@@ -32,7 +35,6 @@ body {
   font-weight: normal;
   height: 100%;
   margin: 0;
-  overflow: auto;
   padding: 0;
 }
 
