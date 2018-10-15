@@ -35,7 +35,8 @@ describe('ActionItemTaskComponent', () => {
     let originalTimeoutFunction = null;
     const fakeElementRef = {
       nativeElement: jasmine.createSpyObj({
-        focus: null
+        focus: null,
+        select: null
       })
     };
 
@@ -49,6 +50,7 @@ describe('ActionItemTaskComponent', () => {
     afterEach(() => {
       window.setTimeout = originalTimeoutFunction;
       fakeElementRef.nativeElement.focus.calls.reset();
+      fakeElementRef.nativeElement.select.calls.reset();
     });
 
     it('should set the edit mode value to true', () => {
@@ -63,7 +65,7 @@ describe('ActionItemTaskComponent', () => {
       component.actionItem.task = 'aa';
       component.toggleEditMode();
 
-      expect(component.textValueLength).toEqual(2);
+      expect(component.actionItemMessage.length).toEqual(2);
     });
 
     it('should set the edit mode value to false', () => {
@@ -86,27 +88,15 @@ describe('ActionItemTaskComponent', () => {
     });
 
     it('should select all the text in the div when focused', () => {
-      const originalExecCommand = document.execCommand;
-
-      const mockExecCommand = spyOn(document, 'execCommand');
-
       component.taskEditModeEnabled = false;
       component.toggleEditMode();
-      expect(mockExecCommand).toHaveBeenCalled();
-
-      document.execCommand = originalExecCommand;
+      expect(component.editableTextArea.nativeElement.select).toHaveBeenCalled();
     });
 
     it('should not select all the text in the div when not focused', () => {
-      const originalExecCommand = document.execCommand;
-
-      const mockExecCommand = spyOn(document, 'execCommand');
-
       component.taskEditModeEnabled = true;
       component.toggleEditMode();
-      expect(mockExecCommand).not.toHaveBeenCalled();
-
-      document.execCommand = originalExecCommand;
+      expect(component.editableTextArea.nativeElement.select).not.toHaveBeenCalled();
     });
   });
 

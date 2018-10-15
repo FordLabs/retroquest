@@ -31,21 +31,24 @@
   }"
 >
 
-  <div class="content-container">
-    <textarea #content_value [ngModel]="actionItem.task"
-              class="content-message edit-input"
-              (blur)="updateActionItemMessage($event, content_value.value); editModeOff()"
-              (keydown.enter)="updateActionItemMessage($event, content_value.value); forceBlur()"
-              (keydown.escape)="updateActionItemMessage($event, content_value.value); forceBlur()"
-              (input)="setMessageLength(content_value.value)"
-              [maxlength]="maxMessageLength"
-              oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
-              [readonly]="!taskEditModeEnabled"
-              (click)="emitTaskContentClicked()"
+  <div
+    class="content-container"
+    (click)="emitTaskContentClicked()"
+  >
+    <textarea
+      #content_value
+      [(ngModel)]="actionItemMessage"
+      class="content-message edit-input"
+      (blur)="editModeOff()"
+      (keydown.enter)="forceBlur(); $event.preventDefault()"
+      (keydown.escape)="forceBlur()"
+      [maxlength]="maxMessageLength"
+      oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
+      [readonly]="!taskEditModeEnabled"
     ></textarea>
 
     <rq-floating-character-countdown
-      [characterCount]="textValueLength"
+      [characterCount]="actionItemMessage.length"
       [charsAreRunningOutThreshold]="50"
       [maxCharacterCount]="maxMessageLength"
       [ngClass]="{'remove': !taskEditModeEnabled}"

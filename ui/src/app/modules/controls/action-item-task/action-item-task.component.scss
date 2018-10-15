@@ -106,11 +106,9 @@
 
       .content-message {
         box-sizing: border-box;
-        cursor: pointer;
         display: block;
-        font-weight: bold;
-        height: auto;
-        min-height: 40px;
+        height: 20px;
+        min-height: 20px;
         padding: 18px;
         white-space: pre-wrap;
         width: 100%;
@@ -119,7 +117,7 @@
           border: 0;
           border-radius: 6px 6px 0 0;
           box-shadow: none;
-          cursor: text;
+          cursor: default;
           display: inline-block;
           font-family: inherit;
           font-size: inherit;
@@ -127,8 +125,10 @@
           outline: none;
           overflow: auto;
           resize: none;
+          word-break: break-all;
 
           &[readonly] {
+            caret-color: transparent;
             cursor: pointer;
           }
         }

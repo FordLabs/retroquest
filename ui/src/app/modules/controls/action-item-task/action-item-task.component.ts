@@ -107,8 +107,7 @@ export class ActionItemTaskComponent implements AfterViewChecked {
   private focusInput(): void {
     setTimeout(() => {
       this.editableTextArea.nativeElement.focus();
-      this.selectAllText();
-      this._textValueLength = this.actionItem.task.length;
+      this.editableTextArea.nativeElement.select();
     }, 0);
   }
 
@@ -134,10 +133,6 @@ export class ActionItemTaskComponent implements AfterViewChecked {
     this.assigneeUpdated.emit(actionItem.assignee);
   }
 
-  private selectAllText(): void {
-    document.execCommand('selectAll', false, null);
-  }
-
   public setMessageLength(textContent: string): void {
     this._textValueLength = textContent.length;
   }
@@ -155,8 +150,15 @@ export class ActionItemTaskComponent implements AfterViewChecked {
     this.deleteWasToggled = !this.deleteWasToggled;
   }
 
-  public emojifyText(text: string): string {
-    return emojify(text);
+  get actionItemMessage(): string {
+    if (this.taskEditModeEnabled) {
+      return this.actionItem.task;
+    }
+    return emojify(this.actionItem.task);
+  }
+
+  set actionItemMessage(text: string) {
+    this.actionItem.task = text;
   }
 }
 

@@ -111,13 +111,8 @@ export class TaskComponent implements AfterViewChecked {
   private focusInput(): void {
     setTimeout(() => {
       this.editableTextArea.nativeElement.focus();
-      this.selectAllText();
-      this._textValueLength = this.task.message.length;
+      this.editableTextArea.nativeElement.select();
     }, 0);
-  }
-
-  private selectAllText(): void {
-    document.execCommand('selectAll', false, null);
   }
 
   public forceBlur() {
@@ -143,8 +138,16 @@ export class TaskComponent implements AfterViewChecked {
     this.deleteWasToggled = !this.deleteWasToggled;
   }
 
-  public emojifyText(text: string): string {
-    return emojify(text);
+  get taskMessage(): string {
+    if (this.taskEditModeEnabled) {
+      return this.task.message;
+    }
+    return emojify(this.task.message);
   }
+
+  set taskMessage(text: string) {
+    this.task.message = text;
+  }
+
 }
 

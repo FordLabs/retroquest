@@ -28,20 +28,22 @@
   (click)="emitTaskContentClicked()"
   [ngClass]="{'disable': task.discussed }"
 >
-  <textarea #content_value [ngModel]="task.message"
-            class="content-message edit-input"
-            (blur)="updateTaskMessage($event, content_value.value); editModeOff()"
-            (keydown.enter)="updateTaskMessage($event, content_value.value); forceBlur()"
-            (keydown.escape)="updateTaskMessage($event, content_value.value); forceBlur()"
-            (input)="setMessageLength(content_value.value)"
-            [maxlength]="maxMessageLength"
-            oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
-            [readonly]="!taskEditModeEnabled"
-            [ngClass]="{'disable opacify': task.discussed }"
+  <textarea
+    #content_value
+    [(ngModel)]="taskMessage"
+    class="content-message edit-input"
+    [ngClass]="{'disable opacify': task.discussed }"
+    [readonly]="!taskEditModeEnabled"
+    (blur)="editModeOff()"
+    (keydown.enter)="forceBlur(); $event.preventDefault()"
+    (keydown.escape)="forceBlur()"
+    [maxlength]="maxMessageLength"
+    oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
+    style="height: 25px;"
   ></textarea>
 
   <rq-floating-character-countdown
-    [characterCount]="textValueLength"
+    [characterCount]="taskMessage.length"
     [charsAreRunningOutThreshold]="50"
     [maxCharacterCount]="maxMessageLength"
     [ngClass]="{'remove': !taskEditModeEnabled}"
