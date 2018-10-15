@@ -40,6 +40,7 @@ export class TaskComponent implements AfterViewChecked {
   @Input() type = '';
   @Input() task = emptyThought();
   @Input() enableOverlayBorder = false;
+  @Input() readOnly = false;
 
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
   @Output() deleted: EventEmitter<Thought> = new EventEmitter<Thought>();

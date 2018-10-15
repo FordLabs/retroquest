@@ -33,6 +33,7 @@ export class ThoughtsHeaderComponent {
 
   @Input() column: Column;
   @Input() thoughtCount: number;
+  @Input() hideNewThought = false;
 
   @ViewChild('titleInput') titleInput;
 

@@ -35,6 +35,7 @@ export class ThoughtsColumnComponent {
 
   @Input() column: Column;
   @Input() thoughts: Array<Thought> = [];
+  @Input() readOnly = false;
 
   @ViewChild('thoughtDialog') thoughtDialog: TaskDialogComponent;
 

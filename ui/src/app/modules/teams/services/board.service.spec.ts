@@ -87,4 +87,13 @@ describe('BoardService', () => {
       expect(mockHttpClient.delete).toHaveBeenCalledWith(`/api/team/${teamId}/board/${boardId}`);
     });
   });
+
+  describe('fetchThoughtsForBoard', () => {
+    it('should call the get thoughts for board endpoint', () => {
+      const teamId = 'team-id';
+      const boardId = -1;
+      service.fetchThoughtsForBoard(teamId, boardId).subscribe();
+      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/board/${boardId}/thoughts`);
+    });
+  });
 });

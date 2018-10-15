@@ -52,4 +52,8 @@ export class BoardService {
   deleteBoard(teamId: string, boardId: number): Observable<any> {
     return this.http.delete(`/api/team/${teamId}/board/${boardId}`);
   }
+
+  fetchThoughtsForBoard(teamId: string, boardId: number): Observable<any> {
+    return this.http.get(`/api/team/${teamId}/board/${boardId}/thoughts`);
+  }
 }

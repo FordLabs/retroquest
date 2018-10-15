@@ -26,7 +26,7 @@
 <div
   class="content-area"
   (click)="emitTaskContentClicked()"
-  [ngClass]="{'disable': task.discussed }"
+  [ngClass]="{'disable': task.discussed || readOnly }"
 >
   <textarea #content_value [ngModel]="task.message"
             class="content-message edit-input"
@@ -56,7 +56,7 @@
     class="container star-count-container"
     (click)="addStar()"
     *ngIf="type !== 'action'"
-    [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
+    [ngClass]="{'disable': task.discussed || taskEditModeEnabled || readOnly}"
   >
     <div class="star-background"
          [ngClass]="{'opacify': task.discussed || taskEditModeEnabled}"
@@ -73,10 +73,10 @@
     class="container edit-container"
     (click)="toggleEditMode()"
     *ngIf="!taskEditModeEnabled; else exit_edit_mode_icon"
-    [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
+    [ngClass]="{'disable': task.discussed || taskEditModeEnabled || readOnly}"
   >
     <i class="fas fa-edit"
-       [ngClass]="{'opacify': task.discussed || taskEditModeEnabled}"
+       [ngClass]="{'opacify': task.discussed || taskEditModeEnabled || readOnly}"
     ></i>
   </div>
 
@@ -92,14 +92,16 @@
   <div
     class="container delete-container"
     (click)="emitDeleteItem()"
+    [ngClass]="{'disable': readOnly}"
   >
     <i class="fas fa-trash-alt"
+       [ngClass]="{'opacify': readOnly}"
     ></i>
   </div>
 
   <div
     class="complete-container"
-    [ngClass]="{'opacify': taskEditModeEnabled}"
+    [ngClass]="{'opacify': taskEditModeEnabled || readOnly, 'disable': readOnly}"
     (click)="toggleTaskComplete()"
   >
     <div

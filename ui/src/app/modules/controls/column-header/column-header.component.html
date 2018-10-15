@@ -46,6 +46,7 @@
   [ngClass]="{
     'edit-button-enabled': !readOnlyEnabled || type === 'action'
     }"
+  *ngIf="!readOnly"
 >
   <i class="fas fa-pencil-alt"
      (click)="toggleEdit()"

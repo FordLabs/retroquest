@@ -38,6 +38,8 @@ export class ColumnHeaderComponent implements OnInit {
   @Input() column: Column;
   @Input() thoughtCount: number;
 
+  @Input() readOnly = false;
+
   @Output() sortedChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() titleChanged: EventEmitter<string> = new EventEmitter<string>();
 

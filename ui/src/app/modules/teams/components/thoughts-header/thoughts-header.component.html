@@ -20,11 +20,13 @@
   <rq-column-header
     [type]="column.topic"
     [title]="column.title"
+    [readOnly]="hideNewThought"
     (sortedChanged)="sortByHearts($event)"
     (titleChanged)="editTitle($event)"
   ></rq-column-header>
 
   <rq-text-field
+    *ngIf="!hideNewThought"
     [type]="column.topic"
     [placeholder]="'Enter A Thought'"
     (newMessageAdded)="addThought($event)"
