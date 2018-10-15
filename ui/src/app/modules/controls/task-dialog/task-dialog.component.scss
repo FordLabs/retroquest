@@ -38,16 +38,17 @@
   }
 
   rq-task {
-    $border-width: 8px;
     $base-drop-shadow: 0 19px 38px opacity($black, .3);
+
+    $border-width: 8px;
 
     $action-shadow: 0 0 0 $border-width $action-yellow, $base-drop-shadow;
 
     $confused-shadow: 0 0 0 $border-width $confused-blue, $base-drop-shadow;
-    $happy-shadow: 0 0 0 $border-width $happy-green, $base-drop-shadow;
-    $sad-shadow: 0 0 0 $border-width $unhappy-red, $base-drop-shadow;
-
     $edit-mode-shadow: 0 0 0 8px $grape, $base-drop-shadow;
+    $happy-shadow: 0 0 0 $border-width $happy-green, $base-drop-shadow;
+
+    $sad-shadow: 0 0 0 $border-width $unhappy-red, $base-drop-shadow;
 
     border-radius: 6px;
     box-sizing: border-box;
@@ -64,8 +65,9 @@
     }
 
     @media only screen and (max-width: 610px) {
+      height: 280px;
       margin: $border-width;
-      max-height: 80%;
+      max-height: 280px;
       transform: none;
       width: calc(100% - 16px);
     }
