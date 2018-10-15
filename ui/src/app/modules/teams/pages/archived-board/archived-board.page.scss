@@ -143,3 +143,60 @@
 
   }
 }
+
+header {
+  padding: 1.5rem 0;
+
+  #headerBottom {
+    $header-bottom-height: 32px;
+    background: $white;
+    box-sizing: border-box;
+    height: 45px;
+    min-width: $desktop-max-width;
+
+    position: relative;
+
+    @media only screen and (max-width: 610px) {
+      height: $header-bottom-height;
+      min-width: 0;
+      width: 100%;
+    }
+
+    .header-bottom-content {
+      align-self: center;
+      box-sizing: inherit;
+      display: flex;
+      flex-direction: row;
+
+      height: inherit;
+
+      justify-content: flex-end;
+      margin: 0 auto;
+      max-width: $desktop-max-width;
+      min-width: inherit;
+
+      padding-left: $global-side-padding;
+      padding-right: $global-side-padding;
+
+      @media only screen and (max-width: 610px) {
+        height: $header-bottom-height;
+        min-width: 0;
+        padding-left: 12px;
+        padding-right: 12px;
+        width: 100%;
+      }
+
+      &.center-content {
+        justify-content: center;
+      }
+
+      .button-icon {
+        display: none;
+
+        @media only screen and (max-width: 610px) {
+          display: block;
+        }
+      }
+    }
+  }
+}

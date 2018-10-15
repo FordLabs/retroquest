@@ -16,13 +16,23 @@
   -->
 
 <div id="page">
-  <rq-header
-    [teamName]="teamName"
-    [teamId]="teamId"
-    (endRetro)="onEndRetro()"
-    (actionsRadiatorViewClicked)="toggleActionsRadiatorAndNormalView($event)"
-  >
-  </rq-header>
+  <header>
+    <rq-top-header [teamName]="teamName"></rq-top-header>
+    <div id="headerBottom">
+      <div class="header-bottom-content center-content">
+        <a routerLink="/team/{{teamId}}/archives">
+          <button class="rq-button-secondary">
+            <span class="button-text">Archives</span>
+          </button>
+        </a>
+        <a routerLink="/team/{{teamId}}">
+          <button class="rq-button-secondary">
+            <span class="button-text">Current Board</span>
+          </button>
+        </a>
+      </div>
+    </div>
+  </header>
 
   <div
     id="team-content"
