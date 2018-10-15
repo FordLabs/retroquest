@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.board;
 
+import com.ford.labs.retroquest.thought.Thought;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -27,4 +28,5 @@ public interface BoardRepository extends JpaRepository<Board, Long>{
     List<Board> findAllByTeamId(String teamId);
     void deleteBoardByTeamIdAndId(String teamId, Long id);
     Board save(Board board);
+    Board findByTeamIdAndId(String teamId, Long id);
 }

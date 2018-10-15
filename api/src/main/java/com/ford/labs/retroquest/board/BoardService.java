@@ -55,4 +55,8 @@ public class BoardService {
     public void deleteBoard(String teamId, Long boardId) {
         this.boardRepository.deleteBoardByTeamIdAndId(teamId, boardId);
     }
+
+    public List<Thought> getThoughtsForTeamIdAndBoardId(String teamID, Long boardId) {
+        return this.boardRepository.findByTeamIdAndId(teamID, boardId).getThoughts();
+    }
 }

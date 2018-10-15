@@ -18,6 +18,7 @@
 package com.ford.labs.retroquest.board;
 
 
+import com.ford.labs.retroquest.thought.Thought;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,5 +53,11 @@ public class BoardController {
     @PreAuthorize("#teamId == authentication.principal")
     public void deleteBoard(@PathVariable("teamId") String teamId, @PathVariable("boardId") Long boardId) {
         this.boardService.deleteBoard(teamId, boardId);
+    }
+
+    @GetMapping("/team/{teamId}/board/{boardId}/thoughts")
+    @PreAuthorize("#teamId == authentication.principal")
+    public List<Thought> getThoughtsForBoard(@PathVariable("teamId") String teamId, @PathVariable("boardId") Long boardId) {
+        return this.boardService.getThoughtsForTeamIdAndBoardId(teamId, boardId);
     }
 }
