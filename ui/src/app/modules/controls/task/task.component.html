@@ -39,7 +39,6 @@
     (keydown.escape)="forceBlur()"
     [maxlength]="maxMessageLength"
     oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
-    (focus)="$event.preventDefault(); $event.stopPropagation()"
   ></textarea>
 
   <rq-floating-character-countdown
