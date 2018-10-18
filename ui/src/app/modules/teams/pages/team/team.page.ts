@@ -33,6 +33,7 @@ import * as moment from 'moment';
 import {ViewChild} from '@angular/core';
 import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-view/actions-radiator-view.component';
 import {SaveCheckerService} from '../../services/save-checker.service';
+import {ThemeSelectorService} from "../../services/theme-selector.service";
 
 @Component({
   selector: 'rq-team',
@@ -71,7 +72,8 @@ export class TeamPageComponent implements OnInit {
               private columnService: ColumnService,
               private actionItemService: ActionItemService,
               private websocketService: WebsocketService,
-              private saveCheckerService: SaveCheckerService) {
+              private saveCheckerService: SaveCheckerService,
+              private themeSelectorService: ThemeSelectorService) {
   }
 
   teamId: string;
@@ -88,6 +90,7 @@ export class TeamPageComponent implements OnInit {
   @ViewChild('radiatorView') radiatorView: ActionsRadiatorViewComponent;
 
   ngOnInit(): void {
+
 
     this.activeRoute.params.subscribe((params) => {
       this.teamId = params.teamId;

@@ -37,6 +37,14 @@
     >
 
       <rq-button
+        (click)="toggleThemeColor()"
+        type="secondary"
+        text="change theme"
+      >
+
+      </rq-button>
+
+      <rq-button
         class="actions-radiator-button"
         type="secondary"
         [text]="actionsRadiatorViewEnabled ? 'view retro' : 'actions radiator'"

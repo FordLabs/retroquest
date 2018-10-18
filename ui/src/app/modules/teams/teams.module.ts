@@ -35,6 +35,7 @@ import {AuthGuard} from '../auth/auth-guard/auth.guard';
 import {TeamPageQueryParamGuard} from './services/team-page-query-param-guard';
 import {ControlsModule} from '../controls/controls.module';
 import {SaveCheckerService} from './services/save-checker.service';
+import {ThemeSelectorService} from "./services/theme-selector.service";
 
 @NgModule({
   imports: [
@@ -53,7 +54,8 @@ import {SaveCheckerService} from './services/save-checker.service';
     ColumnService,
     WebsocketService,
     FeedbackService,
-    SaveCheckerService
+    SaveCheckerService,
+    ThemeSelectorService
   ],
   declarations: [
     TeamPageComponent,

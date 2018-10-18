@@ -20,8 +20,8 @@ import {EndRetroDialogComponent} from '../../../controls/end-retro-dialog/end-re
 import {FeedbackService} from '../../services/feedback.service';
 import {Feedback} from '../../../domain/feedback';
 import {FeedbackDialogComponent} from '../../../controls/feedback-dialog/feedback-dialog.component';
-import {ActionItem} from '../../../domain/action-item';
 import {SaveCheckerService} from '../../services/save-checker.service';
+import {Themes, ThemeSelectorService} from "../../services/theme-selector.service";
 
 @Component({
   selector: 'rq-header',
@@ -40,7 +40,11 @@ export class HeaderComponent {
 
   actionsRadiatorViewEnabled = false;
 
-  constructor(private feedbackService: FeedbackService, private saveChecker: SaveCheckerService) {
+  constructor(
+    private feedbackService: FeedbackService,
+    private saveChecker: SaveCheckerService,
+    private themeSelectorService: ThemeSelectorService
+  ) {
 
   }
 
@@ -72,5 +76,13 @@ export class HeaderComponent {
     }
 
     return 'Last change saved ' + this.saveChecker.lastSavedDateTime;
+  }
+
+  public toggleThemeColor(): void {
+    if (ThemeSelectorService.currentTheme === Themes.Dark) {
+      this.themeSelectorService.setDocumentBackgroundColor(Themes.Light);
+    } else {
+      this.themeSelectorService.setDocumentBackgroundColor(Themes.Dark);
+    }
   }
 }
