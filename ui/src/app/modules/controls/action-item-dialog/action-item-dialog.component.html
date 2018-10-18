@@ -17,6 +17,7 @@
 
 <rq-action-item-task
   #action_item_component
+  *ngIf="visible"
   [enableOverlayBorder]="true"
   [actionItem]="actionItem"
   (click)="$event.stopPropagation()"
