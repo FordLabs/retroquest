@@ -15,12 +15,7 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-
-@Component({
-  selector: 'rq-root',
-  template: '<router-outlet></router-outlet>'
-})
-export class AppComponent {
-
+export enum Themes {
+  Light,
+  Dark
 }

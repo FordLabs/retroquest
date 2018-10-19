@@ -15,20 +15,25 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter } from '@angular/core';
+import {Component, EventEmitter} from '@angular/core';
 import {ViewChild} from '@angular/core';
 import {ElementRef} from '@angular/core';
 import {Output, Input} from '@angular/core';
 import {OnInit} from '@angular/core';
+import {Themes} from '../../domain/Theme';
 
 @Component({
   selector: 'rq-deletion-overlay',
   templateUrl: './deletion-overlay.component.html',
-  styleUrls: ['./deletion-overlay.component.scss']
+  styleUrls: ['./deletion-overlay.component.scss'],
+  host: {
+    '[class.dark-theme]': 'darkThemeIsEnabled'
+  }
 })
 export class DeletionOverlayComponent implements OnInit {
 
   @Input() heading = '';
+  @Input() theme: Themes = Themes.Light;
 
   @Output() acceptButtonClicked: EventEmitter<void> = new EventEmitter<void>();
   @Output() declineButtonClicked: EventEmitter<void> = new EventEmitter<void>();
@@ -40,6 +45,10 @@ export class DeletionOverlayComponent implements OnInit {
     setTimeout(() => {
       this.hiddenDeleteInput.nativeElement.focus();
     }, 0);
+  }
+
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
   }
 
   emitAcceptButtonClicked() {

@@ -56,6 +56,10 @@
     height: auto;
     width: auto;
 
+    &.dark-theme {
+      background-color: $task-background-dark;
+    }
+
     @media only screen and (max-width: 610px) {
       height: auto;
       margin: $border-width;
@@ -85,6 +89,16 @@
       .sub-heading {
         color: opacity($wet-asphalt, .5);
         font-size: 1rem;
+
+        &.dark-theme {
+          color: opacity($clouds, .5);
+        }
+      }
+
+      .heading {
+        &.dark-theme {
+          color: $clouds;
+        }
       }
 
       @media only screen and (max-width: 610px) {
@@ -119,9 +133,21 @@
       #cancel-button-container {
         border-top: 2px solid opacity($wet-asphalt, .06);
 
+        &.dark-theme {
+          border-top-color: $task-footer-separator-dark;
+        }
+
         rq-button {
           color: opacity($wet-asphalt, .5);
           font-size: 1.2rem;
+
+          &.dark-theme {
+            color: opacity($clouds, .5);
+
+            &:hover {
+              color: $clouds;
+            }
+          }
         }
       }
 

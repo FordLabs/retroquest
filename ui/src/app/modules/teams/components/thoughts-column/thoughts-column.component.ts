@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, Input, ViewChild} from '@angular/core';
+import {Component, Input, ViewChild} from '@angular/core';
 import {emptyThought, Thought} from '../../../domain/thought';
 import {Column} from '../../../domain/column';
 import {ThoughtService} from '../../services/thought.service';
 import {TaskDialogComponent} from '../../../controls/task-dialog/task-dialog.component';
-import {animate, sequence, style, transition, trigger} from '@angular/animations';
 import {fadeInOutAnimation} from '../../../animations/add-delete-animation';
+import {Themes} from '../../../domain/Theme';
 
 @Component({
   selector: 'rq-thoughts-column',
@@ -36,6 +36,8 @@ export class ThoughtsColumnComponent {
   @Input() column: Column;
   @Input() thoughts: Array<Thought> = [];
   @Input() readOnly = false;
+
+  @Input() theme: Themes = Themes.Light;
 
   @ViewChild('thoughtDialog') thoughtDialog: TaskDialogComponent;
 

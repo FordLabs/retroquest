@@ -34,6 +34,10 @@
     font-weight: bold;
     margin-bottom: 36px;
     text-transform: capitalize;
+
+    &.dark-theme {
+      color: $clouds;
+    }
   }
 
   rq-action-item-task {

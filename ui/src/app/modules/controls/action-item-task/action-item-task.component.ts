@@ -15,10 +15,21 @@
  * limitations under the License.
  */
 
-import {AfterViewChecked, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {ActionItem, emptyActionItem} from '../../domain/action-item';
 import * as moment from 'moment';
 import {emojify} from '../../utils/EmojiGenerator';
+import {Themes} from '../../domain/Theme';
 
 @Component({
   selector: 'rq-action-item-task',
@@ -27,7 +38,8 @@ import {emojify} from '../../utils/EmojiGenerator';
   host: {
     '[class.push-order-to-bottom]': 'actionItem.completed',
     '[class.edit-mode]': 'taskEditModeEnabled',
-    '[class.dialog-overlay-border]': 'enableOverlayBorder'
+    '[class.dialog-overlay-border]': 'enableOverlayBorder',
+    '[class.dark-theme]': 'darkThemeIsEnabled'
   }
 })
 export class ActionItemTaskComponent implements AfterViewChecked {
@@ -35,6 +47,7 @@ export class ActionItemTaskComponent implements AfterViewChecked {
   @Input() actionItem = emptyActionItem();
   @Input() readOnly = false;
   @Input() enableOverlayBorder = false;
+  @Input() theme = Themes.Light;
 
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
   @Output() deleted: EventEmitter<ActionItem> = new EventEmitter<ActionItem>();
@@ -50,7 +63,8 @@ export class ActionItemTaskComponent implements AfterViewChecked {
   _textValueLength = 0;
   deleteWasToggled = false;
 
-  constructor() {
+  private get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
   }
 
   ngAfterViewChecked() {

@@ -18,7 +18,7 @@
 import {AfterViewChecked, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {emptyThought, Thought} from '../../domain/thought';
 import {emojify} from '../../utils/EmojiGenerator';
-
+import {Themes} from '../../domain/Theme';
 
 @Component({
   selector: 'rq-task',
@@ -32,7 +32,8 @@ import {emojify} from '../../utils/EmojiGenerator';
     '[class.sad]': 'type === \'unhappy\'',
     '[class.action]': 'type === \'action\'',
     '[class.delete-mode]': 'deleteWasToggled',
-    '[class.dialog-overlay-border]': 'enableOverlayBorder'
+    '[class.dialog-overlay-border]': 'enableOverlayBorder',
+    '[class.dark-theme]': 'darkThemeIsEnabled'
   }
 })
 export class TaskComponent implements AfterViewChecked {
@@ -41,6 +42,7 @@ export class TaskComponent implements AfterViewChecked {
   @Input() task = emptyThought();
   @Input() enableOverlayBorder = false;
   @Input() readOnly = false;
+  @Input() theme = Themes.Light;
 
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
   @Output() deleted: EventEmitter<Thought> = new EventEmitter<Thought>();
@@ -56,7 +58,8 @@ export class TaskComponent implements AfterViewChecked {
   _textValueLength = 0;
   deleteWasToggled = false;
 
-  constructor() {
+  private get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
   }
 
   ngAfterViewChecked() {

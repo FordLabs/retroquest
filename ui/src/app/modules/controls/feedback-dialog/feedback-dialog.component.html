@@ -17,12 +17,27 @@
 
 <div
   class="dialog"
+  [ngClass]="{
+    'dark-theme': darkThemeIsEnabled
+  }"
   (click)="$event.stopPropagation()"
 >
 
   <div class="body">
-    <div class="heading">feedback</div>
-    <div class="sub-heading">How can we improve?</div>
+    <div
+      class="heading"
+      [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+    >feedback
+    </div>
+    <div
+      class="sub-heading"
+      [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+    >How can we improve?
+    </div>
 
     <div
       class="section star-line"
@@ -42,15 +57,34 @@
     </div>
 
     <div class="section comments-section">
-      <div class="label">comments<span class="required-field">*</span></div>
-      <textarea [(ngModel)]="feedback.comment"></textarea>
+      <div
+        class="label"
+        [ngClass]="{
+          'dark-theme': darkThemeIsEnabled
+        }"
+      >comments<span class="required-field">*</span></div>
+      <textarea
+        [(ngModel)]="feedback.comment"
+        [ngClass]="{
+          'dark-theme': darkThemeIsEnabled
+        }"
+      ></textarea>
     </div>
 
     <div class="section feedback-email-section">
-      <div class="label">feedback email</div>
+      <div
+        class="label"
+        [ngClass]="{
+          'dark-theme': darkThemeIsEnabled
+        }"
+      >feedback email
+      </div>
       <input
         [type]="'text'"
         [(ngModel)]="feedback.userEmail"
+        [ngClass]="{
+          'dark-theme': darkThemeIsEnabled
+        }"
       />
     </div>
 
@@ -59,14 +93,15 @@
 
     <div class="container">
       <rq-button
-        [type]="'secondary'"
+        type="secondary"
         text="cancel"
         (click)="hide()"
+        [theme]="theme"
       ></rq-button>
     </div>
     <div class="container">
       <rq-button
-        [type]="'primary'"
+        type="primary"
         text="send!"
         (click)="onSendButtonClicked()"
       ></rq-button>

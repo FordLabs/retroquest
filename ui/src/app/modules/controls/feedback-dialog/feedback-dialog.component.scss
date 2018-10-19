@@ -54,6 +54,10 @@
     position: relative;
     width: 360px;
 
+    &.dark-theme {
+      background-color: $task-background-dark;
+    }
+
     @media only screen and (max-width: 610px) {
       margin: $border-width;
       padding: 12px 6px;
@@ -89,6 +93,10 @@
         text-transform: capitalize;
         width: 100%;
 
+        &.dark-theme {
+          color: $clouds;
+        }
+
         @media only screen and (max-width: 610px) {
           font-size: 2rem;
         }
@@ -102,6 +110,10 @@
         font-weight: bold;
         text-align: center;
         width: 100%;
+
+        &.dark-theme {
+          color: opacity($clouds, .5);
+        }
 
         @media only screen and (max-width: 610px) {
           font-size: .9rem;
@@ -138,7 +150,14 @@
         cursor: default;
         padding: 0 12px;
 
+        .label {
+          &.dark-theme {
+            color: $clouds;
+          }
+        }
+
         textarea {
+          background-color: inherit;
           border: 5px $confused-blue solid;
           border-radius: 6px;
           box-sizing: border-box;
@@ -152,6 +171,12 @@
           padding: 12px;
           resize: none;
           width: 100%;
+
+          &.dark-theme {
+            color: $clouds;
+          }
+
+
 
           @media only screen and (max-width: 610px) {
             font-size: 1rem;
@@ -168,9 +193,14 @@
 
         .label {
           color: opacity($wet-asphalt, .4);
+
+          &.dark-theme {
+            color: opacity($clouds, .4);
+          }
         }
 
         input {
+          background-color: inherit;
           border: 0;
           border-bottom: 4px opacity($wet-asphalt, .15) solid;
           box-sizing: border-box;
@@ -182,6 +212,11 @@
           outline: none;
           padding: 0 0 3px;
           width: 100%;
+
+          &.dark-theme {
+            border-bottom-color: opacity($clouds, .15);
+            color: $clouds;
+          }
 
           @media only screen and (max-width: 610px) {
             font-size: 1rem;
@@ -227,6 +262,10 @@
 
           &.secondary {
             color: opacity($wet-asphalt, .5);
+
+            &.dark-theme {
+              color: opacity($clouds, .5);
+            }
           }
 
           &.primary {

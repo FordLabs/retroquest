@@ -16,21 +16,26 @@
  */
 
 import {Component, Input} from '@angular/core';
+import {Themes} from '../../domain/Theme';
 
-@ Component({
+@Component({
   selector: 'rq-button',
   templateUrl: './button.component.html',
   styleUrls: ['./button.component.scss'],
   host: {
     '[class.primary]': 'type === \'primary\'',
-    '[class.secondary]': 'type === \'secondary\''
+    '[class.secondary]': 'type === \'secondary\'',
+    '[class.dark-theme]': 'darkThemeIsEnabled'
   }
 })
 export class ButtonComponent {
 
   @Input() type: string;
   @Input() text = '';
+  @Input() theme: Themes = Themes.Light;
 
-  constructor() { }
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
+  }
 
 }

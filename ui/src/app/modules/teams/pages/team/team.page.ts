@@ -32,6 +32,7 @@ import {WebsocketResponse} from '../../../domain/websocket-response';
 import * as moment from 'moment';
 import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-view/actions-radiator-view.component';
 import {SaveCheckerService} from '../../services/save-checker.service';
+import {Themes} from '../../../domain/Theme';
 import {BoardService} from '../../services/board.service';
 
 @Component({
@@ -65,6 +66,8 @@ export class TeamPageComponent implements OnInit {
     }
   ];
 
+  @ViewChild('radiatorView') radiatorView: ActionsRadiatorViewComponent;
+
   constructor(private activeRoute: ActivatedRoute,
               private teamsService: TeamService,
               private thoughtService: ThoughtService,
@@ -86,7 +89,34 @@ export class TeamPageComponent implements OnInit {
   actionItemsAreSorted = false;
   currentView = 'normalView';
 
-  @ViewChild('radiatorView') radiatorView: ActionsRadiatorViewComponent;
+  _theme: Themes = Themes.Light;
+
+  constructor(
+    private activeRoute: ActivatedRoute,
+    private teamsService: TeamService,
+    private thoughtService: ThoughtService,
+    private columnService: ColumnService,
+    private actionItemService: ActionItemService,
+    private websocketService: WebsocketService,
+    private saveCheckerService: SaveCheckerService) {
+  }
+
+  get theme(): Themes {
+    return this._theme;
+  }
+
+  set theme(theme: Themes) {
+    this._theme = theme;
+    if (this._theme === Themes.Dark) {
+      document.body.style.backgroundColor = '#2c3e50';
+    } else if (this._theme === Themes.Light) {
+      document.body.style.backgroundColor = '#ecf0f1';
+    }
+  }
+
+  public onThemeChanged(theme: Themes) {
+    this.theme = theme;
+  }
 
   ngOnInit(): void {
 

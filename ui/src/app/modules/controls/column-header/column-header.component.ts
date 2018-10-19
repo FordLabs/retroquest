@@ -18,6 +18,7 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Column} from '../../domain/column';
 import {emojify} from '../../utils/EmojiGenerator';
+import {Themes} from '../../domain/Theme';
 
 @Component({
   selector: 'rq-column-header',
@@ -39,6 +40,7 @@ export class ColumnHeaderComponent implements OnInit {
   @Input() thoughtCount: number;
 
   @Input() readOnly = false;
+  @Input() theme: Themes = Themes.Light;
 
   @Output() sortedChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() titleChanged: EventEmitter<string> = new EventEmitter<string>();

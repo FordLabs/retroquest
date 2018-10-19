@@ -41,10 +41,20 @@
   }
 
   &.primary {
-    background-color: $midnight-blue;
+    background-color: $wet-asphalt;
     box-shadow: 0 4px 15px opacity($black, .25);
-    color: $white;
+    color: $clouds;
     outline: none;
+
+    &.dark-theme {
+      background-color: $clouds;
+      color: $wet-asphalt;
+
+      &:hover {
+        color: $clouds;
+      }
+
+    }
 
     &:hover {
       background-color: $turquoise;
@@ -55,7 +65,11 @@
 
   &.secondary {
     background: transparent;
-    color: $midnight-blue;
+    color: inherit;
+
+    &.dark-theme {
+      color: opacity($clouds, .8);
+    }
 
     &:hover {
       color: $turquoise;

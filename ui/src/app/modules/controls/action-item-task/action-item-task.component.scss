@@ -34,6 +34,12 @@
   transition: box-shadow .2s cubic-bezier(.25, .8, .25, 1);
   width: 100px;
 
+  &.dark-theme {
+    background-color: $task-background-dark;
+    box-shadow: 0 1px 2px opacity($black, .7);
+    color: $clouds;
+  }
+
   &.dialog-overlay-border {
     rq-deletion-overlay {
       $border-width: 8px;
@@ -45,6 +51,10 @@
   &.push-order-to-bottom {
     box-shadow: none;
     order: 99;
+
+    &.dark-theme {
+      background-color: opacity($task-background-dark, .3);
+    }
   }
 
   .remove {
@@ -86,6 +96,7 @@
 
     border-top-left-radius: inherit;
     border-top-right-radius: inherit;
+    color: inherit;
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -105,7 +116,9 @@
       }
 
       .content-message {
+        background-color: inherit;
         box-sizing: border-box;
+        color: inherit;
         display: block;
         height: 20px;
         min-height: 20px;
@@ -142,6 +155,7 @@
 
   .assigned-to-section {
     $label-color: #a9a9a9;
+    background-color: inherit;
     box-sizing: border-box;
     margin-bottom: 12px;
     padding: 0 18px;
@@ -155,6 +169,7 @@
     }
 
     .value {
+      background-color: inherit;
       border: 0;
       border-bottom: 2px solid $action-yellow;
       color: inherit;
@@ -183,7 +198,6 @@
   }
 
   .footer {
-    background-color: inherit;
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
     border-top: 2px solid opacity($wet-asphalt, .06);
@@ -191,6 +205,10 @@
     height: 40px;
     justify-content: flex-start;
     width: 100%;
+
+    &.dark-theme {
+      border-top-color: $task-footer-separator-dark;
+    }
 
     .container,
     .complete-container {
@@ -206,6 +224,11 @@
       border-right: 2px solid opacity($wet-asphalt, .06);
       cursor: pointer;
       user-select: none;
+
+      &.dark-theme {
+        border-color: $task-footer-separator-dark;
+        color: $clouds;
+      }
     }
 
     .complete-container {
@@ -215,8 +238,10 @@
       .checkbox {
         $size: 11px;
 
-        background-color: opacity($wet-asphalt, .14);
-        border: 2px solid $wet-asphalt;
+        background-color: transparent;
+        border: 2px solid transparent;
+        border-color: inherit;
+
         border-radius: 4px;
         height: $size;
         width: $size;

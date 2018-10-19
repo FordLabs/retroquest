@@ -18,6 +18,7 @@
 import {AfterContentChecked, Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {emptyThought, Thought} from '../../domain/thought';
 import {TaskComponent} from '../task/task.component';
+import {Themes} from '../../domain/Theme';
 
 const ESC_KEY = 27;
 
@@ -28,7 +29,8 @@ const ESC_KEY = 27;
   host: {
     '(click)': 'hide()',
     '[style.display]': 'visible ? "flex": "none"',
-    '[class.edit-mode]': 'taskEditModeEnabled'
+    '[class.edit-mode]': 'taskEditModeEnabled',
+    '[class.dark-theme]': 'darkThemeIsEnabled'
   }
 })
 export class TaskDialogComponent implements AfterContentChecked {
@@ -36,6 +38,7 @@ export class TaskDialogComponent implements AfterContentChecked {
   @Input() type = '';
   @Input() task: Thought = emptyThought();
   @Input() visible = true;
+  @Input() theme: Themes = Themes.Light;
 
   @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
@@ -44,6 +47,10 @@ export class TaskDialogComponent implements AfterContentChecked {
   @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @ViewChild('task_component') taskComponent: TaskComponent;
+
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
+  }
 
   ngAfterContentChecked() {
     if (this.taskComponent && this.visible) {

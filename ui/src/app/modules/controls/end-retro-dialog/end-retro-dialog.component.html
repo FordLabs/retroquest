@@ -16,26 +16,49 @@
   -->
 
 
-<div class="dialog" (click)="$event.stopPropagation()">
+<div
+  class="dialog"
+  [ngClass]="{
+    'dark-theme': darkThemeIsEnabled
+  }"
+  (click)="$event.stopPropagation()">
 
   <div class="content-area">
-    <div class="heading">Do you want to end the retro?</div>
-    <div class="sub-heading">This will move all thoughts to archives!</div>
+    <div
+      class="heading"
+      [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+    >Do you want to end the retro?</div>
+    <div
+      class="sub-heading"
+      [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+    >This will archive all thoughts!
+    </div>
   </div>
 
   <div class="footer">
-    <div class="container" id="cancel-button-container">
+    <div
+      class="container"
+      id="cancel-button-container"
+      [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+    >
       <rq-button
-        [type]="'secondary'"
+        type="secondary"
         text="nope"
+        [theme]="theme"
         (click)="hide()"
       ></rq-button>
     </div>
     <div class="container" id="end-button-container">
       <rq-button
-      [type]="'primary'"
-      text="yes!"
-      (click)="submit()"
+        type="primary"
+        text="yes!"
+        (click)="submit()"
       ></rq-button>
     </div>
   </div>

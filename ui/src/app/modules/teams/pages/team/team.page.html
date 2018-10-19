@@ -16,11 +16,14 @@
   -->
 
 <div id="page">
+
   <rq-header
     [teamName]="teamName"
     [teamId]="teamId"
     (endRetro)="onEndRetro()"
     (actionsRadiatorViewClicked)="toggleActionsRadiatorAndNormalView($event)"
+    [theme]="theme"
+    (themeChanged)="onThemeChanged($event)"
   >
   </rq-header>
 
@@ -28,6 +31,7 @@
     #radiatorView
     [actionItems]="unsortedAndUncompletedActionItems"
     [visible]="actionsRadiatorViewIsSelected()"
+    [theme]="theme"
   >
   </rq-actions-radiator-view>
 
@@ -42,21 +46,36 @@
       *ngFor="let column of columns; let i = index"
       [ngClass]="{'selected': isSelectedIndex(i)}"
     >
-      <rq-thoughts-header [column]="column" [thoughtCount]="getColumnThoughtCount(column)"
+      <rq-thoughts-header
+        [column]="column"
+        [thoughtCount]="getColumnThoughtCount(column)"
+        [theme]="theme"
       ></rq-thoughts-header>
-      <rq-thoughts-column [column]="column" [thoughts]="getThoughtsInColumn(column)"
+
+      <rq-thoughts-column
+        [column]="column"
+        [thoughts]="getThoughtsInColumn(column)"
+        [theme]="theme"
       ></rq-thoughts-column>
+
     </div>
+
     <div
       class="rq-column"
       [ngClass]="{'selected': actionItemsIndexIsSelected()}"
     >
       <rq-actions-header
         [teamId]="teamId"
+        [theme]="theme"
         [thoughtCount]="getActionItemColumnCount()"
         (sortChanged)="onActionItemsSortChanged($event)"
       ></rq-actions-header>
-      <rq-actions-column [actionItems]="getActionItems()"></rq-actions-column>
+
+      <rq-actions-column
+        [theme]="theme"
+        [actionItems]="getActionItems()"
+      ></rq-actions-column>
+
     </div>
   </div>
 
