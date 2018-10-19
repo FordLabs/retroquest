@@ -21,7 +21,7 @@ import {FeedbackService} from '../../services/feedback.service';
 import {Feedback} from '../../../domain/feedback';
 import {FeedbackDialogComponent} from '../../../controls/feedback-dialog/feedback-dialog.component';
 import {SaveCheckerService} from '../../services/save-checker.service';
-import {Themes} from "../../../domain/Theme";
+import {Themes} from '../../../domain/Theme';
 
 @Component({
   selector: 'rq-header',

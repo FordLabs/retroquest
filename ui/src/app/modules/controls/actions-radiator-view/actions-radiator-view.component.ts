@@ -18,7 +18,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ActionItem} from '../../domain/action-item';
 import * as $ from 'jquery';
-import {Themes} from "../../domain/Theme";
+import {Themes} from '../../domain/Theme';
 
 const ESC_KEY = 27;
 

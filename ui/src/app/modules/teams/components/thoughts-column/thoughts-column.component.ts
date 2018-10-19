@@ -21,7 +21,7 @@ import {Column} from '../../../domain/column';
 import {ThoughtService} from '../../services/thought.service';
 import {TaskDialogComponent} from '../../../controls/task-dialog/task-dialog.component';
 import {fadeInOutAnimation} from '../../../animations/add-delete-animation';
-import {Themes} from "../../../domain/Theme";
+import {Themes} from '../../../domain/Theme';
 
 @Component({
   selector: 'rq-thoughts-column',

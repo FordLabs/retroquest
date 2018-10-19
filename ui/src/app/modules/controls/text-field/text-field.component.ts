@@ -16,7 +16,7 @@
  */
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Themes} from "../../domain/Theme";
+import {Themes} from '../../domain/Theme';
 
 @Component({
   selector: 'rq-text-field',

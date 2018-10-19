@@ -18,7 +18,7 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Column} from '../../domain/column';
 import {emojify} from '../../utils/EmojiGenerator';
-import {Themes} from "../../domain/Theme";
+import {Themes} from '../../domain/Theme';
 
 @Component({
   selector: 'rq-column-header',

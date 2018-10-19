@@ -20,7 +20,7 @@ import {Column} from '../../../domain/column';
 import {Thought} from '../../../domain/thought';
 import {ThoughtService} from '../../services/thought.service';
 import {ColumnService} from '../../services/column.service';
-import {Themes} from "../../../domain/Theme";
+import {Themes} from '../../../domain/Theme';
 
 @Component({
   selector: 'rq-thoughts-header',

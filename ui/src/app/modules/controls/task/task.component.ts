@@ -18,7 +18,7 @@
 import {AfterViewChecked, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {emptyThought, Thought} from '../../domain/thought';
 import {emojify} from '../../utils/EmojiGenerator';
-import {Themes} from "../../domain/Theme";
+import {Themes} from '../../domain/Theme';
 
 @Component({
   selector: 'rq-task',

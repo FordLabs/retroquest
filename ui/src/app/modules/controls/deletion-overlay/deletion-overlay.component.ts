@@ -20,7 +20,7 @@ import {ViewChild} from '@angular/core';
 import {ElementRef} from '@angular/core';
 import {Output, Input} from '@angular/core';
 import {OnInit} from '@angular/core';
-import {Themes} from "../../domain/Theme";
+import {Themes} from '../../domain/Theme';
 
 @Component({
   selector: 'rq-deletion-overlay',

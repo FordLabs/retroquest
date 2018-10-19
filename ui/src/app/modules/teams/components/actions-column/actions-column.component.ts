@@ -20,7 +20,7 @@ import {ActionItem, emptyActionItem} from '../../../domain/action-item';
 import {ActionItemService} from '../../services/action.service';
 import {ActionItemDialogComponent} from '../../../controls/action-item-dialog/action-item-dialog.component';
 import {fadeInOutAnimation} from '../../../animations/add-delete-animation';
-import {Themes} from "../../../domain/Theme";
+import {Themes} from '../../../domain/Theme';
 
 @Component({
   selector: 'rq-actions-column',

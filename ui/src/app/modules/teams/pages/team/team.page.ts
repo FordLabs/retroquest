@@ -32,7 +32,7 @@ import {WebsocketResponse} from '../../../domain/websocket-response';
 import * as moment from 'moment';
 import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-view/actions-radiator-view.component';
 import {SaveCheckerService} from '../../services/save-checker.service';
-import {Themes} from "../../../domain/Theme";
+import {Themes} from '../../../domain/Theme';
 
 @Component({
   selector: 'rq-team',
@@ -65,15 +65,7 @@ export class TeamPageComponent implements OnInit {
     }
   ];
 
-  constructor(
-    private activeRoute: ActivatedRoute,
-    private teamsService: TeamService,
-    private thoughtService: ThoughtService,
-    private columnService: ColumnService,
-    private actionItemService: ActionItemService,
-    private websocketService: WebsocketService,
-    private saveCheckerService: SaveCheckerService) {
-  }
+  @ViewChild('radiatorView') radiatorView: ActionsRadiatorViewComponent;
 
   teamId: string;
   teamName: string;
@@ -87,6 +79,16 @@ export class TeamPageComponent implements OnInit {
   currentView = 'normalView';
 
   _theme: Themes = Themes.Light;
+
+  constructor(
+    private activeRoute: ActivatedRoute,
+    private teamsService: TeamService,
+    private thoughtService: ThoughtService,
+    private columnService: ColumnService,
+    private actionItemService: ActionItemService,
+    private websocketService: WebsocketService,
+    private saveCheckerService: SaveCheckerService) {
+  }
 
   get theme(): Themes {
     return this._theme;
@@ -104,8 +106,6 @@ export class TeamPageComponent implements OnInit {
   public onThemeChanged(theme: Themes) {
     this.theme = theme;
   }
-
-  @ViewChild('radiatorView') radiatorView: ActionsRadiatorViewComponent;
 
   ngOnInit(): void {
 

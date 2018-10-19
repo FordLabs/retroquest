@@ -18,7 +18,7 @@
 import {AfterContentChecked, Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {emptyThought, Thought} from '../../domain/thought';
 import {TaskComponent} from '../task/task.component';
-import {Themes} from "../../domain/Theme";
+import {Themes} from '../../domain/Theme';
 
 const ESC_KEY = 27;
 

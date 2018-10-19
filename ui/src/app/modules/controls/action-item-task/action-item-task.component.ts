@@ -29,7 +29,7 @@ import {
 import {ActionItem, emptyActionItem} from '../../domain/action-item';
 import * as moment from 'moment';
 import {emojify} from '../../utils/EmojiGenerator';
-import {Themes} from "../../domain/Theme";
+import {Themes} from '../../domain/Theme';
 
 @Component({
   selector: 'rq-action-item-task',

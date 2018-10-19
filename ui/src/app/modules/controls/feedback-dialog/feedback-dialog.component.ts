@@ -17,7 +17,7 @@
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {emptyFeedback, Feedback} from '../../domain/feedback';
-import {Themes} from "../../domain/Theme";
+import {Themes} from '../../domain/Theme';
 
 const ESC_KEY = 27;
 
