@@ -32,10 +32,6 @@
   width: 100%;
   z-index: 100;
 
-  &.dark-theme {
-    background-color: opacity($black, .7);
-  }
-
   @media only screen and (max-width: 610px) {
     flex-direction: column;
     justify-content: flex-end;
