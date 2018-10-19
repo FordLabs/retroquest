@@ -15,19 +15,18 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.thought;
+package com.ford.labs.retroquest.board;
 
+import com.ford.labs.retroquest.thought.Thought;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface ThoughtRepository extends JpaRepository<Thought, Long> {
-    List<Thought> findAllByTeamId(String teamId);
-    List<Thought> findAllByTeamIdAndBoardIdIsNull(String teamId);
-    List<Thought> findAllByTeamIdOrderByTopic(String teamId);
-
-    void deleteAllByTeamId(String teamId);
-    void deleteThoughtByTeamIdAndId(String teamId, Long id);
+public interface BoardRepository extends JpaRepository<Board, Long>{
+    List<Board> findAllByTeamId(String teamId);
+    void deleteBoardByTeamIdAndId(String teamId, Long id);
+    Board save(Board board);
+    Board findByTeamIdAndId(String teamId, Long id);
 }

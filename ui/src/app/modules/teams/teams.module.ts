@@ -35,6 +35,10 @@ import {AuthGuard} from '../auth/auth-guard/auth.guard';
 import {TeamPageQueryParamGuard} from './services/team-page-query-param-guard';
 import {ControlsModule} from '../controls/controls.module';
 import {SaveCheckerService} from './services/save-checker.service';
+import {ArchivesPageComponent} from './pages/archives/archives.page';
+import {TopHeaderComponent} from './components/top-header/top-header.component';
+import {BoardSummaryComponent} from './components/board-summary/board-summary.component';
+import {ArchivedBoardPageComponent} from './pages/archived-board/archived-board.page';
 
 @NgModule({
   imports: [
@@ -42,6 +46,8 @@ import {SaveCheckerService} from './services/save-checker.service';
     FormsModule,
     RouterModule.forChild([
       {path: 'team/:teamId', component: TeamPageComponent, canActivate: [AuthGuard]},
+      {path: 'team/:teamId/archives', component: ArchivesPageComponent, canActivate: [AuthGuard]},
+      {path: 'team/:teamId/archives/:boardId', component: ArchivedBoardPageComponent, canActivate: [AuthGuard]},
       {path: 'team', component: TeamPageComponent, canActivate: [TeamPageQueryParamGuard]},
     ]),
     ControlsModule
@@ -61,7 +67,11 @@ import {SaveCheckerService} from './services/save-checker.service';
     ThoughtsColumnComponent,
     ThoughtsHeaderComponent,
     ActionsHeaderComponent,
-    ActionsColumnComponent
+    ActionsColumnComponent,
+    ArchivesPageComponent,
+    TopHeaderComponent,
+    BoardSummaryComponent,
+    ArchivedBoardPageComponent
   ]
 })
 export class TeamsModule {

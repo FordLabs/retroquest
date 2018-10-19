@@ -15,23 +15,18 @@
   ~ limitations under the License.
   -->
 
-<div class="rq-thought-column-header {{column.topic}}">
+<rq-deletion-overlay
+  *ngIf="deleteWasToggled"
+  (declineButtonClicked)="deleteWasToggled = false"
+  (acceptButtonClicked)="deleteBoard(board)"
+  heading="Delete this board?"
+></rq-deletion-overlay>
 
-  <rq-column-header
-    [type]="column.topic"
-    [title]="column.title"
-    [readOnly]="hideNewThought"
-    (sortedChanged)="sortByHearts($event)"
-    (titleChanged)="editTitle($event)"
-  ></rq-column-header>
+<div class="content-area">
+  <span>{{board.dateCreated.format("MMM Do YYYY")}}</span>
+</div>
 
-  <rq-text-field
-    *ngIf="!hideNewThought"
-    [type]="column.topic"
-    [placeholder]="'Enter A Thought'"
-    (newMessageAdded)="addThought($event)"
-  ></rq-text-field>
-
-  <rq-count-seperator [count]="thoughtCount"></rq-count-seperator>
-
+<div class="footer">
+  <a routerLink="/team/{{teamId}}/archives/{{board.id}}" class="view">View Board</a>
+  <a href="#delete" (click)="$event.preventDefault(); deleteWasToggled = true" class="delete">Delete Board</a>
 </div>

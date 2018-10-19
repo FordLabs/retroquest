@@ -15,23 +15,13 @@
   ~ limitations under the License.
   -->
 
-<div class="rq-thought-column-header {{column.topic}}">
-
-  <rq-column-header
-    [type]="column.topic"
-    [title]="column.title"
-    [readOnly]="hideNewThought"
-    (sortedChanged)="sortByHearts($event)"
-    (titleChanged)="editTitle($event)"
-  ></rq-column-header>
-
-  <rq-text-field
-    *ngIf="!hideNewThought"
-    [type]="column.topic"
-    [placeholder]="'Enter A Thought'"
-    (newMessageAdded)="addThought($event)"
-  ></rq-text-field>
-
-  <rq-count-seperator [count]="thoughtCount"></rq-count-seperator>
-
+<div id="headerTop">
+  <div class="header-top-content">
+    <a routerLink="/" class="logo-link">
+      <img src="/assets/RetroQuest.png" title="RetroQuest Logo" id="logo"/>
+    </a>
+    <div class="horizontal-separator"></div>
+    <div id="teamName">{{teamName}}</div>
+    <div class="last-saved-text">{{lastSavedText}}</div>
+  </div>
 </div>

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Ford Motor Company
+ * Copyright (c) 2018 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,19 +15,20 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.thought;
+import {Component, Input, OnInit} from '@angular/core';
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+@Component({
+  selector: 'rq-top-header',
+  templateUrl: './top-header.component.html',
+  styleUrls: ['./top-header.component.scss']
+})
+export class TopHeaderComponent implements OnInit {
+  @Input() teamName: string;
+  @Input() lastSavedText: string;
 
-import java.util.List;
+  constructor() { }
 
-@Repository
-public interface ThoughtRepository extends JpaRepository<Thought, Long> {
-    List<Thought> findAllByTeamId(String teamId);
-    List<Thought> findAllByTeamIdAndBoardIdIsNull(String teamId);
-    List<Thought> findAllByTeamIdOrderByTopic(String teamId);
+  ngOnInit() {
+  }
 
-    void deleteAllByTeamId(String teamId);
-    void deleteThoughtByTeamIdAndId(String teamId, Long id);
 }

@@ -21,13 +21,10 @@ import {ActivatedRoute} from '@angular/router';
 import {Column} from '../../../domain/column';
 import {Thought} from '../../../domain/thought';
 import {ActionItem} from '../../../domain/action-item';
-import {WebsocketService} from '../../services/websocket.service';
 
 import {ThoughtService} from '../../services/thought.service';
 import {TeamService} from '../../services/team.service';
-import {ActionItemService} from '../../services/action.service';
 import {ColumnService} from '../../services/column.service';
-import {WebsocketResponse} from '../../../domain/websocket-response';
 
 import * as moment from 'moment';
 import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-view/actions-radiator-view.component';
@@ -35,11 +32,11 @@ import {SaveCheckerService} from '../../services/save-checker.service';
 import {BoardService} from '../../services/board.service';
 
 @Component({
-  selector: 'rq-team',
-  templateUrl: './team.page.html',
-  styleUrls: ['./team.page.scss']
+  selector: 'rq-archived-board',
+  templateUrl: './archived-board.page.html',
+  styleUrls: ['./archived-board.page.scss']
 })
-export class TeamPageComponent implements OnInit {
+export class ArchivedBoardPageComponent implements OnInit {
 
   static defaultColumns: Array<Column> = [
     {
@@ -69,17 +66,15 @@ export class TeamPageComponent implements OnInit {
               private teamsService: TeamService,
               private thoughtService: ThoughtService,
               private columnService: ColumnService,
-              private actionItemService: ActionItemService,
-              private websocketService: WebsocketService,
-              private saveCheckerService: SaveCheckerService,
               private boardService: BoardService) {
   }
 
   teamId: string;
+  boardId: number;
   teamName: string;
   globalWindowRef: Window = window;
 
-  columns: Array<Column> = TeamPageComponent.defaultColumns;
+  columns: Array<Column> = ArchivedBoardPageComponent.defaultColumns;
   actionItems: Array<ActionItem> = [];
   thoughtsArray: Array<Thought> = [];
   selectedIndex = 0;
@@ -92,24 +87,11 @@ export class TeamPageComponent implements OnInit {
 
     this.activeRoute.params.subscribe((params) => {
       this.teamId = params.teamId;
+      this.boardId = params.boardId;
       this.getTeamName();
       this.getColumns();
       this.getThoughts();
-      this.subscribeToActionItems();
       this.subscribeToResetThoughts();
-
-      if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
-        this.websocketInit();
-      }
-
-      this.websocketService.intervalId = this.globalWindowRef.setInterval(() => {
-        if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
-          this.websocketService.closeWebsocket();
-          this.websocketInit();
-        } else if (this.websocketService.getWebsocketState() === WebSocket.OPEN) {
-          this.websocketService.sendHeartbeat();
-        }
-      }, 1000 * 60);
     });
   }
 
@@ -147,94 +129,8 @@ export class TeamPageComponent implements OnInit {
     this.thoughtService.resetThoughtsObserver.subscribe(() => this.resetThoughts());
   }
 
-  private websocketInit() {
-    this.websocketService.openWebsocket(this.teamId).subscribe(() => {
-
-      this.websocketService.heartbeatTopic().subscribe(message => {
-      });
-
-      this.websocketService.thoughtsTopic().subscribe((message) => {
-
-        const response: WebsocketResponse = message.bodyJson;
-
-        if (response.type === 'delete') {
-          this.deleteThought(response);
-        } else {
-          this.updateThoughts(response);
-        }
-
-        this.saveCheckerService.updateTimestamp();
-      });
-
-      this.websocketService.actionItemTopic().subscribe((message) => {
-        const response: WebsocketResponse = message.bodyJson;
-        if (response.type === 'delete') {
-          this.deleteActionItem(response);
-        } else {
-          this.updateActionItems(response);
-        }
-
-        this.saveCheckerService.updateTimestamp();
-      });
-
-      this.websocketService.columnTitleTopic().subscribe((message) => {
-        const response: WebsocketResponse = message.bodyJson;
-
-        if (response.type === 'put') {
-          this.updateColumns(response);
-        }
-
-        this.saveCheckerService.updateTimestamp();
-      });
-    });
-  }
-
-  private deleteThought(response: WebsocketResponse) {
-    const thoughtId = response.payload as number;
-    if (thoughtId === -1) {
-      this.resetThoughts();
-    } else {
-      this.thoughtsArray = this.thoughtsArray.filter((item) => item.id !== thoughtId);
-    }
-  }
-
-  private updateThoughts(response: WebsocketResponse) {
-    const thought: Thought = response.payload as Thought;
-    const thoughtIndex = this.thoughtsArray.findIndex((item) => item.id === thought.id);
-    if (thoughtIndex === -1) {
-      thought.state = 'active';
-      this.thoughtsArray.push(thought);
-    } else {
-      Object.assign(this.thoughtsArray[thoughtIndex], thought);
-    }
-  }
-
-  private deleteActionItem(response: WebsocketResponse) {
-    const actionItemId = response.payload as number;
-    this.actionItems = this.actionItems.filter((item) => item.id !== actionItemId);
-  }
-
-  private updateActionItems(response: WebsocketResponse) {
-    const actionItem: ActionItem = response.payload as ActionItem;
-    const actionItemIndex = this.actionItems.findIndex((item) => item.id === actionItem.id);
-    if (actionItemIndex === -1) {
-      actionItem.state = 'active';
-      this.actionItems.push(actionItem);
-    } else {
-      Object.assign(this.actionItems[actionItemIndex], actionItem);
-    }
-  }
-
-  private updateColumns(response: WebsocketResponse) {
-    const updatedColumn: Column = response.payload as Column;
-    const modifiedColumnIndex = this.columns.findIndex((item) => item.id === updatedColumn.id);
-    if (modifiedColumnIndex > -1) {
-      this.columns[modifiedColumnIndex].title = updatedColumn.title;
-    }
-  }
-
   private getThoughts(): void {
-    this.thoughtService.fetchThoughts(this.teamId).subscribe(
+    this.boardService.fetchThoughtsForBoard(this.teamId, this.boardId).subscribe(
       (thoughts: Array<Thought>) => this.thoughtsArray = thoughts);
   }
 
@@ -247,12 +143,6 @@ export class TeamPageComponent implements OnInit {
   private getTeamName(): void {
     this.teamsService.fetchTeamName(this.teamId).subscribe(
       (teamName) => this.teamName = teamName
-    );
-  }
-
-  private subscribeToActionItems(): void {
-    this.actionItemService.fetchActionItems(this.teamId).subscribe(
-      (actionItems: Array<ActionItem>) => this.actionItems = actionItems
     );
   }
 

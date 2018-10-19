@@ -15,19 +15,17 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.thought;
+package com.ford.labs.retroquest.board;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.junit.Test;
 
-import java.util.List;
+import static org.hamcrest.Matchers.typeCompatibleWith;
+import static org.junit.Assert.assertThat;
 
-@Repository
-public interface ThoughtRepository extends JpaRepository<Thought, Long> {
-    List<Thought> findAllByTeamId(String teamId);
-    List<Thought> findAllByTeamIdAndBoardIdIsNull(String teamId);
-    List<Thought> findAllByTeamIdOrderByTopic(String teamId);
-
-    void deleteAllByTeamId(String teamId);
-    void deleteThoughtByTeamIdAndId(String teamId, Long id);
+public class BoardTest {
+    @Test
+    public void shouldBeAbleToCreateABoard() {
+        Board board = new Board();
+        assertThat(board.getClass(), typeCompatibleWith(Board.class));
+    }
 }

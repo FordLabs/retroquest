@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Ford Motor Company
+ * Copyright (c) 2018 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,19 +15,16 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.thought;
+import {TopHeaderComponent} from './top-header.component';
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+describe('TopHeaderComponent', () => {
+  let component: TopHeaderComponent;
 
-import java.util.List;
+  beforeEach(() => {
+    component = new TopHeaderComponent();
+  });
 
-@Repository
-public interface ThoughtRepository extends JpaRepository<Thought, Long> {
-    List<Thought> findAllByTeamId(String teamId);
-    List<Thought> findAllByTeamIdAndBoardIdIsNull(String teamId);
-    List<Thought> findAllByTeamIdOrderByTopic(String teamId);
-
-    void deleteAllByTeamId(String teamId);
-    void deleteThoughtByTeamIdAndId(String teamId, Long id);
-}
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

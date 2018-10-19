@@ -26,6 +26,7 @@
     (starCountIncreased)="starCountChanged($event, thought)"
     (completed)="onCompleted($event, thought)"
     [@fadeInOutAnimation]="thought.state"
+    [readOnly]="readOnly"
   >
   </rq-task>
 </div>

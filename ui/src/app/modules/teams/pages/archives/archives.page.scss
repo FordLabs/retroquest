@@ -17,22 +17,8 @@
 @import 'color-vars';
 @import 'global-vars';
 
-.hide {
-  display: none;
-}
-
-#header {
-  background-color: $clouds;
-  box-sizing: border-box;
-  color: $button-blue;
-  font-weight: normal;
+header {
   padding: 1.5rem 0;
-  z-index: 3;
-
-  @media only screen and (max-width: 610px) {
-    padding-bottom: 12px;
-    padding-top: 6px;
-  }
 
   #headerBottom {
     $header-bottom-height: 32px;
@@ -84,65 +70,13 @@
           display: block;
         }
       }
-
-      rq-button {
-        height: 100%;
-        width: auto;
-      }
-
-      .actions-radiator-button {
-        @media only screen and (max-width: 610px) {
-          display: none;
-        }
-      }
-
-      #giveFeedback {
-        outline: none;
-
-        @media only screen and (max-width: 610px) {
-          height: 100%;
-          padding: 0 18px;
-        }
-
-        .button-text {
-          @media only screen and (max-width: 610px) {
-            display: none;
-          }
-        }
-      }
-
-      #downloadCsv {
-        margin-right: 24px;
-        outline: none;
-        padding: 0;
-
-        button {
-
-          .button-text {
-            @media only screen and (max-width: 610px) {
-              display: none;
-            }
-          }
-
-          @media only screen and (max-width: 610px) {
-            height: 100%;
-            padding: 0 18px;
-          }
-        }
-
-      }
-
-      #endRetro {
-        height: 100%;
-        outline: none;
-
-        @media only screen and (max-width: 610px) {
-          font-size: .9rem;
-          height: 100%;
-          padding: 0 18px;
-        }
-
-      }
     }
   }
+}
+
+#archives {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
