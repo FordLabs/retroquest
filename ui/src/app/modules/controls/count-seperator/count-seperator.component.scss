@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 @import 'color-vars';
 
 :host {
@@ -23,18 +22,27 @@
   justify-content: center;
   width: 100px;
 
-  .left-count-separator {
-    background: linear-gradient(to right, transparent, opacity($wet-asphalt, .1) 15%, opacity($wet-asphalt, .15));
+  &.dark-theme {
+    color: $clouds;
+  }
+
+  .separator {
     border-radius: 3px;
     height: 2px;
     width: 50%;
+
+    &.dark-theme {
+      background: $count-separator-background-dark none;
+    }
+
+  }
+
+  .left-count-separator {
+    background: linear-gradient(to right, transparent, opacity($wet-asphalt, .1) 15%, opacity($wet-asphalt, .15));
   }
 
   .right-count-separator {
     background: linear-gradient(to right, opacity($wet-asphalt, .15) 0%, opacity($wet-asphalt, .1) 85%, transparent);
-    border-radius: 3px;
-    height: 2px;
-    width: 50%;
   }
 
   .count-value {
@@ -46,4 +54,5 @@
     text-align: center;
     width: 30px;
   }
+
 }

@@ -20,15 +20,38 @@
   <div id="headerTop">
     <div class="header-top-content">
       <a routerLink="/" class="logo-link">
-        <img src="/assets/RetroQuest.png" title="RetroQuest Logo" id="logo"/>
+        <img
+          [src]="darkThemeIsEnabled ? '/assets/logo-dark.png' : '/assets/RetroQuest.png'"
+          title="RetroQuest Logo"
+          id="logo"
+          [ngClass]="{
+            'dark-theme': darkThemeIsEnabled
+          }"
+        />
       </a>
-      <div class="horizontal-separator"></div>
-      <div id="teamName">{{teamName}}</div>
+      <div
+        class="horizontal-separator"
+        [ngClass]="{
+          'dark-theme': darkThemeIsEnabled
+        }"
+      ></div>
+      <div
+        id="teamName"
+        [ngClass]="{
+          'dark-theme': darkThemeIsEnabled
+        }"
+      >{{teamName}}
+      </div>
       <div class="last-saved-text">{{lastSavedText}}</div>
     </div>
   </div>
 
-  <div id="headerBottom">
+  <div
+    id="headerBottom"
+    [ngClass]="{
+      'dark-theme': darkThemeIsEnabled
+    }"
+  >
     <div
       class="header-bottom-content"
       [ngClass]="{
@@ -37,9 +60,11 @@
     >
 
       <rq-button
+        class="change-team-button"
         (click)="toggleThemeColor()"
         type="secondary"
         text="change theme"
+        [theme]="theme"
       >
 
       </rq-button>
@@ -49,9 +74,17 @@
         type="secondary"
         [text]="actionsRadiatorViewEnabled ? 'view retro' : 'actions radiator'"
         (click)="onActionsRadiatorViewClicked()"
+        [theme]="theme"
       ></rq-button>
 
-      <button id="giveFeedback" class="rq-button-secondary" (click)="feedbackDialog.show()">
+      <button
+        id="giveFeedback"
+        class="rq-button-secondary"
+        (click)="feedbackDialog.show()"
+        [ngClass]="{
+          'dark-theme': darkThemeIsEnabled
+        }"
+      >
         <span class="button-text">Give Feedback</span>
         <i class="far fa-comments button-icon"></i>
       </button>
@@ -67,16 +100,17 @@
           <i class="fas fa-download button-icon"></i>
         </button>
       </a>
-      <button
+      <rq-button
         id="endRetro"
-        class="rq-button-primary"
         (click)="showEndRetroDialog()"
         [ngClass]="{
             'hide': actionsRadiatorViewEnabled
          }"
+        [theme]="theme"
+        text="end retro"
+        type="primary"
       >
-        <span class="button-text">End Retro</span>
-      </button>
+      </rq-button>
     </div>
   </div>
 

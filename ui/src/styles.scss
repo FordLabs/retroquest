@@ -22,13 +22,13 @@
 
 html {
   -webkit-overflow-scrolling: touch;   // Enables smooth scrolling for IOS devices.
-  background-color: $clouds;
   height: 100%;
-  overflow: auto;
   padding: 0;
+  overflow: scroll;
 }
 
 body {
+  background-color: $clouds;
   color: $wet-asphalt;
   font-family: 'Quicksand', sans-serif;
   font-size: 1rem;

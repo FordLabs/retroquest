@@ -21,12 +21,18 @@
   display: none;
 }
 
+:host {
+  &.dark-theme {
+    color: opacity($clouds, .8);
+  }
+}
+
 #header {
   box-sizing: border-box;
-  color: $button-blue;
   font-weight: normal;
   padding: 1.5rem 0;
   z-index: 3;
+
 
   @media only screen and (max-width: 610px) {
     padding-bottom: 12px;
@@ -78,6 +84,11 @@
         opacity: .1;
         padding-top: 12px;
         width: 3px;
+
+        &.dark-theme {
+          background-color: $count-separator-background-dark;
+          opacity: 1;
+        }
       }
 
       .logo-link {
@@ -91,7 +102,7 @@
       }
 
       #teamName {
-        color: opacity($wet-asphalt, .8);
+        color: inherit;
         font-size: 1.5rem;
         margin-left: 24px;
         overflow: hidden;
@@ -100,10 +111,13 @@
         @media only screen and (max-width: 610px) {
           font-size: 1rem;
         }
+
+        &.dark-theme {
+          color: opacity($clouds, .75);
+        }
       }
 
       .last-saved-text {
-        color: $wet-asphalt;
         flex: 1;
         font-size: .8rem;
         opacity: .5;
@@ -125,6 +139,10 @@
     min-width: $desktop-max-width;
 
     position: relative;
+
+    &.dark-theme {
+      background-color: $header-background-color-dark;
+    }
 
     @media only screen and (max-width: 610px) {
       height: $header-bottom-height;
@@ -168,6 +186,14 @@
         }
       }
 
+      .change-team-button {
+
+        @media only screen and (max-width: 610px) {
+          display: none;
+        }
+
+      }
+
       rq-button {
         height: 100%;
         width: auto;
@@ -180,7 +206,12 @@
       }
 
       #giveFeedback {
+        color: inherit;
         outline: none;
+
+        &:hover {
+          color: $turquoise;
+        }
 
         @media only screen and (max-width: 610px) {
           height: 100%;
@@ -195,11 +226,17 @@
       }
 
       #downloadCsv {
+        color: inherit;
         margin-right: 24px;
         outline: none;
         padding: 0;
 
         button {
+          color: inherit;
+
+          &:hover {
+            color: $turquoise;
+          }
 
           .button-text {
             @media only screen and (max-width: 610px) {

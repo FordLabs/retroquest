@@ -26,6 +26,7 @@
     (starCountIncreased)="starCountChanged($event, thought)"
     (completed)="onCompleted($event, thought)"
     [@fadeInOutAnimation]="thought.state"
+    [theme]="theme"
   >
   </rq-task>
 </div>
@@ -40,4 +41,5 @@
   (deleted)="onDeleted($event)"
   (starCountIncreased)="starCountChanged($event, selectedThought)"
   (completed)="onCompleted($event, selectedThought)"
+  [theme]="theme"
 ></rq-task-dialog>

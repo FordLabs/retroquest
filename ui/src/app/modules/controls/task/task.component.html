@@ -21,6 +21,7 @@
   (acceptButtonClicked)="emitDeleteItem()"
   (blur)="onDeleteConfirmationBlur()"
   heading="Delete this thought?"
+  [theme]="theme"
 ></rq-deletion-overlay>
 
 <div
@@ -46,23 +47,40 @@
     [charsAreRunningOutThreshold]="50"
     [maxCharacterCount]="maxMessageLength"
     [ngClass]="{'remove': !taskEditModeEnabled}"
+    [theme]="theme"
   >
   </rq-floating-character-countdown>
 
 </div>
 
 
-<div class="footer">
+<div
+  class="footer"
+  [ngClass]="{
+    'dark-theme': darkThemeIsEnabled
+  }"
+>
   <div
     class="container star-count-container"
     (click)="addStar()"
     *ngIf="type !== 'action'"
-    [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
+    [ngClass]="{
+      'disable': task.discussed || taskEditModeEnabled,
+      'dark-theme': darkThemeIsEnabled
+    }"
   >
     <div class="star-background"
-         [ngClass]="{'opacify': task.discussed || taskEditModeEnabled}"
+         [ngClass]="{
+          'opacify': task.discussed || taskEditModeEnabled,
+          'dark-theme': darkThemeIsEnabled
+         }"
     >
-      <i class="fas fa-star star-icon"></i>
+      <i
+        class="fas fa-star star-icon"
+        [ngClass]="{
+          'dark-theme': darkThemeIsEnabled
+        }"
+      ></i>
     </div>
     <div class="star-count"
          [ngClass]="{'opacify': task.discussed || taskEditModeEnabled}"
@@ -74,7 +92,10 @@
     class="container edit-container"
     (click)="toggleEditMode()"
     *ngIf="!taskEditModeEnabled; else exit_edit_mode_icon"
-    [ngClass]="{'disable': task.discussed || taskEditModeEnabled}"
+    [ngClass]="{
+      'disable': task.discussed || taskEditModeEnabled,
+      'dark-theme': darkThemeIsEnabled
+    }"
   >
     <i class="fas fa-edit"
        [ngClass]="{'opacify': task.discussed || taskEditModeEnabled}"
@@ -84,6 +105,9 @@
   <ng-template #exit_edit_mode_icon>
     <div
       class="container edit-container"
+      [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
       (click)="forceBlur()"
     >
       <i class="fas fa-times exit-edit-mode-icon"></i>
@@ -92,6 +116,9 @@
 
   <div
     class="container delete-container"
+    [ngClass]="{
+      'dark-theme': darkThemeIsEnabled
+    }"
     (click)="emitDeleteItem()"
   >
     <i class="fas fa-trash-alt"
@@ -100,7 +127,10 @@
 
   <div
     class="complete-container"
-    [ngClass]="{'opacify': taskEditModeEnabled}"
+    [ngClass]="{
+      'opacify': taskEditModeEnabled,
+      'dark-theme': darkThemeIsEnabled
+    }"
     (click)="toggleTaskComplete()"
   >
     <div

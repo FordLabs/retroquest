@@ -19,8 +19,8 @@ import {Component, Input, ViewChild} from '@angular/core';
 import {ActionItem, emptyActionItem} from '../../../domain/action-item';
 import {ActionItemService} from '../../services/action.service';
 import {ActionItemDialogComponent} from '../../../controls/action-item-dialog/action-item-dialog.component';
-import {animate, sequence, style, transition, trigger} from '@angular/animations';
 import {fadeInOutAnimation} from '../../../animations/add-delete-animation';
+import {Themes} from "../../../domain/Theme";
 
 @Component({
   selector: 'rq-actions-column',
@@ -34,6 +34,7 @@ export class ActionsColumnComponent {
   }
 
   @Input() actionItems: Array<ActionItem>;
+  @Input() theme: Themes = Themes.Light;
 
   @ViewChild('actionItemDialog') actionItemDialog: ActionItemDialogComponent;
 

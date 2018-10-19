@@ -19,6 +19,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ActionItem} from '../../../domain/action-item';
 import {ActionItemService} from '../../services/action.service';
 import * as moment from 'moment';
+import {Themes} from "../../../domain/Theme";
 
 @Component({
   selector: 'rq-actions-header',
@@ -32,6 +33,7 @@ export class ActionsHeaderComponent {
 
   @Input() teamId: string;
   @Input() thoughtCount: number;
+  @Input() theme: Themes = Themes.Light;
 
   @Output() sortChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
 

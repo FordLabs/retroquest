@@ -15,33 +15,7 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-
 export enum Themes {
   Light,
   Dark
-}
-
-@Injectable()
-export class ThemeSelectorService {
-
-  public static currentTheme = Themes.Light;
-
-  public setDocumentBackgroundColor(theme: Themes) {
-
-    let chosenColor = '';
-
-    if (Themes.Dark === theme) {
-      chosenColor = '#1A1A1A';
-      ThemeSelectorService.currentTheme = Themes.Dark;
-    } else if (Themes.Light === theme) {
-      chosenColor = '#ecf0f1';
-      ThemeSelectorService.currentTheme = Themes.Light;
-    }
-
-    window.document.body.style.backgroundColor = chosenColor;
-    console.log(window.document.body.style.backgroundColor);
-
-  }
-
 }

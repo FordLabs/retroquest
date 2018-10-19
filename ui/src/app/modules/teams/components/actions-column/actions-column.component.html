@@ -25,12 +25,14 @@
     (assigneeUpdated)="onAssigneeUpdated($event, actionItem)"
     (messageClicked)="displayPopup(actionItem)"
     [@fadeInOutAnimation]="actionItem.state"
+    [theme]="theme"
   >
   </rq-action-item-task>
 </div>
 
 <rq-action-item-dialog
   #actionItemDialog
+  [theme]="theme"
   [visible]="dialogIsVisible"
   [actionItem]="selectedActionItem"
   (visibilityChanged)="dialogIsVisible = $event"

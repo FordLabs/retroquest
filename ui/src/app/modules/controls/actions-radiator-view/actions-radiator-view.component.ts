@@ -18,6 +18,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ActionItem} from '../../domain/action-item';
 import * as $ from 'jquery';
+import {Themes} from "../../domain/Theme";
 
 const ESC_KEY = 27;
 
@@ -32,14 +33,19 @@ const ESC_KEY = 27;
 export class ActionsRadiatorViewComponent {
 
   @Input() visible = false;
+  @Input() theme: Themes = Themes.Light;
+  @Input() actionItems: Array<ActionItem>;
+
+  @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   timeOutInterval = 1000 * 75;
   scrollInterval = 1000 * 25;
   pageIsAutoScrolling = false;
   scrollingIntervalId: any = null;
 
-  @Input() actionItems: Array<ActionItem>;
-
-  @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
+  }
 
   private scrollToTopOfPage() {
     const rootPage = $('html');

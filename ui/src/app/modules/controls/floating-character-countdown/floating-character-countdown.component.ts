@@ -16,6 +16,7 @@
  */
 
 import {Component, Input} from '@angular/core';
+import {Themes} from "../../domain/Theme";
 
 @Component({
   selector: 'rq-floating-character-countdown',
@@ -23,7 +24,8 @@ import {Component, Input} from '@angular/core';
   styleUrls: ['./floating-character-countdown.component.scss'],
   host: {
     '[class.display-warning-text]': 'charactersRemainingAreAboutToRunOut()',
-    '[style.visibility]': 'textIsEmpty() ? \'hidden\' : \'visible\''
+    '[style.visibility]': 'textIsEmpty() ? \'hidden\' : \'visible\'',
+    '[class.dark-theme]': 'darkThemeIsEnabled'
   }
 })
 export class FloatingCharacterCountdownComponent {
@@ -31,8 +33,7 @@ export class FloatingCharacterCountdownComponent {
   @Input() maxCharacterCount = 255;
   @Input() charsAreRunningOutThreshold = 50;
   @Input() characterCount = 0;
-
-  constructor() { }
+  @Input() theme: Themes = Themes.Light;
 
   public charactersRemaining(): number {
     return this.maxCharacterCount - this.characterCount;
@@ -44,6 +45,10 @@ export class FloatingCharacterCountdownComponent {
 
   public textIsEmpty(): boolean {
     return this.characterCount === 0;
+  }
+
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
   }
 
 }

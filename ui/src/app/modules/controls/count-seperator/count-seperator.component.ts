@@ -16,17 +16,23 @@
  */
 
 import {Component, Input} from '@angular/core';
+import {Themes} from "../../domain/Theme";
 
 @Component({
   selector: 'rq-count-seperator',
   templateUrl: './count-seperator.component.html',
-  styleUrls: ['./count-seperator.component.scss']
+  styleUrls: ['./count-seperator.component.scss'],
+  host: {
+    '[class.dark-theme]': 'darkThemeIsEnabled'
+  }
 })
 export class CountSeperatorComponent {
 
   @Input() count = 0;
+  @Input() theme = Themes.Light;
 
-  constructor() { }
-
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
+  }
 
 }

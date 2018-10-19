@@ -21,19 +21,24 @@ import {FeedbackService} from '../../services/feedback.service';
 import {Feedback} from '../../../domain/feedback';
 import {FeedbackDialogComponent} from '../../../controls/feedback-dialog/feedback-dialog.component';
 import {SaveCheckerService} from '../../services/save-checker.service';
-import {Themes, ThemeSelectorService} from "../../services/theme-selector.service";
+import {Themes} from "../../../domain/Theme";
 
 @Component({
   selector: 'rq-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
+  host: {
+    '[class.dark-theme]': 'darkThemeIsEnabled'
+  }
 })
 export class HeaderComponent {
   @Input() teamName: string;
   @Input() teamId: string;
+  @Input() theme = Themes.Light;
 
   @Output() endRetro: EventEmitter<void> = new EventEmitter<void>();
   @Output() actionsRadiatorViewClicked: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() themeChanged: EventEmitter<Themes> = new EventEmitter<Themes>();
 
   @ViewChild(FeedbackDialogComponent) feedbackDialog: FeedbackDialogComponent;
   @ViewChild(EndRetroDialogComponent) endRetroDialog: EndRetroDialogComponent;
@@ -42,10 +47,13 @@ export class HeaderComponent {
 
   constructor(
     private feedbackService: FeedbackService,
-    private saveChecker: SaveCheckerService,
-    private themeSelectorService: ThemeSelectorService
+    private saveChecker: SaveCheckerService
   ) {
 
+  }
+
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
   }
 
   public getCsvUrl(): string {
@@ -79,10 +87,13 @@ export class HeaderComponent {
   }
 
   public toggleThemeColor(): void {
-    if (ThemeSelectorService.currentTheme === Themes.Dark) {
-      this.themeSelectorService.setDocumentBackgroundColor(Themes.Light);
+
+    if (this.theme === Themes.Dark) {
+      this.theme = Themes.Light;
     } else {
-      this.themeSelectorService.setDocumentBackgroundColor(Themes.Dark);
+      this.theme = Themes.Dark;
     }
+
+    this.themeChanged.emit(this.theme);
   }
 }
