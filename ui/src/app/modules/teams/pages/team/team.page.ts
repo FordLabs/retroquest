@@ -91,16 +91,6 @@ export class TeamPageComponent implements OnInit {
 
   _theme: Themes = Themes.Light;
 
-  constructor(
-    private activeRoute: ActivatedRoute,
-    private teamsService: TeamService,
-    private thoughtService: ThoughtService,
-    private columnService: ColumnService,
-    private actionItemService: ActionItemService,
-    private websocketService: WebsocketService,
-    private saveCheckerService: SaveCheckerService) {
-  }
-
   get theme(): Themes {
     return this._theme;
   }
