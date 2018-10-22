@@ -18,7 +18,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Board} from '../../../domain/board';
 import {BoardService} from '../../services/board.service';
-import {Themes} from "../../../domain/Theme";
+import {Themes} from '../../../domain/Theme';
 
 @Component({
   selector: 'rq-board-summary',

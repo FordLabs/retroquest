@@ -44,6 +44,7 @@ export class ArchivesPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.setBackgroundColorToLightVersion();
 
     this.globalWindowRef.clearInterval(this.websocketService.intervalId);
     this.websocketService.closeWebsocket();
@@ -66,6 +67,10 @@ export class ArchivesPageComponent implements OnInit {
     this.boards = this.boards.filter(board => {
       return board.id !== boardId;
     });
+  }
+
+  private setBackgroundColorToLightVersion() {
+    document.body.style.backgroundColor = '#ecf0f1';
   }
 
 }
