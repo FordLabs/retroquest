@@ -15,7 +15,8 @@
  * limitations under the License.
  */
 
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
+import {Themes} from '../../../domain/Theme';
 
 @Component({
   selector: 'rq-top-header',
@@ -26,4 +27,11 @@ export class TopHeaderComponent {
   @Input() teamName: string;
   @Input() lastSavedText: string;
 
+  @Input() theme: Themes = Themes.Light;
+
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
+  }
 }
+
+

@@ -17,87 +17,104 @@
 @import 'color-vars';
 @import 'global-vars';
 
-header {
-  padding: 1.5rem 0;
+:host {
+  display: block;
 
-  &.dark-theme {
-    color: $clouds;
-  }
-
-  #headerBottom {
-    $header-bottom-height: 32px;
-    background: $white;
-    box-sizing: border-box;
-    color: inherit;
-    height: 45px;
-
-    min-width: $desktop-max-width;
-    position: relative;
+  header {
+    padding: 1.5rem 0;
 
     &.dark-theme {
-      background-color: $header-background-color-dark;
+      color: $clouds;
     }
 
-    @media only screen and (max-width: 610px) {
-      height: $header-bottom-height;
-      min-width: 0;
-      width: 100%;
-    }
-
-    .header-bottom-content {
-      align-self: center;
-      box-sizing: inherit;
+    #headerBottom {
+      $header-bottom-height: 32px;
+      background: $white;
+      box-sizing: border-box;
       color: inherit;
-      display: flex;
-      flex-direction: row;
+      height: 45px;
 
-      height: inherit;
+      min-width: $desktop-max-width;
+      position: relative;
 
-      justify-content: flex-end;
-      margin: 0 auto;
-      max-width: $desktop-max-width;
-      min-width: inherit;
-
-      padding-left: $global-side-padding;
-      padding-right: $global-side-padding;
+      &.dark-theme {
+        background-color: $header-background-color-dark;
+      }
 
       @media only screen and (max-width: 610px) {
         height: $header-bottom-height;
         min-width: 0;
-        padding-left: 12px;
-        padding-right: 12px;
         width: 100%;
       }
 
-      a {
+      .header-bottom-content {
+        align-self: center;
+        box-sizing: inherit;
         color: inherit;
-        margin: 0;
-        padding: 0;
-        width: auto;
+        display: flex;
+        flex-direction: row;
 
-        rq-button {
-          width: auto;
-        }
-      }
+        height: inherit;
 
-      &.center-content {
-        justify-content: center;
-      }
+        justify-content: flex-end;
+        margin: 0 auto;
+        max-width: $desktop-max-width;
+        min-width: inherit;
 
-      .button-icon {
-        display: none;
+        padding-left: $global-side-padding;
+        padding-right: $global-side-padding;
 
         @media only screen and (max-width: 610px) {
-          display: block;
+          height: $header-bottom-height;
+          min-width: 0;
+          padding-left: 12px;
+          padding-right: 12px;
+          width: 100%;
+        }
+
+        a {
+          color: inherit;
+          margin: 0;
+          padding: 0;
+          width: auto;
+
+          rq-button {
+            width: auto;
+          }
+        }
+
+        &.center-content {
+          justify-content: center;
+        }
+
+        .button-icon {
+          display: none;
+
+          @media only screen and (max-width: 610px) {
+            display: block;
+          }
         }
       }
     }
   }
-}
 
-#archives {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  .archives {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .heading {
+      color: inherit;
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 36px;
+      text-transform: capitalize;
+
+      &.dark-theme {
+        color: $clouds;
+      }
+    }
+  }
+
 }

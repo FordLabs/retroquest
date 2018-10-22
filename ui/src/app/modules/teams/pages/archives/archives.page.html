@@ -21,7 +21,10 @@
       'dark-theme': darkThemeIsEnabled
     }"
   >
-    <rq-top-header [teamName]="teamName"></rq-top-header>
+    <rq-top-header
+      [teamName]="teamName"
+      [theme]="theme"
+    ></rq-top-header>
 
     <div
       id="headerBottom"
@@ -44,9 +47,14 @@
 
   </header>
 
-  <div id="archives">
+  <div class="archives">
 
-    <h1>Archived Boards</h1>
+    <h1
+      class="heading"
+      [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+    >Archived Boards</h1>
 
     <rq-board-summary
       *ngFor="let board of boards"

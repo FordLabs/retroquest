@@ -17,9 +17,10 @@
 @import 'color-vars';
 @import 'global-vars';
 
-#headerTop {
+:host {
   align-items: center;
   box-sizing: border-box;
+  display: block;
 
   height: 64px;
   margin: 0 auto;
@@ -62,6 +63,11 @@
       opacity: .1;
       padding-top: 12px;
       width: 3px;
+
+      &.dark-theme {
+        background-color: $count-separator-background-dark;
+        opacity: 1;
+      }
     }
 
     .logo-link {
@@ -80,6 +86,10 @@
       margin-left: 24px;
       overflow: hidden;
       text-overflow: ellipsis;
+
+      &.dark-theme {
+        color: opacity($clouds, .75);
+      }
 
       @media only screen and (max-width: 610px) {
         font-size: 1rem;

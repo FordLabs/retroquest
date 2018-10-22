@@ -15,13 +15,29 @@
   ~ limitations under the License.
   -->
 
-<div id="headerTop">
-  <div class="header-top-content">
-    <a routerLink="/" class="logo-link">
-      <img src="/assets/RetroQuest.png" title="RetroQuest Logo" id="logo"/>
-    </a>
-    <div class="horizontal-separator"></div>
-    <div id="teamName">{{teamName}}</div>
-    <div class="last-saved-text">{{lastSavedText}}</div>
+<div class="header-top-content">
+  <a routerLink="/" class="logo-link">
+    <img
+      [src]="darkThemeIsEnabled ? '/assets/logo-dark.png' : '/assets/RetroQuest.png'"
+      title="RetroQuest Logo"
+      id="logo"
+      [ngClass]="{
+          'dark-theme': darkThemeIsEnabled
+        }"
+    />
+  </a>
+  <div
+    class="horizontal-separator"
+    [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+  ></div>
+  <div
+    id="teamName"
+    [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+  >{{teamName}}
   </div>
+  <div class="last-saved-text">{{lastSavedText}}</div>
 </div>

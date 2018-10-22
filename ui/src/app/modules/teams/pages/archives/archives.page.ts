@@ -21,7 +21,7 @@ import {TeamService} from '../../services/team.service';
 import {Board} from '../../../domain/board';
 import {BoardService} from '../../services/board.service';
 import {WebsocketService} from '../../services/websocket.service';
-import {parseTheme, Themes} from "../../../domain/Theme";
+import {parseTheme, Themes} from '../../../domain/Theme';
 
 @Component({
   selector: 'rq-archives',
@@ -44,7 +44,6 @@ export class ArchivesPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadTheme();
 
     this.globalWindowRef.clearInterval(this.websocketService.intervalId);
     this.websocketService.closeWebsocket();
@@ -69,10 +68,4 @@ export class ArchivesPageComponent implements OnInit {
     });
   }
 
-  private loadTheme(): void {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      this.theme = parseTheme(savedTheme);
-    }
-  }
 }
