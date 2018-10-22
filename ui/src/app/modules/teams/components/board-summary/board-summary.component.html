@@ -20,13 +20,35 @@
   (declineButtonClicked)="deleteWasToggled = false"
   (acceptButtonClicked)="deleteBoard(board)"
   heading="Delete this board?"
+  [theme]="theme"
 ></rq-deletion-overlay>
 
-<div class="content-area">
+<div
+  class="content-area"
+>
   <span>{{board.dateCreated.format("MMM Do YYYY")}}</span>
 </div>
 
-<div class="footer">
-  <a routerLink="/team/{{teamId}}/archives/{{board.id}}" class="view-board-button">View Board</a>
-  <a href="#delete" (click)="$event.preventDefault(); deleteWasToggled = true" class="delete-board-button">Delete Board</a>
+<div
+  class="footer"
+  [ngClass]="{
+    'dark-theme': darkThemeIsEnabled
+  }"
+>
+  <a
+    routerLink="/team/{{teamId}}/archives/{{board.id}}"
+    class="view-board-button"
+    [ngClass]="{
+      'dark-theme': darkThemeIsEnabled
+    }"
+  >View Board</a>
+  <a
+    href="#delete"
+    (click)="$event.preventDefault();
+    deleteWasToggled = true"
+    class="delete-board-button"
+    [ngClass]="{
+      'dark-theme': darkThemeIsEnabled
+    }"
+  >Delete Board</a>
 </div>

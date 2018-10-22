@@ -16,22 +16,48 @@
   -->
 
 <div id="page">
-  <header>
+  <header
+    [ngClass]="{
+      'dark-theme': darkThemeIsEnabled
+    }"
+  >
     <rq-top-header [teamName]="teamName"></rq-top-header>
-    <div id="headerBottom">
+
+    <div
+      id="headerBottom"
+      [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+    >
       <div class="header-bottom-content center-content">
+
         <a routerLink="/team/{{teamId}}">
-          <button class="rq-button-secondary">
-            <span class="button-text">Current Board</span>
-          </button>
+          <rq-button
+            type="secondary"
+            text="current board"
+            [theme]="theme"
+          ></rq-button>
         </a>
+
       </div>
     </div>
+
   </header>
 
   <div id="archives">
+
     <h1>Archived Boards</h1>
-    <rq-board-summary *ngFor="let board of boards" [board]="board" [teamId]="teamId" (boardDeleted)="removeBoardFromBoards($event)"></rq-board-summary>
-    <h2 *ngIf="boards.length === 0">No archived boards were found for your team. Boards will appear here after ending a retro.</h2>
+
+    <rq-board-summary
+      *ngFor="let board of boards"
+      [theme]="theme"
+      [board]="board"
+      [teamId]="teamId"
+      (boardDeleted)="removeBoardFromBoards($event)"></rq-board-summary>
+
+    <h2 *ngIf="boards.length === 0">
+      No archived boards were found for your team. Boards will appear here after ending a retro.
+    </h2>
+
   </div>
 </div>

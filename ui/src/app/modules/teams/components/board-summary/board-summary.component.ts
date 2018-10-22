@@ -15,19 +15,26 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Board} from '../../../domain/board';
 import {BoardService} from '../../services/board.service';
+import {Themes} from "../../../domain/Theme";
 
 @Component({
   selector: 'rq-board-summary',
   templateUrl: './board-summary.component.html',
-  styleUrls: ['./board-summary.component.scss']
+  styleUrls: ['./board-summary.component.scss'],
+  host: {
+    '[class.dark-theme]': 'theme'
+  }
 })
-export class BoardSummaryComponent implements OnInit {
+export class BoardSummaryComponent {
   @Input() board: Board;
   @Input() teamId: string;
+  @Input() theme: Themes = Themes.Light;
+
   @Output() boardDeleted: EventEmitter<number>;
+
   deleteWasToggled: boolean;
 
   constructor(private boardService: BoardService) {
@@ -35,7 +42,8 @@ export class BoardSummaryComponent implements OnInit {
     this.deleteWasToggled = false;
   }
 
-  ngOnInit() {
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
   }
 
   deleteBoard(board: Board) {

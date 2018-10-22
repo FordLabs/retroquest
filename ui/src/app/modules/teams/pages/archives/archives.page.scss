@@ -20,14 +20,23 @@
 header {
   padding: 1.5rem 0;
 
+  &.dark-theme {
+    color: $clouds;
+  }
+
   #headerBottom {
     $header-bottom-height: 32px;
     background: $white;
     box-sizing: border-box;
+    color: inherit;
     height: 45px;
-    min-width: $desktop-max-width;
 
+    min-width: $desktop-max-width;
     position: relative;
+
+    &.dark-theme {
+      background-color: $header-background-color-dark;
+    }
 
     @media only screen and (max-width: 610px) {
       height: $header-bottom-height;
@@ -38,6 +47,7 @@ header {
     .header-bottom-content {
       align-self: center;
       box-sizing: inherit;
+      color: inherit;
       display: flex;
       flex-direction: row;
 
@@ -57,6 +67,17 @@ header {
         padding-left: 12px;
         padding-right: 12px;
         width: 100%;
+      }
+
+      a {
+        color: inherit;
+        margin: 0;
+        padding: 0;
+        width: auto;
+
+        rq-button {
+          width: auto;
+        }
       }
 
       &.center-content {

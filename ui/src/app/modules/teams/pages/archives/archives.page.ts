@@ -15,12 +15,13 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {TeamService} from '../../services/team.service';
 import {Board} from '../../../domain/board';
 import {BoardService} from '../../services/board.service';
 import {WebsocketService} from '../../services/websocket.service';
+import {parseTheme, Themes} from "../../../domain/Theme";
 
 @Component({
   selector: 'rq-archives',
@@ -28,6 +29,9 @@ import {WebsocketService} from '../../services/websocket.service';
   styleUrls: ['./archives.page.scss']
 })
 export class ArchivesPageComponent implements OnInit {
+
+  @Input() theme: Themes = Themes.Light;
+
   teamId: string;
   teamName: string;
   boards: Array<Board> = [];
@@ -40,6 +44,8 @@ export class ArchivesPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadTheme();
+
     this.globalWindowRef.clearInterval(this.websocketService.intervalId);
     this.websocketService.closeWebsocket();
     this.activeRoute.params.subscribe((params) => {
@@ -53,9 +59,20 @@ export class ArchivesPageComponent implements OnInit {
     });
   }
 
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
+  }
+
   removeBoardFromBoards(boardId: number) {
     this.boards = this.boards.filter(board => {
       return board.id !== boardId;
     });
+  }
+
+  private loadTheme(): void {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      this.theme = parseTheme(savedTheme);
+    }
   }
 }

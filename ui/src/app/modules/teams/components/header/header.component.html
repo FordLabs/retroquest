@@ -90,9 +90,12 @@
       </button>
 
       <a routerLink="/team/{{teamId}}/archives">
-        <button class="rq-button-secondary">
-          <span class="button-text">Archives</span>
-        </button>
+        <rq-button
+          type="secondary"
+          text="archives"
+          [theme]="theme"
+        >
+        </rq-button>
       </a>
 
       <a id="downloadCsv"

@@ -22,13 +22,8 @@ import {Component, Input, OnInit} from '@angular/core';
   templateUrl: './top-header.component.html',
   styleUrls: ['./top-header.component.scss']
 })
-export class TopHeaderComponent implements OnInit {
+export class TopHeaderComponent {
   @Input() teamName: string;
   @Input() lastSavedText: string;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
 
 }
