@@ -17,5 +17,26 @@
 
 export enum Themes {
   Light,
-  Dark
+  Dark,
+  None,
+}
+
+export function parseTheme(themeString: string): Themes {
+  if (themeString === 'light') {
+    return Themes.Light;
+  } else if (themeString === 'dark') {
+    return Themes.Dark;
+  }
+
+  return Themes.None;
+}
+
+export function themeToString(theme: Themes): string {
+  if (theme === Themes.Light) {
+    return 'light';
+  } else if (theme === Themes.Dark) {
+    return 'dark';
+  }
+
+  return '';
 }

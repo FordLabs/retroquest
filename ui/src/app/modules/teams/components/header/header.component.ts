@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {EndRetroDialogComponent} from '../../../controls/end-retro-dialog/end-retro-dialog.component';
 import {FeedbackService} from '../../services/feedback.service';
 import {Feedback} from '../../../domain/feedback';
 import {FeedbackDialogComponent} from '../../../controls/feedback-dialog/feedback-dialog.component';
 import {SaveCheckerService} from '../../services/save-checker.service';
-import {Themes} from '../../../domain/Theme';
+import {parseTheme, Themes, themeToString} from '../../../domain/Theme';
 
 @Component({
   selector: 'rq-header',
@@ -31,7 +31,7 @@ import {Themes} from '../../../domain/Theme';
     '[class.dark-theme]': 'darkThemeIsEnabled'
   }
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   @Input() teamName: string;
   @Input() teamId: string;
   @Input() theme = Themes.Light;
@@ -50,6 +50,10 @@ export class HeaderComponent {
     private saveChecker: SaveCheckerService
   ) {
 
+  }
+
+  public ngOnInit(): void {
+    this.loadTheme();
   }
 
   get darkThemeIsEnabled(): boolean {
@@ -94,6 +98,23 @@ export class HeaderComponent {
       this.theme = Themes.Dark;
     }
 
+    this.saveTheme();
     this.themeChanged.emit(this.theme);
+  }
+
+  private saveTheme(): void {
+    const themeString = themeToString(this.theme);
+    if (themeString !== '') {
+      localStorage.setItem('theme', themeString)
+    }
+  }
+
+
+  private loadTheme(): void {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      this.theme = parseTheme(savedTheme);
+      this.themeChanged.emit(this.theme);
+    }
   }
 }
