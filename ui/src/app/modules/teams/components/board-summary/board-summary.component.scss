@@ -22,6 +22,7 @@
   background-color: $white;
   border-radius: 6px;
   box-shadow: 0 1px 2px opacity($black, .25);
+  box-sizing: border-box;
   color: inherit;
   display: flex;
   flex-direction: column;
@@ -32,12 +33,11 @@
   position: relative;
   transition: box-shadow .2s cubic-bezier(.25, .8, .25, 1);
   width: 400px;
-  box-sizing: border-box;
 
   .content-area {
+    box-sizing: border-box;
     padding: 20px;
     text-align: center;
-    box-sizing: border-box;
   }
 
   .footer {
@@ -45,21 +45,21 @@
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
     border-top: 2px solid opacity($wet-asphalt, .06);
-    display: flex;
-    justify-content: flex-start;
     box-sizing: border-box;
-
+    display: flex;
     height: 40px;
+
+    justify-content: flex-start;
 
     a {
       align-items: center;
+      box-sizing: border-box;
       display: flex;
+      flex: 1;
+      height: 100%;
       justify-content: space-around;
       padding: 0;
       transition: .5s;
-      flex: 1;
-      height: 100%;
-      box-sizing: border-box;
 
       &.view-board-button {
         border-bottom-left-radius: inherit;
