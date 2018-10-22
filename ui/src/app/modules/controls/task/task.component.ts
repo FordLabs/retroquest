@@ -52,7 +52,7 @@ export class TaskComponent implements AfterViewChecked {
 
   @ViewChild('content_value') editableTextArea: ElementRef;
 
-  starCountMax = 99;A
+  starCountMax = 99;
   maxMessageLength = 255;
   taskEditModeEnabled = false;
   _textValueLength = 0;

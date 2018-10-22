@@ -105,7 +105,7 @@ export class HeaderComponent implements OnInit {
   private saveTheme(): void {
     const themeString = themeToString(this.theme);
     if (themeString !== '') {
-      localStorage.setItem('theme', themeString)
+      localStorage.setItem('theme', themeString);
     }
   }
 
