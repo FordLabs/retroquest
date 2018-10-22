@@ -27,45 +27,51 @@
   flex-direction: column;
   font-size: 1rem;
   font-weight: bold;
-  height: 95px;
+  height: auto;
   margin: 10px 0;
   position: relative;
   transition: box-shadow .2s cubic-bezier(.25, .8, .25, 1);
-  width: 600px;
-}
+  width: 400px;
+  box-sizing: border-box;
 
-.content-area {
-  padding: 20px;
-  text-align: center;
-}
+  .content-area {
+    padding: 20px;
+    text-align: center;
+    box-sizing: border-box;
+  }
 
-.footer {
-  background-color: inherit;
-  border-bottom-left-radius: inherit;
-  border-bottom-right-radius: inherit;
-  border-top: 2px solid opacity($wet-asphalt, .06);
-  display: flex;
-  height: 40px;
-  justify-content: flex-start;
-
-  a {
-    align-items: center;
+  .footer {
+    background-color: inherit;
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+    border-top: 2px solid opacity($wet-asphalt, .06);
     display: flex;
-    justify-content: space-around;
-    padding: 0;
-    transition: .5s;
-    width: 50%;
+    justify-content: flex-start;
+    box-sizing: border-box;
 
-    &.view {
-      border-bottom-left-radius: inherit;
-      border-right: 1px solid opacity($wet-asphalt, .06);
-      color: inherit;
-    }
+    height: 40px;
 
-    &.delete {
-      background-color: $end-retro-button-red;
-      border-bottom-right-radius: inherit;
-      color: $white;
+    a {
+      align-items: center;
+      display: flex;
+      justify-content: space-around;
+      padding: 0;
+      transition: .5s;
+      flex: 1;
+      height: 100%;
+      box-sizing: border-box;
+
+      &.view-board-button {
+        border-bottom-left-radius: inherit;
+        border-right: 2px solid opacity($wet-asphalt, .06);
+        color: inherit;
+      }
+
+      &.delete-board-button {
+        border-bottom-right-radius: inherit;
+        color: $end-retro-button-red;
+      }
     }
   }
+
 }
