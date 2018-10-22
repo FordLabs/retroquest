@@ -63,7 +63,7 @@ export class ActionItemTaskComponent implements AfterViewChecked {
   _textValueLength = 0;
   deleteWasToggled = false;
 
-  private get darkThemeIsEnabled(): boolean {
+  get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;
   }
 

@@ -52,13 +52,13 @@ export class TaskComponent implements AfterViewChecked {
 
   @ViewChild('content_value') editableTextArea: ElementRef;
 
-  starCountMax = 99;
+  starCountMax = 99;A
   maxMessageLength = 255;
   taskEditModeEnabled = false;
   _textValueLength = 0;
   deleteWasToggled = false;
 
-  private get darkThemeIsEnabled(): boolean {
+  get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;
   }
 
