@@ -60,14 +60,26 @@
     >
 
       <rq-button
-        class="change-team-button"
+        class="change-theme-button"
         (click)="toggleThemeColor()"
         type="secondary"
-        text="change theme"
+        [text]="!darkThemeIsEnabled ? 'dark mode' : 'light mode'"
         [theme]="theme"
       >
-
       </rq-button>
+
+      <div
+        class="change-theme-icon-container"
+        (click)="toggleThemeColor()"
+      >
+        <i
+          class="fas change-theme-icon"
+          [ngClass]="{
+            'fa-moon': !darkThemeIsEnabled,
+            'fa-sun': darkThemeIsEnabled
+          }"
+        ></i>
+      </div>
 
       <rq-button
         class="actions-radiator-button"

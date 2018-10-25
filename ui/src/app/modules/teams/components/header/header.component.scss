@@ -192,10 +192,25 @@
         }
       }
 
-      .change-team-button {
+      .change-theme-button {
 
         @media only screen and (max-width: 610px) {
           display: none;
+        }
+
+      }
+
+      .change-theme-icon-container {
+        box-sizing: border-box;
+        display: none;
+        height: 100%;
+        padding-right: 18px;
+
+        @media only screen and (max-width: 610px) {
+          align-items: center;
+          display: flex;
+          justify-content: center;
+          text-align: center;
         }
 
       }
@@ -220,6 +235,7 @@
       }
 
       #giveFeedback {
+        box-sizing: border-box;
         color: inherit;
         outline: none;
 
