@@ -26,7 +26,7 @@ import java.util.List;
 public interface ThoughtRepository extends JpaRepository<Thought, Long> {
     List<Thought> findAllByTeamId(String teamId);
     List<Thought> findAllByTeamIdAndBoardIdIsNull(String teamId);
-    List<Thought> findAllByTeamIdOrderByTopic(String teamId);
+    List<Thought> findAllByTeamIdAndBoardIdIsNullOrderByTopic(String teamId);
 
     void deleteAllByTeamId(String teamId);
     void deleteThoughtByTeamIdAndId(String teamId, Long id);
