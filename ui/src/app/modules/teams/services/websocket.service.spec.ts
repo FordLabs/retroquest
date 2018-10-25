@@ -60,9 +60,12 @@ describe('WebsocketService', () => {
 
   describe('closeWebsocket', () => {
     it('should close the current websocket', () => {
+      service.intervalId = 1;
+
       service.closeWebsocket();
       expect(service.stompClient).toBeNull();
       expect(service.websocket).toBeNull();
+      expect(service.intervalId).toBeNull();
     });
   });
 

@@ -15,11 +15,12 @@
  * limitations under the License.
  */
 
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, ViewChild} from '@angular/core';
 import {Column} from '../../../domain/column';
 import {Thought} from '../../../domain/thought';
 import {ThoughtService} from '../../services/thought.service';
 import {ColumnService} from '../../services/column.service';
+import {Themes} from '../../../domain/Theme';
 
 @Component({
   selector: 'rq-thoughts-header',
@@ -28,24 +29,26 @@ import {ColumnService} from '../../services/column.service';
 })
 export class ThoughtsHeaderComponent {
 
-  constructor (private thoughtService: ThoughtService, private columnService: ColumnService) {
+  constructor(private thoughtService: ThoughtService, private columnService: ColumnService) {
   }
 
   @Input() column: Column;
   @Input() thoughtCount: number;
+  @Input() theme: Themes = Themes.Light;
+  @Input() hideNewThought = false;
 
   @ViewChild('titleInput') titleInput;
 
-  public editTitle (newTitle: string) {
+  public editTitle(newTitle: string) {
     this.column.title = newTitle;
     this.columnService.updateColumn(this.column);
   }
 
-  public sortByHearts (sortState: boolean): void {
+  public sortByHearts(sortState: boolean): void {
     this.column.sorted = sortState;
   }
 
-  public addThought (newMessage: string): void {
+  public addThought(newMessage: string): void {
     if (newMessage && newMessage.length) {
       const thought: Thought = {
         id: null,

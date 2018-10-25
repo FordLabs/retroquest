@@ -35,6 +35,12 @@
   transition: box-shadow .2s cubic-bezier(.25, .8, .25, 1);
   width: 100px;
 
+  &.dark-theme {
+    background-color: $task-background-dark;
+    box-shadow: 0 1px 2px opacity($black, .7);
+    color: $clouds;
+  }
+
   &.dialog-overlay-border {
     rq-deletion-overlay {
       $border-width: 8px;
@@ -43,8 +49,6 @@
     }
   }
 
-
-
   &.delete-mode {
     box-shadow: none;
   }
@@ -52,6 +56,10 @@
   &.push-order-to-bottom {
     box-shadow: none;
     order: 99;
+
+    &.dark-theme {
+      background-color: opacity($task-background-dark, .3);
+    }
   }
 
   .remove {
@@ -59,6 +67,7 @@
   }
 
   &.happy {
+
     &:hover {
       box-shadow: 0 0 0 $host-border-width $happy-green;
     }
@@ -96,6 +105,7 @@
     &.sad,
     &.confused,
     &.happy {
+
       &:hover {
         box-shadow: 0 1px 2px opacity($black, .25);
       }
@@ -141,45 +151,35 @@
       right: 18px;
     }
 
-    .assigned-to-section {
-      $label-color: #a9a9a9;
-      box-sizing: border-box;
-      margin-bottom: 12px;
-      padding: 0 12px;
-
-      width: 100%;
-
-      .label {
-        color: $label-color;
-        font-size: .5rem;
-      }
-
-      .value {
-        border: 0;
-        border-bottom: 2px solid $action-yellow;
-        display: inline-block;
-        font-size: .65rem;
-        height: 14px;
-        margin-top: 3px;
-        min-width: 64px;
-        outline: none;
-      }
-    }
-
     .content-message {
+      background-color: inherit;
       box-sizing: border-box;
+      color: inherit;
       display: block;
-      height: auto;
-      min-height: 40px;
+      height: 20px;
+      min-height: 20px;
       padding: 18px;
+      white-space: pre-wrap;
       width: 100%;
 
-      &.editable-div {
-        border-radius: inherit;
+      &.edit-input {
+        border: 0;
+        border-radius: 6px 6px 0 0;
         box-shadow: none;
-        cursor: text;
+        cursor: default;
         display: inline-block;
+        font-family: inherit;
+        font-size: inherit;
+        font-weight: inherit;
         outline: none;
+        overflow: auto;
+        resize: none;
+        word-break: break-word;
+
+        &[readonly] {
+          caret-color: transparent;
+          cursor: pointer;
+        }
       }
     }
   }
@@ -193,6 +193,10 @@
     height: 40px;
     justify-content: flex-start;
     width: 100%;
+
+    &.dark-theme {
+      border-top-color: $task-footer-separator-dark;
+    }
 
     .container,
     .complete-container {
@@ -208,6 +212,11 @@
       border-right: 2px solid opacity($wet-asphalt, .06);
       cursor: pointer;
       user-select: none;
+
+      &.dark-theme {
+        border-color: $task-footer-separator-dark;
+        color: $clouds;
+      }
     }
 
     .complete-container {
@@ -217,9 +226,9 @@
 
       .checkbox {
         $size: 11px;
-
-        background-color: opacity($wet-asphalt, .14);
-        border: 2px solid $wet-asphalt;
+        background-color: transparent;
+        border: 2px solid transparent;
+        border-color: inherit;
         border-radius: 4px;
         height: $size;
         width: $size;
@@ -266,6 +275,10 @@
         position: relative;
         width: 25px;
 
+        &.dark-theme {
+          background-color: opacity($black, .7);
+        }
+
         .star-icon {
           bottom: 0;
           box-sizing: border-box;
@@ -277,6 +290,10 @@
           right: 0;
 
           top: -10px;
+
+          &.dark-theme {
+            color: $action-yellow;
+          }
         }
       }
     }

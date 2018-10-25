@@ -59,7 +59,7 @@ public class TeamService {
     }
 
     public CsvFile buildCsvFileFromTeam(String team) {
-        List<Thought> thoughts = thoughtRepository.findAllByTeamIdOrderByTopic(team);
+        List<Thought> thoughts = thoughtRepository.findAllByTeamIdAndBoardIdIsNullOrderByTopic(team);
         List<ActionItem> actionItems = actionItemRepository.findAllByTeamId(team);
         return new CsvFile(team, thoughts, actionItems);
     }

@@ -17,6 +17,7 @@
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {emptyFeedback, Feedback} from '../../domain/feedback';
+import {Themes} from '../../domain/Theme';
 
 const ESC_KEY = 27;
 
@@ -32,6 +33,7 @@ const ESC_KEY = 27;
 export class FeedbackDialogComponent {
 
   @Input() visible = false;
+  @Input() theme: Themes = Themes.Light;
 
   @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() submitted: EventEmitter<Feedback> = new EventEmitter<Feedback>();
@@ -39,6 +41,10 @@ export class FeedbackDialogComponent {
   feedback: Feedback = emptyFeedback();
   starStates: Array<boolean> = [false, false, false, false, false];
   starsClicked = false;
+
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
+  }
 
   public hide(): void {
     this.visible = false;

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import {Component, OnInit, ElementRef} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 
 import {Column} from '../../../domain/column';
@@ -30,9 +30,10 @@ import {ColumnService} from '../../services/column.service';
 import {WebsocketResponse} from '../../../domain/websocket-response';
 
 import * as moment from 'moment';
-import {ViewChild} from '@angular/core';
 import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-view/actions-radiator-view.component';
 import {SaveCheckerService} from '../../services/save-checker.service';
+import {Themes} from '../../../domain/Theme';
+import {BoardService} from '../../services/board.service';
 
 @Component({
   selector: 'rq-team',
@@ -65,13 +66,16 @@ export class TeamPageComponent implements OnInit {
     }
   ];
 
+  @ViewChild('radiatorView') radiatorView: ActionsRadiatorViewComponent;
+
   constructor(private activeRoute: ActivatedRoute,
               private teamsService: TeamService,
               private thoughtService: ThoughtService,
               private columnService: ColumnService,
               private actionItemService: ActionItemService,
               private websocketService: WebsocketService,
-              private saveCheckerService: SaveCheckerService) {
+              private saveCheckerService: SaveCheckerService,
+              private boardService: BoardService) {
   }
 
   teamId: string;
@@ -85,7 +89,24 @@ export class TeamPageComponent implements OnInit {
   actionItemsAreSorted = false;
   currentView = 'normalView';
 
-  @ViewChild('radiatorView') radiatorView: ActionsRadiatorViewComponent;
+  _theme: Themes = Themes.Light;
+
+  get theme(): Themes {
+    return this._theme;
+  }
+
+  set theme(theme: Themes) {
+    this._theme = theme;
+    if (this._theme === Themes.Dark) {
+      document.body.style.backgroundColor = '#2c3e50';
+    } else if (this._theme === Themes.Light) {
+      document.body.style.backgroundColor = '#ecf0f1';
+    }
+  }
+
+  public onThemeChanged(theme: Themes) {
+    this.theme = theme;
+  }
 
   ngOnInit(): void {
 
@@ -101,7 +122,7 @@ export class TeamPageComponent implements OnInit {
         this.websocketInit();
       }
 
-      this.globalWindowRef.setInterval(() => {
+      this.websocketService.intervalId = this.globalWindowRef.setInterval(() => {
         if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
           this.websocketService.closeWebsocket();
           this.websocketInit();
@@ -256,7 +277,9 @@ export class TeamPageComponent implements OnInit {
   }
 
   public onEndRetro(): void {
-    this.thoughtService.deleteAllThoughts();
+    this.boardService.createBoard(this.teamId, this.thoughtsArray).subscribe(() => {
+      this.thoughtsArray = [];
+    });
   }
 
   public isSelectedIndex(index: number): boolean {

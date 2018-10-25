@@ -24,9 +24,18 @@
 <div class="heading">
   <div>{{heading}}</div>
 </div>
-<div class="button-container">
+
+<div
+  class="button-container"
+  [ngClass]="{
+    'dark-theme': darkThemeIsEnabled
+  }"
+>
   <rq-button
     class="delete-decline-button"
+    [ngClass]="{
+      'dark-mode': darkThemeIsEnabled
+    }"
     type="secondary"
     text="no"
     (click)="emitDeclineButtonClicked()"

@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {ThoughtService} from '../../teams/services/thought.service';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Themes} from '../../domain/Theme';
 
 const ESC_KEY = 27;
 
@@ -31,12 +31,14 @@ const ESC_KEY = 27;
 })
 export class EndRetroDialogComponent {
 
-  constructor() {
-  }
-
   @Input() visible = true;
+  @Input() theme = Themes.Light;
 
   @Output() submitted: EventEmitter<void> = new EventEmitter<void>();
+
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
+  }
 
   public hide(): void {
     this.visible = false;

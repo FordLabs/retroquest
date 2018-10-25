@@ -15,6 +15,16 @@
   ~ limitations under the License.
   -->
 
-<div class="left-count-separator"></div>
+<div
+  class="separator left-count-separator"
+  [ngClass]="{
+    'dark-theme': darkThemeIsEnabled
+  }"
+></div>
 <div class="count-value">{{count}}</div>
-<div class="right-count-separator"></div>
+<div
+  class="separator right-count-separator"
+  [ngClass]="{
+    'dark-theme': darkThemeIsEnabled
+  }"
+></div>

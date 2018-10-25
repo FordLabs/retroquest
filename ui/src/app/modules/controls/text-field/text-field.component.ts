@@ -16,6 +16,7 @@
  */
 
 import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Themes} from '../../domain/Theme';
 
 @Component({
   selector: 'rq-text-field',
@@ -27,16 +28,19 @@ export class TextFieldComponent {
 
   @Input() placeholder = '';
   @Input() type = '';
+  @Input() theme = Themes.Light;
 
   @Output() newMessageAdded: EventEmitter<string> = new EventEmitter<string>();
 
   text = '';
 
-  constructor() {
-  }
-
   public emitNewTaskMessage(): void {
     this.newMessageAdded.emit(this.text);
     this.text = '';
   }
+
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
+  }
+
 }

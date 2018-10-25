@@ -15,13 +15,10 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {emptyThought, Thought} from '../../domain/thought';
 import {emojify} from '../../utils/EmojiGenerator';
-
-
-const BACKSPACE_KEY = 8;
-const DELETE_KEY = 46;
+import {Themes} from '../../domain/Theme';
 
 @Component({
   selector: 'rq-task',
@@ -35,14 +32,17 @@ const DELETE_KEY = 46;
     '[class.sad]': 'type === \'unhappy\'',
     '[class.action]': 'type === \'action\'',
     '[class.delete-mode]': 'deleteWasToggled',
-    '[class.dialog-overlay-border]': 'enableOverlayBorder'
+    '[class.dialog-overlay-border]': 'enableOverlayBorder',
+    '[class.dark-theme]': 'darkThemeIsEnabled'
   }
 })
-export class TaskComponent {
+export class TaskComponent implements AfterViewChecked {
 
   @Input() type = '';
   @Input() task = emptyThought();
   @Input() enableOverlayBorder = false;
+  @Input() readOnly = false;
+  @Input() theme = Themes.Light;
 
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
   @Output() deleted: EventEmitter<Thought> = new EventEmitter<Thought>();
@@ -58,9 +58,13 @@ export class TaskComponent {
   _textValueLength = 0;
   deleteWasToggled = false;
 
-  constructor() {
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
   }
 
+  ngAfterViewChecked() {
+    this.initializeTextAreaHeight();
+  }
 
   public onDeleteConfirmationBlur(): void {
     this.toggleDeleteConfirmation();
@@ -73,6 +77,11 @@ export class TaskComponent {
       this.focusInput();
     }
     this.taskEditModeEnabled = !this.taskEditModeEnabled;
+  }
+
+  public editModeOff(): void {
+    this.messageChanged.emit(this.task.message);
+    this.taskEditModeEnabled = false;
   }
 
   public addStar(): void {
@@ -99,16 +108,15 @@ export class TaskComponent {
     this.completed.emit(this.task.discussed);
   }
 
+  public initializeTextAreaHeight(): void {
+    this.editableTextArea.nativeElement.style.height = this.editableTextArea.nativeElement.scrollHeight + 'px';
+  }
+
   private focusInput(): void {
     setTimeout(() => {
       this.editableTextArea.nativeElement.focus();
-      this.selectAllText();
-      this._textValueLength = this.task.message.length;
+      this.editableTextArea.nativeElement.select();
     }, 0);
-  }
-
-  private selectAllText(): void {
-    document.execCommand('selectAll', false, null);
   }
 
   public forceBlur() {
@@ -117,24 +125,13 @@ export class TaskComponent {
     }, 0);
   }
 
-  public onKeyDown(keyEvent: KeyboardEvent, innerText: string) {
-    if (!this.keyEventIsAnAction(keyEvent)) {
-      if (innerText.length + keyEvent.key.length > this.maxMessageLength) {
-        keyEvent.preventDefault();
-      }
-    }
+  public setMessageLength(textContent: string): void {
+    this._textValueLength = textContent.length;
   }
 
-  public onKeyUp(textContent: string, innerText: string): void {
-    this._textValueLength = Math.min(textContent.length, innerText.length);
-  }
-
-  public updateTaskMessage(innerText: string): void {
-    this.task.message = innerText;
-  }
-
-  private keyEventIsAnAction(keyEvent: KeyboardEvent): boolean {
-    return keyEvent.keyCode === BACKSPACE_KEY || keyEvent.keyCode === DELETE_KEY;
+  public updateTaskMessage(event, value: string): void {
+    event.preventDefault();
+    this.task.message = value;
   }
 
   get textValueLength(): number {
@@ -145,8 +142,16 @@ export class TaskComponent {
     this.deleteWasToggled = !this.deleteWasToggled;
   }
 
-  public emojifyText(text: string): string {
-    return emojify(text);
+  get taskMessage(): string {
+    if (this.taskEditModeEnabled) {
+      return this.task.message;
+    }
+    return emojify(this.task.message);
   }
+
+  set taskMessage(text: string) {
+    this.task.message = text;
+  }
+
 }
 

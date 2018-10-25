@@ -49,6 +49,15 @@
     text-transform: initial;
     width: inherit;
 
+    &.dark-theme {
+      background-color: $text-field-background-color;
+      color: $clouds;
+
+      &::placeholder {
+        color: opacity($clouds, .4);
+      }
+    }
+
     &::placeholder {
       color: opacity($wet-asphalt, .4);
     }

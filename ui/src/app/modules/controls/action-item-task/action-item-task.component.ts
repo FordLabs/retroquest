@@ -15,13 +15,21 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {ActionItem, emptyActionItem} from '../../domain/action-item';
 import * as moment from 'moment';
 import {emojify} from '../../utils/EmojiGenerator';
-
-const BACKSPACE_KEY = 8;
-const DELETE_KEY = 46;
+import {Themes} from '../../domain/Theme';
 
 @Component({
   selector: 'rq-action-item-task',
@@ -30,14 +38,16 @@ const DELETE_KEY = 46;
   host: {
     '[class.push-order-to-bottom]': 'actionItem.completed',
     '[class.edit-mode]': 'taskEditModeEnabled',
-    '[class.dialog-overlay-border]': 'enableOverlayBorder'
+    '[class.dialog-overlay-border]': 'enableOverlayBorder',
+    '[class.dark-theme]': 'darkThemeIsEnabled'
   }
 })
-export class ActionItemTaskComponent {
+export class ActionItemTaskComponent implements AfterViewChecked {
 
   @Input() actionItem = emptyActionItem();
   @Input() readOnly = false;
   @Input() enableOverlayBorder = false;
+  @Input() theme = Themes.Light;
 
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
   @Output() deleted: EventEmitter<ActionItem> = new EventEmitter<ActionItem>();
@@ -53,7 +63,12 @@ export class ActionItemTaskComponent {
   _textValueLength = 0;
   deleteWasToggled = false;
 
-  constructor() {
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
+  }
+
+  ngAfterViewChecked() {
+    this.initializeTextAreaHeight();
   }
 
   public onDeleteConfirmationBlur(): void {
@@ -67,6 +82,11 @@ export class ActionItemTaskComponent {
       this.focusInput();
     }
     this.taskEditModeEnabled = !this.taskEditModeEnabled;
+  }
+
+  public editModeOff(): void {
+    this.messageChanged.emit(this.actionItem.task);
+    this.taskEditModeEnabled = false;
   }
 
   public emitDeleteItem(): void {
@@ -94,11 +114,14 @@ export class ActionItemTaskComponent {
     return moment(this.actionItem.dateCreated).format('MMM Do');
   }
 
+  public initializeTextAreaHeight(): void {
+    this.editableTextArea.nativeElement.style.height = this.editableTextArea.nativeElement.scrollHeight + 'px';
+  }
+
   private focusInput(): void {
     setTimeout(() => {
       this.editableTextArea.nativeElement.focus();
-      this.selectAllText();
-      this._textValueLength = this.actionItem.task.length;
+      this.editableTextArea.nativeElement.select();
     }, 0);
   }
 
@@ -124,28 +147,13 @@ export class ActionItemTaskComponent {
     this.assigneeUpdated.emit(actionItem.assignee);
   }
 
-  private selectAllText(): void {
-    document.execCommand('selectAll', false, null);
+  public setMessageLength(textContent: string): void {
+    this._textValueLength = textContent.length;
   }
 
-  public onKeyDown(keyEvent: KeyboardEvent, innerText: string) {
-    if (!this.keyEventIsAnAction(keyEvent)) {
-      if (innerText.length + keyEvent.key.length > this.maxMessageLength) {
-        keyEvent.preventDefault();
-      }
-    }
-  }
-
-  public onKeyUp(textContent: string, innerText: string): void {
-    this._textValueLength = Math.min(textContent.length, innerText.length);
-  }
-
-  public updateActionItemMessage(innerText: string): void {
+  public updateActionItemMessage(event, innerText: string): void {
+    event.preventDefault();
     this.actionItem.task = innerText;
-  }
-
-  private keyEventIsAnAction(keyEvent: KeyboardEvent): boolean {
-    return keyEvent.keyCode === BACKSPACE_KEY || keyEvent.keyCode === DELETE_KEY;
   }
 
   get textValueLength(): number {
@@ -156,8 +164,15 @@ export class ActionItemTaskComponent {
     this.deleteWasToggled = !this.deleteWasToggled;
   }
 
-  public emojifyText(text: string): string {
-    return emojify(text);
+  get actionItemMessage(): string {
+    if (this.taskEditModeEnabled) {
+      return this.actionItem.task;
+    }
+    return emojify(this.actionItem.task);
+  }
+
+  set actionItemMessage(text: string) {
+    this.actionItem.task = text;
   }
 }
 

@@ -46,6 +46,7 @@
   [ngClass]="{
     'edit-button-enabled': !readOnlyEnabled || type === 'action'
     }"
+  *ngIf="!readOnly"
 >
   <i class="fas fa-pencil-alt"
      (click)="toggleEdit()"
@@ -56,6 +57,7 @@
   [characterCount]="readOnlyEnabled ? 0 : titleCopy.length"
   [maxCharacterCount]="maxTextLength"
   [charsAreRunningOutThreshold]="5"
+  [theme]="theme"
 >
 
 </rq-floating-character-countdown>

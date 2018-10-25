@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 @import 'color-vars';
 
 :host {
@@ -26,6 +25,10 @@
   position: absolute;
   right: 0;
   width: auto;
+
+  &.dark-theme {
+    color: $clouds;
+  }
 
   &.display-warning-text {
     color: $unhappy-red;

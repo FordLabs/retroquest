@@ -15,33 +15,49 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {EndRetroDialogComponent} from '../../../controls/end-retro-dialog/end-retro-dialog.component';
 import {FeedbackService} from '../../services/feedback.service';
 import {Feedback} from '../../../domain/feedback';
 import {FeedbackDialogComponent} from '../../../controls/feedback-dialog/feedback-dialog.component';
-import {ActionItem} from '../../../domain/action-item';
 import {SaveCheckerService} from '../../services/save-checker.service';
+import {parseTheme, Themes, themeToString} from '../../../domain/Theme';
 
 @Component({
   selector: 'rq-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
+  host: {
+    '[class.dark-theme]': 'darkThemeIsEnabled'
+  }
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   @Input() teamName: string;
   @Input() teamId: string;
+  @Input() theme = Themes.Light;
 
   @Output() endRetro: EventEmitter<void> = new EventEmitter<void>();
   @Output() actionsRadiatorViewClicked: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() themeChanged: EventEmitter<Themes> = new EventEmitter<Themes>();
 
   @ViewChild(FeedbackDialogComponent) feedbackDialog: FeedbackDialogComponent;
   @ViewChild(EndRetroDialogComponent) endRetroDialog: EndRetroDialogComponent;
 
   actionsRadiatorViewEnabled = false;
 
-  constructor(private feedbackService: FeedbackService, private saveChecker: SaveCheckerService) {
+  constructor(
+    private feedbackService: FeedbackService,
+    private saveChecker: SaveCheckerService
+  ) {
 
+  }
+
+  public ngOnInit(): void {
+    this.loadTheme();
+  }
+
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
   }
 
   public getCsvUrl(): string {
@@ -71,6 +87,34 @@ export class HeaderComponent {
       return 'All changes saved';
     }
 
-    return 'Last change saved ' + this.saveChecker.lastSavedDateTime;
+    return 'Last change saved at ' + this.saveChecker.lastSavedDateTime;
+  }
+
+  public toggleThemeColor(): void {
+
+    if (this.theme === Themes.Dark) {
+      this.theme = Themes.Light;
+    } else {
+      this.theme = Themes.Dark;
+    }
+
+    this.saveTheme();
+    this.themeChanged.emit(this.theme);
+  }
+
+  private saveTheme(): void {
+    const themeString = themeToString(this.theme);
+    if (themeString !== '') {
+      localStorage.setItem('theme', themeString);
+    }
+  }
+
+
+  private loadTheme(): void {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      this.theme = parseTheme(savedTheme);
+      this.themeChanged.emit(this.theme);
+    }
   }
 }

@@ -18,7 +18,7 @@
 import {TeamPageComponent} from './team.page';
 import {Observable, Subject} from 'rxjs/index';
 import {Column} from '../../../domain/column';
-import {emptyThought, Thought} from '../../../domain/thought';
+import {emptyThought, emptyThoughtWithColumn, Thought} from '../../../domain/thought';
 import {TeamService} from '../../services/team.service';
 import {ThoughtService} from '../../services/thought.service';
 import {ColumnService} from '../../services/column.service';
@@ -27,6 +27,7 @@ import {WebsocketService} from '../../services/websocket.service';
 import {ActionItem, emptyActionItem} from '../../../domain/action-item';
 import * as moment from 'moment';
 import {SaveCheckerService} from '../../services/save-checker.service';
+import {BoardService} from '../../services/board.service';
 
 describe('TeamPageComponent', () => {
 
@@ -37,11 +38,14 @@ describe('TeamPageComponent', () => {
   let mockColumnService: ColumnService;
   let mockWebsocketService: WebsocketService;
   let mockSaveCheckerService: SaveCheckerService;
+  let mockBoardService: BoardService;
 
   let heartbeatTopic: Subject<any>;
   let thoughtsTopic: Subject<any>;
   let actionItemTopic: Subject<any>;
   let columnTitleTopic: Subject<any>;
+
+  let createBoardSubject: Subject<any>;
 
   let component;
 
@@ -65,6 +69,8 @@ describe('TeamPageComponent', () => {
     actionItemTopic = new Subject<any>();
     columnTitleTopic = new Subject<any>();
 
+    createBoardSubject = new Subject();
+
     mockActiveRoute = {params: new Subject()};
     mockTeamService = jasmine.createSpyObj({fetchTeamName: new Observable()});
     mockThoughtService = jasmine.createSpyObj({fetchThoughts: new Observable()});
@@ -87,9 +93,14 @@ describe('TeamPageComponent', () => {
 
       sendHeartbeat: null,
     });
+    mockWebsocketService.intervalId = null;
 
     mockSaveCheckerService = jasmine.createSpyObj({
       updateTimestamp: null
+    });
+
+    mockBoardService = jasmine.createSpyObj({
+      createBoard: createBoardSubject
     });
 
     component = new TeamPageComponent(
@@ -99,7 +110,8 @@ describe('TeamPageComponent', () => {
       mockColumnService,
       mockActionItemService,
       mockWebsocketService,
-      mockSaveCheckerService
+      mockSaveCheckerService,
+      mockBoardService
     );
 
     component.columns = [];
@@ -242,6 +254,13 @@ describe('TeamPageComponent', () => {
       mockActiveRoute.params.next({teamId: 1});
 
       expect(mockWebsocketService.openWebsocket).toHaveBeenCalled();
+    });
+
+    it('should set websocket.intervalId to return value of setInterval', function () {
+      component.ngOnInit();
+      mockActiveRoute.params.next({teamId: 1});
+
+      expect(mockWebsocketService.intervalId).not.toBeNull();
     });
 
     it('should send a heartbeat with a open connected', () => {
@@ -434,12 +453,25 @@ describe('TeamPageComponent', () => {
   });
 
   describe('onEndRetro', () => {
-    it('should delete all thoughts', () => {
+    it('should create a board', function () {
       component.thoughtService = jasmine.createSpyObj({
         deleteAllThoughts: null
       });
+      component.teamId = 'teamId';
+      component.thoughtsArray = [emptyThoughtWithColumn()];
       component.onEndRetro();
-      expect(component.thoughtService.deleteAllThoughts).toHaveBeenCalled();
+      expect(component.boardService.createBoard).toHaveBeenCalledWith('teamId', [emptyThoughtWithColumn()]);
+    });
+
+    it('should clear the thoughtsArray', () => {
+      component.thoughtService = jasmine.createSpyObj({
+        deleteAllThoughts: null
+      });
+      component.teamId = 'teamId';
+      component.thoughtsArray = [emptyThoughtWithColumn()];
+      component.onEndRetro();
+      createBoardSubject.next({});
+      expect(component.thoughtsArray.length).toBe(0);
     });
   });
 

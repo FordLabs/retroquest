@@ -19,13 +19,18 @@
   <rq-column-header
     [title]="'Action Items'"
     [type]="'action'"
+    [theme]="theme"
     (sortedChanged)="onSortChanged($event)"
   ></rq-column-header>
   <rq-text-field
+    [theme]="theme"
     [type]="'action'"
     [placeholder]="'Enter an Action Item'"
     (newMessageAdded)="addActionItem($event)"
   ></rq-text-field>
 
-  <rq-count-seperator [count]="thoughtCount"></rq-count-seperator>
+  <rq-count-seperator
+    [count]="thoughtCount"
+    [theme]="theme"
+  ></rq-count-seperator>
 </div>

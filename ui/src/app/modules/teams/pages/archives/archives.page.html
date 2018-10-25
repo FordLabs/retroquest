@@ -1,0 +1,71 @@
+<!--
+  ~ Copyright (c) 2018 Ford Motor Company
+  ~ All rights reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<div id="page">
+  <header
+    [ngClass]="{
+      'dark-theme': darkThemeIsEnabled
+    }"
+  >
+    <rq-top-header
+      [teamName]="teamName"
+      [theme]="theme"
+    ></rq-top-header>
+
+    <div
+      id="headerBottom"
+      [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+    >
+      <div class="header-bottom-content center-content">
+
+        <a routerLink="/team/{{teamId}}">
+          <rq-button
+            type="secondary"
+            text="current board"
+            [theme]="theme"
+          ></rq-button>
+        </a>
+
+      </div>
+    </div>
+
+  </header>
+
+  <div class="archives">
+
+    <h1
+      class="heading"
+      [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+    >Archived Boards</h1>
+
+    <rq-board-summary
+      *ngFor="let board of boards"
+      [theme]="theme"
+      [board]="board"
+      [teamId]="teamId"
+      (boardDeleted)="removeBoardFromBoards($event)"></rq-board-summary>
+
+    <h2 *ngIf="boards.length === 0">
+      No archived boards were found for your team. Boards will appear here after ending a retro.
+    </h2>
+
+  </div>
+</div>

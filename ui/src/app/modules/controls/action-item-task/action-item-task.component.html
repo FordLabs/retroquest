@@ -21,64 +21,74 @@
   (acceptButtonClicked)="emitDeleteItem()"
   (blur)="onDeleteConfirmationBlur()"
   heading="Delete this Action Item?"
+  [theme]="theme"
 ></rq-deletion-overlay>
 
 <div
   class="content-area"
   [ngClass]="{
-    'disable': actionItem.completed || taskEditModeEnabled,
-    'opacify': actionItem.completed || taskEditModeEnabled
+    'disable': actionItem.completed,
+    'opacify': actionItem.completed
   }"
 >
 
-  <div class="content-container">
-
-  <span
-    class="content-message"
+  <div
+    class="content-container"
     (click)="emitTaskContentClicked()"
-    *ngIf="!taskEditModeEnabled; else content_textarea"
-  >{{emojifyText(actionItem.task)}}</span>
+  >
+    <textarea
+      #content_value
+      [(ngModel)]="actionItemMessage"
+      class="content-message edit-input"
+      (blur)="editModeOff()"
+      (keydown.enter)="forceBlur(); $event.preventDefault()"
+      (keydown.escape)="forceBlur()"
+      [maxlength]="maxMessageLength"
+      oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
+      [readonly]="!taskEditModeEnabled"
+    ></textarea>
 
-    <ng-template #content_textarea>
-      <div
-        #content_value
-        class="content-message editable-div"
-        contenteditable="true"
-        (keydown.enter)="updateActionItemMessage(content_value.textContent); forceBlur()"
-        (blur)="updateActionItemMessage(content_value.textContent); toggleEditMode()"
-        (keydown)="onKeyDown($event, content_value.textContent)"
-        (keyup)="onKeyUp(content_value.textContent, content_value.innerText)"
-      >{{actionItem.task}}
-      </div>
-
-      <rq-floating-character-countdown
-        [characterCount]="textValueLength"
-        [charsAreRunningOutThreshold]="50"
-        [maxCharacterCount]="maxMessageLength"
-      >
-      </rq-floating-character-countdown>
-
-    </ng-template>
-
-  </div>
-
-  <div class="assigned-to-section">
-    <div class="label">assigned to</div>
-    <input
-      [readonly]="readOnly"
-      #assignee_text_field
-      class="value"
-      [type]="'text'"
-      [(ngModel)]="actionItem.assignee"
-      (blur)="emitAssigneeUpdated()"
-      (keydown.enter)="forceBlurOnAssigneeTextField()"
+    <rq-floating-character-countdown
+      [characterCount]="actionItemMessage.length"
+      [charsAreRunningOutThreshold]="50"
+      [maxCharacterCount]="maxMessageLength"
+      [ngClass]="{'remove': !taskEditModeEnabled}"
+      [theme]="theme"
     >
+    </rq-floating-character-countdown>
+
   </div>
 </div>
 
-<div class="footer">
+<div class="assigned-to-section"
+     [ngClass]="{
+     'disable': taskEditModeEnabled || actionItem.completed,
+     'opacify': taskEditModeEnabled || actionItem.completed
+     }">
+  <div class="label">assigned to</div>
+  <input
+    [readonly]="readOnly"
+    #assignee_text_field
+    class="value"
+    [type]="'text'"
+    [(ngModel)]="actionItem.assignee"
+    (blur)="emitAssigneeUpdated()"
+    (keydown.enter)="forceBlurOnAssigneeTextField()"
+  >
+</div>
 
-  <div class="container date-created-container">
+<div
+  class="footer"
+  [ngClass]="{
+    'dark-theme': darkThemeIsEnabled
+  }"
+>
+  <div
+    class="container date-created-container"
+    [ngClass]="{
+      'dark-theme': darkThemeIsEnabled
+    }"
+  >
     <div class="date-created-header"
          [ngClass]="{'opacify': actionItem.completed || taskEditModeEnabled}"
     >created
@@ -93,7 +103,10 @@
     class="container edit-container"
     (click)="toggleEditMode()"
     *ngIf="!taskEditModeEnabled; else exit_edit_mode_icon"
-    [ngClass]="{'disable': actionItem.completed || taskEditModeEnabled}"
+    [ngClass]="{
+      'disable': actionItem.completed || taskEditModeEnabled,
+      'dark-theme': darkThemeIsEnabled
+    }"
   >
     <i class="fas fa-edit"
        [ngClass]="{'opacify': actionItem.completed || taskEditModeEnabled || readOnly}"
@@ -103,6 +116,9 @@
   <ng-template #exit_edit_mode_icon>
     <div
       class="container edit-container"
+      [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
       (click)="forceBlur()"
     >
       <i class="fas fa-times exit-edit-mode-icon"></i>
@@ -111,6 +127,9 @@
 
   <div
     class="container delete-container"
+    [ngClass]="{
+      'dark-theme': darkThemeIsEnabled
+    }"
     (click)="emitDeleteItem()">
     <i class="fas fa-trash-alt"
        [ngClass]="{'opacify': readOnly}"
