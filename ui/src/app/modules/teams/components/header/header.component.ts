@@ -87,7 +87,7 @@ export class HeaderComponent implements OnInit {
       return 'All changes saved';
     }
 
-    return 'Last change saved ' + this.saveChecker.lastSavedDateTime;
+    return 'Last change saved at ' + this.saveChecker.lastSavedDateTime;
   }
 
   public toggleThemeColor(): void {
