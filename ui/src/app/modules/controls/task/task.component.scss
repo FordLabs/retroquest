@@ -174,7 +174,7 @@
         outline: none;
         overflow: auto;
         resize: none;
-        word-break: break-all;
+        word-break: break-word;
 
         &[readonly] {
           caret-color: transparent;
