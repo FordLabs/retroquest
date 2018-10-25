@@ -141,6 +141,10 @@
           color: opacity($wet-asphalt, .5);
           font-size: 1.2rem;
 
+          &:hover {
+            color: inherit;
+          }
+
           &.dark-theme {
             color: opacity($clouds, .5);
 
@@ -157,9 +161,14 @@
           border-radius: 0 0 4px;
           box-shadow: none;
           box-sizing: border-box;
+          color: $white;
           font-size: 1.2rem;
           height: 100%;
           width: 100%;
+
+          &:hover {
+            color: $wet-asphalt;
+          }
         }
       }
 
