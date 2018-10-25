@@ -33,10 +33,9 @@
   padding: 1.5rem 0;
   z-index: 3;
 
-
   @media only screen and (max-width: 610px) {
     padding-bottom: 12px;
-    padding-top: 6px;
+    padding-top: 0;
   }
 
   #headerTop {
@@ -53,9 +52,9 @@
     padding-right: $global-side-padding;
 
     @media only screen and (max-width: 610px) {
-      height: 44px;
+      height: 36px;
       min-width: 0;
-      padding-bottom: 6px;
+      padding-bottom: 0;
       padding-left: 6px;
       padding-right: 6px;
       width: 100%;
@@ -71,7 +70,6 @@
       width: 100%;
 
       @media only screen and (max-width: 610px) {
-        height: 32px;
         min-width: 0;
         width: 100%;
       }
@@ -79,11 +77,16 @@
       .horizontal-separator {
         background-color: $wet-asphalt;
         border-radius: 2px;
-        height: 35%;
-        margin-left: 24px;
+        box-sizing: border-box;
+        height: 28px;
+        margin: 0 24px;
         opacity: .1;
-        padding-top: 12px;
-        width: 3px;
+        width: 2px;
+
+        @media only screen and (max-width: 610px) {
+          height: 16px;
+          margin: 0 12px;
+        }
 
         &.dark-theme {
           background-color: $count-separator-background-dark;
@@ -96,6 +99,10 @@
         margin: 0;
         padding: 0;
 
+        @media only screen and (max-width: 610px) {
+          height: 24px;
+        }
+
         #logo {
           height: inherit;
         }
@@ -104,7 +111,6 @@
       #teamName {
         color: inherit;
         font-size: 1.5rem;
-        margin-left: 24px;
         overflow: hidden;
         text-overflow: ellipsis;
 
