@@ -70,13 +70,26 @@
 
     &:hover {
       box-shadow: 0 0 0 $host-border-width $happy-green;
+
+      &.dark-theme {
+        box-shadow: 0 0 0 $host-border-width $nephritis;
+      }
+
     }
 
     &.edit-mode {
       box-shadow: 0 0 0 4px $grape;
 
+      &.dark-theme {
+        box-shadow: 0 0 0 4px $wisteria;
+      }
+
       &:hover {
         box-shadow: 0 0 0 4px $grape;
+
+        &.dark-theme {
+          box-shadow: 0 0 0 4px $wisteria;
+        }
       }
     }
   }
@@ -84,12 +97,20 @@
   &.confused {
     &:hover {
       box-shadow: 0 0 0 $host-border-width $confused-blue;
+
+      &.dark-theme {
+        box-shadow: 0 0 0 $host-border-width $belize-hole;
+      }
     }
   }
 
   &.sad {
     &:hover {
       box-shadow: 0 0 0 $host-border-width $unhappy-red;
+
+      &.dark-theme {
+        box-shadow: 0 0 0 $host-border-width $pomegranate;
+      }
     }
   }
 

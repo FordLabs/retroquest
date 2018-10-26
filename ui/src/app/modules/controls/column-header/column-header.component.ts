@@ -28,7 +28,8 @@ import {Themes} from '../../domain/Theme';
     '[class.happy]': 'type === \'happy\'',
     '[class.confused]': 'type === \'confused\'',
     '[class.sad]': 'type === \'unhappy\'',
-    '[class.action]': 'type === \'action\''
+    '[class.action]': 'type === \'action\'',
+    '[class.dark-theme]': 'darkModeIsEnabled'
   }
 })
 export class ColumnHeaderComponent implements OnInit {
@@ -55,6 +56,10 @@ export class ColumnHeaderComponent implements OnInit {
 
   public ngOnInit() {
     this.titleCopy = this.title.slice(0);
+  }
+
+  public get darkModeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
   }
 
   public emitTitleChangedAndEnableReadonlyMode(): void {

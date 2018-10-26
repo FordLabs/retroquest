@@ -43,10 +43,16 @@
     $border-width: 8px;
 
     $action-shadow: 0 0 0 $border-width $action-yellow, $base-drop-shadow;
+    $action-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
 
     $confused-shadow: 0 0 0 $border-width $confused-blue, $base-drop-shadow;
+    $confused-shadow-dark: 0 0 0 $border-width $belize-hole, $base-drop-shadow;
+
     $edit-mode-shadow: 0 0 0 8px $grape, $base-drop-shadow;
+    $edit-mode-shadow-dark: 0 0 0 8px $wisteria, $base-drop-shadow;
+
     $happy-shadow: 0 0 0 $border-width $happy-green, $base-drop-shadow;
+    $happy-shadow-dark: 0 0 0 $border-width $nephritis, $base-drop-shadow;
 
     $sad-shadow: 0 0 0 $border-width $unhappy-red, $base-drop-shadow;
 

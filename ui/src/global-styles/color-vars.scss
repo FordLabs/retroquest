@@ -65,6 +65,11 @@ $green-sea: #16a085;
 
 $clouds: #ecf0f1;
 $grape: #a56de2;
+$wisteria: #8e44ad;
+$nephritis: #27ae60;
+$belize-hole: #2980b9;
+$orange: #f39c12;
+$pomegranate: #c0392b;
 
 @function opacity($color, $level) {
   @return rgba($color, $level);

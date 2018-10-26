@@ -63,7 +63,12 @@
 
   &:hover {
     box-shadow: 0 0 0 $host-border-width $action-yellow;
+
+    &.dark-theme {
+      box-shadow: 0 0 0 $host-border-width $orange;
+    }
   }
+
 
   @media only screen and (max-width: 610px) {
     &:hover {
@@ -74,8 +79,16 @@
   &.edit-mode {
     box-shadow: 0 0 0 4px $grape;
 
+    &.dark-theme {
+      box-shadow: 0 0 0 4px $wisteria;
+    }
+
     &:hover {
       box-shadow: 0 0 0 4px $grape;
+
+      &.dark-theme {
+        box-shadow: 0 0 0 4px $wisteria;
+      }
     }
   }
 
@@ -187,12 +200,26 @@
         font-size: 1rem;
       }
 
+      &.dark-theme {
+        border-bottom-color: $orange;
+      }
+
       &:hover {
         border-bottom-color: $grape;
+
+        &.dark-theme {
+          border-bottom-color: $wisteria;
+        }
+
       }
 
       &:focus {
         border-bottom-color: $grape;
+
+        &.dark-theme {
+          border-bottom-color: $wisteria;
+        }
+
       }
     }
   }

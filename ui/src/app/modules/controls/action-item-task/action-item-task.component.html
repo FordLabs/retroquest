@@ -62,8 +62,8 @@
 
 <div class="assigned-to-section"
      [ngClass]="{
-     'disable': taskEditModeEnabled || actionItem.completed,
-     'opacify': taskEditModeEnabled || actionItem.completed
+       'disable': taskEditModeEnabled || actionItem.completed,
+       'opacify': taskEditModeEnabled || actionItem.completed
      }">
   <div class="label">assigned to</div>
   <input
@@ -74,6 +74,9 @@
     [(ngModel)]="actionItem.assignee"
     (blur)="emitAssigneeUpdated()"
     (keydown.enter)="forceBlurOnAssigneeTextField()"
+    [ngClass]="{
+      'dark-theme': darkThemeIsEnabled
+    }"
   >
 </div>
 
