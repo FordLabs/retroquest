@@ -267,6 +267,20 @@ public class TeamApiTest extends ControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
+    @Test
+    public void shouldAllowCaptchaRequestWithInvalidToken() throws Exception {
+        MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
+        server.expect(requestTo(containsString("http://captcha.url")))
+                .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
+
+        CreateTeamRequest createTeamRequest = new CreateTeamRequest("ateam", VALID_PASSWORD, "some captcha");
+        testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
+
+        mockMvc.perform(get("/api/team/ateam/captcha")
+                .header("Authorization", "Bearer invalidToken")
+        ).andExpect(status().isOk());
+    }
+
     @After
     public void cleanUpTestData() {
         teamRepository.deleteAll();

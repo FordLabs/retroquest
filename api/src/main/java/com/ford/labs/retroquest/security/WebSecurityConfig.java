@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -75,7 +76,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         .authenticated()
         .and().addFilterAfter(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
 
-
         httpSecurity.csrf().disable();
         displayH2ConsoleToDevs(httpSecurity);
     }
@@ -85,6 +85,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         auth.authenticationProvider(jwtAuthenticationProvider);
         auth.inMemoryAuthentication().withUser(adminUsername).password(adminPassword).roles("ADMIN");
 
+    }
+
+    @Override
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers("/api/team/**/captcha");
     }
 
     private void displayH2ConsoleToDevs(HttpSecurity httpSecurity) throws Exception {
