@@ -1,7 +1,7 @@
 buildscript {
     ext {
         springBootVersion = '1.5.9.RELEASE'
-        cfAppVersion = '2.3.0-rc.1'
+        cfAppVersion = '2.3.0-rc.4'
     }
     repositories {
         mavenCentral()
@@ -89,3 +89,7 @@ dockerCompose {
 
     waitForTcpPorts = true
 }
+
+task buildPackage(){}
+buildPackage.dependsOn ':ui:npm_run_build-prod'
+buildPackage.finalizedBy 'build'
