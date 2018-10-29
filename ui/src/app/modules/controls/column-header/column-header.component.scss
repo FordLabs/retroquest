@@ -35,6 +35,10 @@
   text-align: center;
   width: 100px;
 
+  &.dark-theme {
+    color: $clouds;
+  }
+
   .input-container {
     align-items: center;
     display: flex;
@@ -128,18 +132,34 @@
 
   &.happy {
     background-color: $happy-green;
+
+    &.dark-theme {
+      background-color: $nephritis;
+    }
   }
 
   &.confused {
     background-color: $confused-blue;
+
+    &.dark-theme {
+      background-color: $belize-hole;
+    }
   }
 
   &.sad {
     background-color: $unhappy-red;
+
+    &.dark-theme {
+      background-color: $pomegranate;
+    }
   }
 
   &.action {
     background-color: $action-yellow;
+
+    &.dark-theme {
+      background-color: $orange;
+    }
   }
 
 }
