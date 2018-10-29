@@ -64,18 +64,34 @@
 
     &.happy {
       border-color: $happy-green;
+
+      &.dark-theme {
+        border-color: $nephritis;
+      }
     }
 
     &.confused {
       border-color: $confused-blue;
+
+      &.dark-theme {
+        border-color: $belize-hole;
+      }
     }
 
     &.sad {
       border-color: $unhappy-red;
+
+      &.dark-theme {
+        border-color: $pomegranate;
+      }
     }
 
     &.action {
       border-color: $action-yellow;
+
+      &.dark-theme {
+        border-color: $orange;
+      }
     }
   }
 }
