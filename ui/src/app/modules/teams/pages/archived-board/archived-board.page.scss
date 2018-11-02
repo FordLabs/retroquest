@@ -194,6 +194,18 @@ header {
         width: 100%;
       }
 
+      a {
+        color: inherit;
+        margin: 0;
+        padding: 0;
+        width: auto;
+
+        rq-button {
+          height: 100%;
+          width: auto;
+        }
+      }
+
       &.center-content {
         justify-content: center;
       }
