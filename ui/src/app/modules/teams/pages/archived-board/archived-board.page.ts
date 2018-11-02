@@ -30,7 +30,7 @@ import * as moment from 'moment';
 import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-view/actions-radiator-view.component';
 import {SaveCheckerService} from '../../services/save-checker.service';
 import {BoardService} from '../../services/board.service';
-import {Themes} from "../../../domain/Theme";
+import {Themes} from '../../../domain/Theme';
 
 @Component({
   selector: 'rq-archived-board',
