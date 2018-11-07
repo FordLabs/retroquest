@@ -54,7 +54,7 @@
       box-sizing: border-box;
       height: 100%;
       opacity: .35;
-      width: 25%;
+      width: calc(100% / 3);
 
       &.happy-guide-button {
         background-color: $happy-green;
@@ -145,7 +145,15 @@
 }
 
 header {
-  padding: 1.5rem 0;
+  box-sizing: border-box;
+  font-weight: normal;
+  padding: 12px 0;
+  z-index: 3;
+
+  @media only screen and (max-width: 610px) {
+    padding-bottom: 12px;
+    padding-top: 0;
+  }
 
   #headerBottom {
     $header-bottom-height: 32px;
@@ -184,6 +192,18 @@ header {
         padding-left: 12px;
         padding-right: 12px;
         width: 100%;
+      }
+
+      a {
+        color: inherit;
+        margin: 0;
+        padding: 0;
+        width: auto;
+
+        rq-button {
+          height: 100%;
+          width: auto;
+        }
       }
 
       &.center-content {
