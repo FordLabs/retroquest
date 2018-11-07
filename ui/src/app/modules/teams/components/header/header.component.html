@@ -17,34 +17,7 @@
 
 <header id="header">
 
-  <div id="headerTop">
-    <div class="header-top-content">
-      <a routerLink="/" class="logo-link">
-        <img
-          [src]="darkThemeIsEnabled ? '/assets/logo-dark.png' : '/assets/RetroQuest.png'"
-          title="RetroQuest Logo"
-          id="logo"
-          [ngClass]="{
-            'dark-theme': darkThemeIsEnabled
-          }"
-        />
-      </a>
-      <div
-        class="horizontal-separator"
-        [ngClass]="{
-          'dark-theme': darkThemeIsEnabled
-        }"
-      ></div>
-      <div
-        id="teamName"
-        [ngClass]="{
-          'dark-theme': darkThemeIsEnabled
-        }"
-      >{{teamName}}
-      </div>
-      <div class="last-saved-text">{{lastSavedText}}</div>
-    </div>
-  </div>
+  <rq-top-header [lastSavedText]="lastSavedText" [teamName]="teamName" [theme]="theme"></rq-top-header>
 
   <div
     id="headerBottom"
@@ -111,6 +84,7 @@
           [theme]="theme"
         >
         </rq-button>
+        <i class="fas fa-archive button-icon"></i>
       </a>
 
       <a id="downloadCsv"

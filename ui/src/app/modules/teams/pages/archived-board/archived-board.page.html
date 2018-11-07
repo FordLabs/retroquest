@@ -21,14 +21,18 @@
     <div id="headerBottom">
       <div class="header-bottom-content center-content">
         <a routerLink="/team/{{teamId}}/archives">
-          <button class="rq-button-secondary">
-            <span class="button-text">Archives</span>
-          </button>
+          <rq-button
+            type="secondary"
+            text="archives"
+            [theme]="theme"
+          ></rq-button>
         </a>
         <a routerLink="/team/{{teamId}}">
-          <button class="rq-button-secondary">
-            <span class="button-text">Current Board</span>
-          </button>
+          <rq-button
+            type="secondary"
+            text="current board"
+            [theme]="theme"
+          ></rq-button>
         </a>
       </div>
     </div>

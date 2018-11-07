@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 
 import {Column} from '../../../domain/column';
@@ -30,6 +30,7 @@ import * as moment from 'moment';
 import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-view/actions-radiator-view.component';
 import {SaveCheckerService} from '../../services/save-checker.service';
 import {BoardService} from '../../services/board.service';
+import {Themes} from '../../../domain/Theme';
 
 @Component({
   selector: 'rq-archived-board',
@@ -68,6 +69,8 @@ export class ArchivedBoardPageComponent implements OnInit {
               private columnService: ColumnService,
               private boardService: BoardService) {
   }
+
+  @Input() theme: Themes = Themes.Light;
 
   teamId: string;
   boardId: number;

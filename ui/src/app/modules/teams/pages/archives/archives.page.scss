@@ -21,7 +21,15 @@
   display: block;
 
   header {
-    padding: 1.5rem 0;
+    box-sizing: border-box;
+    font-weight: normal;
+    padding: 12px 0;
+    z-index: 3;
+
+    @media only screen and (max-width: 610px) {
+      padding-bottom: 12px;
+      padding-top: 0;
+    }
 
     &.dark-theme {
       color: $clouds;
@@ -79,6 +87,7 @@
           width: auto;
 
           rq-button {
+            height: 100%;
             width: auto;
           }
         }
@@ -108,12 +117,20 @@
       color: inherit;
       font-size: 2rem;
       font-weight: bold;
-      margin-bottom: 36px;
+      margin: 10px 0;
       text-transform: capitalize;
 
       &.dark-theme {
         color: $clouds;
       }
+    }
+
+    h2 {
+      max-width: 90%;
+    }
+
+    rq-board-summary {
+      max-width: 90%;
     }
   }
 
