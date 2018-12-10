@@ -207,19 +207,6 @@
 
   .footer {
 
-    .tooltip {
-      visibility: hidden;
-      width: 8rem;
-      background-color: black;
-      color: #fff;
-      text-align: center;
-      padding: 5px 0;
-      border-radius: 6px;
-
-      position: absolute;
-      bottom: 2.65rem;
-    }
-
     background-color: inherit;
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
@@ -228,6 +215,18 @@
     height: 40px;
     justify-content: flex-start;
     width: 100%;
+
+    .tooltip {
+      background-color: $black;
+      border-radius: 6px;
+      bottom: 2.65rem;
+      color: $white;
+      padding: 5px 0;
+      position: absolute;
+      text-align: center;
+      visibility: hidden;
+      width: 8rem;
+    }
 
     &.dark-theme {
       border-top-color: $task-footer-separator-dark;
@@ -283,19 +282,14 @@
           font-size: 1.1rem;
         }
       }
-    } :hover .tooltip {
+    }
+
+    :hover > .tooltip {
       visibility: visible;
     }
 
-    .edit-container {
-
-    } :hover .tooltip {
-      visibility: visible;
-    }
     .delete-container {
       font-size: 1rem;
-    } :hover .tooltip {
-      visibility: visible;
     }
 
     .star-count-container {
@@ -339,8 +333,6 @@
           }
         }
       }
-    } :hover .tooltip {
-      visibility: visible;
     }
   }
 }
