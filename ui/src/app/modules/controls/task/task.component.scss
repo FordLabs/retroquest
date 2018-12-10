@@ -206,6 +206,20 @@
   }
 
   .footer {
+
+    .tooltip {
+      visibility: hidden;
+      width: 8rem;
+      background-color: black;
+      color: #fff;
+      text-align: center;
+      padding: 5px 0;
+      border-radius: 6px;
+
+      position: absolute;
+      bottom: 2.65rem;
+    }
+
     background-color: inherit;
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
@@ -269,11 +283,19 @@
           font-size: 1.1rem;
         }
       }
+    } :hover .tooltip {
+      visibility: visible;
     }
 
-    .edit-container,
+    .edit-container {
+
+    } :hover .tooltip {
+      visibility: visible;
+    }
     .delete-container {
       font-size: 1rem;
+    } :hover .tooltip {
+      visibility: visible;
     }
 
     .star-count-container {
@@ -317,6 +339,8 @@
           }
         }
       }
+    } :hover .tooltip {
+      visibility: visible;
     }
   }
 }
