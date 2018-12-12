@@ -36,7 +36,14 @@ export class BoardService {
         data.map((boardObject) => {
           boardObject['dateCreated'] = moment(boardObject['dateCreated']);
         });
-        subscriber.next(data as Array<Board>);
+        const newstFirstSortedBoards = data.sort((board1, board2) => {
+          if (board1['dateCreated'].isAfter(board2['dateCreated'])) {
+            return -1;
+          } else {
+            return 1;
+          }
+        });
+        subscriber.next(newstFirstSortedBoards as Array<Board>);
       });
     });
   }

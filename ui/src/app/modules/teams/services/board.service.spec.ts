@@ -20,6 +20,7 @@ import {HttpClient} from '@angular/common/http';
 import {Subject} from 'rxjs';
 import * as moment from 'moment';
 import {emptyThoughtWithColumn} from '../../domain/thought';
+import {Board} from '../../domain/board';
 
 
 describe('BoardService', () => {
@@ -65,6 +66,19 @@ describe('BoardService', () => {
         expect(boards).toBe(expectedBoards);
       });
       getRequestSubject.next(expectedBoards);
+    });
+
+    it ('should sort the most recent archives to be first', () => {
+      const teamId = 'teamod';
+      const oldMoment = moment();
+      const newMoment = moment().add(1, 'days');
+      const olderBoard: Board = { id: 1, dateCreated: oldMoment, teamId: teamId, thoughts: [] };
+      const newerBoard: Board = { id: 2, dateCreated: newMoment, teamId: teamId, thoughts: [] };
+      service.fetchBoards(teamId).subscribe(boards => {
+        expect(boards[0].dateCreated.isSame(newMoment)).toBeTruthy();
+        expect(boards[1].dateCreated.isSame(oldMoment)).toBeTruthy();
+      });
+      getRequestSubject.next([olderBoard, newerBoard]);
     });
   });
 
