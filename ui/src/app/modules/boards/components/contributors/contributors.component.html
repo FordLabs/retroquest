@@ -15,22 +15,13 @@
   ~ limitations under the License.
   -->
 
-<div class="rq-brand-footer">
-  <a class="labs-text">Powered By <a
-    class="labs-link"
-    href="https://thehubat.ford.com/groups/fordlabs"
-    target="_blank"
-  >FordLabs</a>
-  </a>
-
-  <span class="vertical-seperator"></span>
-
-  <a
-    class="github-link"
-    href="https://github.com/FordLabs/retroquest"
-    target="_blank"
-  >Github</a>
-</div>
 <div class="contributors">
-  <rq-contributors></rq-contributors>
+  <div class="contributors-title">
+    Contributors
+  </div>
+  <div *ngFor="let contributorRow of contributors">
+    <a *ngFor="let contributor of contributorRow" href="{{contributor.accountUrl}}" target="_blank">
+      <img [src]="contributor.image" >
+    </a>
+  </div>
 </div>
