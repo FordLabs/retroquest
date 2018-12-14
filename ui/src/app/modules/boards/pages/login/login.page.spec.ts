@@ -17,13 +17,16 @@
 
 import {LoginComponent} from './login.page';
 import {AuthService} from '../../../auth/auth.service';
-import {Subject, throwError} from 'rxjs';
+import {Subject, Observable, from, throwError} from 'rxjs';
 import {of} from 'rxjs/internal/observable/of';
 import {HttpHeaders, HttpResponse} from '@angular/common/http';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import { TestBed } from '@angular/core/testing';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let mockTeamService;
+  let mockRoute;
   let mockRouter;
   let mockRecaptchaComponent;
 
@@ -32,14 +35,25 @@ describe('LoginComponent', () => {
       login: new Subject(),
       isCaptchaEnabledForTeam: new Subject()
     });
+
+    const mockActivatedRoute = new ActivatedRoute();
+
+    mockActivatedRoute.snapshot = new ActivatedRouteSnapshot();
+    mockActivatedRoute.snapshot.params = {teamId: 'devs'};
+
     mockRouter = jasmine.createSpyObj({navigateByUrl: null});
     mockRecaptchaComponent = jasmine.createSpyObj({reset: null, execute: null});
 
     spyOn(AuthService, 'setToken');
     spyOn(console, 'error');
 
-    component = new LoginComponent(mockTeamService, mockRouter);
+    component = new LoginComponent(mockTeamService, mockActivatedRoute, mockRouter);
+    component.ngOnInit();
     component.recaptchaComponent = mockRecaptchaComponent;
+  });
+
+  it('should set the team name from the route', () => {
+    expect(component.teamName).toEqual('devs');
   });
 
   describe('requestCaptchaStateAndLogIn', () => {
