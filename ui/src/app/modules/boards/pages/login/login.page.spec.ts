@@ -26,7 +26,6 @@ import { TestBed } from '@angular/core/testing';
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let mockTeamService;
-  let mockRoute;
   let mockRouter;
   let mockRecaptchaComponent;
 
