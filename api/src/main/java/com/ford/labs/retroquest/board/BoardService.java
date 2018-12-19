@@ -39,7 +39,7 @@ public class BoardService {
 
 
     public List<Board> getBoardsForTeamId(String teamId) {
-        return this.boardRepository.findAllByTeamId(teamId);
+        return this.boardRepository.findAllByTeamIdOrderByDateCreatedDesc(teamId);
     }
 
     public Board saveBoard(Board board) {

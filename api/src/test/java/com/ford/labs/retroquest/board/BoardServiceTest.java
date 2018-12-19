@@ -57,7 +57,7 @@ public class BoardServiceTest {
                 .id(1L)
                 .build();
 
-        when(boardRepository.findAllByTeamId("team1")).thenReturn(Arrays.asList(savedBoard));
+        when(boardRepository.findAllByTeamIdOrderByDateCreatedDesc("team1")).thenReturn(Arrays.asList(savedBoard));
 
         List<Board> actualBoards = boardService.getBoardsForTeamId("team1");
 
