@@ -111,6 +111,7 @@
       'dark-theme': darkThemeIsEnabled
     }"
   >
+    <span class="tooltip">Edit</span>
     <i class="fas fa-edit"
        [ngClass]="{'opacify': actionItem.completed || taskEditModeEnabled || readOnly}"
     ></i>
@@ -124,6 +125,7 @@
       }"
       (click)="forceBlur()"
     >
+      <span class="tooltip">Cancel</span>
       <i class="fas fa-times exit-edit-mode-icon"></i>
     </div>
   </ng-template>
@@ -137,13 +139,16 @@
     <i class="fas fa-trash-alt"
        [ngClass]="{'opacify': readOnly}"
     ></i>
+    <span class="tooltip">Delete</span>
   </div>
 
   <div
-    class="complete-container"
+    class=" complete-container"
     [ngClass]="{'opacify': taskEditModeEnabled || readOnly}"
     (click)="toggleTaskComplete()"
   >
+    <span *ngIf="actionItem.completed" class="tooltip">Open</span>
+    <span *ngIf="!actionItem.completed" class="tooltip">Close</span>
     <div
       class="checkbox"
       [ngClass]="{'completed-task':  actionItem.completed}"

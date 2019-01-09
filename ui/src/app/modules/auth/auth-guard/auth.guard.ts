@@ -37,12 +37,14 @@ export class AuthGuard implements CanActivate {
 
     return new Observable<boolean>(observer => {
 
-      this.teamService.validateTeamId(next.url[1].path).subscribe(
+      const teamId = next.url[1].path;
+
+      this.teamService.validateTeamId(teamId).subscribe(
         () => {
           observer.next(true);
         },
         () => {
-          this.router.navigate(['login']);
+          this.router.navigate(['login', teamId]);
           observer.next(true);
         }
       );

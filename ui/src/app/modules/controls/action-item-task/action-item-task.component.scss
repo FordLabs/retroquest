@@ -225,6 +225,7 @@
   }
 
   .footer {
+
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
     border-top: 2px solid opacity($wet-asphalt, .06);
@@ -232,6 +233,18 @@
     height: 40px;
     justify-content: flex-start;
     width: 100%;
+
+    .tooltip {
+      background-color: $black;
+      border-radius: 6px;
+      bottom: 2.65rem;
+      color: $white;
+      padding: 5px 0;
+      position: absolute;
+      text-align: center;
+      visibility: hidden;
+      width: 8rem;
+    }
 
     &.dark-theme {
       border-top-color: $task-footer-separator-dark;
@@ -295,6 +308,11 @@
       font-size: 1rem;
     }
 
+    :hover > .tooltip {
+      visibility: visible;
+    }
+
+    .edit-container,
     .date-created-container {
       cursor: default;
       flex-direction: column;
@@ -317,6 +335,10 @@
       .date-created-value {
         font-size: .75rem;
         font-weight: bold;
+      }
+
+      :hover > .tooltip {
+        visibility: visible;
       }
     }
   }

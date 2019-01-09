@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-import {Component, ViewChild} from '@angular/core';
-import {Router} from '@angular/router';
+import {Component, ViewChild, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 
 import {AuthService} from '../../../auth/auth.service';
 import {TeamService} from '../../../teams/services/team.service';
@@ -32,9 +32,9 @@ import {of} from 'rxjs/internal/observable/of';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
-  constructor(private teamService: TeamService, private router: Router) {
+  constructor(private teamService: TeamService, private route: ActivatedRoute, private router: Router) {
   }
 
   @ViewChild(RecaptchaComponent) recaptchaComponent: RecaptchaComponent;
@@ -42,6 +42,10 @@ export class LoginComponent {
   teamName: string;
   password: string;
   errorMessage: string;
+
+  ngOnInit() {
+    this.teamName = this.route.snapshot.params['teamId'];
+  }
 
   requestCaptchaStateAndLogIn(): void {
     if (!this.validateInput()) {

@@ -45,7 +45,7 @@ describe('AuthGuard', () => {
     const mockState = null;
 
     (guard.canActivate(mockNextRouteSnapshot, mockState) as Observable<boolean>).subscribe(() => {
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['login']);
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['login', 'incorrect-team']);
     });
     mockTeamService.validateTeamId().error();
   });

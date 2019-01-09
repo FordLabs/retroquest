@@ -34,7 +34,8 @@ import {FocusOnLoadDirective} from './pages/directives/focus-on-load.component';
     ControlsModule,
     RouterModule.forChild([
       {path: 'create', component: CreateComponent},
-      {path: 'login', component: LoginComponent}
+      {path: 'login', component: LoginComponent},
+      {path: 'login/:teamId', component: LoginComponent}
     ]),
     RecaptchaModule.forRoot(),
     RecaptchaModule
