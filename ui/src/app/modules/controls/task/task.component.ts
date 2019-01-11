@@ -62,10 +62,6 @@ export class TaskComponent implements AfterViewChecked {
     return this.theme === Themes.Dark;
   }
 
-  get checkboxTooltip(): string {
-    return this.task.discussed ? "Open" : "Close";
-  }
-
   ngAfterViewChecked() {
     this.initializeTextAreaHeight();
   }

@@ -141,11 +141,12 @@
     class="complete-container"
     [ngClass]="{
       'opacify': taskEditModeEnabled || readOnly,
-      'dark-theme': darkThemeIsEnabled
+      'dark-theme': darkThemeIsEnabled,
+      'disable': taskEditModeEnabled
     }"
     (click)="toggleTaskComplete()"
   >
-    <rq-tooltip [text]="checkboxTooltip" [theme]="theme"></rq-tooltip>
+    <rq-tooltip [text]="task.discussed ? 'Open' : 'Close'" [theme]="theme"></rq-tooltip>
 
     <div
       class="checkbox"
