@@ -263,6 +263,7 @@
     .container {
       border-right: 2px solid opacity($wet-asphalt, .06);
       cursor: pointer;
+      position: relative;
       user-select: none;
 
       &.dark-theme {
@@ -308,7 +309,7 @@
       font-size: 1rem;
     }
 
-    :hover > .tooltip {
+    :hover > rq-tooltip {
       visibility: visible;
     }
 
