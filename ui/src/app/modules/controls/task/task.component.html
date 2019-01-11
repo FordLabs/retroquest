@@ -69,7 +69,20 @@
       'dark-theme': darkThemeIsEnabled
     }"
   >
-    <span class="tooltip">Upvote</span>
+    <div
+      [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+      class="tooltip"
+    >
+      <div
+        class="tooltip-arrow"
+        [ngClass]="{
+          'dark-theme': darkThemeIsEnabled
+        }"
+      ></div>
+      Upvote
+    </div>
     <div class="star-background"
          [ngClass]="{
           'opacify': task.discussed || taskEditModeEnabled,
@@ -98,10 +111,24 @@
       'dark-theme': darkThemeIsEnabled
     }"
   >
-    <span class="tooltip">Edit</span>
     <i class="fas fa-edit"
        [ngClass]="{'opacify': task.discussed || taskEditModeEnabled || readOnly}"
     ></i>
+
+    <div
+      [ngClass]="{
+         'dark-theme': darkThemeIsEnabled
+       }"
+      class="tooltip"
+    >
+      <div
+        class="tooltip-arrow"
+        [ngClass]="{
+          'dark-theme': darkThemeIsEnabled
+        }"
+      ></div>
+      Edit
+    </div>
   </div>
 
   <ng-template #exit_edit_mode_icon>
@@ -112,7 +139,21 @@
       }"
       (click)="forceBlur()"
     >
-    <span class="tooltip">Cancel</span>
+      <div
+        [ngClass]="{
+          'dark-theme': darkThemeIsEnabled
+        }"
+        class="tooltip"
+      >
+        <div
+          class="tooltip-arrow"
+          [ngClass]="{
+          'dark-theme': darkThemeIsEnabled
+        }"
+        ></div>
+        Cancel
+      </div>
+
       <i class="fas fa-times exit-edit-mode-icon"></i>
     </div>
   </ng-template>
@@ -125,7 +166,21 @@
     (click)="emitDeleteItem()"
     [ngClass]="{'disable': readOnly}"
   >
-    <span class="tooltip">Delete</span>
+    <div
+      class="tooltip"
+      [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+    >
+      <div
+        class="tooltip-arrow"
+        [ngClass]="{
+          'dark-theme': darkThemeIsEnabled
+        }"
+      ></div>
+      Delete
+    </div>
+
     <i class="fas fa-trash-alt"
        [ngClass]="{'opacify': readOnly}"
     ></i>
@@ -139,8 +194,19 @@
     }"
     (click)="toggleTaskComplete()"
   >
-    <span *ngIf="task.discussed" class="tooltip">Open</span>
-    <span *ngIf="!task.discussed" class="tooltip">Close</span>
+    <div
+      class="tooltip"
+      [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+    >
+      <div
+        class="tooltip-arrow"
+        [ngClass]="{
+          'dark-theme': darkThemeIsEnabled
+        }"
+      ></div>
+      {{checkboxTooltip}}
     <div
       class="checkbox"
       [ngClass]="{'completed-task':  task.discussed}"

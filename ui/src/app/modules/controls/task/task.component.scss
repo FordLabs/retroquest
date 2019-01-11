@@ -217,15 +217,41 @@
     width: 100%;
 
     .tooltip {
-      background-color: $black;
+      z-index: 1000;
+      background-color: $wet-asphalt;
       border-radius: 6px;
-      bottom: 2.65rem;
+      top: 42px;
+      box-shadow: 0 1px 2px opacity($black, .25);
+      box-sizing: border-box;
       color: $white;
-      padding: 5px 0;
+      padding: 6px 18px;
       position: absolute;
       text-align: center;
       visibility: hidden;
-      width: 8rem;
+
+      .tooltip-arrow {
+        $arrow-size: 12px;
+        background-color: $wet-asphalt;
+        height: $arrow-size;
+        width: $arrow-size;
+        position: absolute;
+        top: -$arrow-size / 2;
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+        transform: rotate(45deg);
+        z-index: 999;
+
+        &.dark-theme {
+          background-color: $clouds;
+        }
+      }
+
+      &.dark-theme {
+        background-color: $clouds;
+        color: $midnight-blue;
+      }
     }
 
     &.dark-theme {
@@ -246,6 +272,7 @@
       border-right: 2px solid opacity($wet-asphalt, .06);
       cursor: pointer;
       user-select: none;
+      position: relative;
 
       &.dark-theme {
         border-color: $task-footer-separator-dark;
