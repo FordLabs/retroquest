@@ -216,44 +216,6 @@
     justify-content: flex-start;
     width: 100%;
 
-    .tooltip {
-      z-index: 1000;
-      background-color: $wet-asphalt;
-      border-radius: 6px;
-      top: 42px;
-      box-shadow: 0 1px 2px opacity($black, .25);
-      box-sizing: border-box;
-      color: $white;
-      padding: 6px 18px;
-      position: absolute;
-      text-align: center;
-      visibility: hidden;
-
-      .tooltip-arrow {
-        $arrow-size: 12px;
-        background-color: $wet-asphalt;
-        height: $arrow-size;
-        width: $arrow-size;
-        position: absolute;
-        top: -$arrow-size / 2;
-        left: 0;
-        right: 0;
-        margin-left: auto;
-        margin-right: auto;
-        transform: rotate(45deg);
-        z-index: 999;
-
-        &.dark-theme {
-          background-color: $clouds;
-        }
-      }
-
-      &.dark-theme {
-        background-color: $clouds;
-        color: $midnight-blue;
-      }
-    }
-
     &.dark-theme {
       border-top-color: $task-footer-separator-dark;
     }
@@ -271,8 +233,8 @@
     .container {
       border-right: 2px solid opacity($wet-asphalt, .06);
       cursor: pointer;
-      user-select: none;
       position: relative;
+      user-select: none;
 
       &.dark-theme {
         border-color: $task-footer-separator-dark;
@@ -311,7 +273,7 @@
       }
     }
 
-    :hover > .tooltip {
+    :hover > rq-tooltip {
       visibility: visible;
     }
 

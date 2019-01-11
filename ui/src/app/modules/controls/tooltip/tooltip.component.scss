@@ -1,0 +1,40 @@
+@import 'color-vars';
+
+:host {
+  background-color: $wet-asphalt;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px opacity($black, .25);
+  box-sizing: border-box;
+  color: $white;
+  display: block;
+  padding: 6px 18px;
+  position: absolute;
+  text-align: center;
+  top: 42px;
+  visibility: hidden;
+  z-index: 1000;
+
+  .tip-arrow {
+    $arrow-size: 12px;
+    background-color: $wet-asphalt;
+    height: $arrow-size;
+    left: 0;
+    margin-left: auto;
+    margin-right: auto;
+    position: absolute;
+    right: 0;
+    top: -$arrow-size / 2;
+    transform: rotate(45deg);
+    width: $arrow-size;
+    z-index: 999;
+
+    &.dark-theme {
+      background-color: $clouds;
+    }
+  }
+
+  &.dark-theme {
+    background-color: $clouds;
+    color: $midnight-blue;
+  }
+}
