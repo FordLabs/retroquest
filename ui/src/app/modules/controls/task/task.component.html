@@ -69,12 +69,14 @@
       'dark-theme': darkThemeIsEnabled
     }"
   >
-    <span class="tooltip">Upvote</span>
-    <div class="star-background"
-         [ngClass]="{
-          'opacify': task.discussed || taskEditModeEnabled,
-          'dark-theme': darkThemeIsEnabled
-         }"
+    <rq-tooltip text="Upvote" [theme]="theme"></rq-tooltip>
+
+    <div
+      class="star-background"
+      [ngClass]="{
+        'opacify': task.discussed || taskEditModeEnabled,
+        'dark-theme': darkThemeIsEnabled
+      }"
     >
       <i
         class="fas fa-star star-icon"
@@ -98,10 +100,11 @@
       'dark-theme': darkThemeIsEnabled
     }"
   >
-    <span class="tooltip">Edit</span>
     <i class="fas fa-edit"
        [ngClass]="{'opacify': task.discussed || taskEditModeEnabled || readOnly}"
     ></i>
+
+    <rq-tooltip text="Edit" [theme]="theme"></rq-tooltip>
   </div>
 
   <ng-template #exit_edit_mode_icon>
@@ -112,7 +115,8 @@
       }"
       (click)="forceBlur()"
     >
-    <span class="tooltip">Cancel</span>
+      <rq-tooltip text="Cancel" [theme]="theme"></rq-tooltip>
+
       <i class="fas fa-times exit-edit-mode-icon"></i>
     </div>
   </ng-template>
@@ -125,7 +129,9 @@
     (click)="emitDeleteItem()"
     [ngClass]="{'disable': readOnly}"
   >
-    <span class="tooltip">Delete</span>
+    <rq-tooltip text="Delete" [theme]="theme"></rq-tooltip>
+
+
     <i class="fas fa-trash-alt"
        [ngClass]="{'opacify': readOnly}"
     ></i>
@@ -135,12 +141,13 @@
     class="complete-container"
     [ngClass]="{
       'opacify': taskEditModeEnabled || readOnly,
-      'dark-theme': darkThemeIsEnabled
+      'dark-theme': darkThemeIsEnabled,
+      'disable': taskEditModeEnabled
     }"
     (click)="toggleTaskComplete()"
   >
-    <span *ngIf="task.discussed" class="tooltip">Open</span>
-    <span *ngIf="!task.discussed" class="tooltip">Close</span>
+    <rq-tooltip [text]="task.discussed ? 'Open' : 'Close'" [theme]="theme"></rq-tooltip>
+
     <div
       class="checkbox"
       [ngClass]="{'completed-task':  task.discussed}"
