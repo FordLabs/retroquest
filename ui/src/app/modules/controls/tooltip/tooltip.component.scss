@@ -8,10 +8,12 @@
   color: $white;
   display: block;
   font-size: 1rem;
+  opacity: 0;
   padding: 6px 18px;
   position: absolute;
   text-align: center;
   top: 42px;
+  transition: opacity .5s;
   visibility: hidden;
   z-index: 1000;
 

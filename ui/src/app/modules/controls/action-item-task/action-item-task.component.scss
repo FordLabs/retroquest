@@ -310,6 +310,7 @@
     }
 
     :hover > rq-tooltip {
+      opacity: 1;
       visibility: visible;
     }
 
@@ -338,9 +339,6 @@
         font-weight: bold;
       }
 
-      :hover > .tooltip {
-        visibility: visible;
-      }
     }
   }
 }
