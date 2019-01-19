@@ -17,6 +17,10 @@
   visibility: hidden;
   z-index: 1000;
 
+  @media only screen and (max-width: 610px) {
+    display: none;
+  }
+
   .tip-arrow {
     $arrow-size: 12px;
     background-color: $wet-asphalt;
