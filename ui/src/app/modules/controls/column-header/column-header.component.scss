@@ -101,20 +101,34 @@
     }
   }
 
-  .sort {
-    cursor: pointer;
-    display: block;
-    font-size: 1.5rem;
+  .sort-container {
+    position: relative;
+    text-align: center;
 
-    &.sort-icon-translucent {
-      opacity: .45;
+    .sort {
+      cursor: pointer;
+      display: block;
+      font-size: 1.5rem;
+
+      &.sort-icon-translucent {
+        opacity: .45;
+      }
+
+      &.hide {
+        display: none;
+      }
     }
 
-    &.hide {
-      display: none;
+    &:hover {
+      rq-tooltip {
+        opacity: 1;
+        top: 35px;
+        visibility: visible;
+      }
     }
-
   }
+
+
 
   .edit-button {
     color: $white;

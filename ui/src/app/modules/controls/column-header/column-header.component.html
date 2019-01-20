@@ -33,13 +33,18 @@
   {{emojifyText(title)}}
 </div>
 
-<i class="fas fa-sort-down sort"
-   [ngClass]="{
+<div class="sort-container">
+  <div class="fas fa-sort-down sort"
+       [ngClass]="{
         'sort-icon-translucent': !sorted,
         'hide': !readOnlyEnabled
      }"
-     (click)="toggleSort()"
-  ></i>
+       (click)="toggleSort()"
+  >
+  </div>
+  <rq-tooltip [theme]="theme" [text]="sorted ? 'Unsort' : 'Sort'"></rq-tooltip>
+</div>
+
 
 <span
   class="edit-button"
