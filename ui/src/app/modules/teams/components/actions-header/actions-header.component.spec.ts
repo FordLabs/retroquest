@@ -37,7 +37,7 @@ describe('ActionsHeaderComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('addThought', () => {
+  describe('addActionItem', () => {
 
     const mockDateString = '2018-01-01';
     const mockDate = moment(mockDateString).toDate();
@@ -50,22 +50,58 @@ describe('ActionsHeaderComponent', () => {
       jasmine.clock().uninstall();
     });
 
-    it('should construct the thought and call ThoughtService.addThought', () => {
-      const newTask = 'a new actionItem';
+    it('should construct the action item and call the backend', () => {
+      const newMessage = 'a new actionItem';
 
       const expectedActionItem: ActionItem = {
         id: null,
         teamId: teamId,
-        task: newTask,
+        task: newMessage,
         completed: false,
         assignee: null,
         dateCreated: moment(mockDateString).format()
       };
 
-      component.addActionItem(newTask);
+      component.addActionItem(newMessage);
 
       expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(expectedActionItem);
     });
+
+    it('should parse out the assignees from the new message and add it to the action item', () => {
+      const newUnformattedMessage = `a new actionItem @ben @frank`;
+      const expectedFormattedMessage = 'a new actionItem';
+
+      const expectedActionItem: ActionItem = {
+        id: null,
+        teamId: teamId,
+        task: expectedFormattedMessage,
+        completed: false,
+        assignee: 'ben, frank',
+        dateCreated: moment(mockDateString).format()
+      };
+
+      component.addActionItem(newUnformattedMessage);
+
+      expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(expectedActionItem);
+    });
+
+    it('should set the assignees in the action item to null if none could be parsed out of the message',
+      () => {
+        const newMessage = `a new actionItem`;
+
+        const expectedActionItem: ActionItem = {
+          id: null,
+          teamId: teamId,
+          task: newMessage,
+          completed: false,
+          assignee: null,
+          dateCreated: moment(mockDateString).format()
+        };
+
+        component.addActionItem(newMessage);
+
+        expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(expectedActionItem);
+      });
   });
 
   describe('onSortChanged', () => {
