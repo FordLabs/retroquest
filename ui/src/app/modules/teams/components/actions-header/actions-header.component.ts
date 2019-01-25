@@ -21,6 +21,9 @@ import {ActionItemService} from '../../services/action.service';
 import * as moment from 'moment';
 import {Themes} from '../../../domain/Theme';
 
+const ASSIGNEE_PARSE_SYMBOL = '@';
+const ASSIGNEE_PARSE_REGEX = /(\@[a-zA-Z0-9]+\b)/g;
+
 @Component({
   selector: 'rq-actions-header',
   templateUrl: './actions-header.component.html',
@@ -42,20 +45,43 @@ export class ActionsHeaderComponent {
   public addActionItem(newMessage: string): void {
     if (newMessage && newMessage.length) {
       const todaysDate = moment().format();
-      const actionItem: ActionItem = {
-        id: null,
-        teamId: this.teamId,
-        task: newMessage,
-        completed: false,
-        assignee: null,
-        dateCreated: todaysDate
-      };
+      const assignees = this.parseAssignees(newMessage);
+      const updatedMessage = this.removeAssigneesFromMessage(newMessage, assignees);
 
-      this.actionItemService.addActionItem(actionItem);
+      if (updatedMessage && updatedMessage.length) {
+        const actionItem: ActionItem = {
+          id: null,
+          teamId: this.teamId,
+          task: updatedMessage,
+          completed: false,
+          assignee: assignees ? assignees.join(', ') : null,
+          dateCreated: todaysDate
+        };
+
+        this.actionItemService.addActionItem(actionItem);
+      }
     }
   }
 
   public onSortChanged(sortState: boolean): void {
     this.sortChanged.emit(sortState);
+  }
+
+  private parseAssignees(newMessage: string): string[] {
+    const matches = newMessage.match(ASSIGNEE_PARSE_REGEX);
+    if (matches) {
+      return matches.map(assignee => assignee.replace(ASSIGNEE_PARSE_SYMBOL, ''));
+    }
+    return null;
+  }
+
+  private removeAssigneesFromMessage(newMessage: string, assignees: string[]): string {
+    if (assignees) {
+      return newMessage
+        .replace(ASSIGNEE_PARSE_REGEX, '')
+        .replace(/\s+/g, ' ') // kill extra whitespaces in middle of message
+        .trim();
+    }
+    return newMessage;
   }
 }
