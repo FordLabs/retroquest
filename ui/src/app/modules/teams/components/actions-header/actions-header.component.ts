@@ -22,7 +22,7 @@ import * as moment from 'moment';
 import {Themes} from '../../../domain/Theme';
 
 const ASSIGNEE_PARSE_SYMBOL = '@';
-const ASSIGNEE_PARSE_REGEX = /(\@[a-zA-Z]+\b)/g;
+const ASSIGNEE_PARSE_REGEX = /(\@[a-zA-Z0-9]+\b)/g;
 
 @Component({
   selector: 'rq-actions-header',

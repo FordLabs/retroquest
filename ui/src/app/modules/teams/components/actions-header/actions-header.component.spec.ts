@@ -68,7 +68,7 @@ describe('ActionsHeaderComponent', () => {
     });
 
     it('should parse out the assignees from the new message and add it to the action item', () => {
-      const newUnformattedMessage = `a new actionItem @ben @frank`;
+      const newUnformattedMessage = `a new actionItem @ben12 @frank`;
       const expectedFormattedMessage = 'a new actionItem';
 
       const expectedActionItem: ActionItem = {
@@ -76,7 +76,7 @@ describe('ActionsHeaderComponent', () => {
         teamId: teamId,
         task: expectedFormattedMessage,
         completed: false,
-        assignee: 'ben, frank',
+        assignee: 'ben12, frank',
         dateCreated: moment(mockDateString).format()
       };
 
