@@ -104,10 +104,6 @@ export class TeamPageComponent implements OnInit {
     }
   }
 
-  public onThemeChanged(theme: Themes) {
-    this.theme = theme;
-  }
-
   ngOnInit(): void {
 
     this.activeRoute.params.subscribe((params) => {
