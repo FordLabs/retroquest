@@ -64,8 +64,7 @@
       width: 2px;
 
       @media only screen and (max-width: 610px) {
-        height: 16px;
-        margin: 0 12px;
+        display: none;
       }
 
       &.dark-theme {
@@ -85,6 +84,10 @@
 
       #logo {
         height: inherit;
+
+        @media only screen and (max-width: 610px) {
+          display: none;
+        }
       }
     }
 
@@ -96,6 +99,8 @@
 
       @media only screen and (max-width: 610px) {
         font-size: 1rem;
+        margin: 0 auto;
+        text-align: center;
       }
 
       &.dark-theme {
