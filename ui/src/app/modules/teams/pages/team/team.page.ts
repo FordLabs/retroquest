@@ -104,6 +104,10 @@ export class TeamPageComponent implements OnInit {
     }
   }
 
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
+  }
+
   ngOnInit(): void {
 
     this.activeRoute.params.subscribe((params) => {

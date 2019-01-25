@@ -57,7 +57,12 @@
         background-color: $happy-green;
 
         &.selected {
+          border-top: 4px solid $wet-asphalt;
           opacity: 1;
+
+          &.dark-theme {
+            border-top-color: $grape;
+          }
         }
       }
 
@@ -65,7 +70,12 @@
         background-color: $confused-blue;
 
         &.selected {
+          border-top: 4px solid $wet-asphalt;
           opacity: 1;
+
+          &.dark-theme {
+            border-top-color: $grape;
+          }
         }
       }
 
@@ -73,7 +83,12 @@
         background-color: $unhappy-red;
 
         &.selected {
+          border-top: 4px solid $wet-asphalt;
           opacity: 1;
+
+          &.dark-theme {
+            border-top-color: $grape;
+          }
         }
       }
 
@@ -81,7 +96,12 @@
         background-color: $action-yellow;
 
         &.selected {
+          border-top: 4px solid $wet-asphalt;
           opacity: 1;
+
+          &.dark-theme {
+            border-top-color: $grape;
+          }
         }
       }
     }

@@ -88,22 +88,34 @@
     <div
       class="guide-button happy-guide-button"
       (click)="setSelectedIndex(0)"
-      [ngClass]="{'selected': isSelectedIndex(0)}"
+      [ngClass]="{
+        'selected': isSelectedIndex(0),
+        'dark-theme': darkThemeIsEnabled
+      }"
     ></div>
     <div
       class="guide-button confused-guide-button"
       (click)="setSelectedIndex(1)"
-      [ngClass]="{'selected': isSelectedIndex(1)}"
+      [ngClass]="{
+        'selected': isSelectedIndex(1),
+        'dark-theme': darkThemeIsEnabled
+      }"
     ></div>
     <div
       class="guide-button sad-guide-button"
       (click)="setSelectedIndex(2)"
-      [ngClass]="{'selected': isSelectedIndex(2)}"
+      [ngClass]="{
+        'selected': isSelectedIndex(2),
+        'dark-theme': darkThemeIsEnabled
+      }"
     ></div>
     <div
       class="guide-button action-guide-button"
       (click)="setSelectedIndex(3)"
-      [ngClass]="{'selected': isSelectedIndex(3)}"
+      [ngClass]="{
+        'selected': isSelectedIndex(3),
+        'dark-theme': darkThemeIsEnabled
+      }"
     ></div>
   </div>
 
