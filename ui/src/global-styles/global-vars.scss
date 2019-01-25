@@ -15,7 +15,8 @@
  * limitations under the License.
  */
 
-
 $global-side-padding: 24px;
 
 $desktop-max-width: 1440px + (2 * $global-side-padding);
+
+$mobile-min-cutoff: 610px;
