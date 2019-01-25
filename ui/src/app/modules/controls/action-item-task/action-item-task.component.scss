@@ -304,9 +304,12 @@
       }
     }
 
-    .edit-container,
     .delete-container {
       font-size: 1rem;
+    }
+
+    .edit-container {
+      cursor: pointer;
     }
 
     :hover > rq-tooltip {
@@ -314,7 +317,6 @@
       visibility: visible;
     }
 
-    .edit-container,
     .date-created-container {
       cursor: default;
       flex-direction: column;
