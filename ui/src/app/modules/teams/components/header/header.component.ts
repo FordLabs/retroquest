@@ -99,7 +99,6 @@ export class HeaderComponent implements OnInit {
     }
 
     this.saveTheme();
-    this.themeChanged.emit(this.theme);
   }
 
   private saveTheme(): void {
@@ -107,6 +106,7 @@ export class HeaderComponent implements OnInit {
     if (themeString !== '') {
       localStorage.setItem('theme', themeString);
     }
+    this.themeChanged.emit(this.theme);
   }
 
 

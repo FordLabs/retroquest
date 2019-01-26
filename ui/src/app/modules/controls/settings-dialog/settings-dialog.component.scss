@@ -37,6 +37,8 @@
     position: relative;
     color: inherit;
     width: 360px;
+    display: flex;
+    flex-direction: column;
 
     .heading-container {
       width: 100%;
@@ -63,30 +65,85 @@
       }
     }
 
-    .footer {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: inherit;
-      border-bottom-left-radius: inherit;
-      border-bottom-right-radius: inherit;
-      box-sizing: border-box;
+    .body {
+      flex: 1;
+      width: 100%;
+      //background-color: red;
 
-      rq-button {
-        height: 50px;
-        width: 75%;
-        margin: 32px auto;
-        font-size: 1.2rem;
-        font-weight: bold;
-        color: $clouds;
+      .tab-heading {
 
-        &:hover {
-          color: $wet-asphalt;
+        margin: 6px auto 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 235px;
+        text-align: center;
+        box-shadow: 0 4px 15px opacity($black, .1);
+        border-radius: 6px;
+        overflow: hidden;
+
+        .tab {
+          cursor: pointer;
+          font-weight: bold;
+          padding: 12px 12px;
+          box-sizing: border-box;
+          width: 50%;
+          background-color: #bdc3c7;
+          text-transform: capitalize;
+
+          &.selected {
+            background-color: $wet-asphalt;
+            color: $clouds;
+          }
+
+          &:not(:last-child) {
+            border-right: 2px solid opacity($wet-asphalt, .08);
+          }
+        }
+
+      }
+
+      .tab-body {
+        position: relative;
+        margin-top: 24px;
+        padding: 0 48px;
+        box-sizing: border-box;
+
+        rq-button {
+          height: 50px;
+          width: 75%;
+          margin: 32px auto;
+          font-size: 1.2rem;
+          font-weight: bold;
           background-color: opacity($action-yellow, .7);
+          color: $wet-asphalt;
+
+          &:hover {
+            background-color: opacity($action-yellow, .7);
+          }
+        }
+
+        &.styles-tab-body {
+          .label {
+            text-transform: capitalize;
+            font-weight: bold;
+          }
+
+          select {
+            width: 100%;
+            margin-top: 12px;
+
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: $wet-asphalt;
+            text-transform: capitalize;
+          }
         }
       }
+
+
     }
+
 
   }
 

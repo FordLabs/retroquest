@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import {Component, Input, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {Themes} from '../../../domain/Theme';
 import {SettingsDialogComponent} from '../../../controls/settings-dialog/settings-dialog.component';
 
@@ -30,6 +30,8 @@ export class TopHeaderComponent {
   @Input() teamId: string;
 
   @Input() theme: Themes = Themes.Light;
+
+  @Output() themeChanged: EventEmitter<Themes> = new EventEmitter();
 
   @ViewChild(SettingsDialogComponent) settingsDialog: SettingsDialogComponent;
 

@@ -44,4 +44,9 @@
 
 </div>
 
-<rq-settings-dialog #settingsDialog [teamId]="teamId"></rq-settings-dialog>
+<rq-settings-dialog
+  #settingsDialog
+  [teamId]="teamId"
+  [theme]="theme"
+  (themeChanged)="themeChanged.emit($event)"
+></rq-settings-dialog>

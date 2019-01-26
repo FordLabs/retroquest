@@ -3,7 +3,53 @@
     <div class="heading">settings</div>
     <div class="sub-heading"><span class="asterisk">*</span>under development! <em>(beta)</em></div>
   </div>
-  <div class="footer">
-    <rq-button text="logout" type="primary" (click)="logoutOfAccount()"></rq-button>
+
+  <div class="body">
+    <div class="tab-heading">
+      <div
+        class="tab"
+        (click)="stylesTabIsVisible = true"
+        [ngClass]="{
+          'selected': stylesTabIsVisible
+        }"
+      >styles
+      </div>
+      <div
+        class="tab"
+        (click)="accountTabIsVisible = true"
+        [ngClass]="{
+          'selected': accountTabIsVisible
+        }"
+      >account
+      </div>
+    </div>
+
+    <div class="tab-body styles-tab-body" *ngIf="stylesTabIsVisible">
+      <div class="label">current theme</div>
+      <div class="tab-heading">
+        <div
+          class="tab"
+          (click)="enableDarkTheme()"
+          [ngClass]="{
+            'selected': stylesTabIsVisible
+          }"
+        >styles
+        </div>
+        <div
+          class="tab"
+          (click)="enableLightTheme()"
+          [ngClass]="{
+          'selected': accountTabIsVisible
+        }"
+        >account
+        </div>
+      </div>
+
+    </div>
+
+    <div class="tab-body account-tab-body" *ngIf="accountTabIsVisible">
+      <rq-button text="logout" type="primary" (click)="logoutOfAccount()"></rq-button>
+    </div>
+
   </div>
 </div>

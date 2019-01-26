@@ -17,7 +17,7 @@
 
 <header id="header">
 
-  <rq-top-header [teamId]="teamId" [lastSavedText]="lastSavedText" [teamName]="teamName" [theme]="theme"></rq-top-header>
+  <rq-top-header [theme]="theme" [teamId]="teamId" [lastSavedText]="lastSavedText" [teamName]="teamName" (themeChanged)="theme = $event; saveTheme()"></rq-top-header>
 
   <div
     id="headerBottom"
