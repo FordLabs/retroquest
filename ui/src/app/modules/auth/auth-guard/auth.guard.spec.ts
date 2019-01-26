@@ -19,6 +19,7 @@ import {Observable} from 'rxjs/internal/Observable';
 import {ActivatedRouteSnapshot, UrlSegment} from '@angular/router';
 import {Subject} from 'rxjs/internal/Subject';
 import {AuthGuard} from './auth.guard';
+import {AuthService} from '../auth.service';
 
 describe('AuthGuard', () => {
 
@@ -33,6 +34,10 @@ describe('AuthGuard', () => {
     });
     mockTeamService = jasmine.createSpyObj({validateTeamId: new Subject()});
     guard = new AuthGuard(mockTeamService, mockRouter);
+  });
+
+  afterEach(() => {
+    AuthService.clearToken();
   });
 
   it('should navigate to the login page when navigating to a team page you are not authorized to see', () => {
@@ -50,7 +55,8 @@ describe('AuthGuard', () => {
     mockTeamService.validateTeamId().error();
   });
 
-  it('should navigate to the desired page when you are authorized to see it', () => {
+  it('should navigate to the desired page when you are authorized to see it with the cookie being present', () => {
+    AuthService.setToken('some token');
     const mockNextRouteSnapshot = new ActivatedRouteSnapshot();
     mockNextRouteSnapshot.url = [
       new UrlSegment('team', null),
@@ -61,6 +67,21 @@ describe('AuthGuard', () => {
 
     (guard.canActivate(mockNextRouteSnapshot, mockState) as Observable<boolean>).subscribe(() => {
       expect(mockRouter.navigate).not.toHaveBeenCalled();
+    });
+    mockTeamService.validateTeamId().next();
+  });
+
+  it('should navigate to the login page if you are unauthorized to view your desired team page', () => {
+    const mockNextRouteSnapshot = new ActivatedRouteSnapshot();
+    mockNextRouteSnapshot.url = [
+      new UrlSegment('team', null),
+      new UrlSegment('incorrect-team', null)
+    ];
+
+    const mockState = null;
+
+    (guard.canActivate(mockNextRouteSnapshot, mockState) as Observable<boolean>).subscribe(() => {
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['login', 'incorrect-team']);
     });
     mockTeamService.validateTeamId().next();
   });

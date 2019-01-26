@@ -40,4 +40,8 @@
   >{{teamName}}
   </div>
   <div class="last-saved-text">{{lastSavedText}}</div>
+  <div class="settings-button fas fa-cog" (click)="settingsDialog.show()"></div>
+
 </div>
+
+<rq-settings-dialog #settingsDialog [teamId]="teamId"></rq-settings-dialog>

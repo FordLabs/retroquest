@@ -17,7 +17,7 @@
 
 <header id="header">
 
-  <rq-top-header [lastSavedText]="lastSavedText" [teamName]="teamName" [theme]="theme"></rq-top-header>
+  <rq-top-header [teamId]="teamId" [lastSavedText]="lastSavedText" [teamName]="teamName" [theme]="theme"></rq-top-header>
 
   <div
     id="headerBottom"
@@ -124,7 +124,6 @@
 
 <rq-end-retro-dialog
   #endRetroModal
-  [visible]="false"
   [theme]="theme"
   (submitted)="onEndRetroDialogSubmitted()"
 ></rq-end-retro-dialog>

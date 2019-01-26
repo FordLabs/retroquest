@@ -118,6 +118,17 @@
         display: none;
       }
     }
+
+    .settings-button {
+      font-size: 1.3rem;
+      margin-left: 18px;
+      cursor: pointer;
+      position: relative;
+
+      &:hover {
+        color: $turquoise;
+      }
+    }
   }
 
 }
