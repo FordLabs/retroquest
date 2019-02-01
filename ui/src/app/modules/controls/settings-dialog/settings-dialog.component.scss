@@ -6,6 +6,7 @@
   background-color: opacity($black, .5);
   bottom: 0;
   box-sizing: border-box;
+  color: inherit;
   display: flex;
   height: 100%;
   justify-content: center;
@@ -16,7 +17,6 @@
   top: 0;
   width: 100%;
   z-index: 100;
-  color: inherit;
 
   @media only screen and (max-width: 610px) {
     flex-direction: column;
@@ -24,43 +24,56 @@
   }
 
   .dialog {
-    $base-drop-shadow: 0 19px 38px rgba(0, 0, 0, 0.3);
+    $base-drop-shadow: 0 19px 38px rgba(0, 0, 0, .3);
 
     background-color: $white;
-    box-shadow: $base-drop-shadow;
     border-radius: 6px;
+    box-shadow: $base-drop-shadow;
     box-sizing: border-box;
-    font-size: 1rem;
-    height: 400px;
-    max-height: 50%;
-    max-width: 650px;
-    position: relative;
     color: inherit;
-    width: 360px;
     display: flex;
     flex-direction: column;
+    font-size: 1rem;
+    height: 450px;
+    padding: 24px 36px 48px;
+    position: relative;
+    width: 400px;
+
+    @media only screen and (max-width: 610px) {
+      margin-bottom: 8px;
+      padding: 12px 6px;
+      width: calc(100% - 16px);
+    }
+
+    &.dark-theme {
+      background-color: $task-background-dark;
+    }
 
     .heading-container {
-      width: 100%;
-      padding: 12px 36px;
-      text-align: center;
-      font-weight: bold;
-      text-transform: capitalize;
       box-sizing: border-box;
+      font-weight: bold;
+      margin-bottom: 12px;
+      padding: 0 36px;
+      text-align: center;
+      text-transform: capitalize;
+      width: 100%;
 
       .heading {
-        color: $wet-asphalt;
-        font-size: 2rem;
+        font-size: 2.5rem;
       }
 
       .sub-heading {
         color: opacity($wet-asphalt, .5);
         font-size: 1rem;
 
+        &.dark-theme {
+          color: opacity($clouds, .5);
+        }
+
         .asterisk {
           color: $unhappy-red;
-          font-weight: bold;
           font-size: 1.5rem;
+          font-weight: bold;
         }
       }
     }
@@ -68,55 +81,58 @@
     .body {
       flex: 1;
       width: 100%;
-      //background-color: red;
 
       .tab-heading {
 
-        margin: 6px auto 0;
-        display: flex;
-        justify-content: center;
         align-items: center;
-        width: 235px;
-        text-align: center;
-        box-shadow: 0 4px 15px opacity($black, .1);
         border-radius: 6px;
+        display: flex;
+        font-size: 1.2rem;
+        justify-content: center;
+        margin: 6px auto 0;
         overflow: hidden;
+        text-align: center;
+        width: 235px;
 
         .tab {
+          background-color: $clouds;
+          box-sizing: border-box;
           cursor: pointer;
           font-weight: bold;
-          padding: 12px 12px;
-          box-sizing: border-box;
-          width: 50%;
-          background-color: #bdc3c7;
+          padding: 9px;
           text-transform: capitalize;
+          width: 50%;
+
+          &.dark-theme {
+            background-color: $header-background-color-dark;
+          }
 
           &.selected {
-            background-color: $wet-asphalt;
-            color: $clouds;
+            background-color: $turquoise;
+            color: $white;
+
           }
 
           &:not(:last-child) {
             border-right: 2px solid opacity($wet-asphalt, .08);
           }
         }
-
       }
 
       .tab-body {
-        position: relative;
-        margin-top: 24px;
-        padding: 0 48px;
         box-sizing: border-box;
+        margin-top: 36px;
+        padding: 0 48px;
+        position: relative;
 
         rq-button {
-          height: 50px;
-          width: 75%;
-          margin: 32px auto;
-          font-size: 1.2rem;
-          font-weight: bold;
           background-color: opacity($action-yellow, .7);
           color: $wet-asphalt;
+          font-size: 1.2rem;
+          font-weight: bold;
+          height: 50px;
+          margin: 32px auto;
+          width: 75%;
 
           &:hover {
             background-color: opacity($action-yellow, .7);
@@ -124,19 +140,47 @@
         }
 
         &.styles-tab-body {
+          align-items: center;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          width: 100%;
+
           .label {
-            text-transform: capitalize;
+            font-size: 1.2rem;
             font-weight: bold;
+            text-transform: capitalize;
           }
 
-          select {
-            width: 100%;
-            margin-top: 12px;
+          .theme-tab-heading {
+            border-radius: 0;
+            margin-top: 24px;
+            overflow: visible;
 
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: $wet-asphalt;
-            text-transform: capitalize;
+
+            .theme-icon-container {
+
+              &:not(:last-child) {
+                margin-right: 32px;
+              }
+
+              img {
+                border-radius: 12px;
+
+                &.selected {
+                  box-shadow: 0 0 0 8px $turquoise;
+                }
+
+              }
+
+              .theme-icon-label {
+                font-size: 1rem;
+                font-weight: bolder;
+                margin: 6px auto 0;
+                text-transform: capitalize;
+              }
+            }
+
           }
         }
       }

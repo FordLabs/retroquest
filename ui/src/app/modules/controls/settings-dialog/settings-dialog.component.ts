@@ -62,12 +62,18 @@ export class SettingsDialogComponent {
   }
 
   enableDarkTheme() {
-    console.log("ENABLE DAERK");
     this.themeChanged.emit(Themes.Dark);
   }
 
   enableLightTheme() {
-    console.log("ENABLE light");
     this.themeChanged.emit(Themes.Light);
+  }
+
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
+  }
+
+  get lightThemeIsEnabled(): boolean {
+    return this.theme === Themes.Light;
   }
 }
