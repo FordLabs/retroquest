@@ -43,13 +43,14 @@ export function themeToString(theme: Themes): string {
 
 export function getAllThemesAsString(): Array<string> {
   const result = [];
-  for ( let themeStr in Themes) {
-    const theme = Number(themeStr);
-    if(!isNaN(theme) && theme != Themes.None) {
-      result.push(themeToString(theme));
+  for (const themeStr in Themes) {
+    if (themeStr) {
+      const theme = Number(themeStr);
+      if (!isNaN(theme) && theme != Themes.None) {
+        result.push(themeToString(theme));
+      }
     }
   }
-
 
   return result;
 }
