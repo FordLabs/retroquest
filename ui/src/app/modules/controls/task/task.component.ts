@@ -43,6 +43,7 @@ export class TaskComponent implements AfterViewChecked {
   @Input() enableOverlayBorder = false;
   @Input() readOnly = false;
   @Input() theme = Themes.Light;
+  @Input() archived = false;
 
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
   @Output() deleted: EventEmitter<Thought> = new EventEmitter<Thought>();
