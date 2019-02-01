@@ -15,8 +15,9 @@
  * limitations under the License.
  */
 
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {Themes} from '../../../domain/Theme';
+import {SettingsDialogComponent} from '../../../controls/settings-dialog/settings-dialog.component';
 
 @Component({
   selector: 'rq-top-header',
@@ -26,8 +27,13 @@ import {Themes} from '../../../domain/Theme';
 export class TopHeaderComponent {
   @Input() teamName: string;
   @Input() lastSavedText: string;
+  @Input() teamId: string;
 
   @Input() theme: Themes = Themes.Light;
+
+  @Output() themeChanged: EventEmitter<Themes> = new EventEmitter();
+
+  @ViewChild(SettingsDialogComponent) settingsDialog: SettingsDialogComponent;
 
   get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;

@@ -39,7 +39,7 @@ export class TeamService {
     return this.http.post(
       '/api/team/login',
       {name, password, captchaResponse},
-      {observe: 'response' , responseType: 'text'}
+      {observe: 'response', responseType: 'text'}
     );
   }
 
