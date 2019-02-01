@@ -42,7 +42,7 @@ export function themeToString(theme: Themes): string {
 }
 
 export function getAllThemesAsString(): Array<string> {
-  let result = [];
+  const result = [];
   for ( let themeStr in Themes) {
     const theme = Number(themeStr);
     if(!isNaN(theme) && theme != Themes.None) {
