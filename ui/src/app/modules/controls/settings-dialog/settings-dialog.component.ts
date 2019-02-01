@@ -14,7 +14,7 @@ import {Themes, themeToString} from '../../domain/Theme';
 })
 export class SettingsDialogComponent {
 
-  @Input() visible = true;
+  @Input() visible = false;
   @Input() teamId: string;
   @Input() theme: Themes;
   @Output() themeChanged: EventEmitter<Themes> = new EventEmitter();
