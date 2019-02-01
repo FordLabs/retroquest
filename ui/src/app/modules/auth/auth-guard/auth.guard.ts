@@ -17,8 +17,9 @@
 
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs';
+import {Observable, Subscriber} from 'rxjs';
 import {TeamService} from '../../teams/services/team.service';
+import {AuthService} from '../auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,23 +32,30 @@ export class AuthGuard implements CanActivate {
   ) {
   }
 
+  private navigateToTeamLoginPage(subscriber: Subscriber<boolean>, teamId: string) {
+    this.router.navigate(['login', teamId]);
+    subscriber.next(true);
+  }
+
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-    return new Observable<boolean>(observer => {
-
+    return new Observable<boolean>(subscriber => {
       const teamId = next.url[1].path;
 
-      this.teamService.validateTeamId(teamId).subscribe(
-        () => {
-          observer.next(true);
-        },
-        () => {
-          this.router.navigate(['login', teamId]);
-          observer.next(true);
-        }
-      );
+      if (AuthService.getToken()) {
+
+        this.teamService.validateTeamId(teamId).subscribe(
+          () => {
+            subscriber.next(true);
+          },
+          () => this.navigateToTeamLoginPage(subscriber, teamId)
+        );
+      } else {
+        this.navigateToTeamLoginPage(subscriber, teamId);
+      }
+
     });
   }
 }

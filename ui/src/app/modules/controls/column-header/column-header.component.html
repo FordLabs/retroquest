@@ -53,9 +53,10 @@
     }"
   *ngIf="!readOnly"
 >
-  <i class="fas fa-pencil-alt"
-     (click)="toggleEdit()"
-  ></i>
+  <i class="fas fa-pencil-alt" (click)="toggleEdit()"></i>
+
+  <rq-tooltip [theme]="theme" text="Edit"></rq-tooltip>
+
 </span>
 
 <rq-floating-character-countdown
