@@ -28,7 +28,12 @@ import java.util.stream.Collectors;
 @RestController
 public class ContributorController {
 
+    private static final long MILLISECONDS_IN_DAY = 86400000;
+
     private final RestTemplate restTemplate;
+    private long epochMilisOfLastRequest = 0L;
+
+    private List<Contributor> cachedContributors;
 
     public ContributorController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -36,12 +41,19 @@ public class ContributorController {
 
     @GetMapping("/api/contributors")
     public List<Contributor> getContributors() {
+        if (System.currentTimeMillis() - MILLISECONDS_IN_DAY > epochMilisOfLastRequest) {
+            cacheContributors();
+        }
+        return cachedContributors;
+    }
+
+    private void cacheContributors() {
         GithubContributor[] response = this.restTemplate.getForObject(
                 "https://api.github.com/repos/FordLabs/retroquest/contributors",
                 GithubContributor[].class,
                 Collections.emptyMap()
         );
-        return Arrays.stream(response)
+        cachedContributors =  Arrays.stream(response)
                 .filter(githubContributor -> !githubContributor.getAccountUrl().endsWith("/invalid-email-address"))
                 .map(githubContributor -> new Contributor(
                         getAvatar(githubContributor.getAvatarUrl()), githubContributor.getAccountUrl()
@@ -50,5 +62,18 @@ public class ContributorController {
 
     private byte[] getAvatar(String avatarUrl) {
         return this.restTemplate.getForObject(avatarUrl, byte[].class, Collections.emptyMap());
+    }
+
+    ContributorController setEpochMilisOfLastRequest(long epochMilisOfLastRequest) {
+        this.epochMilisOfLastRequest = epochMilisOfLastRequest;
+        return this;
+    }
+
+    List<Contributor> getCachedContributors() {
+        return cachedContributors;
+    }
+
+    void setCachedContributors(List<Contributor> contributors) {
+        this.cachedContributors = contributors;
     }
 }
