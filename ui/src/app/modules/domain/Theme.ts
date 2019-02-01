@@ -40,17 +40,3 @@ export function themeToString(theme: Themes): string {
 
   return '';
 }
-
-export function getAllThemesAsString(): Array<string> {
-  const result = [];
-  for (const themeStr in Themes) {
-    if (themeStr) {
-      const theme = Number(themeStr);
-      if (!isNaN(theme) && theme != Themes.None) {
-        result.push(themeToString(theme));
-      }
-    }
-  }
-
-  return result;
-}

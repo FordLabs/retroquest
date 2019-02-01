@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AuthService} from '../../auth/auth.service';
 import {Router} from '@angular/router';
-import {getAllThemesAsString, Themes} from '../../domain/Theme';
+import {Themes, themeToString} from '../../domain/Theme';
 
 @Component({
   selector: 'rq-settings-dialog',
@@ -23,10 +23,6 @@ export class SettingsDialogComponent {
   _accountTabIsVisible = false;
 
   constructor(private router: Router) {
-  }
-
-  get allThemes(): Array<string> {
-    return getAllThemesAsString();
   }
 
   set stylesTabIsVisible(visible: boolean) {
@@ -52,7 +48,6 @@ export class SettingsDialogComponent {
   }
 
   hide() {
-    console.log(this.visible);
     this.visible = false;
   }
 
@@ -62,11 +57,17 @@ export class SettingsDialogComponent {
   }
 
   enableDarkTheme() {
-    this.themeChanged.emit(Themes.Dark);
+    this.enableTheme(Themes.Dark);
   }
 
   enableLightTheme() {
-    this.themeChanged.emit(Themes.Light);
+    this.enableTheme(Themes.Light);
+  }
+
+  private enableTheme(theme: Themes) {
+    this.theme = theme;
+    this.themeChanged.emit(this.theme);
+    this.saveTheme();
   }
 
   get darkThemeIsEnabled(): boolean {
@@ -76,4 +77,13 @@ export class SettingsDialogComponent {
   get lightThemeIsEnabled(): boolean {
     return this.theme === Themes.Light;
   }
+
+  private saveTheme(): void {
+    const themeString = themeToString(this.theme);
+    if (themeString !== '') {
+      localStorage.setItem('theme', themeString);
+    }
+    this.themeChanged.emit(this.theme);
+  }
+
 }

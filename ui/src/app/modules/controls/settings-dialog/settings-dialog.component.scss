@@ -60,6 +60,10 @@
 
       .heading {
         font-size: 2.5rem;
+
+        @media only screen and (max-width: 610px) {
+          font-size: 2rem;
+        }
       }
 
       .sub-heading {
@@ -70,10 +74,8 @@
           color: opacity($clouds, .5);
         }
 
-        .asterisk {
-          color: $unhappy-red;
-          font-size: 1.5rem;
-          font-weight: bold;
+        @media only screen and (max-width: 610px) {
+          font-size: .9rem;
         }
       }
     }
@@ -150,13 +152,17 @@
             font-size: 1.2rem;
             font-weight: bold;
             text-transform: capitalize;
+
+            @media only screen and (max-width: 610px) {
+              font-size: 1.1rem;
+            }
           }
 
           .theme-tab-heading {
             border-radius: 0;
             margin-top: 24px;
             overflow: visible;
-
+            width: 100%;
 
             .theme-icon-container {
 
@@ -171,6 +177,10 @@
                   box-shadow: 0 0 0 8px $turquoise;
                 }
 
+                @media only screen and (max-width: 610px) {
+                  width: 96px;
+                  height: 96px;
+                }
               }
 
               .theme-icon-label {

@@ -90,26 +90,6 @@ export class HeaderComponent implements OnInit {
     return 'Last change saved at ' + this.saveChecker.lastSavedDateTime;
   }
 
-  public toggleThemeColor(): void {
-
-    if (this.theme === Themes.Dark) {
-      this.theme = Themes.Light;
-    } else {
-      this.theme = Themes.Dark;
-    }
-
-    this.saveTheme();
-  }
-
-  private saveTheme(): void {
-    const themeString = themeToString(this.theme);
-    if (themeString !== '') {
-      localStorage.setItem('theme', themeString);
-    }
-    this.themeChanged.emit(this.theme);
-  }
-
-
   private loadTheme(): void {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
