@@ -26,6 +26,7 @@ import {BrandFooterComponent} from './components/brand-footer/brand-footer.compo
 import {RecaptchaModule} from 'ng-recaptcha';
 import {ControlsModule} from '../controls/controls.module';
 import {FocusOnLoadDirective} from './pages/directives/focus-on-load.component';
+import { ContributorsComponent } from './components/contributors/contributors.component';
 
 @NgModule({
   imports: [
@@ -46,6 +47,7 @@ import {FocusOnLoadDirective} from './pages/directives/focus-on-load.component';
     AppTitleComponent,
     BrandFooterComponent,
     FocusOnLoadDirective,
+    ContributorsComponent,
   ],
   exports: [CreateComponent]
 })
