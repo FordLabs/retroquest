@@ -114,6 +114,17 @@ public class TeamService {
         return savedTeam;
     }
 
+    public Team updatePassword(UpdatePasswordRequest updatePasswordRequest) {
+        Team savedTeam = getTeamByUri(updatePasswordRequest.getTeamUri());
+        if (passwordEncoder.matches(updatePasswordRequest.getPreviousPassword(), savedTeam.getPassword())) {
+            String encryptedPassword = passwordEncoder.encode(updatePasswordRequest.getNewPassword());
+            savedTeam.setPassword(encryptedPassword);
+            return teamRepository.save(savedTeam);
+        } else {
+            throw new PasswordInvalidException();
+        }
+    }
+
     private void updateFailedAttempts(Team savedTeam, int failedAttempts) {
         savedTeam.setFailedAttempts(failedAttempts);
         teamRepository.save(savedTeam);

@@ -1,10 +1,7 @@
 package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.security.JwtBuilder;
-import com.ford.labs.retroquest.team.CreateTeamRequest;
-import com.ford.labs.retroquest.team.LoginRequest;
-import com.ford.labs.retroquest.team.Team;
-import com.ford.labs.retroquest.team.TeamRepository;
+import com.ford.labs.retroquest.team.*;
 import org.junit.After;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,6 +140,75 @@ public class TeamApiTest extends ControllerTest {
                 .content(teamJsonSameBody))
                 .andExpect(status().reason(containsString("This board name is already in use. Please try another one.")))
                 .andExpect(status().isConflict());
+    }
+
+    @Test
+    public void canUpdatePasswordWithExistingTeamUriPreviousPasswordAndNewPassword() throws Exception {
+        MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
+        server.expect(requestTo(containsString("http://captcha.url")))
+                .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
+
+        CreateTeamRequest createTeamRequest = new CreateTeamRequest();
+        createTeamRequest.setName("Beachity Bums");
+        createTeamRequest.setPassword(VALID_PASSWORD);
+        createTeamRequest.setCaptchaResponse("some captcha");
+
+        testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
+
+        String updatePasswordJsonBody = "{ \"teamUri\":\"beachity-bums\", \"previousPassword\":\"" + VALID_PASSWORD + "\", \"newPassword\":\"" + VALID_PASSWORD + "1" + "\"}";
+
+        MvcResult mvcResult = mockMvc.perform(post("/api/update-password")
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("beachity-bums"))
+                .contentType(APPLICATION_JSON)
+                .content(updatePasswordJsonBody)).andReturn();
+
+        assertEquals(200, mvcResult.getResponse().getStatus());
+    }
+
+    @Test
+    public void updatePasswordWithIncorrectPasswordReturns403() throws Exception {
+        MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
+        server.expect(requestTo(containsString("http://captcha.url")))
+                .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
+
+        CreateTeamRequest createTeamRequest = new CreateTeamRequest();
+        createTeamRequest.setName("Beachity Bums");
+        createTeamRequest.setPassword(VALID_PASSWORD);
+        createTeamRequest.setCaptchaResponse("some captcha");
+
+        testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
+
+        String updatePasswordJsonBody = "{ \"teamUri\":\"beachity-bums\", \"previousPassword\":\"INCORRECT_PASSWORD\", \"newPassword\":\"" + VALID_PASSWORD + "1" + "\"}";
+
+        MvcResult mvcResult = mockMvc.perform(post("/api/update-password")
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("beachity-bums"))
+                .contentType(APPLICATION_JSON)
+                .content(updatePasswordJsonBody)).andReturn();
+
+        assertEquals(403, mvcResult.getResponse().getStatus());
+    }
+
+    @Test
+    public void updatePasswordWithInvalidNewPasswordReturns400() throws Exception {
+        MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
+        server.expect(requestTo(containsString("http://captcha.url")))
+                .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
+
+        CreateTeamRequest createTeamRequest = new CreateTeamRequest();
+        createTeamRequest.setName("Beachity Bums");
+        createTeamRequest.setPassword(VALID_PASSWORD);
+        createTeamRequest.setCaptchaResponse("some captcha");
+
+        testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
+
+        String updatePasswordJsonBody = "{ \"teamUri\":\"beachity-bums\", \"previousPassword\":\"" + VALID_PASSWORD + "\", \"newPassword\":\"invalid-password\"}";
+
+        MvcResult mvcResult = mockMvc.perform(post("/api/update-password")
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("beachity-bums"))
+                .contentType(APPLICATION_JSON)
+                .content(updatePasswordJsonBody)).andReturn();
+
+        assertEquals(400, mvcResult.getResponse().getStatus());
     }
 
     @Test
