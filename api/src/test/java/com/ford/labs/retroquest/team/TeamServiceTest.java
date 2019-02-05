@@ -93,7 +93,7 @@ public class TeamServiceTest {
         savedTeam.setDateCreated(LocalDate.now());
 
         UpdatePasswordRequest updatePasswordRequest = new UpdatePasswordRequest();
-        updatePasswordRequest.setTeamUri("a-name");
+        updatePasswordRequest.setTeamId("a-name");
         updatePasswordRequest.setNewPassword("newPassword");
         updatePasswordRequest.setPreviousPassword("password");
 
@@ -116,7 +116,7 @@ public class TeamServiceTest {
         savedTeam.setDateCreated(LocalDate.now());
 
         UpdatePasswordRequest updatePasswordRequest = new UpdatePasswordRequest();
-        updatePasswordRequest.setTeamUri("a-name");
+        updatePasswordRequest.setTeamId("a-name");
         updatePasswordRequest.setNewPassword("newPassword");
         updatePasswordRequest.setPreviousPassword("incorrectPassword");
 

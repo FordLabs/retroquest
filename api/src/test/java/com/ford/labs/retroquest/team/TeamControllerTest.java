@@ -98,7 +98,7 @@ public class TeamControllerTest {
     @Test
     public void savesNewPasswordOnResetPassword() {
         UpdatePasswordRequest updatePasswordRequest = new UpdatePasswordRequest();
-        updatePasswordRequest.setTeamUri("a-team");
+        updatePasswordRequest.setTeamId("a-team");
         updatePasswordRequest.setPreviousPassword("password");
         updatePasswordRequest.setNewPassword("new-password");
 

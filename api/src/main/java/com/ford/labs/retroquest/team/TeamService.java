@@ -115,7 +115,7 @@ public class TeamService {
     }
 
     public Team updatePassword(UpdatePasswordRequest updatePasswordRequest) {
-        Team savedTeam = getTeamByUri(updatePasswordRequest.getTeamUri());
+        Team savedTeam = getTeamByUri(updatePasswordRequest.getTeamId());
         if (passwordEncoder.matches(updatePasswordRequest.getPreviousPassword(), savedTeam.getPassword())) {
             String encryptedPassword = passwordEncoder.encode(updatePasswordRequest.getNewPassword());
             savedTeam.setPassword(encryptedPassword);

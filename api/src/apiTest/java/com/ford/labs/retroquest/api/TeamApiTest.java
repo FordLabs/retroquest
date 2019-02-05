@@ -143,7 +143,7 @@ public class TeamApiTest extends ControllerTest {
     }
 
     @Test
-    public void canUpdatePasswordWithExistingTeamUriPreviousPasswordAndNewPassword() throws Exception {
+    public void canUpdatePasswordWithExistingTeamIdPreviousPasswordAndNewPassword() throws Exception {
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
         server.expect(requestTo(containsString("http://captcha.url")))
                 .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
@@ -155,7 +155,7 @@ public class TeamApiTest extends ControllerTest {
 
         testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
 
-        String updatePasswordJsonBody = "{ \"teamUri\":\"beachity-bums\", \"previousPassword\":\"" + VALID_PASSWORD + "\", \"newPassword\":\"" + VALID_PASSWORD + "1" + "\"}";
+        String updatePasswordJsonBody = "{ \"teamId\":\"beachity-bums\", \"previousPassword\":\"" + VALID_PASSWORD + "\", \"newPassword\":\"" + VALID_PASSWORD + "1" + "\"}";
 
         MvcResult mvcResult = mockMvc.perform(post("/api/update-password")
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("beachity-bums"))
@@ -178,7 +178,7 @@ public class TeamApiTest extends ControllerTest {
 
         testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
 
-        String updatePasswordJsonBody = "{ \"teamUri\":\"beachity-bums\", \"previousPassword\":\"INCORRECT_PASSWORD\", \"newPassword\":\"" + VALID_PASSWORD + "1" + "\"}";
+        String updatePasswordJsonBody = "{ \"teamId\":\"beachity-bums\", \"previousPassword\":\"INCORRECT_PASSWORD\", \"newPassword\":\"" + VALID_PASSWORD + "1" + "\"}";
 
         MvcResult mvcResult = mockMvc.perform(post("/api/update-password")
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("beachity-bums"))
@@ -201,7 +201,7 @@ public class TeamApiTest extends ControllerTest {
 
         testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
 
-        String updatePasswordJsonBody = "{ \"teamUri\":\"beachity-bums\", \"previousPassword\":\"" + VALID_PASSWORD + "\", \"newPassword\":\"invalid-password\"}";
+        String updatePasswordJsonBody = "{ \"teamId\":\"beachity-bums\", \"previousPassword\":\"" + VALID_PASSWORD + "\", \"newPassword\":\"invalid-password\"}";
 
         MvcResult mvcResult = mockMvc.perform(post("/api/update-password")
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("beachity-bums"))

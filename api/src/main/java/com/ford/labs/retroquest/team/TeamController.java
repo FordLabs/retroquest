@@ -62,7 +62,7 @@ public class TeamController {
 
     @PostMapping("/update-password")
     @Transactional(rollbackOn = URISyntaxException.class)
-    @PreAuthorize("#updatePasswordRequest.teamUri == authentication.principal")
+    @PreAuthorize("#updatePasswordRequest.teamId == authentication.principal")
     public ResponseEntity<String> updatePassword(@RequestBody @Valid UpdatePasswordRequest updatePasswordRequest) {
         teamService.updatePassword(updatePasswordRequest);
         return ResponseEntity.ok().body("Password Reset Successfully");

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdatePasswordRequest {
 
-    private String teamUri;
+    private String teamId;
 
     private String previousPassword;
 
