@@ -43,6 +43,14 @@ export class TeamService {
     );
   }
 
+  updatePassword(teamId: string, previousPassword: string, newPassword: string): Observable<HttpResponse<string>> {
+    return this.http.post(
+      '/api/update-password',
+      {teamId, previousPassword, newPassword},
+      {observe: 'response', responseType: 'text'}
+    );
+  }
+
   fetchTeamName(teamId: string): Observable<string> {
     return this.http.get(
       `/api/team/${teamId}/name`,
