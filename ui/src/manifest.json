@@ -1,6 +1,6 @@
 {
-  "name": "retroquest-ui",
-  "short_name": "retroquest-ui",
+  "name": "RetroQuest",
+  "short_name": "RetroQuest",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",
