@@ -27,6 +27,8 @@ import {TokenInterceptor} from './modules/auth/token-interceptor/token.intercept
 import {TeamService} from './modules/teams/services/team.service';
 import {ControlsModule} from './modules/controls/controls.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     HttpClientModule,
     RouterModule.forRoot([
       {path: '', redirectTo: 'create', pathMatch: 'full'}
-    ])
+    ]),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     TeamService,
