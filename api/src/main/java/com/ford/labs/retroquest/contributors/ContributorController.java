@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 @RestController
@@ -33,7 +34,7 @@ public class ContributorController {
     private final RestTemplate restTemplate;
     private long epochMilisOfLastRequest = 0L;
 
-    private List<Contributor> cachedContributors;
+    private CopyOnWriteArrayList<Contributor> cachedContributors = new CopyOnWriteArrayList<>();
 
     public ContributorController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -53,11 +54,14 @@ public class ContributorController {
                 GithubContributor[].class,
                 Collections.emptyMap()
         );
-        cachedContributors =  Arrays.stream(response)
+
+        List<Contributor> newContributors = Arrays.stream(response)
                 .filter(githubContributor -> !githubContributor.getAccountUrl().endsWith("/invalid-email-address"))
                 .map(githubContributor -> new Contributor(
                         getAvatar(githubContributor.getAvatarUrl()), githubContributor.getAccountUrl()
                 )).collect(Collectors.toList());
+
+        this.setCachedContributors(newContributors);
     }
 
     private byte[] getAvatar(String avatarUrl) {
@@ -74,6 +78,7 @@ public class ContributorController {
     }
 
     void setCachedContributors(List<Contributor> contributors) {
-        this.cachedContributors = contributors;
+        this.cachedContributors.clear();
+        this.cachedContributors.addAll(contributors);
     }
 }
