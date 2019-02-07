@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 @import 'color-vars';
 
 :host {
@@ -128,8 +127,6 @@
     }
   }
 
-
-
   .edit-button {
     color: $white;
     cursor: pointer;
@@ -141,6 +138,14 @@
     &.edit-button-enabled {
       color: $wet-asphalt;
       display: none;
+    }
+
+    &:hover {
+      rq-tooltip {
+        opacity: 1;
+        top: 30px;
+        visibility: visible;
+      }
     }
   }
 

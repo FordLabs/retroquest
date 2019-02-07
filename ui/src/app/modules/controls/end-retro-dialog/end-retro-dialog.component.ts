@@ -31,7 +31,7 @@ const ESC_KEY = 27;
 })
 export class EndRetroDialogComponent {
 
-  @Input() visible = true;
+  @Input() visible = false;
   @Input() theme = Themes.Light;
 
   @Output() submitted: EventEmitter<void> = new EventEmitter<void>();

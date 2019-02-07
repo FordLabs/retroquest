@@ -26,6 +26,8 @@ import {BrandFooterComponent} from './components/brand-footer/brand-footer.compo
 import {RecaptchaModule} from 'ng-recaptcha';
 import {ControlsModule} from '../controls/controls.module';
 import {FocusOnLoadDirective} from './pages/directives/focus-on-load.component';
+import { ContributorsComponent } from './components/contributors/contributors.component';
+import { UpdatePasswordComponent } from './pages/update-password/update-password.page';
 
 @NgModule({
   imports: [
@@ -35,7 +37,8 @@ import {FocusOnLoadDirective} from './pages/directives/focus-on-load.component';
     RouterModule.forChild([
       {path: 'create', component: CreateComponent},
       {path: 'login', component: LoginComponent},
-      {path: 'login/:teamId', component: LoginComponent}
+      {path: 'login/:teamId', component: LoginComponent},
+      {path: 'update-password/:teamId', component: UpdatePasswordComponent}
     ]),
     RecaptchaModule.forRoot(),
     RecaptchaModule
@@ -43,9 +46,11 @@ import {FocusOnLoadDirective} from './pages/directives/focus-on-load.component';
   declarations: [
     LoginComponent,
     CreateComponent,
+    UpdatePasswordComponent,
     AppTitleComponent,
     BrandFooterComponent,
     FocusOnLoadDirective,
+    ContributorsComponent,
   ],
   exports: [CreateComponent]
 })

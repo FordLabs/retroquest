@@ -36,6 +36,7 @@ export class ThoughtsColumnComponent {
   @Input() column: Column;
   @Input() thoughts: Array<Thought> = [];
   @Input() readOnly = false;
+  @Input() archived = false;
 
   @Input() theme: Themes = Themes.Light;
 

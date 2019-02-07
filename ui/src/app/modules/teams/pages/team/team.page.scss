@@ -36,6 +36,12 @@
     right: 0;
     z-index: 3;
 
+
+    &.dark-theme {
+      background-color: $black;
+    }
+
+
     @media only screen and (max-width: 610px) {
       align-items: center;
       display: flex;
@@ -53,19 +59,44 @@
       opacity: .35;
       width: 25%;
 
+      $dark-theme-accent-color: $clouds;
+
+      &.dark-theme {
+        opacity: .65;
+      }
+
+
       &.happy-guide-button {
         background-color: $happy-green;
 
+        &.dark-theme {
+          background-color: $nephritis;
+        }
+
         &.selected {
+          border-top: 6px solid $wet-asphalt;
           opacity: 1;
+
+          &.dark-theme {
+            border-top-color: $dark-theme-accent-color;
+          }
         }
       }
 
       &.confused-guide-button {
         background-color: $confused-blue;
 
+        &.dark-theme {
+          background-color: $belize-hole;
+        }
+
         &.selected {
+          border-top: 6px solid $wet-asphalt;
           opacity: 1;
+
+          &.dark-theme {
+            border-top-color: $dark-theme-accent-color;
+          }
         }
       }
 
@@ -73,7 +104,13 @@
         background-color: $unhappy-red;
 
         &.selected {
+          border-top: 6px solid $wet-asphalt;
           opacity: 1;
+
+          &.dark-theme {
+            background-color: $pomegranate;
+            border-top-color: $dark-theme-accent-color;
+          }
         }
       }
 
@@ -81,7 +118,13 @@
         background-color: $action-yellow;
 
         &.selected {
+          border-top: 6px solid $wet-asphalt;
           opacity: 1;
+
+          &.dark-theme {
+            background-color: $orange;
+            border-top-color: $dark-theme-accent-color;
+          }
         }
       }
     }

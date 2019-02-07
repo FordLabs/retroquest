@@ -42,7 +42,7 @@ describe('ActionItemTaskComponent', () => {
 
     beforeEach(() => {
       originalTimeoutFunction = window.setTimeout;
-      window.setTimeout = (fn) => fn();
+      window.setTimeout = (fn: Function) => fn();
 
       component.editableTextArea = fakeElementRef;
     });
@@ -179,7 +179,7 @@ describe('ActionItemTaskComponent', () => {
 
     beforeEach(() => {
       originalTimeoutFunction = window.setTimeout;
-      window.setTimeout = (fn) => fn();
+      window.setTimeout = (fn: Function) => fn();
     });
 
     afterEach(() => {

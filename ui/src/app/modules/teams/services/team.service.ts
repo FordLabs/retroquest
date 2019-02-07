@@ -39,7 +39,15 @@ export class TeamService {
     return this.http.post(
       '/api/team/login',
       {name, password, captchaResponse},
-      {observe: 'response' , responseType: 'text'}
+      {observe: 'response', responseType: 'text'}
+    );
+  }
+
+  updatePassword(teamId: string, previousPassword: string, newPassword: string): Observable<HttpResponse<string>> {
+    return this.http.post(
+      '/api/update-password',
+      {teamId, previousPassword, newPassword},
+      {observe: 'response', responseType: 'text'}
     );
   }
 

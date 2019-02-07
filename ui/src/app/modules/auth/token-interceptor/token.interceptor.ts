@@ -23,8 +23,11 @@ import {AuthService} from '../auth.service';
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
 
-  intercept (request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (AuthService.getToken() !== null && request.url !== '/api/team' && request.url !== '/api/team/login') {
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    if (AuthService.getToken() !== null && request.url !== '/api/team' &&
+      request.url !== '/api/team/login' &&
+      request.url !== 'https://api.github.com/repos/FordLabs/retroquest/contributors'
+    ) {
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${AuthService.getToken()}`

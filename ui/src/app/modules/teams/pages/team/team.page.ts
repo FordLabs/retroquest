@@ -104,8 +104,8 @@ export class TeamPageComponent implements OnInit {
     }
   }
 
-  public onThemeChanged(theme: Themes) {
-    this.theme = theme;
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
   }
 
   ngOnInit(): void {
