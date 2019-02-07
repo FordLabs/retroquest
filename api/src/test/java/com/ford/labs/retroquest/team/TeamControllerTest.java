@@ -32,6 +32,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 import static org.springframework.http.HttpStatus.OK;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -92,5 +93,19 @@ public class TeamControllerTest {
         ResponseEntity<String> actualResponse = controller.createTeam(createTeamRequest);
 
         assertEquals(expectedJwt, actualResponse.getBody());
+    }
+
+    @Test
+    public void savesNewPasswordOnResetPassword() {
+        UpdatePasswordRequest updatePasswordRequest = new UpdatePasswordRequest();
+        updatePasswordRequest.setTeamId("a-team");
+        updatePasswordRequest.setPreviousPassword("password");
+        updatePasswordRequest.setNewPassword("new-password");
+
+        when(teamService.updatePassword(updatePasswordRequest)).thenReturn(new Team());
+
+        ResponseEntity<String> actualResponse = controller.updatePassword(updatePasswordRequest);
+
+        verify(teamService).updatePassword(updatePasswordRequest);
     }
 }

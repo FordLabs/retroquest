@@ -60,6 +60,14 @@ public class TeamController {
         return new ResponseEntity<>(jwt, headers, CREATED);
     }
 
+    @PostMapping("/update-password")
+    @Transactional(rollbackOn = URISyntaxException.class)
+    @PreAuthorize("#updatePasswordRequest.teamId == authentication.principal")
+    public ResponseEntity<String> updatePassword(@RequestBody @Valid UpdatePasswordRequest updatePasswordRequest) {
+        teamService.updatePassword(updatePasswordRequest);
+        return ResponseEntity.ok().body("Password Reset Successfully");
+    }
+
     @GetMapping("/team/{teamUri}/name")
     public String getTeamName(@PathVariable("teamUri") String teamUri) {
         return teamService.getTeamByUri(teamUri).getName();
