@@ -24,7 +24,6 @@
     "@angular/core": "^7.2.3",
     "@angular/forms": "^7.2.3",
     "@angular/http": "^7.2.3",
-    "@angular/material": "^7.3.0",
     "@angular/platform-browser": "^7.2.3",
     "@angular/platform-browser-dynamic": "^7.2.3",
     "@angular/pwa": "^0.12.4",
