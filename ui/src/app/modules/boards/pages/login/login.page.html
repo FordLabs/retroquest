@@ -16,12 +16,14 @@
   -->
 
 <div class="login-container">
+
   <re-captcha
     #captchaRef="reCaptcha"
     size="invisible"
     siteKey="6LeZOmMUAAAAAOq4uXmluNuIio7XGx7U-ncmOzGT"
     (resolved)="$event && login($event)"
   ></re-captcha>
+
   <div id="app-content">
     <div class="logo-container">
       <img src="/assets/RetroQuest.png" title="RetroQuest Logo" id="logo"/>
@@ -53,6 +55,7 @@
                    [(ngModel)]="password"/>
           </div>
           <span id="errorMessage" class="rq-error-message">{{errorMessage}}</span>
+
           <rq-button
             id="signInButton"
             class="rq-button"
@@ -61,9 +64,17 @@
             text="Sign In"
           >
           </rq-button>
+
+          <div class="recaptcha-message">This site is protected by reCAPTCHA and the Google
+            <a href="https://policies.google.com/privacy">Privacy Policy</a> and
+            <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+          </div>
+
         </form>
       </form>
     </div>
+
     <rq-brand-footer></rq-brand-footer>
+
   </div>
 </div>
