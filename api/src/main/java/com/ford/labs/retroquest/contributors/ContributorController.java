@@ -17,12 +17,14 @@
 
 package com.ford.labs.retroquest.contributors;
 
-import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
@@ -32,7 +34,6 @@ public class ContributorController {
     private static final long MILLISECONDS_IN_DAY = 86400000;
 
     private final RestTemplate restTemplate;
-    private long epochMilisOfLastRequest = 0L;
 
     private CopyOnWriteArrayList<Contributor> cachedContributors = new CopyOnWriteArrayList<>();
 
@@ -42,13 +43,11 @@ public class ContributorController {
 
     @GetMapping("/api/contributors")
     public List<Contributor> getContributors() {
-        if (System.currentTimeMillis() - MILLISECONDS_IN_DAY > epochMilisOfLastRequest) {
-            cacheContributors();
-        }
         return cachedContributors;
     }
 
-    private void cacheContributors() {
+    @Scheduled(fixedRate = MILLISECONDS_IN_DAY)
+    public void cacheContributors() {
         GithubContributor[] response = this.restTemplate.getForObject(
                 "https://api.github.com/repos/FordLabs/retroquest/contributors",
                 GithubContributor[].class,
@@ -66,11 +65,6 @@ public class ContributorController {
 
     private byte[] getAvatar(String avatarUrl) {
         return this.restTemplate.getForObject(avatarUrl, byte[].class, Collections.emptyMap());
-    }
-
-    ContributorController setEpochMilisOfLastRequest(long epochMilisOfLastRequest) {
-        this.epochMilisOfLastRequest = epochMilisOfLastRequest;
-        return this;
     }
 
     List<Contributor> getCachedContributors() {
