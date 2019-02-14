@@ -23,6 +23,10 @@
   overflow: auto;
   width: 100%;
 
+  re-captcha {
+    visibility: hidden;
+  }
+
   #app-content {
     background-color: transparent;
     border-radius: 3px;
@@ -117,6 +121,15 @@
             }
           }
         }
+      }
+    }
+
+    .recaptcha-message {
+      font-size: .8rem;
+      margin-top: 12px;
+
+      a {
+        font-size: .9rem;
       }
     }
 

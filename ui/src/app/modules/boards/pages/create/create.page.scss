@@ -31,6 +31,10 @@
     padding: 24px 48px;
     width: 320px;
 
+    re-captcha {
+      visibility: hidden;
+    }
+
     .logo-container {
       align-items: center;
       display: flex;
@@ -117,6 +121,15 @@
             }
           }
         }
+      }
+    }
+
+    .recaptcha-message {
+      font-size: .8rem;
+      margin-top: 12px;
+
+      a {
+        font-size: .9rem;
       }
     }
 
