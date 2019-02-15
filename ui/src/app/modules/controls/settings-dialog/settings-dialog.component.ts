@@ -56,6 +56,10 @@ export class SettingsDialogComponent {
     this.router.navigate(['login', this.teamId]);
   }
 
+  updatePassword() {
+    this.router.navigate(['update-password', this.teamId]);
+  }
+
   enableDarkTheme() {
     this.enableTheme(Themes.Dark);
   }

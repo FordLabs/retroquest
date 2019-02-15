@@ -64,6 +64,24 @@ describe('TeamService', () => {
     });
   });
 
+  describe('updatePassword', () => {
+    it('should send a post request to the api with valid body', () => {
+      const teamId = 'team-name';
+      const previousPassword = 'passw0rd';
+      const newPassword = 'passw0rd1';
+
+      const returnObj = service.updatePassword(teamId, previousPassword, newPassword);
+
+      expect(mockHttpClient.post).toHaveBeenCalledWith(
+        '/api/update-password',
+        {teamId, previousPassword, newPassword},
+        {observe: 'response', responseType: 'text'}
+      );
+
+      expect(returnObj instanceof Observable).toBe(true);
+    });
+  });
+
   describe('fetchTeamName', () => {
     it('should request team name from the name api', () => {
       const teamId = 'team-id';

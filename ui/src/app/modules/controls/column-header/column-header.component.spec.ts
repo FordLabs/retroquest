@@ -121,7 +121,7 @@ describe('ColumnHeaderComponent', () => {
     beforeEach(() => {
       component.inputFieldRef = mockInputFieldRef;
       originalSetTimeoutFunction = window.setTimeout;
-      window.setTimeout = (fn) => fn();
+      window.setTimeout = (fn: Function) => fn();
     });
 
     afterEach(() => {
@@ -153,7 +153,7 @@ describe('ColumnHeaderComponent', () => {
     beforeEach(() => {
       component.inputFieldRef = mockInputFieldRef;
       originalSetTimeoutFunction = window.setTimeout;
-      window.setTimeout = (fn) => fn();
+      window.setTimeout = (fn: Function) => fn();
     });
 
     afterEach(() => {
@@ -178,7 +178,7 @@ describe('ColumnHeaderComponent', () => {
     beforeEach(() => {
       component.inputFieldRef = mockInputFieldRef;
       originalSetTimeoutFunction = window.setTimeout;
-      window.setTimeout = (fn) => fn();
+      window.setTimeout = (fn: Function) => fn();
 
       component.escapeKeyPressed = false;
       component.onEscapeKeyPressed();

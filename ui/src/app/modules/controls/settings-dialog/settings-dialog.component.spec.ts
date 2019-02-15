@@ -60,6 +60,15 @@ describe('SettingsDialogComponent', () => {
     });
   });
 
+  describe('updatePassword', () => {
+    it('should navigate to password update page', () => {
+      const fakeTeamId = 'fake-id';
+      component.teamId = fakeTeamId;
+      component.updatePassword();
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['update-password', fakeTeamId]);
+    });
+  });
+
   describe('enableDarkTheme', () => {
 
     beforeEach(() => {
