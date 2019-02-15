@@ -71,17 +71,15 @@
         <i class="fas fa-archive button-icon"></i>
       </a>
 
-      <a id="downloadCsv"
-         [href]="getCsvUrl()"
-         [ngClass]="{
+      <button
+        class="rq-button-secondary download-button"
+        (click)="giveZipDownloadToUser()"
+        [ngClass]="{
             'hide': actionsRadiatorViewEnabled
-         }"
-      >
-        <button class="rq-button-secondary">
-          <span class="button-text">Download CSV</span>
-          <i class="fas fa-download button-icon"></i>
-        </button>
-      </a>
+         }">
+        <span class="button-text">Download CSV</span>
+        <i class="fas fa-download button-icon"></i>
+      </button>
 
       <rq-button
         id="endRetro"

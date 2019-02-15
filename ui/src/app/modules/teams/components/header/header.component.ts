@@ -21,7 +21,9 @@ import {FeedbackService} from '../../services/feedback.service';
 import {Feedback} from '../../../domain/feedback';
 import {FeedbackDialogComponent} from '../../../controls/feedback-dialog/feedback-dialog.component';
 import {SaveCheckerService} from '../../services/save-checker.service';
-import {parseTheme, Themes, themeToString} from '../../../domain/Theme';
+import {parseTheme, Themes} from '../../../domain/Theme';
+import {HttpClient} from '@angular/common/http';
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'rq-header',
@@ -47,7 +49,8 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private feedbackService: FeedbackService,
-    private saveChecker: SaveCheckerService
+    private saveChecker: SaveCheckerService,
+    private http: HttpClient
   ) {
 
   }
@@ -96,5 +99,11 @@ export class HeaderComponent implements OnInit {
       this.theme = parseTheme(savedTheme);
       this.themeChanged.emit(this.theme);
     }
+  }
+
+  giveZipDownloadToUser() {
+    this.http.get(this.getCsvUrl(), {responseType: 'blob'}).subscribe(csvData => {
+      saveAs(csvData,  `${this.teamId}-board.csv`);
+    });
   }
 }

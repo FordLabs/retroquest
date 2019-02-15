@@ -166,31 +166,25 @@
         }
       }
 
-      #downloadCsv {
+      .download-button {
         color: inherit;
         margin-right: 24px;
         outline: none;
-        padding: 0;
 
-        button {
-          color: inherit;
+        &:hover {
+          color: $turquoise;
+        }
 
-          &:hover {
-            color: $turquoise;
-          }
-
-          .button-text {
-            @media only screen and (max-width: 610px) {
-              display: none;
-            }
-          }
-
+        .button-text {
           @media only screen and (max-width: 610px) {
-            height: 100%;
-            padding: 0 18px;
+            display: none;
           }
         }
 
+        @media only screen and (max-width: 610px) {
+          height: 100%;
+          padding: 0 18px;
+        }
       }
 
       #endRetro {
