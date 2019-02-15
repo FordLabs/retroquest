@@ -19,12 +19,13 @@ import {HeaderComponent} from './header.component';
 import {FeedbackService} from '../../services/feedback.service';
 import {emptyFeedback, Feedback} from '../../../domain/feedback';
 import {Subject} from 'rxjs';
-import {before} from 'selenium-webdriver/testing';
 import {SaveCheckerService} from '../../services/save-checker.service';
+import {HttpClient} from '@angular/common/http';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
   let mockFeedbackService: FeedbackService;
+  let mockHttpClient: HttpClient;
   const mockSaveCheckerService: SaveCheckerService = null;
 
   beforeEach(() => {
@@ -32,7 +33,11 @@ describe('HeaderComponent', () => {
       addFeedback: new Subject()
     });
 
-    component = new HeaderComponent(mockFeedbackService, mockSaveCheckerService);
+    mockHttpClient = jasmine.createSpyObj({
+      get: new Subject()
+    });
+
+    component = new HeaderComponent(mockFeedbackService, mockSaveCheckerService, mockHttpClient);
   });
 
   it('should create', () => {
