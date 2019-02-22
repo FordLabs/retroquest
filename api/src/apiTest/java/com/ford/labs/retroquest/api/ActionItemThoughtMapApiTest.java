@@ -21,7 +21,12 @@ package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.actionThoughtLink.ActionThoughtMap;
 import com.ford.labs.retroquest.actionThoughtLink.ActionThoughtMapRepository;
+import com.ford.labs.retroquest.actionitem.ActionItem;
+import com.ford.labs.retroquest.actionitem.ActionItemRepository;
+import com.ford.labs.retroquest.thought.Thought;
+import com.ford.labs.retroquest.thought.ThoughtRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,16 +49,35 @@ public class ActionItemThoughtMapApiTest extends ControllerTest {
     @Autowired
     private ActionThoughtMapRepository actionThoughtMapRepository;
 
+    @Autowired
+    private ActionItemRepository actionItemRepository;
+
+    @Autowired
+    private ThoughtRepository thoughtRepository;
+
+
+    @After
+    public void tearDown() {
+        actionItemRepository.deleteAll();
+        thoughtRepository.deleteAll();
+
+        Assertions.assertThat(actionThoughtMapRepository.count()).isEqualTo(0);
+    }
 
     @Test
     public void aGetRequestShouldReturnAListOfMappings() throws Exception {
 
         Long actionItemId = 2L;
 
+        ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder().task("some task").build());
+        Thought savedThought1 = thoughtRepository.save(Thought.builder().message("some message").build());
+        Thought savedThought1 = thoughtRepository.save(Thought.builder().message("some message").build());
+
         List<ActionThoughtMap> expectedActionThoughtMaps = Arrays.asList(
-                new ActionThoughtMap(1L, actionItemId, 3L),
-                new ActionThoughtMap(2L, actionItemId, 4L)
+                new ActionThoughtMap(1L, savedActionItem.getId(), savedThought.getId()),
+                new ActionThoughtMap(2L, savedActionItem.getId(), 4L)
         );
+
 
         actionThoughtMapRepository.save(
                 Arrays.asList(
