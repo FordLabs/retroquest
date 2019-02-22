@@ -20,6 +20,8 @@ package com.ford.labs.retroquest.actionThoughtLink;
 
 import com.ford.labs.retroquest.actionitem.ActionItem;
 import com.ford.labs.retroquest.thought.Thought;
+import org.assertj.core.api.Assertions;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +29,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 
 @RunWith(SpringRunner.class)
@@ -40,47 +39,43 @@ public class ActionThoughtMapRepositoryTest {
     @Autowired
     ActionThoughtMapRepository actionThoughtMapRepository;
 
+    @After
+    public void tearDown() {
+        actionThoughtMapRepository.deleteAll();
+        Assertions.assertThat(actionThoughtMapRepository.count()).isEqualTo(0);
+    }
+
 
     @Test
-    public void ShouldBeAbleToCreateActionThoughtLink() {
-        ActionItem AI1 = new ActionItem();
-        AI1.setId(27L);
-        Thought T1 = new Thought();
-        T1.setId(4L);
+    public void shouldBeAbleToCreateActionThoughtLink() {
+        ActionItem actionItem = ActionItem.builder().id(27L).build();
+        Thought thought = Thought.builder().id(4L).build();
 
-        actionThoughtMapRepository.save(new ActionThoughtMap(null, AI1.getId(), T1.getId()));
-        assertTrue(actionThoughtMapRepository.findAll().size() == 1);
+        actionThoughtMapRepository.save(new ActionThoughtMap(null, actionItem.getId(), thought.getId()));
+
+        Assertions.assertThat(actionThoughtMapRepository.findAll()).hasSize(1);
     }
 
     @Test
-    public void ShouldBeAbleToGetAllLinkedThoughtsForSingleActionItem() {
-        ActionItem AI1 = new ActionItem();
-        AI1.setId(27L);
+    public void shouldBeAbleToGetAllLinkedThoughtsForSingleActionItem() {
+        ActionItem actionItem1 = ActionItem.builder().id(27L).build();
+        ActionItem actionItem2 = ActionItem.builder().id(14L).build();
 
-        ActionItem AI2 = new ActionItem();
-        AI2.setId(14L);
+        Thought thought1 = Thought.builder().id(4L).build();
+        Thought thought2 = Thought.builder().id(9L).build();
+        Thought thought3 = Thought.builder().id(16L).build();
 
-        Thought T1 = new Thought();
-        T1.setId(4L);
+        actionThoughtMapRepository.save(new ActionThoughtMap(null, actionItem1.getId(), thought1.getId()));
+        actionThoughtMapRepository.save(new ActionThoughtMap(null, actionItem2.getId(), thought2.getId()));
+        actionThoughtMapRepository.save(new ActionThoughtMap(null, actionItem1.getId(), thought3.getId()));
 
-        Thought T2 = new Thought();
-        T2.setId(9L);
+        List<ActionThoughtMap> response = actionThoughtMapRepository.findAllByActionItemId(actionItem1.getId());
 
-        Thought T3 = new Thought();
-        T3.setId(16L);
-
-        actionThoughtMapRepository.save(new ActionThoughtMap(null, AI1.getId(), T1.getId()));
-        actionThoughtMapRepository.save(new ActionThoughtMap(null, AI2.getId(), T2.getId()));
-        actionThoughtMapRepository.save(new ActionThoughtMap(null, AI1.getId(), T3.getId()));
-
-        List<ActionThoughtMap> response = actionThoughtMapRepository.findAllByActionItemId(AI1.getId());
-        assertEquals(response.size(), 2);
-
-
-        assertTrue(response.get(0).getThoughtId() == T1.getId());
-        assertTrue(response.get(0).getActionItemId() == AI1.getId());
-        assertTrue(response.get(1).getThoughtId() == T3.getId());
-        assertTrue(response.get(1).getActionItemId() == AI1.getId());
+        Assertions.assertThat(response).hasSize(2);
+        Assertions.assertThat(response.get(0).getThoughtId()).isEqualTo(thought1.getId());
+        Assertions.assertThat(response.get(0).getActionItemId()).isEqualTo(actionItem1.getId());
+        Assertions.assertThat(response.get(1).getThoughtId()).isEqualTo(thought3.getId());
+        Assertions.assertThat(response.get(1).getActionItemId()).isEqualTo(actionItem1.getId());
 
     }
 }

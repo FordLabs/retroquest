@@ -18,7 +18,6 @@
 
 package com.ford.labs.retroquest.actionThoughtLink;
 
-import com.ford.labs.retroquest.actionThoughtLink.ActionThoughtMap;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
