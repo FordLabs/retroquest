@@ -63,7 +63,7 @@ public class ActionItemThoughtMapApiTest extends ControllerTest {
         );
 
         MvcResult result = mockMvc.perform(
-                get("/api/team/" + teamId + "/action-thought-map/2")
+                get("/api/team/" + teamId + "/linkedThoughts/2")
                         .header("Authorization", getBearerAuthToken())
 
         )
@@ -82,7 +82,7 @@ public class ActionItemThoughtMapApiTest extends ControllerTest {
         String forbiddenTeamId = "I AM NOT AUTHORIZED";
 
         mockMvc.perform(
-                get("/api/team/" + forbiddenTeamId + "/action-thought-map/2")
+                get("/api/team/" + forbiddenTeamId + "/linkedThoughts/2")
                         .header("Authorization", getBearerAuthToken())
 
         )

@@ -34,7 +34,7 @@ public class ActionItemThoughtMapController {
         this.actionThoughtMapRepository = actionThoughtMapRepository;
     }
 
-    @GetMapping("/api/team/{teamId}/action-thought-map/{actionItemId}")
+    @GetMapping("/api/team/{teamId}/linkedThoughts/{actionItemId}")
     @PreAuthorize("#teamId == authentication.principal")
     public List<ActionThoughtMap> getAllThoughtsLinkedToActionItem(@PathVariable("teamId") String teamId,
                                                                    @PathVariable("actionItemId") Long actionItemId) {
