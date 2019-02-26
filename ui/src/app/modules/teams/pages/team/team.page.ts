@@ -357,7 +357,11 @@ export class TeamPageComponent implements OnInit {
     const teamPage = document.getElementById('page');
     const pageGestures = new Hammer(teamPage);
 
-    pageGestures.on('swipeleft', () => { this.incrementSelectedIndex(); });
-    pageGestures.on('swiperight', () => { this.decrementSelectedIndex(); });
+    pageGestures.on('swipeleft', () => {
+      this.incrementSelectedIndex();
+    });
+    pageGestures.on('swiperight', () => {
+      this.decrementSelectedIndex();
+    });
   }
 }

@@ -250,7 +250,7 @@ describe('TeamPageComponent', () => {
     const mockWindow = {
       setInterval: (fn, timeout) => {
         mockTimeOutValue = timeout;
-        fn()
+        fn();
       }
     };
 
