@@ -245,12 +245,24 @@ describe('TeamPageComponent', () => {
 
   describe('ngOnInit', () => {
 
+    let mockTimeOutValue = -1;
+
     const mockWindow = {
-      setInterval: (fn) => fn()
+      setInterval: (fn, timeout) => {
+        mockTimeOutValue = timeout;
+        fn()
+      }
     };
 
     beforeEach(() => {
       component.globalWindowRef = mockWindow;
+    });
+
+    fit('websocket should send heartbeat to backend every 1s', () => {
+      component.ngOnInit();
+      mockActiveRoute.params.next({teamId: 1});
+
+      expect(mockTimeOutValue).toEqual(1 * 1000);
     });
 
     it('should call open websocket', () => {

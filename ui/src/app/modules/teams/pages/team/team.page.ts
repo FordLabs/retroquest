@@ -129,6 +129,7 @@ export class TeamPageComponent implements OnInit {
         this.websocketInit();
       }
 
+
       this.websocketService.intervalId = this.globalWindowRef.setInterval(() => {
         if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
           this.websocketService.closeWebsocket();
@@ -136,8 +137,10 @@ export class TeamPageComponent implements OnInit {
         } else if (this.websocketService.getWebsocketState() === WebSocket.OPEN) {
           this.websocketService.sendHeartbeat();
         }
-      }, 1000 * 60);
+      }, 1000 * 1);
+
     });
+
   }
 
   public getColumnThoughtCount(column: Column): number {
