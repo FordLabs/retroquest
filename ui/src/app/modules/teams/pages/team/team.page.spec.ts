@@ -258,7 +258,7 @@ describe('TeamPageComponent', () => {
       component.globalWindowRef = mockWindow;
     });
 
-    fit('websocket should send heartbeat to backend every 1s', () => {
+    it('websocket should send heartbeat to backend every 1s', () => {
       component.ngOnInit();
       mockActiveRoute.params.next({teamId: 1});
 
