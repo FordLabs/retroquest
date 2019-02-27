@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+import {Thought} from './thought';
+
 export interface ActionItem {
   id: number;
   task: string;
@@ -23,16 +25,18 @@ export interface ActionItem {
   assignee: string;
   expanded?: boolean;
   dateCreated: string;
+  linkedThoughts: Thought[]
   state?: string;
 }
 
-export function emptyActionItem (): ActionItem {
+export function emptyActionItem(): ActionItem {
   return {
     id: -1,
     task: '',
     completed: false,
     teamId: null,
     assignee: null,
-    dateCreated: null
+    dateCreated: null,
+    linkedThoughts: []
   };
 }

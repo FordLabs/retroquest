@@ -223,7 +223,8 @@ describe('WebsocketService', () => {
         completed: false,
         teamId: '',
         assignee: '',
-        dateCreated: null
+        dateCreated: null,
+        linkedThoughts: []
       };
 
       service.openWebsocket(teamId).subscribe();
@@ -263,7 +264,8 @@ describe('WebsocketService', () => {
         completed: false,
         teamId: '',
         assignee: '',
-        dateCreated: null
+        dateCreated: null,
+        linkedThoughts: []
       };
 
       service.openWebsocket(teamId).subscribe();
@@ -284,7 +286,8 @@ describe('WebsocketService', () => {
         completed: false,
         teamId: '',
         assignee: '',
-        dateCreated: null
+        dateCreated: null,
+        linkedThoughts: []
       };
 
       service.openWebsocket(teamId).subscribe();

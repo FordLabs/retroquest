@@ -39,7 +39,8 @@ describe('ActionsColumnComponent', () => {
       task: '',
       completed: false,
       assignee: null,
-      dateCreated: null
+      dateCreated: null,
+      linkedThoughts: []
     };
 
     component.actionItems = [fakeActionItem];

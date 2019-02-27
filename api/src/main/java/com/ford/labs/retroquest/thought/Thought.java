@@ -18,19 +18,20 @@
 package com.ford.labs.retroquest.thought;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ford.labs.retroquest.board.Board;
+import com.ford.labs.retroquest.actionitem.ActionItem;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Data
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Thought {
 
@@ -62,6 +63,10 @@ public class Thought {
     private ColumnTitle columnTitle;
     private Long boardId;
 
+    @JsonIgnore
+    @ManyToMany(mappedBy = "linkedThoughts", fetch = FetchType.EAGER)
+    private Set<ActionItem> linkedActionItems = new HashSet<>();
+
     public Thought(Long id, String message, int hearts, String topic, boolean discussed, String teamId, ColumnTitle columnTitle, Long boardId) {
         this.id = id;
         this.message = message;
@@ -71,6 +76,7 @@ public class Thought {
         this.teamId = teamId;
         this.columnTitle = columnTitle;
         this.boardId = boardId;
+        this.linkedActionItems = new HashSet<>();
     }
 
     private String getDiscussedString() {

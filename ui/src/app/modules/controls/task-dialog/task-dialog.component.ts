@@ -19,6 +19,8 @@ import {AfterContentChecked, Component, EventEmitter, Input, Output, ViewChild} 
 import {emptyThought, Thought} from '../../domain/thought';
 import {TaskComponent} from '../task/task.component';
 import {Themes} from '../../domain/Theme';
+import {ActionItem, emptyActionItem} from '../../domain/action-item';
+import {ActionItemService} from '../../teams/services/action.service';
 
 const ESC_KEY = 27;
 
@@ -39,6 +41,7 @@ export class TaskDialogComponent implements AfterContentChecked {
   @Input() task: Thought = emptyThought();
   @Input() visible = true;
   @Input() theme: Themes = Themes.Light;
+  @Input() teamId: string;
 
   @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
@@ -47,6 +50,11 @@ export class TaskDialogComponent implements AfterContentChecked {
   @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @ViewChild('task_component') taskComponent: TaskComponent;
+
+  assignedActionItem: ActionItem = emptyActionItem();
+
+  constructor(private actionItemService: ActionItemService) {
+  }
 
   get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;
@@ -91,6 +99,12 @@ export class TaskDialogComponent implements AfterContentChecked {
   public emitCompleted(state: boolean) {
     this.completed.emit(state);
     this.hide();
+  }
+
+  public createLinking() {
+    this.assignedActionItem.linkedThoughts.push(this.task);
+    this.actionItemService.addActionItem(this.assignedActionItem);
+    this.assignedActionItem = emptyActionItem();
   }
 }
 

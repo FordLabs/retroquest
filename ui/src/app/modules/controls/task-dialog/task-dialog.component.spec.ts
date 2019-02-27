@@ -21,7 +21,7 @@ describe('TaskDialogComponent', () => {
   let component: TaskDialogComponent;
 
   beforeEach(() => {
-    component = new TaskDialogComponent();
+    component = new TaskDialogComponent(null);
   });
 
   it('should create', () => {

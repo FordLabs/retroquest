@@ -118,6 +118,15 @@
     word-break: break-word;
     word-wrap: break-word;
 
+    .linked-thoughts-container {
+      background-color: $grape;
+      height: 25px;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 25px;
+    }
+
     .content-container {
       flex: auto;
       font-size: 1rem;

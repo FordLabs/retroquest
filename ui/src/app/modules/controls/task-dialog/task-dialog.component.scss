@@ -22,6 +22,7 @@
   bottom: 0;
   box-sizing: border-box;
   display: flex;
+  flex-direction: column;
   height: 100%;
   justify-content: center;
   left: 0;
@@ -38,12 +39,12 @@
   }
 
   rq-task {
-    $base-drop-shadow: 0 19px 38px opacity($black, .3);
-
-    $border-width: 8px;
-
     $action-shadow: 0 0 0 $border-width $action-yellow, $base-drop-shadow;
+
     $action-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
+
+    $base-drop-shadow: 0 19px 38px opacity($black, .3);
+    $border-width: 8px;
 
     $confused-shadow: 0 0 0 $border-width $confused-blue, $base-drop-shadow;
     $confused-shadow-dark: 0 0 0 $border-width $belize-hole, $base-drop-shadow;
@@ -175,5 +176,47 @@
         }
       }
     }
+  }
+
+  .add-action-item-submit-container {
+    align-items: center;
+    display: flex;
+    height: 50px;
+    justify-content: center;
+    margin-top: 75px;
+
+    .add-action-item-button {
+      background-color: $white;
+      height: inherit;
+    }
+
+    .submit-action-item-button {
+      background-color: $action-yellow;
+      height: inherit;
+    }
+
+  }
+
+  rq-action-item-task {
+    $action-shadow: 0 0 0 $border-width $action-yellow, $base-drop-shadow;
+
+    $action-shadow-dark: 0 0 0 $border-width $orange, $base-drop-shadow;
+    $base-drop-shadow: 0 19px 38px opacity($black, .3);
+
+    $border-width: 8px;
+    $edit-mode-shadow:  0 0 0 8px $grape, $base-drop-shadow;
+
+    $edit-mode-shadow-dark:  0 0 0 8px $wisteria, $base-drop-shadow;
+    border-radius: 6px;
+
+    box-shadow: $action-shadow;
+    box-sizing: border-box;
+    font-size: 1rem;
+    height: auto;
+    margin-top: 100px;
+    max-height: 50%;
+    max-width: 650px;
+    transform: scale(1.65);
+    width: 450px;
   }
 }
