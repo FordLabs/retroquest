@@ -28,6 +28,9 @@ import com.ford.labs.retroquest.thought.ThoughtRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -55,7 +58,12 @@ public class TeamService {
     }
 
     public String convertTeamNameToURI(String teamName) {
-        return teamName.toLowerCase().replace(" ", "-");
+        try {
+            return URLEncoder.encode(teamName, StandardCharsets.UTF_8.toString()).replaceAll("\\+", "%20");
+        } catch(UnsupportedEncodingException e) {
+            throw new AssertionError("UTF-8 is unknown");
+        }
+        
     }
 
     public CsvFile buildCsvFileFromTeam(String team) {

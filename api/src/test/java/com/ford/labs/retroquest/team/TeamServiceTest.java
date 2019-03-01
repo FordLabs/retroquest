@@ -53,7 +53,7 @@ public class TeamServiceTest {
 
     @Test
     public void convertValidTeamNametoURI() {
-        assertEquals("ford-labs", teamService.convertTeamNameToURI("Ford Labs"));
+        assertEquals("Ford%20Labs", teamService.convertTeamNameToURI("Ford Labs"));
     }
 
     @Test
@@ -79,7 +79,7 @@ public class TeamServiceTest {
         Team actualTeam = teamService.createNewTeam(requestedTeam);
 
         assertEquals("A name", actualTeam.getName());
-        assertEquals("a-name", actualTeam.getUri());
+        assertEquals("A%20name", actualTeam.getUri());
         assertTrue(actualTeam.getDateCreated() != null);
         assertEquals("encryptedPassword", actualTeam.getPassword());
     }
