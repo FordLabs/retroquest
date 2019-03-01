@@ -15,17 +15,7 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewChecked,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {ActionItem, emptyActionItem} from '../../domain/action-item';
 import * as moment from 'moment';
 import {emojify} from '../../utils/EmojiGenerator';
@@ -58,8 +48,10 @@ export class ActionItemTaskComponent implements AfterViewChecked {
   @ViewChild('content_value') editableTextArea: ElementRef;
   @ViewChild('assignee_text_field') assigneeTextField: ElementRef;
 
+  assigneeCharacterCountdownIsVisible = false;
   taskEditModeEnabled = false;
   maxMessageLength = 255;
+  maxAssigneeLength = 50;
   _textValueLength = 0;
   deleteWasToggled = false;
 
