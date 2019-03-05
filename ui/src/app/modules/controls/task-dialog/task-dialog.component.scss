@@ -197,6 +197,10 @@
     margin-top: 100px;
     cursor: pointer;
 
+    @media only screen and (max-width: 610px) {
+      display: none;
+    }
+
     &.hide {
       display: none;
     }
@@ -222,6 +226,11 @@
   }
 
   rq-action-item-task {
+
+    @media only screen and (max-width: 610px) {
+      display: none;
+    }
+
     $border-width: 8px;
 
     $action-shadow: 0 0 0 $border-width $action-yellow, $base-drop-shadow;
