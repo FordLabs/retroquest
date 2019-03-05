@@ -70,7 +70,7 @@
     width: 450px;
 
     @media only screen and (max-width: 770px) {
-      transform: scale(1.3);
+      transform: scale(1.5);
     }
 
     @media only screen and (max-width: 610px) {
@@ -185,6 +185,7 @@
 
     &.disable-events {
       pointer-events: none;
+      transform: scale(1.4);
     }
   }
 
@@ -211,7 +212,7 @@
       padding: 24px;
       box-sizing: border-box;
       border-radius: 36px;
-      box-shadow: $base-drop-shadow;
+      box-shadow: 0 19px 38px opacity($black, .15);
 
       .plus-icon {
         margin-right: 12px;
