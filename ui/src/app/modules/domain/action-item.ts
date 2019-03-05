@@ -31,7 +31,7 @@ export interface ActionItem {
 
 export function emptyActionItem(): ActionItem {
   return {
-    id: -1,
+    id: null,
     task: '',
     completed: false,
     teamId: null,

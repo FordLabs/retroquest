@@ -89,6 +89,8 @@ public class ActionItemController {
         }
         actionItem.setTeamId(teamId);
         ActionItem savedActionItem = actionItemRepository.save(actionItem);
+
+        System.out.println(savedActionItem);
         return new WebsocketPutResponse<>(savedActionItem);
     }
 

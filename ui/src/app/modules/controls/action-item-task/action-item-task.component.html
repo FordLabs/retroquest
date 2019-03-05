@@ -32,8 +32,11 @@
   }"
 >
 
-  <div class="linked-thoughts-container">
-    {{actionItem.linkedThoughts.length}}
+  <div
+    class="linked-thoughts-container"
+    *ngIf="actionItem.linkedThoughts.length > 0"
+  >
+    <div class="fas fa-link link-icon"></div>
   </div>
 
   <div
@@ -49,7 +52,7 @@
       (keydown.escape)="forceBlur()"
       [maxlength]="maxMessageLength"
       oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
-      [readonly]="!taskEditModeEnabled"
+      [readonly]="!displayAsLinkable && !taskEditModeEnabled"
     ></textarea>
 
     <rq-floating-character-countdown
@@ -67,7 +70,7 @@
 <div class="assigned-to-section"
      [ngClass]="{
        'disable': taskEditModeEnabled || actionItem.completed,
-       'opacify': taskEditModeEnabled || actionItem.completed
+       'opacify': !displayAsLinkable && (taskEditModeEnabled || actionItem.completed)
      }">
   <div class="label">assigned to</div>
   <input
@@ -90,6 +93,28 @@
     'dark-theme': darkThemeIsEnabled
   }"
 >
+  <div
+    class="dialog-footer-section"
+    *ngIf="displayAsLinkable"
+    [ngClass]="{
+      'dark-theme': darkThemeIsEnabled
+    }"
+  >
+    <div
+      class="button discard-button"
+      (click)="dialogDiscarded.emit()"
+      [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+    >
+      discard
+    </div>
+    <div class="button create-button" (click)="dialogConfirmed.emit()">
+      <i class="fas fa-link icon"></i>
+      create!
+    </div>
+  </div>
+
   <div
     class="container date-created-container"
     [ngClass]="{

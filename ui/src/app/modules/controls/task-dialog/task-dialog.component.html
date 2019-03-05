@@ -27,33 +27,43 @@
   (messageChanged)="emitMessageChanged($event)"
   (starCountIncreased)="emitStarCountIncreased($event)"
   [theme]="theme"
+  [ngClass]="{
+    'remove-border': actionItemIsVisible,
+    'disable-events': actionItemIsVisible
+  }"
 ></rq-task>
 
 <div
   (click)="$event.stopPropagation()"
   class="add-action-item-submit-container"
+  [ngClass]="{
+    'hide': actionItemIsVisible
+  }"
 >
   <div
     class="add-action-item-button"
+    (click)="toggleActionItem()"
   >
-    Add Action Item
+    <div class="fas fa-plus plus-icon"></div>
+    <div class="label">Add Action Item</div>
   </div>
 
-  <div
-    class="submit-action-item-button"
-    (click)="createLinking()"
-  >
-    Submit aciton item
-  </div>
 </div>
 
 
 <rq-action-item-task
-  (click)="$event.stopPropagation()"
-  enableOverlayBorder="true"
   #actionItemDialog
+  [ngClass]="{
+    'hide': !actionItemIsVisible
+  }"
+  (click)="$event.stopPropagation()"
+  [enableOverlayBorder]="true"
   [theme]="theme"
+  [displayAsLinkable]="actionItemIsVisible"
+  [taskEditModeEnabled]="true"
   [actionItem]="assignedActionItem"
+  (dialogDiscarded)="toggleActionItem()"
+  (dialogConfirmed)="createLinking()"
 >
 
 </rq-action-item-task>
