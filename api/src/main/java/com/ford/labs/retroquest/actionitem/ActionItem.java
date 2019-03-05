@@ -47,7 +47,7 @@ public class ActionItem {
     private Date dateCreated;
 
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinTable(name = "action_thought_map",
+    @JoinTable(name = "action_thought_link",
             joinColumns = @JoinColumn(name = "thought_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "action_item_id", referencedColumnName = "id"))
     private Set<Thought> linkedThoughts;
