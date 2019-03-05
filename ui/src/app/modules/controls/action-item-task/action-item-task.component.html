@@ -73,18 +73,33 @@
        'opacify': !displayAsLinkable && (taskEditModeEnabled || actionItem.completed)
      }">
   <div class="label">assigned to</div>
-  <input
-    [readonly]="readOnly"
-    #assignee_text_field
-    class="value"
-    [type]="'text'"
-    [(ngModel)]="actionItem.assignee"
-    (blur)="emitAssigneeUpdated()"
-    (keydown.enter)="forceBlurOnAssigneeTextField()"
-    [ngClass]="{
-      'dark-theme': darkThemeIsEnabled
-    }"
-  >
+
+  <div class="assigned-to-container">
+    <input
+      [readonly]="readOnly"
+      #assignee_text_field
+      class="value"
+      [type]="'text'"
+      [(ngModel)]="actionItem.assignee"
+      (blur)="emitAssigneeUpdated(); assigneeCharacterCountdownIsVisible = false"
+      (keydown.enter)="forceBlurOnAssigneeTextField()"
+      [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+      [maxLength]="maxAssigneeLength"
+      (focus)="assigneeCharacterCountdownIsVisible = true"
+    >
+    <rq-floating-character-countdown
+      #assigneeCharacterCountdown
+      [characterCount]="actionItem.assignee?.length"
+      [charsAreRunningOutThreshold]="maxAssigneeLength / 2"
+      [maxCharacterCount]="maxAssigneeLength"
+      [theme]="theme"
+      *ngIf="assigneeCharacterCountdownIsVisible"
+    >
+    </rq-floating-character-countdown>
+  </div>
+
 </div>
 
 <div
