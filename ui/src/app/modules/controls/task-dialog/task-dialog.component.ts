@@ -106,13 +106,15 @@ export class TaskDialogComponent implements AfterContentChecked {
   }
 
   public createLinking() {
-    this.assignedActionItem.dateCreated = moment().format();
-    this.assignedActionItem.linkedThoughts.push(this.task);
-    this.actionItemService.addActionItem(this.assignedActionItem);
-    this.assignedActionItem = emptyActionItem();
-    this.actionItemIsVisible = false;
-    this.emitCompleted(true);
-    this.hide();
+    if(this.assignedActionItem.task.length > 0) {
+      this.assignedActionItem.dateCreated = moment().format();
+      this.assignedActionItem.linkedThoughts.push(this.task);
+      this.actionItemService.addActionItem(this.assignedActionItem);
+      this.assignedActionItem = emptyActionItem();
+      this.actionItemIsVisible = false;
+      this.emitCompleted(true);
+      this.hide();
+    }
   }
 
   toggleActionItem() {
