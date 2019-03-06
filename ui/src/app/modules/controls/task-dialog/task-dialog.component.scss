@@ -16,9 +16,48 @@
  */
 @import 'color-vars';
 
+
+$base-drop-shadow: 0 19px 38px opacity($black, .3);
+$border-width: 8px;
+
+$sad-shadow: 0 0 0 $border-width $unhappy-red, $base-drop-shadow;
+$sad-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
+
+.shake {
+  animation: shake .5s cubic-bezier(.36, .07, .19, .97) both;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  transform: scale(1.65) translate3d(0, 0, 0);
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    box-shadow: $sad-shadow;
+    transform: scale(1.65) translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    box-shadow: $sad-shadow;
+    transform: scale(1.65) translate3d(3px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    box-shadow: $sad-shadow;
+    transform: scale(1.65) translate3d(-6px, 0, 0);
+  }
+
+  40%,
+  60% {
+    box-shadow: $sad-shadow;
+    transform: scale(1.65) translate3d(6px, 0, 0);
+  }
+}
+
 :host {
-  $base-drop-shadow: 0 19px 38px opacity($black, .3);
-  $border-width: 8px;
 
   align-items: center;
   background-color: opacity($black, .5);
@@ -48,7 +87,6 @@
 
     $action-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
 
-
     $confused-shadow: 0 0 0 $border-width $confused-blue, $base-drop-shadow;
     $confused-shadow-dark: 0 0 0 $border-width $belize-hole, $base-drop-shadow;
 
@@ -57,9 +95,6 @@
 
     $happy-shadow: 0 0 0 $border-width $happy-green, $base-drop-shadow;
     $happy-shadow-dark: 0 0 0 $border-width $nephritis, $base-drop-shadow;
-
-    $sad-shadow: 0 0 0 $border-width $unhappy-red, $base-drop-shadow;
-    $sad-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
 
     border-radius: 6px;
     box-sizing: border-box;

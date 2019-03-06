@@ -58,7 +58,8 @@
   #actionItemDialog
   [ngClass]="{
     'hide': !actionItemIsVisible,
-    'dark-theme': darkThemeIsEnabled
+    'dark-theme': darkThemeIsEnabled,
+    'shake': assignedActionItem.state === 'active'
   }"
   (click)="$event.stopPropagation()"
   [enableOverlayBorder]="true"

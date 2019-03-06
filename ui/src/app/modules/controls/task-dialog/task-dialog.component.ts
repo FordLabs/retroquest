@@ -22,6 +22,7 @@ import {Themes} from '../../domain/Theme';
 import {ActionItem, emptyActionItem} from '../../domain/action-item';
 import {ActionItemService} from '../../teams/services/action.service';
 import * as moment from 'moment';
+import {ActionItemTaskComponent} from '../action-item-task/action-item-task.component';
 
 const ESC_KEY = 27;
 
@@ -51,6 +52,7 @@ export class TaskDialogComponent implements AfterContentChecked {
   @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @ViewChild('task_component') taskComponent: TaskComponent;
+  @ViewChild(ActionItemTaskComponent) actionItemTaskComponent: ActionItemTaskComponent;
 
   assignedActionItem: ActionItem = emptyActionItem();
   actionItemIsVisible = false;
@@ -113,7 +115,17 @@ export class TaskDialogComponent implements AfterContentChecked {
       this.actionItemIsVisible = false;
       this.emitCompleted(true);
       this.hide();
+    } else {
+      this.triggerAnimation();
     }
+  }
+
+  private triggerAnimation() {
+    this.assignedActionItem.state = '';
+    setTimeout(() => {
+      this.assignedActionItem.state = 'active';
+      this.actionItemTaskComponent.focusInput();
+    }, 0);
   }
 
   public toggleActionItem() {
@@ -122,5 +134,6 @@ export class TaskDialogComponent implements AfterContentChecked {
       this.assignedActionItem = emptyActionItem();
     }
   }
+
 }
 

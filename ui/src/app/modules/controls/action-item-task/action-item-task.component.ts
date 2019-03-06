@@ -124,7 +124,7 @@ export class ActionItemTaskComponent implements AfterViewChecked {
     this.editableTextArea.nativeElement.style.height = this.editableTextArea.nativeElement.scrollHeight + 'px';
   }
 
-  private focusInput(): void {
+  public focusInput(): void {
     setTimeout(() => {
       this.editableTextArea.nativeElement.focus();
       this.editableTextArea.nativeElement.select();
