@@ -222,6 +222,11 @@
       .plus-icon {
         margin-right: 12px;
       }
+
+      &.dark-theme {
+        background-color: $task-background-dark;
+        color: $clouds;
+      }
     }
 
   }
@@ -251,9 +256,12 @@
       box-shadow: $action-shadow;
     }
 
-
     &.hide {
       display: none;
+    }
+
+    &.dark-theme {
+      box-shadow: $action-shadow-dark;
     }
   }
 }

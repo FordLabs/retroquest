@@ -43,6 +43,9 @@
   <div
     class="add-action-item-button"
     (click)="toggleActionItem()"
+    [ngClass]="{
+      'dark-theme': darkThemeIsEnabled
+    }"
   >
     <div class="fas fa-plus plus-icon"></div>
     <div class="label">Add Action Item</div>
@@ -54,7 +57,8 @@
 <rq-action-item-task
   #actionItemDialog
   [ngClass]="{
-    'hide': !actionItemIsVisible
+    'hide': !actionItemIsVisible,
+    'dark-theme': darkThemeIsEnabled
   }"
   (click)="$event.stopPropagation()"
   [enableOverlayBorder]="true"
