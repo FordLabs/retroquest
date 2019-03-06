@@ -177,7 +177,7 @@ describe('TaskDialogComponent', () => {
       });
 
       afterEach(() => {
-        jasmine.clock().uninstall()
+        jasmine.clock().uninstall();
       });
 
       it('should hide all the dialogs', () => {
@@ -201,7 +201,7 @@ describe('TaskDialogComponent', () => {
   describe('toggleActionItem', () => {
     it('should reset the assigned action item if it is false', () => {
       component.actionItemIsVisible = false;
-      expect(component.assignedActionItem).toEqual(emptyActionItem())
+      expect(component.assignedActionItem).toEqual(emptyActionItem());
     });
   });
 

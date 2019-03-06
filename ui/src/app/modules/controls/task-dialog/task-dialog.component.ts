@@ -106,7 +106,7 @@ export class TaskDialogComponent implements AfterContentChecked {
   }
 
   public createLinking() {
-    if(this.assignedActionItem.task.length > 0) {
+    if (this.assignedActionItem.task.length > 0) {
       this.assignedActionItem.dateCreated = moment().format();
       this.actionItemService.addActionItem(this.assignedActionItem);
       this.assignedActionItem = emptyActionItem();
