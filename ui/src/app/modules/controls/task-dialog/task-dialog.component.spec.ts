@@ -19,6 +19,7 @@ import {TaskDialogComponent} from './task-dialog.component';
 import {emptyActionItem} from '../../domain/action-item';
 import {ActionItemService} from '../../teams/services/action.service';
 import * as moment from 'moment';
+import {after} from 'selenium-webdriver/testing';
 
 describe('TaskDialogComponent', () => {
   let component: TaskDialogComponent;
@@ -147,23 +148,40 @@ describe('TaskDialogComponent', () => {
 
   describe('createLinking', () => {
 
+    let originalTimeoutFunction;
+
     beforeEach(() => {
+      originalTimeoutFunction = window.setTimeout;
+      window.setTimeout = (fn: Function) => fn();
+
       component.actionItemIsVisible = true;
       component.show();
     });
 
+    afterEach(() => {
+      window.setTimeout = originalTimeoutFunction;
+    });
+
     describe('action item message is not filled out', () => {
+
+      let mockActionItemTaskComponent;
+
       beforeEach(() => {
+        mockActionItemTaskComponent = jasmine.createSpyObj({
+          focusInput: null
+        });
+        component.actionItemTaskComponent = mockActionItemTaskComponent;
         component.createLinking();
       });
 
-      it('should not do anything, the user will be shown a warning', () => {
-        const expectedActionItem = emptyActionItem();
-        expectedActionItem.state = '';
-
-        expect(component.assignedActionItem).toEqual(expectedActionItem);
+      it('should not do anything but start an animation for the user', () => {
+        expect(component.assignedActionItem.state).toEqual('active');
         expect(component.visible).toBeTruthy();
         expect(component.actionItemIsVisible).toBeTruthy();
+      });
+
+      it('should refocus the action item', () => {
+        expect(mockActionItemTaskComponent.focusInput).toHaveBeenCalled();
       });
     });
 

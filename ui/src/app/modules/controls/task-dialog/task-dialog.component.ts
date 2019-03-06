@@ -121,7 +121,7 @@ export class TaskDialogComponent implements AfterContentChecked {
   }
 
   private triggerAnimation() {
-    this.assignedActionItem.state = '';
+    this.assignedActionItem.state = undefined;
     setTimeout(() => {
       this.assignedActionItem.state = 'active';
       this.actionItemTaskComponent.focusInput();
