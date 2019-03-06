@@ -20,8 +20,6 @@ import {HttpClient} from '@angular/common/http';
 import {Subject} from 'rxjs';
 import * as moment from 'moment';
 import {emptyThoughtWithColumn} from '../../domain/thought';
-import {Board} from '../../domain/board';
-
 
 describe('BoardService', () => {
   let service: BoardService;

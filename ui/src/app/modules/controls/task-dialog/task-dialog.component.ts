@@ -116,7 +116,7 @@ export class TaskDialogComponent implements AfterContentChecked {
     }
   }
 
-  toggleActionItem() {
+  public toggleActionItem() {
     this.actionItemIsVisible = !this.actionItemIsVisible;
     if (!this.actionItemIsVisible) {
       this.assignedActionItem = emptyActionItem();

@@ -16,12 +16,19 @@
  */
 
 import {TaskDialogComponent} from './task-dialog.component';
+import {emptyActionItem} from '../../domain/action-item';
+import {ActionItemService} from '../../teams/services/action.service';
+import * as moment from 'moment';
 
 describe('TaskDialogComponent', () => {
   let component: TaskDialogComponent;
+  let mockActionItemService: ActionItemService;
 
   beforeEach(() => {
-    component = new TaskDialogComponent(null);
+    mockActionItemService = jasmine.createSpyObj({
+      addActionItem: null
+    });
+    component = new TaskDialogComponent(mockActionItemService);
   });
 
   it('should create', () => {
@@ -137,4 +144,65 @@ describe('TaskDialogComponent', () => {
     });
 
   });
+
+  describe('createLinking', () => {
+
+    beforeEach(() => {
+      component.actionItemIsVisible = true;
+      component.show();
+    });
+
+    describe('action item message is not filled out', () => {
+      beforeEach(() => {
+        component.createLinking();
+      });
+
+      it('should not do anything, the user will be shown a warning', () => {
+        expect(component.assignedActionItem).toEqual(emptyActionItem());
+        expect(component.visible).toBeTruthy();
+        expect(component.actionItemIsVisible).toBeTruthy();
+      });
+    });
+
+    describe('action item message is filled out', () => {
+
+      const fakeTaskMessage = 'fake message';
+      const fakeDate = moment('2001-01-01');
+
+      beforeEach(() => {
+        jasmine.clock().mockDate(fakeDate.toDate());
+        component.assignedActionItem.task = fakeTaskMessage;
+        component.actionItemIsVisible = true;
+        component.createLinking();
+      });
+
+      afterEach(() => {
+        jasmine.clock().uninstall()
+      });
+
+      it('should hide all the dialogs', () => {
+        expect(component.visible).toBeFalsy();
+        expect(component.actionItemIsVisible).toBeFalsy();
+      });
+
+      it('should reset the assigned action item to empty', () => {
+        expect(component.assignedActionItem).toEqual(emptyActionItem());
+      });
+
+      it('should call the backend to add the assigned action item', () => {
+        const expectedActionItem = emptyActionItem();
+        expectedActionItem.task = fakeTaskMessage;
+        expectedActionItem.dateCreated = fakeDate.format();
+        expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(expectedActionItem);
+      });
+    });
+  });
+
+  describe('toggleActionItem', () => {
+    it('should reset the assigned action item if it is false', () => {
+      component.actionItemIsVisible = false;
+      expect(component.assignedActionItem).toEqual(emptyActionItem())
+    });
+  });
+
 });
