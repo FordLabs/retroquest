@@ -158,7 +158,10 @@ describe('TaskDialogComponent', () => {
       });
 
       it('should not do anything, the user will be shown a warning', () => {
-        expect(component.assignedActionItem).toEqual(emptyActionItem());
+        const expectedActionItem = emptyActionItem();
+        expectedActionItem.state = '';
+
+        expect(component.assignedActionItem).toEqual(expectedActionItem);
         expect(component.visible).toBeTruthy();
         expect(component.actionItemIsVisible).toBeTruthy();
       });
