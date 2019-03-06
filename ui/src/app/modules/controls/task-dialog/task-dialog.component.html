@@ -27,4 +27,48 @@
   (messageChanged)="emitMessageChanged($event)"
   (starCountIncreased)="emitStarCountIncreased($event)"
   [theme]="theme"
+  [ngClass]="{
+    'remove-border': actionItemIsVisible,
+    'disable-events': actionItemIsVisible
+  }"
 ></rq-task>
+
+<div
+  (click)="$event.stopPropagation()"
+  class="add-action-item-submit-container"
+  [ngClass]="{
+    'hide': actionItemIsVisible
+  }"
+>
+  <div
+    class="add-action-item-button"
+    (click)="toggleActionItem()"
+    [ngClass]="{
+      'dark-theme': darkThemeIsEnabled
+    }"
+  >
+    <div class="fas fa-plus plus-icon"></div>
+    <div class="label">Add Action Item</div>
+  </div>
+
+</div>
+
+
+<rq-action-item-task
+  #actionItemDialog
+  [ngClass]="{
+    'hide': !actionItemIsVisible,
+    'dark-theme': darkThemeIsEnabled,
+    'shake': assignedActionItem.state === 'active'
+  }"
+  (click)="$event.stopPropagation()"
+  [enableOverlayBorder]="true"
+  [theme]="theme"
+  [displayAsLinkable]="actionItemIsVisible"
+  [taskEditModeEnabled]="true"
+  [actionItem]="assignedActionItem"
+  (dialogDiscarded)="toggleActionItem()"
+  (dialogConfirmed)="createLinking()"
+>
+
+</rq-action-item-task>

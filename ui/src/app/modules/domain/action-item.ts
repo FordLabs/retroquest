@@ -26,9 +26,9 @@ export interface ActionItem {
   state?: string;
 }
 
-export function emptyActionItem (): ActionItem {
+export function emptyActionItem(): ActionItem {
   return {
-    id: -1,
+    id: null,
     task: '',
     completed: false,
     teamId: null,
