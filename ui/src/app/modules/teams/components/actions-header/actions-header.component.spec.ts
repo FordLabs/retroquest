@@ -59,8 +59,7 @@ describe('ActionsHeaderComponent', () => {
         task: newMessage,
         completed: false,
         assignee: null,
-        dateCreated: moment(mockDateString).format(),
-        linkedThoughts: []
+        dateCreated: moment(mockDateString).format()
       };
 
       component.addActionItem(newMessage);
@@ -78,8 +77,7 @@ describe('ActionsHeaderComponent', () => {
         task: expectedFormattedMessage,
         completed: false,
         assignee: 'ben12, frank',
-        dateCreated: moment(mockDateString).format(),
-        linkedThoughts: []
+        dateCreated: moment(mockDateString).format()
       };
 
       component.addActionItem(newUnformattedMessage);
@@ -97,8 +95,7 @@ describe('ActionsHeaderComponent', () => {
           task: newMessage,
           completed: false,
           assignee: null,
-          dateCreated: moment(mockDateString).format(),
-          linkedThoughts: []
+          dateCreated: moment(mockDateString).format()
         };
 
         component.addActionItem(newMessage);

@@ -17,6 +17,9 @@
 @import 'color-vars';
 
 :host {
+  $base-drop-shadow: 0 19px 38px opacity($black, .3);
+  $border-width: 8px;
+
   align-items: center;
   background-color: opacity($black, .5);
   bottom: 0;
@@ -31,9 +34,8 @@
   right: 0;
   top: 0;
   width: 100%;
-  z-index: 100;
 
-  $base-drop-shadow: 0 19px 38px opacity($black, .3);
+  z-index: 100;
 
   @media only screen and (max-width: 610px) {
     flex-direction: column;
@@ -42,11 +44,10 @@
 
   rq-task {
 
-    $border-width: 8px;
-
     $action-shadow: 0 0 0 $border-width $action-yellow, $base-drop-shadow;
 
     $action-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
+
 
     $confused-shadow: 0 0 0 $border-width $confused-blue, $base-drop-shadow;
     $confused-shadow-dark: 0 0 0 $border-width $belize-hole, $base-drop-shadow;
@@ -191,11 +192,11 @@
 
   .add-action-item-submit-container {
     align-items: center;
+    cursor: pointer;
     display: flex;
     height: 50px;
     justify-content: center;
     margin-top: 100px;
-    cursor: pointer;
 
     @media only screen and (max-width: 610px) {
       display: none;
@@ -206,17 +207,17 @@
     }
 
     .add-action-item-button {
-      background-color: $white;
-      height: inherit;
-      display: flex;
       align-items: center;
-      justify-content: center;
-      font-weight: bolder;
-      font-size: 1.2rem;
-      padding: 24px;
-      box-sizing: border-box;
+      background-color: $white;
       border-radius: 36px;
       box-shadow: 0 19px 38px opacity($black, .15);
+      box-sizing: border-box;
+      display: flex;
+      font-size: 1.2rem;
+      font-weight: bolder;
+      height: inherit;
+      justify-content: center;
+      padding: 24px;
 
       .plus-icon {
         margin-right: 12px;
@@ -231,10 +232,7 @@
       display: none;
     }
 
-    $border-width: 8px;
-
     $action-shadow: 0 0 0 $border-width $action-yellow, $base-drop-shadow;
-
     $action-shadow-dark: 0 0 0 $border-width $orange, $base-drop-shadow;
 
     border-radius: 6px;

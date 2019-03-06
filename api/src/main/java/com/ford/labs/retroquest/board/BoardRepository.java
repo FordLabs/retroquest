@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.board;
 
+import com.ford.labs.retroquest.thought.Thought;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

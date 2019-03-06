@@ -43,18 +43,14 @@ public class CsvFileTest {
                 .message("stuff \"goes here\"")
                 .hearts(5)
                 .discussed(false)
-                .columnTitle(ColumnTitle.builder()
-                        .title("CONFUSED")
-                        .build())
+                .columnTitle(ColumnTitle.builder().title("CONFUSED").build())
                 .build();
 
         Thought secondThoght = Thought.builder()
                 .topic("happy")
                 .message("a thought, with a comma")
                 .hearts(2)
-                .columnTitle(ColumnTitle.builder()
-                        .title("HAPPY")
-                        .build())
+                .columnTitle(ColumnTitle.builder().title("HAPPY").build())
                 .discussed(true)
                 .build();
 
@@ -63,20 +59,18 @@ public class CsvFileTest {
                 .message("sad")
                 .hearts(0)
                 .discussed(false)
-                .columnTitle(ColumnTitle.builder()
-                        .title("SAD")
-                        .build())
+                .columnTitle(ColumnTitle.builder().title("SAD").build())
                 .build();
 
-        ActionItem actionItem = new ActionItem();
-
-        actionItem.setTask("tasks and \"stuff, yo\"");
-        actionItem.setCompleted(false);
-        actionItem.setAssignee("test user");
+        ActionItem actionItem = ActionItem.builder()
+                .task("tasks and \"stuff, yo\"")
+                .completed(false)
+                .assignee("test user")
+                .build();
 
         String actual = new CsvFile("teamName",
                 Arrays.asList(firstThought, secondThoght, thirdThought),
-                Collections.singletonList(actionItem)).getCSVString();
+                Collections.singletonList(actionItem) ).getCSVString();
 
         String expected = FileUtils.readFileToString(new File("src/test/resources/sampleOutput.csv"), Charset.defaultCharset());
 

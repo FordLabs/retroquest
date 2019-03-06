@@ -55,8 +55,7 @@ export class ActionsHeaderComponent {
           task: updatedMessage,
           completed: false,
           assignee: assignees ? assignees.join(', ') : null,
-          dateCreated: todaysDate,
-          linkedThoughts: []
+          dateCreated: todaysDate
         };
 
         this.actionItemService.addActionItem(actionItem);

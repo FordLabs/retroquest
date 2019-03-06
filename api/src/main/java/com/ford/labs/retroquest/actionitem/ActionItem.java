@@ -18,23 +18,24 @@
 package com.ford.labs.retroquest.actionitem;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ford.labs.retroquest.thought.Thought;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Data
 @Entity
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = "linkedThoughts")
+@AllArgsConstructor
+@Builder
 public class ActionItem {
 
     @Id
@@ -45,12 +46,6 @@ public class ActionItem {
     private String teamId;
     private String assignee;
     private Date dateCreated;
-
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinTable(name = "action_thought_link",
-            joinColumns = @JoinColumn(name = "thought_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "action_item_id", referencedColumnName = "id"))
-    private Set<Thought> linkedThoughts;
 
     private String getCompletedString() {
         return completed ? "yes" : "no";
@@ -63,19 +58,6 @@ public class ActionItem {
 
     public void toggleCompleted() {
         completed = !completed;
-    }
-
-    public ActionItem(Long id, String task, boolean completed, String teamId, String assignee, Date dateCreated, Thought... thoughts) {
-        this.id = id;
-        this.task = task;
-        this.completed = completed;
-        this.teamId = teamId;
-        this.assignee = assignee;
-        this.dateCreated = dateCreated;
-        this.linkedThoughts = Stream.of(thoughts)
-                .collect(Collectors.toSet());
-        this.linkedThoughts.forEach(t -> t.getLinkedActionItems()
-                .add(this));
     }
 
 }

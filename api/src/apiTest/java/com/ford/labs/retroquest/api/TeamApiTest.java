@@ -1,10 +1,7 @@
 package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.security.JwtBuilder;
-import com.ford.labs.retroquest.team.CreateTeamRequest;
-import com.ford.labs.retroquest.team.LoginRequest;
-import com.ford.labs.retroquest.team.Team;
-import com.ford.labs.retroquest.team.TeamRepository;
+import com.ford.labs.retroquest.team.*;
 import org.junit.After;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
