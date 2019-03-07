@@ -102,6 +102,25 @@ describe('ActionsHeaderComponent', () => {
 
         expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(expectedActionItem);
       });
+
+    it('should not let the user submit a assignee string greater than the max limit', () => {
+      const expectedAssignee = 'llllllllllllllllllllllllllllllllllllllllllllllllll';
+      const newMessage = `a new actionItem @${expectedAssignee}p`;
+      const expectedFormattedMessage = 'a new actionItem';
+
+      const expectedActionItem: ActionItem = {
+        id: null,
+        teamId: teamId,
+        task: expectedFormattedMessage,
+        completed: false,
+        assignee: expectedAssignee,
+        dateCreated: moment(mockDateString).format()
+      };
+
+      component.addActionItem(newMessage);
+
+      expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(expectedActionItem);
+    });
   });
 
   describe('onSortChanged', () => {
