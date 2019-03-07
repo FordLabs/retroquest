@@ -19,6 +19,10 @@ import {AfterContentChecked, Component, EventEmitter, Input, Output, ViewChild} 
 import {emptyThought, Thought} from '../../domain/thought';
 import {TaskComponent} from '../task/task.component';
 import {Themes} from '../../domain/Theme';
+import {ActionItem, emptyActionItem} from '../../domain/action-item';
+import {ActionItemService} from '../../teams/services/action.service';
+import * as moment from 'moment';
+import {ActionItemTaskComponent} from '../action-item-task/action-item-task.component';
 
 const ESC_KEY = 27;
 
@@ -39,6 +43,7 @@ export class TaskDialogComponent implements AfterContentChecked {
   @Input() task: Thought = emptyThought();
   @Input() visible = true;
   @Input() theme: Themes = Themes.Light;
+  @Input() teamId: string;
 
   @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
@@ -47,6 +52,13 @@ export class TaskDialogComponent implements AfterContentChecked {
   @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @ViewChild('task_component') taskComponent: TaskComponent;
+  @ViewChild(ActionItemTaskComponent) actionItemTaskComponent: ActionItemTaskComponent;
+
+  assignedActionItem: ActionItem = emptyActionItem();
+  actionItemIsVisible = false;
+
+  constructor(private actionItemService: ActionItemService) {
+  }
 
   get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;
@@ -59,10 +71,12 @@ export class TaskDialogComponent implements AfterContentChecked {
   }
 
   public hide(): void {
-    this.visible = false;
-    this.visibilityChanged.emit(this.visible);
-    document.onkeydown = null;
-    document.body.style.overflow = null;
+    if (!this.actionItemIsVisible) {
+      this.visible = false;
+      this.visibilityChanged.emit(this.visible);
+      document.onkeydown = null;
+      document.body.style.overflow = null;
+    }
   }
 
   public show(): void {
@@ -92,5 +106,34 @@ export class TaskDialogComponent implements AfterContentChecked {
     this.completed.emit(state);
     this.hide();
   }
+
+  public createLinking() {
+    if (this.assignedActionItem.task.length > 0) {
+      this.assignedActionItem.dateCreated = moment().format();
+      this.actionItemService.addActionItem(this.assignedActionItem);
+      this.assignedActionItem = emptyActionItem();
+      this.actionItemIsVisible = false;
+      this.emitCompleted(true);
+      this.hide();
+    } else {
+      this.triggerAnimation();
+    }
+  }
+
+  private triggerAnimation() {
+    this.assignedActionItem.state = undefined;
+    setTimeout(() => {
+      this.assignedActionItem.state = 'active';
+      this.actionItemTaskComponent.focusInput();
+    }, 0);
+  }
+
+  public toggleActionItem() {
+    this.actionItemIsVisible = !this.actionItemIsVisible;
+    if (!this.actionItemIsVisible) {
+      this.assignedActionItem = emptyActionItem();
+    }
+  }
+
 }
 

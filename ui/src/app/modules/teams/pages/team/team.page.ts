@@ -29,6 +29,7 @@ import {ActionItemService} from '../../services/action.service';
 import {ColumnService} from '../../services/column.service';
 import {WebsocketResponse} from '../../../domain/websocket-response';
 
+import * as Hammer from 'hammerjs';
 import * as moment from 'moment';
 import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-view/actions-radiator-view.component';
 import {SaveCheckerService} from '../../services/save-checker.service';
@@ -108,7 +109,13 @@ export class TeamPageComponent implements OnInit {
     return this.theme === Themes.Dark;
   }
 
+  private isMobileView = (): boolean => window.innerWidth <= 610;
+
   ngOnInit(): void {
+
+    if (this.isMobileView()) {
+      this.addTouchListeners();
+    }
 
     this.activeRoute.params.subscribe((params) => {
       this.teamId = params.teamId;
@@ -122,6 +129,7 @@ export class TeamPageComponent implements OnInit {
         this.websocketInit();
       }
 
+
       this.websocketService.intervalId = this.globalWindowRef.setInterval(() => {
         if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
           this.websocketService.closeWebsocket();
@@ -129,8 +137,10 @@ export class TeamPageComponent implements OnInit {
         } else if (this.websocketService.getWebsocketState() === WebSocket.OPEN) {
           this.websocketService.sendHeartbeat();
         }
-      }, 1000 * 60);
+      }, 1000 * 1);
+
     });
+
   }
 
   public getColumnThoughtCount(column: Column): number {
@@ -290,6 +300,18 @@ export class TeamPageComponent implements OnInit {
     this.selectedIndex = index;
   }
 
+  public incrementSelectedIndex(): void {
+    if (this.selectedIndex < this.columns.length) {
+      this.selectedIndex++;
+    }
+  }
+
+  public decrementSelectedIndex(): void {
+    if (this.selectedIndex > 0) {
+      this.selectedIndex--;
+    }
+  }
+
   public actionItemsIndexIsSelected(): boolean {
     return (this.selectedIndex === 3);
   }
@@ -329,5 +351,17 @@ export class TeamPageComponent implements OnInit {
 
   public normalViewIsSelected(): boolean {
     return this.currentView === 'normalView';
+  }
+
+  private addTouchListeners(): void {
+    const teamPage = document.getElementById('page');
+    const pageGestures = new Hammer(teamPage);
+
+    pageGestures.on('swipeleft', () => {
+      this.incrementSelectedIndex();
+    });
+    pageGestures.on('swiperight', () => {
+      this.decrementSelectedIndex();
+    });
   }
 }

@@ -15,17 +15,7 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewChecked,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild
-} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {ActionItem, emptyActionItem} from '../../domain/action-item';
 import * as moment from 'moment';
 import {emojify} from '../../utils/EmojiGenerator';
@@ -37,7 +27,7 @@ import {Themes} from '../../domain/Theme';
   styleUrls: ['./action-item-task.component.scss'],
   host: {
     '[class.push-order-to-bottom]': 'actionItem.completed',
-    '[class.edit-mode]': 'taskEditModeEnabled',
+    '[class.edit-mode]': '!displayAsLinkable && taskEditModeEnabled',
     '[class.dialog-overlay-border]': 'enableOverlayBorder',
     '[class.dark-theme]': 'darkThemeIsEnabled'
   }
@@ -48,20 +38,36 @@ export class ActionItemTaskComponent implements AfterViewChecked {
   @Input() readOnly = false;
   @Input() enableOverlayBorder = false;
   @Input() theme = Themes.Light;
+  @Input() taskEditModeEnabled = false;
 
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
   @Output() deleted: EventEmitter<ActionItem> = new EventEmitter<ActionItem>();
   @Output() messageClicked: EventEmitter<ActionItem> = new EventEmitter<ActionItem>();
   @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() assigneeUpdated: EventEmitter<string> = new EventEmitter<string>();
+  @Output() dialogDiscarded: EventEmitter<void> = new EventEmitter();
+  @Output() dialogConfirmed: EventEmitter<void> = new EventEmitter();
 
   @ViewChild('content_value') editableTextArea: ElementRef;
   @ViewChild('assignee_text_field') assigneeTextField: ElementRef;
 
-  taskEditModeEnabled = false;
+  assigneeCharacterCountdownIsVisible = false;
   maxMessageLength = 255;
+  maxAssigneeLength = 50;
   _textValueLength = 0;
   deleteWasToggled = false;
+  _displayAsLinkable = false;
+
+  get displayAsLinkable(): boolean {
+    return this._displayAsLinkable;
+  }
+
+  @Input() set displayAsLinkable(display: boolean) {
+    this._displayAsLinkable = display;
+    if (display) {
+      this.focusInput();
+    }
+  }
 
   get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;
@@ -118,7 +124,7 @@ export class ActionItemTaskComponent implements AfterViewChecked {
     this.editableTextArea.nativeElement.style.height = this.editableTextArea.nativeElement.scrollHeight + 'px';
   }
 
-  private focusInput(): void {
+  public focusInput(): void {
     setTimeout(() => {
       this.editableTextArea.nativeElement.focus();
       this.editableTextArea.nativeElement.select();

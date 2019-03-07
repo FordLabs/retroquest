@@ -16,12 +16,55 @@
  */
 @import 'color-vars';
 
+
+$base-drop-shadow: 0 19px 38px opacity($black, .3);
+$border-width: 8px;
+
+$sad-shadow: 0 0 0 $border-width $unhappy-red, $base-drop-shadow;
+$sad-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
+
+.shake {
+  animation: shake .5s cubic-bezier(.36, .07, .19, .97) both;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  transform: scale(1.65) translate3d(0, 0, 0);
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    box-shadow: $sad-shadow;
+    transform: scale(1.65) translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    box-shadow: $sad-shadow;
+    transform: scale(1.65) translate3d(3px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    box-shadow: $sad-shadow;
+    transform: scale(1.65) translate3d(-6px, 0, 0);
+  }
+
+  40%,
+  60% {
+    box-shadow: $sad-shadow;
+    transform: scale(1.65) translate3d(6px, 0, 0);
+  }
+}
+
 :host {
+
   align-items: center;
   background-color: opacity($black, .5);
   bottom: 0;
   box-sizing: border-box;
   display: flex;
+  flex-direction: column;
   height: 100%;
   justify-content: center;
   left: 0;
@@ -30,6 +73,7 @@
   right: 0;
   top: 0;
   width: 100%;
+
   z-index: 100;
 
   @media only screen and (max-width: 610px) {
@@ -38,11 +82,9 @@
   }
 
   rq-task {
-    $base-drop-shadow: 0 19px 38px opacity($black, .3);
-
-    $border-width: 8px;
 
     $action-shadow: 0 0 0 $border-width $action-yellow, $base-drop-shadow;
+
     $action-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
 
     $confused-shadow: 0 0 0 $border-width $confused-blue, $base-drop-shadow;
@@ -54,9 +96,6 @@
     $happy-shadow: 0 0 0 $border-width $happy-green, $base-drop-shadow;
     $happy-shadow-dark: 0 0 0 $border-width $nephritis, $base-drop-shadow;
 
-    $sad-shadow: 0 0 0 $border-width $unhappy-red, $base-drop-shadow;
-    $sad-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
-
     border-radius: 6px;
     box-sizing: border-box;
     font-size: 1rem;
@@ -67,7 +106,7 @@
     width: 450px;
 
     @media only screen and (max-width: 770px) {
-      transform: scale(1.3);
+      transform: scale(1.5);
     }
 
     @media only screen and (max-width: 610px) {
@@ -175,5 +214,90 @@
         }
       }
     }
+
+    &.remove-border {
+      box-shadow: $base-drop-shadow;
+    }
+
+    &.disable-events {
+      pointer-events: none;
+      transform: scale(1.4);
+    }
+  }
+
+  .add-action-item-submit-container {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    height: 50px;
+    justify-content: center;
+    margin-top: 100px;
+
+    @media only screen and (max-width: 610px) {
+      display: none;
+    }
+
+    &.hide {
+      display: none;
+    }
+
+    .add-action-item-button {
+      align-items: center;
+      background-color: $white;
+      border-radius: 36px;
+      box-shadow: 0 19px 38px opacity($black, .15);
+      box-sizing: border-box;
+      display: flex;
+      font-size: 1.2rem;
+      font-weight: bolder;
+      height: inherit;
+      justify-content: center;
+      padding: 24px;
+
+      .plus-icon {
+        margin-right: 12px;
+      }
+
+      &.dark-theme {
+        background-color: $task-background-dark;
+        color: $clouds;
+      }
+    }
+
+  }
+
+  rq-action-item-task {
+
+    @media only screen and (max-width: 610px) {
+      display: none;
+    }
+
+    $action-shadow: 0 0 0 $border-width $action-yellow, $base-drop-shadow;
+    $action-shadow-dark: 0 0 0 $border-width $orange, $base-drop-shadow;
+
+    border-radius: 6px;
+
+    box-shadow: $action-shadow;
+    box-sizing: border-box;
+    font-size: 1rem;
+    height: auto;
+    margin-top: 165px;
+    max-height: 50%;
+    max-width: 650px;
+    transform: scale(1.65);
+    width: 450px;
+
+    &:hover {
+      box-shadow: $action-shadow;
+    }
+
+    &.hide {
+      display: none;
+    }
+
+    &.dark-theme {
+      box-shadow: $action-shadow-dark;
+    }
   }
 }
+

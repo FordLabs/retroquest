@@ -41,6 +41,7 @@ export class ActionsHeaderComponent {
   @Output() sortChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   maxInputLength = 255;
+  maxAssigneeLength = 50;
 
   public addActionItem(newMessage: string): void {
     if (newMessage && newMessage.length) {
@@ -54,7 +55,7 @@ export class ActionsHeaderComponent {
           teamId: this.teamId,
           task: updatedMessage,
           completed: false,
-          assignee: assignees ? assignees.join(', ') : null,
+          assignee: assignees ? assignees.join(', ').substring(0, this.maxAssigneeLength) : null,
           dateCreated: todaysDate
         };
 

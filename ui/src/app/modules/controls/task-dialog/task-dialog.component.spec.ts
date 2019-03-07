@@ -16,12 +16,20 @@
  */
 
 import {TaskDialogComponent} from './task-dialog.component';
+import {emptyActionItem} from '../../domain/action-item';
+import {ActionItemService} from '../../teams/services/action.service';
+import * as moment from 'moment';
+import {after} from 'selenium-webdriver/testing';
 
 describe('TaskDialogComponent', () => {
   let component: TaskDialogComponent;
+  let mockActionItemService: ActionItemService;
 
   beforeEach(() => {
-    component = new TaskDialogComponent();
+    mockActionItemService = jasmine.createSpyObj({
+      addActionItem: null
+    });
+    component = new TaskDialogComponent(mockActionItemService);
   });
 
   it('should create', () => {
@@ -137,4 +145,85 @@ describe('TaskDialogComponent', () => {
     });
 
   });
+
+  describe('createLinking', () => {
+
+    let originalTimeoutFunction;
+
+    beforeEach(() => {
+      originalTimeoutFunction = window.setTimeout;
+      window.setTimeout = (fn: Function) => fn();
+
+      component.actionItemIsVisible = true;
+      component.show();
+    });
+
+    afterEach(() => {
+      window.setTimeout = originalTimeoutFunction;
+    });
+
+    describe('action item message is not filled out', () => {
+
+      let mockActionItemTaskComponent;
+
+      beforeEach(() => {
+        mockActionItemTaskComponent = jasmine.createSpyObj({
+          focusInput: null
+        });
+        component.actionItemTaskComponent = mockActionItemTaskComponent;
+        component.createLinking();
+      });
+
+      it('should not do anything but start an animation for the user', () => {
+        expect(component.assignedActionItem.state).toEqual('active');
+        expect(component.visible).toBeTruthy();
+        expect(component.actionItemIsVisible).toBeTruthy();
+      });
+
+      it('should refocus the action item', () => {
+        expect(mockActionItemTaskComponent.focusInput).toHaveBeenCalled();
+      });
+    });
+
+    describe('action item message is filled out', () => {
+
+      const fakeTaskMessage = 'fake message';
+      const fakeDate = moment('2001-01-01');
+
+      beforeEach(() => {
+        jasmine.clock().mockDate(fakeDate.toDate());
+        component.assignedActionItem.task = fakeTaskMessage;
+        component.actionItemIsVisible = true;
+        component.createLinking();
+      });
+
+      afterEach(() => {
+        jasmine.clock().uninstall();
+      });
+
+      it('should hide all the dialogs', () => {
+        expect(component.visible).toBeFalsy();
+        expect(component.actionItemIsVisible).toBeFalsy();
+      });
+
+      it('should reset the assigned action item to empty', () => {
+        expect(component.assignedActionItem).toEqual(emptyActionItem());
+      });
+
+      it('should call the backend to add the assigned action item', () => {
+        const expectedActionItem = emptyActionItem();
+        expectedActionItem.task = fakeTaskMessage;
+        expectedActionItem.dateCreated = fakeDate.format();
+        expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(expectedActionItem);
+      });
+    });
+  });
+
+  describe('toggleActionItem', () => {
+    it('should reset the assigned action item if it is false', () => {
+      component.actionItemIsVisible = false;
+      expect(component.assignedActionItem).toEqual(emptyActionItem());
+    });
+  });
+
 });
