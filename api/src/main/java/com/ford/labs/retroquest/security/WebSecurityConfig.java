@@ -34,7 +34,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
@@ -69,12 +69,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .hasRole("ADMIN").and().httpBasic();
 
         httpSecurity
-        .authorizeRequests()
-        .antMatchers("/**")
-            .permitAll()
-        .anyRequest()
-        .authenticated()
-        .and().addFilterAfter(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
+                .authorizeRequests()
+                .antMatchers("/contributors").permitAll()
+                .antMatchers("/**")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and().addFilterAfter(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
 
         httpSecurity.csrf().disable();
         displayH2ConsoleToDevs(httpSecurity);
@@ -84,7 +85,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(jwtAuthenticationProvider);
         auth.inMemoryAuthentication().withUser(adminUsername).password(adminPassword).roles("ADMIN");
-
     }
 
     @Override
