@@ -46,6 +46,10 @@ export class FeedbackDialogComponent {
     return this.theme === Themes.Dark;
   }
 
+  get commentsAreEmpty(): boolean {
+    return this.feedback.comment === '';
+  }
+
   public hide(): void {
     this.visible = false;
     this.visibilityChanged.emit(this.visible);
@@ -65,8 +69,10 @@ export class FeedbackDialogComponent {
   }
 
   public onSendButtonClicked(): void {
-    this.submitted.emit(this.feedback);
-    this.hide();
+    if (!this.commentsAreEmpty) {
+      this.submitted.emit(this.feedback);
+      this.hide();
+    }
   }
 
   public onStarHovered(index: number): void {

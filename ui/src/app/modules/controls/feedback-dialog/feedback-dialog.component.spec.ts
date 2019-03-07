@@ -142,16 +142,38 @@ describe('DialogComponent', () => {
       component.submitted = jasmine.createSpyObj({
         emit: null
       });
-
-      component.onSendButtonClicked();
     });
 
-    it('should emit the submitted signal', () => {
-      expect(component.submitted.emit).toHaveBeenCalled();
+    describe('comments are filled in', () => {
+
+      beforeEach(() => {
+        component.feedback.comment = 'great job retroquest!';
+        component.onSendButtonClicked();
+      });
+
+      it('should emit the submitted signal', () => {
+        expect(component.submitted.emit).toHaveBeenCalled();
+      });
+
+      it('should hide the dialog', () => {
+        expect(component.visible).toBeFalsy();
+      });
     });
 
-    it('should hide the dialog', () => {
-      expect(component.visible).toBeFalsy();
+    describe('comments are not filled in', () => {
+
+      beforeEach(() => {
+        component.feedback.comment = '';
+        component.onSendButtonClicked();
+      });
+
+      it('should not emit the submitted signal', () => {
+        expect(component.submitted.emit).not.toHaveBeenCalled();
+      });
+
+      it('should keep the dialog visible', () => {
+        expect(component.visible).toBeTruthy();
+      });
     });
   });
 
