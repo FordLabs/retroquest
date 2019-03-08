@@ -36,6 +36,8 @@ import {SaveCheckerService} from '../../services/save-checker.service';
 import {Themes} from '../../../domain/Theme';
 import {BoardService} from '../../services/board.service';
 import {ColumnAggregationService} from "../../services/column-aggregation.service";
+import {ColumnCombinerResponse} from "../../../domain/column-combiner-response";
+import {ColumnResponse} from "../../../domain/column-response";
 
 @Component({
   selector: 'rq-team',
@@ -93,6 +95,11 @@ export class TeamPageComponent implements OnInit {
   actionItemsAreSorted = false;
   currentView = 'normalView';
 
+  columnsAggregation: Array<ColumnResponse> = [];
+  activeActionItems: Array<ActionItem> = [];
+  completedActionItems: Array<ActionItem> = [];
+  thoughtsAggregation: Array<ColumnResponse> = [];
+
   _theme: Themes = Themes.Light;
 
   get theme(): Themes {
@@ -128,13 +135,24 @@ export class TeamPageComponent implements OnInit {
       this.columnAggregationService.getColumns(this.teamId).subscribe(
         (body) => {
           console.log('GOT BODY', body);
+          this.columnsAggregation = body.columns;
+
+          const actionItemsAggregation = this.columnsAggregation.filter(col => col.topic === 'action')[0].items;
+          this.activeActionItems = (actionItemsAggregation.active as Array<ActionItem>);
+          this.completedActionItems = (actionItemsAggregation.completed as Array<ActionItem>);
+
+          this.actionItems = [];
+          this.actionItems.push(...this.activeActionItems);
+          this.actionItems.push(...this.completedActionItems);
+
+          this.thoughtsAggregation = this.columnsAggregation.filter(col => col.topic !== 'action');
         }
       )
 
       this.getTeamName();
       this.getColumns();
-      this.getThoughts();
-      this.subscribeToActionItems();
+      // this.getThoughts();
+      // this.subscribeToActionItems();
       this.subscribeToResetThoughts();
 
 

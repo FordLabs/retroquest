@@ -43,18 +43,17 @@
   >
     <div
       class="rq-column"
-      *ngFor="let column of columns; let i = index"
+      *ngFor="let thoughtAggregation of thoughtsAggregation; let i = index"
       [ngClass]="{'selected': isSelectedIndex(i)}"
     >
       <rq-thoughts-header
-        [column]="column"
-        [thoughtCount]="getColumnThoughtCount(column)"
+        [thoughtAggregation]="thoughtsAggregation"
+        [thoughtCount]="thoughtAggregation.items.completed.length + thoughtAggregation.items.active.length"
         [theme]="theme"
       ></rq-thoughts-header>
 
       <rq-thoughts-column
         [column]="column"
-        [thoughts]="getThoughtsInColumn(column)"
         [theme]="theme"
         [teamId]="teamId"
       ></rq-thoughts-column>

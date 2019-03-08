@@ -16,8 +16,11 @@
  *
  */
 
-import {ColumnResponse} from "./column-response";
+import {ItemSorter} from "./column/item-sorter";
 
-export interface ColumnCombinerResponse {
-  columns: Array<ColumnResponse>
+export interface ColumnResponse {
+  items: ItemSorter
+  title: string
+  topic: string
 }
+

@@ -16,8 +16,7 @@
  *
  */
 
-import {ColumnResponse} from "./column-response";
-
-export interface ColumnCombinerResponse {
-  columns: Array<ColumnResponse>
+export interface ItemSorter {
+  active: Array<object>
+  completed: Array<object>
 }

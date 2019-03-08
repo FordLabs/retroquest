@@ -21,6 +21,7 @@ import {Thought} from '../../../domain/thought';
 import {ThoughtService} from '../../services/thought.service';
 import {ColumnService} from '../../services/column.service';
 import {Themes} from '../../../domain/Theme';
+import {ColumnResponse} from "../../../domain/column-response";
 
 @Component({
   selector: 'rq-thoughts-header',
@@ -32,6 +33,7 @@ export class ThoughtsHeaderComponent {
   constructor(private thoughtService: ThoughtService, private columnService: ColumnService) {
   }
 
+  @Input() thoughtAggregation: ColumnResponse;
   @Input() column: Column;
   @Input() thoughtCount: number;
   @Input() theme: Themes = Themes.Light;

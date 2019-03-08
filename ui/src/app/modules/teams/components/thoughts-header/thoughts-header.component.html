@@ -15,11 +15,11 @@
   ~ limitations under the License.
   -->
 
-<div class="rq-thought-column-header {{column.topic}}">
+<div class="rq-thought-column-header {{thoughtAggregation.topic}}">
 
   <rq-column-header
-    [type]="column.topic"
-    [title]="column.title"
+    [type]="thoughtAggregation.topic"
+    [title]="thoughtAggregation.title"
     [readOnly]="hideNewThought"
     (sortedChanged)="sortByHearts($event)"
     (titleChanged)="editTitle($event)"
@@ -28,7 +28,7 @@
 
   <rq-text-field
     *ngIf="!hideNewThought"
-    [type]="column.topic"
+    [type]="thoughtAggregation.topic"
     [placeholder]="'Enter A Thought'"
     (newMessageAdded)="addThought($event)"
     [theme]="theme"
