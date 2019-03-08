@@ -35,6 +35,7 @@ import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-v
 import {SaveCheckerService} from '../../services/save-checker.service';
 import {Themes} from '../../../domain/Theme';
 import {BoardService} from '../../services/board.service';
+import {ColumnAggregationService} from "../../services/column-aggregation.service";
 
 @Component({
   selector: 'rq-team',
@@ -76,7 +77,9 @@ export class TeamPageComponent implements OnInit {
               private actionItemService: ActionItemService,
               private websocketService: WebsocketService,
               private saveCheckerService: SaveCheckerService,
-              private boardService: BoardService) {
+              private boardService: BoardService,
+              private columnAggregationService: ColumnAggregationService
+  ) {
   }
 
   teamId: string;
@@ -113,17 +116,27 @@ export class TeamPageComponent implements OnInit {
 
   ngOnInit(): void {
 
+
     if (this.isMobileView()) {
       this.addTouchListeners();
     }
 
     this.activeRoute.params.subscribe((params) => {
       this.teamId = params.teamId;
+
+
+      this.columnAggregationService.getColumns(this.teamId).subscribe(
+        (body) => {
+          console.log('GOT BODY', body);
+        }
+      )
+
       this.getTeamName();
       this.getColumns();
       this.getThoughts();
       this.subscribeToActionItems();
       this.subscribeToResetThoughts();
+
 
       if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
         this.websocketInit();

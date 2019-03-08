@@ -25,10 +25,12 @@ import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ColumnCombinerService {
@@ -37,7 +39,8 @@ public class ColumnCombinerService {
     private ActionItemRepository actionItemRepository;
     private ColumnTitleRepository columnTitleRepository;
 
-    public ColumnCombinerService(ThoughtRepository thoughtRepository, ActionItemRepository actionItemRepository, ColumnTitleRepository columnTitleRepository) {
+    public ColumnCombinerService(ThoughtRepository thoughtRepository, ActionItemRepository actionItemRepository,
+                                 ColumnTitleRepository columnTitleRepository) {
         this.thoughtRepository = thoughtRepository;
         this.actionItemRepository = actionItemRepository;
         this.columnTitleRepository = columnTitleRepository;
@@ -46,29 +49,17 @@ public class ColumnCombinerService {
     public ColumnCombinerResponse aggregateResponse(String teamId) {
         List<Thought> thoughts = thoughtRepository.findAllByTeamIdAndBoardIdIsNull(teamId);
         List<ActionItem> actionItems = actionItemRepository.findAllByTeamId(teamId);
+        List<ColumnTitle> columnTitles = columnTitleRepository.findAllByTeamId(teamId);
 
+        Map<ColumnTitle, List<Thought>> columnTitleListMap = columnTitles.stream().collect(
+                Collectors.toMap(title -> title, title -> new ArrayList<>()));
+//
         Map<ColumnTitle, List<Thought>> groupedThoughts = thoughts.stream()
                 .collect(Collectors.groupingBy(Thought::getColumnTitle));
 
-        List<ColumnResponse> unorderedColumnResponses = groupedThoughts.entrySet().stream()
-                .map(iter -> ColumnResponse.builder()
-                        .id(iter.getKey().getId())
-                        .topic(iter.getKey().getTopic())
-                        .title(iter.getKey().getTitle())
-                        .items(ItemSorterResponse.builder()
-                                .completed(
-                                        iter.getValue().stream()
-                                                .filter(Thought::isDiscussed)
-                                                .collect(Collectors.toList())
-                                )
-                                .active(iter.getValue().stream()
-                                        .filter(t -> !t.isDiscussed())
-                                        .collect(Collectors.toList())
-                                )
-                                .build()
-                        )
-                        .build())
-                .collect(Collectors.toList());
+        Map<ColumnTitle, List<Thought>> mergedThoughts = mergeMaps(columnTitleListMap, groupedThoughts);
+
+        List<ColumnResponse> unorderedColumnResponses = buildColumnResponses(mergedThoughts);
 
         ColumnResponse actionItemColumnResponse = ColumnResponse.builder()
                 .title("Action Item")
@@ -88,5 +79,40 @@ public class ColumnCombinerService {
                 .columns(orderedColumns)
                 .build();
 
+    }
+
+    private List<ColumnResponse> buildColumnResponses(final Map<ColumnTitle, List<Thought>> mergedThoughts) {
+        return mergedThoughts.entrySet().stream()
+                    .map(iter -> ColumnResponse.builder()
+                            .id(iter.getKey().getId())
+                            .topic(iter.getKey().getTopic())
+                            .title(iter.getKey().getTitle())
+                            .items(ItemSorterResponse.builder()
+                                    .completed(
+                                            iter.getValue().stream()
+                                                    .filter(Thought::isDiscussed)
+                                                    .collect(Collectors.toList())
+                                    )
+                                    .active(iter.getValue().stream()
+                                            .filter(t -> !t.isDiscussed())
+                                            .collect(Collectors.toList())
+                                    )
+                                    .build()
+                            )
+                            .build())
+                    .collect(Collectors.toList());
+    }
+
+    private Map<ColumnTitle, List<Thought>> mergeMaps(final Map<ColumnTitle, List<Thought>> columnTitleListMap,
+                                                      final Map<ColumnTitle, List<Thought>> groupedThoughts) {
+        return Stream.of(columnTitleListMap, groupedThoughts)
+                    .flatMap(map -> map.entrySet().stream())
+                    .collect(
+                            Collectors.toMap(
+                                    Map.Entry::getKey,
+                                    Map.Entry::getValue,
+                                    (v1, v2) -> {v1.addAll(v2); return v1;}
+                            )
+                    );
     }
 }

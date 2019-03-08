@@ -31,8 +31,10 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -71,6 +73,14 @@ public class ColumnCombinerServiceTest {
                 Arrays.asList(
                         expectedActiveActionItems,
                         expectedCompletedActionItems
+                )
+        );
+
+        when(columnTitleRepository.findAllByTeamId(fakeTeamId)).thenReturn(
+                Arrays.asList(
+                        expectedActiveHappyThoughts.getColumnTitle(),
+                        expectedActiveConfusedThoughts.getColumnTitle(),
+                        expectedActiveSadThoughts.getColumnTitle()
                 )
         );
 
@@ -160,10 +170,14 @@ public class ColumnCombinerServiceTest {
     // "should put completed items in correct list"
     @Test
     public void completedItemsList() {
-        assertThat(response.getColumns().get(0).getItems().getCompleted()).containsExactly(expectedCompletedHappyThoughts);
-        assertThat(response.getColumns().get(1).getItems().getCompleted()).containsExactly(expectedCompletedConfusedThoughts);
-        assertThat(response.getColumns().get(2).getItems().getCompleted()).containsExactly(expectedCompletedSadThoughts);
-        assertThat(response.getColumns().get(3).getItems().getCompleted()).containsExactly(expectedCompletedActionItems);
+        assertThat(response.getColumns().get(0).getItems().getCompleted()).containsExactly(
+                expectedCompletedHappyThoughts);
+        assertThat(response.getColumns().get(1).getItems().getCompleted()).containsExactly(
+                expectedCompletedConfusedThoughts);
+        assertThat(response.getColumns().get(2).getItems().getCompleted()).containsExactly(
+                expectedCompletedSadThoughts);
+        assertThat(response.getColumns().get(3).getItems().getCompleted()).containsExactly(
+                expectedCompletedActionItems);
     }
 
 }
