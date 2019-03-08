@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Ford Motor Company
+ * Copyright (c) 2018 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,17 +15,24 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.board;
+package com.ford.labs.retroquest.v2.columns;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class ColumnResponse {
 
-@Repository
-public interface BoardRepository extends JpaRepository<Board, Long>{
-    List<Board> findAllByTeamIdOrderByDateCreatedDesc(String teamId);
-    void deleteBoardByTeamIdAndId(String teamId, Long id);
-    Board save(Board board);
-    Board findByTeamIdAndId(String teamId, Long id);
+    @JsonIgnore
+    private Long id;
+
+    private String topic;
+    private String title;
+    private ItemSorterResponse items;
 }
