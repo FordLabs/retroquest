@@ -17,7 +17,7 @@
 
 <div class="rq-thought-list {{column.topic}}">
   <rq-task
-    *ngFor="let thought of thoughts"
+    *ngFor="let thought of allThoughts"
     [task]="thought"
     [type]="column.topic"
     (messageChanged)="onMessageChanged($event, thought)"

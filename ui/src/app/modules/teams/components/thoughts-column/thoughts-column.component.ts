@@ -57,6 +57,16 @@ export class ThoughtsColumnComponent implements OnInit {
       teamId: this.teamId
     };
   }
+
+  get allThoughts(): Array<Thought> {
+    const thoughts = [];
+
+    thoughts.push(...this.thoughtAggregation.items.active);
+    thoughts.push(...this.thoughtAggregation.items.completed);
+
+    return thoughts;
+  }
+
   discussThought(thought: Thought): void {
     thought.discussed = !thought.discussed;
     this.thoughtService.updateThought(thought);
