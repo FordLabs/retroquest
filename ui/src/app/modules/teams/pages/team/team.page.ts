@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 
 import {Column} from '../../../domain/column';
@@ -100,6 +100,9 @@ export class TeamPageComponent implements OnInit {
   completedActionItems: Array<ActionItem> = [];
   thoughtsAggregation: Array<ColumnResponse> = [];
 
+  thoughtUpdated: EventEmitter<Thought> = new EventEmitter();
+  thoughtResponseChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
+
   _theme: Themes = Themes.Light;
 
   get theme(): Themes {
@@ -134,7 +137,6 @@ export class TeamPageComponent implements OnInit {
 
       this.columnAggregationService.getColumns(this.teamId).subscribe(
         (body) => {
-          console.log('GOT BODY', body);
           this.columnsAggregation = body.columns;
 
           const actionItemsAggregation = this.columnsAggregation.filter(col => col.topic === 'action')[0].items;
@@ -145,17 +147,12 @@ export class TeamPageComponent implements OnInit {
           this.actionItems.push(...this.activeActionItems);
           this.actionItems.push(...this.completedActionItems);
 
-
-          console.log(this.thoughtsAggregation);
-
           this.thoughtsAggregation = this.columnsAggregation.filter(col => col.topic !== 'action');
         }
       );
 
       this.getTeamName();
       this.getColumns();
-      // this.getThoughts();
-      // this.subscribeToActionItems();
       this.subscribeToResetThoughts();
 
 
@@ -218,15 +215,7 @@ export class TeamPageComponent implements OnInit {
       });
 
       this.websocketService.thoughtsTopic().subscribe((message) => {
-
-        const response: WebsocketResponse = message.bodyJson;
-
-        if (response.type === 'delete') {
-          this.deleteThought(response);
-        } else {
-          this.updateThoughts(response);
-        }
-
+        this.thoughtResponseChanged.emit(message.bodyJson as WebsocketResponse);
         this.saveCheckerService.updateTimestamp();
       });
 
@@ -253,26 +242,6 @@ export class TeamPageComponent implements OnInit {
     });
   }
 
-  private deleteThought(response: WebsocketResponse) {
-    const thoughtId = response.payload as number;
-    if (thoughtId === -1) {
-      this.resetThoughts();
-    } else {
-      this.thoughtsArray = this.thoughtsArray.filter((item) => item.id !== thoughtId);
-    }
-  }
-
-  private updateThoughts(response: WebsocketResponse) {
-    const thought: Thought = response.payload as Thought;
-    const thoughtIndex = this.thoughtsArray.findIndex((item) => item.id === thought.id);
-    if (thoughtIndex === -1) {
-      thought.state = 'active';
-      this.thoughtsArray.push(thought);
-    } else {
-      Object.assign(this.thoughtsArray[thoughtIndex], thought);
-    }
-  }
-
   private deleteActionItem(response: WebsocketResponse) {
     const actionItemId = response.payload as number;
     this.actionItems = this.actionItems.filter((item) => item.id !== actionItemId);
@@ -297,10 +266,6 @@ export class TeamPageComponent implements OnInit {
     }
   }
 
-  private getThoughts(): void {
-    this.thoughtService.fetchThoughts(this.teamId).subscribe(
-      (thoughts: Array<Thought>) => this.thoughtsArray = thoughts);
-  }
 
   private getColumns(): void {
     this.columnService.fetchColumns(this.teamId).subscribe(
@@ -311,12 +276,6 @@ export class TeamPageComponent implements OnInit {
   private getTeamName(): void {
     this.teamsService.fetchTeamName(this.teamId).subscribe(
       (teamName) => this.teamName = teamName
-    );
-  }
-
-  private subscribeToActionItems(): void {
-    this.actionItemService.fetchActionItems(this.teamId).subscribe(
-      (actionItems: Array<ActionItem>) => this.actionItems = actionItems
     );
   }
 

@@ -122,7 +122,7 @@ export class WebsocketService {
 
   public deleteThought(thought: Thought): void {
     this.checkForOpenSocket();
-    this.stompClient.send(`/app/${this.teamId}/thought/${thought.id}/delete`, null);
+    this.stompClient.send(`/app/v2/${this.teamId}/thought/delete`, JSON.stringify(thought));
   }
 
   public updateThought(thought: Thought): void {
@@ -180,6 +180,6 @@ export class WebsocketService {
 
   deleteAllThoughts() {
     this.checkForOpenSocket();
-    this.stompClient.send(`/app/${this.teamId}/thought/delete`, null);
+    this.stompClient.send(`/app/v2/${this.teamId}/thought/deleteAll`, null);
   }
 }

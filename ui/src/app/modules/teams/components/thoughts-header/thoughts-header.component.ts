@@ -66,7 +66,7 @@ export class ThoughtsHeaderComponent implements OnInit {
   public addThought(newMessage: string): void {
     if (newMessage && newMessage.length) {
       const thought: Thought = {
-        id: this.thoughtAggregation.id,
+        id: -1,
         teamId: this.column.teamId,
         topic: this.column.topic,
         message: newMessage,

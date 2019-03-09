@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
 import {emptyThought, Thought} from '../../../domain/thought';
 import {Column} from '../../../domain/column';
 import {ThoughtService} from '../../services/thought.service';
@@ -23,6 +23,7 @@ import {TaskDialogComponent} from '../../../controls/task-dialog/task-dialog.com
 import {fadeInOutAnimation} from '../../../animations/add-delete-animation';
 import {Themes} from '../../../domain/Theme';
 import {ColumnResponse} from '../../../domain/column-response';
+import {WebsocketResponse} from '../../../domain/websocket-response';
 
 @Component({
   selector: 'rq-thoughts-column',
@@ -40,6 +41,10 @@ export class ThoughtsColumnComponent implements OnInit {
   @Input() archived = false;
   @Input() teamId: string;
 
+  @Input() thoughtUpdated: EventEmitter<Thought> = new EventEmitter();
+  @Input() thoughtResponseChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
+
+
   @Input() theme: Themes = Themes.Light;
 
   @ViewChild('thoughtDialog') thoughtDialog: TaskDialogComponent;
@@ -47,6 +52,7 @@ export class ThoughtsColumnComponent implements OnInit {
   column: Column;
   selectedThought: Thought = emptyThought();
   dialogIsVisible = false;
+  _allThoughts = [];
 
   ngOnInit(): void {
     this.column = {
@@ -56,15 +62,48 @@ export class ThoughtsColumnComponent implements OnInit {
       title: this.thoughtAggregation.title,
       teamId: this.teamId
     };
+
+    this._allThoughts.push(...this.thoughtAggregation.items.active);
+    this._allThoughts.push(...this.thoughtAggregation.items.completed);
+
+    this.thoughtResponseChanged.subscribe(
+      response => {
+
+        const thought = (response.payload as Thought);
+
+        if (thought.topic === this.column.topic) {
+
+          if (response.type === 'delete') {
+            this.deleteThought(thought);
+          } else {
+            this.updateThought(thought);
+          }
+        }
+      }
+    );
   }
 
   get allThoughts(): Array<Thought> {
-    const thoughts = [];
+    return this._allThoughts;
+  }
 
-    thoughts.push(...this.thoughtAggregation.items.active);
-    thoughts.push(...this.thoughtAggregation.items.completed);
+  updateThought(thought: Thought) {
+    const index = this._allThoughts.findIndex((item) => item.id === thought.id);
+    if (index === -1) {
+      thought.state = 'active';
+      this._allThoughts.push(thought);
+    } else {
+      Object.assign(this._allThoughts[index], thought);
+    }
+  }
 
-    return thoughts;
+  deleteThought(thought: Thought) {
+    if (thought.id === -1) {
+      console.log('DEELTE ALL');
+      this._allThoughts.splice(0, this._allThoughts.length);
+    } else {
+      this._allThoughts = this._allThoughts.filter((item) => item.id !== thought.id);
+    }
   }
 
   discussThought(thought: Thought): void {
