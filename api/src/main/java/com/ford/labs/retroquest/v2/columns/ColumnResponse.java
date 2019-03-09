@@ -29,7 +29,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ColumnResponse {
 
-    @JsonIgnore
     private Long id;
 
     private String topic;

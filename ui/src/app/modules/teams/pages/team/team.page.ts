@@ -35,9 +35,9 @@ import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-v
 import {SaveCheckerService} from '../../services/save-checker.service';
 import {Themes} from '../../../domain/Theme';
 import {BoardService} from '../../services/board.service';
-import {ColumnAggregationService} from "../../services/column-aggregation.service";
-import {ColumnCombinerResponse} from "../../../domain/column-combiner-response";
-import {ColumnResponse} from "../../../domain/column-response";
+import {ColumnAggregationService} from '../../services/column-aggregation.service';
+import {ColumnCombinerResponse} from '../../../domain/column-combiner-response';
+import {ColumnResponse} from '../../../domain/column-response';
 
 @Component({
   selector: 'rq-team',
@@ -145,9 +145,12 @@ export class TeamPageComponent implements OnInit {
           this.actionItems.push(...this.activeActionItems);
           this.actionItems.push(...this.completedActionItems);
 
+
+          console.log(this.thoughtsAggregation);
+
           this.thoughtsAggregation = this.columnsAggregation.filter(col => col.topic !== 'action');
         }
-      )
+      );
 
       this.getTeamName();
       this.getColumns();

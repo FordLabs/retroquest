@@ -47,13 +47,14 @@
       [ngClass]="{'selected': isSelectedIndex(i)}"
     >
       <rq-thoughts-header
-        [thoughtAggregation]="thoughtsAggregation"
+        [teamId]="teamId"
+        [thoughtAggregation]="thoughtAggregation"
         [thoughtCount]="thoughtAggregation.items.completed.length + thoughtAggregation.items.active.length"
         [theme]="theme"
       ></rq-thoughts-header>
 
       <rq-thoughts-column
-        [column]="column"
+        [thoughtAggregation]="thoughtAggregation"
         [theme]="theme"
         [teamId]="teamId"
       ></rq-thoughts-column>

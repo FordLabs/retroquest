@@ -16,11 +16,12 @@
  *
  */
 
-import {ItemSorter} from "./column/item-sorter";
+import {ItemSorter} from './column/item-sorter';
 
 export interface ColumnResponse {
-  items: ItemSorter
-  title: string
-  topic: string
+  id: number;
+  items: ItemSorter;
+  title: string;
+  topic: string;
 }
 

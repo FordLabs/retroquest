@@ -65,7 +65,7 @@ public class ColumnControllerTest extends ControllerTest {
     }
 
     @Test
-    // "GET: should return a filled out aggregated response with a 200""
+    // "GET: should return a filled out  aggregated response with a 200""
     public void authorizedResponseBody_GET() throws Exception {
         String body = mockMvc.perform(get("/api/v2/team/" + teamId + "/columns")
                 .header("Authorization", getBearerAuthToken()))

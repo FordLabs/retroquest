@@ -15,31 +15,44 @@
  * limitations under the License.
  */
 
-import {Component, Input, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Column} from '../../../domain/column';
 import {Thought} from '../../../domain/thought';
 import {ThoughtService} from '../../services/thought.service';
 import {ColumnService} from '../../services/column.service';
 import {Themes} from '../../../domain/Theme';
-import {ColumnResponse} from "../../../domain/column-response";
+import {ColumnResponse} from '../../../domain/column-response';
+import {isNullOrUndefined} from 'util';
 
 @Component({
   selector: 'rq-thoughts-header',
   templateUrl: './thoughts-header.component.html',
   styleUrls: ['./thoughts-header.component.scss']
 })
-export class ThoughtsHeaderComponent {
+export class ThoughtsHeaderComponent implements OnInit {
 
   constructor(private thoughtService: ThoughtService, private columnService: ColumnService) {
   }
 
   @Input() thoughtAggregation: ColumnResponse;
-  @Input() column: Column;
   @Input() thoughtCount: number;
+  @Input() teamId: string;
   @Input() theme: Themes = Themes.Light;
   @Input() hideNewThought = false;
 
   @ViewChild('titleInput') titleInput;
+
+  column: Column;
+
+  ngOnInit(): void {
+    this.column = {
+      sorted: false,
+      id: this.thoughtAggregation.id,
+      topic: this.thoughtAggregation.topic,
+      title: this.thoughtAggregation.title,
+      teamId: this.teamId,
+    };
+  }
 
   public editTitle(newTitle: string) {
     this.column.title = newTitle;
@@ -53,7 +66,7 @@ export class ThoughtsHeaderComponent {
   public addThought(newMessage: string): void {
     if (newMessage && newMessage.length) {
       const thought: Thought = {
-        id: null,
+        id: this.thoughtAggregation.id,
         teamId: this.column.teamId,
         topic: this.column.topic,
         message: newMessage,

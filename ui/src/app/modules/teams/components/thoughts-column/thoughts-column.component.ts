@@ -15,13 +15,14 @@
  * limitations under the License.
  */
 
-import {Component, Input, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {emptyThought, Thought} from '../../../domain/thought';
 import {Column} from '../../../domain/column';
 import {ThoughtService} from '../../services/thought.service';
 import {TaskDialogComponent} from '../../../controls/task-dialog/task-dialog.component';
 import {fadeInOutAnimation} from '../../../animations/add-delete-animation';
 import {Themes} from '../../../domain/Theme';
+import {ColumnResponse} from '../../../domain/column-response';
 
 @Component({
   selector: 'rq-thoughts-column',
@@ -29,11 +30,11 @@ import {Themes} from '../../../domain/Theme';
   styleUrls: ['./thoughts-column.component.scss'],
   animations: [fadeInOutAnimation]
 })
-export class ThoughtsColumnComponent {
+export class ThoughtsColumnComponent implements OnInit {
   constructor(private thoughtService: ThoughtService) {
   }
 
-  @Input() column: Column;
+  @Input() thoughtAggregation: ColumnResponse;
   @Input() thoughts: Array<Thought> = [];
   @Input() readOnly = false;
   @Input() archived = false;
@@ -43,9 +44,19 @@ export class ThoughtsColumnComponent {
 
   @ViewChild('thoughtDialog') thoughtDialog: TaskDialogComponent;
 
+  column: Column;
   selectedThought: Thought = emptyThought();
   dialogIsVisible = false;
 
+  ngOnInit(): void {
+    this.column = {
+      id: this.thoughtAggregation.id,
+      sorted: false,
+      topic: this.thoughtAggregation.topic,
+      title: this.thoughtAggregation.title,
+      teamId: this.teamId
+    };
+  }
   discussThought(thought: Thought): void {
     thought.discussed = !thought.discussed;
     this.thoughtService.updateThought(thought);
