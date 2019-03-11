@@ -58,6 +58,7 @@
     </div>
 
     <div
+      *ngIf="(thoughtsAggregation.length > 0)"
       class="rq-column"
       [ngClass]="{'selected': actionItemsIndexIsSelected()}"
     >
