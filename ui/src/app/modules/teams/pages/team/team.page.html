@@ -62,16 +62,10 @@
       class="rq-column"
       [ngClass]="{'selected': actionItemsIndexIsSelected()}"
     >
-      <rq-actions-header
-        [teamId]="teamId"
-        [theme]="theme"
-        [thoughtCount]="getActionItemColumnCount()"
-        (sortChanged)="onActionItemsSortChanged($event)"
-      ></rq-actions-header>
-
       <rq-actions-column
         [theme]="theme"
-        [actionItems]="getActionItems()"
+        [actionItems]="getActionItems"
+        [teamId]="teamId"
       ></rq-actions-column>
 
     </div>

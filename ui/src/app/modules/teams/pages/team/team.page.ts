@@ -30,13 +30,11 @@ import {ColumnService} from '../../services/column.service';
 import {WebsocketResponse} from '../../../domain/websocket-response';
 
 import * as Hammer from 'hammerjs';
-import * as moment from 'moment';
 import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-view/actions-radiator-view.component';
 import {SaveCheckerService} from '../../services/save-checker.service';
 import {Themes} from '../../../domain/Theme';
 import {BoardService} from '../../services/board.service';
 import {ColumnAggregationService} from '../../services/column-aggregation.service';
-import {ColumnCombinerResponse} from '../../../domain/column-combiner-response';
 import {ColumnResponse} from '../../../domain/column-response';
 
 @Component({
@@ -67,13 +65,13 @@ export class TeamPageComponent implements OnInit {
   actionItems: Array<ActionItem> = [];
   thoughtsArray: Array<Thought> = [];
   selectedIndex = 0;
-  actionItemsAreSorted = false;
   currentView = 'normalView';
 
   columnsAggregation: Array<ColumnResponse> = [];
   activeActionItems: Array<ActionItem> = [];
   completedActionItems: Array<ActionItem> = [];
   thoughtsAggregation: Array<ColumnResponse> = [];
+  actionItemAggregation: ColumnResponse;
 
   thoughtUpdated: EventEmitter<Thought> = new EventEmitter();
   thoughtResponseChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
@@ -148,6 +146,10 @@ export class TeamPageComponent implements OnInit {
 
     });
 
+  }
+
+  get getActionItems(): Array<ActionItem> {
+    return this.actionItems;
   }
 
   public getColumnThoughtCount(column: Column): number {
@@ -294,28 +296,6 @@ export class TeamPageComponent implements OnInit {
 
   public actionItemsIndexIsSelected(): boolean {
     return (this.selectedIndex === 3);
-  }
-
-  public onActionItemsSortChanged(sortState: boolean): void {
-    this.actionItemsAreSorted = sortState;
-  }
-
-  public getActionItems(): Array<ActionItem> {
-    if (this.actionItemsAreSorted) {
-      return this.actionItems.slice().sort((a, b) => moment
-        .utc(this.checkForNullDate(b.dateCreated))
-        .diff(moment.utc(this.checkForNullDate(a.dateCreated))));
-    }
-
-    return this.actionItems;
-  }
-
-  private checkForNullDate(dateCreated: string): string {
-    if (!dateCreated) {
-      const earliestDatePlaceholder = '1999-01-01';
-      return earliestDatePlaceholder;
-    }
-    return dateCreated;
   }
 
   public toggleActionsRadiatorAndNormalView(state: boolean): void {

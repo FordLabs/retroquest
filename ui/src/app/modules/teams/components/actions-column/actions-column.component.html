@@ -15,9 +15,16 @@
   ~ limitations under the License.
   -->
 
+<rq-actions-header
+  [teamId]="teamId"
+  [theme]="theme"
+  [thoughtCount]="actionItems.length"
+  (sortChanged)="sortChanged($event)"
+></rq-actions-header>
+
 <div class="rq-action-item-list">
   <rq-action-item-task
-    *ngFor="let actionItem of actionItems"
+    *ngFor="let actionItem of getActionItems"
     [actionItem]="actionItem"
     (completed)="onCompleted($event, actionItem)"
     (deleted)="onDeleted(actionItem)"
