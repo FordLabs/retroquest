@@ -52,6 +52,7 @@ export class ThoughtsColumnComponent implements OnInit {
   column: Column;
   selectedThought: Thought = emptyThought();
   dialogIsVisible = false;
+  thoughtsAreSorted = false;
   _allThoughts = [];
 
   ngOnInit(): void {
@@ -83,9 +84,23 @@ export class ThoughtsColumnComponent implements OnInit {
     );
   }
 
-  get allThoughts(): Array<Thought> {
-    return this._allThoughts;
+  get thoughtsToDisplay(): Array<Thought> {
+    let thoughts = [];
+
+    if (this.thoughtsAreSorted) {
+      thoughts = this._allThoughts.slice().sort((a, b) => b.hearts - a.hearts);
+
+    } else {
+      thoughts = this._allThoughts;
+    }
+
+    return thoughts;
   }
+
+  sortChanged(sorted: boolean) {
+    this.thoughtsAreSorted = sorted;
+  }
+
 
   updateThought(thought: Thought) {
     const index = this._allThoughts.findIndex((item) => item.id === thought.id);

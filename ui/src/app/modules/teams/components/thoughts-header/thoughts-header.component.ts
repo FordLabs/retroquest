@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Column} from '../../../domain/column';
 import {Thought} from '../../../domain/thought';
 import {ThoughtService} from '../../services/thought.service';
@@ -23,6 +23,7 @@ import {ColumnService} from '../../services/column.service';
 import {Themes} from '../../../domain/Theme';
 import {ColumnResponse} from '../../../domain/column-response';
 import {isNullOrUndefined} from 'util';
+import {sanitizeResourceUrl} from '@angular/core/src/sanitization/sanitization';
 
 @Component({
   selector: 'rq-thoughts-header',
@@ -39,6 +40,8 @@ export class ThoughtsHeaderComponent implements OnInit {
   @Input() teamId: string;
   @Input() theme: Themes = Themes.Light;
   @Input() hideNewThought = false;
+
+  @Output() sortChanged: EventEmitter<boolean> = new EventEmitter();
 
   @ViewChild('titleInput') titleInput;
 
@@ -59,8 +62,8 @@ export class ThoughtsHeaderComponent implements OnInit {
     this.columnService.updateColumn(this.column);
   }
 
-  public sortByHearts(sortState: boolean): void {
-    this.column.sorted = sortState;
+  public sortByHearts(sorted: boolean): void {
+    this.sortChanged.emit(sorted);
   }
 
   public addThought(newMessage: string): void {

@@ -51,9 +51,11 @@
         [thoughtAggregation]="thoughtAggregation"
         [thoughtCount]="thoughtAggregation.items.completed.length + thoughtAggregation.items.active.length"
         [theme]="theme"
+        (sortChanged)="thoughtsColumn.sortChanged($event)"
       ></rq-thoughts-header>
 
       <rq-thoughts-column
+        #thoughtsColumn
         [thoughtAggregation]="thoughtAggregation"
         [thoughtUpdated]="thoughtUpdated"
         [thoughtResponseChanged]="thoughtResponseChanged"

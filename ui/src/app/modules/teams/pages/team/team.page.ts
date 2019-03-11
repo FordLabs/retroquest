@@ -46,30 +46,6 @@ import {ColumnResponse} from '../../../domain/column-response';
 })
 export class TeamPageComponent implements OnInit {
 
-  static defaultColumns: Array<Column> = [
-    {
-      id: 0,
-      teamId: 'defaults',
-      topic: 'happy',
-      title: '',
-      sorted: false
-    },
-    {
-      id: 0,
-      teamId: 'defaults',
-      topic: 'confused',
-      title: '',
-      sorted: false
-    },
-    {
-      id: 0,
-      teamId: 'defaults',
-      topic: 'unhappy',
-      title: '',
-      sorted: false
-    }
-  ];
-
   @ViewChild('radiatorView') radiatorView: ActionsRadiatorViewComponent;
 
   constructor(private activeRoute: ActivatedRoute,
@@ -88,7 +64,6 @@ export class TeamPageComponent implements OnInit {
   teamName: string;
   globalWindowRef: Window = window;
 
-  columns: Array<Column> = TeamPageComponent.defaultColumns;
   actionItems: Array<ActionItem> = [];
   thoughtsArray: Array<Thought> = [];
   selectedIndex = 0;
@@ -259,18 +234,18 @@ export class TeamPageComponent implements OnInit {
   }
 
   private updateColumns(response: WebsocketResponse) {
-    const updatedColumn: Column = response.payload as Column;
-    const modifiedColumnIndex = this.columns.findIndex((item) => item.id === updatedColumn.id);
-    if (modifiedColumnIndex > -1) {
-      this.columns[modifiedColumnIndex].title = updatedColumn.title;
-    }
+    // const updatedColumn: Column = response.payload as Column;
+    // const modifiedColumnIndex = this.columns.findIndex((item) => item.id === updatedColumn.id);
+    // if (modifiedColumnIndex > -1) {
+    //   this.columns[modifiedColumnIndex].title = updatedColumn.title;
+    // }
   }
 
 
   private getColumns(): void {
-    this.columnService.fetchColumns(this.teamId).subscribe(
-      (columns: Array<Column>) => this.columns = columns
-    );
+    // this.columnService.fetchColumns(this.teamId).subscribe(
+    //   (columns: Array<Column>) => this.columns = columns
+    // );
   }
 
   private getTeamName(): void {
@@ -294,7 +269,7 @@ export class TeamPageComponent implements OnInit {
   }
 
   public incrementSelectedIndex(): void {
-    if (this.selectedIndex < this.columns.length) {
+    if (this.selectedIndex < this.columnsAggregation.length) {
       this.selectedIndex++;
     }
   }
