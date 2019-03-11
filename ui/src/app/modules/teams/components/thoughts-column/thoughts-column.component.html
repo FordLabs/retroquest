@@ -15,6 +15,14 @@
   ~ limitations under the License.
   -->
 
+<rq-thoughts-header
+  [teamId]="teamId"
+  [thoughtAggregation]="thoughtAggregation"
+  [thoughtCount]="thoughtsToDisplay.length"
+  [theme]="theme"
+  (sortChanged)="sortChanged($event)"
+></rq-thoughts-header>
+
 <div class="rq-thought-list {{column.topic}}">
   <rq-task
     *ngFor="let thought of thoughtsToDisplay"

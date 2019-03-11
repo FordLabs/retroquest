@@ -46,16 +46,7 @@
       *ngFor="let thoughtAggregation of thoughtsAggregation; let i = index"
       [ngClass]="{'selected': isSelectedIndex(i)}"
     >
-      <rq-thoughts-header
-        [teamId]="teamId"
-        [thoughtAggregation]="thoughtAggregation"
-        [thoughtCount]="getThoughtCount(i)"
-        [theme]="theme"
-        (sortChanged)="thoughtsColumn.sortChanged($event)"
-      ></rq-thoughts-header>
-
       <rq-thoughts-column
-        #thoughtsColumn
         [retroEnded]="retroEnded"
         [thoughtAggregation]="thoughtAggregation"
         [thoughtUpdated]="thoughtUpdated"
