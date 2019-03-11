@@ -77,6 +77,7 @@ export class TeamPageComponent implements OnInit {
 
   thoughtUpdated: EventEmitter<Thought> = new EventEmitter();
   thoughtResponseChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
+  retroEnded: EventEmitter<void> = new EventEmitter();
 
   _theme: Themes = Themes.Light;
 
@@ -255,9 +256,20 @@ export class TeamPageComponent implements OnInit {
   }
 
   public onEndRetro(): void {
-    this.boardService.createBoard(this.teamId, this.thoughtsArray).subscribe(() => {
-      this.thoughtsArray = [];
+
+    const thoughts = [];
+
+    this.thoughtsAggregation.map((column) => {
+      thoughts.push(...column.items.active);
+      thoughts.push(...column.items.completed);
     });
+
+
+    if (thoughts.length > 0) {
+      this.boardService.createBoard(this.teamId, thoughts).subscribe();
+    }
+
+    this.retroEnded.emit();
   }
 
   public isSelectedIndex(index: number): boolean {
@@ -331,5 +343,9 @@ export class TeamPageComponent implements OnInit {
     pageGestures.on('swiperight', () => {
       this.decrementSelectedIndex();
     });
+  }
+
+  getThoughtCount(index: number): number {
+    return this.thoughtsAggregation[index].items.completed.length + this.thoughtsAggregation[index].items.active.length;
   }
 }

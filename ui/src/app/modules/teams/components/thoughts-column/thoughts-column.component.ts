@@ -44,8 +44,8 @@ export class ThoughtsColumnComponent implements OnInit {
   @Input() thoughtUpdated: EventEmitter<Thought> = new EventEmitter();
   @Input() thoughtResponseChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
 
-
   @Input() theme: Themes = Themes.Light;
+  @Input() retroEnded: EventEmitter<void> = new EventEmitter();
 
   @ViewChild('thoughtDialog') thoughtDialog: TaskDialogComponent;
 
@@ -54,6 +54,10 @@ export class ThoughtsColumnComponent implements OnInit {
   dialogIsVisible = false;
   thoughtsAreSorted = false;
   _allThoughts = [];
+
+  get thoughtCount(): number {
+    return this._allThoughts.length;
+  }
 
   ngOnInit(): void {
     this.column = {
@@ -66,6 +70,11 @@ export class ThoughtsColumnComponent implements OnInit {
 
     this._allThoughts.push(...this.thoughtAggregation.items.active);
     this._allThoughts.push(...this.thoughtAggregation.items.completed);
+
+    this.retroEnded.subscribe(() => {
+      console.log('RETRO ENDED');
+      this._allThoughts = [];
+    });
 
     this.thoughtResponseChanged.subscribe(
       response => {
