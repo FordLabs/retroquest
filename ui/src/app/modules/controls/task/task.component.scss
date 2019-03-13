@@ -55,7 +55,7 @@
 
   &.push-order-to-bottom {
     box-shadow: none;
-    order: 99;
+    //order: 99;
 
     &.dark-theme {
       background-color: opacity($task-background-dark, .3);

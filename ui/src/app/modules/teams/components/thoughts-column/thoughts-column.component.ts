@@ -98,14 +98,18 @@ export class ThoughtsColumnComponent implements OnInit {
     });
   }
 
-  get thoughtsToDisplay(): Array<Thought> {
+  get totalThoughtCount(): number {
+    return this.thoughtAggregation.items.active.length + this.thoughtAggregation.items.completed.length;
+  }
+
+  get activeThoughts(): Array<Thought> {
     let thoughts = [];
 
     if (this.thoughtsAreSorted) {
-      thoughts = this._allThoughts.slice().sort((a, b) => b.hearts - a.hearts);
+      thoughts = this.thoughtAggregation.items.active.slice().sort((a, b) => b.hearts - a.hearts);
 
     } else {
-      thoughts = this._allThoughts;
+      thoughts = this.thoughtAggregation.items.active;
     }
 
     return thoughts;
@@ -115,23 +119,54 @@ export class ThoughtsColumnComponent implements OnInit {
     this.thoughtsAreSorted = sorted;
   }
 
-
   updateThought(thought: Thought) {
-    const index = this._allThoughts.findIndex((item) => item.id === thought.id);
-    if (index === -1) {
-      thought.state = 'active';
-      this._allThoughts.push(thought);
+    const completedIndex = this.thoughtAggregation.items.completed.findIndex((item) => item.id === thought.id);
+    const activeIndex = this.thoughtAggregation.items.active.findIndex((item) => item.id === thought.id);
+
+    if (!this.indexWasFound(completedIndex)) {
+      if (this.indexWasFound(activeIndex)) {
+        if (thought.discussed) {
+          this.thoughtAggregation.items.active.splice(activeIndex, 1);
+          thought.state = 'active';
+          this.thoughtAggregation.items.completed.push(thought);
+        } else {
+          Object.assign(this.thoughtAggregation.items.active[completedIndex], thought);
+        }
+      } else {
+        thought.state = 'active';
+        this.thoughtAggregation.items.active.push(thought);
+      }
     } else {
-      Object.assign(this._allThoughts[index], thought);
+      if (!thought.discussed) {
+        this.thoughtAggregation.items.completed.splice(completedIndex, 1);
+        thought.state = 'active';
+        this.thoughtAggregation.items.active.push(thought);
+      } else {
+        Object.assign(this.thoughtAggregation.items.completed[completedIndex], thought);
+      }
     }
+
+  }
+
+  private indexWasFound(index: number): boolean {
+    return index !== -1;
   }
 
   deleteThought(thought: Thought) {
+
     if (thought.id === -1) {
-      console.log('DEELTE ALL');
-      this._allThoughts.splice(0, this._allThoughts.length);
+      if (thought.discussed) {
+        this.thoughtAggregation.items.completed.splice(0, this.thoughtAggregation.items.completed.length);
+      } else {
+        this.thoughtAggregation.items.active.splice(0, this.thoughtAggregation.items.active.length);
+      }
+
     } else {
-      this._allThoughts = this._allThoughts.filter((item) => item.id !== thought.id);
+      if (thought.discussed) {
+        this.thoughtAggregation.items.completed.splice(this.thoughtAggregation.items.completed.findIndex(item => item.id === thought.id), 1);
+      } else {
+        this.thoughtAggregation.items.active.splice(this.thoughtAggregation.items.active.findIndex(item => item.id === thought.id), 1);
+      }
     }
   }
 

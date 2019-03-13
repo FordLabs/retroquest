@@ -171,6 +171,7 @@ export class TeamPageComponent implements OnInit {
       thoughts.push(...column.items.completed);
     });
 
+    console.log(thoughts);
 
     if (thoughts.length > 0) {
       this.boardService.createBoard(this.teamId, thoughts).subscribe();

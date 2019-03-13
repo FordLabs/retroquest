@@ -46,13 +46,11 @@
   >
     <div
       class="rq-column"
-      *ngFor="let column of columns; let i = index"
+      *ngFor="let thoughtAggregation of columnAggregations; let i = index"
       [ngClass]="{'selected': isSelectedIndex(i)}"
     >
-      <!--<rq-thoughts-header [column]="column" [thoughtCount]="getColumnThoughtCount(column)" [hideNewThought]="true"-->
-      <!--&gt;</rq-thoughts-header>-->
-      <!--<rq-thoughts-column [column]="column" [thoughts]="getThoughtsInColumn(column)" [readOnly]="true" [archived]="true"-->
-      <!--&gt;</rq-thoughts-column>-->
+      <rq-thoughts-header [thoughtAggregation]="thoughtAggregation"></rq-thoughts-header>
+      <rq-thoughts-column readOnly="true" archived="true"></rq-thoughts-column>
     </div>
   </div>
 

@@ -18,14 +18,32 @@
 <rq-thoughts-header
   [teamId]="teamId"
   [thoughtAggregation]="thoughtAggregation"
-  [thoughtCount]="thoughtsToDisplay.length"
+  [thoughtCount]="totalThoughtCount"
   [theme]="theme"
   (sortChanged)="sortChanged($event)"
 ></rq-thoughts-header>
 
 <div class="rq-thought-list {{column.topic}}">
   <rq-task
-    *ngFor="let thought of thoughtsToDisplay"
+    *ngFor="let thought of activeThoughts"
+    [task]="thought"
+    [type]="column.topic"
+    (messageChanged)="onMessageChanged($event, thought)"
+    (deleted)="onDeleted($event)"
+    (messageClicked)="displayPopup(thought)"
+    (starCountIncreased)="starCountChanged($event, thought)"
+    (completed)="onCompleted($event, thought)"
+    [@fadeInOutAnimation]="thought.state"
+    [readOnly]="readOnly"
+    [theme]="theme"
+    [archived]="archived"
+  >
+  </rq-task>
+</div>
+
+<div class="rq-thought-list {{column.topic}}">
+  <rq-task
+    *ngFor="let thought of thoughtAggregation.items.completed"
     [task]="thought"
     [type]="column.topic"
     (messageChanged)="onMessageChanged($event, thought)"

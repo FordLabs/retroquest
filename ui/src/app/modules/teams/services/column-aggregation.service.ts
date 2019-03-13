@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {ColumnCombinerResponse} from "../../domain/column-combiner-response";
-import {Observable} from "rxjs";
+import {HttpClient} from '@angular/common/http';
+import {ColumnCombinerResponse} from '../../domain/column-combiner-response';
+import {Observable} from 'rxjs';
 
 @Injectable()
 export class ColumnAggregationService {

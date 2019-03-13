@@ -28,9 +28,11 @@ import {ColumnService} from '../../services/column.service';
 
 import * as moment from 'moment';
 import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-view/actions-radiator-view.component';
-import {SaveCheckerService} from '../../services/save-checker.service';
 import {BoardService} from '../../services/board.service';
 import {Themes} from '../../../domain/Theme';
+import {ColumnResponse} from '../../../domain/column-response';
+import {ColumnAggregationService} from '../../services/column-aggregation.service';
+import {ColumnCombinerResponse} from '../../../domain/column-combiner-response';
 
 @Component({
   selector: 'rq-archived-board',
@@ -67,7 +69,8 @@ export class ArchivedBoardPageComponent implements OnInit {
               private teamsService: TeamService,
               private thoughtService: ThoughtService,
               private columnService: ColumnService,
-              private boardService: BoardService) {
+              private boardService: BoardService,
+              private columnAggregationService: ColumnAggregationService) {
   }
 
   @Input() theme: Themes = Themes.Light;
@@ -78,6 +81,8 @@ export class ArchivedBoardPageComponent implements OnInit {
   globalWindowRef: Window = window;
 
   columns: Array<Column> = ArchivedBoardPageComponent.defaultColumns;
+  columnAggregations: Array<ColumnResponse>;
+
   actionItems: Array<ActionItem> = [];
   thoughtsArray: Array<Thought> = [];
   selectedIndex = 0;
@@ -91,6 +96,14 @@ export class ArchivedBoardPageComponent implements OnInit {
     this.activeRoute.params.subscribe((params) => {
       this.teamId = params.teamId;
       this.boardId = params.boardId;
+
+      this.columnAggregationService.getColumns(this.teamId).subscribe(
+        response => {
+          this.columnAggregations = response.columns;
+          console.log('GOT AGG', this.columnAggregations);
+        }
+      );
+
       this.getTeamName();
       this.getColumns();
       this.getThoughts();
