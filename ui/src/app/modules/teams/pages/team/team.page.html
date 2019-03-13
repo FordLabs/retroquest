@@ -50,8 +50,8 @@
         *ngIf="aggregation.topic !== 'action'"
         [retroEnded]="retroEnded"
         [thoughtAggregation]="aggregation"
-        [thoughtUpdated]="thoughtUpdated"
-        [thoughtResponseChanged]="thoughtResponseChanged"
+        [thoughtChanged]="thoughtChanged"
+        [columnChanged]="columnChanged"
         [theme]="theme"
         [teamId]="teamId"
       ></rq-thoughts-column>
@@ -67,13 +67,6 @@
 
     </div>
 
-    <!--<div-->
-      <!--*ngIf="(thoughtsAggregation.length > 0)"-->
-      <!--class="rq-column"-->
-      <!--[ngClass]="{'selected': actionItemsIndexIsSelected()}"-->
-    <!--&gt;-->
-      <!---->
-    <!--</div>-->
   </div>
 
   <div

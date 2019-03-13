@@ -17,9 +17,6 @@
 
 import {Component, EventEmitter, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-
-import {Column} from '../../../domain/column';
-import {Thought} from '../../../domain/thought';
 import {ActionItem} from '../../../domain/action-item';
 import {WebsocketService} from '../../services/websocket.service';
 
@@ -36,6 +33,7 @@ import {Themes} from '../../../domain/Theme';
 import {BoardService} from '../../services/board.service';
 import {ColumnAggregationService} from '../../services/column-aggregation.service';
 import {ColumnResponse} from '../../../domain/column-response';
+import {Column} from '../../../domain/column';
 
 @Component({
   selector: 'rq-team',
@@ -63,17 +61,16 @@ export class TeamPageComponent implements OnInit {
   globalWindowRef: Window = window;
 
   actionItems: Array<ActionItem> = [];
-  thoughtsArray: Array<Thought> = [];
   selectedIndex = 0;
   currentView = 'normalView';
 
   columnsAggregation: Array<ColumnResponse> = [];
   thoughtsAggregation: Array<ColumnResponse> = [];
-  actionItemAggregation: ColumnResponse;
 
-  thoughtUpdated: EventEmitter<Thought> = new EventEmitter();
-  thoughtResponseChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
-  actionItemChanged:  EventEmitter<WebsocketResponse> = new EventEmitter();
+  thoughtChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
+  actionItemChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
+  columnChanged: EventEmitter<Column> = new EventEmitter();
+
   retroEnded: EventEmitter<void> = new EventEmitter();
 
   _theme: Themes = Themes.Light;
@@ -111,21 +108,10 @@ export class TeamPageComponent implements OnInit {
       this.columnAggregationService.getColumns(this.teamId).subscribe(
         (body) => {
           this.columnsAggregation = body.columns;
-          //
-          // const actionItemsAggregation = this.columnsAggregation.filter(col => col.topic === 'action')[0].items;
-          // this.activeActionItems = (actionItemsAggregation.active as Array<ActionItem>);
-          // this.completedActionItems = (actionItemsAggregation.completed as Array<ActionItem>);
-          //
-          // this.actionItems = [];
-          // this.actionItems.push(...this.activeActionItems);
-          // this.actionItems.push(...this.completedActionItems);
-
         }
       );
 
       this.getTeamName();
-      this.getColumns();
-      this.subscribeToResetThoughts();
 
 
       if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
@@ -146,18 +132,6 @@ export class TeamPageComponent implements OnInit {
 
   }
 
-  get unsortedAndUncompletedActionItems(): Array<ActionItem> {
-    return this.actionItems.filter((actionItem) => !actionItem.completed);
-  }
-
-  public resetThoughts(): void {
-    this.thoughtsArray.splice(0, this.thoughtsArray.length);
-  }
-
-  private subscribeToResetThoughts() {
-    this.thoughtService.resetThoughtsObserver.subscribe(() => this.resetThoughts());
-  }
-
   private websocketInit() {
     this.websocketService.openWebsocket(this.teamId).subscribe(() => {
 
@@ -165,7 +139,7 @@ export class TeamPageComponent implements OnInit {
       });
 
       this.websocketService.thoughtsTopic().subscribe((message) => {
-        this.thoughtResponseChanged.emit(message.bodyJson as WebsocketResponse);
+        this.thoughtChanged.emit(message.bodyJson as WebsocketResponse);
         this.saveCheckerService.updateTimestamp();
       });
 
@@ -176,30 +150,10 @@ export class TeamPageComponent implements OnInit {
 
       this.websocketService.columnTitleTopic().subscribe((message) => {
         const response: WebsocketResponse = message.bodyJson;
-
-        if (response.type === 'put') {
-          this.updateColumns(response);
-        }
-
+        this.columnChanged.emit(response.payload as Column);
         this.saveCheckerService.updateTimestamp();
       });
     });
-  }
-
-
-  private updateColumns(response: WebsocketResponse) {
-    // const updatedColumn: Column = response.payload as Column;
-    // const modifiedColumnIndex = this.columns.findIndex((item) => item.id === updatedColumn.id);
-    // if (modifiedColumnIndex > -1) {
-    //   this.columns[modifiedColumnIndex].title = updatedColumn.title;
-    // }
-  }
-
-
-  private getColumns(): void {
-    // this.columnService.fetchColumns(this.teamId).subscribe(
-    //   (columns: Array<Column>) => this.columns = columns
-    // );
   }
 
   private getTeamName(): void {
@@ -245,10 +199,6 @@ export class TeamPageComponent implements OnInit {
     }
   }
 
-  public actionItemsIndexIsSelected(): boolean {
-    return (this.selectedIndex === 3);
-  }
-
   public toggleActionsRadiatorAndNormalView(state: boolean): void {
     if (!state) {
       this.radiatorView.resetScroll();
@@ -276,7 +226,4 @@ export class TeamPageComponent implements OnInit {
     });
   }
 
-  getThoughtCount(index: number): number {
-    return this.thoughtsAggregation[index].items.completed.length + this.thoughtsAggregation[index].items.active.length;
-  }
 }

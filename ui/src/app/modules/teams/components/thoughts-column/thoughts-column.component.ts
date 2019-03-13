@@ -41,11 +41,11 @@ export class ThoughtsColumnComponent implements OnInit {
   @Input() archived = false;
   @Input() teamId: string;
 
-  @Input() thoughtUpdated: EventEmitter<Thought> = new EventEmitter();
-  @Input() thoughtResponseChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
+  @Input() thoughtChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
+  @Input() columnChanged: EventEmitter<string> = new EventEmitter();
 
   @Input() theme: Themes = Themes.Light;
-  @Input() retroEnded: EventEmitter<void> = new EventEmitter();
+  @Input() retroEnded: EventEmitter<Column> = new EventEmitter();
 
   @ViewChild('thoughtDialog') thoughtDialog: TaskDialogComponent;
 
@@ -75,7 +75,7 @@ export class ThoughtsColumnComponent implements OnInit {
       this._allThoughts = [];
     });
 
-    this.thoughtResponseChanged.subscribe(
+    this.thoughtChanged.subscribe(
       response => {
 
         const thought = (response.payload as Thought);
@@ -90,6 +90,12 @@ export class ThoughtsColumnComponent implements OnInit {
         }
       }
     );
+
+    this.columnChanged.subscribe(column => {
+      if (this.column.topic === column.topic) {
+        this.column = column;
+      }
+    });
   }
 
   get thoughtsToDisplay(): Array<Thought> {
