@@ -22,7 +22,7 @@
 html {
   -webkit-overflow-scrolling: touch;   // Enables smooth scrolling for IOS devices.
   height: 100%;
-  overflow: scroll;
+  overflow: auto;
   padding: 0;
 }
 
