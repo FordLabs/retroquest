@@ -100,7 +100,7 @@ export class ThoughtsColumnComponent implements OnInit {
     let thoughts = [];
 
     if (this.thoughtsAreSorted) {
-      thoughts = this.thoughtAggregation.items.active.slice().sort((a, b) => b.hearts - a.hearts);
+      thoughts = this.thoughtAggregation.items.active.slice().sort((a: Thought, b: Thought) => b.hearts - a.hearts);
 
     } else {
       thoughts = this.thoughtAggregation.items.active;
@@ -114,8 +114,8 @@ export class ThoughtsColumnComponent implements OnInit {
   }
 
   updateThought(thought: Thought) {
-    const completedIndex = this.thoughtAggregation.items.completed.findIndex((item) => item.id === thought.id);
-    const activeIndex = this.thoughtAggregation.items.active.findIndex((item) => item.id === thought.id);
+    const completedIndex = this.thoughtAggregation.items.completed.findIndex((item: Thought) => item.id === thought.id);
+    const activeIndex = this.thoughtAggregation.items.active.findIndex((item: Thought) => item.id === thought.id);
 
     if (!this.indexWasFound(completedIndex)) {
       if (this.indexWasFound(activeIndex)) {
@@ -157,9 +157,13 @@ export class ThoughtsColumnComponent implements OnInit {
 
     } else {
       if (thought.discussed) {
-        this.thoughtAggregation.items.completed.splice(this.thoughtAggregation.items.completed.findIndex(item => item.id === thought.id), 1);
+        this.thoughtAggregation.items.completed.splice(
+          this.thoughtAggregation.items.completed.findIndex(
+            (item: Thought) => item.id === thought.id), 1);
       } else {
-        this.thoughtAggregation.items.active.splice(this.thoughtAggregation.items.active.findIndex(item => item.id === thought.id), 1);
+        this.thoughtAggregation.items.active.splice(
+          this.thoughtAggregation.items.active.findIndex(
+            (item: Thought) => item.id === thought.id), 1);
       }
     }
   }

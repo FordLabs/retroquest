@@ -18,13 +18,26 @@
 <rq-actions-header
   [teamId]="teamId"
   [theme]="theme"
-  [thoughtCount]="actionItems.length"
+  [thoughtCount]="totalActionItemCount"
   (sortChanged)="sortChanged($event)"
 ></rq-actions-header>
 
 <div class="rq-action-item-list">
   <rq-action-item-task
-    *ngFor="let actionItem of getActionItems"
+    *ngFor="let actionItem of activeActionItems"
+    [actionItem]="actionItem"
+    (completed)="onCompleted($event, actionItem)"
+    (deleted)="onDeleted(actionItem)"
+    (messageChanged)="onMessageChanged($event, actionItem)"
+    (assigneeUpdated)="onAssigneeUpdated($event, actionItem)"
+    (messageClicked)="displayPopup(actionItem)"
+    [@fadeInOutAnimation]="actionItem.state"
+    [theme]="theme"
+  >
+  </rq-action-item-task>
+
+  <rq-action-item-task
+    *ngFor="let actionItem of completedActionItems"
     [actionItem]="actionItem"
     (completed)="onCompleted($event, actionItem)"
     (deleted)="onDeleted(actionItem)"

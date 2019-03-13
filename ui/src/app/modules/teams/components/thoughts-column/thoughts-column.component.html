@@ -39,9 +39,7 @@
     [archived]="archived"
   >
   </rq-task>
-</div>
 
-<div class="rq-thought-list {{column.topic}}">
   <rq-task
     *ngFor="let thought of thoughtAggregation.items.completed"
     [task]="thought"
@@ -57,6 +55,7 @@
     [archived]="archived"
   >
   </rq-task>
+
 </div>
 
 <rq-task-dialog

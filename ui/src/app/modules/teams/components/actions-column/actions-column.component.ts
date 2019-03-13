@@ -24,7 +24,6 @@ import {Themes} from '../../../domain/Theme';
 import * as moment from 'moment';
 import {ColumnResponse} from '../../../domain/column-response';
 import {WebsocketResponse} from '../../../domain/websocket-response';
-import {Thought} from '../../../domain/thought';
 
 @Component({
   selector: 'rq-actions-column',
@@ -43,7 +42,6 @@ export class ActionsColumnComponent implements OnInit {
   @Input() actionItemChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
 
   sorted = false;
-  actionItems = [];
 
   @ViewChild('actionItemDialog') actionItemDialog: ActionItemDialogComponent;
 
@@ -51,8 +49,6 @@ export class ActionsColumnComponent implements OnInit {
   dialogIsVisible = false;
 
   ngOnInit(): void {
-    this.actionItems.push(...this.actionItemAggregation.items.active);
-    this.actionItems.push(...this.actionItemAggregation.items.completed);
 
     this.actionItemChanged.subscribe(
       response => {
@@ -70,18 +66,60 @@ export class ActionsColumnComponent implements OnInit {
 
 
   private deleteActionItem(actionItem: ActionItem) {
-    this.actionItems = this.actionItems.filter((item) => item.id !== actionItem.id);
+
+    if (actionItem.completed) {
+      this.actionItemAggregation.items.completed.splice(
+        this.actionItemAggregation.items.completed.findIndex((item: ActionItem) => item.id === actionItem.id),
+        1);
+    } else {
+      this.actionItemAggregation.items.active.splice(
+        this.actionItemAggregation.items.active.findIndex((item: ActionItem) => item.id === actionItem.id),
+        1);
+    }
+
   }
 
   private updateActionItems(actionItem: ActionItem) {
-    const actionItemIndex = this.actionItems.findIndex((item) => item.id === actionItem.id);
-    if (actionItemIndex === -1) {
-      actionItem.state = 'active';
-      this.actionItems.push(actionItem);
+
+    const completedIndex = this.actionItemAggregation.items.completed.findIndex((item: ActionItem) => item.id === actionItem.id);
+    const activeIndex = this.actionItemAggregation.items.active.findIndex((item: ActionItem) => item.id === actionItem.id);
+
+    if (!this.indexWasFound(completedIndex)) {
+      if (this.indexWasFound(activeIndex)) {
+        if (actionItem.completed) {
+          this.actionItemAggregation.items.active.splice(activeIndex, 1);
+          actionItem.state = 'active';
+          this.actionItemAggregation.items.completed.push(actionItem);
+        } else {
+          Object.assign(this.actionItemAggregation.items.active[completedIndex], actionItem);
+        }
+      } else {
+        actionItem.state = 'active';
+        this.actionItemAggregation.items.active.push(actionItem);
+      }
     } else {
-      Object.assign(this.actionItems[actionItemIndex], actionItem);
+      if (!actionItem.completed) {
+        this.actionItemAggregation.items.completed.splice(completedIndex, 1);
+        actionItem.state = 'active';
+        this.actionItemAggregation.items.active.push(actionItem);
+      } else {
+        Object.assign(this.actionItemAggregation.items.completed[completedIndex], actionItem);
+      }
     }
+    //
+    // const actionItemIndex = this.actionItems.findIndex((item) => item.id === actionItem.id);
+    // if (actionItemIndex === -1) {
+    //   actionItem.state = 'active';
+    //   this.actionItems.push(actionItem);
+    // } else {
+    //   Object.assign(this.actionItems[actionItemIndex], actionItem);
+    // }
   }
+
+  private indexWasFound(index: number): boolean {
+    return index !== -1;
+  }
+
 
   public onCompleted(state: boolean, actionItem: ActionItem) {
     actionItem.completed = state;
@@ -111,14 +149,22 @@ export class ActionsColumnComponent implements OnInit {
     this.sorted = sorted;
   }
 
-  get getActionItems(): Array<ActionItem> {
+  get activeActionItems(): Array<ActionItem> {
     if (this.sorted) {
-      return this.actionItems.slice().sort((a, b) => moment
+      return this.actionItemAggregation.items.active.slice().sort((a: ActionItem, b: ActionItem) => moment
         .utc(this.checkForNullDate(b.dateCreated))
-        .diff(moment.utc(this.checkForNullDate(a.dateCreated))));
+        .diff(moment.utc(this.checkForNullDate(a.dateCreated)))) as Array<ActionItem>;
     }
 
-    return this.actionItems;
+    return this.actionItemAggregation.items.active.slice() as Array<ActionItem>;
+  }
+
+  get completedActionItems(): Array<ActionItem> {
+    return this.actionItemAggregation.items.completed as Array<ActionItem>;
+  }
+
+  get totalActionItemCount(): number {
+    return this.actionItemAggregation.items.active.length + this.actionItemAggregation.items.completed.length;
   }
 
   private checkForNullDate(dateCreated: string): string {
