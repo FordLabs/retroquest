@@ -19,6 +19,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ActionItem} from '../../domain/action-item';
 import * as $ from 'jquery';
 import {Themes} from '../../domain/Theme';
+import {ColumnResponse} from '../../domain/column-response';
 
 const ESC_KEY = 27;
 
