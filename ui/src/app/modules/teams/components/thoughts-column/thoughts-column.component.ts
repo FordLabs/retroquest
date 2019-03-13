@@ -72,7 +72,6 @@ export class ThoughtsColumnComponent implements OnInit {
     this._allThoughts.push(...this.thoughtAggregation.items.completed);
 
     this.retroEnded.subscribe(() => {
-      console.log('RETRO ENDED');
       this._allThoughts = [];
     });
 

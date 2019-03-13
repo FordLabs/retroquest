@@ -15,13 +15,16 @@
  * limitations under the License.
  */
 
-import {Component, Input, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
 import {ActionItem, emptyActionItem} from '../../../domain/action-item';
 import {ActionItemService} from '../../services/action.service';
 import {ActionItemDialogComponent} from '../../../controls/action-item-dialog/action-item-dialog.component';
 import {fadeInOutAnimation} from '../../../animations/add-delete-animation';
 import {Themes} from '../../../domain/Theme';
 import * as moment from 'moment';
+import {ColumnResponse} from '../../../domain/column-response';
+import {WebsocketResponse} from '../../../domain/websocket-response';
+import {Thought} from '../../../domain/thought';
 
 @Component({
   selector: 'rq-actions-column',
@@ -29,21 +32,56 @@ import * as moment from 'moment';
   styleUrls: ['./actions-column.component.scss'],
   animations: [fadeInOutAnimation]
 })
-export class ActionsColumnComponent {
+export class ActionsColumnComponent implements OnInit {
 
   constructor(private actionItemService: ActionItemService) {
   }
 
-  @Input() actionItems: Array<ActionItem>;
+  @Input() actionItemAggregation: ColumnResponse;
   @Input() theme: Themes = Themes.Light;
   @Input() teamId: string;
+  @Input() actionItemChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
 
   sorted = false;
+  actionItems = [];
 
   @ViewChild('actionItemDialog') actionItemDialog: ActionItemDialogComponent;
 
   selectedActionItem: ActionItem = emptyActionItem();
   dialogIsVisible = false;
+
+  ngOnInit(): void {
+    this.actionItems.push(...this.actionItemAggregation.items.active);
+    this.actionItems.push(...this.actionItemAggregation.items.completed);
+
+    this.actionItemChanged.subscribe(
+      response => {
+
+        const actionItem = (response.payload as ActionItem);
+
+        if (response.type === 'delete') {
+          this.deleteActionItem(actionItem);
+        } else {
+          this.updateActionItems(actionItem);
+        }
+      }
+    );
+  }
+
+
+  private deleteActionItem(actionItem: ActionItem) {
+    this.actionItems = this.actionItems.filter((item) => item.id !== actionItem.id);
+  }
+
+  private updateActionItems(actionItem: ActionItem) {
+    const actionItemIndex = this.actionItems.findIndex((item) => item.id === actionItem.id);
+    if (actionItemIndex === -1) {
+      actionItem.state = 'active';
+      this.actionItems.push(actionItem);
+    } else {
+      Object.assign(this.actionItems[actionItemIndex], actionItem);
+    }
+  }
 
   public onCompleted(state: boolean, actionItem: ActionItem) {
     actionItem.completed = state;

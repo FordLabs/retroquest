@@ -170,7 +170,7 @@ export class WebsocketService {
 
   public deleteActionItem(actionItem: ActionItem) {
     this.checkForOpenSocket();
-    this.stompClient.send(`/app/${this.teamId}/action-item/${actionItem.id}/delete`, null);
+    this.stompClient.send(`/app/${this.teamId}/action-item/delete`, JSON.stringify(actionItem));
   }
 
   public updateColumnTitle(column: Column) {

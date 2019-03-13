@@ -43,32 +43,37 @@
   >
     <div
       class="rq-column"
-      *ngFor="let thoughtAggregation of thoughtsAggregation; let i = index"
+      *ngFor="let aggregation of columnsAggregation; let i = index"
       [ngClass]="{'selected': isSelectedIndex(i)}"
     >
       <rq-thoughts-column
+        *ngIf="aggregation.topic !== 'action'"
         [retroEnded]="retroEnded"
-        [thoughtAggregation]="thoughtAggregation"
+        [thoughtAggregation]="aggregation"
         [thoughtUpdated]="thoughtUpdated"
         [thoughtResponseChanged]="thoughtResponseChanged"
         [theme]="theme"
         [teamId]="teamId"
       ></rq-thoughts-column>
 
-    </div>
-
-    <div
-      *ngIf="(thoughtsAggregation.length > 0)"
-      class="rq-column"
-      [ngClass]="{'selected': actionItemsIndexIsSelected()}"
-    >
       <rq-actions-column
+        *ngIf="aggregation.topic === 'action'"
         [theme]="theme"
-        [actionItems]="getActionItems"
+        [actionItemAggregation]="aggregation"
+        [actionItemChanged]="actionItemChanged"
         [teamId]="teamId"
       ></rq-actions-column>
 
+
     </div>
+
+    <!--<div-->
+      <!--*ngIf="(thoughtsAggregation.length > 0)"-->
+      <!--class="rq-column"-->
+      <!--[ngClass]="{'selected': actionItemsIndexIsSelected()}"-->
+    <!--&gt;-->
+      <!---->
+    <!--</div>-->
   </div>
 
   <div

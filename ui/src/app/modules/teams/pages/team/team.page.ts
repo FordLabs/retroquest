@@ -68,13 +68,12 @@ export class TeamPageComponent implements OnInit {
   currentView = 'normalView';
 
   columnsAggregation: Array<ColumnResponse> = [];
-  activeActionItems: Array<ActionItem> = [];
-  completedActionItems: Array<ActionItem> = [];
   thoughtsAggregation: Array<ColumnResponse> = [];
   actionItemAggregation: ColumnResponse;
 
   thoughtUpdated: EventEmitter<Thought> = new EventEmitter();
   thoughtResponseChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
+  actionItemChanged:  EventEmitter<WebsocketResponse> = new EventEmitter();
   retroEnded: EventEmitter<void> = new EventEmitter();
 
   _theme: Themes = Themes.Light;
@@ -112,16 +111,15 @@ export class TeamPageComponent implements OnInit {
       this.columnAggregationService.getColumns(this.teamId).subscribe(
         (body) => {
           this.columnsAggregation = body.columns;
+          //
+          // const actionItemsAggregation = this.columnsAggregation.filter(col => col.topic === 'action')[0].items;
+          // this.activeActionItems = (actionItemsAggregation.active as Array<ActionItem>);
+          // this.completedActionItems = (actionItemsAggregation.completed as Array<ActionItem>);
+          //
+          // this.actionItems = [];
+          // this.actionItems.push(...this.activeActionItems);
+          // this.actionItems.push(...this.completedActionItems);
 
-          const actionItemsAggregation = this.columnsAggregation.filter(col => col.topic === 'action')[0].items;
-          this.activeActionItems = (actionItemsAggregation.active as Array<ActionItem>);
-          this.completedActionItems = (actionItemsAggregation.completed as Array<ActionItem>);
-
-          this.actionItems = [];
-          this.actionItems.push(...this.activeActionItems);
-          this.actionItems.push(...this.completedActionItems);
-
-          this.thoughtsAggregation = this.columnsAggregation.filter(col => col.topic !== 'action');
         }
       );
 
@@ -148,32 +146,6 @@ export class TeamPageComponent implements OnInit {
 
   }
 
-  get getActionItems(): Array<ActionItem> {
-    return this.actionItems;
-  }
-
-  public getColumnThoughtCount(column: Column): number {
-    return this.thoughtsArray.filter(
-      (thought) => thought.topic === column.topic && !thought.discussed).length;
-  }
-
-  public getActionItemColumnCount(): number {
-    return this.actionItems.filter((actionItem) => !actionItem.completed).length;
-  }
-
-  public getThoughtsInColumn(column: Column): Array<Thought> {
-    let thoughtsInColumn = this.thoughtsArray.filter((thought) => thought.topic === column.topic);
-    if (!thoughtsInColumn) {
-      return [];
-    }
-
-    if (column.sorted) {
-      thoughtsInColumn = thoughtsInColumn.slice().sort((a, b) => b.hearts - a.hearts);
-    }
-
-    return thoughtsInColumn;
-  }
-
   get unsortedAndUncompletedActionItems(): Array<ActionItem> {
     return this.actionItems.filter((actionItem) => !actionItem.completed);
   }
@@ -198,13 +170,7 @@ export class TeamPageComponent implements OnInit {
       });
 
       this.websocketService.actionItemTopic().subscribe((message) => {
-        const response: WebsocketResponse = message.bodyJson;
-        if (response.type === 'delete') {
-          this.deleteActionItem(response);
-        } else {
-          this.updateActionItems(response);
-        }
-
+        this.actionItemChanged.emit(message.bodyJson as WebsocketResponse);
         this.saveCheckerService.updateTimestamp();
       });
 
@@ -220,21 +186,6 @@ export class TeamPageComponent implements OnInit {
     });
   }
 
-  private deleteActionItem(response: WebsocketResponse) {
-    const actionItemId = response.payload as number;
-    this.actionItems = this.actionItems.filter((item) => item.id !== actionItemId);
-  }
-
-  private updateActionItems(response: WebsocketResponse) {
-    const actionItem: ActionItem = response.payload as ActionItem;
-    const actionItemIndex = this.actionItems.findIndex((item) => item.id === actionItem.id);
-    if (actionItemIndex === -1) {
-      actionItem.state = 'active';
-      this.actionItems.push(actionItem);
-    } else {
-      Object.assign(this.actionItems[actionItemIndex], actionItem);
-    }
-  }
 
   private updateColumns(response: WebsocketResponse) {
     // const updatedColumn: Column = response.payload as Column;

@@ -119,6 +119,17 @@ public class ActionItemController {
     }
 
     @Transactional
+    @MessageMapping("/{teamId}/action-item/delete")
+    @SendTo("/topic/{teamId}/action-items")
+    public WebsocketDeleteResponse<ActionItem> deleteActionItem(@DestinationVariable("teamId") String teamId, ActionItem actionItem, Authentication authentication) {
+        if (!authentication.getPrincipal().equals(teamId)) {
+            return null;
+        }
+        actionItemRepository.deleteActionItemByTeamIdAndId(teamId, actionItem.getId());
+        return new WebsocketDeleteResponse<>(actionItem);
+    }
+
+    @Transactional
     @DeleteMapping("/api/team/{teamId}/action-item/{id}")
     @PreAuthorize("#teamId == authentication.principal")
     public void deleteActionItemByTeamIdAndId(@PathVariable("teamId") String teamId, @PathVariable("id") Long id) {
