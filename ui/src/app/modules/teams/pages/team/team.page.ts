@@ -65,7 +65,6 @@ export class TeamPageComponent implements OnInit {
   currentView = 'normalView';
 
   columnsAggregation: Array<ColumnResponse> = [];
-  thoughtsAggregation: Array<ColumnResponse> = [];
 
   thoughtChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
   actionItemChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
@@ -166,9 +165,11 @@ export class TeamPageComponent implements OnInit {
 
     const thoughts = [];
 
-    this.thoughtsAggregation.map((column) => {
-      thoughts.push(...column.items.active);
-      thoughts.push(...column.items.completed);
+    this.columnsAggregation.map((column) => {
+      if (column.topic !== 'action') {
+        thoughts.push(...column.items.active);
+        thoughts.push(...column.items.completed);
+      }
     });
 
     console.log(thoughts);

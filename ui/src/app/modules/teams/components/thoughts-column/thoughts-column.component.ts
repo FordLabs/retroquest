@@ -53,11 +53,6 @@ export class ThoughtsColumnComponent implements OnInit {
   selectedThought: Thought = emptyThought();
   dialogIsVisible = false;
   thoughtsAreSorted = false;
-  _allThoughts = [];
-
-  get thoughtCount(): number {
-    return this._allThoughts.length;
-  }
 
   ngOnInit(): void {
     this.column = {
@@ -68,11 +63,10 @@ export class ThoughtsColumnComponent implements OnInit {
       teamId: this.teamId
     };
 
-    this._allThoughts.push(...this.thoughtAggregation.items.active);
-    this._allThoughts.push(...this.thoughtAggregation.items.completed);
 
     this.retroEnded.subscribe(() => {
-      this._allThoughts = [];
+      this.thoughtAggregation.items.active.splice(0, this.thoughtAggregation.items.active.length);
+      this.thoughtAggregation.items.completed.splice(0, this.thoughtAggregation.items.completed.length);
     });
 
     this.thoughtChanged.subscribe(
