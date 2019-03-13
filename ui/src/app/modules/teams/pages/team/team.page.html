@@ -29,15 +29,17 @@
 
   <rq-actions-radiator-view
     #radiatorView
-    [visible]="actionsRadiatorViewIsSelected()"
+    *ngIf="actionsRadiatorViewIsSelected"
+    [visible]="actionsRadiatorViewIsSelected"
     [theme]="theme"
+    [teamId]="teamId"
   >
   </rq-actions-radiator-view>
 
   <div
     id="team-content"
     [ngClass]="{
-      'hidden': actionsRadiatorViewIsSelected()
+      'hidden': actionsRadiatorViewIsSelected
     }"
   >
     <div
@@ -71,7 +73,7 @@
   <div
     class="guide-button-section"
     [ngClass]="{
-      'hidden': actionsRadiatorViewIsSelected(),
+      'hidden': actionsRadiatorViewIsSelected,
       'dark-theme': darkThemeIsEnabled
     }"
   >

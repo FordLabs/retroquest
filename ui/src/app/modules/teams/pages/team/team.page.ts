@@ -206,7 +206,7 @@ export class TeamPageComponent implements OnInit {
     this.currentView = (state) ? 'actionsRadiatorView' : 'normalView';
   }
 
-  public actionsRadiatorViewIsSelected(): boolean {
+  public get actionsRadiatorViewIsSelected(): boolean {
     return this.currentView === 'actionsRadiatorView';
   }
 
