@@ -87,8 +87,8 @@ export class ActionsColumnComponent implements OnInit {
     if (!this.indexWasFound(completedIndex)) {
       if (this.indexWasFound(activeIndex)) {
         if (actionItem.completed) {
-          this.actionItemAggregation.items.active.splice(activeIndex, 1);
           actionItem.state = 'active';
+          this.actionItemAggregation.items.active.splice(activeIndex, 1);
           this.actionItemAggregation.items.completed.push(actionItem);
         } else {
           Object.assign(this.actionItemAggregation.items.active[completedIndex], actionItem);
@@ -99,21 +99,13 @@ export class ActionsColumnComponent implements OnInit {
       }
     } else {
       if (!actionItem.completed) {
-        this.actionItemAggregation.items.completed.splice(completedIndex, 1);
         actionItem.state = 'active';
+        this.actionItemAggregation.items.completed.splice(completedIndex, 1);
         this.actionItemAggregation.items.active.push(actionItem);
       } else {
         Object.assign(this.actionItemAggregation.items.completed[completedIndex], actionItem);
       }
     }
-    //
-    // const actionItemIndex = this.actionItems.findIndex((item) => item.id === actionItem.id);
-    // if (actionItemIndex === -1) {
-    //   actionItem.state = 'active';
-    //   this.actionItems.push(actionItem);
-    // } else {
-    //   Object.assign(this.actionItems[actionItemIndex], actionItem);
-    // }
   }
 
   private indexWasFound(index: number): boolean {

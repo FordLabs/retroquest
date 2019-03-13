@@ -120,8 +120,8 @@ export class ThoughtsColumnComponent implements OnInit {
     if (!this.indexWasFound(completedIndex)) {
       if (this.indexWasFound(activeIndex)) {
         if (thought.discussed) {
-          this.thoughtAggregation.items.active.splice(activeIndex, 1);
           thought.state = 'active';
+          this.thoughtAggregation.items.active.splice(activeIndex, 1);
           this.thoughtAggregation.items.completed.push(thought);
         } else {
           Object.assign(this.thoughtAggregation.items.active[completedIndex], thought);
@@ -132,8 +132,8 @@ export class ThoughtsColumnComponent implements OnInit {
       }
     } else {
       if (!thought.discussed) {
-        this.thoughtAggregation.items.completed.splice(completedIndex, 1);
         thought.state = 'active';
+        this.thoughtAggregation.items.completed.splice(completedIndex, 1);
         this.thoughtAggregation.items.active.push(thought);
       } else {
         Object.assign(this.thoughtAggregation.items.completed[completedIndex], thought);
