@@ -110,6 +110,19 @@ export class ThoughtsColumnComponent implements OnInit {
     return thoughts;
   }
 
+  get completedThoughts(): Array<Thought> {
+    let thoughts = [];
+
+    if (this.archived && this.thoughtsAreSorted) {
+      thoughts = this.thoughtAggregation.items.completed.slice().sort((a: Thought, b: Thought) => b.hearts - a.hearts);
+
+    } else {
+      thoughts = this.thoughtAggregation.items.completed;
+    }
+
+    return thoughts;
+  }
+
   sortChanged(sorted: boolean) {
     this.thoughtsAreSorted = sorted;
   }

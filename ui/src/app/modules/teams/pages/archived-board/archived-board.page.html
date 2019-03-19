@@ -49,12 +49,6 @@
       *ngFor="let thoughtAggregation of columnAggregations; let i = index"
       [ngClass]="{'selected': isSelectedIndex(i)}"
     >
-      <!--<rq-thoughts-header-->
-      <!--[thoughtAggregation]="thoughtAggregation"-->
-      <!--[thoughtCount]="thoughtAggregation.items.completed.length"-->
-      <!--[hideNewThought]="true"-->
-      <!--&gt;</rq-thoughts-header>-->
-
       <rq-thoughts-column
         *ngIf="thoughtAggregation.topic !== 'action'"
         [readOnly]="true"

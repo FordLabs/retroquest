@@ -42,7 +42,7 @@
   </rq-task>
 
   <rq-task
-    *ngFor="let thought of thoughtAggregation.items.completed"
+    *ngFor="let thought of completedThoughts"
     [task]="thought"
     [type]="column.topic"
     (messageChanged)="onMessageChanged($event, thought)"
