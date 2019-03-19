@@ -17,10 +17,7 @@
 
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-
-import {Column} from '../../../domain/column';
 import {Thought} from '../../../domain/thought';
-import {ActionItem} from '../../../domain/action-item';
 
 import {ThoughtService} from '../../services/thought.service';
 import {TeamService} from '../../services/team.service';
@@ -39,30 +36,6 @@ import {ColumnAggregationService} from '../../services/column-aggregation.servic
 })
 export class ArchivedBoardPageComponent implements OnInit {
 
-  static defaultColumns: Array<Column> = [
-    {
-      id: 0,
-      teamId: 'defaults',
-      topic: 'happy',
-      title: '',
-      sorted: false
-    },
-    {
-      id: 0,
-      teamId: 'defaults',
-      topic: 'confused',
-      title: '',
-      sorted: false
-    },
-    {
-      id: 0,
-      teamId: 'defaults',
-      topic: 'unhappy',
-      title: '',
-      sorted: false
-    }
-  ];
-
   constructor(private activeRoute: ActivatedRoute,
               private teamsService: TeamService,
               private thoughtService: ThoughtService,
@@ -78,11 +51,8 @@ export class ArchivedBoardPageComponent implements OnInit {
   teamName: string;
   globalWindowRef: Window = window;
 
-  columns: Array<Column> = ArchivedBoardPageComponent.defaultColumns;
   columnAggregations: Array<ColumnResponse>;
 
-  actionItems: Array<ActionItem> = [];
-  thoughtsArray: Array<Thought> = [];
   selectedIndex = 0;
   currentView = 'normalView';
 
@@ -109,21 +79,11 @@ export class ArchivedBoardPageComponent implements OnInit {
     });
   }
 
-  public getColumnThoughtCount(column: Column): number {
-    return this.thoughtsArray.filter(
-      (thought) => thought.topic === column.topic && !thought.discussed).length;
-  }
-
-  public getActionItemColumnCount(): number {
-    return this.actionItems.filter((actionItem) => !actionItem.completed).length;
-  }
-
   private getThoughts(): void {
     this.boardService.fetchThoughtsForBoard(this.teamId, this.boardId).subscribe(
       (thoughts: Array<Thought>) => {
-        this.thoughtsArray = thoughts;
         this.columnAggregations.map(aggregation => {
-          aggregation.items.completed = this.thoughtsArray.filter(thought => thought.topic === aggregation.topic);
+          aggregation.items.completed = thoughts.filter(thought => thought.topic === aggregation.topic);
         });
       });
   }
