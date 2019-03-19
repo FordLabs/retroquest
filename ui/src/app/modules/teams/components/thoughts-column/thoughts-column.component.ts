@@ -47,7 +47,7 @@ export class ThoughtsColumnComponent implements OnInit {
   @Input() theme: Themes = Themes.Light;
   @Input() retroEnded: EventEmitter<Column> = new EventEmitter();
 
-  @ViewChild('thoughtDialog') thoughtDialog: TaskDialogComponent;
+  @ViewChild(TaskDialogComponent) thoughtDialog: TaskDialogComponent;
 
   column: Column;
   selectedThought: Thought = emptyThought();
@@ -138,7 +138,7 @@ export class ThoughtsColumnComponent implements OnInit {
           this.thoughtAggregation.items.active.splice(activeIndex, 1);
           this.thoughtAggregation.items.completed.push(thought);
         } else {
-          Object.assign(this.thoughtAggregation.items.active[completedIndex], thought);
+          Object.assign(this.thoughtAggregation.items.active[activeIndex], thought);
         }
       } else {
         thought.state = 'active';

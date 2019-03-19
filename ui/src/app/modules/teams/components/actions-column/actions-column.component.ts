@@ -55,6 +55,7 @@ export class ActionsColumnComponent implements OnInit {
 
         const actionItem = (response.payload as ActionItem);
 
+        console.log('DELETE WAS CALLED', actionItem, response);
         if (response.type === 'delete') {
           this.deleteActionItem(actionItem);
         } else {
@@ -91,7 +92,7 @@ export class ActionsColumnComponent implements OnInit {
           this.actionItemAggregation.items.active.splice(activeIndex, 1);
           this.actionItemAggregation.items.completed.push(actionItem);
         } else {
-          Object.assign(this.actionItemAggregation.items.active[completedIndex], actionItem);
+          Object.assign(this.actionItemAggregation.items.active[activeIndex], actionItem);
         }
       } else {
         actionItem.state = 'active';
