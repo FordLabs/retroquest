@@ -103,7 +103,7 @@
     padding-left: $global-side-padding;
     padding-right: $global-side-padding;
     padding-top: 1rem;
-    width: $desktop-max-width;
+    max-width: 1200px;
     z-index: 2;
 
     @media only screen and (max-width: 610px) {
@@ -118,8 +118,7 @@
     }
 
     .rq-column {
-      flex-grow: 1;
-      width: 300px;
+      flex: 1;
 
       @media only screen and (max-width: 610px) {
         width: 100%;
@@ -139,8 +138,11 @@
           margin-right: 0;
         }
       }
-    }
 
+      &:last-of-type {
+        display: none;
+      }
+    }
   }
 }
 

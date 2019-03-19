@@ -32,7 +32,6 @@ import {BoardService} from '../../services/board.service';
 import {Themes} from '../../../domain/Theme';
 import {ColumnResponse} from '../../../domain/column-response';
 import {ColumnAggregationService} from '../../services/column-aggregation.service';
-import {ColumnCombinerResponse} from '../../../domain/column-combiner-response';
 
 @Component({
   selector: 'rq-archived-board',
@@ -100,7 +99,6 @@ export class ArchivedBoardPageComponent implements OnInit {
       this.columnAggregationService.getColumns(this.teamId).subscribe(
         response => {
           this.columnAggregations = response.columns;
-          console.log('GOT AGG', this.columnAggregations);
         }
       );
 
@@ -147,7 +145,12 @@ export class ArchivedBoardPageComponent implements OnInit {
 
   private getThoughts(): void {
     this.boardService.fetchThoughtsForBoard(this.teamId, this.boardId).subscribe(
-      (thoughts: Array<Thought>) => this.thoughtsArray = thoughts);
+      (thoughts: Array<Thought>) => {
+        this.thoughtsArray = thoughts;
+        this.columnAggregations.map(aggregation => {
+          aggregation.items.completed = this.thoughtsArray.filter(thought => thought.topic === aggregation.topic);
+        });
+      });
   }
 
   private getColumns(): void {

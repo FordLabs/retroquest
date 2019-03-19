@@ -36,10 +36,10 @@ export class ThoughtsColumnComponent implements OnInit {
   }
 
   @Input() thoughtAggregation: ColumnResponse;
-  @Input() thoughts: Array<Thought> = [];
   @Input() readOnly = false;
   @Input() archived = false;
   @Input() teamId: string;
+  @Input() hideNewThought = false;
 
   @Input() thoughtChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
   @Input() columnChanged: EventEmitter<string> = new EventEmitter();
@@ -55,6 +55,7 @@ export class ThoughtsColumnComponent implements OnInit {
   thoughtsAreSorted = false;
 
   ngOnInit(): void {
+
     this.column = {
       id: this.thoughtAggregation.id,
       sorted: false,

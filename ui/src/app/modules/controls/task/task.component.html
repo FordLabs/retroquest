@@ -143,9 +143,9 @@
   <div
     class="complete-container"
     [ngClass]="{
-      'opacify': (taskEditModeEnabled || readOnly) && !archived,
+      'opacify': (taskEditModeEnabled || readOnly),
       'dark-theme': darkThemeIsEnabled,
-      'disable': taskEditModeEnabled
+      'disable': taskEditModeEnabled || archived
     }"
     (click)="toggleTaskComplete()"
   >
