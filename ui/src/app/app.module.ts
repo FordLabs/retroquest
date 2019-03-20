@@ -29,8 +29,8 @@ import {ControlsModule} from './modules/controls/controls.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import {Column} from "./modules/domain/column";
-import {ColumnAggregationService} from "./modules/teams/services/column-aggregation.service";
+import {Column} from './modules/domain/column';
+import {ColumnAggregationService} from './modules/teams/services/column-aggregation.service';
 
 @NgModule({
   declarations: [

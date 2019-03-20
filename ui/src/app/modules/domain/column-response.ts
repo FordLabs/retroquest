@@ -25,3 +25,12 @@ export interface ColumnResponse {
   topic: string;
 }
 
+export function emptyColumnResponse(): ColumnResponse {
+  return {
+    id: -1,
+    items: {active: [], completed: []},
+    topic: '',
+    title: ''
+  };
+
+}

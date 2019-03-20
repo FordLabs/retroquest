@@ -45,7 +45,7 @@ describe('ThoughtColumnComponent', () => {
       columnTitle: null
     };
 
-    component.thoughts = [testThought];
+    // component.thoughts = [testThought];
   });
 
   it('should create', () => {

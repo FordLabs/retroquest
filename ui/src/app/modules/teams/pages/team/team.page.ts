@@ -17,7 +17,6 @@
 
 import {Component, EventEmitter, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {ActionItem} from '../../../domain/action-item';
 import {WebsocketService} from '../../services/websocket.service';
 
 import {ThoughtService} from '../../services/thought.service';
@@ -46,9 +45,6 @@ export class TeamPageComponent implements OnInit {
 
   constructor(private activeRoute: ActivatedRoute,
               private teamsService: TeamService,
-              private thoughtService: ThoughtService,
-              private columnService: ColumnService,
-              private actionItemService: ActionItemService,
               private websocketService: WebsocketService,
               private saveCheckerService: SaveCheckerService,
               private boardService: BoardService,
@@ -60,7 +56,6 @@ export class TeamPageComponent implements OnInit {
   teamName: string;
   globalWindowRef: Window = window;
 
-  actionItems: Array<ActionItem> = [];
   selectedIndex = 0;
   currentView = 'normalView';
 
@@ -110,13 +105,11 @@ export class TeamPageComponent implements OnInit {
         }
       );
 
-      this.getTeamName();
-
+      this.setTeamName();
 
       if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
         this.websocketInit();
       }
-
 
       this.websocketService.intervalId = this.globalWindowRef.setInterval(() => {
         if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
@@ -134,8 +127,7 @@ export class TeamPageComponent implements OnInit {
   private websocketInit() {
     this.websocketService.openWebsocket(this.teamId).subscribe(() => {
 
-      this.websocketService.heartbeatTopic().subscribe(message => {
-      });
+      this.websocketService.heartbeatTopic().subscribe();
 
       this.websocketService.thoughtsTopic().subscribe((message) => {
         this.thoughtChanged.emit(message.bodyJson as WebsocketResponse);
@@ -155,7 +147,7 @@ export class TeamPageComponent implements OnInit {
     });
   }
 
-  private getTeamName(): void {
+  private setTeamName(): void {
     this.teamsService.fetchTeamName(this.teamId).subscribe(
       (teamName) => this.teamName = teamName
     );
@@ -171,8 +163,6 @@ export class TeamPageComponent implements OnInit {
         thoughts.push(...column.items.completed);
       }
     });
-
-    console.log(thoughts);
 
     if (thoughts.length > 0) {
       this.boardService.createBoard(this.teamId, thoughts).subscribe();
@@ -190,6 +180,7 @@ export class TeamPageComponent implements OnInit {
   }
 
   public incrementSelectedIndex(): void {
+    console.log(this.selectedIndex, this.columnsAggregation.length);
     if (this.selectedIndex < this.columnsAggregation.length) {
       this.selectedIndex++;
     }

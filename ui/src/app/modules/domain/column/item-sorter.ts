@@ -17,6 +17,6 @@
  */
 
 export interface ItemSorter {
-  active: Array<object>
-  completed: Array<object>
+  active: Array<object>;
+  completed: Array<object>;
 }

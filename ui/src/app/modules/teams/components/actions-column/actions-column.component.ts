@@ -55,7 +55,6 @@ export class ActionsColumnComponent implements OnInit {
 
         const actionItem = (response.payload as ActionItem);
 
-        console.log('DELETE WAS CALLED', actionItem, response);
         if (response.type === 'delete') {
           this.deleteActionItem(actionItem);
         } else {

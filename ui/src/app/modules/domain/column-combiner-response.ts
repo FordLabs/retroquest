@@ -16,8 +16,8 @@
  *
  */
 
-import {ColumnResponse} from "./column-response";
+import {ColumnResponse} from './column-response';
 
 export interface ColumnCombinerResponse {
-  columns: Array<ColumnResponse>
+  columns: Array<ColumnResponse>;
 }

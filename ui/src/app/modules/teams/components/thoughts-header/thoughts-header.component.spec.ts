@@ -32,8 +32,8 @@ describe('ThoughtsHeaderComponent', () => {
   };
 
   beforeEach(() => {
-    mockThoughtService = jasmine.createSpyObj({ addThought: new Observable() });
-    mockColumnService = jasmine.createSpyObj({ updateColumn: new Observable() });
+    mockThoughtService = jasmine.createSpyObj({addThought: new Observable()});
+    mockColumnService = jasmine.createSpyObj({updateColumn: new Observable()});
 
     component = new ThoughtsHeaderComponent(mockThoughtService, mockColumnService);
     component.column = testColumn;
@@ -48,7 +48,7 @@ describe('ThoughtsHeaderComponent', () => {
       const newThoughtMessage = 'a new thought';
 
       const expectedThought = {
-        id: null,
+        id: -1,
         teamId: testColumn.teamId,
         topic: testColumn.topic,
         message: newThoughtMessage,
@@ -64,18 +64,25 @@ describe('ThoughtsHeaderComponent', () => {
   });
 
   describe('sortByHearts', () => {
-    it('disables sorting by hearts', () => {
-      component.sortByHearts(false);
-      expect(component.column.sorted).toBeFalsy();
+
+    beforeEach(() => {
+      component.sortChanged = jasmine.createSpyObj({
+        emit: null
+      });
     });
 
-    it('enables sorting by hearts', () => {
+    it('emits false', () => {
+      component.sortByHearts(false);
+      expect(component.sortChanged.emit).toHaveBeenCalledWith(false);
+    });
+
+    it('emits true', () => {
       component.sortByHearts(true);
-      expect(component.column.sorted).toBeTruthy();
+      expect(component.sortChanged.emit).toHaveBeenCalledWith(true);
     });
   });
 
-  describe( 'editTitle', () => {
+  describe('editTitle', () => {
     it('should send column service the new title', function () {
 
       component.column = {

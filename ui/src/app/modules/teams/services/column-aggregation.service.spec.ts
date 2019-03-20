@@ -1,5 +1,5 @@
 import {ColumnAggregationService} from './column-aggregation.service';
-import {Subject} from "rxjs";
+import {Subject} from 'rxjs';
 
 describe('ColumnAggregationService', () => {
 

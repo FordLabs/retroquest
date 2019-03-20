@@ -100,10 +100,10 @@
     display: flex;
     justify-content: space-around;
     margin: 0 auto;
+    max-width: 1200px;
     padding-left: $global-side-padding;
     padding-right: $global-side-padding;
     padding-top: 1rem;
-    max-width: 1200px;
     z-index: 2;
 
     @media only screen and (max-width: 610px) {
