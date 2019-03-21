@@ -57,12 +57,12 @@
 
     .horizontal-separator {
       background-color: $wet-asphalt;
-      border-radius: 2px;
+      border-radius: 6px;
       box-sizing: border-box;
-      height: 28px;
+      height: 24px;
       margin: 0 24px;
       opacity: .1;
-      width: 2px;
+      width: 3px;
 
       @media only screen and (max-width: 610px) {
         display: none;
@@ -75,7 +75,7 @@
     }
 
     .logo-link {
-      height: inherit;
+      height: 36px;
       margin: 0;
       padding: 0;
 
@@ -84,6 +84,7 @@
       }
 
       #logo {
+        border-radius: 6px;
         height: inherit;
 
         @media only screen and (max-width: 610px) {
@@ -95,6 +96,7 @@
     #teamName {
       color: inherit;
       font-size: 1.5rem;
+      font-weight: bold;
       overflow: hidden;
       text-overflow: ellipsis;
 
