@@ -29,61 +29,51 @@
 
   <rq-actions-radiator-view
     #radiatorView
-    [actionItems]="unsortedAndUncompletedActionItems"
-    [visible]="actionsRadiatorViewIsSelected()"
+    *ngIf="actionsRadiatorViewIsSelected"
+    [visible]="actionsRadiatorViewIsSelected"
     [theme]="theme"
+    [teamId]="teamId"
   >
   </rq-actions-radiator-view>
 
   <div
     id="team-content"
     [ngClass]="{
-      'hidden': actionsRadiatorViewIsSelected()
+      'hidden': actionsRadiatorViewIsSelected
     }"
   >
     <div
       class="rq-column"
-      *ngFor="let column of columns; let i = index"
+      *ngFor="let aggregation of columnsAggregation; let i = index"
       [ngClass]="{'selected': isSelectedIndex(i)}"
     >
-      <rq-thoughts-header
-        [column]="column"
-        [thoughtCount]="getColumnThoughtCount(column)"
-        [theme]="theme"
-      ></rq-thoughts-header>
-
       <rq-thoughts-column
-        [column]="column"
-        [thoughts]="getThoughtsInColumn(column)"
+        *ngIf="aggregation.topic !== 'action'"
+        [retroEnded]="retroEnded"
+        [thoughtAggregation]="aggregation"
+        [thoughtChanged]="thoughtChanged"
+        [columnChanged]="columnChanged"
         [theme]="theme"
         [teamId]="teamId"
       ></rq-thoughts-column>
 
-    </div>
-
-    <div
-      class="rq-column"
-      [ngClass]="{'selected': actionItemsIndexIsSelected()}"
-    >
-      <rq-actions-header
-        [teamId]="teamId"
-        [theme]="theme"
-        [thoughtCount]="getActionItemColumnCount()"
-        (sortChanged)="onActionItemsSortChanged($event)"
-      ></rq-actions-header>
-
       <rq-actions-column
+        *ngIf="aggregation.topic === 'action'"
         [theme]="theme"
-        [actionItems]="getActionItems()"
+        [actionItemAggregation]="aggregation"
+        [actionItemChanged]="actionItemChanged"
+        [teamId]="teamId"
       ></rq-actions-column>
 
+
     </div>
+
   </div>
 
   <div
     class="guide-button-section"
     [ngClass]="{
-      'hidden': actionsRadiatorViewIsSelected(),
+      'hidden': actionsRadiatorViewIsSelected,
       'dark-theme': darkThemeIsEnabled
     }"
   >

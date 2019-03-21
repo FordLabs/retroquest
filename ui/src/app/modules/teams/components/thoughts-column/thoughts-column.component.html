@@ -15,9 +15,18 @@
   ~ limitations under the License.
   -->
 
+<rq-thoughts-header
+  [teamId]="teamId"
+  [thoughtAggregation]="thoughtAggregation"
+  [thoughtCount]="totalThoughtCount"
+  [hideNewThought]="hideNewThought"
+  [theme]="theme"
+  (sortChanged)="sortChanged($event)"
+></rq-thoughts-header>
+
 <div class="rq-thought-list {{column.topic}}">
   <rq-task
-    *ngFor="let thought of thoughts"
+    *ngFor="let thought of activeThoughts"
     [task]="thought"
     [type]="column.topic"
     (messageChanged)="onMessageChanged($event, thought)"
@@ -31,10 +40,26 @@
     [archived]="archived"
   >
   </rq-task>
+
+  <rq-task
+    *ngFor="let thought of completedThoughts"
+    [task]="thought"
+    [type]="column.topic"
+    (messageChanged)="onMessageChanged($event, thought)"
+    (deleted)="onDeleted($event)"
+    (messageClicked)="displayPopup(thought)"
+    (starCountIncreased)="starCountChanged($event, thought)"
+    (completed)="onCompleted($event, thought)"
+    [@fadeInOutAnimation]="thought.state"
+    [readOnly]="readOnly"
+    [theme]="theme"
+    [archived]="archived"
+  >
+  </rq-task>
+
 </div>
 
 <rq-task-dialog
-  #thoughtDialog
   [teamId]="teamId"
   [theme]="theme"
   [visible]="dialogIsVisible"

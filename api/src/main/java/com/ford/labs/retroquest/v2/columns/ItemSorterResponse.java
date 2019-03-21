@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright (c) 2018 Ford Motor Company
  * All rights reserved.
  *
@@ -14,30 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@import 'color-vars';
 
-:host {
-  display: block;
+package com.ford.labs.retroquest.v2.columns;
 
-  .rq-thought-list {
-    display: flex;
-    flex: 1;
-    flex-basis: 0;
-    flex-flow: column nowrap;
-    font-size: 1rem;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    rq-task {
-      height: auto;
-      margin-bottom: 24px;
-      transition: y 1s cubic-bezier(.25, .8, .25, 1);
+import java.util.List;
 
-      width: 100%;
-
-      @media only screen and (max-width: 610px) {
-        font-size: 1rem;
-        margin-bottom: 12px;
-      }
-    }
-  }
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class ItemSorterResponse {
+    private List<Object> completed;
+    private List<Object> active;
 }
-

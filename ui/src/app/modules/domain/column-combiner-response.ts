@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright (c) 2018 Ford Motor Company
  * All rights reserved.
  *
@@ -13,31 +13,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
  */
-@import 'color-vars';
 
-:host {
-  display: block;
+import {ColumnResponse} from './column-response';
 
-  .rq-thought-list {
-    display: flex;
-    flex: 1;
-    flex-basis: 0;
-    flex-flow: column nowrap;
-    font-size: 1rem;
-
-    rq-task {
-      height: auto;
-      margin-bottom: 24px;
-      transition: y 1s cubic-bezier(.25, .8, .25, 1);
-
-      width: 100%;
-
-      @media only screen and (max-width: 610px) {
-        font-size: 1rem;
-        margin-bottom: 12px;
-      }
-    }
-  }
+export interface ColumnCombinerResponse {
+  columns: Array<ColumnResponse>;
 }
-

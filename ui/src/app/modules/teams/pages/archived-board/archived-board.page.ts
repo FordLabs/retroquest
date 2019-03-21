@@ -17,20 +17,17 @@
 
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-
-import {Column} from '../../../domain/column';
 import {Thought} from '../../../domain/thought';
-import {ActionItem} from '../../../domain/action-item';
 
 import {ThoughtService} from '../../services/thought.service';
 import {TeamService} from '../../services/team.service';
 import {ColumnService} from '../../services/column.service';
 
-import * as moment from 'moment';
 import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-view/actions-radiator-view.component';
-import {SaveCheckerService} from '../../services/save-checker.service';
 import {BoardService} from '../../services/board.service';
 import {Themes} from '../../../domain/Theme';
+import {ColumnResponse} from '../../../domain/column-response';
+import {ColumnAggregationService} from '../../services/column-aggregation.service';
 
 @Component({
   selector: 'rq-archived-board',
@@ -39,35 +36,12 @@ import {Themes} from '../../../domain/Theme';
 })
 export class ArchivedBoardPageComponent implements OnInit {
 
-  static defaultColumns: Array<Column> = [
-    {
-      id: 0,
-      teamId: 'defaults',
-      topic: 'happy',
-      title: '',
-      sorted: false
-    },
-    {
-      id: 0,
-      teamId: 'defaults',
-      topic: 'confused',
-      title: '',
-      sorted: false
-    },
-    {
-      id: 0,
-      teamId: 'defaults',
-      topic: 'unhappy',
-      title: '',
-      sorted: false
-    }
-  ];
-
   constructor(private activeRoute: ActivatedRoute,
               private teamsService: TeamService,
               private thoughtService: ThoughtService,
               private columnService: ColumnService,
-              private boardService: BoardService) {
+              private boardService: BoardService,
+              private columnAggregationService: ColumnAggregationService) {
   }
 
   @Input() theme: Themes = Themes.Light;
@@ -77,11 +51,9 @@ export class ArchivedBoardPageComponent implements OnInit {
   teamName: string;
   globalWindowRef: Window = window;
 
-  columns: Array<Column> = ArchivedBoardPageComponent.defaultColumns;
-  actionItems: Array<ActionItem> = [];
-  thoughtsArray: Array<Thought> = [];
+  columnAggregations: Array<ColumnResponse>;
+
   selectedIndex = 0;
-  actionItemsAreSorted = false;
   currentView = 'normalView';
 
   @ViewChild('radiatorView') radiatorView: ActionsRadiatorViewComponent;
@@ -91,68 +63,35 @@ export class ArchivedBoardPageComponent implements OnInit {
     this.activeRoute.params.subscribe((params) => {
       this.teamId = params.teamId;
       this.boardId = params.boardId;
+
+      this.columnAggregationService.getColumns(this.teamId).subscribe(
+        response => {
+          response.columns.map(column => {
+            column.items.active = [];
+            column.items.completed = [];
+          });
+          this.columnAggregations = response.columns;
+        }
+      );
+
       this.getTeamName();
-      this.getColumns();
       this.getThoughts();
-      this.subscribeToResetThoughts();
     });
-  }
-
-  public getColumnThoughtCount(column: Column): number {
-    return this.thoughtsArray.filter(
-      (thought) => thought.topic === column.topic && !thought.discussed).length;
-  }
-
-  public getActionItemColumnCount(): number {
-    return this.actionItems.filter((actionItem) => !actionItem.completed).length;
-  }
-
-  public getThoughtsInColumn(column: Column): Array<Thought> {
-    let thoughtsInColumn = this.thoughtsArray.filter((thought) => thought.topic === column.topic);
-    if (!thoughtsInColumn) {
-      return [];
-    }
-
-    if (column.sorted) {
-      thoughtsInColumn = thoughtsInColumn.slice().sort((a, b) => b.hearts - a.hearts);
-    }
-
-    return thoughtsInColumn;
-  }
-
-  get unsortedAndUncompletedActionItems(): Array<ActionItem> {
-    return this.actionItems.filter((actionItem) => !actionItem.completed);
-  }
-
-  public resetThoughts(): void {
-    this.thoughtsArray.splice(0, this.thoughtsArray.length);
-  }
-
-  private subscribeToResetThoughts() {
-    this.thoughtService.resetThoughtsObserver.subscribe(() => this.resetThoughts());
   }
 
   private getThoughts(): void {
     this.boardService.fetchThoughtsForBoard(this.teamId, this.boardId).subscribe(
-      (thoughts: Array<Thought>) => this.thoughtsArray = thoughts);
-  }
-
-  private getColumns(): void {
-    this.columnService.fetchColumns(this.teamId).subscribe(
-      (columns: Array<Column>) => this.columns = columns
-    );
+      (thoughts: Array<Thought>) => {
+        this.columnAggregations.map(aggregation => {
+          aggregation.items.completed = thoughts.filter(thought => thought.topic === aggregation.topic);
+        });
+      });
   }
 
   private getTeamName(): void {
     this.teamsService.fetchTeamName(this.teamId).subscribe(
       (teamName) => this.teamName = teamName
     );
-  }
-
-  public onEndRetro(): void {
-    this.boardService.createBoard(this.teamId, this.thoughtsArray).subscribe(() => {
-      this.thoughtsArray = [];
-    });
   }
 
   public isSelectedIndex(index: number): boolean {
@@ -167,40 +106,7 @@ export class ArchivedBoardPageComponent implements OnInit {
     return (this.selectedIndex === 3);
   }
 
-  public onActionItemsSortChanged(sortState: boolean): void {
-    this.actionItemsAreSorted = sortState;
-  }
-
-  public getActionItems(): Array<ActionItem> {
-    if (this.actionItemsAreSorted) {
-      return this.actionItems.slice().sort((a, b) => moment
-        .utc(this.checkForNullDate(b.dateCreated))
-        .diff(moment.utc(this.checkForNullDate(a.dateCreated))));
-    }
-
-    return this.actionItems;
-  }
-
-  private checkForNullDate(dateCreated: string): string {
-    if (!dateCreated) {
-      const earliestDatePlaceholder = '1999-01-01';
-      return earliestDatePlaceholder;
-    }
-    return dateCreated;
-  }
-
-  public toggleActionsRadiatorAndNormalView(state: boolean): void {
-    if (!state) {
-      this.radiatorView.resetScroll();
-    }
-    this.currentView = (state) ? 'actionsRadiatorView' : 'normalView';
-  }
-
   public actionsRadiatorViewIsSelected(): boolean {
     return this.currentView === 'actionsRadiatorView';
-  }
-
-  public normalViewIsSelected(): boolean {
-    return this.currentView === 'normalView';
   }
 }

@@ -16,666 +16,138 @@
  */
 
 import {TeamPageComponent} from './team.page';
-import {Observable, Subject} from 'rxjs/index';
-import {Column} from '../../../domain/column';
-import {emptyThought, emptyThoughtWithColumn, Thought} from '../../../domain/thought';
-import {TeamService} from '../../services/team.service';
-import {ThoughtService} from '../../services/thought.service';
-import {ColumnService} from '../../services/column.service';
-import {ActionItemService} from '../../services/action.service';
+import {ActivatedRoute} from '@angular/router';
 import {WebsocketService} from '../../services/websocket.service';
-import {ActionItem, emptyActionItem} from '../../../domain/action-item';
-import * as moment from 'moment';
-import {SaveCheckerService} from '../../services/save-checker.service';
 import {BoardService} from '../../services/board.service';
+import {ColumnAggregationService} from '../../services/column-aggregation.service';
+import {of} from 'rxjs';
+import {ColumnCombinerResponse} from '../../../domain/column-combiner-response';
+import {TeamService} from '../../services/team.service';
+import {anything, instance, mock, verify, when} from 'ts-mockito';
+import {emptyThought} from '../../../domain/thought';
+import {emptyColumnResponse} from '../../../domain/column-response';
 
 describe('TeamPageComponent', () => {
+  let component: TeamPageComponent;
 
-  let mockActiveRoute;
-  let mockTeamService: TeamService;
-  let mockThoughtService: ThoughtService;
-  let mockActionItemService: ActionItemService;
-  let mockColumnService: ColumnService;
-  let mockWebsocketService: WebsocketService;
-  let mockSaveCheckerService: SaveCheckerService;
-  let mockBoardService: BoardService;
+  let activatedRoute: ActivatedRoute;
+  let websocketService: WebsocketService;
+  // let saveCheckerService: SaveCheckerService;
+  let boardService: BoardService;
+  let columnAggregationService: ColumnAggregationService;
+  let teamService: TeamService;
 
-  let heartbeatTopic: Subject<any>;
-  let thoughtsTopic: Subject<any>;
-  let actionItemTopic: Subject<any>;
-  let columnTitleTopic: Subject<any>;
+  const fakeTeamId = 'team-id';
 
-  let createBoardSubject: Subject<any>;
-
-  let component;
-
-  const testColumn: Column = {
-    id: 1,
-    topic: 'happy',
-    title: 'title',
-    teamId: 'team-id',
-    sorted: false
-  };
-
-  const fakeColumnSet = () => {
-    return Array(3).fill(testColumn);
-  };
-
-  const fakeThoughtWithTestTopic = () => {
-    const thought: Thought = emptyThought();
-    thought.topic = testColumn.topic;
-    return thought;
-  };
-
-  beforeEach((() => {
-    heartbeatTopic = new Subject<any>();
-    thoughtsTopic = new Subject<any>();
-    actionItemTopic = new Subject<any>();
-    columnTitleTopic = new Subject<any>();
-
-    createBoardSubject = new Subject();
-
-    mockActiveRoute = {params: new Subject()};
-    mockTeamService = jasmine.createSpyObj({fetchTeamName: new Observable()});
-    mockThoughtService = jasmine.createSpyObj({fetchThoughts: new Observable()});
-    mockThoughtService.resetThoughtsObserver = jasmine.createSpyObj({subscribe: null});
-
-    mockActionItemService = jasmine.createSpyObj({fetchActionItems: new Observable()});
-    mockColumnService = jasmine.createSpyObj({
-      fetchColumns: new Observable(),
-      updateColumn: new Observable()
-    });
-    mockWebsocketService = jasmine.createSpyObj({
-      openWebsocket: new Subject(),
-      closeWebsocket: null,
-      getWebsocketState: WebSocket.CLOSED,
-
-      heartbeatTopic: heartbeatTopic,
-      thoughtsTopic: thoughtsTopic,
-      actionItemTopic: actionItemTopic,
-      columnTitleTopic: columnTitleTopic,
-
-      sendHeartbeat: null,
-    });
-    mockWebsocketService.intervalId = null;
-
-    mockSaveCheckerService = jasmine.createSpyObj({
-      updateTimestamp: null
-    });
-
-    mockBoardService = jasmine.createSpyObj({
-      createBoard: createBoardSubject
-    });
+  beforeEach(() => {
+    activatedRoute = mock(ActivatedRoute);
+    columnAggregationService = mock(ColumnAggregationService);
+    teamService = mock(TeamService);
+    websocketService = mock(WebsocketService);
+    boardService = mock(BoardService);
 
     component = new TeamPageComponent(
-      mockActiveRoute,
-      mockTeamService,
-      mockThoughtService,
-      mockColumnService,
-      mockActionItemService,
-      mockWebsocketService,
-      mockSaveCheckerService,
-      mockBoardService
+      instance(activatedRoute),
+      instance(teamService),
+      instance(websocketService),
+      null,
+      instance(boardService),
+      instance(columnAggregationService)
     );
 
-    component.columns = [];
-  }));
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  describe('getColumnThoughtCount', () => {
-    it('should return count of non-discussed thoughts', () => {
-      const discussedThought = emptyThought();
-      discussedThought.discussed = true;
-      discussedThought.topic = testColumn.topic;
-
-      component.thoughtsArray = [
-        discussedThought,
-        fakeThoughtWithTestTopic(),
-        fakeThoughtWithTestTopic()
-      ];
-
-      component.columns.push(testColumn);
-
-      const thoughtCount = component.getColumnThoughtCount(testColumn);
-
-      expect(thoughtCount).toEqual(2);
-    });
-  });
-
-  describe('getActionItemColumnCount', () => {
-    it('should return count of non-discussed action items', () => {
-      const completedActionItem = emptyActionItem();
-      completedActionItem.completed = true;
-
-      const testThoughts: Array<ActionItem> = [
-        completedActionItem,
-        emptyActionItem(),
-        emptyActionItem()
-      ];
-
-      component.actionItems = testThoughts;
-
-      const actualCount = component.getActionItemColumnCount();
-
-      expect(actualCount).toEqual(2);
-    });
-  });
-
-  describe('getThoughtsInColumn', () => {
-
-    it('should return an empty list of no thoughts are in the list', () => {
-      const actualThoughts = component.getThoughtsInColumn(testColumn);
-      expect(actualThoughts.length).toBe(0);
-    });
-
-    it('should return thoughts for given column', () => {
-
-      const testThoughts: Array<Thought> = [
-        fakeThoughtWithTestTopic(),
-        fakeThoughtWithTestTopic(),
-        fakeThoughtWithTestTopic()
-      ];
-
-      component.columns.push(testColumn);
-      component.thoughtsArray = testThoughts;
-
-      const thoughts = component.getThoughtsInColumn(testColumn);
-      expect(thoughts).toEqual(testThoughts);
-    });
-
-    it('should return sorted thoughts if the given column is sorted', () => {
-
-      testColumn.sorted = true;
-
-      const thought1 = fakeThoughtWithTestTopic();
-      const thought2 = fakeThoughtWithTestTopic();
-      const thought3 = fakeThoughtWithTestTopic();
-
-      thought1.hearts = 0;
-      thought2.hearts = 3;
-      thought3.hearts = 2;
-
-      const testThoughts: Array<Thought> = [
-        thought1,
-        thought2,
-        thought3
-      ];
-
-      component.columns.push(testColumn);
-      component.thoughtsArray = testThoughts;
-
-      const thoughts = component.getThoughtsInColumn(testColumn);
-
-      expect(thoughts[0].hearts).toEqual(3);
-      expect(thoughts[1].hearts).toEqual(2);
-      expect(thoughts[2].hearts).toEqual(0);
-    });
-
-    it('should return unsorted thoughts if the given column is unsorted', () => {
-
-      testColumn.sorted = false;
-
-      const thought1 = fakeThoughtWithTestTopic();
-      const thought2 = fakeThoughtWithTestTopic();
-      const thought3 = fakeThoughtWithTestTopic();
-
-      thought1.hearts = 0;
-      thought2.hearts = 3;
-      thought3.hearts = 2;
-
-      const testThoughts: Array<Thought> = [
-        thought1,
-        thought2,
-        thought3
-      ];
-
-      component.columns.push(testColumn);
-      component.thoughtsArray = testThoughts;
-
-      const thoughts = component.getThoughtsInColumn(testColumn);
-
-      expect(thoughts[0].hearts).toEqual(0);
-      expect(thoughts[1].hearts).toEqual(3);
-      expect(thoughts[2].hearts).toEqual(2);
-    });
   });
 
   describe('ngOnInit', () => {
 
-    let mockTimeOutValue = -1;
-
-    const mockWindow = {
-      setInterval: (fn, timeout) => {
-        mockTimeOutValue = timeout;
-        fn();
-      }
+    const expectedColumns: ColumnCombinerResponse = {
+      columns: [
+        {id: 1, items: {active: [], completed: []}, title: 'Happy', topic: 'happy'}
+      ]
     };
+    const expectedTeamName = 'team-name';
 
     beforeEach(() => {
-      component.globalWindowRef = mockWindow;
+      when(activatedRoute.params).thenReturn(of({teamId: fakeTeamId}));
+      when(columnAggregationService.getColumns(fakeTeamId)).thenReturn(of(expectedColumns));
+      when(teamService.fetchTeamName(fakeTeamId)).thenReturn(of(expectedTeamName));
     });
 
-    it('websocket should send heartbeat to backend every 1s', () => {
+    it('should set the team id', () => {
       component.ngOnInit();
-      mockActiveRoute.params.next({teamId: 1});
-
-      expect(mockTimeOutValue).toEqual(1 * 1000);
+      expect(component.teamId).toEqual(fakeTeamId);
     });
 
-    it('should call open websocket', () => {
+    it('should set the columns aggregation', () => {
       component.ngOnInit();
-      mockActiveRoute.params.next({teamId: 1});
-
-      expect(mockWebsocketService.openWebsocket).toHaveBeenCalled();
+      expect(component.columnsAggregation).toEqual(expectedColumns.columns);
     });
 
-    it('should set websocket.intervalId to return value of setInterval', function () {
+    it('should set the team name', () => {
       component.ngOnInit();
-      mockActiveRoute.params.next({teamId: 1});
-
-      expect(mockWebsocketService.intervalId).not.toBeNull();
+      expect(component.teamName).toEqual(expectedTeamName);
     });
 
-    it('should send a heartbeat with a open connected', () => {
-      mockWebsocketService.getWebsocketState = () => WebSocket.OPEN;
-      component.ngOnInit();
-      mockActiveRoute.params.next({teamId: 1});
+    describe('opening the websocket', () => {
 
-      expect(mockWebsocketService.sendHeartbeat).toHaveBeenCalled();
-    });
-
-    it('should not open the websocket if it is already opened', () => {
-      mockWebsocketService.getWebsocketState = () => WebSocket.OPEN;
-      component.ngOnInit();
-      mockActiveRoute.params.next({teamId: 1});
-
-      expect(mockWebsocketService.openWebsocket).not.toHaveBeenCalled();
-    });
-
-    it('should call heartbeatTopic', () => {
-      component.ngOnInit();
-      mockActiveRoute.params.next({teamId: 1});
-      (mockWebsocketService.openWebsocket('team1') as Subject<any>).next({bodyJson: {}});
-
-      expect(mockWebsocketService.heartbeatTopic).toHaveBeenCalled();
-    });
-
-    it('should call thoughtsTopic', () => {
-      component.ngOnInit();
-      mockActiveRoute.params.next({teamId: 1});
-      (mockWebsocketService.openWebsocket('team1') as Subject<any>).next({bodyJson: {}});
-
-      expect(mockWebsocketService.thoughtsTopic).toHaveBeenCalled();
-    });
-
-    it('should call actionItemTopic', () => {
-      component.ngOnInit();
-      mockActiveRoute.params.next({teamId: 1});
-      (mockWebsocketService.openWebsocket('team1') as Subject<any>).next({bodyJson: {}});
-
-      expect(mockWebsocketService.actionItemTopic).toHaveBeenCalled();
-    });
-
-    it('should add thoughts when a message is received', () => {
-      component.ngOnInit();
-      mockActiveRoute.params.next({teamId: 1});
-      (mockWebsocketService.openWebsocket('team1') as Subject<any>).next({bodyJson: {}});
-
-      expect(component.thoughtsArray.length).toEqual(0);
-
-      thoughtsTopic.next({bodyJson: {type: 'put', payload: {id: 1, columnTitle: {id: 1}}, body: ''}});
-      expect(component.thoughtsArray.length).toEqual(1);
-    });
-
-    it('should update the save checker timestamp when any thought message is recieved successfully', () => {
-      component.ngOnInit();
-      mockActiveRoute.params.next({teamId: 1});
-      (mockWebsocketService.openWebsocket('team1') as Subject<any>).next({bodyJson: {}});
-
-      thoughtsTopic.next({bodyJson: {type: 'put', payload: {id: 1, columnTitle: {id: 1}}, body: ''}});
-      expect(mockSaveCheckerService.updateTimestamp).toHaveBeenCalled();
-    });
-
-    it('should delete thoughts when delete message is received', () => {
-      component.ngOnInit();
-      mockActiveRoute.params.next({teamId: 1});
-      (mockWebsocketService.openWebsocket('team1') as Subject<any>).next({bodyJson: {}});
-
-      expect(component.thoughtsArray.length).toEqual(0);
-
-      thoughtsTopic.next({bodyJson: {type: 'post', payload: {id: 1, columnTitle: {id: 1}}, body: ''}});
-      expect(component.thoughtsArray.length).toEqual(1);
-
-      thoughtsTopic.next({bodyJson: {type: 'delete', payload: 1}});
-      expect(component.thoughtsArray.length).toEqual(0);
-    });
-
-    it('should delete all thoughts when delete message is received with -1', () => {
-      component.ngOnInit();
-      mockActiveRoute.params.next({teamId: 1});
-      (mockWebsocketService.openWebsocket('team1') as Subject<any>).next({bodyJson: {}});
-
-      expect(component.thoughtsArray.length).toEqual(0);
-
-      thoughtsTopic.next({bodyJson: {type: 'post', payload: {id: 1, columnTitle: {id: 1}}, body: ''}});
-      thoughtsTopic.next({bodyJson: {type: 'post', payload: {id: 2, columnTitle: {id: 2}}, body: ''}});
-      expect(component.thoughtsArray.length).toEqual(2);
-
-      thoughtsTopic.next({bodyJson: {type: 'delete', payload: -1}});
-      expect(component.thoughtsArray.length).toEqual(0);
-    });
-
-    it('should delete action items when delete message is recieved', () => {
-      component.ngOnInit();
-      mockActiveRoute.params.next({teamId: 1});
-      (mockWebsocketService.openWebsocket('team1') as Subject<any>).next({bodyJson: {}});
-
-      expect(component.actionItems.length).toEqual(0);
-      actionItemTopic.next({
-        bodyJson: {
-          type: 'post',
-          payload: {'id': 1, 'task': 'hi', 'completed': false, 'teamId': 'test', 'assignee': ''}
-        }
+      beforeEach(() => {
+        when(websocketService.openWebsocket(fakeTeamId)).thenReturn(of());
+        when(websocketService.heartbeatTopic()).thenReturn(of());
       });
 
-      expect(component.actionItems.length).toEqual(1);
+      it('should open the websocket if the state is closed', () => {
+        when(websocketService.getWebsocketState()).thenReturn(WebSocket.CLOSED);
 
-      actionItemTopic.next({bodyJson: {type: 'delete', payload: 1}});
-      expect(component.actionItems.length).toEqual(0);
-
-    });
-
-    it('should add action items when a message is received', () => {
-      component.ngOnInit();
-      mockActiveRoute.params.next({teamId: 1});
-      (mockWebsocketService.openWebsocket('team1') as Subject<any>).next({bodyJson: {}});
-
-      expect(component.actionItems.length).toEqual(0);
-
-      actionItemTopic.next({
-        bodyJson: {
-          type: 'post',
-          payload: {'id': 1, 'task': 'hi', 'completed': false, 'teamId': 'test', 'assignee': ''}
-        }
+        component.ngOnInit();
+        verify(websocketService.openWebsocket(fakeTeamId)).called();
       });
 
-      expect(component.actionItems.length).toEqual(1);
-    });
+      it('should not open the websocket if the state is already opened', () => {
+        when(websocketService.getWebsocketState()).thenReturn(WebSocket.OPEN);
 
-    it('should update the save checker timestamp when any thought message is recieved successfully', () => {
-      component.ngOnInit();
-      mockActiveRoute.params.next({teamId: 1});
-      (mockWebsocketService.openWebsocket('team1') as Subject<any>).next({bodyJson: {}});
-
-      actionItemTopic.next({
-        bodyJson: {
-          type: 'post',
-          payload: {}
-        }
+        component.ngOnInit();
+        verify(websocketService.openWebsocket(fakeTeamId)).never();
       });
-
-      expect(mockSaveCheckerService.updateTimestamp).toHaveBeenCalled();
-    });
-
-    it('should update action items when a message is received', () => {
-      component.ngOnInit();
-      mockActiveRoute.params.next({teamId: 1});
-      (mockWebsocketService.openWebsocket('team1') as Subject<any>).next({bodyJson: {}});
-
-      expect(component.actionItems.length).toEqual(0);
-
-      actionItemTopic.next({
-        bodyJson: {
-          type: 'post',
-          payload: {'id': 1, 'task': 'hi', 'completed': false, 'teamId': 'test', 'assignee': ''}
-        }
-      });
-
-      expect(component.actionItems.length).toEqual(1);
-
-      const updatedActionItem = {
-        'id': 1,
-        'task': 'hi phil',
-        'completed': false,
-        'teamId': 'test',
-        'assignee': '',
-        state: 'active'
-      };
-      actionItemTopic.next({bodyJson: {type: 'put', payload: updatedActionItem}});
-
-      expect(component.actionItems.length).toEqual(1);
-      expect(component.actionItems[0]).toEqual(updatedActionItem);
-
-    });
-
-    it('should subscribe to the resetThoughts event on the thoughts service', () => {
-      component.ngOnInit();
-      mockActiveRoute.params.next({teamId: 1});
-
-      expect(mockThoughtService.resetThoughtsObserver.subscribe).toHaveBeenCalled();
-    });
-
-  });
-
-  describe('resetThoughts', () => {
-    it('should clear the thoughts map', () => {
-      component.thoughtsArray = [emptyThought()];
-      component.resetThoughts();
-      expect(component.thoughtsArray.length).toEqual(0);
     });
   });
 
   describe('onEndRetro', () => {
-    it('should create a board', function () {
-      component.thoughtService = jasmine.createSpyObj({
-        deleteAllThoughts: null
-      });
-      component.teamId = 'teamId';
-      component.thoughtsArray = [emptyThoughtWithColumn()];
+
+    const expectedThoughts = [emptyThought(), emptyThought()];
+
+    beforeEach(() => {
+      component.teamId = fakeTeamId;
+
+      expectedThoughts[0].discussed = false;
+      expectedThoughts[0].id = 0;
+
+      expectedThoughts[1].discussed = true;
+      expectedThoughts[1].id = 1;
+
+      when(boardService.createBoard(anything(), anything())).thenReturn(of(null));
+    });
+
+    it('should create a board if there are thoughts to archive', () => {
+      component.columnsAggregation = [emptyColumnResponse()];
+      component.columnsAggregation[0].items.active = [expectedThoughts[0]];
+      component.columnsAggregation[0].items.completed = [expectedThoughts[1]];
+
       component.onEndRetro();
-      expect(component.boardService.createBoard).toHaveBeenCalledWith('teamId', [emptyThoughtWithColumn()]);
+      verify(boardService.createBoard(anything(), anything())).called();
     });
 
-    it('should clear the thoughtsArray', () => {
-      component.thoughtService = jasmine.createSpyObj({
-        deleteAllThoughts: null
-      });
-      component.teamId = 'teamId';
-      component.thoughtsArray = [emptyThoughtWithColumn()];
+    it('should not create a board if there are no thoughts to archive', () => {
+      component.columnsAggregation = [emptyColumnResponse()];
+
       component.onEndRetro();
-      createBoardSubject.next({});
-      expect(component.thoughtsArray.length).toBe(0);
+      verify(boardService.createBoard(anything(), anything())).never();
+    });
+
+    it('should emit the end retro event', () => {
+      component.retroEnded = jasmine.createSpyObj({emit: null});
+      component.onEndRetro();
+
+      expect(component.retroEnded.emit).toHaveBeenCalled();
     });
   });
 
-  describe('isSelectedIndex', () => {
-
-    it('should have a default selected index of 0', () => {
-      const result = component.isSelectedIndex(0);
-      expect(result).toBeTruthy();
-    });
-
-    it('should return false when the index passed in is not the selected index', () => {
-      const fakeIndex = 1;
-      component.selectedIndex = 0;
-      const result = component.isSelectedIndex(fakeIndex);
-      expect(result).toBeFalsy();
-    });
-
-    it('should return true when the index passed in is the selected index', () => {
-      const fakeIndex = 0;
-      component.selectedIndex = 0;
-      const result = component.isSelectedIndex(fakeIndex);
-      expect(result).toBeTruthy();
-    });
-  });
-
-  describe('setSelectedIndex', () => {
-
-    it('should set the selected index to the index passed in', () => {
-      const fakeIndex = 2;
-      component.setSelectedIndex(fakeIndex);
-      expect(component.selectedIndex).toEqual(fakeIndex);
-    });
-  });
-
-  describe('incrementSelectedIndex', () => {
-
-    beforeEach(() => {
-      component.columns = fakeColumnSet();
-    });
-
-    it('should increase the selected index by one, if not already at max', () => {
-      const expectedIndex = 3;
-      component.selectedIndex = 2;
-      component.incrementSelectedIndex();
-      expect(component.selectedIndex).toEqual(expectedIndex);
-    });
-
-    it('should not increase the selected index, if already at max', () => {
-      const expectedIndex = 3;
-      component.selectedIndex = 3;
-      component.incrementSelectedIndex();
-      expect(component.selectedIndex).toEqual(expectedIndex);
-    });
-
-  });
-
-  describe('decrementSelectedIndex', () => {
-
-    beforeEach(() => {
-      component.columns = fakeColumnSet();
-    });
-
-    it('should decrease the selected index by one, if not already at min', () => {
-      const expectedIndex = 1;
-      component.selectedIndex = 2;
-      component.decrementSelectedIndex();
-      expect(component.selectedIndex).toEqual(expectedIndex);
-    });
-
-    it('should not decrease the selected index, if already at 0', () => {
-      const expectedIndex = 0;
-      component.selectedIndex = 0;
-      component.decrementSelectedIndex();
-      expect(component.selectedIndex).toEqual(expectedIndex);
-    });
-
-  });
-
-
-  describe('actionItemsIndexIsSelected', () => {
-
-    it('should return true if the selected index is 3', () => {
-      const fakeIndex = 3;
-      component.setSelectedIndex(fakeIndex);
-      expect(component.actionItemsIndexIsSelected()).toBeTruthy();
-    });
-
-    it('should return false if the selected index is not 3', () => {
-      const fakeIndex = 2;
-      component.setSelectedIndex(fakeIndex);
-      expect(component.actionItemsIndexIsSelected()).toBeFalsy();
-    });
-  });
-
-  describe('getActionItems', () => {
-
-    const nullDateActionItem = emptyActionItem();
-    const earliestActionItem = emptyActionItem();
-    const middleActionItem = emptyActionItem();
-    const latestActionItem = emptyActionItem();
-
-    beforeEach(() => {
-      nullDateActionItem.id = 4;
-      nullDateActionItem.dateCreated = null;
-
-      earliestActionItem.id = 1;
-      earliestActionItem.dateCreated = moment().format();
-
-      middleActionItem.id = 2;
-      middleActionItem.dateCreated = moment().subtract(1, 'd').format();
-
-      latestActionItem.id = 3;
-      latestActionItem.dateCreated = moment().subtract(2, 'd').format();
-
-      component.actionItems = [
-        latestActionItem,
-        earliestActionItem,
-        middleActionItem
-      ];
-    });
-
-    it('should default to returning an unsorted list', () => {
-      const actionItems = component.getActionItems();
-      expect(actionItems[0].id).toEqual(3);
-      expect(actionItems[1].id).toEqual(1);
-      expect(actionItems[2].id).toEqual(2);
-    });
-
-    it('should return a decending sorted list of action items', () => {
-      component.actionItemsAreSorted = true;
-      const actionItems = component.getActionItems();
-      expect(actionItems[0].id).toEqual(1);
-      expect(actionItems[1].id).toEqual(2);
-      expect(actionItems[2].id).toEqual(3);
-    });
-
-    it('should return a unsort a previously sorted list of action items', () => {
-      component.actionItemsAreSorted = true;
-      component.getActionItems();
-
-      component.actionItemsAreSorted = false;
-      const actionItems = component.getActionItems();
-      expect(actionItems[0].id).toEqual(3);
-      expect(actionItems[1].id).toEqual(1);
-      expect(actionItems[2].id).toEqual(2);
-    });
-
-    it('should return a decending sorted list of action items with null dates at the bottom', () => {
-      component.actionItems = [
-        latestActionItem,
-        earliestActionItem,
-        nullDateActionItem,
-        middleActionItem
-      ];
-
-      component.actionItemsAreSorted = true;
-      const actionItems = component.getActionItems();
-      expect(actionItems[0].id).toEqual(1);
-      expect(actionItems[1].id).toEqual(2);
-      expect(actionItems[2].id).toEqual(3);
-      expect(actionItems[3].id).toEqual(nullDateActionItem.id);
-    });
-
-  });
-
-  describe('onActionItemsSortChanged', () => {
-
-    it('should set the sort flag on action items to true', () => {
-      component.onActionItemsSortChanged(true);
-      expect(component.actionItemsAreSorted).toBeTruthy();
-    });
-
-    it('should set the sort flag on action items to false', () => {
-      component.onActionItemsSortChanged(true);
-      component.onActionItemsSortChanged(false);
-      expect(component.actionItemsAreSorted).toBeFalsy();
-    });
-  });
-
-  describe('unsortedAndUncompletedActionItems', () => {
-
-    beforeEach(() => {
-      component.actionItems = [emptyActionItem(), emptyActionItem(), emptyActionItem()];
-      component.actionItems[1].completed = true;
-    });
-
-    it('should return the list of action items that are unsorted and not completed', () => {
-      expect(component.unsortedAndUncompletedActionItems.length).toEqual(2);
-    });
-  });
 });

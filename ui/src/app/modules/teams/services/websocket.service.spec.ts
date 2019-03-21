@@ -187,8 +187,8 @@ describe('WebsocketService', () => {
       service.deleteThought(fakeThought);
 
       expect(service.stompClient.send).toHaveBeenCalledWith(
-        `/app/${teamId}/thought/${fakeThought.id}/delete`,
-        null
+        `/app/v2/${teamId}/thought/delete`,
+        JSON.stringify(fakeThought)
       );
     });
   });
@@ -291,8 +291,8 @@ describe('WebsocketService', () => {
       service.deleteActionItem(fakeActionItem);
 
       expect(service.stompClient.send).toHaveBeenCalledWith(
-        `/app/${teamId}/action-item/${fakeActionItem.id}/delete`,
-        null
+        `/app/${teamId}/action-item/delete`,
+        JSON.stringify(fakeActionItem)
       );
     });
   });

@@ -15,10 +15,11 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ActionItem} from '../../domain/action-item';
 import * as $ from 'jquery';
 import {Themes} from '../../domain/Theme';
+import {ActionItemService} from '../../teams/services/action.service';
 
 const ESC_KEY = 27;
 
@@ -30,18 +31,32 @@ const ESC_KEY = 27;
     '[style.display]': 'visible ? "flex": "none"'
   }
 })
-export class ActionsRadiatorViewComponent {
+export class ActionsRadiatorViewComponent implements OnInit {
 
   @Input() visible = false;
   @Input() theme: Themes = Themes.Light;
-  @Input() actionItems: Array<ActionItem>;
+  @Input() teamId: string;
 
   @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  actionItems: Array<ActionItem>;
 
   timeOutInterval = 1000 * 75;
   scrollInterval = 1000 * 25;
   pageIsAutoScrolling = false;
   scrollingIntervalId: any = null;
+
+  constructor(private actionItemService: ActionItemService) {
+
+  }
+
+  ngOnInit(): void {
+
+    this.actionItemService.fetchActionItems(this.teamId).subscribe(actionItems => {
+      this.actionItems = actionItems;
+      console.log(this.actionItems);
+    });
+  }
 
   get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;

@@ -42,7 +42,12 @@ describe('ActionsColumnComponent', () => {
       dateCreated: null
     };
 
-    component.actionItems = [fakeActionItem];
+    component.actionItemAggregation = {
+      id: 1,
+      items: {active: [fakeActionItem], completed: []},
+      title: 'Action Item',
+      topic: 'action'
+    };
   });
 
   it('should create', () => {
