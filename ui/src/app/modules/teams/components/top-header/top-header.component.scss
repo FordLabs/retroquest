@@ -46,7 +46,6 @@
     display: flex;
     flex-direction: row;
     height: 100%;
-    justify-content: left;
     position: relative;
     width: 100%;
 
@@ -99,6 +98,7 @@
       font-weight: bold;
       overflow: hidden;
       text-overflow: ellipsis;
+      width: 50px;
 
       @media only screen and (max-width: 610px) {
         font-size: 1rem;
@@ -111,32 +111,80 @@
       }
     }
 
-    .last-saved-text {
+    .center-content {
       flex: 1;
-      font-size: .8rem;
-      opacity: .5;
-      text-align: right;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-      @media only screen and (max-width: 610px) {
-        display: none;
+      .view-button-container {
+
+        rq-button {
+          height: 100%;
+          padding: 0;
+          width: auto;
+          font-size: 1.1rem;
+
+          &:not(.selected) {
+            color: opacity($wet-asphalt, .4);
+
+            &.dark-theme {
+              color: opacity($clouds, .4);
+            }
+          }
+        }
+
+        .selection-underline {
+          width: 100%;
+          height: 4px;
+          background-color: $wet-asphalt;
+          margin: 6px auto 0;
+          border-radius: 6px;
+        }
       }
+
+      .horizontal-separator {
+        height: 1.1rem;
+        margin: 0 12px;
+      }
+
     }
 
-    .settings-button {
-      cursor: pointer;
-      font-size: 1.3rem;
-      margin-left: 18px;
-      position: relative;
+    .right-content {
+      align-self: flex-end;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      height: 100%;
+      width: 200px;
 
-      @media only screen and (max-width: 610px) {
-        position: absolute;
-        right: 12px;
-        top: 50%;
-        transform: translateY(-50%);
+      .last-saved-text {
+        font-size: .8rem;
+        opacity: .5;
+        text-align: right;
+
+        @media only screen and (max-width: 610px) {
+          display: none;
+        }
       }
 
-      &:hover {
-        color: $turquoise;
+      .settings-button {
+        cursor: pointer;
+        font-size: 1.3rem;
+        margin-left: 18px;
+        position: relative;
+
+        @media only screen and (max-width: 610px) {
+          position: absolute;
+          right: 12px;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
+        &:hover {
+          color: $turquoise;
+        }
       }
     }
   }

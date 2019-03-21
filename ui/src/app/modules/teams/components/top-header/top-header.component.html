@@ -39,8 +39,43 @@
     }"
   >{{teamName}}
   </div>
-  <div class="last-saved-text">{{lastSavedText}}</div>
-  <div class="settings-button fas fa-cog" (click)="settingsDialog.show()"></div>
+
+  <div class="center-content">
+    <div class="view-button-container">
+      <rq-button
+        class="retro-view-button"
+        type="secondary"
+        text="retro"
+        [theme]="theme"
+        [ngClass]="{'selected': isSelected('retro')}"
+        (click)="changeView('retro')"
+      ></rq-button>
+
+      <div class="selection-underline" *ngIf="isSelected('retro')"></div>
+    </div>
+
+    <div class="horizontal-separator" [ngClass]="{'dark-theme': darkThemeIsEnabled}"></div>
+
+    <div class="view-button-container">
+
+      <rq-button
+        class="archives-view-button"
+        type="secondary"
+        text="archives"
+        [theme]="theme"
+        [ngClass]="{'selected': isSelected('archives')}"
+        (click)="changeView('archives')"
+      ></rq-button>
+
+      <div class="selection-underline" *ngIf="isSelected('archives')"></div>
+    </div>
+
+  </div>
+
+  <div class="right-content">
+    <div class="last-saved-text">{{lastSavedText}}</div>
+    <div class="settings-button fas fa-cog" (click)="settingsDialog.show()"></div>
+  </div>
 
 </div>
 

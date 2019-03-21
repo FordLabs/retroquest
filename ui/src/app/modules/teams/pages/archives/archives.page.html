@@ -24,26 +24,10 @@
     <rq-top-header
       [teamName]="teamName"
       [theme]="theme"
+      [teamId]="teamId"
     ></rq-top-header>
 
-    <div
-      id="headerBottom"
-      [ngClass]="{
-        'dark-theme': darkThemeIsEnabled
-      }"
-    >
-      <div class="header-bottom-content center-content">
-
-        <a routerLink="/team/{{teamId}}">
-          <rq-button
-            type="secondary"
-            text="current board"
-            [theme]="theme"
-          ></rq-button>
-        </a>
-
-      </div>
-    </div>
+    <div id="headerBottom" [ngClass]="{'dark-theme': darkThemeIsEnabled}"></div>
 
   </header>
 

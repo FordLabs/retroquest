@@ -17,25 +17,8 @@
 
 <div id="page">
   <header>
-    <rq-top-header [teamName]="teamName"></rq-top-header>
-    <div id="headerBottom">
-      <div class="header-bottom-content center-content">
-        <a routerLink="/team/{{teamId}}/archives">
-          <rq-button
-            type="secondary"
-            text="archives"
-            [theme]="theme"
-          ></rq-button>
-        </a>
-        <a routerLink="/team/{{teamId}}">
-          <rq-button
-            type="secondary"
-            text="current board"
-            [theme]="theme"
-          ></rq-button>
-        </a>
-      </div>
-    </div>
+    <rq-top-header [teamName]="teamName" [teamId]="teamId"></rq-top-header>
+    <div id="headerBottom"></div>
   </header>
 
   <div

@@ -180,7 +180,6 @@ export class TeamPageComponent implements OnInit {
   }
 
   public incrementSelectedIndex(): void {
-    console.log(this.selectedIndex, this.columnsAggregation.length);
     if (this.selectedIndex < this.columnsAggregation.length) {
       this.selectedIndex++;
     }

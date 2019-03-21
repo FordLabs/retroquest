@@ -54,7 +54,6 @@ export class ActionsRadiatorViewComponent implements OnInit {
 
     this.actionItemService.fetchActionItems(this.teamId).subscribe(actionItems => {
       this.actionItems = actionItems;
-      console.log(this.actionItems);
     });
   }
 

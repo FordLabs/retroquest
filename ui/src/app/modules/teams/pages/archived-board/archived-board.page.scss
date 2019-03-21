@@ -172,53 +172,5 @@ header {
       width: 100%;
     }
 
-    .header-bottom-content {
-      align-self: center;
-      box-sizing: inherit;
-      display: flex;
-      flex-direction: row;
-
-      height: inherit;
-
-      justify-content: flex-end;
-      margin: 0 auto;
-      max-width: $desktop-max-width;
-      min-width: inherit;
-
-      padding-left: $global-side-padding;
-      padding-right: $global-side-padding;
-
-      @media only screen and (max-width: 610px) {
-        height: $header-bottom-height;
-        min-width: 0;
-        padding-left: 12px;
-        padding-right: 12px;
-        width: 100%;
-      }
-
-      a {
-        color: inherit;
-        margin: 0;
-        padding: 0;
-        width: auto;
-
-        rq-button {
-          height: 100%;
-          width: auto;
-        }
-      }
-
-      &.center-content {
-        justify-content: center;
-      }
-
-      .button-icon {
-        display: none;
-
-        @media only screen and (max-width: 610px) {
-          display: block;
-        }
-      }
-    }
   }
 }

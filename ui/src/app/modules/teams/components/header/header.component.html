@@ -23,6 +23,7 @@
     [lastSavedText]="lastSavedText"
     [teamName]="teamName"
     (themeChanged)="themeChanged.emit($event)"
+    (radiatorViewClicked)="onActionsRadiatorViewClicked()"
   >
   </rq-top-header>
 
@@ -58,18 +59,6 @@
         <i class="far fa-comments button-icon"></i>
       </button>
 
-      <a
-        class="archived-boards-link"
-        routerLink="/team/{{teamId}}/archives"
-      >
-        <rq-button
-          type="secondary"
-          text="archives"
-          [theme]="theme"
-        >
-        </rq-button>
-        <i class="fas fa-archive button-icon"></i>
-      </a>
 
       <button
         class="rq-button-secondary download-button"
