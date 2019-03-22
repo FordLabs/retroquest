@@ -32,10 +32,8 @@ export class TeamPageQueryParamGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
 
-    const teamId = next.queryParams.teamId;
-    if ( teamId && teamId !== '' ) {
-      this.router.navigateByUrl(`team/${teamId}`);
-    } else {
+    const teamId = next.params.teamId;
+    if ( !teamId || teamId === '' ) {
       this.router.navigate( ['login'] );
     }
 

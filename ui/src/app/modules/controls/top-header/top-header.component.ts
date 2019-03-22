@@ -16,11 +16,9 @@
  */
 
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {Themes} from '../../../domain/Theme';
-import {SettingsDialogComponent} from '../../../controls/settings-dialog/settings-dialog.component';
+import {Themes} from '../../domain/Theme';
+import {SettingsDialogComponent} from '../settings-dialog/settings-dialog.component';
 import {Router} from '@angular/router';
-
-const CURRENT_VIEW_KEY = 'currentView';
 
 @Component({
   selector: 'rq-top-header',
@@ -34,7 +32,6 @@ export class TopHeaderComponent implements OnInit {
 
   @Input() theme: Themes = Themes.Light;
 
-  @Output() radiatorViewClicked: EventEmitter<void> = new EventEmitter();
   @Output() themeChanged: EventEmitter<Themes> = new EventEmitter();
 
   @ViewChild(SettingsDialogComponent) settingsDialog: SettingsDialogComponent;
@@ -45,10 +42,6 @@ export class TopHeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const currentView = localStorage.getItem(CURRENT_VIEW_KEY);
-    if (currentView) {
-      this.selectedView = currentView;
-    }
   }
 
   get darkThemeIsEnabled(): boolean {
@@ -61,7 +54,6 @@ export class TopHeaderComponent implements OnInit {
 
   changeView(view: string) {
     this.selectedView = view;
-    localStorage.setItem(CURRENT_VIEW_KEY, view);
 
     switch (view) {
       case 'retro': {

@@ -1,0 +1,18 @@
+<!--<rq-top-header-->
+  <!--[theme]="theme"-->
+  <!--[teamId]="teamId"-->
+  <!--[lastSavedText]="lastSavedText"-->
+  <!--[teamName]="teamName"-->
+  <!--(themeChanged)="$event"-->
+<!--&gt;-->
+<!--</rq-top-header>-->
+
+<rq-top-header
+  [theme]="theme"
+  [teamId]="teamId"
+  [teamName]="teamName"
+  (themeChanged)="emitThemeChanged($event)"
+>
+</rq-top-header>
+
+<router-outlet></router-outlet>

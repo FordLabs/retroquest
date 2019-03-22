@@ -33,6 +33,7 @@ import {BoardService} from '../../services/board.service';
 import {ColumnAggregationService} from '../../services/column-aggregation.service';
 import {ColumnResponse} from '../../../domain/column-response';
 import {Column} from '../../../domain/column';
+import {DataService} from "../../../data.service";
 
 @Component({
   selector: 'rq-team',
@@ -43,7 +44,7 @@ export class TeamPageComponent implements OnInit {
 
   @ViewChild('radiatorView') radiatorView: ActionsRadiatorViewComponent;
 
-  constructor(private activeRoute: ActivatedRoute,
+  constructor(private dataService: DataService,
               private teamsService: TeamService,
               private websocketService: WebsocketService,
               private saveCheckerService: SaveCheckerService,
@@ -89,39 +90,34 @@ export class TeamPageComponent implements OnInit {
   private isMobileView = (): boolean => window.innerWidth <= 610;
 
   ngOnInit(): void {
+    this.teamId = this.dataService.team.id;
+    this.teamName = this.dataService.team.name;
 
+    this.dataService.themeChanged.subscribe(theme => this.theme = theme);
 
     if (this.isMobileView()) {
       this.addTouchListeners();
     }
 
-    this.activeRoute.params.subscribe((params) => {
-      this.teamId = params.teamId;
-
-
-      this.columnAggregationService.getColumns(this.teamId).subscribe(
-        (body) => {
-          this.columnsAggregation = body.columns;
-        }
-      );
-
-      this.setTeamName();
-
-      if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
-        this.websocketInit();
+    this.columnAggregationService.getColumns(this.teamId).subscribe(
+      (body) => {
+        this.columnsAggregation = body.columns;
       }
+    );
 
-      this.websocketService.intervalId = this.globalWindowRef.setInterval(() => {
-        if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
-          this.websocketService.closeWebsocket();
-          this.websocketInit();
-        } else if (this.websocketService.getWebsocketState() === WebSocket.OPEN) {
-          this.websocketService.sendHeartbeat();
-        }
-      }, 1000 * 1);
 
-    });
+    if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
+      this.websocketInit();
+    }
 
+    this.websocketService.intervalId = this.globalWindowRef.setInterval(() => {
+      if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
+        this.websocketService.closeWebsocket();
+        this.websocketInit();
+      } else if (this.websocketService.getWebsocketState() === WebSocket.OPEN) {
+        this.websocketService.sendHeartbeat();
+      }
+    }, 1000 * 1);
   }
 
   private websocketInit() {

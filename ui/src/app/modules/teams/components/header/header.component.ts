@@ -40,7 +40,6 @@ export class HeaderComponent implements OnInit {
 
   @Output() endRetro: EventEmitter<void> = new EventEmitter<void>();
   @Output() actionsRadiatorViewClicked: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() themeChanged: EventEmitter<Themes> = new EventEmitter<Themes>();
 
   @ViewChild(FeedbackDialogComponent) feedbackDialog: FeedbackDialogComponent;
   @ViewChild(EndRetroDialogComponent) endRetroDialog: EndRetroDialogComponent;
@@ -56,7 +55,6 @@ export class HeaderComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.loadTheme();
   }
 
   get darkThemeIsEnabled(): boolean {
@@ -93,13 +91,7 @@ export class HeaderComponent implements OnInit {
     return 'Last change saved at ' + this.saveChecker.lastSavedDateTime;
   }
 
-  private loadTheme(): void {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      this.theme = parseTheme(savedTheme);
-      this.themeChanged.emit(this.theme);
-    }
-  }
+
 
   giveZipDownloadToUser() {
     this.http.get(this.getCsvUrl(), {responseType: 'blob'}).subscribe(csvData => {

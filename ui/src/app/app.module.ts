@@ -27,10 +27,13 @@ import {TokenInterceptor} from './modules/auth/token-interceptor/token.intercept
 import {TeamService} from './modules/teams/services/team.service';
 import {ControlsModule} from './modules/controls/controls.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
+import {ServiceWorkerModule} from '@angular/service-worker';
+import {environment} from '../environments/environment';
 import {Column} from './modules/domain/column';
 import {ColumnAggregationService} from './modules/teams/services/column-aggregation.service';
+import {TopHeaderComponent} from "./modules/controls/top-header/top-header.component";
+import { SubAppComponent } from './modules/sub-app/sub-app.component';
+import {DataService} from "./modules/data.service";
 
 @NgModule({
   declarations: [
@@ -46,10 +49,11 @@ import {ColumnAggregationService} from './modules/teams/services/column-aggregat
     RouterModule.forRoot([
       {path: '', redirectTo: 'create', pathMatch: 'full'}
     ]),
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production})
   ],
   providers: [
     TeamService,
+    DataService,
     ColumnAggregationService,
     {
       provide: HTTP_INTERCEPTORS,

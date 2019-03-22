@@ -15,11 +15,14 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Themes} from "./modules/domain/Theme";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'rq-root',
-  template: '<router-outlet></router-outlet>'
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
 

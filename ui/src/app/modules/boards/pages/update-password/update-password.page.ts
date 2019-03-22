@@ -76,7 +76,7 @@ export class UpdatePasswordComponent implements OnInit {
   }
 
   private handleResponse(response): void {
-    this.router.navigateByUrl(`/team/${this.teamId}`);
+    this.router.navigateByUrl(`team/${this.teamId}`);
   }
 
   private handleError(error) {

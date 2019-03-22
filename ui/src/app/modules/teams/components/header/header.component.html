@@ -17,16 +17,6 @@
 
 <header id="header">
 
-  <rq-top-header
-    [theme]="theme"
-    [teamId]="teamId"
-    [lastSavedText]="lastSavedText"
-    [teamName]="teamName"
-    (themeChanged)="themeChanged.emit($event)"
-    (radiatorViewClicked)="onActionsRadiatorViewClicked()"
-  >
-  </rq-top-header>
-
   <div
     id="headerBottom"
     [ngClass]="{
