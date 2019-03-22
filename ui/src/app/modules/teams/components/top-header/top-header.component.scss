@@ -73,10 +73,18 @@
     .left-content {
       align-items: center;
       display: flex;
+      font-size: 1.5rem;
       height: 100%;
       justify-content: center;
       left: 0;
       position: absolute;
+
+      @media only screen and (max-width: 610px) {
+        font-size: 1rem;
+        left: 0;
+        margin: 0 auto;
+        right: 0;
+      }
 
       .logo-link {
         height: 36px;
@@ -99,17 +107,11 @@
 
       #teamName {
         color: inherit;
-        font-size: 1.5rem;
+        font-size: inherit;
         font-weight: bold;
         overflow: hidden;
         text-overflow: ellipsis;
         width: 50px;
-
-        @media only screen and (max-width: 610px) {
-          font-size: 1rem;
-          margin: 0 auto;
-          text-align: center;
-        }
 
         &.dark-theme {
           color: opacity($clouds, .75);
@@ -127,6 +129,10 @@
       margin: 0 auto;
       position: absolute;
       right: 0;
+
+      @media only screen and (max-width: 610px) {
+        display: none;
+      }
 
       rq-button {
         box-shadow: none;
