@@ -30,7 +30,7 @@ export class TopHeaderComponent implements OnInit {
   @Input() lastSavedText: string;
   @Input() teamId: string;
 
-  @Input() theme: Themes = Themes.Light;
+  @Input() theme: Themes;
 
   @Output() themeChanged: EventEmitter<Themes> = new EventEmitter();
 

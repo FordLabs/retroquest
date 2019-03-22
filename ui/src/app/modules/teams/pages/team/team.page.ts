@@ -33,7 +33,7 @@ import {BoardService} from '../../services/board.service';
 import {ColumnAggregationService} from '../../services/column-aggregation.service';
 import {ColumnResponse} from '../../../domain/column-response';
 import {Column} from '../../../domain/column';
-import {DataService} from "../../../data.service";
+import {DataService} from '../../../data.service';
 
 @Component({
   selector: 'rq-team',

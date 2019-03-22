@@ -64,7 +64,12 @@
 
   </div>
 
-  <div class="right-content">
+  <div
+    class="right-content"
+    [ngClass]="{
+      'dark-theme': darkThemeIsEnabled
+    }"
+  >
     <div class="last-saved-text">{{lastSavedText}}</div>
     <div class="settings-button fas fa-cog" (click)="settingsDialog.show()"></div>
   </div>

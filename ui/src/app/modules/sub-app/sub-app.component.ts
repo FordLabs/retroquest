@@ -1,15 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {TeamService} from "../teams/services/team.service";
-import {DataService} from "../data.service";
-import {parseTheme, Themes} from "../domain/Theme";
+import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {TeamService} from '../teams/services/team.service';
+import {DataService} from '../data.service';
+import {parseTheme, Themes} from '../domain/Theme';
 
 @Component({
   selector: 'rq-sub-app',
   templateUrl: './sub-app.component.html',
   styleUrls: ['./sub-app.component.scss']
 })
-export class SubAppComponent implements OnInit {
+export class SubAppComponent implements OnInit, AfterViewInit {
 
   teamId: string;
   teamName: string;
@@ -22,7 +22,6 @@ export class SubAppComponent implements OnInit {
 
   ngOnInit() {
 
-    this.loadTheme();
 
     this.activatedRoute.params.subscribe((params) => {
       this.teamId = params.teamId;
@@ -32,12 +31,15 @@ export class SubAppComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit(): void {
+    setTimeout(_ => this.loadTheme());
+
+  }
+
   private loadTheme(): void {
     const savedTheme = localStorage.getItem('theme');
-    console.log(savedTheme);
     if (savedTheme) {
-      this.theme = parseTheme(savedTheme);
-      this.dataService.themeChanged.emit(this.theme);
+      this.emitThemeChanged(parseTheme(savedTheme));
     }
   }
 
