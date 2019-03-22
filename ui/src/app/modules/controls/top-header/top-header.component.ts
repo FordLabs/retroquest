@@ -36,12 +36,17 @@ export class TopHeaderComponent implements OnInit {
 
   @ViewChild(SettingsDialogComponent) settingsDialog: SettingsDialogComponent;
 
-  selectedView = '';
+  @Input() selectedView = '';
 
   constructor(private router: Router) {
   }
 
   ngOnInit(): void {
+    if (this.router.url.endsWith(this.teamId)) {
+      this.changeView('retro');
+    } else if (this.router.url.includes('archives')) {
+      this.changeView('archives');
+    }
   }
 
   get darkThemeIsEnabled(): boolean {

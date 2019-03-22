@@ -22,7 +22,6 @@ export class SubAppComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
 
-
     this.activatedRoute.params.subscribe((params) => {
       this.teamId = params.teamId;
       this.dataService.team.id = this.teamId;
@@ -33,7 +32,6 @@ export class SubAppComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     setTimeout(_ => this.loadTheme());
-
   }
 
   private loadTheme(): void {
