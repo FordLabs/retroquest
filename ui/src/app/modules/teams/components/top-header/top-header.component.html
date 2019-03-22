@@ -41,34 +41,22 @@
   </div>
 
   <div class="center-content">
-    <div class="view-button-container">
-      <rq-button
-        class="retro-view-button"
-        type="secondary"
-        text="retro"
-        [theme]="theme"
-        [ngClass]="{'selected': isSelected('retro')}"
-        (click)="changeView('retro')"
-      ></rq-button>
+    <rq-button
+      class="retro-view-button"
+      [type]="isSelected('retro') ? 'primary' : 'secondary'"
+      text="retro"
+      [theme]="theme"
+      [ngClass]="{'selected': isSelected('retro')}"
+      (click)="changeView('retro')"
+    ></rq-button>
 
-      <div class="selection-underline" *ngIf="isSelected('retro')"></div>
-    </div>
-
-    <div class="horizontal-separator" [ngClass]="{'dark-theme': darkThemeIsEnabled}"></div>
-
-    <div class="view-button-container">
-
-      <rq-button
-        class="archives-view-button"
-        type="secondary"
-        text="archives"
-        [theme]="theme"
-        [ngClass]="{'selected': isSelected('archives')}"
-        (click)="changeView('archives')"
-      ></rq-button>
-
-      <div class="selection-underline" *ngIf="isSelected('archives')"></div>
-    </div>
+    <rq-button
+      class="archives-view-button"
+      [type]="isSelected('archives') ? 'primary' : 'secondary'"
+      text="archives"
+      [theme]="theme"
+      (click)="changeView('archives')"
+    ></rq-button>
 
   </div>
 

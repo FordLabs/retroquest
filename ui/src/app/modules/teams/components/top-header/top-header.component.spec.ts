@@ -16,15 +16,44 @@
  */
 
 import {TopHeaderComponent} from './top-header.component';
+import {Router} from '@angular/router';
 
 describe('TopHeaderComponent', () => {
   let component: TopHeaderComponent;
+  let router: Router;
+
+  const fakeId = 'fake-id';
 
   beforeEach(() => {
-    component = new TopHeaderComponent();
+    router = jasmine.createSpyObj({navigateByUrl: null});
+    component = new TopHeaderComponent(router);
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('changeView', () => {
+
+    beforeEach(() => {
+      component.teamId = fakeId;
+    });
+
+    it('should change the selected view to the one passed in', () => {
+      component.selectedView = 'hello';
+      component.changeView('world');
+      expect(component.selectedView).toEqual('world');
+    });
+
+    it('should navigate to the retro board', () => {
+      component.changeView('retro');
+      expect(router.navigateByUrl).toHaveBeenCalledWith(`/team/${fakeId}`);
+    });
+
+    it('should navigate to the archives board', () => {
+      component.changeView('archives');
+      expect(router.navigateByUrl).toHaveBeenCalledWith(`/team/${fakeId}/archives`);
+    });
+
   });
 });
