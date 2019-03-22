@@ -16,28 +16,31 @@
   -->
 
 <div class="header-top-content">
-  <a routerLink="/" class="logo-link">
-    <img
-      [src]="darkThemeIsEnabled ? '/assets/icons/icon-light-72x72.png' : '/assets/icons/icon-72x72.png'"
-      title="RetroQuest"
-      id="logo"
+
+  <div class="left-content">
+    <a routerLink="/" class="logo-link">
+      <img
+        [src]="darkThemeIsEnabled ? '/assets/icons/icon-light-72x72.png' : '/assets/icons/icon-72x72.png'"
+        title="RetroQuest"
+        id="logo"
+        [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+      />
+    </a>
+    <div
+      class="horizontal-separator"
       [ngClass]="{
         'dark-theme': darkThemeIsEnabled
       }"
-    />
-  </a>
-  <div
-    class="horizontal-separator"
-    [ngClass]="{
-        'dark-theme': darkThemeIsEnabled
-      }"
-  ></div>
-  <div
-    id="teamName"
-    [ngClass]="{
+    ></div>
+    <div
+      id="teamName"
+      [ngClass]="{
       'dark-theme': darkThemeIsEnabled
     }"
-  >{{teamName}}
+    >{{teamName}}
+    </div>
   </div>
 
   <div class="center-content">
@@ -55,6 +58,7 @@
       [type]="isSelected('archives') ? 'primary' : 'secondary'"
       text="archives"
       [theme]="theme"
+      [ngClass]="{'selected': isSelected('archives')}"
       (click)="changeView('archives')"
     ></rq-button>
 

@@ -41,10 +41,7 @@
   }
 
   .header-top-content {
-    align-items: center;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: row;
     height: 100%;
     position: relative;
     width: 100%;
@@ -73,51 +70,63 @@
       }
     }
 
-    .logo-link {
-      height: 36px;
-      margin: 0;
-      padding: 0;
+    .left-content {
+      align-items: center;
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      left: 0;
+      position: absolute;
 
-      @media only screen and (max-width: 610px) {
-        height: 24px;
-      }
-
-      #logo {
-        border-radius: 6px;
-        height: inherit;
+      .logo-link {
+        height: 36px;
+        margin: 0;
+        padding: 0;
 
         @media only screen and (max-width: 610px) {
-          display: none;
+          height: 24px;
+        }
+
+        #logo {
+          border-radius: 6px;
+          height: inherit;
+
+          @media only screen and (max-width: 610px) {
+            display: none;
+          }
         }
       }
-    }
 
-    #teamName {
-      color: inherit;
-      font-size: 1.5rem;
-      font-weight: bold;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      width: 50px;
+      #teamName {
+        color: inherit;
+        font-size: 1.5rem;
+        font-weight: bold;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 50px;
 
-      @media only screen and (max-width: 610px) {
-        font-size: 1rem;
-        margin: 0 auto;
-        text-align: center;
-      }
+        @media only screen and (max-width: 610px) {
+          font-size: 1rem;
+          margin: 0 auto;
+          text-align: center;
+        }
 
-      &.dark-theme {
-        color: opacity($clouds, .75);
+        &.dark-theme {
+          color: opacity($clouds, .75);
+        }
       }
     }
 
     .center-content {
       align-items: center;
       display: flex;
-      flex: 1;
       height: 100%;
       justify-content: center;
 
+      left: 0;
+      margin: 0 auto;
+      position: absolute;
+      right: 0;
 
       rq-button {
         box-shadow: none;
@@ -142,16 +151,15 @@
         height: 1.1rem;
         margin: 0 12px;
       }
-
     }
 
     .right-content {
       align-items: center;
-      align-self: flex-end;
       display: flex;
+
       height: 100%;
-      justify-content: flex-end;
-      width: 200px;
+      position: absolute;
+      right: 0;
 
       .last-saved-text {
         font-size: .8rem;
