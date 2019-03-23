@@ -16,11 +16,10 @@
  */
 
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, Router} from '@angular/router';
 import {Observable, Subscriber} from 'rxjs';
 import {TeamService} from '../../teams/services/team.service';
 import {AuthService} from '../auth.service';
-import {url} from 'inspector';
 
 @Injectable({
   providedIn: 'root'

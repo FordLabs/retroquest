@@ -52,10 +52,16 @@ export class SubAppComponent implements OnInit, AfterViewInit {
   }
 
   private loadTheme(): void {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      this.emitThemeChanged(parseTheme(savedTheme));
+
+    if (window.location.href.includes('archives')) {
+      this.emitThemeChanged(Themes.Light);
+    } else {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        this.emitThemeChanged(parseTheme(savedTheme));
+      }
     }
+
   }
 
   private setTeamName(): void {

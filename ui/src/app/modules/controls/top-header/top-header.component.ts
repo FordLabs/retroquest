@@ -16,7 +16,7 @@
  */
 
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {Themes} from '../../domain/Theme';
+import {parseTheme, Themes} from '../../domain/Theme';
 import {SettingsDialogComponent} from '../settings-dialog/settings-dialog.component';
 import {Router} from '@angular/router';
 
@@ -66,6 +66,8 @@ export class TopHeaderComponent implements OnInit {
         break;
       }
       case 'archives': {
+        this.theme = Themes.Light;
+        this.themeChanged.emit(this.theme);
         this.router.navigateByUrl(`/team/${this.teamId}/archives`);
         break;
       }
