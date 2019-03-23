@@ -16,10 +16,11 @@
  */
 
 import {Observable} from 'rxjs/internal/Observable';
-import {ActivatedRouteSnapshot, UrlSegment} from '@angular/router';
+import {ActivatedRouteSnapshot, RouterStateSnapshot, UrlSegment} from '@angular/router';
 import {Subject} from 'rxjs/internal/Subject';
 import {AuthGuard} from './auth.guard';
 import {AuthService} from '../auth.service';
+import {mock} from 'ts-mockito';
 
 describe('AuthGuard', () => {
 
@@ -42,14 +43,9 @@ describe('AuthGuard', () => {
 
   it('should navigate to the login page when navigating to a team page you are not authorized to see', () => {
     const mockNextRouteSnapshot = new ActivatedRouteSnapshot();
-    mockNextRouteSnapshot.url = [
-      new UrlSegment('team', null),
-      new UrlSegment('incorrect-team', null)
-    ];
+    const mockState = { url: '/team/incorrect-team'};
 
-    const mockState = null;
-
-    (guard.canActivate(mockNextRouteSnapshot, mockState) as Observable<boolean>).subscribe(() => {
+    (guard.canActivate(mockNextRouteSnapshot, mockState as any) as Observable<boolean>).subscribe(() => {
       expect(mockRouter.navigate).toHaveBeenCalledWith(['login', 'incorrect-team']);
     });
     mockTeamService.validateTeamId().error();
@@ -58,14 +54,9 @@ describe('AuthGuard', () => {
   it('should navigate to the desired page when you are authorized to see it with the cookie being present', () => {
     AuthService.setToken('some token');
     const mockNextRouteSnapshot = new ActivatedRouteSnapshot();
-    mockNextRouteSnapshot.url = [
-      new UrlSegment('team', null),
-      new UrlSegment('incorrect-team', null)
-    ];
+    const mockState = { url: '/team/incorrect-team'};
 
-    const mockState = null;
-
-    (guard.canActivate(mockNextRouteSnapshot, mockState) as Observable<boolean>).subscribe(() => {
+    (guard.canActivate(mockNextRouteSnapshot, mockState as any) as Observable<boolean>).subscribe(() => {
       expect(mockRouter.navigate).not.toHaveBeenCalled();
     });
     mockTeamService.validateTeamId().next();
@@ -73,14 +64,9 @@ describe('AuthGuard', () => {
 
   it('should navigate to the login page if you are unauthorized to view your desired team page', () => {
     const mockNextRouteSnapshot = new ActivatedRouteSnapshot();
-    mockNextRouteSnapshot.url = [
-      new UrlSegment('team', null),
-      new UrlSegment('incorrect-team', null)
-    ];
+    const mockState = { url: '/team/incorrect-team'};
 
-    const mockState = null;
-
-    (guard.canActivate(mockNextRouteSnapshot, mockState) as Observable<boolean>).subscribe(() => {
+    (guard.canActivate(mockNextRouteSnapshot, mockState as any) as Observable<boolean>).subscribe(() => {
       expect(mockRouter.navigate).toHaveBeenCalledWith(['login', 'incorrect-team']);
     });
     mockTeamService.validateTeamId().next();

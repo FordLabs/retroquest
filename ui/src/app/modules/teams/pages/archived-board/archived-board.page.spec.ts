@@ -27,6 +27,7 @@ describe('ArchivedBoardPageComponent', () => {
       null,
       null,
       null,
+      null,
       null
     );
 

@@ -28,6 +28,7 @@ import {BoardService} from '../../services/board.service';
 import {Themes} from '../../../domain/Theme';
 import {ColumnResponse} from '../../../domain/column-response';
 import {ColumnAggregationService} from '../../services/column-aggregation.service';
+import {DataService} from '../../../data.service';
 
 @Component({
   selector: 'rq-archived-board',
@@ -36,7 +37,8 @@ import {ColumnAggregationService} from '../../services/column-aggregation.servic
 })
 export class ArchivedBoardPageComponent implements OnInit {
 
-  constructor(private activeRoute: ActivatedRoute,
+  constructor(private dataService: DataService,
+              private activatedRoute: ActivatedRoute,
               private teamsService: TeamService,
               private thoughtService: ThoughtService,
               private columnService: ColumnService,
@@ -60,21 +62,21 @@ export class ArchivedBoardPageComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.activeRoute.params.subscribe((params) => {
-      this.teamId = params.teamId;
+    this.teamId = this.dataService.team.id;
+    this.teamName = this.dataService.team.name;
+
+    this.columnAggregationService.getColumns(this.teamId).subscribe(
+      response => {
+        response.columns.map(column => {
+          column.items.active = [];
+          column.items.completed = [];
+        });
+        this.columnAggregations = response.columns;
+      }
+    );
+
+    this.activatedRoute.params.subscribe(params => {
       this.boardId = params.boardId;
-
-      this.columnAggregationService.getColumns(this.teamId).subscribe(
-        response => {
-          response.columns.map(column => {
-            column.items.active = [];
-            column.items.completed = [];
-          });
-          this.columnAggregations = response.columns;
-        }
-      );
-
-      this.getTeamName();
       this.getThoughts();
     });
   }
@@ -86,12 +88,6 @@ export class ArchivedBoardPageComponent implements OnInit {
           aggregation.items.completed = thoughts.filter(thought => thought.topic === aggregation.topic);
         });
       });
-  }
-
-  private getTeamName(): void {
-    this.teamsService.fetchTeamName(this.teamId).subscribe(
-      (teamName) => this.teamName = teamName
-    );
   }
 
   public isSelectedIndex(index: number): boolean {

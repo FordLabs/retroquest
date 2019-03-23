@@ -51,7 +51,7 @@ import {DataService} from '../data.service';
         path: 'team/:teamId', canActivate: [TeamPageQueryParamGuard], component: SubAppComponent
         , children: [
           {path: '', component: TeamPageComponent, pathMatch: 'full'},
-          {path: 'archives', component: ArchivesPageComponent, canActivate: [AuthGuard]},
+          {path: 'archives', component: ArchivesPageComponent, data: {teamId: ':teamId'}, canActivate: [AuthGuard]},
           {path: 'archives/:boardId', component: ArchivedBoardPageComponent, canActivate: [AuthGuard]}
         ]
       },

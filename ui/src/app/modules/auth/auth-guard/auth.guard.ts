@@ -20,6 +20,7 @@ import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '
 import {Observable, Subscriber} from 'rxjs';
 import {TeamService} from '../../teams/services/team.service';
 import {AuthService} from '../auth.service';
+import {url} from 'inspector';
 
 @Injectable({
   providedIn: 'root'
@@ -39,10 +40,11 @@ export class AuthGuard implements CanActivate {
 
   canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    state): Observable<boolean> | Promise<boolean> | boolean {
 
     return new Observable<boolean>(subscriber => {
-      const teamId = next.url[1].path;
+      const urls = state.url.split('/');
+      const teamId = urls[2];
 
       if (AuthService.getToken()) {
 
