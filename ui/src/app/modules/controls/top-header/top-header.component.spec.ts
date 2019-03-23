@@ -19,10 +19,12 @@ import {TopHeaderComponent} from './top-header.component';
 import {Router} from '@angular/router';
 import {spy} from 'ts-mockito';
 import createSpyObj = jasmine.createSpyObj;
+import {SaveCheckerService} from '../../teams/services/save-checker.service';
 
 describe('TopHeaderComponent', () => {
   let component: TopHeaderComponent;
   let router: Router;
+  let saveCheckerService: SaveCheckerService;
 
   const fakeId = 'fake-id';
 
@@ -30,7 +32,9 @@ describe('TopHeaderComponent', () => {
     router = jasmine.createSpyObj({
       navigateByUrl: null
     });
-    component = new TopHeaderComponent(router);
+
+    saveCheckerService = new SaveCheckerService();
+    component = new TopHeaderComponent(router, saveCheckerService);
     component.teamId = fakeId;
   });
 

@@ -83,16 +83,6 @@ export class HeaderComponent implements OnInit {
     this.actionsRadiatorViewClicked.emit(this.actionsRadiatorViewEnabled);
   }
 
-  get lastSavedText(): string {
-    if (this.saveChecker.lastSavedDateTime === '') {
-      return 'All changes saved';
-    }
-
-    return 'Last change saved at ' + this.saveChecker.lastSavedDateTime;
-  }
-
-
-
   giveZipDownloadToUser() {
     this.http.get(this.getCsvUrl(), {responseType: 'blob'}).subscribe(csvData => {
       saveAs(csvData,  `${this.teamId}-board.csv`);

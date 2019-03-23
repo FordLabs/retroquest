@@ -16,9 +16,10 @@
  */
 
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {parseTheme, Themes} from '../../domain/Theme';
+import {Themes} from '../../domain/Theme';
 import {SettingsDialogComponent} from '../settings-dialog/settings-dialog.component';
 import {Router} from '@angular/router';
+import {SaveCheckerService} from '../../teams/services/save-checker.service';
 
 @Component({
   selector: 'rq-top-header',
@@ -27,7 +28,6 @@ import {Router} from '@angular/router';
 })
 export class TopHeaderComponent implements OnInit {
   @Input() teamName: string;
-  @Input() lastSavedText: string;
   @Input() teamId: string;
 
   @Input() theme: Themes;
@@ -38,7 +38,7 @@ export class TopHeaderComponent implements OnInit {
 
   @Input() selectedView = '';
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private saveCheckerService: SaveCheckerService) {
   }
 
   ngOnInit(): void {
@@ -52,6 +52,15 @@ export class TopHeaderComponent implements OnInit {
   get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;
   }
+
+  get lastSavedText(): string {
+    if (this.saveCheckerService.lastSavedDateTime === '') {
+      return 'All changes saved';
+    }
+
+    return 'Last change saved at ' + this.saveCheckerService.lastSavedDateTime;
+  }
+
 
   isSelected(view: string): boolean {
     return this.selectedView === view;
