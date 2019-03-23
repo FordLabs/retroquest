@@ -1,22 +1,24 @@
 /*
- * Copyright (c) 2018 Ford Motor Company
- * All rights reserved.
+ *  Copyright (c) 2018 Ford Motor Company
+ *  All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 import {TopHeaderComponent} from './top-header.component';
 import {Router} from '@angular/router';
+import {spy} from 'ts-mockito';
+import createSpyObj = jasmine.createSpyObj;
 
 describe('TopHeaderComponent', () => {
   let component: TopHeaderComponent;
@@ -25,12 +27,36 @@ describe('TopHeaderComponent', () => {
   const fakeId = 'fake-id';
 
   beforeEach(() => {
-    router = jasmine.createSpyObj({navigateByUrl: null});
+    router = jasmine.createSpyObj({
+      navigateByUrl: null
+    });
     component = new TopHeaderComponent(router);
+    component.teamId = fakeId;
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('ngOnInit', () => {
+    it('should change the view to retro if the window url ends with the team id', () => {
+      Object.defineProperty(router, 'url', {value: `/url/${fakeId}`});
+      component.ngOnInit();
+      expect(component.selectedView).toEqual('retro');
+    });
+
+    it('should change the view to archives if the window url contains archives string', () => {
+      Object.defineProperty(router, 'url', {value: `/url/${fakeId}/archives`});
+      component.ngOnInit();
+      expect(component.selectedView).toEqual('archives');
+    });
+  });
+
+  describe('isSelected', () => {
+    it('should return true if the passed in view is the one currently selected', () => {
+      component.selectedView = 'retro';
+      expect(component.isSelected('retro')).toBeTruthy();
+    });
   });
 
   describe('changeView', () => {
