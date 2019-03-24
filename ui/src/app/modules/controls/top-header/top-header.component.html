@@ -1,0 +1,84 @@
+<!--
+  ~  Copyright (c) 2018 Ford Motor Company
+  ~  All rights reserved.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~  http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<div class="header-top-content">
+
+  <div class="left-content">
+    <a routerLink="/" class="logo-link">
+      <img
+        [src]="darkThemeIsEnabled ? '/assets/icons/icon-light-72x72.png' : '/assets/icons/icon-72x72.png'"
+        title="RetroQuest"
+        id="logo"
+        [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+      />
+    </a>
+    <div
+      class="horizontal-separator"
+      [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+    ></div>
+    <div
+      id="teamName"
+      [ngClass]="{
+      'dark-theme': darkThemeIsEnabled
+    }"
+    >{{teamName}}
+    </div>
+  </div>
+
+  <div class="center-content">
+    <rq-button
+      class="retro-view-button"
+      [type]="isSelected('retro') ? 'primary' : 'secondary'"
+      text="retro"
+      [theme]="theme"
+      [ngClass]="{'selected': isSelected('retro')}"
+      (click)="changeView('retro')"
+    ></rq-button>
+
+    <rq-button
+      class="archives-view-button"
+      [type]="isSelected('archives') ? 'primary' : 'secondary'"
+      text="archives"
+      [theme]="theme"
+      [ngClass]="{'selected': isSelected('archives')}"
+      (click)="changeView('archives')"
+    ></rq-button>
+
+  </div>
+
+  <div
+    class="right-content"
+    [ngClass]="{
+      'dark-theme': darkThemeIsEnabled
+    }"
+  >
+    <div class="last-saved-text">{{lastSavedText}}</div>
+    <div class="settings-button fas fa-cog" (click)="settingsDialog.show()"></div>
+  </div>
+
+</div>
+
+<rq-settings-dialog
+  #settingsDialog
+  [teamId]="teamId"
+  [theme]="theme"
+  (themeChanged)="themeChanged.emit($event)"
+></rq-settings-dialog>

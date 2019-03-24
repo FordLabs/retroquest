@@ -1,22 +1,22 @@
 /*
- * Copyright (c) 2018 Ford Motor Company
- * All rights reserved.
+ *  Copyright (c) 2018 Ford Motor Company
+ *  All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 import {TeamPageComponent} from './team.page';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Data} from '@angular/router';
 import {WebsocketService} from '../../services/websocket.service';
 import {BoardService} from '../../services/board.service';
 import {ColumnAggregationService} from '../../services/column-aggregation.service';
@@ -26,13 +26,15 @@ import {TeamService} from '../../services/team.service';
 import {anything, instance, mock, verify, when} from 'ts-mockito';
 import {emptyThought} from '../../../domain/thought';
 import {emptyColumnResponse} from '../../../domain/column-response';
+import {DataService} from '../../../data.service';
+import {SaveCheckerService} from '../../services/save-checker.service';
 
 describe('TeamPageComponent', () => {
   let component: TeamPageComponent;
 
-  let activatedRoute: ActivatedRoute;
+  let dataService: DataService;
   let websocketService: WebsocketService;
-  // let saveCheckerService: SaveCheckerService;
+  let saveCheckerService: SaveCheckerService;
   let boardService: BoardService;
   let columnAggregationService: ColumnAggregationService;
   let teamService: TeamService;
@@ -40,14 +42,15 @@ describe('TeamPageComponent', () => {
   const fakeTeamId = 'team-id';
 
   beforeEach(() => {
-    activatedRoute = mock(ActivatedRoute);
+    dataService = new DataService();
     columnAggregationService = mock(ColumnAggregationService);
     teamService = mock(TeamService);
     websocketService = mock(WebsocketService);
     boardService = mock(BoardService);
+    saveCheckerService = mock(SaveCheckerService);
 
     component = new TeamPageComponent(
-      instance(activatedRoute),
+      dataService,
       instance(teamService),
       instance(websocketService),
       null,
@@ -67,7 +70,8 @@ describe('TeamPageComponent', () => {
     const expectedTeamName = 'team-name';
 
     beforeEach(() => {
-      when(activatedRoute.params).thenReturn(of({teamId: fakeTeamId}));
+      dataService.team.name = expectedTeamName;
+      dataService.team.id = fakeTeamId;
       when(columnAggregationService.getColumns(fakeTeamId)).thenReturn(of(expectedColumns));
       when(teamService.fetchTeamName(fakeTeamId)).thenReturn(of(expectedTeamName));
     });
@@ -107,6 +111,7 @@ describe('TeamPageComponent', () => {
         component.ngOnInit();
         verify(websocketService.openWebsocket(fakeTeamId)).never();
       });
+
     });
   });
 

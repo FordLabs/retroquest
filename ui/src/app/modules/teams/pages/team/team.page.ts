@@ -1,18 +1,18 @@
 /*
- * Copyright (c) 2018 Ford Motor Company
- * All rights reserved.
+ *  Copyright (c) 2018 Ford Motor Company
+ *  All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 import {Component, EventEmitter, OnInit, ViewChild} from '@angular/core';
@@ -33,6 +33,7 @@ import {BoardService} from '../../services/board.service';
 import {ColumnAggregationService} from '../../services/column-aggregation.service';
 import {ColumnResponse} from '../../../domain/column-response';
 import {Column} from '../../../domain/column';
+import {DataService} from '../../../data.service';
 
 @Component({
   selector: 'rq-team',
@@ -43,7 +44,7 @@ export class TeamPageComponent implements OnInit {
 
   @ViewChild('radiatorView') radiatorView: ActionsRadiatorViewComponent;
 
-  constructor(private activeRoute: ActivatedRoute,
+  constructor(private dataService: DataService,
               private teamsService: TeamService,
               private websocketService: WebsocketService,
               private saveCheckerService: SaveCheckerService,
@@ -89,39 +90,34 @@ export class TeamPageComponent implements OnInit {
   private isMobileView = (): boolean => window.innerWidth <= 610;
 
   ngOnInit(): void {
+    this.teamId = this.dataService.team.id;
+    this.teamName = this.dataService.team.name;
 
+    this.dataService.themeChanged.subscribe(theme => this.theme = theme);
 
     if (this.isMobileView()) {
       this.addTouchListeners();
     }
 
-    this.activeRoute.params.subscribe((params) => {
-      this.teamId = params.teamId;
-
-
-      this.columnAggregationService.getColumns(this.teamId).subscribe(
-        (body) => {
-          this.columnsAggregation = body.columns;
-        }
-      );
-
-      this.setTeamName();
-
-      if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
-        this.websocketInit();
+    this.columnAggregationService.getColumns(this.teamId).subscribe(
+      (body) => {
+        this.columnsAggregation = body.columns;
       }
+    );
 
-      this.websocketService.intervalId = this.globalWindowRef.setInterval(() => {
-        if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
-          this.websocketService.closeWebsocket();
-          this.websocketInit();
-        } else if (this.websocketService.getWebsocketState() === WebSocket.OPEN) {
-          this.websocketService.sendHeartbeat();
-        }
-      }, 1000 * 1);
 
-    });
+    if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
+      this.websocketInit();
+    }
 
+    this.websocketService.intervalId = this.globalWindowRef.setInterval(() => {
+      if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
+        this.websocketService.closeWebsocket();
+        this.websocketInit();
+      } else if (this.websocketService.getWebsocketState() === WebSocket.OPEN) {
+        this.websocketService.sendHeartbeat();
+      }
+    }, 1000 * 1);
   }
 
   private websocketInit() {
@@ -145,12 +141,6 @@ export class TeamPageComponent implements OnInit {
         this.saveCheckerService.updateTimestamp();
       });
     });
-  }
-
-  private setTeamName(): void {
-    this.teamsService.fetchTeamName(this.teamId).subscribe(
-      (teamName) => this.teamName = teamName
-    );
   }
 
   public onEndRetro(): void {
@@ -180,7 +170,6 @@ export class TeamPageComponent implements OnInit {
   }
 
   public incrementSelectedIndex(): void {
-    console.log(this.selectedIndex, this.columnsAggregation.length);
     if (this.selectedIndex < this.columnsAggregation.length) {
       this.selectedIndex++;
     }

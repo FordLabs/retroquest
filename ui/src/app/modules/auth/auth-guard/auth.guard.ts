@@ -1,22 +1,22 @@
 /*
- * Copyright (c) 2018 Ford Motor Company
- * All rights reserved.
+ *  Copyright (c) 2018 Ford Motor Company
+ *  All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, Router} from '@angular/router';
 import {Observable, Subscriber} from 'rxjs';
 import {TeamService} from '../../teams/services/team.service';
 import {AuthService} from '../auth.service';
@@ -39,10 +39,11 @@ export class AuthGuard implements CanActivate {
 
   canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    state): Observable<boolean> | Promise<boolean> | boolean {
 
     return new Observable<boolean>(subscriber => {
-      const teamId = next.url[1].path;
+      const urls = state.url.split('/');
+      const teamId = urls[2];
 
       if (AuthService.getToken()) {
 
