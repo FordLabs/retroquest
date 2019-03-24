@@ -142,7 +142,7 @@
     margin: 0 auto;
     padding-left: $global-side-padding;
     padding-right: $global-side-padding;
-    padding-top: 1rem;
+    padding-top: $global-side-padding;
     width: $desktop-max-width;
     z-index: 2;
 
