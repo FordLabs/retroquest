@@ -39,7 +39,6 @@ export class HeaderComponent implements OnInit {
   @Input() theme = Themes.Light;
 
   @Output() endRetro: EventEmitter<void> = new EventEmitter<void>();
-  @Output() actionsRadiatorViewClicked: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @ViewChild(FeedbackDialogComponent) feedbackDialog: FeedbackDialogComponent;
   @ViewChild(EndRetroDialogComponent) endRetroDialog: EndRetroDialogComponent;
@@ -78,14 +77,9 @@ export class HeaderComponent implements OnInit {
     this.feedbackService.addFeedback(feedback).subscribe();
   }
 
-  public onActionsRadiatorViewClicked(): void {
-    this.actionsRadiatorViewEnabled = !this.actionsRadiatorViewEnabled;
-    this.actionsRadiatorViewClicked.emit(this.actionsRadiatorViewEnabled);
-  }
-
   giveZipDownloadToUser() {
     this.http.get(this.getCsvUrl(), {responseType: 'blob'}).subscribe(csvData => {
-      saveAs(csvData,  `${this.teamId}-board.csv`);
+      saveAs(csvData, `${this.teamId}-board.csv`);
     });
   }
 }

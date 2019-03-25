@@ -46,7 +46,21 @@ export class TopHeaderComponent implements OnInit {
       this.changeView('retro');
     } else if (this.router.url.includes('archives')) {
       this.changeView('archives');
+    } else if (this.router.url.endsWith('radiator')) {
+      this.changeView('radiator');
     }
+  }
+
+  get retroViewIsSelected(): boolean {
+    return this.selectedView === 'retro';
+  }
+
+  get radiatorViewIsSelected(): boolean {
+    return this.selectedView === 'radiator';
+  }
+
+  get archivesViewIsSelected(): boolean {
+    return this.selectedView === 'archives';
   }
 
   get darkThemeIsEnabled(): boolean {
@@ -76,6 +90,10 @@ export class TopHeaderComponent implements OnInit {
       }
       case 'archives': {
         this.router.navigateByUrl(`/team/${this.teamId}/archives`);
+        break;
+      }
+      case 'radiator': {
+        this.router.navigateByUrl(`/team/${this.teamId}/radiator`);
         break;
       }
       default:

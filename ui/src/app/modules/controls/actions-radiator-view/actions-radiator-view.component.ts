@@ -15,11 +15,12 @@
  *  limitations under the License.
  */
 
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {ActionItem} from '../../domain/action-item';
 import * as $ from 'jquery';
 import {Themes} from '../../domain/Theme';
 import {ActionItemService} from '../../teams/services/action.service';
+import {DataService} from '../../data.service';
 
 const ESC_KEY = 27;
 
@@ -31,10 +32,10 @@ const ESC_KEY = 27;
     '[style.display]': 'visible ? "flex": "none"'
   }
 })
-export class ActionsRadiatorViewComponent implements OnInit {
+export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
 
-  @Input() visible = false;
-  @Input() theme: Themes = Themes.Light;
+  @Input() visible = true;
+  @Input() theme;
   @Input() teamId: string;
 
   @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -46,15 +47,25 @@ export class ActionsRadiatorViewComponent implements OnInit {
   pageIsAutoScrolling = false;
   scrollingIntervalId: any = null;
 
-  constructor(private actionItemService: ActionItemService) {
+  constructor(private actionItemService: ActionItemService,
+              private dataService: DataService) {
 
   }
 
   ngOnInit(): void {
+    this.teamId = this.dataService.team.id;
+    this.theme = this.dataService.theme;
+
+    this.dataService.themeChanged.subscribe(theme => this.theme = theme);
 
     this.actionItemService.fetchActionItems(this.teamId).subscribe(actionItems => {
       this.actionItems = actionItems;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.toggleAutoScroll();
+    this.resetScroll();
   }
 
   get darkThemeIsEnabled(): boolean {

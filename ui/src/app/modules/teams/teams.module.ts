@@ -41,6 +41,7 @@ import {BoardSummaryComponent} from './components/board-summary/board-summary.co
 import {ArchivedBoardPageComponent} from './pages/archived-board/archived-board.page';
 import {SubAppComponent} from '../sub-app/sub-app.component';
 import {DataService} from '../data.service';
+import {ActionsRadiatorViewComponent} from '../controls/actions-radiator-view/actions-radiator-view.component';
 
 @NgModule({
   imports: [
@@ -51,6 +52,7 @@ import {DataService} from '../data.service';
         path: 'team/:teamId', canActivate: [TeamPageQueryParamGuard], component: SubAppComponent
         , children: [
           {path: '', component: TeamPageComponent, pathMatch: 'full'},
+          {path: 'radiator', component: ActionsRadiatorViewComponent},
           {path: 'archives', component: ArchivesPageComponent, data: {teamId: ':teamId'}, canActivate: [AuthGuard]},
           {path: 'archives/:boardId', component: ArchivedBoardPageComponent, canActivate: [AuthGuard]}
         ]

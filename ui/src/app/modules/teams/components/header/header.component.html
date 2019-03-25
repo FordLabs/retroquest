@@ -25,18 +25,7 @@
   >
     <div
       class="header-bottom-content"
-      [ngClass]="{
-          'center-content': actionsRadiatorViewEnabled
-      }"
     >
-      <rq-button
-        class="actions-radiator-button"
-        type="secondary"
-        [text]="actionsRadiatorViewEnabled ? 'view retro' : 'actions radiator'"
-        (click)="onActionsRadiatorViewClicked()"
-        [theme]="theme"
-      ></rq-button>
-
       <button
         id="giveFeedback"
         class="rq-button-secondary"
@@ -53,9 +42,7 @@
       <button
         class="rq-button-secondary download-button"
         (click)="giveZipDownloadToUser()"
-        [ngClass]="{
-            'hide': actionsRadiatorViewEnabled
-         }">
+      >
         <span class="button-text">Download CSV</span>
         <i class="fas fa-download button-icon"></i>
       </button>
