@@ -15,17 +15,8 @@
   ~  limitations under the License.
   -->
 
-<!--<rq-top-header-->
-  <!--[theme]="theme"-->
-  <!--[teamId]="teamId"-->
-  <!--[lastSavedText]="lastSavedText"-->
-  <!--[teamName]="teamName"-->
-  <!--(themeChanged)="$event"-->
-<!--&gt;-->
-<!--</rq-top-header>-->
-
 <rq-top-header
-  [theme]="theme"
+  [theme]="dataService.theme"
   [teamId]="teamId"
   [teamName]="teamName"
   (themeChanged)="emitThemeChanged($event)"

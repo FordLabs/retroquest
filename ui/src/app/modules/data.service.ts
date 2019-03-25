@@ -25,5 +25,6 @@ export class DataService {
     name: '',
   };
 
+  theme: Themes = Themes.Light;
   themeChanged: EventEmitter<Themes> = new EventEmitter();
 }

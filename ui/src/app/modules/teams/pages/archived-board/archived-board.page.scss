@@ -171,5 +171,9 @@ header {
       width: 100%;
     }
 
+    &.dark-theme {
+      background-color: $header-background-color-dark;
+    }
+
   }
 }

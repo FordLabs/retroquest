@@ -60,10 +60,17 @@ export class ArchivedBoardPageComponent implements OnInit {
 
   @ViewChild('radiatorView') radiatorView: ActionsRadiatorViewComponent;
 
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
+  }
+
   ngOnInit(): void {
 
     this.teamId = this.dataService.team.id;
     this.teamName = this.dataService.team.name;
+    this.theme = this.dataService.theme;
+
+    this.dataService.themeChanged.subscribe(theme => this.theme = theme);
 
     this.columnAggregationService.getColumns(this.teamId).subscribe(
       response => {

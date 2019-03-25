@@ -75,8 +75,6 @@ export class TopHeaderComponent implements OnInit {
         break;
       }
       case 'archives': {
-        this.theme = Themes.Light;
-        this.themeChanged.emit(this.theme);
         this.router.navigateByUrl(`/team/${this.teamId}/archives`);
         break;
       }

@@ -45,13 +45,16 @@ export class ArchivesPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.setBackgroundColorToLightVersion();
 
     this.globalWindowRef.clearInterval(this.websocketService.intervalId);
     this.websocketService.closeWebsocket();
 
     this.teamId = this.dataService.team.id;
     this.teamName = this.dataService.team.name;
+    this.theme = this.dataService.theme;
+    console.log(this.theme, Themes.Light);
+
+    this.dataService.themeChanged.subscribe(theme => this.theme = theme);
 
     this.boardService.fetchBoards(this.teamId).subscribe(boards => {
       this.boards = boards;
@@ -66,10 +69,6 @@ export class ArchivesPageComponent implements OnInit {
     this.boards = this.boards.filter(board => {
       return board.id !== boardId;
     });
-  }
-
-  private setBackgroundColorToLightVersion() {
-    document.body.style.backgroundColor = '#ecf0f1';
   }
 
 }

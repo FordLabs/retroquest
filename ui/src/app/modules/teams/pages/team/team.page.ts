@@ -16,13 +16,8 @@
  */
 
 import {Component, EventEmitter, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
 import {WebsocketService} from '../../services/websocket.service';
-
-import {ThoughtService} from '../../services/thought.service';
 import {TeamService} from '../../services/team.service';
-import {ActionItemService} from '../../services/action.service';
-import {ColumnService} from '../../services/column.service';
 import {WebsocketResponse} from '../../../domain/websocket-response';
 
 import * as Hammer from 'hammerjs';
@@ -68,20 +63,8 @@ export class TeamPageComponent implements OnInit {
 
   retroEnded: EventEmitter<void> = new EventEmitter();
 
-  _theme: Themes = Themes.Light;
+  theme: Themes;
 
-  get theme(): Themes {
-    return this._theme;
-  }
-
-  set theme(theme: Themes) {
-    this._theme = theme;
-    if (this._theme === Themes.Dark) {
-      document.body.style.backgroundColor = '#2c3e50';
-    } else if (this._theme === Themes.Light) {
-      document.body.style.backgroundColor = '#ecf0f1';
-    }
-  }
 
   get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;
@@ -92,6 +75,7 @@ export class TeamPageComponent implements OnInit {
   ngOnInit(): void {
     this.teamId = this.dataService.team.id;
     this.teamName = this.dataService.team.name;
+    this.theme = this.dataService.theme;
 
     this.dataService.themeChanged.subscribe(theme => this.theme = theme);
 
@@ -104,7 +88,6 @@ export class TeamPageComponent implements OnInit {
         this.columnsAggregation = body.columns;
       }
     );
-
 
     if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
       this.websocketInit();
