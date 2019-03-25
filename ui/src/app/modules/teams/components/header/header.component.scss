@@ -92,56 +92,9 @@
         }
       }
 
-      .change-theme-button {
-
-        @media only screen and (max-width: 610px) {
-          display: none;
-        }
-
-      }
-
-      .change-theme-icon-container {
-        box-sizing: border-box;
-        display: none;
-        height: 100%;
-        padding-right: 18px;
-
-        @media only screen and (max-width: 610px) {
-          align-items: center;
-          display: flex;
-          justify-content: center;
-          text-align: center;
-        }
-
-      }
-
       rq-button {
         height: 100%;
         width: auto;
-      }
-
-      .actions-radiator-button {
-        @media only screen and (max-width: 610px) {
-          display: none;
-        }
-      }
-
-      .archived-boards-link {
-        color: inherit;
-
-        @media only screen and (max-width: 610px) {
-          rq-button {
-            display: none;
-          }
-
-          & {
-            align-items: center;
-            display: flex;
-            height: 100%;
-            padding: 0 18px;
-          }
-        }
-
       }
 
       #giveFeedback {

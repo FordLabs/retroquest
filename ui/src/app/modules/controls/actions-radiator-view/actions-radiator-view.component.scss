@@ -22,23 +22,10 @@
   display: flex;
   flex-direction: column;
 
-  height: 500px;
   justify-content: flex-start;
-  padding: 24px;
+  margin: 0 auto;
   position: relative;
   width: 500px;
-
-  .heading {
-    color: inherit;
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 36px;
-    text-transform: capitalize;
-
-    &.dark-theme {
-      color: $clouds;
-    }
-  }
 
   rq-action-item-task {
     height: auto;

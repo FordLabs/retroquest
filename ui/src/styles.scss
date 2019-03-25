@@ -17,12 +17,8 @@
 
 @import 'color-vars';
 
-// sass-lint:disable no-vendor-prefixes
-
 html {
-  -webkit-overflow-scrolling: touch;   // Enables smooth scrolling for IOS devices.
   height: 100%;
-  overflow: auto;
   padding: 0;
 }
 

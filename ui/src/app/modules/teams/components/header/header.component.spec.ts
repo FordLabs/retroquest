@@ -92,19 +92,4 @@ describe('HeaderComponent', () => {
     });
 
   });
-
-  describe('onActionsRadiatorViewClicked', () => {
-
-    beforeEach(() => {
-      component.actionsRadiatorViewClicked = jasmine.createSpyObj({
-        emit: null
-      });
-      component.onActionsRadiatorViewClicked();
-    });
-
-    it('should emit the actions radiator view signal', () => {
-      expect(component.actionsRadiatorViewClicked.emit).toHaveBeenCalled();
-    });
-  });
-
 });

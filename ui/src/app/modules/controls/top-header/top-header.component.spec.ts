@@ -54,6 +54,12 @@ describe('TopHeaderComponent', () => {
       component.ngOnInit();
       expect(component.selectedView).toEqual('archives');
     });
+
+    it('should change the view to radiator if the window url ends with radiator string', () => {
+      Object.defineProperty(router, 'url', {value: `/url/${fakeId}/radiator`});
+      component.ngOnInit();
+      expect(component.selectedView).toEqual('radiator');
+    });
   });
 
   describe('isSelected', () => {

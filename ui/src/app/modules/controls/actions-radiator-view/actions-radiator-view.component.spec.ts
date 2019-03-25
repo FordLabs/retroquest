@@ -19,18 +19,22 @@
 import {ActionsRadiatorViewComponent} from './actions-radiator-view.component';
 import {ActionItemService} from '../../teams/services/action.service';
 import {of} from 'rxjs';
+import {DataService} from '../../data.service';
 
 describe('ActionsRadiatorViewComponent', () => {
 
   let component: ActionsRadiatorViewComponent;
   let mockActionItemService: ActionItemService;
+  let dataService: DataService;
 
   beforeEach(() => {
     mockActionItemService = jasmine.createSpyObj({
       fetchActionItems: of([])
     });
 
-    component = new ActionsRadiatorViewComponent(mockActionItemService);
+    dataService = new DataService();
+
+    component = new ActionsRadiatorViewComponent(mockActionItemService, dataService);
   });
 
   it('should create', () => {

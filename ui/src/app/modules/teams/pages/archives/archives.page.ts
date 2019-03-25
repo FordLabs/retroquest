@@ -52,7 +52,6 @@ export class ArchivesPageComponent implements OnInit {
     this.teamId = this.dataService.team.id;
     this.teamName = this.dataService.team.name;
     this.theme = this.dataService.theme;
-    console.log(this.theme, Themes.Light);
 
     this.dataService.themeChanged.subscribe(theme => this.theme = theme);
 
