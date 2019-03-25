@@ -110,7 +110,6 @@
         font-weight: bold;
         overflow: hidden;
         text-overflow: ellipsis;
-        width: 50px;
 
         &.dark-theme {
           color: opacity($clouds, .75);
