@@ -53,6 +53,10 @@ export class SubAppComponent implements OnInit, AfterViewInit {
     window.setTimeout(_ => this.loadTheme());
   }
 
+  get theme(): Themes {
+    return this.dataService.theme;
+  }
+
   get darkThemeIsEnabled(): boolean {
     return this.dataService.theme === Themes.Dark;
   }
