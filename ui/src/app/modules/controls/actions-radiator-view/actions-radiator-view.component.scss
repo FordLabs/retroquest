@@ -28,18 +28,6 @@
   position: relative;
   width: 500px;
 
-  .heading {
-    color: inherit;
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 36px;
-    text-transform: capitalize;
-
-    &.dark-theme {
-      color: $clouds;
-    }
-  }
-
   rq-action-item-task {
     height: auto;
     margin-bottom: 150px;
