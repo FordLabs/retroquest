@@ -17,7 +17,7 @@
 
 <div id="page">
   <header>
-    <div id="headerBottom"></div>
+    <div id="headerBottom" [ngClass]="{'dark-theme': darkThemeIsEnabled}"></div>
   </header>
 
   <div
@@ -37,6 +37,7 @@
         [archived]="true"
         [thoughtAggregation]="thoughtAggregation"
         [hideNewThought]="true"
+        [theme]="theme"
       >
       </rq-thoughts-column>
     </div>

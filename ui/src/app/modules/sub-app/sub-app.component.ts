@@ -24,13 +24,15 @@ import {parseTheme, Themes} from '../domain/Theme';
 @Component({
   selector: 'rq-sub-app',
   templateUrl: './sub-app.component.html',
-  styleUrls: ['./sub-app.component.scss']
+  styleUrls: ['./sub-app.component.scss'],
+  host: {
+    '[class.dark-theme]': 'darkThemeIsEnabled'
+  }
 })
 export class SubAppComponent implements OnInit, AfterViewInit {
 
   teamId: string;
   teamName: string;
-  theme: Themes;
 
   constructor(private activatedRoute: ActivatedRoute,
               private teamService: TeamService,
@@ -51,17 +53,15 @@ export class SubAppComponent implements OnInit, AfterViewInit {
     window.setTimeout(_ => this.loadTheme());
   }
 
+  get darkThemeIsEnabled(): boolean {
+    return this.dataService.theme === Themes.Dark;
+  }
+
   private loadTheme(): void {
-
-    if (window.location.href.includes('archives')) {
-      this.emitThemeChanged(Themes.Light);
-    } else {
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme) {
-        this.emitThemeChanged(parseTheme(savedTheme));
-      }
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      this.emitThemeChanged(parseTheme(savedTheme));
     }
-
   }
 
   private setTeamName(): void {
@@ -74,7 +74,7 @@ export class SubAppComponent implements OnInit, AfterViewInit {
   }
 
   emitThemeChanged(theme: Themes) {
-    this.theme = theme;
+    this.dataService.theme = theme;
     this.dataService.themeChanged.emit(theme);
   }
 }

@@ -14,8 +14,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+@import 'color-vars';
 
 :host {
+  background-color: $background-color-light;
+  display: block;
   height: 100%;
+
   width: 100%;
+
+  &.dark-theme {
+    background-color: $background-color-dark;
+  }
 }
