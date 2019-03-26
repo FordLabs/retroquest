@@ -19,17 +19,18 @@
 :host {
   $host-border-width: 2px;
   $host-opacity: .1;
+  align-items: center;
   background-color: $white;
   border-radius: 6px;
-  box-shadow: 0 1px 2px opacity($black, .25);
+  box-shadow: 0 4px 20px opacity($black, .12);
   box-sizing: border-box;
   color: inherit;
   display: flex;
-  flex-direction: column;
-  font-size: 1rem;
   font-weight: bold;
-  height: auto;
-  margin: 10px 0;
+  height: 64px;
+  margin-bottom: 36px;
+  max-width: 90%;
+  padding-left: 18px;
   position: relative;
   transition: box-shadow .2s cubic-bezier(.25, .8, .25, 1);
   width: 400px;
@@ -39,55 +40,78 @@
     color: $clouds;
   }
 
-  .content-area {
-    box-sizing: border-box;
-    padding: 20px;
-    text-align: center;
-  }
+  .thought-count {
+    $size: 36px;
 
-  .footer {
-    background-color: inherit;
-    border-bottom-left-radius: inherit;
-    border-bottom-right-radius: inherit;
-    border-top: 2px solid opacity($wet-asphalt, .06);
-    box-sizing: border-box;
+    align-items: center;
+    background-color: opacity($wet-asphalt, .03);
+    border-radius: $size / 2;
     display: flex;
-    height: 40px;
-
-    justify-content: flex-start;
+    font-size: 1.1rem;
+    height: $size;
+    justify-content: center;
+    margin-right: 52px;
+    width: $size;
 
     &.dark-theme {
-      border-top-color: $task-footer-separator-dark;
+      background-color: opacity($clouds, .03);
     }
 
-    a {
-      align-items: center;
-      box-sizing: border-box;
-      display: flex;
-      flex: 1;
+    @media only screen and (max-width: 610px) {
+      font-size: .9rem;
+      margin-right: 28px;
+    }
+  }
+
+  .date {
+    font-size: 1.2rem;
+
+    @media only screen and (max-width: 610px) {
+      font-size: 1rem;
+    }
+  }
+
+  .right-content {
+    display: flex;
+    font-size: 1.1rem;
+    height: 100%;
+    justify-content: flex-end;
+    position: absolute;
+    right: 0;
+
+    .separator {
+      background-color: opacity($wet-asphalt, .04);
       height: 100%;
-      justify-content: space-around;
+      width: 3px;
+
+      &.dark-theme {
+        background-color: opacity($clouds, .04);
+      }
+    }
+
+    .view-button {
+      color: opacity($wet-asphalt, .68);
+      font-size: inherit;
+      height: 100%;
       padding: 0;
 
-      &.view-board-button {
-        border-bottom-left-radius: inherit;
-        border-right: 2px solid opacity($wet-asphalt, .06);
-        color: inherit;
+      width: 100px;
 
-        &.dark-theme {
-          border-right-color: $task-footer-separator-dark;
-          color: opacity($clouds, .6);
+      &:hover {
+        color: $turquoise;
+      }
 
-          &:hover {
-            color: $clouds;
-          }
+      &.dark-theme {
+        color: opacity($clouds, .68);
 
+        &:hover {
+          color: $turquoise;
         }
       }
 
-      &.delete-board-button {
-        border-bottom-right-radius: inherit;
-        color: $end-retro-button-red;
+      @media only screen and (max-width: 610px) {
+        font-size: .95rem;
+        width: 65px;
       }
     }
   }

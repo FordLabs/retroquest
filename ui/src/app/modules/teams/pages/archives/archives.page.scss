@@ -20,13 +20,12 @@
 :host {
   display: block;
 
-  header {
+  .header {
     box-sizing: border-box;
     font-weight: normal;
     z-index: 3;
 
     @media only screen and (max-width: 610px) {
-      padding-bottom: 12px;
       padding-top: 0;
     }
 
@@ -36,12 +35,14 @@
 
     #headerBottom {
       $header-bottom-height: 32px;
+      align-items: center;
       background: $white;
       box-sizing: border-box;
       color: inherit;
-      height: 45px;
 
-      min-width: $desktop-max-width;
+      display: flex;
+      height: 45px;
+      justify-content: center;
       position: relative;
 
       &.dark-theme {
@@ -55,52 +56,23 @@
       }
 
       .header-bottom-content {
-        align-self: center;
-        box-sizing: inherit;
-        color: inherit;
+        align-items: center;
+        box-sizing: border-box;
         display: flex;
-        flex-direction: row;
+        font-weight: bold;
+        height: 100%;
+        max-width: 90%;
+        width: 400px;
 
-        height: inherit;
-
-        justify-content: flex-end;
-        margin: 0 auto;
-        max-width: $desktop-max-width;
-        min-width: inherit;
-
-        padding-left: $global-side-padding;
-        padding-right: $global-side-padding;
-
-        @media only screen and (max-width: 610px) {
-          height: $header-bottom-height;
-          min-width: 0;
-          padding-left: 12px;
-          padding-right: 12px;
-          width: 100%;
-        }
-
-        a {
-          color: inherit;
-          margin: 0;
-          padding: 0;
-          width: auto;
-
-          rq-button {
-            height: 100%;
-            width: auto;
-          }
-        }
-
-        &.center-content {
-          justify-content: center;
-        }
-
-        .button-icon {
-          display: none;
+        .filter-button {
+          margin-right: 78px;
+          text-transform: capitalize;
 
           @media only screen and (max-width: 610px) {
-            display: block;
+            font-size: .9rem;
+            margin-right: 46px;
           }
+
         }
       }
     }
@@ -111,6 +83,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin-top: 36px;
 
     .heading {
       color: inherit;
@@ -124,13 +97,6 @@
       }
     }
 
-    h2 {
-      max-width: 90%;
-    }
-
-    rq-board-summary {
-      max-width: 90%;
-    }
   }
 
 }

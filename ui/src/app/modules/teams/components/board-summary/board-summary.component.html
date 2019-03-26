@@ -15,40 +15,59 @@
   ~  limitations under the License.
   -->
 
-<rq-deletion-overlay
-  *ngIf="deleteWasToggled"
-  (declineButtonClicked)="deleteWasToggled = false"
-  (acceptButtonClicked)="deleteBoard(board)"
-  heading="Delete this board?"
-  [theme]="theme"
-></rq-deletion-overlay>
+<!--<rq-deletion-overlay-->
+<!--  *ngIf="deleteWasToggled"-->
+<!--  (declineButtonClicked)="deleteWasToggled = false"-->
+<!--  (acceptButtonClicked)="deleteBoard(board)"-->
+<!--  heading="Delete this board?"-->
+<!--  [theme]="theme"-->
+<!--&gt;</rq-deletion-overlay>-->
 
 <div
-  class="content-area"
->
-  <span>{{board.dateCreated.format("MMM Do YYYY")}}</span>
-</div>
-
-<div
-  class="footer"
+  class="thought-count"
   [ngClass]="{
     'dark-theme': darkThemeIsEnabled
   }"
->
-  <a
-    routerLink="/team/{{teamId}}/archives/{{board.id}}"
-    class="view-board-button"
+>{{board.thoughts.length}}</div>
+
+<div class="date">{{board.dateCreated.format("MMM Do YYYY")}}</div>
+
+<div class="right-content">
+  <div
+    class="separator"
     [ngClass]="{
       'dark-theme': darkThemeIsEnabled
     }"
-  >View Board</a>
-  <a
-    href="#delete"
-    (click)="$event.preventDefault();
-    deleteWasToggled = true"
-    class="delete-board-button"
-    [ngClass]="{
-      'dark-theme': darkThemeIsEnabled
-    }"
-  >Delete Board</a>
+  ></div>
+  <rq-button
+    class="view-button"
+    text="view"
+    type="secondary"
+    [theme]="theme"
+    (click)="routeToBoard()"
+  ></rq-button>
 </div>
+
+<!--<div-->
+<!--  class="footer"-->
+<!--  [ngClass]="{-->
+<!--    'dark-theme': darkThemeIsEnabled-->
+<!--  }"-->
+<!--&gt;-->
+<!--  <a-->
+<!--    routerLink="/team/{{teamId}}/archives/{{board.id}}"-->
+<!--    class="view-board-button"-->
+<!--    [ngClass]="{-->
+<!--      'dark-theme': darkThemeIsEnabled-->
+<!--    }"-->
+<!--  >View Board</a>-->
+<!--  <a-->
+<!--    href="#delete"-->
+<!--    (click)="$event.preventDefault();-->
+<!--    deleteWasToggled = true"-->
+<!--    class="delete-board-button"-->
+<!--    [ngClass]="{-->
+<!--      'dark-theme': darkThemeIsEnabled-->
+<!--    }"-->
+<!--  >Delete Board</a>-->
+<!--</div>-->

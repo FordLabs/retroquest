@@ -16,22 +16,21 @@
   -->
 
 <div id="page">
-  <header
+  <div
+    class="header"
     [ngClass]="{
       'dark-theme': darkThemeIsEnabled
     }"
   >
-    <div id="headerBottom" [ngClass]="{'dark-theme': darkThemeIsEnabled}"></div>
-  </header>
+    <div id="headerBottom" [ngClass]="{'dark-theme': darkThemeIsEnabled}">
+      <div class="header-bottom-content">
+        <div class="filter-button count-sort">thoughts</div>
+        <div class="filter-button date-sort">date</div>
+      </div>
+    </div>
+  </div>
 
   <div class="archives">
-
-    <h1
-      class="heading"
-      [ngClass]="{
-        'dark-theme': darkThemeIsEnabled
-      }"
-    >Archived Boards</h1>
 
     <rq-board-summary
       *ngFor="let board of boards"
