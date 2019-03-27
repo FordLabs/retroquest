@@ -23,7 +23,7 @@
     }"
   >
     <div id="headerBottom" [ngClass]="{'dark-theme': darkThemeIsEnabled}">
-      <div class="header-bottom-content">
+      <div class="header-bottom-content" *ngIf="boards.length > 0">
 
         <div class="sort-container count-sort-container"
              [ngClass]="{'add-translucence': !countSortEnabled }"
@@ -57,9 +57,12 @@
       [teamId]="teamId"
       (boardDeleted)="removeBoardFromBoards($event)"></rq-board-summary>
 
-    <h2 *ngIf="boards.length === 0">
-      No archived boards were found for your team. Boards will appear here after ending a retro.
-    </h2>
+    <div class="no-archives-info" *ngIf="boards.length === 0">
+      <div class="heading">Looks Like A New Team!</div>
+      <div class="sub-heading">No archives were found.</div>
+
+      <div class="info">Boards will appear when retros are ended.</div>
+    </div>
 
   </div>
 </div>

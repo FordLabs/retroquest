@@ -33,6 +33,10 @@
       color: $clouds;
     }
 
+    .no-archives-info {
+      margin: 0 auto;
+    }
+
     #headerBottom {
       $header-bottom-height: 32px;
       align-items: center;
@@ -94,15 +98,28 @@
     justify-content: center;
     margin-top: 36px;
 
-    .heading {
-      color: inherit;
-      font-size: 2rem;
-      font-weight: bold;
-      margin: 10px 0;
-      text-transform: capitalize;
+    .no-archives-info {
+      text-align: center;
 
-      &.dark-theme {
-        color: $clouds;
+      .heading {
+        color: inherit;
+        font-size: 1.875rem;
+        font-weight: bold;
+
+        &.dark-theme {
+          color: $clouds;
+        }
+      }
+
+      .sub-heading {
+        font-size: 1.5rem;
+        font-weight: normal;
+        margin-bottom: 24px;
+      }
+
+      .info {
+        font-size: 1.25rem;
+        opacity: .5;
       }
     }
 
