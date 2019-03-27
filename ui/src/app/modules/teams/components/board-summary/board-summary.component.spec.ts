@@ -25,13 +25,15 @@ describe('BoardSummaryComponent', () => {
   let deleteBoardSubject: Subject<any>;
   let mockBoardService: BoardService;
   let mockEvent: Event;
+  let router;
   let component: BoardSummaryComponent;
 
   beforeEach(() => {
     deleteBoardSubject = new Subject();
     mockBoardService = jasmine.createSpyObj({deleteBoard: deleteBoardSubject});
     mockEvent = jasmine.createSpyObj({preventDefault: null});
-    component = new BoardSummaryComponent(mockBoardService);
+    router = jasmine.createSpyObj({navigateByUrl: null});
+    component = new BoardSummaryComponent(mockBoardService, router);
     component.teamId = 'team-id';
   });
 
@@ -59,6 +61,23 @@ describe('BoardSummaryComponent', () => {
       component.deleteBoard(boardToDelete);
       deleteBoardSubject.next();
       expect(component.boardDeleted.emit).toHaveBeenCalledWith(boardToDelete.id);
+    });
+  });
+
+  describe('routeToBoard', () => {
+    const fakeTeamId = 'id';
+    const fakeBoardId = 1;
+
+    beforeEach(() => {
+      component.teamId = fakeTeamId;
+      component.board = new Board();
+      component.board.id = fakeBoardId;
+
+      component.routeToBoard();
+    });
+
+    it('should navigate to the specified board', () => {
+      expect(router.navigateByUrl).toHaveBeenCalledWith(`/team/${fakeTeamId}/archives/${fakeBoardId}`);
     });
   });
 });

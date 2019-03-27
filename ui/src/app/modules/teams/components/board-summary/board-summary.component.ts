@@ -19,6 +19,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Board} from '../../../domain/board';
 import {BoardService} from '../../services/board.service';
 import {Themes} from '../../../domain/Theme';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'rq-board-summary',
@@ -37,7 +38,7 @@ export class BoardSummaryComponent {
 
   deleteWasToggled: boolean;
 
-  constructor(private boardService: BoardService) {
+  constructor(private boardService: BoardService, private router: Router) {
     this.boardDeleted = new EventEmitter();
     this.deleteWasToggled = false;
   }
@@ -50,5 +51,9 @@ export class BoardSummaryComponent {
     this.boardService.deleteBoard(this.teamId, board.id).subscribe(() => {
       this.boardDeleted.emit(board.id);
     });
+  }
+
+  routeToBoard() {
+    this.router.navigateByUrl(`/team/${this.teamId}/archives/${this.board.id}`);
   }
 }

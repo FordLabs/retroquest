@@ -16,12 +16,11 @@
  */
 
 import {Component, Input, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
 import {TeamService} from '../../services/team.service';
 import {Board} from '../../../domain/board';
 import {BoardService} from '../../services/board.service';
 import {WebsocketService} from '../../services/websocket.service';
-import {parseTheme, Themes} from '../../../domain/Theme';
+import {Themes} from '../../../domain/Theme';
 import {DataService} from '../../../data.service';
 
 @Component({
@@ -37,6 +36,7 @@ export class ArchivesPageComponent implements OnInit {
   teamName: string;
   boards: Array<Board> = [];
   globalWindowRef: Window = window;
+  countSortEnabled = false;
 
   constructor(private dataService: DataService,
               private teamsService: TeamService,
@@ -45,7 +45,6 @@ export class ArchivesPageComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.globalWindowRef.clearInterval(this.websocketService.intervalId);
     this.websocketService.closeWebsocket();
 
@@ -68,6 +67,17 @@ export class ArchivesPageComponent implements OnInit {
     this.boards = this.boards.filter(board => {
       return board.id !== boardId;
     });
+  }
+
+  toggleCountSort() {
+    this.countSortEnabled = !this.countSortEnabled;
+  }
+
+  get archiveBoardList(): Array<Board> {
+    if (this.countSortEnabled) {
+      return this.boards.slice().sort((a, b) => b.thoughts.length - a.thoughts.length);
+    }
+    return this.boards;
   }
 
 }
