@@ -34,7 +34,9 @@ import {of} from 'rxjs/internal/observable/of';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private teamService: TeamService, private route: ActivatedRoute, private router: Router) {
+  constructor(private teamService: TeamService,
+              private route: ActivatedRoute,
+              private router: Router) {
   }
 
   @ViewChild(RecaptchaComponent) recaptchaComponent: RecaptchaComponent;
@@ -44,7 +46,7 @@ export class LoginComponent implements OnInit {
   errorMessage: string;
 
   ngOnInit() {
-    this.teamName = this.route.snapshot.params['teamId'];
+    this.teamName = (this.route.snapshot.params['teamId'] as string).replace(/-/g, ' ');
   }
 
   requestCaptchaStateAndLogIn(): void {

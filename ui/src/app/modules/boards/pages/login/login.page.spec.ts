@@ -38,7 +38,7 @@ describe('LoginComponent', () => {
     const mockActivatedRoute = new ActivatedRoute();
 
     mockActivatedRoute.snapshot = new ActivatedRouteSnapshot();
-    mockActivatedRoute.snapshot.params = {teamId: 'devs'};
+    mockActivatedRoute.snapshot.params = {teamId: 'the-devs'};
 
     mockRouter = jasmine.createSpyObj({navigateByUrl: null});
     mockRecaptchaComponent = jasmine.createSpyObj({reset: null, execute: null});
@@ -51,8 +51,9 @@ describe('LoginComponent', () => {
     component.recaptchaComponent = mockRecaptchaComponent;
   });
 
-  it('should set the team name from the route', () => {
-    expect(component.teamName).toEqual('devs');
+
+  it('should set the team name from the route with spaces replacing dashes', () => {
+    expect(component.teamName).toEqual('the devs');
   });
 
   describe('requestCaptchaStateAndLogIn', () => {
