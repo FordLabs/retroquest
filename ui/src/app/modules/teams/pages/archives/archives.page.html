@@ -24,8 +24,26 @@
   >
     <div id="headerBottom" [ngClass]="{'dark-theme': darkThemeIsEnabled}">
       <div class="header-bottom-content">
-        <div class="filter-button count-sort">thoughts</div>
-        <div class="filter-button date-sort">date</div>
+
+        <div class="sort-container count-sort-container"
+             [ngClass]="{'add-translucence': !countSortEnabled }"
+             (click)="toggleCountSort()"
+        >
+          <div class="filter-button count-sort">thoughts</div>
+          <div class="fas fa-sort-down sort"></div>
+        </div>
+
+        <div class="sort-container"
+             [ngClass]="{
+               'add-translucence': countSortEnabled,
+               'add-pointer': countSortEnabled
+             }"
+             (click)="countSortEnabled = false"
+        >
+          <div class="filter-button date-sort">date</div>
+          <div class="fas fa-sort-down sort"></div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -33,7 +51,7 @@
   <div class="archives">
 
     <rq-board-summary
-      *ngFor="let board of boards"
+      *ngFor="let board of archiveBoardList"
       [theme]="theme"
       [board]="board"
       [teamId]="teamId"

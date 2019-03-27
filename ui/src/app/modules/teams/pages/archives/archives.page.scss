@@ -64,15 +64,24 @@
         max-width: 90%;
         width: 400px;
 
-        .filter-button {
-          margin-right: 78px;
-          text-transform: capitalize;
+        .sort-container {
+          align-items: center;
+          display: flex;
+          margin-right: 60px;
 
           @media only screen and (max-width: 610px) {
             font-size: .9rem;
-            margin-right: 46px;
+            margin-right: 36px;
           }
 
+          &.count-sort-container {
+            cursor: pointer;
+          }
+
+          .filter-button {
+            margin-right: 3px;
+            text-transform: capitalize;
+          }
         }
       }
     }
@@ -99,4 +108,12 @@
 
   }
 
+}
+
+.add-translucence {
+  opacity: .45;
+}
+
+.add-pointer {
+  cursor: pointer;
 }
