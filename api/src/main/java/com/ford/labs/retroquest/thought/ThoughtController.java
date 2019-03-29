@@ -153,4 +153,26 @@ public class ThoughtController {
         thoughtRepository.deleteAllByTeamId(teamId);
         return new WebsocketDeleteResponse<>(-1L);
     }
+
+    @Transactional
+    @MessageMapping("/v2/{teamId}/thought/delete")
+    @SendTo("/topic/{teamId}/thoughts")
+    public WebsocketDeleteResponse<Thought> deleteThoughtWebsocket(@DestinationVariable("teamId") String teamId, Thought thought, Authentication authentication) {
+        if (!authentication.getPrincipal().equals(teamId)) {
+            return null;
+        }
+        thoughtRepository.deleteThoughtByTeamIdAndId(teamId, thought.getId());
+        return new WebsocketDeleteResponse<>(thought);
+    }
+
+    @Transactional
+    @MessageMapping("/v2/{teamId}/thought/deleteAll")
+    @SendTo("/topic/{teamId}/thoughts")
+    public WebsocketDeleteResponse<Thought> deleteAllThoughtsWebsocket(@DestinationVariable("teamId") String teamId, Authentication authentication) {
+        if (!authentication.getPrincipal().equals(teamId)) {
+            return null;
+        }
+        thoughtRepository.deleteAllByTeamId(teamId);
+        return new WebsocketDeleteResponse<>(Thought.builder().id(-1L).build());
+    }
 }

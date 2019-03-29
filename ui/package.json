@@ -37,7 +37,6 @@
     "jquery": "^3.3.1",
     "moment": "^2.22.2",
     "ng-recaptcha": "^4.0.0-beta.1",
-    "npm": "^6.1.0",
     "rxjs": "^6.3.3",
     "zone.js": "^0.8.26"
   },
@@ -63,6 +62,7 @@
     "puppeteer": "^1.5.0",
     "sass-lint": "^1.12.1",
     "sass-lint-auto-fix": "^0.11.0",
+    "ts-mockito": "^2.3.1",
     "ts-node": "~5.0.1",
     "tslint": "~5.9.1",
     "typescript": "~3.2.4",

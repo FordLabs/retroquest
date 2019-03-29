@@ -1,54 +1,73 @@
 <!--
-  ~ Copyright (c) 2018 Ford Motor Company
-  ~ All rights reserved.
+  ~  Copyright (c) 2018 Ford Motor Company
+  ~  All rights reserved.
   ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
   ~
-  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~  http://www.apache.org/licenses/LICENSE-2.0
   ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
   -->
 
-<rq-deletion-overlay
-  *ngIf="deleteWasToggled"
-  (declineButtonClicked)="deleteWasToggled = false"
-  (acceptButtonClicked)="deleteBoard(board)"
-  heading="Delete this board?"
-  [theme]="theme"
-></rq-deletion-overlay>
+<!--<rq-deletion-overlay-->
+<!--  *ngIf="deleteWasToggled"-->
+<!--  (declineButtonClicked)="deleteWasToggled = false"-->
+<!--  (acceptButtonClicked)="deleteBoard(board)"-->
+<!--  heading="Delete this board?"-->
+<!--  [theme]="theme"-->
+<!--&gt;</rq-deletion-overlay>-->
 
 <div
-  class="content-area"
->
-  <span>{{board.dateCreated.format("MMM Do YYYY")}}</span>
-</div>
-
-<div
-  class="footer"
+  class="thought-count"
   [ngClass]="{
     'dark-theme': darkThemeIsEnabled
   }"
->
-  <a
-    routerLink="/team/{{teamId}}/archives/{{board.id}}"
-    class="view-board-button"
+>{{board.thoughts.length}}</div>
+
+<div class="date">{{board.dateCreated.format("MMM Do YYYY")}}</div>
+
+<div class="right-content">
+  <div
+    class="separator"
     [ngClass]="{
       'dark-theme': darkThemeIsEnabled
     }"
-  >View Board</a>
-  <a
-    href="#delete"
-    (click)="$event.preventDefault();
-    deleteWasToggled = true"
-    class="delete-board-button"
-    [ngClass]="{
-      'dark-theme': darkThemeIsEnabled
-    }"
-  >Delete Board</a>
+  ></div>
+  <rq-button
+    class="view-button"
+    text="view"
+    type="secondary"
+    [theme]="theme"
+    (click)="routeToBoard()"
+  ></rq-button>
 </div>
+
+<!--<div-->
+<!--  class="footer"-->
+<!--  [ngClass]="{-->
+<!--    'dark-theme': darkThemeIsEnabled-->
+<!--  }"-->
+<!--&gt;-->
+<!--  <a-->
+<!--    routerLink="/team/{{teamId}}/archives/{{board.id}}"-->
+<!--    class="view-board-button"-->
+<!--    [ngClass]="{-->
+<!--      'dark-theme': darkThemeIsEnabled-->
+<!--    }"-->
+<!--  >View Board</a>-->
+<!--  <a-->
+<!--    href="#delete"-->
+<!--    (click)="$event.preventDefault();-->
+<!--    deleteWasToggled = true"-->
+<!--    class="delete-board-button"-->
+<!--    [ngClass]="{-->
+<!--      'dark-theme': darkThemeIsEnabled-->
+<!--    }"-->
+<!--  >Delete Board</a>-->
+<!--</div>-->

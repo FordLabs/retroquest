@@ -1,24 +1,26 @@
 /*
- * Copyright (c) 2018 Ford Motor Company
- * All rights reserved.
+ *  Copyright (c) 2018 Ford Motor Company
+ *  All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {ActionItem} from '../../domain/action-item';
 import * as $ from 'jquery';
 import {Themes} from '../../domain/Theme';
+import {ActionItemService} from '../../teams/services/action.service';
+import {DataService} from '../../data.service';
 
 const ESC_KEY = 27;
 
@@ -30,25 +32,49 @@ const ESC_KEY = 27;
     '[style.display]': 'visible ? "flex": "none"'
   }
 })
-export class ActionsRadiatorViewComponent {
+export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
 
-  @Input() visible = false;
-  @Input() theme: Themes = Themes.Light;
-  @Input() actionItems: Array<ActionItem>;
+  @Input() visible = true;
+  @Input() theme;
+  @Input() teamId: string;
 
   @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  actionItems: Array<ActionItem>;
 
   timeOutInterval = 1000 * 75;
   scrollInterval = 1000 * 25;
   pageIsAutoScrolling = false;
   scrollingIntervalId: any = null;
 
+  constructor(private actionItemService: ActionItemService,
+              private dataService: DataService) {
+
+  }
+
+  ngOnInit(): void {
+    this.teamId = this.dataService.team.id;
+    this.theme = this.dataService.theme;
+
+    this.dataService.themeChanged.subscribe(theme => this.theme = theme);
+
+    this.actionItemService.fetchActionItems(this.teamId).subscribe(actionItems => {
+      this.actionItems = actionItems;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.toggleAutoScroll();
+    this.scrollToTopOfPage();
+    this.resetScroll();
+  }
+
   get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;
   }
 
   private scrollToTopOfPage() {
-    const rootPage = $('html');
+    const rootPage = $('rq-sub-app');
     rootPage.animate(
       {scrollTop: 0},
       this.scrollInterval
@@ -56,7 +82,7 @@ export class ActionsRadiatorViewComponent {
   }
 
   private scrollToBottomOfPage() {
-    const rootPage = $('html');
+    const rootPage = $('rq-sub-app');
     rootPage.animate(
       {scrollTop: rootPage[0].scrollHeight},
       this.scrollInterval
@@ -97,7 +123,7 @@ export class ActionsRadiatorViewComponent {
       this.autoScrollPage();
     } else {
       if (this.scrollingIntervalId) {
-        const rootPage = $('html');
+        const rootPage = $('rq-sub-app');
         rootPage.stop(true);
         window.clearInterval(this.scrollingIntervalId);
         this.scrollingIntervalId = null;
@@ -108,7 +134,7 @@ export class ActionsRadiatorViewComponent {
   public resetScroll(): void {
     this.pageIsAutoScrolling = false;
 
-    const rootPage = $('html');
+    const rootPage = $('rq-sub-app');
     rootPage.stop(true);
 
     window.clearInterval(this.scrollingIntervalId);
@@ -117,7 +143,7 @@ export class ActionsRadiatorViewComponent {
   }
 
   private scrollToTopWithoutAnimation() {
-    const rootPage = $('html');
+    const rootPage = $('rq-sub-app');
     rootPage.animate(
       {scrollTop: 0},
       0

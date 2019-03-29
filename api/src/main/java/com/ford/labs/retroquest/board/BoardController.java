@@ -60,4 +60,5 @@ public class BoardController {
     public List<Thought> getThoughtsForBoard(@PathVariable("teamId") String teamId, @PathVariable("boardId") Long boardId) {
         return this.boardService.getThoughtsForTeamIdAndBoardId(teamId, boardId);
     }
+
 }

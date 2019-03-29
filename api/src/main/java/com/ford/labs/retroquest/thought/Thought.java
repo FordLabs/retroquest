@@ -18,7 +18,6 @@
 package com.ford.labs.retroquest.thought;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ford.labs.retroquest.board.Board;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import lombok.Builder;
 import lombok.Data;

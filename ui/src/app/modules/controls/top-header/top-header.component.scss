@@ -1,0 +1,207 @@
+/*!
+ *  Copyright (c) 2018 Ford Motor Company
+ *  All rights reserved.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+@import 'color-vars';
+@import 'global-vars';
+
+:host {
+  align-items: center;
+  box-sizing: border-box;
+  display: block;
+
+  height: 64px;
+  margin: 0 auto;
+  max-width: $desktop-max-width;
+  min-width: $desktop-max-width;
+
+  padding-left: $global-side-padding;
+  padding-right: $global-side-padding;
+
+  @media only screen and (max-width: 610px) {
+    height: 42px;
+    min-width: 0;
+    padding-bottom: 0;
+    padding-left: 6px;
+    padding-right: 6px;
+    width: 100%;
+  }
+
+  .header-top-content {
+    box-sizing: border-box;
+    height: 100%;
+    position: relative;
+    width: 100%;
+
+    @media only screen and (max-width: 610px) {
+      min-width: 0;
+      width: 100%;
+    }
+
+    .horizontal-separator {
+      background-color: $wet-asphalt;
+      border-radius: 6px;
+      box-sizing: border-box;
+      height: 24px;
+      margin: 0 24px;
+      opacity: .1;
+      width: 3px;
+
+      @media only screen and (max-width: 610px) {
+        display: none;
+      }
+
+      &.dark-theme {
+        background-color: $count-separator-background-dark;
+        opacity: 1;
+      }
+    }
+
+    .left-content {
+      align-items: center;
+      display: flex;
+      font-size: 1.5rem;
+      height: 100%;
+      justify-content: center;
+      left: 0;
+      position: absolute;
+
+      @media only screen and (max-width: 610px) {
+        font-size: 1rem;
+        left: 0;
+        margin: 0 auto;
+        right: 0;
+      }
+
+      .logo-link {
+        height: 36px;
+        margin: 0;
+        padding: 0;
+
+        @media only screen and (max-width: 610px) {
+          height: 24px;
+        }
+
+        #logo {
+          border-radius: 6px;
+          height: inherit;
+
+          @media only screen and (max-width: 610px) {
+            display: none;
+          }
+        }
+      }
+
+      #teamName {
+        color: inherit;
+        font-size: inherit;
+        font-weight: bold;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &.dark-theme {
+          color: opacity($clouds, .75);
+        }
+      }
+    }
+
+    .center-content {
+      align-items: center;
+      display: flex;
+      height: 100%;
+      justify-content: center;
+
+      left: 0;
+      margin: 0 auto;
+      position: absolute;
+      right: 0;
+
+      @media only screen and (max-width: 610px) {
+        display: none;
+      }
+
+      rq-button {
+        box-shadow: none;
+        color: opacity($wet-asphalt, .4);
+        font-size: 1.1rem;
+        height: 28px;
+        width: auto;
+
+        &.dark-theme {
+          color: opacity($clouds, .4);
+        }
+
+        &.selected {
+          background-color: opacity($wet-asphalt, .2);
+          border-radius: 32px;
+          color: $wet-asphalt;
+
+          &.dark-theme {
+            background-color: opacity($clouds, .2);
+            color: $clouds;
+          }
+        }
+
+      }
+
+      .horizontal-separator {
+        height: 1.1rem;
+        margin: 0 12px;
+      }
+    }
+
+    .right-content {
+      align-items: center;
+      color: inherit;
+
+      display: flex;
+      height: 100%;
+      position: absolute;
+      right: 0;
+
+      &.dark-theme {
+        color: $clouds;
+      }
+
+      .last-saved-text {
+        font-size: .8rem;
+        opacity: .5;
+        text-align: right;
+
+        @media only screen and (max-width: 610px) {
+          display: none;
+        }
+      }
+
+      .settings-button {
+        cursor: pointer;
+        font-size: 1.3rem;
+        margin-left: 18px;
+        position: relative;
+
+        @media only screen and (max-width: 610px) {
+          position: absolute;
+          right: 12px;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
+        &:hover {
+          color: $turquoise;
+        }
+      }
+    }
+  }
+}

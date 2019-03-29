@@ -1,18 +1,18 @@
 /*!
- * Copyright (c) 2018 Ford Motor Company
- * All rights reserved.
+ *  Copyright (c) 2018 Ford Motor Company
+ *  All rights reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 @import 'color-vars';
 @import 'global-vars';
@@ -20,14 +20,12 @@
 :host {
   display: block;
 
-  header {
+  .header {
     box-sizing: border-box;
     font-weight: normal;
-    padding: 12px 0;
     z-index: 3;
 
     @media only screen and (max-width: 610px) {
-      padding-bottom: 12px;
       padding-top: 0;
     }
 
@@ -35,14 +33,20 @@
       color: $clouds;
     }
 
+    .no-archives-info {
+      margin: 0 auto;
+    }
+
     #headerBottom {
       $header-bottom-height: 32px;
+      align-items: center;
       background: $white;
       box-sizing: border-box;
       color: inherit;
-      height: 45px;
 
-      min-width: $desktop-max-width;
+      display: flex;
+      height: 45px;
+      justify-content: center;
       position: relative;
 
       &.dark-theme {
@@ -56,51 +60,31 @@
       }
 
       .header-bottom-content {
-        align-self: center;
-        box-sizing: inherit;
-        color: inherit;
+        align-items: center;
+        box-sizing: border-box;
         display: flex;
-        flex-direction: row;
+        font-weight: bold;
+        height: 100%;
+        max-width: 90%;
+        width: 400px;
 
-        height: inherit;
-
-        justify-content: flex-end;
-        margin: 0 auto;
-        max-width: $desktop-max-width;
-        min-width: inherit;
-
-        padding-left: $global-side-padding;
-        padding-right: $global-side-padding;
-
-        @media only screen and (max-width: 610px) {
-          height: $header-bottom-height;
-          min-width: 0;
-          padding-left: 12px;
-          padding-right: 12px;
-          width: 100%;
-        }
-
-        a {
-          color: inherit;
-          margin: 0;
-          padding: 0;
-          width: auto;
-
-          rq-button {
-            height: 100%;
-            width: auto;
-          }
-        }
-
-        &.center-content {
-          justify-content: center;
-        }
-
-        .button-icon {
-          display: none;
+        .sort-container {
+          align-items: center;
+          display: flex;
+          margin-right: 60px;
 
           @media only screen and (max-width: 610px) {
-            display: block;
+            font-size: .9rem;
+            margin-right: 36px;
+          }
+
+          &.count-sort-container {
+            cursor: pointer;
+          }
+
+          .filter-button {
+            margin-right: 3px;
+            text-transform: capitalize;
           }
         }
       }
@@ -112,26 +96,45 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin-top: 36px;
 
-    .heading {
-      color: inherit;
-      font-size: 2rem;
-      font-weight: bold;
-      margin: 10px 0;
-      text-transform: capitalize;
+    .no-archives-info {
+      text-align: center;
 
       &.dark-theme {
         color: $clouds;
       }
+
+      .heading {
+        color: inherit;
+        font-size: 1.875rem;
+        font-weight: bold;
+
+        &.dark-theme {
+          color: $clouds;
+        }
+      }
+
+      .sub-heading {
+        font-size: 1.5rem;
+        font-weight: normal;
+        margin-bottom: 24px;
+      }
+
+      .info {
+        font-size: 1.25rem;
+        opacity: .5;
+      }
     }
 
-    h2 {
-      max-width: 90%;
-    }
-
-    rq-board-summary {
-      max-width: 90%;
-    }
   }
 
+}
+
+.add-translucence {
+  opacity: .45;
+}
+
+.add-pointer {
+  cursor: pointer;
 }

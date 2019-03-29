@@ -15,16 +15,19 @@
  * limitations under the License.
  */
 
-import {TopHeaderComponent} from './top-header.component';
+package com.ford.labs.retroquest.v2.columns;
 
-describe('TopHeaderComponent', () => {
-  let component: TopHeaderComponent;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-  beforeEach(() => {
-    component = new TopHeaderComponent();
-  });
+import java.util.List;
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class ColumnCombinerResponse {
+    private List<ColumnResponse> columns;
+}
