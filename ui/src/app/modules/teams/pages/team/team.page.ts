@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-import {Component, EventEmitter, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {WebsocketService} from '../../services/websocket.service';
 import {TeamService} from '../../services/team.service';
 import {WebsocketResponse} from '../../../domain/websocket-response';
@@ -35,7 +35,7 @@ import {DataService} from '../../../data.service';
   templateUrl: './team.page.html',
   styleUrls: ['./team.page.scss']
 })
-export class TeamPageComponent implements OnInit {
+export class TeamPageComponent implements OnInit, OnDestroy {
 
   @ViewChild('radiatorView') radiatorView: ActionsRadiatorViewComponent;
 
@@ -93,6 +93,7 @@ export class TeamPageComponent implements OnInit {
       this.websocketInit();
     }
 
+
     this.websocketService.intervalId = this.globalWindowRef.setInterval(() => {
       if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
         this.websocketService.closeWebsocket();
@@ -103,7 +104,12 @@ export class TeamPageComponent implements OnInit {
     }, 1000 * 60);
   }
 
+  ngOnDestroy(): void {
+    this.websocketService.closeWebsocket();
+  }
+
   private websocketInit() {
+
     this.websocketService.openWebsocket(this.teamId).subscribe(() => {
 
       this.websocketService.heartbeatTopic().subscribe();

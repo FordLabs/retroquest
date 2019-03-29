@@ -16,7 +16,6 @@
  */
 
 import {TeamPageComponent} from './team.page';
-import {ActivatedRoute, Data} from '@angular/router';
 import {WebsocketService} from '../../services/websocket.service';
 import {BoardService} from '../../services/board.service';
 import {ColumnAggregationService} from '../../services/column-aggregation.service';
@@ -112,6 +111,17 @@ describe('TeamPageComponent', () => {
         verify(websocketService.openWebsocket(fakeTeamId)).never();
       });
 
+    });
+  });
+
+  describe('ngOnDestroy', () => {
+
+    beforeEach(() => {
+      component.ngOnDestroy();
+    });
+
+    it('should close the websocket', () => {
+      verify(websocketService.closeWebsocket()).called();
     });
   });
 
