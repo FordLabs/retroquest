@@ -24,11 +24,11 @@
   (sortChanged)="sortChanged($event)"
 ></rq-thoughts-header>
 
-<div class="rq-thought-list {{column.topic}}">
+<div class="rq-thought-list {{thoughtAggregation.topic}}">
   <rq-task
     *ngFor="let thought of activeThoughts"
     [task]="thought"
-    [type]="column.topic"
+    [type]="thoughtAggregation.topic"
     (messageChanged)="onMessageChanged($event, thought)"
     (deleted)="onDeleted($event)"
     (messageClicked)="displayPopup(thought)"
@@ -44,7 +44,7 @@
   <rq-task
     *ngFor="let thought of completedThoughts"
     [task]="thought"
-    [type]="column.topic"
+    [type]="thoughtAggregation.topic"
     (messageChanged)="onMessageChanged($event, thought)"
     (deleted)="onDeleted($event)"
     (messageClicked)="displayPopup(thought)"
@@ -63,7 +63,7 @@
   [teamId]="teamId"
   [theme]="theme"
   [visible]="dialogIsVisible"
-  [type]="column.topic"
+  [type]="thoughtAggregation.topic"
   [task]="selectedThought"
   (visibilityChanged)="dialogIsVisible = $event"
   (messageChanged)="onMessageChanged($event, selectedThought)"

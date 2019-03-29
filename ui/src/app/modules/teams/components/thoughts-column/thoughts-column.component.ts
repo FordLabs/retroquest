@@ -49,22 +49,11 @@ export class ThoughtsColumnComponent implements OnInit {
 
   @ViewChild(TaskDialogComponent) thoughtDialog: TaskDialogComponent;
 
-  column: Column;
   selectedThought: Thought = emptyThought();
   dialogIsVisible = false;
   thoughtsAreSorted = false;
 
   ngOnInit(): void {
-
-    this.column = {
-      id: this.thoughtAggregation.id,
-      sorted: false,
-      topic: this.thoughtAggregation.topic,
-      title: this.thoughtAggregation.title,
-      teamId: this.teamId
-    };
-
-
     this.retroEnded.subscribe(() => {
       this.thoughtAggregation.items.active.splice(0, this.thoughtAggregation.items.active.length);
       this.thoughtAggregation.items.completed.splice(0, this.thoughtAggregation.items.completed.length);
@@ -74,9 +63,7 @@ export class ThoughtsColumnComponent implements OnInit {
       response => {
 
         const thought = (response.payload as Thought);
-
-        if (thought.topic === this.column.topic) {
-
+        if (thought.topic === this.thoughtAggregation.topic) {
           if (response.type === 'delete') {
             this.deleteThought(thought);
           } else {
@@ -87,14 +74,14 @@ export class ThoughtsColumnComponent implements OnInit {
     );
 
     this.columnChanged.subscribe(column => {
-      if (this.column.topic === column.topic) {
-        this.column = column;
+      if (this.thoughtAggregation.topic === column.topic) {
+        this.thoughtAggregation.title = column.title;
       }
     });
   }
 
   get totalThoughtCount(): number {
-    return this.thoughtAggregation.items.active.length + this.thoughtAggregation.items.completed.length;
+    return this.thoughtAggregation.items.active.length;
   }
 
   get activeThoughts(): Array<Thought> {

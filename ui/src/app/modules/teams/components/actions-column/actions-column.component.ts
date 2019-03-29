@@ -156,7 +156,7 @@ export class ActionsColumnComponent implements OnInit {
   }
 
   get totalActionItemCount(): number {
-    return this.actionItemAggregation.items.active.length + this.actionItemAggregation.items.completed.length;
+    return this.actionItemAggregation.items.active.length;
   }
 
   private checkForNullDate(dateCreated: string): string {
