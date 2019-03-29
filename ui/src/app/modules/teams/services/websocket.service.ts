@@ -90,14 +90,14 @@ export class WebsocketService {
 
   public sendHeartbeat() {
     this.checkForOpenSocket();
-    this.stompClient.send(`/app/heartbeat/ping`, '');
+    this.stompClient.send(`/app/heartbeat/ping/${this.teamId}`, '');
   }
 
   public heartbeatTopic(): Observable<any> {
     this.checkForOpenSocket();
 
     return new Observable<any>(observer => {
-      const sub = this.stompClient.subscribe(`/topic/heartbeat/pong`);
+      const sub = this.stompClient.subscribe(`/topic/heartbeat/pong/${this.teamId}`);
       sub.messages.subscribe(m => {
         observer.next(m);
       });

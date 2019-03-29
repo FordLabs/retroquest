@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class WebSocketHeartbeatController {
 
-    @MessageMapping("/heartbeat/ping")
-    @SendTo("/topic/heartbeat/pong")
+    @MessageMapping("/heartbeat/ping/{teamId}")
+    @SendTo("/topic/heartbeat/pong/{teamId}")
     public String sendBackHeartbeat() {
         return "";
     }

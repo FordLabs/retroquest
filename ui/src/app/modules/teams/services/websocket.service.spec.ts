@@ -19,6 +19,7 @@ import {WebsocketService} from './websocket.service';
 import {Observable} from 'rxjs/internal/Observable';
 import {Column} from '../../domain/column';
 import createSpyObj = jasmine.createSpyObj;
+import {nullSafeIsEquivalent} from '@angular/compiler/src/output/output_ast';
 
 describe('WebsocketService', () => {
   let service: WebsocketService;
@@ -55,6 +56,20 @@ describe('WebsocketService', () => {
 
     it('should return wss:// when the location.protocol is https', () => {
       expect(WebsocketService.getWsProtocol({protocol: 'https:'})).toBe('wss://');
+    });
+  });
+
+  describe('sendHeartbeat', () => {
+    beforeEach(() => {
+      service.stompClient = jasmine.createSpyObj({
+        send: null
+      });
+      service.teamId = teamId;
+      service.sendHeartbeat();
+    });
+
+    it('should send a heartbeat ping to the backend with the team id in the url', () => {
+      expect(service.stompClient.send).toHaveBeenCalledWith(`/app/heartbeat/ping/${teamId}`, '');
     });
   });
 
