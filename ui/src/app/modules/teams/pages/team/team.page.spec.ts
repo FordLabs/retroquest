@@ -95,6 +95,9 @@ describe('TeamPageComponent', () => {
       beforeEach(() => {
         when(websocketService.openWebsocket(fakeTeamId)).thenReturn(of());
         when(websocketService.heartbeatTopic()).thenReturn(of());
+        when(websocketService.thoughtsTopic()).thenReturn(of());
+        when(websocketService.actionItemTopic()).thenReturn(of());
+        when(websocketService.columnTitleTopic()).thenReturn(of());
       });
 
       it('should open the websocket if the state is closed', () => {
@@ -111,17 +114,16 @@ describe('TeamPageComponent', () => {
         verify(websocketService.openWebsocket(fakeTeamId)).never();
       });
 
-    });
-  });
+      it('should resubscribe to the websocket', () => {
+        when(websocketService.getWebsocketState()).thenReturn(WebSocket.OPEN);
 
-  describe('ngOnDestroy', () => {
+        component.ngOnInit();
+        verify(websocketService.heartbeatTopic()).called();
+        verify(websocketService.thoughtsTopic()).called();
+        verify(websocketService.actionItemTopic()).called();
+        verify(websocketService.columnTitleTopic()).called();
+      });
 
-    beforeEach(() => {
-      component.ngOnDestroy();
-    });
-
-    it('should close the websocket', () => {
-      verify(websocketService.closeWebsocket()).called();
     });
   });
 

@@ -35,7 +35,7 @@ import {DataService} from '../../../data.service';
   templateUrl: './team.page.html',
   styleUrls: ['./team.page.scss']
 })
-export class TeamPageComponent implements OnInit, OnDestroy {
+export class TeamPageComponent implements OnInit {
 
   @ViewChild('radiatorView') radiatorView: ActionsRadiatorViewComponent;
 
@@ -91,8 +91,9 @@ export class TeamPageComponent implements OnInit, OnDestroy {
 
     if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
       this.websocketInit();
+    } else if (this.websocketService.getWebsocketState() === WebSocket.OPEN) {
+      this.subscribeToWebsocket();
     }
-
 
     this.websocketService.intervalId = this.globalWindowRef.setInterval(() => {
       if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
@@ -104,31 +105,31 @@ export class TeamPageComponent implements OnInit, OnDestroy {
     }, 1000 * 60);
   }
 
-  ngOnDestroy(): void {
-    this.websocketService.closeWebsocket();
+  private subscribeToWebsocket() {
+
+    this.websocketService.heartbeatTopic().subscribe();
+
+    this.websocketService.thoughtsTopic().subscribe((message) => {
+      this.thoughtChanged.emit(message.bodyJson as WebsocketResponse);
+      this.saveCheckerService.updateTimestamp();
+    });
+
+    this.websocketService.actionItemTopic().subscribe((message) => {
+      this.actionItemChanged.emit(message.bodyJson as WebsocketResponse);
+      this.saveCheckerService.updateTimestamp();
+    });
+
+    this.websocketService.columnTitleTopic().subscribe((message) => {
+      const response: WebsocketResponse = message.bodyJson;
+      this.columnChanged.emit(response.payload as Column);
+      this.saveCheckerService.updateTimestamp();
+    });
   }
 
   private websocketInit() {
 
     this.websocketService.openWebsocket(this.teamId).subscribe(() => {
-
-      this.websocketService.heartbeatTopic().subscribe();
-
-      this.websocketService.thoughtsTopic().subscribe((message) => {
-        this.thoughtChanged.emit(message.bodyJson as WebsocketResponse);
-        this.saveCheckerService.updateTimestamp();
-      });
-
-      this.websocketService.actionItemTopic().subscribe((message) => {
-        this.actionItemChanged.emit(message.bodyJson as WebsocketResponse);
-        this.saveCheckerService.updateTimestamp();
-      });
-
-      this.websocketService.columnTitleTopic().subscribe((message) => {
-        const response: WebsocketResponse = message.bodyJson;
-        this.columnChanged.emit(response.payload as Column);
-        this.saveCheckerService.updateTimestamp();
-      });
+      this.subscribeToWebsocket();
     });
   }
 
