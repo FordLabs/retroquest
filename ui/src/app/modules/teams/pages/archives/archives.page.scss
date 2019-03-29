@@ -101,6 +101,10 @@
     .no-archives-info {
       text-align: center;
 
+      &.dark-theme {
+        color: $clouds;
+      }
+
       .heading {
         color: inherit;
         font-size: 1.875rem;

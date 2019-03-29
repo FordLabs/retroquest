@@ -16,12 +16,9 @@
   -->
 
 <div id="page">
-  <div
-    class="header"
-    [ngClass]="{
-      'dark-theme': darkThemeIsEnabled
-    }"
-  >
+
+  <div class="header" [ngClass]="{'dark-theme': darkThemeIsEnabled}">
+
     <div id="headerBottom" [ngClass]="{'dark-theme': darkThemeIsEnabled}">
       <div class="header-bottom-content" *ngIf="boards.length > 0">
 
@@ -57,7 +54,13 @@
       [teamId]="teamId"
       (boardDeleted)="removeBoardFromBoards($event)"></rq-board-summary>
 
-    <div class="no-archives-info" *ngIf="boards.length === 0">
+    <div
+      class="no-archives-info"
+      *ngIf="boards.length === 0"
+      [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+    >
       <div class="heading">Looks Like A New Team!</div>
       <div class="sub-heading">No archives were found.</div>
 
