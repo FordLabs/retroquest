@@ -65,6 +65,7 @@ export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.toggleAutoScroll();
+    this.scrollToTopOfPage();
     this.resetScroll();
   }
 
@@ -73,7 +74,7 @@ export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
   }
 
   private scrollToTopOfPage() {
-    const rootPage = $('html');
+    const rootPage = $('rq-sub-app');
     rootPage.animate(
       {scrollTop: 0},
       this.scrollInterval
@@ -81,7 +82,7 @@ export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
   }
 
   private scrollToBottomOfPage() {
-    const rootPage = $('html');
+    const rootPage = $('rq-sub-app');
     rootPage.animate(
       {scrollTop: rootPage[0].scrollHeight},
       this.scrollInterval
@@ -122,7 +123,7 @@ export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
       this.autoScrollPage();
     } else {
       if (this.scrollingIntervalId) {
-        const rootPage = $('html');
+        const rootPage = $('rq-sub-app');
         rootPage.stop(true);
         window.clearInterval(this.scrollingIntervalId);
         this.scrollingIntervalId = null;
@@ -133,7 +134,7 @@ export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
   public resetScroll(): void {
     this.pageIsAutoScrolling = false;
 
-    const rootPage = $('html');
+    const rootPage = $('rq-sub-app');
     rootPage.stop(true);
 
     window.clearInterval(this.scrollingIntervalId);
@@ -142,7 +143,7 @@ export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
   }
 
   private scrollToTopWithoutAnimation() {
-    const rootPage = $('html');
+    const rootPage = $('rq-sub-app');
     rootPage.animate(
       {scrollTop: 0},
       0

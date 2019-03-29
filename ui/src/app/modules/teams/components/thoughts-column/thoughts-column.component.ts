@@ -94,7 +94,7 @@ export class ThoughtsColumnComponent implements OnInit {
   }
 
   get totalThoughtCount(): number {
-    return this.thoughtAggregation.items.active.length + this.thoughtAggregation.items.completed.length;
+    return this.thoughtAggregation.items.active.length;
   }
 
   get activeThoughts(): Array<Thought> {
