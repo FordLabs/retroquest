@@ -100,7 +100,7 @@ export class TeamPageComponent implements OnInit {
       } else if (this.websocketService.getWebsocketState() === WebSocket.OPEN) {
         this.websocketService.sendHeartbeat();
       }
-    }, 1000 * 1);
+    }, 1000 * 60);
   }
 
   private websocketInit() {
