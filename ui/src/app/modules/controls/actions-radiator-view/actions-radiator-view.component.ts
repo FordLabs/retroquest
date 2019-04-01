@@ -52,6 +52,7 @@ export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
 
   }
 
+
   ngOnInit(): void {
     this.teamId = this.dataService.team.id;
     this.theme = this.dataService.theme;
@@ -59,7 +60,7 @@ export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
     this.dataService.themeChanged.subscribe(theme => this.theme = theme);
 
     this.actionItemService.fetchActionItems(this.teamId).subscribe(actionItems => {
-      this.actionItems = actionItems;
+      this.actionItems = actionItems.filter(action => !action.completed);
     });
   }
 
