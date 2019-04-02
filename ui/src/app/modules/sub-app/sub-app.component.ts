@@ -20,6 +20,7 @@ import {ActivatedRoute} from '@angular/router';
 import {TeamService} from '../teams/services/team.service';
 import {DataService} from '../data.service';
 import {parseTheme, Themes} from '../domain/Theme';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'rq-sub-app',
@@ -36,7 +37,8 @@ export class SubAppComponent implements OnInit, AfterViewInit {
 
   constructor(private activatedRoute: ActivatedRoute,
               private teamService: TeamService,
-              private dataService: DataService) {
+              private dataService: DataService,
+              private titleService: Title) {
   }
 
   ngOnInit() {
@@ -73,6 +75,7 @@ export class SubAppComponent implements OnInit, AfterViewInit {
       (teamName) => {
         this.teamName = teamName;
         this.dataService.team.name = this.teamName;
+        this.titleService.setTitle(this.teamName + ' | RetroQuest');
       }
     );
   }
