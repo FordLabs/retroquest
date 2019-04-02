@@ -1,5 +1,5 @@
 
-## Welcome to the RetroQuest!
+## Welcome to RetroQuest!
 
 [![Build Status](https://secure.travis-ci.org/FordLabs/retroquest.svg?branch=develop)](http://travis-ci.org/FordLabs/retroquest)
 
