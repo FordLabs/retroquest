@@ -135,5 +135,8 @@ export class TaskDialogComponent implements AfterContentChecked {
     }
   }
 
+  hideActionItem() {
+    this.actionItemIsVisible = false;
+  }
 }
 

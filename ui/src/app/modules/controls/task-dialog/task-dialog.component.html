@@ -69,6 +69,7 @@
   [actionItem]="assignedActionItem"
   (dialogDiscarded)="toggleActionItem()"
   (dialogConfirmed)="createLinking()"
+  (keydown.escape)="hideActionItem(); $event.stopPropagation()"
 >
 
 </rq-action-item-task>
