@@ -56,7 +56,7 @@
 
     <div
       class="no-archives-info"
-      *ngIf="boards.length === 0"
+      *ngIf="boards.length === 0 && !archivesAreLoading"
       [ngClass]="{
         'dark-theme': darkThemeIsEnabled
       }"

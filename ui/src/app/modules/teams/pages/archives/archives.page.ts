@@ -37,6 +37,7 @@ export class ArchivesPageComponent implements OnInit {
   boards: Array<Board> = [];
   globalWindowRef: Window = window;
   countSortEnabled = false;
+  archivesAreLoading = true;
 
   constructor(private dataService: DataService,
               private teamsService: TeamService,
@@ -55,8 +56,12 @@ export class ArchivesPageComponent implements OnInit {
     this.dataService.themeChanged.subscribe(theme => this.theme = theme);
 
     this.boardService.fetchBoards(this.teamId).subscribe(boards => {
-      this.boards = boards;
-    });
+        this.boards = boards;
+        this.archivesAreLoading = false;
+      },
+      () => {
+        this.archivesAreLoading = false;
+      });
   }
 
   get darkThemeIsEnabled(): boolean {

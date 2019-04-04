@@ -15,6 +15,7 @@
  *  limitations under the License.
  */
 @import 'color-vars';
+@import 'global-vars';
 
 :host {
   align-items: center;
@@ -25,7 +26,32 @@
   justify-content: flex-start;
   margin: 0 auto;
   position: relative;
-  width: 500px;
+  width: 100%;
+
+  .header-bottom {
+    $header-bottom-height: 32px;
+    align-items: center;
+    background: $white;
+    box-sizing: border-box;
+    color: inherit;
+    display: flex;
+
+    height: 45px;
+    justify-content: center;
+    margin-bottom: 24px;
+    position: relative;
+    width: 100%;
+
+    &.dark-theme {
+      background-color: $header-background-color-dark;
+    }
+
+    @media only screen and (max-width: 610px) {
+      height: $header-bottom-height;
+      min-width: 0;
+      width: 100%;
+    }
+  }
 
   rq-action-item-task {
     height: auto;

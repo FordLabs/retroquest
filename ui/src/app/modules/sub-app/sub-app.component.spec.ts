@@ -20,21 +20,24 @@ import {ActivatedRoute} from '@angular/router';
 import {TeamService} from '../teams/services/team.service';
 import {DataService} from '../data.service';
 import {of} from 'rxjs';
-import {instance, mock, when} from 'ts-mockito';
+import {instance, mock, verify, when} from 'ts-mockito';
 import {Themes} from '../domain/Theme';
+import {Title} from '@angular/platform-browser';
 
 describe('SubAppComponent', () => {
   let component: SubAppComponent;
   let activatedRoute: ActivatedRoute;
   let teamService: TeamService;
   let dataService: DataService;
+  let titleService: Title;
 
   beforeEach(() => {
     activatedRoute = mock(ActivatedRoute);
     teamService = mock(TeamService);
     dataService = new DataService();
+    titleService = mock(Title);
 
-    component = new SubAppComponent(instance(activatedRoute), instance(teamService), dataService);
+    component = new SubAppComponent(instance(activatedRoute), instance(teamService), dataService, instance(titleService));
   });
 
   it('should create', () => {
@@ -60,6 +63,10 @@ describe('SubAppComponent', () => {
     it('should set the team name to name returned by the backend', () => {
       expect(component.teamName).toEqual(fakeName);
       expect(dataService.team.name).toEqual(fakeName);
+    });
+
+    it('should change the window title to include the team name', () => {
+      verify(titleService.setTitle(`${fakeName} | RetroQuest`)).called();
     });
   });
 

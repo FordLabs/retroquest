@@ -72,6 +72,10 @@ describe('ArchivesPageComponent', () => {
       mockDataService.team.id = 'the id';
     });
 
+    it('should have the archives loading flag to true', () => {
+      expect(component.archivesAreLoading).toBeTruthy();
+    });
+
     it('should set the team id attribute on the component', () => {
       component.teamId = '';
       component.ngOnInit();

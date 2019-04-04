@@ -51,8 +51,8 @@ import {ActionsRadiatorViewComponent} from '../controls/actions-radiator-view/ac
       {
         path: 'team/:teamId', canActivate: [TeamPageQueryParamGuard], component: SubAppComponent
         , children: [
-          {path: '', component: TeamPageComponent, pathMatch: 'full'},
-          {path: 'radiator', component: ActionsRadiatorViewComponent},
+          {path: '', component: TeamPageComponent, pathMatch: 'full', canActivate: [AuthGuard]},
+          {path: 'radiator', component: ActionsRadiatorViewComponent, canActivate: [AuthGuard]},
           {path: 'archives', component: ArchivesPageComponent, data: {teamId: ':teamId'}, canActivate: [AuthGuard]},
           {path: 'archives/:boardId', component: ArchivedBoardPageComponent, canActivate: [AuthGuard]}
         ]
