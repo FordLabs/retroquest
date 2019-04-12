@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-import {Component, EventEmitter, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, OnInit, ViewChild} from '@angular/core';
 import {WebsocketService} from '../../services/websocket.service';
 import {TeamService} from '../../services/team.service';
 import {WebsocketResponse} from '../../../domain/websocket-response';
@@ -124,6 +124,10 @@ export class TeamPageComponent implements OnInit {
       this.columnChanged.emit(response.payload as Column);
       this.saveCheckerService.updateTimestamp();
     });
+
+    this.websocketService.endRetroTopic().subscribe(() => {
+      this.retroEnded.emit();
+    });
   }
 
   private websocketInit() {
@@ -146,9 +150,8 @@ export class TeamPageComponent implements OnInit {
 
     if (thoughts.length > 0) {
       this.boardService.createBoard(this.teamId, thoughts).subscribe();
+      this.websocketService.endRetro();
     }
-
-    this.retroEnded.emit();
   }
 
   public isSelectedIndex(index: number): boolean {
