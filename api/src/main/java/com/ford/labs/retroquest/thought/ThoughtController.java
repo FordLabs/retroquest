@@ -175,4 +175,6 @@ public class ThoughtController {
         thoughtRepository.deleteAllByTeamId(teamId);
         return new WebsocketDeleteResponse<>(Thought.builder().id(-1L).build());
     }
+
+
 }

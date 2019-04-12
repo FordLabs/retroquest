@@ -19,7 +19,6 @@ import {WebsocketService} from './websocket.service';
 import {Observable} from 'rxjs/internal/Observable';
 import {Column} from '../../domain/column';
 import createSpyObj = jasmine.createSpyObj;
-import {nullSafeIsEquivalent} from '@angular/compiler/src/output/output_ast';
 
 describe('WebsocketService', () => {
   let service: WebsocketService;
@@ -309,6 +308,15 @@ describe('WebsocketService', () => {
         `/app/${teamId}/action-item/delete`,
         JSON.stringify(fakeActionItem)
       );
+    });
+  });
+
+  describe('deleteActionItem', () => {
+    it('should call the end retro websocket with no message', () => {
+      service.openWebsocket(teamId).subscribe();
+      service.endRetro();
+
+      expect(service.stompClient.send).toHaveBeenCalledWith(`/app/${teamId}/end-retro`, null);
     });
   });
 });

@@ -104,6 +104,17 @@ export class WebsocketService {
     });
   }
 
+  public endRetroTopic(): Observable<any> {
+    this.checkForOpenSocket();
+
+    return new Observable<any>(observer => {
+      const sub = this.stompClient.subscribe(`/topic/${this.teamId}/end-retro`);
+      sub.messages.subscribe(m => {
+        observer.next(m);
+      });
+    });
+  }
+
   public thoughtsTopic(): Observable<any> {
     this.checkForOpenSocket();
 
@@ -181,5 +192,10 @@ export class WebsocketService {
   deleteAllThoughts() {
     this.checkForOpenSocket();
     this.stompClient.send(`/app/v2/${this.teamId}/thought/deleteAll`, null);
+  }
+
+  endRetro() {
+    this.checkForOpenSocket();
+    this.stompClient.send(`/app/${this.teamId}/end-retro`, null);
   }
 }

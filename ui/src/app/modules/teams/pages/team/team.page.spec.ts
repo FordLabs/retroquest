@@ -98,6 +98,7 @@ describe('TeamPageComponent', () => {
         when(websocketService.thoughtsTopic()).thenReturn(of());
         when(websocketService.actionItemTopic()).thenReturn(of());
         when(websocketService.columnTitleTopic()).thenReturn(of());
+        when(websocketService.endRetroTopic()).thenReturn(of());
       });
 
       it('should open the websocket if the state is closed', () => {
@@ -122,8 +123,8 @@ describe('TeamPageComponent', () => {
         verify(websocketService.thoughtsTopic()).called();
         verify(websocketService.actionItemTopic()).called();
         verify(websocketService.columnTitleTopic()).called();
+        verify(websocketService.endRetroTopic()).called();
       });
-
     });
   });
 
@@ -159,11 +160,14 @@ describe('TeamPageComponent', () => {
       verify(boardService.createBoard(anything(), anything())).never();
     });
 
-    it('should emit the end retro event', () => {
-      component.retroEnded = jasmine.createSpyObj({emit: null});
+    it('should emit the end retro event to the websocket', () => {
+
+      component.columnsAggregation = [emptyColumnResponse()];
+      component.columnsAggregation[0].items.active = [expectedThoughts[0]];
+
       component.onEndRetro();
 
-      expect(component.retroEnded.emit).toHaveBeenCalled();
+      verify(websocketService.endRetro()).called();
     });
   });
 

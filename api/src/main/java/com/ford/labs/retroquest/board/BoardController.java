@@ -19,7 +19,13 @@ package com.ford.labs.retroquest.board;
 
 
 import com.ford.labs.retroquest.thought.Thought;
+import com.ford.labs.retroquest.websocket.WebsocketDeleteResponse;
+import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -61,4 +67,12 @@ public class BoardController {
         return this.boardService.getThoughtsForTeamIdAndBoardId(teamId, boardId);
     }
 
+    @MessageMapping("/{teamId}/end-retro")
+    @SendTo("/topic/{teamId}/end-retro")
+    public WebsocketPutResponse<Object> endRetroWebsocket(@DestinationVariable("teamId") String teamId, Authentication authentication) {
+        if (!authentication.getPrincipal().equals(teamId)) {
+            return null;
+        }
+        return new WebsocketPutResponse<>(null);
+    }
 }
