@@ -47,7 +47,7 @@ import {DataService} from './modules/data.service';
     BrowserAnimationsModule,
     HttpClientModule,
     RouterModule.forRoot([
-      {path: '', redirectTo: 'create', pathMatch: 'full'}
+      {path: '', redirectTo: 'login', pathMatch: 'full'}
     ]),
     ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production})
   ],
