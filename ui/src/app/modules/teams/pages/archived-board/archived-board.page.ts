@@ -53,7 +53,7 @@ export class ArchivedBoardPageComponent implements OnInit {
   teamName: string;
   globalWindowRef: Window = window;
 
-  columnAggregations: Array<ColumnResponse>;
+  columnAggregations: Array<ColumnResponse> = [];
 
   selectedIndex = 0;
   currentView = 'normalView';
