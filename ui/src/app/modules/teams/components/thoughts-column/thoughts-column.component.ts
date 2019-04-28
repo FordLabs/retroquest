@@ -22,7 +22,7 @@ import {ThoughtService} from '../../services/thought.service';
 import {TaskDialogComponent} from '../../../controls/task-dialog/task-dialog.component';
 import {fadeInOutAnimation} from '../../../animations/add-delete-animation';
 import {Themes} from '../../../domain/Theme';
-import {ColumnResponse} from '../../../domain/column-response';
+import {ColumnResponse, emptyColumnResponse} from '../../../domain/column-response';
 import {WebsocketResponse} from '../../../domain/websocket-response';
 
 @Component({
@@ -35,7 +35,7 @@ export class ThoughtsColumnComponent implements OnInit {
   constructor(private thoughtService: ThoughtService) {
   }
 
-  @Input() thoughtAggregation: ColumnResponse;
+  @Input() thoughtAggregation: ColumnResponse = emptyColumnResponse();
   @Input() readOnly = false;
   @Input() archived = false;
   @Input() teamId: string;
