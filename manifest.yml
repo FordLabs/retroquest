@@ -1,0 +1,8 @@
+---
+applications:
+- name: dev-retroquest
+  path: api/build/libs/retroquest.jar
+  memory: 1GB
+  instances: 1
+  buildpack: java_buildpack_offline
+  disk_quota: 1GB
