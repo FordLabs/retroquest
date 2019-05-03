@@ -17,29 +17,6 @@
 
 <div class="login-container">
 
-  <div #dialog class="dialog" (click)="dialog.hidden = true">
-    <div class="heading">We will be migrating soon!</div>
-    <div class="sub-heading"></div>
-
-    <div class="content">
-      On <b>May 2nd</b> RetroQuest will be shutting down in order to migrate PCF spaces.
-      We will be resuming operation on May 3rd but it may go until <b>May 5th</b>.
-
-      <br>
-      <br>
-      This is an open source application and doesn't any official team work on it and so developers need
-      to do the migration in their downtime.
-
-      <br>
-      <br>
-      Please bear with us and going forward use
-      <a href="https://retroquest.ford.com/"><b>retroquest.ford.com</b></a> this will make
-      future migrations easier. This vanity url will become active once the migration has finished.
-    </div>
-
-    <rq-button type="primary" text="dismiss"></rq-button>
-  </div>
-
   <re-captcha
     #captchaRef="reCaptcha"
     size="invisible"
