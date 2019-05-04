@@ -46,7 +46,10 @@ export class LoginComponent implements OnInit {
   errorMessage: string;
 
   ngOnInit() {
-    this.teamName = (this.route.snapshot.params['teamId'] as string).replace(/-/g, ' ');
+    const teamId = this.route.snapshot.params['teamId'] as string;
+    if (teamId) {
+      this.teamName = teamId.replace(/-/g, ' ');
+    }
   }
 
   requestCaptchaStateAndLogIn(): void {
