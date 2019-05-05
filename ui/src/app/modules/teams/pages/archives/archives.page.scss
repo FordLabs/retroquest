@@ -21,8 +21,11 @@
   display: block;
 
   .header {
+    background: $white;
     box-sizing: border-box;
     font-weight: normal;
+    min-width: $desktop-max-width;
+    width: 100%;
     z-index: 3;
 
     @media only screen and (max-width: 610px) {
@@ -40,14 +43,16 @@
     #headerBottom {
       $header-bottom-height: 32px;
       align-items: center;
-      background: $white;
       box-sizing: border-box;
       color: inherit;
 
       display: flex;
       height: 45px;
       justify-content: center;
+      margin: 0 auto;
+      overflow: auto;
       position: relative;
+      width: 100%;
 
       &.dark-theme {
         background-color: $header-background-color-dark;
@@ -97,6 +102,8 @@
     flex-direction: column;
     justify-content: center;
     margin-top: 36px;
+    min-width: $desktop-max-width;
+    width: 100%;
 
     .no-archives-info {
       text-align: center;
