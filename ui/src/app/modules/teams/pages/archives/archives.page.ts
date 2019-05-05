@@ -38,6 +38,7 @@ export class ArchivesPageComponent implements OnInit {
   globalWindowRef: Window = window;
   countSortEnabled = false;
   archivesAreLoading = true;
+  selectedArchives = 'thoughts';
 
   constructor(private dataService: DataService,
               private teamsService: TeamService,
@@ -62,6 +63,14 @@ export class ArchivesPageComponent implements OnInit {
       () => {
         this.archivesAreLoading = false;
       });
+  }
+
+  get thoughtArchivesAreSelected(): boolean {
+    return this.selectedArchives === 'thoughts';
+  }
+
+  get actionItemArchivesAreSelected(): boolean {
+    return this.selectedArchives === 'action items';
   }
 
   get darkThemeIsEnabled(): boolean {
