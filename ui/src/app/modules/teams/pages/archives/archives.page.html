@@ -47,6 +47,11 @@
 
   <div class="archives">
 
+    <div
+      *ngIf="boards.length > 0"
+      class="archives-heading"
+    >Thought Archives</div>
+
     <rq-board-summary
       *ngFor="let board of archiveBoardList"
       [theme]="theme"

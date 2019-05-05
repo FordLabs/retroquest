@@ -18,6 +18,8 @@
 @import 'global-vars';
 
 :host {
+  $archives-content-base-width: 400px;
+
   display: block;
 
   .header {
@@ -71,7 +73,7 @@
         font-weight: bold;
         height: 100%;
         max-width: 90%;
-        width: 400px;
+        width: $archives-content-base-width;
 
         .sort-container {
           align-items: center;
@@ -101,9 +103,15 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-top: 36px;
+    margin-top: 24px;
     min-width: $desktop-max-width;
     width: 100%;
+
+    .archives-heading {
+      font-size: 1.5rem;
+      margin-bottom: 24px;
+      width: $archives-content-base-width;
+    }
 
     .no-archives-info {
       text-align: center;
