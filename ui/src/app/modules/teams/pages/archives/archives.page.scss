@@ -35,6 +35,7 @@
     }
 
     &.dark-theme {
+      background-color: $header-background-color-dark;
       color: $clouds;
     }
 
@@ -56,45 +57,12 @@
       position: relative;
       width: 100%;
 
-      &.dark-theme {
-        background-color: $header-background-color-dark;
-      }
-
       @media only screen and (max-width: 610px) {
         height: $header-bottom-height;
         min-width: 0;
         width: 100%;
       }
 
-      .header-bottom-content {
-        align-items: center;
-        box-sizing: border-box;
-        display: flex;
-        font-weight: bold;
-        height: 100%;
-        max-width: 90%;
-        width: $archives-content-base-width;
-
-        .sort-container {
-          align-items: center;
-          display: flex;
-          margin-right: 60px;
-
-          @media only screen and (max-width: 610px) {
-            font-size: .9rem;
-            margin-right: 36px;
-          }
-
-          &.count-sort-container {
-            cursor: pointer;
-          }
-
-          .filter-button {
-            margin-right: 3px;
-            text-transform: capitalize;
-          }
-        }
-      }
     }
   }
 
@@ -111,6 +79,51 @@
       font-size: 1.5rem;
       margin-bottom: 24px;
       width: $archives-content-base-width;
+
+      &.dark-theme {
+        color: $clouds;
+      }
+    }
+
+    .archives-sort-section {
+      align-items: center;
+      background-color: opacity($wet-asphalt, .07);
+      border-radius: 6px;
+      box-sizing: border-box;
+      display: flex;
+      font-weight: bold;
+      margin-bottom: 24px;
+      max-width: 90%;
+      padding: 6px;
+      width: $archives-content-base-width;
+
+      &.dark-theme {
+        background-color: opacity($clouds, .07);
+        color: $clouds;
+      }
+
+      .sort-container {
+        align-items: center;
+        display: flex;
+        margin-right: 60px;
+
+        @media only screen and (max-width: 610px) {
+          font-size: .9rem;
+          margin-right: 36px;
+        }
+
+        &.count-sort-container {
+          cursor: pointer;
+          font-size: 1.2rem;
+          margin-left: 18px;
+          margin-right: 86px;
+        }
+
+        .filter-button {
+          margin-right: 3px;
+          text-transform: capitalize;
+        }
+      }
     }
 
     .no-archives-info {

@@ -20,29 +20,8 @@
   <div class="header" [ngClass]="{'dark-theme': darkThemeIsEnabled}">
 
     <div id="headerBottom" [ngClass]="{'dark-theme': darkThemeIsEnabled}">
-      <div class="header-bottom-content" *ngIf="boards.length > 0">
-
-        <div class="sort-container count-sort-container"
-             [ngClass]="{'add-translucence': !countSortEnabled }"
-             (click)="toggleCountSort()"
-        >
-          <div class="filter-button count-sort">thoughts</div>
-          <div class="fas fa-sort-down sort"></div>
-        </div>
-
-        <div class="sort-container"
-             [ngClass]="{
-               'add-translucence': countSortEnabled,
-               'add-pointer': countSortEnabled
-             }"
-             (click)="countSortEnabled = false"
-        >
-          <div class="filter-button date-sort">date</div>
-          <div class="fas fa-sort-down sort"></div>
-        </div>
-
-      </div>
     </div>
+
   </div>
 
   <div class="archives">
@@ -50,7 +29,36 @@
     <div
       *ngIf="boards.length > 0"
       class="archives-heading"
-    >Thought Archives</div>
+      [ngClass]="{'dark-theme': darkThemeIsEnabled}"
+    >Thought Archives
+    </div>
+
+    <div
+      class="archives-sort-section"
+      *ngIf="boards.length > 0"
+      [ngClass]="{'dark-theme': darkThemeIsEnabled}"
+    >
+
+      <div class="sort-container count-sort-container"
+           [ngClass]="{'add-translucence': !countSortEnabled }"
+           (click)="toggleCountSort()"
+      >
+        <div class="filter-button count-sort">#</div>
+        <div class="fas fa-sort-down sort"></div>
+      </div>
+
+      <div class="sort-container"
+           [ngClass]="{
+               'add-translucence': countSortEnabled,
+               'add-pointer': countSortEnabled
+             }"
+           (click)="countSortEnabled = false"
+      >
+        <div class="filter-button date-sort">date</div>
+        <div class="fas fa-sort-down sort"></div>
+      </div>
+
+    </div>
 
     <rq-board-summary
       *ngFor="let board of archiveBoardList"
