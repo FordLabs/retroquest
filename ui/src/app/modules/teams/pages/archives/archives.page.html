@@ -107,23 +107,44 @@
 
   <div class="archives" *ngIf="actionItemArchivesAreSelected">
 
-    <div class="heading-container">
-      <div
-        class="archives-heading"
-        [ngClass]="{'dark-theme': darkThemeIsEnabled}"
-      >Action Item Archives
+    <div class="grid-wrapper">
+
+      <div class="heading-container">
+        <div
+          class="archives-heading"
+          [ngClass]="{'dark-theme': darkThemeIsEnabled}"
+        >Action Item Archives
+        </div>
+
+        <div
+          class="archives-sub-heading"
+          [ngClass]="{'dark-theme': darkThemeIsEnabled}"
+        >Examine completed action items from times gone by
+        </div>
       </div>
 
-      <div
-        class="archives-sub-heading"
-        [ngClass]="{'dark-theme': darkThemeIsEnabled}"
-      >Examine completed action items
+      <div class="action-item-container">
+        <rq-action-item-task
+          *ngFor="let actionItem of archivedActionItems"
+          [actionItem]="actionItem"
+          [theme]="theme"
+          [readOnly]="true"
+          [archived]="true"
+          (click)="showDialog(actionItem); actionItemDialog.show()"
+        ></rq-action-item-task>
       </div>
 
-      <div class="coming-soon-message" [ngClass]="{'dark-theme': darkThemeIsEnabled}">
-        This feature is coming soon. Stay tuned!
-      </div>
     </div>
 
   </div>
 </div>
+
+<rq-action-item-dialog
+  #actionItemDialog
+  [theme]="theme"
+  [actionItem]="selectedActionItem"
+  (visibilityChanged)="dialogIsVisible = $event"
+  [readonly]="true"
+>
+
+</rq-action-item-dialog>

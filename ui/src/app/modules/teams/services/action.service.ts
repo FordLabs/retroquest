@@ -21,6 +21,7 @@ import {Observable} from 'rxjs/index';
 
 import {ActionItem} from '../../domain/action-item';
 import {WebsocketService} from './websocket.service';
+import {Action} from 'rxjs/internal/scheduler/Action';
 
 @Injectable()
 export class ActionItemService {
@@ -30,6 +31,10 @@ export class ActionItemService {
 
   fetchActionItems(teamId): Observable<Array<ActionItem>> {
     return this.http.get<Array<ActionItem>>(`/api/team/${teamId}/action-items`);
+  }
+
+  fetchArchivedActionItems(teamId): Observable<Array<ActionItem>> {
+    return this.http.get<Array<ActionItem>>(`/api/team/${teamId}/action-items/archived`);
   }
 
   addActionItem(actionItem: ActionItem): void {
@@ -44,4 +49,9 @@ export class ActionItemService {
     this.webSocketService.updateActionItem(actionItem);
   }
 
+  archiveActionItems(archivedActionItems: Array<ActionItem>) {
+    archivedActionItems.map(actionItem => {
+      this.webSocketService.updateActionItem(actionItem);
+    });
+  }
 }

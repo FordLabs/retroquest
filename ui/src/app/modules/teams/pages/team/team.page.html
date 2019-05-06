@@ -50,6 +50,7 @@
       <rq-actions-column
         *ngIf="aggregation.topic === 'action'"
         [theme]="theme"
+        [retroEnded]="retroEnded"
         [actionItemAggregation]="aggregation"
         [actionItemChanged]="actionItemChanged"
         [teamId]="teamId"

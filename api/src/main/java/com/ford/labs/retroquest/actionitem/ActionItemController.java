@@ -72,6 +72,12 @@ public class ActionItemController {
         return actionItemRepository.findAllByTeamId(teamId);
     }
 
+    @GetMapping("/api/team/{teamId}/action-items/archived")
+    @PreAuthorize("#teamId == authentication.principal")
+    public List<ActionItem> getArchivedActionItemsForTeam(@PathVariable("teamId") String teamId) {
+        return actionItemRepository.findAllByTeamIdAndArchivedIsTrue(teamId);
+    }
+
     @PostMapping("/api/team/{teamId}/action-item")
     @PreAuthorize("#teamId == authentication.principal")
     public ResponseEntity createActionItemForTeam(@PathVariable("teamId") String teamId, @RequestBody ActionItem actionItem) throws URISyntaxException {
@@ -103,6 +109,7 @@ public class ActionItemController {
         savedActionItem.setTask(updatedActionItem.getTask());
         savedActionItem.setAssignee(updatedActionItem.getAssignee());
         savedActionItem.setCompleted(updatedActionItem.isCompleted());
+        savedActionItem.setArchived(updatedActionItem.isArchived());
         actionItemRepository.save(savedActionItem);
         return new WebsocketPutResponse<>(savedActionItem);
     }
