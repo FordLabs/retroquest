@@ -24,6 +24,7 @@ import {Themes} from '../../../domain/Theme';
 import * as moment from 'moment';
 import {ColumnResponse} from '../../../domain/column-response';
 import {WebsocketResponse} from '../../../domain/websocket-response';
+import {Column} from '../../../domain/column';
 
 @Component({
   selector: 'rq-actions-column',
@@ -40,6 +41,7 @@ export class ActionsColumnComponent implements OnInit {
   @Input() theme: Themes = Themes.Light;
   @Input() teamId: string;
   @Input() actionItemChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
+  @Input() retroEnded: EventEmitter<Column> = new EventEmitter();
 
   sorted = false;
 
@@ -50,6 +52,10 @@ export class ActionsColumnComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.retroEnded.subscribe(() => {
+      this.actionItemAggregation.items.completed.splice(0, this.actionItemAggregation.items.completed.length);
+    });
+
     this.actionItemChanged.subscribe(
       response => {
 
@@ -58,7 +64,9 @@ export class ActionsColumnComponent implements OnInit {
         if (response.type === 'delete') {
           this.deleteActionItem(actionItem);
         } else {
-          this.updateActionItems(actionItem);
+          if (!actionItem.archived) {
+            this.updateActionItems(actionItem);
+          }
         }
       }
     );

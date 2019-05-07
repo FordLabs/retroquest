@@ -59,7 +59,8 @@ describe('ActionsHeaderComponent', () => {
         task: newMessage,
         completed: false,
         assignee: null,
-        dateCreated: moment(mockDateString).format()
+        dateCreated: moment(mockDateString).format(),
+        archived: false
       };
 
       component.addActionItem(newMessage);
@@ -77,7 +78,8 @@ describe('ActionsHeaderComponent', () => {
         task: expectedFormattedMessage,
         completed: false,
         assignee: 'ben12, frank',
-        dateCreated: moment(mockDateString).format()
+        dateCreated: moment(mockDateString).format(),
+        archived: false
       };
 
       component.addActionItem(newUnformattedMessage);
@@ -95,7 +97,8 @@ describe('ActionsHeaderComponent', () => {
           task: newMessage,
           completed: false,
           assignee: null,
-          dateCreated: moment(mockDateString).format()
+          dateCreated: moment(mockDateString).format(),
+          archived: false
         };
 
         component.addActionItem(newMessage);
@@ -114,7 +117,8 @@ describe('ActionsHeaderComponent', () => {
         task: expectedFormattedMessage,
         completed: false,
         assignee: expectedAssignee,
-        dateCreated: moment(mockDateString).format()
+        dateCreated: moment(mockDateString).format(),
+        archived: false
       };
 
       component.addActionItem(newMessage);

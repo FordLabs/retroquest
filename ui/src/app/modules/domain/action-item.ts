@@ -24,6 +24,7 @@ export interface ActionItem {
   expanded?: boolean;
   dateCreated: string;
   state?: string;
+  archived: boolean;
 }
 
 export function emptyActionItem(): ActionItem {
@@ -33,6 +34,7 @@ export function emptyActionItem(): ActionItem {
     completed: false,
     teamId: null,
     assignee: null,
-    dateCreated: null
+    dateCreated: null,
+    archived: false
   };
 }

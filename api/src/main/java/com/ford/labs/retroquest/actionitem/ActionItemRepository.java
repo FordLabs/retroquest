@@ -25,5 +25,9 @@ import java.util.List;
 @Repository
 public interface ActionItemRepository extends JpaRepository<ActionItem, Long>{
     List<ActionItem> findAllByTeamId(String teamId);
+    List<ActionItem> findAllByTeamIdAndArchivedIsFalse(String teamId);
+    List<ActionItem> findAllByTeamIdAndArchivedIsTrue(String teamId);
+
     void deleteActionItemByTeamIdAndId(String teamId, Long id);
+
 }

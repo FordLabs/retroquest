@@ -106,10 +106,10 @@
 
     .heading-container {
       margin-bottom: 24px;
-      width: $archives-content-base-width;
 
       .archives-heading {
         font-size: 1.5rem;
+        font-weight: 500;
 
         &.dark-theme {
           color: $clouds;
@@ -118,25 +118,14 @@
       }
 
       .archives-sub-heading {
+        font-size: 1.1rem;
         opacity: .6;
 
         &.dark-theme {
           color: $clouds;
         }
       }
-
-      .coming-soon-message {
-        font-size: 1.7rem;
-        font-weight: bold;
-        margin-top: 12px;
-        width: 800px;
-
-        &.dark-theme {
-          color: $clouds;
-        }
-      }
     }
-
 
     .archives-sort-section {
       align-items: center;
@@ -178,6 +167,19 @@
         }
       }
     }
+
+    .action-item-container {
+      display: grid;
+      grid-gap: 48px;
+      grid-template-columns: 350px 350px 350px;
+
+      rq-action-item-task {
+        font-size: .9rem;
+        height: auto;
+        width: inherit;
+      }
+    }
+
 
     .no-archives-info {
       text-align: center;

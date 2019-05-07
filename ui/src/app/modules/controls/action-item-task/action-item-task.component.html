@@ -27,8 +27,8 @@
 <div
   class="content-area"
   [ngClass]="{
-    'disable': actionItem.completed,
-    'opacify': actionItem.completed
+    'disable': actionItem.completed && !actionItem.archived,
+    'opacify': actionItem.completed && !actionItem.archived
   }"
 >
 
@@ -62,8 +62,8 @@
 
 <div class="assigned-to-section"
      [ngClass]="{
-       'disable': taskEditModeEnabled || actionItem.completed,
-       'opacify': !displayAsLinkable && (taskEditModeEnabled || actionItem.completed)
+       'disable': taskEditModeEnabled || (actionItem.completed && !actionItem.archived),
+       'opacify': !displayAsLinkable && (taskEditModeEnabled || (actionItem.completed && !actionItem.archived))
      }">
   <div class="label">assigned to</div>
 
@@ -81,6 +81,7 @@
       }"
       [maxLength]="maxAssigneeLength"
       (focus)="assigneeCharacterCountdownIsVisible = true"
+      [disabled]="archived"
     >
     <rq-floating-character-countdown
       #assigneeCharacterCountdown
@@ -130,11 +131,11 @@
     }"
   >
     <div class="date-created-header"
-         [ngClass]="{'opacify': actionItem.completed || taskEditModeEnabled}"
+         [ngClass]="{'opacify': (actionItem.completed  && !actionItem.archived) || taskEditModeEnabled}"
     >created
     </div>
     <div class="date-created-value"
-         [ngClass]="{'opacify': actionItem.completed || taskEditModeEnabled}"
+         [ngClass]="{'opacify': (actionItem.completed  && !actionItem.archived) || taskEditModeEnabled}"
     >{{getDateCreated()}}
     </div>
   </div>
@@ -170,11 +171,15 @@
   <div
     class="container delete-container"
     [ngClass]="{
-      'dark-theme': darkThemeIsEnabled
+      'dark-theme': darkThemeIsEnabled,
+      'disable': actionItem.archived || taskEditModeEnabled
     }"
     (click)="emitDeleteItem()">
-    <i class="fas fa-trash-alt"
-       [ngClass]="{'opacify': readOnly}"
+    <i
+      class="fas fa-trash-alt"
+      [ngClass]="{
+        'opacify': readOnly || taskEditModeEnabled
+       }"
     ></i>
     <rq-tooltip text="Delete" [theme]="theme"></rq-tooltip>
   </div>
@@ -182,8 +187,8 @@
   <div
     class="complete-container"
     [ngClass]="{
-      'opacify': taskEditModeEnabled || readOnly,
-      'disable': taskEditModeEnabled
+      'opacify': taskEditModeEnabled || (readOnly && !actionItem.archived),
+      'disable': taskEditModeEnabled || readOnly
     }"
     (click)="toggleTaskComplete()"
   >

@@ -46,6 +46,7 @@ public class ActionItem {
     private String teamId;
     private String assignee;
     private Date dateCreated;
+    private boolean archived;
 
     private String getCompletedString() {
         return completed ? "yes" : "no";
