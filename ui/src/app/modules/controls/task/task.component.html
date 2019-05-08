@@ -27,7 +27,7 @@
 <div
   class="content-area"
   (click)="emitTaskContentClicked()"
-  [ngClass]="{'disable': task.discussed || readOnly }"
+  [ngClass]="{'disable': !archived && (task.discussed || readOnly)}"
 >
   <textarea
     #content_value

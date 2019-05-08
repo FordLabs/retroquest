@@ -19,6 +19,7 @@
   *ngIf="visible"
   #task_component
   [enableOverlayBorder]="true"
+  [readOnly]="readOnly"
   [type]="type"
   [task]="task"
   (click)="$event.stopPropagation()"
@@ -31,13 +32,14 @@
     'remove-border': actionItemIsVisible,
     'disable-events': actionItemIsVisible
   }"
+  [archived]="archived"
 ></rq-task>
 
 <div
   (click)="$event.stopPropagation()"
   class="add-action-item-submit-container"
   [ngClass]="{
-    'hide': actionItemIsVisible
+    'hide': actionItemIsVisible || archived
   }"
 >
   <div

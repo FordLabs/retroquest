@@ -44,6 +44,8 @@ export class TaskDialogComponent implements AfterContentChecked {
   @Input() visible = true;
   @Input() theme: Themes = Themes.Light;
   @Input() teamId: string;
+  @Input() archived = false;
+  @Input() readOnly = false;
 
   @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();

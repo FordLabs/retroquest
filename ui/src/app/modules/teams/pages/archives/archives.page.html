@@ -46,61 +46,63 @@
 
   <div class="archives" *ngIf="thoughtArchivesAreSelected">
 
-    <div class="heading-container">
+    <div class="thought-archives-section">
+      <div class="heading-container">
+        <div
+          *ngIf="boards.length > 0"
+          class="archives-heading"
+          [ngClass]="{'dark-theme': darkThemeIsEnabled}"
+        >Thought Archives
+        </div>
+      </div>
+
+
       <div
+        class="archives-sort-section"
         *ngIf="boards.length > 0"
-        class="archives-heading"
         [ngClass]="{'dark-theme': darkThemeIsEnabled}"
-      >Thought Archives
-      </div>
-    </div>
-
-
-    <div
-      class="archives-sort-section"
-      *ngIf="boards.length > 0"
-      [ngClass]="{'dark-theme': darkThemeIsEnabled}"
-    >
-
-      <div class="sort-container count-sort-container"
-           [ngClass]="{'add-translucence': !countSortEnabled }"
-           (click)="toggleCountSort()"
       >
-        <div class="filter-button count-sort">#</div>
-        <div class="fas fa-sort-down sort"></div>
-      </div>
 
-      <div class="sort-container"
-           [ngClass]="{
+        <div class="sort-container count-sort-container"
+             [ngClass]="{'add-translucence': !countSortEnabled }"
+             (click)="toggleCountSort()"
+        >
+          <div class="filter-button count-sort">#</div>
+          <div class="fas fa-sort-down sort"></div>
+        </div>
+
+        <div class="sort-container"
+             [ngClass]="{
                'add-translucence': countSortEnabled,
                'add-pointer': countSortEnabled
              }"
-           (click)="countSortEnabled = false"
-      >
-        <div class="filter-button date-sort">date</div>
-        <div class="fas fa-sort-down sort"></div>
+             (click)="countSortEnabled = false"
+        >
+          <div class="filter-button date-sort">date</div>
+          <div class="fas fa-sort-down sort"></div>
+        </div>
+
       </div>
 
-    </div>
+      <rq-board-summary
+        *ngFor="let board of archiveBoardList"
+        [theme]="theme"
+        [board]="board"
+        [teamId]="teamId"
+        (boardDeleted)="removeBoardFromBoards($event)"></rq-board-summary>
 
-    <rq-board-summary
-      *ngFor="let board of archiveBoardList"
-      [theme]="theme"
-      [board]="board"
-      [teamId]="teamId"
-      (boardDeleted)="removeBoardFromBoards($event)"></rq-board-summary>
-
-    <div
-      class="no-archives-info"
-      *ngIf="boards.length === 0 && !archivesAreLoading"
-      [ngClass]="{
+      <div
+        class="no-archives-info"
+        *ngIf="boards.length === 0 && !archivesAreLoading"
+        [ngClass]="{
         'dark-theme': darkThemeIsEnabled
       }"
-    >
-      <div class="heading">Looks Like A New Team!</div>
-      <div class="sub-heading">No archives were found.</div>
+      >
+        <div class="heading">Looks Like A New Team!</div>
+        <div class="sub-heading">No archives were found.</div>
 
-      <div class="info">Boards will appear when retros are ended.</div>
+        <div class="info">Boards will appear when retros are ended.</div>
+      </div>
     </div>
 
   </div>
