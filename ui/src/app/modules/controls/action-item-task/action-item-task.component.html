@@ -187,7 +187,7 @@
   <div
     class="complete-container"
     [ngClass]="{
-      'opacify': taskEditModeEnabled || (readOnly && !actionItem.archived),
+      'opacify': taskEditModeEnabled || readOnly,
       'disable': taskEditModeEnabled || readOnly
     }"
     (click)="toggleTaskComplete()"
