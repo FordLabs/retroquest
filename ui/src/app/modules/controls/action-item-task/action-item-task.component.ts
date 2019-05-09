@@ -26,7 +26,7 @@ import {Themes} from '../../domain/Theme';
   templateUrl: './action-item-task.component.html',
   styleUrls: ['./action-item-task.component.scss'],
   host: {
-    '[class.push-order-to-bottom]': 'actionItem.completed',
+    '[class.push-order-to-bottom]': 'actionItem.completed && !actionItem.archived',
     '[class.edit-mode]': '!displayAsLinkable && taskEditModeEnabled',
     '[class.dialog-overlay-border]': 'enableOverlayBorder',
     '[class.dark-theme]': 'darkThemeIsEnabled'
@@ -39,6 +39,7 @@ export class ActionItemTaskComponent implements AfterViewChecked {
   @Input() enableOverlayBorder = false;
   @Input() theme = Themes.Light;
   @Input() taskEditModeEnabled = false;
+  @Input() archived = false;
 
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
   @Output() deleted: EventEmitter<ActionItem> = new EventEmitter<ActionItem>();

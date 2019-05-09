@@ -25,7 +25,7 @@ import {Themes} from '../../domain/Theme';
   templateUrl: './task.component.html',
   styleUrls: ['./task.component.scss'],
   host: {
-    '[class.push-order-to-bottom]': 'task.discussed',
+    '[class.push-order-to-bottom]': 'task.discussed && !this.archived',
     '[class.edit-mode]': 'taskEditModeEnabled',
     '[class.happy]': 'type === \'happy\'',
     '[class.confused]': 'type === \'confused\'',

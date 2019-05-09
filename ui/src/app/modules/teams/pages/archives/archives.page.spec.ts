@@ -17,12 +17,12 @@
 
 import {ArchivesPageComponent} from './archives.page';
 import {Subject} from 'rxjs';
-import {ActivatedRoute, Params} from '@angular/router';
 import {TeamService} from '../../services/team.service';
 import {BoardService} from '../../services/board.service';
 import {Board, emptyBoardWithThought} from '../../../domain/board';
 import {WebsocketService} from '../../services/websocket.service';
 import {DataService} from '../../../data.service';
+import {ActionItemService} from '../../services/action.service';
 
 describe('ArchivesPageComponent', () => {
   let paramsSubject: Subject<Object>;
@@ -34,6 +34,7 @@ describe('ArchivesPageComponent', () => {
   let mockWebSocketService: WebsocketService;
   let mockWindow: Window;
   let mockDataService: DataService;
+  let mockActionItemService: ActionItemService;
 
   let component: ArchivesPageComponent;
 
@@ -50,8 +51,9 @@ describe('ArchivesPageComponent', () => {
     mockWebSocketService = jasmine.createSpyObj({closeWebsocket: new Subject()});
     mockWindow = jasmine.createSpyObj({clearInterval: null});
     mockDataService = new DataService();
+    mockActionItemService = jasmine.createSpyObj({fetchArchivedActionItems: new Subject()});
 
-    component = new ArchivesPageComponent(mockDataService, mockTeamService, mockBoardService, mockWebSocketService);
+    component = new ArchivesPageComponent(mockDataService, mockTeamService, mockBoardService, mockWebSocketService, mockActionItemService);
     component.globalWindowRef = mockWindow;
 
     paramsObj = {
@@ -73,7 +75,7 @@ describe('ArchivesPageComponent', () => {
     });
 
     it('should have the archives loading flag to true', () => {
-      expect(component.archivesAreLoading).toBeTruthy();
+      expect(component.thoughtArchivesAreLoading).toBeTruthy();
     });
 
     it('should set the team id attribute on the component', () => {
@@ -97,6 +99,11 @@ describe('ArchivesPageComponent', () => {
       mockWebSocketService.intervalId = 1;
       component.ngOnInit();
       expect(mockWindow.clearInterval).toHaveBeenCalledWith(1);
+    });
+
+    it('should get all of the archived action items', () => {
+      component.ngOnInit();
+      expect(mockActionItemService.fetchArchivedActionItems).toHaveBeenCalled();
     });
   });
 

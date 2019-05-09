@@ -18,11 +18,16 @@
 @import 'global-vars';
 
 :host {
+  $archives-content-base-width: 400px;
+
   display: block;
 
   .header {
+    background: $white;
     box-sizing: border-box;
     font-weight: normal;
+    min-width: $desktop-max-width;
+    width: 100%;
     z-index: 3;
 
     @media only screen and (max-width: 610px) {
@@ -30,6 +35,7 @@
     }
 
     &.dark-theme {
+      background-color: $header-background-color-dark;
       color: $clouds;
     }
 
@@ -40,18 +46,16 @@
     #headerBottom {
       $header-bottom-height: 32px;
       align-items: center;
-      background: $white;
       box-sizing: border-box;
       color: inherit;
 
       display: flex;
       height: 45px;
       justify-content: center;
+      margin: 0 auto;
+      overflow: auto;
       position: relative;
-
-      &.dark-theme {
-        background-color: $header-background-color-dark;
-      }
+      width: 100%;
 
       @media only screen and (max-width: 610px) {
         height: $header-bottom-height;
@@ -61,33 +65,33 @@
 
       .header-bottom-content {
         align-items: center;
-        box-sizing: border-box;
         display: flex;
-        font-weight: bold;
-        height: 100%;
-        max-width: 90%;
-        width: 400px;
+        justify-content: center;
 
-        .sort-container {
-          align-items: center;
-          display: flex;
-          margin-right: 60px;
+        rq-button {
+          box-shadow: none;
+          color: opacity($wet-asphalt, .4);
+          font-size: .9rem;
+          height: 28px;
+          width: auto;
 
-          @media only screen and (max-width: 610px) {
-            font-size: .9rem;
-            margin-right: 36px;
+          &.dark-theme {
+            color: opacity($clouds, .4);
           }
 
-          &.count-sort-container {
-            cursor: pointer;
-          }
+          &.selected {
+            background-color: opacity($wet-asphalt, .12);
+            border-radius: 32px;
+            color: $wet-asphalt;
 
-          .filter-button {
-            margin-right: 3px;
-            text-transform: capitalize;
+            &.dark-theme {
+              background-color: opacity($clouds, .12);
+              color: $clouds;
+            }
           }
         }
       }
+
     }
   }
 
@@ -96,7 +100,86 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-top: 36px;
+    margin-top: 24px;
+    min-width: $desktop-max-width;
+    width: 100%;
+
+    .heading-container {
+      margin-bottom: 24px;
+
+      .archives-heading {
+        font-size: 1.5rem;
+        font-weight: 500;
+
+        &.dark-theme {
+          color: $clouds;
+        }
+
+      }
+
+      .archives-sub-heading {
+        font-size: 1.1rem;
+        opacity: .6;
+
+        &.dark-theme {
+          color: $clouds;
+        }
+      }
+    }
+
+    .archives-sort-section {
+      align-items: center;
+      background-color: opacity($wet-asphalt, .07);
+      border-radius: 6px;
+      box-sizing: border-box;
+      display: flex;
+      font-weight: bold;
+      margin-bottom: 24px;
+      max-width: 90%;
+      padding: 6px;
+      width: $archives-content-base-width;
+
+      &.dark-theme {
+        background-color: opacity($clouds, .07);
+        color: $clouds;
+      }
+
+      .sort-container {
+        align-items: center;
+        display: flex;
+        margin-right: 60px;
+
+        @media only screen and (max-width: 610px) {
+          font-size: .9rem;
+          margin-right: 36px;
+        }
+
+        &.count-sort-container {
+          cursor: pointer;
+          font-size: 1.2rem;
+          margin-left: 18px;
+          margin-right: 86px;
+        }
+
+        .filter-button {
+          margin-right: 3px;
+          text-transform: capitalize;
+        }
+      }
+    }
+
+    .action-item-container {
+      display: grid;
+      grid-gap: 48px;
+      grid-template-columns: 350px 350px 350px;
+
+      rq-action-item-task {
+        font-size: .9rem;
+        height: auto;
+        width: inherit;
+      }
+    }
+
 
     .no-archives-info {
       text-align: center;

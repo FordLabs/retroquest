@@ -54,7 +54,8 @@ describe('TeamPageComponent', () => {
       instance(websocketService),
       null,
       instance(boardService),
-      instance(columnAggregationService)
+      instance(columnAggregationService),
+      null
     );
 
   });

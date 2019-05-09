@@ -56,7 +56,8 @@ export class ActionsHeaderComponent {
           task: updatedMessage,
           completed: false,
           assignee: assignees ? assignees.join(', ').substring(0, this.maxAssigneeLength) : null,
-          dateCreated: todaysDate
+          dateCreated: todaysDate,
+          archived: false
         };
 
         this.actionItemService.addActionItem(actionItem);

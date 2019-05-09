@@ -72,19 +72,19 @@ export class ArchivedBoardPageComponent implements OnInit {
 
     this.dataService.themeChanged.subscribe(theme => this.theme = theme);
 
-    this.columnAggregationService.getColumns(this.teamId).subscribe(
-      response => {
-        response.columns.map(column => {
-          column.items.active = [];
-          column.items.completed = [];
-        });
-        this.columnAggregations = response.columns;
-      }
-    );
-
     this.activatedRoute.params.subscribe(params => {
       this.boardId = params.boardId;
-      this.getThoughts();
+
+      this.columnAggregationService.getColumns(this.teamId).subscribe(
+        response => {
+          response.columns.map(column => {
+            column.items.active = [];
+            column.items.completed = [];
+          });
+          this.columnAggregations = response.columns;
+          this.getThoughts();
+        }
+      );
     });
   }
 

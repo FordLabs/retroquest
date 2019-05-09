@@ -25,6 +25,7 @@
 
   justify-content: flex-start;
   margin: 0 auto;
+  min-width: $desktop-max-width;
   position: relative;
   width: 100%;
 
@@ -46,11 +47,6 @@
       background-color: $header-background-color-dark;
     }
 
-    @media only screen and (max-width: 610px) {
-      height: $header-bottom-height;
-      min-width: 0;
-      width: 100%;
-    }
   }
 
   rq-action-item-task {
@@ -76,9 +72,11 @@
     bottom: 0;
     font-size: 1.5rem;
     height: 60px;
-    margin: auto 0 0;
+    left: 0;
+    margin: 0 auto;
     padding: 0;
     position: fixed;
+    right: 0;
     width: 400px;
 
     &.stop {

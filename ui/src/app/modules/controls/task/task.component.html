@@ -27,7 +27,7 @@
 <div
   class="content-area"
   (click)="emitTaskContentClicked()"
-  [ngClass]="{'disable': task.discussed || readOnly }"
+  [ngClass]="{'disable': !archived && (task.discussed || readOnly)}"
 >
   <textarea
     #content_value
@@ -127,16 +127,16 @@
   <div
     class="container delete-container"
     [ngClass]="{
-      'dark-theme': darkThemeIsEnabled
+      'dark-theme': darkThemeIsEnabled,
+      'disable': readOnly || taskEditModeEnabled
     }"
     (click)="emitDeleteItem()"
-    [ngClass]="{'disable': readOnly}"
   >
     <rq-tooltip text="Delete" [theme]="theme"></rq-tooltip>
 
 
     <i class="fas fa-trash-alt"
-       [ngClass]="{'opacify': readOnly}"
+       [ngClass]="{'opacify': readOnly || taskEditModeEnabled}"
     ></i>
   </div>
 

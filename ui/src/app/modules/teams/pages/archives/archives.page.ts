@@ -22,6 +22,8 @@ import {BoardService} from '../../services/board.service';
 import {WebsocketService} from '../../services/websocket.service';
 import {Themes} from '../../../domain/Theme';
 import {DataService} from '../../../data.service';
+import {ActionItemService} from '../../services/action.service';
+import {ActionItem} from '../../../domain/action-item';
 
 @Component({
   selector: 'rq-archives',
@@ -37,12 +39,19 @@ export class ArchivesPageComponent implements OnInit {
   boards: Array<Board> = [];
   globalWindowRef: Window = window;
   countSortEnabled = false;
-  archivesAreLoading = true;
+  thoughtArchivesAreLoading = true;
+  actionItemArchivesAreLoading = true;
+  selectedArchives = 'thoughts';
+  archivedActionItems: Array<ActionItem> = [];
+  selectedActionItem: ActionItem;
+  dialogIsVisible = false;
 
   constructor(private dataService: DataService,
               private teamsService: TeamService,
               private boardService: BoardService,
-              private websocketService: WebsocketService) {
+              private websocketService: WebsocketService,
+              private actionItemService: ActionItemService
+  ) {
   }
 
   ngOnInit() {
@@ -57,11 +66,29 @@ export class ArchivesPageComponent implements OnInit {
 
     this.boardService.fetchBoards(this.teamId).subscribe(boards => {
         this.boards = boards;
-        this.archivesAreLoading = false;
+        this.thoughtArchivesAreLoading = false;
       },
       () => {
-        this.archivesAreLoading = false;
+        this.thoughtArchivesAreLoading = false;
       });
+
+    this.actionItemService.fetchArchivedActionItems(this.teamId).subscribe(
+      actionItems => {
+        this.archivedActionItems = actionItems;
+        this.actionItemArchivesAreLoading = false;
+      },
+      () => {
+        this.actionItemArchivesAreLoading = false;
+      }
+    );
+  }
+
+  get thoughtArchivesAreSelected(): boolean {
+    return this.selectedArchives === 'thoughts';
+  }
+
+  get actionItemArchivesAreSelected(): boolean {
+    return this.selectedArchives === 'action items';
   }
 
   get darkThemeIsEnabled(): boolean {
@@ -85,4 +112,12 @@ export class ArchivesPageComponent implements OnInit {
     return this.boards;
   }
 
+  showDialog(actionItem: ActionItem) {
+    this.selectedActionItem = actionItem;
+    this.dialogIsVisible = true;
+  }
+
+  get noActionItemArchivesWereFound(): boolean {
+    return this.archivedActionItems.length === 0 && !this.thoughtArchivesAreLoading;
+  }
 }

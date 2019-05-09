@@ -20,6 +20,9 @@ import {Observable} from 'rxjs/index';
 import {ActionItem} from '../../domain/action-item';
 import {HttpClient} from '@angular/common/http';
 import {WebsocketService} from './websocket.service';
+import {compareLogSummaries} from '@angular/core/src/render3/styling/class_and_style_bindings';
+import {componentFactoryName} from '@angular/compiler';
+import {mock} from 'ts-mockito';
 
 describe('ActionItemService', () => {
   let service: ActionItemService;
@@ -32,7 +35,8 @@ describe('ActionItemService', () => {
     task: 'action actionItem',
     completed: false,
     assignee: null,
-    dateCreated: null
+    dateCreated: null,
+    archived: false
   };
 
   beforeEach(() => {
@@ -77,6 +81,15 @@ describe('ActionItemService', () => {
     it('should send an update command to the ActionItem api via websocket', () => {
       service.updateActionItem(actionItem);
       expect(mockWebSocket.updateActionItem).toHaveBeenCalledWith(actionItem);
+    });
+  });
+
+  describe('fetchArchivedActionItems', () => {
+    const fakeTeamId = 'fake-team-id';
+
+    it('should call the backend api with the correct url', () => {
+      service.fetchArchivedActionItems(fakeTeamId);
+      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${fakeTeamId}/action-items/archived`);
     });
   });
 

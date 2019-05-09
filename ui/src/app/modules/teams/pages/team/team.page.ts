@@ -29,6 +29,8 @@ import {ColumnAggregationService} from '../../services/column-aggregation.servic
 import {ColumnResponse} from '../../../domain/column-response';
 import {Column} from '../../../domain/column';
 import {DataService} from '../../../data.service';
+import {ActionItemService} from '../../services/action.service';
+import {ActionItem} from '../../../domain/action-item';
 
 @Component({
   selector: 'rq-team',
@@ -44,7 +46,8 @@ export class TeamPageComponent implements OnInit {
               private websocketService: WebsocketService,
               private saveCheckerService: SaveCheckerService,
               private boardService: BoardService,
-              private columnAggregationService: ColumnAggregationService
+              private columnAggregationService: ColumnAggregationService,
+              private actionItemService: ActionItemService
   ) {
   }
 
@@ -140,18 +143,33 @@ export class TeamPageComponent implements OnInit {
   public onEndRetro(): void {
 
     const thoughts = [];
+    const archivedActionItems: Array<ActionItem> = [];
 
     this.columnsAggregation.map((column) => {
       if (column.topic !== 'action') {
         thoughts.push(...column.items.active);
         thoughts.push(...column.items.completed);
+      } else {
+        archivedActionItems.push(...column.items.completed as Array<ActionItem>);
+        for (let i = 0; i < archivedActionItems.length; ++i) {
+          archivedActionItems[i].archived = true;
+        }
       }
     });
 
-    if (thoughts.length > 0) {
-      this.boardService.createBoard(this.teamId, thoughts).subscribe();
+    if (thoughts.length > 0 || archivedActionItems.length > 0) {
+      if (thoughts.length > 0) {
+        this.boardService.createBoard(this.teamId, thoughts).subscribe();
+      }
+
+      if (archivedActionItems.length > 0) {
+        this.actionItemService.archiveActionItems(archivedActionItems);
+      }
+
       this.websocketService.endRetro();
     }
+
+
   }
 
   public isSelectedIndex(index: number): boolean {

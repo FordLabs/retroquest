@@ -48,7 +48,7 @@ public class ColumnCombinerService {
 
     public ColumnCombinerResponse aggregateResponse(String teamId) {
         List<Thought> thoughts = thoughtRepository.findAllByTeamIdAndBoardIdIsNull(teamId);
-        List<ActionItem> actionItems = actionItemRepository.findAllByTeamId(teamId);
+        List<ActionItem> actionItems = actionItemRepository.findAllByTeamIdAndArchivedIsFalse(teamId);
         List<ColumnTitle> columnTitles = columnTitleRepository.findAllByTeamId(teamId);
 
         Map<ColumnTitle, List<Thought>> columnTitleListMap = columnTitles.stream().collect(

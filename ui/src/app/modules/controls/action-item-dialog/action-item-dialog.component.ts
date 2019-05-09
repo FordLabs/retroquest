@@ -36,8 +36,9 @@ const ESC_KEY = 27;
 export class ActionItemDialogComponent implements AfterContentChecked {
 
   @Input() actionItem: ActionItem = emptyActionItem();
-  @Input() visible = true;
+  @Input() visible = false;
   @Input() theme: Themes = Themes.Light;
+  @Input() readonly = false;
 
   @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();

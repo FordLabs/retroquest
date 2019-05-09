@@ -44,7 +44,7 @@ export class SettingsDialogComponent {
 
   set stylesTabIsVisible(visible: boolean) {
     this._stylesTabIsVisible = visible;
-    this.accountTabIsVisible = !visible;
+    this._accountTabIsVisible = !visible;
   }
 
   get stylesTabIsVisible(): boolean {
@@ -53,7 +53,7 @@ export class SettingsDialogComponent {
 
   set accountTabIsVisible(visible: boolean) {
     this._accountTabIsVisible = visible;
-    this.stylesTabIsVisible = !visible;
+    this._stylesTabIsVisible = !visible;
   }
 
   get accountTabIsVisible(): boolean {

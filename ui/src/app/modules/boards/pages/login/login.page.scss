@@ -23,45 +23,6 @@
   overflow: auto;
   width: 100%;
 
-  .dialog {
-    background-color: $white;
-    border-radius: 12px;
-    bottom: 0;
-    box-shadow: 0 19px 38px opacity($black, .3);
-    box-sizing: border-box;
-    height: 450px;
-    left: 0;
-    margin: auto;
-    padding: 36px;
-    position: fixed;
-    right: 0;
-    top: 0;
-    width: 500px;
-    z-index: 1000;
-
-    @media only screen and (max-width: 610px) {
-      border-radius: 0;
-      height: 100%;
-      width: 100%;
-    }
-
-    .heading {
-      font-size: 1.8rem;
-      font-weight: bold;
-      text-align: center;
-    }
-
-    .content {
-      margin-top: 24px;
-    }
-
-    rq-button {
-      font-size: 1.2rem;
-      margin: 24px auto 0;
-      width: 80%;
-    }
-  }
-
   re-captcha {
     visibility: hidden;
   }
