@@ -75,7 +75,7 @@ describe('ArchivesPageComponent', () => {
     });
 
     it('should have the archives loading flag to true', () => {
-      expect(component.archivesAreLoading).toBeTruthy();
+      expect(component.thoughtArchivesAreLoading).toBeTruthy();
     });
 
     it('should set the team id attribute on the component', () => {

@@ -47,6 +47,20 @@
   <div class="archives" *ngIf="thoughtArchivesAreSelected">
 
     <div class="thought-archives-section">
+
+      <div
+        class="no-archives-info"
+        *ngIf="boards.length === 0 && !thoughtArchivesAreLoading"
+        [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+      >
+        <div class="heading">Looks Like A New Team!</div>
+        <div class="sub-heading">No archives were found.</div>
+
+        <div class="info">Boards will appear when retros are ended with <b>thoughts</b>.</div>
+      </div>
+
       <div class="heading-container">
         <div
           *ngIf="boards.length > 0"
@@ -89,20 +103,8 @@
         [theme]="theme"
         [board]="board"
         [teamId]="teamId"
-        (boardDeleted)="removeBoardFromBoards($event)"></rq-board-summary>
-
-      <div
-        class="no-archives-info"
-        *ngIf="boards.length === 0 && !archivesAreLoading"
-        [ngClass]="{
-        'dark-theme': darkThemeIsEnabled
-      }"
-      >
-        <div class="heading">Looks Like A New Team!</div>
-        <div class="sub-heading">No archives were found.</div>
-
-        <div class="info">Boards will appear when retros are ended.</div>
-      </div>
+        (boardDeleted)="removeBoardFromBoards($event)">
+      </rq-board-summary>
     </div>
 
   </div>
@@ -111,7 +113,20 @@
 
     <div class="grid-wrapper">
 
-      <div class="heading-container">
+      <div
+        class="no-archives-info"
+        *ngIf="noActionItemArchivesWereFound"
+        [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+      }"
+      >
+        <div class="heading">Looks Like A New Team!</div>
+        <div class="sub-heading">No archives were found.</div>
+
+        <div class="info">Archives will appear when retros are ended with <b>completed action items</b>.</div>
+      </div>
+
+      <div class="heading-container" *ngIf="!noActionItemArchivesWereFound">
         <div
           class="archives-heading"
           [ngClass]="{'dark-theme': darkThemeIsEnabled}"

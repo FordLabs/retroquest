@@ -71,7 +71,7 @@
         rq-button {
           box-shadow: none;
           color: opacity($wet-asphalt, .4);
-          font-size: 1.1rem;
+          font-size: .9rem;
           height: 28px;
           width: auto;
 
@@ -80,12 +80,12 @@
           }
 
           &.selected {
-            background-color: opacity($wet-asphalt, .2);
+            background-color: opacity($wet-asphalt, .12);
             border-radius: 32px;
             color: $wet-asphalt;
 
             &.dark-theme {
-              background-color: opacity($clouds, .2);
+              background-color: opacity($clouds, .12);
               color: $clouds;
             }
           }
