@@ -32,7 +32,11 @@ describe('BoardService', () => {
     getRequestSubject = new Subject();
     postRequestSubject = new Subject();
     deleteRequestSubject = new Subject();
-    mockHttpClient = jasmine.createSpyObj({get: getRequestSubject, post: postRequestSubject, delete: deleteRequestSubject});
+    mockHttpClient = jasmine.createSpyObj({
+      get: getRequestSubject,
+      post: postRequestSubject,
+      delete: deleteRequestSubject
+    });
     service = new BoardService(mockHttpClient);
   });
 
@@ -41,12 +45,15 @@ describe('BoardService', () => {
   });
 
   describe(`fetchBoards`, () => {
-    it(`should request thoughts from the thoughts api`, () => {
-      const teamId = 'team-id';
+    const teamId = 'team-id';
 
-      service.fetchBoards(teamId).subscribe();
+    const params = {
+      pageIndex: '0'
+    };
 
-      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/boards`);
+    it(`should request thoughts from the thoughts api with a page index of 0`, () => {
+      service.fetchBoards(teamId, 0).subscribe();
+      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/boards`, {params});
     });
 
     it('should send the boards on successful request', () => {
@@ -60,7 +67,7 @@ describe('BoardService', () => {
         }
       ];
 
-      service.fetchBoards(teamId).subscribe(boards => {
+      service.fetchBoards(teamId, 0).subscribe(boards => {
         expect(boards).toBe(expectedBoards);
       });
       getRequestSubject.next(expectedBoards);
@@ -74,7 +81,10 @@ describe('BoardService', () => {
 
       service.createBoard(teamId, thoughts).subscribe();
 
-      expect(mockHttpClient.post).toHaveBeenCalledWith(`/api/team/${teamId}/board`, {teamId: teamId, thoughts: thoughts});
+      expect(mockHttpClient.post).toHaveBeenCalledWith(`/api/team/${teamId}/board`, {
+        teamId: teamId,
+        thoughts: thoughts
+      });
     });
   });
 

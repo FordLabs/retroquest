@@ -19,6 +19,9 @@ package com.ford.labs.retroquest.board;
 
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -29,6 +32,9 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final ThoughtRepository thoughtRepository;
 
+    @Value("${app.archive.thought.pageSize}")
+    public int pageSize;
+
     public BoardService(
             BoardRepository boardRepository,
             ThoughtRepository thoughtRepository
@@ -38,14 +44,20 @@ public class BoardService {
     }
 
 
-    public List<Board> getBoardsForTeamId(String teamId) {
-        return this.boardRepository.findAllByTeamIdOrderByDateCreatedDesc(teamId);
+    public List<Board> getBoardsForTeamId(String teamId, Integer pageIndex) {
+        return this.boardRepository.findAllByTeamIdOrderByDateCreatedDesc(teamId,
+                new PageRequest(
+                        pageIndex,
+                        pageSize,
+                        new Sort(Sort.Direction.DESC, "dateCreated")
+                )
+        );
     }
 
     public Board saveBoard(Board board) {
         board.setDateCreated(LocalDate.now());
         board = this.boardRepository.save(board);
-        for (Thought thought: board.getThoughts()) {
+        for (Thought thought : board.getThoughts()) {
             thought.setBoardId(board.getId());
             thoughtRepository.save(thought);
         }

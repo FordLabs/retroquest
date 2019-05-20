@@ -45,6 +45,7 @@ export class ArchivesPageComponent implements OnInit {
   archivedActionItems: Array<ActionItem> = [];
   selectedActionItem: ActionItem;
   dialogIsVisible = false;
+  boardPageIndex = 0;
 
   constructor(private dataService: DataService,
               private teamsService: TeamService,
@@ -64,13 +65,7 @@ export class ArchivesPageComponent implements OnInit {
 
     this.dataService.themeChanged.subscribe(theme => this.theme = theme);
 
-    this.boardService.fetchBoards(this.teamId).subscribe(boards => {
-        this.boards = boards;
-        this.thoughtArchivesAreLoading = false;
-      },
-      () => {
-        this.thoughtArchivesAreLoading = false;
-      });
+    this.fetchBoards(this.teamId, this.boardPageIndex);
 
     this.actionItemService.fetchArchivedActionItems(this.teamId).subscribe(
       actionItems => {
@@ -119,5 +114,19 @@ export class ArchivesPageComponent implements OnInit {
 
   get noActionItemArchivesWereFound(): boolean {
     return this.archivedActionItems.length === 0 && !this.thoughtArchivesAreLoading;
+  }
+
+  fetchBoards(teamId: string, pageIndex: number) {
+    this.boardService.fetchBoards(teamId, pageIndex).subscribe(boards => {
+        this.boards.push(...boards);
+        this.thoughtArchivesAreLoading = false;
+      },
+      () => {
+        this.thoughtArchivesAreLoading = false;
+      });
+  }
+
+  onScroll() {
+    this.fetchBoards(this.teamId, ++this.boardPageIndex);
   }
 }

@@ -1,4 +1,5 @@
-/*!
+/*!  overflow: auto;
+
  *  Copyright (c) 2018 Ford Motor Company
  *  All rights reserved.
  *
@@ -23,7 +24,6 @@
   background-color: $background-color-light;
   display: block;
   height: 100%;
-  overflow: auto;
   width: 100%;   // Enables smooth scrolling for IOS devices.
 
   &.dark-theme {

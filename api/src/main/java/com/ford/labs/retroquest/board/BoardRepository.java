@@ -17,15 +17,20 @@
 
 package com.ford.labs.retroquest.board;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface BoardRepository extends JpaRepository<Board, Long>{
-    List<Board> findAllByTeamIdOrderByDateCreatedDesc(String teamId);
+public interface BoardRepository extends JpaRepository<Board, Long> {
+    List<Board> findAllByTeamIdOrderByDateCreatedDesc(String teamId, Pageable pageable);
+
     void deleteBoardByTeamIdAndId(String teamId, Long id);
+
     Board save(Board board);
+
     Board findByTeamIdAndId(String teamId, Long id);
 }

@@ -118,4 +118,20 @@ describe('ArchivesPageComponent', () => {
       expect(component.boards).not.toContain(board1);
     });
   });
+
+  describe('onScroll', () => {
+
+    const teamId = 'test-team-id';
+
+    beforeEach(() => {
+      component.teamId = teamId;
+      component.boardPageIndex = 0;
+      component.onScroll();
+    });
+
+    it('should fetch the next paged board from the api, with a page index incremented by 1', () => {
+      expect(mockBoardService.fetchBoards).toHaveBeenCalledWith(teamId, 1);
+    });
+
+  });
 });

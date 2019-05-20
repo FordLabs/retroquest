@@ -19,17 +19,23 @@ package com.ford.labs.retroquest.board;
 
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -57,11 +63,38 @@ public class BoardServiceTest {
                 .id(1L)
                 .build();
 
-        when(boardRepository.findAllByTeamIdOrderByDateCreatedDesc("team1")).thenReturn(Arrays.asList(savedBoard));
+        boardService.pageSize = 2;
 
-        List<Board> actualBoards = boardService.getBoardsForTeamId("team1");
+        final PageRequest pageRequest = new PageRequest(
+                0,
+                boardService.pageSize,
+                new Sort(Sort.Direction.DESC, "dateCreated")
+        );
 
-        assertEquals(Arrays.asList(expectedBoard), actualBoards);
+
+        when(boardRepository.findAllByTeamIdOrderByDateCreatedDesc("team1", pageRequest))
+                .thenReturn(Collections.singletonList(savedBoard));
+
+        List<Board> actualBoards = boardService.getBoardsForTeamId("team1", 0);
+
+        assertEquals(Collections.singletonList(expectedBoard), actualBoards);
+    }
+
+
+    @Test
+    public void getBoardsForTeamId_shouldReturnAPagedResult() {
+
+        boardService.pageSize = 5;
+
+        final PageRequest pageRequest = new PageRequest(
+                0,
+                boardService.pageSize,
+                new Sort(Sort.Direction.DESC, "dateCreated")
+        );
+
+        boardService.getBoardsForTeamId("team1", 0);
+
+        verify(boardRepository).findAllByTeamIdOrderByDateCreatedDesc("team1", pageRequest);
     }
 
     @Test
