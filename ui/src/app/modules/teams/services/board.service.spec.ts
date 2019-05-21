@@ -28,6 +28,8 @@ describe('BoardService', () => {
   let postRequestSubject: Subject<any>;
   let deleteRequestSubject: Subject<any>;
 
+  const teamId = 'team-id';
+
   beforeEach(() => {
     getRequestSubject = new Subject();
     postRequestSubject = new Subject();
@@ -45,7 +47,6 @@ describe('BoardService', () => {
   });
 
   describe(`fetchBoards`, () => {
-    const teamId = 'team-id';
 
     const params = {
       pageIndex: '0'
@@ -57,7 +58,6 @@ describe('BoardService', () => {
     });
 
     it('should send the boards on successful request', () => {
-      const teamId = 'team-id';
       const expectedBoards = [
         {
           id: 1,
@@ -77,7 +77,6 @@ describe('BoardService', () => {
   describe('createBoard', () => {
     it('should call the create board endpoint', () => {
       const thoughts = [emptyThoughtWithColumn()];
-      const teamId = 'team-id';
 
       service.createBoard(teamId, thoughts).subscribe();
 
@@ -90,7 +89,6 @@ describe('BoardService', () => {
 
   describe('deleteBoard', () => {
     it('should call the delete board endpoint', () => {
-      const teamId = 'team-id';
       const boardId = -1;
       service.deleteBoard(teamId, boardId).subscribe();
       expect(mockHttpClient.delete).toHaveBeenCalledWith(`/api/team/${teamId}/board/${boardId}`);
@@ -99,7 +97,6 @@ describe('BoardService', () => {
 
   describe('fetchThoughtsForBoard', () => {
     it('should call the get thoughts for board endpoint', () => {
-      const teamId = 'team-id';
       const boardId = -1;
       service.fetchThoughtsForBoard(teamId, boardId).subscribe();
       expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/board/${boardId}/thoughts`);
