@@ -24,7 +24,8 @@
   background-color: $background-color-light;
   display: block;
   height: 100%;
-  width: 100%;   // Enables smooth scrolling for IOS devices.
+  overflow: scroll;   // Enables smooth scrolling for IOS devices.
+  width: 100%;
 
   &.dark-theme {
     background-color: $background-color-dark;

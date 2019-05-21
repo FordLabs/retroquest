@@ -144,6 +144,8 @@
         rq-button {
           color: opacity($wet-asphalt, .5);
           font-size: 1.2rem;
+          height: 100%;
+          width: 100%;
 
           &:hover {
             color: inherit;
@@ -161,7 +163,7 @@
 
       #end-button-container {
         rq-button {
-          background-color: $end-retro-button-red;
+          background-color: $grape;
           border-radius: 0 0 4px;
           box-shadow: none;
           box-sizing: border-box;
