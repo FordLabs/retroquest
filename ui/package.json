@@ -37,6 +37,7 @@
     "jquery": "^3.3.1",
     "moment": "^2.22.2",
     "ng-recaptcha": "^4.0.0-beta.1",
+    "ngx-infinite-scroll": "^7.1.0",
     "rxjs": "^6.3.3",
     "zone.js": "^0.8.26"
   },

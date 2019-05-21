@@ -16,7 +16,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Board} from '../../domain/board';
 import * as moment from 'moment';
@@ -30,9 +30,14 @@ export class BoardService {
   constructor(private http: HttpClient) {
   }
 
-  fetchBoards(teamId: string): Observable<Array<Board>> {
+  fetchBoards(teamId: string, pageIndex: number): Observable<Array<Board>> {
+
+    const params = {
+      pageIndex: pageIndex.toString()
+    };
+
     return new Observable((subscriber) => {
-      this.http.get(`/api/team/${teamId}/boards`).subscribe((data: Array<Object>) => {
+      this.http.get(`/api/team/${teamId}/boards`, {params}).subscribe((data: Array<Object>) => {
         data.map((boardObject) => {
           boardObject['dateCreated'] = moment(boardObject['dateCreated']);
         });

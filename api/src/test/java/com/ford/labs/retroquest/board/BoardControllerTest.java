@@ -47,9 +47,9 @@ public class BoardControllerTest {
                 .id(1L)
                 .build();
 
-        when(boardService.getBoardsForTeamId("team-id")).thenReturn(Arrays.asList(expectedBoard));
+        when(boardService.getBoardsForTeamId("team-id", 0)).thenReturn(Arrays.asList(expectedBoard));
 
-        List<Board> response = controller.getBoardsForTeamId("team-id");
+        List<Board> response = controller.getBoardsForTeamId("team-id", 0);
         assertEquals(Arrays.asList(expectedBoard), response);
     }
 
