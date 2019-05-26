@@ -78,6 +78,14 @@ task withH2(type: org.springframework.boot.gradle.run.BootRunTask, dependsOn: 'b
     }
 }
 
+task withDockerDb(type: org.springframework.boot.gradle.run.BootRunTask, dependsOn: 'build') {
+    doFirst() {
+        main = project.mainClassName
+        classpath = sourceSets.main.runtimeClasspath
+        systemProperty 'spring.profiles.active', 'dockerdb'
+    }
+}
+
 jar {
     archiveName = "${archivesBaseName}.jar"
 }
