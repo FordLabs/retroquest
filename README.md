@@ -59,7 +59,11 @@ docker-compose up
 
 Start the backend with Gradle:  
 ```
-./gradlew bootRun
+./gradlew withDockerDb
+```
+or
+```
+SPRING_PROFILES_ACTIVE=dockerdb ./gradlew bootRun
 ```
 ### Frontend
 If you are only working on the backend, a static build will be accessible from [localhost:8080](http://localhost:8080) after running `npm run build-prod`
