@@ -9,7 +9,7 @@ handlers:
 
 env_variables:
   SPRING_DATASOURCE_PASSWORD: <PASSWORD>
-  SPRING_DATASOURCE_URL: jdbc:mysql://google/<PROJECT>?cloudSqlInstance=<INSTANCE_CONNECTION_NAME>&socketFactory=com.google.cloud.sql.mysql.SocketFactory&useSSL=false
+  SPRING_DATASOURCE_URL: jdbc:mysql://google/<DATABASE_NAME>?cloudSqlInstance=<INSTANCE_CONNECTION_NAME>&socketFactory=com.google.cloud.sql.mysql.SocketFactory&useSSL=false
   SPRING_DATASOURCE_USERNAME: <USERNAME>
 
 automatic_scaling:
