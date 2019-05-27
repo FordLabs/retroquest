@@ -6,9 +6,19 @@ We recommend using the project ID "retroquest".  If you do this, you will not ne
 ### App Engine - Create New Project
 - Java
 - Flexible
+
+![create app](./images/google_create_app_1.png)
+
+![create app](./images/google_create_app_2.png)
+
 ### Create New SQL Instance
 - MySQL 2nd Gen 5.7
 - Create Database
+
+![create sql](./images/google_create_sql.png)
+
+![create database](./images/google_create_database.png)
+
 ### Enable Cloud SQL Admin API
 In order to connect directly to MySQL database from app engine, you need to [Enable the API](https://console.cloud.google.com/flows/enableapi?apiid=sqladmin&redirect=https://console.cloud.google.com&_ga=2.76411670.-2090376866.1552752988)
 ## Setting up build scripts
