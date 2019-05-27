@@ -15,7 +15,7 @@ In order to connect directly to MySQL database from app engine, you need to [Ena
 ### build.gradle
 build.gradle needs to point to the project id that you wish to deploy to.  If you did not use "retroquest" as your project ID, then you will need to modify the appengine deploy configuration.
 In the example below, we used "annarbor" as the project ID.
->`
+```
 appengine {
     tools {
         // configure the Cloud Sdk tooling
@@ -28,17 +28,18 @@ appengine {
         version = 'initial' + getDateTs()
     }
 }
-`
+```
+
 ### app.yaml
 To deploy to google app engine, we will need to create an app.yaml file.  Rename sample.app.yaml in the github repository to app.yaml.
 
 Next, we will need to configure the environment variables for connecting to the database.
-`
+```
 env_variables:
   SPRING_DATASOURCE_PASSWORD: BH3HiG3vtj6ExmrA
   SPRING_DATASOURCE_URL: jdbc:mysql://google/retroquest?cloudSqlInstance=annarbor:us-central1:ascot&socketFactory=com.google.cloud.sql.mysql.SocketFactory&useSSL=false
   SPRING_DATASOURCE_USERNAME: root
-`
+```
 
 Note, in the example above:
 - database name: retroquest
