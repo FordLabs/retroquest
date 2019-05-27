@@ -15,7 +15,7 @@ In order to connect directly to MySQL database from app engine, you need to [Ena
 ### build.gradle
 build.gradle needs to point to the project id that you wish to deploy to.  If you did not use "retroquest" as your project ID, then you will need to modify the appengine deploy configuration.
 In the example below, we used "annarbor" as the project ID.
-`
+>`
 appengine {
     tools {
         // configure the Cloud Sdk tooling
