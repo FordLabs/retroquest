@@ -13,6 +13,7 @@ buildscript {
         classpath("com.github.pivotalservices:ya-cf-app-gradle-plugin:${cfAppVersion}")
         classpath "org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.4.2"
         classpath "com.avast.gradle:gradle-docker-compose-plugin:0.7.1"
+        classpath "com.google.cloud.tools:appengine-gradle-plugin:2.0.0"
     }
 }
 
@@ -22,6 +23,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'cf-app'
 apply plugin: 'org.unbroken-dome.test-sets'
 apply plugin: 'docker-compose'
+apply plugin: "com.google.cloud.tools.appengine-appyaml"
 
 group = 'com.ford.labs'
 archivesBaseName = 'retroquest'
@@ -47,6 +49,7 @@ dependencies {
     compile 'org.flywaydb:flyway-core'
     runtime 'mysql:mysql-connector-java'
     runtime 'com.h2database:h2:1.4.197'
+    runtime group: 'com.google.cloud.sql', name: 'mysql-socket-factory', version: '1.0.13'
     compileOnly 'org.projectlombok:lombok'
     testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
@@ -75,6 +78,14 @@ task withH2(type: org.springframework.boot.gradle.run.BootRunTask, dependsOn: 'b
     }
 }
 
+task withDockerDb(type: org.springframework.boot.gradle.run.BootRunTask, dependsOn: 'build') {
+    doFirst() {
+        main = project.mainClassName
+        classpath = sourceSets.main.runtimeClasspath
+        systemProperty 'spring.profiles.active', 'dockerdb'
+    }
+}
+
 jar {
     archiveName = "${archivesBaseName}.jar"
 }
@@ -92,3 +103,22 @@ dockerCompose {
 task buildPackage(){}
 buildPackage.dependsOn ':ui:npm_run_build-prod'
 buildPackage.finalizedBy 'build'
+
+appengine {
+    tools {
+        // configure the Cloud Sdk tooling
+    }
+    stage {
+        // configure staging for deployment
+    }
+    deploy {
+        projectId = 'retroquest'
+        version = 'initial' + getDateTs()
+    }
+}
+
+def getDateTs() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMddHHmmss')
+    return formattedDate
+}

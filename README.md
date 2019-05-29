@@ -59,7 +59,11 @@ docker-compose up
 
 Start the backend with Gradle:  
 ```
-./gradlew bootRun
+./gradlew withDockerDb
+```
+or
+```
+SPRING_PROFILES_ACTIVE=dockerdb ./gradlew bootRun
 ```
 ### Frontend
 If you are only working on the backend, a static build will be accessible from [localhost:8080](http://localhost:8080) after running `npm run build-prod`
@@ -113,6 +117,9 @@ cd /ui && npm run e2e
 
 ## Connecting to the local Database
 The application uses a MariaDB instance. The connection properties can be found in the application's property file.
+
+## Deploying to Google App Engine
+Please read [GOOGLE_APP_ENGINE.md](/docs/GOOGLE_APP_ENGINE.md) for details on deploying Retroquest to Google App Engine.
 
 ## Contributing
 Please read [CONTRIBUTING.md](/docs/CONTRIBUTING.md) for details on our code of conduct, and the process for contributing, including how to fork and submit pull requests.
