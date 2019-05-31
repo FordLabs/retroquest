@@ -36,8 +36,17 @@ pipeline {
       }
     }
     stage('Archive') {
-      steps {
-        archiveArtifacts 'api/build/libs/retroquest.jar'
+      parallel {
+        stage('Archive') {
+          steps {
+            archiveArtifacts 'api/build/libs/retroquest.jar'
+          }
+        }
+        stage('Deploy') {
+          steps {
+            sh 'cf push'
+          }
+        }
       }
     }
   }
