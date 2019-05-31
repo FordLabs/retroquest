@@ -35,5 +35,10 @@ pipeline {
         }
       }
     }
+    stage('Deploy') {
+      steps {
+        archiveArtifacts 'retroquest.jar'
+      }
+    }
   }
 }
