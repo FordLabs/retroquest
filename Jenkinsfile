@@ -35,9 +35,9 @@ pipeline {
         }
       }
     }
-    stage('Deploy') {
+    stage('Archive') {
       steps {
-        archiveArtifacts 'retroquest.jar'
+        archiveArtifacts 'api/build/libs/retroquest.jar'
       }
     }
   }
