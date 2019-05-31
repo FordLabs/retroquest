@@ -38,14 +38,15 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    public BoardController (BoardService boardService) {
+    public BoardController(BoardService boardService) {
         this.boardService = boardService;
     }
 
     @GetMapping("/team/{teamId}/boards")
     @PreAuthorize("#teamId == authentication.principal")
-    public List<Board> getBoardsForTeamId(@PathVariable("teamId") String teamId) {
-        return this.boardService.getBoardsForTeamId(teamId);
+    public List<Board> getBoardsForTeamId(@PathVariable("teamId") String teamId,
+                                          @RequestParam(value = "pageIndex", defaultValue = "0") Integer pageIndex) {
+        return this.boardService.getBoardsForTeamId(teamId, pageIndex);
     }
 
     @PostMapping("/team/{teamId}/board")

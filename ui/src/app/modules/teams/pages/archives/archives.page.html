@@ -15,7 +15,12 @@
   ~  limitations under the License.
   -->
 
-<div id="page">
+<div id="page"
+     infiniteScroll
+     [infiniteScrollDistance]="2"
+     [infiniteScrollThrottle]="1000"
+     (scrolled)="onScroll()"
+>
 
   <div class="header" [ngClass]="{'dark-theme': darkThemeIsEnabled}">
 
