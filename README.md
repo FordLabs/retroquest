@@ -6,7 +6,7 @@
 - [Request new features](https://github.com/FordLabs/retroquest/issues)
 - [Contribute](https://github.com/FordLabs/retroquest/pulls)
 
-RetroQuest is a website that enables teams to run retrospectives online and in a fun way. It is designed to accomodate distributed teams.
+RetroQuest is a website that enables teams to run retrospectives online and in a fun way. It is designed to accomodate both local and distributed teams.
 
 ### What is a Retro?
 If you are unfamiliar with what a retrospective is, it is a meeting that is held at the and of each iteration on a Agile team. Retrospectices are designed to allow the team time to decompress and reflect upon what happened during the iteration and indentify actions that can improve the team as a whole.
