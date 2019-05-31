@@ -12,8 +12,27 @@ pipeline {
       }
     }
     stage('Frontend Tests') {
-      steps {
-        sh 'cd ui && npm run unit && cd ..'
+      parallel {
+        stage('Frontend Tests') {
+          steps {
+            sh 'cd ui && npm run unit && cd ..'
+          }
+        }
+        stage('Lint SCSS') {
+          steps {
+            sh 'cd ui && npm run sass-lint'
+          }
+        }
+        stage('Lint Typescript') {
+          steps {
+            sh 'cd ui && npm run lint'
+          }
+        }
+        stage('Build Prod') {
+          steps {
+            sh 'cd ui && npm run build-prod'
+          }
+        }
       }
     }
   }
