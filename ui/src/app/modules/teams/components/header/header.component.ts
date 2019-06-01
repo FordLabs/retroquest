@@ -57,7 +57,7 @@ export class HeaderComponent implements OnInit {
   }
 
   get boardIsOpenToEveryone(): boolean {
-    return this.teamName.toLowerCase() === 'techtrek';
+    return this.teamId.toLowerCase() === 'techtrek';
   }
 
   get darkThemeIsEnabled(): boolean {
