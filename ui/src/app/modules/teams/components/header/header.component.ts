@@ -56,6 +56,10 @@ export class HeaderComponent implements OnInit {
   public ngOnInit(): void {
   }
 
+  get boardIsOpenToEveryone(): boolean {
+    return this.teamName.toLowerCase() === 'techtrek';
+  }
+
   get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;
   }

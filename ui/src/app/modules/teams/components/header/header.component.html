@@ -48,11 +48,12 @@
       </button>
 
       <rq-button
+        *ngIf="boardIsOpenToEveryone"
         id="endRetro"
         (click)="showEndRetroDialog()"
         [ngClass]="{
-            'hide': actionsRadiatorViewEnabled
-         }"
+          'hide': actionsRadiatorViewEnabled
+        }"
         [theme]="theme"
         text="end retro"
         type="primary"
