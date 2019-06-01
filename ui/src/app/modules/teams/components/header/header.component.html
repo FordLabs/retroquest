@@ -48,7 +48,7 @@
       </button>
 
       <rq-button
-        *ngIf="boardIsOpenToEveryone"
+        *ngIf="!boardIsOpenToEveryone"
         id="endRetro"
         (click)="showEndRetroDialog()"
         [ngClass]="{
