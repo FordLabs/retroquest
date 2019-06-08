@@ -27,4 +27,8 @@ export class DataService {
 
   theme: Themes = Themes.Light;
   themeChanged: EventEmitter<Themes> = new EventEmitter();
+
+  get darkThemeIsEnabled(): boolean {
+    return this.theme === Themes.Dark;
+  }
 }

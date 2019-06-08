@@ -94,7 +94,7 @@ describe('TeamPageComponent', () => {
     describe('opening the websocket', () => {
 
       beforeEach(() => {
-        when(websocketService.openWebsocket(fakeTeamId)).thenReturn(of());
+        when(websocketService.openWebsocket()).thenReturn(of());
         when(websocketService.heartbeatTopic()).thenReturn(of());
         when(websocketService.thoughtsTopic()).thenReturn(of());
         when(websocketService.actionItemTopic()).thenReturn(of());
@@ -106,14 +106,14 @@ describe('TeamPageComponent', () => {
         when(websocketService.getWebsocketState()).thenReturn(WebSocket.CLOSED);
 
         component.ngOnInit();
-        verify(websocketService.openWebsocket(fakeTeamId)).called();
+        verify(websocketService.openWebsocket()).called();
       });
 
       it('should not open the websocket if the state is already opened', () => {
         when(websocketService.getWebsocketState()).thenReturn(WebSocket.OPEN);
 
         component.ngOnInit();
-        verify(websocketService.openWebsocket(fakeTeamId)).never();
+        verify(websocketService.openWebsocket()).never();
       });
 
       it('should resubscribe to the websocket', () => {

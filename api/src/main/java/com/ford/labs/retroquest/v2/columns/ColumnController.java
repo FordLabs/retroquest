@@ -17,7 +17,11 @@
 
 package com.ford.labs.retroquest.v2.columns;
 
+import com.ford.labs.retroquest.apiAuthorization.ApiAuthorization;
+import com.ford.labs.retroquest.users.UserRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,14 +32,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class ColumnController {
 
     private ColumnCombinerService columnCombinerService;
+    private ApiAuthorization apiAuthorization;
 
-    ColumnController(ColumnCombinerService columnCombinerService) {
+    ColumnController(ColumnCombinerService columnCombinerService, ApiAuthorization apiAuthorization) {
         this.columnCombinerService = columnCombinerService;
+        this.apiAuthorization = apiAuthorization;
     }
 
     @GetMapping("/{teamId}/columns")
-    @PreAuthorize("#teamId == authentication.principal")
-    public ColumnCombinerResponse getThoughtsForTeam(@PathVariable("teamId") String teamId) {
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    public ColumnCombinerResponse getThoughtsForTeam(@PathVariable("teamId") String teamId, Authentication authentication) {
         return columnCombinerService.aggregateResponse(teamId);
+
     }
 }

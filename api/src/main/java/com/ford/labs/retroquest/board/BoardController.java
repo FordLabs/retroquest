@@ -18,6 +18,7 @@
 package com.ford.labs.retroquest.board;
 
 
+import com.ford.labs.retroquest.apiAuthorization.ApiAuthorization;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.websocket.WebsocketDeleteResponse;
 import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
@@ -37,33 +38,35 @@ import java.util.List;
 public class BoardController {
 
     private final BoardService boardService;
+    private final ApiAuthorization apiAuthorization;
 
-    public BoardController(BoardService boardService) {
+    public BoardController(BoardService boardService, ApiAuthorization apiAuthorization) {
         this.boardService = boardService;
+        this.apiAuthorization = apiAuthorization;
     }
 
     @GetMapping("/team/{teamId}/boards")
-    @PreAuthorize("#teamId == authentication.principal")
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public List<Board> getBoardsForTeamId(@PathVariable("teamId") String teamId,
                                           @RequestParam(value = "pageIndex", defaultValue = "0") Integer pageIndex) {
         return this.boardService.getBoardsForTeamId(teamId, pageIndex);
     }
 
     @PostMapping("/team/{teamId}/board")
-    @PreAuthorize("#teamId == authentication.principal")
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public Board saveBoard(@PathVariable("teamId") String teamId, @RequestBody @Valid Board board) {
         return this.boardService.saveBoard(board);
     }
 
     @Transactional
     @DeleteMapping("/team/{teamId}/board/{boardId}")
-    @PreAuthorize("#teamId == authentication.principal")
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public void deleteBoard(@PathVariable("teamId") String teamId, @PathVariable("boardId") Long boardId) {
         this.boardService.deleteBoard(teamId, boardId);
     }
 
     @GetMapping("/team/{teamId}/board/{boardId}/thoughts")
-    @PreAuthorize("#teamId == authentication.principal")
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public List<Thought> getThoughtsForBoard(@PathVariable("teamId") String teamId, @PathVariable("boardId") Long boardId) {
         return this.boardService.getThoughtsForTeamIdAndBoardId(teamId, boardId);
     }
@@ -71,7 +74,7 @@ public class BoardController {
     @MessageMapping("/{teamId}/end-retro")
     @SendTo("/topic/{teamId}/end-retro")
     public WebsocketPutResponse<Object> endRetroWebsocket(@DestinationVariable("teamId") String teamId, Authentication authentication) {
-        if (!authentication.getPrincipal().equals(teamId)) {
+        if (!apiAuthorization.requestIsAuthorized(authentication, teamId)) {
             return null;
         }
         return new WebsocketPutResponse<>(null);

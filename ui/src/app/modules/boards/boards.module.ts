@@ -26,8 +26,11 @@ import {BrandFooterComponent} from './components/brand-footer/brand-footer.compo
 import {RecaptchaModule} from 'ng-recaptcha';
 import {ControlsModule} from '../controls/controls.module';
 import {FocusOnLoadDirective} from './pages/directives/focus-on-load.component';
-import { ContributorsComponent } from './components/contributors/contributors.component';
-import { UpdatePasswordComponent } from './pages/update-password/update-password.page';
+import {ContributorsComponent} from './components/contributors/contributors.component';
+import {UpdatePasswordComponent} from './pages/update-password/update-password.page';
+import {CreateUserComponent} from './pages/create-user/create-user.component';
+import {UserViewComponent} from './pages/user-view/user-view.component';
+import { LoginUserComponent } from './pages/login-user/login-user.component';
 
 @NgModule({
   imports: [
@@ -38,7 +41,12 @@ import { UpdatePasswordComponent } from './pages/update-password/update-password
       {path: 'create', component: CreateComponent},
       {path: 'login', component: LoginComponent},
       {path: 'login/:teamId', component: LoginComponent},
-      {path: 'update-password/:teamId', component: UpdatePasswordComponent}
+      {path: 'update-password/:teamId', component: UpdatePasswordComponent},
+
+      {path: 'create-user', component: CreateUserComponent},
+      {path: 'login-user', component: LoginUserComponent},
+      {path: 'user/:user', component: UserViewComponent}
+
     ]),
     RecaptchaModule.forRoot(),
     RecaptchaModule
@@ -51,6 +59,9 @@ import { UpdatePasswordComponent } from './pages/update-password/update-password
     BrandFooterComponent,
     FocusOnLoadDirective,
     ContributorsComponent,
+    CreateUserComponent,
+    UserViewComponent,
+    LoginUserComponent
   ],
   exports: [CreateComponent]
 })

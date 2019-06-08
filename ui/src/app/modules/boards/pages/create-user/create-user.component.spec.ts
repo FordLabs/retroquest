@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Ford Motor Company
+ *  Copyright (c) 2018 Ford Motor Company
  *  All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,26 +15,7 @@
  *  limitations under the License.
  */
 
-package com.ford.labs.retroquest.team;
 
-import com.ford.labs.retroquest.team.validation.PasswordConstraint;
-import com.ford.labs.retroquest.team.validation.TeamNameConstraint;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+describe('CreateComponent', () => {
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class CreateTeamRequest implements TeamRequest {
-
-    @TeamNameConstraint
-    private String name;
-
-    @PasswordConstraint
-    private String password;
-
-    private String captchaResponse;
-}
+});

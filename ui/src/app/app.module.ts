@@ -34,6 +34,7 @@ import {ColumnAggregationService} from './modules/teams/services/column-aggregat
 import {TopHeaderComponent} from './modules/controls/top-header/top-header.component';
 import { SubAppComponent } from './modules/sub-app/sub-app.component';
 import {DataService} from './modules/data.service';
+import { CreateUserComponent } from './modules/boards/pages/create-user/create-user.component';
 
 @NgModule({
   declarations: [

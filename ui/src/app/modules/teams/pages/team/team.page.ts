@@ -134,8 +134,7 @@ export class TeamPageComponent implements OnInit {
   }
 
   private websocketInit() {
-
-    this.websocketService.openWebsocket(this.teamId).subscribe(() => {
+    this.websocketService.openWebsocket().subscribe(() => {
       this.subscribeToWebsocket();
     });
   }

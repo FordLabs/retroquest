@@ -23,17 +23,18 @@ import {Observable} from 'rxjs/internal/Observable';
 import {Thought} from '../../domain/thought';
 import {ActionItem} from '../../domain/action-item';
 import {Column} from '../../domain/column';
+import {DataService} from '../../data.service';
 
 @Injectable()
 export class WebsocketService {
 
   logger = LoggerFactory.getLogger('WebsocketService');
   stompClient: StompClient;
-  teamId: String;
   websocket;
   intervalId = null;
+  websocketIsOpened = false;
 
-  constructor() {
+  constructor(private dataService: DataService) {
   }
 
   static getWsProtocol(location) {
@@ -51,9 +52,10 @@ export class WebsocketService {
     this.stompClient = null;
     this.websocket = null;
     this.intervalId = null;
+    this.websocketIsOpened = false;
   }
 
-  public openWebsocket(teamId: String): Observable<any> {
+  public openWebsocket(): Observable<any> {
     if (!this.stompClient) {
 
       const protocol = WebsocketService.getWsProtocol(location);
@@ -63,9 +65,8 @@ export class WebsocketService {
       );
 
     }
-
+    this.websocketIsOpened = true;
     return new Observable(observer => {
-      this.teamId = teamId;
 
       const headers = new Map<string, string>();
       headers.set('Authorization', 'Bearer ' + AuthService.getToken());
@@ -89,15 +90,14 @@ export class WebsocketService {
   }
 
   public sendHeartbeat() {
-    this.checkForOpenSocket();
-    this.stompClient.send(`/app/heartbeat/ping/${this.teamId}`, '');
+    this.stompClient.send(`/app/heartbeat/ping/${this.dataService.team.id}`, '');
   }
 
   public heartbeatTopic(): Observable<any> {
     this.checkForOpenSocket();
 
     return new Observable<any>(observer => {
-      const sub = this.stompClient.subscribe(`/topic/heartbeat/pong/${this.teamId}`);
+      const sub = this.stompClient.subscribe(`/topic/heartbeat/pong/${this.dataService.team.id}`);
       sub.messages.subscribe(m => {
         observer.next(m);
       });
@@ -108,7 +108,7 @@ export class WebsocketService {
     this.checkForOpenSocket();
 
     return new Observable<any>(observer => {
-      const sub = this.stompClient.subscribe(`/topic/${this.teamId}/end-retro`);
+      const sub = this.stompClient.subscribe(`/topic/${this.dataService.team.id}/end-retro`);
       sub.messages.subscribe(m => {
         observer.next(m);
       });
@@ -119,7 +119,7 @@ export class WebsocketService {
     this.checkForOpenSocket();
 
     return new Observable<any>(observer => {
-      const sub = this.stompClient.subscribe(`/topic/${this.teamId}/thoughts`);
+      const sub = this.stompClient.subscribe(`/topic/${this.dataService.team.id}/thoughts`);
       sub.messages.subscribe(m => {
         observer.next(m);
       });
@@ -128,21 +128,21 @@ export class WebsocketService {
 
   public createThought(thought: Thought): void {
     this.checkForOpenSocket();
-    this.stompClient.send(`/app/${this.teamId}/thought/create`, JSON.stringify(thought));
+    this.stompClient.send(`/app/${this.dataService.team.id}/thought/create`, JSON.stringify(thought));
   }
 
   public deleteThought(thought: Thought): void {
     this.checkForOpenSocket();
-    this.stompClient.send(`/app/v2/${this.teamId}/thought/delete`, JSON.stringify(thought));
+    this.stompClient.send(`/app/v2/${this.dataService.team.id}/thought/delete`, JSON.stringify(thought));
   }
 
   public updateThought(thought: Thought): void {
     this.checkForOpenSocket();
-    this.stompClient.send(`/app/${this.teamId}/thought/${thought.id}/edit`, JSON.stringify(thought));
+    this.stompClient.send(`/app/${this.dataService.team.id}/thought/${thought.id}/edit`, JSON.stringify(thought));
   }
 
   private checkForOpenSocket(): void {
-    if (this.teamId == null) {
+    if (!this.websocketIsOpened) {
       throw new Error('Attempted to connect to thoughts topic without connecting to the websocket');
     }
   }
@@ -151,7 +151,7 @@ export class WebsocketService {
     this.checkForOpenSocket();
 
     return new Observable<any>(observer => {
-      const sub = this.stompClient.subscribe(`/topic/${this.teamId}/action-items`);
+      const sub = this.stompClient.subscribe(`/topic/${this.dataService.team.id}/action-items`);
       sub.messages.subscribe(m => {
         observer.next(m);
       });
@@ -159,10 +159,8 @@ export class WebsocketService {
   }
 
   public columnTitleTopic(): Observable<any> {
-    this.checkForOpenSocket();
-
     return new Observable<any>(observer => {
-      const sub = this.stompClient.subscribe(`/topic/${this.teamId}/column-titles`);
+      const sub = this.stompClient.subscribe(`/topic/${this.dataService.team.id}/column-titles`);
       sub.messages.subscribe(m => {
         observer.next(m);
       });
@@ -171,31 +169,31 @@ export class WebsocketService {
 
   public createActionItem(actionItem: ActionItem) {
     this.checkForOpenSocket();
-    this.stompClient.send(`/app/${this.teamId}/action-item/create`, JSON.stringify(actionItem));
+    this.stompClient.send(`/app/${this.dataService.team.id}/action-item/create`, JSON.stringify(actionItem));
   }
 
   public updateActionItem(actionItem: ActionItem) {
     this.checkForOpenSocket();
-    this.stompClient.send(`/app/${this.teamId}/action-item/${actionItem.id}/edit`, JSON.stringify(actionItem));
+    this.stompClient.send(`/app/${this.dataService.team.id}/action-item/${actionItem.id}/edit`, JSON.stringify(actionItem));
   }
 
   public deleteActionItem(actionItem: ActionItem) {
     this.checkForOpenSocket();
-    this.stompClient.send(`/app/${this.teamId}/action-item/delete`, JSON.stringify(actionItem));
+    this.stompClient.send(`/app/${this.dataService.team.id}/action-item/delete`, JSON.stringify(actionItem));
   }
 
   public updateColumnTitle(column: Column) {
     this.checkForOpenSocket();
-    this.stompClient.send(`/app/${this.teamId}/column-title/${column.id}/edit`, JSON.stringify(column));
+    this.stompClient.send(`/app/${this.dataService.team.id}/column-title/${column.id}/edit`, JSON.stringify(column));
   }
 
   deleteAllThoughts() {
     this.checkForOpenSocket();
-    this.stompClient.send(`/app/v2/${this.teamId}/thought/deleteAll`, null);
+    this.stompClient.send(`/app/v2/${this.dataService.team.id}/thought/deleteAll`, null);
   }
 
   endRetro() {
     this.checkForOpenSocket();
-    this.stompClient.send(`/app/${this.teamId}/end-retro`, null);
+    this.stompClient.send(`/app/${this.dataService.team.id}/end-retro`, null);
   }
 }

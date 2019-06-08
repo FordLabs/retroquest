@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.thought;
 
+import com.ford.labs.retroquest.apiAuthorization.ApiAuthorization;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.websocket.WebsocketDeleteResponse;
@@ -37,16 +38,20 @@ import java.util.List;
 @RestController
 public class ThoughtController {
 
-    private ThoughtRepository thoughtRepository;
-    private ColumnTitleRepository columnTitleRepository;
+    private final ThoughtRepository thoughtRepository;
+    private final ColumnTitleRepository columnTitleRepository;
+    private final ApiAuthorization apiAuthorization;
 
-    public ThoughtController(ThoughtRepository thoughtRepository, ColumnTitleRepository columnTitleRepository) {
+    public ThoughtController(ThoughtRepository thoughtRepository,
+                             ColumnTitleRepository columnTitleRepository,
+                             ApiAuthorization apiAuthorization) {
         this.thoughtRepository = thoughtRepository;
         this.columnTitleRepository = columnTitleRepository;
+        this.apiAuthorization = apiAuthorization;
     }
 
     @PutMapping("/api/team/{teamId}/thought/{thoughtId}/heart")
-    @PreAuthorize("#teamId == authentication.principal")
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public int likeThought(@PathVariable("thoughtId") String thoughtId, @PathVariable("teamId") String teamId) {
         Thought thought = thoughtRepository.findOne(Long.valueOf(thoughtId));
         thought.incrementHearts();
@@ -54,7 +59,7 @@ public class ThoughtController {
     }
 
     @PutMapping("/api/team/{teamId}/thought/{thoughtId}/discuss")
-    @PreAuthorize("#teamId == authentication.principal")
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public ResponseEntity discussThought(@PathVariable("thoughtId") String thoughtId, @PathVariable("teamId") String teamId) {
         Thought thought = thoughtRepository.findOne(Long.valueOf(thoughtId));
 
@@ -66,7 +71,7 @@ public class ThoughtController {
 
     @Transactional
     @PutMapping("/api/team/{teamId}/thought/{id}/message")
-    @PreAuthorize("#teamId == authentication.principal")
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public void updateThought(@PathVariable("id") Long id, @RequestBody Thought thought, @PathVariable("teamId") String teamId) {
         Thought returnedThought = thoughtRepository.findOne(id);
         returnedThought.setMessage(thought.getMessage());
@@ -74,27 +79,27 @@ public class ThoughtController {
     }
 
     @GetMapping("/api/team/{teamId}/thoughts")
-    @PreAuthorize("#teamId == authentication.principal")
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public List<Thought> getThoughtsForTeam(@PathVariable("teamId") String teamId) {
         return thoughtRepository.findAllByTeamIdAndBoardIdIsNull(teamId);
     }
 
     @Transactional
     @DeleteMapping("/api/team/{teamId}/thoughts")
-    @PreAuthorize("#teamId == authentication.principal")
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public void clearThoughtsForTeam(@PathVariable("teamId") String teamId) {
         thoughtRepository.deleteAllByTeamId(teamId);
     }
 
     @Transactional
     @DeleteMapping("/api/team/{teamId}/thought/{thoughtId}")
-    @PreAuthorize("#teamId == authentication.principal")
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public void clearIndividualThoughtForTeam(@PathVariable("teamId") String teamId, @PathVariable("thoughtId") Long id) {
         thoughtRepository.deleteThoughtByTeamIdAndId(teamId, id);
     }
 
     @PostMapping("/api/team/{teamId}/thought")
-    @PreAuthorize("#teamId == authentication.principal")
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public ResponseEntity createThoughtForTeam(@PathVariable("teamId") String teamId, @RequestBody Thought thought) throws URISyntaxException {
         thought.setTeamId(teamId);
 
@@ -110,7 +115,7 @@ public class ThoughtController {
     @MessageMapping("/{teamId}/thought/create")
     @SendTo("/topic/{teamId}/thoughts")
     public WebsocketPutResponse<Thought> createThoughtWebsocket(@DestinationVariable("teamId") String teamId, Thought thought, Authentication authentication) {
-        if (authentication.getPrincipal().equals(teamId)) {
+        if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
             thought.setTeamId(teamId);
             Thought savedThought = thoughtRepository.save(thought);
             return new WebsocketPutResponse<>(thoughtRepository.findOne(savedThought.getId()));
@@ -121,7 +126,7 @@ public class ThoughtController {
     @MessageMapping("/{teamId}/thought/{thoughtId}/edit")
     @SendTo("/topic/{teamId}/thoughts")
     public WebsocketPutResponse<Thought> editThoughtWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("thoughtId") Long thoughtId, Thought thought, Authentication authentication) {
-        if (authentication.getPrincipal().equals(teamId)) {
+        if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
             Thought savedThought = thoughtRepository.findOne(thoughtId);
             savedThought.setMessage(thought.getMessage());
             savedThought.setDiscussed(thought.isDiscussed());
@@ -136,7 +141,7 @@ public class ThoughtController {
     @MessageMapping("/{teamId}/thought/{thoughtId}/delete")
     @SendTo("/topic/{teamId}/thoughts")
     public WebsocketDeleteResponse<Long> deleteThoughtWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("thoughtId") Long thoughtId, Authentication authentication) {
-        if (!authentication.getPrincipal().equals(teamId)) {
+        if (!apiAuthorization.requestIsAuthorized(authentication, teamId)) {
             return null;
         }
         thoughtRepository.deleteThoughtByTeamIdAndId(teamId, thoughtId);
@@ -147,7 +152,7 @@ public class ThoughtController {
     @MessageMapping("/{teamId}/thought/delete")
     @SendTo("/topic/{teamId}/thoughts")
     public WebsocketDeleteResponse<Long> deleteThoughtWebsocket(@DestinationVariable("teamId") String teamId, Authentication authentication) {
-        if (!authentication.getPrincipal().equals(teamId)) {
+        if (!apiAuthorization.requestIsAuthorized(authentication, teamId)) {
             return null;
         }
         thoughtRepository.deleteAllByTeamId(teamId);
@@ -158,7 +163,7 @@ public class ThoughtController {
     @MessageMapping("/v2/{teamId}/thought/delete")
     @SendTo("/topic/{teamId}/thoughts")
     public WebsocketDeleteResponse<Thought> deleteThoughtWebsocket(@DestinationVariable("teamId") String teamId, Thought thought, Authentication authentication) {
-        if (!authentication.getPrincipal().equals(teamId)) {
+        if (!apiAuthorization.requestIsAuthorized(authentication, teamId)) {
             return null;
         }
         thoughtRepository.deleteThoughtByTeamIdAndId(teamId, thought.getId());
@@ -169,9 +174,10 @@ public class ThoughtController {
     @MessageMapping("/v2/{teamId}/thought/deleteAll")
     @SendTo("/topic/{teamId}/thoughts")
     public WebsocketDeleteResponse<Thought> deleteAllThoughtsWebsocket(@DestinationVariable("teamId") String teamId, Authentication authentication) {
-        if (!authentication.getPrincipal().equals(teamId)) {
+        if (!apiAuthorization.requestIsAuthorized(authentication, teamId)) {
             return null;
         }
+
         thoughtRepository.deleteAllByTeamId(teamId);
         return new WebsocketDeleteResponse<>(Thought.builder().id(-1L).build());
     }

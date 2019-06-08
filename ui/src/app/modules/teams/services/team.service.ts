@@ -35,6 +35,14 @@ export class TeamService {
     );
   }
 
+  createUser(name: string, password: string): Observable<HttpResponse<string>> {
+    return this.http.post(
+      '/api/user',
+      {name, password},
+      {observe: 'response', responseType: 'text'}
+    );
+  }
+
   login(name: string, password: string, captchaResponse: string): Observable<HttpResponse<string>> {
     return this.http.post(
       '/api/team/login',
