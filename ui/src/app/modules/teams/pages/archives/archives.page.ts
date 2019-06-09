@@ -127,6 +127,7 @@ export class ArchivesPageComponent implements OnInit {
   }
 
   onScroll() {
+    console.log('scroll', this.boardPageIndex);
     this.fetchBoards(this.teamId, ++this.boardPageIndex);
   }
 }

@@ -19,10 +19,10 @@
 // sass-lint:disable no-vendor-prefixes
 
 :host {
-  -webkit-overflow-scrolling: touch;
   background-color: $background-color-light;
   display: block;
   height: 100%;
+  overflow: auto;
   width: 100%;
 
   &.dark-theme {
