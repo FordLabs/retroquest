@@ -26,26 +26,25 @@
     <div
       class="header-bottom-content"
     >
-      <button
+      <rq-button
         id="giveFeedback"
-        class="rq-button-secondary"
         (click)="feedbackDialog.show()"
-        [ngClass]="{
-          'dark-theme': darkThemeIsEnabled
-        }"
+        type="secondary"
+        [theme]="theme"
       >
         <span class="button-text">Give Feedback</span>
         <i class="far fa-comments button-icon"></i>
-      </button>
+      </rq-button>
 
 
-      <button
+      <rq-button
+        type="secondary"
         class="rq-button-secondary download-button"
         (click)="giveZipDownloadToUser()"
       >
         <span class="button-text">Download CSV</span>
         <i class="fas fa-download button-icon"></i>
-      </button>
+      </rq-button>
 
       <rq-button
         *ngIf="!boardIsOpenToEveryone"
