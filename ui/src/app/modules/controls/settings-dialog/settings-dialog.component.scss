@@ -128,7 +128,7 @@
           }
 
           &.selected {
-            background-color: $turquoise;
+            background-color: $grape;
             color: $white;
 
           }
@@ -192,7 +192,7 @@
                 border-radius: 12px;
 
                 &.selected {
-                  box-shadow: 0 0 0 8px $turquoise;
+                  box-shadow: 0 0 0 8px $grape;
                 }
 
                 @media only screen and (max-width: 610px) {
