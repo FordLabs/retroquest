@@ -33,6 +33,7 @@ export class ButtonComponent {
   @Input() type: string;
   @Input() text = '';
   @Input() theme: Themes = Themes.Light;
+  @Input() iconUrl = '';
 
   get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;

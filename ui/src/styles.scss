@@ -14,12 +14,12 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 @import 'color-vars';
 
-html {
+html,
+body {
   height: 100%;
-  padding: 0;
+  margin: 0;
   width: 100%;
 }
 
@@ -29,100 +29,4 @@ body {
   font-family: 'Quicksand', sans-serif;
   font-size: 1rem;
   font-weight: normal;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-}
-
-a {
-  color: $link-blue;
-  font-size: 1rem;
-  font-weight: 300;
-  padding-left: .2rem;
-  text-decoration: none;
-}
-
-input {
-  font-size: large;
-}
-
-p {
-  font-size: 1rem;
-  margin: 0;
-  padding-top: 0;
-}
-
-.rq-form {
-  width: 100%;
-}
-
-.rq-validation-message {
-  color: $text-gray;
-  font-size: 1rem;
-  padding-top: .5rem;
-}
-
-.rq-error-message {
-  color: $text-error;
-  font-size: medium;
-  margin: 0;
-}
-
-.rq-input {
-  border: 1px solid $border-gray;
-  border-radius: 3px;
-  box-sizing: border-box;
-  font-size: 1rem;
-  font-weight: 200;
-  padding: .8rem 1rem .8rem .5rem;
-}
-
-.rq-button {
-  background-color: $button-green;
-  border-radius: 3px;
-  color: $white;
-  font-size: 1.2rem;
-  padding: 1rem;
-  text-transform: uppercase;
-  width: 100%;
-}
-
-.rq-button-primary,
-.rq-button-secondary {
-  border: 0;
-  border-radius: 6px;
-  font-family: 'Quicksand', sans-serif;
-  font-size: 1rem;
-  font-weight: 800;
-  padding: 12px 36px;
-
-  .button-text {
-    white-space: nowrap;
-  }
-}
-
-.rq-button-primary {
-  background-color: $midnight-blue;
-  box-shadow: 0 4px 15px opacity($black, .25);
-  color: $white;
-
-  &:hover {
-    background-color: $turquoise;
-    cursor: pointer;
-  }
-
-  &:active {
-    background-color: $button-active-blue;
-  }
-}
-
-.rq-button-secondary {
-  background-color: transparent;
-  color: $wet-asphalt;
-
-  &:hover {
-    color: $turquoise;
-    cursor: pointer;
-  }
 }

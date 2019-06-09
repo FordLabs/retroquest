@@ -333,7 +333,7 @@ public class TeamApiTest extends ControllerTest {
     public void shouldReturnBadRequestWhenTheDesiredTeamDoesNotMatchTheTokenTeam() throws Exception {
         mockMvc.perform(get("/api/team/wrongTeamId/validate")
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("teamId")))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
     }
 
     @Test

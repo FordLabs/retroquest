@@ -18,13 +18,15 @@
 package com.ford.labs.retroquest.team;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ford.labs.retroquest.users.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Persistable;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
@@ -48,11 +50,12 @@ public class Team implements Persistable<String> {
     @JsonIgnore
     private LocalDate lastLoginDate;
 
-    Team(String uri, String name, String password) {
+    public Team(String uri, String name, String password) {
         this.uri = uri;
         this.name = name;
         this.password = password;
         this.failedAttempts = 0;
+//        this.users = new HashSet<>();
     }
 
     @Override

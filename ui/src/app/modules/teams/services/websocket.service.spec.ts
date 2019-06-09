@@ -18,10 +18,12 @@
 import {WebsocketService} from './websocket.service';
 import {Observable} from 'rxjs/internal/Observable';
 import {Column} from '../../domain/column';
+import {DataService} from '../../data.service';
 import createSpyObj = jasmine.createSpyObj;
 
 describe('WebsocketService', () => {
   let service: WebsocketService;
+  const dataService: DataService = new DataService();
   let spiedClient;
   const teamId = 'teamId';
 
@@ -34,17 +36,13 @@ describe('WebsocketService', () => {
     spiedClient.onConnect = new Observable();
     spiedClient.errors = new Observable();
 
-    service = new WebsocketService();
+    dataService.team.id = teamId;
+    service = new WebsocketService(dataService);
     service.stompClient = spiedClient;
   });
 
-  it('should set teamId', () => {
-    service.openWebsocket(teamId).subscribe();
-    expect(service.teamId).toBe(teamId);
-  });
-
   it('should call connect on client', () => {
-    service.openWebsocket(teamId).subscribe();
+    service.openWebsocket().subscribe();
     expect(service.stompClient.connect).toHaveBeenCalled();
   });
 
@@ -63,7 +61,6 @@ describe('WebsocketService', () => {
       service.stompClient = jasmine.createSpyObj({
         send: null
       });
-      service.teamId = teamId;
       service.sendHeartbeat();
     });
 
@@ -110,7 +107,7 @@ describe('WebsocketService', () => {
     });
 
     it('should subscribe to the thoughts topic', () => {
-      service.openWebsocket(teamId).subscribe();
+      service.openWebsocket().subscribe();
 
       service.thoughtsTopic().subscribe();
 
@@ -131,7 +128,7 @@ describe('WebsocketService', () => {
     });
 
     it('should subscribe to the action item topic', () => {
-      service.openWebsocket(teamId).subscribe();
+      service.openWebsocket().subscribe();
 
       service.actionItemTopic().subscribe();
 
@@ -142,20 +139,8 @@ describe('WebsocketService', () => {
 
   describe('columnTitleTopic', () => {
 
-    it('should throw an error if called without opening the websocket', () => {
-      try {
-        service.columnTitleTopic();
-        expect(true).toBeFalsy();
-      } catch (e) {
-        expect(e).toEqual(jasmine.any(Error));
-      }
-    });
-
-    it('should subscribe to the column title topic', () => {
-      service.openWebsocket(teamId).subscribe();
-
+    it('should subscribe to the column title topic', async () => {
       service.columnTitleTopic().subscribe();
-
       expect(service.stompClient.subscribe).toHaveBeenCalledWith(`/topic/${teamId}/column-titles`);
     });
 
@@ -175,7 +160,7 @@ describe('WebsocketService', () => {
         'columnTitle': {'id': 2, 'topic': 'confused', 'title': 'Confused', 'teamId': 'test'}
       };
 
-      service.openWebsocket(teamId).subscribe();
+      service.openWebsocket().subscribe();
       service.createThought(fakeThought);
 
       expect(service.stompClient.send).toHaveBeenCalledWith(
@@ -197,7 +182,7 @@ describe('WebsocketService', () => {
         'columnTitle': {'id': 2, 'topic': 'confused', 'title': 'Confused', 'teamId': 'test'}
       };
 
-      service.openWebsocket(teamId).subscribe();
+      service.openWebsocket().subscribe();
       service.deleteThought(fakeThought);
 
       expect(service.stompClient.send).toHaveBeenCalledWith(
@@ -219,7 +204,7 @@ describe('WebsocketService', () => {
         'columnTitle': {'id': 2, 'topic': 'confused', 'title': 'Confused', 'teamId': 'test'}
       };
 
-      service.openWebsocket(teamId).subscribe();
+      service.openWebsocket().subscribe();
       service.updateThought(fakeThought);
 
       expect(service.stompClient.send).toHaveBeenCalledWith(
@@ -241,7 +226,7 @@ describe('WebsocketService', () => {
         archived: false
       };
 
-      service.openWebsocket(teamId).subscribe();
+      service.openWebsocket().subscribe();
       service.updateActionItem(fakeActionItem);
 
       expect(service.stompClient.send).toHaveBeenCalledWith(
@@ -260,7 +245,7 @@ describe('WebsocketService', () => {
         title: ''
       };
 
-      service.openWebsocket(teamId).subscribe();
+      service.openWebsocket().subscribe();
       service.updateColumnTitle(fakeColumnTitle);
 
       expect(service.stompClient.send).toHaveBeenCalledWith(
@@ -282,7 +267,7 @@ describe('WebsocketService', () => {
         archived: false
       };
 
-      service.openWebsocket(teamId).subscribe();
+      service.openWebsocket().subscribe();
       service.createActionItem(fakeActionItem);
 
       expect(service.stompClient.send).toHaveBeenCalledWith(
@@ -304,7 +289,7 @@ describe('WebsocketService', () => {
         archived: false
       };
 
-      service.openWebsocket(teamId).subscribe();
+      service.openWebsocket().subscribe();
       service.deleteActionItem(fakeActionItem);
 
       expect(service.stompClient.send).toHaveBeenCalledWith(
@@ -316,7 +301,7 @@ describe('WebsocketService', () => {
 
   describe('deleteActionItem', () => {
     it('should call the end retro websocket with no message', () => {
-      service.openWebsocket(teamId).subscribe();
+      service.openWebsocket().subscribe();
       service.endRetro();
 
       expect(service.stompClient.send).toHaveBeenCalledWith(`/app/${teamId}/end-retro`, null);

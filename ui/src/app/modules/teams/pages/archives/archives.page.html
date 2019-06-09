@@ -17,8 +17,10 @@
 
 <div id="page"
      infiniteScroll
-     [infiniteScrollDistance]="2"
+     [infiniteScrollDistance]="3"
      [infiniteScrollThrottle]="1000"
+     [infiniteScrollContainer]="'rq-sub-app'"
+     [fromRoot]="true"
      (scrolled)="onScroll()"
 >
 

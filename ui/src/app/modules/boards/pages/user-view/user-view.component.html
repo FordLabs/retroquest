@@ -1,0 +1,60 @@
+<div class="user-account-info-container">
+    <div class="user-icon"><i class="fas fa-user-circle"></i></div>
+    <div class="user-name">{{userName}}</div>
+</div>
+
+<div class="team-sync-and-creation-container">
+    <form class="sync-team-container existing-team-container">
+        <div class="heading">Add Existing Team</div>
+        <div class="entry-container">
+            <div>Existing Team Name</div>
+            <input [(ngModel)]="existingTeamName" name="existing-team-name" type="text"/>
+        </div>
+        <div class="entry-container">
+            <div>Existing Password</div>
+            <input [(ngModel)]="existingTeamPassword" name="existing-team-password" type="password"/>
+        </div>
+
+        <rq-button type="primary" text="add board" (click)="addExistingTeamToUser()"></rq-button>
+    </form>
+
+    <form class="sync-team-container">
+        <div class="heading">Add New Team</div>
+        <div class="entry-container">
+            <div>New Team Name</div>
+            <input [(ngModel)]="newTeamName" name="new-team-name" type="text"/>
+        </div>
+
+        <rq-button type="primary" text="create board" (click)="addNewTeamToUser()"></rq-button>
+    </form>
+</div>
+
+<div class="teams-container">
+    <div class="heading-container">
+        <div class="team-heading">Retro Boards</div>
+        <div class="team-sub-heading">View your new or existing team retro boards</div>
+    </div>
+
+    <div class="team-item" *ngFor="let team of teamList">
+        <div class="team-name">
+            <div>{{team.name}}</div>
+        </div>
+        <div class="right-content">
+            <div
+                    class="separator"
+                    [ngClass]="{
+                        'dark-theme': dataService.darkThemeIsEnabled
+                    }"
+            ></div>
+            <rq-button
+                    class="view-button"
+                    text="view"
+                    type="secondary"
+                    [theme]="dataService.theme"
+                    (click)="fetchColumnsForTeamTest(team.id)"
+            ></rq-button>
+        </div>
+    </div>
+</div>
+
+

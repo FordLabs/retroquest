@@ -17,11 +17,13 @@
 
 package com.ford.labs.retroquest.api;
 
+import com.ford.labs.retroquest.apiAuthorization.ApiAuthorization;
 import com.ford.labs.retroquest.v2.columns.ColumnCombinerResponse;
 import com.ford.labs.retroquest.v2.columns.ColumnCombinerService;
 import com.ford.labs.retroquest.v2.columns.ColumnResponse;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Collections;
@@ -32,6 +34,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class ColumnControllerTest extends ControllerTest {
+
+    @Autowired
+    ApiAuthorization apiAuthorization;
 
     @MockBean
     ColumnCombinerService columnCombinerService;

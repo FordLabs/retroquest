@@ -2,6 +2,9 @@ package com.ford.labs.retroquest.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ford.labs.retroquest.security.JwtBuilder;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.impl.TextCodec;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
@@ -12,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.xml.bind.DatatypeConverter;
 import java.util.Base64;
 
 @AutoConfigureMockMvc
@@ -27,7 +31,7 @@ public class ControllerTest {
     public MockMvc mockMvc;
 
     @Autowired
-    private JwtBuilder jwtBuilder;
+    public JwtBuilder jwtBuilder;
 
     @Value("${com.retroquest.adminUsername}")
     private String adminUsername;
@@ -38,7 +42,8 @@ public class ControllerTest {
     @Value("${local.server.port}")
     private int port;
 
-
+    @Value("${jwt.signing.secret}")
+    private String jwtSigningSecret;
 
     private String basicAuthToken;
 
@@ -52,7 +57,7 @@ public class ControllerTest {
     public void setUp() {
         teamId = "BeachBums";
         websocketUrl = "ws://localhost:" + port + "/websocket";
-        basicAuthToken = "Basic " + Base64.getEncoder().encodeToString((adminUsername + ":"+ adminPassword).getBytes());
+        basicAuthToken = "Basic " + Base64.getEncoder().encodeToString((adminUsername + ":" + adminPassword).getBytes());
         bearerAuthToken = "Bearer " + jwtBuilder.buildJwt(teamId);
     }
 
@@ -62,6 +67,14 @@ public class ControllerTest {
 
     public String getBearerAuthToken() {
         return bearerAuthToken;
+    }
+
+    public Claims decodeJWT(String jwt) {
+        //This line will throw an exception if it is not a signed JWS (as expected)
+        return Jwts.parser()
+                .setSigningKey(TextCodec.BASE64.encode(jwtSigningSecret))
+                .parseClaimsJws(jwt)
+                .getBody();
     }
 
 }

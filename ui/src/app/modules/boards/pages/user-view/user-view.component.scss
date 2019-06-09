@@ -1,0 +1,193 @@
+/*!
+*  Copyright (c) 2018 Ford Motor Company
+*  All rights reserved.
+*
+*  Licensed under the Apache License, Version 2.0 (the "License");
+*  you may not use this file except in compliance with the License.
+*  You may obtain a copy of the License at
+*
+*  http://www.apache.org/licenses/LICENSE-2.0
+*
+*  Unless required by applicable law or agreed to in writing, software
+*  distributed under the License is distributed on an "AS IS" BASIS,
+*  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*  See the License for the specific language governing permissions and
+*  limitations under the License.
+*/
+@import 'color-vars';
+
+:host {
+  box-sizing: border-box;
+  display: block;
+  margin: 0 auto;
+  padding: 48px;
+  width: 1440px;
+
+  .user-account-info-container {
+    align-items: center;
+    display: flex;
+    font-size: 4rem;
+    justify-content: center;
+    margin: 0 auto 24px;
+
+    .user-name {
+      margin-left: 12px;
+    }
+  }
+
+  .team-sync-and-creation-container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto 24px;
+
+    .sync-team-container {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      height: 250px;
+      justify-content: flex-start;
+      position: relative;
+      width: 400px;
+
+      &.existing-team-container {
+        margin-right: 48px;
+      }
+
+      .heading {
+        font-size: 1.6rem;
+        font-weight: 500;
+        width: 100%;
+      }
+
+      .entry-container {
+        margin-top: 12px;
+        width: 100%;
+
+        input {
+          width: 100%;
+        }
+      }
+
+      rq-button {
+        bottom: 0;
+        position: absolute;
+        width: 100%;
+      }
+    }
+  }
+
+  .teams-container {
+    margin: 0 auto;
+    width: 500px;
+
+    .heading-container {
+      margin-bottom: 24px;
+
+      .team-heading {
+        font-size: 1.5rem;
+        font-weight: 500;
+
+        &.dark-theme {
+          color: $clouds;
+        }
+
+      }
+
+      .team-sub-heading {
+        font-size: 1.1rem;
+        opacity: .6;
+
+        &.dark-theme {
+          color: $clouds;
+        }
+      }
+    }
+
+    .team-item {
+      $host-border-width: 2px;
+      $host-opacity: .1;
+      align-items: center;
+      background-color: $white;
+      border-radius: 6px;
+      box-shadow: 0 4px 20px opacity($black, .12);
+      box-sizing: border-box;
+      color: inherit;
+      display: flex;
+      font-weight: bold;
+      height: 64px;
+      margin-bottom: 36px;
+      max-width: 90%;
+      padding-left: 18px;
+      position: relative;
+      transition: box-shadow .2s cubic-bezier(.25, .8, .25, 1);
+      width: 100%;
+
+      &.add-team-button {
+        align-items: center;
+        color: opacity($wet-asphalt, .35);
+        cursor: pointer;
+        font-size: 1.6rem;
+        justify-content: center;
+      }
+
+      &.dark-theme {
+        background-color: $task-background-dark;
+        color: $clouds;
+      }
+
+      .team-name {
+        font-size: 1.2rem;
+
+        @media only screen and (max-width: 610px) {
+          font-size: 1rem;
+        }
+      }
+
+      .right-content {
+        display: flex;
+        font-size: 1.1rem;
+        height: 100%;
+        justify-content: flex-end;
+        position: absolute;
+        right: 0;
+
+        .separator {
+          background-color: opacity($wet-asphalt, .04);
+          height: 100%;
+          width: 3px;
+
+          &.dark-theme {
+            background-color: opacity($black, .08);
+          }
+        }
+
+        .view-button {
+          color: opacity($wet-asphalt, .68);
+          font-size: inherit;
+          height: 100%;
+          padding: 0;
+
+          width: 100px;
+
+          &:hover {
+            color: $turquoise;
+          }
+
+          &.dark-theme {
+            color: opacity($clouds, .68);
+
+            &:hover {
+              color: $turquoise;
+            }
+          }
+
+          @media only screen and (max-width: 610px) {
+            font-size: .95rem;
+            width: 65px;
+          }
+        }
+      }
+    }
+  }
+}

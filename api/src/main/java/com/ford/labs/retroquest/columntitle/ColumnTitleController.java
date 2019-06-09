@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.columntitle;
 
+import com.ford.labs.retroquest.apiAuthorization.ApiAuthorization;
 import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -32,20 +33,23 @@ import java.util.List;
 public class ColumnTitleController {
 
     private ColumnTitleRepository columnTitleRepository;
+    private ApiAuthorization apiAuthorization;
 
-    public ColumnTitleController(ColumnTitleRepository columnTitleRepository) {
+    public ColumnTitleController(ColumnTitleRepository columnTitleRepository,
+                                 ApiAuthorization apiAuthorization) {
         this.columnTitleRepository = columnTitleRepository;
+        this.apiAuthorization = apiAuthorization;
     }
 
     @GetMapping("/api/team/{teamId}/columns")
-    @PreAuthorize("#teamId == authentication.principal")
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public List<ColumnTitle> getColumnTitlesForTeam(@PathVariable("teamId") String teamId) {
         return columnTitleRepository.findAllByTeamId(teamId);
     }
 
     @Transactional
     @PutMapping("/api/team/{teamId}/column/{columnId}/title")
-    @PreAuthorize("#teamId == authentication.principal")
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public void updateTitleOfColumn(@PathVariable("teamId") String teamId, @RequestBody ColumnTitle columnTitle, @PathVariable("columnId") Long columnId) {
         ColumnTitle returnedColumnTitle = columnTitleRepository.findOne(columnId);
         returnedColumnTitle.setTitle(columnTitle.getTitle());
@@ -56,7 +60,7 @@ public class ColumnTitleController {
     @SendTo("/topic/{teamId}/column-titles")
     public WebsocketPutResponse<ColumnTitle> editColumnTitleWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("columnId") Long columnId, ColumnTitle columnTitle, Authentication authentication) {
 
-        if (authentication.getPrincipal().equals(teamId)) {
+        if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
             ColumnTitle savedColumnTitle = columnTitleRepository.findOne(columnId);
             savedColumnTitle.setTitle(columnTitle.getTitle());
             columnTitleRepository.save(savedColumnTitle);

@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.team;
 
+import com.ford.labs.retroquest.apiAuthorization.ApiAuthorization;
 import com.ford.labs.retroquest.security.JwtBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -40,11 +41,16 @@ public class TeamController {
     private final TeamService teamService;
     private final JwtBuilder jwtBuilder;
     private final CaptchaService captchaService;
+    private final ApiAuthorization apiAuthorization;
 
-    public TeamController(TeamService teamService, JwtBuilder jwtBuilder, CaptchaService captchaService) {
+    public TeamController(TeamService teamService,
+                          JwtBuilder jwtBuilder,
+                          CaptchaService captchaService,
+                          ApiAuthorization apiAuthorization) {
         this.teamService = teamService;
         this.jwtBuilder = jwtBuilder;
         this.captchaService = captchaService;
+        this.apiAuthorization = apiAuthorization;
     }
 
     @PostMapping("/team")
@@ -74,7 +80,7 @@ public class TeamController {
     }
 
     @GetMapping(value = "/team/{teamId}/csv", produces = "application/board.csv")
-    @PreAuthorize("#teamId == authentication.principal")
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public ResponseEntity<byte[]> downloadTeamBoard(@PathVariable("teamId") String teamId) throws IOException {
         CsvFile file = teamService.buildCsvFileFromTeam(teamId);
         return ResponseEntity.ok()
@@ -84,11 +90,8 @@ public class TeamController {
     }
 
     @GetMapping(value = "team/{teamId}/validate")
-    public ResponseEntity validateTeamId(@PathVariable("teamId") String teamId, Authentication authentication) {
-        if (teamId.equals(authentication.getPrincipal())) {
-            return new ResponseEntity<>(OK);
-        }
-        return new ResponseEntity(UNAUTHORIZED);
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    public void validateTeamId(@PathVariable("teamId") String teamId) {
     }
 
     @PostMapping("/team/login")

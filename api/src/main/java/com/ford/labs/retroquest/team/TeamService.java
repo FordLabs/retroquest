@@ -77,6 +77,28 @@ public class TeamService {
 
         teamEntity = teamRepository.save(teamEntity);
 
+        generateColumns(teamEntity);
+
+        return teamEntity;
+    }
+
+    public Team createNewTeam(String name) {
+
+        Team teamEntity = new Team();
+        teamEntity.setName(name);
+        teamEntity.setUri(convertTeamNameToURI(name));
+        teamEntity.setDateCreated(LocalDate.now());
+
+        teamEntity = teamRepository.save(teamEntity);
+
+        generateColumns(teamEntity);
+
+        return teamEntity;
+    }
+
+    private void generateColumns(Team teamEntity) {
+
+
         ColumnTitle happyColumnTitle = new ColumnTitle();
         happyColumnTitle.setTeamId(teamEntity.getUri());
         happyColumnTitle.setTopic("happy");
@@ -95,8 +117,6 @@ public class TeamService {
         columnTitleRepository.save(happyColumnTitle);
         columnTitleRepository.save(confusedColumnTitle);
         columnTitleRepository.save(unhappyColumnTitle);
-
-        return teamEntity;
     }
 
     public Team login(LoginRequest loginRequest) {
