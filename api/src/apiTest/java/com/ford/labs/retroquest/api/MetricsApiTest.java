@@ -1,5 +1,6 @@
 package com.ford.labs.retroquest.api;
 
+import com.ford.labs.retroquest.api.refactor.setup.ApiTest;
 import com.ford.labs.retroquest.feedback.Feedback;
 import com.ford.labs.retroquest.feedback.FeedbackRepository;
 import com.ford.labs.retroquest.team.Team;
@@ -22,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class MetricsApiTest extends ControllerTest {
+public class MetricsApiTest extends ApiTest {
 
     @Autowired
     private TeamRepository teamRepository;
