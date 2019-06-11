@@ -80,6 +80,10 @@ export class ThoughtsColumnComponent implements OnInit {
     });
   }
 
+  get activeThoughtsCount(): number {
+    return this.thoughtAggregation.items.active.length;
+  }
+
   get totalThoughtCount(): number {
     return this.thoughtAggregation.items.active.length + this.thoughtAggregation.items.completed.length;
   }
