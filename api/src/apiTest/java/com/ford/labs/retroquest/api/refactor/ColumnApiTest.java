@@ -15,8 +15,9 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.api;
+package com.ford.labs.retroquest.api.refactor;
 
+import com.ford.labs.retroquest.api.refactor.setup.ApiTest;
 import com.ford.labs.retroquest.apiAuthorization.ApiAuthorization;
 import com.ford.labs.retroquest.v2.columns.ColumnCombinerResponse;
 import com.ford.labs.retroquest.v2.columns.ColumnCombinerService;
@@ -33,7 +34,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class ColumnControllerTest extends ControllerTest {
+public class ColumnApiTest extends ApiTest {
 
     @Autowired
     ApiAuthorization apiAuthorization;
@@ -44,7 +45,7 @@ public class ColumnControllerTest extends ControllerTest {
     private ColumnCombinerResponse expectedBody;
 
     @Before
-    public void init() {
+    public void setup() {
         expectedBody = ColumnCombinerResponse.builder()
                 .columns(
                         Collections.singletonList(ColumnResponse.builder().topic("happy").build())
@@ -53,25 +54,21 @@ public class ColumnControllerTest extends ControllerTest {
         when(columnCombinerService.aggregateResponse(teamId)).thenReturn(expectedBody);
     }
 
-
     @Test
-    // "GET: should return a 401 when you are unauthorized"
-    public void unauthorized_GET() throws Exception {
+    public void should_return_unauthorized_if_no_bearer_token_is_sent() throws Exception {
         mockMvc.perform(get("/api/v2/team/" + teamId + "/columns"))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
-    // "GET: should return a 200 since user is authorized"
-    public void authorized_GET() throws Exception {
+    public void should_return_ok_since_user_is_authorized() throws Exception {
         mockMvc.perform(get("/api/v2/team/" + teamId + "/columns")
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk());
     }
 
     @Test
-    // "GET: should return a filled out  aggregated response with a 200""
-    public void authorizedResponseBody_GET() throws Exception {
+    public void should_get_a_filled_out_aggregated_response_with_a_200() throws Exception {
         String body = mockMvc.perform(get("/api/v2/team/" + teamId + "/columns")
                 .header("Authorization", getBearerAuthToken()))
                 .andReturn().getResponse().getContentAsString();
