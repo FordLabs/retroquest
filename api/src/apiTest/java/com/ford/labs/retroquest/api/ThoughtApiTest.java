@@ -1,6 +1,6 @@
-package com.ford.labs.retroquest.api.refactor;
+package com.ford.labs.retroquest.api;
 
-import com.ford.labs.retroquest.api.refactor.setup.ApiTest;
+import com.ford.labs.retroquest.api.setup.ApiTest;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.thought.Thought;

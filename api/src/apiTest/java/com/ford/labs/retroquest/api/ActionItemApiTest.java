@@ -1,8 +1,8 @@
-package com.ford.labs.retroquest.api.refactor;
+package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.actionitem.ActionItem;
 import com.ford.labs.retroquest.actionitem.ActionItemRepository;
-import com.ford.labs.retroquest.api.refactor.setup.ApiTest;
+import com.ford.labs.retroquest.api.setup.ApiTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

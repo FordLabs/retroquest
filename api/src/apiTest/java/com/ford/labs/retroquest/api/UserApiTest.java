@@ -1,6 +1,6 @@
-package com.ford.labs.retroquest.api.refactor;
+package com.ford.labs.retroquest.api;
 
-import com.ford.labs.retroquest.api.refactor.setup.ApiTest;
+import com.ford.labs.retroquest.api.setup.ApiTest;
 import com.ford.labs.retroquest.users.NewUserRequest;
 import com.ford.labs.retroquest.users.User;
 import com.ford.labs.retroquest.users.UserRepository;

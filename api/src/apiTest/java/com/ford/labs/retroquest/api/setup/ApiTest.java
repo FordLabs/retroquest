@@ -1,4 +1,4 @@
-package com.ford.labs.retroquest.api.refactor.setup;
+package com.ford.labs.retroquest.api.setup;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
