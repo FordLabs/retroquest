@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.Base64;
 
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -29,6 +30,15 @@ public class MetricsApiTest extends ControllerTest {
     @Autowired
     private FeedbackRepository feedbackRepository;
 
+    @After
+    public void teardown() {
+        teamRepository.deleteAll();
+        feedbackRepository.deleteAll();
+
+        assertThat(teamRepository.count()).isEqualTo(0);
+        assertThat(feedbackRepository.count()).isEqualTo(0);
+    }
+
     @Test
     public void canReadTheTotalNumberOfTeamsCreated() throws Exception {
         Team team = new Team();
@@ -39,8 +49,8 @@ public class MetricsApiTest extends ControllerTest {
 
         MvcResult result = mockMvc.perform(get("/api/admin/metrics/team/count")
                 .header("Authorization", getBasicAuthToken()))
-            .andExpect(status().isOk())
-            .andReturn();
+                .andExpect(status().isOk())
+                .andReturn();
         assertEquals("1", result.getResponse().getContentAsString());
     }
 
@@ -326,12 +336,6 @@ public class MetricsApiTest extends ControllerTest {
     }
 
     private String getToken(String adminUsername, String adminPassword) {
-        return Base64.getEncoder().encodeToString((adminUsername + ":"+ adminPassword).getBytes());
-    }
-
-    @After
-    public void cleanUpTestData() {
-        teamRepository.deleteAll();
-        feedbackRepository.deleteAll();
+        return Base64.getEncoder().encodeToString((adminUsername + ":" + adminPassword).getBytes());
     }
 }
