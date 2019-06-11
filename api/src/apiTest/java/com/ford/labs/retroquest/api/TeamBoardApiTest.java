@@ -1,6 +1,6 @@
-package com.ford.labs.retroquest.api.teamboard;
+package com.ford.labs.retroquest.api;
 
-import com.ford.labs.retroquest.api.ControllerTest;
+import com.ford.labs.retroquest.api.setup.ApiTest;
 import com.ford.labs.retroquest.team.CreateTeamRequest;
 import com.ford.labs.retroquest.team.TeamRepository;
 import com.ford.labs.retroquest.team.TeamService;
@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class TeamBoardApiTest extends ControllerTest {
+public class TeamBoardApiTest extends ApiTest {
 
     @Autowired
     private UserRepository userRepository;

@@ -1,92 +1,108 @@
 package com.ford.labs.retroquest.api;
 
+import com.ford.labs.retroquest.api.setup.ApiTest;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class ColumnTitleApiTest extends ControllerTest {
+public class ColumnTitleApiTest extends ApiTest {
 
     @Autowired
     private ColumnTitleRepository columnTitleRepository;
 
+    private String BASE_SUB_URL;
+    private String BASE_ENDPOINT_URL;
+
+    @Before
+    public void setup() {
+        BASE_SUB_URL = "/topic/" + teamId + "/column-titles";
+        BASE_ENDPOINT_URL = "/app/" + teamId + "/column-title";
+    }
+
     @After
-    public void tearDown() {
+    public void teardown() {
         columnTitleRepository.deleteAll();
+        assertThat(columnTitleRepository.count()).isEqualTo(0);
     }
 
     @Test
-    public void canRetrieveListOfColumnNamesForTeam() throws Exception {
-        ColumnTitle columnTitle1 = new ColumnTitle();
-        columnTitle1.setTeamId("BeachBums");
-        ColumnTitle columnTitle2 = new ColumnTitle();
-        columnTitle2.setTeamId("BeachBums");
-        ColumnTitle columnTitle3 = new ColumnTitle();
-        columnTitle3.setTeamId("BeachBums");
+    public void canEditColumnTitleWithWebSockets() throws Exception {
 
-        columnTitleRepository.save(Arrays.asList(columnTitle1, columnTitle2, columnTitle3));
+        ColumnTitle savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder()
+                .title("old title")
+                .teamId("beach-bums")
+                .build());
 
-        MvcResult columnListRequest = mockMvc.perform(get("/api/team/BeachBums/columns").contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", getBearerAuthToken()))
-            .andReturn();
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
 
-        ColumnTitle[] columnTitles = objectMapper.readValue(columnListRequest.getResponse().getContentAsByteArray(), ColumnTitle[].class);
+        ColumnTitle sentColumnTitle = ColumnTitle.builder()
+                .id(savedColumnTitle.getId())
+                .title("new title")
+                .teamId(savedColumnTitle.getTeamId())
+                .build();
 
-        assertEquals(3, columnTitles.length);
+        session.send(BASE_ENDPOINT_URL + "/" + sentColumnTitle.getId() + "/edit",
+                objectMapper.writeValueAsBytes(sentColumnTitle));
+
+        ColumnTitle response = takeObjectInSocket(ColumnTitle.class);
+
+        assertThat(response).isEqualTo(sentColumnTitle);
+        assertThat(columnTitleRepository.count()).isEqualTo(1);
+        assertThat(columnTitleRepository.findAll().get(0)).isEqualTo(sentColumnTitle);
     }
 
     @Test
-    public void submittingModifiedTitleUpdatesTitle() throws Exception {
-        ColumnTitle columnTitle = new ColumnTitle();
-        columnTitle.setTeamId("BeachBums");
-        columnTitle.setTitle("Unmodified title");
-
-        ColumnTitle createdColumnTitle = columnTitleRepository.save(columnTitle);
-        String columnTitleJsonBody = "{ \"title\" : \"modified title\" }";
-
-        mockMvc.perform(put("/api/team/BeachBums/column/" + createdColumnTitle.getId() + "/title")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(columnTitleJsonBody)
-                .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isOk());
+    public void should_get_list_of_columns() throws Exception {
+        columnTitleRepository.save(Arrays.asList(
+                ColumnTitle.builder().teamId("BeachBums").title("one").build(),
+                ColumnTitle.builder().teamId("BeachBums").title("two").build(),
+                ColumnTitle.builder().teamId("BeachBums").title("three").build()
+        ));
 
         MvcResult columnListRequest = mockMvc.perform(get("/api/team/BeachBums/columns").contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", getBearerAuthToken()))
                 .andReturn();
 
-        ColumnTitle[] columnTitles = objectMapper.readValue(columnListRequest.getResponse().getContentAsByteArray(), ColumnTitle[].class);
+        ColumnTitle[] result = objectMapper.readValue(columnListRequest.getResponse().getContentAsByteArray(), ColumnTitle[].class);
 
-        assertEquals("modified title", columnTitles[0].getTitle());
+        assertThat(result).hasSize(3);
     }
 
     @Test
-    public void submittingModifiedTitleDoesNotCreateNewColumnTitle() throws Exception {
+    public void should_update_column_title() throws Exception {
 
-        ColumnTitle columnTitle = new ColumnTitle();
-        columnTitle.setTeamId("BeachBums");
-        columnTitle.setTitle("Unmodified title");
+        ColumnTitle savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder()
+                .teamId("BeachBums")
+                .title("old title")
+                .build());
 
-        ColumnTitle createdColumnTitle = columnTitleRepository.save(columnTitle);
-        int startingSize = columnTitleRepository.findAll().size();
+        ColumnTitle sentColumnTitle = ColumnTitle.builder()
+                .id(savedColumnTitle.getId())
+                .teamId("BeachBums")
+                .title("new title")
+                .build();
 
-        String columnTitleJsonBody = "{ \"title\" : \"modified title\" }";
-
-        mockMvc.perform(put("/api/team/BeachBums/column/" + createdColumnTitle.getId() + "/title")
+        mockMvc.perform(put("/api/team/BeachBums/column/" + savedColumnTitle.getId() + "/title")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(columnTitleJsonBody)
+                .content(objectMapper.writeValueAsBytes(sentColumnTitle))
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk());
 
-        assertEquals(startingSize, columnTitleRepository.findAll().size());
+        assertThat(columnTitleRepository.count()).isEqualTo(1);
+        assertThat(columnTitleRepository.findAll().get(0)).isEqualTo(sentColumnTitle);
     }
 }

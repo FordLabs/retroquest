@@ -1,368 +1,311 @@
 package com.ford.labs.retroquest.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ford.labs.retroquest.actionitem.ActionItem;
 import com.ford.labs.retroquest.actionitem.ActionItemRepository;
-import com.ford.labs.retroquest.security.JwtBuilder;
-import org.apache.catalina.connector.Response;
+import com.ford.labs.retroquest.api.setup.ApiTest;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.messaging.simp.stomp.StompFrameHandler;
-import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.web.socket.WebSocketHttpHeaders;
-import org.springframework.web.socket.client.standard.StandardWebSocketClient;
-import org.springframework.web.socket.messaging.WebSocketStompClient;
-import org.springframework.web.socket.sockjs.client.SockJsClient;
-import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.Arrays;
+import java.util.List;
 
-import static java.util.Arrays.asList;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.junit.Assert.*;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
-public class ActionItemApiTest extends AbstractTransactionalJUnit4SpringContextTests{
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private JwtBuilder jwtBuilder;
+public class ActionItemApiTest extends ApiTest {
 
     @Autowired
     private ActionItemRepository actionItemRepository;
 
-    @Value("${local.server.port}")
-    private int port;
-
-    private ObjectMapper mapper = new ObjectMapper();
-
-    BlockingQueue<String> blockingQueue;
-    WebSocketStompClient stompClient;
-
-    private String websocketUri;
-    private String actionItemSubscribeEndpoint;
-    private String actionItemEndpoint;
-
-    private ActionItem getLatestActionItemInQueue() throws IOException, InterruptedException {
-        ObjectNode response = mapper.readValue(blockingQueue.poll(1, SECONDS), ObjectNode.class);
-        return mapper.treeToValue(response.get("payload"), ActionItem.class);
-    }
+    private String BASE_SUB_URL;
+    private String BASE_ENDPOINT_URL;
 
     @Before
     public void setup() {
-        websocketUri = "ws://localhost:" + port + "/websocket";
-        actionItemSubscribeEndpoint = "/topic/beach-bums/action-items";
-        actionItemEndpoint = "/app/beach-bums/action-item";
-        blockingQueue = new LinkedBlockingDeque<>();
-        stompClient = new WebSocketStompClient(new SockJsClient(
-                asList(new WebSocketTransport(new StandardWebSocketClient()))));
+        BASE_SUB_URL = "/topic/" + teamId + "/action-items";
+        BASE_ENDPOINT_URL = "/app/" + teamId + "/action-item";
+    }
+
+    @After
+    public void teardown() {
+        actionItemRepository.deleteAll();
+
+        assertThat(actionItemRepository.count()).isEqualTo(0);
     }
 
     @Test
-    public void canCreateAnActionItemUsingWebsockets() throws Exception {
+    public void should_create_action_item() throws Exception {
 
-        String jwt = jwtBuilder.buildJwt("beach-bums");
-        String actionItemJsonBody = "{\"task\" : \"Do the thing\"}";
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
 
-        StompHeaders headers = new StompHeaders();
-        headers.add("Authorization", "Bearer " + jwt);
+        ActionItem sentActionItem = ActionItem.builder()
+                .task("do the thing")
+                .build();
 
-        StompSession session = stompClient
-                .connect(websocketUri, new WebSocketHttpHeaders() {}, headers, new StompSessionHandlerAdapter() {})
-                .get(1, SECONDS);
-        session.subscribe(actionItemSubscribeEndpoint, new DefaultStompFrameHandler());
+        session.send(BASE_ENDPOINT_URL + "/create", objectMapper.writeValueAsBytes(sentActionItem));
 
-        session.send(actionItemEndpoint + "/create", actionItemJsonBody.getBytes());
+        ActionItem returnedActionItem = takeObjectInSocket(ActionItem.class);
 
-        ActionItem actionItem = getLatestActionItemInQueue();
+        assertThat(actionItemRepository.count()).isEqualTo(1);
+        assertThat(actionItemRepository.findAll().get(0)).isEqualTo(returnedActionItem);
 
-        assertEquals("Do the thing", actionItem.getTask());
+        assertThat(sentActionItem.getTask()).isEqualTo(returnedActionItem.getTask());
     }
 
     @Test
-    public void cannotCreateAnActionItemUsingWebsocketsForAnotherTeam() throws Exception {
-        String jwt = jwtBuilder.buildJwt("beach-bum");
-        String actionItemJsonBody = "{\"task\" : \"Do the thing\"}";
+    public void should_not_create_action_item_when_unauthorized() throws Exception {
+        ActionItem sentActionItem = ActionItem.builder()
+                .task("do the thing")
+                .build();
 
-        StompHeaders headers = new StompHeaders();
-        headers.add("Authorization", "Bearer " + jwt);
+        StompSession session = getUnauthorizedSession();
+        subscribe(session, BASE_SUB_URL);
 
-        StompSession session = stompClient
-                .connect(websocketUri, new WebSocketHttpHeaders() {}, headers, new StompSessionHandlerAdapter() {})
-                .get(1, SECONDS);
-        session.subscribe(actionItemSubscribeEndpoint, new DefaultStompFrameHandler());
+        session.send(BASE_ENDPOINT_URL + "/create", objectMapper.writeValueAsBytes(sentActionItem));
 
-        session.send(actionItemEndpoint + "/create", actionItemJsonBody.getBytes());
-
-        assertEquals(null, blockingQueue.poll(1, SECONDS));
+        assertThat(takeObjectInSocket(ActionItem.class)).isNull();
     }
 
     @Test
-    public void canEditAnActionItemUsingWebsockets() throws Exception {
-        String jwt = jwtBuilder.buildJwt("beach-bums");
-        String actionItemJsonBody = "{\"task\" : \"Do the thing\"}";
+    public void should_get_edited_action_item() throws Exception {
+        ActionItem sentActionItem = ActionItem.builder()
+                .task("do the thing")
+                .build();
 
-        StompHeaders headers = new StompHeaders();
-        headers.add("Authorization", "Bearer " + jwt);
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
 
-        StompSession session = stompClient
-                .connect(websocketUri, new WebSocketHttpHeaders() {}, headers, new StompSessionHandlerAdapter() {})
-                .get(1, SECONDS);
-        session.subscribe(actionItemSubscribeEndpoint, new DefaultStompFrameHandler());
-        session.send(actionItemEndpoint + "/create", actionItemJsonBody.getBytes());
+        session.send(BASE_ENDPOINT_URL + "/create", objectMapper.writeValueAsBytes(sentActionItem));
 
-        ActionItem actionItem = getLatestActionItemInQueue();
+        ActionItem savedActionItem = takeObjectInSocket(ActionItem.class);
 
-        String editActionItemJsonBody = "{\"task\" : \"Edit the thing\"}";
-        session.send(actionItemEndpoint + "/" + actionItem.getId() + "/edit", editActionItemJsonBody.getBytes());
+        ActionItem sentUpdatedActionItem = savedActionItem;
+        sentUpdatedActionItem.setTask("edited the thing");
 
-        assertEquals("Edit the thing", getLatestActionItemInQueue().getTask());
+        session.send(BASE_ENDPOINT_URL + "/" + savedActionItem.getId() + "/edit",
+                objectMapper.writeValueAsBytes(sentUpdatedActionItem));
+
+        ActionItem returnedUpdatedActionItem = takeObjectInSocket(ActionItem.class);
+
+        assertThat(actionItemRepository.count()).isEqualTo(1);
+        assertThat(actionItemRepository.findAll().get(0)).isEqualTo(returnedUpdatedActionItem);
+
+        assertThat(sentUpdatedActionItem.getTask()).isEqualTo(returnedUpdatedActionItem.getTask());
     }
 
     @Test
-    public void canDeleteAnActionItemUsingWebsockets() throws Exception {
-        String jwt = jwtBuilder.buildJwt("beach-bums");
-        String actionItemJsonBody = "{\"task\" : \"Do the thing\"}";
+    public void should_delete_all_action_items_attached_to_team() throws Exception {
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
 
-        StompHeaders headers = new StompHeaders();
-        headers.add("Authorization", "Bearer " + jwt);
+        List<ActionItem> savedActionItems = actionItemRepository.save(Arrays.asList(
+                ActionItem.builder()
+                        .teamId(teamId)
+                        .task("do the thing")
+                        .build(),
+                ActionItem.builder()
+                        .teamId("team2")
+                        .task("do the thing")
+                        .build()
+        ));
 
-        StompSession session = stompClient
-                .connect(websocketUri, new WebSocketHttpHeaders() {}, headers, new StompSessionHandlerAdapter() {})
-                .get(1, SECONDS);
-        session.subscribe(actionItemSubscribeEndpoint, new DefaultStompFrameHandler());
-        session.send(actionItemEndpoint + "/create", actionItemJsonBody.getBytes());
+        ActionItem sameTeamSavedActionItem = savedActionItems.get(0);
 
-        ActionItem actionItem = getLatestActionItemInQueue();
+        session.send(BASE_ENDPOINT_URL + "/" + sameTeamSavedActionItem.getId() + "/delete", null);
 
-        session.send(actionItemEndpoint + "/" + actionItem.getId() + "/delete", null);
+        Long returnActionItemId = takeObjectInSocket(Long.class);
 
-        String returnVal = blockingQueue.poll(1, SECONDS);
-        assertFalse(returnVal.contains("not"));
+        assertThat(returnActionItemId).isEqualTo(sameTeamSavedActionItem.getId());
+
+        assertThat(actionItemRepository.count()).isEqualTo(1);
+        assertThat(actionItemRepository.findAll().get(0)).isEqualTo(savedActionItems.get(1));
     }
 
     @Test
-    public void canRetrieveListOfActionItemsForATeam() throws Exception {
+    public void should_get_action_items_only_for_team_in_token() throws Exception {
         String jwt = jwtBuilder.buildJwt("beach-bums2");
 
-        ActionItem actionItem1 = new ActionItem();
-        actionItem1.setTask("Some Action");
-        actionItem1.setTeamId("beach-bums2");
-        ActionItem actionItem2 = new ActionItem();
-        actionItem2.setTask("Another Action");
-        actionItem2.setTeamId("beach-bums2");
+        ActionItem actionItem1 = ActionItem.builder()
+                .task("Some Action")
+                .teamId("beach-bums2")
+                .build();
 
-        actionItemRepository.save(asList(actionItem1, actionItem2));
+        ActionItem actionItem2 = ActionItem.builder()
+                .task("Another Action")
+                .teamId("beach-bums2")
+                .build();
+
+        actionItemRepository.save(Arrays.asList(actionItem1, actionItem2));
 
         mockMvc.perform(get("/api/team/beach-bums2/action-items")
                 .header("Authorization", "Bearer " + jwt))
-            .andExpect(jsonPath("$.[0].task").value("Some Action"))
-            .andExpect(jsonPath("$.[0].teamId").value("beach-bums2"))
-            .andExpect(jsonPath("$.[1].task").value("Another Action"))
-            .andExpect(jsonPath("$.[1].teamId").value("beach-bums2"));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].task").value("Some Action"))
+                .andExpect(jsonPath("$.[0].teamId").value("beach-bums2"))
+                .andExpect(jsonPath("$.[1].task").value("Another Action"))
+                .andExpect(jsonPath("$.[1].teamId").value("beach-bums2"));
 
     }
 
     @Test
-    public void canCreateAnActionItem() throws Exception {
-        String actionItemJsonBody = "{\"task\" : \"Do the thing\",\"teamId\":\"themildones\"}";
+    public void should_set_action_item_as_completed() throws Exception {
 
-        MvcResult response = mockMvc.perform(post("/api/team/themildones/action-item")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("themildones"))
-                .contentType(APPLICATION_JSON)
-                .content(actionItemJsonBody))
+        ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder().teamId(teamId).build());
+
+        mockMvc.perform(put("/api/team/" + teamId + "/action-item/" + savedActionItem.getId() + "/complete")
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk());
+
+        MvcResult checkThoughtsRequest = mockMvc.perform(get("/api/team/" + teamId + "/action-items")
+                .header("Authorization", getBearerAuthToken()))
                 .andReturn();
 
-        ActionItem actionItem = actionItemRepository.findAllByTeamId("themildones").get(0);
+        ActionItem resultActionItem = objectMapper.readValue(checkThoughtsRequest.getResponse().getContentAsByteArray(),
+                ActionItem[].class)[0];
 
-        String uri = response.getResponse().getHeader("Location");
-        assertTrue(uri.contains("/api/team/themildones/action-item/" + actionItem.getId()));
-        assertEquals(201, response.getResponse().getStatus());
-        assertEquals("Do the thing", actionItem.getTask());
+        assertThat(resultActionItem.isCompleted()).isTrue();
     }
 
     @Test
-    public void canMarkActionItemAsCompleted() throws Exception {
-        ActionItem actionItem = new ActionItem();
-        actionItem.setTeamId("beachcrazy");
-        actionItemRepository.save(actionItem);
+    public void should_set_action_item_as_incomplete() throws Exception {
+        ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder()
+                .teamId(teamId)
+                .completed(true)
+                .build());
 
-        MvcResult updateActionItemResult = mockMvc.perform(put("/api/team/beachcrazy/action-item/" + actionItem.getId() + "/complete")
-            .header("Authorization", "Bearer " + jwtBuilder.buildJwt("beachcrazy")))
-            .andReturn();
+        mockMvc.perform(put("/api/team/" + teamId + "/action-item/" + savedActionItem.getId() + "/complete")
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk());
 
-        assertEquals(Response.SC_OK, updateActionItemResult.getResponse().getStatus());
-
-        MvcResult checkThoughtsRequest = mockMvc.perform(get("/api/team/beachcrazy/action-items")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("beachcrazy")))
+        MvcResult checkThoughtsRequest = mockMvc.perform(get("/api/team/" + teamId + "/action-items")
+                .header("Authorization", getBearerAuthToken()))
                 .andReturn();
-        ActionItem resultActionItem = mapper.readValue(checkThoughtsRequest.getResponse().getContentAsByteArray(), ActionItem[].class)[0];
 
-        assertTrue(resultActionItem.isCompleted());
+        ActionItem resultActionItem = objectMapper.readValue(checkThoughtsRequest.getResponse().getContentAsByteArray(), ActionItem[].class)[0];
+
+        assertThat(resultActionItem.isCompleted()).isFalse();
     }
 
     @Test
-    public void canMarkCompletedActionItemsAsIncomplete() throws Exception {
-        ActionItem actionItem = new ActionItem();
-        actionItem.setTeamId("BeachCrazier");
-        actionItem.setCompleted(true);
-        actionItemRepository.save(actionItem);
+    public void should_delete_action_items_for_team_in_token() throws Exception {
+        ActionItem actionItem1 = ActionItem.builder().teamId(teamId).build();
 
-        MvcResult updateActionItemResult = mockMvc.perform(put("/api/team/BeachCrazier/action-item/" + actionItem.getId() + "/complete")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachCrazier")))
-                .andReturn();
+        ActionItem actionItem2 = ActionItem.builder()
+                .teamId(teamId)
+                .task("Please don't be deleted")
+                .build();
 
-        assertEquals(Response.SC_OK, updateActionItemResult.getResponse().getStatus());
+        ActionItem actionItem3 = ActionItem.builder().teamId(teamId).build();
 
-        MvcResult checkThoughtsRequest = mockMvc.perform(get("/api/team/BeachCrazier/action-items")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachCrazier")))
-                .andReturn();
-        ActionItem resultActionItem = mapper.readValue(checkThoughtsRequest.getResponse().getContentAsByteArray(), ActionItem[].class)[0];
+        actionItemRepository.save(Arrays.asList(actionItem1, actionItem2, actionItem3));
 
-        assertFalse(resultActionItem.isCompleted());
-    }
+        mockMvc.perform(delete("/api/team/" + teamId + "/action-item/" + actionItem1.getId())
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk());
 
-    @Test
-    public void canDeleteAnActionItemForAGivenTeam() throws Exception {
-        ActionItem actionItem1 = new ActionItem();
-        actionItem1.setTeamId("beachcrazy");
+        mockMvc.perform(delete("/api/team/" + teamId + "/action-item/" + actionItem3.getId())
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk());
 
-        ActionItem actionItem2 = new ActionItem();
-        actionItem2.setTeamId("beachcrazy");
-        actionItem2.setTask("Please don't be deleted");
-
-        ActionItem actionItem3 = new ActionItem();
-        actionItem3.setTeamId("beachcrazy");
-
-        actionItemRepository.save(asList(actionItem1, actionItem2, actionItem3));
-
-        MvcResult firstDeletedActionItem = mockMvc.perform(delete("/api/team/beachcrazy/action-item/" + actionItem1.getId())
-                    .header("Authorization", "Bearer " + jwtBuilder.buildJwt("beachcrazy")))
-                .andReturn();
-        MvcResult thirdDeletedActionItem = mockMvc.perform(delete("/api/team/beachcrazy/action-item/" + actionItem3.getId())
-                    .header("Authorization", "Bearer " + jwtBuilder.buildJwt("beachcrazy")))
-                .andReturn();
-
-        assertEquals(Response.SC_OK, firstDeletedActionItem.getResponse().getStatus());
-        assertEquals(Response.SC_OK, thirdDeletedActionItem.getResponse().getStatus());
-
-        MvcResult returnedActionItems = mockMvc.perform(get("/api/team/beachcrazy/action-items")
-                    .header("Authorization", "Bearer " + jwtBuilder.buildJwt("beachcrazy")))
-                .andReturn();
-        ActionItem[] actionItems = mapper.readValue(returnedActionItems.getResponse().getContentAsByteArray(), ActionItem[].class);
-        assertEquals(1, actionItems.length);
-        assertEquals("Please don't be deleted", actionItems[0].getTask());
-    }
-
-    @Test
-    public void canEditActionItem() throws Exception {
-
-        ActionItem expectedActionItem = new ActionItem();
-        expectedActionItem.setTask("I AM A TEMPORARY TASK");
-        expectedActionItem.setTeamId("suchateam");
-        expectedActionItem = actionItemRepository.save(expectedActionItem);
-
-        mockMvc.perform(put("/api/team/suchateam/action-item/" + expectedActionItem.getId() + "/task")
-                    .content("{\"task\": \"I am an updated task\"}")
-                    .contentType(APPLICATION_JSON)
-                    .header("Authorization", "Bearer " + jwtBuilder.buildJwt("suchateam")))
+        MvcResult returnedActionItems = mockMvc.perform(get("/api/team/" + teamId + "/action-items")
+                .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        ActionItem actualActionItem = actionItemRepository.getOne(expectedActionItem.getId());
+        ActionItem[] actionItems = objectMapper.readValue(returnedActionItems.getResponse().getContentAsByteArray(),
+                ActionItem[].class);
 
-        assertEquals("I am an updated task", actualActionItem.getTask());
+        assertThat(actionItems).hasSize(1);
+        assertThat(actionItems[0]).isEqualTo(actionItem2);
     }
 
     @Test
-    public void canAddAssigneeToActionItem() throws Exception {
-        ActionItem expectedActionItem = new ActionItem();
-        expectedActionItem.setTask("TEMP TASK");
-        expectedActionItem.setTeamId("suchateam");
-        expectedActionItem = actionItemRepository.save(expectedActionItem);
+    public void should_edit_action_item() throws Exception {
 
-        mockMvc.perform(put("/api/team/suchateam/action-item/" + expectedActionItem.getId() + "/assignee")
-                    .content("{\"assignee\": \"Bill Ford\"}")
-                    .contentType(APPLICATION_JSON)
-                    .header("Authorization", "Bearer " + jwtBuilder.buildJwt("suchateam")))
+        ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder()
+                .task("I AM A TEMPORARY TASK")
+                .teamId(teamId)
+                .build());
+
+        ActionItem sentActionItem = savedActionItem;
+        sentActionItem.setTask("i am updated");
+
+        mockMvc.perform(put("/api/team/" + teamId + "/action-item/" + savedActionItem.getId() + "/task")
+                .content(objectMapper.writeValueAsBytes(sentActionItem))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk());
+
+        assertThat(actionItemRepository.count()).isEqualTo(1);
+        assertThat(actionItemRepository.findAll().get(0)).isEqualTo(sentActionItem);
+    }
+
+    @Test
+    public void should_add_assignee_to_action_item() throws Exception {
+        ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder()
+                .task(teamId)
+                .teamId("suchateam")
+                .build());
+
+        ActionItem sentActionItem = savedActionItem;
+        sentActionItem.setAssignee("heyo!");
+
+        mockMvc.perform(put("/api/team/" + teamId + "/action-item/" + savedActionItem.getId() + "/assignee")
+                .content(objectMapper.writeValueAsBytes(sentActionItem))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        ActionItem actualActionItem = actionItemRepository.getOne(expectedActionItem.getId());
-
-        assertEquals("Bill Ford", actualActionItem.getAssignee());
+        assertThat(actionItemRepository.count()).isEqualTo(1);
+        assertThat(actionItemRepository.findAll().get(0)).isEqualTo(sentActionItem);
     }
 
     @Test
-    public void cannotAccessActionItemsWithUnauthorizedUser() throws Exception {
-        String jwt = jwtBuilder.buildJwt("not-beach-bums");
+    public void should_authenticate_all_action_item_endpoints_properly() throws Exception {
+        String unauthorizedTeamJwt = jwtBuilder.buildJwt("not-beach-bums");
 
-        ActionItem actionItem1 = new ActionItem();
-        actionItem1.setTask("Some Action");
-        actionItem1.setTeamId("beach-bums");
-
-        actionItemRepository.save(actionItem1);
+        ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder()
+                .task("Some Action")
+                .teamId("beach-bums")
+                .build());
 
         mockMvc.perform(get("/api/team/beach-bums/action-items")
-                .header("Authorization", "Bearer " + jwt))
+                .header("Authorization", "Bearer " + unauthorizedTeamJwt))
                 .andExpect(status().isForbidden());
 
         mockMvc.perform(post("/api/team/beach-bums/action-item")
-                .header("Authorization", "Bearer " + jwt)
+                .header("Authorization", "Bearer " + unauthorizedTeamJwt)
                 .content("{}")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
 
         mockMvc.perform(put("/api/team/beach-bums/action-item/1/task")
-                .header("Authorization", "Bearer " + jwt)
+                .header("Authorization", "Bearer " + unauthorizedTeamJwt)
                 .content("{}")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
 
         mockMvc.perform(put("/api/team/beach-bums/action-item/1/complete")
-                .header("Authorization", "Bearer " + jwt)
+                .header("Authorization", "Bearer " + unauthorizedTeamJwt)
                 .content("{}")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
 
         mockMvc.perform(delete("/api/team/beach-bums/action-item/1")
-                .header("Authorization", "Bearer " + jwt))
+                .header("Authorization", "Bearer " + unauthorizedTeamJwt))
                 .andExpect(status().isForbidden());
+
+        assertThat(actionItemRepository.count()).isEqualTo(1);
+        assertThat(savedActionItem).isEqualTo(actionItemRepository.findAll().get(0));
     }
 
-    class DefaultStompFrameHandler implements StompFrameHandler {
-        @Override
-        public Type getPayloadType(StompHeaders stompHeaders) {
-            return byte[].class;
-        }
-
-        @Override
-        public void handleFrame(StompHeaders stompHeaders, Object o) {
-            blockingQueue.offer(new String((byte[]) o));
-        }
-    }
 }
