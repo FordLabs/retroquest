@@ -67,23 +67,20 @@ public class ColumnTitleApiTest extends ApiTest {
     }
 
     @Test
-    public void canRetrieveListOfColumnNamesForTeam() throws Exception {
-        ColumnTitle columnTitle1 = new ColumnTitle();
-        columnTitle1.setTeamId("BeachBums");
-        ColumnTitle columnTitle2 = new ColumnTitle();
-        columnTitle2.setTeamId("BeachBums");
-        ColumnTitle columnTitle3 = new ColumnTitle();
-        columnTitle3.setTeamId("BeachBums");
-
-        columnTitleRepository.save(Arrays.asList(columnTitle1, columnTitle2, columnTitle3));
+    public void should_get_list_of_columns() throws Exception {
+        columnTitleRepository.save(Arrays.asList(
+                ColumnTitle.builder().teamId("BeachBums").title("one").build(),
+                ColumnTitle.builder().teamId("BeachBums").title("two").build(),
+                ColumnTitle.builder().teamId("BeachBums").title("three").build()
+        ));
 
         MvcResult columnListRequest = mockMvc.perform(get("/api/team/BeachBums/columns").contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", getBearerAuthToken()))
                 .andReturn();
 
-        ColumnTitle[] columnTitles = objectMapper.readValue(columnListRequest.getResponse().getContentAsByteArray(), ColumnTitle[].class);
+        ColumnTitle[] result = objectMapper.readValue(columnListRequest.getResponse().getContentAsByteArray(), ColumnTitle[].class);
 
-        assertEquals(3, columnTitles.length);
+        assertThat(result).hasSize(3);
     }
 
     @Test
