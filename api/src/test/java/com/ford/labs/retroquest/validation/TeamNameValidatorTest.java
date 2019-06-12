@@ -22,7 +22,7 @@ import com.ford.labs.retroquest.exception.EmptyTeamNameException;
 import com.ford.labs.retroquest.exception.SpecialCharacterTeamNameException;
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TeamNameValidatorTest {
 
@@ -46,14 +46,12 @@ public class TeamNameValidatorTest {
 
     @Test
     public void canSubmitValidTeamName() {
-        boolean isValid = validator.isValid("Ford Labs", null);
-        assertTrue(isValid);
+        assertThat(validator.isValid("Ford Labs", null)).isTrue();
     }
 
     @Test
     public void canSubmitValidTeamNameWithNumbers() {
-        boolean isValid = validator.isValid("Ford Labs 2018", null);
-        assertTrue(isValid);
+        assertThat(validator.isValid("Ford Labs 2018", null)).isTrue();
     }
 
     @Test(expected = EmptyTeamNameException.class)

@@ -23,8 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.springframework.security.crypto.codec.Base64;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class JwtBuilderTest {
 
@@ -37,15 +36,16 @@ public class JwtBuilderTest {
         String teamId = "team-id";
 
         String jwt = jwtBuilder.buildJwt(teamId);
-        String jwtHeader = StringUtils.substringBefore(jwt,".");
 
-        assertEquals("{\"alg\":\"HS512\"}", new String(Base64.decode(jwtHeader.getBytes())));
+        String jwtHeader = StringUtils.substringBefore(jwt, ".");
 
         JwtParser parser = Jwts.parser();
         parser.requireIssuer("RetroQuest")
                 .requireSubject("team-id")
                 .setSigningKey(JWT_SECRET.getBytes())
                 .parse(jwt);
-        assertTrue(parser.isSigned(jwt));
+
+        assertThat("{\"alg\":\"HS512\"}").isEqualTo(new String(Base64.decode(jwtHeader.getBytes())));
+        assertThat(parser.isSigned(jwt)).isTrue();
     }
 }

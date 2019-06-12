@@ -23,7 +23,7 @@ import com.ford.labs.retroquest.exception.PasswordMissingUpperCaseAlphaException
 import com.ford.labs.retroquest.exception.PasswordTooShortException;
 import org.junit.Test;
 
-import static junit.framework.TestCase.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PasswordValidatorTest {
 
@@ -61,8 +61,7 @@ public class PasswordValidatorTest {
 
     @Test
     public void validPasswordReturnsTrue() {
-        boolean isValid = validator.isValid("Passw0rd", null);
-        assertTrue(isValid);
+        assertThat(validator.isValid("Passw0rd", null)).isTrue();
     }
 
 }

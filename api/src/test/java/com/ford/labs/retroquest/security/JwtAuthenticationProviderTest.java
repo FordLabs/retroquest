@@ -21,8 +21,7 @@ import org.junit.Test;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class JwtAuthenticationProviderTest {
 
@@ -40,8 +39,8 @@ public class JwtAuthenticationProviderTest {
 
         Authentication actualAuthentication = jwtAuthenticationProvider.authenticate(unverifiedJwt);
 
-        assertTrue(actualAuthentication.isAuthenticated());
-        assertEquals("a-team", actualAuthentication.getPrincipal());
+        assertThat(actualAuthentication.isAuthenticated()).isTrue();
+        assertThat("a-team").isEqualTo(actualAuthentication.getPrincipal());
     }
 
 }
