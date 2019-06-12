@@ -111,6 +111,8 @@ public class DownloadTeamBoardApiTest extends ApiTest {
     @Test
     public void should_not_get_csv_unauthorized() throws Exception {
 
+        restTemplate.postForObject("/api/team/", loginRequest, String.class);
+
         mockMvc.perform(get("/api/team/" + teamId + "/csv")
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("not-beach-bums")))
                 .andExpect(status().isForbidden());
