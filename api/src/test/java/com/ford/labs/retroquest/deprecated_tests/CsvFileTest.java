@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest;
+package com.ford.labs.retroquest.deprecated_tests;
 
 import com.ford.labs.retroquest.actionitem.ActionItem;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;

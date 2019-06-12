@@ -1,4 +1,4 @@
-package com.ford.labs.retroquest;
+package com.ford.labs.retroquest.deprecated_tests;
 
 import com.ford.labs.retroquest.contributors.Contributor;
 import com.ford.labs.retroquest.contributors.ContributorController;

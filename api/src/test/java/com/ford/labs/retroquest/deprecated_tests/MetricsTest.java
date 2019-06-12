@@ -1,4 +1,4 @@
-package com.ford.labs.retroquest;
+package com.ford.labs.retroquest.deprecated_tests;
 
 import com.ford.labs.retroquest.feedback.Feedback;
 import com.ford.labs.retroquest.feedback.FeedbackRepository;

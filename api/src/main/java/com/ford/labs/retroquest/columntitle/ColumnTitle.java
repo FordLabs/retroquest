@@ -39,9 +39,13 @@ public class ColumnTitle implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @NaturalId
     private String topic;
+
+    @Builder.Default
     private String title = "";
+
     @NaturalId
     private String teamId;
 
