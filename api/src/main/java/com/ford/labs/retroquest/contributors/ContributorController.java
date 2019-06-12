@@ -67,11 +67,11 @@ public class ContributorController {
         return this.restTemplate.getForObject(avatarUrl, byte[].class, Collections.emptyMap());
     }
 
-    List<Contributor> getCachedContributors() {
+    public List<Contributor> getCachedContributors() {
         return cachedContributors;
     }
 
-    void setCachedContributors(List<Contributor> contributors) {
+    public void setCachedContributors(List<Contributor> contributors) {
         this.cachedContributors.clear();
         this.cachedContributors.addAll(contributors);
     }

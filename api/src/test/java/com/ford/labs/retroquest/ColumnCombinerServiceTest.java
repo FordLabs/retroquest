@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.v2.columns;
+package com.ford.labs.retroquest;
 
 import com.ford.labs.retroquest.actionitem.ActionItem;
 import com.ford.labs.retroquest.actionitem.ActionItemRepository;
@@ -23,6 +23,8 @@ import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
+import com.ford.labs.retroquest.v2.columns.ColumnCombinerResponse;
+import com.ford.labs.retroquest.v2.columns.ColumnCombinerService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -42,7 +42,7 @@ public class Metrics {
         return feedbackRepository.findAll().size();
     }
 
-    int getFeedbackCount(LocalDate startTime, LocalDate endTime) {
+    public int getFeedbackCount(LocalDate startTime, LocalDate endTime) {
         LocalDateTime finalEndTime = endTime == null ? LocalDateTime.now() : endTime.atStartOfDay();
         LocalDateTime finalStartTime = startTime == null ? LocalDateTime.MIN : startTime.atStartOfDay();
         List<Feedback> feedbackList = feedbackRepository.findAll().stream()
@@ -59,7 +59,7 @@ public class Metrics {
         return average.isPresent() ? average.getAsDouble() : 0.0;
     }
 
-    double getAverageRating(LocalDate startTime, LocalDate endTime) {
+    public double getAverageRating(LocalDate startTime, LocalDate endTime) {
         LocalDateTime finalEndTime = endTime == null ? LocalDateTime.now() : endTime.atStartOfDay();
         LocalDateTime finalStartTime = startTime == null ? LocalDateTime.MIN : startTime.atStartOfDay();
         return feedbackRepository.findAllByStarsIsGreaterThanEqual(1).stream()

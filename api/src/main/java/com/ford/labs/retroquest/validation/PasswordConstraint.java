@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.team.validation;
+package com.ford.labs.retroquest.validation;
 
 
 import javax.validation.Constraint;

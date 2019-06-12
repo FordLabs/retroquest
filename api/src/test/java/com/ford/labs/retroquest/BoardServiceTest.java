@@ -15,8 +15,11 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.board;
+package com.ford.labs.retroquest;
 
+import com.ford.labs.retroquest.board.Board;
+import com.ford.labs.retroquest.board.BoardRepository;
+import com.ford.labs.retroquest.board.BoardService;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
 import org.assertj.core.api.Assertions;

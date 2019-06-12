@@ -1,5 +1,8 @@
-package com.ford.labs.retroquest.contributors;
+package com.ford.labs.retroquest;
 
+import com.ford.labs.retroquest.contributors.Contributor;
+import com.ford.labs.retroquest.contributors.ContributorController;
+import com.ford.labs.retroquest.contributors.GithubContributor;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;

@@ -1,6 +1,9 @@
-package com.ford.labs.retroquest.team;
+package com.ford.labs.retroquest;
 
-import com.ford.labs.retroquest.team.validation.CaptchaProperties;
+import com.ford.labs.retroquest.team.CaptchaService;
+import com.ford.labs.retroquest.team.Team;
+import com.ford.labs.retroquest.team.TeamRepository;
+import com.ford.labs.retroquest.validation.CaptchaProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

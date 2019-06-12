@@ -15,10 +15,11 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.team;
+package com.ford.labs.retroquest;
 
 import com.ford.labs.retroquest.actionitem.ActionItem;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
+import com.ford.labs.retroquest.team.CsvFile;
 import com.ford.labs.retroquest.thought.Thought;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;

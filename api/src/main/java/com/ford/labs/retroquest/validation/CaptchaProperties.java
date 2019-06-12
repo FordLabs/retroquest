@@ -1,4 +1,4 @@
-package com.ford.labs.retroquest.team.validation;
+package com.ford.labs.retroquest.validation;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

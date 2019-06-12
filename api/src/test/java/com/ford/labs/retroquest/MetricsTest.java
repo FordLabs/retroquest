@@ -1,7 +1,8 @@
-package com.ford.labs.retroquest.metrics;
+package com.ford.labs.retroquest;
 
 import com.ford.labs.retroquest.feedback.Feedback;
 import com.ford.labs.retroquest.feedback.FeedbackRepository;
+import com.ford.labs.retroquest.metrics.Metrics;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import org.junit.Test;

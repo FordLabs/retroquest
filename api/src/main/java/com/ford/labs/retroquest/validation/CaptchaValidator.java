@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.team.validation;
+package com.ford.labs.retroquest.validation;
 
 import com.ford.labs.retroquest.exception.CaptchaInvalidException;
 import com.ford.labs.retroquest.team.CaptchaService;

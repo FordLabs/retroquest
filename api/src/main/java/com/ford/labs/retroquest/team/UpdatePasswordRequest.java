@@ -1,6 +1,6 @@
 package com.ford.labs.retroquest.team;
 
-import com.ford.labs.retroquest.team.validation.PasswordConstraint;
+import com.ford.labs.retroquest.validation.PasswordConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

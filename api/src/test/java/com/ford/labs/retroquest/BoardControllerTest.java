@@ -15,8 +15,11 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.board;
+package com.ford.labs.retroquest;
 
+import com.ford.labs.retroquest.board.Board;
+import com.ford.labs.retroquest.board.BoardController;
+import com.ford.labs.retroquest.board.BoardService;
 import com.ford.labs.retroquest.thought.Thought;
 import org.junit.Test;
 import org.junit.runner.RunWith;
