@@ -1,11 +1,13 @@
 package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.api.setup.ApiTest;
+import com.ford.labs.retroquest.security.JwtBuilder;
 import com.ford.labs.retroquest.team.*;
 import org.junit.After;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.client.RestTemplate;
@@ -30,6 +32,9 @@ public class TeamApiTest extends ApiTest {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private static final String VALID_PASSWORD = "Passw0rd";
 
@@ -154,6 +159,35 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
+    public void should_update_password() throws Exception {
+        installSuccessCaptcha();
+
+        CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
+                .name("Beachity Bums")
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+        testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
+
+        UpdatePasswordRequest updatePasswordRequest = UpdatePasswordRequest.builder()
+                .teamId("beachity-bums")
+                .previousPassword(VALID_PASSWORD)
+                .newPassword(VALID_PASSWORD + "1")
+                .build();
+
+        mockMvc.perform(post("/api/update-password")
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("beachity-bums"))
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(updatePasswordRequest)))
+                .andExpect(status().isOk());
+
+        assertThat(teamRepository.count()).isEqualTo(1);
+        assertThat(passwordEncoder.matches(updatePasswordRequest.getNewPassword(),
+                teamRepository.findAll().get(0).getPassword())).isTrue();
+    }
+
+    @Test
     public void should_not_update_password_with_incorrect_previous_password() throws Exception {
         installSuccessCaptcha();
 
@@ -233,6 +267,33 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
+    public void should_get_token_when_logged_in() throws Exception {
+        installSuccessCaptcha();
+
+        CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
+                .name("PEACHY BEACHY")
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+        testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
+
+        LoginRequest loginRequest = LoginRequest.builder()
+                .name("PEACHY BEACHY")
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+        MvcResult mvcResult = mockMvc.perform(post("/api/team/login")
+                .content(objectMapper.writeValueAsBytes(loginRequest))
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo(jwtBuilder.buildJwt("peachy-beachy"));
+    }
+
+    @Test
     public void should_login_when_failed_password_threshold_is_not_reached() throws Exception {
         installSuccessCaptcha();
 
@@ -257,7 +318,6 @@ public class TeamApiTest extends ApiTest {
                 .andReturn();
 
         assertThat("peachy-beachy").isEqualTo(mvcResult.getResponse().getHeader("Location"));
-        assertThat(mvcResult.getResponse().getContentAsString()).isNotNull();
     }
 
     @Test
