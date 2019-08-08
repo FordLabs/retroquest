@@ -31,6 +31,7 @@
     "@angular/service-worker": "^7.2.3",
     "@elderbyte/ts-logger": "^0.1.0",
     "@elderbyte/ts-stomp": "^2.1.2",
+    "@fortawesome/fontawesome-free": "^5.9.0",
     "core-js": "^2.5.4",
     "file-saver": "^2.0.0",
     "hammerjs": "^2.0.8",

@@ -28,10 +28,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.management.*;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
 import java.util.Arrays;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(properties = "spring.jmx.enabled=true")
@@ -46,49 +47,51 @@ public class MetricsJMXTest {
     @Autowired
     private FeedbackRepository feedbackRepository;
 
-    @Test
-    public void canReadTheTotalNumberOfTeamsCreated() throws MalformedObjectNameException, AttributeNotFoundException, MBeanException, ReflectionException, InstanceNotFoundException {
-        Team team = new Team();
-        team.setUri("some uri");
-        teamRepository.save(team);
-
-        Object teamCount = mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metrics,type=Metrics"), "TeamCount");
-        assertEquals(1, teamCount);
-    }
-
-    @Test
-    public void canGetFeedbackCount() throws MalformedObjectNameException, AttributeNotFoundException, MBeanException, ReflectionException, InstanceNotFoundException {
-        feedbackRepository.save(new Feedback());
-
-        Object feedbackCount = mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metrics,type=Metrics"), "FeedbackCount");
-        assertEquals(1, feedbackCount);
-    }
-
-    @Test
-    public void canGetAverageRating() throws MalformedObjectNameException, AttributeNotFoundException, MBeanException, ReflectionException, InstanceNotFoundException {
-        Feedback feedback = new Feedback();
-        feedback.setStars(5);
-        feedbackRepository.save(feedback);
-
-        Object feedbackCount = mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metrics,type=Metrics"), "AverageRating");
-        assertEquals(5.0, feedbackCount);
-    }
-
-    @Test
-    public void averageRatingIgnoresStarsWithAZeroValue() throws MalformedObjectNameException, AttributeNotFoundException, MBeanException, ReflectionException, InstanceNotFoundException {
-        Feedback fiveStarFeedback = new Feedback();
-        fiveStarFeedback.setStars(5);
-        Feedback zeroStarFeedback = new Feedback();
-        zeroStarFeedback.setStars(0);
-        feedbackRepository.save(Arrays.asList(fiveStarFeedback, zeroStarFeedback));
-
-        Object feedbackCount = mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metrics,type=Metrics"), "AverageRating");
-        assertEquals(5.0, feedbackCount);
-    }
-
     @After
-    public void cleanUpTestData() {
+    public void teardown() {
         teamRepository.deleteAll();
         feedbackRepository.deleteAll();
+
+        assertThat(teamRepository.count()).isEqualTo(0);
+        assertThat(feedbackRepository.count()).isEqualTo(0);
+    }
+
+    @Test
+    public void should_return_total_count_of_all_teams() throws Exception {
+        teamRepository.save(Team.builder().uri("uri").build());
+
+        Integer teamCount = (Integer) mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metrics,type=Metrics"), "TeamCount");
+        assertThat(teamCount).isEqualTo(1);
+    }
+
+    @Test
+    public void should_return_total_count_of_feedback() throws Exception {
+        feedbackRepository.save(Feedback.builder().build());
+
+        Integer feedbackCount = (Integer) mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metrics,type=Metrics"), "FeedbackCount");
+        assertThat(feedbackCount).isEqualTo(1);
+    }
+
+    @Test
+    public void should_return_average_of_all_feedback_ratings() throws Exception {
+        feedbackRepository.save(Arrays.asList(
+                Feedback.builder().stars(5).build(),
+                Feedback.builder().stars(1).build()
+        ));
+
+        Double feedbackCount = (Double) mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metrics,type=Metrics"), "AverageRating");
+        assertThat(feedbackCount).isEqualTo(3.0);
+    }
+
+    @Test
+    public void _should_return_average_of_all_feedback_ratings_ignoring_zeros() throws Exception {
+        feedbackRepository.save(Arrays.asList(
+                Feedback.builder().stars(5).build(),
+                Feedback.builder().stars(2).build(),
+                Feedback.builder().stars(0).build()
+        ));
+
+        Double feedbackCount = (Double) mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metrics,type=Metrics"), "AverageRating");
+        assertThat(feedbackCount).isEqualTo(3.5);
     }
 }

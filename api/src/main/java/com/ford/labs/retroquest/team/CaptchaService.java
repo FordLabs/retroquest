@@ -1,7 +1,7 @@
 package com.ford.labs.retroquest.team;
 
 import com.ford.labs.retroquest.exception.BoardDoesNotExistException;
-import com.ford.labs.retroquest.team.validation.CaptchaProperties;
+import com.ford.labs.retroquest.validation.CaptchaProperties;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

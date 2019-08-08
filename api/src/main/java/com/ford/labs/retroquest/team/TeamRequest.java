@@ -1,7 +1,7 @@
 package com.ford.labs.retroquest.team;
 
 
-import com.ford.labs.retroquest.team.validation.CaptchaConstraint;
+import com.ford.labs.retroquest.validation.CaptchaConstraint;
 
 @CaptchaConstraint
 public interface TeamRequest {

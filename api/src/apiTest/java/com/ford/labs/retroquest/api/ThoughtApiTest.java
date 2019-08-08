@@ -1,56 +1,28 @@
 package com.ford.labs.retroquest.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.ford.labs.retroquest.api.setup.ApiTest;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
-import com.ford.labs.retroquest.security.JwtBuilder;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.messaging.simp.stomp.StompFrameHandler;
-import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
-import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.socket.WebSocketHttpHeaders;
-import org.springframework.web.socket.client.standard.StandardWebSocketClient;
-import org.springframework.web.socket.messaging.WebSocketStompClient;
-import org.springframework.web.socket.sockjs.client.SockJsClient;
-import org.springframework.web.socket.sockjs.client.WebSocketTransport;
+import org.springframework.test.web.servlet.MvcResult;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.List;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
-public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTests {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private JwtBuilder jwtBuilder;
+public class ThoughtApiTest extends ApiTest {
 
     @Autowired
     private ThoughtRepository thoughtRepository;
@@ -58,323 +30,198 @@ public class ThoughtApiTest extends AbstractTransactionalJUnit4SpringContextTest
     @Autowired
     private ColumnTitleRepository columnTitleRepository;
 
-    @Value("${local.server.port}")
-    private int port;
-
-    private ObjectMapper mapper = new ObjectMapper();
-    private BlockingQueue<String> blockingQueue;
-    private WebSocketStompClient stompClient;
-    private String websocketUri;
-    private String thoughtSubscribeEndpoint;
-    private String thoughtEndpoint;
-    private int websocketTestTimeoutInSeconds = 10;
+    private String BASE_SUB_URL;
+    private String BASE_ENDPOINT_URL;
+    private String BASE_GET_URL;
 
     @Before
     public void setup() {
-        websocketUri = "ws://localhost:" + port + "/websocket";
-        thoughtSubscribeEndpoint = "/topic/beach-bums/thoughts";
-        thoughtEndpoint = "/app/beach-bums/thought";
-        blockingQueue = new LinkedBlockingDeque<>();
-        stompClient = new WebSocketStompClient(new SockJsClient(
-                Collections.singletonList(new WebSocketTransport(new StandardWebSocketClient()))));
+        BASE_SUB_URL = "/topic/" + teamId + "/thoughts";
+        BASE_ENDPOINT_URL = "/app/" + teamId + "/thought";
+        BASE_GET_URL = "/api/team/" + teamId;
+    }
+
+    @After
+    public void teardown() {
+        thoughtRepository.deleteAll();
+        Assertions.assertThat(thoughtRepository.count()).isEqualTo(0);
     }
 
     @Test
-    public void canSaveAndRetrieveThoughtsForTeam() throws Exception {
-        String thoughtJsonBody = "{ \"message\" : \"Great Thought\", " +
-                "\"topic\" : \"happy\",  \"teamId\" : \"BeachBums\"}";
-        mockMvc.perform(post("/api/team/BeachBums/thought")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(thoughtJsonBody)
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")));
+    public void should_delete_all_thoughts_on_team() throws Exception {
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
 
-        mockMvc.perform(get("/api/team/BeachBums/thoughts").contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-                .andExpect(jsonPath("$[0].message", is("Great Thought")))
-                .andExpect(jsonPath("$[0].topic", is("happy")))
-                .andExpect(jsonPath("$[0].teamId", is("BeachBums")));
+        thoughtRepository.save(Arrays.asList(
+                Thought.builder().teamId(teamId).message("message").build(),
+                Thought.builder().teamId("team 2").message("message").build()
+        ));
+
+        session.send(BASE_ENDPOINT_URL + "/delete", null);
+
+        assertThat(takeObjectInSocket(Long.class)).isEqualTo(-1L);
+        assertThat(thoughtRepository.count()).isEqualTo(1);
     }
 
     @Test
-    public void canSetUpThoughtAndColumnTitleAssociation() throws Exception {
-        ColumnTitle columnTitle = new ColumnTitle();
-        columnTitle.setTeamId("BeachBums");
-        columnTitle.setTopic("happy");
+    public void should_not_delete_all_thoughts_unauthorized() throws Exception {
+        StompSession session = getUnauthorizedSession();
+        subscribe(session, BASE_SUB_URL);
 
-        columnTitleRepository.save(columnTitle);
+        thoughtRepository.save(Thought.builder().teamId(teamId).message("message").build());
 
-        String thoughtJsonBody = "{ \"message\" : \"Great Thought.\", " +
-                "\"topic\" : \"happy\",  \"teamId\" : \"BeachBums\"}";
-        mockMvc.perform(post("/api/team/BeachBums/thought")
+        session.send(BASE_ENDPOINT_URL + "/delete", null);
+
+        assertThat(thoughtRepository.count()).isEqualTo(1);
+    }
+
+    @Test
+    public void should_edit_thought() throws Exception {
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
+
+        Thought savedThought = thoughtRepository.save(Thought.builder()
+                .teamId(teamId)
+                .message("message")
+                .discussed(false)
+                .hearts(1)
+                .build());
+
+        Thought sentThought = Thought.builder()
+                .id(savedThought.getId())
+                .message("message 2")
+                .discussed(true)
+                .hearts(2)
+                .build();
+
+        session.send(BASE_ENDPOINT_URL + "/" + savedThought.getId().toString() + "/edit",
+                objectMapper.writeValueAsBytes(sentThought));
+
+        Thought responseThought = takeObjectInSocket(Thought.class);
+
+        Thought updatedThought = thoughtRepository.findOne(savedThought.getId());
+
+        assertThat(responseThought).isEqualToComparingFieldByField(responseThought);
+
+        assertThat(updatedThought.getId()).isEqualTo(sentThought.getId());
+        assertThat(updatedThought.getMessage()).isEqualTo(sentThought.getMessage());
+        assertThat(updatedThought.isDiscussed()).isEqualTo(sentThought.isDiscussed());
+        assertThat(updatedThought.getHearts()).isEqualTo(sentThought.getHearts());
+    }
+
+    @Test
+    public void should_not_edit_thought_unauthorized() throws Exception {
+        StompSession session = getUnauthorizedSession();
+        subscribe(session, BASE_SUB_URL);
+
+        Thought savedThought = thoughtRepository.save(Thought.builder().teamId(teamId).message("message").build());
+        Thought sentThought = Thought.builder().id(savedThought.getId()).message("message 2").build();
+
+        session.send(BASE_ENDPOINT_URL + "/" + savedThought.getId().toString() + "/edit",
+                objectMapper.writeValueAsBytes(sentThought));
+
+        Thought responseThought = takeObjectInSocket(Thought.class);
+
+        Thought updatedThought = thoughtRepository.findOne(savedThought.getId());
+
+        assertThat(updatedThought).isEqualToComparingFieldByField(savedThought);
+        assertThat(responseThought).isNull();
+    }
+
+    @Test
+    public void should_create_thought() throws Exception {
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
+
+        Thought sentThought = Thought.builder()
+                .teamId(teamId)
+                .message("message")
+                .build();
+
+        session.send(BASE_ENDPOINT_URL + "/create",
+                objectMapper.writeValueAsBytes(sentThought));
+
+        Thought responseThought = takeObjectInSocket(Thought.class);
+
+        Thought savedThought = thoughtRepository.findOne(responseThought.getId());
+
+        assertThat(savedThought).isEqualToComparingFieldByField(responseThought);
+    }
+
+    @Test
+    public void should_create_thought_and_assign_column_title() throws Exception {
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
+
+        Thought sentThought = Thought.builder()
+                .teamId(teamId)
+                .message("message")
+                .topic("happy")
+                .build();
+
+        ColumnTitle savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder().teamId(teamId).topic("happy").build());
+
+        session.send(BASE_ENDPOINT_URL + "/create",
+                objectMapper.writeValueAsBytes(sentThought));
+
+        Thought responseThought = takeObjectInSocket(Thought.class);
+
+        Thought savedThought = thoughtRepository.findOne(responseThought.getId());
+
+        assertThat(savedThought.getColumnTitle()).isEqualTo(savedColumnTitle);
+    }
+
+    @Test
+    public void should_not_create_thought_unauthorized() throws Exception {
+        StompSession session = getUnauthorizedSession();
+        subscribe(session, BASE_SUB_URL);
+
+        Thought sentThought = Thought.builder().teamId(teamId).message("message").build();
+
+        session.send(BASE_ENDPOINT_URL + "/create",
+                objectMapper.writeValueAsBytes(sentThought));
+
+        Thought responseThought = takeObjectInSocket(Thought.class);
+
+        assertThat(responseThought).isNull();
+        assertThat(thoughtRepository.count()).isEqualTo(0);
+    }
+
+    @Test
+    public void should_get_thoughts_on_same_team() throws Exception {
+
+        List<Thought> savedThoughts = Arrays.asList(
+                Thought.builder().message("message 1").teamId(teamId).build(),
+                Thought.builder().message("message 2").teamId(teamId).build(),
+                Thought.builder().message("message 2").teamId("team 2").build()
+        );
+
+        thoughtRepository.save(savedThoughts);
+
+        MvcResult result = mockMvc.perform(get(BASE_GET_URL + "/thoughts")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(thoughtJsonBody)
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk())
                 .andReturn();
 
-        Thought thought = thoughtRepository.findAllByTeamId("BeachBums")
-                .get(0);
+        Thought[] response = objectMapper.readValue(result.getResponse().getContentAsByteArray(), Thought[].class);
 
-        assertNotNull(thought.getColumnTitle());
+        assertThat(response).hasSize(2);
     }
 
     @Test
-    public void canIncreaseLikesOnAThought() throws Exception {
-        Thought newThought = new Thought();
-        newThought.setTeamId("BeachBums");
-        Thought savedThought = thoughtRepository.save(newThought);
+    public void should_not_get_thoughts_unauthorized() throws Exception {
 
-        mockMvc.perform(put("/api/team/BeachBums/thought/" + savedThought.getId() + "/heart")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")));
+        List<Thought> savedThoughts = Collections.singletonList(
+                Thought.builder().message("message 1").teamId(teamId).build()
+        );
 
-        mockMvc.perform(get("/api/team/BeachBums/thoughts")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-                .andExpect(jsonPath("$[0].hearts", is(1)));
-    }
+        thoughtRepository.save(savedThoughts);
 
-    @Test
-    public void canMarkThoughtAsDiscussed() throws Exception {
-        Thought thought = new Thought();
-        thought.setTeamId("BeachBums");
-        Thought savedThought = thoughtRepository.save(thought);
-
-        mockMvc.perform(put("/api/team/BeachBums/thought/" + savedThought.getId() + "/discuss")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-                .andExpect(status().isOk());
-
-        mockMvc.perform(get("/api/team/BeachBums/thoughts")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-                .andExpect(jsonPath("$[0].discussed", is(true)));
-    }
-
-    @Test
-    public void canUnmarkThoughtAsDiscussed() throws Exception {
-        Thought thought = new Thought();
-        thought.setDiscussed(true);
-        thought.setTeamId("BeachBums");
-        Thought savedThought = thoughtRepository.save(thought);
-
-        mockMvc.perform(put("/api/team/BeachBums/thought/" + savedThought.getId() + "/discuss")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")));
-
-        mockMvc.perform(get("/api/team/BeachBums/thoughts")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-                .andExpect(jsonPath("$[0].discussed", is(false)));
-    }
-
-    @Test
-    public void canClearThoughtsForTeam() throws Exception {
-        Thought thought1 = new Thought();
-        thought1.setTeamId("BeachBums");
-
-        thoughtRepository.save(Collections.singletonList(thought1));
-
-        mockMvc.perform(delete("/api/team/BeachBums/thoughts")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-                .andReturn();
-        mockMvc.perform(get("/api/team/BeachBums/thoughts")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-                .andExpect(content().string("[]"));
-    }
-
-    @Test
-    public void canClearIndividualThoughts() throws Exception {
-        Thought thought1 = new Thought();
-        thought1.setTeamId("TestTeam");
-        thought1.setMessage("Test Content");
-
-        thoughtRepository.save(Collections.singletonList(thought1));
-
-        mockMvc.perform(delete("/api/team/TestTeam/thought/" + thought1.getId())
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("TestTeam")))
-                .andExpect(status().isOk());
-
-        mockMvc.perform(get("/api/team/TestTeam/thoughts")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("TestTeam")))
-                .andExpect(content().string("[]"));
-    }
-
-    @Test
-    public void submittingModifiedThoughtUpdatesMessage() throws Exception {
-        Thought thought = new Thought();
-        thought.setTeamId("BeachBums");
-        thought.setMessage("Not modified message");
-
-        Thought createdThought = thoughtRepository.save(thought);
-        String thoughtJsonBody = "{ \"message\" : \"modified message\" }";
-
-        mockMvc.perform(put("/api/team/BeachBums/thought/" + createdThought.getId() + "/message")
+        mockMvc.perform(get(BASE_GET_URL + "/thoughts")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(thoughtJsonBody)
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-                .andExpect((status().isOk()));
-
-        mockMvc.perform(get("/api/team/BeachBums/thoughts")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("BeachBums")))
-                .andExpect(jsonPath("$[0].message", is("modified message")));
-    }
-
-    @Test
-    public void cannotAccessTeamOtherThanOneLoggedInTo() throws Exception {
-        String jwt = jwtBuilder.buildJwt("notBeachBums");
-
-        Thought thought1 = new Thought();
-        thought1.setTeamId("BeachBums");
-        Thought thought2 = new Thought();
-        thought2.setTeamId("BeachBums");
-
-        thoughtRepository.save(thought1);
-        thoughtRepository.save(thought2);
-
-        mockMvc.perform(get("/api/team/BeachBums/thoughts")
-                .header("Authorization", "Bearer " + jwt))
-                .andExpect(status().isForbidden());
-
-        mockMvc.perform(post("/api/team/BeachBums/thought")
-                .header("Authorization", "Bearer " + jwt)
-                .content("{}")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());
-
-        mockMvc.perform(put("/api/team/BeachBums/thought/1/heart")
-                .header("Authorization", "Bearer " + jwt)
-                .content("{}")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());
-
-        mockMvc.perform(put("/api/team/BeachBums/thought/1/discuss")
-                .header("Authorization", "Bearer " + jwt)
-                .content("{}")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());
-
-        mockMvc.perform(put("/api/team/BeachBums/thought/1/message")
-                .header("Authorization", "Bearer " + jwt)
-                .content("{}")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());
-
-        mockMvc.perform(delete("/api/team/BeachBums/thought/1")
-                .header("Authorization", "Bearer " + jwt))
-                .andExpect(status().isForbidden());
-
-        mockMvc.perform(delete("/api/team/BeachBums/thoughts")
-                .header("Authorization", "Bearer " + jwt))
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
                 .andExpect(status().isForbidden());
     }
 
-    @Test
-    public void canCreateThoughtWithWebsockets() throws Exception {
-        String jwt = jwtBuilder.buildJwt("beach-bums");
-        StompHeaders headers = new StompHeaders();
-        headers.add("Authorization", "Bearer " + jwt);
-
-        StompSession session = stompClient
-                .connect(websocketUri, new WebSocketHttpHeaders() {
-                }, headers, new StompSessionHandlerAdapter() {
-                })
-                .get(websocketTestTimeoutInSeconds, SECONDS);
-        session.subscribe(thoughtSubscribeEndpoint, new DefaultStompFrameHandler());
-        String thoughJsonBody = "{\"message\":\"Message\"}";
-        session.send(thoughtEndpoint + "/create", thoughJsonBody.getBytes());
-
-        Thought thought = getLatestThoughtInQueue();
-        Assertions.assertThat("Message")
-                .isEqualTo(thought.getMessage());
-    }
-
-    @Test
-    public void canEditThoughtWithWebsockets() throws Exception {
-        String jwt = jwtBuilder.buildJwt("beach-bums");
-        StompHeaders headers = new StompHeaders();
-        headers.add("Authorization", "Bearer " + jwt);
-
-        StompSession session = stompClient
-                .connect(websocketUri, new WebSocketHttpHeaders() {
-                }, headers, new StompSessionHandlerAdapter() {
-                })
-                .get(10, SECONDS);
-        session.subscribe(thoughtSubscribeEndpoint, new DefaultStompFrameHandler());
-        String thoughJsonBody = "{\"message\":\"Message\"}";
-        session.send(thoughtEndpoint + "/create", thoughJsonBody.getBytes());
-        Thought thought = getLatestThoughtInQueue();
-
-        String editThoughtJsonBody = "{\"message\":\"Edited message\"}";
-        session.send(thoughtEndpoint + "/" + thought.getId() + "/edit", editThoughtJsonBody.getBytes());
-        Thought editedThought = getLatestThoughtInQueue();
-
-        Assertions.assertThat("Edited message").isEqualTo(editedThought.getMessage());
-    }
-
-    @Test
-    public void canDeleteThoughtWithWebsockets() throws Exception {
-        String jwt = jwtBuilder.buildJwt("beach-bums");
-        StompHeaders headers = new StompHeaders();
-        headers.add("Authorization", "Bearer " + jwt);
-
-        StompSession session = stompClient
-                .connect(websocketUri, new WebSocketHttpHeaders() {
-                }, headers, new StompSessionHandlerAdapter() {
-                })
-                .get(websocketTestTimeoutInSeconds, SECONDS);
-        session.subscribe(thoughtSubscribeEndpoint, new DefaultStompFrameHandler());
-        String thoughJsonBody = "{\"message\":\"Message\"}";
-        session.send(thoughtEndpoint + "/create", thoughJsonBody.getBytes());
-        Thought thought = getLatestThoughtInQueue();
-
-        session.send(thoughtEndpoint + "/" + thought.getId() + "/delete", null);
-
-        Long returnVal = getLatestIdInQueue();
-
-        Assertions.assertThat(returnVal)
-                .isNotNull();
-        Assertions.assertThat(returnVal)
-                .isEqualTo(thought.getId());
-    }
-
-    @Test
-    public void canDeleteAllThoughtsWithWebsockets() throws Exception {
-        String jwt = jwtBuilder.buildJwt("beach-bums");
-        StompHeaders headers = new StompHeaders();
-        headers.add("Authorization", "Bearer " + jwt);
-
-        StompSession session = stompClient
-                .connect(websocketUri, new WebSocketHttpHeaders() {
-                }, headers, new StompSessionHandlerAdapter() {
-                })
-                .get(websocketTestTimeoutInSeconds, SECONDS);
-        session.subscribe(thoughtSubscribeEndpoint, new DefaultStompFrameHandler());
-        String thoughJsonBody = "{\"message\":\"Message\"}";
-        session.send(thoughtEndpoint + "/create", thoughJsonBody.getBytes());
-        getLatestThoughtInQueue();
-        session.send(thoughtEndpoint + "/delete", null);
-
-        final Long returnVal = getLatestIdInQueue();
-
-        Assertions.assertThat(returnVal)
-                .isNotNull();
-        Assertions.assertThat(returnVal)
-                .isEqualTo(-1L);
-    }
-
-    private Thought getLatestThoughtInQueue() throws IOException, InterruptedException {
-        ObjectNode response = mapper.readValue(blockingQueue.poll(websocketTestTimeoutInSeconds, SECONDS), ObjectNode.class);
-        return mapper.treeToValue(response.get("payload"), Thought.class);
-    }
-
-    private Long getLatestIdInQueue() throws IOException, InterruptedException {
-        ObjectNode response = mapper.readValue(blockingQueue.poll(websocketTestTimeoutInSeconds, SECONDS), ObjectNode.class);
-        return mapper.treeToValue(response.get("payload"), Long.class);
-    }
-
-    class DefaultStompFrameHandler implements StompFrameHandler {
-        @Override
-        public Type getPayloadType(StompHeaders stompHeaders) {
-            return byte[].class;
-        }
-
-        @Override
-        public void handleFrame(StompHeaders stompHeaders, Object o) {
-            blockingQueue.offer(new String((byte[]) o));
-        }
-    }
 }

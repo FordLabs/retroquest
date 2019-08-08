@@ -19,7 +19,7 @@ package com.ford.labs.retroquest.security;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class JwtAuthenticationTest {
 
@@ -29,7 +29,7 @@ public class JwtAuthenticationTest {
 
         JwtAuthentication authentication = new JwtAuthentication(jwt, false, "SOSECRET");
 
-        assertEquals("i-am-a-team", authentication.getPrincipal());
+        assertThat("i-am-a-team").isEqualTo(authentication.getPrincipal());
     }
 
 }

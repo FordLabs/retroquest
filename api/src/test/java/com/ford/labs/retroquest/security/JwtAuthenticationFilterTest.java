@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.security;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -26,53 +27,58 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 public class JwtAuthenticationFilterTest {
-    
+
+    private MockHttpServletRequest request;
+    private MockHttpServletResponse response;
+    private FilterChain filterChainMock;
+
+    @Before
+    public void setup() {
+        request = new MockHttpServletRequest();
+        response = mock(MockHttpServletResponse.class);
+        SecurityContextHolder.getContext().setAuthentication(null);
+        filterChainMock = mock(FilterChain.class);
+    }
+
     @Test
-    public void callsDoFilterWhenSecurityIsNotSet() throws ServletException, IOException {
+    public void should_call_security_filter_when_security_is_not_set() throws ServletException, IOException {
+
         JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter("SOSECRET");
-        FilterChain filterChainMock = mock(FilterChain.class);
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        MockHttpServletResponse response = mock(MockHttpServletResponse.class);
 
         authenticationFilter.doFilterInternal(request, response, filterChainMock);
 
-        assertNull(SecurityContextHolder.getContext().getAuthentication());
+        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
         verify(filterChainMock).doFilter(request, response);
     }
 
     @Test
     public void ifValidBearerHeaderIsSet_DontCallDoFilterAndSetAuthentication() throws ServletException, IOException {
         JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter("SOSECRET");
+
         String expectedJwt = new JwtBuilder("SOSECRET").buildJwt("anyteam");
-        FilterChain filterChainMock = mock(FilterChain.class);
-        MockHttpServletResponse response = mock(MockHttpServletResponse.class);
-        MockHttpServletRequest request = new MockHttpServletRequest();
+
         request.addHeader("Authorization", "Bearer " + expectedJwt);
 
         JwtAuthentication expectedJwtAuthentication = new JwtAuthentication(expectedJwt, false, "SOSECRET");
 
         authenticationFilter.doFilterInternal(request, response, filterChainMock);
 
-        assertEquals(expectedJwtAuthentication.getPrincipal(), SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        assertThat(expectedJwtAuthentication.getPrincipal()).isEqualTo(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     }
 
     @Test
     public void ifRequestDoesnotHaveATokenInHeader_CallDoFilter() throws ServletException, IOException {
-        JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter("SOSECRET");
-        FilterChain filterChainMock = mock(FilterChain.class);
-        MockHttpServletResponse response = mock(MockHttpServletResponse.class);
-        MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("Authorization", "Bearer ");
 
+        JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter("SOSECRET");
         authenticationFilter.doFilterInternal(request, response, filterChainMock);
 
-        assertNull(SecurityContextHolder.getContext().getAuthentication());
+        assertThat(SecurityContextHolder.getContext().getAuthentication()).isNull();
 
     }
 

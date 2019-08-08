@@ -24,7 +24,7 @@ import {Themes} from '../../domain/Theme';
   styleUrls: ['./floating-character-countdown.component.scss'],
   host: {
     '[class.display-warning-text]': 'charactersRemainingAreAboutToRunOut()',
-    '[style.visibility]': 'textIsEmpty() ? \'hidden\' : \'visible\'',
+    '[style.visibility]': 'isVisible() ? \'visible\' :  \'hidden\'',
     '[class.dark-theme]': 'darkThemeIsEnabled'
   }
 })
@@ -34,6 +34,7 @@ export class FloatingCharacterCountdownComponent {
   @Input() charsAreRunningOutThreshold = 50;
   @Input() characterCount = 0;
   @Input() theme: Themes = Themes.Light;
+  @Input() alwaysVisible = false;
 
   public charactersRemaining(): number {
     return this.maxCharacterCount - this.characterCount;
@@ -45,6 +46,10 @@ export class FloatingCharacterCountdownComponent {
 
   public textIsEmpty(): boolean {
     return this.characterCount === 0;
+  }
+
+  public isVisible(): boolean {
+    return this.alwaysVisible || !this.textIsEmpty();
   }
 
   get darkThemeIsEnabled(): boolean {
