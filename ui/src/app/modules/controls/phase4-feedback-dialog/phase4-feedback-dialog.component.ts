@@ -18,18 +18,18 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {emptyFeedback, Feedback} from '../../domain/feedback';
 import {Themes} from '../../domain/Theme';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient} from '@angular/common/http';
 
 const ESC_KEY = 27;
 
 export interface Phase4AnswerForm {
-  time_stamp: string,
-  q_0: number,
-  q_1: string,
-  q_2: string,
-  q_3: string,
-  prj_name: string,
-  platform: string
+  time_stamp: string;
+  q_0: number;
+  q_1: string;
+  q_2: string;
+  q_3: string;
+  prj_name: string;
+  platform: string;
 }
 
 export function emptyPhase4AnswerForm(): Phase4AnswerForm {
@@ -41,7 +41,7 @@ export function emptyPhase4AnswerForm(): Phase4AnswerForm {
     q_3: '',
     prj_name: 'retroquest',
     platform: 'desktop'
-  }
+  };
 }
 
 @Component({
@@ -49,7 +49,6 @@ export function emptyPhase4AnswerForm(): Phase4AnswerForm {
   templateUrl: './phase4-feedback-dialog.component.html',
   styleUrls: ['./phase4-feedback-dialog.component.scss'],
   host: {
-    '(click)': 'hide(); submitForm()',
     '[style.display]': 'visible ? "flex": "none"'
   }
 })
@@ -146,16 +145,16 @@ export class Phase4FeedbackDialogComponent {
 
   submitForm() {
     this.phase4AnswerForm.time_stamp = new Date().toLocaleString();
-    // this.httpClient
-    //   .post(
-    //     'https://phasefour-phasefourserver.apps.pp01i.edc1.cf.ford.com/survey',
-    //     this.phase4AnswerForm
-    //   )
-    //   .subscribe(res => {
-    //     this.hide();
-    //   }, err => {
-    //     this.hide();
-    //   });
+    this.httpClient
+      .post(
+        'https://phasefour-phasefourserver.apps.pp01i.edc1.cf.ford.com/survey',
+        this.phase4AnswerForm
+      )
+      .subscribe(res => {
+        this.hide();
+      }, err => {
+        this.hide();
+      });
   }
 
   advanceToQuestion(question: number) {

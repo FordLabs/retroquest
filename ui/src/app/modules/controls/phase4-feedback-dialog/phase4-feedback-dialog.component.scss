@@ -48,10 +48,10 @@
     display: flex;
     flex-direction: column;
     font-size: 1rem;
+    height: 400px;
     padding: 24px;
     position: relative;
     width: 500px;
-    height: 400px;
 
     &.dark-theme {
       background-color: $task-background-dark;
@@ -68,7 +68,6 @@
       $content-area-padding: 12px;
 
       background-color: inherit;
-
       border-top-left-radius: inherit;
       border-top-right-radius: inherit;
       cursor: pointer;
@@ -78,6 +77,21 @@
       position: relative;
       word-break: break-word;
       word-wrap: break-word;
+
+      .close-button {
+        $size: 30px;
+        align-items: center;
+        display: flex;
+
+        font-size: 1.2rem;
+        height: $size;
+
+        justify-content: center;
+        position: absolute;
+        right: -$size / 2;
+        top: -$size / 2;
+        width: $size;
+      }
 
       .section {
         margin-top: 12px;
@@ -133,9 +147,9 @@
       .comments-section {
         box-sizing: border-box;
         cursor: default;
-        padding: 0 12px;
         font-size: 1.2rem;
         margin-bottom: 48px;
+        padding: 0 12px;
 
         .label {
           font-weight: normal;
@@ -147,44 +161,44 @@
         }
 
         .progress-container {
-          width: 100%;
-          margin-top: 48px;
-
-          display: flex;
           align-items: center;
+          display: flex;
+
           justify-content: space-between;
+          margin-top: 48px;
+          width: 100%;
 
           .current-progress {
             font-size: .9rem;
-            width: 200px;
             height: 100%;
+            width: 200px;
 
             .progress-bar {
-              width: 100%;
               box-sizing: border-box;
               padding-right: 48px;
+              width: 100%;
 
               progress {
-                width: 100%;
-                height: 12px;
                 appearance: none;
                 background-color: $phase4-light-border-color;
+                border: 0;
                 border-radius: 16px;
+                height: 12px;
                 margin-top: 6px;
                 outline: none;
-                border: none;
+                width: 100%;
 
-                &::-webkit-progress-value {
+                &::-webkit-progress-value { // sass-lint:disable-line no-vendor-prefixes
                   background-color: $phase4-light-background-selected-color;
                   border-radius: 16px;
                 }
 
-                &::-webkit-progress-bar {
+                &::-webkit-progress-bar { // sass-lint:disable-line no-vendor-prefixes
                   background-color: $phase4-light-border-color;
                   border-radius: 16px;
                 }
 
-                &::-moz-progress-bar {
+                &::-moz-progress-bar { // sass-lint:disable-line no-vendor-prefixes
                   background-color: $phase4-light-background-selected-color;
                   border-radius: 16px;
                 }
@@ -192,11 +206,15 @@
                 &.dark-theme {
                   background-color: $midnight-blue;
 
-                  &::-webkit-progress-bar {
+                  &::-webkit-progress-bar { // sass-lint:disable-line no-vendor-prefixes
                     background-color: $midnight-blue;
                   }
 
-                  &::-webkit-progress-value {
+                  &::-webkit-progress-value { // sass-lint:disable-line no-vendor-prefixes
+                    background-color: $grape;
+                  }
+
+                  &::-moz-progress-bar { // sass-lint:disable-line no-vendor-prefixes
                     background-color: $grape;
                   }
                 }
@@ -209,10 +227,10 @@
             background-color: $phase4-light-background-selected-color;
 
             &.disabled {
-              pointer-events: none;
               background-color: $phase4-light-background-color;
               box-shadow: none;
-              color: rgba($wet-asphalt, .3);
+              color: rgba($wet-asphalt, .3); // sass-lint:disable-line no-color-literals
+              pointer-events: none;
             }
 
             &.dark-theme {
@@ -220,8 +238,8 @@
               color: $clouds;
 
               &.disabled {
-                color: rgba($wet-asphalt, .3);
-                background-color: rgba($phase4-light-border-color, .4);
+                background-color: rgba($phase4-light-border-color, .4); // sass-lint:disable-line no-color-literals
+                color: rgba($wet-asphalt, .3); // sass-lint:disable-line no-color-literals
               }
             }
 
@@ -233,14 +251,14 @@
           width: 100%;
 
           .question-container {
-            display: flex;
             align-items: center;
-            justify-content: flex-start;
-            width: 100%;
-            margin-bottom: 12px;
+            display: flex;
             font-size: 1rem;
-            position: relative;
             height: 35px;
+            justify-content: flex-start;
+            margin-bottom: 12px;
+            position: relative;
+            width: 100%;
 
             &.with-text-area {
               height: auto;
@@ -256,11 +274,11 @@
               font-size: inherit;
               font-weight: bold;
               height: 125px;
+              margin: 0;
               outline: none;
               padding: 12px;
               resize: none;
               width: 100%;
-              margin: 0;
 
               @media only screen and (max-width: 610px) {
                 font-size: 1rem;
@@ -273,12 +291,12 @@
               }
 
               &.dark-theme {
+                border-color: rgba($phase4-light-border-color, .4); // sass-lint:disable-line no-color-literals
                 color: $clouds;
-                border-color: rgba($phase4-light-border-color, .4);
 
                 &::placeholder {
                   color: opacity($clouds, .5);
-                  opacity: 1.0;
+                  opacity: 1;
                 }
               }
 
@@ -314,19 +332,19 @@
             }
 
             .question-square {
-              width: 35px;
-              height: 100%;
-              background-color: $phase4-light-background-color;
-              display: flex;
               align-items: center;
-              justify-content: center;
-              border-radius: 3px;
-              margin-right: 12px;
+              background-color: $phase4-light-background-color;
               border: 1px solid $phase4-light-border-color;
+              border-radius: 3px;
+              display: flex;
+              height: 100%;
+              justify-content: center;
+              margin-right: 12px;
+              width: 35px;
 
               &.dark-theme {
-                background-color: rgba($clouds, .8);
-                border: none;
+                background-color: rgba($clouds, .8); // sass-lint:disable-line no-color-literals
+                border: 0;
                 color: $midnight-blue;
               }
             }
@@ -406,28 +424,28 @@
     }
 
     .footer {
+      align-items: center;
+      background-color: $phase4-light-background-color;
       border-bottom-left-radius: inherit;
       border-bottom-right-radius: inherit;
+      bottom: 0;
       box-sizing: border-box;
       display: flex;
       justify-content: center;
-      align-items: center;
+      left: 0;
       margin-top: 24px;
       padding: 12px 0;
-      width: 100%;
-      background-color: $phase4-light-background-color;
       position: absolute;
-      bottom: 0;
-      left: 0;
       right: 0;
+      width: 100%;
 
       &.dark-theme {
         background-color: $wet-asphalt;
       }
 
       .branding {
-        margin-left: 6px;
         font-weight: bold;
+        margin-left: 6px;
       }
 
       @media only screen and (max-width: 610px) {

@@ -24,7 +24,7 @@ import {SaveCheckerService} from '../../services/save-checker.service';
 import {parseTheme, Themes} from '../../../domain/Theme';
 import {HttpClient} from '@angular/common/http';
 import {saveAs} from 'file-saver';
-import {Phase4FeedbackDialogComponent} from "../../../controls/phase4-feedback-dialog/phase4-feedback-dialog.component";
+import {Phase4FeedbackDialogComponent} from '../../../controls/phase4-feedback-dialog/phase4-feedback-dialog.component';
 
 @Component({
   selector: 'rq-header',

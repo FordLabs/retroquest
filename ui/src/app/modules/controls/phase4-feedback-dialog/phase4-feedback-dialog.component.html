@@ -25,6 +25,13 @@
 
   <div class="body">
 
+    <div class="close-button"
+         [ngClass]="{
+          'dark-theme': darkThemeIsEnabled
+        }"
+         (click)="submitForm()"
+    ><i class="fas fa-times"></i></div>
+
     <div class="section comments-section" *ngIf="currentQuestion === 1">
       <div
         class="label"

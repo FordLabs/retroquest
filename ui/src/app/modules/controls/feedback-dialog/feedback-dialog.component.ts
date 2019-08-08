@@ -39,6 +39,8 @@ export class FeedbackDialogComponent {
   @Output() submitted: EventEmitter<Feedback> = new EventEmitter<Feedback>();
 
   feedback: Feedback = emptyFeedback();
+  starStates: Array<boolean> = [false, false, false, false, false];
+  starsClicked = false;
 
   get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;
@@ -52,6 +54,8 @@ export class FeedbackDialogComponent {
     this.visible = false;
     this.visibilityChanged.emit(this.visible);
     this.feedback = emptyFeedback();
+    this.starsClicked = false;
+    this.clearStars();
     document.onkeydown = null;
   }
 
@@ -71,5 +75,36 @@ export class FeedbackDialogComponent {
     }
   }
 
+  public onStarHovered(index: number): void {
+
+    const starRating = index + 1;
+
+    if (!this.starsClicked) {
+
+      this.clearStars();
+
+      for (let i = 0; i < starRating; ++i) {
+        this.starStates[i] = true;
+      }
+      this.feedback.stars = starRating;
+    }
+  }
+
+  public clearStars(): void {
+    if (!this.starsClicked) {
+      for (let i = 0; i < this.starStates.length; ++i) {
+        this.starStates[i] = false;
+      }
+      this.feedback.stars = 0;
+    }
+  }
+
+  public onStarClicked(index: number): void {
+    if (this.starsClicked) {
+      this.starsClicked = false;
+      this.onStarHovered(index);
+    }
+    this.starsClicked = true;
+  }
 }
 
