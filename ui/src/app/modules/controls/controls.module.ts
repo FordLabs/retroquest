@@ -37,6 +37,7 @@ import {ActionsRadiatorViewComponent} from './actions-radiator-view/actions-radi
 import {DeletionOverlayComponent} from './deletion-overlay/deletion-overlay.component';
 import { TooltipComponent } from './tooltip/tooltip.component';
 import { SettingsDialogComponent } from './settings-dialog/settings-dialog.component';
+import { Phase4FeedbackDialogComponent } from './phase4-feedback-dialog/phase4-feedback-dialog.component';
 
 @NgModule({
   imports: [
@@ -64,7 +65,8 @@ import { SettingsDialogComponent } from './settings-dialog/settings-dialog.compo
     ActionsRadiatorViewComponent,
     DeletionOverlayComponent,
     TooltipComponent,
-    SettingsDialogComponent
+    SettingsDialogComponent,
+    Phase4FeedbackDialogComponent
   ],
 
   exports: [
@@ -84,7 +86,8 @@ import { SettingsDialogComponent } from './settings-dialog/settings-dialog.compo
     FeedbackDialogComponent,
     ActionsRadiatorViewComponent,
     DeletionOverlayComponent,
-    SettingsDialogComponent
+    SettingsDialogComponent,
+    Phase4FeedbackDialogComponent
   ]
 
 })
