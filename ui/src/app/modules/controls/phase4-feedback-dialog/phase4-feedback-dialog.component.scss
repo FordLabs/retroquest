@@ -1,0 +1,420 @@
+/*!
+ *  Copyright (c) 2018 Ford Motor Company
+ *  All rights reserved.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+@import 'color-vars';
+
+:host {
+  align-items: center;
+  background-color: opacity($black, .5);
+  bottom: 0;
+  box-sizing: border-box;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  overflow: auto;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+
+  @media only screen and (max-width: 610px) {
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .dialog {
+    $base-drop-shadow: 0 19px 38px opacity($black, .3);
+    $border-width: 8px;
+
+    background-color: $white;
+    border-radius: 6px;
+    box-shadow: $base-drop-shadow;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+    padding: 24px;
+    position: relative;
+    width: 500px;
+    height: 400px;
+
+    &.dark-theme {
+      background-color: $task-background-dark;
+    }
+
+    @media only screen and (max-width: 610px) {
+      margin: $border-width;
+      padding: 12px 6px;
+      transform: none;
+      width: calc(100% - 16px);
+    }
+
+    .body {
+      $content-area-padding: 12px;
+
+      background-color: inherit;
+
+      border-top-left-radius: inherit;
+      border-top-right-radius: inherit;
+      cursor: pointer;
+      display: block;
+      flex: 1 1 auto;
+      font-size: inherit;
+      position: relative;
+      word-break: break-word;
+      word-wrap: break-word;
+
+      .section {
+        margin-top: 12px;
+        width: 100%;
+      }
+
+      .heading {
+        cursor: default;
+        font-size: 2.5rem;
+        font-weight: bold;
+        text-align: center;
+        text-transform: capitalize;
+        width: 100%;
+
+        &.dark-theme {
+          color: $clouds;
+        }
+
+        @media only screen and (max-width: 610px) {
+          font-size: 2rem;
+        }
+
+      }
+
+      .sub-heading {
+        color: opacity($wet-asphalt, .5);
+        cursor: default;
+        font-size: 1rem;
+        font-weight: bold;
+        text-align: center;
+        width: 100%;
+
+        &.dark-theme {
+          color: opacity($clouds, .5);
+        }
+
+        @media only screen and (max-width: 610px) {
+          font-size: .9rem;
+        }
+      }
+
+      .label {
+        font-weight: bold;
+        text-transform: capitalize;
+      }
+
+      .required-field {
+        color: $unhappy-red;
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      .comments-section {
+        box-sizing: border-box;
+        cursor: default;
+        padding: 0 12px;
+        font-size: 1.2rem;
+        margin-bottom: 48px;
+
+        .label {
+          font-weight: normal;
+          text-transform: none;
+
+          &.dark-theme {
+            color: $clouds;
+          }
+        }
+
+        .progress-container {
+          width: 100%;
+          margin-top: 48px;
+
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+
+          .current-progress {
+            font-size: .9rem;
+            width: 200px;
+            height: 100%;
+
+            .progress-bar {
+              width: 100%;
+
+              progress {
+                width: 100%;
+                height: 12px;
+                appearance: none;
+                background-color: $phase4-light-border-color;
+                border-radius: 16px;
+                margin-top: 6px;
+
+                &::-webkit-progress-value {
+                  background-color: $phase4-light-background-selected-color;
+                  border-radius: 16px;
+                }
+
+                &::-webkit-progress-bar {
+                  background-color: $phase4-light-border-color;
+                  border-radius: 16px;
+                }
+
+                &::-moz-progress-bar {
+                  background-color: $phase4-light-background-selected-color;
+                  border-radius: 16px;
+                }
+              }
+            }
+          }
+
+          rq-button {
+            background-color: $phase4-light-background-selected-color;
+          }
+        }
+
+        .answer-container {
+          margin-top: 24px;
+          width: 100%;
+
+          .question-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            margin-bottom: 12px;
+            font-size: 1rem;
+            position: relative;
+            height: 35px;
+
+            &.with-text-area {
+              height: auto;
+            }
+
+            textarea {
+              background-color: inherit;
+              border: 5px $phase4-light-border-color solid;
+              border-radius: 6px;
+              box-sizing: border-box;
+              color: inherit;
+              font-family: inherit;
+              font-size: inherit;
+              font-weight: bold;
+              height: 125px;
+              outline: none;
+              padding: 12px;
+              resize: none;
+              width: 100%;
+              margin: 0;
+
+              &.dark-theme {
+                color: $clouds;
+              }
+
+              @media only screen and (max-width: 610px) {
+                font-size: 1rem;
+                height: 85px;
+                margin-top: 6px;
+              }
+
+              &::placeholder {
+                opacity: .4;
+              }
+            }
+
+            input {
+              background-color: inherit;
+              border: 0;
+              border-bottom: 4px opacity($wet-asphalt, .4) solid;
+              box-sizing: border-box;
+              color: inherit;
+              font-family: inherit;
+              font-size: inherit;
+              font-weight: bold;
+              margin: 12px 0 0;
+              outline: none;
+              padding: 0 0 3px;
+              width: 100%;
+
+              &::placeholder {
+                opacity: .8;
+              }
+
+              &.dark-theme {
+                border-bottom-color: opacity($clouds, .15);
+                color: $clouds;
+              }
+
+              @media only screen and (max-width: 610px) {
+                font-size: 1rem;
+                margin-top: 6px;
+              }
+            }
+
+            .question-square {
+              width: 35px;
+              height: 100%;
+              background-color: $phase4-light-background-color;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border-radius: 3px;
+              margin-right: 12px;
+              border: 1px solid $phase4-light-border-color;
+            }
+          }
+
+
+        }
+
+        textarea {
+          background-color: inherit;
+          border: 5px $confused-blue solid;
+          border-radius: 6px;
+          box-sizing: border-box;
+          color: inherit;
+          font-family: inherit;
+          font-size: .9rem;
+          font-weight: bold;
+          height: 125px;
+          margin: 12px 0 0;
+          outline: none;
+          padding: 12px;
+          resize: none;
+          width: 100%;
+
+          &.dark-theme {
+            color: $clouds;
+          }
+
+          @media only screen and (max-width: 610px) {
+            font-size: 1rem;
+            height: 85px;
+            margin-top: 6px;
+          }
+        }
+      }
+
+      .feedback-email-section {
+        box-sizing: border-box;
+        cursor: default;
+        margin-top: 24px;
+        padding: 0 12px;
+
+        .label {
+          color: opacity($wet-asphalt, .4);
+
+          &.dark-theme {
+            color: opacity($clouds, .4);
+          }
+        }
+
+        input {
+          background-color: inherit;
+          border: 0;
+          border-bottom: 4px opacity($wet-asphalt, .15) solid;
+          box-sizing: border-box;
+          color: inherit;
+          font-family: inherit;
+          font-size: .9rem;
+          font-weight: bold;
+          margin: 12px 0 0;
+          outline: none;
+          padding: 0 0 3px;
+          width: 100%;
+
+          &.dark-theme {
+            border-bottom-color: opacity($clouds, .15);
+            color: $clouds;
+          }
+
+          @media only screen and (max-width: 610px) {
+            font-size: 1rem;
+            margin-top: 6px;
+          }
+        }
+      }
+
+    }
+
+    .footer {
+      border-bottom-left-radius: inherit;
+      border-bottom-right-radius: inherit;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: center;
+      margin-top: 24px;
+      padding: 12px 0;
+      width: 100%;
+      background-color: $phase4-light-background-color;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+
+      .branding {
+        margin-left: 6px;
+        font-weight: bold;
+      }
+
+      @media only screen and (max-width: 610px) {
+        height: 50px;
+        margin-top: 12px;
+        padding-bottom: 0;
+        padding-top: 0;
+      }
+
+      .container {
+        align-items: center;
+        box-sizing: border-box;
+        cursor: pointer;
+        display: flex;
+        height: 100%;
+        justify-content: center;
+        user-select: none;
+        width: 50%;
+
+        rq-button {
+          font-size: 1.3rem;
+          height: 100%;
+          width: 100%;
+
+          &.secondary {
+            color: opacity($wet-asphalt, .5);
+
+            &.dark-theme {
+              color: opacity($clouds, .5);
+            }
+          }
+
+          &.primary {
+            background-color: $confused-blue;
+          }
+
+        }
+      }
+    }
+
+  }
+
+}

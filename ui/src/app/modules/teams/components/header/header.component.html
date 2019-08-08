@@ -28,11 +28,11 @@
     >
       <rq-button
         id="giveFeedback"
-        (click)="feedbackDialog.show()"
+        (click)="phase4FeedbackDialog.show()"
         type="secondary"
         [theme]="theme"
       >
-        <span class="button-text">Give Feedback</span>
+        <span class="button-text">Got Feedback?</span>
         <i class="far fa-comments button-icon"></i>
       </rq-button>
 
@@ -62,6 +62,12 @@
   </div>
 
 </header>
+
+<rq-phase4-feedback-dialog
+    #phase4FeedbackDialog
+    (submitted)="onPhase4FeedbackSubmitted($event)"
+    [theme]="theme"
+></rq-phase4-feedback-dialog>
 
 
 <rq-feedback-dialog
