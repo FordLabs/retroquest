@@ -36,15 +36,33 @@
 
       <div class="answer-container">
         <div class="question-container" (click)="questionOneEquals(1)">
-          <div class="question-square">A</div>
+          <div class="question-square"
+               [ngClass]="{
+                'dark-theme': darkThemeIsEnabled
+                }"
+          >
+            A
+          </div>
           <div>Very disappointed</div>
         </div>
         <div class="question-container" (click)="questionOneEquals(2)">
-          <div class="question-square">B</div>
+          <div class="question-square"
+               [ngClass]="{
+                'dark-theme': darkThemeIsEnabled
+                }"
+          >
+            B
+          </div>
           <div>Somewhat disappointed</div>
         </div>
         <div class="question-container" (click)="questionOneEquals(3)">
-          <div class="question-square">C</div>
+          <div class="question-square"
+               [ngClass]="{
+                'dark-theme': darkThemeIsEnabled
+                }"
+          >
+            C
+          </div>
           <div>Not disappointed</div>
         </div>
       </div>
@@ -62,7 +80,11 @@
 
       <div class="answer-container">
         <div class="question-container with-text-area">
-          <textarea [(ngModel)]="phase4AnswerForm.q_1" placeholder="Your answer" maxlength="750"></textarea>
+          <textarea [(ngModel)]="phase4AnswerForm.q_1" placeholder="Your answer" maxlength="750"
+                    [ngClass]="{
+                      'dark-theme': darkThemeIsEnabled
+                    }"
+          ></textarea>
           <rq-floating-character-countdown
             [characterCount]="phase4AnswerForm.q_1.length"
             [maxCharacterCount]="750"
@@ -77,7 +99,13 @@
         <div class="current-progress">
           <div class="progress-bar-label">{{currentQuestion - 1}}/4 completed</div>
           <div class="progress-bar">
-            <progress [value]="currentQuestion - 1" max="4"></progress>
+            <progress
+              [value]="currentQuestion - 1"
+              max="4"
+              [ngClass]="{
+                      'dark-theme': darkThemeIsEnabled
+                    }"
+            ></progress>
           </div>
         </div>
 
@@ -86,6 +114,7 @@
           type="primary"
           text="Next"
           (click)="advanceToQuestion(3)"
+          [theme]="theme"
         >
         </rq-button>
       </div>
@@ -103,7 +132,11 @@
 
       <div class="answer-container">
         <div class="question-container with-text-area">
-          <textarea [(ngModel)]="phase4AnswerForm.q_2" placeholder="Your answer" maxlength="750"></textarea>
+          <textarea [(ngModel)]="phase4AnswerForm.q_2" placeholder="Your answer" maxlength="750"
+                    [ngClass]="{
+                      'dark-theme': darkThemeIsEnabled
+                    }"
+          ></textarea>
           <rq-floating-character-countdown
             [characterCount]="phase4AnswerForm.q_2.length"
             [maxCharacterCount]="750"
@@ -118,66 +151,89 @@
         <div class="current-progress">
           <div class="progress-bar-label">{{currentQuestion - 1}}/4 completed</div>
           <div class="progress-bar">
-            <progress [value]="currentQuestion - 1" max="4"></progress>
+            <progress
+              [value]="currentQuestion - 1"
+              max="4"
+              [ngClass]="{
+                      'dark-theme': darkThemeIsEnabled
+                    }"
+            ></progress>
           </div>
         </div>
 
         <rq-button
-          [disabled]="phase4AnswerForm.q_2.length === 0"
-          type="primary"
-          text="Next"
-          (click)="advanceToQuestion(4)"
-        >
-        </rq-button>
-      </div>
+          [disabled]=" phase4AnswerForm.q_2.length=== 0
+            "
+            type="primary"
+            text="Next"
+            (click)="advanceToQuestion(4)"
+            [theme]="theme"
+            >
+            </rq-button>
+          </div>
 
-    </div>
+        </div>
 
-    <div class="section comments-section" *ngIf="currentQuestion === 4">
-      <div
-        class="label"
-        [ngClass]="{
+        <div class="section comments-section" *ngIf="currentQuestion === 4">
+          <div
+            class="label"
+            [ngClass]="{
           'dark-theme': darkThemeIsEnabled
         }"
-      >How can we <b>improve</b> RetroQuest for you?
-      </div>
-
-      <div class="answer-container">
-        <div class="question-container with-text-area">
-          <textarea [(ngModel)]="phase4AnswerForm.q_3" placeholder="Your answer" maxlength="750"></textarea>
-          <rq-floating-character-countdown
-            [characterCount]="phase4AnswerForm.q_3.length"
-            [maxCharacterCount]="750"
-            [charsAreRunningOutThreshold]="50"
-            [theme]="theme"
-            [alwaysVisible]="true"
-          ></rq-floating-character-countdown>
-        </div>
-      </div>
-
-      <div class="progress-container">
-        <div class="current-progress">
-          <div class="progress-bar-label">{{currentQuestion - 1}}/4 completed</div>
-          <div class="progress-bar">
-            <progress [value]="currentQuestion - 1" max="4"></progress>
+          >How can we <b>improve</b> RetroQuest for you?
           </div>
+
+          <div class="answer-container">
+            <div class="question-container with-text-area">
+          <textarea [(ngModel)]="phase4AnswerForm.q_3" placeholder="Your answer" maxlength="750"
+                    [ngClass]="{
+                      'dark-theme': darkThemeIsEnabled
+                    }"
+          ></textarea>
+              <rq-floating-character-countdown
+                [characterCount]="phase4AnswerForm.q_3.length"
+                [maxCharacterCount]="750"
+                [charsAreRunningOutThreshold]="50"
+                [theme]="theme"
+                [alwaysVisible]="true"
+              ></rq-floating-character-countdown>
+            </div>
+          </div>
+
+          <div class="progress-container">
+            <div class="current-progress">
+              <div class="progress-bar-label">{{currentQuestion - 1}}/4 completed</div>
+              <div class="progress-bar">
+                <progress
+                  [value]="currentQuestion - 1"
+                  max="4"
+                  [ngClass]="{
+                      'dark-theme': darkThemeIsEnabled
+                    }"
+                ></progress>
+              </div>
+            </div>
+
+            <rq-button
+              [disabled]="phase4AnswerForm.q_3.length === 0"
+              type="primary"
+              text="Submit"
+              (click)="submitForm()"
+              [theme]="theme"
+            >
+            </rq-button>
+          </div>
+
         </div>
 
-        <rq-button
-          [disabled]="phase4AnswerForm.q_3.length === 0"
-          type="primary"
-          text="Submit"
-          (click)="submitForm()"
-        >
-        </rq-button>
       </div>
 
+      <div class="footer"
+           [ngClass]="{
+          'dark-theme': darkThemeIsEnabled
+        }"
+      >
+        Powered By
+        <div class="branding">Phase4</div>
+      </div>
     </div>
-
-  </div>
-
-  <div class="footer">
-    Powered By
-    <div class="branding">Phase4</div>
-  </div>
-</div>

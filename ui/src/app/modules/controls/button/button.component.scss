@@ -61,13 +61,6 @@
       background-color: $grape;
       cursor: pointer;
     }
-
-    &.disabled {
-      pointer-events: none;
-      background-color: $phase4-light-background-color !important;
-      box-shadow: none;
-      color: rgba($wet-asphalt, .3);
-    }
   }
 
   &.secondary {

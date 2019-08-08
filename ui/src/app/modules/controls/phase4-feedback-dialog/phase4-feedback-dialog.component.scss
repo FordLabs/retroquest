@@ -161,6 +161,8 @@
 
             .progress-bar {
               width: 100%;
+              box-sizing: border-box;
+              padding-right: 48px;
 
               progress {
                 width: 100%;
@@ -169,6 +171,8 @@
                 background-color: $phase4-light-border-color;
                 border-radius: 16px;
                 margin-top: 6px;
+                outline: none;
+                border: none;
 
                 &::-webkit-progress-value {
                   background-color: $phase4-light-background-selected-color;
@@ -184,12 +188,43 @@
                   background-color: $phase4-light-background-selected-color;
                   border-radius: 16px;
                 }
+
+                &.dark-theme {
+                  background-color: $midnight-blue;
+
+                  &::-webkit-progress-bar {
+                    background-color: $midnight-blue;
+                  }
+
+                  &::-webkit-progress-value {
+                    background-color: $grape;
+                  }
+                }
+
               }
             }
           }
 
           rq-button {
             background-color: $phase4-light-background-selected-color;
+
+            &.disabled {
+              pointer-events: none;
+              background-color: $phase4-light-background-color;
+              box-shadow: none;
+              color: rgba($wet-asphalt, .3);
+            }
+
+            &.dark-theme {
+              background-color: $grape;
+              color: $clouds;
+
+              &.disabled {
+                color: rgba($wet-asphalt, .3);
+                background-color: rgba($phase4-light-border-color, .4);
+              }
+            }
+
           }
         }
 
@@ -227,10 +262,6 @@
               width: 100%;
               margin: 0;
 
-              &.dark-theme {
-                color: $clouds;
-              }
-
               @media only screen and (max-width: 610px) {
                 font-size: 1rem;
                 height: 85px;
@@ -240,6 +271,17 @@
               &::placeholder {
                 opacity: .4;
               }
+
+              &.dark-theme {
+                color: $clouds;
+                border-color: rgba($phase4-light-border-color, .4);
+
+                &::placeholder {
+                  color: opacity($clouds, .5);
+                  opacity: 1.0;
+                }
+              }
+
             }
 
             input {
@@ -281,6 +323,12 @@
               border-radius: 3px;
               margin-right: 12px;
               border: 1px solid $phase4-light-border-color;
+
+              &.dark-theme {
+                background-color: rgba($clouds, .8);
+                border: none;
+                color: $midnight-blue;
+              }
             }
           }
 
@@ -363,6 +411,7 @@
       box-sizing: border-box;
       display: flex;
       justify-content: center;
+      align-items: center;
       margin-top: 24px;
       padding: 12px 0;
       width: 100%;
@@ -371,6 +420,10 @@
       bottom: 0;
       left: 0;
       right: 0;
+
+      &.dark-theme {
+        background-color: $wet-asphalt;
+      }
 
       .branding {
         margin-left: 6px;

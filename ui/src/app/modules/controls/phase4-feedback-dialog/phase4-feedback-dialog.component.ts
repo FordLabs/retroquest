@@ -146,16 +146,16 @@ export class Phase4FeedbackDialogComponent {
 
   submitForm() {
     this.phase4AnswerForm.time_stamp = new Date().toLocaleString();
-    this.httpClient
-      .post(
-        'https://phasefour-phasefourserver.apps.pp01i.edc1.cf.ford.com/survey',
-        this.phase4AnswerForm
-      )
-      .subscribe(res => {
-        this.hide();
-      }, err => {
-        this.hide();
-      });
+    // this.httpClient
+    //   .post(
+    //     'https://phasefour-phasefourserver.apps.pp01i.edc1.cf.ford.com/survey',
+    //     this.phase4AnswerForm
+    //   )
+    //   .subscribe(res => {
+    //     this.hide();
+    //   }, err => {
+    //     this.hide();
+    //   });
   }
 
   advanceToQuestion(question: number) {
