@@ -24,7 +24,6 @@ import {SaveCheckerService} from '../../services/save-checker.service';
 import {parseTheme, Themes} from '../../../domain/Theme';
 import {HttpClient} from '@angular/common/http';
 import {saveAs} from 'file-saver';
-import {Phase4FeedbackDialogComponent} from '../../../controls/phase4-feedback-dialog/phase4-feedback-dialog.component';
 
 @Component({
   selector: 'rq-header',
@@ -41,7 +40,6 @@ export class HeaderComponent implements OnInit {
 
   @Output() endRetro: EventEmitter<void> = new EventEmitter<void>();
 
-  @ViewChild(Phase4FeedbackDialogComponent) phase4FeedbackDialogComponent: Phase4FeedbackDialogComponent;
   @ViewChild(FeedbackDialogComponent) feedbackDialog: FeedbackDialogComponent;
   @ViewChild(EndRetroDialogComponent) endRetroDialog: EndRetroDialogComponent;
 
@@ -87,10 +85,5 @@ export class HeaderComponent implements OnInit {
     this.http.get(this.getCsvUrl(), {responseType: 'blob'}).subscribe(csvData => {
       saveAs(csvData, `${this.teamId}-board.csv`);
     });
-  }
-
-  onPhase4FeedbackSubmitted(feedback: Feedback) {
-    feedback.teamId = this.teamId;
-    this.feedbackService.addFeedback(feedback).subscribe();
   }
 }

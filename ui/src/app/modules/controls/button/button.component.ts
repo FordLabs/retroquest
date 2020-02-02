@@ -25,8 +25,7 @@ import {Themes} from '../../domain/Theme';
   host: {
     '[class.primary]': 'type === \'primary\'',
     '[class.secondary]': 'type === \'secondary\'',
-    '[class.dark-theme]': 'darkThemeIsEnabled',
-    '[class.disabled]': 'disabled'
+    '[class.dark-theme]': 'darkThemeIsEnabled'
   }
 })
 export class ButtonComponent {
@@ -35,7 +34,6 @@ export class ButtonComponent {
   @Input() text = '';
   @Input() theme: Themes = Themes.Light;
   @Input() iconUrl = '';
-  @Input() disabled = false;
 
   get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;
