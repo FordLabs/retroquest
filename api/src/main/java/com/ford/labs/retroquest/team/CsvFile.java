@@ -21,6 +21,7 @@ import com.ford.labs.retroquest.actionitem.ActionItem;
 import com.ford.labs.retroquest.thought.Thought;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
@@ -31,8 +32,9 @@ import java.io.OutputStreamWriter;
 import java.time.LocalDate;
 import java.util.List;
 
-@AllArgsConstructor
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CsvFile {
 
     private String teamName;
