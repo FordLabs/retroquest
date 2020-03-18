@@ -50,7 +50,8 @@ dependencies {
     runtime 'mysql:mysql-connector-java'
     runtime 'com.h2database:h2:1.4.197'
     runtime group: 'com.google.cloud.sql', name: 'mysql-socket-factory', version: '1.0.13'
-    compileOnly 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok:1.18.10'
+    annotationProcessor 'org.projectlombok:lombok:1.18.10'
     testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 
