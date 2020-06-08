@@ -69,7 +69,6 @@ public class CaptchaValidatorTest {
     public void whenFailedLoginAttemptsIsBelowThreshold_returnsTrue() {
         Team team = new Team();
         team.setFailedAttempts(2);
-        when(teamService.getTeamByName("a-team")).thenReturn(team);
 
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setName("a-team");
@@ -82,7 +81,6 @@ public class CaptchaValidatorTest {
         Team team = new Team();
         team.setFailedAttempts(7);
 
-        when(teamService.getTeamByName("a-team")).thenReturn(team);
         when(captchaService.isCaptchaEnabledForTeam("a-team")).thenReturn(true);
 
         LoginRequest loginRequest = new LoginRequest();
@@ -96,10 +94,7 @@ public class CaptchaValidatorTest {
         Team team = new Team();
         team.setFailedAttempts(7);
 
-        when(teamService.getTeamByName("a-team")).thenReturn(team);
         when(captchaService.isCaptchaEnabledForTeam("a-team")).thenReturn(true);
-        when(restTemplate.getForObject("http://myUrl?secret={secret}&response={response}", ReCaptchaResponse.class, "secret", "InvalidCaptcha"))
-                .thenReturn(new ReCaptchaResponse(false, Collections.emptyList()));
 
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setName("a-team");
@@ -112,10 +107,6 @@ public class CaptchaValidatorTest {
         Team team = new Team();
         team.setFailedAttempts(7);
 
-        when(teamService.getTeamByName("a-team")).thenReturn(team);
-        when(restTemplate.getForObject("http://myUrl?secret={secret}&response={response}", ReCaptchaResponse.class, "secret", "ValidCaptcha"))
-                .thenReturn(new ReCaptchaResponse(true, Collections.emptyList()));
-
         LoginRequest loginRequest = new LoginRequest("a-team", "password", "ValidCaptcha");
 
         assertTrue(validator.isValid(loginRequest, null));
@@ -123,7 +114,6 @@ public class CaptchaValidatorTest {
 
     @Test(expected = CaptchaInvalidException.class)
     public void whenTeamIsNull_AndCaptchaIsInvalid_throwsCaptchaInvalidException() {
-        when(teamService.getTeamByName("b-team")).thenReturn(null);
         when(restTemplate.getForObject("http://myUrl?secret={secret}&response={response}", ReCaptchaResponse.class, "secret", "InvalidCaptcha"))
                 .thenReturn(new ReCaptchaResponse(false, Collections.emptyList()));
         CreateTeamRequest createTeamRequest = new CreateTeamRequest("name", "password", "InvalidCaptcha");
@@ -133,7 +123,6 @@ public class CaptchaValidatorTest {
 
     @Test
     public void whenTeamIsNull_AndCaptchaIsValid_returnsTrue() {
-        when(teamService.getTeamByName("b-team")).thenReturn(null);
         when(restTemplate.getForObject("http://myUrl?secret={secret}&response={response}", ReCaptchaResponse.class, "secret", "ValidCaptcha"))
                 .thenReturn(new ReCaptchaResponse(true, Collections.emptyList()));
         CreateTeamRequest createTeamRequest = new CreateTeamRequest("name", "password", "ValidCaptcha");

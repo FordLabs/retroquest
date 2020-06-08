@@ -51,7 +51,7 @@ public class ColumnTitleController {
     @PutMapping("/api/team/{teamId}/column/{columnId}/title")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public void updateTitleOfColumn(@PathVariable("teamId") String teamId, @RequestBody ColumnTitle columnTitle, @PathVariable("columnId") Long columnId) {
-        ColumnTitle returnedColumnTitle = columnTitleRepository.findOne(columnId);
+        ColumnTitle returnedColumnTitle = columnTitleRepository.findById(columnId).orElseThrow();
         returnedColumnTitle.setTitle(columnTitle.getTitle());
         columnTitleRepository.save(returnedColumnTitle);
     }
@@ -61,7 +61,7 @@ public class ColumnTitleController {
     public WebsocketPutResponse<ColumnTitle> editColumnTitleWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("columnId") Long columnId, ColumnTitle columnTitle, Authentication authentication) {
 
         if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            ColumnTitle savedColumnTitle = columnTitleRepository.findOne(columnId);
+            ColumnTitle savedColumnTitle = columnTitleRepository.findById(columnId).orElseThrow();
             savedColumnTitle.setTitle(columnTitle.getTitle());
             columnTitleRepository.save(savedColumnTitle);
             return new WebsocketPutResponse<>(savedColumnTitle);

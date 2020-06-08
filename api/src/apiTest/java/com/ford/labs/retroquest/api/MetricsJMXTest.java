@@ -74,7 +74,7 @@ public class MetricsJMXTest {
 
     @Test
     public void should_return_average_of_all_feedback_ratings() throws Exception {
-        feedbackRepository.save(Arrays.asList(
+        feedbackRepository.saveAll(Arrays.asList(
                 Feedback.builder().stars(5).build(),
                 Feedback.builder().stars(1).build()
         ));
@@ -85,7 +85,7 @@ public class MetricsJMXTest {
 
     @Test
     public void _should_return_average_of_all_feedback_ratings_ignoring_zeros() throws Exception {
-        feedbackRepository.save(Arrays.asList(
+        feedbackRepository.saveAll(Arrays.asList(
                 Feedback.builder().stars(5).build(),
                 Feedback.builder().stars(2).build(),
                 Feedback.builder().stars(0).build()

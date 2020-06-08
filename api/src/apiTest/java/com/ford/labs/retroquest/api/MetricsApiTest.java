@@ -106,7 +106,7 @@ public class MetricsApiTest extends ApiTest {
         Feedback feedback2 = new Feedback();
         feedback2.setStars(2);
         feedback2.setDateCreated(LocalDateTime.now());
-        feedbackRepository.save(asList(feedback1, feedback2));
+        feedbackRepository.saveAll(asList(feedback1, feedback2));
 
 
         MvcResult result = mockMvc.perform(get("/api/admin/metrics/feedback/average")
@@ -126,7 +126,7 @@ public class MetricsApiTest extends ApiTest {
         Feedback feedback2 = new Feedback();
         feedback2.setStars(0);
         feedback2.setDateCreated(LocalDateTime.now());
-        feedbackRepository.save(asList(feedback1, feedback2));
+        feedbackRepository.saveAll(asList(feedback1, feedback2));
 
         MvcResult result = mockMvc.perform(get("/api/admin/metrics/feedback/average")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -159,7 +159,7 @@ public class MetricsApiTest extends ApiTest {
         Feedback feedback2 = new Feedback();
         feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
 
-        feedbackRepository.save(asList(feedback1, feedback2));
+        feedbackRepository.saveAll(asList(feedback1, feedback2));
 
         mockMvc.perform(get("/api/admin/metrics/feedback/count?start=2018-02-02")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -176,7 +176,7 @@ public class MetricsApiTest extends ApiTest {
         Feedback feedback2 = new Feedback();
         feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
 
-        feedbackRepository.save(asList(feedback1, feedback2));
+        feedbackRepository.saveAll(asList(feedback1, feedback2));
 
         mockMvc.perform(get("/api/admin/metrics/feedback/count?end=2018-02-02")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -195,7 +195,7 @@ public class MetricsApiTest extends ApiTest {
         Feedback feedback3 = new Feedback();
         feedback3.setDateCreated(LocalDateTime.of(2018, 12, 25, 1, 1));
 
-        feedbackRepository.save(asList(feedback1, feedback2, feedback3));
+        feedbackRepository.saveAll(asList(feedback1, feedback2, feedback3));
 
         mockMvc.perform(get("/api/admin/metrics/feedback/count?start=2018-05-01&end=2018-12-01")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -217,7 +217,7 @@ public class MetricsApiTest extends ApiTest {
         feedback3.setDateCreated(LocalDateTime.of(2018, 12, 25, 1, 1));
         feedback3.setStars(1);
 
-        feedbackRepository.save(asList(feedback1, feedback2, feedback3));
+        feedbackRepository.saveAll(asList(feedback1, feedback2, feedback3));
 
         mockMvc.perform(get("/api/admin/metrics/feedback/average?start=2018-05-01&end=2018-12-01")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -236,7 +236,7 @@ public class MetricsApiTest extends ApiTest {
         feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
         feedback2.setStars(3);
 
-        feedbackRepository.save(asList(feedback1, feedback2));
+        feedbackRepository.saveAll(asList(feedback1, feedback2));
 
         mockMvc.perform(get("/api/admin/metrics/feedback/average?start=2018-02-02")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -255,7 +255,7 @@ public class MetricsApiTest extends ApiTest {
         feedback2.setStars(1);
         feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
 
-        feedbackRepository.save(asList(feedback1, feedback2));
+        feedbackRepository.saveAll(asList(feedback1, feedback2));
 
         mockMvc.perform(get("/api/admin/metrics/feedback/average?end=2018-02-02")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -273,7 +273,7 @@ public class MetricsApiTest extends ApiTest {
         Team team2 = new Team();
         team2.setUri("team" + (LocalDate.now().toEpochDay() + 1));
         team2.setDateCreated(LocalDate.of(2018, 4, 4));
-        teamRepository.save(asList(team1, team2));
+        teamRepository.saveAll(asList(team1, team2));
 
         mockMvc.perform(get("/api/admin/metrics/team/count?start=2018-03-03")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -290,7 +290,7 @@ public class MetricsApiTest extends ApiTest {
         Team team2 = new Team();
         team2.setUri("teamLoginOnlyStartDate2");
         team2.setLastLoginDate(LocalDate.of(2018, 3, 3));
-        teamRepository.save(asList(team1, team2));
+        teamRepository.saveAll(asList(team1, team2));
 
         mockMvc.perform(get("/api/admin/metrics/team/logins?start=2018-02-02")
                 .header("Authorization", getBasicAuthToken()))
@@ -306,7 +306,7 @@ public class MetricsApiTest extends ApiTest {
         Team team2 = new Team();
         team2.setUri("teamLoginsOnlyEndDate2");
         team2.setLastLoginDate(LocalDate.of(2018, 3, 3));
-        teamRepository.save(asList(team1, team2));
+        teamRepository.saveAll(asList(team1, team2));
 
         mockMvc.perform(get("/api/admin/metrics/team/logins?end=2018-02-02")
                 .header("Authorization", getBasicAuthToken()))
@@ -328,7 +328,7 @@ public class MetricsApiTest extends ApiTest {
         team3.setUri("teamLoginStartAndEndDate3");
         team3.setName("teamLoginStartAndEndDate3");
         team3.setLastLoginDate(LocalDate.of(2018, 5, 5));
-        teamRepository.save(asList(team1, team2, team3));
+        teamRepository.saveAll(asList(team1, team2, team3));
 
         mockMvc.perform(get("/api/admin/metrics/team/logins?start=2018-02-02&end=2018-04-04")
                 .header("Authorization", getBasicAuthToken()))

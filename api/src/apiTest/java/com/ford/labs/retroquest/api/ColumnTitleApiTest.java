@@ -67,7 +67,7 @@ public class ColumnTitleApiTest extends ApiTest {
 
     @Test
     public void should_get_list_of_columns() throws Exception {
-        columnTitleRepository.save(Arrays.asList(
+        columnTitleRepository.saveAll(Arrays.asList(
                 ColumnTitle.builder().teamId("BeachBums").title("one").build(),
                 ColumnTitle.builder().teamId("BeachBums").title("two").build(),
                 ColumnTitle.builder().teamId("BeachBums").title("three").build()

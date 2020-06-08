@@ -60,7 +60,7 @@ public class TeamApiTest extends ApiTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        Team team = teamRepository.findOne(sentCreateTeamRequest.getName().toLowerCase());
+        Team team = teamRepository.findById(sentCreateTeamRequest.getName().toLowerCase()).orElseThrow();
 
         assertThat(team.getName()).isEqualTo(teamId);
         assertThat(team.getUri()).isEqualTo(teamId.toLowerCase());

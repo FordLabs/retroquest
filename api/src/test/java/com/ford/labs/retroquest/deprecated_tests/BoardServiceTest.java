@@ -66,10 +66,10 @@ public class BoardServiceTest {
 
         boardService.pageSize = 2;
 
-        final PageRequest pageRequest = new PageRequest(
+        final PageRequest pageRequest = PageRequest.of(
                 0,
                 boardService.pageSize,
-                new Sort(Sort.Direction.DESC, "dateCreated")
+                Sort.by(Sort.Order.desc("dateCreated"))
         );
 
 
@@ -87,10 +87,10 @@ public class BoardServiceTest {
 
         boardService.pageSize = 5;
 
-        final PageRequest pageRequest = new PageRequest(
+        final PageRequest pageRequest = PageRequest.of(
                 0,
                 boardService.pageSize,
-                new Sort(Sort.Direction.DESC, "dateCreated")
+                Sort.by(Sort.Order.desc("dateCreated"))
         );
 
         boardService.getBoardsForTeamId("team1", 0);

@@ -106,7 +106,7 @@ public class ActionItemApiTest extends ApiTest {
         StompSession session = getAuthorizedSession();
         subscribe(session, BASE_SUB_URL);
 
-        List<ActionItem> savedActionItems = actionItemRepository.save(Arrays.asList(
+        List<ActionItem> savedActionItems = actionItemRepository.saveAll(Arrays.asList(
                 ActionItem.builder()
                         .teamId(teamId)
                         .task("do the thing")
@@ -143,7 +143,7 @@ public class ActionItemApiTest extends ApiTest {
                 .teamId("beach-bums2")
                 .build();
 
-        actionItemRepository.save(Arrays.asList(actionItem1, actionItem2));
+        actionItemRepository.saveAll(Arrays.asList(actionItem1, actionItem2));
 
         mockMvc.perform(get("/api/team/beach-bums2/action-items")
                 .header("Authorization", "Bearer " + jwt))
@@ -205,7 +205,7 @@ public class ActionItemApiTest extends ApiTest {
 
         ActionItem actionItem3 = ActionItem.builder().teamId(teamId).build();
 
-        actionItemRepository.save(Arrays.asList(actionItem1, actionItem2, actionItem3));
+        actionItemRepository.saveAll(Arrays.asList(actionItem1, actionItem2, actionItem3));
 
         mockMvc.perform(delete("/api/team/" + teamId + "/action-item/" + actionItem1.getId())
                 .header("Authorization", getBearerAuthToken()))

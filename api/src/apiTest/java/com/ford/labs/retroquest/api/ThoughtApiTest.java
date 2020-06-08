@@ -52,7 +52,7 @@ public class ThoughtApiTest extends ApiTest {
         StompSession session = getAuthorizedSession();
         subscribe(session, BASE_SUB_URL);
 
-        thoughtRepository.save(Arrays.asList(
+        thoughtRepository.saveAll(Arrays.asList(
                 Thought.builder().teamId(teamId).message("message").build(),
                 Thought.builder().teamId("team 2").message("message").build()
         ));
@@ -99,7 +99,7 @@ public class ThoughtApiTest extends ApiTest {
 
         Thought responseThought = takeObjectInSocket(Thought.class);
 
-        Thought updatedThought = thoughtRepository.findOne(savedThought.getId());
+        Thought updatedThought = thoughtRepository.findById(savedThought.getId()).orElseThrow();
 
         assertThat(responseThought).isEqualToComparingFieldByField(responseThought);
 
@@ -122,7 +122,7 @@ public class ThoughtApiTest extends ApiTest {
 
         Thought responseThought = takeObjectInSocket(Thought.class);
 
-        Thought updatedThought = thoughtRepository.findOne(savedThought.getId());
+        Thought updatedThought = thoughtRepository.findById(savedThought.getId()).orElseThrow();
 
         assertThat(updatedThought).isEqualToComparingFieldByField(savedThought);
         assertThat(responseThought).isNull();
@@ -143,7 +143,7 @@ public class ThoughtApiTest extends ApiTest {
 
         Thought responseThought = takeObjectInSocket(Thought.class);
 
-        Thought savedThought = thoughtRepository.findOne(responseThought.getId());
+        Thought savedThought = thoughtRepository.findById(responseThought.getId()).orElseThrow();
 
         assertThat(savedThought).isEqualToComparingFieldByField(responseThought);
     }
@@ -166,7 +166,7 @@ public class ThoughtApiTest extends ApiTest {
 
         Thought responseThought = takeObjectInSocket(Thought.class);
 
-        Thought savedThought = thoughtRepository.findOne(responseThought.getId());
+        Thought savedThought = thoughtRepository.findById(responseThought.getId()).orElseThrow();
 
         assertThat(savedThought.getColumnTitle()).isEqualTo(savedColumnTitle);
     }
@@ -196,7 +196,7 @@ public class ThoughtApiTest extends ApiTest {
                 Thought.builder().message("message 2").teamId("team 2").build()
         );
 
-        thoughtRepository.save(savedThoughts);
+        thoughtRepository.saveAll(savedThoughts);
 
         MvcResult result = mockMvc.perform(get(BASE_GET_URL + "/thoughts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -216,7 +216,7 @@ public class ThoughtApiTest extends ApiTest {
                 Thought.builder().message("message 1").teamId(teamId).build()
         );
 
-        thoughtRepository.save(savedThoughts);
+        thoughtRepository.saveAll(savedThoughts);
 
         mockMvc.perform(get(BASE_GET_URL + "/thoughts")
                 .contentType(MediaType.APPLICATION_JSON)

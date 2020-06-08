@@ -11,10 +11,11 @@ buildscript {
 plugins {
     id 'java'
     id 'idea'
-    id 'org.springframework.boot' version '1.5.22.RELEASE'
+    id 'org.springframework.boot' version '2.2.2.RELEASE'
     id 'com.github.pivotalservices.cf-app' version '2.3.0-rc.4'
     id 'org.unbroken-dome.test-sets' version '3.0.1'
     id 'com.avast.gradle.docker-compose' version '0.7.1'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 }
 
 apply plugin: "com.google.cloud.tools.appengine-appyaml"
@@ -30,11 +31,11 @@ repositories {
 }
 
 dependencies {
-    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
-    compile 'org.springframework.boot:spring-boot-devtools'
-    compile 'org.springframework.boot:spring-boot-starter-web'
-    compile 'org.springframework.boot:spring-boot-starter-security'
-    compile 'org.springframework.boot:spring-boot-starter-websocket'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa:2.2.2.RELEASE'
+    compile 'org.springframework.boot:spring-boot-devtools:2.2.2.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-web:2.2.2.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-security:2.2.2.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-websocket:2.2.2.RELEASE'
     compile 'io.jsonwebtoken:jjwt:0.9.0'
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     compile 'org.apache.commons:commons-csv:1.5'
@@ -51,7 +52,7 @@ dependencies {
 }
 
 bootRun {
-    addResources = true
+    sourceResources sourceSets.main
 }
 
 testSets {
@@ -66,21 +67,19 @@ dockerApiTest.finalizedBy apiTest
 task runAllTests(dependsOn: [test, apiTest]) {
 }
 
-task withH2(type: org.springframework.boot.gradle.run.BootRunTask, dependsOn: 'build') {
-    doFirst() {
-        main = project.mainClassName
-        classpath = sourceSets.main.runtimeClasspath
+task withH2 {
+    bootRun.configure {
         systemProperty 'spring.profiles.active', 'h2'
     }
 }
+withH2.finalizedBy bootRun
 
-task withDockerDb(type: org.springframework.boot.gradle.run.BootRunTask, dependsOn: 'build') {
-    doFirst() {
-        main = project.mainClassName
-        classpath = sourceSets.main.runtimeClasspath
+task withDockerDb {
+    bootRun.configure {
         systemProperty 'spring.profiles.active', 'dockerdb'
     }
 }
+withDockerDb.finalizedBy bootRun
 
 jar {
     archiveName = "${archivesBaseName}.jar"
