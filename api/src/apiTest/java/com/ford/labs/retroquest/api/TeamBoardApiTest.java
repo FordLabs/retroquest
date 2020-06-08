@@ -252,7 +252,7 @@ public class TeamBoardApiTest extends ApiTest {
 
         assertThat(userTeamMappingRepository.count()).isEqualTo(2);
 
-        User savedUser = userRepository.findUserByName(validNewUserRequest.getName());
+        User savedUser = userRepository.findByName(validNewUserRequest.getName()).orElseThrow();
         assertThat(savedUser.getTeams()).hasSize(2);
     }
 

@@ -2,6 +2,7 @@ package com.ford.labs.retroquest.api.setup;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.ford.labs.retroquest.contributors.ContributorController;
 import com.ford.labs.retroquest.security.JwtBuilder;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -11,8 +12,10 @@ import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -50,6 +53,9 @@ public class ApiTest {
 
     @Autowired
     public JwtBuilder jwtBuilder;
+
+    @MockBean
+    public ContributorController contributorController;
 
     @Value("${com.retroquest.adminUsername}")
     private String adminUsername;
@@ -143,7 +149,7 @@ public class ApiTest {
         String obj = blockingQueue.poll(1, SECONDS);
         try {
             return objectMapper.treeToValue(objectMapper.readValue(obj, ObjectNode.class).get("payload"), clazz);
-        } catch (NullPointerException exp) {
+        } catch (NullPointerException | IllegalArgumentException exp) {
             return null;
         }
     }
