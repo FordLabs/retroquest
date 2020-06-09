@@ -1,16 +1,18 @@
 package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.api.setup.ApiTest;
-import com.ford.labs.retroquest.security.JwtBuilder;
 import com.ford.labs.retroquest.team.*;
-import org.junit.After;
 import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.client.RestTemplate;
+
+import javax.transaction.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -22,6 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Transactional
 public class TeamApiTest extends ApiTest {
 
     @Autowired
@@ -38,7 +41,7 @@ public class TeamApiTest extends ApiTest {
 
     private static final String VALID_PASSWORD = "Passw0rd";
 
-    @After
+    @AfterEach
     public void teardown() {
         teamRepository.deleteAll();
         assertThat(teamRepository.count()).isEqualTo(0);
@@ -377,6 +380,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
+    @DirtiesContext
     public void shouldAllowCaptchaRequestWithInvalidToken() throws Exception {
         installSuccessCaptcha();
 

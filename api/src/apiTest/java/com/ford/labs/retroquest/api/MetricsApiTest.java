@@ -6,8 +6,8 @@ import com.ford.labs.retroquest.feedback.FeedbackRepository;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import org.hamcrest.Matchers;
-import org.junit.After;
 import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
@@ -31,7 +31,7 @@ public class MetricsApiTest extends ApiTest {
     @Autowired
     private FeedbackRepository feedbackRepository;
 
-    @After
+    @AfterEach
     public void teardown() {
         teamRepository.deleteAll();
         feedbackRepository.deleteAll();
@@ -299,7 +299,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    public void whenGettingTeamLogins_providingOnlyAnEndDate_getsAllFromTheBegginingOfTimeToThatDate() throws Exception {
+    public void whenGettingTeamLogins_providingOnlyAnEndDate_getsAllFromTheBeginningOfTimeToThatDate() throws Exception {
         Team team1 = new Team();
         team1.setUri("teamLoginsOnlyEndDate1");
         team1.setLastLoginDate(LocalDate.of(2018, 1, 1));

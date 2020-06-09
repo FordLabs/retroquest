@@ -23,13 +23,10 @@ public class ApiAuthorization {
 
     private boolean teamBelongsToUser(Authentication authentication, String teamId) {
         Optional<User> foundUser = userRepository.findByName(authentication.getPrincipal().toString());
-        if (foundUser.isPresent()) {
-            return foundUser.get().getTeams()
-                    .stream()
-                    .anyMatch(team -> team.getId().equals(teamId));
-        }
+        return foundUser.map(user -> user.getTeams()
+                .stream()
+                .anyMatch(team -> team.getId().equals(teamId))).orElse(false);
 
-        return false;
     }
 
 }
