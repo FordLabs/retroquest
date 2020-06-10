@@ -22,7 +22,7 @@ import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.team.CsvFile;
 import com.ford.labs.retroquest.thought.Thought;
 import org.apache.commons.io.FileUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;

@@ -6,9 +6,9 @@ import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
 import org.assertj.core.api.Assertions;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -34,14 +34,14 @@ public class ThoughtApiTest extends ApiTest {
     private String BASE_ENDPOINT_URL;
     private String BASE_GET_URL;
 
-    @Before
+    @BeforeEach
     public void setup() {
         BASE_SUB_URL = "/topic/" + teamId + "/thoughts";
         BASE_ENDPOINT_URL = "/app/" + teamId + "/thought";
         BASE_GET_URL = "/api/team/" + teamId;
     }
 
-    @After
+    @AfterEach
     public void teardown() {
         thoughtRepository.deleteAll();
         Assertions.assertThat(thoughtRepository.count()).isEqualTo(0);

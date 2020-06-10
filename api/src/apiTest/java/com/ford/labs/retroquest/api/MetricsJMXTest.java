@@ -21,12 +21,10 @@ import com.ford.labs.retroquest.feedback.Feedback;
 import com.ford.labs.retroquest.feedback.FeedbackRepository;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
@@ -34,7 +32,6 @@ import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(properties = "spring.jmx.enabled=true")
 public class MetricsJMXTest {
 
@@ -47,7 +44,7 @@ public class MetricsJMXTest {
     @Autowired
     private FeedbackRepository feedbackRepository;
 
-    @After
+    @AfterEach
     public void teardown() {
         teamRepository.deleteAll();
         feedbackRepository.deleteAll();

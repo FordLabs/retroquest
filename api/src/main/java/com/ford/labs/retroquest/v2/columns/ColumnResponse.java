@@ -17,7 +17,6 @@
 
 package com.ford.labs.retroquest.v2.columns;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

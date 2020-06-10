@@ -4,10 +4,10 @@ import com.ford.labs.retroquest.team.CaptchaService;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import com.ford.labs.retroquest.validation.CaptchaProperties;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
@@ -16,7 +16,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CaptchaServiceTest {
 
     @Mock

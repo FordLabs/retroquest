@@ -22,8 +22,8 @@ import com.ford.labs.retroquest.apiAuthorization.ApiAuthorization;
 import com.ford.labs.retroquest.v2.columns.ColumnCombinerResponse;
 import com.ford.labs.retroquest.v2.columns.ColumnCombinerService;
 import com.ford.labs.retroquest.v2.columns.ColumnResponse;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -44,7 +44,7 @@ public class ColumnApiTest extends ApiTest {
 
     private ColumnCombinerResponse expectedBody;
 
-    @Before
+    @BeforeEach
     public void setup() {
         expectedBody = ColumnCombinerResponse.builder()
                 .columns(

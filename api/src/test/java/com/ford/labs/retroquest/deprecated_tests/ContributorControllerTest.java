@@ -3,8 +3,8 @@ package com.ford.labs.retroquest.deprecated_tests;
 import com.ford.labs.retroquest.contributors.Contributor;
 import com.ford.labs.retroquest.contributors.ContributorController;
 import com.ford.labs.retroquest.contributors.GithubContributor;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,7 +21,7 @@ public class ContributorControllerTest {
 
     private long MILLISECONDS_IN_DAY = 86400000;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         restTemplate = Mockito.mock(RestTemplate.class);
         subject = new ContributorController(restTemplate);

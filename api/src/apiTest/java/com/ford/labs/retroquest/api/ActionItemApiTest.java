@@ -3,9 +3,9 @@ package com.ford.labs.retroquest.api;
 import com.ford.labs.retroquest.actionitem.ActionItem;
 import com.ford.labs.retroquest.actionitem.ActionItemRepository;
 import com.ford.labs.retroquest.api.setup.ApiTest;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -27,13 +27,13 @@ public class ActionItemApiTest extends ApiTest {
     private String BASE_SUB_URL;
     private String BASE_ENDPOINT_URL;
 
-    @Before
+    @BeforeEach
     public void setup() {
         BASE_SUB_URL = "/topic/" + teamId + "/action-items";
         BASE_ENDPOINT_URL = "/app/" + teamId + "/action-item";
     }
 
-    @After
+    @AfterEach
     public void teardown() {
         actionItemRepository.deleteAll();
 

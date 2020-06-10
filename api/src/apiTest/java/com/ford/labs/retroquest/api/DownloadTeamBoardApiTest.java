@@ -9,9 +9,9 @@ import com.ford.labs.retroquest.team.LoginRequest;
 import com.ford.labs.retroquest.team.TeamRepository;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
@@ -43,12 +43,12 @@ public class DownloadTeamBoardApiTest extends ApiTest {
 
     private LoginRequest loginRequest;
 
-    @Before
+    @BeforeEach
     public void setup() {
         loginRequest = LoginRequest.builder().name(teamId).password("password").build();
     }
 
-    @After
+    @AfterEach
     public void teardown() {
         teamRepository.deleteAll();
         actionItemRepository.deleteAll();

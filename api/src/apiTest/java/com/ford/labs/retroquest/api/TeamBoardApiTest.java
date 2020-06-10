@@ -5,9 +5,9 @@ import com.ford.labs.retroquest.team.CreateTeamRequest;
 import com.ford.labs.retroquest.team.TeamRepository;
 import com.ford.labs.retroquest.team.TeamService;
 import com.ford.labs.retroquest.users.*;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
@@ -40,7 +40,7 @@ public class TeamBoardApiTest extends ApiTest {
 
     private String jwt;
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
         teamService.createNewTeam(CreateTeamRequest.builder()
                 .name(validNewTeamRequest.getName())
@@ -63,7 +63,7 @@ public class TeamBoardApiTest extends ApiTest {
         jwt = result.getResponse().getContentAsString();
     }
 
-    @After
+    @AfterEach
     public void teardown() {
         userRepository.deleteAll();
         teamRepository.deleteAll();
