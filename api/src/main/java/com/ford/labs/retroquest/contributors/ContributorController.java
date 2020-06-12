@@ -50,8 +50,7 @@ public class ContributorController {
     public void cacheContributors() {
         GithubContributor[] response = this.restTemplate.getForObject(
                 "https://api.github.com/repos/FordLabs/retroquest/contributors",
-                GithubContributor[].class,
-                Collections.emptyMap()
+                GithubContributor[].class
         );
 
         List<Contributor> newContributors = Arrays.stream(response)
@@ -64,7 +63,7 @@ public class ContributorController {
     }
 
     private byte[] getAvatar(String avatarUrl) {
-        return this.restTemplate.getForObject(avatarUrl, byte[].class, Collections.emptyMap());
+        return this.restTemplate.getForObject(avatarUrl, byte[].class);
     }
 
     public List<Contributor> getCachedContributors() {

@@ -2,6 +2,7 @@ package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.api.setup.ApiTest;
 import com.ford.labs.retroquest.team.CreateTeamRequest;
+import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import com.ford.labs.retroquest.team.TeamService;
 import com.ford.labs.retroquest.users.*;
@@ -33,10 +34,10 @@ public class TeamBoardApiTest extends ApiTest {
     @Autowired
     private UserTeamMappingRepository userTeamMappingRepository;
 
-    private NewUserRequest validNewUserRequest = NewUserRequest.builder().name("jake").password("paul").build();
+    private final NewUserRequest validNewUserRequest = NewUserRequest.builder().name("jake").password("paul").build();
 
-    private ExistingTeamRequest validNewTeamRequest = ExistingTeamRequest.builder().name("team1").password("pass123").build();
-    private ExistingTeamRequest validSecondTeamRequest = ExistingTeamRequest.builder().name("team2").password("pass123").build();
+    private final ExistingTeamRequest validNewTeamRequest = ExistingTeamRequest.builder().name("team1").password("pass123").build();
+    private final ExistingTeamRequest validSecondTeamRequest = ExistingTeamRequest.builder().name("team2").password("pass123").build();
 
     private String jwt;
 
@@ -279,7 +280,10 @@ public class TeamBoardApiTest extends ApiTest {
                 .andExpect(status().is(200))
                 .andReturn();
 
-        Set teams = objectMapper.readValue(result.getResponse().getContentAsByteArray(), Set.class);
+        Set<Team> teams = objectMapper.readValue(
+                result.getResponse().getContentAsByteArray(),
+                objectMapper.getTypeFactory().constructCollectionType(Set.class, Team.class)
+        );
 
         assertThat(teams).hasSize(1);
     }
