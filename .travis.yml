@@ -34,7 +34,7 @@ install:
     fi
   - |
     if [ "${TEST_SUITE}" == "api" ]; then
-      ./gradlew assemble
+      gradle assemble
     fi
 script:
   - |
@@ -43,5 +43,5 @@ script:
     fi
   - |
     if [ "${TEST_SUITE}" == "api" ]; then
-      SPRING_PROFILES_ACTIVE=docker ./gradlew check dockerApiTest
+      SPRING_PROFILES_ACTIVE=docker gradle check dockerApiTest
     fi
