@@ -43,7 +43,7 @@ public class ThoughtApiTest extends ApiTest {
 
     @AfterEach
     public void teardown() {
-        thoughtRepository.deleteAll();
+        thoughtRepository.deleteAllInBatch();
         Assertions.assertThat(thoughtRepository.count()).isEqualTo(0);
     }
 

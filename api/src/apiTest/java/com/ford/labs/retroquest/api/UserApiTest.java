@@ -31,7 +31,7 @@ public class UserApiTest extends ApiTest {
 
     @AfterEach
     public void teardown() {
-        userRepository.deleteAll();
+        userRepository.deleteAllInBatch();
         assertThat(userRepository.count()).isEqualTo(0);
     }
 

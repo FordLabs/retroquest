@@ -35,7 +35,7 @@ public class ActionItemApiTest extends ApiTest {
 
     @AfterEach
     public void teardown() {
-        actionItemRepository.deleteAll();
+        actionItemRepository.deleteAllInBatch();
 
         assertThat(actionItemRepository.count()).isEqualTo(0);
     }

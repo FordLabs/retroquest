@@ -50,10 +50,10 @@ public class DownloadTeamBoardApiTest extends ApiTest {
 
     @AfterEach
     public void teardown() {
-        teamRepository.deleteAll();
-        actionItemRepository.deleteAll();
-        thoughtRepository.deleteAll();
-        columnTitleRepository.deleteAll();
+        teamRepository.deleteAllInBatch();
+        actionItemRepository.deleteAllInBatch();
+        thoughtRepository.deleteAllInBatch();
+        columnTitleRepository.deleteAllInBatch();
 
         assertThat(teamRepository.count()).isEqualTo(0);
         assertThat(actionItemRepository.count()).isEqualTo(0);

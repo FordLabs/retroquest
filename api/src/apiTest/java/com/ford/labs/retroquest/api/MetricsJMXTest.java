@@ -46,8 +46,8 @@ public class MetricsJMXTest {
 
     @AfterEach
     public void teardown() {
-        teamRepository.deleteAll();
-        feedbackRepository.deleteAll();
+        teamRepository.deleteAllInBatch();
+        feedbackRepository.deleteAllInBatch();
 
         assertThat(teamRepository.count()).isEqualTo(0);
         assertThat(feedbackRepository.count()).isEqualTo(0);

@@ -23,7 +23,7 @@ public class BoardApiTest extends ApiTest {
 
     @AfterEach
     public void teardown() {
-        boardRepository.deleteAll();
+        boardRepository.deleteAllInBatch();
 
         assertThat(boardRepository.count()).isEqualTo(0);
     }

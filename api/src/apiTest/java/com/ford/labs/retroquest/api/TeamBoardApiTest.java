@@ -66,9 +66,9 @@ public class TeamBoardApiTest extends ApiTest {
 
     @AfterEach
     public void teardown() {
-        userRepository.deleteAll();
-        teamRepository.deleteAll();
-        userTeamMappingRepository.deleteAll();
+        userRepository.deleteAllInBatch();
+        teamRepository.deleteAllInBatch();
+        userTeamMappingRepository.deleteAllInBatch();
 
         assertThat(userRepository.count()).isEqualTo(0);
         assertThat(teamRepository.count()).isEqualTo(0);

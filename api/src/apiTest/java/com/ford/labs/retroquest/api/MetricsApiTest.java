@@ -26,7 +26,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Transactional
 public class MetricsApiTest extends ApiTest {
 
     @Autowired
@@ -37,8 +36,8 @@ public class MetricsApiTest extends ApiTest {
 
     @AfterEach
     public void teardown() {
-        teamRepository.deleteAll();
-        feedbackRepository.deleteAll();
+        teamRepository.deleteAllInBatch();
+        feedbackRepository.deleteAllInBatch();
     }
 
     @Test

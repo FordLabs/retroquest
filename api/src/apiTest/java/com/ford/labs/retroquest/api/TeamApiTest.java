@@ -24,7 +24,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Transactional
 public class TeamApiTest extends ApiTest {
 
     @Autowired
@@ -43,7 +42,7 @@ public class TeamApiTest extends ApiTest {
 
     @AfterEach
     public void teardown() {
-        teamRepository.deleteAll();
+        teamRepository.deleteAllInBatch();
     }
 
     @Test
@@ -184,9 +183,9 @@ public class TeamApiTest extends ApiTest {
                 .content(objectMapper.writeValueAsBytes(updatePasswordRequest)))
                 .andExpect(status().isOk());
 
-        assertThat(teamRepository.count()).isEqualTo(1);
+        Team team = teamRepository.findById(updatePasswordRequest.getTeamId().toLowerCase()).orElseThrow();
         assertThat(passwordEncoder.matches(updatePasswordRequest.getNewPassword(),
-                teamRepository.findAll().get(0).getPassword())).isTrue();
+                team.getPassword())).isTrue();
     }
 
     @Test
@@ -379,7 +378,6 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    @DirtiesContext
     public void shouldAllowCaptchaRequestWithInvalidToken() throws Exception {
         installSuccessCaptcha();
 

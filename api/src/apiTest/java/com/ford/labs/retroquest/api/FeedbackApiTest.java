@@ -24,7 +24,7 @@ public class FeedbackApiTest extends ApiTest {
 
     @AfterEach
     public void tearDown() {
-        feedbackRepository.deleteAll();
+        feedbackRepository.deleteAllInBatch();
         assertThat(feedbackRepository.count()).isEqualTo(0);
     }
 

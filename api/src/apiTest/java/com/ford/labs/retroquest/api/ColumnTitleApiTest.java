@@ -34,7 +34,7 @@ public class ColumnTitleApiTest extends ApiTest {
 
     @AfterEach
     public void teardown() {
-        columnTitleRepository.deleteAll();
+        columnTitleRepository.deleteAllInBatch();
         assertThat(columnTitleRepository.count()).isEqualTo(0);
     }
 
