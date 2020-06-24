@@ -18,6 +18,7 @@
 package com.ford.labs.retroquest.feedback;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ford.labs.retroquest.converters.LocalDateTimeAttributeConverter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -46,4 +47,7 @@ public class Feedback {
     @JsonFormat(pattern = "MM/dd/yy hh:mm:ss.SSS")
     private LocalDateTime dateCreated;
 
+    @JsonFormat(pattern = "MM/dd/yy hh:mm:ss.SSS")
+    @Convert(converter = LocalDateTimeAttributeConverter.class)
+    private LocalDateTime dateCreated2;
 }

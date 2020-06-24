@@ -18,6 +18,7 @@
 package com.ford.labs.retroquest.board;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ford.labs.retroquest.converters.LocalDateAttributeConverter;
 import com.ford.labs.retroquest.thought.Thought;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,6 +44,10 @@ public class Board {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-dd")
     private LocalDate dateCreated;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-dd")
+    @Convert(converter = LocalDateAttributeConverter.class)
+    private LocalDate dateCreated2;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "boardId", orphanRemoval = true)
     private List<Thought> thoughts;

@@ -76,6 +76,7 @@ public class TeamServiceTest {
 
         when(passwordEncoder.encode("password")).thenReturn("encryptedPassword");
         when(this.teamRepository.save(any(Team.class))).then(returnsFirstArg());
+        when(this.teamRepository.findTeamByUri("a-name")).thenReturn(Optional.empty());
 
         Team actualTeam = teamService.createNewTeam(requestedTeam);
 
@@ -212,6 +213,7 @@ public class TeamServiceTest {
     @Test
     public void creatingTeamAlsoCreatesThreeColumnTitles() {
         when(this.teamRepository.save(any(Team.class))).then(returnsFirstArg());
+        when(this.teamRepository.findTeamByUri("beach-bums")).thenReturn(Optional.empty());
 
         CreateTeamRequest requestedTeam = new CreateTeamRequest("beach-bums", "password", "captcha");
         teamService.createNewTeam(requestedTeam);
