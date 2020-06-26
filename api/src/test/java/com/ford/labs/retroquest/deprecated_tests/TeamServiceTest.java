@@ -59,17 +59,6 @@ public class TeamServiceTest {
 
     @Test
     public void createNewBoard_WithValidInformation_ReturnsSavedTeamUri() {
-        Team expectedSaveEntity = new Team();
-        expectedSaveEntity.setUri("a-name");
-        expectedSaveEntity.setName("A name");
-        expectedSaveEntity.setPassword("encryptedPassword");
-
-        Team savedEntity = new Team();
-        savedEntity.setUri("a-name");
-        savedEntity.setName("A name");
-        savedEntity.setPassword("encryptedPassword");
-        savedEntity.setDateCreated(LocalDate.now());
-
         CreateTeamRequest requestedTeam = new CreateTeamRequest();
         requestedTeam.setName("A name");
         requestedTeam.setPassword("password");
@@ -82,7 +71,7 @@ public class TeamServiceTest {
 
         assertEquals("A name", actualTeam.getName());
         assertEquals("a-name", actualTeam.getUri());
-        assertTrue(actualTeam.getDateCreated() != null);
+        assertTrue(actualTeam.getDateCreated2() != null);
         assertEquals("encryptedPassword", actualTeam.getPassword());
     }
 
@@ -92,7 +81,7 @@ public class TeamServiceTest {
         savedTeam.setUri("a-name");
         savedTeam.setName("A name");
         savedTeam.setPassword("encryptedPassword");
-        savedTeam.setDateCreated(LocalDate.now());
+        savedTeam.setDateCreated2(LocalDate.now());
 
         UpdatePasswordRequest updatePasswordRequest = new UpdatePasswordRequest();
         updatePasswordRequest.setTeamId("a-name");
@@ -115,7 +104,7 @@ public class TeamServiceTest {
         savedTeam.setUri("a-name");
         savedTeam.setName("A name");
         savedTeam.setPassword("encryptedPassword");
-        savedTeam.setDateCreated(LocalDate.now());
+        savedTeam.setDateCreated2(LocalDate.now());
 
         UpdatePasswordRequest updatePasswordRequest = new UpdatePasswordRequest();
         updatePasswordRequest.setTeamId("a-name");
@@ -279,7 +268,7 @@ public class TeamServiceTest {
 
         teamService.login(loginRequest);
 
-        assertTrue(savedTeam.getLastLoginDate().isEqual(LocalDate.now()));
+        assertTrue(savedTeam.getLastLoginDate2().isEqual(LocalDate.now()));
         verify(teamRepository, times(2)).save(savedTeam);
     }
 }

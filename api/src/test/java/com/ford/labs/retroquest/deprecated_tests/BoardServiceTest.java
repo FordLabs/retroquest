@@ -54,13 +54,13 @@ public class BoardServiceTest {
     public void getBoardsForTeamId() {
         Board expectedBoard = Board.builder()
                 .teamId("team1")
-                .dateCreated(LocalDate.of(2012, 12, 12))
+                .dateCreated2(LocalDate.of(2012, 12, 12))
                 .id(1L)
                 .build();
 
         Board savedBoard = Board.builder()
                 .teamId("team1")
-                .dateCreated(LocalDate.of(2012, 12, 12))
+                .dateCreated2(LocalDate.of(2012, 12, 12))
                 .id(1L)
                 .build();
 
@@ -73,7 +73,7 @@ public class BoardServiceTest {
         );
 
 
-        when(boardRepository.findAllByTeamIdOrderByDateCreatedDesc("team1", pageRequest))
+        when(boardRepository.findAllByTeamIdOrderByDateCreated2Desc("team1", pageRequest))
                 .thenReturn(Collections.singletonList(savedBoard));
 
         List<Board> actualBoards = boardService.getBoardsForTeamId("team1", 0);
@@ -95,7 +95,7 @@ public class BoardServiceTest {
 
         boardService.getBoardsForTeamId("team1", 0);
 
-        verify(boardRepository).findAllByTeamIdOrderByDateCreatedDesc("team1", pageRequest);
+        verify(boardRepository).findAllByTeamIdOrderByDateCreated2Desc("team1", pageRequest);
     }
 
     @Test
@@ -108,7 +108,7 @@ public class BoardServiceTest {
         Board savedBoard = Board.builder()
                 .id(1L)
                 .teamId("team1")
-                .dateCreated(LocalDate.now())
+                .dateCreated2(LocalDate.now())
                 .thoughts(Arrays.asList(Thought.builder().message("hello").build()))
                 .build();
 

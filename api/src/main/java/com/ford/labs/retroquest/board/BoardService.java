@@ -45,7 +45,7 @@ public class BoardService {
 
 
     public List<Board> getBoardsForTeamId(String teamId, Integer pageIndex) {
-        return this.boardRepository.findAllByTeamIdOrderByDateCreatedDesc(teamId,
+        return this.boardRepository.findAllByTeamIdOrderByDateCreated2Desc(teamId,
                 new PageRequest(
                         pageIndex,
                         pageSize,
@@ -55,7 +55,9 @@ public class BoardService {
     }
 
     public Board saveBoard(Board board) {
-        board.setDateCreated(LocalDate.now());
+        LocalDate now = LocalDate.now();
+        board.setDateCreated(now);
+        board.setDateCreated2(now);
         board = this.boardRepository.save(board);
         for (Thought thought : board.getThoughts()) {
             thought.setBoardId(board.getId());

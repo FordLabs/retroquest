@@ -28,8 +28,8 @@ import java.util.Optional;
 public interface TeamRepository extends JpaRepository<Team, String> {
     Optional<Team> findTeamByName(String name);
     Optional<Team> findTeamByUri(String uri);
-    List<Team> findAllByLastLoginDateBetween(LocalDate start, LocalDate end);
+    List<Team> findAllByLastLoginDate2Between(LocalDate start, LocalDate end);
 
-    long countAllByDateCreatedAfterAndDateCreatedIsNotNull(LocalDate start);
-    long countAllByDateCreatedBetweenAndDateCreatedNotNull(LocalDate start, LocalDate end);
+    long countAllByDateCreated2AfterAndDateCreated2IsNotNull(LocalDate start);
+    long countAllByDateCreated2BetweenAndDateCreated2NotNull(LocalDate start, LocalDate end);
 }

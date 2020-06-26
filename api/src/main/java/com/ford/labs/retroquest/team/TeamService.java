@@ -126,7 +126,9 @@ public class TeamService {
             throw new PasswordInvalidException();
         }
 
-        savedTeam.setLastLoginDate(LocalDate.now());
+        LocalDate now = LocalDate.now();
+        savedTeam.setLastLoginDate(now);
+        savedTeam.setLastLoginDate2(now);
         teamRepository.save(savedTeam);
         updateFailedAttempts(savedTeam, 0);
         return savedTeam;
