@@ -45,7 +45,7 @@ public class MetricsApiTest extends ApiTest {
         Team team = new Team();
         String teamUri = "teamUri";
         team.setUri(teamUri);
-        team.setDateCreated2(LocalDate.now());
+        team.setDateCreated(LocalDate.now());
         teamRepository.save(team);
 
         MvcResult result = mockMvc.perform(get("/api/admin/metrics/team/count")
@@ -73,7 +73,7 @@ public class MetricsApiTest extends ApiTest {
     public void canGetFeedbackCount() throws Exception {
 
         Feedback feedback = new Feedback();
-        feedback.setDateCreated2(LocalDateTime.now());
+        feedback.setDateCreated(LocalDateTime.now());
         feedbackRepository.save(feedback);
 
         MvcResult result = mockMvc.perform(get("/api/admin/metrics/feedback/count")
@@ -102,10 +102,10 @@ public class MetricsApiTest extends ApiTest {
 
         Feedback feedback1 = new Feedback();
         feedback1.setStars(4);
-        feedback1.setDateCreated2(LocalDateTime.now());
+        feedback1.setDateCreated(LocalDateTime.now());
         Feedback feedback2 = new Feedback();
         feedback2.setStars(2);
-        feedback2.setDateCreated2(LocalDateTime.now());
+        feedback2.setDateCreated(LocalDateTime.now());
         feedbackRepository.save(asList(feedback1, feedback2));
 
 
@@ -122,10 +122,10 @@ public class MetricsApiTest extends ApiTest {
 
         Feedback feedback1 = new Feedback();
         feedback1.setStars(4);
-        feedback1.setDateCreated2(LocalDateTime.now());
+        feedback1.setDateCreated(LocalDateTime.now());
         Feedback feedback2 = new Feedback();
         feedback2.setStars(0);
-        feedback2.setDateCreated2(LocalDateTime.now());
+        feedback2.setDateCreated(LocalDateTime.now());
         feedbackRepository.save(asList(feedback1, feedback2));
 
         MvcResult result = mockMvc.perform(get("/api/admin/metrics/feedback/average")
@@ -155,9 +155,9 @@ public class MetricsApiTest extends ApiTest {
     public void whenGettingTheTotalNumberofReviews_providingOnlyAStartDate_getsAllFromThatDateUntilNow() throws Exception {
 
         Feedback feedback1 = new Feedback();
-        feedback1.setDateCreated2(LocalDateTime.of(2018, 1, 1, 1, 1));
+        feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         Feedback feedback2 = new Feedback();
-        feedback2.setDateCreated2(LocalDateTime.of(2018, 3, 3, 3, 3));
+        feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
 
         feedbackRepository.save(asList(feedback1, feedback2));
 
@@ -172,9 +172,9 @@ public class MetricsApiTest extends ApiTest {
     public void whenGettingTheTotalNumberofReviews_providingOnlyAnEndDate_getsAllFromNowToThatDate() throws Exception {
 
         Feedback feedback1 = new Feedback();
-        feedback1.setDateCreated2(LocalDateTime.of(2018, 1, 1, 1, 1));
+        feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         Feedback feedback2 = new Feedback();
-        feedback2.setDateCreated2(LocalDateTime.of(2018, 3, 3, 3, 3));
+        feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
 
         feedbackRepository.save(asList(feedback1, feedback2));
 
@@ -189,11 +189,11 @@ public class MetricsApiTest extends ApiTest {
     public void whenGettingTheTotalNumberofReviews_providingOnlyStartAndEndDate_getsAllBetweenThoseDates() throws Exception {
 
         Feedback feedback1 = new Feedback();
-        feedback1.setDateCreated2(LocalDateTime.of(2018, 4, 1, 1, 1));
+        feedback1.setDateCreated(LocalDateTime.of(2018, 4, 1, 1, 1));
         Feedback feedback2 = new Feedback();
-        feedback2.setDateCreated2(LocalDateTime.of(2018, 10, 31, 1, 1));
+        feedback2.setDateCreated(LocalDateTime.of(2018, 10, 31, 1, 1));
         Feedback feedback3 = new Feedback();
-        feedback3.setDateCreated2(LocalDateTime.of(2018, 12, 25, 1, 1));
+        feedback3.setDateCreated(LocalDateTime.of(2018, 12, 25, 1, 1));
 
         feedbackRepository.save(asList(feedback1, feedback2, feedback3));
 
@@ -208,13 +208,13 @@ public class MetricsApiTest extends ApiTest {
     public void whenGettingTheAverageRating_providingAStartAndEndDate_getsTheBetweenDates() throws Exception {
 
         Feedback feedback1 = new Feedback();
-        feedback1.setDateCreated2(LocalDateTime.of(2018, 4, 1, 1, 1));
+        feedback1.setDateCreated(LocalDateTime.of(2018, 4, 1, 1, 1));
         feedback1.setStars(1);
         Feedback feedback2 = new Feedback();
-        feedback2.setDateCreated2(LocalDateTime.of(2018, 10, 31, 1, 1));
+        feedback2.setDateCreated(LocalDateTime.of(2018, 10, 31, 1, 1));
         feedback2.setStars(2);
         Feedback feedback3 = new Feedback();
-        feedback3.setDateCreated2(LocalDateTime.of(2018, 12, 25, 1, 1));
+        feedback3.setDateCreated(LocalDateTime.of(2018, 12, 25, 1, 1));
         feedback3.setStars(1);
 
         feedbackRepository.save(asList(feedback1, feedback2, feedback3));
@@ -230,10 +230,10 @@ public class MetricsApiTest extends ApiTest {
     public void whenGettingTheAverageRating_providingOnlyAStartDate_getsAllFromThatDateUntilNow() throws Exception {
 
         Feedback feedback1 = new Feedback();
-        feedback1.setDateCreated2(LocalDateTime.of(2018, 1, 1, 1, 1));
+        feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         feedback1.setStars(1);
         Feedback feedback2 = new Feedback();
-        feedback2.setDateCreated2(LocalDateTime.of(2018, 3, 3, 3, 3));
+        feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
         feedback2.setStars(3);
 
         feedbackRepository.save(asList(feedback1, feedback2));
@@ -250,10 +250,10 @@ public class MetricsApiTest extends ApiTest {
 
         Feedback feedback1 = new Feedback();
         feedback1.setStars(3);
-        feedback1.setDateCreated2(LocalDateTime.of(2018, 1, 1, 1, 1));
+        feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         Feedback feedback2 = new Feedback();
         feedback2.setStars(1);
-        feedback2.setDateCreated2(LocalDateTime.of(2018, 3, 3, 3, 3));
+        feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
 
         feedbackRepository.save(asList(feedback1, feedback2));
 
@@ -269,10 +269,10 @@ public class MetricsApiTest extends ApiTest {
 
         Team team1 = new Team();
         team1.setUri("team" + LocalDate.now().toEpochDay());
-        team1.setDateCreated2(LocalDate.of(2018, 2, 2));
+        team1.setDateCreated(LocalDate.of(2018, 2, 2));
         Team team2 = new Team();
         team2.setUri("team" + (LocalDate.now().toEpochDay() + 1));
-        team2.setDateCreated2(LocalDate.of(2018, 4, 4));
+        team2.setDateCreated(LocalDate.of(2018, 4, 4));
         teamRepository.save(asList(team1, team2));
 
         mockMvc.perform(get("/api/admin/metrics/team/count?start=2018-03-03")
@@ -286,10 +286,10 @@ public class MetricsApiTest extends ApiTest {
     public void whenGettingTeamLogins_providingOnlyAStartDate_getsAllFromThenToNow() throws Exception {
         Team team1 = new Team();
         team1.setUri("teamLoginOnlyStartDate1");
-        team1.setLastLoginDate2(LocalDate.of(2018, 1, 1));
+        team1.setLastLoginDate(LocalDate.of(2018, 1, 1));
         Team team2 = new Team();
         team2.setUri("teamLoginOnlyStartDate2");
-        team2.setLastLoginDate2(LocalDate.of(2018, 3, 3));
+        team2.setLastLoginDate(LocalDate.of(2018, 3, 3));
         teamRepository.save(asList(team1, team2));
 
         mockMvc.perform(get("/api/admin/metrics/team/logins?start=2018-02-02")
@@ -302,10 +302,10 @@ public class MetricsApiTest extends ApiTest {
     public void whenGettingTeamLogins_providingOnlyAnEndDate_getsAllFromTheBegginingOfTimeToThatDate() throws Exception {
         Team team1 = new Team();
         team1.setUri("teamLoginsOnlyEndDate1");
-        team1.setLastLoginDate2(LocalDate.of(2018, 1, 1));
+        team1.setLastLoginDate(LocalDate.of(2018, 1, 1));
         Team team2 = new Team();
         team2.setUri("teamLoginsOnlyEndDate2");
-        team2.setLastLoginDate2(LocalDate.of(2018, 3, 3));
+        team2.setLastLoginDate(LocalDate.of(2018, 3, 3));
         teamRepository.save(asList(team1, team2));
 
         mockMvc.perform(get("/api/admin/metrics/team/logins?end=2018-02-02")
@@ -319,15 +319,15 @@ public class MetricsApiTest extends ApiTest {
         Team team1 = new Team();
         team1.setUri("teamLoginStartAndEndDate1");
         team1.setName("teamLoginStartAndEndDate1");
-        team1.setLastLoginDate2(LocalDate.of(2018, 1, 1));
+        team1.setLastLoginDate(LocalDate.of(2018, 1, 1));
         Team team2 = new Team();
         team2.setUri("teamLoginStartAndEndDate2");
         team2.setName("teamLoginStartAndEndDate2");
-        team2.setLastLoginDate2(LocalDate.of(2018, 3, 3));
+        team2.setLastLoginDate(LocalDate.of(2018, 3, 3));
         Team team3 = new Team();
         team3.setUri("teamLoginStartAndEndDate3");
         team3.setName("teamLoginStartAndEndDate3");
-        team3.setLastLoginDate2(LocalDate.of(2018, 5, 5));
+        team3.setLastLoginDate(LocalDate.of(2018, 5, 5));
         teamRepository.save(asList(team1, team2, team3));
 
         mockMvc.perform(get("/api/admin/metrics/team/logins?start=2018-02-02&end=2018-04-04")

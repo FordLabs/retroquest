@@ -71,7 +71,7 @@ public class TeamServiceTest {
 
         assertEquals("A name", actualTeam.getName());
         assertEquals("a-name", actualTeam.getUri());
-        assertTrue(actualTeam.getDateCreated2() != null);
+        assertTrue(actualTeam.getDateCreated() != null);
         assertEquals("encryptedPassword", actualTeam.getPassword());
     }
 
@@ -81,7 +81,7 @@ public class TeamServiceTest {
         savedTeam.setUri("a-name");
         savedTeam.setName("A name");
         savedTeam.setPassword("encryptedPassword");
-        savedTeam.setDateCreated2(LocalDate.now());
+        savedTeam.setDateCreated(LocalDate.now());
 
         UpdatePasswordRequest updatePasswordRequest = new UpdatePasswordRequest();
         updatePasswordRequest.setTeamId("a-name");
@@ -104,7 +104,7 @@ public class TeamServiceTest {
         savedTeam.setUri("a-name");
         savedTeam.setName("A name");
         savedTeam.setPassword("encryptedPassword");
-        savedTeam.setDateCreated2(LocalDate.now());
+        savedTeam.setDateCreated(LocalDate.now());
 
         UpdatePasswordRequest updatePasswordRequest = new UpdatePasswordRequest();
         updatePasswordRequest.setTeamId("a-name");
@@ -268,7 +268,7 @@ public class TeamServiceTest {
 
         teamService.login(loginRequest);
 
-        assertTrue(savedTeam.getLastLoginDate2().isEqual(LocalDate.now()));
+        assertTrue(savedTeam.getLastLoginDate().isEqual(LocalDate.now()));
         verify(teamRepository, times(2)).save(savedTeam);
     }
 }

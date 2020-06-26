@@ -31,13 +31,13 @@ public class BoardApiTest extends ApiTest {
     @Test
     public void should_get_boards_assigned_to_requested_team_with_newest_boards_first() throws Exception {
         Board oldBoard = Board.builder()
-                .dateCreated2(LocalDate.of(2018, 1, 1))
+                .dateCreated(LocalDate.of(2018, 1, 1))
                 .teamId(teamId)
                 .thoughts(Collections.emptyList())
                 .build();
 
         Board newBoard = Board.builder()
-                .dateCreated2(LocalDate.of(2018, 2, 2))
+                .dateCreated(LocalDate.of(2018, 2, 2))
                 .teamId(teamId)
                 .thoughts(Collections.emptyList())
                 .build();
@@ -48,7 +48,7 @@ public class BoardApiTest extends ApiTest {
         mockMvc.perform(get("/api/team/" + teamId + "/boards")
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].dateCreated2", Matchers.is("2018-02-02")))
-                .andExpect(jsonPath("$[1].dateCreated2", Matchers.is("2018-01-01")));
+                .andExpect(jsonPath("$[0].dateCreated", Matchers.is("2018-02-02")))
+                .andExpect(jsonPath("$[1].dateCreated", Matchers.is("2018-01-01")));
     }
 }

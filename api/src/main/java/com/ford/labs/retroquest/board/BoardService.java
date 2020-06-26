@@ -45,7 +45,7 @@ public class BoardService {
 
 
     public List<Board> getBoardsForTeamId(String teamId, Integer pageIndex) {
-        return this.boardRepository.findAllByTeamIdOrderByDateCreated2Desc(teamId,
+        return this.boardRepository.findAllByTeamIdOrderByDateCreatedDesc(teamId,
                 new PageRequest(
                         pageIndex,
                         pageSize,

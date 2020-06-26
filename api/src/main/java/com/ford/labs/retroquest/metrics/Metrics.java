@@ -32,9 +32,9 @@ public class Metrics {
         if (startDate == null && endDate == null) {
             return teamRepository.count();
         } else if (endDate == null) {
-            return teamRepository.countAllByDateCreated2AfterAndDateCreated2IsNotNull(startDate);
+            return teamRepository.countAllByDateCreatedAfterAndDateCreatedIsNotNull(startDate);
         }
-        return teamRepository.countAllByDateCreated2BetweenAndDateCreated2NotNull(startDate, endDate);
+        return teamRepository.countAllByDateCreatedBetweenAndDateCreatedNotNull(startDate, endDate);
     }
 
     @ManagedAttribute
@@ -46,8 +46,8 @@ public class Metrics {
         LocalDateTime finalEndTime = endTime == null ? LocalDateTime.now() : endTime.atStartOfDay();
         LocalDateTime finalStartTime = startTime == null ? LocalDateTime.MIN : startTime.atStartOfDay();
         List<Feedback> feedbackList = feedbackRepository.findAll().stream()
-                .filter(feedback -> !feedback.getDateCreated2().isBefore(finalStartTime))
-                .filter(feedback -> !feedback.getDateCreated2().isAfter(finalEndTime))
+                .filter(feedback -> !feedback.getDateCreated().isBefore(finalStartTime))
+                .filter(feedback -> !feedback.getDateCreated().isAfter(finalEndTime))
                 .collect(toList());
         return feedbackList.size();
     }
@@ -63,8 +63,8 @@ public class Metrics {
         LocalDateTime finalEndTime = endTime == null ? LocalDateTime.now() : endTime.atStartOfDay();
         LocalDateTime finalStartTime = startTime == null ? LocalDateTime.MIN : startTime.atStartOfDay();
         return feedbackRepository.findAllByStarsIsGreaterThanEqual(1).stream()
-                .filter(feedback -> !feedback.getDateCreated2().isBefore(finalStartTime))
-                .filter(feedback -> !feedback.getDateCreated2().isAfter(finalEndTime))
+                .filter(feedback -> !feedback.getDateCreated().isBefore(finalStartTime))
+                .filter(feedback -> !feedback.getDateCreated().isAfter(finalEndTime))
                 .mapToInt(Feedback::getStars)
                 .average()
                 .orElse(0);
@@ -73,6 +73,6 @@ public class Metrics {
     public int getTeamLogins(LocalDate startDate, LocalDate endDate) {
         LocalDate finalEndDate = endDate == null ? LocalDate.now() : endDate;
         LocalDate finalStartDate = startDate == null ? LocalDate.of(1900, 1, 1) : startDate;
-        return teamRepository.findAllByLastLoginDate2Between(finalStartDate, finalEndDate).size();
+        return teamRepository.findAllByLastLoginDateBetween(finalStartDate, finalEndDate).size();
     }
 }

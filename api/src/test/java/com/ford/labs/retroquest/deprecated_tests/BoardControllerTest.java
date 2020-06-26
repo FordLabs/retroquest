@@ -45,7 +45,7 @@ public class BoardControllerTest {
     @Test
     public void returnsAllBoardsForTeamWithoutThoughts() {
         Board expectedBoard = Board.builder()
-                .dateCreated2(LocalDate.of(2012, 12, 25))
+                .dateCreated(LocalDate.of(2012, 12, 25))
                 .teamId("team-id")
                 .id(1L)
                 .build();
@@ -66,7 +66,7 @@ public class BoardControllerTest {
         Board savedBoard = Board.builder()
                 .id(1L)
                 .teamId("team-id")
-                .dateCreated2(LocalDate.now())
+                .dateCreated(LocalDate.now())
                 .thoughts(Arrays.asList(Thought.builder().message("hello").build()))
                 .build();
 

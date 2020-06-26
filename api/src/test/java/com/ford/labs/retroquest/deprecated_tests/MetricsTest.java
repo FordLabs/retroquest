@@ -41,16 +41,16 @@ public class MetricsTest {
 
     @Test
     public void callsDateCreatedAfter_whenGivenOnlyAStartDate() {
-        when(mockTeamRepository.countAllByDateCreated2AfterAndDateCreated2IsNotNull(any())).thenReturn(1L);
+        when(mockTeamRepository.countAllByDateCreatedAfterAndDateCreatedIsNotNull(any())).thenReturn(1L);
         metrics.getTeamCount(LocalDate.of(2018, 2, 2), null);
-        verify(mockTeamRepository, times(1)).countAllByDateCreated2AfterAndDateCreated2IsNotNull(any());
+        verify(mockTeamRepository, times(1)).countAllByDateCreatedAfterAndDateCreatedIsNotNull(any());
     }
 
     @Test
     public void callsDateCreatedBetween_whenGivenBothAStartAndEndDate() {
-        when(mockTeamRepository.countAllByDateCreated2BetweenAndDateCreated2NotNull(any(), any())).thenReturn(1L);
+        when(mockTeamRepository.countAllByDateCreatedBetweenAndDateCreatedNotNull(any(), any())).thenReturn(1L);
         metrics.getTeamCount(LocalDate.of(2018, 2, 2), LocalDate.of(2018, 4, 4));
-        verify(mockTeamRepository, times(1)).countAllByDateCreated2BetweenAndDateCreated2NotNull(any(), any());
+        verify(mockTeamRepository, times(1)).countAllByDateCreatedBetweenAndDateCreatedNotNull(any(), any());
     }
 
     @Test
@@ -79,9 +79,9 @@ public class MetricsTest {
     @Test
     public void returnsAppropriateFeedbackCount_whenOnlyStartDateIsProvided() {
         Feedback feedback1 = new Feedback();
-        feedback1.setDateCreated2(LocalDateTime.of(2018, 1, 1, 1, 1));
+        feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         Feedback feedback2 = new Feedback();
-        feedback2.setDateCreated2(LocalDateTime.of(2018, 3, 3 ,3, 3));
+        feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3 ,3, 3));
         when(mockFeedbackRepository.findAll()).thenReturn(asList(feedback1, feedback2));
 
         assertEquals(1, metrics.getFeedbackCount(LocalDate.of(2018, 2, 2), null));
@@ -91,11 +91,11 @@ public class MetricsTest {
     public void returnsAppropriateFeedbackCount_whenGivenAStartAndEndDate() {
 
         Feedback feedback1 = new Feedback();
-        feedback1.setDateCreated2(LocalDateTime.of(2018, 1, 1, 1, 1));
+        feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         Feedback feedback2 = new Feedback();
-        feedback2.setDateCreated2(LocalDateTime.of(2018, 3, 3, 3, 3));
+        feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
         Feedback feedback3 = new Feedback();
-        feedback3.setDateCreated2(LocalDateTime.of(2018, 5, 5, 5, 5));
+        feedback3.setDateCreated(LocalDateTime.of(2018, 5, 5, 5, 5));
         when(mockFeedbackRepository.findAll()).thenReturn(asList(feedback1, feedback2));
 
         assertEquals(1, metrics.getFeedbackCount(LocalDate.of(2018, 2, 2), LocalDate.of(2018, 4, 4)));
@@ -104,9 +104,9 @@ public class MetricsTest {
     @Test
     public void returnsAppropriateFeedbackCount_whenOnlyGivenAndEndDate() {
         Feedback feedback1 = new Feedback();
-        feedback1.setDateCreated2(LocalDateTime.of(2018, 1, 1, 1, 1));
+        feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         Feedback feedback2 = new Feedback();
-        feedback2.setDateCreated2(LocalDateTime.of(2018, 3, 3 ,3, 3));
+        feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3 ,3, 3));
         when(mockFeedbackRepository.findAll()).thenReturn(asList(feedback1, feedback2));
 
         assertEquals(1, metrics.getFeedbackCount(null, LocalDate.of(2018, 2, 2)));
@@ -115,10 +115,10 @@ public class MetricsTest {
     @Test
     public void returnsAppropriateFeedbackAverage_whenOnlyGivenAStartTime() {
         Feedback feedback1 = new Feedback();
-        feedback1.setDateCreated2(LocalDateTime.of(2018, 1, 1, 1, 1));
+        feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         feedback1.setStars(1);
         Feedback feedback2 = new Feedback();
-        feedback2.setDateCreated2(LocalDateTime.of(2018, 3, 3, 3, 3));
+        feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
         feedback2.setStars(1);
         when(mockFeedbackRepository.findAllByStarsIsGreaterThanEqual(1)).thenReturn(asList(feedback1, feedback2));
 
@@ -128,13 +128,13 @@ public class MetricsTest {
     @Test
     public void returnsAppropriateFeedbackAverage_whenOnlyGivenBothAStartAndEndTime() {
         Feedback feedback1 = new Feedback();
-        feedback1.setDateCreated2(LocalDateTime.of(2018, 1, 1, 1, 1));
+        feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         feedback1.setStars(1);
         Feedback feedback2 = new Feedback();
-        feedback2.setDateCreated2(LocalDateTime.of(2018, 3, 3, 3, 3));
+        feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
         feedback2.setStars(1);
         Feedback feedback3 = new Feedback();
-        feedback3.setDateCreated2(LocalDateTime.of(2018, 3, 3, 3, 3));
+        feedback3.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
         feedback3.setStars(1);
         when(mockFeedbackRepository.findAllByStarsIsGreaterThanEqual(1)).thenReturn(asList(feedback1, feedback2));
 
@@ -144,10 +144,10 @@ public class MetricsTest {
     @Test
     public void returnsAppropriateFeedbackAverage_whenOnlyGivenAnEndTime() {
         Feedback feedback1 = new Feedback();
-        feedback1.setDateCreated2(LocalDateTime.of(2018, 1, 1, 1, 1));
+        feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         feedback1.setStars(1);
         Feedback feedback2 = new Feedback();
-        feedback2.setDateCreated2(LocalDateTime.of(2018, 3, 3, 3, 3));
+        feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
         feedback2.setStars(1);
         when(mockFeedbackRepository.findAllByStarsIsGreaterThanEqual(1)).thenReturn(asList(feedback1, feedback2));
 
@@ -157,12 +157,12 @@ public class MetricsTest {
     @Test
     public void nullStartDate_becomesDefaultStatDate() {
         metrics.getTeamLogins(null, LocalDate.of(2018, 1, 1));
-        verify(mockTeamRepository).findAllByLastLoginDate2Between(LocalDate.of(1900, 1, 1), LocalDate.of(2018, 1, 1));
+        verify(mockTeamRepository).findAllByLastLoginDateBetween(LocalDate.of(1900, 1, 1), LocalDate.of(2018, 1, 1));
     }
 
     @Test
     public void nullEndDate_becomesDefaulEndDate() {
         metrics.getTeamLogins(LocalDate.of(2018, 1, 1), null);
-        verify(mockTeamRepository).findAllByLastLoginDate2Between(LocalDate.of(2018, 1, 1), LocalDate.now());
+        verify(mockTeamRepository).findAllByLastLoginDateBetween(LocalDate.of(2018, 1, 1), LocalDate.now());
     }
 }
