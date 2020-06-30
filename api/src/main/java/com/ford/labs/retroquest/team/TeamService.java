@@ -25,10 +25,12 @@ import com.ford.labs.retroquest.exception.BoardDoesNotExistException;
 import com.ford.labs.retroquest.exception.PasswordInvalidException;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,32 +67,27 @@ public class TeamService {
     }
 
     public Team createNewTeam(CreateTeamRequest createTeamRequest) {
-        String requestedName = createTeamRequest.getName();
-
-        Team teamEntity = new Team();
-        teamEntity.setName(requestedName);
-        teamEntity.setUri(convertTeamNameToURI(requestedName));
-        teamEntity.setDateCreated(LocalDate.now());
-
         String encryptedPassword = passwordEncoder.encode(createTeamRequest.getPassword());
-        teamEntity.setPassword(encryptedPassword);
 
-        teamEntity = teamRepository.save(teamEntity);
-
-        generateColumns(teamEntity);
-
-        return teamEntity;
+        return createTeamEntity(createTeamRequest.getName(), encryptedPassword);
     }
 
     public Team createNewTeam(String name) {
+        return createTeamEntity(name, null);
+    }
 
-        Team teamEntity = new Team();
-        teamEntity.setName(name);
-        teamEntity.setUri(convertTeamNameToURI(name));
+    private Team createTeamEntity(String name, String password) {
+        String uri = convertTeamNameToURI(name);
+        teamRepository
+                .findTeamByUri(uri)
+                .ifPresent(s -> {
+                    throw new DataIntegrityViolationException(s.getUri());
+                });
+
+        Team teamEntity = new Team(uri, name, password);
         teamEntity.setDateCreated(LocalDate.now());
 
         teamEntity = teamRepository.save(teamEntity);
-
         generateColumns(teamEntity);
 
         return teamEntity;
