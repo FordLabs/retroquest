@@ -19,17 +19,16 @@ package com.ford.labs.retroquest.team;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ford.labs.retroquest.converters.LocalDateAttributeConverter;
-import com.ford.labs.retroquest.users.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Persistable;
 
-import javax.persistence.*;
+import javax.persistence.Convert;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @Entity
@@ -48,20 +47,14 @@ public class Team implements Persistable<String> {
     private String password;
 
     @JsonIgnore
-    private LocalDate dateCreated;
-
-    @JsonIgnore
     @Convert(converter = LocalDateAttributeConverter.class)
-    private LocalDate dateCreated2;
+    private LocalDate dateCreated;
 
     private Integer failedAttempts;
 
     @JsonIgnore
-    private LocalDate lastLoginDate;
-
-    @JsonIgnore
     @Convert(converter = LocalDateAttributeConverter.class)
-    private LocalDate lastLoginDate2;
+    private LocalDate lastLoginDate;
 
     public Team(String uri, String name, String password) {
         this.uri = uri;
