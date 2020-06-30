@@ -40,6 +40,7 @@ public class TeamApiTest extends ApiTest {
     @AfterEach
     public void teardown() {
         teamRepository.deleteAllInBatch();
+        assertThat(teamRepository.count()).isEqualTo(0);
     }
 
     @Test
