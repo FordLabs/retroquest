@@ -11,7 +11,7 @@ buildscript {
 plugins {
     id 'java'
     id 'idea'
-    id 'org.springframework.boot' version '2.3.0.RELEASE'
+    id 'org.springframework.boot' version '2.3.1.RELEASE'
     id 'com.github.pivotalservices.cf-app' version '2.3.0-rc.4'
     id 'org.unbroken-dome.test-sets' version '3.0.1'
     id 'com.avast.gradle.docker-compose' version '0.7.1'
@@ -31,9 +31,9 @@ repositories {
 }
 
 dependencies {
-    compile 'org.springframework.boot:spring-boot-starter-data-jpa:2.3.0.RELEASE'
-    compile 'org.springframework.boot:spring-boot-starter-web:2.3.0.RELEASE'
-    compile 'org.springframework.boot:spring-boot-starter-websocket:2.3.0.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa:2.3.1.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-web:2.3.1.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-websocket:2.3.1.RELEASE'
     compile 'org.springframework.cloud:spring-cloud-starter-oauth2:2.2.2.RELEASE'
     compile 'io.jsonwebtoken:jjwt:0.9.0'
     compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
