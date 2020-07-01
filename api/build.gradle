@@ -60,6 +60,10 @@ testSets {
     apiTest
 }
 
+tasks.withType(Test) {
+    useJUnitPlatform()
+}
+
 task dockerApiTest() {
 }
 
