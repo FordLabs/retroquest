@@ -1,6 +1,7 @@
 package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.api.setup.ApiTest;
+import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.team.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,9 @@ public class TeamApiTest extends ApiTest {
     private TeamRepository teamRepository;
 
     @Autowired
+    private ColumnTitleRepository columnTitleRepository;
+
+    @Autowired
     private TestRestTemplate testRestTemplate;
 
     @Autowired
@@ -40,7 +44,9 @@ public class TeamApiTest extends ApiTest {
     @AfterEach
     public void teardown() {
         teamRepository.deleteAllInBatch();
+        columnTitleRepository.deleteAllInBatch();
         assertThat(teamRepository.count()).isEqualTo(0);
+        assertThat(columnTitleRepository.count()).isEqualTo(0);
     }
 
     @Test

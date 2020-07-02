@@ -5,7 +5,6 @@ import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,7 +43,9 @@ public class ThoughtApiTest extends ApiTest {
     @AfterEach
     public void teardown() {
         thoughtRepository.deleteAllInBatch();
-        Assertions.assertThat(thoughtRepository.count()).isEqualTo(0);
+        columnTitleRepository.deleteAllInBatch();
+        assertThat(thoughtRepository.count()).isEqualTo(0);
+        assertThat(columnTitleRepository.count()).isEqualTo(0);
     }
 
     @Test

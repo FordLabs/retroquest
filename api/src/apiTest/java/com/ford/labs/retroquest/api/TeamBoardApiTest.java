@@ -1,6 +1,7 @@
 package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.api.setup.ApiTest;
+import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.team.CreateTeamRequest;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
@@ -30,6 +31,9 @@ public class TeamBoardApiTest extends ApiTest {
 
     @Autowired
     private TeamService teamService;
+
+    @Autowired
+    private ColumnTitleRepository columnTitleRepository;
 
     @Autowired
     private UserTeamMappingRepository userTeamMappingRepository;
@@ -68,10 +72,12 @@ public class TeamBoardApiTest extends ApiTest {
     public void teardown() {
         userRepository.deleteAllInBatch();
         teamRepository.deleteAllInBatch();
+        columnTitleRepository.deleteAllInBatch();
         userTeamMappingRepository.deleteAllInBatch();
 
         assertThat(userRepository.count()).isEqualTo(0);
         assertThat(teamRepository.count()).isEqualTo(0);
+        assertThat(columnTitleRepository.count()).isEqualTo(0);
         assertThat(userTeamMappingRepository.count()).isEqualTo(0);
     }
 
