@@ -1,6 +1,7 @@
 package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.api.setup.ApiTest;
+import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.security.JwtBuilder;
 import com.ford.labs.retroquest.team.*;
 import org.junit.After;
@@ -28,6 +29,9 @@ public class TeamApiTest extends ApiTest {
     private TeamRepository teamRepository;
 
     @Autowired
+    private ColumnTitleRepository columnTitleRepository;
+
+    @Autowired
     private TestRestTemplate testRestTemplate;
 
     @Autowired
@@ -41,7 +45,9 @@ public class TeamApiTest extends ApiTest {
     @After
     public void teardown() {
         teamRepository.deleteAll();
+        columnTitleRepository.deleteAll();
         assertThat(teamRepository.count()).isEqualTo(0);
+        assertThat(columnTitleRepository.count()).isEqualTo(0);
     }
 
     @Test
