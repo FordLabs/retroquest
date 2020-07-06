@@ -25,6 +25,7 @@ import com.ford.labs.retroquest.exception.BoardDoesNotExistException;
 import com.ford.labs.retroquest.exception.PasswordInvalidException;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -65,32 +66,29 @@ public class TeamService {
     }
 
     public Team createNewTeam(CreateTeamRequest createTeamRequest) {
-        String requestedName = createTeamRequest.getName();
-
-        Team teamEntity = new Team();
-        teamEntity.setName(requestedName);
-        teamEntity.setUri(convertTeamNameToURI(requestedName));
-        teamEntity.setDateCreated(LocalDate.now());
-
         String encryptedPassword = passwordEncoder.encode(createTeamRequest.getPassword());
-        teamEntity.setPassword(encryptedPassword);
 
-        teamEntity = teamRepository.save(teamEntity);
-
-        generateColumns(teamEntity);
-
-        return teamEntity;
+        return createTeamEntity(createTeamRequest.getName(), encryptedPassword);
     }
 
     public Team createNewTeam(String name) {
+        return createTeamEntity(name, null);
+    }
 
-        Team teamEntity = new Team();
-        teamEntity.setName(name);
-        teamEntity.setUri(convertTeamNameToURI(name));
-        teamEntity.setDateCreated(LocalDate.now());
+    private Team createTeamEntity(String name, String password) {
+        String uri = convertTeamNameToURI(name);
+        teamRepository
+                .findTeamByUri(uri)
+                .ifPresent(s -> {
+                    throw new DataIntegrityViolationException(s.getUri());
+                });
+
+        Team teamEntity = new Team(uri, name, password);
+        LocalDate now = LocalDate.now();
+        teamEntity.setDateCreated(now);
+        teamEntity.setDateCreated2(now);
 
         teamEntity = teamRepository.save(teamEntity);
-
         generateColumns(teamEntity);
 
         return teamEntity;
@@ -128,7 +126,9 @@ public class TeamService {
             throw new PasswordInvalidException();
         }
 
-        savedTeam.setLastLoginDate(LocalDate.now());
+        LocalDate now = LocalDate.now();
+        savedTeam.setLastLoginDate(now);
+        savedTeam.setLastLoginDate2(now);
         teamRepository.save(savedTeam);
         updateFailedAttempts(savedTeam, 0);
         return savedTeam;

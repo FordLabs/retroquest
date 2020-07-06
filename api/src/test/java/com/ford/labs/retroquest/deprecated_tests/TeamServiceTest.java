@@ -59,23 +59,13 @@ public class TeamServiceTest {
 
     @Test
     public void createNewBoard_WithValidInformation_ReturnsSavedTeamUri() {
-        Team expectedSaveEntity = new Team();
-        expectedSaveEntity.setUri("a-name");
-        expectedSaveEntity.setName("A name");
-        expectedSaveEntity.setPassword("encryptedPassword");
-
-        Team savedEntity = new Team();
-        savedEntity.setUri("a-name");
-        savedEntity.setName("A name");
-        savedEntity.setPassword("encryptedPassword");
-        savedEntity.setDateCreated(LocalDate.now());
-
         CreateTeamRequest requestedTeam = new CreateTeamRequest();
         requestedTeam.setName("A name");
         requestedTeam.setPassword("password");
 
         when(passwordEncoder.encode("password")).thenReturn("encryptedPassword");
         when(this.teamRepository.save(any(Team.class))).then(returnsFirstArg());
+        when(this.teamRepository.findTeamByUri("a-name")).thenReturn(Optional.empty());
 
         Team actualTeam = teamService.createNewTeam(requestedTeam);
 
@@ -212,6 +202,7 @@ public class TeamServiceTest {
     @Test
     public void creatingTeamAlsoCreatesThreeColumnTitles() {
         when(this.teamRepository.save(any(Team.class))).then(returnsFirstArg());
+        when(this.teamRepository.findTeamByUri("beach-bums")).thenReturn(Optional.empty());
 
         CreateTeamRequest requestedTeam = new CreateTeamRequest("beach-bums", "password", "captcha");
         teamService.createNewTeam(requestedTeam);

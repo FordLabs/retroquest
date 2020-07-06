@@ -18,6 +18,7 @@
 package com.ford.labs.retroquest.team;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ford.labs.retroquest.converters.LocalDateAttributeConverter;
 import com.ford.labs.retroquest.users.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -49,10 +50,18 @@ public class Team implements Persistable<String> {
     @JsonIgnore
     private LocalDate dateCreated;
 
+    @JsonIgnore
+    @Convert(converter = LocalDateAttributeConverter.class)
+    private LocalDate dateCreated2;
+
     private Integer failedAttempts;
 
     @JsonIgnore
     private LocalDate lastLoginDate;
+
+    @JsonIgnore
+    @Convert(converter = LocalDateAttributeConverter.class)
+    private LocalDate lastLoginDate2;
 
     public Team(String uri, String name, String password) {
         this.uri = uri;
@@ -69,6 +78,6 @@ public class Team implements Persistable<String> {
 
     @Override
     public boolean isNew() {
-        return uri != null;
+        return uri == null;
     }
 }
