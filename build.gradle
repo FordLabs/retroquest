@@ -3,6 +3,7 @@ buildscript {
         springBootVersion = '1.5.9.RELEASE'
         cfAppVersion = '2.3.0-rc.4'
         lombokVersion = '1.18.10'
+        uiWorkingDir = "${rootDir}/ui"
     }
     repositories {
         mavenCentral()
@@ -19,7 +20,6 @@ buildscript {
 plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'com.github.pivotalservices.cf-app' version "${cfAppVersion}"
-    id 'com.moowork.node' version '1.3.1'
     id 'org.unbroken-dome.test-sets' version '3.0.1'
     id 'com.avast.gradle.docker-compose' version '0.7.1'
 }
@@ -31,7 +31,6 @@ apply plugin: 'com.google.cloud.tools.appengine-appyaml'
 group = 'com.ford.labs'
 archivesBaseName = 'retroquest'
 sourceCompatibility = 1.8
-
 
 sourceSets {
     test {
@@ -76,12 +75,6 @@ dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
-
-node {
-    nodeModulesDir = file("${project.buildDir}/node")
-    npmWorkDir = file("${project.buildDir}/npm")
-    download = true
 }
 
 bootRun {
@@ -129,11 +122,14 @@ dockerCompose {
     waitForTcpPorts = true
 }
 
-task buildPackage(type: NpmTask, dependsOn: 'npmInstall') {
-    inputs.files fileTree('ui')
-    inputs.file 'ui/package.json'
-    inputs.file 'ui/package-lock.json'
-    args = ['npm_run_build-prod']
+task installNodeModules(type: Exec) {
+    workingDir = uiWorkingDir
+    commandLine  'npm', 'install'
+}
+
+task buildPackage(type: Exec, dependsOn: 'installNodeModules') {
+    workingDir = uiWorkingDir
+    commandLine  'npm', 'run', 'build-prod'
     finalizedBy 'build'
 }
 
