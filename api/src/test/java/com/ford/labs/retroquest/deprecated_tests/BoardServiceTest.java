@@ -22,16 +22,15 @@ import com.ford.labs.retroquest.board.BoardRepository;
 import com.ford.labs.retroquest.board.BoardService;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -47,8 +46,12 @@ public class BoardServiceTest {
     @Mock
     private ThoughtRepository thoughtRepository;
 
-    @InjectMocks
     private BoardService boardService;
+
+    @Before
+    public void setUp() {
+        boardService = new BoardService(boardRepository, thoughtRepository);
+    }
 
     @Test
     public void getBoardsForTeamId() {
@@ -66,10 +69,10 @@ public class BoardServiceTest {
 
         boardService.pageSize = 2;
 
-        final PageRequest pageRequest = new PageRequest(
+        final PageRequest pageRequest = PageRequest.of(
                 0,
                 boardService.pageSize,
-                new Sort(Sort.Direction.DESC, "dateCreated")
+                Sort.by(Sort.Direction.DESC, "dateCreated")
         );
 
 
@@ -87,10 +90,10 @@ public class BoardServiceTest {
 
         boardService.pageSize = 5;
 
-        final PageRequest pageRequest = new PageRequest(
+        final PageRequest pageRequest = PageRequest.of(
                 0,
                 boardService.pageSize,
-                new Sort(Sort.Direction.DESC, "dateCreated")
+                Sort.by(Sort.Direction.DESC, "dateCreated")
         );
 
         boardService.getBoardsForTeamId("team1", 0);
@@ -102,14 +105,14 @@ public class BoardServiceTest {
     public void saveBoard() {
         Board boardToSave = Board.builder()
                 .teamId("team1")
-                .thoughts(Arrays.asList(Thought.builder().message("hello").build()))
+                .thoughts(Collections.singletonList(Thought.builder().message("hello").build()))
                 .build();
 
         Board savedBoard = Board.builder()
                 .id(1L)
                 .teamId("team1")
                 .dateCreated(LocalDate.now())
-                .thoughts(Arrays.asList(Thought.builder().message("hello").build()))
+                .thoughts(Collections.singletonList(Thought.builder().message("hello").build()))
                 .build();
 
         when(boardRepository.save(boardToSave)).thenReturn(savedBoard);

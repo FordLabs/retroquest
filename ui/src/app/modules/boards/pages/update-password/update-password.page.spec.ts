@@ -19,7 +19,7 @@ import {UpdatePasswordComponent} from './update-password.page';
 import {AuthService} from '../../../auth/auth.service';
 import {Subject, throwError} from 'rxjs';
 import {of} from 'rxjs/internal/observable/of';
-import {HttpHeaders, HttpResponse} from '@angular/common/http';
+import {HttpResponse} from '@angular/common/http';
 
 describe('UpdatePasswordComponent', () => {
   let component: UpdatePasswordComponent;

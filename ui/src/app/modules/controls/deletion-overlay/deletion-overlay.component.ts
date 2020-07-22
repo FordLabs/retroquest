@@ -15,11 +15,7 @@
  *  limitations under the License.
  */
 
-import {Component, EventEmitter} from '@angular/core';
-import {ViewChild} from '@angular/core';
-import {ElementRef} from '@angular/core';
-import {Output, Input} from '@angular/core';
-import {OnInit} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Themes} from '../../domain/Theme';
 
 @Component({

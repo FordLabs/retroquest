@@ -1,5 +1,5 @@
-import { browser, by, element, ElementFinder } from 'protractor';
-import { CreatePage } from '../create/create.po';
+import {browser, by, element, ElementFinder} from 'protractor';
+import {CreatePage} from '../create/create.po';
 
 export class LoginPage {
 

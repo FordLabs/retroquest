@@ -20,9 +20,6 @@ import {Observable} from 'rxjs/index';
 import {ActionItem} from '../../domain/action-item';
 import {HttpClient} from '@angular/common/http';
 import {WebsocketService} from './websocket.service';
-import {compareLogSummaries} from '@angular/core/src/render3/styling/class_and_style_bindings';
-import {componentFactoryName} from '@angular/compiler';
-import {mock} from 'ts-mockito';
 
 describe('ActionItemService', () => {
   let service: ActionItemService;

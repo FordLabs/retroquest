@@ -17,8 +17,6 @@
 
 import {TopHeaderComponent} from './top-header.component';
 import {Router} from '@angular/router';
-import {spy} from 'ts-mockito';
-import createSpyObj = jasmine.createSpyObj;
 import {SaveCheckerService} from '../../teams/services/save-checker.service';
 
 describe('TopHeaderComponent', () => {

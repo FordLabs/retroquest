@@ -15,10 +15,8 @@
  *  limitations under the License.
  */
 
-import {Component, ViewChild, OnInit} from '@angular/core';
-import {Router, ActivatedRoute} from '@angular/router';
-
-import {AuthService} from '../../../auth/auth.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {TeamService} from '../../../teams/services/team.service';
 import {RecaptchaComponent} from 'ng-recaptcha';
 import {of} from 'rxjs/internal/observable/of';

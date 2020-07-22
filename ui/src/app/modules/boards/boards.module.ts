@@ -30,7 +30,7 @@ import {ContributorsComponent} from './components/contributors/contributors.comp
 import {UpdatePasswordComponent} from './pages/update-password/update-password.page';
 import {CreateUserComponent} from './pages/create-user/create-user.component';
 import {UserViewComponent} from './pages/user-view/user-view.component';
-import { LoginUserComponent } from './pages/login-user/login-user.component';
+import {LoginUserComponent} from './pages/login-user/login-user.component';
 
 @NgModule({
   imports: [

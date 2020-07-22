@@ -22,8 +22,6 @@ import {ThoughtService} from '../../services/thought.service';
 import {ColumnService} from '../../services/column.service';
 import {Themes} from '../../../domain/Theme';
 import {ColumnResponse} from '../../../domain/column-response';
-import {isNullOrUndefined} from 'util';
-import {sanitizeResourceUrl} from '@angular/core/src/sanitization/sanitization';
 
 @Component({
   selector: 'rq-thoughts-header',

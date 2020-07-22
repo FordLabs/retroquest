@@ -23,12 +23,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -37,7 +37,7 @@ public class CaptchaValidatorTest {
     @Mock
     private RestTemplate restTemplate;
 
-    private CaptchaProperties captchaProperties = new CaptchaProperties();
+    private final CaptchaProperties captchaProperties = new CaptchaProperties();
 
     @Mock
     private TeamService teamService;
@@ -48,7 +48,7 @@ public class CaptchaValidatorTest {
     private CaptchaValidator validator;
 
     @Before
-    public void setUp () {
+    public void setUp() {
         captchaProperties.setSecret("secret");
         captchaProperties.setUrl("http://myUrl");
         captchaProperties.setFailedLoginThreshold(5);
@@ -56,33 +56,31 @@ public class CaptchaValidatorTest {
     }
 
     @Test
-    public void whenCaptchaIsDisabled_returnsTrue () {
+    public void whenCaptchaIsDisabled_returnsTrue() {
         captchaProperties.setEnabled(false);
         validator = new CaptchaValidator(restTemplate, captchaProperties, captchaService);
 
         LoginRequest loginRequest = new LoginRequest("name", "password", "invalidCaptcha");
 
-        assertTrue(validator.isValid(loginRequest, null));
+        assertThat(validator.isValid(loginRequest, null)).isTrue();
     }
 
     @Test
     public void whenFailedLoginAttemptsIsBelowThreshold_returnsTrue() {
         Team team = new Team();
         team.setFailedAttempts(2);
-        when(teamService.getTeamByName("a-team")).thenReturn(team);
 
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setName("a-team");
 
-        assertTrue(validator.isValid(loginRequest, null));
+        assertThat(validator.isValid(loginRequest, null)).isTrue();
     }
 
     @Test(expected = CaptchaInvalidException.class)
-    public void whenFailedLoginAttemptsIsAboveThreshold_AndCaptchaIsEmpty_throwsCaptchaInvalidException () {
+    public void whenFailedLoginAttemptsIsAboveThreshold_AndCaptchaIsEmpty_throwsCaptchaInvalidException() {
         Team team = new Team();
         team.setFailedAttempts(7);
 
-        when(teamService.getTeamByName("a-team")).thenReturn(team);
         when(captchaService.isCaptchaEnabledForTeam("a-team")).thenReturn(true);
 
         LoginRequest loginRequest = new LoginRequest();
@@ -92,14 +90,11 @@ public class CaptchaValidatorTest {
     }
 
     @Test(expected = CaptchaInvalidException.class)
-    public void whenFailedLoginAttemptsIsAboveThreshold_AndCaptchaIsInvalid_throwsCaptchaInvalidException () {
+    public void whenFailedLoginAttemptsIsAboveThreshold_AndCaptchaIsInvalid_throwsCaptchaInvalidException() {
         Team team = new Team();
         team.setFailedAttempts(7);
 
-        when(teamService.getTeamByName("a-team")).thenReturn(team);
         when(captchaService.isCaptchaEnabledForTeam("a-team")).thenReturn(true);
-        when(restTemplate.getForObject("http://myUrl?secret={secret}&response={response}", ReCaptchaResponse.class, "secret", "InvalidCaptcha"))
-                .thenReturn(new ReCaptchaResponse(false, Collections.emptyList()));
 
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setName("a-team");
@@ -108,22 +103,17 @@ public class CaptchaValidatorTest {
     }
 
     @Test
-    public void whenFailedLoginAttemptsIsAboveThreshold_AndCaptchaIsValid_returnsTrue () {
+    public void whenFailedLoginAttemptsIsAboveThreshold_AndCaptchaIsValid_returnsTrue() {
         Team team = new Team();
         team.setFailedAttempts(7);
 
-        when(teamService.getTeamByName("a-team")).thenReturn(team);
-        when(restTemplate.getForObject("http://myUrl?secret={secret}&response={response}", ReCaptchaResponse.class, "secret", "ValidCaptcha"))
-                .thenReturn(new ReCaptchaResponse(true, Collections.emptyList()));
-
         LoginRequest loginRequest = new LoginRequest("a-team", "password", "ValidCaptcha");
 
-        assertTrue(validator.isValid(loginRequest, null));
+        assertThat(validator.isValid(loginRequest, null)).isTrue();
     }
 
     @Test(expected = CaptchaInvalidException.class)
     public void whenTeamIsNull_AndCaptchaIsInvalid_throwsCaptchaInvalidException() {
-        when(teamService.getTeamByName("b-team")).thenReturn(null);
         when(restTemplate.getForObject("http://myUrl?secret={secret}&response={response}", ReCaptchaResponse.class, "secret", "InvalidCaptcha"))
                 .thenReturn(new ReCaptchaResponse(false, Collections.emptyList()));
         CreateTeamRequest createTeamRequest = new CreateTeamRequest("name", "password", "InvalidCaptcha");
@@ -133,11 +123,10 @@ public class CaptchaValidatorTest {
 
     @Test
     public void whenTeamIsNull_AndCaptchaIsValid_returnsTrue() {
-        when(teamService.getTeamByName("b-team")).thenReturn(null);
         when(restTemplate.getForObject("http://myUrl?secret={secret}&response={response}", ReCaptchaResponse.class, "secret", "ValidCaptcha"))
                 .thenReturn(new ReCaptchaResponse(true, Collections.emptyList()));
         CreateTeamRequest createTeamRequest = new CreateTeamRequest("name", "password", "ValidCaptcha");
 
-        validator.isValid(createTeamRequest, null);
+        assertThat(validator.isValid(createTeamRequest, null)).isTrue();
     }
 }

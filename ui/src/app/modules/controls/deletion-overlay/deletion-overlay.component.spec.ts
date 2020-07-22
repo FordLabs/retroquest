@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-import { DeletionOverlayComponent } from './deletion-overlay.component';
+import {DeletionOverlayComponent} from './deletion-overlay.component';
 
 describe('DeletionOverlayComponent', () => {
   let component: DeletionOverlayComponent;

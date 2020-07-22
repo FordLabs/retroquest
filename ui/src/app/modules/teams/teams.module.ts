@@ -40,7 +40,6 @@ import {TopHeaderComponent} from '../controls/top-header/top-header.component';
 import {BoardSummaryComponent} from './components/board-summary/board-summary.component';
 import {ArchivedBoardPageComponent} from './pages/archived-board/archived-board.page';
 import {SubAppComponent} from '../sub-app/sub-app.component';
-import {DataService} from '../data.service';
 import {ActionsRadiatorViewComponent} from '../controls/actions-radiator-view/actions-radiator-view.component';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 

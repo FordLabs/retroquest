@@ -17,7 +17,6 @@
 
 import {ActionItemTaskComponent} from './action-item-task.component';
 import {emptyActionItem} from '../../domain/action-item';
-import {elementDef} from '@angular/core/src/view';
 
 describe('ActionItemTaskComponent', () => {
   let component: ActionItemTaskComponent;

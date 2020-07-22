@@ -5,7 +5,6 @@ import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.team.CreateTeamRequest;
 import com.ford.labs.retroquest.team.TeamRepository;
 import com.ford.labs.retroquest.team.TeamService;
-import com.ford.labs.retroquest.users.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

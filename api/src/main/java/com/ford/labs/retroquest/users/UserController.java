@@ -1,7 +1,7 @@
 package com.ford.labs.retroquest.users;
 
-import com.ford.labs.retroquest.statuscodeexceptions.BadRequestException;
 import com.ford.labs.retroquest.security.JwtBuilder;
+import com.ford.labs.retroquest.statuscodeexceptions.BadRequestException;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import com.ford.labs.retroquest.team.TeamService;

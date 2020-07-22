@@ -16,11 +16,10 @@
  */
 
 import {Observable} from 'rxjs/internal/Observable';
-import {ActivatedRouteSnapshot, RouterStateSnapshot, UrlSegment} from '@angular/router';
+import {ActivatedRouteSnapshot} from '@angular/router';
 import {Subject} from 'rxjs/internal/Subject';
 import {AuthGuard} from './auth.guard';
 import {AuthService} from '../auth.service';
-import {mock} from 'ts-mockito';
 
 describe('AuthGuard', () => {
 

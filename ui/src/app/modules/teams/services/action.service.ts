@@ -21,7 +21,6 @@ import {Observable} from 'rxjs/index';
 
 import {ActionItem} from '../../domain/action-item';
 import {WebsocketService} from './websocket.service';
-import {Action} from 'rxjs/internal/scheduler/Action';
 
 @Injectable()
 export class ActionItemService {

@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-import {animate, group, sequence, style, transition, trigger} from '@angular/animations';
+import {animate, group, style, transition, trigger} from '@angular/animations';
 
 export const fadeInOutAnimation = trigger('fadeInOutAnimation', [
   transition('* => void', [

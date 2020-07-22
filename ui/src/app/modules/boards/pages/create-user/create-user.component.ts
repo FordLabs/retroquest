@@ -1,8 +1,7 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {RecaptchaComponent} from 'ng-recaptcha';
 import {concatMap, map} from 'rxjs/operators';
-import {EMPTY, Observable, of} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {HttpResponse} from '@angular/common/http';
 import {TeamService} from '../../../teams/services/team.service';
 import {AuthService} from '../../../auth/auth.service';

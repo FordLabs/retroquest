@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Contributor} from '../../../domain/contributor';

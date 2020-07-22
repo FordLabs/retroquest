@@ -17,11 +17,10 @@
 
 import {LoginComponent} from './login.page';
 import {AuthService} from '../../../auth/auth.service';
-import {Subject, Observable, from, throwError} from 'rxjs';
+import {Subject, throwError} from 'rxjs';
 import {of} from 'rxjs/internal/observable/of';
 import {HttpHeaders, HttpResponse} from '@angular/common/http';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { TestBed } from '@angular/core/testing';
+import {ActivatedRoute, ActivatedRouteSnapshot} from '@angular/router';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;

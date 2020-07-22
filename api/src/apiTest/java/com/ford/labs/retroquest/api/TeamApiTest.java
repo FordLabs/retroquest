@@ -2,8 +2,6 @@ package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.api.setup.ApiTest;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
-import com.ford.labs.retroquest.security.JwtBuilder;
-import com.ford.labs.retroquest.team.*;
 import org.junit.After;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

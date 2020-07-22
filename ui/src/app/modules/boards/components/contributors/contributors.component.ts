@@ -18,7 +18,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ContributorsService} from './contributors.service';
 import {Contributor} from '../../../domain/contributor';
-import {combineAll} from 'rxjs/operators';
 
 @Component({
   selector: 'rq-contributors',

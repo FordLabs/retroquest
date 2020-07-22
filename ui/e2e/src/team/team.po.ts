@@ -1,5 +1,5 @@
-import { browser, by, element, ElementFinder, ElementArrayFinder } from 'protractor';
-import { CreatePage } from '../create/create.po';
+import {browser, by, element, ElementArrayFinder, ElementFinder} from 'protractor';
+import {CreatePage} from '../create/create.po';
 
 export class TeamPage {
   private createPage = new CreatePage();

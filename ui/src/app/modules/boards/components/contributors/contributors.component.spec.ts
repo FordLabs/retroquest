@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-import { ContributorsComponent } from './contributors.component';
+import {ContributorsComponent} from './contributors.component';
 import {ContributorsService} from './contributors.service';
 import {Contributor} from '../../../domain/contributor';
 import {Subject} from 'rxjs';

@@ -46,10 +46,10 @@ public class BoardService {
 
     public List<Board> getBoardsForTeamId(String teamId, Integer pageIndex) {
         return this.boardRepository.findAllByTeamIdOrderByDateCreatedDesc(teamId,
-                new PageRequest(
+                PageRequest.of(
                         pageIndex,
                         pageSize,
-                        new Sort(Sort.Direction.DESC, "dateCreated")
+                        Sort.by(Sort.Direction.DESC, "dateCreated")
                 )
         );
     }

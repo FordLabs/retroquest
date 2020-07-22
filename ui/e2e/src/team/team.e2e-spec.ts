@@ -1,5 +1,5 @@
-import { TeamPage } from './team.po';
-import { browser } from 'protractor';
+import {TeamPage} from './team.po';
+import {browser} from 'protractor';
 
 describe('Team Page', () => {
   let page: TeamPage;
