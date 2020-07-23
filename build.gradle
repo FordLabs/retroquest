@@ -1,5 +1,6 @@
 buildscript {
     ext {
+        javaVersion = 11
         springBootVersion = '2.3.1.RELEASE'
         lombokVersion = '1.18.12'
         uiWorkingDir = "${rootDir}/ui"
@@ -28,7 +29,8 @@ apply plugin: 'com.google.cloud.tools.appengine-appyaml'
 
 group = 'com.ford.labs'
 archivesBaseName = 'retroquest'
-sourceCompatibility = 1.8
+sourceCompatibility = javaVersion
+targetCompatibility = javaVersion
 
 sourceSets {
     test {
