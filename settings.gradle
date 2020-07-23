@@ -8,5 +8,3 @@
  */
 
 rootProject.name = 'retroquest'
-include 'api'
-include 'ui'
