@@ -1,53 +1,55 @@
 pipeline {
-  agent any
-  stages {
-    stage('Build') {
-      steps {
-        sh './gradlew clean build'
-      }
+    agent {
+        label 'chrome-jdk8'
     }
-    stage('Install Deps') {
-      steps {
-        sh 'cd ui/ && npm install && cd ..'
-      }
+    options {
+        disableConcurrentBuilds()
+        buildDiscarder(logRotator(numToKeepStr: '1', artifactNumToKeepStr: '1'))
     }
-    stage('Frontend Tests') {
-      parallel {
+    stages {
         stage('Frontend Tests') {
-          steps {
-            sh 'cd ui && npm run unit && cd ..'
-          }
+            parallel {
+                stage('Frontend Tests') {
+                    steps {
+                        sh './gradlew uiUnitTests'
+                    }
+                }
+                stage('Lint SCSS') {
+                    steps {
+                        sh './gradlew uiLintSCSS'
+                    }
+                }
+                stage('Lint Typescript') {
+                    steps {
+                        sh './gradlew uiLintTypeScript'
+                    }
+                }
+                stage('Build UI Prod Package') {
+                    steps {
+                        sh './gradlew buildProdPackage'
+                    }
+                }
+                stage('Build API') {
+                    steps {
+                        sh './gradlew  build'
+                    }
+                }
+                stage('API Tests') {
+                    steps {
+                        sh './gradlew  apiTest'
+                    }
+                }
+            }
         }
-        stage('Lint SCSS') {
-          steps {
-            sh 'cd ui && npm run sass-lint'
-          }
+        stage('Deploy Dev') {
+            withCredentials([usernamePassword(credentialsId: 'pcf-pe-prod', usernameVariable: 'CF_CCUSER', passwordVariable: 'CF_CCPASSWORD')]) {
+                sh 'echo Logging in to Cloud Foundry'
+                sh 'cf login -u $CF_CCUSER -p $CF_CCPASSWORD -a https://api.sys.pd01.edc1.cf.ford.com -s Platform-Enablement-prod'
+                sh 'echo Blue-Green push to Cloud Foundry'
+                sh 'cf blue-green-deploy dev-retroquest --delete-old-apps'
+            }
         }
-        stage('Lint Typescript') {
-          steps {
-            sh 'cd ui && npm run lint'
-          }
-        }
-        stage('Build Prod') {
-          steps {
-            sh 'cd ui && npm run build-prod'
-          }
-        }
-      }
     }
-    stage('Archive') {
-      parallel {
-        stage('Archive') {
-          steps {
-            archiveArtifacts 'api/build/libs/retroquest.jar'
-          }
-        }
-        stage('Deploy') {
-          steps {
-            sh 'cf push'
-          }
-        }
-      }
-    }
-  }
+}
+}
 }

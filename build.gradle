@@ -1,7 +1,6 @@
 buildscript {
     ext {
         springBootVersion = '2.3.1.RELEASE'
-        cfAppVersion = '2.3.0-rc.8'
         lombokVersion = '1.18.12'
         uiWorkingDir = "${rootDir}/ui"
     }
@@ -19,7 +18,6 @@ buildscript {
 
 plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
-    id 'com.github.pivotalservices.cf-app' version "${cfAppVersion}"
     id 'org.unbroken-dome.test-sets' version '3.0.1'
     id 'com.avast.gradle.docker-compose' version '0.13.0'
 }
@@ -121,10 +119,24 @@ task installNodeModules(type: Exec) {
     commandLine  'npm', 'install'
 }
 
-task buildPackage(type: Exec, dependsOn: 'installNodeModules') {
+task buildProdPackage(type: Exec, dependsOn: 'installNodeModules') {
     workingDir = uiWorkingDir
     commandLine  'npm', 'run', 'build-prod'
-    finalizedBy 'build'
+}
+
+task uiUnitTests(type: Exec, dependsOn: 'installNodeModules') {
+    workingDir = uiWorkingDir
+    commandLine 'npm', 'run', 'unit'
+}
+
+task uiLintSCSS(type: Exec, dependsOn: 'installNodeModules') {
+    workingDir = uiWorkingDir
+    commandLine 'npm', 'run', 'sass-lint'
+}
+
+task uiLintTypeScript(type: Exec, dependsOn: 'installNodeModules') {
+    workingDir = uiWorkingDir
+    commandLine 'npm', 'run', 'lint'
 }
 
 appengine {
