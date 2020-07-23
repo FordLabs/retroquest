@@ -107,7 +107,6 @@ task withDockerDb(dependsOn: bootRun) {
     }
 }
 
-
 dockerCompose {
     apiTests {
         useComposeFiles = ['docker-compose.yml']
