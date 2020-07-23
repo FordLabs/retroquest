@@ -11,32 +11,44 @@ pipeline {
             parallel {
                 stage('Frontend Tests') {
                     steps {
-                        sh './gradlew uiUnitTests'
+                        container('chrome') {
+                            sh './gradlew uiUnitTests'
+                        }
                     }
                 }
                 stage('Lint SCSS') {
                     steps {
-                        sh './gradlew uiLintSCSS'
+                        container('chrome') {
+                            sh './gradlew uiLintSCSS'
+                        }
                     }
                 }
                 stage('Lint Typescript') {
                     steps {
-                        sh './gradlew uiLintTypeScript'
+                        container('chrome') {
+                            sh './gradlew uiLintTypeScript'
+                        }
                     }
                 }
                 stage('Build UI Prod Package') {
                     steps {
-                        sh './gradlew buildProdPackage'
+                        container('chrome') {
+                            sh './gradlew buildProdPackage'
+                        }
                     }
                 }
                 stage('Build API') {
                     steps {
-                        sh './gradlew  build'
+                        container('chrome') {
+                            sh './gradlew  build'
+                        }
                     }
                 }
                 stage('API Tests') {
                     steps {
-                        sh './gradlew  apiTest'
+                        container('chrome') {
+                            sh './gradlew  apiTest'
+                        }
                     }
                 }
             }
@@ -44,10 +56,12 @@ pipeline {
         stage('Deploy Dev') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'pcf-pe-prod', usernameVariable: 'CF_CCUSER', passwordVariable: 'CF_CCPASSWORD')]) {
-                    sh 'echo Logging in to Cloud Foundry'
-                    sh 'cf login -u $CF_CCUSER -p $CF_CCPASSWORD -a https://api.sys.pd01.edc1.cf.ford.com -s Platform-Enablement-prod'
-                    sh 'echo Blue-Green push to Cloud Foundry'
-                    sh 'cf blue-green-deploy dev-retroquest --delete-old-apps'
+                    container('chrome') {
+                        sh 'echo Logging in to Cloud Foundry'
+                        sh 'cf login -u $CF_CCUSER -p $CF_CCPASSWORD -a https://api.sys.pd01.edc1.cf.ford.com -s Platform-Enablement-prod'
+                        sh 'echo Blue-Green push to Cloud Foundry'
+                        sh 'cf blue-green-deploy dev-retroquest --delete-old-apps'
+                    }
                 }
             }
         }
