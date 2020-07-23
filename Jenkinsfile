@@ -12,42 +12,42 @@ pipeline {
                 stage('Frontend Tests') {
                     steps {
                         container('chrome') {
-                            sh './gradlew uiUnitTests -Dhttp.proxyHost=$HTTP_PROXY -Dhttp.proxyPort=$HTTP_PROXY_PORT -Dhttps.proxyHost=$HTTP_PROXY -Dhttps.proxyPort=$HTTPS_PROXY_PORT -Dhttp.nonProxyHosts=$NO_PROXY_HOSTS'
+                            sh './gradlew uiUnitTests -Dhttp.proxyHost=$HTTP_PROXY -Dhttps.proxyHost=$HTTP_PROXY -Dhttp.nonProxyHosts=$NO_PROXY_HOSTS'
                         }
                     }
                 }
                 stage('Lint SCSS') {
                     steps {
                         container('chrome') {
-                            sh './gradlew uiLintSCSS'
+                            sh './gradlew uiLintSCSS -Dhttp.proxyHost=$HTTP_PROXY -Dhttps.proxyHost=$HTTP_PROXY -Dhttp.nonProxyHosts=$NO_PROXY_HOSTS'
                         }
                     }
                 }
                 stage('Lint Typescript') {
                     steps {
                         container('chrome') {
-                            sh './gradlew uiLintTypeScript'
+                            sh './gradlew uiLintTypeScript -Dhttp.proxyHost=$HTTP_PROXY -Dhttps.proxyHost=$HTTP_PROXY -Dhttp.nonProxyHosts=$NO_PROXY_HOSTS'
                         }
                     }
                 }
                 stage('Build UI Prod Package') {
                     steps {
                         container('chrome') {
-                            sh './gradlew buildProdPackage'
+                            sh './gradlew buildProdPackage -Dhttp.proxyHost=$HTTP_PROXY -Dhttps.proxyHost=$HTTP_PROXY -Dhttp.nonProxyHosts=$NO_PROXY_HOSTS'
                         }
                     }
                 }
                 stage('Build API') {
                     steps {
                         container('chrome') {
-                            sh './gradlew  build'
+                            sh './gradlew  build -Dhttp.proxyHost=$HTTP_PROXY -Dhttps.proxyHost=$HTTP_PROXY -Dhttp.nonProxyHosts=$NO_PROXY_HOSTS'
                         }
                     }
                 }
                 stage('API Tests') {
                     steps {
                         container('chrome') {
-                            sh './gradlew  apiTest'
+                            sh './gradlew  apiTest -Dhttp.proxyHost=$HTTP_PROXY -Dhttps.proxyHost=$HTTP_PROXY -Dhttp.nonProxyHosts=$NO_PROXY_HOSTS'
                         }
                     }
                 }
