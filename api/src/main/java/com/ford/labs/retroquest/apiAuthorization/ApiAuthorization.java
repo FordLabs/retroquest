@@ -5,6 +5,8 @@ import com.ford.labs.retroquest.users.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ApiAuthorization {
 
@@ -20,14 +22,11 @@ public class ApiAuthorization {
     }
 
     private boolean teamBelongsToUser(Authentication authentication, String teamId) {
-        User foundUser = userRepository.findUserByName((String) authentication.getPrincipal());
-        if (foundUser != null) {
-            return foundUser.getTeams()
-                    .stream()
-                    .anyMatch(team -> team.getId().equals(teamId));
-        }
+        Optional<User> foundUser = userRepository.findByName(authentication.getPrincipal().toString());
+        return foundUser.map(user -> user.getTeams()
+                .stream()
+                .anyMatch(team -> team.getId().equals(teamId))).orElse(false);
 
-        return false;
     }
 
 }

@@ -21,42 +21,61 @@ import com.ford.labs.retroquest.exception.PasswordMissingLowerCaseAlphaException
 import com.ford.labs.retroquest.exception.PasswordMissingNumberException;
 import com.ford.labs.retroquest.exception.PasswordMissingUpperCaseAlphaException;
 import com.ford.labs.retroquest.exception.PasswordTooShortException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertThrows;
 
 public class PasswordValidatorTest {
 
     private PasswordValidator validator = new PasswordValidator();
 
-    @Test(expected = PasswordTooShortException.class)
+    @Test
     public void whenEmptyPasswordIsSubmitted_ThrowPasswordTooShortException() {
-        validator.isValid("", null);
+        assertThrows(
+                PasswordTooShortException.class,
+                () -> validator.isValid("", null)
+        );
     }
 
-    @Test(expected = PasswordTooShortException.class)
+    @Test
     public void whenNullPasswordIsSubmitted_ThrowPasswordTooShortException() {
-        validator.isValid(null, null);
+        assertThrows(
+                PasswordTooShortException.class,
+                () -> validator.isValid(null, null)
+        );
     }
 
-    @Test(expected = PasswordTooShortException.class)
+    @Test
     public void whenPasswordShorterThanEightCharactersIsSubmitted_ThrowPasswordTooShortException() {
-        validator.isValid("Passw0r", null);
+        assertThrows(
+                PasswordTooShortException.class,
+                () -> validator.isValid("Passw0r", null)
+        );
     }
 
-    @Test(expected = PasswordMissingNumberException.class)
+    @Test
     public void whenPasswordIsMissingANumber_ThrowPasswordMissingNumberException() {
-        validator.isValid("Password", null);
+        assertThrows(
+                PasswordMissingNumberException.class,
+                () -> validator.isValid("Password", null)
+        );
     }
 
-    @Test(expected = PasswordMissingLowerCaseAlphaException.class)
+    @Test
     public void whenPasswordIsMissingALowerCaseAlpha_ThrowPasswordMissingLowerCaseAlphaException() {
-        validator.isValid("PASSW0RD", null);
+        assertThrows(
+                PasswordMissingLowerCaseAlphaException.class,
+                () -> validator.isValid("PASSW0RD", null)
+        );
     }
 
-    @Test(expected = PasswordMissingUpperCaseAlphaException.class)
+    @Test
     public void whenPasswordIsMissingAUpperCaseAlpha_ThrowPasswordMissingUpperCaseAlphaException() {
-        validator.isValid("passw0rd", null);
+        assertThrows(
+                PasswordMissingUpperCaseAlphaException.class,
+                () -> validator.isValid("passw0rd", null)
+        );
     }
 
     @Test

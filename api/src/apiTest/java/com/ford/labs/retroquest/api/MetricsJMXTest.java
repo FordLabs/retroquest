@@ -21,12 +21,10 @@ import com.ford.labs.retroquest.feedback.Feedback;
 import com.ford.labs.retroquest.feedback.FeedbackRepository;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
@@ -34,7 +32,6 @@ import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(properties = "spring.jmx.enabled=true")
 public class MetricsJMXTest {
 
@@ -47,10 +44,10 @@ public class MetricsJMXTest {
     @Autowired
     private FeedbackRepository feedbackRepository;
 
-    @After
+    @AfterEach
     public void teardown() {
-        teamRepository.deleteAll();
-        feedbackRepository.deleteAll();
+        teamRepository.deleteAllInBatch();
+        feedbackRepository.deleteAllInBatch();
 
         assertThat(teamRepository.count()).isEqualTo(0);
         assertThat(feedbackRepository.count()).isEqualTo(0);
@@ -74,7 +71,7 @@ public class MetricsJMXTest {
 
     @Test
     public void should_return_average_of_all_feedback_ratings() throws Exception {
-        feedbackRepository.save(Arrays.asList(
+        feedbackRepository.saveAll(Arrays.asList(
                 Feedback.builder().stars(5).build(),
                 Feedback.builder().stars(1).build()
         ));
@@ -85,7 +82,7 @@ public class MetricsJMXTest {
 
     @Test
     public void _should_return_average_of_all_feedback_ratings_ignoring_zeros() throws Exception {
-        feedbackRepository.save(Arrays.asList(
+        feedbackRepository.saveAll(Arrays.asList(
                 Feedback.builder().stars(5).build(),
                 Feedback.builder().stars(2).build(),
                 Feedback.builder().stars(0).build()

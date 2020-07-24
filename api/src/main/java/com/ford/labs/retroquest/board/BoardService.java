@@ -49,14 +49,13 @@ public class BoardService {
                 PageRequest.of(
                         pageIndex,
                         pageSize,
-                        Sort.by(Sort.Direction.DESC, "dateCreated")
+                        Sort.by(Sort.Order.desc("dateCreated"))
                 )
         );
     }
 
     public Board saveBoard(Board board) {
-        LocalDate now = LocalDate.now();
-        board.setDateCreated(now);
+        board.setDateCreated(LocalDate.now());
         board = this.boardRepository.save(board);
         for (Thought thought : board.getThoughts()) {
             thought.setBoardId(board.getId());

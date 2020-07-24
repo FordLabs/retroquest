@@ -2,22 +2,22 @@ package com.ford.labs.retroquest.api.setup;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.ford.labs.retroquest.contributors.ContributorController;
 import com.ford.labs.retroquest.security.JwtBuilder;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.impl.TextCodec;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -37,9 +37,8 @@ import java.util.concurrent.TimeoutException;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 @AutoConfigureMockMvc
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Ignore
+@Disabled
 public class ApiTest {
 
     @Autowired
@@ -50,6 +49,9 @@ public class ApiTest {
 
     @Autowired
     public JwtBuilder jwtBuilder;
+
+    @MockBean
+    public ContributorController contributorController;
 
     @Value("${com.retroquest.adminUsername}")
     private String adminUsername;
@@ -74,7 +76,7 @@ public class ApiTest {
     private WebSocketStompClient stompClient;
     private BlockingQueue<String> blockingQueue;
 
-    @Before
+    @BeforeEach
     public void __setup() {
         teamId = "BeachBums";
         websocketUrl = "ws://localhost:" + port + "/websocket";
@@ -143,7 +145,7 @@ public class ApiTest {
         String obj = blockingQueue.poll(1, SECONDS);
         try {
             return objectMapper.treeToValue(objectMapper.readValue(obj, ObjectNode.class).get("payload"), clazz);
-        } catch (NullPointerException exp) {
+        } catch (NullPointerException | IllegalArgumentException exp) {
             return null;
         }
     }

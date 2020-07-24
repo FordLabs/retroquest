@@ -49,7 +49,7 @@ public class ActionItemController {
     @PutMapping("/api/team/{teamId}/action-item/{thoughtId}/complete")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public void completeActionItem(@PathVariable("thoughtId") Long id, @PathVariable("teamId") String teamId) {
-        final ActionItem actionItem = actionItemRepository.findOne(id);
+        final ActionItem actionItem = actionItemRepository.findById(id).orElseThrow();
         actionItem.toggleCompleted();
         actionItemRepository.save(actionItem);
     }
@@ -57,7 +57,7 @@ public class ActionItemController {
     @PutMapping("/api/team/{teamId}/action-item/{thoughtId}/task")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public void updateActionItemTask(@PathVariable("thoughtId") Long actionItemId, @PathVariable("teamId") String teamId, @RequestBody ActionItem updatedActionItem) {
-        ActionItem savedActionItem = actionItemRepository.findOne(actionItemId);
+        ActionItem savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
         savedActionItem.setTask(updatedActionItem.getTask());
         actionItemRepository.save(savedActionItem);
     }
@@ -65,7 +65,7 @@ public class ActionItemController {
     @PutMapping("/api/team/{teamId}/action-item/{thoughtId}/assignee")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public void updateActionItemAssignee(@PathVariable("thoughtId") Long actionItemId, @PathVariable("teamId") String teamId, @RequestBody ActionItem updatedActionItem) {
-        ActionItem savedActionItem = actionItemRepository.findOne(actionItemId);
+        ActionItem savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
         savedActionItem.setAssignee(updatedActionItem.getAssignee());
         actionItemRepository.save(savedActionItem);
     }
@@ -109,7 +109,7 @@ public class ActionItemController {
             return null;
         }
 
-        ActionItem savedActionItem = actionItemRepository.findOne(actionItemId);
+        ActionItem savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
         savedActionItem.setTask(updatedActionItem.getTask());
         savedActionItem.setAssignee(updatedActionItem.getAssignee());
         savedActionItem.setCompleted(updatedActionItem.isCompleted());

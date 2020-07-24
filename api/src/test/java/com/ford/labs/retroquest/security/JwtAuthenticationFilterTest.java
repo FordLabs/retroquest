@@ -17,8 +17,8 @@
 
 package com.ford.labs.retroquest.security;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,7 +37,7 @@ public class JwtAuthenticationFilterTest {
     private MockHttpServletResponse response;
     private FilterChain filterChainMock;
 
-    @Before
+    @BeforeEach
     public void setup() {
         request = new MockHttpServletRequest();
         response = mock(MockHttpServletResponse.class);

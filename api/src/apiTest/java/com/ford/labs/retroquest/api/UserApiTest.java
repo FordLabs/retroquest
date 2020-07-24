@@ -5,8 +5,8 @@ import com.ford.labs.retroquest.users.NewUserRequest;
 import com.ford.labs.retroquest.users.User;
 import com.ford.labs.retroquest.users.UserRepository;
 import io.jsonwebtoken.Claims;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,9 +29,9 @@ public class UserApiTest extends ApiTest {
     private NewUserRequest missingPasswordUser = NewUserRequest.builder().name("jake").password("").build();
     private NewUserRequest missingNameUser = NewUserRequest.builder().name("").password("paul").build();
 
-    @After
+    @AfterEach
     public void teardown() {
-        userRepository.deleteAll();
+        userRepository.deleteAllInBatch();
         assertThat(userRepository.count()).isEqualTo(0);
     }
 

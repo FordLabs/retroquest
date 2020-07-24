@@ -17,7 +17,8 @@
 
 package com.ford.labs.retroquest.security;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 
@@ -27,9 +28,12 @@ public class JwtAuthenticationProviderTest {
 
     private JwtAuthenticationProvider jwtAuthenticationProvider = new JwtAuthenticationProvider();
 
-    @Test(expected = AuthenticationException.class)
+    @Test
     public void jwtWithInvalidFormatThrowsException() {
-        jwtAuthenticationProvider.authenticate(new JwtAuthentication("", false, "SOSECRET"));
+        Assertions.assertThrows(
+                AuthenticationException.class,
+                () -> jwtAuthenticationProvider.authenticate(new JwtAuthentication("", false, "SOSECRET")
+            ));
     }
 
     @Test

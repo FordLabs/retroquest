@@ -3,10 +3,11 @@ package com.ford.labs.retroquest.api;
 import com.ford.labs.retroquest.api.setup.ApiTest;
 import com.ford.labs.retroquest.feedback.Feedback;
 import com.ford.labs.retroquest.feedback.FeedbackRepository;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.Base64;
 
@@ -21,13 +22,14 @@ public class FeedbackApiTest extends ApiTest {
     @Autowired
     private FeedbackRepository feedbackRepository;
 
-    @After
+    @AfterEach
     public void tearDown() {
-        feedbackRepository.deleteAll();
+        feedbackRepository.deleteAllInBatch();
         assertThat(feedbackRepository.count()).isEqualTo(0);
     }
 
     @Test
+    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void should_get_all_feedback_as_an_admin() throws Exception {
         feedbackRepository.save(Feedback.builder().build());
 

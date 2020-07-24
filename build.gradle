@@ -18,13 +18,13 @@ buildscript {
 }
 
 plugins {
+    id 'java'
+    id 'idea'
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'org.unbroken-dome.test-sets' version '3.0.1'
     id 'com.avast.gradle.docker-compose' version '0.13.0'
 }
 
-apply plugin: 'java'
-apply plugin: 'idea'
 apply plugin: 'com.google.cloud.tools.appengine-appyaml'
 
 group = 'com.ford.labs'

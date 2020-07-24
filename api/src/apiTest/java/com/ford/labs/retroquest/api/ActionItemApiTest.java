@@ -3,9 +3,9 @@ package com.ford.labs.retroquest.api;
 import com.ford.labs.retroquest.actionitem.ActionItem;
 import com.ford.labs.retroquest.actionitem.ActionItemRepository;
 import com.ford.labs.retroquest.api.setup.ApiTest;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -27,15 +27,15 @@ public class ActionItemApiTest extends ApiTest {
     private String BASE_SUB_URL;
     private String BASE_ENDPOINT_URL;
 
-    @Before
+    @BeforeEach
     public void setup() {
         BASE_SUB_URL = "/topic/" + teamId + "/action-items";
         BASE_ENDPOINT_URL = "/app/" + teamId + "/action-item";
     }
 
-    @After
+    @AfterEach
     public void teardown() {
-        actionItemRepository.deleteAll();
+        actionItemRepository.deleteAllInBatch();
 
         assertThat(actionItemRepository.count()).isEqualTo(0);
     }
@@ -106,7 +106,7 @@ public class ActionItemApiTest extends ApiTest {
         StompSession session = getAuthorizedSession();
         subscribe(session, BASE_SUB_URL);
 
-        List<ActionItem> savedActionItems = actionItemRepository.save(Arrays.asList(
+        List<ActionItem> savedActionItems = actionItemRepository.saveAll(Arrays.asList(
                 ActionItem.builder()
                         .teamId(teamId)
                         .task("do the thing")
@@ -143,7 +143,7 @@ public class ActionItemApiTest extends ApiTest {
                 .teamId("beach-bums2")
                 .build();
 
-        actionItemRepository.save(Arrays.asList(actionItem1, actionItem2));
+        actionItemRepository.saveAll(Arrays.asList(actionItem1, actionItem2));
 
         mockMvc.perform(get("/api/team/beach-bums2/action-items")
                 .header("Authorization", "Bearer " + jwt))
@@ -205,7 +205,7 @@ public class ActionItemApiTest extends ApiTest {
 
         ActionItem actionItem3 = ActionItem.builder().teamId(teamId).build();
 
-        actionItemRepository.save(Arrays.asList(actionItem1, actionItem2, actionItem3));
+        actionItemRepository.saveAll(Arrays.asList(actionItem1, actionItem2, actionItem3));
 
         mockMvc.perform(delete("/api/team/" + teamId + "/action-item/" + actionItem1.getId())
                 .header("Authorization", getBearerAuthToken()))

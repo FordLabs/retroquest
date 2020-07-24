@@ -5,9 +5,9 @@ import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -33,17 +33,17 @@ public class ThoughtApiTest extends ApiTest {
     private String BASE_ENDPOINT_URL;
     private String BASE_GET_URL;
 
-    @Before
+    @BeforeEach
     public void setup() {
         BASE_SUB_URL = "/topic/" + teamId + "/thoughts";
         BASE_ENDPOINT_URL = "/app/" + teamId + "/thought";
         BASE_GET_URL = "/api/team/" + teamId;
     }
 
-    @After
+    @AfterEach
     public void teardown() {
-        thoughtRepository.deleteAll();
-        columnTitleRepository.deleteAll();
+        thoughtRepository.deleteAllInBatch();
+        columnTitleRepository.deleteAllInBatch();
         assertThat(thoughtRepository.count()).isEqualTo(0);
         assertThat(columnTitleRepository.count()).isEqualTo(0);
     }
@@ -53,7 +53,7 @@ public class ThoughtApiTest extends ApiTest {
         StompSession session = getAuthorizedSession();
         subscribe(session, BASE_SUB_URL);
 
-        thoughtRepository.save(Arrays.asList(
+        thoughtRepository.saveAll(Arrays.asList(
                 Thought.builder().teamId(teamId).message("message").build(),
                 Thought.builder().teamId("team 2").message("message").build()
         ));
@@ -100,7 +100,7 @@ public class ThoughtApiTest extends ApiTest {
 
         Thought responseThought = takeObjectInSocket(Thought.class);
 
-        Thought updatedThought = thoughtRepository.findOne(savedThought.getId());
+        Thought updatedThought = thoughtRepository.findById(savedThought.getId()).orElseThrow();
 
         assertThat(responseThought).isEqualToComparingFieldByField(responseThought);
 
@@ -123,7 +123,7 @@ public class ThoughtApiTest extends ApiTest {
 
         Thought responseThought = takeObjectInSocket(Thought.class);
 
-        Thought updatedThought = thoughtRepository.findOne(savedThought.getId());
+        Thought updatedThought = thoughtRepository.findById(savedThought.getId()).orElseThrow();
 
         assertThat(updatedThought).isEqualToComparingFieldByField(savedThought);
         assertThat(responseThought).isNull();
@@ -144,7 +144,7 @@ public class ThoughtApiTest extends ApiTest {
 
         Thought responseThought = takeObjectInSocket(Thought.class);
 
-        Thought savedThought = thoughtRepository.findOne(responseThought.getId());
+        Thought savedThought = thoughtRepository.findById(responseThought.getId()).orElseThrow();
 
         assertThat(savedThought).isEqualToComparingFieldByField(responseThought);
     }
@@ -167,7 +167,7 @@ public class ThoughtApiTest extends ApiTest {
 
         Thought responseThought = takeObjectInSocket(Thought.class);
 
-        Thought savedThought = thoughtRepository.findOne(responseThought.getId());
+        Thought savedThought = thoughtRepository.findById(responseThought.getId()).orElseThrow();
 
         assertThat(savedThought.getColumnTitle()).isEqualTo(savedColumnTitle);
     }
@@ -197,7 +197,7 @@ public class ThoughtApiTest extends ApiTest {
                 Thought.builder().message("message 2").teamId("team 2").build()
         );
 
-        thoughtRepository.save(savedThoughts);
+        thoughtRepository.saveAll(savedThoughts);
 
         MvcResult result = mockMvc.perform(get(BASE_GET_URL + "/thoughts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -217,7 +217,7 @@ public class ThoughtApiTest extends ApiTest {
                 Thought.builder().message("message 1").teamId(teamId).build()
         );
 
-        thoughtRepository.save(savedThoughts);
+        thoughtRepository.saveAll(savedThoughts);
 
         mockMvc.perform(get(BASE_GET_URL + "/thoughts")
                 .contentType(MediaType.APPLICATION_JSON)

@@ -3,14 +3,13 @@ package com.ford.labs.retroquest.deprecated_tests;
 import com.ford.labs.retroquest.contributors.Contributor;
 import com.ford.labs.retroquest.contributors.ContributorController;
 import com.ford.labs.retroquest.contributors.GithubContributor;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -19,9 +18,7 @@ public class ContributorControllerTest {
     private RestTemplate restTemplate;
     private ContributorController subject;
 
-    private long MILLISECONDS_IN_DAY = 86400000;
-
-    @Before
+    @BeforeEach
     public void setUp() {
         restTemplate = Mockito.mock(RestTemplate.class);
         subject = new ContributorController(restTemplate);
@@ -33,8 +30,7 @@ public class ContributorControllerTest {
 
         Mockito.when(restTemplate.getForObject(
                 Mockito.eq("https://api.github.com/repos/FordLabs/retroquest/contributors"),
-                Mockito.eq(GithubContributor[].class),
-                Mockito.any(Map.class)
+                Mockito.eq(GithubContributor[].class)
         )).thenReturn(data);
 
         subject.cacheContributors();
@@ -42,8 +38,7 @@ public class ContributorControllerTest {
 
         verify(restTemplate).getForObject(
                 Mockito.eq("https://api.github.com/repos/FordLabs/retroquest/contributors"),
-                Mockito.eq(GithubContributor[].class),
-                Mockito.any(Map.class)
+                Mockito.eq(GithubContributor[].class)
         );
     }
 
@@ -55,8 +50,7 @@ public class ContributorControllerTest {
 
         Mockito.when(restTemplate.getForObject(
                 Mockito.eq("https://api.github.com/repos/FordLabs/retroquest/contributors"),
-                Mockito.eq(GithubContributor[].class),
-                Mockito.any(Map.class)
+                Mockito.eq(GithubContributor[].class)
         )).thenReturn(data);
 
         subject.cacheContributors();
@@ -64,27 +58,24 @@ public class ContributorControllerTest {
 
         verify(restTemplate).getForObject(
                 Mockito.eq("avatarUrl"),
-                Mockito.eq(byte[].class),
-                Mockito.any(Map.class)
+                Mockito.eq(byte[].class)
         );
     }
 
     @Test
-    public void getContributorsShoulConvertRetrunedGithubContributorsToContributors() {
+    public void getContributorsShouldConvertReturnedGithubContributorsToContributors() {
         GithubContributor[] data = {
                 new GithubContributor("avatarUrl", "accountUrl")
         };
 
         Mockito.when(restTemplate.getForObject(
                 Mockito.eq("https://api.github.com/repos/FordLabs/retroquest/contributors"),
-                Mockito.eq(GithubContributor[].class),
-                Mockito.any(Map.class)
+                Mockito.eq(GithubContributor[].class)
         )).thenReturn(data);
 
         Mockito.when(restTemplate.getForObject(
                 Mockito.eq("avatarUrl"),
-                Mockito.eq(byte[].class),
-                Mockito.any(Map.class)
+                Mockito.eq(byte[].class)
         )).thenReturn("AVATAR".getBytes());
 
         subject.cacheContributors();
@@ -101,14 +92,12 @@ public class ContributorControllerTest {
         };
         Mockito.when(restTemplate.getForObject(
                 Mockito.eq("https://api.github.com/repos/FordLabs/retroquest/contributors"),
-                Mockito.eq(GithubContributor[].class),
-                Mockito.any(Map.class)
+                Mockito.eq(GithubContributor[].class)
         )).thenReturn(data);
         List<Contributor> response = subject.getContributors();
         verify(restTemplate, never()).getForObject(
                 Mockito.eq("avatarUrl"),
-                Mockito.any(),
-                Mockito.any(Map.class)
+                Mockito.any()
         );
         assertThat(response).hasSize(0);
     }
@@ -116,7 +105,7 @@ public class ContributorControllerTest {
     @Test
     public void getContributorsShouldNotQueryGithubApiWhenLastUpdateWasLessThanADayAgo() {
         subject.getContributors();
-        verify(restTemplate, never()).getForObject(Mockito.any(String.class), Mockito.any(), Mockito.any(Map.class));
+        verify(restTemplate, never()).getForObject(Mockito.any(String.class), Mockito.any());
     }
 
     @Test
@@ -126,14 +115,13 @@ public class ContributorControllerTest {
         };
         Mockito.when(restTemplate.getForObject(
                 Mockito.eq("https://api.github.com/repos/FordLabs/retroquest/contributors"),
-                Mockito.eq(GithubContributor[].class),
-                Mockito.any(Map.class)
+                Mockito.eq(GithubContributor[].class)
         )).thenReturn(data);
 
         subject.cacheContributors();
         subject.getContributors();
 
-        verify(restTemplate, times(1)).getForObject(Mockito.eq("avatarUrl"), Mockito.any(), Mockito.any(Map.class));
+        verify(restTemplate, times(1)).getForObject(Mockito.eq("avatarUrl"), Mockito.any());
     }
 
     @Test
@@ -144,8 +132,7 @@ public class ContributorControllerTest {
         };
         Mockito.when(restTemplate.getForObject(
                 Mockito.eq("https://api.github.com/repos/FordLabs/retroquest/contributors"),
-                Mockito.eq(GithubContributor[].class),
-                Mockito.any(Map.class)
+                Mockito.eq(GithubContributor[].class)
         )).thenReturn(data);
         List<Contributor> result = subject.getContributors();
         assertThat(result).isEqualTo(subject.getCachedContributors());
@@ -153,7 +140,7 @@ public class ContributorControllerTest {
 
     @Test
     public void getContributorsShouldReturnCachedResultsWhenNotCallingTheGithubApi() {
-        subject.setCachedContributors(Arrays.asList(new Contributor(new byte[]{}, "accountUrl")));
+        subject.setCachedContributors(Collections.singletonList(new Contributor(new byte[]{}, "accountUrl")));
         List<Contributor> result = subject.getContributors();
         assertThat(result).isEqualTo(subject.getCachedContributors());
     }

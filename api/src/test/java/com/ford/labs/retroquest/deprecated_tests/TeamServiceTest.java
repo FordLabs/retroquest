@@ -22,22 +22,21 @@ import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.exception.BoardDoesNotExistException;
 import com.ford.labs.retroquest.exception.PasswordInvalidException;
 import com.ford.labs.retroquest.team.*;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class TeamServiceTest {
 
     @Mock
@@ -98,7 +97,7 @@ public class TeamServiceTest {
         verify(teamRepository).save(any(Team.class));
     }
 
-    @Test(expected = PasswordInvalidException.class)
+    @Test
     public void updatePassword_WithIncorrectOldPassword_DoesNotSavePassword() {
         Team savedTeam = new Team();
         savedTeam.setUri("a-name");
@@ -114,7 +113,10 @@ public class TeamServiceTest {
         when(passwordEncoder.matches("incorrectPassword", "encryptedPassword")).thenReturn(false);
         when(teamRepository.findTeamByUri("a-name")).thenReturn(Optional.of(savedTeam));
 
-        teamService.updatePassword(updatePasswordRequest);
+        assertThrows(
+                PasswordInvalidException.class,
+                () -> teamService.updatePassword(updatePasswordRequest)
+        );
     }
 
     @Test
@@ -130,23 +132,29 @@ public class TeamServiceTest {
         assertEquals(expectedTeam, actualTeam);
     }
 
-    @Test(expected = BoardDoesNotExistException.class)
+    @Test
     public void login_throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
         LoginRequest loginRequest = new LoginRequest("beach-bums", "password", "captcha");
 
         when(teamRepository.findTeamByName("beach-bums")).thenReturn(Optional.empty());
-        teamService.login(loginRequest);
+        assertThrows(
+                BoardDoesNotExistException.class,
+                () -> teamService.login(loginRequest)
+        );
     }
 
-    @Test(expected = PasswordInvalidException.class)
+    @Test
     public void throwsPasswordInvalidExceptionWhenNoPasswordGiven() {
         LoginRequest loginRequest = new LoginRequest("beach-bums", null, "captcha");
         when(teamRepository.findTeamByName("beach-bums")).thenReturn(Optional.of(new Team()));
 
-        teamService.login(loginRequest);
+        assertThrows(
+                PasswordInvalidException.class,
+                () -> teamService.login(loginRequest)
+        );
     }
 
-    @Test(expected = PasswordInvalidException.class)
+    @Test
     public void throwsPasswordInvalidExceptionWhenPasswordsDoNotMatch() {
         LoginRequest loginRequest = new LoginRequest("beach-bums", "notPassword", "captcha");
         Team expectedTeam = new Team();
@@ -157,7 +165,10 @@ public class TeamServiceTest {
         when(passwordEncoder.matches("notPassword", "encryptedPassword")).thenReturn(false);
         when(teamRepository.findTeamByName("beach-bums")).thenReturn(Optional.of(expectedTeam));
 
-        teamService.login(loginRequest);
+        assertThrows(
+                PasswordInvalidException.class,
+                () -> teamService.login(loginRequest)
+        );
     }
 
     @Test
@@ -217,10 +228,13 @@ public class TeamServiceTest {
         verify(columnTitleRepository, times(1)).save(unhappyColumnTitle);
     }
 
-    @Test(expected = BoardDoesNotExistException.class)
+    @Test
     public void getTeamByName_throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
         when(teamRepository.findTeamByName("beach-bums")).thenReturn(Optional.empty());
-        teamService.getTeamByName("beach-bums");
+        assertThrows(
+                BoardDoesNotExistException.class,
+                () -> teamService.getTeamByName("beach-bums")
+        );
     }
 
     @Test
@@ -235,10 +249,13 @@ public class TeamServiceTest {
         assertEquals(name, actualTeam.getName());
     }
 
-    @Test(expected = BoardDoesNotExistException.class)
+    @Test
     public void getTeamByUri_throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
         when(teamRepository.findTeamByUri("beach-bums")).thenReturn(Optional.empty());
-        teamService.getTeamByUri("beach-bums");
+        assertThrows(
+                BoardDoesNotExistException.class,
+                () -> teamService.getTeamByUri("beach-bums")
+        );
     }
 
     @Test

@@ -29,7 +29,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     void deleteBoardByTeamIdAndId(String teamId, Long id);
 
-    Board save(Board board);
-
     Board findByTeamIdAndId(String teamId, Long id);
 }

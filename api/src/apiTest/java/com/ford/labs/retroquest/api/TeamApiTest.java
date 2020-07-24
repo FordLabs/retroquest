@@ -2,8 +2,9 @@ package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.api.setup.ApiTest;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
-import org.junit.After;
-import org.junit.Test;
+import com.ford.labs.retroquest.team.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,10 +41,10 @@ public class TeamApiTest extends ApiTest {
 
     private static final String VALID_PASSWORD = "Passw0rd";
 
-    @After
+    @AfterEach
     public void teardown() {
-        teamRepository.deleteAll();
-        columnTitleRepository.deleteAll();
+        teamRepository.deleteAllInBatch();
+        columnTitleRepository.deleteAllInBatch();
         assertThat(teamRepository.count()).isEqualTo(0);
         assertThat(columnTitleRepository.count()).isEqualTo(0);
     }
@@ -64,7 +65,7 @@ public class TeamApiTest extends ApiTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        Team team = teamRepository.findOne(sentCreateTeamRequest.getName().toLowerCase());
+        Team team = teamRepository.findById(sentCreateTeamRequest.getName().toLowerCase()).orElseThrow();
 
         assertThat(team.getName()).isEqualTo(teamId);
         assertThat(team.getUri()).isEqualTo(teamId.toLowerCase());
@@ -186,9 +187,9 @@ public class TeamApiTest extends ApiTest {
                 .content(objectMapper.writeValueAsBytes(updatePasswordRequest)))
                 .andExpect(status().isOk());
 
-        assertThat(teamRepository.count()).isEqualTo(1);
+        Team team = teamRepository.findById(updatePasswordRequest.getTeamId().toLowerCase()).orElseThrow();
         assertThat(passwordEncoder.matches(updatePasswordRequest.getNewPassword(),
-                teamRepository.findAll().get(0).getPassword())).isTrue();
+                team.getPassword())).isTrue();
     }
 
     @Test

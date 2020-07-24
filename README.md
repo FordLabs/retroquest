@@ -19,7 +19,7 @@ These instructions will get you a copy of the project up and running on your loc
 ### Dependencies
 What you need to install before building our project.  This guide will assume you have a basic understanding of Git operations.  
 
-1. [Java Development Kit (JDK) 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+1. [OpenJDK11](https://openjdk.java.net/projects/jdk/11/)
 2. [Lombok](https://projectlombok.org/)
 3. [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/) (Which is included in the desktop docker applications for Mac/Windows) or [MariaDB](https://mariadb.org/)
 4. [Node.js](https://nodejs.org/en/)

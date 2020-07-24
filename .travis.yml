@@ -1,6 +1,6 @@
 language: java
 jdk:
-  - openjdk8
+  - openjdk11
 
 sudo: required
 
@@ -21,6 +21,11 @@ env:
 
 before_install:
   - sudo service mysql stop
+  - wget https://services.gradle.org/distributions/gradle-5.6-bin.zip
+  - unzip -qq gradle-5.6-bin.zip
+  - export GRADLE_HOME=$PWD/gradle-5.6
+  - export PATH=$GRADLE_HOME/bin:$PATH
+  - gradle -v
 
 install:
   - |
@@ -29,7 +34,7 @@ install:
     fi
   - |
     if [ "${TEST_SUITE}" == "api" ]; then
-      ./gradlew assemble
+      gradle assemble
     fi
 script:
   - |
@@ -38,5 +43,5 @@ script:
     fi
   - |
     if [ "${TEST_SUITE}" == "api" ]; then
-      SPRING_PROFILES_ACTIVE=docker ./gradlew check dockerApiTest
+      SPRING_PROFILES_ACTIVE=docker gradle check dockerApiTest
     fi

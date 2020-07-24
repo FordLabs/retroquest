@@ -20,28 +20,38 @@ package com.ford.labs.retroquest.validation;
 
 import com.ford.labs.retroquest.exception.EmptyTeamNameException;
 import com.ford.labs.retroquest.exception.SpecialCharacterTeamNameException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertThrows;
 
 public class TeamNameValidatorTest {
 
     private TeamNameValidator validator = new TeamNameValidator();
 
-    @Test(expected = EmptyTeamNameException.class)
+    @Test
     public void cannotSubmitEmptyTeamName() {
-        validator.isValid("", null);
+        assertThrows(
+                EmptyTeamNameException.class,
+                () -> validator.isValid("", null)
+        );
     }
 
-    @Test(expected = EmptyTeamNameException.class)
+    @Test
     public void cannotSubmitNullTeamName() {
-        validator.isValid(null, null);
+        assertThrows(
+                EmptyTeamNameException.class,
+                () -> validator.isValid(null, null)
+        );
     }
 
-    @Test(expected = SpecialCharacterTeamNameException.class)
+    @Test
     public void cannotSubmitTeamNameWithSpecialCharacters() {
         String teamName = "Ford~!@#$%^&*()+=<>?`.,/|[]{};:'Labs\"";
-        validator.isValid(teamName, null);
+        assertThrows(
+                SpecialCharacterTeamNameException.class,
+                () -> validator.isValid(teamName, null)
+        );
     }
 
     @Test
@@ -54,9 +64,12 @@ public class TeamNameValidatorTest {
         assertThat(validator.isValid("Ford Labs 2018", null)).isTrue();
     }
 
-    @Test(expected = EmptyTeamNameException.class)
+    @Test
     public void cannotSubmitTeamNameWithOnlyWhitespace() {
-        validator.isValid("            ", null);
+        assertThrows(
+                EmptyTeamNameException.class,
+                () -> validator.isValid("            ", null)
+        );
     }
 
 }

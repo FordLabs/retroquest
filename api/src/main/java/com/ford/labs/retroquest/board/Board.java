@@ -18,7 +18,6 @@
 package com.ford.labs.retroquest.board;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ford.labs.retroquest.converters.LocalDateAttributeConverter;
 import com.ford.labs.retroquest.thought.Thought;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,13 +36,12 @@ import java.util.List;
 public class Board {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String teamId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-dd")
-    @Convert(converter = LocalDateAttributeConverter.class)
     private LocalDate dateCreated;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "boardId", orphanRemoval = true)

@@ -3,9 +3,9 @@ package com.ford.labs.retroquest.api;
 import com.ford.labs.retroquest.api.setup.ApiTest;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -26,15 +26,15 @@ public class ColumnTitleApiTest extends ApiTest {
     private String BASE_SUB_URL;
     private String BASE_ENDPOINT_URL;
 
-    @Before
+    @BeforeEach
     public void setup() {
         BASE_SUB_URL = "/topic/" + teamId + "/column-titles";
         BASE_ENDPOINT_URL = "/app/" + teamId + "/column-title";
     }
 
-    @After
+    @AfterEach
     public void teardown() {
-        columnTitleRepository.deleteAll();
+        columnTitleRepository.deleteAllInBatch();
         assertThat(columnTitleRepository.count()).isEqualTo(0);
     }
 
@@ -67,7 +67,7 @@ public class ColumnTitleApiTest extends ApiTest {
 
     @Test
     public void should_get_list_of_columns() throws Exception {
-        columnTitleRepository.save(Arrays.asList(
+        columnTitleRepository.saveAll(Arrays.asList(
                 ColumnTitle.builder().teamId("BeachBums").title("one").build(),
                 ColumnTitle.builder().teamId("BeachBums").title("two").build(),
                 ColumnTitle.builder().teamId("BeachBums").title("three").build()

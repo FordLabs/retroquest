@@ -83,7 +83,7 @@ public class UserController {
 
         Optional<Team> teamOptional = teamRepository.findTeamByName(request.getName());
         if (teamOptional.isPresent() && passwordEncoder.matches(request.getPassword(), teamOptional.get().getPassword())) {
-            User foundUser = userRepository.findUserByName(name);
+            User foundUser = userRepository.findByName(name).orElse(null);
 
             Set<Team> userTeams = foundUser.getTeams();
 
@@ -107,7 +107,7 @@ public class UserController {
     public ResponseEntity addNewTeamToUser(@PathVariable("name") String name, @RequestBody NewTeamRequest request) {
 
         if (request != null && !request.getName().isEmpty()) {
-            User foundUser = userRepository.findUserByName(name);
+            User foundUser = userRepository.findByName(name).orElse(null);
 
             Team createdTeam = teamService.createNewTeam(request.getName());
 
@@ -127,7 +127,7 @@ public class UserController {
     @Transactional
     public ResponseEntity<Set<Team>> getTeamsAssignedToUser(@PathVariable("name") String name) {
 
-        User foundUser = userRepository.findUserByName(name);
+        User foundUser = userRepository.findByName(name).orElse(null);
 
         return ResponseEntity.ok(foundUser.getTeams());
     }
@@ -136,7 +136,7 @@ public class UserController {
     @Transactional
     public ResponseEntity<String> getUserToken(@RequestBody NewUserRequest newUserRequest) {
 
-        User foundUser = userRepository.findUserByName(newUserRequest.getName());
+        User foundUser = userRepository.findByName(newUserRequest.getName()).orElse(null);
 
         if (foundUser != null && passwordEncoder.matches(newUserRequest.getPassword(), foundUser.getPassword())) {
             return ResponseEntity.ok(jwtBuilder.buildJwt(foundUser.getName()));

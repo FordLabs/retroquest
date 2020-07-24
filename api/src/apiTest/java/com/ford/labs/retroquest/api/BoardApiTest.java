@@ -4,8 +4,8 @@ import com.ford.labs.retroquest.api.setup.ApiTest;
 import com.ford.labs.retroquest.board.Board;
 import com.ford.labs.retroquest.board.BoardRepository;
 import org.hamcrest.Matchers;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
@@ -21,9 +21,9 @@ public class BoardApiTest extends ApiTest {
     @Autowired
     private BoardRepository boardRepository;
 
-    @After
+    @AfterEach
     public void teardown() {
-        boardRepository.deleteAll();
+        boardRepository.deleteAllInBatch();
 
         assertThat(boardRepository.count()).isEqualTo(0);
     }

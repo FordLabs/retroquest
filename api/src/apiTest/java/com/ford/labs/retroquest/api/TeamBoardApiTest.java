@@ -3,11 +3,12 @@ package com.ford.labs.retroquest.api;
 import com.ford.labs.retroquest.api.setup.ApiTest;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.team.CreateTeamRequest;
+import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import com.ford.labs.retroquest.team.TeamService;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
@@ -36,14 +37,14 @@ public class TeamBoardApiTest extends ApiTest {
     @Autowired
     private UserTeamMappingRepository userTeamMappingRepository;
 
-    private NewUserRequest validNewUserRequest = NewUserRequest.builder().name("jake").password("paul").build();
+    private final NewUserRequest validNewUserRequest = NewUserRequest.builder().name("jake").password("paul").build();
 
-    private ExistingTeamRequest validNewTeamRequest = ExistingTeamRequest.builder().name("team1").password("pass123").build();
-    private ExistingTeamRequest validSecondTeamRequest = ExistingTeamRequest.builder().name("team2").password("pass123").build();
+    private final ExistingTeamRequest validNewTeamRequest = ExistingTeamRequest.builder().name("team1").password("pass123").build();
+    private final ExistingTeamRequest validSecondTeamRequest = ExistingTeamRequest.builder().name("team2").password("pass123").build();
 
     private String jwt;
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
         teamService.createNewTeam(CreateTeamRequest.builder()
                 .name(validNewTeamRequest.getName())
@@ -66,12 +67,12 @@ public class TeamBoardApiTest extends ApiTest {
         jwt = result.getResponse().getContentAsString();
     }
 
-    @After
+    @AfterEach
     public void teardown() {
-        userRepository.deleteAll();
-        teamRepository.deleteAll();
-        columnTitleRepository.deleteAll();
-        userTeamMappingRepository.deleteAll();
+        userRepository.deleteAllInBatch();
+        teamRepository.deleteAllInBatch();
+        columnTitleRepository.deleteAllInBatch();
+        userTeamMappingRepository.deleteAllInBatch();
 
         assertThat(userRepository.count()).isEqualTo(0);
         assertThat(teamRepository.count()).isEqualTo(0);
@@ -257,7 +258,7 @@ public class TeamBoardApiTest extends ApiTest {
 
         assertThat(userTeamMappingRepository.count()).isEqualTo(2);
 
-        User savedUser = userRepository.findUserByName(validNewUserRequest.getName());
+        User savedUser = userRepository.findByName(validNewUserRequest.getName()).orElseThrow();
         assertThat(savedUser.getTeams()).hasSize(2);
     }
 
@@ -284,7 +285,10 @@ public class TeamBoardApiTest extends ApiTest {
                 .andExpect(status().is(200))
                 .andReturn();
 
-        Set teams = objectMapper.readValue(result.getResponse().getContentAsByteArray(), Set.class);
+        Set<Team> teams = objectMapper.readValue(
+                result.getResponse().getContentAsByteArray(),
+                objectMapper.getTypeFactory().constructCollectionType(Set.class, Team.class)
+        );
 
         assertThat(teams).hasSize(1);
     }

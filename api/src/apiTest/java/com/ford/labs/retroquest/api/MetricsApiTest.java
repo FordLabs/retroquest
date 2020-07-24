@@ -6,10 +6,11 @@ import com.ford.labs.retroquest.feedback.FeedbackRepository;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import org.hamcrest.Matchers;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.LocalDate;
@@ -17,7 +18,6 @@ import java.time.LocalDateTime;
 import java.util.Base64;
 
 import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -31,16 +31,14 @@ public class MetricsApiTest extends ApiTest {
     @Autowired
     private FeedbackRepository feedbackRepository;
 
-    @After
+    @AfterEach
     public void teardown() {
-        teamRepository.deleteAll();
-        feedbackRepository.deleteAll();
-
-        assertThat(teamRepository.count()).isEqualTo(0);
-        assertThat(feedbackRepository.count()).isEqualTo(0);
+        teamRepository.deleteAllInBatch();
+        feedbackRepository.deleteAllInBatch();
     }
 
     @Test
+    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void canReadTheTotalNumberOfTeamsCreated() throws Exception {
         Team team = new Team();
         String teamUri = "teamUri";
@@ -70,6 +68,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
+    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void canGetFeedbackCount() throws Exception {
 
         Feedback feedback = new Feedback();
@@ -98,6 +97,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
+    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void canGetAverageRatingAsAdmin() throws Exception {
 
         Feedback feedback1 = new Feedback();
@@ -106,7 +106,7 @@ public class MetricsApiTest extends ApiTest {
         Feedback feedback2 = new Feedback();
         feedback2.setStars(2);
         feedback2.setDateCreated(LocalDateTime.now());
-        feedbackRepository.save(asList(feedback1, feedback2));
+        feedbackRepository.saveAll(asList(feedback1, feedback2));
 
 
         MvcResult result = mockMvc.perform(get("/api/admin/metrics/feedback/average")
@@ -118,6 +118,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
+    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void averageRatingIgnoresStarsWithAZeroValue() throws Exception {
 
         Feedback feedback1 = new Feedback();
@@ -126,7 +127,7 @@ public class MetricsApiTest extends ApiTest {
         Feedback feedback2 = new Feedback();
         feedback2.setStars(0);
         feedback2.setDateCreated(LocalDateTime.now());
-        feedbackRepository.save(asList(feedback1, feedback2));
+        feedbackRepository.saveAll(asList(feedback1, feedback2));
 
         MvcResult result = mockMvc.perform(get("/api/admin/metrics/feedback/average")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -152,14 +153,15 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    public void whenGettingTheTotalNumberofReviews_providingOnlyAStartDate_getsAllFromThatDateUntilNow() throws Exception {
+    @WithMockUser(value = "Admin", roles = "ADMIN")
+    public void whenGettingTheTotalNumberOfReviews_providingOnlyAStartDate_getsAllFromThatDateUntilNow() throws Exception {
 
         Feedback feedback1 = new Feedback();
         feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         Feedback feedback2 = new Feedback();
         feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
 
-        feedbackRepository.save(asList(feedback1, feedback2));
+        feedbackRepository.saveAll(asList(feedback1, feedback2));
 
         mockMvc.perform(get("/api/admin/metrics/feedback/count?start=2018-02-02")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -169,14 +171,15 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    public void whenGettingTheTotalNumberofReviews_providingOnlyAnEndDate_getsAllFromNowToThatDate() throws Exception {
+    @WithMockUser(value = "Admin", roles = "ADMIN")
+    public void whenGettingTheTotalNumberOfReviews_providingOnlyAnEndDate_getsAllFromNowToThatDate() throws Exception {
 
         Feedback feedback1 = new Feedback();
         feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         Feedback feedback2 = new Feedback();
         feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
 
-        feedbackRepository.save(asList(feedback1, feedback2));
+        feedbackRepository.saveAll(asList(feedback1, feedback2));
 
         mockMvc.perform(get("/api/admin/metrics/feedback/count?end=2018-02-02")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -186,7 +189,8 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    public void whenGettingTheTotalNumberofReviews_providingOnlyStartAndEndDate_getsAllBetweenThoseDates() throws Exception {
+    @WithMockUser(value = "Admin", roles = "ADMIN")
+    public void whenGettingTheTotalNumberOfReviews_providingOnlyStartAndEndDate_getsAllBetweenThoseDates() throws Exception {
 
         Feedback feedback1 = new Feedback();
         feedback1.setDateCreated(LocalDateTime.of(2018, 4, 1, 1, 1));
@@ -195,7 +199,7 @@ public class MetricsApiTest extends ApiTest {
         Feedback feedback3 = new Feedback();
         feedback3.setDateCreated(LocalDateTime.of(2018, 12, 25, 1, 1));
 
-        feedbackRepository.save(asList(feedback1, feedback2, feedback3));
+        feedbackRepository.saveAll(asList(feedback1, feedback2, feedback3));
 
         mockMvc.perform(get("/api/admin/metrics/feedback/count?start=2018-05-01&end=2018-12-01")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -205,6 +209,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
+    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void whenGettingTheAverageRating_providingAStartAndEndDate_getsTheBetweenDates() throws Exception {
 
         Feedback feedback1 = new Feedback();
@@ -217,7 +222,7 @@ public class MetricsApiTest extends ApiTest {
         feedback3.setDateCreated(LocalDateTime.of(2018, 12, 25, 1, 1));
         feedback3.setStars(1);
 
-        feedbackRepository.save(asList(feedback1, feedback2, feedback3));
+        feedbackRepository.saveAll(asList(feedback1, feedback2, feedback3));
 
         mockMvc.perform(get("/api/admin/metrics/feedback/average?start=2018-05-01&end=2018-12-01")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -227,6 +232,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
+    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void whenGettingTheAverageRating_providingOnlyAStartDate_getsAllFromThatDateUntilNow() throws Exception {
 
         Feedback feedback1 = new Feedback();
@@ -236,7 +242,7 @@ public class MetricsApiTest extends ApiTest {
         feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
         feedback2.setStars(3);
 
-        feedbackRepository.save(asList(feedback1, feedback2));
+        feedbackRepository.saveAll(asList(feedback1, feedback2));
 
         mockMvc.perform(get("/api/admin/metrics/feedback/average?start=2018-02-02")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -246,6 +252,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
+    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void whenGettingTheAverageRating_providingOnlyAnEndDate_getsAllFromNowToThatDate() throws Exception {
 
         Feedback feedback1 = new Feedback();
@@ -255,7 +262,7 @@ public class MetricsApiTest extends ApiTest {
         feedback2.setStars(1);
         feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
 
-        feedbackRepository.save(asList(feedback1, feedback2));
+        feedbackRepository.saveAll(asList(feedback1, feedback2));
 
         mockMvc.perform(get("/api/admin/metrics/feedback/average?end=2018-02-02")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -265,6 +272,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
+    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void whenGettingTeamCount_providingOnlyAStartDate_getsAllFromNowToThatDate() throws Exception {
 
         Team team1 = new Team();
@@ -273,7 +281,7 @@ public class MetricsApiTest extends ApiTest {
         Team team2 = new Team();
         team2.setUri("team" + (LocalDate.now().toEpochDay() + 1));
         team2.setDateCreated(LocalDate.of(2018, 4, 4));
-        teamRepository.save(asList(team1, team2));
+        teamRepository.saveAll(asList(team1, team2));
 
         mockMvc.perform(get("/api/admin/metrics/team/count?start=2018-03-03")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -283,6 +291,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
+    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void whenGettingTeamLogins_providingOnlyAStartDate_getsAllFromThenToNow() throws Exception {
         Team team1 = new Team();
         team1.setUri("teamLoginOnlyStartDate1");
@@ -290,7 +299,7 @@ public class MetricsApiTest extends ApiTest {
         Team team2 = new Team();
         team2.setUri("teamLoginOnlyStartDate2");
         team2.setLastLoginDate(LocalDate.of(2018, 3, 3));
-        teamRepository.save(asList(team1, team2));
+        teamRepository.saveAll(asList(team1, team2));
 
         mockMvc.perform(get("/api/admin/metrics/team/logins?start=2018-02-02")
                 .header("Authorization", getBasicAuthToken()))
@@ -299,14 +308,15 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    public void whenGettingTeamLogins_providingOnlyAnEndDate_getsAllFromTheBegginingOfTimeToThatDate() throws Exception {
+    @WithMockUser(value = "Admin", roles = "ADMIN")
+    public void whenGettingTeamLogins_providingOnlyAnEndDate_getsAllFromTheBeginningOfTimeToThatDate() throws Exception {
         Team team1 = new Team();
         team1.setUri("teamLoginsOnlyEndDate1");
         team1.setLastLoginDate(LocalDate.of(2018, 1, 1));
         Team team2 = new Team();
         team2.setUri("teamLoginsOnlyEndDate2");
         team2.setLastLoginDate(LocalDate.of(2018, 3, 3));
-        teamRepository.save(asList(team1, team2));
+        teamRepository.saveAll(asList(team1, team2));
 
         mockMvc.perform(get("/api/admin/metrics/team/logins?end=2018-02-02")
                 .header("Authorization", getBasicAuthToken()))
@@ -315,6 +325,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
+    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void whenGettingTeamLogins_providingAStartAndEndDate_getsAllBetweenThem() throws Exception {
         Team team1 = new Team();
         team1.setUri("teamLoginStartAndEndDate1");
@@ -328,7 +339,7 @@ public class MetricsApiTest extends ApiTest {
         team3.setUri("teamLoginStartAndEndDate3");
         team3.setName("teamLoginStartAndEndDate3");
         team3.setLastLoginDate(LocalDate.of(2018, 5, 5));
-        teamRepository.save(asList(team1, team2, team3));
+        teamRepository.saveAll(asList(team1, team2, team3));
 
         mockMvc.perform(get("/api/admin/metrics/team/logins?start=2018-02-02&end=2018-04-04")
                 .header("Authorization", getBasicAuthToken()))
