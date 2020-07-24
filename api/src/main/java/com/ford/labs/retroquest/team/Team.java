@@ -47,20 +47,14 @@ public class Team implements Persistable<String> {
     private String password;
 
     @JsonIgnore
-    private LocalDate dateCreated;
-
-    @JsonIgnore
     @Convert(converter = LocalDateAttributeConverter.class)
-    private LocalDate dateCreated2;
+    private LocalDate dateCreated;
 
     private Integer failedAttempts;
 
     @JsonIgnore
-    private LocalDate lastLoginDate;
-
-    @JsonIgnore
     @Convert(converter = LocalDateAttributeConverter.class)
-    private LocalDate lastLoginDate2;
+    private LocalDate lastLoginDate;
 
     public Team(String uri, String name, String password) {
         this.uri = uri;

@@ -45,9 +45,6 @@ public class Feedback {
     private String teamId;
 
     @JsonFormat(pattern = "MM/dd/yy hh:mm:ss.SSS")
-    private LocalDateTime dateCreated;
-
-    @JsonFormat(pattern = "MM/dd/yy hh:mm:ss.SSS")
     @Convert(converter = LocalDateTimeAttributeConverter.class)
-    private LocalDateTime dateCreated2;
+    private LocalDateTime dateCreated;
 }

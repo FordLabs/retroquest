@@ -84,9 +84,7 @@ public class TeamService {
                 });
 
         Team teamEntity = new Team(uri, name, password);
-        LocalDate now = LocalDate.now();
-        teamEntity.setDateCreated(now);
-        teamEntity.setDateCreated2(now);
+        teamEntity.setDateCreated(LocalDate.now());
 
         teamEntity = teamRepository.save(teamEntity);
         generateColumns(teamEntity);
@@ -126,9 +124,7 @@ public class TeamService {
             throw new PasswordInvalidException();
         }
 
-        LocalDate now = LocalDate.now();
-        savedTeam.setLastLoginDate(now);
-        savedTeam.setLastLoginDate2(now);
+        savedTeam.setLastLoginDate(LocalDate.now());
         teamRepository.save(savedTeam);
         updateFailedAttempts(savedTeam, 0);
         return savedTeam;

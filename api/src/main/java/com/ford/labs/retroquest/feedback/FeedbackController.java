@@ -39,9 +39,7 @@ public class FeedbackController {
 
     @PostMapping
     public ResponseEntity saveFeedback(@RequestBody Feedback feedback) throws URISyntaxException {
-        LocalDateTime now = LocalDateTime.now();
-        feedback.setDateCreated(now);
-        feedback.setDateCreated2(now);
+        feedback.setDateCreated(LocalDateTime.now());
         Feedback savedFeedback = feedbackRepository.save(feedback);
         return ResponseEntity.created(new URI("/api/feedback/" + savedFeedback.getId())).build();
     }
