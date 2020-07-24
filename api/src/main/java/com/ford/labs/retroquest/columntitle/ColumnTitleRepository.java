@@ -24,8 +24,6 @@ import java.util.List;
 
 @Repository
 public interface ColumnTitleRepository extends JpaRepository<ColumnTitle, Long> {
-    ColumnTitle findOne(Long id);
-    ColumnTitle findByTeamIdAndTitle(String teamId, String title);
     ColumnTitle findByTeamIdAndAndTopic(String teamId, String topic);
     List<ColumnTitle> findAllByTeamId(String teamId);
 }

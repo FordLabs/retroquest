@@ -24,11 +24,11 @@ import java.util.List;
 
 @Repository
 public interface ThoughtRepository extends JpaRepository<Thought, Long> {
-    Thought findOne(Long id);
-    List<Thought> findAllByTeamId(String teamId);
     List<Thought> findAllByTeamIdAndBoardIdIsNull(String teamId);
+
     List<Thought> findAllByTeamIdAndBoardIdIsNullOrderByTopic(String teamId);
 
     void deleteAllByTeamId(String teamId);
+
     void deleteThoughtByTeamIdAndId(String teamId, Long id);
 }
