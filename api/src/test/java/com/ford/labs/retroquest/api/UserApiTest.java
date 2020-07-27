@@ -6,6 +6,7 @@ import com.ford.labs.retroquest.users.User;
 import com.ford.labs.retroquest.users.UserRepository;
 import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Tag("api")
 public class UserApiTest extends ApiTest {
 
     @Autowired
@@ -32,7 +34,7 @@ public class UserApiTest extends ApiTest {
     @AfterEach
     public void teardown() {
         userRepository.deleteAllInBatch();
-        assertThat(userRepository.count()).isEqualTo(0);
+        assertThat(userRepository.count()).isZero();
     }
 
     @Test
@@ -77,7 +79,7 @@ public class UserApiTest extends ApiTest {
                 .andExpect(status().is(400));
 
 
-        assertThat(userRepository.count()).isEqualTo(0);
+        assertThat(userRepository.count()).isZero();
     }
 
     @Test
@@ -90,7 +92,7 @@ public class UserApiTest extends ApiTest {
                 .andExpect(status().is(400));
 
 
-        assertThat(userRepository.count()).isEqualTo(0);
+        assertThat(userRepository.count()).isZero();
     }
 
     @Test

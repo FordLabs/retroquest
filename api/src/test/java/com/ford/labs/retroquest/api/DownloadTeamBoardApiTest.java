@@ -11,6 +11,7 @@ import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -24,6 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Tag("api")
 public class DownloadTeamBoardApiTest extends ApiTest {
 
     @Autowired
@@ -55,10 +57,10 @@ public class DownloadTeamBoardApiTest extends ApiTest {
         thoughtRepository.deleteAllInBatch();
         columnTitleRepository.deleteAllInBatch();
 
-        assertThat(teamRepository.count()).isEqualTo(0);
-        assertThat(actionItemRepository.count()).isEqualTo(0);
-        assertThat(thoughtRepository.count()).isEqualTo(0);
-        assertThat(columnTitleRepository.count()).isEqualTo(0);
+        assertThat(teamRepository.count()).isZero();
+        assertThat(actionItemRepository.count()).isZero();
+        assertThat(thoughtRepository.count()).isZero();
+        assertThat(columnTitleRepository.count()).isZero();
     }
 
     @Test

@@ -5,6 +5,7 @@ import com.ford.labs.retroquest.board.Board;
 import com.ford.labs.retroquest.board.BoardRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,6 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Tag("api")
 public class BoardApiTest extends ApiTest {
 
     @Autowired
@@ -25,7 +27,7 @@ public class BoardApiTest extends ApiTest {
     public void teardown() {
         boardRepository.deleteAllInBatch();
 
-        assertThat(boardRepository.count()).isEqualTo(0);
+        assertThat(boardRepository.count()).isZero();
     }
 
     @Test

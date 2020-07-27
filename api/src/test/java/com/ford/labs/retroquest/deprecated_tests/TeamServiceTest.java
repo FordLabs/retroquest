@@ -32,7 +32,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.*;
 
@@ -63,14 +63,14 @@ public class TeamServiceTest {
         requestedTeam.setPassword("password");
 
         when(passwordEncoder.encode("password")).thenReturn("encryptedPassword");
-        when(this.teamRepository.save(any(Team.class))).then(returnsFirstArg());
-        when(this.teamRepository.findTeamByUri("a-name")).thenReturn(Optional.empty());
+        when(teamRepository.save(any(Team.class))).then(returnsFirstArg());
+        when(teamRepository.findTeamByUri("a-name")).thenReturn(Optional.empty());
 
         Team actualTeam = teamService.createNewTeam(requestedTeam);
 
         assertEquals("A name", actualTeam.getName());
         assertEquals("a-name", actualTeam.getUri());
-        assertTrue(actualTeam.getDateCreated() != null);
+        assertNotNull(actualTeam.getDateCreated());
         assertEquals("encryptedPassword", actualTeam.getPassword());
     }
 
@@ -90,7 +90,7 @@ public class TeamServiceTest {
         when(passwordEncoder.matches("password", "encryptedPassword")).thenReturn(true);
         when(passwordEncoder.encode("newPassword")).thenReturn("newEncryptedPassword");
         when(teamRepository.findTeamByUri("a-name")).thenReturn(Optional.of(savedTeam));
-        when(this.teamRepository.save(any(Team.class))).then(returnsFirstArg());
+        when(teamRepository.save(any(Team.class))).then(returnsFirstArg());
 
         savedTeam = teamService.updatePassword(updatePasswordRequest);
         assertEquals("newEncryptedPassword", savedTeam.getPassword());
@@ -212,8 +212,8 @@ public class TeamServiceTest {
 
     @Test
     public void creatingTeamAlsoCreatesThreeColumnTitles() {
-        when(this.teamRepository.save(any(Team.class))).then(returnsFirstArg());
-        when(this.teamRepository.findTeamByUri("beach-bums")).thenReturn(Optional.empty());
+        when(teamRepository.save(any(Team.class))).then(returnsFirstArg());
+        when(teamRepository.findTeamByUri("beach-bums")).thenReturn(Optional.empty());
 
         CreateTeamRequest requestedTeam = new CreateTeamRequest("beach-bums", "password", "captcha");
         teamService.createNewTeam(requestedTeam);

@@ -5,6 +5,7 @@ import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,6 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Tag("api")
 public class ColumnTitleApiTest extends ApiTest {
 
     @Autowired
@@ -35,7 +37,7 @@ public class ColumnTitleApiTest extends ApiTest {
     @AfterEach
     public void teardown() {
         columnTitleRepository.deleteAllInBatch();
-        assertThat(columnTitleRepository.count()).isEqualTo(0);
+        assertThat(columnTitleRepository.count()).isZero();
     }
 
     @Test

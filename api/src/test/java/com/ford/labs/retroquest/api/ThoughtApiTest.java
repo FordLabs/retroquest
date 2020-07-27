@@ -7,6 +7,7 @@ import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -21,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Tag("api")
 public class ThoughtApiTest extends ApiTest {
 
     @Autowired
@@ -44,8 +46,8 @@ public class ThoughtApiTest extends ApiTest {
     public void teardown() {
         thoughtRepository.deleteAllInBatch();
         columnTitleRepository.deleteAllInBatch();
-        assertThat(thoughtRepository.count()).isEqualTo(0);
-        assertThat(columnTitleRepository.count()).isEqualTo(0);
+        assertThat(thoughtRepository.count()).isZero();
+        assertThat(columnTitleRepository.count()).isZero();
     }
 
     @Test
@@ -100,7 +102,7 @@ public class ThoughtApiTest extends ApiTest {
 
         Thought responseThought = takeObjectInSocket(Thought.class);
 
-        Thought updatedThought = thoughtRepository.findById(savedThought.getId()).orElseThrow();
+        Thought updatedThought = thoughtRepository.findById(savedThought.getId()).orElseThrow(Exception::new);
 
         assertThat(responseThought).isEqualToComparingFieldByField(responseThought);
 
@@ -123,7 +125,7 @@ public class ThoughtApiTest extends ApiTest {
 
         Thought responseThought = takeObjectInSocket(Thought.class);
 
-        Thought updatedThought = thoughtRepository.findById(savedThought.getId()).orElseThrow();
+        Thought updatedThought = thoughtRepository.findById(savedThought.getId()).orElseThrow(Exception::new);
 
         assertThat(updatedThought).isEqualToComparingFieldByField(savedThought);
         assertThat(responseThought).isNull();
@@ -144,7 +146,7 @@ public class ThoughtApiTest extends ApiTest {
 
         Thought responseThought = takeObjectInSocket(Thought.class);
 
-        Thought savedThought = thoughtRepository.findById(responseThought.getId()).orElseThrow();
+        Thought savedThought = thoughtRepository.findById(responseThought.getId()).orElseThrow(Exception::new);
 
         assertThat(savedThought).isEqualToComparingFieldByField(responseThought);
     }
@@ -167,7 +169,7 @@ public class ThoughtApiTest extends ApiTest {
 
         Thought responseThought = takeObjectInSocket(Thought.class);
 
-        Thought savedThought = thoughtRepository.findById(responseThought.getId()).orElseThrow();
+        Thought savedThought = thoughtRepository.findById(responseThought.getId()).orElseThrow(Exception::new);
 
         assertThat(savedThought.getColumnTitle()).isEqualTo(savedColumnTitle);
     }
@@ -185,7 +187,7 @@ public class ThoughtApiTest extends ApiTest {
         Thought responseThought = takeObjectInSocket(Thought.class);
 
         assertThat(responseThought).isNull();
-        assertThat(thoughtRepository.count()).isEqualTo(0);
+        assertThat(thoughtRepository.count()).isZero();
     }
 
     @Test

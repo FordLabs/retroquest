@@ -6,8 +6,10 @@ import com.ford.labs.retroquest.team.CreateTeamRequest;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import com.ford.labs.retroquest.team.TeamService;
+import com.ford.labs.retroquest.users.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Tag("api")
 public class TeamBoardApiTest extends ApiTest {
 
     @Autowired
@@ -74,10 +77,10 @@ public class TeamBoardApiTest extends ApiTest {
         columnTitleRepository.deleteAllInBatch();
         userTeamMappingRepository.deleteAllInBatch();
 
-        assertThat(userRepository.count()).isEqualTo(0);
-        assertThat(teamRepository.count()).isEqualTo(0);
-        assertThat(columnTitleRepository.count()).isEqualTo(0);
-        assertThat(userTeamMappingRepository.count()).isEqualTo(0);
+        assertThat(userRepository.count()).isZero();
+        assertThat(teamRepository.count()).isZero();
+        assertThat(columnTitleRepository.count()).isZero();
+        assertThat(userTeamMappingRepository.count()).isZero();
     }
 
     @Test
@@ -146,7 +149,7 @@ public class TeamBoardApiTest extends ApiTest {
         )
                 .andExpect(status().is(401));
 
-        assertThat(userTeamMappingRepository.count()).isEqualTo(0);
+        assertThat(userTeamMappingRepository.count()).isZero();
     }
 
     @Test
@@ -159,7 +162,7 @@ public class TeamBoardApiTest extends ApiTest {
         )
                 .andExpect(status().is(403));
 
-        assertThat(userTeamMappingRepository.count()).isEqualTo(0);
+        assertThat(userTeamMappingRepository.count()).isZero();
     }
 
     @Test
@@ -171,7 +174,7 @@ public class TeamBoardApiTest extends ApiTest {
         )
                 .andExpect(status().is(401));
 
-        assertThat(userTeamMappingRepository.count()).isEqualTo(0);
+        assertThat(userTeamMappingRepository.count()).isZero();
     }
 
     @Test
@@ -184,7 +187,7 @@ public class TeamBoardApiTest extends ApiTest {
         )
                 .andExpect(status().is(403));
 
-        assertThat(userTeamMappingRepository.count()).isEqualTo(0);
+        assertThat(userTeamMappingRepository.count()).isZero();
     }
 
     @Test
@@ -196,7 +199,7 @@ public class TeamBoardApiTest extends ApiTest {
         )
                 .andExpect(status().is(400));
 
-        assertThat(userTeamMappingRepository.count()).isEqualTo(0);
+        assertThat(userTeamMappingRepository.count()).isZero();
     }
 
     @Test
@@ -208,7 +211,7 @@ public class TeamBoardApiTest extends ApiTest {
         )
                 .andExpect(status().is(400));
 
-        assertThat(userTeamMappingRepository.count()).isEqualTo(0);
+        assertThat(userTeamMappingRepository.count()).isZero();
     }
 
     @Test
@@ -258,7 +261,7 @@ public class TeamBoardApiTest extends ApiTest {
 
         assertThat(userTeamMappingRepository.count()).isEqualTo(2);
 
-        User savedUser = userRepository.findByName(validNewUserRequest.getName()).orElseThrow();
+        User savedUser = userRepository.findByName(validNewUserRequest.getName()).orElseThrow(Exception::new);
         assertThat(savedUser.getTeams()).hasSize(2);
     }
 

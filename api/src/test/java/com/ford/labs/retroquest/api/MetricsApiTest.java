@@ -7,6 +7,7 @@ import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,11 +19,12 @@ import java.time.LocalDateTime;
 import java.util.Base64;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Tag("api")
 public class MetricsApiTest extends ApiTest {
 
     @Autowired
@@ -50,7 +52,7 @@ public class MetricsApiTest extends ApiTest {
                 .header("Authorization", getBasicAuthToken()))
                 .andExpect(status().isOk())
                 .andReturn();
-        assertEquals("1", result.getResponse().getContentAsString());
+        assertThat(result.getResponse().getContentAsString()).isEqualTo("1");
     }
 
     @Test
@@ -79,7 +81,7 @@ public class MetricsApiTest extends ApiTest {
                 .header("Authorization", getBasicAuthToken()))
                 .andExpect(status().isOk())
                 .andReturn();
-        assertEquals("1", result.getResponse().getContentAsString());
+        assertThat(result.getResponse().getContentAsString()).isEqualTo("1");
     }
 
     @Test
@@ -114,7 +116,7 @@ public class MetricsApiTest extends ApiTest {
                 .header("Authorization", getBasicAuthToken()))
                 .andExpect(status().isOk())
                 .andReturn();
-        assertEquals("3.0", result.getResponse().getContentAsString());
+        assertThat(result.getResponse().getContentAsString()).isEqualTo("3.0");
     }
 
     @Test
@@ -135,7 +137,7 @@ public class MetricsApiTest extends ApiTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        assertEquals("4.0", result.getResponse().getContentAsString());
+        assertThat(result.getResponse().getContentAsString()).isEqualTo("4.0");
     }
 
     @Test

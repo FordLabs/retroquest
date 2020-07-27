@@ -29,9 +29,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,21 +54,21 @@ public class BoardControllerTest {
         when(boardService.getBoardsForTeamId("team-id", 0)).thenReturn(Arrays.asList(expectedBoard));
 
         List<Board> response = controller.getBoardsForTeamId("team-id", 0);
-        assertEquals(Arrays.asList(expectedBoard), response);
+        assertEquals(Collections.singletonList(expectedBoard), response);
     }
 
     @Test
     public void saveBoardReturnsSavedBoard() {
         Board boardToSave = Board.builder()
                 .teamId("team-id")
-                .thoughts(Arrays.asList(Thought.builder().message("hello").build()))
+                .thoughts(Collections.singletonList(Thought.builder().message("hello").build()))
                 .build();
 
         Board savedBoard = Board.builder()
                 .id(1L)
                 .teamId("team-id")
                 .dateCreated(LocalDate.now())
-                .thoughts(Arrays.asList(Thought.builder().message("hello").build()))
+                .thoughts(Collections.singletonList(Thought.builder().message("hello").build()))
                 .build();
 
         when(boardService.saveBoard(boardToSave)).thenReturn(savedBoard);

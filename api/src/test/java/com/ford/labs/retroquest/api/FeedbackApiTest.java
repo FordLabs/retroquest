@@ -4,6 +4,7 @@ import com.ford.labs.retroquest.api.setup.ApiTest;
 import com.ford.labs.retroquest.feedback.Feedback;
 import com.ford.labs.retroquest.feedback.FeedbackRepository;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Tag("api")
 public class FeedbackApiTest extends ApiTest {
 
     @Autowired
@@ -25,7 +27,7 @@ public class FeedbackApiTest extends ApiTest {
     @AfterEach
     public void tearDown() {
         feedbackRepository.deleteAllInBatch();
-        assertThat(feedbackRepository.count()).isEqualTo(0);
+        assertThat(feedbackRepository.count()).isZero();
     }
 
     @Test

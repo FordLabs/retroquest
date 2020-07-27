@@ -21,7 +21,6 @@ plugins {
     id 'java'
     id 'idea'
     id 'org.springframework.boot' version "${springBootVersion}"
-    id 'org.unbroken-dome.test-sets' version '3.0.1'
     id 'com.avast.gradle.docker-compose' version '0.13.0'
 }
 
@@ -76,15 +75,29 @@ dependencies {
     runtimeOnly 'com.google.cloud.sql:mysql-socket-factory:1.0.16'
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
 bootRun {
     sourceResources sourceSets.main
 }
 
-testSets {
-    apiTest {dirName = 'api/src/apiTest'}
+test {
+    useJUnitPlatform {
+        excludeTags 'api'
+    }
+}
+
+task apiTest(type: Test) {
+    useJUnitPlatform {
+        includeTags 'api'
+    }
 }
 
 task dockerApiTest(type: GradleBuild) {

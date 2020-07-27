@@ -22,6 +22,7 @@ import com.ford.labs.retroquest.feedback.FeedbackRepository;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,7 +32,7 @@ import javax.management.ObjectName;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
+@Tag("api")
 @SpringBootTest(properties = "spring.jmx.enabled=true")
 public class MetricsJMXTest {
 
@@ -49,8 +50,8 @@ public class MetricsJMXTest {
         teamRepository.deleteAllInBatch();
         feedbackRepository.deleteAllInBatch();
 
-        assertThat(teamRepository.count()).isEqualTo(0);
-        assertThat(feedbackRepository.count()).isEqualTo(0);
+        assertThat(teamRepository.count()).isZero();
+        assertThat(feedbackRepository.count()).isZero();
     }
 
     @Test

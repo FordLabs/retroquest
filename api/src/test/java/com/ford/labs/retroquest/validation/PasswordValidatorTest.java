@@ -24,11 +24,11 @@ import com.ford.labs.retroquest.exception.PasswordTooShortException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PasswordValidatorTest {
 
-    private PasswordValidator validator = new PasswordValidator();
+    private final PasswordValidator validator = new PasswordValidator();
 
     @Test
     public void whenEmptyPasswordIsSubmitted_ThrowPasswordTooShortException() {
