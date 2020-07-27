@@ -1,12 +1,12 @@
 ---
 applications:
 - name: dev-retroquest
-  path: api/build/libs/retroquest.jar
+  path: build/libs/retroquest.jar
   memory: 1GB
   instances: 1
   buildpack: java_buildpack_offline
   disk_quota: 1GB
   env:
     JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
-    SPRING_PROFILES_ACTIVE: datemigration
+    SPRING_PROFILES_ACTIVE: cloud
     JAVA_OPTS: '-Dhttps.proxyHost=internet.ford.com -Dhttps.proxyPort=83 -Dhttps.nonProxyHosts="localhost|127.0.0.1|19.0.0.0/8|10.0.0.0/8|172.16.0.0/12|*.cf.ford.com|*.caas.ford.com|vault.app.ford.com" -Dhttp.proxyHost=internet.ford.com -Dhttp.proxyPort=83 -Dhttp.nonProxyHosts="localhost|127.0.0.1|19.0.0.0/8|10.0.0.0/8|172.16.0.0/12|*.cf.ford.com|*.caas.ford.com|vault.app.ford.com"'
