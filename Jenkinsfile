@@ -7,6 +7,21 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '1', artifactNumToKeepStr: '1'))
     }
     stages {
+        stage('Setup Environment') {
+            steps {
+                container('chrome') {
+                    sh 'echo "systemProp.http.proxyHost=$HTTP_PROXY" >> gradle.properties'
+                    sh 'echo "systemProp.https.proxyHost=$HTTP_PROXY" >> gradle.properties'
+                    sh 'echo "systemProp.http.proxyPort=$HTTP_PROXY" >> gradle.properties'
+                    sh 'echo "systemProp.https.proxyPort=$PROXY_PORT" >> gradle.properties'
+                    sh 'echo "systemProp.http.proxyHost=$PROXY_PORT" >> gradle.properties'
+                    sh 'echo "systemProp.http.nonProxyHosts=$NO_PROXY_HOSTS" >> gradle.properties'
+                    sh 'echo "systemProp.https.nonProxyHosts=$NO_PROXY_HOSTS" >> gradle.properties'
+                    sh 'cat gradle.properties'
+                    sh 'exit 0;'
+                }
+            }
+        }
         stage('Frontend Tests') {
             steps {
                 container('chrome') {
