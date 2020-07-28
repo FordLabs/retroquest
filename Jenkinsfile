@@ -11,7 +11,7 @@ pipeline {
             steps {
                 container('chrome') {
                     sh 'env'
-                    sh './gradlew uiUnitTests -Dhttp.proxyHost=${env.HTTP_PROXY} -Dhttp.proxyPort=${env.PROXY_PORT} -Dhttps.proxyPort={$env.PROXY_PORT} -Dhttps.proxyHost=${env.PROXY_PORT} -Dhttp.nonProxyHosts=${env.NO_PROXY_HOSTS}'
+                    sh './gradlew uiUnitTests -Dhttp.proxyHost=${env.HTTP_PROXY} -Dhttp.proxyPort=${env.PROXY_PORT} -Dhttps.proxyPort=${env.PROXY_PORT} -Dhttps.proxyHost=${env.PROXY_PORT} -Dhttp.nonProxyHosts=${env.NO_PROXY_HOSTS}'
                 }
             }
         }
