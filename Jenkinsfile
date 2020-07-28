@@ -12,7 +12,7 @@ pipeline {
                 stage('Frontend Tests') {
                     steps {
                         container('chrome') {
-                            sh './gradlew uiUnitTests -Dhttp.proxyHost=$HTTP_PROXY -Dhttps.proxyHost=$HTTP_PROXY -Dhttp.nonProxyHosts=$NO_PROXY_HOSTS'
+                            sh './gradlew uiUnitTests -Dhttp.proxyHost=${env.HTTP_PROXY} -Dhttp.proxyPort=${env.PROXY_PORT} -Dhttps.proxyPort={$env.PROXY_PORT} -Dhttps.proxyHost=${env.PROXY_PORT} -Dhttp.nonProxyHosts=${env.NO_PROXY_HOSTS}'
                         }
                     }
                 }
