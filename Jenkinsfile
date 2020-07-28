@@ -17,8 +17,6 @@ pipeline {
                     sh 'echo "systemProp.http.proxyHost=$PROXY_PORT" >> gradle.properties'
                     sh 'echo "systemProp.http.nonProxyHosts=$NO_PROXY_HOSTS" >> gradle.properties'
                     sh 'echo "systemProp.https.nonProxyHosts=$NO_PROXY_HOSTS" >> gradle.properties'
-                    sh 'cat gradle.properties'
-                    sh 'exit 0;'
                 }
             }
         }
