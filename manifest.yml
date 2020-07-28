@@ -6,6 +6,8 @@ applications:
   instances: 1
   buildpack: java_buildpack_offline
   disk_quota: 1GB
+  services:
+    - dev_retroquest_db
   env:
     JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
     SPRING_PROFILES_ACTIVE: cloud
