@@ -7,10 +7,6 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '1', artifactNumToKeepStr: '1'))
     }
     stages {
-        stage('Setup Environment') {
-            sh 'echo $HTTP_PROXY'
-
-        }
         stage('Frontend Tests') {
             steps {
                 container('chrome') {
