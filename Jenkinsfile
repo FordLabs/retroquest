@@ -10,9 +10,9 @@ pipeline {
         stage('Setup Environment') {
             steps {
                 container('chrome') {
-                    sh 'echo "systemProp.http.proxyHost=$HTTP_PROXY" >> gradle.properties'
-                    sh 'echo "systemProp.https.proxyHost=$HTTP_PROXY" >> gradle.properties'
-                    sh 'echo "systemProp.http.proxyPort=$HTTP_PROXY" >> gradle.properties'
+                    sh 'echo "systemProp.http.proxyHost=$GRADLE_HTTP_PROXY" >> gradle.properties'
+                    sh 'echo "systemProp.https.proxyHost=$GRADLE_HTTP_PROXY" >> gradle.properties'
+                    sh 'echo "systemProp.http.proxyPort=$GRADLE_HTTP_PROXY" >> gradle.properties'
                     sh 'echo "systemProp.https.proxyPort=$PROXY_PORT" >> gradle.properties'
                     sh 'echo "systemProp.http.proxyHost=$PROXY_PORT" >> gradle.properties'
                     sh 'echo "systemProp.http.nonProxyHosts=$NO_PROXY_HOSTS" >> gradle.properties'
