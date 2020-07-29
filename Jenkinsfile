@@ -17,6 +17,8 @@ pipeline {
                     sh 'echo "systemProp.http.proxyHost=$PROXY_PORT" >> gradle.properties'
                     sh 'echo "systemProp.http.nonProxyHosts=$NO_PROXY_HOSTS" >> gradle.properties'
                     sh 'echo "systemProp.https.nonProxyHosts=$NO_PROXY_HOSTS" >> gradle.properties'
+                    sh 'echo "systemProp.sonar.url=$SONAR_URL" >> gradle.properties'
+                    sh 'echo "systemProp.sonar.token=$SONAR_TOKEN" >> gradle.properties'
                 }
             }
         }

@@ -177,11 +177,11 @@ task jacocoMergeAll(type: JacocoMerge) {
 
 sonarqube {
     properties {
-        property 'sonar.host.url', System.getProperty("SONAR_URL")
+        property 'sonar.host.url', System.getProperty("sonar.url")
         property 'sonar.projectName', 'RetroQuest'
         property 'sonar.projectKey', 'com.ford.labs.retroquest'
         property 'sonar.analysis.mode', 'publish'
-        property 'sonar.login', System.getProperty("SONAR_TOKEN")
+        property 'sonar.login', System.getProperty("sonar.token")
         property 'sonar.password', ''
         property 'sonar.jacoco.reportPath', mergedJacocoOutput
         property 'sonar.exclusions', ''
