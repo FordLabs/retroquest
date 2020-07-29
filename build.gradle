@@ -5,6 +5,7 @@ buildscript {
         lombokVersion = '1.18.12'
         uiWorkingDir = "${rootDir}/ui"
         springCloudVersion='2.2.3.RELEASE'
+        mergedJacocoOutput = "${buildDir}/jacoco-merged/jacoco-merged.exec"
     }
     repositories {
         mavenCentral()
@@ -21,6 +22,8 @@ buildscript {
 plugins {
     id 'java'
     id 'idea'
+    id 'org.sonarqube' version '3.0'
+    id 'jacoco'
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'com.avast.gradle.docker-compose' version '0.13.0'
 }
@@ -155,6 +158,39 @@ task uiLintTypeScript(type: Exec, dependsOn: 'installNodeModules') {
     workingDir = uiWorkingDir
     commandLine 'npm', 'run', 'lint'
 }
+
+jacoco {
+    toolVersion = '0.8.3'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.destination file("${buildDir}/jacoco-html")
+    }
+}
+
+task jacocoMergeAll(type: JacocoMerge) {
+    executionData = fileTree(dir: "${project.buildDir}/jacoco", include: '*.exec')
+    destinationFile = file(mergedJacocoOutput)
+}
+
+sonarqube {
+    properties {
+        property 'sonar.host.url', System.getProperty("SONAR_URL")
+        property 'sonar.projectName', 'RetroQuest'
+        property 'sonar.projectKey', 'com.ford.labs.retroquest'
+        property 'sonar.analysis.mode', 'publish'
+        property 'sonar.login', System.getProperty("SONAR_TOKEN")
+        property 'sonar.password', ''
+        property 'sonar.jacoco.reportPath', mergedJacocoOutput
+        property 'sonar.exclusions', ''
+        property 'sonar.scm.provider', 'git'
+    }
+}
+
+tasks['jacocoTestReport'].dependsOn 'jacocoMergeAll'
+tasks['sonarqube'].dependsOn 'jacocoTestReport'
 
 appengine {
     tools {

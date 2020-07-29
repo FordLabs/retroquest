@@ -62,6 +62,13 @@ pipeline {
                 }
             }
         }
+        stage('Sonarqube') {
+            steps {
+                container('chrome') {
+                    sh './gradlew  sonarqube'
+                }
+            }
+        }
         stage('Deploy Dev') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'pcf-pe-prod', usernameVariable: 'CF_CCUSER', passwordVariable: 'CF_CCPASSWORD')]) {
