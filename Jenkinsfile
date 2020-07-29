@@ -67,7 +67,7 @@ pipeline {
         stage('Sonarqube') {
             steps {
                 container('chrome') {
-                    sh './gradlew  sonarqube'
+                    sh './gradlew  sonarqube -Duser.home=$WORKSPACE'
                 }
             }
         }
