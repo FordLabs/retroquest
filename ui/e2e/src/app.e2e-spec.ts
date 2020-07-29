@@ -8,8 +8,8 @@ describe('App root page', () => {
     page = new AppPage();
   });
 
-  it('home page should redirect to create', () => {
+  it('home page should redirect to login', () => {
     page.navigateTo();
-    expect(browser.getCurrentUrl()).toContain('create');
+    expect(browser.getCurrentUrl()).toContain('login');
   });
 });
