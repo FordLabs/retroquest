@@ -31,7 +31,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-@RefreshScope
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String jwtSecret;
