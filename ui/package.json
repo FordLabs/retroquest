@@ -15,7 +15,7 @@
     "e2e": "ng e2e",
     "sass-lint": "sass-lint -v",
     "sass-lint-fix": "sass-lint-auto-fix && sass-lint -v",
-    "sonarqube": "sonar-scanner"
+    "sonarqube": "sonar-scanner -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_UI_TOKEN"
   },
   "private": true,
   "dependencies": {
