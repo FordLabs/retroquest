@@ -9,11 +9,13 @@
     "build-prod": "ng build --prod --build-optimizer --output-path=../api/src/main/resources/static",
     "test": "ng test",
     "unit": "ng test --watch=false",
+    "unit-coverage": "ng test --codeCoverage=true --watch=false",
     "lint": "ng lint",
     "lint-fix": "./node_modules/tslint/bin/tslint --fix -p .",
     "e2e": "ng e2e",
     "sass-lint": "sass-lint -v",
-    "sass-lint-fix": "sass-lint-auto-fix && sass-lint -v"
+    "sass-lint-fix": "sass-lint-auto-fix && sass-lint -v",
+    "sonarqube": "sonar-scanner"
   },
   "private": true,
   "dependencies": {
@@ -40,6 +42,7 @@
     "ng-recaptcha": "^4.0.0-beta.1",
     "ngx-infinite-scroll": "^7.1.0",
     "rxjs": "^6.3.3",
+    "sonar-scanner": "^3.1.0",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {

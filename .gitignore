@@ -26,6 +26,7 @@ nbdist/
 
 **/.DS_Store
 **/coverage/
+**/.scannerwork/
 package-lock.json
 
 /tools

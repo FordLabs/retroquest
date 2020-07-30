@@ -5,7 +5,9 @@ buildscript {
         lombokVersion = '1.18.12'
         uiWorkingDir = "${rootDir}/ui"
         springCloudVersion='2.2.3.RELEASE'
-        mergedJacocoOutput = "${buildDir}/jacoco-merged/jacoco-merged.exec"
+        jacocoOutputDirectory = "${project.buildDir}/jacoco"
+        jacocoHtmlDirectory = "${project.buildDir}/jacoco-html"
+        jacocoXml = "${project.buildDir}/jacoco-xml/jacoco.xml"
     }
     repositories {
         mavenCentral()
@@ -24,6 +26,7 @@ plugins {
     id 'idea'
     id 'org.sonarqube' version '3.0'
     id 'jacoco'
+    id 'org.gradle.test-retry' version '1.1.6'
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'com.avast.gradle.docker-compose' version '0.13.0'
 }
@@ -159,38 +162,54 @@ task uiLintTypeScript(type: Exec, dependsOn: 'installNodeModules') {
     commandLine 'npm', 'run', 'lint'
 }
 
+task uiUnitTestCoverage(type: Exec, dependsOn: 'installNodeModules') {
+    workingDir = uiWorkingDir
+    commandLine 'npm', 'run', 'unit-coverage'
+}
+
+task uiSonarqube(type: Exec, dependsOn: 'uiUnitTestCoverage') {
+    workingDir = uiWorkingDir
+    commandLine 'npm', 'run', 'sonarqube'
+}
+
 jacoco {
     toolVersion = '0.8.3'
 }
 
 jacocoTestReport {
+    executionData.setFrom(fileTree(jacocoOutputDirectory).include("*.exec"))
     reports {
         xml.enabled true
-        html.destination file("${buildDir}/jacoco-html")
+        xml.destination file(jacocoXml)
+        html.destination file(jacocoHtmlDirectory)
     }
-}
-
-task jacocoMergeAll(type: JacocoMerge) {
-    executionData = fileTree(dir: "${project.buildDir}/jacoco", include: '*.exec')
-    destinationFile = file(mergedJacocoOutput)
 }
 
 sonarqube {
     properties {
         property 'sonar.host.url', System.getProperty("sonar.url")
-        property 'sonar.projectName', 'RetroQuest'
+        property 'sonar.projectName', 'RetroQuest API'
         property 'sonar.projectKey', 'com.ford.labs.retroquest'
         property 'sonar.analysis.mode', 'publish'
         property 'sonar.login', System.getProperty("sonar.token")
         property 'sonar.password', ''
-        property 'sonar.jacoco.reportPath', mergedJacocoOutput
         property 'sonar.exclusions', ''
         property 'sonar.scm.provider', 'git'
+        property 'sonar.coverage.jacoco.xmlReportPaths', "$jacocoXml".toString()
     }
 }
 
-tasks['jacocoTestReport'].dependsOn 'jacocoMergeAll'
-tasks['sonarqube'].dependsOn 'jacocoTestReport'
+tasks['sonarqube'].dependsOn 'build', 'apiTest'
+tasks['sonarqube'].group = 'verification'
+
+tasks.withType(Test) {
+    retry {
+        maxRetries = 3
+        maxFailures = 1
+        failOnPassedAfterRetry = false
+    }
+    finalizedBy('jacocoTestReport')
+}
 
 appengine {
     tools {

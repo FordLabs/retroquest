@@ -68,6 +68,7 @@ pipeline {
             steps {
                 container('chrome') {
                     sh './gradlew  sonarqube -Duser.home=$WORKSPACE'
+                    sh './gradlew  uiSonarqube -Dsonar.login=$SONAR_UI_TOKEN -Dsonar.host.url=$SONAR_URL'
                 }
             }
         }
