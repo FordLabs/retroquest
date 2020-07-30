@@ -69,7 +69,7 @@ pipeline {
                         sh 'echo Logging in to Cloud Foundry'
                         sh 'cf login -u $CF_CCUSER -p $CF_CCPASSWORD -a https://api.sys.pd01.edc1.cf.ford.com -s Platform-Enablement-prod'
                         sh 'echo Blue-Green push to Cloud Foundry'
-                        sh 'cf blue-green-deploy -f manifest-prod.yml retroquest --delete-old-apps'
+                        sh 'cf blue-green-deploy retroquest -f manifest-prod.yml --delete-old-apps'
                     }
                 }
             }
