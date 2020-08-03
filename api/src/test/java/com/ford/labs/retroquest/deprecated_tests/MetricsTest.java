@@ -5,10 +5,13 @@ import com.ford.labs.retroquest.feedback.FeedbackRepository;
 import com.ford.labs.retroquest.metrics.Metrics;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
@@ -16,7 +19,10 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,27 +40,35 @@ public class MetricsTest {
 
     @Test
     public void returnsTheTotalNumberOfTeamsCreated() {
-        when(mockTeamRepository.findAll()).thenReturn(asList(new Team(), new Team()));
+        given(mockTeamRepository.findAll()).willReturn(asList(new Team(), new Team()));
         assertEquals(2, metrics.getTeamCount());
     }
 
     @Test
+    public void noStartOrEndDateReturnsAllCountOfTeams() {
+        given(mockTeamRepository.count()).willReturn(2L);
+        long teamCount = metrics.getTeamCount(null, null);
+        then(mockTeamRepository).should().count();
+        assertThat(teamCount).isEqualTo(2L);
+    }
+
+    @Test
     public void callsDateCreatedAfter_whenGivenOnlyAStartDate() {
-        when(mockTeamRepository.countAllByDateCreatedAfterAndDateCreatedIsNotNull(any())).thenReturn(1L);
+        given(mockTeamRepository.countAllByDateCreatedAfterAndDateCreatedIsNotNull(any())).willReturn(1L);
         metrics.getTeamCount(LocalDate.of(2018, 2, 2), null);
-        verify(mockTeamRepository, times(1)).countAllByDateCreatedAfterAndDateCreatedIsNotNull(any());
+        then(mockTeamRepository).should().countAllByDateCreatedAfterAndDateCreatedIsNotNull(any());
     }
 
     @Test
     public void callsDateCreatedBetween_whenGivenBothAStartAndEndDate() {
-        when(mockTeamRepository.countAllByDateCreatedBetweenAndDateCreatedNotNull(any(), any())).thenReturn(1L);
+        given(mockTeamRepository.countAllByDateCreatedBetweenAndDateCreatedNotNull(any(), any())).willReturn(1L);
         metrics.getTeamCount(LocalDate.of(2018, 2, 2), LocalDate.of(2018, 4, 4));
-        verify(mockTeamRepository, times(1)).countAllByDateCreatedBetweenAndDateCreatedNotNull(any(), any());
+        then(mockTeamRepository).should().countAllByDateCreatedBetweenAndDateCreatedNotNull(any(), any());
     }
 
     @Test
     public void returnsTheFeedbackCount() {
-        when(mockFeedbackRepository.findAll()).thenReturn(asList(new Feedback(), new Feedback()));
+        given(mockFeedbackRepository.findAll()).willReturn(asList(new Feedback(), new Feedback()));
         assertEquals(2, metrics.getFeedbackCount());
     }
 
@@ -65,13 +79,13 @@ public class MetricsTest {
         Feedback threeStarFeedback = new Feedback();
         threeStarFeedback.setStars(3);
 
-        when(mockFeedbackRepository.findAllByStarsIsGreaterThanEqual(1)).thenReturn(asList(twoStarFeeback, threeStarFeedback));
+        given(mockFeedbackRepository.findAllByStarsIsGreaterThanEqual(1)).willReturn(asList(twoStarFeeback, threeStarFeedback));
         assertEquals(2.5, metrics.getAverageRating(), 0);
     }
 
     @Test
     public void returnsZeroWhenNoFeedbackIsPresent() {
-        when(mockFeedbackRepository.findAllByStarsIsGreaterThanEqual(1)).thenReturn(Collections.emptyList());
+        given(mockFeedbackRepository.findAllByStarsIsGreaterThanEqual(1)).willReturn(Collections.emptyList());
         assertEquals(0.0, metrics.getAverageRating(), 0);
     }
 
@@ -81,7 +95,7 @@ public class MetricsTest {
         feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         Feedback feedback2 = new Feedback();
         feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3 ,3, 3));
-        when(mockFeedbackRepository.findAll()).thenReturn(asList(feedback1, feedback2));
+        given(mockFeedbackRepository.findAll()).willReturn(asList(feedback1, feedback2));
 
         assertEquals(1, metrics.getFeedbackCount(LocalDate.of(2018, 2, 2), null));
     }
@@ -95,7 +109,7 @@ public class MetricsTest {
         feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
         Feedback feedback3 = new Feedback();
         feedback3.setDateCreated(LocalDateTime.of(2018, 5, 5, 5, 5));
-        when(mockFeedbackRepository.findAll()).thenReturn(asList(feedback1, feedback2));
+        given(mockFeedbackRepository.findAll()).willReturn(asList(feedback1, feedback2));
 
         assertEquals(1, metrics.getFeedbackCount(LocalDate.of(2018, 2, 2), LocalDate.of(2018, 4, 4)));
     }
@@ -106,7 +120,7 @@ public class MetricsTest {
         feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         Feedback feedback2 = new Feedback();
         feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3 ,3, 3));
-        when(mockFeedbackRepository.findAll()).thenReturn(asList(feedback1, feedback2));
+        given(mockFeedbackRepository.findAll()).willReturn(asList(feedback1, feedback2));
 
         assertEquals(1, metrics.getFeedbackCount(null, LocalDate.of(2018, 2, 2)));
     }
@@ -119,7 +133,7 @@ public class MetricsTest {
         Feedback feedback2 = new Feedback();
         feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
         feedback2.setStars(1);
-        when(mockFeedbackRepository.findAllByStarsIsGreaterThanEqual(1)).thenReturn(asList(feedback1, feedback2));
+        given(mockFeedbackRepository.findAllByStarsIsGreaterThanEqual(1)).willReturn(asList(feedback1, feedback2));
 
         assertEquals(1.0, metrics.getAverageRating(LocalDate.of(2018, 1, 1), null), .001);
     }
@@ -135,7 +149,7 @@ public class MetricsTest {
         Feedback feedback3 = new Feedback();
         feedback3.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
         feedback3.setStars(1);
-        when(mockFeedbackRepository.findAllByStarsIsGreaterThanEqual(1)).thenReturn(asList(feedback1, feedback2));
+        given(mockFeedbackRepository.findAllByStarsIsGreaterThanEqual(1)).willReturn(asList(feedback1, feedback2));
 
         assertEquals(1.0, metrics.getAverageRating(LocalDate.of(2018, 2, 2), LocalDate.of(2018, 4, 4)), .001);
     }
@@ -148,7 +162,7 @@ public class MetricsTest {
         Feedback feedback2 = new Feedback();
         feedback2.setDateCreated(LocalDateTime.of(2018, 3, 3, 3, 3));
         feedback2.setStars(1);
-        when(mockFeedbackRepository.findAllByStarsIsGreaterThanEqual(1)).thenReturn(asList(feedback1, feedback2));
+        given(mockFeedbackRepository.findAllByStarsIsGreaterThanEqual(1)).willReturn(asList(feedback1, feedback2));
 
         assertEquals(1.0, metrics.getAverageRating(null, LocalDate.of(2018, 4, 4)), .001);
     }
@@ -156,7 +170,7 @@ public class MetricsTest {
     @Test
     public void nullStartDate_becomesDefaultStatDate() {
         metrics.getTeamLogins(null, LocalDate.of(2018, 1, 1));
-        verify(mockTeamRepository).findAllByLastLoginDateBetween(LocalDate.of(1900, 1, 1), LocalDate.of(2018, 1, 1));
+        then(mockTeamRepository).should().findAllByLastLoginDateBetween(LocalDate.of(1900, 1, 1), LocalDate.of(2018, 1, 1));
     }
 
     @Test

@@ -400,6 +400,13 @@ public class TeamApiTest extends ApiTest {
         ).andExpect(status().isOk());
     }
 
+    @Test
+    public void shouldReturnIsCaptchaEnabledWithCaptchaRequest() throws Exception {
+        mockMvc.perform(get("/api/captcha")
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("teamId"))
+        ).andExpect(status().isOk());
+    }
+
     private void installSuccessCaptcha() {
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
         server.expect(requestTo(containsString("http://captcha.url")))
