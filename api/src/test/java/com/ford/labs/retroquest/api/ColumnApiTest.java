@@ -17,8 +17,8 @@
 
 package com.ford.labs.retroquest.api;
 
+import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
 import com.ford.labs.retroquest.api.setup.ApiTest;
-import com.ford.labs.retroquest.apiAuthorization.ApiAuthorization;
 import com.ford.labs.retroquest.v2.columns.ColumnCombinerResponse;
 import com.ford.labs.retroquest.v2.columns.ColumnCombinerService;
 import com.ford.labs.retroquest.v2.columns.ColumnResponse;

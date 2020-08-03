@@ -79,7 +79,7 @@ public class UserController {
     @PutMapping(value = "user/{name}/team")
     @PreAuthorize("#name.toLowerCase() == authentication.principal")
     @Transactional
-    public ResponseEntity addExistingTeamToUser(@PathVariable("name") String name, @RequestBody ExistingTeamRequest request) {
+    public ResponseEntity<Void> addExistingTeamToUser(@PathVariable("name") String name, @RequestBody ExistingTeamRequest request) {
 
         Optional<Team> teamOptional = teamRepository.findTeamByName(request.getName());
         if (teamOptional.isPresent() && passwordEncoder.matches(request.getPassword(), teamOptional.get().getPassword())) {

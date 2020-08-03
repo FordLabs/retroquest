@@ -18,7 +18,7 @@
 package com.ford.labs.retroquest.actionitem;
 
 
-import com.ford.labs.retroquest.apiAuthorization.ApiAuthorization;
+import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
 import com.ford.labs.retroquest.websocket.WebsocketDeleteResponse;
 import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
 import org.springframework.http.ResponseEntity;

@@ -65,10 +65,6 @@ public class ContributorController {
         return this.restTemplate.getForObject(avatarUrl, byte[].class);
     }
 
-    public List<Contributor> getCachedContributors() {
-        return cachedContributors;
-    }
-
     public void setCachedContributors(List<Contributor> contributors) {
         this.cachedContributors.clear();
         this.cachedContributors.addAll(contributors);

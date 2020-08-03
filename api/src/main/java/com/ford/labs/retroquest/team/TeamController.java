@@ -17,7 +17,7 @@
 
 package com.ford.labs.retroquest.team;
 
-import com.ford.labs.retroquest.apiAuthorization.ApiAuthorization;
+import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
 import com.ford.labs.retroquest.security.JwtBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;

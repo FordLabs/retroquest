@@ -17,7 +17,7 @@
 
 package com.ford.labs.retroquest.columntitle;
 
-import com.ford.labs.retroquest.apiAuthorization.ApiAuthorization;
+import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
 import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;

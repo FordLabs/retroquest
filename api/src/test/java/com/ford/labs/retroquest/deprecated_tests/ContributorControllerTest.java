@@ -135,14 +135,14 @@ public class ContributorControllerTest {
                 Mockito.eq(GithubContributor[].class)
         )).thenReturn(data);
         List<Contributor> result = subject.getContributors();
-        assertThat(result).isEqualTo(subject.getCachedContributors());
+        assertThat(result).isEqualTo(subject.getContributors());
     }
 
     @Test
     public void getContributorsShouldReturnCachedResultsWhenNotCallingTheGithubApi() {
         subject.setCachedContributors(Collections.singletonList(new Contributor(new byte[]{}, "accountUrl")));
         List<Contributor> result = subject.getContributors();
-        assertThat(result).isEqualTo(subject.getCachedContributors());
+        assertThat(result).isEqualTo(subject.getContributors());
     }
 
 }

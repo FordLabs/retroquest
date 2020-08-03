@@ -17,7 +17,6 @@
 
 package com.ford.labs.retroquest.v2.columns;
 
-import com.ford.labs.retroquest.apiAuthorization.ApiAuthorization;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,12 +28,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/v2/team")
 public class ColumnController {
 
-    private ColumnCombinerService columnCombinerService;
-    private ApiAuthorization apiAuthorization;
+    private final ColumnCombinerService columnCombinerService;
 
-    ColumnController(ColumnCombinerService columnCombinerService, ApiAuthorization apiAuthorization) {
+    ColumnController(ColumnCombinerService columnCombinerService) {
         this.columnCombinerService = columnCombinerService;
-        this.apiAuthorization = apiAuthorization;
     }
 
     @GetMapping("/{teamId}/columns")

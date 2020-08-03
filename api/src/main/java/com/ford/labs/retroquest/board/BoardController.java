@@ -18,7 +18,7 @@
 package com.ford.labs.retroquest.board;
 
 
-import com.ford.labs.retroquest.apiAuthorization.ApiAuthorization;
+import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
