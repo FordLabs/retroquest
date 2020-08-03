@@ -17,13 +17,16 @@
 
 package com.ford.labs.retroquest.contributors;
 
+import org.springframework.boot.autoconfigure.info.ProjectInfoProperties;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.List;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
@@ -47,12 +50,14 @@ public class ContributorController {
 
     @Scheduled(fixedRate = MILLISECONDS_IN_DAY)
     public void cacheContributors() {
-        GithubContributor[] response = this.restTemplate.getForObject(
+        GithubContributor[] response = Optional.ofNullable(this.restTemplate.getForObject(
                 "https://api.github.com/repos/FordLabs/retroquest/contributors",
                 GithubContributor[].class
-        );
+        )).orElse(new GithubContributor[0]);
 
-        List<Contributor> newContributors = Arrays.stream(response)
+        List<GithubContributor> githubContributors = Arrays.asList(response);
+
+        List<Contributor> newContributors = githubContributors.stream()
                 .filter(githubContributor -> !githubContributor.getAccountUrl().endsWith("/invalid-email-address"))
                 .map(githubContributor -> new Contributor(
                         getAvatar(githubContributor.getAvatarUrl()), githubContributor.getAccountUrl()
