@@ -76,8 +76,4 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public void passwordMissingLowerCaseAlphaExceptionHandler() {
     }
 
-    @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Team already has a password")
-    @ExceptionHandler(TeamAlreadyHasPasswordException.class)
-    public void teamAlreadyHasPasswordExceptionHandler() {
-    }
 }
