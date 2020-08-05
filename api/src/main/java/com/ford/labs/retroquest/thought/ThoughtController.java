@@ -38,13 +38,16 @@ import java.util.List;
 @RestController
 public class ThoughtController {
 
+    private ThoughtService thoughtService;
     private final ThoughtRepository thoughtRepository;
     private final ColumnTitleRepository columnTitleRepository;
     private final ApiAuthorization apiAuthorization;
 
-    public ThoughtController(ThoughtRepository thoughtRepository,
+    public ThoughtController(ThoughtService thoughtService,
+                             ThoughtRepository thoughtRepository,
                              ColumnTitleRepository columnTitleRepository,
                              ApiAuthorization apiAuthorization) {
+        this.thoughtService = thoughtService;
         this.thoughtRepository = thoughtRepository;
         this.columnTitleRepository = columnTitleRepository;
         this.apiAuthorization = apiAuthorization;
@@ -53,18 +56,13 @@ public class ThoughtController {
     @PutMapping("/api/team/{teamId}/thought/{thoughtId}/heart")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public int likeThought(@PathVariable("thoughtId") String thoughtId, @PathVariable("teamId") String teamId) {
-        Thought thought = thoughtRepository.findById(Long.valueOf(thoughtId)).orElseThrow();
-        thought.incrementHearts();
-        return thoughtRepository.save(thought).getHearts();
+        return thoughtService.likeThought(thoughtId);
     }
 
     @PutMapping("/api/team/{teamId}/thought/{thoughtId}/discuss")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
-    public ResponseEntity discussThought(@PathVariable("thoughtId") String thoughtId, @PathVariable("teamId") String teamId) {
-        Thought thought = thoughtRepository.findById(Long.valueOf(thoughtId)).orElseThrow();
-
-        thought.setDiscussed(!thought.isDiscussed());
-        thoughtRepository.save(thought);
+    public ResponseEntity<Void> discussThought(@PathVariable("thoughtId") String thoughtId, @PathVariable("teamId") String teamId) {
+        thoughtService.discussThought(thoughtId);
 
         return ResponseEntity.ok().build();
     }
@@ -72,43 +70,34 @@ public class ThoughtController {
     @Transactional
     @PutMapping("/api/team/{teamId}/thought/{id}/message")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
-    public void updateThought(@PathVariable("id") Long id, @RequestBody Thought thought, @PathVariable("teamId") String teamId) {
-        Thought returnedThought = thoughtRepository.findById(id).orElseThrow();
-        returnedThought.setMessage(thought.getMessage());
-        thoughtRepository.save(returnedThought);
+    public void updateThoughtMessage(@PathVariable("id") Long id, @RequestBody Thought thought, @PathVariable("teamId") String teamId) {
+        thoughtService.updateThoughtMessage(String.valueOf(id), thought.getMessage());
     }
 
     @GetMapping("/api/team/{teamId}/thoughts")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public List<Thought> getThoughtsForTeam(@PathVariable("teamId") String teamId) {
-        return thoughtRepository.findAllByTeamIdAndBoardIdIsNull(teamId);
+        return thoughtService.fetchAllThoughtsByTeam(teamId);
     }
 
     @Transactional
     @DeleteMapping("/api/team/{teamId}/thoughts")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public void clearThoughtsForTeam(@PathVariable("teamId") String teamId) {
-        thoughtRepository.deleteAllByTeamId(teamId);
+        thoughtService.deleteAllThoughtsByTeamId(teamId);
     }
 
     @Transactional
     @DeleteMapping("/api/team/{teamId}/thought/{thoughtId}")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public void clearIndividualThoughtForTeam(@PathVariable("teamId") String teamId, @PathVariable("thoughtId") Long id) {
-        thoughtRepository.deleteThoughtByTeamIdAndId(teamId, id);
+        thoughtService.deleteThought(teamId, id);
     }
 
     @PostMapping("/api/team/{teamId}/thought")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
-    public ResponseEntity createThoughtForTeam(@PathVariable("teamId") String teamId, @RequestBody Thought thought) throws URISyntaxException {
-        thought.setTeamId(teamId);
-
-        ColumnTitle columnTitle = columnTitleRepository.findByTeamIdAndAndTopic(teamId, thought.getTopic());
-        thought.setColumnTitle(columnTitle);
-
-        Thought save = thoughtRepository.save(thought);
-
-        URI savedThoughtUri = new URI("/api/team/" + teamId + "/thought/" + save.getId());
+    public ResponseEntity<Void> createThoughtForTeam(@PathVariable("teamId") String teamId, @RequestBody Thought thought) throws URISyntaxException {
+        URI savedThoughtUri = new URI(thoughtService.createThoughtAndReturnURI(teamId, thought));
         return ResponseEntity.created(savedThoughtUri).build();
     }
 
@@ -118,7 +107,7 @@ public class ThoughtController {
         if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
             thought.setTeamId(teamId);
             Thought savedThought = thoughtRepository.save(thought);
-            return new WebsocketPutResponse<>(thoughtRepository.findById(savedThought.getId()).orElseThrow());
+            return new WebsocketPutResponse<>(thoughtService.fetchThought(savedThought.getId()));
         }
         return null;
     }

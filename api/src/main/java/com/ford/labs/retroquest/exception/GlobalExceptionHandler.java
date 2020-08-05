@@ -19,6 +19,7 @@ package com.ford.labs.retroquest.exception;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -74,6 +75,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Password must contain at least one lower case letter.")
     @ExceptionHandler(PasswordMissingLowerCaseAlphaException.class)
     public void passwordMissingLowerCaseAlphaExceptionHandler() {
+    }
+
+    @ExceptionHandler(ThoughtNotFoundException.class)
+    public ResponseEntity<String> thoughtNotFoundExceptionHandler(ThoughtNotFoundException thoughtNotFoundException) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(thoughtNotFoundException.getMessage());
     }
 
 }
