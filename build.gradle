@@ -117,14 +117,16 @@ task runAllTests(type: GradleBuild) {
 }
 
 task withH2(dependsOn: bootRun) {
-    doFirst {
-        systemProperty 'spring.profiles.active', 'h2'
+    bootRun {
+        args = ['--spring.profiles.active=h2']
+        systemProperties System.properties
     }
 }
 
 task withDockerDb(dependsOn: bootRun) {
-    doFirst {
-        systemProperty 'spring.profiles.active', 'dockerdb'
+    bootRun {
+        args = ['--spring.profiles.active=dockerdb']
+        systemProperties System.properties
     }
 }
 
