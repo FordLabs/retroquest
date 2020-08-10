@@ -131,19 +131,26 @@ public class ThoughtApiTest extends ApiTest {
 
     @Test
     public void should_delete_thoughts_by_thought_id() throws Exception {
-        List<Thought> savedThoughts = Arrays.asList(
+
+
+        List<Thought> thoughtsToSave = Arrays.asList(
                 Thought.builder().teamId(teamId).message("hello").build(),
                 Thought.builder().teamId(teamId).message("goodbye").build());
-        thoughtRepository.saveAll(savedThoughts);
+
+        List<Thought> persistedThoughts = thoughtRepository.saveAll(thoughtsToSave);
+
         assertThat(thoughtRepository.findAll().size()).isEqualTo(2);
 
-        mockMvc.perform(delete(String.join("", "/api/team/", teamId, "/thought/1"))
+        Thought thoughtToDelete = persistedThoughts.get(0);
+        Thought thoughToKeep = persistedThoughts.get(1);
+
+        mockMvc.perform(delete(String.join("", "/api/team/", teamId, "/thought/" + thoughtToDelete.getId()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk());
 
-        assertThat(thoughtRepository.existsById(1L)).isFalse();
-        assertThat(thoughtRepository.existsById(2L)).isTrue();
+        assertThat(thoughtRepository.exists(Example.of(thoughtToDelete))).isFalse();
+        assertThat(thoughtRepository.exists(Example.of(thoughToKeep))).isTrue();
 
     }
 
