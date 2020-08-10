@@ -18,8 +18,6 @@
 package com.ford.labs.retroquest.thought;
 
 import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
-import com.ford.labs.retroquest.columntitle.ColumnTitle;
-import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.websocket.WebsocketDeleteResponse;
 import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
 import org.springframework.http.ResponseEntity;
@@ -40,16 +38,13 @@ public class ThoughtController {
 
     private ThoughtService thoughtService;
     private final ThoughtRepository thoughtRepository;
-    private final ColumnTitleRepository columnTitleRepository;
     private final ApiAuthorization apiAuthorization;
 
     public ThoughtController(ThoughtService thoughtService,
                              ThoughtRepository thoughtRepository,
-                             ColumnTitleRepository columnTitleRepository,
                              ApiAuthorization apiAuthorization) {
         this.thoughtService = thoughtService;
         this.thoughtRepository = thoughtRepository;
-        this.columnTitleRepository = columnTitleRepository;
         this.apiAuthorization = apiAuthorization;
     }
 

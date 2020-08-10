@@ -5,6 +5,7 @@ buildscript {
         lombokVersion = '1.18.12'
         uiWorkingDir = "${rootDir}/ui"
         springCloudVersion='2.2.3.RELEASE'
+        moshiVersion = '1.9.3'
         jacocoOutputDirectory = "${project.buildDir}/jacoco"
         jacocoHtmlDirectory = "${project.buildDir}/jacoco-html"
         jacocoXml = "${project.buildDir}/jacoco-xml/jacoco.xml"
@@ -72,6 +73,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation "org.springframework.cloud:spring-cloud-config-client:${springCloudVersion}"
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation "com.squareup.moshi:moshi:$moshiVersion"
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.1'
     implementation 'org.apache.commons:commons-csv:1.8'
     implementation 'org.apache.commons:commons-lang3:3.11'

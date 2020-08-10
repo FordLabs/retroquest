@@ -3,13 +3,18 @@ package com.ford.labs.retroquest.api;
 import com.ford.labs.retroquest.api.setup.ApiTest;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
+import com.ford.labs.retroquest.exception.ThoughtNotFoundException;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
+import com.squareup.moshi.Types;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.test.web.servlet.MvcResult;
@@ -19,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
@@ -34,6 +39,7 @@ public class ThoughtApiTest extends ApiTest {
     private String BASE_SUB_URL;
     private String BASE_ENDPOINT_URL;
     private String BASE_GET_URL;
+    private final Moshi moshi = new Moshi.Builder().build();
 
     @BeforeEach
     public void setup() {
@@ -48,6 +54,112 @@ public class ThoughtApiTest extends ApiTest {
         columnTitleRepository.deleteAllInBatch();
         assertThat(thoughtRepository.count()).isZero();
         assertThat(columnTitleRepository.count()).isZero();
+    }
+
+    @Test
+    public void should_like_thought_on_upvote() throws Exception {
+        Thought savedThought = thoughtRepository.save(Thought.builder().teamId(teamId).hearts(1).build());
+
+        mockMvc.perform(put("/api/team/" + teamId + "/thought/" + savedThought.getId() + "/heart")
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk());
+
+        assertThat(thoughtRepository.findById(savedThought.getId()).orElseThrow(() -> new ThoughtNotFoundException(String.valueOf(savedThought.getId()))).getHearts()).isEqualTo(2);
+    }
+
+    @Test
+    public void should_discuss_not_discussed_thought() throws Exception {
+        Thought savedThought = thoughtRepository.save(Thought.builder().teamId(teamId).discussed(false).build());
+
+        mockMvc.perform(put("/api/team/" + teamId + "/thought/" + savedThought.getId() + "/discuss")
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk());
+
+        assertThat(thoughtRepository.findById(savedThought.getId()).orElseThrow(() -> new ThoughtNotFoundException(String.valueOf(savedThought.getId()))).isDiscussed()).isTrue();
+    }
+
+    @Test
+    public void should_update_thought_message() throws Exception {
+        Thought savedThought = thoughtRepository.save(Thought.builder().teamId(teamId).message("hello").build());
+        Thought updatedThought = Thought.builder().id(savedThought.getId()).teamId(teamId).message("goodbye").build();
+
+        JsonAdapter<Thought> jsonAdapter = moshi.adapter(Thought.class);
+
+        mockMvc.perform(put("/api/team/" + teamId + "/thought/" + savedThought.getId() + "/message")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonAdapter.toJson(updatedThought))
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk());
+
+        assertThat(thoughtRepository.findById(savedThought.getId()).orElseThrow(() -> new ThoughtNotFoundException(String.valueOf(savedThought.getId()))).getMessage()).isEqualTo("goodbye");
+    }
+
+    @Test
+    public void should_return_all_thoughts_by_team_id() throws Exception {
+        List<Thought> expectedThoughts = Arrays.asList(
+                Thought.builder().teamId(teamId).message("hello").build(),
+                Thought.builder().teamId(teamId).message("goodbye").build());
+
+        List<Thought> persistedExpectedThoughts = thoughtRepository.saveAll(expectedThoughts);
+
+        JsonAdapter<List<Thought>> thoughtsAdapter = moshi.adapter(Types.newParameterizedType(List.class, Thought.class));
+
+        MvcResult result = mockMvc.perform(get(String.join("", "/api/team/", teamId, "/thoughts"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        assertThat(thoughtsAdapter.fromJson(result.getResponse().getContentAsString())).isEqualTo(persistedExpectedThoughts);
+    }
+
+    @Test
+    public void should_delete_all_thoughts_by_team_id() throws Exception {
+        List<Thought> savedThoughts = Arrays.asList(
+                Thought.builder().teamId(teamId).message("hello").build(),
+                Thought.builder().teamId(teamId).message("goodbye").build());
+        thoughtRepository.saveAll(savedThoughts);
+        assertThat(thoughtRepository.findAll().size()).isEqualTo(2);
+
+        mockMvc.perform(delete(String.join("", "/api/team/", teamId, "/thoughts"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk());
+
+        assertThat(thoughtRepository.findAll()).isEmpty();
+    }
+
+    @Test
+    public void should_delete_thoughts_by_thought_id() throws Exception {
+        List<Thought> savedThoughts = Arrays.asList(
+                Thought.builder().teamId(teamId).message("hello").build(),
+                Thought.builder().teamId(teamId).message("goodbye").build());
+        thoughtRepository.saveAll(savedThoughts);
+        assertThat(thoughtRepository.findAll().size()).isEqualTo(2);
+
+        mockMvc.perform(delete(String.join("", "/api/team/", teamId, "/thought/1"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk());
+
+        assertThat(thoughtRepository.existsById(1L)).isFalse();
+        assertThat(thoughtRepository.existsById(2L)).isTrue();
+
+    }
+
+    @Test
+    public void should_create_thought_no_websocket() throws Exception {
+        Thought thoughtToSave = Thought.builder().teamId(teamId).message("hello").build();
+
+        JsonAdapter<Thought> jsonAdapter = moshi.adapter(Thought.class);
+
+        mockMvc.perform(post(String.join("", "/api/team/", teamId, "/thought"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonAdapter.toJson(thoughtToSave))
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isCreated());
+
+        assertThat(thoughtRepository.exists(Example.of(thoughtToSave))).isTrue();
     }
 
     @Test
