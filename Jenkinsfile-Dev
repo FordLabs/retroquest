@@ -19,6 +19,8 @@ pipeline {
                     sh 'echo "systemProp.https.nonProxyHosts=$NO_PROXY_HOSTS" >> gradle.properties'
                     sh 'echo "systemProp.sonar.url=$SONAR_URL" >> gradle.properties'
                     sh 'echo "systemProp.sonar.token=$SONAR_TOKEN" >> gradle.properties'
+                    sh 'echo "http_proxy: $HTTP_PROXY" >> variables.yml'
+                    sh 'echo "https_proxy: $HTTPS_PROXY" >> variables.yml'
                 }
             }
         }
@@ -79,7 +81,7 @@ pipeline {
                         sh 'echo Logging in to Cloud Foundry'
                         sh 'cf login -u $CF_CCUSER -p $CF_CCPASSWORD -a https://api.sys.pd01.edc1.cf.ford.com -s Platform-Enablement-prod'
                         sh 'echo Blue-Green push to Cloud Foundry'
-                        sh 'cf blue-green-deploy dev-retroquest -f manifest-dev.yml --delete-old-apps'
+                        sh 'cf blue-green-deploy dev-retroquest -f manifest-dev.yml --vars-file=variables.yml --delete-old-apps'
                     }
                 }
             }
