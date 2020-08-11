@@ -19,10 +19,10 @@ pipeline {
                     sh 'echo "systemProp.https.nonProxyHosts=$NO_PROXY_HOSTS" >> gradle.properties'
                     sh 'echo "systemProp.sonar.url=$SONAR_URL" >> gradle.properties'
                     sh 'echo "systemProp.sonar.token=$SONAR_TOKEN" >> gradle.properties'
-                    sh 'echo "\tHTTP_PROXY: $HTTP_PROXY" >> manifest-dev.yml'
-                    sh 'echo "\thttp_proxy: $HTTP_PROXY" >> manifest-dev.yml'
-                    sh 'echo "\tHTTPS_PROXY: $HTTPS_PROXY" >> manifest-dev.yml'
-                    sh 'echo "\thttps_proxy: $HTTPS_PROXY" >> manifest-dev.yml'
+                    sh 'echo "    HTTP_PROXY: $HTTP_PROXY" >> manifest-dev.yml'
+                    sh 'echo "    http_proxy: $HTTP_PROXY" >> manifest-dev.yml'
+                    sh 'echo "    HTTPS_PROXY: $HTTPS_PROXY" >> manifest-dev.yml'
+                    sh 'echo "    https_proxy: $HTTPS_PROXY" >> manifest-dev.yml'
                 }
             }
         }
