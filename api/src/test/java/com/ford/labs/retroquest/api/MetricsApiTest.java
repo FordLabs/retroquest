@@ -40,7 +40,6 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void canReadTheTotalNumberOfTeamsCreated() throws Exception {
         Team team = new Team();
         String teamUri = "teamUri";
@@ -70,9 +69,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void canGetFeedbackCount() throws Exception {
-
         Feedback feedback = new Feedback();
         feedback.setDateCreated(LocalDateTime.now());
         feedbackRepository.save(feedback);
@@ -99,9 +96,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void canGetAverageRatingAsAdmin() throws Exception {
-
         Feedback feedback1 = new Feedback();
         feedback1.setStars(4);
         feedback1.setDateCreated(LocalDateTime.now());
@@ -120,7 +115,6 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void averageRatingIgnoresStarsWithAZeroValue() throws Exception {
 
         Feedback feedback1 = new Feedback();
@@ -155,7 +149,6 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void whenGettingTheTotalNumberOfReviews_providingOnlyAStartDate_getsAllFromThatDateUntilNow() throws Exception {
 
         Feedback feedback1 = new Feedback();
@@ -173,7 +166,6 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void whenGettingTheTotalNumberOfReviews_providingOnlyAnEndDate_getsAllFromNowToThatDate() throws Exception {
 
         Feedback feedback1 = new Feedback();
@@ -191,7 +183,6 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void whenGettingTheTotalNumberOfReviews_providingOnlyStartAndEndDate_getsAllBetweenThoseDates() throws Exception {
 
         Feedback feedback1 = new Feedback();
@@ -211,7 +202,6 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void whenGettingTheAverageRating_providingAStartAndEndDate_getsTheBetweenDates() throws Exception {
 
         Feedback feedback1 = new Feedback();
@@ -234,7 +224,6 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void whenGettingTheAverageRating_providingOnlyAStartDate_getsAllFromThatDateUntilNow() throws Exception {
 
         Feedback feedback1 = new Feedback();
@@ -254,7 +243,6 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void whenGettingTheAverageRating_providingOnlyAnEndDate_getsAllFromNowToThatDate() throws Exception {
 
         Feedback feedback1 = new Feedback();
@@ -274,7 +262,6 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void whenGettingTeamCount_providingOnlyAStartDate_getsAllFromNowToThatDate() throws Exception {
 
         Team team1 = new Team();
@@ -293,7 +280,6 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void whenGettingTeamLogins_providingOnlyAStartDate_getsAllFromThenToNow() throws Exception {
         Team team1 = new Team();
         team1.setUri("teamLoginOnlyStartDate1");
@@ -310,7 +296,6 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void whenGettingTeamLogins_providingOnlyAnEndDate_getsAllFromTheBeginningOfTimeToThatDate() throws Exception {
         Team team1 = new Team();
         team1.setUri("teamLoginsOnlyEndDate1");
@@ -327,7 +312,6 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void whenGettingTeamLogins_providingAStartAndEndDate_getsAllBetweenThem() throws Exception {
         Team team1 = new Team();
         team1.setUri("teamLoginStartAndEndDate1");

@@ -110,12 +110,6 @@ task apiTest(type: Test) {
     }
 }
 
-task inContainerTest(type: Test) {
-    useJUnitPlatform {
-        includeTags 'container'
-    }
-}
-
 task dockerApiTest(type: GradleBuild) {
     tasks = ['apiTest']
 }

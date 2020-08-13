@@ -56,13 +56,6 @@ pipeline {
                 }
             }
         }
-        stage ('In-Container Tests') {
-           steps {
-               container('chrome') {
-                   sh './gradlew inContainerTest'
-               }
-           }
-        }
         stage('Deploy Prod') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'pcf-pe-prod', usernameVariable: 'CF_CCUSER', passwordVariable: 'CF_CCPASSWORD')]) {

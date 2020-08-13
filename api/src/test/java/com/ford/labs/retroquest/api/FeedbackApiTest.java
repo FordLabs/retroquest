@@ -31,7 +31,6 @@ public class FeedbackApiTest extends ApiTest {
     }
 
     @Test
-    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void should_get_all_feedback_as_an_admin() throws Exception {
         feedbackRepository.save(Feedback.builder().build());
 
