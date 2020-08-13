@@ -56,11 +56,10 @@ pipeline {
                 }
             }
         }
-        stage('Sonarqube') {
+        stage ('In-Container Tests') {
             steps {
                 container('chrome') {
-                    sh './gradlew  sonarqube -Duser.home=$WORKSPACE'
-                    sh './gradlew  uiSonarqube -Dsonar.login=$SONAR_UI_TOKEN -Dsonar.host.url=$SONAR_URL'
+                    sh './gradlew inContainerTest'
                 }
             }
         }
@@ -75,6 +74,14 @@ pipeline {
                     }
                 }
             }
+        }
+        stage('Sonarqube') {
+           steps {
+               container('chrome') {
+                   sh './gradlew  sonarqube -Duser.home=$WORKSPACE'
+                   sh './gradlew  uiSonarqube -Dsonar.login=$SONAR_UI_TOKEN -Dsonar.host.url=$SONAR_URL'
+               }
+           }
         }
     }
 }
