@@ -115,7 +115,7 @@ task dockerApiTest(type: GradleBuild) {
 }
 
 task runAllTests(type: GradleBuild) {
-    tasks = ['test', 'apiTest', 'inContainerTest']
+    tasks = ['test', 'apiTest']
 }
 
 task withH2(dependsOn: bootRun) {
