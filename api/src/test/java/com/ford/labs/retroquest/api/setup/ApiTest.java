@@ -152,11 +152,7 @@ public class ApiTest {
         }
     }
 
-    public String takeObjectInSocket() throws InterruptedException {
-        return blockingQueue.poll(1, SECONDS);
-    }
-
-    public <T> void subscribe(StompSession session, String url) {
+    public void subscribe(StompSession session, String url) {
         session.subscribe(url, new DefaultStompFrameHandler());
     }
 
