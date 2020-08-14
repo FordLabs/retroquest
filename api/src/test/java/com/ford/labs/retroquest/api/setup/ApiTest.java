@@ -19,8 +19,6 @@ import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -30,7 +28,6 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
