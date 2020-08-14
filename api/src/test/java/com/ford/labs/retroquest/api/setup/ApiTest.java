@@ -28,7 +28,6 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
@@ -67,8 +66,6 @@ public class ApiTest {
     @Value("${jwt.signing.secret}")
     private String jwtSigningSecret;
 
-    private String basicAuthToken;
-
     private String bearerAuthToken;
 
     public String teamId;
@@ -82,17 +79,12 @@ public class ApiTest {
     public void __setup() {
         teamId = "BeachBums";
         websocketUrl = "ws://localhost:" + port + "/websocket";
-        basicAuthToken = "Basic " + Base64.getEncoder().encodeToString((adminUsername + ":" + adminPassword).getBytes());
         bearerAuthToken = "Bearer " + jwtBuilder.buildJwt(teamId);
 
         blockingQueue = new LinkedBlockingDeque<>();
 
         stompClient = new WebSocketStompClient(new SockJsClient(
                 Collections.singletonList(new WebSocketTransport(new StandardWebSocketClient()))));
-    }
-
-    public String getBasicAuthToken() {
-        return basicAuthToken;
     }
 
     public String getBearerAuthToken() {
@@ -152,12 +144,16 @@ public class ApiTest {
         }
     }
 
-    public String takeObjectInSocket() throws InterruptedException {
-        return blockingQueue.poll(1, SECONDS);
+    public void subscribe(StompSession session, String url) {
+        session.subscribe(url, new DefaultStompFrameHandler());
     }
 
-    public <T> void subscribe(StompSession session, String url) {
-        session.subscribe(url, new DefaultStompFrameHandler());
+    public String getAdminUsername() {
+        return adminUsername;
+    }
+
+    public String getAdminPassword() {
+        return adminPassword;
     }
 
 }

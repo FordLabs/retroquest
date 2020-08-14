@@ -21,7 +21,8 @@ import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
-import org.springframework.security.crypto.codec.Base64;
+
+import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -45,7 +46,7 @@ public class JwtBuilderTest {
                 .setSigningKey(JWT_SECRET.getBytes())
                 .parse(jwt);
 
-        assertThat("{\"alg\":\"HS512\"}").isEqualTo(new String(Base64.decode(jwtHeader.getBytes())));
+        assertThat("{\"alg\":\"HS512\"}").isEqualTo(new String(Base64.getDecoder().decode(jwtHeader.getBytes())));
         assertThat(parser.isSigned(jwt)).isTrue();
     }
 }

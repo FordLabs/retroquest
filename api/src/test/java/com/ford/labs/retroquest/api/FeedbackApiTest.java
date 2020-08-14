@@ -8,12 +8,10 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-
-import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,24 +29,21 @@ public class FeedbackApiTest extends ApiTest {
     }
 
     @Test
-    @WithMockUser(value = "Admin", roles = "ADMIN")
     public void should_get_all_feedback_as_an_admin() throws Exception {
         feedbackRepository.save(Feedback.builder().build());
 
         mockMvc.perform(
                 get("/api/admin/feedback/all")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", getBasicAuthToken()))
+                        .with(httpBasic(getAdminUsername(), getAdminPassword())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
     }
 
     @Test
     public void should_not_get_all_feedback_being_unauthorized() throws Exception {
-        final String token = Base64.getEncoder().encodeToString("notadmin:pass".getBytes());
-
         mockMvc.perform(get("/api/admin/feedback/all").contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Basic " + token))
+                .with(httpBasic("foo", "bar")))
                 .andExpect(status().isUnauthorized());
     }
 
