@@ -30,51 +30,61 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Incorrect board or password. Please try again.")
     @ExceptionHandler(CaptchaInvalidException.class)
     public void invalidCaptchaExceptionHandler() {
+        // Used by Spring for Controller Advice
     }
     
     @ResponseStatus(value = HttpStatus.CONFLICT, reason = "This board name is already in use. Please try another one.")
     @ExceptionHandler(DataIntegrityViolationException.class)
     public void duplicateUriConflict() {
+        // Used by Spring for Controller Advice
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Please enter a board name without any special characters.")
     @ExceptionHandler(SpecialCharacterTeamNameException.class)
     public void badTeamNameWithSpecialCharactersRequest() {
+        // Used by Spring for Controller Advice
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Please enter a board name.")
     @ExceptionHandler(EmptyTeamNameException.class)
     public void emptyTeamNameRequest() {
+        // Used by Spring for Controller Advice
     }
 
     @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Incorrect board name. Please try again.")
     @ExceptionHandler(BoardDoesNotExistException.class)
     public void noTeamExceptionHandler() {
+        // Used by Spring for Controller Advice
     }
 
     @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Incorrect board or password. Please try again.")
     @ExceptionHandler(PasswordInvalidException.class)
     public void badPasswordExceptionHandler() {
+        // Used by Spring for Controller Advice
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Password must be 8 characters or longer.")
     @ExceptionHandler(PasswordTooShortException.class)
     public void passwordTooShortExceptionHandler() {
+        // Used by Spring for Controller Advice
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Password must contain at least one numeric character.")
     @ExceptionHandler(PasswordMissingNumberException.class)
     public void passwordMissingNumberExceptionHandler() {
+        // Used by Spring for Controller Advice
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Password must contain at least one capital letter.")
     @ExceptionHandler(PasswordMissingUpperCaseAlphaException.class)
     public void passwordMissingUpperCaseAlphaExceptionHandler() {
+        // Used by Spring for Controller Advice
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Password must contain at least one lower case letter.")
     @ExceptionHandler(PasswordMissingLowerCaseAlphaException.class)
     public void passwordMissingLowerCaseAlphaExceptionHandler() {
+        // Used by Spring for Controller Advice
     }
 
     @ExceptionHandler(ThoughtNotFoundException.class)
