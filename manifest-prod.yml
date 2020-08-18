@@ -1,6 +1,6 @@
 ---
 applications:
-  - name: retroquest
+  - name: retroquest-prod
     path: build/libs/retroquest.jar
     memory: 1GB
     instances: 1

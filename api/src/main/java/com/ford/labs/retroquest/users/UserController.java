@@ -22,7 +22,6 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequestMapping(value = "/api")
-
 public class UserController {
 
     private final UserRepository userRepository;
