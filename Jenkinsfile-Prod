@@ -11,6 +11,7 @@ pipeline {
             steps {
                 container('chrome') {
                    sh './set_proxies.sh manifest-prod.yml'
+                   sh 'cat manifest-prod.yml'
                 }
             }
         }
