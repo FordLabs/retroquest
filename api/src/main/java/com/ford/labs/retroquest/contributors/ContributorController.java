@@ -31,45 +31,14 @@ import java.util.stream.Collectors;
 @RestController
 public class ContributorController {
 
-    private static final long MILLISECONDS_IN_DAY = 86400000;
+    private final ContributorsService contributorService;
 
-    private final RestTemplate restTemplate;
-
-    private CopyOnWriteArrayList<Contributor> cachedContributors = new CopyOnWriteArrayList<>();
-
-    public ContributorController(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public ContributorController(ContributorsService contributorsService) {
+        this.contributorService = contributorsService;
     }
 
     @GetMapping("/api/contributors")
     public List<Contributor> getContributors() {
-        return cachedContributors;
-    }
-
-    @Scheduled(fixedRate = MILLISECONDS_IN_DAY)
-    public void cacheContributors() {
-        GithubContributor[] response = Optional.ofNullable(this.restTemplate.getForObject(
-                "https://api.github.com/repos/FordLabs/retroquest/contributors",
-                GithubContributor[].class
-        )).orElse(new GithubContributor[0]);
-
-        List<GithubContributor> githubContributors = Arrays.asList(response);
-
-        List<Contributor> newContributors = githubContributors.stream()
-                .filter(githubContributor -> !githubContributor.getAccountUrl().endsWith("/invalid-email-address"))
-                .map(githubContributor -> new Contributor(
-                        getAvatar(githubContributor.getAvatarUrl()), githubContributor.getAccountUrl()
-                )).collect(Collectors.toList());
-
-        this.setCachedContributors(newContributors);
-    }
-
-    private byte[] getAvatar(String avatarUrl) {
-        return this.restTemplate.getForObject(avatarUrl, byte[].class);
-    }
-
-    public void setCachedContributors(List<Contributor> contributors) {
-        this.cachedContributors.clear();
-        this.cachedContributors.addAll(contributors);
+        return contributorService.getContributors();
     }
 }
