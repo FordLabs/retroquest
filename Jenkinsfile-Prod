@@ -10,13 +10,7 @@ pipeline {
         stage('Setup Environment') {
             steps {
                 container('chrome') {
-                    sh 'echo "systemProp.http.proxyHost=$GRADLE_HTTP_PROXY" >> gradle.properties'
-                    sh 'echo "systemProp.https.proxyHost=$GRADLE_HTTP_PROXY" >> gradle.properties'
-                    sh 'echo "systemProp.http.proxyPort=$GRADLE_HTTP_PROXY" >> gradle.properties'
-                    sh 'echo "systemProp.https.proxyPort=$PROXY_PORT" >> gradle.properties'
-                    sh 'echo "systemProp.http.proxyHost=$PROXY_PORT" >> gradle.properties'
-                    sh 'echo "systemProp.http.nonProxyHosts=$NO_PROXY_HOSTS" >> gradle.properties'
-                    sh 'echo "systemProp.https.nonProxyHosts=$NO_PROXY_HOSTS" >> gradle.properties'
+                   sh './set_proxies.sh manifest-prod.yml'
                 }
             }
         }
@@ -65,7 +59,7 @@ pipeline {
         stage('Deploy Prod') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'pcf-pe-prod', usernameVariable: 'CF_CCUSER', passwordVariable: 'CF_CCPASSWORD')]) {
-                    container('cf-cli') {
+                    container('common-utils') {
                         sh 'echo Logging in to Cloud Foundry'
                         sh 'cf login -u $CF_CCUSER -p $CF_CCPASSWORD -a https://api.sys.pd01.edc1.cf.ford.com -s Platform-Enablement-prod'
                         sh 'echo Blue-Green push to Cloud Foundry'
