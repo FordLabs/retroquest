@@ -53,14 +53,16 @@ describe('ActionItemDialogComponent', () => {
 
     it('should emit that the visibility is false', () => {
       component.emitCompleted(true);
-
       expect(component.visibilityChanged.emit).toHaveBeenCalledWith(false);
     });
   });
 
   describe('show', () => {
-    it('should display the dialog when called', () => {
+    beforeEach(() => {
       component.show();
+    });
+
+    it('should display the dialog when called', () => {
       expect(component.visible).toBeTruthy();
     });
 
@@ -82,9 +84,7 @@ describe('ActionItemDialogComponent', () => {
 
     it('should emit the deleted signal when the delete button is clicked', () => {
       component.actionItem.task = 'I AM A FAKE TASK';
-
       component.emitDeleted();
-
       expect(component.deleted.emit).toHaveBeenCalledWith(component.actionItem);
     });
 
@@ -99,7 +99,6 @@ describe('ActionItemDialogComponent', () => {
       component.emitDeleted();
       expect(document.onkeydown).toBeNull();
     });
-
   });
 
   describe('emitMessageChanged', () => {
@@ -116,7 +115,6 @@ describe('ActionItemDialogComponent', () => {
 
       expect(component.messageChanged.emit).toHaveBeenCalledWith(fakeMessage);
     });
-
   });
 
   describe('emitAssigneeUpdated', () => {
@@ -133,7 +131,6 @@ describe('ActionItemDialogComponent', () => {
 
       expect(component.assignedUpdated.emit).toHaveBeenCalledWith(fakeAssignee);
     });
-
   });
 
 });

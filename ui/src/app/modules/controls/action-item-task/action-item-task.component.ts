@@ -58,6 +58,7 @@ export class ActionItemTaskComponent implements AfterViewChecked {
   _textValueLength = 0;
   deleteWasToggled = false;
   _displayAsLinkable = false;
+  myWindow: object = window;
 
   get displayAsLinkable(): boolean {
     return this._displayAsLinkable;
@@ -126,20 +127,23 @@ export class ActionItemTaskComponent implements AfterViewChecked {
   }
 
   public focusInput(): void {
-    setTimeout(() => {
+    // @ts-ignore
+    this.myWindow.setTimeout(() => {
       this.editableTextArea.nativeElement.focus();
       this.editableTextArea.nativeElement.select();
     }, 0);
   }
 
   public forceBlur() {
-    setTimeout(() => {
+    // @ts-ignore
+    this.myWindow.setTimeout(() => {
       this.editableTextArea.nativeElement.blur();
     }, 0);
   }
 
   public forceBlurOnAssigneeTextField() {
-    setTimeout(() => {
+    // @ts-ignore
+    this.myWindow.setTimeout(() => {
       this.assigneeTextField.nativeElement.blur();
     }, 0);
   }

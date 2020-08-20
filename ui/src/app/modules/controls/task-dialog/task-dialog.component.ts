@@ -58,6 +58,7 @@ export class TaskDialogComponent implements AfterContentChecked {
 
   assignedActionItem: ActionItem = emptyActionItem();
   actionItemIsVisible = false;
+  myWindow: object = window;
 
   constructor(private actionItemService: ActionItemService) {
   }
@@ -124,7 +125,8 @@ export class TaskDialogComponent implements AfterContentChecked {
 
   private triggerAnimation() {
     this.assignedActionItem.state = undefined;
-    setTimeout(() => {
+    // @ts-ignore
+    this.myWindow.setTimeout(() => {
       this.assignedActionItem.state = 'active';
       this.actionItemTaskComponent.focusInput();
     }, 0);

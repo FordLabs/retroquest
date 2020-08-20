@@ -20,9 +20,13 @@ import {emptyActionItem} from '../../domain/action-item';
 
 describe('ActionItemTaskComponent', () => {
   let component: ActionItemTaskComponent;
+  const myWindow = {
+    setTimeout: (fn: Function) => fn()
+  };
 
   beforeEach(() => {
     component = new ActionItemTaskComponent();
+    component.myWindow = myWindow;
   });
 
   it('should create', () => {
@@ -30,8 +34,6 @@ describe('ActionItemTaskComponent', () => {
   });
 
   describe('toggleEditMode', () => {
-
-    let originalTimeoutFunction = null;
     const fakeElementRef = {
       nativeElement: jasmine.createSpyObj({
         focus: null,
@@ -40,14 +42,10 @@ describe('ActionItemTaskComponent', () => {
     };
 
     beforeEach(() => {
-      originalTimeoutFunction = window.setTimeout;
-      window.setTimeout = (fn: Function) => fn();
-
       component.editableTextArea = fakeElementRef;
     });
 
     afterEach(() => {
-      window.setTimeout = originalTimeoutFunction;
       fakeElementRef.nativeElement.focus.calls.reset();
       fakeElementRef.nativeElement.select.calls.reset();
     });
@@ -174,17 +172,6 @@ describe('ActionItemTaskComponent', () => {
   });
 
   describe('forceBlur', () => {
-    let originalTimeoutFunction = null;
-
-    beforeEach(() => {
-      originalTimeoutFunction = window.setTimeout;
-      window.setTimeout = (fn: Function) => fn();
-    });
-
-    afterEach(() => {
-      window.setTimeout = originalTimeoutFunction;
-    });
-
     it('should call blur on the native textarea element', () => {
       component.editableTextArea = {
         nativeElement: jasmine.createSpyObj({

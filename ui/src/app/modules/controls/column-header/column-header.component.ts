@@ -53,6 +53,7 @@ export class ColumnHeaderComponent implements OnInit {
   sorted = false;
   maxTextLength = 16;
   escapeKeyPressed = false;
+  myWindow: object = window;
 
   public ngOnInit() {
     this.titleCopy = this.title.slice(0);
@@ -85,14 +86,16 @@ export class ColumnHeaderComponent implements OnInit {
   }
 
   private focusInput(): void {
-    setTimeout(() => {
+    // @ts-ignore
+    this.myWindow.setTimeout(() => {
       this.inputFieldRef.nativeElement.focus();
       this.inputFieldRef.nativeElement.select();
     }, 0);
   }
 
   public blurInput(): void {
-    setTimeout(() => {
+    // @ts-ignore
+    this.myWindow.setTimeout(() => {
       this.inputFieldRef.nativeElement.blur();
     }, 0);
   }
