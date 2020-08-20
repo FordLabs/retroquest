@@ -42,13 +42,10 @@ import {LoginUserComponent} from './pages/login-user/login-user.component';
       {path: 'login', component: LoginComponent},
       {path: 'login/:teamId', component: LoginComponent},
       {path: 'update-password/:teamId', component: UpdatePasswordComponent},
-
       {path: 'create-user', component: CreateUserComponent},
       {path: 'login-user', component: LoginUserComponent},
       {path: 'user/:user', component: UserViewComponent}
-
     ]),
-    RecaptchaModule.forRoot(),
     RecaptchaModule
   ],
   declarations: [

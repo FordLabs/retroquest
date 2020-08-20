@@ -53,11 +53,7 @@ describe('AuthService', () => {
     });
 
     it('should return null when the token is not set', () => {
-      const expectedToken = null;
-
-      const actualToken = AuthService.getToken();
-
-      expect(actualToken).toEqual(expectedToken);
+      expect(AuthService.getToken()).toBeNull();
     });
   });
 });

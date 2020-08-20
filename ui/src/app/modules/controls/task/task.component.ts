@@ -58,6 +58,7 @@ export class TaskComponent implements AfterViewChecked {
   taskEditModeEnabled = false;
   _textValueLength = 0;
   deleteWasToggled = false;
+  myWindow: object = window;
 
   get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;
@@ -114,14 +115,16 @@ export class TaskComponent implements AfterViewChecked {
   }
 
   private focusInput(): void {
-    setTimeout(() => {
+    // @ts-ignore
+    this.myWindow.setTimeout(() => {
       this.editableTextArea.nativeElement.focus();
       this.editableTextArea.nativeElement.select();
     }, 0);
   }
 
   public forceBlur() {
-    setTimeout(() => {
+    // @ts-ignore
+    this.myWindow.setTimeout(() => {
       this.editableTextArea.nativeElement.blur();
     }, 0);
   }

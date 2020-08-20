@@ -19,15 +19,18 @@ import {ColumnHeaderComponent} from './column-header.component';
 
 describe('ColumnHeaderComponent', () => {
   let component: ColumnHeaderComponent;
+  const myWindow = {
+    setTimeout: (fn: Function) => fn()
+  };
 
   beforeEach(() => {
     component = new ColumnHeaderComponent();
+    component.myWindow = myWindow;
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
 
   describe('toggleSort', () => {
 
@@ -113,19 +116,15 @@ describe('ColumnHeaderComponent', () => {
 
   describe('toggleEdit', () => {
 
-    let originalSetTimeoutFunction = null;
     const mockInputFieldRef = {
       nativeElement: jasmine.createSpyObj({focus: null, select: null})
     };
 
     beforeEach(() => {
       component.inputFieldRef = mockInputFieldRef;
-      originalSetTimeoutFunction = window.setTimeout;
-      window.setTimeout = (fn: Function) => fn();
     });
 
     afterEach(() => {
-      window.setTimeout = originalSetTimeoutFunction;
       mockInputFieldRef.nativeElement.focus.calls.reset();
     });
 
@@ -145,19 +144,16 @@ describe('ColumnHeaderComponent', () => {
   });
 
   describe('blurInput', () => {
-    let originalSetTimeoutFunction = null;
+
     const mockInputFieldRef = {
       nativeElement: jasmine.createSpyObj({blur: null})
     };
 
     beforeEach(() => {
       component.inputFieldRef = mockInputFieldRef;
-      originalSetTimeoutFunction = window.setTimeout;
-      window.setTimeout = (fn: Function) => fn();
     });
 
     afterEach(() => {
-      window.setTimeout = originalSetTimeoutFunction;
       mockInputFieldRef.nativeElement.blur.calls.reset();
     });
 
@@ -170,22 +166,18 @@ describe('ColumnHeaderComponent', () => {
 
   describe('onEscapeKeyPressed', () => {
 
-    let originalSetTimeoutFunction = null;
     const mockInputFieldRef = {
       nativeElement: jasmine.createSpyObj({blur: null})
     };
 
     beforeEach(() => {
       component.inputFieldRef = mockInputFieldRef;
-      originalSetTimeoutFunction = window.setTimeout;
-      window.setTimeout = (fn: Function) => fn();
 
       component.escapeKeyPressed = false;
       component.onEscapeKeyPressed();
     });
 
     afterEach(() => {
-      window.setTimeout = originalSetTimeoutFunction;
       mockInputFieldRef.nativeElement.blur.calls.reset();
     });
 

@@ -30,8 +30,11 @@ describe('DialogComponent', () => {
   });
 
   describe('show', () => {
-    it('should display the dialog when called', () => {
+    beforeEach(() => {
       component.show();
+    });
+
+    it('should display the dialog when called', () => {
       expect(component.visible).toBeTruthy();
     });
 

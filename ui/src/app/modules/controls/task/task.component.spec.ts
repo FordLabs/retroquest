@@ -20,9 +20,13 @@ import {emptyThought} from '../../domain/thought';
 
 describe('TaskComponent', () => {
   let component: TaskComponent;
+  const myWindow = {
+    setTimeout: (fn: Function) => fn()
+  };
 
   beforeEach(() => {
     component = new TaskComponent();
+    component.myWindow = myWindow;
   });
 
   it('should create', () => {
@@ -31,7 +35,6 @@ describe('TaskComponent', () => {
 
   describe('toggleEditMode', () => {
 
-    let originalTimeoutFunction = null;
     const fakeElementRef = {
       nativeElement: jasmine.createSpyObj({
         focus: null,
@@ -40,14 +43,10 @@ describe('TaskComponent', () => {
     };
 
     beforeEach(() => {
-      originalTimeoutFunction = window.setTimeout;
-      window.setTimeout = (fn: Function) => fn();
-
       component.editableTextArea = fakeElementRef;
     });
 
     afterEach(() => {
-      window.setTimeout = originalTimeoutFunction;
       fakeElementRef.nativeElement.focus.calls.reset();
       fakeElementRef.nativeElement.select.calls.reset();
     });
@@ -196,17 +195,6 @@ describe('TaskComponent', () => {
   });
 
   describe('forceBlur', () => {
-    let originalTimeoutFunction = null;
-
-    beforeEach(() => {
-      originalTimeoutFunction = window.setTimeout;
-      window.setTimeout = (fn: Function) => fn();
-    });
-
-    afterEach(() => {
-      window.setTimeout = originalTimeoutFunction;
-    });
-
     it('should call blur on the native textarea element', () => {
       component.editableTextArea = {
         nativeElement: jasmine.createSpyObj({

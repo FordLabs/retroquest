@@ -23,12 +23,16 @@ import * as moment from 'moment';
 describe('TaskDialogComponent', () => {
   let component: TaskDialogComponent;
   let mockActionItemService: ActionItemService;
+  const myWindow = {
+    setTimeout: (fn: Function) => fn()
+  };
 
   beforeEach(() => {
     mockActionItemService = jasmine.createSpyObj({
       addActionItem: null
     });
     component = new TaskDialogComponent(mockActionItemService);
+    component.myWindow = myWindow;
   });
 
   it('should create', () => {
@@ -65,8 +69,11 @@ describe('TaskDialogComponent', () => {
   });
 
   describe('show', () => {
-    it('should display the dialog when called', () => {
+    beforeEach( () => {
       component.show();
+    });
+
+    it('should display the dialog when called', () => {
       expect(component.visible).toBeTruthy();
     });
 
@@ -147,18 +154,9 @@ describe('TaskDialogComponent', () => {
 
   describe('createLinking', () => {
 
-    let originalTimeoutFunction;
-
     beforeEach(() => {
-      originalTimeoutFunction = window.setTimeout;
-      window.setTimeout = (fn: Function) => fn();
-
       component.actionItemIsVisible = true;
       component.show();
-    });
-
-    afterEach(() => {
-      window.setTimeout = originalTimeoutFunction;
     });
 
     describe('action item message is not filled out', () => {
