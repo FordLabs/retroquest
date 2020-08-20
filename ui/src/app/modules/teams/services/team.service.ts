@@ -28,19 +28,11 @@ export class TeamService {
   }
 
   create(name: string, password: string, captchaResponse: string): Observable<HttpResponse<string>> {
-    return this.http.post(
-      '/api/team',
-      {name, password, captchaResponse},
-      {observe: 'response', responseType: 'text'}
-    );
+    return this.doPostRequest('/api/team', name, password, captchaResponse);
   }
 
   createUser(name: string, password: string): Observable<HttpResponse<string>> {
-    return this.http.post(
-      '/api/user',
-      {name, password},
-      {observe: 'response', responseType: 'text'}
-    );
+    return this.doPostRequest('/api/user', name, password);
   }
 
   login(name: string, password: string, captchaResponse: string): Observable<HttpResponse<string>> {
@@ -83,6 +75,15 @@ export class TeamService {
   isCaptchaEnabled(): Observable<HttpResponse<string>> {
     return this.http.get(
       `/api/captcha`,
+      {observe: 'response', responseType: 'text'}
+    );
+  }
+
+  private doPostRequest(endpoint: string, name: string, password: string, captchaResponse?: string) {
+    const payload = captchaResponse ? {name, password, captchaResponse} : {name, password};
+    return this.http.post(
+      endpoint,
+      payload,
       {observe: 'response', responseType: 'text'}
     );
   }
