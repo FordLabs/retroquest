@@ -17,7 +17,7 @@
 
 import {ActionItemService} from './action.service';
 import {Observable} from 'rxjs/index';
-import {ActionItem} from '../../domain/action-item';
+import {ActionItem, emptyActionItem} from '../../domain/action-item';
 import {HttpClient} from '@angular/common/http';
 import {WebsocketService} from './websocket.service';
 
@@ -90,4 +90,16 @@ describe('ActionItemService', () => {
     });
   });
 
+  describe('archiveActionItems', () => {
+    const archivedActionItems = new Array<ActionItem>();
+    const firstActionItem = emptyActionItem();
+    const secondActionItem = emptyActionItem();
+    archivedActionItems.push(firstActionItem, secondActionItem);
+
+    it('should call the backend api with the correct url', () => {
+      service.archiveActionItems(archivedActionItems);
+      expect(mockWebSocket.updateActionItem).toHaveBeenCalledWith(firstActionItem);
+      expect(mockWebSocket.updateActionItem).toHaveBeenCalledWith(secondActionItem);
+    });
+  });
 });

@@ -49,7 +49,7 @@ export class ActionItemService {
   }
 
   archiveActionItems(archivedActionItems: Array<ActionItem>) {
-    archivedActionItems.map(actionItem => {
+    archivedActionItems.forEach(actionItem => {
       this.webSocketService.updateActionItem(actionItem);
     });
   }
