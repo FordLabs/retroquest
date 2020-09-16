@@ -80,9 +80,8 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpclient:4.5.12'
     implementation 'commons-io:commons-io:2.7'
     implementation 'org.flywaydb:flyway-core:6.5.2'
-    runtimeOnly 'mysql:mysql-connector-java:8.0.21'
     runtimeOnly 'com.h2database:h2:1.4.200'
-    runtimeOnly 'com.google.cloud.sql:mysql-socket-factory:1.0.16'
+    runtimeOnly 'org.postgresql:postgresql:42.2.16'
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
