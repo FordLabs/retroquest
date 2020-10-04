@@ -7,7 +7,6 @@ applications:
   buildpack: java_buildpack_offline
   disk_quota: 1GB
   services:
-    - prod_retroquest_db
     - retroquest-config-server-binding
   env:
     JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
