@@ -27,14 +27,18 @@ describe('LoginComponent', () => {
   let mockTeamService;
   let mockRouter;
   let mockRecaptchaComponent;
+  let mockTeamNameResponse: Subject<string>;
+  let mockActivatedRoute;
 
   beforeEach(() => {
+    mockTeamNameResponse = new Subject<string>();
     mockTeamService = jasmine.createSpyObj('teamService', {
       login: new Subject(),
-      isCaptchaEnabledForTeam: new Subject()
+      isCaptchaEnabledForTeam: new Subject(),
+      fetchTeamName: mockTeamNameResponse
     });
 
-    const mockActivatedRoute = new ActivatedRoute();
+    mockActivatedRoute = new ActivatedRoute();
 
     mockActivatedRoute.snapshot = new ActivatedRouteSnapshot();
     mockActivatedRoute.snapshot.params = {teamId: 'the-devs'};
@@ -46,14 +50,31 @@ describe('LoginComponent', () => {
     spyOn(console, 'error');
 
     component = new LoginComponent(mockTeamService, mockActivatedRoute, mockRouter);
-    component.ngOnInit();
     component.recaptchaComponent = mockRecaptchaComponent;
   });
 
-
-  it('should set the team name from the route with spaces replacing dashes', () => {
-    expect(component.teamName).toEqual('the devs');
+  describe('ngOnInit', () => {
+    it('should set the team name from the API based on the team-uri in the route', () => {
+      const teamNameInAPI = 'The Devs';
+      component.ngOnInit();
+      expect(mockTeamService.fetchTeamName).toHaveBeenCalledWith(mockActivatedRoute.snapshot.params['teamId']);
+      mockTeamNameResponse.next(teamNameInAPI);
+      expect(component.teamName).toEqual(teamNameInAPI);
+    });
+    it('should not set the team name from the API if team name does not exist', () => {
+      component.ngOnInit();
+      expect(mockTeamService.fetchTeamName).toHaveBeenCalledWith(mockActivatedRoute.snapshot.params['teamId']);
+      mockTeamNameResponse.error(new Error('something wrong'));
+      expect(component.teamName).toBeFalsy();
+    });
+    it('should not set the team name from the API based on the team-uri in the route if the team does not exist', () => {
+      mockActivatedRoute.snapshot.params = {};
+      component.ngOnInit();
+      expect(mockTeamService.fetchTeamName).not.toHaveBeenCalledWith(mockActivatedRoute.snapshot.params['teamId']);
+      expect(component.teamName).toBeFalsy();
+    });
   });
+
 
   describe('requestCaptchaStateAndLogIn', () => {
     it('should set the error message for empty teamName', () => {

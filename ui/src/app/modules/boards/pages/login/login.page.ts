@@ -48,7 +48,12 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     const teamId = this.route.snapshot.params['teamId'] as string;
     if (teamId) {
-      this.teamName = teamId.replace(/-/g, ' ');
+      this.teamService.fetchTeamName(teamId).subscribe(
+        (teamName) => {
+          this.teamName = teamName;
+        },
+        (error) => {
+        });
     }
   }
 
