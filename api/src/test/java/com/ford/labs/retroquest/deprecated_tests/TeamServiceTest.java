@@ -75,6 +75,24 @@ public class TeamServiceTest {
     }
 
     @Test
+    public void createNewBoard_WithValidInformation_trimsNameWhitespaceFromTeamName() {
+        CreateTeamRequest requestedTeam = new CreateTeamRequest();
+        requestedTeam.setName("   A name");
+        requestedTeam.setPassword("password");
+
+        when(passwordEncoder.encode("password")).thenReturn("encryptedPassword");
+        when(teamRepository.save(any(Team.class))).then(returnsFirstArg());
+        when(teamRepository.findTeamByUri("a-name")).thenReturn(Optional.empty());
+
+        Team actualTeam = teamService.createNewTeam(requestedTeam);
+
+        assertEquals("A name", actualTeam.getName());
+        assertEquals("a-name", actualTeam.getUri());
+        assertNotNull(actualTeam.getDateCreated());
+        assertEquals("encryptedPassword", actualTeam.getPassword());
+    }
+
+    @Test
     public void updatePassword_WithValidInformation_SavesNewPassword() {
         Team savedTeam = new Team();
         savedTeam.setUri("a-name");
@@ -126,7 +144,20 @@ public class TeamServiceTest {
         expectedTeam.setPassword("encryptedPassword");
 
         when(passwordEncoder.matches("password", "encryptedPassword")).thenReturn(true);
-        when(teamRepository.findTeamByName("beach-bums")).thenReturn(Optional.of(expectedTeam));
+        when(teamRepository.findTeamByNameIgnoreCase("beach-bums")).thenReturn(Optional.of(expectedTeam));
+        Team actualTeam = teamService.login(loginRequest);
+
+        assertEquals(expectedTeam, actualTeam);
+    }
+
+    @Test
+    public void trimsTeamNameWhenLoggingIn() {
+        LoginRequest loginRequest = new LoginRequest("  beach-bums    ", "password", "captcha");
+        Team expectedTeam = new Team();
+        expectedTeam.setPassword("encryptedPassword");
+
+        when(passwordEncoder.matches("password", "encryptedPassword")).thenReturn(true);
+        when(teamRepository.findTeamByNameIgnoreCase("beach-bums")).thenReturn(Optional.of(expectedTeam));
         Team actualTeam = teamService.login(loginRequest);
 
         assertEquals(expectedTeam, actualTeam);
@@ -136,7 +167,7 @@ public class TeamServiceTest {
     public void login_throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
         LoginRequest loginRequest = new LoginRequest("beach-bums", "password", "captcha");
 
-        when(teamRepository.findTeamByName("beach-bums")).thenReturn(Optional.empty());
+        when(teamRepository.findTeamByNameIgnoreCase("beach-bums")).thenReturn(Optional.empty());
         assertThrows(
                 BoardDoesNotExistException.class,
                 () -> teamService.login(loginRequest)
@@ -146,7 +177,7 @@ public class TeamServiceTest {
     @Test
     public void throwsPasswordInvalidExceptionWhenNoPasswordGiven() {
         LoginRequest loginRequest = new LoginRequest("beach-bums", null, "captcha");
-        when(teamRepository.findTeamByName("beach-bums")).thenReturn(Optional.of(new Team()));
+        when(teamRepository.findTeamByNameIgnoreCase("beach-bums")).thenReturn(Optional.of(new Team()));
 
         assertThrows(
                 PasswordInvalidException.class,
@@ -163,7 +194,7 @@ public class TeamServiceTest {
         expectedTeam.setName("beach-bums");
 
         when(passwordEncoder.matches("notPassword", "encryptedPassword")).thenReturn(false);
-        when(teamRepository.findTeamByName("beach-bums")).thenReturn(Optional.of(expectedTeam));
+        when(teamRepository.findTeamByNameIgnoreCase("beach-bums")).thenReturn(Optional.of(expectedTeam));
 
         assertThrows(
                 PasswordInvalidException.class,
@@ -182,7 +213,7 @@ public class TeamServiceTest {
         Team teamAfterFailedAttempt = new Team("", teamName, teamPassword);
         teamAfterFailedAttempt.setFailedAttempts(1);
 
-        when(teamRepository.findTeamByName(teamName)).thenReturn(Optional.of(team));
+        when(teamRepository.findTeamByNameIgnoreCase(teamName)).thenReturn(Optional.of(team));
         when(passwordEncoder.matches("notPassword", teamPassword)).thenReturn(false);
 
         try {
@@ -202,7 +233,7 @@ public class TeamServiceTest {
         Team team = new Team("", teamName, teamPassword);
         team.setFailedAttempts(1);
 
-        when(teamRepository.findTeamByName(teamName)).thenReturn(Optional.of(team));
+        when(teamRepository.findTeamByNameIgnoreCase(teamName)).thenReturn(Optional.of(team));
         when(passwordEncoder.matches(teamPassword, teamPassword)).thenReturn(true);
 
         teamService.login(loginRequest);
@@ -230,7 +261,7 @@ public class TeamServiceTest {
 
     @Test
     public void getTeamByName_throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
-        when(teamRepository.findTeamByName("beach-bums")).thenReturn(Optional.empty());
+        when(teamRepository.findTeamByNameIgnoreCase("beach-bums")).thenReturn(Optional.empty());
         assertThrows(
                 BoardDoesNotExistException.class,
                 () -> teamService.getTeamByName("beach-bums")
@@ -242,9 +273,21 @@ public class TeamServiceTest {
         Team expectedTeam = new Team();
         String name = "expected-name";
         expectedTeam.setName(name);
-        when(teamRepository.findTeamByName(name)).thenReturn(Optional.of(expectedTeam));
+        when(teamRepository.findTeamByNameIgnoreCase(name)).thenReturn(Optional.of(expectedTeam));
 
         Team actualTeam = teamService.getTeamByName(name);
+
+        assertEquals(name, actualTeam.getName());
+    }
+
+    @Test
+    public void getTeamByName_trimsWhitespace() {
+        Team expectedTeam = new Team();
+        String name = "expected-name";
+        expectedTeam.setName(name);
+        when(teamRepository.findTeamByNameIgnoreCase(name)).thenReturn(Optional.of(expectedTeam));
+
+        Team actualTeam = teamService.getTeamByName("    "+name+"     ");
 
         assertEquals(name, actualTeam.getName());
     }
@@ -276,7 +319,7 @@ public class TeamServiceTest {
         Team savedTeam = new Team();
         savedTeam.setName("Name");
         savedTeam.setPassword("Password");
-        when(teamRepository.findTeamByName(savedTeam.getName())).thenReturn(Optional.of(savedTeam));
+        when(teamRepository.findTeamByNameIgnoreCase(savedTeam.getName())).thenReturn(Optional.of(savedTeam));
 
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setName("Name");

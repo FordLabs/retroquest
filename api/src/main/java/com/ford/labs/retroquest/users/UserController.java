@@ -80,7 +80,7 @@ public class UserController {
     @Transactional
     public ResponseEntity<Void> addExistingTeamToUser(@PathVariable("name") String name, @RequestBody ExistingTeamRequest request) {
 
-        Optional<Team> teamOptional = teamRepository.findTeamByName(request.getName());
+        Optional<Team> teamOptional = teamRepository.findTeamByNameIgnoreCase(request.getName());
         if (teamOptional.isPresent() && passwordEncoder.matches(request.getPassword(), teamOptional.get().getPassword())) {
             User foundUser = userRepository.findByName(name).orElse(null);
 

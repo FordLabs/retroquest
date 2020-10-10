@@ -3,15 +3,21 @@ package com.ford.labs.retroquest.api;
 import com.ford.labs.retroquest.api.setup.ApiTest;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.team.*;
+import com.ford.labs.retroquest.validation.CaptchaProperties;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -163,6 +169,154 @@ public class TeamApiTest extends ApiTest {
                 .content(objectMapper.writeValueAsBytes(sentCreateTeamRequest)))
                 .andExpect(status().reason(containsString("This board name is already in use. Please try another one.")))
                 .andExpect(status().isConflict());
+    }
+
+    @Test
+    public void should_not_create_team_with_duplicate_lower_case_name() throws Exception {
+        installSuccessCaptcha();
+
+        CreateTeamRequest upperCaseCreateTeamRequest = CreateTeamRequest.builder()
+                .name("someTeam".toUpperCase())
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+        CreateTeamRequest lowerCaseCreateTeamRequest = upperCaseCreateTeamRequest.toBuilder().name(upperCaseCreateTeamRequest.getName().toLowerCase()).build();
+
+        teamRepository.save(Team.builder()
+                .uri(upperCaseCreateTeamRequest.getName().toLowerCase())
+                .name(upperCaseCreateTeamRequest.getName())
+                .password(upperCaseCreateTeamRequest.getPassword())
+                .build());
+
+        mockMvc.perform(post("/api/team")
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(lowerCaseCreateTeamRequest)))
+                .andExpect(status().reason(containsString("This board name is already in use. Please try another one.")))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    public void should_not_create_team_with_duplicate_upper_case_name() throws Exception {
+        installSuccessCaptcha();
+
+        CreateTeamRequest upperCaseCreateTeamRequest = CreateTeamRequest.builder()
+                .name("someTeam".toUpperCase())
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+        CreateTeamRequest lowerCaseCreateTeamRequest = upperCaseCreateTeamRequest.toBuilder().name(upperCaseCreateTeamRequest.getName().toLowerCase()).build();
+
+        teamRepository.save(Team.builder()
+                .uri(lowerCaseCreateTeamRequest.getName().toLowerCase())
+                .name(lowerCaseCreateTeamRequest.getName())
+                .password(lowerCaseCreateTeamRequest.getPassword())
+                .build());
+
+        mockMvc.perform(post("/api/team")
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(upperCaseCreateTeamRequest)))
+                .andExpect(status().reason(containsString("This board name is already in use. Please try another one.")))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    public void should_not_create_team_with_duplicate_with_leading_spaces() throws Exception {
+        installSuccessCaptcha();
+
+        CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
+                .name("someTeam")
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+        CreateTeamRequest leadingSpacesRequest = createTeamRequest.toBuilder().name("    "+createTeamRequest.getName()).build();
+
+        teamRepository.save(Team.builder()
+                .uri(createTeamRequest.getName().toLowerCase())
+                .name(createTeamRequest.getName())
+                .password(createTeamRequest.getPassword())
+                .build());
+
+        mockMvc.perform(post("/api/team")
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(leadingSpacesRequest)))
+                .andExpect(status().reason(containsString("This board name is already in use. Please try another one.")))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    public void should_not_create_team_with_duplicate_with_trailing_spaces() throws Exception {
+        installSuccessCaptcha();
+
+        CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
+                .name("someTeam")
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+        CreateTeamRequest trailingSpacesRequest = createTeamRequest.toBuilder().name(createTeamRequest.getName()+"    ").build();
+
+        teamRepository.save(Team.builder()
+                .uri(createTeamRequest.getName().toLowerCase())
+                .name(createTeamRequest.getName())
+                .password(createTeamRequest.getPassword())
+                .build());
+
+        mockMvc.perform(post("/api/team")
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(trailingSpacesRequest)))
+                .andExpect(status().reason(containsString("This board name is already in use. Please try another one.")))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    public void should_create_team_with_leading_spaces_dropped_from_team_name_and_uri() throws Exception {
+        installSuccessCaptcha();
+
+        CreateTeamRequest sentCreateTeamRequest = CreateTeamRequest.builder()
+                .name("    "+teamId)
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+        MvcResult mvcResult = mockMvc.perform(post("/api/team")
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(sentCreateTeamRequest)))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        Team team = teamRepository.findById(sentCreateTeamRequest.getName().trim().toLowerCase()).orElseThrow();
+
+        assertThat(team.getName()).isEqualTo(teamId);
+        assertThat(team.getUri()).isEqualTo(teamId.toLowerCase());
+        assertThat(team.getPassword().length()).isEqualTo(60);
+        assertThat(mvcResult.getResponse().getContentAsString()).isNotNull();
+    }
+
+    @Test
+    public void should_create_team_with_trailing_spaces_dropped_from_team_name_and_uri() throws Exception {
+        installSuccessCaptcha();
+
+        CreateTeamRequest sentCreateTeamRequest = CreateTeamRequest.builder()
+                .name(teamId+"    ")
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+        MvcResult mvcResult = mockMvc.perform(post("/api/team")
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(sentCreateTeamRequest)))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        Team team = teamRepository.findById(sentCreateTeamRequest.getName().trim().toLowerCase()).orElseThrow();
+
+        assertThat(team.getName()).isEqualTo(teamId);
+        assertThat(team.getUri()).isEqualTo(teamId.toLowerCase());
+        assertThat(team.getPassword().length()).isEqualTo(60);
+        assertThat(mvcResult.getResponse().getContentAsString()).isNotNull();
     }
 
     @Test
@@ -367,6 +521,166 @@ public class TeamApiTest extends ApiTest {
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isForbidden())
                 .andExpect(status().reason("Incorrect board or password. Please try again."));
+    }
+
+    @Test
+    public void should_login_with_lower_case_board_name_in_request() throws Exception {
+        installSuccessCaptcha();
+
+        CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
+                .name("PEACHY BEACHY".toUpperCase())
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+        testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
+
+        LoginRequest loginRequest = LoginRequest.builder()
+                .name("PEACHY BEACHY".toLowerCase())
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+         MvcResult mvcResult = mockMvc.perform(post("/api/team/login")
+                .content(objectMapper.writeValueAsBytes(loginRequest))
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        assertThat("peachy-beachy").isEqualTo(mvcResult.getResponse().getHeader("Location"));
+    }
+    
+    @Test
+    public void should_login_with_upper_case_board_name_in_request() throws Exception {
+        installSuccessCaptcha();
+
+        CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
+                .name("PEACHY BEACHY".toLowerCase())
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+        testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
+
+        LoginRequest loginRequest = LoginRequest.builder()
+                .name("PEACHY BEACHY".toUpperCase())
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+        MvcResult mvcResult = mockMvc.perform(post("/api/team/login")
+                .content(objectMapper.writeValueAsBytes(loginRequest))
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        assertThat("peachy-beachy").isEqualTo(mvcResult.getResponse().getHeader("Location"));
+    }
+
+    @Test
+    public void should_login_with_board_name_with_leading_spaces_in_request() throws Exception {
+        installSuccessCaptcha();
+
+        CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
+                .name("PEACHY BEACHY")
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+        testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
+
+        LoginRequest loginRequest = LoginRequest.builder()
+                .name("    PEACHY BEACHY")
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+        MvcResult mvcResult = mockMvc.perform(post("/api/team/login")
+                .content(objectMapper.writeValueAsBytes(loginRequest))
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        assertThat("peachy-beachy").isEqualTo(mvcResult.getResponse().getHeader("Location"));
+    }
+
+    @Test
+    public void should_login_with_board_name_with_trailing_spaces_in_request() throws Exception {
+        installSuccessCaptcha();
+
+        CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
+                .name("PEACHY BEACHY")
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+        testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
+
+        LoginRequest loginRequest = LoginRequest.builder()
+                .name("PEACHY BEACHY    ")
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+        MvcResult mvcResult = mockMvc.perform(post("/api/team/login")
+                .content(objectMapper.writeValueAsBytes(loginRequest))
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        assertThat("peachy-beachy").isEqualTo(mvcResult.getResponse().getHeader("Location"));
+    }
+
+    @Test
+    public void should_login_with_board_name_with_leading_and_trailing_spaces_in_request() throws Exception {
+        installSuccessCaptcha();
+
+        CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
+                .name("PEACHY BEACHY")
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+        testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
+
+        LoginRequest loginRequest = LoginRequest.builder()
+                .name("    PEACHY BEACHY  ")
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+        MvcResult mvcResult = mockMvc.perform(post("/api/team/login")
+                .content(objectMapper.writeValueAsBytes(loginRequest))
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        assertThat("peachy-beachy").isEqualTo(mvcResult.getResponse().getHeader("Location"));
+    }
+
+    @Test
+    public void should_not_login_with_board_name_with_middle_spaces_in_request() throws Exception {
+        installSuccessCaptcha();
+
+        CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
+                .name("PEACHY BEACHY")
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+        testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
+
+        LoginRequest loginRequest = LoginRequest.builder()
+                .name("PEACHY     BEACHY")
+                .password(VALID_PASSWORD)
+                .captchaResponse("some captcha")
+                .build();
+
+        mockMvc.perform(post("/api/team/login")
+                .content(objectMapper.writeValueAsBytes(loginRequest))
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andExpect(status().reason("Incorrect board name. Please try again."));
     }
 
     @Test

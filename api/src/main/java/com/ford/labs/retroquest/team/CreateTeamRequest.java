@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Builder(toBuilder=true)
 public class CreateTeamRequest implements TeamRequest {
 
     @TeamNameConstraint

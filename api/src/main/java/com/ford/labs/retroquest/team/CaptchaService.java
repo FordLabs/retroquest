@@ -21,7 +21,7 @@ public class CaptchaService {
             return false;
         }
 
-        Optional<Team> team = teamRepository.findTeamByName(teamName);
+        Optional<Team> team = teamRepository.findTeamByNameIgnoreCase(teamName.trim());
         if(team.isPresent()) {
             Integer failedAttempts = team.get().getFailedAttempts() != null ? team.get().getFailedAttempts() : 0;
             return failedAttempts > captchaProperties.getFailedLoginThreshold();

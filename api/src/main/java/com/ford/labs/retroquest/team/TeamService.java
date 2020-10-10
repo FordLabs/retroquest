@@ -76,14 +76,15 @@ public class TeamService {
     }
 
     private Team createTeamEntity(String name, String password) {
-        String uri = convertTeamNameToURI(name);
+        String trimmedName = name.trim();
+        String uri = convertTeamNameToURI(trimmedName);
         teamRepository
                 .findTeamByUri(uri)
                 .ifPresent(s -> {
                     throw new DataIntegrityViolationException(s.getUri());
                 });
 
-        Team teamEntity = new Team(uri, name, password);
+        Team teamEntity = new Team(uri, trimmedName, password);
         teamEntity.setDateCreated(LocalDate.now());
 
         teamEntity = teamRepository.save(teamEntity);
@@ -147,7 +148,7 @@ public class TeamService {
     }
 
     public Team getTeamByName(String teamName) {
-        Optional<Team> team = teamRepository.findTeamByName(teamName);
+        Optional<Team> team = teamRepository.findTeamByNameIgnoreCase(teamName.trim());
         if (team.isPresent()) {
             return team.get();
         }

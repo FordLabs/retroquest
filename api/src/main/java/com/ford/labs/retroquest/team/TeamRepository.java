@@ -26,7 +26,7 @@ import java.util.Optional;
 
 @Repository
 public interface TeamRepository extends JpaRepository<Team, String> {
-    Optional<Team> findTeamByName(String name);
+    Optional<Team> findTeamByNameIgnoreCase(String name);
     Optional<Team> findTeamByUri(String uri);
     List<Team> findAllByLastLoginDateBetween(LocalDate start, LocalDate end);
 
