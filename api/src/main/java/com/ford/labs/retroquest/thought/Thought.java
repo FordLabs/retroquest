@@ -30,7 +30,7 @@ import java.util.List;
 @Data
 @Entity
 @NoArgsConstructor
-@Builder
+@Builder(toBuilder=true)
 public class Thought {
 
     @Id

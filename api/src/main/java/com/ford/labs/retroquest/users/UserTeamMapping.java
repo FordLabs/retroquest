@@ -9,7 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@Builder
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserTeamMapping {

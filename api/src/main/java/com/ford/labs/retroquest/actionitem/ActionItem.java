@@ -18,10 +18,7 @@
 package com.ford.labs.retroquest.actionitem;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,7 +32,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 public class ActionItem {
 
     @Id
@@ -45,6 +42,7 @@ public class ActionItem {
     private boolean completed;
     private String teamId;
     private String assignee;
+    @EqualsAndHashCode.Exclude
     private Date dateCreated;
     private boolean archived;
 

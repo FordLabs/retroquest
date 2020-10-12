@@ -27,4 +27,5 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
 
     List<Feedback> findAllByStarsIsGreaterThanEqual(int minimumValue);
 
+    List<Feedback> findAllByTeamId(String teamId);
 }

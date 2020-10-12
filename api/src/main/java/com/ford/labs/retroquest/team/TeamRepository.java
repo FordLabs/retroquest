@@ -17,12 +17,15 @@
 
 package com.ford.labs.retroquest.team;
 
+import com.ford.labs.retroquest.team.cleanup.CanonicalTeamNameAndCount;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface TeamRepository extends JpaRepository<Team, String> {
@@ -32,4 +35,13 @@ public interface TeamRepository extends JpaRepository<Team, String> {
 
     long countAllByDateCreatedAfterAndDateCreatedIsNotNull(LocalDate start);
     long countAllByDateCreatedBetweenAndDateCreatedNotNull(LocalDate start, LocalDate end);
+
+    @Query("SELECT new com.ford.labs.retroquest.team.cleanup.CanonicalTeamNameAndCount(UPPER(TRIM(name)) as canonical_name,COUNT(*) as total) "
+            + "FROM Team "
+            + "GROUP BY canonical_name "
+            +" HAVING COUNT(*) > 1")
+    Set<CanonicalTeamNameAndCount> findAllTeamsWithConflictingCanonicalNames();
+
+    @Query("SELECT t FROM Team t WHERE UPPER(TRIM(name)) = UPPER(TRIM(:name))")
+    List<Team> findAllTeamsByNameWithTrimmingAndIgnoreCase(String name);
 }

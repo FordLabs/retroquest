@@ -33,7 +33,7 @@ import java.io.Serializable;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder=true)
 public class ColumnTitle implements Serializable {
 
     @Id

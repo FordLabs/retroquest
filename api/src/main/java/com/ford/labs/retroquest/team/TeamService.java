@@ -30,6 +30,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,9 +94,7 @@ public class TeamService {
         return teamEntity;
     }
 
-    private void generateColumns(Team teamEntity) {
-
-
+    public List<ColumnTitle> generateColumns(Team teamEntity) {
         ColumnTitle happyColumnTitle = new ColumnTitle();
         happyColumnTitle.setTeamId(teamEntity.getUri());
         happyColumnTitle.setTopic("happy");
@@ -111,9 +110,12 @@ public class TeamService {
         unhappyColumnTitle.setTopic("unhappy");
         unhappyColumnTitle.setTitle("Sad");
 
-        columnTitleRepository.save(happyColumnTitle);
-        columnTitleRepository.save(confusedColumnTitle);
-        columnTitleRepository.save(unhappyColumnTitle);
+        List<ColumnTitle> columns = new ArrayList<>();
+
+        columns.add(columnTitleRepository.save(happyColumnTitle));
+        columns.add(columnTitleRepository.save(confusedColumnTitle));
+        columns.add(columnTitleRepository.save(unhappyColumnTitle));
+        return columns;
     }
 
     public Team login(LoginRequest loginRequest) {
