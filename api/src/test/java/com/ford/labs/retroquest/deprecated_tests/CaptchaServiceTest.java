@@ -33,7 +33,7 @@ public class CaptchaServiceTest {
         captchaProperties.setFailedLoginThreshold(4);
         CaptchaService captchaService = new CaptchaService(teamRepository, captchaProperties);
 
-        when(teamRepository.findTeamByName("some team")).thenReturn(Optional.of(team));
+        when(teamRepository.findTeamByNameIgnoreCase("some team")).thenReturn(Optional.of(team));
 
         assertTrue(captchaService.isCaptchaEnabledForTeam("some team"));
     }
@@ -47,7 +47,7 @@ public class CaptchaServiceTest {
         captchaProperties.setFailedLoginThreshold(10);
         CaptchaService captchaService = new CaptchaService(teamRepository, captchaProperties);
 
-        when(teamRepository.findTeamByName("some team")).thenReturn(Optional.of(team));
+        when(teamRepository.findTeamByNameIgnoreCase("some team")).thenReturn(Optional.of(team));
 
         assertFalse(captchaService.isCaptchaEnabledForTeam("some team"));
     }
@@ -64,11 +64,25 @@ public class CaptchaServiceTest {
     }
 
     @Test
+    public void trimsSpaceFromTramName() {
+        Team team = new Team();
+        team.setFailedAttempts(5);
+
+        captchaProperties.setEnabled(true);
+        captchaProperties.setFailedLoginThreshold(4);
+        CaptchaService captchaService = new CaptchaService(teamRepository, captchaProperties);
+
+        when(teamRepository.findTeamByNameIgnoreCase("some team")).thenReturn(Optional.of(team));
+
+        assertTrue(captchaService.isCaptchaEnabledForTeam("    some team     "));
+    }
+
+    @Test
     public void handlesNullFailedAttempts() {
         Team team = new Team();
         captchaProperties.setEnabled(true);
         captchaProperties.setFailedLoginThreshold(1);
-        when(teamRepository.findTeamByName("some team")).thenReturn(Optional.of(team));
+        when(teamRepository.findTeamByNameIgnoreCase("some team")).thenReturn(Optional.of(team));
 
         CaptchaService captchaService = new CaptchaService(teamRepository, captchaProperties);
 

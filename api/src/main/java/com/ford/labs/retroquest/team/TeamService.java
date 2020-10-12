@@ -30,6 +30,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,14 +77,15 @@ public class TeamService {
     }
 
     private Team createTeamEntity(String name, String password) {
-        String uri = convertTeamNameToURI(name);
+        String trimmedName = name.trim();
+        String uri = convertTeamNameToURI(trimmedName);
         teamRepository
                 .findTeamByUri(uri)
                 .ifPresent(s -> {
                     throw new DataIntegrityViolationException(s.getUri());
                 });
 
-        Team teamEntity = new Team(uri, name, password);
+        Team teamEntity = new Team(uri, trimmedName, password);
         teamEntity.setDateCreated(LocalDate.now());
 
         teamEntity = teamRepository.save(teamEntity);
@@ -92,9 +94,7 @@ public class TeamService {
         return teamEntity;
     }
 
-    private void generateColumns(Team teamEntity) {
-
-
+    public List<ColumnTitle> generateColumns(Team teamEntity) {
         ColumnTitle happyColumnTitle = new ColumnTitle();
         happyColumnTitle.setTeamId(teamEntity.getUri());
         happyColumnTitle.setTopic("happy");
@@ -110,9 +110,12 @@ public class TeamService {
         unhappyColumnTitle.setTopic("unhappy");
         unhappyColumnTitle.setTitle("Sad");
 
-        columnTitleRepository.save(happyColumnTitle);
-        columnTitleRepository.save(confusedColumnTitle);
-        columnTitleRepository.save(unhappyColumnTitle);
+        List<ColumnTitle> columns = new ArrayList<>();
+
+        columns.add(columnTitleRepository.save(happyColumnTitle));
+        columns.add(columnTitleRepository.save(confusedColumnTitle));
+        columns.add(columnTitleRepository.save(unhappyColumnTitle));
+        return columns;
     }
 
     public Team login(LoginRequest loginRequest) {
@@ -147,7 +150,7 @@ public class TeamService {
     }
 
     public Team getTeamByName(String teamName) {
-        Optional<Team> team = teamRepository.findTeamByName(teamName);
+        Optional<Team> team = teamRepository.findTeamByNameIgnoreCase(teamName.trim());
         if (team.isPresent()) {
             return team.get();
         }
@@ -160,5 +163,9 @@ public class TeamService {
             return team.get();
         }
         throw new BoardDoesNotExistException();
+    }
+
+    public int trimAllTeamNames() {
+        return teamRepository.trimAllTeamNames();
     }
 }

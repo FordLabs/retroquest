@@ -18,17 +18,14 @@
 package com.ford.labs.retroquest.feedback;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class Feedback {
@@ -44,5 +41,6 @@ public class Feedback {
     private String teamId;
 
     @JsonFormat(pattern = "MM/dd/yy hh:mm:ss.SSS")
+    @EqualsAndHashCode.Exclude
     private LocalDateTime dateCreated;
 }
