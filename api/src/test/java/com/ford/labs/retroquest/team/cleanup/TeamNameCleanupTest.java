@@ -125,7 +125,7 @@ class TeamNameCleanupTest {
     }
 
     @Test
-    public void thoughtsArePointedToNewTeamAndColumnsOnNewTeam() {
+    public void thoughtsWithBoardsArePointedToNewTeamAndColumnsOnNewTeam_andThoughtsWithoutBoardsAreDeleted() {
         teamNameCleanup.onApplicationEvent(applicationReadyEvent);
         List<Thought> expectedThoughts = getExpectedThoughts();
 
@@ -183,19 +183,12 @@ class TeamNameCleanupTest {
     }
 
     @Test
-    public void actionItemsArePointedToNewTeam() {
+    public void actionItemsAreDeletedAlongWithTeams() {
         teamNameCleanup.onApplicationEvent(applicationReadyEvent);
 
         List<ActionItem> expectedActionItems = new ArrayList<>();
         for (Team team : teamsToKeep) {
             expectedActionItems.addAll(teamsToActionItems.get(team));
-        }
-        for (Team oldTeam : teamsToDeleteToReplacement.keySet()) {
-            Team newTeam = teamsToDeleteToReplacement.get(oldTeam);
-            for (ActionItem oldActionItem : teamsToActionItems.get(oldTeam)) {
-                ActionItem newActionItem = oldActionItem.toBuilder().teamId(newTeam.getId()).build();
-                expectedActionItems.add(newActionItem);
-            }
         }
 
         List<ActionItem> actualActionItems = actionItemRepository.findAll();
@@ -418,11 +411,13 @@ class TeamNameCleanupTest {
             Team newTeam = teamsToDeleteToReplacement.get(oldTeam);
             for (List<Thought> oldThoughts : teamsToTopicsToThoughts.get(oldTeam).values()) {
                 for (Thought oldThought : oldThoughts) {
-                    Thought newThought = oldThought.toBuilder()
-                            .teamId(newTeam.getId())
-                            .columnTitle(teamsToTopicsToColumnTitles.get(newTeam).get(oldThought.getTopic()))
-                            .build();
-                    expectedThoughts.add(newThought);
+                    if (oldThought.getBoardId() != null && oldThought.getBoardId() != 0) {
+                        Thought newThought = oldThought.toBuilder()
+                                .teamId(newTeam.getId())
+                                .columnTitle(teamsToTopicsToColumnTitles.get(newTeam).get(oldThought.getTopic()))
+                                .build();
+                        expectedThoughts.add(newThought);
+                    }
                 }
             }
         }

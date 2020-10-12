@@ -92,10 +92,10 @@ public class TeamNameCleanup implements ApplicationListener<ApplicationReadyEven
     }
 
     private void deleteTeam(Team oldTeam, Team newTeam) {
-        moveThoughtsToNewTeam(oldTeam, newTeam);
+        moveThoughtsWithBoardsToNewTeamOrElseDelete(oldTeam, newTeam);
         deleteColumnTitles(oldTeam);
         moveBoardsToNewTeam(oldTeam, newTeam);
-        moveActionItemsToNewTeam(oldTeam, newTeam);
+        deleteActionItems(oldTeam);
         moveUserTeamMappingsToNewTeam(oldTeam, newTeam);
         moveFeedbackToNewTeam(oldTeam, newTeam);
         teamRepository.delete(oldTeam);
@@ -116,18 +116,22 @@ public class TeamNameCleanup implements ApplicationListener<ApplicationReadyEven
         return maxTeam;
     }
 
-    private void moveThoughtsToNewTeam(Team oldTeam, Team newTeam) {
+    private void moveThoughtsWithBoardsToNewTeamOrElseDelete(Team oldTeam, Team newTeam) {
         List<ColumnTitle> columnTitles = columnTitleRepository.findAllByTeamId(newTeam.getId());
         Map<String, ColumnTitle> topicsToNewTitles = columnTitles.stream()
                 .collect(toMap(ColumnTitle::getTopic, columnTitle -> columnTitle));
 
         List<Thought> oldThoughts = thoughtRepository.findAllByTeamId(oldTeam.getId());
         for (Thought oldThought : oldThoughts) {
-            Thought newThought = oldThought.toBuilder()
-                    .teamId(newTeam.getId())
-                    .columnTitle(topicsToNewTitles.get(oldThought.getTopic()))
-                    .build();
-            thoughtRepository.save(newThought);
+            if (oldThought.getBoardId() != null && oldThought.getBoardId() != 0) {
+                Thought newThought = oldThought.toBuilder()
+                        .teamId(newTeam.getId())
+                        .columnTitle(topicsToNewTitles.get(oldThought.getTopic()))
+                        .build();
+                thoughtRepository.save(newThought);
+            } else {
+                thoughtRepository.delete(oldThought);
+            }
         }
     }
 
@@ -144,11 +148,10 @@ public class TeamNameCleanup implements ApplicationListener<ApplicationReadyEven
         });
     }
 
-    private void moveActionItemsToNewTeam(Team oldTeam, Team newTeam) {
+    private void deleteActionItems(Team oldTeam) {
         List<ActionItem> actionItems = actionItemRepository.findAllByTeamId(oldTeam.getId());
         actionItems.forEach(oldActionItem -> {
-            ActionItem newActionItem = oldActionItem.toBuilder().teamId(newTeam.getId()).build();
-            actionItemRepository.save(newActionItem);
+            actionItemRepository.delete(oldActionItem);
         });
     }
 
