@@ -164,4 +164,8 @@ public class TeamService {
         }
         throw new BoardDoesNotExistException();
     }
+
+    public int trimAllTeamNames() {
+        return teamRepository.trimAllTeamNames();
+    }
 }

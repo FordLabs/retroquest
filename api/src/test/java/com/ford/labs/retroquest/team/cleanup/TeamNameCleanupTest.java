@@ -292,6 +292,22 @@ class TeamNameCleanupTest {
         assertThat(actualFeedback).isEqualTo(expectedFeedback);
     }
 
+    @Test
+    public void teamNamesRemoveExtraSpaces() {
+        createTeamToKeep(new Team("name-with-trailing", "nameWithTrailing    ", "Password1"));
+        createTeamToKeep(new Team("name-with-leading", "   nameWithLeading", "Password1"));
+        createTeamToKeep(new Team("name-with-extras", "  name   with   extras  ", "Password1"));
+        teamNameCleanup.onApplicationEvent(applicationReadyEvent);
+
+        List<Team> expectedTeams = teamsToKeep.stream()
+                .map(t -> t.toBuilder().name(t.getName().trim()).build())
+                .collect(Collectors.toList());
+        List<Team> actualTeams = teamRepository.findAll();
+        actualTeams.sort(comparing(Team::getUri));
+        expectedTeams.sort(comparing(Team::getUri));
+        assertThat(actualTeams).isEqualTo(expectedTeams);
+    }
+
     private void createConflictingTeamNames() {
         Team teamToDelete, teamToKeep;
         teamToDelete = createTeamToDelete(new Team("name0-", "name0 ", "Password1"));

@@ -10,6 +10,7 @@ import com.ford.labs.retroquest.feedback.Feedback;
 import com.ford.labs.retroquest.feedback.FeedbackRepository;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
+import com.ford.labs.retroquest.team.TeamService;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
 import com.ford.labs.retroquest.users.UserTeamMapping;
@@ -47,6 +48,7 @@ public class TeamNameCleanup implements ApplicationListener<ApplicationReadyEven
     private final ActionItemRepository actionItemRepository;
     private final UserTeamMappingRepository userTeamMappingRepository;
     private final FeedbackRepository feedbackRepository;
+    private final TeamService teamService;
 
     public TeamNameCleanup(TeamRepository teamRepository,
                            ThoughtRepository thoughtRepository,
@@ -54,7 +56,8 @@ public class TeamNameCleanup implements ApplicationListener<ApplicationReadyEven
                            BoardRepository boardRepository,
                            ActionItemRepository actionItemRepository,
                            UserTeamMappingRepository userTeamMappingRepository,
-                           FeedbackRepository feedbackRepository) {
+                           FeedbackRepository feedbackRepository,
+                           TeamService teamService) {
         this.teamRepository = teamRepository;
         this.thoughtRepository = thoughtRepository;
         this.columnTitleRepository = columnTitleRepository;
@@ -62,11 +65,13 @@ public class TeamNameCleanup implements ApplicationListener<ApplicationReadyEven
         this.actionItemRepository = actionItemRepository;
         this.userTeamMappingRepository = userTeamMappingRepository;
         this.feedbackRepository = feedbackRepository;
+        this.teamService = teamService;
     }
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         fixConflictingTeamNames();
+        teamService.trimAllTeamNames();
     }
 
     private void fixConflictingTeamNames() {

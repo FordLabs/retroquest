@@ -19,8 +19,10 @@ package com.ford.labs.retroquest.team;
 
 import com.ford.labs.retroquest.team.cleanup.CanonicalTeamNameAndCount;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -44,4 +46,9 @@ public interface TeamRepository extends JpaRepository<Team, String> {
 
     @Query("SELECT t FROM Team t WHERE UPPER(TRIM(name)) = UPPER(TRIM(:name))")
     List<Team> findAllTeamsByNameWithTrimmingAndIgnoreCase(String name);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Team t SET t.name = TRIM(t.name)")
+    int trimAllTeamNames();
 }
