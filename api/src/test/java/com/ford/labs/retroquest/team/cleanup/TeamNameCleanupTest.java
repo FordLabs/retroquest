@@ -21,6 +21,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -33,7 +34,8 @@ import static java.util.Collections.emptyList;
 import static java.util.Comparator.comparing;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+properties = { "com.retroquest.runTeamCleanupJob=true"})
 class TeamNameCleanupTest {
 
     @Autowired
@@ -104,6 +106,7 @@ class TeamNameCleanupTest {
         teamRepository.deleteAll();
 
         createConflictingTeamNames();
+        ReflectionTestUtils.setField(teamNameCleanup, "runCleanupJob", true);
     }
 
     @Test
@@ -229,7 +232,7 @@ class TeamNameCleanupTest {
     }
 
     @Test
-    public void userTeamMappingsAreRepointedToNewTeamWhenConflicts() {
+    public void userTeamMappingsAreDeletedWhenConflicts() {
 
         Map<Team, List<UserTeamMapping>> existingUserTeamMappings = new HashMap<>();
         List<UserTeamMapping> expectedUserTeamMappings = new ArrayList<>();
@@ -299,6 +302,16 @@ class TeamNameCleanupTest {
         actualTeams.sort(comparing(Team::getUri));
         expectedTeams.sort(comparing(Team::getUri));
         assertThat(actualTeams).isEqualTo(expectedTeams);
+    }
+
+    @Test
+    public void doesNothingIfPropertyIsNotSet() {
+        ReflectionTestUtils.setField(teamNameCleanup, "runCleanupJob", false);
+        teamNameCleanup.onApplicationEvent(applicationReadyEvent);
+        assertThat(teamRepository.findAllTeamsWithConflictingCanonicalNames().size()).isNotEqualTo(0);
+        List<Team> existingTeams = teamRepository.findAll();
+        assertThat(existingTeams).containsAll(teamsToKeep);
+        assertThat(existingTeams).containsAll(teamsToDeleteToReplacement.keySet());
     }
 
     private void createConflictingTeamNames() {

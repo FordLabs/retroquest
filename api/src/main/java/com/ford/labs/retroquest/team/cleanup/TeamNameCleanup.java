@@ -16,6 +16,7 @@ import com.ford.labs.retroquest.thought.ThoughtRepository;
 import com.ford.labs.retroquest.users.UserTeamMapping;
 import com.ford.labs.retroquest.users.UserTeamMappingRepository;
 import lombok.extern.java.Log;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
@@ -49,6 +50,7 @@ public class TeamNameCleanup implements ApplicationListener<ApplicationReadyEven
     private final UserTeamMappingRepository userTeamMappingRepository;
     private final FeedbackRepository feedbackRepository;
     private final TeamService teamService;
+    private final boolean runCleanupJob;
 
     public TeamNameCleanup(TeamRepository teamRepository,
                            ThoughtRepository thoughtRepository,
@@ -57,7 +59,8 @@ public class TeamNameCleanup implements ApplicationListener<ApplicationReadyEven
                            ActionItemRepository actionItemRepository,
                            UserTeamMappingRepository userTeamMappingRepository,
                            FeedbackRepository feedbackRepository,
-                           TeamService teamService) {
+                           TeamService teamService,
+                           @Value("${com.retroquest.runTeamCleanupJob:false}") boolean runCleanupJob) {
         this.teamRepository = teamRepository;
         this.thoughtRepository = thoughtRepository;
         this.columnTitleRepository = columnTitleRepository;
@@ -66,12 +69,15 @@ public class TeamNameCleanup implements ApplicationListener<ApplicationReadyEven
         this.userTeamMappingRepository = userTeamMappingRepository;
         this.feedbackRepository = feedbackRepository;
         this.teamService = teamService;
+        this.runCleanupJob = runCleanupJob;
     }
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
-        fixConflictingTeamNames();
-        teamService.trimAllTeamNames();
+        if (runCleanupJob) {
+            fixConflictingTeamNames();
+            teamService.trimAllTeamNames();
+        }
     }
 
     private void fixConflictingTeamNames() {
