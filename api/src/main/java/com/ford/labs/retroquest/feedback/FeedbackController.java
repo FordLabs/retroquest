@@ -17,6 +17,10 @@
 
 package com.ford.labs.retroquest.feedback;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +33,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/feedback")
+@Api(tags = {"Feedback Controller"}, description = "The controller that manages feedback for Retroquest")
 public class FeedbackController {
 
     private FeedbackRepository feedbackRepository;
@@ -38,10 +43,11 @@ public class FeedbackController {
     }
 
     @PostMapping
+    @ApiOperation(value = "Creates a feedback entry", notes = "saveFeedback")
+    @ApiResponses(value = {@ApiResponse(code = 201, message = "Created", response = ResponseEntity.class)})
     public ResponseEntity saveFeedback(@RequestBody Feedback feedback) throws URISyntaxException {
         feedback.setDateCreated(LocalDateTime.now());
         Feedback savedFeedback = feedbackRepository.save(feedback);
         return ResponseEntity.created(new URI("/api/feedback/" + savedFeedback.getId())).build();
     }
-
 }
