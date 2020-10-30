@@ -18,7 +18,12 @@
 package com.ford.labs.retroquest.columntitle;
 
 import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
+import com.ford.labs.retroquest.board.Board;
 import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -30,6 +35,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
+@Api(tags = {"Column Title Controller"}, description = "The controller that manages the titles of each column on a retro board")
 public class ColumnTitleController {
 
     private ColumnTitleRepository columnTitleRepository;
@@ -43,6 +49,8 @@ public class ColumnTitleController {
 
     @GetMapping("/api/team/{teamId}/columns")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @ApiOperation(value = "Gets a the column titles on a retro board for a given team id", notes = "getColumnTitlesForTeam")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK", response = ColumnTitle.class, responseContainer = "List")})
     public List<ColumnTitle> getColumnTitlesForTeam(@PathVariable("teamId") String teamId) {
         return columnTitleRepository.findAllByTeamId(teamId);
     }
@@ -50,6 +58,8 @@ public class ColumnTitleController {
     @Transactional
     @PutMapping("/api/team/{teamId}/column/{columnId}/title")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @ApiOperation(value = "Updates the title of a column of a retro board given a team id and column id", notes = "updateTitleOfColumn")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK")})
     public void updateTitleOfColumn(@PathVariable("teamId") String teamId, @RequestBody ColumnTitle columnTitle, @PathVariable("columnId") Long columnId) {
         ColumnTitle returnedColumnTitle = columnTitleRepository.findById(columnId).orElseThrow();
         returnedColumnTitle.setTitle(columnTitle.getTitle());
