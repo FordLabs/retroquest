@@ -22,10 +22,12 @@ import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
 import com.ford.labs.retroquest.v2.columns.ColumnCombinerResponse;
 import com.ford.labs.retroquest.websocket.WebsocketDeleteResponse;
 import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
+import com.sun.net.httpserver.HttpsConfigurator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -55,7 +57,7 @@ public class ActionItemController {
     @PutMapping("/api/team/{teamId}/action-item/{thoughtId}/complete")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @ApiOperation(value = "Gets all thoughts for a given team id", notes = "getThoughtsForTeam")
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "All the thoughts for a team id", response = ColumnCombinerResponse.class)})
+    @ApiResponses(value = {@ApiResponse(code = 204, message = "No Content")})
     public void completeActionItem(@PathVariable("thoughtId") Long id, @PathVariable("teamId") String teamId) {
         final ActionItem actionItem = actionItemRepository.findById(id).orElseThrow();
         actionItem.toggleCompleted();
@@ -64,6 +66,8 @@ public class ActionItemController {
 
     @PutMapping("/api/team/{teamId}/action-item/{thoughtId}/task")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @ApiOperation(value = "Updates an action item given a thought id and a team id", notes = "updateActionItemTask")
+    @ApiResponses(value = {@ApiResponse(code = 204, message = "No Content")})
     public void updateActionItemTask(@PathVariable("thoughtId") Long actionItemId, @PathVariable("teamId") String teamId, @RequestBody ActionItem updatedActionItem) {
         ActionItem savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
         savedActionItem.setTask(updatedActionItem.getTask());
@@ -72,6 +76,8 @@ public class ActionItemController {
 
     @PutMapping("/api/team/{teamId}/action-item/{thoughtId}/assignee")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @ApiOperation(value = "Updates an action item assignee a thought id and a team id", notes = "updateActionItemAssignee")
+    @ApiResponses(value = {@ApiResponse(code = 204, message = "No Content")})
     public void updateActionItemAssignee(@PathVariable("thoughtId") Long actionItemId, @PathVariable("teamId") String teamId, @RequestBody ActionItem updatedActionItem) {
         ActionItem savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
         savedActionItem.setAssignee(updatedActionItem.getAssignee());
@@ -80,18 +86,24 @@ public class ActionItemController {
 
     @GetMapping("/api/team/{teamId}/action-items")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @ApiOperation(value = "Retrieves all action items given a team id", notes = "getActionItemsForTeam")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK", response = ActionItem.class, responseContainer = "List")})
     public List<ActionItem> getActionItemsForTeam(@PathVariable("teamId") String teamId) {
         return actionItemRepository.findAllByTeamId(teamId);
     }
 
     @GetMapping("/api/team/{teamId}/action-items/archived")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @ApiOperation(value = "Retrieves all archived action items given a team id", notes = "getArchivedActionItemsForTeam")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK", response = ActionItem.class, responseContainer = "List")})
     public List<ActionItem> getArchivedActionItemsForTeam(@PathVariable("teamId") String teamId) {
         return actionItemRepository.findAllByTeamIdAndArchivedIsTrue(teamId);
     }
 
     @PostMapping("/api/team/{teamId}/action-item")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @ApiOperation(value = "Creates an action item given a team id", notes = "createActionItemForTeam")
+    @ApiResponses(value = {@ApiResponse(code = 201, message = "Created", response = ResponseEntity.class)})
     public ResponseEntity createActionItemForTeam(@PathVariable("teamId") String teamId, @RequestBody ActionItem actionItem) throws URISyntaxException {
         actionItem.setTeamId(teamId);
         ActionItem savedActionItem = actionItemRepository.save(actionItem);
