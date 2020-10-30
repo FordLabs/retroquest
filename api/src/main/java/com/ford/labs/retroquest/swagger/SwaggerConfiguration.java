@@ -17,7 +17,7 @@ class SwaggerConfiguration {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
-                .host("https://retroquest.ford.com")
+                .host("retroquest.ford.com")
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.ford.labs.retroquest"))
                 .paths(PathSelectors.any())
