@@ -19,15 +19,12 @@ package com.ford.labs.retroquest.actionitem;
 
 
 import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
-import com.ford.labs.retroquest.v2.columns.ColumnCombinerResponse;
 import com.ford.labs.retroquest.websocket.WebsocketDeleteResponse;
 import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
-import com.sun.net.httpserver.HttpsConfigurator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -56,7 +53,7 @@ public class ActionItemController {
 
     @PutMapping("/api/team/{teamId}/action-item/{thoughtId}/complete")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
-    @ApiOperation(value = "Gets all thoughts for a given team id", notes = "getThoughtsForTeam")
+    @ApiOperation(value = "Marks a thought as complete for a given team id", notes = "completeActionItem")
     @ApiResponses(value = {@ApiResponse(code = 204, message = "No Content")})
     public void completeActionItem(@PathVariable("thoughtId") Long id, @PathVariable("teamId") String teamId) {
         final ActionItem actionItem = actionItemRepository.findById(id).orElseThrow();
