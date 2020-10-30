@@ -9,6 +9,7 @@ buildscript {
         jacocoOutputDirectory = "${project.buildDir}/jacoco"
         jacocoHtmlDirectory = "${project.buildDir}/jacoco-html"
         jacocoXml = "${project.buildDir}/jacoco-xml/jacoco.xml"
+        swaggerVersion = '2.9.2'
     }
     repositories {
         mavenCentral()
@@ -80,6 +81,9 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpclient:4.5.12'
     implementation 'commons-io:commons-io:2.7'
     implementation 'org.flywaydb:flyway-core:6.5.2'
+    implementation "io.springfox:springfox-swagger2:${swaggerVersion}"
+    implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
+
     runtimeOnly 'com.h2database:h2:1.4.200'
     runtimeOnly 'org.postgresql:postgresql:42.2.16'
     compileOnly "org.projectlombok:lombok:${lombokVersion}"

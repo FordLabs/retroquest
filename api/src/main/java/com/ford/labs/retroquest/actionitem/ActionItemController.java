@@ -19,8 +19,13 @@ package com.ford.labs.retroquest.actionitem;
 
 
 import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
+import com.ford.labs.retroquest.v2.columns.ColumnCombinerResponse;
 import com.ford.labs.retroquest.websocket.WebsocketDeleteResponse;
 import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -35,6 +40,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
+@Api(tags = {"Action Item Controller"}, description = "The controller that manages action items to a board given a team id")
 public class ActionItemController {
 
     private final ActionItemRepository actionItemRepository;
@@ -48,6 +54,8 @@ public class ActionItemController {
 
     @PutMapping("/api/team/{teamId}/action-item/{thoughtId}/complete")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @ApiOperation(value = "Gets all thoughts for a given team id", notes = "getThoughtsForTeam")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "All the thoughts for a team id", response = ColumnCombinerResponse.class)})
     public void completeActionItem(@PathVariable("thoughtId") Long id, @PathVariable("teamId") String teamId) {
         final ActionItem actionItem = actionItemRepository.findById(id).orElseThrow();
         actionItem.toggleCompleted();

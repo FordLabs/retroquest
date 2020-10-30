@@ -53,7 +53,6 @@ public class ColumnCombinerService {
 
         Map<ColumnTitle, List<Thought>> columnTitleListMap = columnTitles.stream().collect(
                 Collectors.toMap(title -> title, title -> new ArrayList<>()));
-//
         Map<ColumnTitle, List<Thought>> groupedThoughts = thoughts.stream()
                 .collect(Collectors.groupingBy(Thought::getColumnTitle));
 
