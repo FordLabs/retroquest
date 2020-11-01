@@ -17,7 +17,6 @@
 
 package com.ford.labs.retroquest.contributors;
 
-import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;

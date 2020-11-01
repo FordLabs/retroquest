@@ -3,21 +3,15 @@ package com.ford.labs.retroquest.api;
 import com.ford.labs.retroquest.api.setup.ApiTest;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.team.*;
-import com.ford.labs.retroquest.validation.CaptchaProperties;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;

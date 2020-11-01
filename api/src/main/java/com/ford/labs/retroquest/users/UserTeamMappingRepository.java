@@ -1,6 +1,5 @@
 package com.ford.labs.retroquest.users;
 
-import com.ford.labs.retroquest.board.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

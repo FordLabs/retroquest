@@ -18,7 +18,6 @@
 package com.ford.labs.retroquest.columntitle;
 
 import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
-import com.ford.labs.retroquest.board.Board;
 import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
