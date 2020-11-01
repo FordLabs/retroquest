@@ -20,6 +20,10 @@ package com.ford.labs.retroquest.thought;
 import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
 import com.ford.labs.retroquest.websocket.WebsocketDeleteResponse;
 import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -34,6 +38,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
+@Api(tags = {"Thought Controller"}, description = "The controller that manages thoughts on a team board")
 public class ThoughtController {
 
     private ThoughtService thoughtService;
@@ -50,12 +55,16 @@ public class ThoughtController {
 
     @PutMapping("/api/team/{teamId}/thought/{thoughtId}/heart")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @ApiOperation(value = "adds a like to a thought given a thought and team id", notes = "likeThought")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Created", response = Integer.class)})
     public int likeThought(@PathVariable("thoughtId") String thoughtId, @PathVariable("teamId") String teamId) {
         return thoughtService.likeThought(thoughtId);
     }
 
     @PutMapping("/api/team/{teamId}/thought/{thoughtId}/discuss")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @ApiOperation(value = "toggles between a thought being discussed or not discussed", notes = "discussThought")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK")})
     public ResponseEntity<Void> discussThought(@PathVariable("thoughtId") String thoughtId, @PathVariable("teamId") String teamId) {
         thoughtService.discussThought(thoughtId);
 
@@ -65,12 +74,16 @@ public class ThoughtController {
     @Transactional
     @PutMapping("/api/team/{teamId}/thought/{id}/message")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @ApiOperation(value = "Updates the content of a thought given a thought and team id", notes = "updateThoughtMessage")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK")})
     public void updateThoughtMessage(@PathVariable("id") Long id, @RequestBody Thought thought, @PathVariable("teamId") String teamId) {
         thoughtService.updateThoughtMessage(String.valueOf(id), thought.getMessage());
     }
 
     @GetMapping("/api/team/{teamId}/thoughts")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @ApiOperation(value = "Returns all thoughts given a team id", notes = "getThoughtsForTeam")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK", response = Thought.class, responseContainer = "List")})
     public List<Thought> getThoughtsForTeam(@PathVariable("teamId") String teamId) {
         return thoughtService.fetchAllThoughtsByTeam(teamId);
     }
@@ -78,6 +91,8 @@ public class ThoughtController {
     @Transactional
     @DeleteMapping("/api/team/{teamId}/thoughts")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @ApiOperation(value = "Removes all thoughts given a team id", notes = "clearThoughtsForTeam")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK")})
     public void clearThoughtsForTeam(@PathVariable("teamId") String teamId) {
         thoughtService.deleteAllThoughtsByTeamId(teamId);
     }
@@ -85,12 +100,19 @@ public class ThoughtController {
     @Transactional
     @DeleteMapping("/api/team/{teamId}/thought/{thoughtId}")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @ApiOperation(value = "Removes a thought given a team id and thought id", notes = "clearIndividualThoughtForTeam")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK")})
     public void clearIndividualThoughtForTeam(@PathVariable("teamId") String teamId, @PathVariable("thoughtId") Long id) {
         thoughtService.deleteThought(teamId, id);
     }
 
     @PostMapping("/api/team/{teamId}/thought")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @ApiOperation(value = "Creates a thought given a team id and thought", notes = "createThoughtForTeam")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Created"),
+            @ApiResponse(code = 400, message = "Path to saved thought is not a valid URI")
+    })
     public ResponseEntity<Void> createThoughtForTeam(@PathVariable("teamId") String teamId, @RequestBody Thought thought) throws URISyntaxException {
         URI savedThoughtUri = new URI(thoughtService.createThoughtAndReturnURI(teamId, thought));
         return ResponseEntity.created(savedThoughtUri).build();
@@ -165,6 +187,4 @@ public class ThoughtController {
         thoughtRepository.deleteAllByTeamId(teamId);
         return new WebsocketDeleteResponse<>(Thought.builder().id(-1L).build());
     }
-
-
 }
