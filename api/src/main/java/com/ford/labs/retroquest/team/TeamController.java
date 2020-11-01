@@ -19,6 +19,10 @@ package com.ford.labs.retroquest.team;
 
 import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
 import com.ford.labs.retroquest.security.JwtBuilder;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +39,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping(value = "/api")
+@Api(tags = {"Team Controller"}, description = "The controller that manages team boards")
 public class TeamController {
 
     private final TeamService teamService;
@@ -54,6 +59,8 @@ public class TeamController {
 
     @PostMapping("/team")
     @Transactional(rollbackOn = URISyntaxException.class)
+    @ApiOperation(value = "Creates a new team", notes = "createTeam")
+    @ApiResponses(value = {@ApiResponse(code = 201, message = "Created", response = String.class)})
     public ResponseEntity<String> createTeam(@RequestBody @Valid CreateTeamRequest createTeamRequest) {
         Team team = teamService.createNewTeam(createTeamRequest);
 
@@ -68,18 +75,24 @@ public class TeamController {
     @PostMapping("/update-password")
     @Transactional(rollbackOn = URISyntaxException.class)
     @PreAuthorize("#updatePasswordRequest.teamId == authentication.principal")
+    @ApiOperation(value = "Resets a password for a team id", notes = "updatePasswords")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK", response = String.class)})
     public ResponseEntity<String> updatePassword(@RequestBody @Valid UpdatePasswordRequest updatePasswordRequest) {
         teamService.updatePassword(updatePasswordRequest);
         return ResponseEntity.ok().body("Password Reset Successfully");
     }
 
     @GetMapping("/team/{teamUri}/name")
+    @ApiOperation(value = "Gets a team name given the team uri", notes = "getTeamName")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK", response = String.class)})
     public String getTeamName(@PathVariable("teamUri") String teamUri) {
         return teamService.getTeamByUri(teamUri).getName();
     }
 
     @GetMapping(value = "/team/{teamId}/csv", produces = "application/board.csv")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @ApiOperation(value = "downloads a team board", notes = "downloadTeamBoard")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK", response = Byte.class)})
     public ResponseEntity<byte[]> downloadTeamBoard(@PathVariable("teamId") String teamId) throws IOException {
         CsvFile file = teamService.buildCsvFileFromTeam(teamId);
         return ResponseEntity.ok()
@@ -90,10 +103,14 @@ public class TeamController {
 
     @GetMapping(value = "team/{teamId}/validate")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @ApiOperation(value = "Validates a team id", notes = "deprecated")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK")})
     public void validateTeamId(@PathVariable("teamId") String teamId) {
     }
 
     @PostMapping("/team/login")
+    @ApiOperation(value = "Logs in a user given a login request", notes = "deprecated")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK", response = String.class)})
     public ResponseEntity<String> login(@RequestBody @Valid LoginRequest team) {
         Team savedTeamEntity = teamService.login(team);
         String jwt = jwtBuilder.buildJwt(savedTeamEntity.getUri());
@@ -105,11 +122,15 @@ public class TeamController {
     }
 
     @GetMapping("/team/{teamName}/captcha")
+    @ApiOperation(value = "returns whether captcha is enabled given a team name", notes = "isCaptchaEnabledForTeam")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK", response = CaptchaResponse.class)})
     public CaptchaResponse isCaptchaEnabledForTeam(@PathVariable("teamName") String teamName) {
         return new CaptchaResponse(captchaService.isCaptchaEnabledForTeam(teamName));
     }
 
     @GetMapping("/captcha")
+    @ApiOperation(value = "Determines whether captcha is enabled globally for Retroquest", notes = "isCaptchaEnabled")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK", response = CaptchaResponse.class)})
     public CaptchaResponse isCaptchaEnabled() {
         return new CaptchaResponse(captchaService.isCaptchaEnabled());
     }
