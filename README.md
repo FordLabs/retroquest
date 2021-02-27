@@ -54,7 +54,7 @@ The schema produced for H2 may not conform exactly to the MySQL schema used in p
 Running the application locally with MySQL requires a running instance of the Docker MySQL container:
 
 ```
-docker-compose up
+cd ./api && docker-compose up
 ```  
 
 Start the backend with Gradle:  
@@ -84,7 +84,6 @@ After navigating to the `api` folder, the following Gradle targets will run the 
 ```
 ./gradlew test -- Java Unit Tests
 ./gradlew apiTest -- API Level integration tests with and H2 database
-SPRING_PROFILES_ACTIVE=docker ./gradlew apiTest -- API Level integration tests with the Docker MySQL database
 ```
 
 To run both the backend api and unit tests at once:
@@ -92,6 +91,14 @@ To run both the backend api and unit tests at once:
 ```
 ./gradlew runAllTests
 ```
+
+To run both the backend api and unit tests at once against a production representative database:
+
+```
+docker-compose -f ./api/docker-compose.yml up -d && ./gradlew -Dspring.profiles.active.dockerdb runAllTests docker-compose -f ./api/docker-compose.yml down
+```
+
+SPRING_PROFILES_ACTIVE=dockerdb ./gradlew apiTest -- API Level integration tests with the Docker MySQL database
 
 ## Running the Frontend Tests
 Navigate to the `ui` folder, making sure you've already followed the build steps for the frontend and run any of the following commands:
@@ -108,11 +115,11 @@ Start the backend application
 ```
 Start the database
 ```
-cd /api && docker-compose up
+cd ./api && docker-compose up
 ```
 Run the end to end tests
 ```
-cd /ui && npm run e2e
+cd ./ui && npm run e2e
 ```
 
 ## Connecting to the local Database

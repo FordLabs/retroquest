@@ -84,10 +84,9 @@ dependencies {
     implementation "io.springfox:springfox-swagger2:${swaggerVersion}"
     implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
 
-    runtimeOnly 'com.h2database:h2:1.4.200'
-    runtimeOnly 'org.postgresql:postgresql:42.2.16'
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -131,6 +130,9 @@ task withH2(dependsOn: bootRun) {
             }
         }
     }
+    dependencies {
+        runtimeOnly 'com.h2database:h2:1.4.200'
+    }
 }
 
 task withDockerDb(dependsOn: bootRun) {
@@ -142,6 +144,9 @@ task withDockerDb(dependsOn: bootRun) {
                 systemProperties System.properties
             }
         }
+    }
+    dependencies {
+        runtime 'mysql:mysql-connector-java:8.0.23'
     }
 }
 
