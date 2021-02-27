@@ -87,11 +87,14 @@ dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
+    runtimeOnly 'mysql:mysql-connector-java:8.0.23'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'com.h2database:h2:1.4.200'
 
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
@@ -123,6 +126,9 @@ task runAllTests(type: GradleBuild) {
 task withH2(dependsOn: bootRun) {
     gradle.taskGraph.whenReady { graph ->
         if (graph.hasTask(withH2)) {
+            dependencies {
+                runtimeOnly 'com.h2database:h2:1.4.200'
+            }
             logger.lifecycle('>>> Setting spring.profiles.active == "h2" <<<')
             bootRun {
                 args = ['--spring.profiles.active=h2']
@@ -130,23 +136,20 @@ task withH2(dependsOn: bootRun) {
             }
         }
     }
-    dependencies {
-        runtimeOnly 'com.h2database:h2:1.4.200'
-    }
 }
 
 task withDockerDb(dependsOn: bootRun) {
     gradle.taskGraph.whenReady { graph ->
         if (graph.hasTask(withDockerDb)) {
+            dependencies {
+                runtimeOnly 'mysql:mysql-connector-java:8.0.23'
+            }
             logger.lifecycle('>>> Setting spring.profiles.active == "dockerdb" <<<')
             bootRun {
                 args = ['--spring.profiles.active=dockerdb']
                 systemProperties System.properties
             }
         }
-    }
-    dependencies {
-        runtime 'mysql:mysql-connector-java:8.0.23'
     }
 }
 
