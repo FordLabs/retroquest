@@ -31,7 +31,7 @@ plugins {
     id 'org.gradle.test-retry' version '1.1.6'
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'com.avast.gradle.docker-compose' version '0.13.0'
-    id "rkennel.withdb" version "1.0.2"
+    id "rkennel.withdb" version "1.0.4"
 }
 
 apply plugin: 'com.google.cloud.tools.appengine-appyaml'
@@ -105,8 +105,8 @@ bootRun {
 task runLocal {
     dependsOn 'withH2'
     dependsOn 'bootRun'
-    group: 'application'
-    description: 'Runs this project as a Spring Boot application using in-memory (H2) database'
+    group 'application'
+    description 'Runs this project as a Spring Boot application using in-memory (H2) database'
     gradle.taskGraph.whenReady { graph ->
         if (graph.hasTask(runLocal)) {
             logger.lifecycle('>>> Setting spring.profiles.active == "local" <<<')
@@ -121,8 +121,8 @@ task runLocal {
 task runDockerDb(group: 'application') {
     dependsOn 'withMaria'
     dependsOn 'bootRun'
-    group: 'application'
-    description: 'Runs this project as a Spring Boot application using containerized database'
+    group 'application'
+    description 'Runs this project as a Spring Boot application using containerized database'
 
     gradle.taskGraph.whenReady { graph ->
         if (graph.hasTask(runDockerDb)) {
