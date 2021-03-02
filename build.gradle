@@ -116,6 +116,20 @@ task runLocal {
     }
 }
 
+task runDockerDb {
+    dependsOn 'withMaria'
+    dependsOn 'bootRun'
+    gradle.taskGraph.whenReady { graph ->
+        if (graph.hasTask(runDockerDb)) {
+            logger.lifecycle('>>> Setting spring.profiles.active == "dockerdb" <<<')
+            bootRun {
+                args = ['--spring.profiles.active=dockerdb']
+                systemProperties System.properties
+            }
+        }
+    }
+}
+
 test {
     useJUnitPlatform {
         excludeTags 'api'
@@ -134,18 +148,6 @@ task dockerApiTest(type: GradleBuild) {
 
 task runAllTests(type: GradleBuild) {
     tasks = ['test', 'apiTest']
-}
-
-task withDockerDb(dependsOn: bootRun) {
-    gradle.taskGraph.whenReady { graph ->
-        if (graph.hasTask(withDockerDb)) {
-            logger.lifecycle('>>> Setting spring.profiles.active == "dockerdb" <<<')
-            bootRun {
-                args = ['--spring.profiles.active=dockerdb']
-                systemProperties System.properties
-            }
-        }
-    }
 }
 
 dockerCompose {
