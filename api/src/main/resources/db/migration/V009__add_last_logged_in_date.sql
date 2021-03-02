@@ -1,2 +1,2 @@
-ALTER TABLE `team`
-ADD `last_login_date` tinyblob
+ALTER TABLE team
+ADD last_login_date tinyblob
