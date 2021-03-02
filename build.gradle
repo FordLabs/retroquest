@@ -31,6 +31,7 @@ plugins {
     id 'org.gradle.test-retry' version '1.1.6'
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'com.avast.gradle.docker-compose' version '0.13.0'
+    id "rkennel.withdb" version "1.0.4"
 }
 
 apply plugin: 'com.google.cloud.tools.appengine-appyaml'
@@ -101,6 +102,39 @@ bootRun {
     sourceResources sourceSets.main
 }
 
+task runLocal {
+    dependsOn 'withH2'
+    dependsOn 'bootRun'
+    group 'application'
+    description 'Runs this project as a Spring Boot application using in-memory (H2) database'
+    gradle.taskGraph.whenReady { graph ->
+        if (graph.hasTask(runLocal)) {
+            logger.lifecycle('>>> Setting spring.profiles.active == "local" <<<')
+            bootRun {
+                args = ['--spring.profiles.active=local']
+                systemProperties System.properties
+            }
+        }
+    }
+}
+
+task runDockerDb(group: 'application') {
+    dependsOn 'withMaria'
+    dependsOn 'bootRun'
+    group 'application'
+    description 'Runs this project as a Spring Boot application using containerized database'
+
+    gradle.taskGraph.whenReady { graph ->
+        if (graph.hasTask(runDockerDb)) {
+            logger.lifecycle('>>> Setting spring.profiles.active == "dockerdb" <<<')
+            bootRun {
+                args = ['--spring.profiles.active=dockerdb']
+                systemProperties System.properties
+            }
+        }
+    }
+}
+
 test {
     useJUnitPlatform {
         excludeTags 'api'
@@ -119,30 +153,6 @@ task dockerApiTest(type: GradleBuild) {
 
 task runAllTests(type: GradleBuild) {
     tasks = ['test', 'apiTest']
-}
-
-task withH2(dependsOn: bootRun) {
-    gradle.taskGraph.whenReady { graph ->
-        if (graph.hasTask(withH2)) {
-            logger.lifecycle('>>> Setting spring.profiles.active == "h2" <<<')
-            bootRun {
-                args = ['--spring.profiles.active=h2']
-                systemProperties System.properties
-            }
-        }
-    }
-}
-
-task withDockerDb(dependsOn: bootRun) {
-    gradle.taskGraph.whenReady { graph ->
-        if (graph.hasTask(withDockerDb)) {
-            logger.lifecycle('>>> Setting spring.profiles.active == "dockerdb" <<<')
-            bootRun {
-                args = ['--spring.profiles.active=dockerdb']
-                systemProperties System.properties
-            }
-        }
-    }
 }
 
 dockerCompose {

@@ -26,8 +26,10 @@ What you need to install before building our project.  This guide will assume yo
 
 ### Build the Backend with Gradle
 1. Open a terminal in the api directory (location of gradle.build)
-2. Build the project with the following command: `./gradlew clean build` This will trigger the backend tests to run.
-  - If you do not wish to run the tests and only want to build the application, use `./gradlew clean assemble`
+2. Build the project with the following command: `./gradlew clean build withPostgres` This will trigger the backend tests to run.
+  - If you do not wish to run the tests and only want to build the application, use `./gradlew clean assemble withPostgres`
+
+Note: If you are using a different database, then choose the appropriate [withDB](https://github.com/rkennel/withDb) syntax
 
 ### Build the Frontend with npm
 1. Open a terminal in the ui directory (location of package.json)
@@ -36,34 +38,34 @@ What you need to install before building our project.  This guide will assume yo
   - This will place the compiled output into the `api/src/main/resources/static` and will be bundled in the next backend build
 
 ## Running the Application
-Running the application locally can be done with either an H2 in-memory database or with a docker container of MySQL.
+Running the application locally can be done with either an H2 in-memory database or with a docker container of MariaDB.
 
 ### In-Memory
 The simplest way to get the application spun up is by using the in-memory database via Gradle:
 ```
-./gradlew withH2
+./gradlew runLocal
 ```
 or
 ```
-SPRING_PROFILES_ACTIVE=h2 ./gradlew bootRun
+SPRING_PROFILES_ACTIVE=local ./gradlew bootRun withH2
 ```
 
-The schema produced for H2 may not conform exactly to the MySQL schema used in production.
+The schema produced for H2 may not conform exactly to the MariaDB schema used in production.
 
 ### Docker
-Running the application locally with MySQL requires a running instance of the Docker MySQL container:
+Running the application locally with MariaDB requires a running instance of the Docker MariaDB container:
 
 ```
-docker-compose up
+cd ./api && docker-compose up
 ```  
 
 Start the backend with Gradle:  
 ```
-./gradlew withDockerDb
+./gradlew runDockerDb
 ```
 or
 ```
-SPRING_PROFILES_ACTIVE=dockerdb ./gradlew bootRun
+SPRING_PROFILES_ACTIVE=dockerdb ./gradlew bootRun withMaria
 ```
 ### Frontend
 If you are only working on the backend, a static build will be accessible from [localhost:8080](http://localhost:8080) after running `npm run build-prod`
@@ -84,13 +86,18 @@ After navigating to the `api` folder, the following Gradle targets will run the 
 ```
 ./gradlew test -- Java Unit Tests
 ./gradlew apiTest -- API Level integration tests with and H2 database
-SPRING_PROFILES_ACTIVE=docker ./gradlew apiTest -- API Level integration tests with the Docker MySQL database
 ```
 
 To run both the backend api and unit tests at once:
 
 ```
 ./gradlew runAllTests
+```
+
+To run both the backend api and unit tests at once against a production representative database:
+
+```
+docker-compose -f ./api/docker-compose.yml up -d && ./gradlew -Dspring.profiles.active.dockerdb runAllTests withMaria docker-compose -f ./api/docker-compose.yml down
 ```
 
 ## Running the Frontend Tests
@@ -102,17 +109,17 @@ npm run test -- Hot runs all tests
 ```
 
 ## Running the E2E Tests
-Start the backend application
-```
-./gradlew bootRun
-```
 Start the database
 ```
-cd /api && docker-compose up
+cd ./api && docker-compose up
+```
+Start the backend application
+```
+./gradlew runDockerDb
 ```
 Run the end to end tests
 ```
-cd /ui && npm run e2e
+cd ./ui && npm run e2e
 ```
 
 ## Connecting to the local Database

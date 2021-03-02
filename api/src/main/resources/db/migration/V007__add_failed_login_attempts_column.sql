@@ -1,2 +1,2 @@
-ALTER TABLE `team`
-ADD `failed_attempts` INT
+ALTER TABLE team
+ADD failed_attempts INT
