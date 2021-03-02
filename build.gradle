@@ -31,6 +31,7 @@ plugins {
     id 'org.gradle.test-retry' version '1.1.6'
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'com.avast.gradle.docker-compose' version '0.13.0'
+    id "rkennel.withdb" version "1.0.2"
 }
 
 apply plugin: 'com.google.cloud.tools.appengine-appyaml'
@@ -84,23 +85,35 @@ dependencies {
     implementation "io.springfox:springfox-swagger2:${swaggerVersion}"
     implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
 
+    runtimeOnly 'com.h2database:h2:1.4.200'
+    runtimeOnly 'org.postgresql:postgresql:42.2.16'
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-
-    runtimeOnly 'mysql:mysql-connector-java:8.0.23'
-
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation 'com.h2database:h2:1.4.200'
 
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
 bootRun {
     sourceResources sourceSets.main
+}
+
+task runLocal {
+    dependsOn 'withH2'
+    dependsOn 'bootRun'
+    gradle.taskGraph.whenReady { graph ->
+        if (graph.hasTask(runLocal)) {
+            logger.lifecycle('>>> Setting spring.profiles.active == "local" <<<')
+            bootRun {
+                args = ['--spring.profiles.active=local']
+                systemProperties System.properties
+            }
+        }
+    }
 }
 
 test {
@@ -123,27 +136,9 @@ task runAllTests(type: GradleBuild) {
     tasks = ['test', 'apiTest']
 }
 
-task withH2(dependsOn: bootRun) {
-    gradle.taskGraph.whenReady { graph ->
-        if (graph.hasTask(withH2)) {
-            dependencies {
-                runtimeOnly 'com.h2database:h2:1.4.200'
-            }
-            logger.lifecycle('>>> Setting spring.profiles.active == "h2" <<<')
-            bootRun {
-                args = ['--spring.profiles.active=h2']
-                systemProperties System.properties
-            }
-        }
-    }
-}
-
 task withDockerDb(dependsOn: bootRun) {
     gradle.taskGraph.whenReady { graph ->
         if (graph.hasTask(withDockerDb)) {
-            dependencies {
-                runtimeOnly 'mysql:mysql-connector-java:8.0.23'
-            }
             logger.lifecycle('>>> Setting spring.profiles.active == "dockerdb" <<<')
             bootRun {
                 args = ['--spring.profiles.active=dockerdb']
