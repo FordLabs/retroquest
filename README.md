@@ -26,8 +26,10 @@ What you need to install before building our project.  This guide will assume yo
 
 ### Build the Backend with Gradle
 1. Open a terminal in the api directory (location of gradle.build)
-2. Build the project with the following command: `./gradlew clean build` This will trigger the backend tests to run.
-  - If you do not wish to run the tests and only want to build the application, use `./gradlew clean assemble`
+2. Build the project with the following command: `./gradlew clean build withPostgres` This will trigger the backend tests to run.
+  - If you do not wish to run the tests and only want to build the application, use `./gradlew clean assemble withPostgres`
+
+Note: If you are using a different database, then choose the appropriate [withDB](https://github.com/rkennel/withDb) syntax
 
 ### Build the Frontend with npm
 1. Open a terminal in the ui directory (location of package.json)
