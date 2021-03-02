@@ -105,6 +105,8 @@ bootRun {
 task runLocal {
     dependsOn 'withH2'
     dependsOn 'bootRun'
+    group: 'application'
+    description: 'Runs this project as a Spring Boot application using in-memory (H2) database'
     gradle.taskGraph.whenReady { graph ->
         if (graph.hasTask(runLocal)) {
             logger.lifecycle('>>> Setting spring.profiles.active == "local" <<<')
@@ -116,9 +118,12 @@ task runLocal {
     }
 }
 
-task runDockerDb {
+task runDockerDb(group: 'application') {
     dependsOn 'withMaria'
     dependsOn 'bootRun'
+    group: 'application'
+    description: 'Runs this project as a Spring Boot application using containerized database'
+
     gradle.taskGraph.whenReady { graph ->
         if (graph.hasTask(runDockerDb)) {
             logger.lifecycle('>>> Setting spring.profiles.active == "dockerdb" <<<')
