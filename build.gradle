@@ -19,7 +19,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.google.cloud.tools:appengine-gradle-plugin:2.3.0'
+        classpath 'com.google.cloud.tools:appengine-gradle-plugin:2.4.1'
     }
 }
 
@@ -237,21 +237,19 @@ tasks.withType(Test) {
     finalizedBy('jacocoTestReport')
 }
 
+appengineStage.dependsOn build
+
 appengine {
     tools {
         // configure the Cloud Sdk tooling
     }
     stage {
-        // configure staging for deployment
+        appEngineDirectory = './api/src/main/appengine'
+        stagingDirectory = './build/gcloud/staged-app'
     }
     deploy {
+        appEngineDirectory = './api/src/main/appengine'
         projectId = 'retroquest'
-        version = 'initial' + getDateTs()
+        version = System.getProperty("google.app.version")
     }
-}
-
-def getDateTs() {
-    def date = new Date()
-    def formattedDate = date.format('yyyyMMddHHmmss')
-    return formattedDate
 }

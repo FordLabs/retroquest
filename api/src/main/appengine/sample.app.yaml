@@ -1,5 +1,6 @@
-runtime: java
-env: flex
+runtime: java11
+env: standard
+instance_class: F4_1G
 
 service: default
 
@@ -8,19 +9,7 @@ handlers:
     script: this field is required, but ignored
 
 env_variables:
-  SPRING_DATASOURCE_PASSWORD: <PASSWORD>
-  SPRING_DATASOURCE_URL: jdbc:mysql://google/<DATABASE_NAME>?cloudSqlInstance=<INSTANCE_CONNECTION_NAME>&socketFactory=com.google.cloud.sql.mysql.SocketFactory&useSSL=false
-  SPRING_DATASOURCE_USERNAME: <USERNAME>
-
-automatic_scaling:
-  min_num_instances: 1
-  max_num_instances: 5
-
-resources:
-  cpu: 2
-  memory_gb: 2.3
-  disk_size_gb: 10
-  volumes:
-    - name: ramdisk1
-      volume_type: tmpfs
-      size_gb: 0.5
+  SPRING_DATASOURCE_USERNAME: root
+  SPRING_DATASOURCE_PASSWORD: meKdowFmfuJ0ke30
+  SPRING_DATASOURCE_URL: jdbc:postgresql:///retroquest?cloudSqlInstance=retroquest-306823:us-central1:retroquest&socketFactory=com.google.cloud.sql.postgres.SocketFactory&user=root&password=meKdowFmfuJ0ke30
+  SPRING_DATASOURCE_NAME: retroquest

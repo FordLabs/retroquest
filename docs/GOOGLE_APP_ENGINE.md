@@ -5,17 +5,13 @@ We recommend using the project ID "retroquest".  If you do this, you will not ne
 
 ### App Engine - Create New Project
 - Java
-- Flexible
+- Standard
 
 ![create app](./images/google_create_app_1.png)
-
-![create app](./images/google_create_app_2.png)
 
 ### Create New SQL Instance
 - MySQL 2nd Gen 5.7
 - Create Database
-
-![create sql](./images/google_create_sql.png)
 
 ![create database](./images/google_create_database.png)
 
