@@ -1,9 +1,13 @@
-version: '2.1'
+version: '3.1'
+
 services:
-  mysql:
-    image: mariadb:10.5
+
+  db:
+    image: postgres:13
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: "retroquest"
-      MYSQL_DATABASE: "retroquest"
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: retroquest
+      POSTGRES_DB: retroquest
     ports:
-      - "3306:3306"
+      - "5432:5432"

@@ -1,0 +1,148 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.1.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <changeSet author="rkennel (generated)" id="1615067156888-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="action_item"/>
+            </not>
+        </preConditions>
+        <createTable tableName="action_item">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="assignee" type="VARCHAR(255)"/>
+            <column name="completed" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="task" type="VARCHAR(255)"/>
+            <column name="team_id" type="VARCHAR(255)"/>
+            <column defaultValueComputed="NULL" name="date_created" type="date"/>
+            <column defaultValueBoolean="false" name="archived" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="rkennel (generated)" id="1615067156888-2">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="board"/>
+            </not>
+        </preConditions>
+        <createTable tableName="board">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="team_id" type="VARCHAR(255)"/>
+            <column defaultValueComputed="NULL" name="date_created" type="date"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="rkennel (generated)" id="1615067156888-3">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="column_title"/>
+            </not>
+        </preConditions>
+        <createTable tableName="column_title">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="topic" type="VARCHAR(255)"/>
+            <column name="title" type="VARCHAR(255)"/>
+            <column name="team_id" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="rkennel (generated)" id="1615067156888-4">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="feedback"/>
+            </not>
+        </preConditions>
+        <createTable tableName="feedback">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="comment" type="VARCHAR(3000)"/>
+            <column name="stars" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="team_id" type="VARCHAR(255)"/>
+            <column name="user_email" type="VARCHAR(255)"/>
+            <column defaultValueComputed="current_timestamp()" name="date_created" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="rkennel (generated)" id="1615067156888-6">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="team"/>
+            </not>
+        </preConditions>
+        <createTable tableName="team">
+            <column name="uri" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="password" type="VARCHAR(255)"/>
+            <column defaultValueComputed="NULL" name="failed_attempts" type="INT"/>
+            <column defaultValueComputed="NULL" name="date_created" type="date"/>
+            <column defaultValueComputed="NULL" name="last_login_date" type="date"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="rkennel (generated)" id="1615067156888-7">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="thought"/>
+            </not>
+        </preConditions>
+        <createTable tableName="thought">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="discussed" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="hearts" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="message" type="VARCHAR(255)"/>
+            <column name="team_id" type="VARCHAR(255)"/>
+            <column name="topic" type="VARCHAR(255)"/>
+            <column defaultValueComputed="NULL" name="board_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="rkennel (generated)" id="1615067156888-8">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user"/>
+            </not>
+        </preConditions>
+        <createTable tableName="user">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="rkennel (generated)" id="1615067156888-9">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="user_team_mapping"/>
+            </not>
+        </preConditions>
+        <createTable tableName="user_team_mapping">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="team_uri" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

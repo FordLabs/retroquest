@@ -21,7 +21,7 @@ What you need to install before building our project.  This guide will assume yo
 
 1. [OpenJDK11](https://openjdk.java.net/projects/jdk/11/)
 2. [Lombok](https://projectlombok.org/)
-3. [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/) (Which is included in the desktop docker applications for Mac/Windows) or [MariaDB](https://mariadb.org/)
+3. [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/install/) (Which is included in the desktop docker applications for Mac/Windows) or [Postgresql](https://www.postgresql.org/)
 4. [Node.js](https://nodejs.org/en/)
 
 ### Build the Backend with Gradle
@@ -38,7 +38,7 @@ Note: If you are using a different database, then choose the appropriate [withDB
   - This will place the compiled output into the `api/src/main/resources/static` and will be bundled in the next backend build
 
 ## Running the Application
-Running the application locally can be done with either an H2 in-memory database or with a docker container of MariaDB.
+Running the application locally can be done with either an H2 in-memory database or with a docker container of Postgresql.
 
 ### In-Memory
 The simplest way to get the application spun up is by using the in-memory database via Gradle:
@@ -50,10 +50,10 @@ or
 SPRING_PROFILES_ACTIVE=local ./gradlew bootRun withH2
 ```
 
-The schema produced for H2 may not conform exactly to the MariaDB schema used in production.
+The schema produced for H2 may not conform exactly to the Postgresql schema used in production.
 
 ### Docker
-Running the application locally with MariaDB requires a running instance of the Docker MariaDB container:
+Running the application locally with Postgresql requires a running instance of the Docker Postgresql container:
 
 ```
 cd ./api && docker-compose up
@@ -65,7 +65,7 @@ Start the backend with Gradle:
 ```
 or
 ```
-SPRING_PROFILES_ACTIVE=dockerdb ./gradlew bootRun withMaria
+SPRING_PROFILES_ACTIVE=dockerdb ./gradlew bootRun withPostgres
 ```
 ### Frontend
 If you are only working on the backend, a static build will be accessible from [localhost:8080](http://localhost:8080) after running `npm run build-prod`
@@ -97,7 +97,7 @@ To run both the backend api and unit tests at once:
 To run both the backend api and unit tests at once against a production representative database:
 
 ```
-docker-compose -f ./api/docker-compose.yml up -d && ./gradlew -Dspring.profiles.active.dockerdb runAllTests withMaria docker-compose -f ./api/docker-compose.yml down
+docker-compose -f ./api/docker-compose.yml up -d && ./gradlew -Dspring.profiles.active.dockerdb runAllTests withPostgres docker-compose -f ./api/docker-compose.yml down
 ```
 
 ## Running the Frontend Tests
@@ -123,7 +123,7 @@ cd ./ui && npm run e2e
 ```
 
 ## Connecting to the local Database
-The application uses a MariaDB instance. The connection properties can be found in the application's property file.
+The application uses a Postgresql instance. The connection properties can be found in the application's property file.
 
 ## Deploying to Google App Engine
 Please read [GOOGLE_APP_ENGINE.md](/docs/GOOGLE_APP_ENGINE.md) for details on deploying Retroquest to Google App Engine.

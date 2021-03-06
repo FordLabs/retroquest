@@ -81,14 +81,13 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.11'
     implementation 'org.apache.httpcomponents:httpclient:4.5.12'
     implementation 'commons-io:commons-io:2.7'
-    implementation 'org.flywaydb:flyway-core:6.5.2'
+    implementation 'org.liquibase:liquibase-core:4.3.1'
     implementation "io.springfox:springfox-swagger2:${swaggerVersion}"
     implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
 
-    runtimeOnly 'com.h2database:h2:1.4.200'
-    runtimeOnly 'org.postgresql:postgresql:42.2.16'
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    testImplementation 'com.h2database:h2:1.4.200'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -119,7 +118,7 @@ task runLocal {
 }
 
 task runDockerDb(group: 'application') {
-    dependsOn 'withMaria'
+    dependsOn 'withPostgres'
     dependsOn 'bootRun'
     group 'application'
     description 'Runs this project as a Spring Boot application using containerized database'
