@@ -31,7 +31,7 @@ plugins {
     id 'org.gradle.test-retry' version '1.1.6'
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'com.avast.gradle.docker-compose' version '0.13.0'
-    id "rkennel.withdb" version "1.0.4"
+    id "rkennel.withdb" version "1.0.5"
 }
 
 apply plugin: 'com.google.cloud.tools.appengine-appyaml'
@@ -237,9 +237,15 @@ tasks.withType(Test) {
     finalizedBy('jacocoTestReport')
 }
 
-appengineStage.dependsOn build
 
+appengineStage.dependsOn build
+appengineStage.dependsOn withGooglePostgres
+appengineStage.dependsOn withPostgres
+appengineDeploy.dependsOn build
+appengineDeploy.dependsOn withGooglePostgres
+appengineDeploy.dependsOn withPostgres
 appengine {
+
     tools {
         // configure the Cloud Sdk tooling
     }
@@ -249,7 +255,7 @@ appengine {
     }
     deploy {
         appEngineDirectory = './api/src/main/appengine'
-        projectId = 'retroquest'
+        projectId = System.getProperty("google.app.projectid")
         version = System.getProperty("google.app.version")
     }
 }

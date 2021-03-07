@@ -9,7 +9,7 @@ handlers:
     script: this field is required, but ignored
 
 env_variables:
-  SPRING_DATASOURCE_USERNAME: root
-  SPRING_DATASOURCE_PASSWORD: meKdowFmfuJ0ke30
-  SPRING_DATASOURCE_URL: jdbc:postgresql:///retroquest?cloudSqlInstance=retroquest-306823:us-central1:retroquest&socketFactory=com.google.cloud.sql.postgres.SocketFactory&user=root&password=meKdowFmfuJ0ke30
+  SPRING_DATASOURCE_USERNAME: retroquest
+  SPRING_DATASOURCE_PASSWORD: <password>
+  SPRING_DATASOURCE_URL: jdbc:postgresql:///retroquest?c<INSTANCE CONNECTION NAME>&socketFactory=com.google.cloud.sql.postgres.SocketFactory
   SPRING_DATASOURCE_NAME: retroquest

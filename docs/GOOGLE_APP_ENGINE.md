@@ -10,31 +10,28 @@ We recommend using the project ID "retroquest".  If you do this, you will not ne
 ![create app](./images/google_create_app_1.png)
 
 ### Create New SQL Instance
-- MySQL 2nd Gen 5.7
+- instance id = retroquest
+- PostgreSQL 13
 - Create Database
 
 ![create database](./images/google_create_database.png)
 
 ### Enable Cloud SQL Admin API
 In order to connect directly to MySQL database from app engine, you need to [Enable the API](https://console.cloud.google.com/flows/enableapi?apiid=sqladmin&redirect=https://console.cloud.google.com&_ga=2.76411670.-2090376866.1552752988)
+
+### Add retroquest user
+In Cloud SQL console, navigate to users and choose "Add User Account".
+- Choose the PostgreSQL option
+- Username retroquest
+- enter a secure password of your choosing
+
+### Create Retroquest DB
+You need to create the initial instance of the retroquest db.  In the gcloud sdk, enter the following command
+```gcloud sql databases create retroquest --instance=retroquest```
+
 ## Setting up build scripts
 ### build.gradle
-build.gradle needs to point to the project id that you wish to deploy to.  If you did not use "retroquest" as your project ID, then you will need to modify the appengine deploy configuration.
-In the example below, we used "annarbor" as the project ID.
-```
-appengine {
-    tools {
-        // configure the Cloud Sdk tooling
-    }
-    stage {
-        // configure staging for deployment
-    }
-    deploy {
-        projectId = 'annarbor'
-        version = 'initial' + getDateTs()
-    }
-}
-```
+The build.gradle file is setup such that you will dynamically pass in the project-id and version.
 
 ### app.yaml
 To deploy to google app engine, we will need to create an app.yaml file.  Rename sample.app.yaml in the github repository to app.yaml.
@@ -42,19 +39,15 @@ To deploy to google app engine, we will need to create an app.yaml file.  Rename
 Next, we will need to configure the environment variables for connecting to the database.
 ```
 env_variables:
-  SPRING_DATASOURCE_PASSWORD: BH3HiG3vtj6ExmrA
-  SPRING_DATASOURCE_URL: jdbc:mysql://google/retroquest?cloudSqlInstance=annarbor:us-central1:ascot&socketFactory=com.google.cloud.sql.mysql.SocketFactory&useSSL=false
-  SPRING_DATASOURCE_USERNAME: root
+  SPRING_DATASOURCE_USERNAME: retroquest
+  SPRING_DATASOURCE_PASSWORD: <password>
+  SPRING_DATASOURCE_URL: jdbc:postgresql:///retroquest?c<INSTANCE CONNECTION NAME>&socketFactory=com.google.cloud.sql.postgres.SocketFactory
+  SPRING_DATASOURCE_NAME: retroquest
 ```
 
-Note, in the example above:
-- database name: retroquest
-- project id: ann arbor
-- region: us-central1
-- sql instance name: ascot
-- The database username has DDL create permissions.  This is necessary for Flyway scripts to create the database tables.
 ## Deploying
 ### Authenticate to Google Cloud
 `gcloud auth application-default login`
 ### Deploy Application
-`./gradlew appengineDeploy`
+In the example below, we are deploying version 2.0.0 of the application and google assigned a proejctid of retroquest-925256
+`./gradlew appEngineDeploy -Dgoogle.app.version=2-0-0 -Dgoogle.app.projectid=retroquest-925256`
