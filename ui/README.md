@@ -61,3 +61,29 @@ This command will lint the sass codebase and report violations
 yarn sass-lint-fix
 ```
 This command will lint the sass codebase and fix violations
+
+## Angular Components
+
+The UI makes use of Angular components to separate application UI logic.  The image below shows a breakdown of the main components in the application.
+
+![angular_components](./docs/retroquest-components.png)
+
+## Angular Routing
+
+Navigation through RetroQuest is managed by [Angular Router](https://angular.io/guide/router).
+
+|Path |Component|
+|------------------------|------------------------|
+|create |CreateComponent|
+|login |LoginComponent|
+|login/:teamId |LoginComponent|
+|update-password/:teamId |UpdatePasswordComponent|
+|create-user |CreateUserComponent|
+|login-user |LoginUserComponent|
+|user/:user |UserViewComponent|
+|styleguide |StyleGuidePageComponent|
+|team/:teamId |SubAppComponent, TeamPageComponent|
+|team/:teamId/radiator |ActionsRadiatorViewComponent|
+|team/:teamId/archives |ArchivesPageComponent|
+|team/:teamId/archives/:boardId |ArchivedBoardPageComponent|
+
