@@ -5,7 +5,7 @@ We recommend using the project ID "retroquest".  If you do this, you will not ne
 
 ### App Engine - Create New Project
 - Java
-- Standard
+- Flex
 
 ![create app](./images/google_create_app_1.png)
 
