@@ -1,5 +1,5 @@
-runtime: java11
-env: standard
+runtime: java
+env: flex
 instance_class: F4_1G
 
 service: default
@@ -13,3 +13,19 @@ env_variables:
   SPRING_DATASOURCE_PASSWORD: <password>
   SPRING_DATASOURCE_URL: jdbc:postgresql:///retroquest?c<INSTANCE CONNECTION NAME>&socketFactory=com.google.cloud.sql.postgres.SocketFactory
   SPRING_DATASOURCE_NAME: retroquest
+
+network:
+  session_affinity: true
+
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 5
+
+resources:
+  cpu: 2
+  memory_gb: 2.3
+  disk_size_gb: 10
+  volumes:
+    - name: ramdisk1
+      volume_type: tmpfs
+      size_gb: 0.5
