@@ -17,15 +17,22 @@
 
 import {TeamService} from './team.service';
 import {Observable} from 'rxjs/index';
+import {HttpClient} from '@angular/common/http';
 
 describe('TeamService', () => {
   let service;
-  let mockHttpClient;
+  let fakeHttpClient: HttpClient;
 
   beforeEach(() => {
-    mockHttpClient = jasmine.createSpyObj({get: new Observable(), post: new Observable()});
+    const mockGet = jest.fn().mockReturnValue(new Observable());
+    const mockPost = jest.fn().mockReturnValue(new Observable());
+    // @ts-ignore
+    fakeHttpClient = {
+      get: mockGet,
+      post: mockPost
+    } as HttpClient;
 
-    service = new TeamService(mockHttpClient);
+    service = new TeamService(fakeHttpClient);
   });
 
   describe('create', () => {
@@ -36,7 +43,7 @@ describe('TeamService', () => {
 
       const returnObj = service.create(name, password, captchaResponse);
 
-      expect(mockHttpClient.post).toHaveBeenCalledWith(
+      expect(fakeHttpClient.post).toHaveBeenCalledWith(
         '/api/team',
         {name, password, captchaResponse},
         {observe: 'response', responseType: 'text'}
@@ -54,7 +61,7 @@ describe('TeamService', () => {
 
       const returnObj = service.login(name, password, captchaResponse);
 
-      expect(mockHttpClient.post).toHaveBeenCalledWith(
+      expect(fakeHttpClient.post).toHaveBeenCalledWith(
         '/api/team/login',
         {name, password, captchaResponse},
         {observe: 'response', responseType: 'text'}
@@ -72,7 +79,7 @@ describe('TeamService', () => {
 
       const returnObj = service.updatePassword(teamId, previousPassword, newPassword);
 
-      expect(mockHttpClient.post).toHaveBeenCalledWith(
+      expect(fakeHttpClient.post).toHaveBeenCalledWith(
         '/api/update-password',
         {teamId, previousPassword, newPassword},
         {observe: 'response', responseType: 'text'}
@@ -88,7 +95,7 @@ describe('TeamService', () => {
 
       const returnObj = service.fetchTeamName(teamId);
 
-      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/name`, {responseType: 'text'});
+      expect(fakeHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/name`, {responseType: 'text'});
       expect(returnObj instanceof Observable).toBe(true);
     });
   });
@@ -100,7 +107,7 @@ describe('TeamService', () => {
       const returnObj = service.validateTeamId(teamId);
 
 
-      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/validate`, {observe: 'response'});
+      expect(fakeHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/validate`, {observe: 'response'});
       expect(returnObj instanceof Observable).toBeTruthy();
     });
   });
@@ -111,7 +118,7 @@ describe('TeamService', () => {
 
       const returnObj = service.isCaptchaEnabledForTeam(teamName);
 
-      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamName}/captcha`, {observe: 'response', responseType: 'text' });
+      expect(fakeHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamName}/captcha`, {observe: 'response', responseType: 'text' });
       expect(returnObj instanceof Observable).toBe(true);
     });
   });
