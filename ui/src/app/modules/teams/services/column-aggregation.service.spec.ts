@@ -17,12 +17,11 @@
 
 import {ColumnAggregationService} from './column-aggregation.service';
 import {Subject} from 'rxjs';
+import {createMockHttpClient} from '../../utils/testutils';
 
 describe('ColumnAggregationService', () => {
 
-  const mockHttpClient = jasmine.createSpyObj({
-    get: new Subject()
-  });
+  const mockHttpClient = createMockHttpClient();
 
   const service = new ColumnAggregationService(mockHttpClient);
 
