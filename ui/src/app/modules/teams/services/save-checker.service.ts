@@ -17,7 +17,7 @@
 
 
 import {Injectable} from '@angular/core';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Injectable()
 export class SaveCheckerService {
@@ -29,6 +29,8 @@ export class SaveCheckerService {
   }
 
   public updateTimestamp(): void {
-    this._lastSavedDateTime = moment().format('h:mm a');
+    const now = new Date();
+    const ampm = now.getHours() > 11 ? 'pm' : 'am';
+    this._lastSavedDateTime = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')} ${ampm}`;
   }
 }

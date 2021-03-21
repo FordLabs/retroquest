@@ -18,7 +18,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ActionItem} from '../../../domain/action-item';
 import {ActionItemService} from '../../services/action.service';
-import * as moment from 'moment';
+import moment from 'moment';
 import {Themes} from '../../../domain/Theme';
 
 const ASSIGNEE_PARSE_SYMBOL = '@';

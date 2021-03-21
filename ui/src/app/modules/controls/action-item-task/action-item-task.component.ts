@@ -17,7 +17,7 @@
 
 import {AfterViewChecked, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {ActionItem, emptyActionItem} from '../../domain/action-item';
-import * as moment from 'moment';
+import moment from 'moment';
 import {emojify} from '../../utils/EmojiGenerator';
 import {Themes} from '../../domain/Theme';
 

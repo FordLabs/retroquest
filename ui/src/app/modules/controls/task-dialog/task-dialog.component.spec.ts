@@ -18,7 +18,7 @@
 import {TaskDialogComponent} from './task-dialog.component';
 import {emptyActionItem} from '../../domain/action-item';
 import {ActionItemService} from '../../teams/services/action.service';
-import * as moment from 'moment';
+import moment from 'moment';
 
 describe('TaskDialogComponent', () => {
   let component: TaskDialogComponent;
