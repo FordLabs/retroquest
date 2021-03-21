@@ -51,3 +51,16 @@ export function createMockEventEmitter(): EventEmitter<any> {
     subscribe: jest.fn()
   } as EventEmitter<any>;
 }
+
+export function createMockRouter() {
+  return {
+    navigateByUrl: jest.fn()
+  };
+}
+
+export function createMockRecaptchaComponent() {
+  return {
+    reset: jest.fn(),
+    execute: jest.fn()
+  };
+}
