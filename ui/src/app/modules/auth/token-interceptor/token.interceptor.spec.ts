@@ -26,15 +26,11 @@ describe('TokenInterceptor', () => {
 
   let mockHttpHandler;
   beforeEach(() => {
-    mockHttpRequest = jasmine.createSpyObj({
-      clone: null
-    });
+    mockHttpRequest = {clone: jest.fn()};
 
     mockHttpRequest.url = '';
 
-    mockHttpHandler = jasmine.createSpyObj({
-      handle: null
-    });
+    mockHttpHandler = {handle: jest.fn()};
 
     spyOn(AuthService, 'getToken').and.returnValue(fakeToken);
 
