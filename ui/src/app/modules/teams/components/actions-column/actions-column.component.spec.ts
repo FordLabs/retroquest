@@ -18,6 +18,7 @@
 import {ActionsColumnComponent} from './actions-column.component';
 import {ActionItem} from '../../../domain/action-item';
 import {ActionItemService} from '../../services/action.service';
+import {ActionItemDialogComponent} from '../../../controls/action-item-dialog/action-item-dialog.component';
 
 describe('ActionsColumnComponent', () => {
   let component: ActionsColumnComponent;
@@ -26,10 +27,11 @@ describe('ActionsColumnComponent', () => {
   let fakeActionItem: ActionItem;
 
   beforeEach(() => {
-    mockActionItemService = jasmine.createSpyObj({
-      updateActionItem: null,
-      deleteActionItem: null
-    });
+    // @ts-ignore
+    mockActionItemService = {
+      updateActionItem: jest.fn(),
+      deleteActionItem: jest.fn()
+    } as ActionItemService;
 
     component = new ActionsColumnComponent(mockActionItemService);
 
@@ -117,9 +119,10 @@ describe('ActionsColumnComponent', () => {
   describe('displayPopup', () => {
 
     beforeEach(() => {
-      component.actionItemDialog = jasmine.createSpyObj({
-        show: null
-      });
+      // @ts-ignore
+      component.actionItemDialog = {
+        show: jest.fn()
+      } as ActionItemDialogComponent;
     });
 
     it('should show the action item dialog', () => {
