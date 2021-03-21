@@ -17,6 +17,8 @@
 
 import {ActionItemTaskComponent} from './action-item-task.component';
 import {emptyActionItem} from '../../domain/action-item';
+import {ElementRef} from '@angular/core';
+import {createMockEventEmitter} from '../../utils/testutils';
 
 describe('ActionItemTaskComponent', () => {
   let component: ActionItemTaskComponent;
@@ -34,20 +36,21 @@ describe('ActionItemTaskComponent', () => {
   });
 
   describe('toggleEditMode', () => {
-    const fakeElementRef = {
-      nativeElement: jasmine.createSpyObj({
-        focus: null,
-        select: null
-      })
-    };
+    // @ts-ignore
+    const fakeElementRef: ElementRef = {
+      nativeElement: {
+        focus: jest.fn(),
+        select: jest.fn()
+      }
+    } as ElementRef;
 
     beforeEach(() => {
       component.editableTextArea = fakeElementRef;
     });
 
     afterEach(() => {
-      fakeElementRef.nativeElement.focus.calls.reset();
-      fakeElementRef.nativeElement.select.calls.reset();
+      fakeElementRef.nativeElement.focus.mockReset();
+      fakeElementRef.nativeElement.select.mockReset();
     });
 
     it('should set the edit mode value to true', () => {
@@ -99,7 +102,7 @@ describe('ActionItemTaskComponent', () => {
 
   describe(`editModeOff`, () => {
     it(`should emit message changed`, () => {
-      component.messageChanged = jasmine.createSpyObj({emit: null});
+      component.messageChanged = createMockEventEmitter();
       component.editModeOff();
       expect(component.messageChanged.emit).toHaveBeenCalled();
     });
@@ -120,7 +123,7 @@ describe('ActionItemTaskComponent', () => {
   describe('emitDeleteItem', () => {
 
     it('should emit the actionItem to be deleted if the deletion flag is set to true', () => {
-      component.deleted = jasmine.createSpyObj({emit: null});
+      component.deleted = createMockEventEmitter();
 
       component.actionItem = emptyActionItem();
       component.actionItem.task = 'FAKE TASK';
@@ -132,7 +135,7 @@ describe('ActionItemTaskComponent', () => {
     });
 
     it('should not emit the actionItem to be deleted if the deletion flag is set to false', () => {
-      component.deleted = jasmine.createSpyObj({emit: null});
+      component.deleted = createMockEventEmitter();
 
       component.actionItem = emptyActionItem();
       component.actionItem.task = 'FAKE TASK';
@@ -149,7 +152,7 @@ describe('ActionItemTaskComponent', () => {
 
     it('should emit the actionItem when edit mode is not enabled', () => {
       component.taskEditModeEnabled = false;
-      component.messageClicked = jasmine.createSpyObj({emit: null});
+      component.messageClicked = createMockEventEmitter();
 
       component.actionItem = emptyActionItem();
       component.actionItem.task = 'FAKE TASK';
@@ -160,7 +163,7 @@ describe('ActionItemTaskComponent', () => {
 
     it('should not emit the actionItem when edit mode is enabled', () => {
       component.taskEditModeEnabled = true;
-      component.messageClicked = jasmine.createSpyObj({emit: null});
+      component.messageClicked = createMockEventEmitter();
 
       component.actionItem = emptyActionItem();
       component.actionItem.task = 'FAKE TASK';
@@ -174,9 +177,9 @@ describe('ActionItemTaskComponent', () => {
   describe('forceBlur', () => {
     it('should call blur on the native textarea element', () => {
       component.editableTextArea = {
-        nativeElement: jasmine.createSpyObj({
-          blur: null
-        })
+        nativeElement: {
+          blur: jest.fn()
+        }
       };
       component.forceBlur();
 
@@ -212,7 +215,9 @@ describe('ActionItemTaskComponent', () => {
     let fakeEvent;
 
     beforeEach(() => {
-      fakeEvent = jasmine.createSpyObj(['preventDefault']);
+      fakeEvent = {
+        preventDefault: jest.fn()
+      };
     });
 
     it('should set the action item message to the passed in string', () => {
