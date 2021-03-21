@@ -27,9 +27,10 @@ describe('ContributorsComponent', () => {
 
   beforeEach(() => {
     mockContributorSubject = new Subject<Contributor[]>();
-    mockContrbutorsServerice = jasmine.createSpyObj({
-      getContributors: mockContributorSubject
-    });
+    // @ts-ignore
+    mockContrbutorsServerice = {
+      getContributors: jest.fn().mockReturnValue(mockContributorSubject)
+    } as ContributorsService;
     component = new ContributorsComponent(mockContrbutorsServerice);
   });
 
