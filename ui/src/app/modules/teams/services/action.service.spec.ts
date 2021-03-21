@@ -37,21 +37,20 @@ describe('ActionItemService', () => {
   };
 
   beforeEach(() => {
-    mockHttpClient = jasmine.createSpyObj(
-      {
-        get: new Observable(),
-        post: new Observable(),
-        put: new Observable(),
-        delete: new Observable()
-      });
+    // @ts-ignore
+    mockHttpClient = {
+      get: jest.fn().mockReturnValue(new Observable()),
+      post: jest.fn().mockReturnValue(new Observable()),
+      put: jest.fn().mockReturnValue(new Observable()),
+      delete: jest.fn().mockReturnValue(new Observable()),
+    } as HttpClient;
 
-    mockWebSocket = jasmine.createSpyObj(
-      {
-        createActionItem: null,
-        deleteActionItem: null,
-        updateActionItem: null
-      }
-    );
+    // @ts-ignore
+    mockWebSocket = {
+      createActionItem: jest.fn(),
+      updateActionItem: jest.fn(),
+      deleteActionItem: jest.fn()
+    } as WebsocketService;
     service = new ActionItemService(mockHttpClient, mockWebSocket);
 
   });
