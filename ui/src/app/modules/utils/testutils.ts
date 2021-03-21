@@ -54,6 +54,7 @@ export function createMockEventEmitter(): EventEmitter<any> {
 
 export function createMockRouter() {
   return {
+    navigate: jest.fn(),
     navigateByUrl: jest.fn()
   };
 }
