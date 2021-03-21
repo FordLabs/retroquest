@@ -16,6 +16,7 @@
  */
 
 import {TextFieldComponent} from './text-field.component';
+import {createMockEventEmitter} from '../../utils/testutils';
 
 describe('TextFieldComponent', () => {
   let component: TextFieldComponent;
@@ -32,7 +33,7 @@ describe('TextFieldComponent', () => {
 
     it('should emit the new actionItem message', () => {
 
-      component.newMessageAdded = jasmine.createSpyObj({emit: null});
+      component.newMessageAdded = createMockEventEmitter();
 
       const fakeMessage = 'FAKE MESSAGE';
       component.text = fakeMessage;
