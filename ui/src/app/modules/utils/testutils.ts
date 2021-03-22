@@ -3,6 +3,7 @@ import {Observable, Subscription} from 'rxjs/index';
 import 'jest-preset-angular/setup-jest';
 import {WebsocketService} from '../teams/services/websocket.service';
 import {EventEmitter} from '@angular/core';
+import {Router} from '@angular/router';
 
 export function createMockHttpClient(): HttpClient {
   // @ts-ignore
@@ -52,11 +53,12 @@ export function createMockEventEmitter(): EventEmitter<any> {
   } as EventEmitter<any>;
 }
 
-export function createMockRouter() {
+export function createMockRouter(): Router {
+  // @ts-ignore
   return {
     navigate: jest.fn(),
     navigateByUrl: jest.fn()
-  };
+  } as Router;
 }
 
 export function createMockRecaptchaComponent() {
