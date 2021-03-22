@@ -17,6 +17,7 @@
 
 
 import {EndRetroDialogComponent} from './end-retro-dialog.component';
+import {createMockEventEmitter} from '../../utils/testutils';
 
 describe('EndRetroDialogComponent', () => {
   let component: EndRetroDialogComponent;
@@ -31,9 +32,7 @@ describe('EndRetroDialogComponent', () => {
 
   describe('submit', () => {
     beforeEach(() => {
-      component.submitted = jasmine.createSpyObj({
-        emit: null
-      });
+      component.submitted = createMockEventEmitter();
       component.submit();
     });
 
