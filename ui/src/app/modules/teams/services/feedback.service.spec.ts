@@ -17,10 +17,11 @@
 
 import {FeedbackService} from './feedback.service';
 import {Observable} from 'rxjs/index';
+import {createMockHttpClient} from '../../utils/testutils';
 
 describe('FeedbackService', () => {
   let service: FeedbackService;
-  const mockHttpClient = jasmine.createSpyObj({post: new Observable()});
+  const mockHttpClient = createMockHttpClient();
 
   beforeEach(() => {
     service = new FeedbackService(mockHttpClient);
