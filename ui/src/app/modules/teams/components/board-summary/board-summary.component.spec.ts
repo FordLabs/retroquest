@@ -19,7 +19,6 @@ import {BoardSummaryComponent} from './board-summary.component';
 import {Board, emptyBoardWithThought} from '../../../domain/board';
 import {BoardService} from '../../services/board.service';
 import {Subject} from 'rxjs';
-import any = jasmine.any;
 import {createMockEventEmitter} from '../../../utils/testutils';
 
 describe('BoardSummaryComponent', () => {
@@ -60,7 +59,7 @@ describe('BoardSummaryComponent', () => {
       const boardToDelete: Board = emptyBoardWithThought();
       spyOn(mockBoardService.deleteBoard('team-id', boardToDelete.id), 'subscribe');
       component.deleteBoard(boardToDelete);
-      expect(mockBoardService.deleteBoard('team-id', boardToDelete.id).subscribe).toHaveBeenCalledWith(any(Function));
+      expect(mockBoardService.deleteBoard('team-id', boardToDelete.id).subscribe).toHaveBeenCalledWith(expect.any(Function));
     });
 
     it('should emit a boardDeleted event', () => {
