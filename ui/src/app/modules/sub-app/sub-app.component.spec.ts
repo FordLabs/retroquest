@@ -23,6 +23,7 @@ import {of} from 'rxjs';
 import {instance, mock, verify, when} from 'ts-mockito';
 import {Themes} from '../domain/Theme';
 import {Title} from '@angular/platform-browser';
+import {createMockEventEmitter} from '../utils/testutils';
 
 describe('SubAppComponent', () => {
   let component: SubAppComponent;
@@ -72,7 +73,7 @@ describe('SubAppComponent', () => {
 
   describe('emitThemeChanged', () => {
     beforeEach(() => {
-      dataService.themeChanged = jasmine.createSpyObj({emit: null});
+      dataService.themeChanged = createMockEventEmitter();
     });
 
     it('should set the theme to the one passed in', () => {
