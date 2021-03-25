@@ -31,10 +31,10 @@ What you need to install before building our project.  This guide will assume yo
 
 Note: If you are using a different database, then choose the appropriate [withDB](https://github.com/rkennel/withDb) syntax
 
-### Build the Frontend with npm
+### Build the Frontend with yarn
 1. Open a terminal in the ui directory (location of package.json)
-2. Run `npm install` to install the dependencies
-3. Build the project with the following command: `npm run build-prod`
+2. Run `yarn install` to install the dependencies
+3. Build the project with the following command: `yarn build-prod`
   - This will place the compiled output into the `api/src/main/resources/static` and will be bundled in the next backend build
 
 ## Running the Application
@@ -68,11 +68,11 @@ or
 SPRING_PROFILES_ACTIVE=dockerdb ./gradlew bootRun withMaria
 ```
 ### Frontend
-If you are only working on the backend, a static build will be accessible from [localhost:8080](http://localhost:8080) after running `npm run build-prod`
+If you are only working on the backend, a static build will be accessible from [localhost:8080](http://localhost:8080) after running `yarn build-prod`
 
-Start the frontend with npm for live development:  
+Start the frontend with yarn for live development:  
 ```
-npm run start
+yarn start
 ```
 
 This will start the frontend with a proxy to direct all requests to localhost:8080 where the api is running. The application will start at [localhost:4200](http://localhost:4200)
@@ -104,8 +104,8 @@ docker-compose -f ./api/docker-compose.yml up -d && ./gradlew -Dspring.profiles.
 Navigate to the `ui` folder, making sure you've already followed the build steps for the frontend and run any of the following commands:
 
 ```
-npm run unit -- Runs all tests and closes
-npm run test -- Hot runs all tests
+yarn unit -- Runs all tests and closes
+yarn test -- Hot runs all tests
 ```
 
 ## Running the E2E Tests
@@ -119,7 +119,7 @@ Start the backend application
 ```
 Run the end to end tests
 ```
-cd ./ui && npm run e2e
+cd ./ui && yarn e2e
 ```
 
 ## Connecting to the local Database
