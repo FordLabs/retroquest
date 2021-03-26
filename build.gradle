@@ -172,10 +172,14 @@ task apiTestDockerDb(type: Test){
 
 task runAllTests(type: GradleBuild) {
     tasks = ['test', 'apiTest']
+    group 'Verification'
+    description 'Runs all tests against H2 Database'
 }
 
 task runAllTestsDockerDb(type: GradleBuild) {
     tasks = ['test', 'apiTestDockerDb']
+    group 'Verification'
+    description 'Runs all tests against docker database'
 }
 
 dockerCompose {
