@@ -16,7 +16,8 @@
     "sass-lint": "sass-lint -v",
     "sass-lint-fix": "sass-lint-auto-fix && sass-lint -v",
     "sonarqube": "sonar-scanner -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_UI_TOKEN",
-    "postinstall": "ngcc"
+    "postinstall": "ngcc",
+    "prepare": "cd .. && husky install ui/.husky"
   },
   "private": true,
   "dependencies": {
@@ -39,7 +40,7 @@
     "hammerjs": "^2.0.8",
     "jquery": "^3.3.1",
     "moment": "^2.22.2",
-    "ng-recaptcha": "^5.0.0",
+    "ng-recaptcha": "^6.0.0",
     "ngx-infinite-scroll": "^7.1.0",
     "rxjs": "^6.5.4",
     "sonar-scanner": "^3.1.0",
@@ -57,6 +58,7 @@
     "@types/node": "~13.1.0",
     "ajv": "^6.12.4",
     "codelyzer": "^5.2.1",
+    "husky": "^5.2.0",
     "jasmine-core": "^3.6.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.4.0",
@@ -72,17 +74,18 @@
     "puppeteer": "^1.5.0",
     "sass-lint": "^1.12.1",
     "sass-lint-auto-fix": "^0.21.0",
-    "simple-git-hooks": ">=2.0.3",
     "ts-mockito": "^2.3.1",
     "ts-node": "~8.5.0",
     "tslint": "~5.20.0",
     "typescript": "~3.7.5",
     "webpack": "^4.29.6"
   },
-  "simple-git-hooks": {
-    "pre-commit": "npx lint-staged"
-  },
   "lint-staged": {
     "*.{js,ts,css,md}": "prettier --write"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "cd ui && npx lint-staged"
+    }
   }
 }
