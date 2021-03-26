@@ -15,42 +15,43 @@
  *  limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {Board} from '../../domain/board';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Board } from '../../domain/board';
 import * as moment from 'moment';
-import {Thought} from '../../domain/thought';
+import { Thought } from '../../domain/thought';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BoardService {
-
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   fetchBoards(teamId: string, pageIndex: number): Observable<Array<Board>> {
-
     const params = {
-      pageIndex: pageIndex.toString()
+      pageIndex: pageIndex.toString(),
     };
 
     return new Observable((subscriber) => {
-      this.http.get(`/api/team/${teamId}/boards`, {params}).subscribe((data: Array<Object>) => {
-        data.map((boardObject) => {
-          boardObject['dateCreated'] = moment(boardObject['dateCreated']);
+      this.http
+        .get(`/api/team/${teamId}/boards`, { params })
+        .subscribe((data: Array<Object>) => {
+          data.map((boardObject) => {
+            boardObject['dateCreated'] = moment(boardObject['dateCreated']);
+          });
+          subscriber.next(data as Array<Board>);
         });
-        subscriber.next(data as Array<Board>);
-      });
     });
   }
 
   createBoard(teamId: string, thoughts: Array<Thought>): Observable<Board> {
-    return new Observable(subscriber => {
-      this.http.post(`/api/team/${teamId}/board`, {teamId: teamId, thoughts: thoughts}).subscribe(data => {
-        subscriber.next(data as Board);
-      });
+    return new Observable((subscriber) => {
+      this.http
+        .post(`/api/team/${teamId}/board`, { teamId, thoughts })
+        .subscribe((data) => {
+          subscriber.next(data as Board);
+        });
     });
   }
 

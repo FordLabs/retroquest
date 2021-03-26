@@ -15,23 +15,22 @@
  *  limitations under the License.
  */
 
-import {AuthService} from './auth.service';
+import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
-
   afterEach(() => {
     const cookies = document.cookie.split(';');
-
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i];
-      const eqPos = cookie.indexOf('=');
-      const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-      document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    for (const cookie in cookies) {
+      if (Object.prototype.hasOwnProperty.call(cookies, cookie)) {
+        const element = cookies[cookie];
+        const eqPos = cookie.indexOf('=');
+        const name = eqPos > -1 ? element.substr(0, eqPos) : element;
+        document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      }
     }
   });
 
   describe('setToken', () => {
-
     it('should set the token in the token cookie', () => {
       const token = 'im.a.jwt';
 
@@ -42,7 +41,6 @@ describe('AuthService', () => {
   });
 
   describe('getToken', () => {
-
     it('should get the token after its been set', () => {
       const expectedToken = 'im.a.jwt';
       AuthService.setToken(expectedToken);

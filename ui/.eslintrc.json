@@ -19,6 +19,10 @@
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
+        "@angular-eslint/component-selector": "off",
+        "@angular-eslint/directive-selector": "off",
+        "@angular-eslint/no-host-metadata-property": "off",
+        "@typescript-eslint/ban-types": "off",
         "@typescript-eslint/consistent-type-definitions": "error",
         "@typescript-eslint/dot-notation": "off",
         "@typescript-eslint/explicit-member-accessibility": [
@@ -27,10 +31,13 @@
             "accessibility": "explicit"
           }
         ],
+        "@typescript-eslint/member-ordering": "off",
+        "@typescript-eslint/naming-convention": "off",
         "brace-style": ["error", "1tbs"],
         "id-blacklist": "off",
         "id-match": "off",
-        "no-underscore-dangle": "off"
+        "no-underscore-dangle": "off",
+        "prefer-arrow/prefer-arrow-functions": "off"
       }
     },
     {

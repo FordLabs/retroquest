@@ -11,7 +11,7 @@
     "unit": "ng test --watch=false",
     "unit-coverage": "ng test --codeCoverage=true --watch=false",
     "lint": "ng lint",
-    "lint-fix": "./node_modules/tslint/bin/tslint --fix -p .",
+    "lint-fix": "ng lint --fix",
     "e2e": "ng e2e",
     "sass-lint": "sass-lint -v",
     "sass-lint-fix": "sass-lint-auto-fix && sass-lint -v",
@@ -92,7 +92,7 @@
     "webpack": "^4.29.6"
   },
   "lint-staged": {
-    "*.{js,ts,css,md,html}": "prettier --write"
+    "*.{js,ts,css,md,html}": ["eslint --fix", "prettier --write"]
   },
   "husky": {
     "hooks": {

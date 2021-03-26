@@ -15,19 +15,22 @@
  *  limitations under the License.
  */
 
-import {ColumnService} from './column.service';
-import {Observable} from 'rxjs/index';
-import {Column} from '../../domain/column';
+import { ColumnService } from './column.service';
+import { Observable } from 'rxjs/index';
+import { Column } from '../../domain/column';
 
 describe('ColumnService', () => {
   let service: ColumnService;
   let mockWebsocketService;
-  const mockHttpClient = jasmine.createSpyObj({get: new Observable(), put: new Observable()});
+  const mockHttpClient = jasmine.createSpyObj({
+    get: new Observable(),
+    put: new Observable(),
+  });
 
   const teamId = 'team-id';
 
   beforeEach(() => {
-    mockWebsocketService = jasmine.createSpyObj({updateColumnTitle: null});
+    mockWebsocketService = jasmine.createSpyObj({ updateColumnTitle: null });
     service = new ColumnService(mockHttpClient, mockWebsocketService);
   });
 
@@ -39,7 +42,9 @@ describe('ColumnService', () => {
     it('should request Columns from the columns api', () => {
       const returnObj = service.fetchColumns(teamId);
 
-      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/columns`);
+      expect(mockHttpClient.get).toHaveBeenCalledWith(
+        `/api/team/${teamId}/columns`
+      );
       expect(returnObj instanceof Observable).toBe(true);
     });
   });
@@ -52,12 +57,14 @@ describe('ColumnService', () => {
         id: 1,
         topic: 'happy',
         title: newTitle,
-        teamId: teamId
+        teamId,
       };
 
       service.updateColumn(testColumn);
 
-      expect(mockWebsocketService.updateColumnTitle).toHaveBeenCalledWith(testColumn);
+      expect(mockWebsocketService.updateColumnTitle).toHaveBeenCalledWith(
+        testColumn
+      );
     });
   });
 });
