@@ -28,11 +28,6 @@ describe('WebsocketService', () => {
   const teamId = 'teamId';
 
   beforeEach(() => {
-    // spiedClient = createSpyObj({
-    //   connect: null,
-    //   subscribe: {messages: new Observable()},
-    //   send: null
-    // });
     // @ts-ignore
     spiedClient = {
       connect: jest.fn(),
