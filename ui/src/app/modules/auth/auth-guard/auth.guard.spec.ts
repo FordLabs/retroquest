@@ -20,7 +20,7 @@ import {ActivatedRouteSnapshot} from '@angular/router';
 import {Subject} from 'rxjs/internal/Subject';
 import {AuthGuard} from './auth.guard';
 import {AuthService} from '../auth.service';
-import {createMockRecaptchaComponent, createMockRouter} from '../../utils/testutils';
+import {createMockRouter} from '../../utils/testutils';
 import {TeamService} from '../../teams/services/team.service';
 
 describe('AuthGuard', () => {

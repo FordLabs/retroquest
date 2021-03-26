@@ -1,5 +1,5 @@
 import {HttpClient} from '@angular/common/http';
-import {Observable, Subscription} from 'rxjs/index';
+import {Observable} from 'rxjs/index';
 import 'jest-preset-angular/setup-jest';
 import {WebsocketService} from '../teams/services/websocket.service';
 import {EventEmitter} from '@angular/core';

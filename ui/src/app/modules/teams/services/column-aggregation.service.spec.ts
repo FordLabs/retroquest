@@ -16,7 +16,6 @@
  */
 
 import {ColumnAggregationService} from './column-aggregation.service';
-import {Subject} from 'rxjs';
 import {createMockHttpClient} from '../../utils/testutils';
 
 describe('ColumnAggregationService', () => {

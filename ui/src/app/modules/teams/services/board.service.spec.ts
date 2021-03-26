@@ -17,10 +17,9 @@
 
 import {BoardService} from './board.service';
 import {HttpClient} from '@angular/common/http';
-import {Observable, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 import moment from 'moment';
 import {emptyThoughtWithColumn} from '../../domain/thought';
-import {del} from 'selenium-webdriver/http';
 import {Board} from '../../domain/board';
 
 describe('BoardService', () => {
