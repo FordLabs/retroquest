@@ -15,28 +15,29 @@
  *  limitations under the License.
  */
 
-import {async} from '@angular/core/testing';
-import {ActivatedRouteSnapshot} from '@angular/router';
-import {TeamPageQueryParamGuard} from './team-page-query-param-guard';
+import { waitForAsync } from '@angular/core/testing';
+import { ActivatedRouteSnapshot } from '@angular/router';
+import { TeamPageQueryParamGuard } from './team-page-query-param-guard';
 
 describe('TeamPageQueryParamGuard', () => {
-
   let service: TeamPageQueryParamGuard;
   let mockRouter;
   const fakeTeamId = 'FAKE TEAM ID';
 
-  beforeEach(async(() => {
-    mockRouter = jasmine.createSpyObj( {
-      navigate: null,
-      navigateByUrl: null
-    });
-    service = new TeamPageQueryParamGuard(mockRouter);
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      mockRouter = jasmine.createSpyObj({
+        navigate: null,
+        navigateByUrl: null,
+      });
+      service = new TeamPageQueryParamGuard(mockRouter);
+    })
+  );
 
   it('should continue to the team/teamId url if a team id query param is provided', () => {
     const mockNextRouteSnapshot = new ActivatedRouteSnapshot();
     mockNextRouteSnapshot.params = {
-      teamId: fakeTeamId
+      teamId: fakeTeamId,
     };
 
     const mockState = null;
@@ -49,7 +50,7 @@ describe('TeamPageQueryParamGuard', () => {
   it('should navigate to the login if no teamId is provided in the query param', () => {
     const mockNextRouteSnapshot = new ActivatedRouteSnapshot();
     mockNextRouteSnapshot.params = {
-      teamId: ''
+      teamId: '',
     };
 
     const mockState = null;

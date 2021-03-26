@@ -15,27 +15,25 @@
  *  limitations under the License.
  */
 
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-import {RouterModule} from '@angular/router';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
-import {AppComponent} from './app.component';
-import {TeamsModule} from './modules/teams/teams.module';
-import {BoardsModule} from './modules/boards/boards.module';
-import {TokenInterceptor} from './modules/auth/token-interceptor/token.interceptor';
-import {TeamService} from './modules/teams/services/team.service';
-import {ControlsModule} from './modules/controls/controls.module';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ServiceWorkerModule} from '@angular/service-worker';
-import {environment} from '../environments/environment';
-import {ColumnAggregationService} from './modules/teams/services/column-aggregation.service';
-import {DataService} from './modules/data.service';
+import { AppComponent } from './app.component';
+import { TeamsModule } from './modules/teams/teams.module';
+import { BoardsModule } from './modules/boards/boards.module';
+import { TokenInterceptor } from './modules/auth/token-interceptor/token.interceptor';
+import { TeamService } from './modules/teams/services/team.service';
+import { ControlsModule } from './modules/controls/controls.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import { ColumnAggregationService } from './modules/teams/services/column-aggregation.service';
+import { DataService } from './modules/data.service';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     TeamsModule,
     ControlsModule,
@@ -43,10 +41,13 @@ import {DataService} from './modules/data.service';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    RouterModule.forRoot([
-      {path: '', redirectTo: 'login', pathMatch: 'full'}
-    ]),
-    ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production})
+    RouterModule.forRoot(
+      [{ path: '', redirectTo: 'login', pathMatch: 'full' }],
+      { relativeLinkResolution: 'legacy' }
+    ),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+    }),
   ],
   providers: [
     TeamService,
@@ -55,11 +56,9 @@ import {DataService} from './modules/data.service';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
-      multi: true
-    }
+      multi: true,
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-
-export class AppModule {
-}
+export class AppModule {}
