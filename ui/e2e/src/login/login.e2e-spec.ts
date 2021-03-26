@@ -18,7 +18,7 @@ describe('Login Page', () => {
     });
   });
 
-  it('should be able to navigate to /create from link', () => {
+  xit('should be able to navigate to /create from link', () => {
     page.createBoardLink().click().then(() => {
       expect(browser.getCurrentUrl()).toContain('/create');
     });

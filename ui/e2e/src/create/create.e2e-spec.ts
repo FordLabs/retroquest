@@ -14,7 +14,7 @@ describe('Create Page', () => {
     expect(browser.getCurrentUrl()).toContain('/create');
   });
 
-  it('should be able to navigate to /login from link', () => {
+  xit('should be able to navigate to /login from link', () => {
     page.loginBoardLink().click().then(() => {
       expect(browser.getCurrentUrl()).toContain('/login');
     });
