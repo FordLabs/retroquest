@@ -18,6 +18,7 @@
 import {async} from '@angular/core/testing';
 import {ActivatedRouteSnapshot} from '@angular/router';
 import {TeamPageQueryParamGuard} from './team-page-query-param-guard';
+import {createMockRouter} from '../../utils/testutils';
 
 describe('TeamPageQueryParamGuard', () => {
 
@@ -26,10 +27,7 @@ describe('TeamPageQueryParamGuard', () => {
   const fakeTeamId = 'FAKE TEAM ID';
 
   beforeEach(async(() => {
-    mockRouter = jasmine.createSpyObj( {
-      navigate: null,
-      navigateByUrl: null
-    });
+    mockRouter = createMockRouter();
     service = new TeamPageQueryParamGuard(mockRouter);
   }));
 

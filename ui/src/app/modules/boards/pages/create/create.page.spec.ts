@@ -20,20 +20,23 @@ import {AuthService} from '../../../auth/auth.service';
 import {Subject, throwError} from 'rxjs';
 import {of} from 'rxjs/internal/observable/of';
 import {HttpHeaders, HttpResponse} from '@angular/common/http';
+import {createMockRecaptchaComponent, createMockRouter} from '../../../utils/testutils';
+import {TeamService} from '../../../teams/services/team.service';
 
 describe('CreateComponent', () => {
   let component: CreateComponent;
-  let mockTeamService;
+  let mockTeamService: TeamService;
   let mockRouter;
   let mockRecaptchaComponent;
 
   beforeEach(() => {
-    mockTeamService = jasmine.createSpyObj('teamService', {
-      create: new Subject(),
-      isCaptchaEnabled: new Subject()
-    });
-    mockRouter = jasmine.createSpyObj({'navigateByUrl': null});
-    mockRecaptchaComponent = jasmine.createSpyObj({reset: null, execute: null});
+    // @ts-ignore
+    mockTeamService = {
+      create: jest.fn().mockReturnValue(new Subject()),
+      isCaptchaEnabled: jest.fn().mockReturnValue(new Subject()),
+    } as TeamService;
+    mockRouter = createMockRouter();
+    mockRecaptchaComponent = createMockRecaptchaComponent();
 
     spyOn(AuthService, 'setToken');
     spyOn(console, 'error');
@@ -96,8 +99,8 @@ describe('CreateComponent', () => {
         body: JSON.stringify({captchaEnabled: false})
       });
 
-      mockTeamService.isCaptchaEnabled.and.returnValue(of(captchaResponse));
-      mockTeamService.create.and.returnValue(of(createTeamResponse));
+      mockTeamService.isCaptchaEnabled = jest.fn().mockReturnValue(of(captchaResponse));
+      mockTeamService.create = jest.fn().mockReturnValue(of(createTeamResponse));
 
       component.requestCaptchaStateAndCreateTeam();
 
@@ -117,8 +120,8 @@ describe('CreateComponent', () => {
         body: JSON.stringify({captchaEnabled: false})
       });
 
-      mockTeamService.isCaptchaEnabled.and.returnValue(of(captchaResponse));
-      mockTeamService.create.and.returnValue(throwError(error));
+      mockTeamService.isCaptchaEnabled = jest.fn().mockReturnValue(of(captchaResponse));
+      mockTeamService.create = jest.fn().mockReturnValue(throwError(error));
 
       component.requestCaptchaStateAndCreateTeam();
 
@@ -136,7 +139,7 @@ describe('CreateComponent', () => {
         error: JSON.stringify({message: httpErrorMessage})
       };
 
-      mockTeamService.isCaptchaEnabled.and.returnValue(throwError(error));
+      mockTeamService.isCaptchaEnabled = jest.fn().mockReturnValue(throwError(error));
 
       component.requestCaptchaStateAndCreateTeam();
 
@@ -151,7 +154,7 @@ describe('CreateComponent', () => {
 
       const error = {error: JSON.stringify({message: 'error'})};
 
-      mockTeamService.isCaptchaEnabled.and.returnValue(throwError(error));
+      mockTeamService.isCaptchaEnabled = jest.fn().mockReturnValue(throwError(error));
 
       component.requestCaptchaStateAndCreateTeam();
 
@@ -173,7 +176,7 @@ describe('CreateComponent', () => {
         headers: new HttpHeaders({location: teamUrl})
       });
 
-      mockTeamService.create.and.returnValue(of(loginResponse));
+      mockTeamService.create = jest.fn().mockReturnValue(of(loginResponse));
 
       component.create('some captcha');
 
@@ -191,7 +194,7 @@ describe('CreateComponent', () => {
         error: JSON.stringify({message: httpErrorMessage})
       };
 
-      mockTeamService.create.and.returnValue(throwError(error));
+      mockTeamService.create = jest.fn().mockReturnValue(throwError(error));
       component.create('some captcha');
 
       expect(component.errorMessage).toEqual(httpErrorMessage);

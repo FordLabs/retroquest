@@ -16,6 +16,7 @@
  */
 
 import {DeletionOverlayComponent} from './deletion-overlay.component';
+import {createMockEventEmitter} from '../../utils/testutils';
 
 describe('DeletionOverlayComponent', () => {
   let component: DeletionOverlayComponent;
@@ -31,9 +32,7 @@ describe('DeletionOverlayComponent', () => {
   describe('emitAcceptButtonClicked', () => {
 
     beforeEach(() => {
-      component.acceptButtonClicked = jasmine.createSpyObj({
-        emit: null
-      });
+      component.acceptButtonClicked = createMockEventEmitter();
       component.emitAcceptButtonClicked();
     });
 
@@ -45,9 +44,7 @@ describe('DeletionOverlayComponent', () => {
   describe('emitDeclineButtonClicked', () => {
 
     beforeEach(() => {
-      component.declineButtonClicked = jasmine.createSpyObj({
-        emit: null
-      });
+      component.declineButtonClicked = createMockEventEmitter();
       component.emitDeclineButtonClicked();
     });
 
@@ -59,9 +56,7 @@ describe('DeletionOverlayComponent', () => {
   describe('emitBlur', () => {
 
     beforeEach(() => {
-      component.blur = jasmine.createSpyObj({
-        emit: null
-      });
+      component.blur = createMockEventEmitter();
       component.emitBlur();
     });
 

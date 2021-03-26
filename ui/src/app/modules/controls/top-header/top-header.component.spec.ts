@@ -18,6 +18,7 @@
 import {TopHeaderComponent} from './top-header.component';
 import {Router} from '@angular/router';
 import {SaveCheckerService} from '../../teams/services/save-checker.service';
+import {createMockRouter} from '../../utils/testutils';
 
 describe('TopHeaderComponent', () => {
   let component: TopHeaderComponent;
@@ -27,9 +28,7 @@ describe('TopHeaderComponent', () => {
   const fakeId = 'fake-id';
 
   beforeEach(() => {
-    router = jasmine.createSpyObj({
-      navigateByUrl: null
-    });
+    router = createMockRouter();
 
     saveCheckerService = new SaveCheckerService();
     component = new TopHeaderComponent(router, saveCheckerService);

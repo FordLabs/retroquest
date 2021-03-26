@@ -18,16 +18,17 @@
 import {ColumnService} from './column.service';
 import {Observable} from 'rxjs/index';
 import {Column} from '../../domain/column';
+import {createMockHttpClient, createMockWebSocketService} from '../../utils/testutils';
 
 describe('ColumnService', () => {
   let service: ColumnService;
   let mockWebsocketService;
-  const mockHttpClient = jasmine.createSpyObj({get: new Observable(), put: new Observable()});
+  const mockHttpClient = createMockHttpClient();
 
   const teamId = 'team-id';
 
   beforeEach(() => {
-    mockWebsocketService = jasmine.createSpyObj({updateColumnTitle: null});
+    mockWebsocketService = createMockWebSocketService();
     service = new ColumnService(mockHttpClient, mockWebsocketService);
   });
 

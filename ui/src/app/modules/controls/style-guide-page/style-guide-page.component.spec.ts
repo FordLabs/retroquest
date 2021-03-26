@@ -31,9 +31,9 @@ describe('StyleGuidePageComponent', () => {
   describe('scrollToId', () => {
 
     it('should be able to scroll to any page id if it exists on the page', () => {
-      const fakeFoundElement = jasmine.createSpyObj( {
-        scrollIntoView: null
-      });
+      const fakeFoundElement = {
+        scrollIntoView: jest.fn()
+      };
       const spyQuerySelector = spyOn(document, 'querySelector').and.returnValue(fakeFoundElement);
       const fakeId = 'FAKE ID';
 

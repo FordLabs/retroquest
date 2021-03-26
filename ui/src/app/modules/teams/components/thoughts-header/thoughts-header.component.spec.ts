@@ -17,6 +17,7 @@
 
 import {Observable} from 'rxjs/index';
 import {ThoughtsHeaderComponent} from './thoughts-header.component';
+import {createMockEventEmitter} from '../../../utils/testutils';
 
 describe('ThoughtsHeaderComponent', () => {
   let component: ThoughtsHeaderComponent;
@@ -32,8 +33,13 @@ describe('ThoughtsHeaderComponent', () => {
   };
 
   beforeEach(() => {
-    mockThoughtService = jasmine.createSpyObj({addThought: new Observable()});
-    mockColumnService = jasmine.createSpyObj({updateColumn: new Observable()});
+    mockThoughtService = {
+      addThought: jest.fn().mockReturnValue(new Observable())
+    };
+
+    mockColumnService = {
+      updateColumn: jest.fn().mockReturnValue(new Observable())
+    };
 
     component = new ThoughtsHeaderComponent(mockThoughtService, mockColumnService);
     component.column = testColumn;
@@ -66,9 +72,7 @@ describe('ThoughtsHeaderComponent', () => {
   describe('sortByHearts', () => {
 
     beforeEach(() => {
-      component.sortChanged = jasmine.createSpyObj({
-        emit: null
-      });
+      component.sortChanged = createMockEventEmitter();
     });
 
     it('emits false', () => {

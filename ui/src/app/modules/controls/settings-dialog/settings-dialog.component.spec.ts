@@ -23,19 +23,24 @@ import {Themes, themeToString} from '../../domain/Theme';
 
 describe('SettingsDialogComponent', () => {
   let component: SettingsDialogComponent;
-  let mockRouter: Router;
-  let mockThemeChangedEmitter: EventEmitter<Themes>;
+  let fakeRouter: Router;
+  let fakeThemeChangedEmitter: EventEmitter<Themes>;
 
   beforeEach(() => {
-    mockRouter = jasmine.createSpyObj({
-      'navigate': null
-    });
-    mockThemeChangedEmitter = jasmine.createSpyObj({
-      'emit': null
-    });
 
-    component = new SettingsDialogComponent(mockRouter);
-    component.themeChanged = mockThemeChangedEmitter;
+    // @ts-ignore
+    fakeRouter = {
+      navigate: jest.fn().mockReturnValue(null)
+    };
+
+    // @ts-ignore
+    fakeThemeChangedEmitter = {
+      emit: jest.fn().mockReturnValue(null)
+    };
+
+
+    component = new SettingsDialogComponent(fakeRouter);
+    component.themeChanged = fakeThemeChangedEmitter;
 
     let store = {};
 
@@ -73,7 +78,7 @@ describe('SettingsDialogComponent', () => {
     });
 
     it('should navigate to the login page with the teamId', () => {
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['login', fakeTeamId]);
+      expect(fakeRouter.navigate).toHaveBeenCalledWith(['login', fakeTeamId]);
     });
   });
 
@@ -82,7 +87,7 @@ describe('SettingsDialogComponent', () => {
       const fakeTeamId = 'fake-id';
       component.teamId = fakeTeamId;
       component.updatePassword();
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['update-password', fakeTeamId]);
+      expect(fakeRouter.navigate).toHaveBeenCalledWith(['update-password', fakeTeamId]);
     });
   });
 
@@ -97,7 +102,7 @@ describe('SettingsDialogComponent', () => {
     });
 
     it('should emit the theme changed as dark', () => {
-      expect(mockThemeChangedEmitter.emit).toHaveBeenCalledWith(Themes.Dark);
+      expect(fakeThemeChangedEmitter.emit).toHaveBeenCalledWith(Themes.Dark);
     });
 
     it('should set the theme to dark', () => {
@@ -116,7 +121,7 @@ describe('SettingsDialogComponent', () => {
     });
 
     it('should emit the theme changed as light', () => {
-      expect(mockThemeChangedEmitter.emit).toHaveBeenCalledWith(Themes.Light);
+      expect(fakeThemeChangedEmitter.emit).toHaveBeenCalledWith(Themes.Light);
     });
 
     it('should set the theme to light', () => {

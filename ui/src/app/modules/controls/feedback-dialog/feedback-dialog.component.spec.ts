@@ -17,6 +17,7 @@
 
 
 import {FeedbackDialogComponent} from './feedback-dialog.component';
+import {createMockEventEmitter} from '../../utils/testutils';
 
 describe('DialogComponent', () => {
   let component: FeedbackDialogComponent;
@@ -46,9 +47,7 @@ describe('DialogComponent', () => {
   describe('hide', () => {
 
     beforeEach(() => {
-      component.visibilityChanged = jasmine.createSpyObj({
-        emit: null
-      });
+      component.visibilityChanged = createMockEventEmitter();
       component.hide();
     });
 
@@ -142,9 +141,7 @@ describe('DialogComponent', () => {
 
     beforeEach(() => {
       component.visible = true;
-      component.submitted = jasmine.createSpyObj({
-        emit: null
-      });
+      component.submitted = createMockEventEmitter();
     });
 
     describe('comments are filled in', () => {

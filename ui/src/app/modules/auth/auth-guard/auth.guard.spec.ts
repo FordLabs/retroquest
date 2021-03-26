@@ -20,6 +20,8 @@ import {ActivatedRouteSnapshot} from '@angular/router';
 import {Subject} from 'rxjs/internal/Subject';
 import {AuthGuard} from './auth.guard';
 import {AuthService} from '../auth.service';
+import {createMockRouter} from '../../utils/testutils';
+import {TeamService} from '../../teams/services/team.service';
 
 describe('AuthGuard', () => {
 
@@ -28,11 +30,11 @@ describe('AuthGuard', () => {
   let mockTeamService;
 
   beforeEach(() => {
-    mockRouter = jasmine.createSpyObj( {
-      navigate: null,
-      navigateByUrl: null
-    });
-    mockTeamService = jasmine.createSpyObj({validateTeamId: new Subject()});
+    mockRouter = createMockRouter();
+    // @ts-ignore
+    mockTeamService = {
+      validateTeamId: jest.fn().mockReturnValue(new Subject())
+    } as TeamService;
     guard = new AuthGuard(mockTeamService, mockRouter);
   });
 

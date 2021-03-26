@@ -18,6 +18,7 @@
 import {ContributorsService} from './contributors.service';
 import {HttpClient} from '@angular/common/http';
 import {Subject} from 'rxjs';
+import {createMockHttpClient} from '../../../utils/testutils';
 
 describe('ContributorsService', () => {
 
@@ -27,9 +28,7 @@ describe('ContributorsService', () => {
 
   beforeEach(() => {
     mockHttpClientGetSubject = new Subject<any>();
-    mockHttpClient = jasmine.createSpyObj({
-      get: mockHttpClientGetSubject
-    });
+    mockHttpClient = createMockHttpClient();
     service = new ContributorsService(mockHttpClient);
   });
 

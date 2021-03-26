@@ -20,6 +20,8 @@ import {AuthService} from '../../../auth/auth.service';
 import {Subject, throwError} from 'rxjs';
 import {of} from 'rxjs/internal/observable/of';
 import {HttpResponse} from '@angular/common/http';
+import {createMockRecaptchaComponent, createMockRouter} from '../../../utils/testutils';
+import {TeamService} from '../../../teams/services/team.service';
 
 describe('UpdatePasswordComponent', () => {
   let component: UpdatePasswordComponent;
@@ -29,12 +31,13 @@ describe('UpdatePasswordComponent', () => {
   let mockRecaptchaComponent;
 
   beforeEach(() => {
-    mockTeamService = jasmine.createSpyObj('teamService', {
-      updatePassword: new Subject()
-    });
+    // @ts-ignore
+    mockTeamService = {
+      updatePassword: jest.fn().mockReturnValue(new Subject())
+    } as TeamService;
     mockActivatedRoute = {snapshot: {params: {teamId: -1}}};
-    mockRouter = jasmine.createSpyObj({'navigateByUrl': null});
-    mockRecaptchaComponent = jasmine.createSpyObj({reset: null, execute: null});
+    mockRouter = createMockRouter();
+    mockRecaptchaComponent = createMockRecaptchaComponent();
 
     spyOn(AuthService, 'setToken');
     spyOn(console, 'error');
@@ -63,7 +66,7 @@ describe('UpdatePasswordComponent', () => {
         body: 'Password updated successfully'
       });
 
-      mockTeamService.updatePassword.and.returnValue(of(updatePasswordResponse));
+      mockTeamService.updatePassword = jest.fn().mockReturnValue(of(updatePasswordResponse));
 
       component.updatePassword();
       expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('team/teamId');
@@ -82,7 +85,7 @@ describe('UpdatePasswordComponent', () => {
         body: JSON.stringify({captchaEnabled: false})
       });
 
-      mockTeamService.updatePassword.and.returnValue(throwError(error));
+      mockTeamService.updatePassword = jest.fn().mockReturnValue(throwError(error));
 
       component.updatePassword();
 

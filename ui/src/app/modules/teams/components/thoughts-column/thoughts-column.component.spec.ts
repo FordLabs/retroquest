@@ -26,12 +26,12 @@ describe('ThoughtColumnComponent', () => {
 
 
   beforeEach(() => {
-    mockThoughtService = jasmine.createSpyObj({
-      deleteThought: new Observable(),
-      discussThought: new Observable(),
-      heartThought: new Observable(),
-      updateThought: new Observable()
-    });
+    mockThoughtService = {
+      deleteThought: jest.fn().mockReturnValue(new Observable()),
+      discussThought: jest.fn().mockReturnValue(new Observable()),
+      heartThought: jest.fn().mockReturnValue(new Observable()),
+      updateThought: jest.fn().mockReturnValue(new Observable())
+    };
 
     component = new ThoughtsColumnComponent(mockThoughtService);
 

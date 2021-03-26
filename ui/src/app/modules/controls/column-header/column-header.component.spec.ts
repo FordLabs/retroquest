@@ -16,6 +16,7 @@
  */
 
 import {ColumnHeaderComponent} from './column-header.component';
+import {createMockEventEmitter} from '../../utils/testutils';
 
 describe('ColumnHeaderComponent', () => {
   let component: ColumnHeaderComponent;
@@ -35,7 +36,7 @@ describe('ColumnHeaderComponent', () => {
   describe('toggleSort', () => {
 
     it('should emit true when the sort state is toggled from false to true', () => {
-      component.sortedChanged = jasmine.createSpyObj({emit: null});
+      component.sortedChanged = createMockEventEmitter();
       component.sorted = false;
 
       component.toggleSort();
@@ -44,7 +45,7 @@ describe('ColumnHeaderComponent', () => {
     });
 
     it('should emit false when the sort state is toggled from true to false', () => {
-      component.sortedChanged = jasmine.createSpyObj({emit: null});
+      component.sortedChanged = createMockEventEmitter();
       component.sorted = true;
 
       component.toggleSort();
@@ -63,7 +64,7 @@ describe('ColumnHeaderComponent', () => {
     });
 
     it('should emit the modified title', () => {
-      component.titleChanged = jasmine.createSpyObj({emit: null});
+      component.titleChanged = createMockEventEmitter();
 
       component.emitTitleChangedAndEnableReadonlyMode();
 
@@ -117,7 +118,10 @@ describe('ColumnHeaderComponent', () => {
   describe('toggleEdit', () => {
 
     const mockInputFieldRef = {
-      nativeElement: jasmine.createSpyObj({focus: null, select: null})
+      nativeElement: {
+        focus: jest.fn(),
+        select: jest.fn()
+      }
     };
 
     beforeEach(() => {
@@ -125,7 +129,7 @@ describe('ColumnHeaderComponent', () => {
     });
 
     afterEach(() => {
-      mockInputFieldRef.nativeElement.focus.calls.reset();
+      mockInputFieldRef.nativeElement.focus.mockClear();
     });
 
     it('should disable readonly mode', () => {
@@ -146,7 +150,9 @@ describe('ColumnHeaderComponent', () => {
   describe('blurInput', () => {
 
     const mockInputFieldRef = {
-      nativeElement: jasmine.createSpyObj({blur: null})
+      nativeElement: {
+        blur: jest.fn()
+      }
     };
 
     beforeEach(() => {
@@ -154,7 +160,7 @@ describe('ColumnHeaderComponent', () => {
     });
 
     afterEach(() => {
-      mockInputFieldRef.nativeElement.blur.calls.reset();
+      mockInputFieldRef.nativeElement.blur.mockClear();
     });
 
 
@@ -167,7 +173,9 @@ describe('ColumnHeaderComponent', () => {
   describe('onEscapeKeyPressed', () => {
 
     const mockInputFieldRef = {
-      nativeElement: jasmine.createSpyObj({blur: null})
+      nativeElement: {
+        blur: jest.fn()
+      }
     };
 
     beforeEach(() => {
@@ -178,7 +186,7 @@ describe('ColumnHeaderComponent', () => {
     });
 
     afterEach(() => {
-      mockInputFieldRef.nativeElement.blur.calls.reset();
+      mockInputFieldRef.nativeElement.blur.mockClear();
     });
 
     it('should set the escape key was pressed flag to true', () => {

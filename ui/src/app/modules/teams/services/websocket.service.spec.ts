@@ -19,7 +19,7 @@ import {WebsocketService} from './websocket.service';
 import {Observable} from 'rxjs/internal/Observable';
 import {Column} from '../../domain/column';
 import {DataService} from '../../data.service';
-import createSpyObj = jasmine.createSpyObj;
+import {StompClient} from '@elderbyte/ts-stomp';
 
 describe('WebsocketService', () => {
   let service: WebsocketService;
@@ -28,11 +28,12 @@ describe('WebsocketService', () => {
   const teamId = 'teamId';
 
   beforeEach(() => {
-    spiedClient = createSpyObj({
-      connect: null,
-      subscribe: {messages: new Observable()},
-      send: null
-    });
+    // @ts-ignore
+    spiedClient = {
+      connect: jest.fn(),
+      subscribe: jest.fn(),
+      send: jest.fn()
+    } as StompClient;
     spiedClient.onConnect = new Observable();
     spiedClient.errors = new Observable();
 
@@ -58,9 +59,10 @@ describe('WebsocketService', () => {
 
   describe('sendHeartbeat', () => {
     beforeEach(() => {
-      service.stompClient = jasmine.createSpyObj({
-        send: null
-      });
+      // @ts-ignore
+      service.stompClient = {
+        send: jest.fn()
+      } as StompClient;
       service.sendHeartbeat();
     });
 
@@ -102,7 +104,7 @@ describe('WebsocketService', () => {
         service.thoughtsTopic();
         expect(true).toBeFalsy();
       } catch (e) {
-        expect(e).toEqual(jasmine.any(Error));
+        expect(e).toEqual(expect.any(Error));
       }
     });
 
@@ -123,7 +125,7 @@ describe('WebsocketService', () => {
         service.actionItemTopic();
         expect(true).toBeFalsy();
       } catch (e) {
-        expect(e).toEqual(jasmine.any(Error));
+        expect(e).toEqual(expect.any(Error));
       }
     });
 
