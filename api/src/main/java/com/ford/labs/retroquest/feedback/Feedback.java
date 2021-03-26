@@ -42,5 +42,6 @@ public class Feedback {
 
     @JsonFormat(pattern = "MM/dd/yy hh:mm:ss.SSS")
     @EqualsAndHashCode.Exclude
-    private LocalDateTime dateCreated;
+    @Builder.Default
+    private LocalDateTime dateCreated = LocalDateTime.now();
 }
