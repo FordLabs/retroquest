@@ -144,7 +144,7 @@
   "defaultProject": "retroquest-ui",
   "schematics": {
     "@schematics/angular:component": {
-      "styleext": "scss"
+      "style": "scss"
     }
   }
 }
