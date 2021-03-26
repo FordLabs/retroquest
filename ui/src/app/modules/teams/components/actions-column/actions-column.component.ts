@@ -26,7 +26,7 @@ import {ColumnResponse} from '../../../domain/column-response';
 import {WebsocketResponse} from '../../../domain/websocket-response';
 import {Column} from '../../../domain/column';
 
-@Component({
+@Component({ 
   selector: 'rq-actions-column',
   templateUrl: './actions-column.component.html',
   styleUrls: ['./actions-column.component.scss'],
