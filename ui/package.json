@@ -18,11 +18,6 @@
     "sonarqube": "sonar-scanner -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_UI_TOKEN"
   },
   "private": true,
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
-  },
   "dependencies": {
     "@angular/animations": "~9.1.12",
     "@angular/cdk": "^7.3.0",
@@ -61,7 +56,6 @@
     "@types/node": "~13.1.0",
     "ajv": "^6.12.4",
     "codelyzer": "^5.2.1",
-    "husky": "^5.2.0",
     "jasmine-core": "^3.6.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.4.0",
@@ -69,6 +63,7 @@
     "karma-coverage-istanbul-reporter": "^2.1.1",
     "karma-jasmine": "~3.0.0",
     "karma-jasmine-html-reporter": "~1.5.0",
+    "lint-staged": "^10.5.4",
     "node-sass": "^4.9.0",
     "prettier": "^2.2.1",
     "pretty-quick": "^3.1.0",
@@ -76,10 +71,17 @@
     "puppeteer": "^1.5.0",
     "sass-lint": "^1.12.1",
     "sass-lint-auto-fix": "^0.21.0",
+    "simple-git-hooks": ">=2.0.3",
     "ts-mockito": "^2.3.1",
     "ts-node": "~8.5.0",
     "tslint": "~5.20.0",
     "typescript": "~3.7.5",
     "webpack": "^4.29.6"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,ts,css,md}": "prettier --write"
   }
 }
