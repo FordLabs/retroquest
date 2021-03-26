@@ -67,7 +67,7 @@
             </column>
             <column name="team_id" type="VARCHAR(255)"/>
             <column name="user_email" type="VARCHAR(255)"/>
-            <column defaultValueComputed="current_timestamp()" name="date_created" type="timestamp">
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="date_created" type="timestamp">
                 <constraints nullable="false"/>
             </column>
         </createTable>

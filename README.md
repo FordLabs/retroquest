@@ -81,11 +81,12 @@ This will start the frontend with a proxy to direct all requests to localhost:80
 ## Running the Backend Tests
 This project includes unit tests, API tests, and Selenium tests.
 
-After navigating to the `api` folder, the following Gradle targets will run the various test suites:
+The following Gradle targets will run the various test suites:
 
 ```
 ./gradlew test -- Java Unit Tests
 ./gradlew apiTest -- API Level integration tests with and H2 database
+./gradlew apiTestDockerDb -- API Level integration tests with and production representative database
 ```
 
 To run both the backend api and unit tests at once:
@@ -97,7 +98,7 @@ To run both the backend api and unit tests at once:
 To run both the backend api and unit tests at once against a production representative database:
 
 ```
-docker-compose -f ./api/docker-compose.yml up -d && ./gradlew -Dspring.profiles.active.dockerdb runAllTests withPostgres docker-compose -f ./api/docker-compose.yml down
+./gradlew runAllTestsDockerDb
 ```
 
 ## Running the Frontend Tests

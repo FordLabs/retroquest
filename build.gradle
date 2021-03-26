@@ -117,18 +117,20 @@ task runLocal {
     }
 }
 
-task runDockerDb(group: 'application') {
+task runDockerDb(type: Exec){
     dependsOn 'withPostgres'
     dependsOn 'bootRun'
-    group 'application'
+
+    tasks.findByName('bootRun').mustRunAfter 'withPostgres'
+
+    group 'Application'
     description 'Runs this project as a Spring Boot application using containerized database'
 
     gradle.taskGraph.whenReady { graph ->
         if (graph.hasTask(runDockerDb)) {
             logger.lifecycle('>>> Setting spring.profiles.active == "dockerdb" <<<')
             bootRun {
-                args = ['--spring.profiles.active=dockerdb']
-                systemProperties System.properties
+                systemProperty "spring.profiles.active", "dockerdb"
             }
         }
     }
@@ -141,25 +143,43 @@ test {
 }
 
 task apiTest(type: Test) {
+    group 'Verification'
+    description 'Runs API Tests against h2 database'
     useJUnitPlatform {
         includeTags 'api'
     }
 }
 
-task dockerApiTest(type: GradleBuild) {
-    tasks = ['apiTest']
+task apiTestDockerDb(type: Test){
+    dependsOn 'composeUp'
+    dependsOn 'withPostgres'
+    dependsOn 'apiTest'
+    finalizedBy 'composeDown'
+
+    tasks.findByName('withPostgres').mustRunAfter 'composeUp'
+    tasks.findByName('apiTest').mustRunAfter 'withPostgres'
+
+    group 'Verification'
+    description 'Runs API Tests against docker database'
+
+    gradle.taskGraph.whenReady { graph ->
+        if (graph.hasTask(apiTestDockerDb)) {
+            logger.lifecycle('>>> Setting spring.profiles.active == "dockerdb" <<<')
+            systemProperty "spring.profiles.active", "dockerdb"
+        }
+    }
 }
 
 task runAllTests(type: GradleBuild) {
     tasks = ['test', 'apiTest']
 }
 
-dockerCompose {
-    apiTests {
-        useComposeFiles = ['docker-compose.yml']
-        isRequiredBy(project.tasks.dockerApiTest)
-    }
+task runAllTestsDockerDb(type: GradleBuild) {
+    tasks = ['test', 'apiTestDockerDb']
+}
 
+dockerCompose {
+    useComposeFiles = ['./api/docker-compose.yml']
     waitForTcpPorts = true
 }
 
