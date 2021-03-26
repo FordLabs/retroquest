@@ -8,7 +8,7 @@ module.exports = {
   setupFilesAfterEnv: ['./src/test.ts'],
   collectCoverage: true,
   coverageReporters: ['html'],
-  coverageDirectory: 'coverage/my-app',
+  coverageDirectory: 'coverage',
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths || {}, {
     prefix: './',
   }),
