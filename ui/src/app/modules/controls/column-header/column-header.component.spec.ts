@@ -15,12 +15,13 @@
  *  limitations under the License.
  */
 
-import {ColumnHeaderComponent} from './column-header.component';
+import { ColumnHeaderComponent } from './column-header.component';
+import { createMockEventEmitter } from '../../utils/testutils';
 
 describe('ColumnHeaderComponent', () => {
   let component: ColumnHeaderComponent;
   const myWindow = {
-    setTimeout: (fn: Function) => fn()
+    setTimeout: (fn: Function) => fn(),
   };
 
   beforeEach(() => {
@@ -33,9 +34,8 @@ describe('ColumnHeaderComponent', () => {
   });
 
   describe('toggleSort', () => {
-
     it('should emit true when the sort state is toggled from false to true', () => {
-      component.sortedChanged = jasmine.createSpyObj({emit: null});
+      component.sortedChanged = createMockEventEmitter();
       component.sorted = false;
 
       component.toggleSort();
@@ -44,7 +44,7 @@ describe('ColumnHeaderComponent', () => {
     });
 
     it('should emit false when the sort state is toggled from true to false', () => {
-      component.sortedChanged = jasmine.createSpyObj({emit: null});
+      component.sortedChanged = createMockEventEmitter();
       component.sorted = true;
 
       component.toggleSort();
@@ -54,7 +54,6 @@ describe('ColumnHeaderComponent', () => {
   });
 
   describe('emitTitleChangedAndEnableReadonlyMode', () => {
-
     const fakeText = 'MODIFIED TEXT';
 
     beforeEach(() => {
@@ -63,7 +62,7 @@ describe('ColumnHeaderComponent', () => {
     });
 
     it('should emit the modified title', () => {
-      component.titleChanged = jasmine.createSpyObj({emit: null});
+      component.titleChanged = createMockEventEmitter();
 
       component.emitTitleChangedAndEnableReadonlyMode();
 
@@ -84,28 +83,37 @@ describe('ColumnHeaderComponent', () => {
       expect(component.readOnlyEnabled).toBeTruthy();
     });
 
-    it('should copy the value of temp title into the title variable ' +
-      'if the escape key was not pressed', () => {
-      component.emitTitleChangedAndEnableReadonlyMode();
+    it(
+      'should copy the value of temp title into the title variable ' +
+        'if the escape key was not pressed',
+      () => {
+        component.emitTitleChangedAndEnableReadonlyMode();
 
-      expect(component.title).toEqual(fakeText);
-    });
+        expect(component.title).toEqual(fakeText);
+      }
+    );
 
-    it('should not copy the value of temp title into the title variable' +
-      'if the escape key was pressed', () => {
-      component.escapeKeyPressed = true;
-      component.emitTitleChangedAndEnableReadonlyMode();
+    it(
+      'should not copy the value of temp title into the title variable' +
+        'if the escape key was pressed',
+      () => {
+        component.escapeKeyPressed = true;
+        component.emitTitleChangedAndEnableReadonlyMode();
 
-      expect(component.title).toEqual('');
-    });
+        expect(component.title).toEqual('');
+      }
+    );
 
-    it('should set the temp title to empty string' +
-      'if the escape key was pressed', () => {
-      component.escapeKeyPressed = true;
-      component.emitTitleChangedAndEnableReadonlyMode();
+    it(
+      'should set the temp title to empty string' +
+        'if the escape key was pressed',
+      () => {
+        component.escapeKeyPressed = true;
+        component.emitTitleChangedAndEnableReadonlyMode();
 
-      expect(component.titleCopy).toEqual('');
-    });
+        expect(component.titleCopy).toEqual('');
+      }
+    );
 
     it('should set the escape key pressed flag to false', () => {
       component.escapeKeyPressed = true;
@@ -115,9 +123,11 @@ describe('ColumnHeaderComponent', () => {
   });
 
   describe('toggleEdit', () => {
-
     const mockInputFieldRef = {
-      nativeElement: jasmine.createSpyObj({focus: null, select: null})
+      nativeElement: {
+        focus: jest.fn(),
+        select: jest.fn(),
+      },
     };
 
     beforeEach(() => {
@@ -125,7 +135,7 @@ describe('ColumnHeaderComponent', () => {
     });
 
     afterEach(() => {
-      mockInputFieldRef.nativeElement.focus.calls.reset();
+      mockInputFieldRef.nativeElement.focus.mockClear();
     });
 
     it('should disable readonly mode', () => {
@@ -144,9 +154,10 @@ describe('ColumnHeaderComponent', () => {
   });
 
   describe('blurInput', () => {
-
     const mockInputFieldRef = {
-      nativeElement: jasmine.createSpyObj({blur: null})
+      nativeElement: {
+        blur: jest.fn(),
+      },
     };
 
     beforeEach(() => {
@@ -154,9 +165,8 @@ describe('ColumnHeaderComponent', () => {
     });
 
     afterEach(() => {
-      mockInputFieldRef.nativeElement.blur.calls.reset();
+      mockInputFieldRef.nativeElement.blur.mockClear();
     });
-
 
     it('should blur the input field', () => {
       component.blurInput();
@@ -165,9 +175,10 @@ describe('ColumnHeaderComponent', () => {
   });
 
   describe('onEscapeKeyPressed', () => {
-
     const mockInputFieldRef = {
-      nativeElement: jasmine.createSpyObj({blur: null})
+      nativeElement: {
+        blur: jest.fn(),
+      },
     };
 
     beforeEach(() => {
@@ -178,7 +189,7 @@ describe('ColumnHeaderComponent', () => {
     });
 
     afterEach(() => {
-      mockInputFieldRef.nativeElement.blur.calls.reset();
+      mockInputFieldRef.nativeElement.blur.mockClear();
     });
 
     it('should set the escape key was pressed flag to true', () => {

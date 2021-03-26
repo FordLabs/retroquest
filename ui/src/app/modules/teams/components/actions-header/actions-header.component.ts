@@ -15,11 +15,11 @@
  *  limitations under the License.
  */
 
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {ActionItem} from '../../../domain/action-item';
-import {ActionItemService} from '../../services/action.service';
-import * as moment from 'moment';
-import {Themes} from '../../../domain/Theme';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ActionItem } from '../../../domain/action-item';
+import { ActionItemService } from '../../services/action.service';
+import moment from 'moment';
+import { Themes } from '../../../domain/Theme';
 
 const ASSIGNEE_PARSE_SYMBOL = '@';
 const ASSIGNEE_PARSE_REGEX = /(\@[a-zA-Z0-9]+\b)/g;
@@ -27,12 +27,10 @@ const ASSIGNEE_PARSE_REGEX = /(\@[a-zA-Z0-9]+\b)/g;
 @Component({
   selector: 'rq-actions-header',
   templateUrl: './actions-header.component.html',
-  styleUrls: ['./actions-header.component.scss']
+  styleUrls: ['./actions-header.component.scss'],
 })
 export class ActionsHeaderComponent {
-
-  constructor(private actionItemService: ActionItemService) {
-  }
+  constructor(private actionItemService: ActionItemService) {}
 
   @Input() teamId: string;
   @Input() thoughtCount: number;
@@ -47,7 +45,10 @@ export class ActionsHeaderComponent {
     if (newMessage && newMessage.length) {
       const todaysDate = moment().format();
       const assignees = this.parseAssignees(newMessage);
-      const updatedMessage = this.removeAssigneesFromMessage(newMessage, assignees);
+      const updatedMessage = this.removeAssigneesFromMessage(
+        newMessage,
+        assignees
+      );
 
       if (updatedMessage && updatedMessage.length) {
         const actionItem: ActionItem = {
@@ -55,9 +56,11 @@ export class ActionsHeaderComponent {
           teamId: this.teamId,
           task: updatedMessage,
           completed: false,
-          assignee: assignees ? assignees.join(', ').substring(0, this.maxAssigneeLength) : null,
+          assignee: assignees
+            ? assignees.join(', ').substring(0, this.maxAssigneeLength)
+            : null,
           dateCreated: todaysDate,
-          archived: false
+          archived: false,
         };
 
         this.actionItemService.addActionItem(actionItem);
@@ -72,12 +75,17 @@ export class ActionsHeaderComponent {
   private parseAssignees(newMessage: string): string[] {
     const matches = newMessage.match(ASSIGNEE_PARSE_REGEX);
     if (matches) {
-      return matches.map(assignee => assignee.replace(ASSIGNEE_PARSE_SYMBOL, ''));
+      return matches.map((assignee) =>
+        assignee.replace(ASSIGNEE_PARSE_SYMBOL, '')
+      );
     }
     return null;
   }
 
-  private removeAssigneesFromMessage(newMessage: string, assignees: string[]): string {
+  private removeAssigneesFromMessage(
+    newMessage: string,
+    assignees: string[]
+  ): string {
     if (assignees) {
       return newMessage
         .replace(ASSIGNEE_PARSE_REGEX, '')

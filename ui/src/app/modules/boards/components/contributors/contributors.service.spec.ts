@@ -15,21 +15,19 @@
  *  limitations under the License.
  */
 
-import {ContributorsService} from './contributors.service';
-import {HttpClient} from '@angular/common/http';
-import {Subject} from 'rxjs';
+import { ContributorsService } from './contributors.service';
+import { HttpClient } from '@angular/common/http';
+import { Subject } from 'rxjs';
+import { createMockHttpClient } from '../../../utils/testutils';
 
 describe('ContributorsService', () => {
-
   let service: ContributorsService;
   let mockHttpClient: HttpClient;
   let mockHttpClientGetSubject: Subject<any>;
 
   beforeEach(() => {
     mockHttpClientGetSubject = new Subject<any>();
-    mockHttpClient = jasmine.createSpyObj({
-      get: mockHttpClientGetSubject
-    });
+    mockHttpClient = createMockHttpClient();
     service = new ContributorsService(mockHttpClient);
   });
 
@@ -45,10 +43,14 @@ describe('ContributorsService', () => {
       mockHttpClientGetSubject.next([]);
     });
     it('should prepend data:image/png;base64 to all image data', () => {
-      service.getContributors().subscribe(result => {
-        expect(result[0].image.startsWith('data:image/png;base64,')).toBeTruthy();
+      service.getContributors().subscribe((result) => {
+        expect(
+          result[0].image.startsWith('data:image/png;base64,')
+        ).toBeTruthy();
       });
-      mockHttpClientGetSubject.next([{accountUrl: 'accountUrl', image: 'imageData'}]);
+      mockHttpClientGetSubject.next([
+        { accountUrl: 'accountUrl', image: 'imageData' },
+      ]);
     });
   });
 });

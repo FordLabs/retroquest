@@ -15,10 +15,10 @@
  *  limitations under the License.
  */
 
-import {ContributorsComponent} from './contributors.component';
-import {ContributorsService} from './contributors.service';
-import {Contributor} from '../../../domain/contributor';
-import {Subject} from 'rxjs';
+import { ContributorsComponent } from './contributors.component';
+import { ContributorsService } from './contributors.service';
+import { Contributor } from '../../../domain/contributor';
+import { Subject } from 'rxjs';
 
 describe('ContributorsComponent', () => {
   let component: ContributorsComponent;
@@ -27,9 +27,10 @@ describe('ContributorsComponent', () => {
 
   beforeEach(() => {
     mockContributorSubject = new Subject<Contributor[]>();
-    mockContrbutorsServerice = jasmine.createSpyObj({
-      getContributors: mockContributorSubject
-    });
+    // @ts-ignore
+    mockContrbutorsServerice = {
+      getContributors: jest.fn().mockReturnValue(mockContributorSubject),
+    } as ContributorsService;
     component = new ContributorsComponent(mockContrbutorsServerice);
   });
 
@@ -39,10 +40,9 @@ describe('ContributorsComponent', () => {
 
   describe('ngOnInit', () => {
     it('should load the contributors', () => {
-
       const contributor: Contributor = {
         accountUrl: 'url',
-        image: 'avatar'
+        image: 'avatar',
       };
 
       const contributors = [];
@@ -56,15 +56,15 @@ describe('ContributorsComponent', () => {
     it('should properly format contributors into multiple rows', () => {
       const contributor: Contributor = {
         accountUrl: 'url',
-        image: 'avatar'
+        image: 'avatar',
       };
       const contributors = [
-        { accountUrl: 'url1', image: 'avatar1'},
-        { accountUrl: 'url2', image: 'avatar2'},
-        { accountUrl: 'url3', image: 'avatar3'},
-        { accountUrl: 'url4', image: 'avatar4'},
-        { accountUrl: 'url5', image: 'avatar5'},
-        contributor
+        { accountUrl: 'url1', image: 'avatar1' },
+        { accountUrl: 'url2', image: 'avatar2' },
+        { accountUrl: 'url3', image: 'avatar3' },
+        { accountUrl: 'url4', image: 'avatar4' },
+        { accountUrl: 'url5', image: 'avatar5' },
+        contributor,
       ];
       component.ngOnInit();
       mockContributorSubject.next(contributors);

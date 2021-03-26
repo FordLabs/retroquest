@@ -18,7 +18,9 @@
 import { ActionsHeaderComponent } from './actions-header.component';
 import { Observable } from 'rxjs/index';
 import { ActionItem } from '../../../domain/action-item';
-import * as moment from 'moment';
+import moment from 'moment';
+import { createMockEventEmitter } from '../../../utils/testutils';
+import MockDate from 'mockdate';
 
 describe('ActionsHeaderComponent', () => {
   let component: ActionsHeaderComponent;
@@ -27,9 +29,9 @@ describe('ActionsHeaderComponent', () => {
   const teamId = 'team-id';
 
   beforeEach(() => {
-    mockActionItemService = jasmine.createSpyObj({
-      addActionItem: new Observable(),
-    });
+    mockActionItemService = {
+      addActionItem: jest.fn().mockReturnValue(new Observable()),
+    };
 
     component = new ActionsHeaderComponent(mockActionItemService);
     component.teamId = teamId;
@@ -44,11 +46,11 @@ describe('ActionsHeaderComponent', () => {
     const mockDate = moment(mockDateString).toDate();
 
     beforeEach(() => {
-      jasmine.clock().mockDate(mockDate);
+      MockDate.set(mockDate);
     });
 
     afterEach(() => {
-      jasmine.clock().uninstall();
+      MockDate.reset();
     });
 
     it('should construct the action item and call the backend', () => {
@@ -138,9 +140,7 @@ describe('ActionsHeaderComponent', () => {
 
   describe('onSortChanged', () => {
     beforeEach(() => {
-      component.sortChanged = jasmine.createSpyObj({
-        emit: null,
-      });
+      component.sortChanged = createMockEventEmitter();
     });
 
     it('should emit the sort state passed in as true', () => {

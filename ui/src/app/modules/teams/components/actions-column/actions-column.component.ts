@@ -15,32 +15,37 @@
  *  limitations under the License.
  */
 
-import {Component, EventEmitter, Input, OnInit, ViewChild} from '@angular/core';
-import {ActionItem, emptyActionItem} from '../../../domain/action-item';
-import {ActionItemService} from '../../services/action.service';
-import {ActionItemDialogComponent} from '../../../controls/action-item-dialog/action-item-dialog.component';
-import {fadeInOutAnimation} from '../../../animations/add-delete-animation';
-import {Themes} from '../../../domain/Theme';
-import * as moment from 'moment';
-import {ColumnResponse} from '../../../domain/column-response';
-import {WebsocketResponse} from '../../../domain/websocket-response';
-import {Column} from '../../../domain/column';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { ActionItem, emptyActionItem } from '../../../domain/action-item';
+import { ActionItemService } from '../../services/action.service';
+import { ActionItemDialogComponent } from '../../../controls/action-item-dialog/action-item-dialog.component';
+import { fadeInOutAnimation } from '../../../animations/add-delete-animation';
+import { Themes } from '../../../domain/Theme';
+import moment from 'moment';
+import { ColumnResponse } from '../../../domain/column-response';
+import { WebsocketResponse } from '../../../domain/websocket-response';
+import { Column } from '../../../domain/column';
 
-@Component({ 
+@Component({
   selector: 'rq-actions-column',
   templateUrl: './actions-column.component.html',
   styleUrls: ['./actions-column.component.scss'],
-  animations: [fadeInOutAnimation]
+  animations: [fadeInOutAnimation],
 })
 export class ActionsColumnComponent implements OnInit {
-
-  constructor(private actionItemService: ActionItemService) {
-  }
+  constructor(private actionItemService: ActionItemService) {}
 
   @Input() actionItemAggregation: ColumnResponse;
   @Input() theme: Themes = Themes.Light;
   @Input() teamId: string;
-  @Input() actionItemChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
+  @Input()
+  actionItemChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
   @Input() retroEnded: EventEmitter<Column> = new EventEmitter();
 
   sorted = false;
@@ -51,46 +56,51 @@ export class ActionsColumnComponent implements OnInit {
   dialogIsVisible = false;
 
   ngOnInit(): void {
-
     this.retroEnded.subscribe(() => {
-      this.actionItemAggregation.items.completed.splice(0, this.actionItemAggregation.items.completed.length);
+      this.actionItemAggregation.items.completed.splice(
+        0,
+        this.actionItemAggregation.items.completed.length
+      );
     });
 
-    this.actionItemChanged.subscribe(
-      response => {
+    this.actionItemChanged.subscribe((response) => {
+      const actionItem = response.payload as ActionItem;
 
-        const actionItem = (response.payload as ActionItem);
-
-        if (response.type === 'delete') {
-          this.deleteActionItem(actionItem);
-        } else {
-          if (!actionItem.archived) {
-            this.updateActionItems(actionItem);
-          }
+      if (response.type === 'delete') {
+        this.deleteActionItem(actionItem);
+      } else {
+        if (!actionItem.archived) {
+          this.updateActionItems(actionItem);
         }
       }
-    );
+    });
   }
 
-
   private deleteActionItem(actionItem: ActionItem) {
-
     if (actionItem.completed) {
       this.actionItemAggregation.items.completed.splice(
-        this.actionItemAggregation.items.completed.findIndex((item: ActionItem) => item.id === actionItem.id),
-        1);
+        this.actionItemAggregation.items.completed.findIndex(
+          (item: ActionItem) => item.id === actionItem.id
+        ),
+        1
+      );
     } else {
       this.actionItemAggregation.items.active.splice(
-        this.actionItemAggregation.items.active.findIndex((item: ActionItem) => item.id === actionItem.id),
-        1);
+        this.actionItemAggregation.items.active.findIndex(
+          (item: ActionItem) => item.id === actionItem.id
+        ),
+        1
+      );
     }
-
   }
 
   private updateActionItems(actionItem: ActionItem) {
-
-    const completedIndex = this.actionItemAggregation.items.completed.findIndex((item: ActionItem) => item.id === actionItem.id);
-    const activeIndex = this.actionItemAggregation.items.active.findIndex((item: ActionItem) => item.id === actionItem.id);
+    const completedIndex = this.actionItemAggregation.items.completed.findIndex(
+      (item: ActionItem) => item.id === actionItem.id
+    );
+    const activeIndex = this.actionItemAggregation.items.active.findIndex(
+      (item: ActionItem) => item.id === actionItem.id
+    );
 
     if (!this.indexWasFound(completedIndex)) {
       if (this.indexWasFound(activeIndex)) {
@@ -99,7 +109,10 @@ export class ActionsColumnComponent implements OnInit {
           this.actionItemAggregation.items.active.splice(activeIndex, 1);
           this.actionItemAggregation.items.completed.push(actionItem);
         } else {
-          Object.assign(this.actionItemAggregation.items.active[activeIndex], actionItem);
+          Object.assign(
+            this.actionItemAggregation.items.active[activeIndex],
+            actionItem
+          );
         }
       } else {
         actionItem.state = 'active';
@@ -111,7 +124,10 @@ export class ActionsColumnComponent implements OnInit {
         this.actionItemAggregation.items.completed.splice(completedIndex, 1);
         this.actionItemAggregation.items.active.push(actionItem);
       } else {
-        Object.assign(this.actionItemAggregation.items.completed[completedIndex], actionItem);
+        Object.assign(
+          this.actionItemAggregation.items.completed[completedIndex],
+          actionItem
+        );
       }
     }
   }
@@ -119,7 +135,6 @@ export class ActionsColumnComponent implements OnInit {
   private indexWasFound(index: number): boolean {
     return index !== -1;
   }
-
 
   public onCompleted(state: boolean, actionItem: ActionItem) {
     actionItem.completed = state;
@@ -151,9 +166,13 @@ export class ActionsColumnComponent implements OnInit {
 
   get activeActionItems(): Array<ActionItem> {
     if (this.sorted) {
-      return this.actionItemAggregation.items.active.slice().sort((a: ActionItem, b: ActionItem) => moment
-        .utc(this.checkForNullDate(b.dateCreated))
-        .diff(moment.utc(this.checkForNullDate(a.dateCreated)))) as Array<ActionItem>;
+      return this.actionItemAggregation.items.active
+        .slice()
+        .sort((a: ActionItem, b: ActionItem) =>
+          moment
+            .utc(this.checkForNullDate(b.dateCreated))
+            .diff(moment.utc(this.checkForNullDate(a.dateCreated)))
+        ) as Array<ActionItem>;
     }
 
     return this.actionItemAggregation.items.active.slice() as Array<ActionItem>;
@@ -174,5 +193,4 @@ export class ActionsColumnComponent implements OnInit {
     }
     return dateCreated;
   }
-
 }

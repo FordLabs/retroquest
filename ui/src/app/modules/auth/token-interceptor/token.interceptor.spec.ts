@@ -15,8 +15,8 @@
  *  limitations under the License.
  */
 
-import {TokenInterceptor} from './token.interceptor';
-import {AuthService} from '../auth.service';
+import { TokenInterceptor } from './token.interceptor';
+import { AuthService } from '../auth.service';
 
 describe('TokenInterceptor', () => {
   const fakeToken = 'fake-token';
@@ -26,15 +26,11 @@ describe('TokenInterceptor', () => {
 
   let mockHttpHandler;
   beforeEach(() => {
-    mockHttpRequest = jasmine.createSpyObj({
-      clone: null
-    });
+    mockHttpRequest = { clone: jest.fn() };
 
     mockHttpRequest.url = '';
 
-    mockHttpHandler = jasmine.createSpyObj({
-      handle: null
-    });
+    mockHttpHandler = { handle: jest.fn() };
 
     spyOn(AuthService, 'getToken').and.returnValue(fakeToken);
 
@@ -51,8 +47,8 @@ describe('TokenInterceptor', () => {
       expect(AuthService.getToken).toHaveBeenCalled();
       expect(mockHttpRequest.clone).toHaveBeenCalledWith({
         setHeaders: {
-          Authorization: `Bearer ${fakeToken}`
-        }
+          Authorization: `Bearer ${fakeToken}`,
+        },
       });
     });
 

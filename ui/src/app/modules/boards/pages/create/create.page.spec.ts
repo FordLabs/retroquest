@@ -15,25 +15,31 @@
  *  limitations under the License.
  */
 
-import {CreateComponent} from './create.page';
-import {AuthService} from '../../../auth/auth.service';
-import {Subject, throwError} from 'rxjs';
-import {of} from 'rxjs/internal/observable/of';
-import {HttpHeaders, HttpResponse} from '@angular/common/http';
+import { CreateComponent } from './create.page';
+import { AuthService } from '../../../auth/auth.service';
+import { Subject, throwError } from 'rxjs';
+import { of } from 'rxjs/internal/observable/of';
+import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import {
+  createMockRecaptchaComponent,
+  createMockRouter,
+} from '../../../utils/testutils';
+import { TeamService } from '../../../teams/services/team.service';
 
 describe('CreateComponent', () => {
   let component: CreateComponent;
-  let mockTeamService;
+  let mockTeamService: TeamService;
   let mockRouter;
   let mockRecaptchaComponent;
 
   beforeEach(() => {
-    mockTeamService = jasmine.createSpyObj('teamService', {
-      create: new Subject(),
-      isCaptchaEnabled: new Subject()
-    });
-    mockRouter = jasmine.createSpyObj({'navigateByUrl': null});
-    mockRecaptchaComponent = jasmine.createSpyObj({reset: null, execute: null});
+    // @ts-ignore
+    mockTeamService = {
+      create: jest.fn().mockReturnValue(new Subject()),
+      isCaptchaEnabled: jest.fn().mockReturnValue(new Subject()),
+    } as TeamService;
+    mockRouter = createMockRouter();
+    mockRecaptchaComponent = createMockRecaptchaComponent();
 
     spyOn(AuthService, 'setToken');
     spyOn(console, 'error');
@@ -89,15 +95,19 @@ describe('CreateComponent', () => {
       const jwt = 'im.a.jwt';
       const createTeamResponse: HttpResponse<string> = new HttpResponse({
         body: jwt,
-        headers: new HttpHeaders({location: teamUrl})
+        headers: new HttpHeaders({ location: teamUrl }),
       });
 
       const captchaResponse: HttpResponse<string> = new HttpResponse({
-        body: JSON.stringify({captchaEnabled: false})
+        body: JSON.stringify({ captchaEnabled: false }),
       });
 
-      mockTeamService.isCaptchaEnabled.and.returnValue(of(captchaResponse));
-      mockTeamService.create.and.returnValue(of(createTeamResponse));
+      mockTeamService.isCaptchaEnabled = jest
+        .fn()
+        .mockReturnValue(of(captchaResponse));
+      mockTeamService.create = jest
+        .fn()
+        .mockReturnValue(of(createTeamResponse));
 
       component.requestCaptchaStateAndCreateTeam();
 
@@ -111,19 +121,24 @@ describe('CreateComponent', () => {
       component.confirmPassword = 'p4ssw0rd';
 
       const httpErrorMessage = 'server error message';
-      const error = {error: JSON.stringify({message: httpErrorMessage})};
+      const error = { error: JSON.stringify({ message: httpErrorMessage }) };
 
       const captchaResponse: HttpResponse<string> = new HttpResponse({
-        body: JSON.stringify({captchaEnabled: false})
+        body: JSON.stringify({ captchaEnabled: false }),
       });
 
-      mockTeamService.isCaptchaEnabled.and.returnValue(of(captchaResponse));
-      mockTeamService.create.and.returnValue(throwError(error));
+      mockTeamService.isCaptchaEnabled = jest
+        .fn()
+        .mockReturnValue(of(captchaResponse));
+      mockTeamService.create = jest.fn().mockReturnValue(throwError(error));
 
       component.requestCaptchaStateAndCreateTeam();
 
       expect(component.errorMessage).toEqual(httpErrorMessage);
-      expect(console.error).toHaveBeenCalledWith('A registration error occurred: ', httpErrorMessage);
+      expect(console.error).toHaveBeenCalledWith(
+        'A registration error occurred: ',
+        httpErrorMessage
+      );
     });
 
     it('should set the error message and log it when isCaptchaEnabled has an error', () => {
@@ -133,15 +148,20 @@ describe('CreateComponent', () => {
 
       const httpErrorMessage = 'server error message';
       const error = {
-        error: JSON.stringify({message: httpErrorMessage})
+        error: JSON.stringify({ message: httpErrorMessage }),
       };
 
-      mockTeamService.isCaptchaEnabled.and.returnValue(throwError(error));
+      mockTeamService.isCaptchaEnabled = jest
+        .fn()
+        .mockReturnValue(throwError(error));
 
       component.requestCaptchaStateAndCreateTeam();
 
       expect(component.errorMessage).toEqual(httpErrorMessage);
-      expect(console.error).toHaveBeenCalledWith('A registration error occurred: ', httpErrorMessage);
+      expect(console.error).toHaveBeenCalledWith(
+        'A registration error occurred: ',
+        httpErrorMessage
+      );
     });
 
     it('should not call create when isCaptchaEnabled has an error', () => {
@@ -149,9 +169,11 @@ describe('CreateComponent', () => {
       component.password = 'p4ssw0rd';
       component.confirmPassword = 'p4ssw0rd';
 
-      const error = {error: JSON.stringify({message: 'error'})};
+      const error = { error: JSON.stringify({ message: 'error' }) };
 
-      mockTeamService.isCaptchaEnabled.and.returnValue(throwError(error));
+      mockTeamService.isCaptchaEnabled = jest
+        .fn()
+        .mockReturnValue(throwError(error));
 
       component.requestCaptchaStateAndCreateTeam();
 
@@ -170,10 +192,10 @@ describe('CreateComponent', () => {
 
       const loginResponse: HttpResponse<string> = new HttpResponse({
         body: jwt,
-        headers: new HttpHeaders({location: teamUrl})
+        headers: new HttpHeaders({ location: teamUrl }),
       });
 
-      mockTeamService.create.and.returnValue(of(loginResponse));
+      mockTeamService.create = jest.fn().mockReturnValue(of(loginResponse));
 
       component.create('some captcha');
 
@@ -188,14 +210,17 @@ describe('CreateComponent', () => {
 
       const httpErrorMessage = 'server error message';
       const error = {
-        error: JSON.stringify({message: httpErrorMessage})
+        error: JSON.stringify({ message: httpErrorMessage }),
       };
 
-      mockTeamService.create.and.returnValue(throwError(error));
+      mockTeamService.create = jest.fn().mockReturnValue(throwError(error));
       component.create('some captcha');
 
       expect(component.errorMessage).toEqual(httpErrorMessage);
-      expect(console.error).toHaveBeenCalledWith('A registration error occurred: ', httpErrorMessage);
+      expect(console.error).toHaveBeenCalledWith(
+        'A registration error occurred: ',
+        httpErrorMessage
+      );
     });
   });
 });

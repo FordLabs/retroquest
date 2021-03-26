@@ -15,9 +15,10 @@
  *  limitations under the License.
  */
 
-import {ActionsColumnComponent} from './actions-column.component';
-import {ActionItem} from '../../../domain/action-item';
-import {ActionItemService} from '../../services/action.service';
+import { ActionsColumnComponent } from './actions-column.component';
+import { ActionItem } from '../../../domain/action-item';
+import { ActionItemService } from '../../services/action.service';
+import { ActionItemDialogComponent } from '../../../controls/action-item-dialog/action-item-dialog.component';
 
 describe('ActionsColumnComponent', () => {
   let component: ActionsColumnComponent;
@@ -26,10 +27,11 @@ describe('ActionsColumnComponent', () => {
   let fakeActionItem: ActionItem;
 
   beforeEach(() => {
-    mockActionItemService = jasmine.createSpyObj({
-      updateActionItem: null,
-      deleteActionItem: null
-    });
+    // @ts-ignore
+    mockActionItemService = {
+      updateActionItem: jest.fn(),
+      deleteActionItem: jest.fn(),
+    } as ActionItemService;
 
     component = new ActionsColumnComponent(mockActionItemService);
 
@@ -40,14 +42,14 @@ describe('ActionsColumnComponent', () => {
       completed: false,
       assignee: null,
       dateCreated: null,
-      archived: false
+      archived: false,
     };
 
     component.actionItemAggregation = {
       id: 1,
-      items: {active: [fakeActionItem], completed: []},
+      items: { active: [fakeActionItem], completed: [] },
       title: 'Action Item',
-      topic: 'action'
+      topic: 'action',
     };
   });
 
@@ -56,10 +58,11 @@ describe('ActionsColumnComponent', () => {
   });
 
   describe('onCompleted', () => {
-
     it('should update the action item on the backend with the passed in state', () => {
       component.onCompleted(true, fakeActionItem);
-      expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(fakeActionItem);
+      expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(
+        fakeActionItem
+      );
     });
 
     it('should set the action item with the passed in index to false', () => {
@@ -74,38 +77,39 @@ describe('ActionsColumnComponent', () => {
   });
 
   describe('onDeleted', () => {
-
     it('should delete the action item on the backend', () => {
       component.onDeleted(fakeActionItem);
 
-      expect(mockActionItemService.deleteActionItem).toHaveBeenCalledWith(fakeActionItem);
+      expect(mockActionItemService.deleteActionItem).toHaveBeenCalledWith(
+        fakeActionItem
+      );
     });
-
   });
 
   describe('onMessageChanged', () => {
-
     const fakeMessage = 'I AM A FAKE MESSAGE';
 
     it('should update the action item on the backend', () => {
       component.onMessageChanged(fakeMessage, fakeActionItem);
-      expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(fakeActionItem);
+      expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(
+        fakeActionItem
+      );
     });
 
     it('should set the message on the action item with the passed in index', () => {
       component.onMessageChanged(fakeMessage, fakeActionItem);
       expect(fakeActionItem.task).toEqual(fakeMessage);
     });
-
   });
 
   describe('onAssigneeUpdated', () => {
-
     const fakeAssignee = 'I AM A FAKE ASSIGNEE';
 
     it('should update the action item on the backend', () => {
       component.onAssigneeUpdated(fakeAssignee, fakeActionItem);
-      expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(fakeActionItem);
+      expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(
+        fakeActionItem
+      );
     });
 
     it('should set the assignee on the action item with the passed in index', () => {
@@ -115,11 +119,11 @@ describe('ActionsColumnComponent', () => {
   });
 
   describe('displayPopup', () => {
-
     beforeEach(() => {
-      component.actionItemDialog = jasmine.createSpyObj({
-        show: null
-      });
+      // @ts-ignore
+      component.actionItemDialog = {
+        show: jest.fn(),
+      } as ActionItemDialogComponent;
     });
 
     it('should show the action item dialog', () => {

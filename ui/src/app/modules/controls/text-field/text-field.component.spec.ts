@@ -15,7 +15,8 @@
  *  limitations under the License.
  */
 
-import {TextFieldComponent} from './text-field.component';
+import { TextFieldComponent } from './text-field.component';
+import { createMockEventEmitter } from '../../utils/testutils';
 
 describe('TextFieldComponent', () => {
   let component: TextFieldComponent;
@@ -29,10 +30,8 @@ describe('TextFieldComponent', () => {
   });
 
   describe('emitNewTaskMessage', () => {
-
     it('should emit the new actionItem message', () => {
-
-      component.newMessageAdded = jasmine.createSpyObj({emit: null});
+      component.newMessageAdded = createMockEventEmitter();
 
       const fakeMessage = 'FAKE MESSAGE';
       component.text = fakeMessage;
@@ -49,7 +48,5 @@ describe('TextFieldComponent', () => {
       component.emitNewTaskMessage();
       expect(component.text).toEqual('');
     });
-
   });
-
 });

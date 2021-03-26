@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-import {StyleGuidePageComponent} from './style-guide-page.component';
+import { StyleGuidePageComponent } from './style-guide-page.component';
 
 describe('StyleGuidePageComponent', () => {
   let component: StyleGuidePageComponent;
@@ -29,12 +29,13 @@ describe('StyleGuidePageComponent', () => {
   });
 
   describe('scrollToId', () => {
-
     it('should be able to scroll to any page id if it exists on the page', () => {
-      const fakeFoundElement = jasmine.createSpyObj( {
-        scrollIntoView: null
-      });
-      const spyQuerySelector = spyOn(document, 'querySelector').and.returnValue(fakeFoundElement);
+      const fakeFoundElement = {
+        scrollIntoView: jest.fn(),
+      };
+      const spyQuerySelector = spyOn(document, 'querySelector').and.returnValue(
+        fakeFoundElement
+      );
       const fakeId = 'FAKE ID';
 
       component.scrollToId(fakeId);
@@ -45,7 +46,9 @@ describe('StyleGuidePageComponent', () => {
 
     it('should not be able to scroll to page id if it doesnt exist on the page', () => {
       const elementNotFound = null;
-      const spyQuerySelector = spyOn(document, 'querySelector').and.returnValue(elementNotFound);
+      const spyQuerySelector = spyOn(document, 'querySelector').and.returnValue(
+        elementNotFound
+      );
       const fakeId = 'FAKE ID';
 
       component.scrollToId(fakeId);
@@ -53,7 +56,6 @@ describe('StyleGuidePageComponent', () => {
       expect(spyQuerySelector).toHaveBeenCalledWith('#' + fakeId);
       expect(elementNotFound).toBeNull();
     });
-
   });
 
   describe('showDialog', () => {
@@ -62,5 +64,4 @@ describe('StyleGuidePageComponent', () => {
       expect(component.dialogIsVisible).toBeTruthy();
     });
   });
-
 });

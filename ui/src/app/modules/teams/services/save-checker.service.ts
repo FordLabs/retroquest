@@ -15,13 +15,11 @@
  *  limitations under the License.
  */
 
-
-import {Injectable} from '@angular/core';
-import * as moment from 'moment';
+import { Injectable } from '@angular/core';
+import moment from 'moment';
 
 @Injectable()
 export class SaveCheckerService {
-
   _lastSavedDateTime = '';
 
   get lastSavedDateTime(): string {

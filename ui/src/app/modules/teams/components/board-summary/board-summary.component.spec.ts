@@ -15,11 +15,11 @@
  *  limitations under the License.
  */
 
-import {BoardSummaryComponent} from './board-summary.component';
-import {Board, emptyBoardWithThought} from '../../../domain/board';
-import {BoardService} from '../../services/board.service';
-import {Subject} from 'rxjs';
-import any = jasmine.any;
+import { BoardSummaryComponent } from './board-summary.component';
+import { Board, emptyBoardWithThought } from '../../../domain/board';
+import { BoardService } from '../../services/board.service';
+import { Subject } from 'rxjs';
+import { createMockEventEmitter } from '../../../utils/testutils';
 
 describe('BoardSummaryComponent', () => {
   let deleteBoardSubject: Subject<any>;
@@ -30,9 +30,16 @@ describe('BoardSummaryComponent', () => {
 
   beforeEach(() => {
     deleteBoardSubject = new Subject();
-    mockBoardService = jasmine.createSpyObj({deleteBoard: deleteBoardSubject});
-    mockEvent = jasmine.createSpyObj({preventDefault: null});
-    router = jasmine.createSpyObj({navigateByUrl: null});
+    // @ts-ignore
+    mockBoardService = {
+      deleteBoard: jest.fn().mockReturnValue(deleteBoardSubject),
+    } as BoardService;
+    // @ts-ignore
+    mockEvent = {
+      preventDefault: jest.fn(),
+    } as Event;
+    router = { navigateByUrl: jest.fn() };
+
     component = new BoardSummaryComponent(mockBoardService, router);
     component.teamId = 'team-id';
   });
@@ -45,22 +52,32 @@ describe('BoardSummaryComponent', () => {
     it('should call deleteBoard in the boardService', () => {
       const boardToDelete: Board = emptyBoardWithThought();
       component.deleteBoard(boardToDelete);
-      expect(mockBoardService.deleteBoard).toHaveBeenCalledWith('team-id', boardToDelete.id);
+      expect(mockBoardService.deleteBoard).toHaveBeenCalledWith(
+        'team-id',
+        boardToDelete.id
+      );
     });
 
     it('should subscribe to the return value of deleteBoard', () => {
       const boardToDelete: Board = emptyBoardWithThought();
-      spyOn(mockBoardService.deleteBoard('team-id', boardToDelete.id), 'subscribe');
+      spyOn(
+        mockBoardService.deleteBoard('team-id', boardToDelete.id),
+        'subscribe'
+      );
       component.deleteBoard(boardToDelete);
-      expect(mockBoardService.deleteBoard('team-id', boardToDelete.id).subscribe).toHaveBeenCalledWith(any(Function));
+      expect(
+        mockBoardService.deleteBoard('team-id', boardToDelete.id).subscribe
+      ).toHaveBeenCalledWith(expect.any(Function));
     });
 
     it('should emit a boardDeleted event', () => {
       const boardToDelete: Board = emptyBoardWithThought();
-      component.boardDeleted = jasmine.createSpyObj({emit: null});
+      component.boardDeleted = createMockEventEmitter();
       component.deleteBoard(boardToDelete);
       deleteBoardSubject.next();
-      expect(component.boardDeleted.emit).toHaveBeenCalledWith(boardToDelete.id);
+      expect(component.boardDeleted.emit).toHaveBeenCalledWith(
+        boardToDelete.id
+      );
     });
   });
 
@@ -77,7 +94,9 @@ describe('BoardSummaryComponent', () => {
     });
 
     it('should navigate to the specified board', () => {
-      expect(router.navigateByUrl).toHaveBeenCalledWith(`/team/${fakeTeamId}/archives/${fakeBoardId}`);
+      expect(router.navigateByUrl).toHaveBeenCalledWith(
+        `/team/${fakeTeamId}/archives/${fakeBoardId}`
+      );
     });
   });
 });

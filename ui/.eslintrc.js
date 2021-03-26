@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  ignorePatterns: ['projects/**/*'],
+  ignorePatterns: ['projects/**/*', 'jest.config.js'],
   extends: ['prettier'],
   overrides: [
     {
@@ -8,8 +8,8 @@ module.exports = {
       parserOptions: {
         tsconfigRootDir: __dirname,
         project: [
-          'src/tsconfig.app.json',
-          'src/tsconfig.spec.json',
+          'tsconfig.app.json',
+          'tsconfig.spec.json',
           'e2e/tsconfig.e2e.json',
         ],
         createDefaultProgram: true,
@@ -19,8 +19,14 @@ module.exports = {
         'plugin:@angular-eslint/template/process-inline-templates',
       ],
       rules: {
-        '@angular-eslint/component-selector': 'off',
-        '@angular-eslint/directive-selector': 'off',
+        '@angular-eslint/directive-selector': [
+          'error',
+          { type: 'attribute', prefix: 'rq', style: 'camelCase' },
+        ],
+        '@angular-eslint/component-selector': [
+          'error',
+          { type: 'element', prefix: 'rq', style: 'kebab-case' },
+        ],
         '@angular-eslint/no-host-metadata-property': 'off',
         '@typescript-eslint/ban-types': 'off',
         '@typescript-eslint/consistent-type-definitions': 'error',

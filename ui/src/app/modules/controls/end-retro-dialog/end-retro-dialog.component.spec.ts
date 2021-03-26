@@ -15,8 +15,8 @@
  *  limitations under the License.
  */
 
-
-import {EndRetroDialogComponent} from './end-retro-dialog.component';
+import { EndRetroDialogComponent } from './end-retro-dialog.component';
+import { createMockEventEmitter } from '../../utils/testutils';
 
 describe('EndRetroDialogComponent', () => {
   let component: EndRetroDialogComponent;
@@ -31,9 +31,7 @@ describe('EndRetroDialogComponent', () => {
 
   describe('submit', () => {
     beforeEach(() => {
-      component.submitted = jasmine.createSpyObj({
-        emit: null
-      });
+      component.submitted = createMockEventEmitter();
       component.submit();
     });
 
@@ -48,11 +46,9 @@ describe('EndRetroDialogComponent', () => {
     it('should set the document.onkeydown callback to null', () => {
       expect(document.onkeydown).toBeNull();
     });
-
   });
 
   describe('show', () => {
-
     beforeEach(() => {
       component.show();
     });

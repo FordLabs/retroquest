@@ -18,27 +18,30 @@
 import { BoardService } from './board.service';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
-import * as moment from 'moment';
+import moment from 'moment';
 import { emptyThoughtWithColumn } from '../../domain/thought';
+import { Board } from '../../domain/board';
 
 describe('BoardService', () => {
   let service: BoardService;
   let mockHttpClient: HttpClient;
-  let getRequestSubject: Subject<Array<Object>>;
-  let postRequestSubject: Subject<any>;
-  let deleteRequestSubject: Subject<any>;
+  let getRequestSubject: () => Subject<Board[]>;
+  let postRequestSubject: () => Subject<Board[]>;
+  let deleteRequestSubject: () => Subject<Board[]>;
 
   const teamId = 'team-id';
 
   beforeEach(() => {
-    getRequestSubject = new Subject();
-    postRequestSubject = new Subject();
-    deleteRequestSubject = new Subject();
-    mockHttpClient = jasmine.createSpyObj({
+    getRequestSubject = jest.fn().mockReturnValue(new Subject<Board[]>());
+    postRequestSubject = jest.fn().mockReturnValue(new Subject<Board[]>());
+    deleteRequestSubject = jest.fn().mockReturnValue(new Subject<Board[]>());
+
+    // @ts-ignore
+    mockHttpClient = {
       get: getRequestSubject,
       post: postRequestSubject,
       delete: deleteRequestSubject,
-    });
+    } as HttpClient;
     service = new BoardService(mockHttpClient);
   });
 
@@ -59,7 +62,7 @@ describe('BoardService', () => {
     });
 
     it('should send the boards on successful request', () => {
-      const expectedBoards = [
+      const expectedBoards: Board[] = [
         {
           id: 1,
           dateCreated: moment(),
@@ -71,7 +74,7 @@ describe('BoardService', () => {
       service.fetchBoards(teamId, 0).subscribe((boards) => {
         expect(boards).toBe(expectedBoards);
       });
-      getRequestSubject.next(expectedBoards);
+      getRequestSubject().next(expectedBoards);
     });
   });
 

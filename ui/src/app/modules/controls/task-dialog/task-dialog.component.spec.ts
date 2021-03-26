@@ -15,22 +15,27 @@
  *  limitations under the License.
  */
 
-import {TaskDialogComponent} from './task-dialog.component';
-import {emptyActionItem} from '../../domain/action-item';
-import {ActionItemService} from '../../teams/services/action.service';
-import * as moment from 'moment';
+import { TaskDialogComponent } from './task-dialog.component';
+import { emptyActionItem } from '../../domain/action-item';
+import { ActionItemService } from '../../teams/services/action.service';
+import moment from 'moment';
+import { createMockEventEmitter } from '../../utils/testutils';
+import MockDate from 'mockdate';
+import { ActionItemTaskComponent } from '../action-item-task/action-item-task.component';
 
 describe('TaskDialogComponent', () => {
   let component: TaskDialogComponent;
   let mockActionItemService: ActionItemService;
   const myWindow = {
-    setTimeout: (fn: Function) => fn()
+    setTimeout: (fn: Function) => fn(),
   };
 
   beforeEach(() => {
-    mockActionItemService = jasmine.createSpyObj({
-      addActionItem: null
-    });
+    // @ts-ignore
+    mockActionItemService = {
+      addActionItem: jest.fn(),
+    } as ActionItemService;
+
     component = new TaskDialogComponent(mockActionItemService);
     component.myWindow = myWindow;
   });
@@ -40,10 +45,9 @@ describe('TaskDialogComponent', () => {
   });
 
   describe('emitCompleted', () => {
-
     beforeEach(() => {
-      component.completed = jasmine.createSpyObj({emit: null});
-      component.visibilityChanged = jasmine.createSpyObj({emit: null});
+      component.completed = createMockEventEmitter();
+      component.visibilityChanged = createMockEventEmitter();
     });
 
     it('should emit the completed signal with a state of true', () => {
@@ -69,7 +73,7 @@ describe('TaskDialogComponent', () => {
   });
 
   describe('show', () => {
-    beforeEach( () => {
+    beforeEach(() => {
       component.show();
     });
 
@@ -80,7 +84,6 @@ describe('TaskDialogComponent', () => {
     it('should set a function callback to document.onkeydown', () => {
       expect(document.onkeydown).not.toBeNull();
     });
-
   });
 
   describe('hide', () => {
@@ -91,14 +94,9 @@ describe('TaskDialogComponent', () => {
   });
 
   describe('emitDeleted', () => {
-
     beforeEach(() => {
-      component.visibilityChanged = jasmine.createSpyObj({
-        emit: null
-      });
-      component.deleted = jasmine.createSpyObj({
-        emit: null
-      });
+      component.visibilityChanged = createMockEventEmitter();
+      component.deleted = createMockEventEmitter();
     });
 
     it('should emit the deleted signal when the delete button is clicked', () => {
@@ -115,15 +113,11 @@ describe('TaskDialogComponent', () => {
       expect(component.visible).toEqual(false);
       expect(component.visibilityChanged.emit).toHaveBeenCalledWith(false);
     });
-
   });
 
   describe('emitMessageChanged', () => {
-
     beforeEach(() => {
-      component.messageChanged = jasmine.createSpyObj({
-        emit: null
-      });
+      component.messageChanged = createMockEventEmitter();
     });
 
     it('should emit the passed in message', () => {
@@ -132,15 +126,11 @@ describe('TaskDialogComponent', () => {
 
       expect(component.messageChanged.emit).toHaveBeenCalledWith(fakeMessage);
     });
-
   });
 
   describe('emitStarCountIncreased', () => {
-
     beforeEach(() => {
-      component.starCountIncreased = jasmine.createSpyObj({
-        emit: null
-      });
+      component.starCountIncreased = createMockEventEmitter();
     });
 
     it('should emit the passed in star count', () => {
@@ -149,24 +139,22 @@ describe('TaskDialogComponent', () => {
 
       expect(component.starCountIncreased.emit).toHaveBeenCalledWith(fakeCount);
     });
-
   });
 
   describe('createLinking', () => {
-
     beforeEach(() => {
       component.actionItemIsVisible = true;
       component.show();
     });
 
     describe('action item message is not filled out', () => {
-
       let mockActionItemTaskComponent;
 
       beforeEach(() => {
-        mockActionItemTaskComponent = jasmine.createSpyObj({
-          focusInput: null
-        });
+        // @ts-ignore
+        mockActionItemTaskComponent = {
+          focusInput: jest.fn(),
+        } as ActionItemTaskComponent;
         component.actionItemTaskComponent = mockActionItemTaskComponent;
         component.createLinking();
       });
@@ -183,19 +171,18 @@ describe('TaskDialogComponent', () => {
     });
 
     describe('action item message is filled out', () => {
-
       const fakeTaskMessage = 'fake message';
       const fakeDate = moment('2001-01-01');
 
       beforeEach(() => {
-        jasmine.clock().mockDate(fakeDate.toDate());
+        MockDate.set(fakeDate.toDate());
         component.assignedActionItem.task = fakeTaskMessage;
         component.actionItemIsVisible = true;
         component.createLinking();
       });
 
       afterEach(() => {
-        jasmine.clock().uninstall();
+        MockDate.reset();
       });
 
       it('should hide all the dialogs', () => {
@@ -211,7 +198,9 @@ describe('TaskDialogComponent', () => {
         const expectedActionItem = emptyActionItem();
         expectedActionItem.task = fakeTaskMessage;
         expectedActionItem.dateCreated = fakeDate.format();
-        expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(expectedActionItem);
+        expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(
+          expectedActionItem
+        );
       });
     });
   });
@@ -222,5 +211,4 @@ describe('TaskDialogComponent', () => {
       expect(component.assignedActionItem).toEqual(emptyActionItem());
     });
   });
-
 });

@@ -19,8 +19,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Board } from '../../domain/board';
-import * as moment from 'moment';
 import { Thought } from '../../domain/thought';
+import moment from 'moment';
 
 @Injectable({
   providedIn: 'root',

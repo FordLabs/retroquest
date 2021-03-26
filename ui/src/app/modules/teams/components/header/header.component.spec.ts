@@ -15,12 +15,17 @@
  *  limitations under the License.
  */
 
-import {HeaderComponent} from './header.component';
-import {FeedbackService} from '../../services/feedback.service';
-import {emptyFeedback, Feedback} from '../../../domain/feedback';
-import {Subject} from 'rxjs';
-import {SaveCheckerService} from '../../services/save-checker.service';
-import {HttpClient} from '@angular/common/http';
+import { HeaderComponent } from './header.component';
+import { FeedbackService } from '../../services/feedback.service';
+import { emptyFeedback, Feedback } from '../../../domain/feedback';
+import { Subject } from 'rxjs';
+import { SaveCheckerService } from '../../services/save-checker.service';
+import { HttpClient } from '@angular/common/http';
+import {
+  createMockEventEmitter,
+  createMockHttpClient,
+} from '../../../utils/testutils';
+import { EndRetroDialogComponent } from '../../../controls/end-retro-dialog/end-retro-dialog.component';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -29,15 +34,18 @@ describe('HeaderComponent', () => {
   const mockSaveCheckerService: SaveCheckerService = null;
 
   beforeEach(() => {
-    mockFeedbackService = jasmine.createSpyObj({
-      addFeedback: new Subject()
-    });
+    // @ts-ignore
+    mockFeedbackService = {
+      addFeedback: jest.fn().mockReturnValue(new Subject()),
+    } as FeedbackService;
 
-    mockHttpClient = jasmine.createSpyObj({
-      get: new Subject()
-    });
+    mockHttpClient = createMockHttpClient();
 
-    component = new HeaderComponent(mockFeedbackService, mockSaveCheckerService, mockHttpClient);
+    component = new HeaderComponent(
+      mockFeedbackService,
+      mockSaveCheckerService,
+      mockHttpClient
+    );
   });
 
   it('should create', () => {
@@ -54,9 +62,10 @@ describe('HeaderComponent', () => {
 
   describe('showEndRetroDialog', () => {
     it('should show the dialog', () => {
-      component.endRetroDialog = jasmine.createSpyObj({
-        show: null
-      });
+      // @ts-ignore
+      component.endRetroDialog = {
+        show: jest.fn(),
+      } as EndRetroDialogComponent;
       component.showEndRetroDialog();
       expect(component.endRetroDialog.show).toHaveBeenCalled();
     });
@@ -64,9 +73,7 @@ describe('HeaderComponent', () => {
 
   describe('onEndRetroDialogSubmitted', () => {
     it('should emit the end retro signal', () => {
-      component.endRetro = jasmine.createSpyObj({
-        emit: null
-      });
+      component.endRetro = createMockEventEmitter();
 
       component.onEndRetroDialogSubmitted();
       expect(component.endRetro.emit).toHaveBeenCalled();
@@ -74,7 +81,6 @@ describe('HeaderComponent', () => {
   });
 
   describe('onFeedbackSubmitted', () => {
-
     const fakeFeedback: Feedback = emptyFeedback();
 
     beforeEach(() => {
@@ -84,12 +90,13 @@ describe('HeaderComponent', () => {
     });
 
     it('should send the feedback to the backend', () => {
-      expect(mockFeedbackService.addFeedback).toHaveBeenCalledWith(fakeFeedback);
+      expect(mockFeedbackService.addFeedback).toHaveBeenCalledWith(
+        fakeFeedback
+      );
     });
 
     it('should send the feedback to the backend', () => {
       expect(fakeFeedback.teamId).toEqual(component.teamId);
     });
-
   });
 });

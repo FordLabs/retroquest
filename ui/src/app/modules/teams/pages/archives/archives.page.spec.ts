@@ -15,14 +15,15 @@
  *  limitations under the License.
  */
 
-import {ArchivesPageComponent} from './archives.page';
-import {Subject} from 'rxjs';
-import {TeamService} from '../../services/team.service';
-import {BoardService} from '../../services/board.service';
-import {Board, emptyBoardWithThought} from '../../../domain/board';
-import {WebsocketService} from '../../services/websocket.service';
-import {DataService} from '../../../data.service';
-import {ActionItemService} from '../../services/action.service';
+import { ArchivesPageComponent } from './archives.page';
+import { Subject } from 'rxjs';
+import { TeamService } from '../../services/team.service';
+import { BoardService } from '../../services/board.service';
+import { Board, emptyBoardWithThought } from '../../../domain/board';
+import { WebsocketService } from '../../services/websocket.service';
+import { DataService } from '../../../data.service';
+import { ActionItemService } from '../../services/action.service';
+import { createMockWebSocketService } from '../../../utils/testutils';
 
 describe('ArchivesPageComponent', () => {
   let paramsSubject: Subject<Object>;
@@ -46,18 +47,41 @@ describe('ArchivesPageComponent', () => {
     fetchTeamNameSubject = new Subject();
     fetchBoardsSubject = new Subject();
 
-    mockTeamService = jasmine.createSpyObj({fetchTeamName: fetchTeamNameSubject});
-    mockBoardService = jasmine.createSpyObj({fetchBoards: fetchBoardsSubject});
-    mockWebSocketService = jasmine.createSpyObj({closeWebsocket: new Subject()});
-    mockWindow = jasmine.createSpyObj({clearInterval: null});
-    mockDataService = new DataService();
-    mockActionItemService = jasmine.createSpyObj({fetchArchivedActionItems: new Subject()});
+    // @ts-ignore
+    mockTeamService = {
+      fetchTeamName: jest.fn().mockReturnValue(fetchTeamNameSubject),
+    } as TeamService;
 
-    component = new ArchivesPageComponent(mockDataService, mockTeamService, mockBoardService, mockWebSocketService, mockActionItemService);
+    // @ts-ignore
+    mockBoardService = {
+      fetchBoards: jest.fn().mockReturnValue(fetchBoardsSubject),
+    } as BoardService;
+
+    mockWebSocketService = createMockWebSocketService();
+
+    // @ts-ignore
+    mockWindow = {
+      clearInterval: jest.fn(),
+    } as Window;
+
+    mockDataService = new DataService();
+
+    // @ts-ignore
+    mockActionItemService = {
+      fetchArchivedActionItems: jest.fn().mockReturnValue(new Subject()),
+    } as ActionItemService;
+
+    component = new ArchivesPageComponent(
+      mockDataService,
+      mockTeamService,
+      mockBoardService,
+      mockWebSocketService,
+      mockActionItemService
+    );
     component.globalWindowRef = mockWindow;
 
     paramsObj = {
-      teamId: 'test-id'
+      teamId: 'test-id',
     };
 
     returnBoard = emptyBoardWithThought();
@@ -68,7 +92,6 @@ describe('ArchivesPageComponent', () => {
   });
 
   describe(`ngOnInit`, () => {
-
     beforeEach(() => {
       mockDataService.team.name = 'the team name';
       mockDataService.team.id = 'the id';
@@ -120,7 +143,6 @@ describe('ArchivesPageComponent', () => {
   });
 
   describe('onScroll', () => {
-
     const teamId = 'test-team-id';
 
     beforeEach(() => {
@@ -132,6 +154,5 @@ describe('ArchivesPageComponent', () => {
     it('should fetch the next paged board from the api, with a page index incremented by 1', () => {
       expect(mockBoardService.fetchBoards).toHaveBeenCalledWith(teamId, 1);
     });
-
   });
 });

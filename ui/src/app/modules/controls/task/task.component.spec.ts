@@ -15,13 +15,14 @@
  *  limitations under the License.
  */
 
-import {TaskComponent} from './task.component';
-import {emptyThought} from '../../domain/thought';
+import { TaskComponent } from './task.component';
+import { emptyThought } from '../../domain/thought';
+import { createMockEventEmitter } from '../../utils/testutils';
 
 describe('TaskComponent', () => {
   let component: TaskComponent;
   const myWindow = {
-    setTimeout: (fn: Function) => fn()
+    setTimeout: (fn: Function) => fn(),
   };
 
   beforeEach(() => {
@@ -34,12 +35,11 @@ describe('TaskComponent', () => {
   });
 
   describe('toggleEditMode', () => {
-
     const fakeElementRef = {
-      nativeElement: jasmine.createSpyObj({
-        focus: null,
-        select: null,
-      })
+      nativeElement: {
+        focus: jest.fn(),
+        select: jest.fn(),
+      },
     };
 
     beforeEach(() => {
@@ -47,8 +47,8 @@ describe('TaskComponent', () => {
     });
 
     afterEach(() => {
-      fakeElementRef.nativeElement.focus.calls.reset();
-      fakeElementRef.nativeElement.select.calls.reset();
+      fakeElementRef.nativeElement.focus.mockClear();
+      fakeElementRef.nativeElement.select.mockClear();
     });
 
     it('should set the edit mode value to true', () => {
@@ -82,26 +82,31 @@ describe('TaskComponent', () => {
     it('should not focus the title area when the edit mode is toggled false', () => {
       component.taskEditModeEnabled = true;
       component.toggleEditMode();
-      expect(component.editableTextArea.nativeElement.focus).not.toHaveBeenCalled();
+      expect(
+        component.editableTextArea.nativeElement.focus
+      ).not.toHaveBeenCalled();
     });
 
     it('should select all the text in the div when focused', () => {
       component.taskEditModeEnabled = false;
       component.toggleEditMode();
-      expect(component.editableTextArea.nativeElement.select).toHaveBeenCalled();
+      expect(
+        component.editableTextArea.nativeElement.select
+      ).toHaveBeenCalled();
     });
 
     it('should not select all the text in the div when not focusesd', () => {
       component.taskEditModeEnabled = true;
       component.toggleEditMode();
-      expect(component.editableTextArea.nativeElement.select).not.toHaveBeenCalled();
+      expect(
+        component.editableTextArea.nativeElement.select
+      ).not.toHaveBeenCalled();
     });
-
   });
 
   describe(`editModeOff`, () => {
     it(`should emit message changed`, () => {
-      component.messageChanged = jasmine.createSpyObj({emit: null});
+      component.messageChanged = createMockEventEmitter();
       component.editModeOff();
       expect(component.messageChanged.emit).toHaveBeenCalled();
     });
@@ -120,9 +125,8 @@ describe('TaskComponent', () => {
   });
 
   describe('addStar', () => {
-
     it('should increase the star count by one', () => {
-      component.starCountIncreased = jasmine.createSpyObj({emit: null});
+      component.starCountIncreased = createMockEventEmitter();
 
       component.task = emptyThought();
       component.task.hearts = 1;
@@ -132,7 +136,7 @@ describe('TaskComponent', () => {
     });
 
     it('should emit the star', () => {
-      component.starCountIncreased = jasmine.createSpyObj({emit: null});
+      component.starCountIncreased = createMockEventEmitter();
 
       component.task = emptyThought();
       component.task.hearts = 1;
@@ -143,9 +147,8 @@ describe('TaskComponent', () => {
   });
 
   describe('emitDeleteItem', () => {
-
     it('should emit the actionItem to be deleted is the deletion flag is set to true', () => {
-      component.deleted = jasmine.createSpyObj({emit: null});
+      component.deleted = createMockEventEmitter();
       component.task = emptyThought();
       component.task.hearts = 1;
 
@@ -156,7 +159,7 @@ describe('TaskComponent', () => {
     });
 
     it('should not emit the actionItem to be deleted is the deletion flag is set to false', () => {
-      component.deleted = jasmine.createSpyObj({emit: null});
+      component.deleted = createMockEventEmitter();
       component.task = emptyThought();
       component.task.hearts = 1;
 
@@ -165,25 +168,25 @@ describe('TaskComponent', () => {
 
       expect(component.deleted.emit).not.toHaveBeenCalledWith(component.task);
     });
-
   });
 
   describe('emitTaskContentClicked', () => {
-
     it('should emit the actionItem when edit mode is not enabled', () => {
       component.taskEditModeEnabled = false;
-      component.messageClicked = jasmine.createSpyObj({emit: null});
+      component.messageClicked = createMockEventEmitter();
 
       component.task = emptyThought();
       component.task.hearts = 1;
       component.emitTaskContentClicked();
 
-      expect(component.messageClicked.emit).toHaveBeenCalledWith(component.task);
+      expect(component.messageClicked.emit).toHaveBeenCalledWith(
+        component.task
+      );
     });
 
     it('should not emit the actionItem when edit mode is enabled', () => {
       component.taskEditModeEnabled = true;
-      component.messageClicked = jasmine.createSpyObj({emit: null});
+      component.messageClicked = createMockEventEmitter();
 
       component.task = emptyThought();
       component.task.hearts = 1;
@@ -191,15 +194,14 @@ describe('TaskComponent', () => {
 
       expect(component.messageClicked.emit).not.toHaveBeenCalled();
     });
-
   });
 
   describe('forceBlur', () => {
     it('should call blur on the native textarea element', () => {
       component.editableTextArea = {
-        nativeElement: jasmine.createSpyObj({
-          blur: null
-        })
+        nativeElement: {
+          blur: jest.fn(),
+        },
       };
       component.forceBlur();
 
@@ -212,14 +214,16 @@ describe('TaskComponent', () => {
       component.editableTextArea = {
         nativeElement: {
           style: {
-            height: ''
+            height: '',
           },
-          scrollHeight: 40
-        }
+          scrollHeight: 40,
+        },
       };
 
       component.initializeTextAreaHeight();
-      expect(component.editableTextArea.nativeElement.style.height).toEqual('40px');
+      expect(component.editableTextArea.nativeElement.style.height).toEqual(
+        '40px'
+      );
     });
   });
 
@@ -235,7 +239,9 @@ describe('TaskComponent', () => {
     let fakeEvent;
 
     beforeEach(() => {
-      fakeEvent = jasmine.createSpyObj(['preventDefault']);
+      fakeEvent = {
+        preventDefault: jest.fn(),
+      };
     });
 
     it('should set the thought message to the passed in string', () => {

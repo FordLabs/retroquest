@@ -15,8 +15,8 @@
  *  limitations under the License.
  */
 
-import {ThoughtsColumnComponent} from './thoughts-column.component';
-import {Observable} from 'rxjs/index';
+import { ThoughtsColumnComponent } from './thoughts-column.component';
+import { Observable } from 'rxjs/index';
 
 describe('ThoughtColumnComponent', () => {
   let component: ThoughtsColumnComponent;
@@ -24,14 +24,13 @@ describe('ThoughtColumnComponent', () => {
 
   let testThought;
 
-
   beforeEach(() => {
-    mockThoughtService = jasmine.createSpyObj({
-      deleteThought: new Observable(),
-      discussThought: new Observable(),
-      heartThought: new Observable(),
-      updateThought: new Observable()
-    });
+    mockThoughtService = {
+      deleteThought: jest.fn().mockReturnValue(new Observable()),
+      discussThought: jest.fn().mockReturnValue(new Observable()),
+      heartThought: jest.fn().mockReturnValue(new Observable()),
+      updateThought: jest.fn().mockReturnValue(new Observable()),
+    };
 
     component = new ThoughtsColumnComponent(mockThoughtService);
 
@@ -42,7 +41,7 @@ describe('ThoughtColumnComponent', () => {
       message: null,
       hearts: 0,
       discussed: false,
-      columnTitle: null
+      columnTitle: null,
     };
 
     // component.thoughts = [testThought];
@@ -62,7 +61,9 @@ describe('ThoughtColumnComponent', () => {
 
     it('should call ThoughtService.discussThought', () => {
       component.discussThought(testThought);
-      expect(mockThoughtService.updateThought).toHaveBeenCalledWith(testThought);
+      expect(mockThoughtService.updateThought).toHaveBeenCalledWith(
+        testThought
+      );
     });
   });
 
@@ -74,7 +75,9 @@ describe('ThoughtColumnComponent', () => {
 
     it('should call ThoughtService.setCurrentThought', () => {
       component.heartThought(testThought);
-      expect(mockThoughtService.updateThought).toHaveBeenCalledWith(testThought);
+      expect(mockThoughtService.updateThought).toHaveBeenCalledWith(
+        testThought
+      );
     });
   });
 });

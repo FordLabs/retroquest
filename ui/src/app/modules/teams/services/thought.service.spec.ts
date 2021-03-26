@@ -15,14 +15,20 @@
  *  limitations under the License.
  */
 
-import {Observable} from 'rxjs/index';
-import {ThoughtService} from './thought.service';
-import {Thought} from '../../domain/thought';
+import { Observable } from 'rxjs/index';
+import { ThoughtService } from './thought.service';
+import { Thought } from '../../domain/thought';
+import {
+  createMockHttpClient,
+  createMockWebSocketService,
+} from '../../utils/testutils';
+import { WebsocketService } from './websocket.service';
+import { HttpClient } from '@angular/common/http';
 
 describe('ThoughtService', () => {
   let service: ThoughtService;
-  let mockHttpClient;
-  let mockWebsocketService;
+  let mockHttpClient: HttpClient;
+  let mockWebsocketService: WebsocketService;
 
   const thought: Thought = {
     id: 0,
@@ -31,23 +37,14 @@ describe('ThoughtService', () => {
     message: 'a message',
     hearts: 0,
     discussed: false,
-    columnTitle: null
+    columnTitle: null,
   };
 
   beforeEach(() => {
-    mockHttpClient = jasmine.createSpyObj({
-      get: new Observable(),
-      post: new Observable(),
-      put: new Observable(),
-      delete: new Observable()
-    });
-    mockWebsocketService = jasmine.createSpyObj({
-      openWebSocket: null,
-      createThought: null,
-      updateThought: null,
-      deleteThought: null,
-      deleteAllThoughts: null
-    });
+    // @ts-ignore
+    mockHttpClient = createMockHttpClient();
+    // @ts-ignore
+    mockWebsocketService = createMockWebSocketService();
 
     service = new ThoughtService(mockHttpClient, mockWebsocketService);
   });
@@ -58,7 +55,9 @@ describe('ThoughtService', () => {
 
       const returnObj = service.fetchThoughts(teamId);
 
-      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/thoughts`);
+      expect(mockHttpClient.get).toHaveBeenCalledWith(
+        `/api/team/${teamId}/thoughts`
+      );
       expect(returnObj instanceof Observable).toBe(true);
     });
   });

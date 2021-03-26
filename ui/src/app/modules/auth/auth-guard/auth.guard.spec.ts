@@ -15,24 +15,25 @@
  *  limitations under the License.
  */
 
-import {Observable} from 'rxjs/internal/Observable';
-import {ActivatedRouteSnapshot} from '@angular/router';
-import {Subject} from 'rxjs/internal/Subject';
-import {AuthGuard} from './auth.guard';
-import {AuthService} from '../auth.service';
+import { Observable } from 'rxjs/internal/Observable';
+import { ActivatedRouteSnapshot } from '@angular/router';
+import { Subject } from 'rxjs/internal/Subject';
+import { AuthGuard } from './auth.guard';
+import { AuthService } from '../auth.service';
+import { createMockRouter } from '../../utils/testutils';
+import { TeamService } from '../../teams/services/team.service';
 
 describe('AuthGuard', () => {
-
   let guard: AuthGuard;
   let mockRouter;
   let mockTeamService;
 
   beforeEach(() => {
-    mockRouter = jasmine.createSpyObj( {
-      navigate: null,
-      navigateByUrl: null
-    });
-    mockTeamService = jasmine.createSpyObj({validateTeamId: new Subject()});
+    mockRouter = createMockRouter();
+    // @ts-ignore
+    mockTeamService = {
+      validateTeamId: jest.fn().mockReturnValue(new Subject()),
+    } as TeamService;
     guard = new AuthGuard(mockTeamService, mockRouter);
   });
 
@@ -42,10 +43,16 @@ describe('AuthGuard', () => {
 
   it('should navigate to the login page when navigating to a team page you are not authorized to see', () => {
     const mockNextRouteSnapshot = new ActivatedRouteSnapshot();
-    const mockState = { url: '/team/incorrect-team'};
+    const mockState = { url: '/team/incorrect-team' };
 
-    (guard.canActivate(mockNextRouteSnapshot, mockState as any) as Observable<boolean>).subscribe(() => {
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['login', 'incorrect-team']);
+    (guard.canActivate(
+      mockNextRouteSnapshot,
+      mockState as any
+    ) as Observable<boolean>).subscribe(() => {
+      expect(mockRouter.navigate).toHaveBeenCalledWith([
+        'login',
+        'incorrect-team',
+      ]);
     });
     mockTeamService.validateTeamId().error();
   });
@@ -53,9 +60,12 @@ describe('AuthGuard', () => {
   it('should navigate to the desired page when you are authorized to see it with the cookie being present', () => {
     AuthService.setToken('some token');
     const mockNextRouteSnapshot = new ActivatedRouteSnapshot();
-    const mockState = { url: '/team/incorrect-team'};
+    const mockState = { url: '/team/incorrect-team' };
 
-    (guard.canActivate(mockNextRouteSnapshot, mockState as any) as Observable<boolean>).subscribe(() => {
+    (guard.canActivate(
+      mockNextRouteSnapshot,
+      mockState as any
+    ) as Observable<boolean>).subscribe(() => {
       expect(mockRouter.navigate).not.toHaveBeenCalled();
     });
     mockTeamService.validateTeamId().next();
@@ -63,10 +73,16 @@ describe('AuthGuard', () => {
 
   it('should navigate to the login page if you are unauthorized to view your desired team page', () => {
     const mockNextRouteSnapshot = new ActivatedRouteSnapshot();
-    const mockState = { url: '/team/incorrect-team'};
+    const mockState = { url: '/team/incorrect-team' };
 
-    (guard.canActivate(mockNextRouteSnapshot, mockState as any) as Observable<boolean>).subscribe(() => {
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['login', 'incorrect-team']);
+    (guard.canActivate(
+      mockNextRouteSnapshot,
+      mockState as any
+    ) as Observable<boolean>).subscribe(() => {
+      expect(mockRouter.navigate).toHaveBeenCalledWith([
+        'login',
+        'incorrect-team',
+      ]);
     });
     mockTeamService.validateTeamId().next();
   });

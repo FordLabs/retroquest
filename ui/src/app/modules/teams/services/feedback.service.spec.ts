@@ -15,12 +15,13 @@
  *  limitations under the License.
  */
 
-import {FeedbackService} from './feedback.service';
-import {Observable} from 'rxjs/index';
+import { FeedbackService } from './feedback.service';
+import { Observable } from 'rxjs/index';
+import { createMockHttpClient } from '../../utils/testutils';
 
 describe('FeedbackService', () => {
   let service: FeedbackService;
-  const mockHttpClient = jasmine.createSpyObj({post: new Observable()});
+  const mockHttpClient = createMockHttpClient();
 
   beforeEach(() => {
     service = new FeedbackService(mockHttpClient);
@@ -37,7 +38,7 @@ describe('FeedbackService', () => {
       stars: 1,
       comment: 'Comment',
       userEmail: 'email@email.com',
-      teamId: 'teamId'
+      teamId: 'teamId',
     };
 
     const response = service.addFeedback(feedback);
@@ -45,10 +46,9 @@ describe('FeedbackService', () => {
     expect(mockHttpClient.post).toHaveBeenCalledWith(
       '/api/feedback/',
       feedback,
-      {observe: 'response'}
+      { observe: 'response' }
     );
 
     expect(response instanceof Observable).toBe(true);
-
   });
 });

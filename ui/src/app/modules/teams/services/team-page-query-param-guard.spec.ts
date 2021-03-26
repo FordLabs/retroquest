@@ -18,6 +18,7 @@
 import { waitForAsync } from '@angular/core/testing';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { TeamPageQueryParamGuard } from './team-page-query-param-guard';
+import { createMockRouter } from '../../utils/testutils';
 
 describe('TeamPageQueryParamGuard', () => {
   let service: TeamPageQueryParamGuard;
@@ -26,10 +27,7 @@ describe('TeamPageQueryParamGuard', () => {
 
   beforeEach(
     waitForAsync(() => {
-      mockRouter = jasmine.createSpyObj({
-        navigate: null,
-        navigateByUrl: null,
-      });
+      mockRouter = createMockRouter();
       service = new TeamPageQueryParamGuard(mockRouter);
     })
   );

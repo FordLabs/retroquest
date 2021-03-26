@@ -15,9 +15,10 @@
  *  limitations under the License.
  */
 
-import {TopHeaderComponent} from './top-header.component';
-import {Router} from '@angular/router';
-import {SaveCheckerService} from '../../teams/services/save-checker.service';
+import { TopHeaderComponent } from './top-header.component';
+import { Router } from '@angular/router';
+import { SaveCheckerService } from '../../teams/services/save-checker.service';
+import { createMockRouter } from '../../utils/testutils';
 
 describe('TopHeaderComponent', () => {
   let component: TopHeaderComponent;
@@ -27,9 +28,7 @@ describe('TopHeaderComponent', () => {
   const fakeId = 'fake-id';
 
   beforeEach(() => {
-    router = jasmine.createSpyObj({
-      navigateByUrl: null
-    });
+    router = createMockRouter();
 
     saveCheckerService = new SaveCheckerService();
     component = new TopHeaderComponent(router, saveCheckerService);
@@ -42,19 +41,23 @@ describe('TopHeaderComponent', () => {
 
   describe('ngOnInit', () => {
     it('should change the view to retro if the window url ends with the team id', () => {
-      Object.defineProperty(router, 'url', {value: `/url/${fakeId}`});
+      Object.defineProperty(router, 'url', { value: `/url/${fakeId}` });
       component.ngOnInit();
       expect(component.selectedView).toEqual('retro');
     });
 
     it('should change the view to archives if the window url contains archives string', () => {
-      Object.defineProperty(router, 'url', {value: `/url/${fakeId}/archives`});
+      Object.defineProperty(router, 'url', {
+        value: `/url/${fakeId}/archives`,
+      });
       component.ngOnInit();
       expect(component.selectedView).toEqual('archives');
     });
 
     it('should change the view to radiator if the window url ends with radiator string', () => {
-      Object.defineProperty(router, 'url', {value: `/url/${fakeId}/radiator`});
+      Object.defineProperty(router, 'url', {
+        value: `/url/${fakeId}/radiator`,
+      });
       component.ngOnInit();
       expect(component.selectedView).toEqual('radiator');
     });
@@ -68,7 +71,6 @@ describe('TopHeaderComponent', () => {
   });
 
   describe('changeView', () => {
-
     beforeEach(() => {
       component.teamId = fakeId;
     });
@@ -86,8 +88,9 @@ describe('TopHeaderComponent', () => {
 
     it('should navigate to the archives board', () => {
       component.changeView('archives');
-      expect(router.navigateByUrl).toHaveBeenCalledWith(`/team/${fakeId}/archives`);
+      expect(router.navigateByUrl).toHaveBeenCalledWith(
+        `/team/${fakeId}/archives`
+      );
     });
-
   });
 });

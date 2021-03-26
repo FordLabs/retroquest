@@ -15,11 +15,11 @@
  *  limitations under the License.
  */
 
-import {WebsocketService} from './websocket.service';
-import {Observable} from 'rxjs/internal/Observable';
-import {Column} from '../../domain/column';
-import {DataService} from '../../data.service';
-import createSpyObj = jasmine.createSpyObj;
+import { WebsocketService } from './websocket.service';
+import { Observable } from 'rxjs/internal/Observable';
+import { Column } from '../../domain/column';
+import { DataService } from '../../data.service';
+import { StompClient } from '@elderbyte/ts-stomp';
 
 describe('WebsocketService', () => {
   let service: WebsocketService;
@@ -28,11 +28,12 @@ describe('WebsocketService', () => {
   const teamId = 'teamId';
 
   beforeEach(() => {
-    spiedClient = createSpyObj({
-      connect: null,
-      subscribe: {messages: new Observable()},
-      send: null
-    });
+    // @ts-ignore
+    spiedClient = {
+      connect: jest.fn(),
+      subscribe: jest.fn(),
+      send: jest.fn(),
+    } as StompClient;
     spiedClient.onConnect = new Observable();
     spiedClient.errors = new Observable();
 
@@ -48,24 +49,32 @@ describe('WebsocketService', () => {
 
   describe('getProtocol', () => {
     it('should return ws:// when the location.protocol is http', () => {
-      expect(WebsocketService.getWsProtocol({protocol: 'http:'})).toBe('ws://');
+      expect(WebsocketService.getWsProtocol({ protocol: 'http:' })).toBe(
+        'ws://'
+      );
     });
 
     it('should return wss:// when the location.protocol is https', () => {
-      expect(WebsocketService.getWsProtocol({protocol: 'https:'})).toBe('wss://');
+      expect(WebsocketService.getWsProtocol({ protocol: 'https:' })).toBe(
+        'wss://'
+      );
     });
   });
 
   describe('sendHeartbeat', () => {
     beforeEach(() => {
-      service.stompClient = jasmine.createSpyObj({
-        send: null
-      });
+      // @ts-ignore
+      service.stompClient = {
+        send: jest.fn(),
+      } as StompClient;
       service.sendHeartbeat();
     });
 
     it('should send a heartbeat ping to the backend with the team id in the url', () => {
-      expect(service.stompClient.send).toHaveBeenCalledWith(`/app/heartbeat/ping/${teamId}`, '');
+      expect(service.stompClient.send).toHaveBeenCalledWith(
+        `/app/heartbeat/ping/${teamId}`,
+        ''
+      );
     });
   });
 
@@ -88,7 +97,7 @@ describe('WebsocketService', () => {
 
     it('should return the state of the websocket after opening', () => {
       service.websocket = {
-        readyState: WebSocket.OPEN
+        readyState: WebSocket.OPEN,
       };
       const state = service.getWebsocketState();
       expect(state).toEqual(WebSocket.OPEN);
@@ -96,13 +105,12 @@ describe('WebsocketService', () => {
   });
 
   describe('thoughtsTopic', () => {
-
     it('should throw an error if called without opening the websocket', () => {
       try {
         service.thoughtsTopic();
         expect(true).toBeFalsy();
       } catch (e) {
-        expect(e).toEqual(jasmine.any(Error));
+        expect(e).toEqual(expect.any(Error));
       }
     });
 
@@ -111,19 +119,19 @@ describe('WebsocketService', () => {
 
       service.thoughtsTopic().subscribe();
 
-      expect(service.stompClient.subscribe).toHaveBeenCalledWith(`/topic/${teamId}/thoughts`);
+      expect(service.stompClient.subscribe).toHaveBeenCalledWith(
+        `/topic/${teamId}/thoughts`
+      );
     });
-
   });
 
   describe('actionItemTopic', () => {
-
     it('should throw an error if called without opening the websocket', () => {
       try {
         service.actionItemTopic();
         expect(true).toBeFalsy();
       } catch (e) {
-        expect(e).toEqual(jasmine.any(Error));
+        expect(e).toEqual(expect.any(Error));
       }
     });
 
@@ -132,32 +140,36 @@ describe('WebsocketService', () => {
 
       service.actionItemTopic().subscribe();
 
-      expect(service.stompClient.subscribe).toHaveBeenCalledWith(`/topic/${teamId}/action-items`);
+      expect(service.stompClient.subscribe).toHaveBeenCalledWith(
+        `/topic/${teamId}/action-items`
+      );
     });
-
   });
 
   describe('columnTitleTopic', () => {
-
     it('should subscribe to the column title topic', async () => {
       service.columnTitleTopic().subscribe();
-      expect(service.stompClient.subscribe).toHaveBeenCalledWith(`/topic/${teamId}/column-titles`);
+      expect(service.stompClient.subscribe).toHaveBeenCalledWith(
+        `/topic/${teamId}/column-titles`
+      );
     });
-
   });
 
-
   describe('createThought', () => {
-
     it('should send a message', () => {
       const fakeThought = {
-        'id': null,
-        'teamId': 'test',
-        'topic': 'confused',
-        'message': 'asd',
-        'hearts': 0,
-        'discussed': false,
-        'columnTitle': {'id': 2, 'topic': 'confused', 'title': 'Confused', 'teamId': 'test'}
+        id: null,
+        teamId: 'test',
+        topic: 'confused',
+        message: 'asd',
+        hearts: 0,
+        discussed: false,
+        columnTitle: {
+          id: 2,
+          topic: 'confused',
+          title: 'Confused',
+          teamId: 'test',
+        },
       };
 
       service.openWebsocket().subscribe();
@@ -173,13 +185,18 @@ describe('WebsocketService', () => {
   describe('deleteThought', () => {
     it('should send a message', () => {
       const fakeThought = {
-        'id': 1,
-        'teamId': 'test',
-        'topic': 'confused',
-        'message': 'asd',
-        'hearts': 0,
-        'discussed': false,
-        'columnTitle': {'id': 2, 'topic': 'confused', 'title': 'Confused', 'teamId': 'test'}
+        id: 1,
+        teamId: 'test',
+        topic: 'confused',
+        message: 'asd',
+        hearts: 0,
+        discussed: false,
+        columnTitle: {
+          id: 2,
+          topic: 'confused',
+          title: 'Confused',
+          teamId: 'test',
+        },
       };
 
       service.openWebsocket().subscribe();
@@ -195,13 +212,18 @@ describe('WebsocketService', () => {
   describe('updateThought', () => {
     it('should send a message', () => {
       const fakeThought = {
-        'id': 1,
-        'teamId': 'test',
-        'topic': 'confused',
-        'message': 'asd',
-        'hearts': 0,
-        'discussed': false,
-        'columnTitle': {'id': 2, 'topic': 'confused', 'title': 'Confused', 'teamId': 'test'}
+        id: 1,
+        teamId: 'test',
+        topic: 'confused',
+        message: 'asd',
+        hearts: 0,
+        discussed: false,
+        columnTitle: {
+          id: 2,
+          topic: 'confused',
+          title: 'Confused',
+          teamId: 'test',
+        },
       };
 
       service.openWebsocket().subscribe();
@@ -223,7 +245,7 @@ describe('WebsocketService', () => {
         teamId: '',
         assignee: '',
         dateCreated: null,
-        archived: false
+        archived: false,
       };
 
       service.openWebsocket().subscribe();
@@ -242,7 +264,7 @@ describe('WebsocketService', () => {
         id: 1,
         teamId: '',
         topic: '',
-        title: ''
+        title: '',
       };
 
       service.openWebsocket().subscribe();
@@ -264,7 +286,7 @@ describe('WebsocketService', () => {
         teamId: '',
         assignee: '',
         dateCreated: null,
-        archived: false
+        archived: false,
       };
 
       service.openWebsocket().subscribe();
@@ -286,7 +308,7 @@ describe('WebsocketService', () => {
         teamId: '',
         assignee: '',
         dateCreated: null,
-        archived: false
+        archived: false,
       };
 
       service.openWebsocket().subscribe();
@@ -304,7 +326,10 @@ describe('WebsocketService', () => {
       service.openWebsocket().subscribe();
       service.endRetro();
 
-      expect(service.stompClient.send).toHaveBeenCalledWith(`/app/${teamId}/end-retro`, null);
+      expect(service.stompClient.send).toHaveBeenCalledWith(
+        `/app/${teamId}/end-retro`,
+        null
+      );
     });
   });
 });

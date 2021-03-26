@@ -15,8 +15,8 @@
  *  limitations under the License.
  */
 
-
-import {ActionItemDialogComponent} from './action-item-dialog.component';
+import { ActionItemDialogComponent } from './action-item-dialog.component';
+import { createMockEventEmitter } from '../../utils/testutils';
 
 describe('ActionItemDialogComponent', () => {
   let component: ActionItemDialogComponent;
@@ -30,10 +30,9 @@ describe('ActionItemDialogComponent', () => {
   });
 
   describe('emitCompleted', () => {
-
     beforeEach(() => {
-      component.completed = jasmine.createSpyObj({emit: null});
-      component.visibilityChanged = jasmine.createSpyObj({emit: null});
+      component.completed = createMockEventEmitter();
+      component.visibilityChanged = createMockEventEmitter();
     });
 
     it('should emit the completed signal with a state of true', () => {
@@ -72,14 +71,9 @@ describe('ActionItemDialogComponent', () => {
   });
 
   describe('emitDeleted', () => {
-
     beforeEach(() => {
-      component.visibilityChanged = jasmine.createSpyObj({
-        emit: null
-      });
-      component.deleted = jasmine.createSpyObj({
-        emit: null
-      });
+      component.visibilityChanged = createMockEventEmitter();
+      component.deleted = createMockEventEmitter();
     });
 
     it('should emit the deleted signal when the delete button is clicked', () => {
@@ -102,11 +96,8 @@ describe('ActionItemDialogComponent', () => {
   });
 
   describe('emitMessageChanged', () => {
-
     beforeEach(() => {
-      component.messageChanged = jasmine.createSpyObj({
-        emit: null
-      });
+      component.messageChanged = createMockEventEmitter();
     });
 
     it('should emit the passed in message', () => {
@@ -118,11 +109,8 @@ describe('ActionItemDialogComponent', () => {
   });
 
   describe('emitAssigneeUpdated', () => {
-
     beforeEach(() => {
-      component.assignedUpdated = jasmine.createSpyObj({
-        emit: null
-      });
+      component.assignedUpdated = createMockEventEmitter();
     });
 
     it('should emit the passed in assignee', () => {
@@ -132,5 +120,4 @@ describe('ActionItemDialogComponent', () => {
       expect(component.assignedUpdated.emit).toHaveBeenCalledWith(fakeAssignee);
     });
   });
-
 });

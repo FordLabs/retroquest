@@ -15,11 +15,16 @@
  *  limitations under the License.
  */
 
-import {UpdatePasswordComponent} from './update-password.page';
-import {AuthService} from '../../../auth/auth.service';
-import {Subject, throwError} from 'rxjs';
-import {of} from 'rxjs/internal/observable/of';
-import {HttpResponse} from '@angular/common/http';
+import { UpdatePasswordComponent } from './update-password.page';
+import { AuthService } from '../../../auth/auth.service';
+import { Subject, throwError } from 'rxjs';
+import { of } from 'rxjs/internal/observable/of';
+import { HttpResponse } from '@angular/common/http';
+import {
+  createMockRecaptchaComponent,
+  createMockRouter,
+} from '../../../utils/testutils';
+import { TeamService } from '../../../teams/services/team.service';
 
 describe('UpdatePasswordComponent', () => {
   let component: UpdatePasswordComponent;
@@ -29,17 +34,22 @@ describe('UpdatePasswordComponent', () => {
   let mockRecaptchaComponent;
 
   beforeEach(() => {
-    mockTeamService = jasmine.createSpyObj('teamService', {
-      updatePassword: new Subject()
-    });
-    mockActivatedRoute = {snapshot: {params: {teamId: -1}}};
-    mockRouter = jasmine.createSpyObj({'navigateByUrl': null});
-    mockRecaptchaComponent = jasmine.createSpyObj({reset: null, execute: null});
+    // @ts-ignore
+    mockTeamService = {
+      updatePassword: jest.fn().mockReturnValue(new Subject()),
+    } as TeamService;
+    mockActivatedRoute = { snapshot: { params: { teamId: -1 } } };
+    mockRouter = createMockRouter();
+    mockRecaptchaComponent = createMockRecaptchaComponent();
 
     spyOn(AuthService, 'setToken');
     spyOn(console, 'error');
 
-    component = new UpdatePasswordComponent(mockTeamService, mockActivatedRoute, mockRouter);
+    component = new UpdatePasswordComponent(
+      mockTeamService,
+      mockActivatedRoute,
+      mockRouter
+    );
     component.recaptchaComponent = mockRecaptchaComponent;
   });
 
@@ -50,7 +60,11 @@ describe('UpdatePasswordComponent', () => {
       component.newPassword = 'newPassword';
       component.confirmPassword = 'newPassword';
       component.updatePassword();
-      expect(mockTeamService.updatePassword).toHaveBeenCalledWith('teamId', 'oldPassword', 'newPassword');
+      expect(mockTeamService.updatePassword).toHaveBeenCalledWith(
+        'teamId',
+        'oldPassword',
+        'newPassword'
+      );
     });
 
     it('should navigate back to team page', () => {
@@ -60,10 +74,12 @@ describe('UpdatePasswordComponent', () => {
       component.confirmPassword = 'newPassword';
 
       const updatePasswordResponse: HttpResponse<string> = new HttpResponse({
-        body: 'Password updated successfully'
+        body: 'Password updated successfully',
       });
 
-      mockTeamService.updatePassword.and.returnValue(of(updatePasswordResponse));
+      mockTeamService.updatePassword = jest
+        .fn()
+        .mockReturnValue(of(updatePasswordResponse));
 
       component.updatePassword();
       expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('team/teamId');
@@ -76,32 +92,41 @@ describe('UpdatePasswordComponent', () => {
       component.confirmPassword = 'newPassword';
 
       const httpErrorMessage = 'server error message';
-      const error = {error: JSON.stringify({message: httpErrorMessage})};
+      const error = { error: JSON.stringify({ message: httpErrorMessage }) };
 
       const captchaResponse: HttpResponse<string> = new HttpResponse({
-        body: JSON.stringify({captchaEnabled: false})
+        body: JSON.stringify({ captchaEnabled: false }),
       });
 
-      mockTeamService.updatePassword.and.returnValue(throwError(error));
+      mockTeamService.updatePassword = jest
+        .fn()
+        .mockReturnValue(throwError(error));
 
       component.updatePassword();
 
       expect(component.errorMessage).toEqual(httpErrorMessage);
-      expect(console.error).toHaveBeenCalledWith('A registration error occurred: ', httpErrorMessage);
+      expect(console.error).toHaveBeenCalledWith(
+        'A registration error occurred: ',
+        httpErrorMessage
+      );
     });
 
     describe('input validation', () => {
       it('should not update if the previous password field is null', () => {
         component.previousPassword = null;
         component.updatePassword();
-        expect(component.errorMessage).toBe('Please enter your original password');
+        expect(component.errorMessage).toBe(
+          'Please enter your original password'
+        );
         expect(mockTeamService.updatePassword).not.toHaveBeenCalled();
       });
 
       it('should not update if the previous password field is empty', () => {
         component.previousPassword = '';
         component.updatePassword();
-        expect(component.errorMessage).toBe('Please enter your original password');
+        expect(component.errorMessage).toBe(
+          'Please enter your original password'
+        );
         expect(mockTeamService.updatePassword).not.toHaveBeenCalled();
       });
 
@@ -128,7 +153,9 @@ describe('UpdatePasswordComponent', () => {
         component.newPassword = 'newPassword';
         component.confirmPassword = 'aNewPassword';
         component.updatePassword();
-        expect(component.errorMessage).toBe('Please enter matching new passwords');
+        expect(component.errorMessage).toBe(
+          'Please enter matching new passwords'
+        );
         expect(mockTeamService.updatePassword).not.toHaveBeenCalled();
       });
     });
