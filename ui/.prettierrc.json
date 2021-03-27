@@ -1,8 +1,12 @@
 {
   "tabWidth": 2,
   "singleQuote": true,
-  "files": ["*.html"],
-  "options": {
-    "tabWidth": 4
-  }
+  "overrides": [
+    {
+      "files": "*.html",
+      "options": {
+        "tabWidth": 4
+      }
+    }
+  ]
 }
