@@ -99,17 +99,22 @@ dependencies {
 
 bootRun {
     sourceResources sourceSets.main
-}
 
-task runLocal {
-    dependsOn 'withH2'
-    dependsOn 'bootRun'
-    group 'application'
-    description 'Runs this project as a Spring Boot application using in-memory (H2) database'
     gradle.taskGraph.whenReady { graph ->
-        if (graph.hasTask(runLocal)) {
+        boolean dbDeclared = false;
+
+        graph.getAllTasks().forEach { task->
+            if(task.name.contains('with')){
+                dbDeclared=true;
+            }
+        }
+
+        if(!dbDeclared){
             logger.lifecycle('>>> Setting spring.profiles.active == "local" <<<')
             bootRun {
+                dependencies {
+                    implementation 'com.h2database:h2:1.4.200'
+                }
                 args = ['--spring.profiles.active=local']
                 systemProperties System.properties
             }
@@ -117,7 +122,7 @@ task runLocal {
     }
 }
 
-task runDockerDb(type: Exec){
+task bootRunDockerDb(type: Exec){
     dependsOn 'withPostgres'
     dependsOn 'bootRun'
 
@@ -127,7 +132,7 @@ task runDockerDb(type: Exec){
     description 'Runs this project as a Spring Boot application using containerized database'
 
     gradle.taskGraph.whenReady { graph ->
-        if (graph.hasTask(runDockerDb)) {
+        if (graph.hasTask(bootRunDockerDb)) {
             logger.lifecycle('>>> Setting spring.profiles.active == "dockerdb" <<<')
             bootRun {
                 systemProperty "spring.profiles.active", "dockerdb"
