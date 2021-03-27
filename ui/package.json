@@ -78,7 +78,6 @@
     "jest-preset-angular": "^8.4.0",
     "lint-staged": "^10.5.4",
     "mockdate": "^3.0.5",
-    "node-sass": "^4.9.0",
     "prettier": "^2.2.1",
     "protractor": "~7.0.0",
     "puppeteer": "^1.5.0",
