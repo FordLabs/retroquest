@@ -1,7 +1,6 @@
 {
   "name": "retroquest-ui",
   "version": "0.0.0",
-  "sasslintConfig": ".sasslintrc",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --configuration local",
@@ -14,8 +13,6 @@
     "lint": "ng lint",
     "lint-fix": "ng lint --fix",
     "e2e": "ng e2e",
-    "sass-lint": "sass-lint -v",
-    "sass-lint-fix": "sass-lint-auto-fix && sass-lint -v",
     "sonarqube": "sonar-scanner -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_UI_TOKEN",
     "postinstall": "ngcc",
     "prepare": "cd .. && husky install ui/.husky"
@@ -83,6 +80,9 @@
     "puppeteer": "^1.5.0",
     "sass-lint": "^1.12.1",
     "sass-lint-auto-fix": "^0.21.0",
+    "stylelint": "^13.12.0",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-prettier": "^1.2.0",
     "ts-jest": "^26.5.4",
     "ts-mockito": "^2.3.1",
     "ts-node": "~8.5.0",
@@ -91,10 +91,11 @@
     "webpack": "^4.29.6"
   },
   "lint-staged": {
-    "*.{js,ts,css,md,html}": [
+    "*.{js,ts,html}": [
       "eslint --fix",
       "prettier --write"
-    ]
+    ],
+    "*.{css,scss,sass}": "prettier --write"
   },
   "husky": {
     "hooks": {
