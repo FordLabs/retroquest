@@ -23,7 +23,6 @@ set -x
 pushd ui
   npm install
   npm run lint-fix
-  npm run sass-lint-fix
 
   set +x
   if [[ $(git diff .) ]]

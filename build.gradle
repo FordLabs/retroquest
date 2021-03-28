@@ -202,11 +202,6 @@ task uiUnitTests(type: Exec, dependsOn: 'installNodeModules') {
     commandLine 'yarn', 'unit'
 }
 
-task uiLintSCSS(type: Exec, dependsOn: 'installNodeModules') {
-    workingDir = uiWorkingDir
-    commandLine 'yarn', 'sass-lint'
-}
-
 task uiLintTypeScript(type: Exec, dependsOn: 'installNodeModules') {
     workingDir = uiWorkingDir
     commandLine 'yarn', 'lint'
