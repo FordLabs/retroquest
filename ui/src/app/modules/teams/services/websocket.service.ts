@@ -119,16 +119,16 @@ export class WebsocketService {
     });
   }
 
-  public thoughtsTopic(): Observable<any> {
-    this.checkForOpenSocket();
-
-    return new Observable<any>(observer => {
-      const sub = this.stompClient.subscribe(`/topic/${this.dataService.team.id}/thoughts`);
-      sub.messages.subscribe(m => {
-        observer.next(m);
-      });
-    });
-  }
+  // public thoughtsTopic(): Observable<any> {
+  //   this.checkForOpenSocket();
+  //
+  //   return new Observable<any>(observer => {
+  //     const sub = this.stompClient.subscribe(`/topic/${this.dataService.team.id}/thoughts`);
+  //     sub.messages.subscribe(m => {
+  //       observer.next(m);
+  //     });
+  //   });
+  // }
 
   public createThought(thought: Thought): void {
     this.checkForOpenSocket();

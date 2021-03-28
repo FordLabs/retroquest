@@ -31,6 +31,7 @@ import {Column} from '../../../domain/column';
 import {DataService} from '../../../data.service';
 import {ActionItemService} from '../../services/action.service';
 import {ActionItem} from '../../../domain/action-item';
+import {RxStompService} from '@stomp/ng2-stompjs';
 
 @Component({
   selector: 'rq-team',
@@ -47,7 +48,8 @@ export class TeamPageComponent implements OnInit {
               private saveCheckerService: SaveCheckerService,
               private boardService: BoardService,
               private columnAggregationService: ColumnAggregationService,
-              private actionItemService: ActionItemService
+              private actionItemService: ActionItemService,
+              private rxStompService: RxStompService
   ) {
   }
 
@@ -112,8 +114,8 @@ export class TeamPageComponent implements OnInit {
 
     this.websocketService.heartbeatTopic().subscribe();
 
-    this.websocketService.thoughtsTopic().subscribe((message) => {
-      this.thoughtChanged.emit(message.bodyJson as WebsocketResponse);
+    this.rxStompService.watch(`/topic/${this.dataService.team.id}/thoughts`).subscribe((message) => {
+      this.thoughtChanged.emit(JSON.parse(message.body) as WebsocketResponse);
       this.saveCheckerService.updateTimestamp();
     });
 
