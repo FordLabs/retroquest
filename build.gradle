@@ -97,25 +97,42 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
+def noProfileOrDbDefined(tasks) {
+
+    def envProfile = System.getenv("SPRING_PROFILES_ACTIVE")
+    def systemProfile = System.getProperty("spring.profiles.active")
+
+    if(envProfile !=null || systemProfile!=null){
+        return false;
+    }
+
+    boolean dbDeclared = false;
+    tasks.forEach { task ->
+        if(task.name.contains('with')){
+            dbDeclared=true;
+        }
+    }
+
+    if(dbDeclared){
+        return false;
+    }
+
+    return true;
+
+}
+
 bootRun {
     sourceResources sourceSets.main
 
     gradle.taskGraph.whenReady { graph ->
-        boolean dbDeclared = false;
 
-        graph.getAllTasks().forEach { task->
-            if(task.name.contains('with')){
-                dbDeclared=true;
-            }
-        }
-
-        if(!dbDeclared){
+        if(noProfileOrDbDefined(graph.getAllTasks())){
             logger.lifecycle('>>> Setting spring.profiles.active == "local" <<<')
             bootRun {
                 dependencies {
                     implementation 'com.h2database:h2:1.4.200'
                 }
-                args = ['--spring.profiles.active=local']
+                System.setProperty("spring.profiles.active","local")
                 systemProperties System.properties
             }
         }
