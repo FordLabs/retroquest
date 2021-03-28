@@ -42,6 +42,7 @@ import {ArchivedBoardPageComponent} from './pages/archived-board/archived-board.
 import {SubAppComponent} from '../sub-app/sub-app.component';
 import {ActionsRadiatorViewComponent} from '../controls/actions-radiator-view/actions-radiator-view.component';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
+import {WsService} from './services/ws.service';
 
 @NgModule({
   imports: [
@@ -67,6 +68,7 @@ import {InfiniteScrollModule} from 'ngx-infinite-scroll';
     ActionItemService,
     ColumnService,
     WebsocketService,
+    WsService,
     FeedbackService,
     SaveCheckerService
   ],

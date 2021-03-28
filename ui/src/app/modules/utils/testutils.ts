@@ -4,6 +4,7 @@ import 'jest-preset-angular/setup-jest';
 import {WebsocketService} from '../teams/services/websocket.service';
 import {EventEmitter} from '@angular/core';
 import {Router} from '@angular/router';
+import {WsService} from '../teams/services/ws.service';
 
 export function createMockHttpClient(): HttpClient {
   // @ts-ignore
@@ -42,6 +43,32 @@ export function createMockWebSocketService(): WebsocketService {
     deleteAllThoughts: jest.fn(),
     endRetro: jest.fn(),
   } as WebsocketService;
+
+}
+
+export function createMockWsService(): WsService {
+
+  // @ts-ignore
+  return {
+    getWebsocketState: jest.fn(),
+    closeWebsocket: jest.fn(),
+    openWebsocket: jest.fn(),
+    sendHeartbeat: jest.fn(),
+    heartbeatTopic: jest.fn(),
+    endRetroTopic: jest.fn(),
+    thoughtsTopic: jest.fn(),
+    createThought: jest.fn(),
+    deleteThought: jest.fn(),
+    updateThought: jest.fn(),
+    actionItemTopic: jest.fn(),
+    columnTitleTopic: jest.fn(),
+    createActionItem: jest.fn(),
+    updateActionItem: jest.fn(),
+    deleteActionItem: jest.fn(),
+    updateColumnTitle: jest.fn(),
+    deleteAllThoughts: jest.fn(),
+    endRetro: jest.fn(),
+  } as WsService;
 
 }
 

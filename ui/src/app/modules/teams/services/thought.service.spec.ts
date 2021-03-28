@@ -18,14 +18,15 @@
 import {Observable} from 'rxjs/index';
 import {ThoughtService} from './thought.service';
 import {Thought} from '../../domain/thought';
-import {createMockHttpClient, createMockWebSocketService} from '../../utils/testutils';
+import {createMockHttpClient, createMockWebSocketService, createMockWsService} from '../../utils/testutils';
 import {WebsocketService} from './websocket.service';
 import {HttpClient} from '@angular/common/http';
+import {WsService} from './ws.service';
 
 describe('ThoughtService', () => {
   let service: ThoughtService;
   let mockHttpClient: HttpClient;
-  let mockWebsocketService: WebsocketService;
+  let mockWebsocketService: WsService;
 
   const thought: Thought = {
     id: 0,
@@ -41,7 +42,7 @@ describe('ThoughtService', () => {
     // @ts-ignore
     mockHttpClient = createMockHttpClient();
     // @ts-ignore
-    mockWebsocketService = createMockWebSocketService();
+    mockWebsocketService = createMockWsService();
 
     service = new ThoughtService(mockHttpClient, mockWebsocketService);
   });

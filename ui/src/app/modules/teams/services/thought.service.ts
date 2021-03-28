@@ -20,13 +20,12 @@ import {Observable, Subject} from 'rxjs/index';
 import {HttpClient} from '@angular/common/http';
 
 import {Thought} from '../../domain/thought';
-import {WebsocketService} from './websocket.service';
+import {WsService} from './ws.service';
 
 @Injectable()
 export class ThoughtService {
-  resetThoughtsObserver: Subject<null> = new Subject<null>();
 
-  constructor (private http: HttpClient, private websocket: WebsocketService) {
+  constructor (private http: HttpClient, private websocket: WsService) {
   }
 
   fetchThoughts (teamId: string): Observable<Array<Thought>> {

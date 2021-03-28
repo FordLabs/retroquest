@@ -28,14 +28,18 @@ import {DataService} from '../../data.service';
 @Injectable()
 export class WebsocketService {
 
+  constructor(private dataService: DataService) {
+    WebsocketService.instantiationCount++;
+    console.log(`\tWebSockerService instantiation count=${WebsocketService.instantiationCount}`);
+  }
+
+  static instantiationCount = 0;
+
   logger = LoggerFactory.getLogger('WebsocketService');
   stompClient: StompClient;
   websocket;
   intervalId = null;
   websocketIsOpened = false;
-
-  constructor(private dataService: DataService) {
-  }
 
   static getWsProtocol(location) {
     return location.protocol === 'http:' ? 'ws://' : 'wss://';

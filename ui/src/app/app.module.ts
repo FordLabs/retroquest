@@ -31,6 +31,8 @@ import {ServiceWorkerModule} from '@angular/service-worker';
 import {environment} from '../environments/environment';
 import {ColumnAggregationService} from './modules/teams/services/column-aggregation.service';
 import {DataService} from './modules/data.service';
+import {InjectableRxStompConfig, RxStompService, rxStompServiceFactory} from '@stomp/ng2-stompjs';
+import {myRxStompConfig} from './my-rx-stomp.config';
 
 @NgModule({
   declarations: [
@@ -56,7 +58,16 @@ import {DataService} from './modules/data.service';
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
-    }
+    },
+    {
+      provide: InjectableRxStompConfig,
+      useValue: myRxStompConfig,
+    },
+    {
+      provide: RxStompService,
+      useFactory: rxStompServiceFactory,
+      deps: [InjectableRxStompConfig],
+    },
   ],
   bootstrap: [AppComponent]
 })

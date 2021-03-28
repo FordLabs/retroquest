@@ -33,6 +33,7 @@
     "@elderbyte/ts-logger": "^0.1.0",
     "@elderbyte/ts-stomp": "^2.1.2",
     "@fortawesome/fontawesome-free": "^5.9.0",
+    "@stomp/ng2-stompjs": "^8.0.0",
     "core-js": "^3.6.5",
     "file-saver": "^2.0.0",
     "hammerjs": "^2.0.8",
