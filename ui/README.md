@@ -18,19 +18,20 @@ app. The app will automatically reload if you change any of the source files.
 
 ### Unit Testing
 
-This code base uses [Jasmine](https://jasmine.github.io/) for its unit testing framework.
-
-```
-yarn test
-```
-
-This command will execute all the unit tests and then enter "watch mode" in which case it will execute any tests again where the code has changed.
+This code base uses [Jest](https://jestjs.io/) for its unit testing framework.
 
 ```
 yarn unit
 ```
 
 This command will execute the unit tests once and then terminate.
+
+```
+yarn unit-watch
+```
+
+This command will execute all the unit tests and then enter "watch mode" in which case it will execute any tests again where the code has changed.
+
 
 ```
 yarn unit-coverage
