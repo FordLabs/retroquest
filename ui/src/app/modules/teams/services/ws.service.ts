@@ -13,25 +13,25 @@ export class WsService {
     console.log(`\tWsService instantiation count=${WsService.instantiationCount}`);
   }
 
-  createThought(thought: Thought) {
-    if (this.validTeamId(thought.teamId)) {
-      this.rxStompService.publish({destination: `/app/${thought.teamId}/thought/create`, body: JSON.stringify(thought)});
-    }
-  }
-
   private validTeamId(teamId: string) {
     return this.dataService.team.id === teamId;
   }
 
-  deleteThought(thought: Thought) {
+  createThought(thought: Thought) {
+    if (this.validTeamId(thought.teamId)) {
+      this.rxStompService.publish({destination: `/app/${this.dataService.team.id}/thought/create`, body: JSON.stringify(thought)});
+    }
+  }
 
+  deleteThought(thought: Thought) {
+    if (this.validTeamId(thought.teamId)) {
+      this.rxStompService.publish({destination: `/app/${this.dataService.team.id}/thought/delete`, body: JSON.stringify(thought)});
+    }
   }
 
   updateThought(thought: Thought) {
-
-  }
-
-  deleteAllThoughts() {
-
+    if (this.validTeamId(thought.teamId)) {
+      this.rxStompService.publish({destination: `/app/${this.dataService.team.id}/thought/edit`, body: JSON.stringify(thought)});
+    }
   }
 }

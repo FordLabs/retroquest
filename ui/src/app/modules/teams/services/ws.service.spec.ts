@@ -21,10 +21,10 @@ describe('WebsocketService', () => {
     service = new WsService(spiedStompService, dataService);
   });
 
-  function createTestThought(id: string) {
+  function createTestThought(team: string, id: number = null) {
     return {
-      'id': null,
-      'teamId': id,
+      'id': id,
+      'teamId': team,
       'topic': 'confused',
       'message': 'asd',
       'hearts': 0,
@@ -34,27 +34,71 @@ describe('WebsocketService', () => {
   }
 
 
-  describe('createThought', () => {
+  describe('Thoughts', () => {
+    describe('createThought', () => {
 
-    it('should send a message', () => {
-      const testThought = createTestThought(teamId);
+      it('should send a message', () => {
+        const testThought = createTestThought(teamId);
 
-      service.createThought(testThought);
+        service.createThought(testThought);
 
-      expect(spiedStompService.publish).toHaveBeenCalledWith(
-        {destination: `/app/${testThought.teamId}/thought/create`, body: JSON.stringify(testThought)}
-      );
+        expect(spiedStompService.publish).toHaveBeenCalledWith(
+          {destination: `/app/${testThought.teamId}/thought/create`, body: JSON.stringify(testThought)}
+        );
+      });
+
+      it('does not allow messages to be sent for other teams', () => {
+        const testThought = createTestThought('hacker');
+
+        service.createThought(testThought);
+
+        expect(spiedStompService.publish).not.toHaveBeenCalled();
+      });
     });
 
-    it('does not allow messages to be sent for other teams', () => {
-      const testThought = createTestThought('hacker');
+    describe('updateThought', () => {
+      it('should send a message', () => {
+        const testThought = createTestThought(teamId, 1);
 
-      service.createThought(testThought);
+        service.updateThought(testThought);
 
-      expect(spiedStompService.publish).not.toHaveBeenCalled();
+        expect(spiedStompService.publish).toHaveBeenCalledWith(
+          {destination: `/app/${testThought.teamId}/thought/edit`, body: JSON.stringify(testThought)}
+        );
+      });
+
+      it('does not allow messages to be updated for other teams', () => {
+        const testThought = createTestThought('hacker', 1);
+
+        service.updateThought(testThought);
+
+        expect(spiedStompService.publish).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('deleteThought', () => {
+      it('should send a message', () => {
+
+        const testThought = createTestThought(teamId, 1);
+        service.deleteThought(testThought);
+
+        expect(spiedStompService.publish).toHaveBeenCalledWith(
+          {destination: `/app/${testThought.teamId}/thought/delete`, body: JSON.stringify(testThought)}
+        );
+      });
+
+      it('does not allow messages to be deleted for other teams', () => {
+        const testThought = createTestThought('hacker', 1);
+
+        service.deleteThought(testThought);
+
+        expect(spiedStompService.publish).not.toHaveBeenCalled();
+      });
+
     });
 
   });
+
 
 });
 

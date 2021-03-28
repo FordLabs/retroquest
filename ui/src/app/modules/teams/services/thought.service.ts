@@ -36,15 +36,12 @@ export class ThoughtService {
     this.websocket.createThought(thought);
   }
 
-  deleteThought (thought: Thought): void {
-    this.websocket.deleteThought(thought);
-  }
-
   updateThought (thought: Thought): void {
     this.websocket.updateThought(thought);
   }
 
-  deleteAllThoughts (): void {
-    this.websocket.deleteAllThoughts();
+  deleteThought (thought: Thought): void {
+    this.websocket.deleteThought(thought);
   }
+
 }

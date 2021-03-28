@@ -78,12 +78,4 @@ describe('ThoughtService', () => {
       expect(mockWebsocketService.deleteThought).toHaveBeenCalledWith(thought);
     });
   });
-
-  describe('deleteAllThoughts', () => {
-    it('should send delete thoughts to the thoughts api', () => {
-      service.deleteAllThoughts();
-
-      expect(mockWebsocketService.deleteAllThoughts).toHaveBeenCalled();
-    });
-  });
 });
