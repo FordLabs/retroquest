@@ -3,7 +3,7 @@ import {WsService} from './ws.service';
 import {RxStompService} from '@stomp/ng2-stompjs';
 import {DataService} from '../../data.service';
 
-describe('WebsocketService', () => {
+describe('WsService', () => {
 
   let service: WsService;
   let spiedStompService: RxStompService;
