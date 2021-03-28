@@ -18,8 +18,7 @@
 import {Observable} from 'rxjs/index';
 import {ThoughtService} from './thought.service';
 import {Thought} from '../../domain/thought';
-import {createMockHttpClient, createMockWebSocketService, createMockWsService} from '../../utils/testutils';
-import {WebsocketService} from './websocket.service';
+import {createMockHttpClient, createMockWsService} from '../../utils/testutils';
 import {HttpClient} from '@angular/common/http';
 import {WsService} from './ws.service';
 
