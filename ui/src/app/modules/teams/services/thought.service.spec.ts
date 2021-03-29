@@ -17,10 +17,8 @@
 
 import {Observable} from 'rxjs/index';
 import {ThoughtService} from './thought.service';
-import {Thought} from '../../domain/thought';
-import {createMockHttpClient, createMockWsService} from '../../utils/testutils';
+import {createMockHttpClient} from '../../utils/testutils';
 import {HttpClient} from '@angular/common/http';
-import {WsService} from './ws.service';
 import {RxStompService} from '@stomp/ng2-stompjs';
 import {DataService} from '../../data.service';
 

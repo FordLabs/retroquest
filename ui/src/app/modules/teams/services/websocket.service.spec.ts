@@ -97,27 +97,6 @@ describe('WebsocketService', () => {
     });
   });
 
-  describe('thoughtsTopic', () => {
-
-    it('should throw an error if called without opening the websocket', () => {
-      try {
-        service.thoughtsTopic();
-        expect(true).toBeFalsy();
-      } catch (e) {
-        expect(e).toEqual(expect.any(Error));
-      }
-    });
-
-    it('should subscribe to the thoughts topic', () => {
-      service.openWebsocket().subscribe();
-
-      service.thoughtsTopic().subscribe();
-
-      expect(service.stompClient.subscribe).toHaveBeenCalledWith(`/topic/${teamId}/thoughts`);
-    });
-
-  });
-
   describe('actionItemTopic', () => {
 
     it('should throw an error if called without opening the websocket', () => {
