@@ -51,10 +51,8 @@ describe('ThoughtService', () => {
   }
 
   beforeEach(() => {
-    // @ts-ignore
     mockHttpClient = createMockHttpClient();
 
-    // @ts-ignore
     spiedStompService = createMockRxStompService();
 
     dataService.team.id = teamId;

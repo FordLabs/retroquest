@@ -41,6 +41,8 @@ describe('TeamPageComponent', () => {
 
   const fakeTeamId = 'team-id';
 
+  const spiedStompService = createMockRxStompService();
+
   beforeEach(() => {
     dataService = new DataService();
     columnAggregationService = mock(ColumnAggregationService);
@@ -57,7 +59,7 @@ describe('TeamPageComponent', () => {
       instance(boardService),
       instance(columnAggregationService),
       null,
-      createMockRxStompService()
+      spiedStompService
     );
   });
 
@@ -104,8 +106,6 @@ describe('TeamPageComponent', () => {
       beforeEach(() => {
         when(websocketService.openWebsocket()).thenReturn(of());
         when(websocketService.heartbeatTopic()).thenReturn(of());
-        //when(websocketService.thoughtsTopic()).thenReturn(of());
-        //when(websocketService.actionItemTopic()).thenReturn(of());
         when(websocketService.columnTitleTopic()).thenReturn(of());
         when(websocketService.endRetroTopic()).thenReturn(of());
       });
@@ -129,10 +129,22 @@ describe('TeamPageComponent', () => {
 
         component.ngOnInit();
         verify(websocketService.heartbeatTopic()).called();
-        //verify(websocketService.thoughtsTopic()).called();
-        //verify(websocketService.actionItemTopic()).called();
         verify(websocketService.columnTitleTopic()).called();
         verify(websocketService.endRetroTopic()).called();
+      });
+
+      it('Should subscribe to the Thoughts topic', () => {
+        component.ngOnInit();
+        expect(spiedStompService.watch).toHaveBeenCalledWith(
+          `/topic/${dataService.team.id}/thoughts`
+        );
+      });
+
+      it('Should subscribe to the action items topic', () => {
+        component.ngOnInit();
+        expect(spiedStompService.watch).toHaveBeenCalledWith(
+          `/topic/${dataService.team.id}/action-items`
+        );
       });
     });
   });

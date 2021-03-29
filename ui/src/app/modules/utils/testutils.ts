@@ -8,8 +8,7 @@ import { RxStompService } from '@stomp/ng2-stompjs';
 import { IMessage } from '@stomp/stompjs';
 
 export function createMockHttpClient(): HttpClient {
-  // @ts-ignore
-  return {
+  return ({
     request: jest.fn().mockReturnValue(new Observable()),
     delete: jest.fn().mockReturnValue(new Observable()),
     get: jest.fn().mockReturnValue(new Observable()),
@@ -18,12 +17,11 @@ export function createMockHttpClient(): HttpClient {
     options: jest.fn().mockReturnValue(new Observable()),
     patch: jest.fn().mockReturnValue(new Observable()),
     post: jest.fn().mockReturnValue(new Observable()),
-  } as HttpClient;
+  } as unknown) as HttpClient;
 }
 
 export function createMockWebSocketService(): WebsocketService {
-  // @ts-ignore
-  return {
+  return ({
     getWebsocketState: jest.fn(),
     closeWebsocket: jest.fn(),
     openWebsocket: jest.fn(),
@@ -42,7 +40,7 @@ export function createMockWebSocketService(): WebsocketService {
     updateColumnTitle: jest.fn(),
     deleteAllThoughts: jest.fn(),
     endRetro: jest.fn(),
-  } as WebsocketService;
+  } as unknown) as WebsocketService;
 }
 
 export function createMockRxStompService(): RxStompService {
@@ -57,19 +55,17 @@ export function createMockRxStompService(): RxStompService {
 }
 
 export function createMockEventEmitter(): EventEmitter<any> {
-  // @ts-ignore
-  return {
+  return ({
     emit: jest.fn(),
     subscribe: jest.fn(),
-  } as EventEmitter<any>;
+  } as unknown) as EventEmitter<any>;
 }
 
 export function createMockRouter(): Router {
-  // @ts-ignore
-  return {
+  return ({
     navigate: jest.fn(),
     navigateByUrl: jest.fn(),
-  } as Router;
+  } as unknown) as Router;
 }
 
 export function createMockRecaptchaComponent() {
