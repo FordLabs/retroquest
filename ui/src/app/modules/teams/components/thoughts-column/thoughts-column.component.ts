@@ -74,15 +74,7 @@ export class ThoughtsColumnComponent implements OnInit {
     });
 
     this.thoughtChanged.subscribe((response) => {
-      const thought = response.payload as Thought;
-      console.log(thought);
-      if (thought.topic === this.thoughtAggregation.topic) {
-        if (response.type === 'delete') {
-          this.deleteThought(thought);
-        } else {
-          this.updateThought(thought);
-        }
-      }
+      this.processThoughtChange(response);
     });
 
     this.columnChanged.subscribe((column) => {
@@ -90,6 +82,35 @@ export class ThoughtsColumnComponent implements OnInit {
         this.thoughtAggregation.title = column.title;
       }
     });
+  }
+
+  processThoughtChange(response: WebsocketResponse): void {
+    function retrieveThoughtFromPayload(message: WebsocketResponse): Thought {
+      if (message.type === 'delete') {
+        return {
+          id: message.payload,
+        } as Thought;
+      } else {
+        return message.payload as Thought;
+      }
+    }
+
+    function thoughtIsInThisColumn(
+      thoughtTopic: string,
+      thoughtAggregationTopic: string
+    ) {
+      return thoughtTopic === thoughtAggregationTopic;
+    }
+
+    const thought = retrieveThoughtFromPayload(response);
+
+    if (response.type === 'delete') {
+      this.deleteThought(thought);
+    } else if (
+      thoughtIsInThisColumn(thought.topic, this.thoughtAggregation.topic)
+    ) {
+      this.updateThought(thought);
+    }
   }
 
   get activeThoughtsCount(): number {
@@ -178,34 +199,37 @@ export class ThoughtsColumnComponent implements OnInit {
   }
 
   deleteThought(thought: Thought) {
-    if (thought.id === -1) {
-      if (thought.discussed) {
-        this.thoughtAggregation.items.completed.splice(
-          0,
-          this.thoughtAggregation.items.completed.length
-        );
-      } else {
-        this.thoughtAggregation.items.active.splice(
-          0,
-          this.thoughtAggregation.items.active.length
-        );
+    function removeThought(
+      inputThought: Thought,
+      thoughts: Array<Object>
+    ): number {
+      let index = -1;
+      for (let i = 0; i < thoughts.length; i++) {
+        const comparatorThought: Thought = thoughts[i] as Thought;
+        if (comparatorThought.id === inputThought.id) {
+          index = i;
+          break;
+        }
       }
-    } else {
-      if (thought.discussed) {
-        this.thoughtAggregation.items.completed.splice(
-          this.thoughtAggregation.items.completed.findIndex(
-            (item: Thought) => item.id === thought.id
-          ),
-          1
-        );
-      } else {
-        this.thoughtAggregation.items.active.splice(
-          this.thoughtAggregation.items.active.findIndex(
-            (item: Thought) => item.id === thought.id
-          ),
-          1
-        );
-      }
+
+      return index;
+    }
+
+    let removeIndex = removeThought(
+      thought,
+      this.thoughtAggregation.items.active
+    );
+    if (removeIndex > -1) {
+      this.thoughtAggregation.items.active.splice(removeIndex, 1);
+      return;
+    }
+
+    removeIndex = removeThought(
+      thought,
+      this.thoughtAggregation.items.completed
+    );
+    if (removeIndex > -1) {
+      this.thoughtAggregation.items.completed.splice(removeIndex, 1);
     }
   }
 
