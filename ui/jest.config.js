@@ -1,3 +1,4 @@
+/* eslint-disable no-alert, no-console */
 const { pathsToModuleNameMapper } = require('ts-jest/utils');
 const { compilerOptions } = require('./tsconfig');
 

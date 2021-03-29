@@ -15,25 +15,25 @@
  *  limitations under the License.
  */
 
-import {TaskDialogComponent} from './task-dialog.component';
-import {emptyActionItem} from '../../domain/action-item';
-import {ActionItemService} from '../../teams/services/action.service';
+import { TaskDialogComponent } from './task-dialog.component';
+import { emptyActionItem } from '../../domain/action-item';
+import { ActionItemService } from '../../teams/services/action.service';
 import moment from 'moment';
-import {createMockEventEmitter} from '../../utils/testutils';
+import { createMockEventEmitter } from '../../utils/testutils';
 import MockDate from 'mockdate';
-import {ActionItemTaskComponent} from '../action-item-task/action-item-task.component';
+import { ActionItemTaskComponent } from '../action-item-task/action-item-task.component';
 
 describe('TaskDialogComponent', () => {
   let component: TaskDialogComponent;
   let mockActionItemService: ActionItemService;
   const myWindow = {
-    setTimeout: (fn: Function) => fn()
+    setTimeout: (fn: Function) => fn(),
   };
 
   beforeEach(() => {
     // @ts-ignore
     mockActionItemService = {
-      addActionItem: jest.fn()
+      addActionItem: jest.fn(),
     } as ActionItemService;
 
     component = new TaskDialogComponent(mockActionItemService);
@@ -45,7 +45,6 @@ describe('TaskDialogComponent', () => {
   });
 
   describe('emitCompleted', () => {
-
     beforeEach(() => {
       component.completed = createMockEventEmitter();
       component.visibilityChanged = createMockEventEmitter();
@@ -85,7 +84,6 @@ describe('TaskDialogComponent', () => {
     it('should set a function callback to document.onkeydown', () => {
       expect(document.onkeydown).not.toBeNull();
     });
-
   });
 
   describe('hide', () => {
@@ -96,7 +94,6 @@ describe('TaskDialogComponent', () => {
   });
 
   describe('emitDeleted', () => {
-
     beforeEach(() => {
       component.visibilityChanged = createMockEventEmitter();
       component.deleted = createMockEventEmitter();
@@ -116,11 +113,9 @@ describe('TaskDialogComponent', () => {
       expect(component.visible).toEqual(false);
       expect(component.visibilityChanged.emit).toHaveBeenCalledWith(false);
     });
-
   });
 
   describe('emitMessageChanged', () => {
-
     beforeEach(() => {
       component.messageChanged = createMockEventEmitter();
     });
@@ -131,11 +126,9 @@ describe('TaskDialogComponent', () => {
 
       expect(component.messageChanged.emit).toHaveBeenCalledWith(fakeMessage);
     });
-
   });
 
   describe('emitStarCountIncreased', () => {
-
     beforeEach(() => {
       component.starCountIncreased = createMockEventEmitter();
     });
@@ -146,24 +139,21 @@ describe('TaskDialogComponent', () => {
 
       expect(component.starCountIncreased.emit).toHaveBeenCalledWith(fakeCount);
     });
-
   });
 
   describe('createLinking', () => {
-
     beforeEach(() => {
       component.actionItemIsVisible = true;
       component.show();
     });
 
     describe('action item message is not filled out', () => {
-
       let mockActionItemTaskComponent;
 
       beforeEach(() => {
         // @ts-ignore
         mockActionItemTaskComponent = {
-          focusInput: jest.fn()
+          focusInput: jest.fn(),
         } as ActionItemTaskComponent;
         component.actionItemTaskComponent = mockActionItemTaskComponent;
         component.createLinking();
@@ -181,7 +171,6 @@ describe('TaskDialogComponent', () => {
     });
 
     describe('action item message is filled out', () => {
-
       const fakeTaskMessage = 'fake message';
       const fakeDate = moment('2001-01-01');
 
@@ -209,7 +198,9 @@ describe('TaskDialogComponent', () => {
         const expectedActionItem = emptyActionItem();
         expectedActionItem.task = fakeTaskMessage;
         expectedActionItem.dateCreated = fakeDate.format();
-        expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(expectedActionItem);
+        expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(
+          expectedActionItem
+        );
       });
     });
   });
@@ -220,5 +211,4 @@ describe('TaskDialogComponent', () => {
       expect(component.assignedActionItem).toEqual(emptyActionItem());
     });
   });
-
 });

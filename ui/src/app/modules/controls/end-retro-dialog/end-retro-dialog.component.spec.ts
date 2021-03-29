@@ -15,9 +15,8 @@
  *  limitations under the License.
  */
 
-
-import {EndRetroDialogComponent} from './end-retro-dialog.component';
-import {createMockEventEmitter} from '../../utils/testutils';
+import { EndRetroDialogComponent } from './end-retro-dialog.component';
+import { createMockEventEmitter } from '../../utils/testutils';
 
 describe('EndRetroDialogComponent', () => {
   let component: EndRetroDialogComponent;
@@ -47,11 +46,9 @@ describe('EndRetroDialogComponent', () => {
     it('should set the document.onkeydown callback to null', () => {
       expect(document.onkeydown).toBeNull();
     });
-
   });
 
   describe('show', () => {
-
     beforeEach(() => {
       component.show();
     });

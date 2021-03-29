@@ -15,22 +15,23 @@
  *  limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {AuthService} from '../../auth/auth.service';
-import {LoggerFactory} from '@elderbyte/ts-logger';
-import {StompClient} from '@elderbyte/ts-stomp';
-import {Observable} from 'rxjs/internal/Observable';
-import {Thought} from '../../domain/thought';
-import {ActionItem} from '../../domain/action-item';
-import {Column} from '../../domain/column';
-import {DataService} from '../../data.service';
+import { Injectable } from '@angular/core';
+import { AuthService } from '../../auth/auth.service';
+import { LoggerFactory } from '@elderbyte/ts-logger';
+import { StompClient } from '@elderbyte/ts-stomp';
+import { Observable } from 'rxjs/internal/Observable';
+import { Thought } from '../../domain/thought';
+import { ActionItem } from '../../domain/action-item';
+import { Column } from '../../domain/column';
+import { DataService } from '../../data.service';
 
 @Injectable()
 export class WebsocketService {
-
   constructor(private dataService: DataService) {
     WebsocketService.instantiationCount++;
-    console.log(`\tWebSockerService instantiation count=${WebsocketService.instantiationCount}`);
+    console.log(
+      `\tWebSockerService instantiation count=${WebsocketService.instantiationCount}`
+    );
   }
 
   static instantiationCount = 0;
@@ -61,48 +62,51 @@ export class WebsocketService {
 
   public openWebsocket(): Observable<any> {
     if (!this.stompClient) {
-
       const protocol = WebsocketService.getWsProtocol(location);
 
       this.stompClient = new StompClient(
-        this.websocket = new WebSocket(protocol + location.host + '/websocket/websocket', [])
+        (this.websocket = new WebSocket(
+          protocol + location.host + '/websocket/websocket',
+          []
+        ))
       );
-
     }
     this.websocketIsOpened = true;
-    return new Observable(observer => {
-
+    return new Observable((observer) => {
       const headers = new Map<string, string>();
       headers.set('Authorization', 'Bearer ' + AuthService.getToken());
 
       this.stompClient.connect({
-        headers: headers
+        headers,
       });
 
-      this.stompClient.onConnect
-        .subscribe(() => {
-          observer.next();
-        });
+      this.stompClient.onConnect.subscribe(() => {
+        observer.next();
+      });
 
-      this.stompClient.errors
-        .subscribe((m) => {
-          this.stompClient.connect({
-            headers: headers
-          });
+      this.stompClient.errors.subscribe((m) => {
+        this.stompClient.connect({
+          headers,
         });
+      });
     });
   }
 
   public sendHeartbeat() {
-    this.stompClient.send(`/app/heartbeat/ping/${this.dataService.team.id}`, '');
+    this.stompClient.send(
+      `/app/heartbeat/ping/${this.dataService.team.id}`,
+      ''
+    );
   }
 
   public heartbeatTopic(): Observable<any> {
     this.checkForOpenSocket();
 
-    return new Observable<any>(observer => {
-      const sub = this.stompClient.subscribe(`/topic/heartbeat/pong/${this.dataService.team.id}`);
-      sub.messages.subscribe(m => {
+    return new Observable<any>((observer) => {
+      const sub = this.stompClient.subscribe(
+        `/topic/heartbeat/pong/${this.dataService.team.id}`
+      );
+      sub.messages.subscribe((m) => {
         observer.next(m);
       });
     });
@@ -111,9 +115,11 @@ export class WebsocketService {
   public endRetroTopic(): Observable<any> {
     this.checkForOpenSocket();
 
-    return new Observable<any>(observer => {
-      const sub = this.stompClient.subscribe(`/topic/${this.dataService.team.id}/end-retro`);
-      sub.messages.subscribe(m => {
+    return new Observable<any>((observer) => {
+      const sub = this.stompClient.subscribe(
+        `/topic/${this.dataService.team.id}/end-retro`
+      );
+      sub.messages.subscribe((m) => {
         observer.next(m);
       });
     });
@@ -121,14 +127,18 @@ export class WebsocketService {
 
   private checkForOpenSocket(): void {
     if (!this.websocketIsOpened) {
-      throw new Error('Attempted to connect to thoughts topic without connecting to the websocket');
+      throw new Error(
+        'Attempted to connect to thoughts topic without connecting to the websocket'
+      );
     }
   }
 
   public columnTitleTopic(): Observable<any> {
-    return new Observable<any>(observer => {
-      const sub = this.stompClient.subscribe(`/topic/${this.dataService.team.id}/column-titles`);
-      sub.messages.subscribe(m => {
+    return new Observable<any>((observer) => {
+      const sub = this.stompClient.subscribe(
+        `/topic/${this.dataService.team.id}/column-titles`
+      );
+      sub.messages.subscribe((m) => {
         observer.next(m);
       });
     });
@@ -136,7 +146,10 @@ export class WebsocketService {
 
   public updateColumnTitle(column: Column) {
     this.checkForOpenSocket();
-    this.stompClient.send(`/app/${this.dataService.team.id}/column-title/${column.id}/edit`, JSON.stringify(column));
+    this.stompClient.send(
+      `/app/${this.dataService.team.id}/column-title/${column.id}/edit`,
+      JSON.stringify(column)
+    );
   }
 
   endRetro() {

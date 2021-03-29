@@ -15,25 +15,33 @@
  *  limitations under the License.
  */
 
-import {AfterViewChecked, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {ActionItem, emptyActionItem} from '../../domain/action-item';
+import {
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import { ActionItem, emptyActionItem } from '../../domain/action-item';
 import moment from 'moment';
-import {emojify} from '../../utils/EmojiGenerator';
-import {Themes} from '../../domain/Theme';
+import { emojify } from '../../utils/EmojiGenerator';
+import { Themes } from '../../domain/Theme';
 
 @Component({
   selector: 'rq-action-item-task',
   templateUrl: './action-item-task.component.html',
   styleUrls: ['./action-item-task.component.scss'],
   host: {
-    '[class.push-order-to-bottom]': 'actionItem.completed && !actionItem.archived',
+    '[class.push-order-to-bottom]':
+      'actionItem.completed && !actionItem.archived',
     '[class.edit-mode]': '!displayAsLinkable && taskEditModeEnabled',
     '[class.dialog-overlay-border]': 'enableOverlayBorder',
-    '[class.dark-theme]': 'darkThemeIsEnabled'
-  }
+    '[class.dark-theme]': 'darkThemeIsEnabled',
+  },
 })
 export class ActionItemTaskComponent implements AfterViewChecked {
-
   @Input() actionItem = emptyActionItem();
   @Input() readOnly = false;
   @Input() enableOverlayBorder = false;
@@ -43,7 +51,8 @@ export class ActionItemTaskComponent implements AfterViewChecked {
 
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
   @Output() deleted: EventEmitter<ActionItem> = new EventEmitter<ActionItem>();
-  @Output() messageClicked: EventEmitter<ActionItem> = new EventEmitter<ActionItem>();
+  @Output()
+  messageClicked: EventEmitter<ActionItem> = new EventEmitter<ActionItem>();
   @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() assigneeUpdated: EventEmitter<string> = new EventEmitter<string>();
   @Output() dialogDiscarded: EventEmitter<void> = new EventEmitter();
@@ -123,7 +132,8 @@ export class ActionItemTaskComponent implements AfterViewChecked {
   }
 
   public initializeTextAreaHeight(): void {
-    this.editableTextArea.nativeElement.style.height = this.editableTextArea.nativeElement.scrollHeight + 'px';
+    this.editableTextArea.nativeElement.style.height =
+      this.editableTextArea.nativeElement.scrollHeight + 'px';
   }
 
   public focusInput(): void {
@@ -186,4 +196,3 @@ export class ActionItemTaskComponent implements AfterViewChecked {
     this.actionItem.task = text;
   }
 }
-

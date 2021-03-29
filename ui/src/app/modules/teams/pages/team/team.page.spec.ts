@@ -15,18 +15,19 @@
  *  limitations under the License.
  */
 
-import {TeamPageComponent} from './team.page';
-import {WebsocketService} from '../../services/websocket.service';
-import {BoardService} from '../../services/board.service';
-import {ColumnAggregationService} from '../../services/column-aggregation.service';
-import {of} from 'rxjs';
-import {ColumnCombinerResponse} from '../../../domain/column-combiner-response';
-import {TeamService} from '../../services/team.service';
-import {anything, instance, mock, verify, when} from 'ts-mockito';
-import {emptyThought} from '../../../domain/thought';
-import {emptyColumnResponse} from '../../../domain/column-response';
-import {DataService} from '../../../data.service';
-import {SaveCheckerService} from '../../services/save-checker.service';
+import { TeamPageComponent } from './team.page';
+import { WebsocketService } from '../../services/websocket.service';
+import { BoardService } from '../../services/board.service';
+import { ColumnAggregationService } from '../../services/column-aggregation.service';
+import { of } from 'rxjs';
+import { ColumnCombinerResponse } from '../../../domain/column-combiner-response';
+import { TeamService } from '../../services/team.service';
+import { anything, instance, mock, verify, when } from 'ts-mockito';
+import { emptyThought } from '../../../domain/thought';
+import { emptyColumnResponse } from '../../../domain/column-response';
+import { DataService } from '../../../data.service';
+import { SaveCheckerService } from '../../services/save-checker.service';
+import { createMockRxStompService } from '../../../utils/testutils';
 
 describe('TeamPageComponent', () => {
   let component: TeamPageComponent;
@@ -55,25 +56,33 @@ describe('TeamPageComponent', () => {
       null,
       instance(boardService),
       instance(columnAggregationService),
-      null
+      null,
+      createMockRxStompService()
     );
-
   });
 
   describe('ngOnInit', () => {
-
     const expectedColumns: ColumnCombinerResponse = {
       columns: [
-        {id: 1, items: {active: [], completed: []}, title: 'Happy', topic: 'happy'}
-      ]
+        {
+          id: 1,
+          items: { active: [], completed: [] },
+          title: 'Happy',
+          topic: 'happy',
+        },
+      ],
     };
     const expectedTeamName = 'team-name';
 
     beforeEach(() => {
       dataService.team.name = expectedTeamName;
       dataService.team.id = fakeTeamId;
-      when(columnAggregationService.getColumns(fakeTeamId)).thenReturn(of(expectedColumns));
-      when(teamService.fetchTeamName(fakeTeamId)).thenReturn(of(expectedTeamName));
+      when(columnAggregationService.getColumns(fakeTeamId)).thenReturn(
+        of(expectedColumns)
+      );
+      when(teamService.fetchTeamName(fakeTeamId)).thenReturn(
+        of(expectedTeamName)
+      );
     });
 
     it('should set the team id', () => {
@@ -92,12 +101,11 @@ describe('TeamPageComponent', () => {
     });
 
     describe('opening the websocket', () => {
-
       beforeEach(() => {
         when(websocketService.openWebsocket()).thenReturn(of());
         when(websocketService.heartbeatTopic()).thenReturn(of());
-        when(websocketService.thoughtsTopic()).thenReturn(of());
-        when(websocketService.actionItemTopic()).thenReturn(of());
+        //when(websocketService.thoughtsTopic()).thenReturn(of());
+        //when(websocketService.actionItemTopic()).thenReturn(of());
         when(websocketService.columnTitleTopic()).thenReturn(of());
         when(websocketService.endRetroTopic()).thenReturn(of());
       });
@@ -121,8 +129,8 @@ describe('TeamPageComponent', () => {
 
         component.ngOnInit();
         verify(websocketService.heartbeatTopic()).called();
-        verify(websocketService.thoughtsTopic()).called();
-        verify(websocketService.actionItemTopic()).called();
+        //verify(websocketService.thoughtsTopic()).called();
+        //verify(websocketService.actionItemTopic()).called();
         verify(websocketService.columnTitleTopic()).called();
         verify(websocketService.endRetroTopic()).called();
       });
@@ -130,7 +138,6 @@ describe('TeamPageComponent', () => {
   });
 
   describe('onEndRetro', () => {
-
     const expectedThoughts = [emptyThought(), emptyThought()];
 
     beforeEach(() => {
@@ -142,7 +149,9 @@ describe('TeamPageComponent', () => {
       expectedThoughts[1].discussed = true;
       expectedThoughts[1].id = 1;
 
-      when(boardService.createBoard(anything(), anything())).thenReturn(of(null));
+      when(boardService.createBoard(anything(), anything())).thenReturn(
+        of(null)
+      );
     });
 
     it('should create a board if there are thoughts to archive', () => {
@@ -162,7 +171,6 @@ describe('TeamPageComponent', () => {
     });
 
     it('should emit the end retro event to the websocket', () => {
-
       component.columnsAggregation = [emptyColumnResponse()];
       component.columnsAggregation[0].items.active = [expectedThoughts[0]];
 
@@ -171,5 +179,4 @@ describe('TeamPageComponent', () => {
       verify(websocketService.endRetro()).called();
     });
   });
-
 });

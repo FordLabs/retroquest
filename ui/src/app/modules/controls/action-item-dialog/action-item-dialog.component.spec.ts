@@ -15,9 +15,8 @@
  *  limitations under the License.
  */
 
-
-import {ActionItemDialogComponent} from './action-item-dialog.component';
-import {createMockEventEmitter} from '../../utils/testutils';
+import { ActionItemDialogComponent } from './action-item-dialog.component';
+import { createMockEventEmitter } from '../../utils/testutils';
 
 describe('ActionItemDialogComponent', () => {
   let component: ActionItemDialogComponent;
@@ -31,7 +30,6 @@ describe('ActionItemDialogComponent', () => {
   });
 
   describe('emitCompleted', () => {
-
     beforeEach(() => {
       component.completed = createMockEventEmitter();
       component.visibilityChanged = createMockEventEmitter();
@@ -73,7 +71,6 @@ describe('ActionItemDialogComponent', () => {
   });
 
   describe('emitDeleted', () => {
-
     beforeEach(() => {
       component.visibilityChanged = createMockEventEmitter();
       component.deleted = createMockEventEmitter();
@@ -99,7 +96,6 @@ describe('ActionItemDialogComponent', () => {
   });
 
   describe('emitMessageChanged', () => {
-
     beforeEach(() => {
       component.messageChanged = createMockEventEmitter();
     });
@@ -113,7 +109,6 @@ describe('ActionItemDialogComponent', () => {
   });
 
   describe('emitAssigneeUpdated', () => {
-
     beforeEach(() => {
       component.assignedUpdated = createMockEventEmitter();
     });
@@ -125,5 +120,4 @@ describe('ActionItemDialogComponent', () => {
       expect(component.assignedUpdated.emit).toHaveBeenCalledWith(fakeAssignee);
     });
   });
-
 });

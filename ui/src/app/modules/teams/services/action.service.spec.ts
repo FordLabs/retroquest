@@ -15,14 +15,16 @@
  *  limitations under the License.
  */
 
-import {ActionItemService} from './action.service';
-import {Observable} from 'rxjs/index';
-import {ActionItem, emptyActionItem} from '../../domain/action-item';
-import {HttpClient} from '@angular/common/http';
-import {WebsocketService} from './websocket.service';
-import {RxStompService} from '@stomp/ng2-stompjs';
-import {DataService} from '../../data.service';
-import {ThoughtService} from './thought.service';
+import { ActionItemService } from './action.service';
+import { Observable } from 'rxjs/index';
+import { ActionItem } from '../../domain/action-item';
+import { HttpClient } from '@angular/common/http';
+import { RxStompService } from '@stomp/ng2-stompjs';
+import { DataService } from '../../data.service';
+import {
+  createMockHttpClient,
+  createMockRxStompService,
+} from '../../utils/testutils';
 
 describe('ActionItemService', () => {
   let service: ActionItemService;
@@ -31,45 +33,42 @@ describe('ActionItemService', () => {
   const dataService: DataService = new DataService();
   const teamId = 'teamId';
 
-
   function createActionItem(team: string, id: number = null) {
     return {
-      id: id,
+      id,
       teamId: team,
       task: 'action actionItem',
       completed: false,
       assignee: null,
       dateCreated: null,
-      archived: false
+      archived: false,
     };
   }
 
   beforeEach(() => {
     // @ts-ignore
-    mockHttpClient = {
-      get: jest.fn().mockReturnValue(new Observable()),
-      post: jest.fn().mockReturnValue(new Observable()),
-      put: jest.fn().mockReturnValue(new Observable()),
-      delete: jest.fn().mockReturnValue(new Observable()),
-    } as HttpClient;
+    mockHttpClient = createMockHttpClient();
 
     // @ts-ignore
-    spiedStompService = {
-      publish: jest.fn(),
-    } as RxStompService;
+    spiedStompService = createMockRxStompService();
 
     dataService.team.id = teamId;
 
-    service = new ActionItemService(mockHttpClient, spiedStompService, dataService);
+    service = new ActionItemService(
+      mockHttpClient,
+      spiedStompService,
+      dataService
+    );
   });
 
   describe('addActionItem', () => {
     it('should add over websocket', () => {
       const actionItem = createActionItem(teamId);
       service.addActionItem(actionItem);
-      expect(spiedStompService.publish).toHaveBeenCalledWith(
-        {destination: `/app/${dataService.team.id}/action-item/create`, body: JSON.stringify(actionItem)}
-      );
+      expect(spiedStompService.publish).toHaveBeenCalledWith({
+        destination: `/app/${dataService.team.id}/action-item/create`,
+        body: JSON.stringify(actionItem),
+      });
     });
 
     it('should not add with invalid team id', () => {
@@ -80,13 +79,13 @@ describe('ActionItemService', () => {
   });
 
   describe('deleteActionItem', () => {
-
     it('should delete over websocket', () => {
       const actionItem = createActionItem(teamId);
       service.deleteActionItem(actionItem);
-      expect(spiedStompService.publish).toHaveBeenCalledWith(
-        {destination: `/app/${dataService.team.id}/action-item/delete`, body: JSON.stringify(actionItem)}
-      );
+      expect(spiedStompService.publish).toHaveBeenCalledWith({
+        destination: `/app/${dataService.team.id}/action-item/delete`,
+        body: JSON.stringify(actionItem),
+      });
     });
 
     it('should not delete with invalid team id', () => {
@@ -94,16 +93,16 @@ describe('ActionItemService', () => {
       service.deleteActionItem(actionItem);
       expect(spiedStompService.publish).not.toHaveBeenCalled();
     });
-
   });
 
   describe('updateActionItem', () => {
     it('should delete over websocket', () => {
       const actionItem = createActionItem(teamId);
       service.updateActionItem(actionItem);
-      expect(spiedStompService.publish).toHaveBeenCalledWith(
-        {destination: `/app/${dataService.team.id}/action-item/edit`, body: JSON.stringify(actionItem)}
-      );
+      expect(spiedStompService.publish).toHaveBeenCalledWith({
+        destination: `/app/${dataService.team.id}/action-item/edit`,
+        body: JSON.stringify(actionItem),
+      });
     });
 
     it('should not delete with invalid team id', () => {
@@ -118,7 +117,9 @@ describe('ActionItemService', () => {
 
     it('should call the backend api with the correct url', () => {
       service.fetchArchivedActionItems(fakeTeamId);
-      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${fakeTeamId}/action-items/archived`);
+      expect(mockHttpClient.get).toHaveBeenCalledWith(
+        `/api/team/${fakeTeamId}/action-items/archived`
+      );
     });
   });
 
@@ -131,12 +132,14 @@ describe('ActionItemService', () => {
     it('should call the backend api with the correct url', () => {
       service.archiveActionItems(archivedActionItems);
       expect(spiedStompService.publish).toHaveBeenCalledTimes(2);
-      expect(spiedStompService.publish).toHaveBeenCalledWith(
-        {destination: `/app/${dataService.team.id}/action-item/edit`, body: JSON.stringify(firstActionItem)}
-      );
-      expect(spiedStompService.publish).toHaveBeenCalledWith(
-        {destination: `/app/${dataService.team.id}/action-item/edit`, body: JSON.stringify(secondActionItem)}
-      );
+      expect(spiedStompService.publish).toHaveBeenCalledWith({
+        destination: `/app/${dataService.team.id}/action-item/edit`,
+        body: JSON.stringify(firstActionItem),
+      });
+      expect(spiedStompService.publish).toHaveBeenCalledWith({
+        destination: `/app/${dataService.team.id}/action-item/edit`,
+        body: JSON.stringify(secondActionItem),
+      });
     });
   });
 });

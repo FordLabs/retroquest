@@ -15,11 +15,11 @@
  *  limitations under the License.
  */
 
-import {ActionsHeaderComponent} from './actions-header.component';
-import {Observable} from 'rxjs/index';
-import {ActionItem} from '../../../domain/action-item';
+import { ActionsHeaderComponent } from './actions-header.component';
+import { Observable } from 'rxjs/index';
+import { ActionItem } from '../../../domain/action-item';
 import moment from 'moment';
-import {createMockEventEmitter} from '../../../utils/testutils';
+import { createMockEventEmitter } from '../../../utils/testutils';
 import MockDate from 'mockdate';
 
 describe('ActionsHeaderComponent', () => {
@@ -30,7 +30,7 @@ describe('ActionsHeaderComponent', () => {
 
   beforeEach(() => {
     mockActionItemService = {
-      addActionItem: jest.fn().mockReturnValue(new Observable())
+      addActionItem: jest.fn().mockReturnValue(new Observable()),
     };
 
     component = new ActionsHeaderComponent(mockActionItemService);
@@ -42,7 +42,6 @@ describe('ActionsHeaderComponent', () => {
   });
 
   describe('addActionItem', () => {
-
     const mockDateString = '2018-01-01';
     const mockDate = moment(mockDateString).toDate();
 
@@ -59,17 +58,19 @@ describe('ActionsHeaderComponent', () => {
 
       const expectedActionItem: ActionItem = {
         id: null,
-        teamId: teamId,
+        teamId,
         task: newMessage,
         completed: false,
         assignee: null,
         dateCreated: moment(mockDateString).format(),
-        archived: false
+        archived: false,
       };
 
       component.addActionItem(newMessage);
 
-      expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(expectedActionItem);
+      expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(
+        expectedActionItem
+      );
     });
 
     it('should parse out the assignees from the new message and add it to the action item', () => {
@@ -78,56 +79,62 @@ describe('ActionsHeaderComponent', () => {
 
       const expectedActionItem: ActionItem = {
         id: null,
-        teamId: teamId,
+        teamId,
         task: expectedFormattedMessage,
         completed: false,
         assignee: 'ben12, frank',
         dateCreated: moment(mockDateString).format(),
-        archived: false
+        archived: false,
       };
 
       component.addActionItem(newUnformattedMessage);
 
-      expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(expectedActionItem);
+      expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(
+        expectedActionItem
+      );
     });
 
-    it('should set the assignees in the action item to null if none could be parsed out of the message',
-      () => {
-        const newMessage = `a new actionItem`;
+    it('should set the assignees in the action item to null if none could be parsed out of the message', () => {
+      const newMessage = `a new actionItem`;
 
-        const expectedActionItem: ActionItem = {
-          id: null,
-          teamId: teamId,
-          task: newMessage,
-          completed: false,
-          assignee: null,
-          dateCreated: moment(mockDateString).format(),
-          archived: false
-        };
+      const expectedActionItem: ActionItem = {
+        id: null,
+        teamId,
+        task: newMessage,
+        completed: false,
+        assignee: null,
+        dateCreated: moment(mockDateString).format(),
+        archived: false,
+      };
 
-        component.addActionItem(newMessage);
+      component.addActionItem(newMessage);
 
-        expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(expectedActionItem);
-      });
+      expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(
+        expectedActionItem
+      );
+    });
 
     it('should not let the user submit a assignee string greater than the max limit', () => {
-      const expectedAssignee = 'llllllllllllllllllllllllllllllllllllllllllllllllll';
+      const expectedAssignee =
+        'llllllllllllllllllllllllllllllllllllllllllllllllll';
       const newMessage = `a new actionItem @${expectedAssignee}p`;
       const expectedFormattedMessage = 'a new actionItem';
 
       const expectedActionItem: ActionItem = {
         id: null,
-        teamId: teamId,
+        teamId,
         task: expectedFormattedMessage,
         completed: false,
         assignee: expectedAssignee,
         dateCreated: moment(mockDateString).format(),
-        archived: false
+        archived: false,
       };
 
       component.addActionItem(newMessage);
 
-      expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(expectedActionItem);
+      expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(
+        expectedActionItem
+      );
     });
   });
 

@@ -15,9 +15,9 @@
  *  limitations under the License.
  */
 
-import {FeedbackService} from './feedback.service';
-import {Observable} from 'rxjs/index';
-import {createMockHttpClient} from '../../utils/testutils';
+import { FeedbackService } from './feedback.service';
+import { Observable } from 'rxjs/index';
+import { createMockHttpClient } from '../../utils/testutils';
 
 describe('FeedbackService', () => {
   let service: FeedbackService;
@@ -38,7 +38,7 @@ describe('FeedbackService', () => {
       stars: 1,
       comment: 'Comment',
       userEmail: 'email@email.com',
-      teamId: 'teamId'
+      teamId: 'teamId',
     };
 
     const response = service.addFeedback(feedback);
@@ -46,10 +46,9 @@ describe('FeedbackService', () => {
     expect(mockHttpClient.post).toHaveBeenCalledWith(
       '/api/feedback/',
       feedback,
-      {observe: 'response'}
+      { observe: 'response' }
     );
 
     expect(response instanceof Observable).toBe(true);
-
   });
 });
