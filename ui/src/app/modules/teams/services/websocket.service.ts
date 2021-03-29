@@ -119,32 +119,6 @@ export class WebsocketService {
     });
   }
 
-  // public thoughtsTopic(): Observable<any> {
-  //   this.checkForOpenSocket();
-  //
-  //   return new Observable<any>(observer => {
-  //     const sub = this.stompClient.subscribe(`/topic/${this.dataService.team.id}/thoughts`);
-  //     sub.messages.subscribe(m => {
-  //       observer.next(m);
-  //     });
-  //   });
-  // }
-
-  public createThought(thought: Thought): void {
-    this.checkForOpenSocket();
-    this.stompClient.send(`/app/${this.dataService.team.id}/thought/create`, JSON.stringify(thought));
-  }
-
-  public deleteThought(thought: Thought): void {
-    this.checkForOpenSocket();
-    this.stompClient.send(`/app/v2/${this.dataService.team.id}/thought/delete`, JSON.stringify(thought));
-  }
-
-  public updateThought(thought: Thought): void {
-    this.checkForOpenSocket();
-    this.stompClient.send(`/app/${this.dataService.team.id}/thought/${thought.id}/edit`, JSON.stringify(thought));
-  }
-
   private checkForOpenSocket(): void {
     if (!this.websocketIsOpened) {
       throw new Error('Attempted to connect to thoughts topic without connecting to the websocket');
@@ -189,11 +163,6 @@ export class WebsocketService {
   public updateColumnTitle(column: Column) {
     this.checkForOpenSocket();
     this.stompClient.send(`/app/${this.dataService.team.id}/column-title/${column.id}/edit`, JSON.stringify(column));
-  }
-
-  deleteAllThoughts() {
-    this.checkForOpenSocket();
-    this.stompClient.send(`/app/v2/${this.dataService.team.id}/thought/deleteAll`, null);
   }
 
   endRetro() {
