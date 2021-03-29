@@ -63,20 +63,34 @@ export class ActionsColumnComponent implements OnInit {
       );
     });
 
-    this.actionItemChanged.subscribe((response) => {
-      const actionItem = response.payload as ActionItem;
-
-      if (response.type === 'delete') {
-        this.deleteActionItem(actionItem);
-      } else {
-        if (!actionItem.archived) {
-          this.updateActionItems(actionItem);
-        }
-      }
-    });
+    this.actionItemChanged.subscribe((response) =>
+      this.processActionItemChange(response)
+    );
   }
 
-  private deleteActionItem(actionItem: ActionItem) {
+  processActionItemChange(response: WebsocketResponse) {
+    function retrieveActionItemFromPayload(message: WebsocketResponse) {
+      if (response.type === 'delete') {
+        return {
+          id: response.payload,
+        } as ActionItem;
+      } else {
+        return response.payload as ActionItem;
+      }
+    }
+
+    const actionItem = retrieveActionItemFromPayload(response);
+
+    if (response.type === 'delete') {
+      this.deleteActionItem(actionItem);
+    } else {
+      if (!actionItem.archived) {
+        this.updateActionItems(actionItem);
+      }
+    }
+  }
+
+  deleteActionItem(actionItem: ActionItem) {
     if (actionItem.completed) {
       this.actionItemAggregation.items.completed.splice(
         this.actionItemAggregation.items.completed.findIndex(
@@ -94,7 +108,7 @@ export class ActionsColumnComponent implements OnInit {
     }
   }
 
-  private updateActionItems(actionItem: ActionItem) {
+  updateActionItems(actionItem: ActionItem) {
     const completedIndex = this.actionItemAggregation.items.completed.findIndex(
       (item: ActionItem) => item.id === actionItem.id
     );

@@ -136,4 +136,62 @@ describe('ActionsColumnComponent', () => {
       expect(component.selectedActionItem).toEqual(fakeActionItem);
     });
   });
+
+  describe('processActionItemChanged', () => {
+    let deleteSpy;
+    let updateSpy;
+
+    beforeEach(() => {
+      deleteSpy = jest.spyOn(component, 'deleteActionItem');
+      updateSpy = jest.spyOn(component, 'updateActionItems');
+    });
+
+    it('Handles update correctly', () => {
+      const response = {
+        type: 'put',
+        payload: {
+          id: 11,
+          task: 'NBC',
+          completed: false,
+          teamId: 'test',
+          assignee: null,
+          dateCreated: '2021-03-29',
+          archived: false,
+        },
+      };
+      component.processActionItemChange(response);
+
+      expect(updateSpy).toHaveBeenCalledWith(response.payload);
+      expect(deleteSpy).not.toHaveBeenCalled();
+    });
+
+    it('Does not update archived action items', () => {
+      const response = {
+        type: 'put',
+        payload: {
+          id: 11,
+          task: 'NBC',
+          completed: false,
+          teamId: 'test',
+          assignee: null,
+          dateCreated: '2021-03-29',
+          archived: true,
+        },
+      };
+      component.processActionItemChange(response);
+
+      expect(updateSpy).not.toHaveBeenCalled();
+      expect(deleteSpy).not.toHaveBeenCalled();
+    });
+
+    it('Handles delete correctly', () => {
+      const response = { type: 'delete', payload: 11 };
+      component.processActionItemChange(response);
+
+      expect(updateSpy).not.toHaveBeenCalled();
+      expect(deleteSpy).toHaveBeenCalledWith({
+        id: 11,
+      });
+    });
+  });
 });
