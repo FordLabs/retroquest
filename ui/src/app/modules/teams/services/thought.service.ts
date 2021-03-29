@@ -15,17 +15,22 @@
  *  limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {Observable, Subject} from 'rxjs/index';
+import {Injectable, OnDestroy} from '@angular/core';
+import {Observable} from 'rxjs/index';
 import {HttpClient} from '@angular/common/http';
 
 import {Thought} from '../../domain/thought';
-import {WsService} from './ws.service';
+import {RxStompService} from '@stomp/ng2-stompjs';
+import {DataService} from '../../data.service';
 
 @Injectable()
 export class ThoughtService {
 
-  constructor (private http: HttpClient, private websocket: WsService) {
+  constructor (private http: HttpClient, private rxStompService: RxStompService, private dataService: DataService) {
+  }
+
+  private validTeamId(teamId: string) {
+    return this.dataService.team.id === teamId;
   }
 
   fetchThoughts (teamId: string): Observable<Array<Thought>> {
@@ -33,15 +38,22 @@ export class ThoughtService {
   }
 
   addThought (thought: Thought): void {
-    this.websocket.createThought(thought);
+    if (this.validTeamId(thought.teamId)) {
+      this.rxStompService.publish({destination: `/app/${this.dataService.team.id}/thought/create`, body: JSON.stringify(thought)});
+    }
   }
 
   updateThought (thought: Thought): void {
-    this.websocket.updateThought(thought);
+    if (this.validTeamId(thought.teamId)) {
+      this.rxStompService.publish({destination: `/app/${this.dataService.team.id}/thought/edit`, body: JSON.stringify(thought)});
+    }
   }
 
   deleteThought (thought: Thought): void {
-    this.websocket.deleteThought(thought);
+    if (this.validTeamId(thought.teamId)) {
+      this.rxStompService.publish({destination: `/app/${this.dataService.team.id}/thought/delete`, body: JSON.stringify(thought)});
+    }
   }
+
 
 }

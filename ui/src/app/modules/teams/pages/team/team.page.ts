@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-import {Component, EventEmitter, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {WebsocketService} from '../../services/websocket.service';
 import {TeamService} from '../../services/team.service';
 import {WebsocketResponse} from '../../../domain/websocket-response';
@@ -32,13 +32,14 @@ import {DataService} from '../../../data.service';
 import {ActionItemService} from '../../services/action.service';
 import {ActionItem} from '../../../domain/action-item';
 import {RxStompService} from '@stomp/ng2-stompjs';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'rq-team',
   templateUrl: './team.page.html',
   styleUrls: ['./team.page.scss']
 })
-export class TeamPageComponent implements OnInit {
+export class TeamPageComponent implements OnInit, OnDestroy {
 
   @ViewChild('radiatorView') radiatorView: ActionsRadiatorViewComponent;
 
@@ -61,6 +62,8 @@ export class TeamPageComponent implements OnInit {
   currentView = 'normalView';
 
   columnsAggregation: Array<ColumnResponse> = [];
+
+  thoughtSubscription: Subscription;
 
   thoughtChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
   actionItemChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
@@ -108,16 +111,20 @@ export class TeamPageComponent implements OnInit {
         this.websocketService.sendHeartbeat();
       }
     }, 1000 * 60);
+
+    this.thoughtSubscription = this.rxStompService.watch(`/topic/${this.dataService.team.id}/thoughts`).subscribe((message) => {
+      this.thoughtChanged.emit(JSON.parse(message.body) as WebsocketResponse);
+      this.saveCheckerService.updateTimestamp();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.thoughtSubscription.unsubscribe();
   }
 
   private subscribeToWebsocket() {
 
     this.websocketService.heartbeatTopic().subscribe();
-
-    this.rxStompService.watch(`/topic/${this.dataService.team.id}/thoughts`).subscribe((message) => {
-      this.thoughtChanged.emit(JSON.parse(message.body) as WebsocketResponse);
-      this.saveCheckerService.updateTimestamp();
-    });
 
     this.websocketService.actionItemTopic().subscribe((message) => {
       this.actionItemChanged.emit(message.bodyJson as WebsocketResponse);
@@ -215,5 +222,4 @@ export class TeamPageComponent implements OnInit {
       this.decrementSelectedIndex();
     });
   }
-
 }
