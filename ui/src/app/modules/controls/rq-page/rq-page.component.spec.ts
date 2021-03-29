@@ -15,20 +15,21 @@
  *  limitations under the License.
  */
 
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {RqPageComponent} from './rq-page.component';
+import { RqPageComponent } from './rq-page.component';
 
 describe('RqPageComponent', () => {
   let component: RqPageComponent;
   let fixture: ComponentFixture<RqPageComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ RqPageComponent ]
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [RqPageComponent],
+      }).compileComponents();
     })
-    .compileComponents();
-  }));
+  );
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RqPageComponent);

@@ -16,7 +16,7 @@
  */
 
 import moment from 'moment';
-import {emptyThoughtWithColumn, Thought} from './thought';
+import { emptyThoughtWithColumn, Thought } from './thought';
 
 export class Board {
   id: number;
@@ -25,7 +25,7 @@ export class Board {
   thoughts: Array<Thought>;
 }
 
-export function emptyBoardWithThought (): Board {
+export function emptyBoardWithThought(): Board {
   const board = new Board();
   board.dateCreated = moment();
   board.id = -1;

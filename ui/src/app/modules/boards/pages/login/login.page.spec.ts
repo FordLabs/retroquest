@@ -15,13 +15,16 @@
  *  limitations under the License.
  */
 
-import {LoginComponent} from './login.page';
-import {AuthService} from '../../../auth/auth.service';
-import {Subject, throwError} from 'rxjs';
-import {of} from 'rxjs/internal/observable/of';
-import {HttpHeaders, HttpResponse} from '@angular/common/http';
-import {ActivatedRoute, ActivatedRouteSnapshot} from '@angular/router';
-import {createMockRecaptchaComponent, createMockRouter} from '../../../utils/testutils';
+import { LoginComponent } from './login.page';
+import { AuthService } from '../../../auth/auth.service';
+import { Subject, throwError } from 'rxjs';
+import { of } from 'rxjs/internal/observable/of';
+import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
+import {
+  createMockRecaptchaComponent,
+  createMockRouter,
+} from '../../../utils/testutils';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -36,13 +39,13 @@ describe('LoginComponent', () => {
     mockTeamService = {
       login: jest.fn().mockReturnValue(new Subject()),
       isCaptchaEnabledForTeam: jest.fn().mockReturnValue(new Subject()),
-      fetchTeamName: jest.fn().mockReturnValue(mockTeamNameResponse)
+      fetchTeamName: jest.fn().mockReturnValue(mockTeamNameResponse),
     };
 
     mockActivatedRoute = new ActivatedRoute();
 
     mockActivatedRoute.snapshot = new ActivatedRouteSnapshot();
-    mockActivatedRoute.snapshot.params = {teamId: 'the-devs'};
+    mockActivatedRoute.snapshot.params = { teamId: 'the-devs' };
 
     mockRouter = createMockRouter();
     mockRecaptchaComponent = createMockRecaptchaComponent();
@@ -50,7 +53,11 @@ describe('LoginComponent', () => {
     jest.spyOn(AuthService, 'setToken');
     jest.spyOn(console, 'error');
 
-    component = new LoginComponent(mockTeamService, mockActivatedRoute, mockRouter);
+    component = new LoginComponent(
+      mockTeamService,
+      mockActivatedRoute,
+      mockRouter
+    );
     component.recaptchaComponent = mockRecaptchaComponent;
   });
 
@@ -58,24 +65,29 @@ describe('LoginComponent', () => {
     it('should set the team name from the API based on the team-uri in the route', () => {
       const teamNameInAPI = 'The Devs';
       component.ngOnInit();
-      expect(mockTeamService.fetchTeamName).toHaveBeenCalledWith(mockActivatedRoute.snapshot.params['teamId']);
+      expect(mockTeamService.fetchTeamName).toHaveBeenCalledWith(
+        mockActivatedRoute.snapshot.params['teamId']
+      );
       mockTeamNameResponse.next(teamNameInAPI);
       expect(component.teamName).toEqual(teamNameInAPI);
     });
     it('should not set the team name from the API if team name does not exist', () => {
       component.ngOnInit();
-      expect(mockTeamService.fetchTeamName).toHaveBeenCalledWith(mockActivatedRoute.snapshot.params['teamId']);
+      expect(mockTeamService.fetchTeamName).toHaveBeenCalledWith(
+        mockActivatedRoute.snapshot.params['teamId']
+      );
       mockTeamNameResponse.error(new Error('something wrong'));
       expect(component.teamName).toBeFalsy();
     });
     it('should not set the team name from the API based on the team-uri in the route if the team does not exist', () => {
       mockActivatedRoute.snapshot.params = {};
       component.ngOnInit();
-      expect(mockTeamService.fetchTeamName).not.toHaveBeenCalledWith(mockActivatedRoute.snapshot.params['teamId']);
+      expect(mockTeamService.fetchTeamName).not.toHaveBeenCalledWith(
+        mockActivatedRoute.snapshot.params['teamId']
+      );
       expect(component.teamName).toBeFalsy();
     });
   });
-
 
   describe('requestCaptchaStateAndLogIn', () => {
     it('should set the error message for empty teamName', () => {
@@ -109,15 +121,17 @@ describe('LoginComponent', () => {
       component.password = 'some password';
 
       const captchaResponse: HttpResponse<string> = new HttpResponse({
-        body: JSON.stringify({captchaEnabled: true})
+        body: JSON.stringify({ captchaEnabled: true }),
       });
 
       const loginResponse: HttpResponse<string> = new HttpResponse({
         body: 'im.a.jwt',
-        headers: new HttpHeaders({location: 'teamId'})
+        headers: new HttpHeaders({ location: 'teamId' }),
       });
 
-      mockTeamService.isCaptchaEnabledForTeam = jest.fn().mockReturnValue(of(captchaResponse));
+      mockTeamService.isCaptchaEnabledForTeam = jest
+        .fn()
+        .mockReturnValue(of(captchaResponse));
       mockTeamService.login = jest.fn().mockReturnValue(loginResponse);
 
       component.requestCaptchaStateAndLogIn();
@@ -130,9 +144,11 @@ describe('LoginComponent', () => {
       component.password = 'some password';
 
       const captchaResponse: HttpResponse<string> = new HttpResponse({
-        body: JSON.stringify({captchaEnabled: false})
+        body: JSON.stringify({ captchaEnabled: false }),
       });
-      mockTeamService.isCaptchaEnabledForTeam = jest.fn().mockReturnValue(of(captchaResponse));
+      mockTeamService.isCaptchaEnabledForTeam = jest
+        .fn()
+        .mockReturnValue(of(captchaResponse));
 
       component.requestCaptchaStateAndLogIn();
 
@@ -145,18 +161,23 @@ describe('LoginComponent', () => {
       component.password = 'some password';
 
       const captchaResponse: HttpResponse<string> = new HttpResponse({
-        body: JSON.stringify({captchaEnabled: false})
+        body: JSON.stringify({ captchaEnabled: false }),
       });
 
       const httpErrorMessage = 'server error message';
-      const error = {error: JSON.stringify({message: httpErrorMessage})};
+      const error = { error: JSON.stringify({ message: httpErrorMessage }) };
 
-      mockTeamService.isCaptchaEnabledForTeam = jest.fn().mockReturnValue(of(captchaResponse));
+      mockTeamService.isCaptchaEnabledForTeam = jest
+        .fn()
+        .mockReturnValue(of(captchaResponse));
       mockTeamService.login = jest.fn().mockReturnValue(throwError(error));
 
       component.requestCaptchaStateAndLogIn();
 
-      expect(console.error).toHaveBeenCalledWith('A login error occurred: ', httpErrorMessage);
+      expect(console.error).toHaveBeenCalledWith(
+        'A login error occurred: ',
+        httpErrorMessage
+      );
     });
 
     it('should set the error message and log it when isCaptchaEnabledForTeam has an error', () => {
@@ -164,28 +185,34 @@ describe('LoginComponent', () => {
       component.password = 'some password';
 
       const httpErrorMessage = 'server error message';
-      const error = {error: JSON.stringify({message: httpErrorMessage})};
+      const error = { error: JSON.stringify({ message: httpErrorMessage }) };
 
-      mockTeamService.isCaptchaEnabledForTeam = jest.fn().mockReturnValue(throwError(error));
+      mockTeamService.isCaptchaEnabledForTeam = jest
+        .fn()
+        .mockReturnValue(throwError(error));
 
       component.requestCaptchaStateAndLogIn();
 
-      expect(console.error).toHaveBeenCalledWith('A login error occurred: ', httpErrorMessage);
+      expect(console.error).toHaveBeenCalledWith(
+        'A login error occurred: ',
+        httpErrorMessage
+      );
     });
 
     it('should not call login when isCaptchaEnabledForTeam has an error', () => {
       component.teamName = 'Team Name';
       component.password = 'p4ssw0rd';
 
-      const error = {error: JSON.stringify({message: 'error'})};
+      const error = { error: JSON.stringify({ message: 'error' }) };
 
-      mockTeamService.isCaptchaEnabledForTeam = jest.fn().mockReturnValue(throwError(error));
+      mockTeamService.isCaptchaEnabledForTeam = jest
+        .fn()
+        .mockReturnValue(throwError(error));
 
       component.requestCaptchaStateAndLogIn();
 
       expect(mockTeamService.login).not.toHaveBeenCalled();
     });
-
   });
 
   describe('login', () => {
@@ -198,7 +225,7 @@ describe('LoginComponent', () => {
 
       const loginResponse: HttpResponse<string> = new HttpResponse({
         body: jwt,
-        headers: new HttpHeaders({location: teamId})
+        headers: new HttpHeaders({ location: teamId }),
       });
 
       mockTeamService.login = jest.fn().mockReturnValue(of(loginResponse));
@@ -215,14 +242,17 @@ describe('LoginComponent', () => {
 
       const httpErrorMessage = 'server error message';
       const error = {
-        error: JSON.stringify({message: httpErrorMessage})
+        error: JSON.stringify({ message: httpErrorMessage }),
       };
 
       mockTeamService.login = jest.fn().mockReturnValue(throwError(error));
       component.login('some captcha');
 
       expect(component.errorMessage).toEqual(httpErrorMessage);
-      expect(console.error).toHaveBeenCalledWith('A login error occurred: ', httpErrorMessage);
+      expect(console.error).toHaveBeenCalledWith(
+        'A login error occurred: ',
+        httpErrorMessage
+      );
     });
   });
 });

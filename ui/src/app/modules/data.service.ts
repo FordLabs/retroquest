@@ -15,11 +15,11 @@
  *  limitations under the License.
  */
 
-import {Themes} from './domain/Theme';
-import {EventEmitter} from '@angular/core';
+import { Themes } from './domain/Theme';
+import { EventEmitter, Injectable } from '@angular/core';
 
+@Injectable()
 export class DataService {
-
   team = {
     id: '',
     name: '',

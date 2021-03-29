@@ -15,9 +15,8 @@
  *  limitations under the License.
  */
 
-
-import {FeedbackDialogComponent} from './feedback-dialog.component';
-import {createMockEventEmitter} from '../../utils/testutils';
+import { FeedbackDialogComponent } from './feedback-dialog.component';
+import { createMockEventEmitter } from '../../utils/testutils';
 
 describe('DialogComponent', () => {
   let component: FeedbackDialogComponent;
@@ -45,7 +44,6 @@ describe('DialogComponent', () => {
   });
 
   describe('hide', () => {
-
     beforeEach(() => {
       component.visibilityChanged = createMockEventEmitter();
       component.hide();
@@ -62,11 +60,9 @@ describe('DialogComponent', () => {
     it('should set the document.onkeydown callback to null', () => {
       expect(document.onkeydown).toBeNull();
     });
-
   });
 
   describe('onStarClicked', () => {
-
     beforeEach(() => {
       component.starsClicked = true;
       component.starStates.fill(true);
@@ -80,11 +76,9 @@ describe('DialogComponent', () => {
     it('should not modify the star states', () => {
       expect(component.starStates).toContain(true);
     });
-
   });
 
   describe('clearStars', () => {
-
     beforeEach(() => {
       component.starStates.fill(true);
     });
@@ -100,11 +94,9 @@ describe('DialogComponent', () => {
       component.clearStars();
       expect(component.starStates).toContain(true);
     });
-
   });
 
   describe('onStarHovered', () => {
-
     beforeEach(() => {
       component.starStates.fill(false);
     });
@@ -121,12 +113,15 @@ describe('DialogComponent', () => {
       expect(component.starStates).toEqual([true, true, true, false, false]);
     });
 
-    it('should set the star count of the feedback message to the passed in value plus 1' +
-      ', if the stars havent been clicked', () => {
-      component.starsClicked = false;
-      component.onStarHovered(3);
-      expect(component.feedback.stars).toEqual(4);
-    });
+    it(
+      'should set the star count of the feedback message to the passed in value plus 1' +
+        ', if the stars havent been clicked',
+      () => {
+        component.starsClicked = false;
+        component.onStarHovered(3);
+        expect(component.feedback.stars).toEqual(4);
+      }
+    );
 
     it('should not set the star states', () => {
       component.starStates.fill(true);
@@ -134,18 +129,15 @@ describe('DialogComponent', () => {
       component.onStarHovered(component.starStates.length);
       expect(component.starStates).toContain(true);
     });
-
   });
 
   describe('onSendButtonClicked', () => {
-
     beforeEach(() => {
       component.visible = true;
       component.submitted = createMockEventEmitter();
     });
 
     describe('comments are filled in', () => {
-
       beforeEach(() => {
         component.feedback.comment = 'great job retroquest!';
         component.onSendButtonClicked();
@@ -161,7 +153,6 @@ describe('DialogComponent', () => {
     });
 
     describe('comments are not filled in', () => {
-
       beforeEach(() => {
         component.feedback.comment = '';
         component.onSendButtonClicked();
@@ -176,5 +167,4 @@ describe('DialogComponent', () => {
       });
     });
   });
-
 });

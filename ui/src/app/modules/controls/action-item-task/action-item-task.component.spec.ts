@@ -15,15 +15,15 @@
  *  limitations under the License.
  */
 
-import {ActionItemTaskComponent} from './action-item-task.component';
-import {emptyActionItem} from '../../domain/action-item';
-import {ElementRef} from '@angular/core';
-import {createMockEventEmitter} from '../../utils/testutils';
+import { ActionItemTaskComponent } from './action-item-task.component';
+import { emptyActionItem } from '../../domain/action-item';
+import { ElementRef } from '@angular/core';
+import { createMockEventEmitter } from '../../utils/testutils';
 
 describe('ActionItemTaskComponent', () => {
   let component: ActionItemTaskComponent;
   const myWindow = {
-    setTimeout: (fn: Function) => fn()
+    setTimeout: (fn: Function) => fn(),
   };
 
   beforeEach(() => {
@@ -40,8 +40,8 @@ describe('ActionItemTaskComponent', () => {
     const fakeElementRef: ElementRef = {
       nativeElement: {
         focus: jest.fn(),
-        select: jest.fn()
-      }
+        select: jest.fn(),
+      },
     } as ElementRef;
 
     beforeEach(() => {
@@ -84,19 +84,25 @@ describe('ActionItemTaskComponent', () => {
     it('should not focus the title area when the edit mode is toggled false', () => {
       component.taskEditModeEnabled = true;
       component.toggleEditMode();
-      expect(component.editableTextArea.nativeElement.focus).not.toHaveBeenCalled();
+      expect(
+        component.editableTextArea.nativeElement.focus
+      ).not.toHaveBeenCalled();
     });
 
     it('should select all the text in the div when focused', () => {
       component.taskEditModeEnabled = false;
       component.toggleEditMode();
-      expect(component.editableTextArea.nativeElement.select).toHaveBeenCalled();
+      expect(
+        component.editableTextArea.nativeElement.select
+      ).toHaveBeenCalled();
     });
 
     it('should not select all the text in the div when not focused', () => {
       component.taskEditModeEnabled = true;
       component.toggleEditMode();
-      expect(component.editableTextArea.nativeElement.select).not.toHaveBeenCalled();
+      expect(
+        component.editableTextArea.nativeElement.select
+      ).not.toHaveBeenCalled();
     });
   });
 
@@ -121,7 +127,6 @@ describe('ActionItemTaskComponent', () => {
   });
 
   describe('emitDeleteItem', () => {
-
     it('should emit the actionItem to be deleted if the deletion flag is set to true', () => {
       component.deleted = createMockEventEmitter();
 
@@ -143,13 +148,13 @@ describe('ActionItemTaskComponent', () => {
 
       component.emitDeleteItem();
 
-      expect(component.deleted.emit).not.toHaveBeenCalledWith(component.actionItem);
+      expect(component.deleted.emit).not.toHaveBeenCalledWith(
+        component.actionItem
+      );
     });
-
   });
 
   describe('emitTaskContentClicked', () => {
-
     it('should emit the actionItem when edit mode is not enabled', () => {
       component.taskEditModeEnabled = false;
       component.messageClicked = createMockEventEmitter();
@@ -158,7 +163,9 @@ describe('ActionItemTaskComponent', () => {
       component.actionItem.task = 'FAKE TASK';
       component.emitTaskContentClicked();
 
-      expect(component.messageClicked.emit).toHaveBeenCalledWith(component.actionItem);
+      expect(component.messageClicked.emit).toHaveBeenCalledWith(
+        component.actionItem
+      );
     });
 
     it('should not emit the actionItem when edit mode is enabled', () => {
@@ -171,15 +178,14 @@ describe('ActionItemTaskComponent', () => {
 
       expect(component.messageClicked.emit).not.toHaveBeenCalled();
     });
-
   });
 
   describe('forceBlur', () => {
     it('should call blur on the native textarea element', () => {
       component.editableTextArea = {
         nativeElement: {
-          blur: jest.fn()
-        }
+          blur: jest.fn(),
+        },
       };
       component.forceBlur();
 
@@ -192,14 +198,16 @@ describe('ActionItemTaskComponent', () => {
       component.editableTextArea = {
         nativeElement: {
           style: {
-            height: ''
+            height: '',
           },
-          scrollHeight: 40
-        }
+          scrollHeight: 40,
+        },
       };
 
       component.initializeTextAreaHeight();
-      expect(component.editableTextArea.nativeElement.style.height).toEqual('40px');
+      expect(component.editableTextArea.nativeElement.style.height).toEqual(
+        '40px'
+      );
     });
   });
 
@@ -216,7 +224,7 @@ describe('ActionItemTaskComponent', () => {
 
     beforeEach(() => {
       fakeEvent = {
-        preventDefault: jest.fn()
+        preventDefault: jest.fn(),
       };
     });
 

@@ -15,24 +15,32 @@
  *  limitations under the License.
  */
 
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {Themes} from '../../domain/Theme';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import { Themes } from '../../domain/Theme';
 
 @Component({
   selector: 'rq-deletion-overlay',
   templateUrl: './deletion-overlay.component.html',
   styleUrls: ['./deletion-overlay.component.scss'],
   host: {
-    '[class.dark-theme]': 'darkThemeIsEnabled'
-  }
+    '[class.dark-theme]': 'darkThemeIsEnabled',
+  },
 })
 export class DeletionOverlayComponent implements OnInit {
-
   @Input() heading = '';
   @Input() theme: Themes = Themes.Light;
 
   @Output() acceptButtonClicked: EventEmitter<void> = new EventEmitter<void>();
   @Output() declineButtonClicked: EventEmitter<void> = new EventEmitter<void>();
+  // eslint-disable-next-line
   @Output() blur: EventEmitter<void> = new EventEmitter<void>();
 
   @ViewChild('hiddenDeleteInput') hiddenDeleteInput: ElementRef;
@@ -58,5 +66,4 @@ export class DeletionOverlayComponent implements OnInit {
   emitBlur() {
     this.blur.emit();
   }
-
 }

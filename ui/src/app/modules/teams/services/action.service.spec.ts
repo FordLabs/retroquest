@@ -15,11 +15,11 @@
  *  limitations under the License.
  */
 
-import {ActionItemService} from './action.service';
-import {Observable} from 'rxjs/index';
-import {ActionItem, emptyActionItem} from '../../domain/action-item';
-import {HttpClient} from '@angular/common/http';
-import {WebsocketService} from './websocket.service';
+import { ActionItemService } from './action.service';
+import { Observable } from 'rxjs/index';
+import { ActionItem, emptyActionItem } from '../../domain/action-item';
+import { HttpClient } from '@angular/common/http';
+import { WebsocketService } from './websocket.service';
 
 describe('ActionItemService', () => {
   let service: ActionItemService;
@@ -33,7 +33,7 @@ describe('ActionItemService', () => {
     completed: false,
     assignee: null,
     dateCreated: null,
-    archived: false
+    archived: false,
   };
 
   beforeEach(() => {
@@ -49,10 +49,9 @@ describe('ActionItemService', () => {
     mockWebSocket = {
       createActionItem: jest.fn(),
       updateActionItem: jest.fn(),
-      deleteActionItem: jest.fn()
+      deleteActionItem: jest.fn(),
     } as WebsocketService;
     service = new ActionItemService(mockHttpClient, mockWebSocket);
-
   });
 
   it('should be created', () => {
@@ -85,7 +84,9 @@ describe('ActionItemService', () => {
 
     it('should call the backend api with the correct url', () => {
       service.fetchArchivedActionItems(fakeTeamId);
-      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${fakeTeamId}/action-items/archived`);
+      expect(mockHttpClient.get).toHaveBeenCalledWith(
+        `/api/team/${fakeTeamId}/action-items/archived`
+      );
     });
   });
 
@@ -97,8 +98,12 @@ describe('ActionItemService', () => {
 
     it('should call the backend api with the correct url', () => {
       service.archiveActionItems(archivedActionItems);
-      expect(mockWebSocket.updateActionItem).toHaveBeenCalledWith(firstActionItem);
-      expect(mockWebSocket.updateActionItem).toHaveBeenCalledWith(secondActionItem);
+      expect(mockWebSocket.updateActionItem).toHaveBeenCalledWith(
+        firstActionItem
+      );
+      expect(mockWebSocket.updateActionItem).toHaveBeenCalledWith(
+        secondActionItem
+      );
     });
   });
 });

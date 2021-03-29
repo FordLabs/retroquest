@@ -15,8 +15,8 @@
  *  limitations under the License.
  */
 
-import {TextFieldComponent} from './text-field.component';
-import {createMockEventEmitter} from '../../utils/testutils';
+import { TextFieldComponent } from './text-field.component';
+import { createMockEventEmitter } from '../../utils/testutils';
 
 describe('TextFieldComponent', () => {
   let component: TextFieldComponent;
@@ -30,9 +30,7 @@ describe('TextFieldComponent', () => {
   });
 
   describe('emitNewTaskMessage', () => {
-
     it('should emit the new actionItem message', () => {
-
       component.newMessageAdded = createMockEventEmitter();
 
       const fakeMessage = 'FAKE MESSAGE';
@@ -50,7 +48,5 @@ describe('TextFieldComponent', () => {
       component.emitNewTaskMessage();
       expect(component.text).toEqual('');
     });
-
   });
-
 });

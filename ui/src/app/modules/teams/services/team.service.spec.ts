@@ -15,9 +15,9 @@
  *  limitations under the License.
  */
 
-import {TeamService} from './team.service';
-import {Observable} from 'rxjs/index';
-import {HttpClient} from '@angular/common/http';
+import { TeamService } from './team.service';
+import { Observable } from 'rxjs/index';
+import { HttpClient } from '@angular/common/http';
 
 describe('TeamService', () => {
   let service;
@@ -29,7 +29,7 @@ describe('TeamService', () => {
     // @ts-ignore
     fakeHttpClient = {
       get: mockGet,
-      post: mockPost
+      post: mockPost,
     } as HttpClient;
 
     service = new TeamService(fakeHttpClient);
@@ -45,8 +45,8 @@ describe('TeamService', () => {
 
       expect(fakeHttpClient.post).toHaveBeenCalledWith(
         '/api/team',
-        {name, password, captchaResponse},
-        {observe: 'response', responseType: 'text'}
+        { name, password, captchaResponse },
+        { observe: 'response', responseType: 'text' }
       );
 
       expect(returnObj instanceof Observable).toBe(true);
@@ -63,8 +63,8 @@ describe('TeamService', () => {
 
       expect(fakeHttpClient.post).toHaveBeenCalledWith(
         '/api/team/login',
-        {name, password, captchaResponse},
-        {observe: 'response', responseType: 'text'}
+        { name, password, captchaResponse },
+        { observe: 'response', responseType: 'text' }
       );
 
       expect(returnObj instanceof Observable).toBe(true);
@@ -77,12 +77,16 @@ describe('TeamService', () => {
       const previousPassword = 'passw0rd';
       const newPassword = 'passw0rd1';
 
-      const returnObj = service.updatePassword(teamId, previousPassword, newPassword);
+      const returnObj = service.updatePassword(
+        teamId,
+        previousPassword,
+        newPassword
+      );
 
       expect(fakeHttpClient.post).toHaveBeenCalledWith(
         '/api/update-password',
-        {teamId, previousPassword, newPassword},
-        {observe: 'response', responseType: 'text'}
+        { teamId, previousPassword, newPassword },
+        { observe: 'response', responseType: 'text' }
       );
 
       expect(returnObj instanceof Observable).toBe(true);
@@ -95,7 +99,11 @@ describe('TeamService', () => {
 
       const returnObj = service.fetchTeamName(teamId);
 
-      expect(fakeHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/name`, {responseType: 'text'});
+      expect(
+        fakeHttpClient.get
+      ).toHaveBeenCalledWith(`/api/team/${teamId}/name`, {
+        responseType: 'text',
+      });
       expect(returnObj instanceof Observable).toBe(true);
     });
   });
@@ -106,8 +114,11 @@ describe('TeamService', () => {
 
       const returnObj = service.validateTeamId(teamId);
 
-
-      expect(fakeHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/validate`, {observe: 'response'});
+      expect(
+        fakeHttpClient.get
+      ).toHaveBeenCalledWith(`/api/team/${teamId}/validate`, {
+        observe: 'response',
+      });
       expect(returnObj instanceof Observable).toBeTruthy();
     });
   });
@@ -118,7 +129,12 @@ describe('TeamService', () => {
 
       const returnObj = service.isCaptchaEnabledForTeam(teamName);
 
-      expect(fakeHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamName}/captcha`, {observe: 'response', responseType: 'text' });
+      expect(
+        fakeHttpClient.get
+      ).toHaveBeenCalledWith(`/api/team/${teamName}/captcha`, {
+        observe: 'response',
+        responseType: 'text',
+      });
       expect(returnObj instanceof Observable).toBe(true);
     });
   });
