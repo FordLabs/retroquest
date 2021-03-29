@@ -16,7 +16,6 @@
  */
 
 import { TeamPageComponent } from './team.page';
-import { WebsocketService } from '../../services/websocket.service';
 import { BoardService } from '../../services/board.service';
 import { ColumnAggregationService } from '../../services/column-aggregation.service';
 import { of } from 'rxjs';
@@ -37,7 +36,6 @@ describe('TeamPageComponent', () => {
   let component: TeamPageComponent;
 
   let dataService: DataService;
-  let websocketService: WebsocketService;
   let saveCheckerService: SaveCheckerService;
   let boardService: BoardService;
   let columnAggregationService: ColumnAggregationService;
@@ -52,7 +50,6 @@ describe('TeamPageComponent', () => {
     dataService = new DataService();
     columnAggregationService = mock(ColumnAggregationService);
     teamService = mock(TeamService);
-    websocketService = mock(WebsocketService);
     boardService = mock(BoardService);
     saveCheckerService = mock(SaveCheckerService);
     endRetroService = mock(EndRetroService);
