@@ -27,7 +27,11 @@ import { emptyThought } from '../../../domain/thought';
 import { emptyColumnResponse } from '../../../domain/column-response';
 import { DataService } from '../../../data.service';
 import { SaveCheckerService } from '../../services/save-checker.service';
-import { createMockRxStompService } from '../../../utils/testutils';
+import {
+  createMockRxStompService,
+  createMockSubscription,
+} from '../../../utils/testutils';
+import { EndRetroService } from '../../services/end-retro.service';
 
 describe('TeamPageComponent', () => {
   let component: TeamPageComponent;
@@ -38,6 +42,7 @@ describe('TeamPageComponent', () => {
   let boardService: BoardService;
   let columnAggregationService: ColumnAggregationService;
   let teamService: TeamService;
+  let endRetroService: EndRetroService;
 
   const fakeTeamId = 'team-id';
 
@@ -50,15 +55,16 @@ describe('TeamPageComponent', () => {
     websocketService = mock(WebsocketService);
     boardService = mock(BoardService);
     saveCheckerService = mock(SaveCheckerService);
+    endRetroService = mock(EndRetroService);
 
     component = new TeamPageComponent(
       dataService,
       instance(teamService),
-      instance(websocketService),
       null,
       instance(boardService),
       instance(columnAggregationService),
       null,
+      instance(endRetroService),
       spiedStompService
     );
   });
@@ -102,35 +108,7 @@ describe('TeamPageComponent', () => {
       expect(component.teamName).toEqual(expectedTeamName);
     });
 
-    describe('opening the websocket', () => {
-      beforeEach(() => {
-        when(websocketService.openWebsocket()).thenReturn(of());
-        when(websocketService.heartbeatTopic()).thenReturn(of());
-        when(websocketService.endRetroTopic()).thenReturn(of());
-      });
-
-      it('should open the websocket if the state is closed', () => {
-        when(websocketService.getWebsocketState()).thenReturn(WebSocket.CLOSED);
-
-        component.ngOnInit();
-        verify(websocketService.openWebsocket()).called();
-      });
-
-      it('should not open the websocket if the state is already opened', () => {
-        when(websocketService.getWebsocketState()).thenReturn(WebSocket.OPEN);
-
-        component.ngOnInit();
-        verify(websocketService.openWebsocket()).never();
-      });
-
-      it('should resubscribe to the websocket', () => {
-        when(websocketService.getWebsocketState()).thenReturn(WebSocket.OPEN);
-
-        component.ngOnInit();
-        verify(websocketService.heartbeatTopic()).called();
-        verify(websocketService.endRetroTopic()).called();
-      });
-
+    describe('Subscriptions', () => {
       it('Should subscribe to the Thoughts topic', () => {
         component.ngOnInit();
         expect(spiedStompService.watch).toHaveBeenCalledWith(
@@ -151,6 +129,46 @@ describe('TeamPageComponent', () => {
           `/topic/${dataService.team.id}/column-titles`
         );
       });
+
+      it('Should subscribe to the end retro topic', () => {
+        component.ngOnInit();
+        expect(spiedStompService.watch).toHaveBeenCalledWith(
+          `/topic/${dataService.team.id}/end-retro`
+        );
+      });
+    });
+  });
+
+  describe('ngOnDestroy', () => {
+    beforeEach(() => {
+      component.thoughtSubscription = createMockSubscription();
+      component.actionItemSubscription = createMockSubscription();
+      component.columnTitleSubscription = createMockSubscription();
+      component.endRetroSubscription = createMockSubscription();
+    });
+
+    it('should unsubscribe from thoughts', () => {
+      const spy = jest.spyOn(component.thoughtSubscription, 'unsubscribe');
+      component.ngOnDestroy();
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('should unsubscribe from action items', () => {
+      const spy = jest.spyOn(component.actionItemSubscription, 'unsubscribe');
+      component.ngOnDestroy();
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('should unsubscribe from column titles', () => {
+      const spy = jest.spyOn(component.columnTitleSubscription, 'unsubscribe');
+      component.ngOnDestroy();
+      expect(spy).toHaveBeenCalled();
+    });
+
+    it('should unsubscribe from end retro', () => {
+      const spy = jest.spyOn(component.endRetroSubscription, 'unsubscribe');
+      component.ngOnDestroy();
+      expect(spy).toHaveBeenCalled();
     });
   });
 
@@ -193,7 +211,7 @@ describe('TeamPageComponent', () => {
 
       component.onEndRetro();
 
-      verify(websocketService.endRetro()).called();
+      verify(endRetroService.endRetro()).called();
     });
   });
 });

@@ -6,6 +6,8 @@ import { EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { IMessage } from '@stomp/stompjs';
+import { ColumnAggregationService } from '../teams/services/column-aggregation.service';
+import { Subscription } from 'rxjs';
 
 export function createMockHttpClient(): HttpClient {
   return ({
@@ -73,4 +75,20 @@ export function createMockRecaptchaComponent() {
     reset: jest.fn(),
     execute: jest.fn(),
   };
+}
+
+export function createMockColumnAggregationService(): ColumnAggregationService {
+  const observable = ({
+    subscribe: jest.fn(),
+  } as unknown) as Observable<any>;
+
+  return ({
+    getColumns: jest.fn().mockReturnValue(observable),
+  } as unknown) as ColumnAggregationService;
+}
+
+export function createMockSubscription(): Subscription {
+  return ({
+    unsubscribe: jest.fn(),
+  } as unknown) as Subscription;
 }

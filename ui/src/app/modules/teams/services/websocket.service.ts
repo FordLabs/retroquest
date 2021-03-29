@@ -112,19 +112,6 @@ export class WebsocketService {
     });
   }
 
-  public endRetroTopic(): Observable<any> {
-    this.checkForOpenSocket();
-
-    return new Observable<any>((observer) => {
-      const sub = this.stompClient.subscribe(
-        `/topic/${this.dataService.team.id}/end-retro`
-      );
-      sub.messages.subscribe((m) => {
-        observer.next(m);
-      });
-    });
-  }
-
   private checkForOpenSocket(): void {
     if (!this.websocketIsOpened) {
       throw new Error(

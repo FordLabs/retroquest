@@ -22,7 +22,6 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { WebsocketService } from '../../services/websocket.service';
 import { TeamService } from '../../services/team.service';
 import { WebsocketResponse } from '../../../domain/websocket-response';
 
@@ -39,6 +38,7 @@ import { ActionItemService } from '../../services/action.service';
 import { ActionItem } from '../../../domain/action-item';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { Subscription } from 'rxjs';
+import { EndRetroService } from '../../services/end-retro.service';
 
 @Component({
   selector: 'rq-team',
@@ -51,11 +51,11 @@ export class TeamPageComponent implements OnInit, OnDestroy {
   constructor(
     private dataService: DataService,
     private teamsService: TeamService,
-    private websocketService: WebsocketService,
     private saveCheckerService: SaveCheckerService,
     private boardService: BoardService,
     private columnAggregationService: ColumnAggregationService,
     private actionItemService: ActionItemService,
+    private endRetroService: EndRetroService,
     private rxStompService: RxStompService
   ) {}
 
@@ -71,6 +71,7 @@ export class TeamPageComponent implements OnInit, OnDestroy {
   thoughtSubscription: Subscription;
   actionItemSubscription: Subscription;
   columnTitleSubscription: Subscription;
+  endRetroSubscription: Subscription;
 
   thoughtChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
   actionItemChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
@@ -101,21 +102,6 @@ export class TeamPageComponent implements OnInit, OnDestroy {
       this.columnsAggregation = body.columns;
     });
 
-    if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
-      this.websocketInit();
-    } else if (this.websocketService.getWebsocketState() === WebSocket.OPEN) {
-      this.subscribeToWebsocket();
-    }
-
-    this.websocketService.intervalId = this.globalWindowRef.setInterval(() => {
-      if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
-        this.websocketService.closeWebsocket();
-        this.websocketInit();
-      } else if (this.websocketService.getWebsocketState() === WebSocket.OPEN) {
-        this.websocketService.sendHeartbeat();
-      }
-    }, 1000 * 60);
-
     this.thoughtSubscription = this.rxStompService
       .watch(`/topic/${this.dataService.team.id}/thoughts`)
       .subscribe((message) => {
@@ -141,25 +127,19 @@ export class TeamPageComponent implements OnInit, OnDestroy {
         );
         this.saveCheckerService.updateTimestamp();
       });
+
+    this.endRetroSubscription = this.rxStompService
+      .watch(`/topic/${this.dataService.team.id}/end-retro`)
+      .subscribe((message) => {
+        this.retroEnded.emit();
+      });
   }
 
   ngOnDestroy(): void {
     this.thoughtSubscription.unsubscribe();
     this.actionItemSubscription.unsubscribe();
-  }
-
-  private subscribeToWebsocket() {
-    this.websocketService.heartbeatTopic().subscribe();
-
-    this.websocketService.endRetroTopic().subscribe(() => {
-      this.retroEnded.emit();
-    });
-  }
-
-  private websocketInit() {
-    this.websocketService.openWebsocket().subscribe(() => {
-      this.subscribeToWebsocket();
-    });
+    this.columnTitleSubscription.unsubscribe();
+    this.endRetroSubscription.unsubscribe();
   }
 
   public onEndRetro(): void {
@@ -187,7 +167,7 @@ export class TeamPageComponent implements OnInit, OnDestroy {
       if (archivedActionItems.length > 0) {
         this.actionItemService.archiveActionItems(archivedActionItems);
       }
-      this.websocketService.endRetro();
+      this.endRetroService.endRetro();
     }
   }
 
