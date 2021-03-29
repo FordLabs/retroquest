@@ -70,6 +70,7 @@ export class TeamPageComponent implements OnInit, OnDestroy {
 
   thoughtSubscription: Subscription;
   actionItemSubscription: Subscription;
+  columnTitleSubscription: Subscription;
 
   thoughtChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
   actionItemChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
@@ -131,6 +132,15 @@ export class TeamPageComponent implements OnInit, OnDestroy {
         );
         this.saveCheckerService.updateTimestamp();
       });
+
+    this.columnTitleSubscription = this.rxStompService
+      .watch(`/topic/${this.dataService.team.id}/column-titles`)
+      .subscribe((message) => {
+        this.columnChanged.emit(
+          (JSON.parse(message.body) as WebsocketResponse).payload as Column
+        );
+        this.saveCheckerService.updateTimestamp();
+      });
   }
 
   ngOnDestroy(): void {
@@ -140,12 +150,6 @@ export class TeamPageComponent implements OnInit, OnDestroy {
 
   private subscribeToWebsocket() {
     this.websocketService.heartbeatTopic().subscribe();
-
-    this.websocketService.columnTitleTopic().subscribe((message) => {
-      const response: WebsocketResponse = message.bodyJson;
-      this.columnChanged.emit(response.payload as Column);
-      this.saveCheckerService.updateTimestamp();
-    });
 
     this.websocketService.endRetroTopic().subscribe(() => {
       this.retroEnded.emit();

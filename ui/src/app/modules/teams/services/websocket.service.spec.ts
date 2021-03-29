@@ -103,44 +103,4 @@ describe('WebsocketService', () => {
       expect(state).toEqual(WebSocket.OPEN);
     });
   });
-
-  describe('columnTitleTopic', () => {
-    it('should subscribe to the column title topic', async () => {
-      service.columnTitleTopic().subscribe();
-      expect(service.stompClient.subscribe).toHaveBeenCalledWith(
-        `/topic/${teamId}/column-titles`
-      );
-    });
-  });
-
-  describe('updateColumnTitle', () => {
-    it('should send a message', () => {
-      const fakeColumnTitle: Column = {
-        id: 1,
-        teamId: '',
-        topic: '',
-        title: '',
-      };
-
-      service.openWebsocket().subscribe();
-      service.updateColumnTitle(fakeColumnTitle);
-
-      expect(service.stompClient.send).toHaveBeenCalledWith(
-        `/app/${teamId}/column-title/${fakeColumnTitle.id}/edit`,
-        JSON.stringify(fakeColumnTitle)
-      );
-    });
-  });
-
-  describe('deleteActionItem', () => {
-    it('should call the end retro websocket with no message', () => {
-      service.openWebsocket().subscribe();
-      service.endRetro();
-
-      expect(service.stompClient.send).toHaveBeenCalledWith(
-        `/app/${teamId}/end-retro`,
-        null
-      );
-    });
-  });
 });

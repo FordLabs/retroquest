@@ -106,7 +106,6 @@ describe('TeamPageComponent', () => {
       beforeEach(() => {
         when(websocketService.openWebsocket()).thenReturn(of());
         when(websocketService.heartbeatTopic()).thenReturn(of());
-        when(websocketService.columnTitleTopic()).thenReturn(of());
         when(websocketService.endRetroTopic()).thenReturn(of());
       });
 
@@ -129,7 +128,6 @@ describe('TeamPageComponent', () => {
 
         component.ngOnInit();
         verify(websocketService.heartbeatTopic()).called();
-        verify(websocketService.columnTitleTopic()).called();
         verify(websocketService.endRetroTopic()).called();
       });
 
@@ -144,6 +142,13 @@ describe('TeamPageComponent', () => {
         component.ngOnInit();
         expect(spiedStompService.watch).toHaveBeenCalledWith(
           `/topic/${dataService.team.id}/action-items`
+        );
+      });
+
+      it('Should subscribe to the column title topic', () => {
+        component.ngOnInit();
+        expect(spiedStompService.watch).toHaveBeenCalledWith(
+          `/topic/${dataService.team.id}/column-titles`
         );
       });
     });

@@ -15,24 +15,37 @@
  *  limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs/index';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/index';
 
-import {Column} from '../../domain/column';
-import {WebsocketService} from './websocket.service';
+import { Column } from '../../domain/column';
+import { WebsocketService } from './websocket.service';
+import { RxStompService } from '@stomp/ng2-stompjs';
+import { DataService } from '../../data.service';
 
 @Injectable()
 export class ColumnService {
-
-  constructor(private http: HttpClient, private webSocketService: WebsocketService) {
-  }
+  constructor(
+    private http: HttpClient,
+    private rxStompService: RxStompService,
+    private dataService: DataService
+  ) {}
 
   fetchColumns(teamId): Observable<Array<Column>> {
     return this.http.get<Array<Column>>(`/api/team/${teamId}/columns`);
   }
 
+  private validTeamId(teamId: string) {
+    return this.dataService.team.id === teamId;
+  }
+
   updateColumn(column: Column): void {
-    this.webSocketService.updateColumnTitle(column);
+    if (this.validTeamId(column.teamId)) {
+      this.rxStompService.publish({
+        destination: `/app/${this.dataService.team.id}/column-title/${column.id}/edit`,
+        body: JSON.stringify(column),
+      });
+    }
   }
 }

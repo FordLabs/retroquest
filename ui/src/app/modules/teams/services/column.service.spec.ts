@@ -20,19 +20,24 @@ import { Observable } from 'rxjs/index';
 import { Column } from '../../domain/column';
 import {
   createMockHttpClient,
+  createMockRxStompService,
   createMockWebSocketService,
 } from '../../utils/testutils';
+import { DataService } from '../../data.service';
 
 describe('ColumnService', () => {
   let service: ColumnService;
-  let mockWebsocketService;
-  const mockHttpClient = createMockHttpClient();
+  let mockHttpClient;
+  let spiedStompService;
 
-  const teamId = 'team-id';
+  const dataService: DataService = new DataService();
+  const teamId = 'teamId';
 
   beforeEach(() => {
-    mockWebsocketService = createMockWebSocketService();
-    service = new ColumnService(mockHttpClient, mockWebsocketService);
+    mockHttpClient = createMockHttpClient();
+    spiedStompService = createMockRxStompService();
+    dataService.team.id = teamId;
+    service = new ColumnService(mockHttpClient, spiedStompService, dataService);
   });
 
   it('should be created', () => {
@@ -63,9 +68,24 @@ describe('ColumnService', () => {
 
       service.updateColumn(testColumn);
 
-      expect(mockWebsocketService.updateColumnTitle).toHaveBeenCalledWith(
-        testColumn
-      );
+      expect(spiedStompService.publish).toHaveBeenCalledWith({
+        destination: `/app/${dataService.team.id}/column-title/${testColumn.id}/edit`,
+        body: JSON.stringify(testColumn),
+      });
+    });
+    it('cannot update columns for other teams', () => {
+      const newTitle = 'title 2';
+
+      const testColumn: Column = {
+        id: 1,
+        topic: 'happy',
+        title: newTitle,
+        teamId: 'hacker',
+      };
+
+      service.updateColumn(testColumn);
+
+      expect(spiedStompService.publish).not.toHaveBeenCalled();
     });
   });
 });
