@@ -43,7 +43,7 @@ Running the application locally can be done with either an H2 in-memory database
 ### In-Memory
 The simplest way to get the application spun up is by using the in-memory database via Gradle:
 ```
-./gradlew runLocal
+./gradlew bootRun
 ```
 or
 ```
@@ -61,7 +61,7 @@ cd ./api && docker-compose up
 
 Start the backend with Gradle:  
 ```
-./gradlew runDockerDb
+./gradlew bootRunDockerDb
 ```
 or
 ```

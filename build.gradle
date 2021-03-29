@@ -97,27 +97,49 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
-bootRun {
-    sourceResources sourceSets.main
+def noProfileOrDbDefined(tasks) {
+
+    def envProfile = System.getenv("SPRING_PROFILES_ACTIVE")
+    def systemProfile = System.getProperty("spring.profiles.active")
+
+    if(envProfile !=null || systemProfile!=null){
+        return false;
+    }
+
+    boolean dbDeclared = false;
+    tasks.forEach { task ->
+        if(task.name.contains('with')){
+            dbDeclared=true;
+        }
+    }
+
+    if(dbDeclared){
+        return false;
+    }
+
+    return true;
+
 }
 
-task runLocal {
-    dependsOn 'withH2'
-    dependsOn 'bootRun'
-    group 'application'
-    description 'Runs this project as a Spring Boot application using in-memory (H2) database'
+bootRun {
+    sourceResources sourceSets.main
+
     gradle.taskGraph.whenReady { graph ->
-        if (graph.hasTask(runLocal)) {
+
+        if(noProfileOrDbDefined(graph.getAllTasks())){
             logger.lifecycle('>>> Setting spring.profiles.active == "local" <<<')
             bootRun {
-                args = ['--spring.profiles.active=local']
+                dependencies {
+                    implementation 'com.h2database:h2:1.4.200'
+                }
+                System.setProperty("spring.profiles.active","local")
                 systemProperties System.properties
             }
         }
     }
 }
 
-task runDockerDb(type: Exec){
+task bootRunDockerDb(type: Exec){
     dependsOn 'withPostgres'
     dependsOn 'bootRun'
 
@@ -127,7 +149,7 @@ task runDockerDb(type: Exec){
     description 'Runs this project as a Spring Boot application using containerized database'
 
     gradle.taskGraph.whenReady { graph ->
-        if (graph.hasTask(runDockerDb)) {
+        if (graph.hasTask(bootRunDockerDb)) {
             logger.lifecycle('>>> Setting spring.profiles.active == "dockerdb" <<<')
             bootRun {
                 systemProperty "spring.profiles.active", "dockerdb"
