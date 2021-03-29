@@ -1,9 +1,9 @@
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs/index';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/index';
 import 'jest-preset-angular/setup-jest';
-import {WebsocketService} from '../teams/services/websocket.service';
-import {EventEmitter} from '@angular/core';
-import {Router} from '@angular/router';
+import { WebsocketService } from '../teams/services/websocket.service';
+import { EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 
 export function createMockHttpClient(): HttpClient {
   // @ts-ignore
@@ -20,7 +20,6 @@ export function createMockHttpClient(): HttpClient {
 }
 
 export function createMockWebSocketService(): WebsocketService {
-
   // @ts-ignore
   return {
     getWebsocketState: jest.fn(),
@@ -42,14 +41,13 @@ export function createMockWebSocketService(): WebsocketService {
     deleteAllThoughts: jest.fn(),
     endRetro: jest.fn(),
   } as WebsocketService;
-
 }
 
 export function createMockEventEmitter(): EventEmitter<any> {
   // @ts-ignore
   return {
     emit: jest.fn(),
-    subscribe: jest.fn()
+    subscribe: jest.fn(),
   } as EventEmitter<any>;
 }
 
@@ -57,13 +55,13 @@ export function createMockRouter(): Router {
   // @ts-ignore
   return {
     navigate: jest.fn(),
-    navigateByUrl: jest.fn()
+    navigateByUrl: jest.fn(),
   } as Router;
 }
 
 export function createMockRecaptchaComponent() {
   return {
     reset: jest.fn(),
-    execute: jest.fn()
+    execute: jest.fn(),
   };
 }

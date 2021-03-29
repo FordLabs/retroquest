@@ -15,13 +15,20 @@
  *  limitations under the License.
  */
 
-import {AfterContentChecked, Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {emptyThought, Thought} from '../../domain/thought';
-import {TaskComponent} from '../task/task.component';
-import {Themes} from '../../domain/Theme';
-import {ActionItem, emptyActionItem} from '../../domain/action-item';
-import {ActionItemService} from '../../teams/services/action.service';
-import {ActionItemTaskComponent} from '../action-item-task/action-item-task.component';
+import {
+  AfterContentChecked,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import { emptyThought, Thought } from '../../domain/thought';
+import { TaskComponent } from '../task/task.component';
+import { Themes } from '../../domain/Theme';
+import { ActionItem, emptyActionItem } from '../../domain/action-item';
+import { ActionItemService } from '../../teams/services/action.service';
+import { ActionItemTaskComponent } from '../action-item-task/action-item-task.component';
 import moment from 'moment';
 
 const ESC_KEY = 27;
@@ -34,11 +41,10 @@ const ESC_KEY = 27;
     '(click)': 'hide()',
     '[style.display]': 'visible ? "flex": "none"',
     '[class.edit-mode]': 'taskEditModeEnabled',
-    '[class.dark-theme]': 'darkThemeIsEnabled'
-  }
+    '[class.dark-theme]': 'darkThemeIsEnabled',
+  },
 })
 export class TaskDialogComponent implements AfterContentChecked {
-
   @Input() type = '';
   @Input() task: Thought = emptyThought();
   @Input() visible = true;
@@ -47,21 +53,23 @@ export class TaskDialogComponent implements AfterContentChecked {
   @Input() archived = false;
   @Input() readOnly = false;
 
-  @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output()
+  visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
   @Output() deleted: EventEmitter<Thought> = new EventEmitter<Thought>();
-  @Output() starCountIncreased: EventEmitter<number> = new EventEmitter<number>();
+  @Output()
+  starCountIncreased: EventEmitter<number> = new EventEmitter<number>();
   @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @ViewChild('task_component') taskComponent: TaskComponent;
-  @ViewChild(ActionItemTaskComponent) actionItemTaskComponent: ActionItemTaskComponent;
+  @ViewChild(ActionItemTaskComponent)
+  actionItemTaskComponent: ActionItemTaskComponent;
 
   assignedActionItem: ActionItem = emptyActionItem();
   actionItemIsVisible = false;
   myWindow: object = window;
 
-  constructor(private actionItemService: ActionItemService) {
-  }
+  constructor(private actionItemService: ActionItemService) {}
 
   get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;
@@ -85,7 +93,7 @@ export class TaskDialogComponent implements AfterContentChecked {
   public show(): void {
     this.visible = true;
     document.body.style.overflow = 'hidden';
-    document.onkeydown = event => {
+    document.onkeydown = (event) => {
       if (event.keyCode === ESC_KEY) {
         this.hide();
       }
@@ -143,4 +151,3 @@ export class TaskDialogComponent implements AfterContentChecked {
     this.actionItemIsVisible = false;
   }
 }
-

@@ -15,14 +15,17 @@
  *  limitations under the License.
  */
 
-import {HeaderComponent} from './header.component';
-import {FeedbackService} from '../../services/feedback.service';
-import {emptyFeedback, Feedback} from '../../../domain/feedback';
-import {Subject} from 'rxjs';
-import {SaveCheckerService} from '../../services/save-checker.service';
-import {HttpClient} from '@angular/common/http';
-import {createMockEventEmitter, createMockHttpClient} from '../../../utils/testutils';
-import {EndRetroDialogComponent} from '../../../controls/end-retro-dialog/end-retro-dialog.component';
+import { HeaderComponent } from './header.component';
+import { FeedbackService } from '../../services/feedback.service';
+import { emptyFeedback, Feedback } from '../../../domain/feedback';
+import { Subject } from 'rxjs';
+import { SaveCheckerService } from '../../services/save-checker.service';
+import { HttpClient } from '@angular/common/http';
+import {
+  createMockEventEmitter,
+  createMockHttpClient,
+} from '../../../utils/testutils';
+import { EndRetroDialogComponent } from '../../../controls/end-retro-dialog/end-retro-dialog.component';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -33,12 +36,16 @@ describe('HeaderComponent', () => {
   beforeEach(() => {
     // @ts-ignore
     mockFeedbackService = {
-      addFeedback: jest.fn().mockReturnValue(new Subject())
+      addFeedback: jest.fn().mockReturnValue(new Subject()),
     } as FeedbackService;
 
     mockHttpClient = createMockHttpClient();
 
-    component = new HeaderComponent(mockFeedbackService, mockSaveCheckerService, mockHttpClient);
+    component = new HeaderComponent(
+      mockFeedbackService,
+      mockSaveCheckerService,
+      mockHttpClient
+    );
   });
 
   it('should create', () => {
@@ -57,7 +64,7 @@ describe('HeaderComponent', () => {
     it('should show the dialog', () => {
       // @ts-ignore
       component.endRetroDialog = {
-        show: jest.fn()
+        show: jest.fn(),
       } as EndRetroDialogComponent;
       component.showEndRetroDialog();
       expect(component.endRetroDialog.show).toHaveBeenCalled();
@@ -74,7 +81,6 @@ describe('HeaderComponent', () => {
   });
 
   describe('onFeedbackSubmitted', () => {
-
     const fakeFeedback: Feedback = emptyFeedback();
 
     beforeEach(() => {
@@ -84,12 +90,13 @@ describe('HeaderComponent', () => {
     });
 
     it('should send the feedback to the backend', () => {
-      expect(mockFeedbackService.addFeedback).toHaveBeenCalledWith(fakeFeedback);
+      expect(mockFeedbackService.addFeedback).toHaveBeenCalledWith(
+        fakeFeedback
+      );
     });
 
     it('should send the feedback to the backend', () => {
       expect(fakeFeedback.teamId).toEqual(component.teamId);
     });
-
   });
 });

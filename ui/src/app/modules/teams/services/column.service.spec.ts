@@ -15,10 +15,13 @@
  *  limitations under the License.
  */
 
-import {ColumnService} from './column.service';
-import {Observable} from 'rxjs/index';
-import {Column} from '../../domain/column';
-import {createMockHttpClient, createMockWebSocketService} from '../../utils/testutils';
+import { ColumnService } from './column.service';
+import { Observable } from 'rxjs/index';
+import { Column } from '../../domain/column';
+import {
+  createMockHttpClient,
+  createMockWebSocketService,
+} from '../../utils/testutils';
 
 describe('ColumnService', () => {
   let service: ColumnService;
@@ -40,7 +43,9 @@ describe('ColumnService', () => {
     it('should request Columns from the columns api', () => {
       const returnObj = service.fetchColumns(teamId);
 
-      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/columns`);
+      expect(mockHttpClient.get).toHaveBeenCalledWith(
+        `/api/team/${teamId}/columns`
+      );
       expect(returnObj instanceof Observable).toBe(true);
     });
   });
@@ -53,12 +58,14 @@ describe('ColumnService', () => {
         id: 1,
         topic: 'happy',
         title: newTitle,
-        teamId: teamId
+        teamId,
       };
 
       service.updateColumn(testColumn);
 
-      expect(mockWebsocketService.updateColumnTitle).toHaveBeenCalledWith(testColumn);
+      expect(mockWebsocketService.updateColumnTitle).toHaveBeenCalledWith(
+        testColumn
+      );
     });
   });
 });

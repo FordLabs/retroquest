@@ -17,8 +17,6 @@
 @import 'color-vars';
 @import 'global-vars';
 
-// sass-lint:disable no-vendor-prefixes
-
 #page {
   $guide-button-section-height: 35px;
   -webkit-overflow-scrolling: touch;
@@ -26,12 +24,12 @@
   font-family: 'Quicksand', sans-serif;
   height: 100%;
   padding: 0;
-  transition: top .5s;
+  transition: top 0.5s;
 
   .guide-button-section {
     background-color: $white;
     bottom: 0;
-    box-shadow: 1px 0 2px opacity($black, .1);
+    box-shadow: 1px 0 2px opacity($black, 0.1);
     display: none;
     height: $guide-button-section-height;
     left: 0;
@@ -53,7 +51,7 @@
       background-color: $happy-green;
       box-sizing: border-box;
       height: 100%;
-      opacity: .35;
+      opacity: 0.35;
       width: calc(100% / 3);
 
       &.happy-guide-button {
@@ -173,6 +171,5 @@ header {
     &.dark-theme {
       background-color: $header-background-color-dark;
     }
-
   }
 }

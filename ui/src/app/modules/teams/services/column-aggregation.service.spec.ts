@@ -15,11 +15,10 @@
  *  limitations under the License.
  */
 
-import {ColumnAggregationService} from './column-aggregation.service';
-import {createMockHttpClient} from '../../utils/testutils';
+import { ColumnAggregationService } from './column-aggregation.service';
+import { createMockHttpClient } from '../../utils/testutils';
 
 describe('ColumnAggregationService', () => {
-
   const mockHttpClient = createMockHttpClient();
 
   const service = new ColumnAggregationService(mockHttpClient);

@@ -15,11 +15,11 @@
  *  limitations under the License.
  */
 
-import {SettingsDialogComponent} from './settings-dialog.component';
-import {AuthService} from '../../auth/auth.service';
-import {Router} from '@angular/router';
-import {EventEmitter} from '@angular/core';
-import {Themes, themeToString} from '../../domain/Theme';
+import { SettingsDialogComponent } from './settings-dialog.component';
+import { AuthService } from '../../auth/auth.service';
+import { Router } from '@angular/router';
+import { EventEmitter } from '@angular/core';
+import { Themes, themeToString } from '../../domain/Theme';
 
 describe('SettingsDialogComponent', () => {
   let component: SettingsDialogComponent;
@@ -27,17 +27,15 @@ describe('SettingsDialogComponent', () => {
   let fakeThemeChangedEmitter: EventEmitter<Themes>;
 
   beforeEach(() => {
-
     // @ts-ignore
     fakeRouter = {
-      navigate: jest.fn().mockReturnValue(null)
+      navigate: jest.fn().mockReturnValue(null),
     };
 
     // @ts-ignore
     fakeThemeChangedEmitter = {
-      emit: jest.fn().mockReturnValue(null)
+      emit: jest.fn().mockReturnValue(null),
     };
-
 
     component = new SettingsDialogComponent(fakeRouter);
     component.themeChanged = fakeThemeChangedEmitter;
@@ -48,7 +46,7 @@ describe('SettingsDialogComponent', () => {
       return store[key];
     });
     spyOn(localStorage, 'setItem').and.callFake((key, value) => {
-      return store[key] = value + '';
+      return (store[key] = value + '');
     });
     spyOn(localStorage, 'clear').and.callFake(() => {
       store = {};
@@ -87,12 +85,14 @@ describe('SettingsDialogComponent', () => {
       const fakeTeamId = 'fake-id';
       component.teamId = fakeTeamId;
       component.updatePassword();
-      expect(fakeRouter.navigate).toHaveBeenCalledWith(['update-password', fakeTeamId]);
+      expect(fakeRouter.navigate).toHaveBeenCalledWith([
+        'update-password',
+        fakeTeamId,
+      ]);
     });
   });
 
   describe('enableDarkTheme', () => {
-
     beforeEach(() => {
       component.enableDarkTheme();
     });
@@ -111,13 +111,14 @@ describe('SettingsDialogComponent', () => {
   });
 
   describe('enableLightTheme', () => {
-
     beforeEach(() => {
       component.enableLightTheme();
     });
 
     it('should set theme value in local storage to light', () => {
-      expect(localStorage.getItem('theme')).toEqual(themeToString(Themes.Light));
+      expect(localStorage.getItem('theme')).toEqual(
+        themeToString(Themes.Light)
+      );
     });
 
     it('should emit the theme changed as light', () => {

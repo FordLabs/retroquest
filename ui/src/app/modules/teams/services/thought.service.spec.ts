@@ -15,12 +15,15 @@
  *  limitations under the License.
  */
 
-import {Observable} from 'rxjs/index';
-import {ThoughtService} from './thought.service';
-import {Thought} from '../../domain/thought';
-import {createMockHttpClient, createMockWebSocketService} from '../../utils/testutils';
-import {WebsocketService} from './websocket.service';
-import {HttpClient} from '@angular/common/http';
+import { Observable } from 'rxjs/index';
+import { ThoughtService } from './thought.service';
+import { Thought } from '../../domain/thought';
+import {
+  createMockHttpClient,
+  createMockWebSocketService,
+} from '../../utils/testutils';
+import { WebsocketService } from './websocket.service';
+import { HttpClient } from '@angular/common/http';
 
 describe('ThoughtService', () => {
   let service: ThoughtService;
@@ -34,7 +37,7 @@ describe('ThoughtService', () => {
     message: 'a message',
     hearts: 0,
     discussed: false,
-    columnTitle: null
+    columnTitle: null,
   };
 
   beforeEach(() => {
@@ -52,7 +55,9 @@ describe('ThoughtService', () => {
 
       const returnObj = service.fetchThoughts(teamId);
 
-      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/thoughts`);
+      expect(mockHttpClient.get).toHaveBeenCalledWith(
+        `/api/team/${teamId}/thoughts`
+      );
       expect(returnObj instanceof Observable).toBe(true);
     });
   });
