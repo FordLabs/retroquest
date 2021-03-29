@@ -15,44 +15,49 @@
  *  limitations under the License.
  */
 
-import {Component, EventEmitter, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {WebsocketService} from '../../services/websocket.service';
-import {TeamService} from '../../services/team.service';
-import {WebsocketResponse} from '../../../domain/websocket-response';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { WebsocketService } from '../../services/websocket.service';
+import { TeamService } from '../../services/team.service';
+import { WebsocketResponse } from '../../../domain/websocket-response';
 
 import * as Hammer from 'hammerjs';
-import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-view/actions-radiator-view.component';
-import {SaveCheckerService} from '../../services/save-checker.service';
-import {Themes} from '../../../domain/Theme';
-import {BoardService} from '../../services/board.service';
-import {ColumnAggregationService} from '../../services/column-aggregation.service';
-import {ColumnResponse} from '../../../domain/column-response';
-import {Column} from '../../../domain/column';
-import {DataService} from '../../../data.service';
-import {ActionItemService} from '../../services/action.service';
-import {ActionItem} from '../../../domain/action-item';
-import {RxStompService} from '@stomp/ng2-stompjs';
-import {Subscription} from 'rxjs';
+import { ActionsRadiatorViewComponent } from '../../../controls/actions-radiator-view/actions-radiator-view.component';
+import { SaveCheckerService } from '../../services/save-checker.service';
+import { Themes } from '../../../domain/Theme';
+import { BoardService } from '../../services/board.service';
+import { ColumnAggregationService } from '../../services/column-aggregation.service';
+import { ColumnResponse } from '../../../domain/column-response';
+import { Column } from '../../../domain/column';
+import { DataService } from '../../../data.service';
+import { ActionItemService } from '../../services/action.service';
+import { ActionItem } from '../../../domain/action-item';
+import { RxStompService } from '@stomp/ng2-stompjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'rq-team',
   templateUrl: './team.page.html',
-  styleUrls: ['./team.page.scss']
+  styleUrls: ['./team.page.scss'],
 })
 export class TeamPageComponent implements OnInit, OnDestroy {
-
   @ViewChild('radiatorView') radiatorView: ActionsRadiatorViewComponent;
 
-  constructor(private dataService: DataService,
-              private teamsService: TeamService,
-              private websocketService: WebsocketService,
-              private saveCheckerService: SaveCheckerService,
-              private boardService: BoardService,
-              private columnAggregationService: ColumnAggregationService,
-              private actionItemService: ActionItemService,
-              private rxStompService: RxStompService
-  ) {
-  }
+  constructor(
+    private dataService: DataService,
+    private teamsService: TeamService,
+    private websocketService: WebsocketService,
+    private saveCheckerService: SaveCheckerService,
+    private boardService: BoardService,
+    private columnAggregationService: ColumnAggregationService,
+    private actionItemService: ActionItemService,
+    private rxStompService: RxStompService
+  ) {}
 
   teamId: string;
   teamName: string;
@@ -74,7 +79,6 @@ export class TeamPageComponent implements OnInit, OnDestroy {
 
   theme: Themes;
 
-
   get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;
   }
@@ -86,17 +90,15 @@ export class TeamPageComponent implements OnInit, OnDestroy {
     this.teamName = this.dataService.team.name;
     this.theme = this.dataService.theme;
 
-    this.dataService.themeChanged.subscribe(theme => this.theme = theme);
+    this.dataService.themeChanged.subscribe((theme) => (this.theme = theme));
 
     if (this.isMobileView()) {
       this.addTouchListeners();
     }
 
-    this.columnAggregationService.getColumns(this.teamId).subscribe(
-      (body) => {
-        this.columnsAggregation = body.columns;
-      }
-    );
+    this.columnAggregationService.getColumns(this.teamId).subscribe((body) => {
+      this.columnsAggregation = body.columns;
+    });
 
     if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
       this.websocketInit();
@@ -113,15 +115,22 @@ export class TeamPageComponent implements OnInit, OnDestroy {
       }
     }, 1000 * 60);
 
-    this.thoughtSubscription = this.rxStompService.watch(`/topic/${this.dataService.team.id}/thoughts`).subscribe((message) => {
-      this.thoughtChanged.emit(JSON.parse(message.body) as WebsocketResponse);
-      this.saveCheckerService.updateTimestamp();
-    });
+    this.thoughtSubscription = this.rxStompService
+      .watch(`/topic/${this.dataService.team.id}/thoughts`)
+      .subscribe((message) => {
+        console.log(message);
+        this.thoughtChanged.emit(JSON.parse(message.body) as WebsocketResponse);
+        this.saveCheckerService.updateTimestamp();
+      });
 
-    this.actionItemSubscription = this.rxStompService.watch(`/topic/${this.dataService.team.id}/action-items`).subscribe((message) => {
-      this.actionItemChanged.emit(JSON.parse(message.body) as WebsocketResponse);
-      this.saveCheckerService.updateTimestamp();
-    });
+    this.actionItemSubscription = this.rxStompService
+      .watch(`/topic/${this.dataService.team.id}/action-items`)
+      .subscribe((message) => {
+        this.actionItemChanged.emit(
+          JSON.parse(message.body) as WebsocketResponse
+        );
+        this.saveCheckerService.updateTimestamp();
+      });
   }
 
   ngOnDestroy(): void {
@@ -130,7 +139,6 @@ export class TeamPageComponent implements OnInit, OnDestroy {
   }
 
   private subscribeToWebsocket() {
-
     this.websocketService.heartbeatTopic().subscribe();
 
     this.websocketService.columnTitleTopic().subscribe((message) => {
@@ -151,7 +159,6 @@ export class TeamPageComponent implements OnInit, OnDestroy {
   }
 
   public onEndRetro(): void {
-
     const thoughts = [];
     const archivedActionItems: Array<ActionItem> = [];
 
@@ -160,7 +167,9 @@ export class TeamPageComponent implements OnInit, OnDestroy {
         thoughts.push(...column.items.active);
         thoughts.push(...column.items.completed);
       } else {
-        archivedActionItems.push(...column.items.completed as Array<ActionItem>);
+        archivedActionItems.push(
+          ...(column.items.completed as Array<ActionItem>)
+        );
         archivedActionItems.forEach((actionItem: ActionItem) => {
           actionItem.archived = true;
         });
@@ -179,7 +188,7 @@ export class TeamPageComponent implements OnInit, OnDestroy {
   }
 
   public isSelectedIndex(index: number): boolean {
-    return (index === this.selectedIndex);
+    return index === this.selectedIndex;
   }
 
   public setSelectedIndex(index: number): void {
@@ -202,7 +211,7 @@ export class TeamPageComponent implements OnInit, OnDestroy {
     if (!state) {
       this.radiatorView.resetScroll();
     }
-    this.currentView = (state) ? 'actionsRadiatorView' : 'normalView';
+    this.currentView = state ? 'actionsRadiatorView' : 'normalView';
   }
 
   public get actionsRadiatorViewIsSelected(): boolean {

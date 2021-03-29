@@ -103,7 +103,7 @@ describe('ThoughtService', () => {
       service.updateThought(testThought);
 
       expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${testThought.teamId}/thought/edit`,
+        destination: `/app/${testThought.teamId}/thought/${testThought.id}/edit`,
         body: JSON.stringify(testThought),
       });
     });
@@ -123,7 +123,7 @@ describe('ThoughtService', () => {
       service.deleteThought(testThought);
 
       expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${testThought.teamId}/thought/delete`,
+        destination: `/app/${testThought.teamId}/thought/${testThought.id}/delete`,
         body: JSON.stringify(testThought),
       });
     });

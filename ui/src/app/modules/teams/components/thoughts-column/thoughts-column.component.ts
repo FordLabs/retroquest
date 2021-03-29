@@ -75,6 +75,7 @@ export class ThoughtsColumnComponent implements OnInit {
 
     this.thoughtChanged.subscribe((response) => {
       const thought = response.payload as Thought;
+      console.log(thought);
       if (thought.topic === this.thoughtAggregation.topic) {
         if (response.type === 'delete') {
           this.deleteThought(thought);

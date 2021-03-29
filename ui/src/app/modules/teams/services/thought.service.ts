@@ -15,45 +15,54 @@
  *  limitations under the License.
  */
 
-import {Injectable, OnDestroy} from '@angular/core';
-import {Observable} from 'rxjs/index';
-import {HttpClient} from '@angular/common/http';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Observable } from 'rxjs/index';
+import { HttpClient } from '@angular/common/http';
 
-import {Thought} from '../../domain/thought';
-import {RxStompService} from '@stomp/ng2-stompjs';
-import {DataService} from '../../data.service';
+import { Thought } from '../../domain/thought';
+import { RxStompService } from '@stomp/ng2-stompjs';
+import { DataService } from '../../data.service';
 
 @Injectable()
 export class ThoughtService {
-
-  constructor (private http: HttpClient, private rxStompService: RxStompService, private dataService: DataService) {
-  }
+  constructor(
+    private http: HttpClient,
+    private rxStompService: RxStompService,
+    private dataService: DataService
+  ) {}
 
   private validTeamId(teamId: string) {
     return this.dataService.team.id === teamId;
   }
 
-  fetchThoughts (teamId: string): Observable<Array<Thought>> {
+  fetchThoughts(teamId: string): Observable<Array<Thought>> {
     return this.http.get<Array<Thought>>(`/api/team/${teamId}/thoughts`);
   }
 
-  addThought (thought: Thought): void {
+  addThought(thought: Thought): void {
     if (this.validTeamId(thought.teamId)) {
-      this.rxStompService.publish({destination: `/app/${this.dataService.team.id}/thought/create`, body: JSON.stringify(thought)});
+      this.rxStompService.publish({
+        destination: `/app/${this.dataService.team.id}/thought/create`,
+        body: JSON.stringify(thought),
+      });
     }
   }
 
-  updateThought (thought: Thought): void {
+  updateThought(thought: Thought): void {
     if (this.validTeamId(thought.teamId)) {
-      this.rxStompService.publish({destination: `/app/${this.dataService.team.id}/thought/edit`, body: JSON.stringify(thought)});
+      this.rxStompService.publish({
+        destination: `/app/${this.dataService.team.id}/thought/${thought.id}/edit`,
+        body: JSON.stringify(thought),
+      });
     }
   }
 
-  deleteThought (thought: Thought): void {
+  deleteThought(thought: Thought): void {
     if (this.validTeamId(thought.teamId)) {
-      this.rxStompService.publish({destination: `/app/${this.dataService.team.id}/thought/delete`, body: JSON.stringify(thought)});
+      this.rxStompService.publish({
+        destination: `/app/${this.dataService.team.id}/thought/${thought.id}/delete`,
+        body: JSON.stringify(thought),
+      });
     }
   }
-
-
 }

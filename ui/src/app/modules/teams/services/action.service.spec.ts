@@ -83,7 +83,7 @@ describe('ActionItemService', () => {
       const actionItem = createActionItem(teamId);
       service.deleteActionItem(actionItem);
       expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${dataService.team.id}/action-item/delete`,
+        destination: `/app/${dataService.team.id}/action-item/${actionItem.id}/delete`,
         body: JSON.stringify(actionItem),
       });
     });
@@ -100,7 +100,7 @@ describe('ActionItemService', () => {
       const actionItem = createActionItem(teamId);
       service.updateActionItem(actionItem);
       expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${dataService.team.id}/action-item/edit`,
+        destination: `/app/${dataService.team.id}/action-item/${actionItem.id}/edit`,
         body: JSON.stringify(actionItem),
       });
     });
@@ -133,11 +133,11 @@ describe('ActionItemService', () => {
       service.archiveActionItems(archivedActionItems);
       expect(spiedStompService.publish).toHaveBeenCalledTimes(2);
       expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${dataService.team.id}/action-item/edit`,
+        destination: `/app/${dataService.team.id}/action-item/${firstActionItem.id}/edit`,
         body: JSON.stringify(firstActionItem),
       });
       expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${dataService.team.id}/action-item/edit`,
+        destination: `/app/${dataService.team.id}/action-item/${secondActionItem.id}/edit`,
         body: JSON.stringify(secondActionItem),
       });
     });
