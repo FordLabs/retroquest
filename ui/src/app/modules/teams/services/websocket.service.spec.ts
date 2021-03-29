@@ -127,28 +127,6 @@ describe('WebsocketService', () => {
 
   });
 
-  describe('updateActionItem', () => {
-    it('should send a message', () => {
-      const fakeActionItem = {
-        id: 1,
-        task: '',
-        completed: false,
-        teamId: '',
-        assignee: '',
-        dateCreated: null,
-        archived: false
-      };
-
-      service.openWebsocket().subscribe();
-      service.updateActionItem(fakeActionItem);
-
-      expect(service.stompClient.send).toHaveBeenCalledWith(
-        `/app/${teamId}/action-item/${fakeActionItem.id}/edit`,
-        JSON.stringify(fakeActionItem)
-      );
-    });
-  });
-
   describe('updateColumnTitle', () => {
     it('should send a message', () => {
       const fakeColumnTitle: Column = {
@@ -164,50 +142,6 @@ describe('WebsocketService', () => {
       expect(service.stompClient.send).toHaveBeenCalledWith(
         `/app/${teamId}/column-title/${fakeColumnTitle.id}/edit`,
         JSON.stringify(fakeColumnTitle)
-      );
-    });
-  });
-
-  describe('createActionItem', () => {
-    it('should send a message', () => {
-      const fakeActionItem = {
-        id: 1,
-        task: '',
-        completed: false,
-        teamId: '',
-        assignee: '',
-        dateCreated: null,
-        archived: false
-      };
-
-      service.openWebsocket().subscribe();
-      service.createActionItem(fakeActionItem);
-
-      expect(service.stompClient.send).toHaveBeenCalledWith(
-        `/app/${teamId}/action-item/create`,
-        JSON.stringify(fakeActionItem)
-      );
-    });
-  });
-
-  describe('deleteActionItem', () => {
-    it('should send a message', () => {
-      const fakeActionItem = {
-        id: 1,
-        task: '',
-        completed: false,
-        teamId: '',
-        assignee: '',
-        dateCreated: null,
-        archived: false
-      };
-
-      service.openWebsocket().subscribe();
-      service.deleteActionItem(fakeActionItem);
-
-      expect(service.stompClient.send).toHaveBeenCalledWith(
-        `/app/${teamId}/action-item/delete`,
-        JSON.stringify(fakeActionItem)
       );
     });
   });

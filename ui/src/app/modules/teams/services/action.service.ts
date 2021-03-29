@@ -20,12 +20,17 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/index';
 
 import {ActionItem} from '../../domain/action-item';
-import {WebsocketService} from './websocket.service';
+import {RxStompService} from '@stomp/ng2-stompjs';
+import {DataService} from '../../data.service';
 
 @Injectable()
 export class ActionItemService {
 
-  constructor(private http: HttpClient, private webSocketService: WebsocketService) {
+  constructor(private http: HttpClient,  private rxStompService: RxStompService, private dataService: DataService) {
+  }
+
+  private validTeamId(teamId: string) {
+    return this.dataService.team.id === teamId;
   }
 
   fetchActionItems(teamId): Observable<Array<ActionItem>> {
@@ -37,20 +42,26 @@ export class ActionItemService {
   }
 
   addActionItem(actionItem: ActionItem): void {
-    this.webSocketService.createActionItem(actionItem);
+    if (this.validTeamId(actionItem.teamId)) {
+      this.rxStompService.publish({destination: `/app/${this.dataService.team.id}/action-item/create`, body: JSON.stringify(actionItem)});
+    }
   }
 
   deleteActionItem(actionItem: ActionItem): void {
-    this.webSocketService.deleteActionItem(actionItem);
+    if (this.validTeamId(actionItem.teamId)) {
+      this.rxStompService.publish({destination: `/app/${this.dataService.team.id}/action-item/delete`, body: JSON.stringify(actionItem)});
+    }
   }
 
   updateActionItem(actionItem: ActionItem): void {
-    this.webSocketService.updateActionItem(actionItem);
+    if (this.validTeamId(actionItem.teamId)) {
+      this.rxStompService.publish({destination: `/app/${this.dataService.team.id}/action-item/edit`, body: JSON.stringify(actionItem)});
+    }
   }
 
   archiveActionItems(archivedActionItems: Array<ActionItem>) {
     archivedActionItems.forEach(actionItem => {
-      this.webSocketService.updateActionItem(actionItem);
+      this.updateActionItem(actionItem);
     });
   }
 }

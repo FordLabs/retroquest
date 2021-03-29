@@ -64,6 +64,7 @@ export class TeamPageComponent implements OnInit, OnDestroy {
   columnsAggregation: Array<ColumnResponse> = [];
 
   thoughtSubscription: Subscription;
+  actionItemSubscription: Subscription;
 
   thoughtChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
   actionItemChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
@@ -116,20 +117,21 @@ export class TeamPageComponent implements OnInit, OnDestroy {
       this.thoughtChanged.emit(JSON.parse(message.body) as WebsocketResponse);
       this.saveCheckerService.updateTimestamp();
     });
+
+    this.actionItemSubscription = this.rxStompService.watch(`/topic/${this.dataService.team.id}/action-items`).subscribe((message) => {
+      this.actionItemChanged.emit(JSON.parse(message.body) as WebsocketResponse);
+      this.saveCheckerService.updateTimestamp();
+    });
   }
 
   ngOnDestroy(): void {
     this.thoughtSubscription.unsubscribe();
+    this.actionItemSubscription.unsubscribe();
   }
 
   private subscribeToWebsocket() {
 
     this.websocketService.heartbeatTopic().subscribe();
-
-    this.websocketService.actionItemTopic().subscribe((message) => {
-      this.actionItemChanged.emit(message.bodyJson as WebsocketResponse);
-      this.saveCheckerService.updateTimestamp();
-    });
 
     this.websocketService.columnTitleTopic().subscribe((message) => {
       const response: WebsocketResponse = message.bodyJson;

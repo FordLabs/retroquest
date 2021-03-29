@@ -20,21 +20,29 @@ import {Observable} from 'rxjs/index';
 import {ActionItem, emptyActionItem} from '../../domain/action-item';
 import {HttpClient} from '@angular/common/http';
 import {WebsocketService} from './websocket.service';
+import {RxStompService} from '@stomp/ng2-stompjs';
+import {DataService} from '../../data.service';
+import {ThoughtService} from './thought.service';
 
 describe('ActionItemService', () => {
   let service: ActionItemService;
+  let spiedStompService: RxStompService;
   let mockHttpClient: HttpClient;
-  let mockWebSocket: WebsocketService;
+  const dataService: DataService = new DataService();
+  const teamId = 'teamId';
 
-  const actionItem: ActionItem = {
-    id: 0,
-    teamId: 'team-id',
-    task: 'action actionItem',
-    completed: false,
-    assignee: null,
-    dateCreated: null,
-    archived: false
-  };
+
+  function createActionItem(team: string, id: number = null) {
+    return {
+      id: id,
+      teamId: team,
+      task: 'action actionItem',
+      completed: false,
+      assignee: null,
+      dateCreated: null,
+      archived: false
+    };
+  }
 
   beforeEach(() => {
     // @ts-ignore
@@ -46,37 +54,62 @@ describe('ActionItemService', () => {
     } as HttpClient;
 
     // @ts-ignore
-    mockWebSocket = {
-      createActionItem: jest.fn(),
-      updateActionItem: jest.fn(),
-      deleteActionItem: jest.fn()
-    } as WebsocketService;
-    service = new ActionItemService(mockHttpClient, mockWebSocket);
+    spiedStompService = {
+      publish: jest.fn(),
+    } as RxStompService;
 
-  });
+    dataService.team.id = teamId;
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+    service = new ActionItemService(mockHttpClient, spiedStompService, dataService);
   });
 
   describe('addActionItem', () => {
     it('should add over websocket', () => {
+      const actionItem = createActionItem(teamId);
       service.addActionItem(actionItem);
-      expect(mockWebSocket.createActionItem).toHaveBeenCalledWith(actionItem);
+      expect(spiedStompService.publish).toHaveBeenCalledWith(
+        {destination: `/app/${dataService.team.id}/action-item/create`, body: JSON.stringify(actionItem)}
+      );
+    });
+
+    it('should not add with invalid team id', () => {
+      const actionItem = createActionItem('hacker');
+      service.addActionItem(actionItem);
+      expect(spiedStompService.publish).not.toHaveBeenCalled();
     });
   });
 
   describe('deleteActionItem', () => {
-    it('should send delete request to the ActionItem api via websocket', () => {
+
+    it('should delete over websocket', () => {
+      const actionItem = createActionItem(teamId);
       service.deleteActionItem(actionItem);
-      expect(mockWebSocket.deleteActionItem).toHaveBeenCalledWith(actionItem);
+      expect(spiedStompService.publish).toHaveBeenCalledWith(
+        {destination: `/app/${dataService.team.id}/action-item/delete`, body: JSON.stringify(actionItem)}
+      );
     });
+
+    it('should not delete with invalid team id', () => {
+      const actionItem = createActionItem('hacker');
+      service.deleteActionItem(actionItem);
+      expect(spiedStompService.publish).not.toHaveBeenCalled();
+    });
+
   });
 
   describe('updateActionItem', () => {
-    it('should send an update command to the ActionItem api via websocket', () => {
+    it('should delete over websocket', () => {
+      const actionItem = createActionItem(teamId);
       service.updateActionItem(actionItem);
-      expect(mockWebSocket.updateActionItem).toHaveBeenCalledWith(actionItem);
+      expect(spiedStompService.publish).toHaveBeenCalledWith(
+        {destination: `/app/${dataService.team.id}/action-item/edit`, body: JSON.stringify(actionItem)}
+      );
+    });
+
+    it('should not delete with invalid team id', () => {
+      const actionItem = createActionItem('hacker');
+      service.updateActionItem(actionItem);
+      expect(spiedStompService.publish).not.toHaveBeenCalled();
     });
   });
 
@@ -91,14 +124,19 @@ describe('ActionItemService', () => {
 
   describe('archiveActionItems', () => {
     const archivedActionItems = new Array<ActionItem>();
-    const firstActionItem = emptyActionItem();
-    const secondActionItem = emptyActionItem();
+    const firstActionItem = createActionItem(teamId, 1);
+    const secondActionItem = createActionItem(teamId, 2);
     archivedActionItems.push(firstActionItem, secondActionItem);
 
     it('should call the backend api with the correct url', () => {
       service.archiveActionItems(archivedActionItems);
-      expect(mockWebSocket.updateActionItem).toHaveBeenCalledWith(firstActionItem);
-      expect(mockWebSocket.updateActionItem).toHaveBeenCalledWith(secondActionItem);
+      expect(spiedStompService.publish).toHaveBeenCalledTimes(2);
+      expect(spiedStompService.publish).toHaveBeenCalledWith(
+        {destination: `/app/${dataService.team.id}/action-item/edit`, body: JSON.stringify(firstActionItem)}
+      );
+      expect(spiedStompService.publish).toHaveBeenCalledWith(
+        {destination: `/app/${dataService.team.id}/action-item/edit`, body: JSON.stringify(secondActionItem)}
+      );
     });
   });
 });

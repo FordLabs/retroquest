@@ -125,17 +125,6 @@ export class WebsocketService {
     }
   }
 
-  public actionItemTopic(): Observable<any> {
-    this.checkForOpenSocket();
-
-    return new Observable<any>(observer => {
-      const sub = this.stompClient.subscribe(`/topic/${this.dataService.team.id}/action-items`);
-      sub.messages.subscribe(m => {
-        observer.next(m);
-      });
-    });
-  }
-
   public columnTitleTopic(): Observable<any> {
     return new Observable<any>(observer => {
       const sub = this.stompClient.subscribe(`/topic/${this.dataService.team.id}/column-titles`);
@@ -143,21 +132,6 @@ export class WebsocketService {
         observer.next(m);
       });
     });
-  }
-
-  public createActionItem(actionItem: ActionItem) {
-    this.checkForOpenSocket();
-    this.stompClient.send(`/app/${this.dataService.team.id}/action-item/create`, JSON.stringify(actionItem));
-  }
-
-  public updateActionItem(actionItem: ActionItem) {
-    this.checkForOpenSocket();
-    this.stompClient.send(`/app/${this.dataService.team.id}/action-item/${actionItem.id}/edit`, JSON.stringify(actionItem));
-  }
-
-  public deleteActionItem(actionItem: ActionItem) {
-    this.checkForOpenSocket();
-    this.stompClient.send(`/app/${this.dataService.team.id}/action-item/delete`, JSON.stringify(actionItem));
   }
 
   public updateColumnTitle(column: Column) {
