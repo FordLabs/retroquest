@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-import {ItemSorter} from './column/item-sorter';
+import { ItemSorter } from './column/item-sorter';
 
 export interface ColumnResponse {
   id: number;
@@ -27,9 +27,44 @@ export interface ColumnResponse {
 export function emptyColumnResponse(): ColumnResponse {
   return {
     id: -1,
-    items: {active: [], completed: []},
+    items: { active: [], completed: [] },
     topic: '',
-    title: ''
+    title: '',
   };
+}
 
+export function deleteColumnResponse(
+  response: ResponseWithId,
+  items: ItemSorter
+): void {
+  function findIndex(
+    inputResponse: ResponseWithId,
+    responses: Array<Object>
+  ): number {
+    let index = -1;
+    for (let i = 0; i < responses.length; i++) {
+      const comparatorResponse: ResponseWithId = responses[i] as ResponseWithId;
+      if (comparatorResponse.id === inputResponse.id) {
+        index = i;
+        break;
+      }
+    }
+
+    return index;
+  }
+
+  let removeIndex = findIndex(response, items.active);
+  if (removeIndex > -1) {
+    items.active.splice(removeIndex, 1);
+    return;
+  }
+
+  removeIndex = findIndex(response, items.completed);
+  if (removeIndex > -1) {
+    items.completed.splice(removeIndex, 1);
+  }
+}
+
+export interface ResponseWithId {
+  id: number;
 }

@@ -1238,16 +1238,6 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.2.tgz#8f03a22a04de437254e8ce8cc84ba39689288752"
   integrity sha512-HyYEUDeIj5rRQU2Hk5HTB2uHsbRQpF70nvMhVzi+VJR0X+xNEhjPui4/kBf3VeH/wqD28PT4sVOm8qqLjBrSZg==
 
-"@elderbyte/ts-logger@^0.1.0":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@elderbyte/ts-logger/-/ts-logger-0.1.2.tgz#f900d5cd08e7b24a5cbcebbd6669735ffd45d407"
-  integrity sha512-v+nI9g/7+Jl3YsLxSGh0IZMUSvdIQVARM12DUfT8B4xQZtRQtHnDHEKfiUzkeXtj7kSG5WHvutc3/oUgRJnA6A==
-
-"@elderbyte/ts-stomp@^2.1.2":
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/@elderbyte/ts-stomp/-/ts-stomp-2.1.2.tgz#b14dd6e91a1c3f3488eb16a8ae21bc9f4c53741c"
-  integrity sha512-qMaJ1fdeGLT8pIImNA01w2FnEYMhw/M1q7vRMkgeV7IdQltTuFmJdNg3LMboDIfGVC5KBWFMNycIe8ikH0Sgkg==
-
 "@eslint/eslintrc@^0.4.0":
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@eslint/eslintrc/-/eslintrc-0.4.0.tgz#99cc0a0584d72f1df38b900fb062ba995f395547"

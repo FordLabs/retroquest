@@ -30,9 +30,11 @@ import { fadeInOutAnimation } from '../../../animations/add-delete-animation';
 import { Themes } from '../../../domain/Theme';
 import {
   ColumnResponse,
+  deleteColumnResponse,
   emptyColumnResponse,
 } from '../../../domain/column-response';
 import { WebsocketResponse } from '../../../domain/websocket-response';
+import { ItemSorter } from '../../../domain/column/item-sorter';
 
 @Component({
   selector: 'rq-thoughts-column',
@@ -199,38 +201,7 @@ export class ThoughtsColumnComponent implements OnInit {
   }
 
   deleteThought(thought: Thought) {
-    function removeThought(
-      inputThought: Thought,
-      thoughts: Array<Object>
-    ): number {
-      let index = -1;
-      for (let i = 0; i < thoughts.length; i++) {
-        const comparatorThought: Thought = thoughts[i] as Thought;
-        if (comparatorThought.id === inputThought.id) {
-          index = i;
-          break;
-        }
-      }
-
-      return index;
-    }
-
-    let removeIndex = removeThought(
-      thought,
-      this.thoughtAggregation.items.active
-    );
-    if (removeIndex > -1) {
-      this.thoughtAggregation.items.active.splice(removeIndex, 1);
-      return;
-    }
-
-    removeIndex = removeThought(
-      thought,
-      this.thoughtAggregation.items.completed
-    );
-    if (removeIndex > -1) {
-      this.thoughtAggregation.items.completed.splice(removeIndex, 1);
-    }
+    deleteColumnResponse(thought, this.thoughtAggregation.items);
   }
 
   discussThought(thought: Thought): void {

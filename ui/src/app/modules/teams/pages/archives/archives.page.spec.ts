@@ -20,10 +20,8 @@ import { Subject } from 'rxjs';
 import { TeamService } from '../../services/team.service';
 import { BoardService } from '../../services/board.service';
 import { Board, emptyBoardWithThought } from '../../../domain/board';
-import { WebsocketService } from '../../services/websocket.service';
 import { DataService } from '../../../data.service';
 import { ActionItemService } from '../../services/action.service';
-import { createMockWebSocketService } from '../../../utils/testutils';
 
 describe('ArchivesPageComponent', () => {
   let paramsSubject: Subject<Object>;
@@ -32,7 +30,6 @@ describe('ArchivesPageComponent', () => {
 
   let mockTeamService: TeamService;
   let mockBoardService: BoardService;
-  let mockWebSocketService: WebsocketService;
   let mockWindow: Window;
   let mockDataService: DataService;
   let mockActionItemService: ActionItemService;
@@ -57,8 +54,6 @@ describe('ArchivesPageComponent', () => {
       fetchBoards: jest.fn().mockReturnValue(fetchBoardsSubject),
     } as BoardService;
 
-    mockWebSocketService = createMockWebSocketService();
-
     // @ts-ignore
     mockWindow = {
       clearInterval: jest.fn(),
@@ -75,7 +70,6 @@ describe('ArchivesPageComponent', () => {
       mockDataService,
       mockTeamService,
       mockBoardService,
-      mockWebSocketService,
       mockActionItemService
     );
     component.globalWindowRef = mockWindow;
@@ -111,17 +105,6 @@ describe('ArchivesPageComponent', () => {
       component.teamName = '';
       component.ngOnInit();
       expect(component.teamName).toEqual('the team name');
-    });
-
-    it('should close the websocketservice', function () {
-      component.ngOnInit();
-      expect(mockWebSocketService.closeWebsocket).toHaveBeenCalled();
-    });
-
-    it('should clear setInterval on window', function () {
-      mockWebSocketService.intervalId = 1;
-      component.ngOnInit();
-      expect(mockWindow.clearInterval).toHaveBeenCalledWith(1);
     });
 
     it('should get all of the archived action items', () => {

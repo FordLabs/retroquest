@@ -15,23 +15,21 @@
  *  limitations under the License.
  */
 
-import {Component, Input, OnInit} from '@angular/core';
-import {TeamService} from '../../services/team.service';
-import {Board} from '../../../domain/board';
-import {BoardService} from '../../services/board.service';
-import {WebsocketService} from '../../services/websocket.service';
-import {Themes} from '../../../domain/Theme';
-import {DataService} from '../../../data.service';
-import {ActionItemService} from '../../services/action.service';
-import {ActionItem} from '../../../domain/action-item';
+import { Component, Input, OnInit } from '@angular/core';
+import { TeamService } from '../../services/team.service';
+import { Board } from '../../../domain/board';
+import { BoardService } from '../../services/board.service';
+import { Themes } from '../../../domain/Theme';
+import { DataService } from '../../../data.service';
+import { ActionItemService } from '../../services/action.service';
+import { ActionItem } from '../../../domain/action-item';
 
 @Component({
   selector: 'rq-archives',
   templateUrl: './archives.page.html',
-  styleUrls: ['./archives.page.scss']
+  styleUrls: ['./archives.page.scss'],
 })
 export class ArchivesPageComponent implements OnInit {
-
   @Input() theme: Themes = Themes.Light;
 
   teamId: string;
@@ -47,28 +45,24 @@ export class ArchivesPageComponent implements OnInit {
   dialogIsVisible = false;
   boardPageIndex = 0;
 
-  constructor(private dataService: DataService,
-              private teamsService: TeamService,
-              private boardService: BoardService,
-              private websocketService: WebsocketService,
-              private actionItemService: ActionItemService
-  ) {
-  }
+  constructor(
+    private dataService: DataService,
+    private teamsService: TeamService,
+    private boardService: BoardService,
+    private actionItemService: ActionItemService
+  ) {}
 
   ngOnInit() {
-    this.globalWindowRef.clearInterval(this.websocketService.intervalId);
-    this.websocketService.closeWebsocket();
-
     this.teamId = this.dataService.team.id;
     this.teamName = this.dataService.team.name;
     this.theme = this.dataService.theme;
 
-    this.dataService.themeChanged.subscribe(theme => this.theme = theme);
+    this.dataService.themeChanged.subscribe((theme) => (this.theme = theme));
 
     this.fetchBoards(this.teamId, this.boardPageIndex);
 
     this.actionItemService.fetchArchivedActionItems(this.teamId).subscribe(
-      actionItems => {
+      (actionItems) => {
         this.archivedActionItems = actionItems;
         this.actionItemArchivesAreLoading = false;
       },
@@ -91,7 +85,7 @@ export class ArchivesPageComponent implements OnInit {
   }
 
   removeBoardFromBoards(boardId: number) {
-    this.boards = this.boards.filter(board => {
+    this.boards = this.boards.filter((board) => {
       return board.id !== boardId;
     });
   }
@@ -102,7 +96,9 @@ export class ArchivesPageComponent implements OnInit {
 
   get archiveBoardList(): Array<Board> {
     if (this.countSortEnabled) {
-      return this.boards.slice().sort((a, b) => b.thoughts.length - a.thoughts.length);
+      return this.boards
+        .slice()
+        .sort((a, b) => b.thoughts.length - a.thoughts.length);
     }
     return this.boards;
   }
@@ -113,17 +109,21 @@ export class ArchivesPageComponent implements OnInit {
   }
 
   get noActionItemArchivesWereFound(): boolean {
-    return this.archivedActionItems.length === 0 && !this.thoughtArchivesAreLoading;
+    return (
+      this.archivedActionItems.length === 0 && !this.thoughtArchivesAreLoading
+    );
   }
 
   fetchBoards(teamId: string, pageIndex: number) {
-    this.boardService.fetchBoards(teamId, pageIndex).subscribe(boards => {
+    this.boardService.fetchBoards(teamId, pageIndex).subscribe(
+      (boards) => {
         this.boards.push(...boards);
         this.thoughtArchivesAreLoading = false;
       },
       () => {
         this.thoughtArchivesAreLoading = false;
-      });
+      }
+    );
   }
 
   onScroll() {

@@ -19,6 +19,7 @@ import { ActionsColumnComponent } from './actions-column.component';
 import { ActionItem } from '../../../domain/action-item';
 import { ActionItemService } from '../../services/action.service';
 import { ActionItemDialogComponent } from '../../../controls/action-item-dialog/action-item-dialog.component';
+import { Thought } from '../../../domain/thought';
 
 describe('ActionsColumnComponent', () => {
   let component: ActionsColumnComponent;
@@ -194,4 +195,53 @@ describe('ActionsColumnComponent', () => {
       });
     });
   });
+
+  describe('deleting action items', () => {
+    const incompleteActionItem = createActionItem(1, 'take out the trash');
+    const completedActionItem = createActionItem(
+      2,
+      'wipe off the dry erase board',
+      true
+    );
+
+    let active;
+    let completed;
+
+    beforeEach(() => {
+      active = [incompleteActionItem];
+      completed = [completedActionItem];
+      component.actionItemAggregation.items = {
+        active,
+        completed,
+      };
+    });
+
+    it('properly deletes incomplete action items', () => {
+      component.deleteActionItem({ id: incompleteActionItem.id } as ActionItem);
+      expect(component.actionItemAggregation.items.active.length).toEqual(0);
+      expect(component.actionItemAggregation.items.completed.length).toEqual(1);
+    });
+
+    it('properly deletes complete action items', () => {
+      component.deleteActionItem({ id: completedActionItem.id } as ActionItem);
+      expect(component.actionItemAggregation.items.active.length).toEqual(1);
+      expect(component.actionItemAggregation.items.completed.length).toEqual(0);
+    });
+  });
+
+  function createActionItem(
+    id: number,
+    task: string,
+    completed: boolean = false
+  ): ActionItem {
+    return {
+      id,
+      task,
+      completed,
+      teamId: 'test',
+      assignee: null,
+      dateCreated: null,
+      archived: false,
+    } as ActionItem;
+  }
 });

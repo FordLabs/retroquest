@@ -29,7 +29,6 @@ import { ActionsColumnComponent } from './components/actions-column/actions-colu
 import { TeamService } from './services/team.service';
 import { ActionItemService } from './services/action.service';
 import { ColumnService } from './services/column.service';
-import { WebsocketService } from './services/websocket.service';
 import { FeedbackService } from './services/feedback.service';
 import { AuthGuard } from '../auth/auth-guard/auth.guard';
 import { TeamPageQueryParamGuard } from './services/team-page-query-param-guard';
@@ -87,7 +86,6 @@ import { EndRetroService } from './services/end-retro.service';
     TeamService,
     ActionItemService,
     ColumnService,
-    WebsocketService,
     FeedbackService,
     SaveCheckerService,
     EndRetroService,

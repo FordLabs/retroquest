@@ -20,7 +20,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/index';
 
 import { Column } from '../../domain/column';
-import { WebsocketService } from './websocket.service';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { DataService } from '../../data.service';
 

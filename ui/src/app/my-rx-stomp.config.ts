@@ -1,5 +1,5 @@
-import {AuthService} from './modules/auth/auth.service';
-import {InjectableRxStompConfig} from '@stomp/ng2-stompjs';
+import { AuthService } from './modules/auth/auth.service';
+import { InjectableRxStompConfig } from '@stomp/ng2-stompjs';
 
 function getBrokerUrl(): string {
   const protocol = location.protocol === 'http:' ? 'ws://' : 'wss://';
@@ -13,7 +13,7 @@ export const myRxStompConfig: InjectableRxStompConfig = {
   // Headers
   // Typical keys: login, passcode, host
   connectHeaders: {
-    Authorization: AuthService.getToken()
+    Authorization: AuthService.getToken(),
   },
 
   // How often to heartbeat?
@@ -30,6 +30,7 @@ export const myRxStompConfig: InjectableRxStompConfig = {
   // It can be quite verbose, not recommended in production
   // Skip this key to stop logging to console
   debug: (msg: string): void => {
-    console.log(new Date(), msg);
+    // eslint-disable-next-line no-console
+    console.debug(new Date(), msg);
   },
 };

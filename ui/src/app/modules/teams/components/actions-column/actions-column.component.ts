@@ -28,7 +28,10 @@ import { ActionItemDialogComponent } from '../../../controls/action-item-dialog/
 import { fadeInOutAnimation } from '../../../animations/add-delete-animation';
 import { Themes } from '../../../domain/Theme';
 import moment from 'moment';
-import { ColumnResponse } from '../../../domain/column-response';
+import {
+  ColumnResponse,
+  deleteColumnResponse,
+} from '../../../domain/column-response';
 import { WebsocketResponse } from '../../../domain/websocket-response';
 import { Column } from '../../../domain/column';
 
@@ -91,21 +94,7 @@ export class ActionsColumnComponent implements OnInit {
   }
 
   deleteActionItem(actionItem: ActionItem) {
-    if (actionItem.completed) {
-      this.actionItemAggregation.items.completed.splice(
-        this.actionItemAggregation.items.completed.findIndex(
-          (item: ActionItem) => item.id === actionItem.id
-        ),
-        1
-      );
-    } else {
-      this.actionItemAggregation.items.active.splice(
-        this.actionItemAggregation.items.active.findIndex(
-          (item: ActionItem) => item.id === actionItem.id
-        ),
-        1
-      );
-    }
+    deleteColumnResponse(actionItem, this.actionItemAggregation.items);
   }
 
   updateActionItems(actionItem: ActionItem) {

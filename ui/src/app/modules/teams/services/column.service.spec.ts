@@ -21,7 +21,6 @@ import { Column } from '../../domain/column';
 import {
   createMockHttpClient,
   createMockRxStompService,
-  createMockWebSocketService,
 } from '../../utils/testutils';
 import { DataService } from '../../data.service';
 
