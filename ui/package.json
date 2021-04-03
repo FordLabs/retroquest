@@ -15,7 +15,9 @@
     "e2e": "ng e2e",
     "sonarqube": "sonar-scanner -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_UI_TOKEN",
     "postinstall": "ngcc",
-    "prepare": "cd .. && husky install ui/.husky"
+    "prepare": "cd .. && husky install ui/.husky",
+    "cypress": "cypress run --headless",
+    "cypress-visual": "cypress open"
   },
   "private": true,
   "dependencies": {
@@ -55,6 +57,8 @@
     "@angular/cli": "~11.2.6",
     "@angular/compiler-cli": "~11.2.7",
     "@angular/language-service": "~11.2.7",
+    "@cypress/webpack-preprocessor": "^5.6.0",
+    "@testing-library/cypress": "^7.0.5",
     "@types/file-saver": "^2.0.0",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "^2.0.8",
@@ -63,6 +67,9 @@
     "@typescript-eslint/eslint-plugin": "4.16.1",
     "@typescript-eslint/parser": "4.16.1",
     "ajv": "^6.12.4",
+    "cypress": "^6.8.0",
+    "cypress-angular-unit-test": "^3.6.1",
+    "cypress-jest-adapter": "^0.1.1",
     "eslint": "^7.6.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-import": "2.22.1",
