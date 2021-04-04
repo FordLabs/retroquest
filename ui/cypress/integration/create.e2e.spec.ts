@@ -1,6 +1,6 @@
 describe('Create Page', () => {
-  const teamName = 'Test Team Name';
-  const teamId = 'test-team-name';
+  const teamName = 'Create Board Tests';
+  const teamId = 'create-board-tests';
   const password = 'Test1234';
 
   describe('navigation', () => {
