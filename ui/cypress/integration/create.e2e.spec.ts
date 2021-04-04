@@ -1,3 +1,5 @@
+import { createTeamIfNecessary, goToTeamBoard } from './utils';
+
 describe('Create Page', () => {
   const teamName = 'Create Board Tests';
   const teamId = 'create-board-tests';
@@ -17,41 +19,10 @@ describe('Create Page', () => {
   });
 
   describe('default board creation', () => {
-    async function createTeamIfNecessary() {
-      const urlTeamBoard = `http://localhost:4200/team/${teamId}`;
+    const created = false;
 
-      cy.visit(urlTeamBoard);
-
-      const url = await cy.url();
-
-      if (url === urlTeamBoard) {
-        return;
-      }
-
-      cy.get('#teamNameInput').then((teamNameInput) => {
-        function createTeam() {
-          cy.visit('/create');
-          cy.get('#teamNameInput').type(teamName);
-          cy.get('#teamPasswordInput').type(password);
-          cy.get('#teamPasswordConfirmInput').type(password);
-          cy.get('#createRetroButton').click();
-        }
-
-        function login() {
-          cy.get('#teamPasswordInput').type(password);
-          cy.get('#signInButton').click();
-        }
-
-        if (teamNameInput.val().trim() === '') {
-          createTeam();
-        } else {
-          login();
-        }
-      });
-    }
-
-    beforeEach(() => {
-      createTeamIfNecessary();
+    before(() => {
+      createTeamIfNecessary(teamName, teamId, password);
     });
 
     describe('Sections', () => {
