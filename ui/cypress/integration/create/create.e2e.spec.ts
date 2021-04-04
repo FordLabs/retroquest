@@ -2,80 +2,19 @@ describe('Create Page', () => {
   const teamName = 'Test Team Name';
   const teamId = 'test-team-name';
   const password = 'Test1234';
-  //
-  // describe('navigation', () => {
-  //     it('should be able to navigate to /create', () => {
-  //         cy.visit('/create');
-  //         cy.url().should('eq', 'http://localhost:4200/create');
-  //     });
-  //
-  //     it('should be able to navigate to /login from link', () => {
-  //         cy.visit('/create');
-  //         cy.get('#loginBoard').click();
-  //         cy.url().should('eq', 'http://localhost:4200/login');
-  //     });
-  // });
-  //
-  // describe('form validation', () => {
-  //
-  //     beforeEach(() => {
-  //         cy.visit('/create');
-  //     });
-  //
-  //     it('must have a valid team name', () => {
-  //         cy.get('#teamPasswordInput').type(password);
-  //         cy.get('#teamPasswordConfirmInput').type(password);
-  //         cy.get('#createRetroButton').click();
-  //         cy.get('#errorMessage').should('contain.text', 'Please enter a team name');
-  //     });
-  //
-  //     it('must have a password', () => {
-  //         cy.get('#teamNameInput').type(teamName);
-  //         cy.get('#teamPasswordConfirmInput').type(password);
-  //         cy.get('#createRetroButton').click();
-  //         cy.get('#errorMessage').should('contain.text', 'Please enter a password');
-  //     });
-  //
-  //     it('must have a confirm password', () => {
-  //         cy.get('#teamNameInput').type(teamName);
-  //         cy.get('#teamPasswordInput').type(password);
-  //         cy.get('#createRetroButton').click();
-  //         cy.get('#errorMessage').should('contain.text', 'Please enter matching passwords');
-  //     });
-  //
-  //     it('Password must contain a capital letter', () => {
-  //         cy.get('#teamNameInput').type(teamName);
-  //         cy.get('#teamPasswordInput').type('test1234');
-  //         cy.get('#teamPasswordConfirmInput').type('test1234');
-  //         cy.get('#createRetroButton').click();
-  //         cy.get('#errorMessage').should('contain.text', 'Password must contain at least one capital letter.');
-  //     });
-  //
-  //     it('Password must contain a lowercase letter', () => {
-  //         cy.get('#teamNameInput').type(teamName);
-  //         cy.get('#teamPasswordInput').type('TEST1234');
-  //         cy.get('#teamPasswordConfirmInput').type('TEST1234');
-  //         cy.get('#createRetroButton').click();
-  //         cy.get('#errorMessage').should('contain.text', 'Password must contain at least one lower case letter.');
-  //     });
-  //
-  //     it('Password must contain a number', () => {
-  //         cy.get('#teamNameInput').type(teamName);
-  //         cy.get('#teamPasswordInput').type('TESTtest');
-  //         cy.get('#teamPasswordConfirmInput').type('TESTtest');
-  //         cy.get('#createRetroButton').click();
-  //         cy.get('#errorMessage').should('contain.text', 'Password must contain at least one numeric character.');
-  //     });
-  //
-  //     it('Password must be 8 characters long', () => {
-  //         cy.get('#teamNameInput').type(teamName);
-  //         cy.get('#teamPasswordInput').type('Te1');
-  //         cy.get('#teamPasswordConfirmInput').type('Te1');
-  //         cy.get('#createRetroButton').click();
-  //         cy.get('#errorMessage').should('contain.text', 'Password must be 8 characters or longer.');
-  //     });
-  //
-  // });
+
+  describe('navigation', () => {
+    it('should be able to navigate to /create', () => {
+      cy.visit('/create');
+      cy.url().should('eq', 'http://localhost:4200/create');
+    });
+
+    it('should be able to navigate to /login from link', () => {
+      cy.visit('/create');
+      cy.get('#loginBoard').click();
+      cy.url().should('eq', 'http://localhost:4200/login');
+    });
+  });
 
   describe('default board creation', () => {
     async function createTeamIfNecessary() {

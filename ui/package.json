@@ -16,8 +16,8 @@
     "sonarqube": "sonar-scanner -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_UI_TOKEN",
     "postinstall": "ngcc",
     "prepare": "cd .. && husky install ui/.husky",
-    "cypress": "cypress run --headless",
-    "cypress-visual": "cypress open"
+    "cypress": "cypress run --headless --browser chrome",
+    "cypress-supervise": "cypress open"
   },
   "private": true,
   "dependencies": {
@@ -60,6 +60,8 @@
     "@cypress/webpack-preprocessor": "^5.6.0",
     "@testing-library/angular": "^10.5.0",
     "@testing-library/cypress": "^7.0.5",
+    "@testing-library/jest-dom": "^5.11.10",
+    "@testing-library/user-event": "^13.1.1",
     "@types/file-saver": "^2.0.0",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "^2.0.8",
