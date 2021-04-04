@@ -1,4 +1,4 @@
-import { createTeamIfNecessary, goToTeamBoard } from './utils';
+import { createTeamIfNecessary, goToTeamBoard } from '../util/utils';
 
 describe('Create Page', () => {
   const teamName = 'Create Board Tests';

@@ -82,6 +82,7 @@ export function createMockTeamService(): TeamService {
 
   return ({
     isCaptchaEnabled: jest.fn().mockReturnValue(of(captchResponse)),
+    isCaptchaEnabledForTeam: jest.fn().mockReturnValue(of(captchResponse)),
     create: jest.fn().mockReturnValue(of(createTeamResponse)),
   } as unknown) as TeamService;
 }
