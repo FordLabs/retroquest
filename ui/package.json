@@ -72,6 +72,7 @@
     "ajv": "^6.12.4",
     "cypress": "^6.8.0",
     "cypress-angular-unit-test": "^3.6.1",
+    "cypress-intellij-reporter": "^0.0.6",
     "cypress-jest-adapter": "^0.1.1",
     "eslint": "^7.6.0",
     "eslint-config-prettier": "^8.1.0",
