@@ -17,13 +17,10 @@
 
 import { CreateComponent } from './create.page';
 import { AuthService } from '../../../auth/auth.service';
-import { Subject, throwError } from 'rxjs';
 import { of } from 'rxjs/internal/observable/of';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import {
   createMockHttpClient,
-  createMockRecaptchaComponent,
-  createMockRouter,
   createMockTeamService,
   enterTextIntoFormElement,
 } from '../../../utils/testutils';
@@ -31,33 +28,30 @@ import { TeamService } from '../../../teams/services/team.service';
 import { render } from '@testing-library/angular';
 import { BoardsModule } from '../../boards.module';
 import { RenderResult } from '@testing-library/angular/src/lib/models';
-import { BrandFooterComponent } from '../../components/brand-footer/brand-footer.component';
+import { TestModule } from '../../../test/test.module';
+import { EmptyComponent } from '../../../test/empty.page';
 
 describe('CreateComponent', () => {
-  let component: RenderResult<CreateComponent>;
-  let mockTeamService;
-
-  beforeEach(async () => {
-    mockTeamService = createMockTeamService();
-
-    component = await render(CreateComponent, {
+  async function createComponent(
+    teamService: TeamService
+  ): Promise<RenderResult<CreateComponent>> {
+    return render(CreateComponent, {
       routes: [
         {
-          path: '',
+          path: 'create',
           component: CreateComponent,
         },
         {
-          path: 'team/teamId',
-          //Just need to be able to ensure we were routed to another component
-          component: BrandFooterComponent,
+          path: 'team/:teamId',
+          component: EmptyComponent,
         },
       ],
-      imports: [BoardsModule],
+      imports: [BoardsModule, TestModule],
       excludeComponentDeclaration: true,
-      componentProviders: [
+      providers: [
         {
           provide: TeamService,
-          useValue: mockTeamService,
+          useValue: teamService,
         },
         {
           provide: HttpClient,
@@ -65,9 +59,18 @@ describe('CreateComponent', () => {
         },
       ],
     });
-  });
+  }
 
   describe('Validating form fields', () => {
+    let component: RenderResult<CreateComponent>;
+    let mockTeamService;
+
+    beforeEach(async () => {
+      mockTeamService = createMockTeamService();
+
+      component = await createComponent(mockTeamService);
+    });
+
     it('Requires a team name to be entered', async () => {
       component.getByText('create board').click();
       await component.findByText('Please enter a team name');
@@ -124,17 +127,24 @@ describe('CreateComponent', () => {
       );
     });
   });
+
   describe('Submitting form', () => {
+    let component: RenderResult<CreateComponent>;
+    let mockTeamService;
+
     const jwt = 'im.a.jwt';
-    const teamUrl = 'team/teamId';
+    const teamUrl = '/team/teamId';
     const loginResponse: HttpResponse<string> = new HttpResponse({
       body: 'im.a.jwt',
       headers: new HttpHeaders({ location: teamUrl }),
     });
+    const createSpy = jest.fn().mockReturnValue(of(loginResponse));
     const authSpy = jest.spyOn(AuthService, 'setToken');
 
-    beforeEach(() => {
-      mockTeamService.create = jest.fn().mockReturnValue(of(loginResponse));
+    beforeEach(async () => {
+      mockTeamService = createMockTeamService();
+      mockTeamService.create = createSpy;
+      component = await createComponent(mockTeamService);
 
       enterTextIntoFormElement(component, 'Board name', 'test');
       enterTextIntoFormElement(component, 'Password', 'Test1234');
@@ -143,15 +153,11 @@ describe('CreateComponent', () => {
     });
 
     it('Makes call to create team service if form entry is valid', () => {
-      expect(mockTeamService.create).toHaveBeenCalled();
+      expect(createSpy).toHaveBeenCalled();
     });
 
     it('Sets the JWT token on auth service', () => {
       expect(authSpy).toHaveBeenCalledWith(jwt);
-    });
-
-    it('Routes to the team board', () => {
-      expect(component.findByText('Powered By'));
     });
   });
 });

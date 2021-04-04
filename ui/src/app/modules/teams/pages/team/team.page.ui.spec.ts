@@ -16,12 +16,6 @@ import { Board } from '../../../domain/board';
 import { ColumnAggregationService } from '../../services/column-aggregation.service';
 import { ActionItemService } from '../../services/action.service';
 import { HttpClient } from '@angular/common/http';
-import { HeaderComponent } from '../../components/header/header.component';
-import { ThoughtsColumnComponent } from '../../components/thoughts-column/thoughts-column.component';
-import { ActionsColumnComponent } from '../../components/actions-column/actions-column.component';
-import { ThoughtsHeaderComponent } from '../../components/thoughts-header/thoughts-header.component';
-import { TaskComponent } from '../../../controls/task/task.component';
-import { TaskDialogComponent } from '../../../controls/task-dialog/task-dialog.component';
 
 describe('Setting up Team Board', () => {
   let mockTeamService;
@@ -35,17 +29,9 @@ describe('Setting up Team Board', () => {
 
   async function createComponent(): Promise<RenderResult<TeamPageComponent>> {
     return render(TeamPageComponent, {
-      declarations: [
-        HeaderComponent,
-        ThoughtsColumnComponent,
-        ActionsColumnComponent,
-        ThoughtsHeaderComponent,
-        TaskComponent,
-        TaskDialogComponent,
-      ],
       imports: [TeamsModule],
       excludeComponentDeclaration: true,
-      componentProviders: [
+      providers: [
         {
           provide: DataService,
           useValue: dataService,
@@ -172,7 +158,7 @@ describe('Setting up Team Board', () => {
 
     let component: RenderResult<TeamPageComponent>;
 
-    beforeAll(async () => {
+    beforeEach(async () => {
       columnAggregationService = ({
         getColumns: jest.fn().mockReturnValue(of({ columns })),
       } as unknown) as ColumnAggregationService;
@@ -185,64 +171,64 @@ describe('Setting up Team Board', () => {
     describe('Happy Column', () => {
       let happy;
 
-      beforeAll(() => {
+      beforeEach(() => {
         happy = component.getByText('Happy');
       });
 
       it('Creates a column with title Happy', () => {
         expect(happy).toBeVisible();
       });
-    });
 
-    describe('Comment 1', () => {
-      let textArea;
-      let rqTask;
-      let starCount;
-      let checkbox;
+      describe('Comment 1', () => {
+        let textArea;
+        let rqTask;
+        let starCount;
+        let checkbox;
 
-      beforeAll(() => {
-        textArea = component.getByDisplayValue('Comment 1');
-        rqTask = textArea.parentElement.parentElement;
-        starCount = rqTask.querySelector('div.star-count');
-        checkbox = rqTask.querySelector('div.checkbox');
+        beforeEach(() => {
+          textArea = component.getByDisplayValue('Comment 1');
+          rqTask = textArea.parentElement.parentElement;
+          starCount = rqTask.querySelector('div.star-count');
+          checkbox = rqTask.querySelector('div.checkbox');
+        });
+
+        it('Has a comment named Comment 1', () => {
+          expect(textArea).toBeVisible();
+        });
+
+        it('Comment 1 has 2 stars', () => {
+          expect(starCount.innerHTML.trim()).toEqual('2');
+        });
+
+        it('Comment is not checked', () => {
+          expect(checkbox).toBeVisible();
+        });
       });
 
-      it('Has a comment named Comment 1', () => {
-        expect(textArea).toBeVisible();
-      });
+      describe('Comment 2', () => {
+        let textArea;
+        let rqTask;
+        let starCount;
+        let checkbox;
 
-      it('Comment 1 has 2 stars', () => {
-        expect(starCount.innerHTML.trim()).toEqual('2');
-      });
+        beforeEach(() => {
+          textArea = component.getByDisplayValue('Comment 2');
+          rqTask = textArea.parentElement.parentElement;
+          starCount = rqTask.querySelector('div.star-count');
+          checkbox = rqTask.querySelector('div.checkbox.completed-task');
+        });
 
-      it('Comment is not checked', () => {
-        expect(checkbox).toBeVisible();
-      });
-    });
+        it('Has a comment named Comment 2', () => {
+          expect(textArea).toBeVisible();
+        });
 
-    describe('Comment 2', () => {
-      let textArea;
-      let rqTask;
-      let starCount;
-      let checkbox;
+        it('Comment 1 has 2 stars', () => {
+          expect(starCount.innerHTML.trim()).toEqual('5');
+        });
 
-      beforeAll(() => {
-        textArea = component.getByDisplayValue('Comment 2');
-        rqTask = textArea.parentElement.parentElement;
-        starCount = rqTask.querySelector('div.star-count');
-        checkbox = rqTask.querySelector('div.checkbox.completed-task');
-      });
-
-      it('Has a comment named Comment 2', () => {
-        expect(textArea).toBeVisible();
-      });
-
-      it('Comment 1 has 2 stars', () => {
-        expect(starCount.innerHTML.trim()).toEqual('5');
-      });
-
-      it('Comment is not checked', () => {
-        expect(checkbox).toBeVisible();
+        it('Comment is not checked', () => {
+          expect(checkbox).toBeVisible();
+        });
       });
     });
 
