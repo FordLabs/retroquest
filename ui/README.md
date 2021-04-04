@@ -16,9 +16,17 @@ yarn start
 This command will start the server. Navigate to http://localhost:4200/ to begin interacting on your desktop with the
 app. The app will automatically reload if you change any of the source files.
 
+### Testing Strategy
+While not perfect, this site makes heavy use of automated testing.  Engineers are encouraged to follow a "test-first" or test driven development approach
+to ensure confidence that the application works after a code change is made.  This code base incorporates the following types of testing:
+- Unit - confirms that an isolated block of code works properly
+- UI - confirms that the user interface behaves as expected when the user interacts with it
+- End to End - Simulates a user executing common tasks in a browser
+
 ### Unit Testing
 
-This code base uses [Jest](https://jestjs.io/) for its unit testing framework.
+This code base uses [Jest](https://jestjs.io/) for its unit testing framework.  Unit test cases are placed alongside src 
+files and follow the naming convention *.spec.ts.
 
 ```
 yarn unit
@@ -39,19 +47,17 @@ yarn unit-coverage
 
 This command will execute the unit tests once and then generate a code coverage report
 
-### Testing Strategy
-While not perfect, this site makes heavy use of automated testing.  Engineers are encouraged to follow a "test-first" or test driven development approach 
-to ensure confidence that the application works after a code change is made.  This code base incorporates the following types of testing:
-- Unit - confirms that an isolated block of code works properly
-- UI - confirms that the user interface behaves as expected when the user interacts with it
-- End to End - Simulates a user executing common tasks in a browser
-
 ### UI Testing
 
 This code base uses [Angular Testing Library](https://testing-library.com/docs/angular-testing-library/intro/) to validate 
-most UI test cases.  These test cases are run when the unit test cases are run.  Jest+Angular Testing Library uses JSDOM to 
+most UI test cases.  These test cases are run when the unit test cases are run.  Unit test cases are placed alongside src
+files and follow the naming convention *.ui.spec.ts.
+
+Jest+Angular Testing Library uses JSDOM to 
 simulate a browser.  There are some UI test cases where JSDOM is insufficient to simulat the test scenario in which the UI test 
-case is included in the Cypress End to End testing suite.
+case is included in the Cypress End to End testing suite.  Instances where it is appropriate to use Cypress instead of Jest:
+- Routing
+- CSS Style verification
 
 ### End to End Testing
 
