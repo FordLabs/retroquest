@@ -36,7 +36,12 @@ pushd ui
 
   yarn build-prod
 
-  if npm run unit | grep -E "ERROR|FAILED"
+  if yarn unit | grep -E "ERROR|FAILED"
+  then
+    exit 1
+  fi
+
+  if yarn cypress | grep -E "ERROR|FAILED"
   then
     exit 1
   fi
@@ -44,7 +49,7 @@ pushd ui
 popd
 
 pushd api
-  ./gradlew clean build test apiTest
+  ../gradlew clean build test apiTest
 popd
 
 git pull -r
