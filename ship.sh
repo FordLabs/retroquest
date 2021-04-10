@@ -41,10 +41,16 @@ pushd ui
     exit 1
   fi
 
+  yarn start && ../gradlew bootRun &&
   if yarn cypress | grep -E "ERROR|FAILED"
   then
+    kill $(lsof -t -i:4280)
+    kill $(lsof -t -i:8080)
     exit 1
   fi
+
+  kill $(lsof -t -i:4280)
+  kill $(lsof -t -i:8080)
 
 popd
 
