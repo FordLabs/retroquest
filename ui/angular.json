@@ -90,24 +90,12 @@
       "root": "e2e",
       "projectType": "application",
       "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "retroquest-ui:serve:local"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "retroquest-ui:serve:production"
-            }
-          }
-        },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
             "lintFilePatterns": [
-              "e2e/**/*.ts",
-              "e2e/**/*.html"
+              "cypress/**/*.ts",
+              "cypress/**/*.html"
             ]
           }
         }

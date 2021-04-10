@@ -1,6 +1,17 @@
-import { createTeamIfNecessary, goToTeamBoard } from '../util/utils';
+import {
+  createTeamIfNecessaryAndLogin,
+  goToTeamBoard,
+  TeamCredentials,
+} from '../util/utils';
 
 describe('Create Page', () => {
+  const teamCredentials = {
+    teamName: 'Create Board Tests',
+    teamId: 'create-board-tests',
+    password: 'Test1234',
+    jwt: '',
+  } as TeamCredentials;
+
   const teamName = 'Create Board Tests';
   const teamId = 'create-board-tests';
   const password = 'Test1234';
@@ -19,10 +30,9 @@ describe('Create Page', () => {
   });
 
   describe('default board creation', () => {
-    const created = false;
-
     before(() => {
-      createTeamIfNecessary(teamName, teamId, password);
+      createTeamIfNecessaryAndLogin(teamCredentials); //have this function somehow return JWT
+      console.log(teamCredentials);
     });
 
     describe('Sections', () => {

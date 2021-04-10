@@ -1,19 +1,26 @@
-import { createTeamIfNecessary } from '../util/utils';
+import {
+  createTeamIfNecessaryAndLogin,
+  teamBoardUrl,
+  TeamCredentials,
+} from '../util/utils';
 
 describe('Logging In', () => {
-  const teamName = 'Login Tests';
-  const teamId = 'login-tests';
-  const password = 'Login1234';
+  const teamCredentials = {
+    teamName: 'Login Tests',
+    teamId: 'login-tests',
+    password: 'Login1234',
+    jwt: '',
+  } as TeamCredentials;
 
   before(() => {
-    createTeamIfNecessary(teamName, teamId, password);
+    createTeamIfNecessaryAndLogin(teamCredentials);
     cy.visit('/login');
   });
 
   it('Navigates to team board after successful login', () => {
-    cy.get('#teamNameInput').type(teamName);
-    cy.get('#teamPasswordInput').type(password);
+    cy.get('#teamNameInput').type(teamCredentials.teamName);
+    cy.get('#teamPasswordInput').type(teamCredentials.password);
     cy.get('#signInButton').click();
-    cy.url().should('eq', `http://localhost:4200/team/${teamId}`);
+    cy.url().should('eq', teamBoardUrl(teamCredentials.teamId));
   });
 });

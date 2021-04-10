@@ -1,40 +1,65 @@
-let count = 0;
+export interface TeamCredentials {
+  teamName: string;
+  teamId: string;
+  password: string;
+  jwt: string;
+}
 
-export async function createTeamIfNecessary(
-  teamName: string,
-  teamId: string,
-  password: string
+export function teamBoardUrl(teamId: string): string {
+  console.log(`**** ${teamId} *****`);
+  return `http://localhost:4200/team/${teamId}`;
+}
+
+export function goToTeamBoard(teamCredentials: TeamCredentials) {
+  cy.visit(teamBoardUrl(teamCredentials.teamId), {
+    headers: {
+      bearer: teamCredentials.jwt,
+    },
+  });
+}
+
+function enterText(selector: string, textToEnter: string) {
+  cy.get(selector).type(textToEnter);
+}
+
+function click(selector: string) {
+  cy.get(selector).click();
+}
+
+function login(teamCredentials: TeamCredentials) {
+  cy.visit('/login');
+  enterText('#teamNameInput', teamCredentials.teamName);
+  enterText('#teamPasswordInput', teamCredentials.password);
+  click('#signInButton');
+}
+
+function createBoard(teamCredentials: TeamCredentials) {
+  cy.visit('/create');
+  enterText('#teamNameInput', teamCredentials.teamName);
+  enterText('#teamPasswordInput', teamCredentials.password);
+  enterText('#teamPasswordConfirmInput', teamCredentials.password);
+  click('#createRetroButton');
+}
+
+export function createTeamIfNecessaryAndLogin(
+  teamCredentials: TeamCredentials
 ) {
-  count++;
-  console.log('Logged in ' + count + ' times');
-  const urlTeamBoard = `http://localhost:4200/team/${teamId}`;
-
-  cy.visit(urlTeamBoard);
-
-  const url = await cy.url();
-
-  if (url === urlTeamBoard) {
-    return;
-  }
-
-  cy.get('#teamNameInput').then((teamNameInput) => {
-    function createTeam() {
-      cy.visit('/create');
-      cy.get('#teamNameInput').type(teamName);
-      cy.get('#teamPasswordInput').type(password);
-      cy.get('#teamPasswordConfirmInput').type(password);
-      cy.get('#createRetroButton').click();
-    }
-
-    function login() {
-      cy.get('#teamPasswordInput').type(password);
-      cy.get('#signInButton').click();
-    }
-
-    if (teamNameInput.val().trim() === '') {
-      createTeam();
+  cy.request({
+    url: `http://localhost:4200/api/team/login`,
+    failOnStatusCode: false,
+    method: 'POST',
+    body: {
+      name: teamCredentials.teamName,
+      password: teamCredentials.password,
+      captchaResponse: null,
+    },
+  }).then((response) => {
+    console.log(response.body);
+    if (response.status === 200) {
+      teamCredentials.jwt = response.body;
+      login(teamCredentials);
     } else {
-      login();
+      createBoard(teamCredentials);
     }
   });
 }
