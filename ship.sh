@@ -44,7 +44,7 @@ pushd ui
 popd
 
 pushd ./
-  gradlew clean build test apiTest
+  ./gradlew clean build test apiTest
 popd
 
 git pull -r
