@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 cd ./ui/
-    npm run lint
-    npm run unit
-    npm run build-prod
+    yarn lint-fix
+    yarn unit
+    yarn build-prod
 
 cd ../
 
