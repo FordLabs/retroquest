@@ -106,7 +106,8 @@ Navigate to the `ui` folder, making sure you've already followed the build steps
 
 ```
 yarn unit -- Runs all tests and closes
-yarn test -- Hot runs all tests
+yarn unit-watch -- Runs all tests.  Reruns tests if changes are made.
+yarn unit-coverage -- Runs all tests, collects unit test coverage and closes
 ```
 
 ## Running the E2E Tests
@@ -116,12 +117,19 @@ cd ./api && docker-compose up
 ```
 Start the backend application
 ```
-./gradlew runDockerDb
+./gradlew bootRunDockerDb
 ```
 Run the end to end tests
 ```
-cd ./ui && yarn e2e
+cd ./ui
+yarn cypress
 ```
+...Or to run the tests visually from the cypress tool (good for troubleshooting)
+```
+cd ./ui
+yarn cypress-supervise
+```
+
 
 ## Connecting to the local Database
 The application uses a Postgresql instance. The connection properties can be found in the application's property file.
