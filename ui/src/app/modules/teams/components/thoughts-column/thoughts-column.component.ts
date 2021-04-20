@@ -131,7 +131,12 @@ export class ThoughtsColumnComponent implements OnInit {
   }
 
   sortChanged(sorted: boolean) {
+    console.log('THE SORT WAS CHANGED');
     this.thoughtsAreSorted = sorted;
+  }
+
+  onThoughtDrop(event: Event) {
+    console.log('YO!!');
   }
 
   updateThought(thought: Thought) {
