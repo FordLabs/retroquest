@@ -15,37 +15,40 @@
  *  limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {Observable, Subject} from 'rxjs/index';
-import {HttpClient} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, Subject } from 'rxjs/index';
+import { HttpClient } from '@angular/common/http';
 
-import {Thought} from '../../domain/thought';
-import {WebsocketService} from './websocket.service';
+import { Thought } from '../../domain/thought';
+import { WebsocketService } from './websocket.service';
 
 @Injectable()
 export class ThoughtService {
   resetThoughtsObserver: Subject<null> = new Subject<null>();
 
-  constructor (private http: HttpClient, private websocket: WebsocketService) {
-  }
+  constructor(private http: HttpClient, private websocket: WebsocketService) {}
 
-  fetchThoughts (teamId: string): Observable<Array<Thought>> {
+  fetchThoughts(teamId: string): Observable<Array<Thought>> {
     return this.http.get<Array<Thought>>(`/api/team/${teamId}/thoughts`);
   }
 
-  addThought (thought: Thought): void {
+  addThought(thought: Thought): void {
     this.websocket.createThought(thought);
   }
 
-  deleteThought (thought: Thought): void {
+  deleteThought(thought: Thought): void {
     this.websocket.deleteThought(thought);
   }
 
-  updateThought (thought: Thought): void {
+  updateThought(thought: Thought): void {
     this.websocket.updateThought(thought);
   }
 
-  deleteAllThoughts (): void {
+  moveThought(thought: Thought): void {
+    this.websocket.moveThought(thought, thought.topic); // if I'm gonna do this, remove the second arugment
+  }
+
+  deleteAllThoughts(): void {
     this.websocket.deleteAllThoughts();
   }
 }
