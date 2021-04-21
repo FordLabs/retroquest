@@ -147,6 +147,29 @@ describe('ThoughtColumnComponent', () => {
 
         expect(subject.thoughtAggregation.items).toEqual(itemsBefore);
       });
+      it('removes the thought from this column when it is no longer in this topic', () => {
+        const randomThoughtInThisTopic = {
+          ...emptyThought(),
+          id: 42,
+          topic: 'topic-of-this-column',
+        };
+        const subject = newEmptyComponent();
+        subject.thoughtAggregation.items.active.push(randomThoughtInThisTopic);
+
+        const randomThoughtThatMovedToAnotherTopic = {
+          ...randomThoughtInThisTopic,
+          topic: 'something-else',
+        };
+
+        subject.respondToThought('put', randomThoughtThatMovedToAnotherTopic);
+
+        expect(
+          findThought(
+            subject.thoughtAggregation,
+            randomThoughtThatMovedToAnotherTopic.id
+          )
+        ).toBeUndefined();
+      });
       // note: there is some behavior in the deleteThought method for when thoughtId is -1. Not tested here.
       // also in the deleteThought method: a thought marked discussed and then deleted, will be missed if those messages arrive in the wrong order.
       it('removes an active thought that was deleted', () => {
@@ -157,12 +180,13 @@ describe('ThoughtColumnComponent', () => {
           message: 'bananas',
         };
         const subject = newEmptyComponent();
-        const itemsBefore = copyItems(subject.thoughtAggregation); // without the thought
         subject.thoughtAggregation.items.active.push(randomThought); // now we have the thought
 
         subject.respondToThought('delete', randomThought);
 
-        expect(subject.thoughtAggregation.items).toEqual(itemsBefore); // now it should be gone
+        expect(
+          findThought(subject.thoughtAggregation, randomThought.id)
+        ).toBeUndefined();
       });
       it('removes a completed thought that was deleted', () => {
         const randomThought: Thought = {
@@ -173,12 +197,13 @@ describe('ThoughtColumnComponent', () => {
           message: 'bananas',
         };
         const subject = newEmptyComponent();
-        const itemsBefore = copyItems(subject.thoughtAggregation); // without the thought
         subject.thoughtAggregation.items.completed.push(randomThought); // now we have the thought
 
         subject.respondToThought('delete', randomThought);
 
-        expect(subject.thoughtAggregation.items).toEqual(itemsBefore); // now it should be gone
+        expect(
+          findThought(subject.thoughtAggregation, randomThought.id)
+        ).toBeUndefined();
       });
     });
     it('adds an active thought that was not here before', () => {

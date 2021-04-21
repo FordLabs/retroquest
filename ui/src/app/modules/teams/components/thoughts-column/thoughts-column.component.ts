@@ -88,12 +88,13 @@ export class ThoughtsColumnComponent implements OnInit {
   }
 
   respondToThought(responseType: string, thought: Thought) {
-    if (thought.topic === this.thoughtAggregation.topic) {
-      if (responseType === 'delete') {
-        this.deleteThought(thought);
-      } else {
-        this.updateThought(thought);
-      }
+    if (
+      responseType === 'delete' ||
+      thought.topic !== this.thoughtAggregation.topic
+    ) {
+      this.deleteThought(thought);
+    } else {
+      this.updateThought(thought);
     }
   }
 
@@ -212,12 +213,12 @@ export class ThoughtsColumnComponent implements OnInit {
           1
         );
       } else {
-        this.thoughtAggregation.items.active.splice(
-          this.thoughtAggregation.items.active.findIndex(
-            (item: Thought) => item.id === thought.id
-          ),
-          1
+        const foundedness = this.thoughtAggregation.items.active.findIndex(
+          (item: Thought) => item.id === thought.id
         );
+        if (this.indexWasFound(foundedness)) {
+          this.thoughtAggregation.items.active.splice(foundedness, 1);
+        }
       }
     }
   }
