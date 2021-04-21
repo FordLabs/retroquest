@@ -136,7 +136,7 @@ export class ThoughtsColumnComponent implements OnInit {
   }
 
   onThoughtDrop(event: Event) {
-    console.log('YO!!');
+    console.log('YO!! from ', event);
   }
 
   updateThought(thought: Thought) {
