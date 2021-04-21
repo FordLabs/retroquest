@@ -20,7 +20,7 @@ import { Observable } from 'rxjs/index';
 import 'jest';
 import { emptyThought, Thought } from '../../../domain/thought';
 import { ItemSorter } from '../../../domain/column/item-sorter';
-import { ColumnResponse } from '../../../domain/column-response';
+import { ColumnResponse, findThought } from '../../../domain/column-response';
 
 describe('ThoughtColumnComponent', () => {
   let component: ThoughtsColumnComponent;
@@ -99,14 +99,6 @@ describe('ThoughtColumnComponent', () => {
       );
       singleUseComponent.thoughtAggregation.topic = 'topic-of-this-column';
       return singleUseComponent;
-    }
-    // this method belongs in the thoughtAggregation code
-    function findThought(
-      { items: { active, completed } }: ColumnResponse,
-      thoughtId: Thought['id']
-    ): Thought | undefined {
-      const allThoughts: Thought[] = [...active, ...completed] as Thought[]; // these arrays aren't typed properly
-      return allThoughts.find((t) => t.id === thoughtId);
     }
     it('does nothing when the thought is not in this column, and was not before', () => {
       const unrelatedThought: Thought = { ...emptyThought(), id: 42 };

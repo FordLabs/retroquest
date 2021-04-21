@@ -15,7 +15,8 @@
  *  limitations under the License.
  */
 
-import {ItemSorter} from './column/item-sorter';
+import { ItemSorter } from './column/item-sorter';
+import { Thought } from './thought';
 
 export interface ColumnResponse {
   id: number;
@@ -27,9 +28,16 @@ export interface ColumnResponse {
 export function emptyColumnResponse(): ColumnResponse {
   return {
     id: -1,
-    items: {active: [], completed: []},
+    items: { active: [], completed: [] },
     topic: '',
-    title: ''
+    title: '',
   };
+}
 
+export function findThought(
+  { items: { active, completed } }: ColumnResponse,
+  thoughtId: Thought['id']
+): Thought | undefined {
+  const allThoughts: Thought[] = [...active, ...completed] as Thought[]; // these arrays aren't typed properly
+  return allThoughts.find((t) => t.id === thoughtId);
 }
