@@ -25,11 +25,12 @@
     flex-basis: 0;
     flex-flow: column nowrap;
     font-size: 1rem;
+    min-height: 60px;
 
     rq-task {
       height: auto;
       margin-bottom: 24px;
-      transition: y 1s cubic-bezier(.25, .8, .25, 1);
+      transition: y 1s cubic-bezier(0.25, 0.8, 0.25, 1);
 
       width: 100%;
 
@@ -40,4 +41,3 @@
     }
   }
 }
-
