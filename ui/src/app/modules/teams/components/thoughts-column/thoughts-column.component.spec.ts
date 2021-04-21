@@ -100,6 +100,14 @@ describe('ThoughtColumnComponent', () => {
       singleUseComponent.thoughtAggregation.topic = 'topic-of-this-column';
       return singleUseComponent;
     }
+    // this method belongs in the thoughtAggregation code
+    function findThought(
+      { items: { active, completed } }: ColumnResponse,
+      thoughtId: Thought['id']
+    ): Thought | undefined {
+      const allThoughts: Thought[] = [...active, ...completed] as Thought[]; // these arrays aren't typed properly
+      return allThoughts.find((t) => t.id === thoughtId);
+    }
     it('does nothing when the thought is not in this column, and was not before', () => {
       const unrelatedThought: Thought = { ...emptyThought(), id: 42 };
       const subject = newEmptyComponent();
@@ -238,9 +246,73 @@ describe('ThoughtColumnComponent', () => {
       // I don't know why it sets it to active, but never to anything else.
       // 'active' has something to do with an animation, but I don't understand it.
       // Testing it here so that I don't unintentionally change it.
-      test.todo('sets a formerly-discussed thought state to active');
-      test.todo('sets a newly-discussed thought state to active');
-      test.todo('sets a new-to-this-topic thought state to active');
+      it('sets a formerly-discussed thought state to active', () => {
+        const randomThought: Thought = {
+          ...emptyThought(),
+          id: 42,
+          topic: 'topic-of-this-column',
+          message: 'bananas',
+        };
+        const randomThoughtAfterItWasDiscussed = {
+          ...randomThought,
+          discussed: true,
+        };
+        const subject = newEmptyComponent();
+        const itemsBefore = copyItems(subject.thoughtAggregation); // without the thought
+        itemsBefore.active.push(randomThought); // we are going to have the thought undiscussed
+
+        subject.thoughtAggregation.items.completed.push(
+          randomThoughtAfterItWasDiscussed
+        ); // now we have the thought, discussed
+
+        subject.respondToThought('put', randomThought);
+        const myThought = findThought(
+          subject.thoughtAggregation,
+          randomThought.id
+        );
+
+        expect(myThought.state).toEqual('active');
+      });
+      it('sets a newly-discussed thought state to active', () => {
+        const randomThought: Thought = {
+          ...emptyThought(),
+          id: 42,
+          topic: 'topic-of-this-column',
+          message: 'bananas',
+        };
+        const randomThoughtAfterItWasDiscussed = {
+          ...randomThought,
+          discussed: true,
+        };
+        const subject = newEmptyComponent();
+
+        subject.thoughtAggregation.items.active.push(randomThought); // now we have the thought, undiscussed
+
+        subject.respondToThought('put', randomThoughtAfterItWasDiscussed);
+        const myThought = findThought(
+          subject.thoughtAggregation,
+          randomThought.id
+        );
+
+        expect(myThought.state).toEqual('active'); // now it should be moved
+      });
+      it('sets a new-to-this-topic thought state to active', () => {
+        const randomThought: Thought = {
+          ...emptyThought(),
+          id: 42,
+          topic: 'topic-of-this-column',
+          message: 'bananas',
+        };
+        const subject = newEmptyComponent();
+
+        subject.respondToThought('put', randomThought);
+        const myThought = findThought(
+          subject.thoughtAggregation,
+          randomThought.id
+        );
+
+        expect(myThought.state).toEqual('active');
+      });
     });
   });
 });
