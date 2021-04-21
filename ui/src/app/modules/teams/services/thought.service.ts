@@ -44,8 +44,8 @@ export class ThoughtService {
     this.websocket.updateThought(thought);
   }
 
-  moveThought(thought: Thought): void {
-    this.websocket.moveThought(thought, thought.topic); // if I'm gonna do this, remove the second arugment
+  moveThought(thoughtId: Thought['id'], newTopic: Thought['topic']): void {
+    this.websocket.moveThought(thoughtId, newTopic); // if I'm gonna do this, remove the second arugment
   }
 
   deleteAllThoughts(): void {

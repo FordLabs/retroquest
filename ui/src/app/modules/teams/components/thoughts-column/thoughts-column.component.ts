@@ -33,6 +33,7 @@ import {
   emptyColumnResponse,
 } from '../../../domain/column-response';
 import { WebsocketResponse } from '../../../domain/websocket-response';
+import { CdkDragSortEvent } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'rq-thoughts-column',
@@ -140,8 +141,11 @@ export class ThoughtsColumnComponent implements OnInit {
     this.thoughtsAreSorted = sorted;
   }
 
-  onThoughtDrop(event: Event) {
-    console.log('YO!! from ', event);
+  onThoughtDrop(event: CdkDragSortEvent) {
+    console.log('YO!! from ', event, 'by', this.thoughtAggregation.topic);
+    const thoughtId = event.item.data;
+    const newTopic = event.container.data; // expected to equal this.thoughtAggregation.topic
+    this.thoughtService.moveThought(thoughtId, newTopic);
   }
 
   updateThought(thought: Thought) {
