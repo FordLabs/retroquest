@@ -131,7 +131,7 @@ public class ThoughtController {
 
     @MessageMapping("/{teamId}/thought/{thoughtId}/edit")
     @SendTo("/topic/{teamId}/thoughts")
-    public WebsocketPutResponse<Thought> moveThoughtWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("thoughtId") Long thoughtId, Thought thought, Authentication authentication) {
+    public WebsocketPutResponse<Thought> editThoughtWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("thoughtId") Long thoughtId, Thought thought, Authentication authentication) {
         if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
             Thought savedThought = thoughtRepository.findById(thoughtId).orElseThrow();
             savedThought.setMessage(thought.getMessage());
@@ -145,7 +145,7 @@ public class ThoughtController {
 
     @MessageMapping("/{teamId}/thought/{thoughtId}/move")
     @SendTo("/topic/{teamId}/thoughts")
-    public WebsocketPutResponse<Thought> editThoughtWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("thoughtId") Long thoughtId, Thought thought, Authentication authentication) {
+    public WebsocketPutResponse<Thought> moveThoughtWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("thoughtId") Long thoughtId, Thought thought, Authentication authentication) {
         if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
             Thought savedThought = thoughtRepository.findById(thoughtId).orElseThrow();
             savedThought.setTopic(thought.getTopic());
