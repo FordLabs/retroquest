@@ -75,13 +75,8 @@ export class ThoughtsColumnComponent implements OnInit {
 
     this.thoughtChanged.subscribe((response) => {
       const thought = response.payload as Thought;
-      if (thought.topic === this.thoughtAggregation.topic) {
-        if (response.type === 'delete') {
-          this.deleteThought(thought);
-        } else {
-          this.updateThought(thought);
-        }
-      }
+      const responseType = response.type;
+      this.respondToThought(responseType, thought);
     });
 
     this.columnChanged.subscribe((column) => {
@@ -89,6 +84,16 @@ export class ThoughtsColumnComponent implements OnInit {
         this.thoughtAggregation.title = column.title;
       }
     });
+  }
+
+  respondToThought(responseType: string, thought: Thought) {
+    if (thought.topic === this.thoughtAggregation.topic) {
+      if (responseType === 'delete') {
+        this.deleteThought(thought);
+      } else {
+        this.updateThought(thought);
+      }
+    }
   }
 
   get activeThoughtsCount(): number {
