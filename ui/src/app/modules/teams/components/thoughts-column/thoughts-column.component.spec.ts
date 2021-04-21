@@ -18,6 +18,9 @@
 import { ThoughtsColumnComponent } from './thoughts-column.component';
 import { Observable } from 'rxjs/index';
 import 'jest';
+import { emptyThought, Thought } from '../../../domain/thought';
+import { ItemSorter } from '../../../domain/column/item-sorter';
+import { ColumnResponse } from '../../../domain/column-response';
 
 describe('ThoughtColumnComponent', () => {
   let component: ThoughtsColumnComponent;
@@ -34,6 +37,7 @@ describe('ThoughtColumnComponent', () => {
     };
 
     component = new ThoughtsColumnComponent(mockThoughtService);
+    component.thoughtAggregation.topic = 'topic-of-this-column';
 
     testThought = {
       id: 0,
@@ -44,8 +48,6 @@ describe('ThoughtColumnComponent', () => {
       discussed: false,
       columnTitle: null,
     };
-
-    // component.thoughts = [testThought];
   });
 
   it('should create', () => {
@@ -83,19 +85,154 @@ describe('ThoughtColumnComponent', () => {
   });
 
   describe('updating the thoughts inside the component', () => {
-    test.todo(
-      'does nothing when the thought is not in this column, and was not before'
-    );
-    test.todo('does nothing when the thought has not changed');
-    describe('deleting a thought that was in this column and is not now', () => {
-      // note: there is some behavior in the deleteThought method for when thoughtId is -1. Not tested here.
-      test.todo('removes an active thought that was deleted');
-      test.todo('removes a completed thought that was deleted');
+    function copyItems(
+      thoughtAggregation: ColumnResponse
+    ): ColumnResponse['items'] {
+      return {
+        active: thoughtAggregation.items.active.slice(),
+        completed: thoughtAggregation.items.completed.slice(),
+      };
+    }
+    function newEmptyComponent(): ThoughtsColumnComponent {
+      const singleUseComponent = new ThoughtsColumnComponent(
+        mockThoughtService
+      );
+      singleUseComponent.thoughtAggregation.topic = 'topic-of-this-column';
+      return singleUseComponent;
+    }
+    it('does nothing when the thought is not in this column, and was not before', () => {
+      const unrelatedThought: Thought = { ...emptyThought(), id: 42 };
+      const subject = newEmptyComponent();
+      const itemsBefore = copyItems(subject.thoughtAggregation);
+
+      subject.respondToThought('put', unrelatedThought);
+
+      expect(subject.thoughtAggregation.items).toEqual(itemsBefore);
     });
-    test.todo('adds an active thought that was not here before');
+
+    it('does nothing when the thought has not changed', () => {
+      const randomThought: Thought = {
+        ...emptyThought(),
+        id: 42,
+        discussed: true,
+        topic: 'topic-of-this-column',
+        message: 'bananas',
+      };
+      const subject = newEmptyComponent();
+      subject.thoughtAggregation.items.completed.push(randomThought);
+      const itemsBefore = copyItems(subject.thoughtAggregation);
+      subject.respondToThought('put', randomThought);
+
+      expect(subject.thoughtAggregation.items).toEqual(itemsBefore);
+    });
+    describe('deleting a thought', () => {
+      it('does nothing when the thought is not in this column, and was not before', () => {
+        const unrelatedThought: Thought = { ...emptyThought(), id: 42 };
+        const subject = newEmptyComponent();
+        subject.thoughtAggregation.items.active.push({
+          ...emptyThought(),
+          id: 64,
+        }); // put something in random in there
+        const itemsBefore = copyItems(subject.thoughtAggregation);
+
+        subject.respondToThought('delete', unrelatedThought);
+
+        expect(subject.thoughtAggregation.items).toEqual(itemsBefore);
+      });
+      // note: there is some behavior in the deleteThought method for when thoughtId is -1. Not tested here.
+      // also in the deleteThought method: a thought marked discussed and then deleted, will be missed if those messages arrive in the wrong order.
+      it('removes an active thought that was deleted', () => {
+        const randomThought: Thought = {
+          ...emptyThought(),
+          id: 42,
+          topic: 'topic-of-this-column',
+          message: 'bananas',
+        };
+        const subject = newEmptyComponent();
+        const itemsBefore = copyItems(subject.thoughtAggregation); // without the thought
+        subject.thoughtAggregation.items.active.push(randomThought); // now we have the thought
+
+        subject.respondToThought('delete', randomThought);
+
+        expect(subject.thoughtAggregation.items).toEqual(itemsBefore); // now it should be gone
+      });
+      it('removes a completed thought that was deleted', () => {
+        const randomThought: Thought = {
+          ...emptyThought(),
+          id: 42,
+          discussed: true,
+          topic: 'topic-of-this-column',
+          message: 'bananas',
+        };
+        const subject = newEmptyComponent();
+        const itemsBefore = copyItems(subject.thoughtAggregation); // without the thought
+        subject.thoughtAggregation.items.completed.push(randomThought); // now we have the thought
+
+        subject.respondToThought('delete', randomThought);
+
+        expect(subject.thoughtAggregation.items).toEqual(itemsBefore); // now it should be gone
+      });
+    });
+    it('adds an active thought that was not here before', () => {
+      const randomThought: Thought = {
+        ...emptyThought(),
+        id: 42,
+        topic: 'topic-of-this-column',
+        message: 'bananas',
+      };
+      const subject = newEmptyComponent();
+      const itemsBefore = copyItems(subject.thoughtAggregation); // without the thought
+      itemsBefore.active.push(randomThought); // we are going to have the thought
+
+      subject.respondToThought('put', randomThought);
+
+      expect(subject.thoughtAggregation.items).toEqual(itemsBefore); // now it should be gone
+    });
     describe('updating thought discussedness', () => {
-      test.todo('moves a discussed thought from active to completed');
-      test.todo('moves a not-discussed thought from completed to active');
+      it('moves a discussed thought from active to completed', () => {
+        const randomThought: Thought = {
+          ...emptyThought(),
+          id: 42,
+          topic: 'topic-of-this-column',
+          message: 'bananas',
+        };
+        const randomThoughtAfterItWasDiscussed = {
+          ...randomThought,
+          discussed: true,
+        };
+        const subject = newEmptyComponent();
+        const itemsBefore = copyItems(subject.thoughtAggregation); // without the thought
+        itemsBefore.completed.push(randomThoughtAfterItWasDiscussed); // we are going to have the thought completed
+
+        subject.thoughtAggregation.items.active.push(randomThought); // now we have the thought, undiscussed
+
+        subject.respondToThought('put', randomThoughtAfterItWasDiscussed);
+
+        expect(subject.thoughtAggregation.items).toEqual(itemsBefore); // now it should be moved
+      });
+      it('moves a not-discussed thought from completed to active', () => {
+        const randomThought: Thought = {
+          ...emptyThought(),
+          id: 42,
+          topic: 'topic-of-this-column',
+          message: 'bananas',
+        };
+        const randomThoughtAfterItWasDiscussed = {
+          ...randomThought,
+          discussed: true,
+        };
+        const subject = newEmptyComponent();
+        const itemsBefore = copyItems(subject.thoughtAggregation); // without the thought
+        itemsBefore.active.push(randomThought); // we are going to have the thought undiscussed
+
+        subject.thoughtAggregation.items.completed.push(
+          randomThoughtAfterItWasDiscussed
+        ); // now we have the thought, discussed
+
+        subject.respondToThought('put', randomThought);
+
+        expect(subject.thoughtAggregation.items).toEqual(itemsBefore); // now it should be moved
+      });
     });
     describe('setting the thought state to active', () => {
       // I don't know why it sets it to active, but never to anything else.
