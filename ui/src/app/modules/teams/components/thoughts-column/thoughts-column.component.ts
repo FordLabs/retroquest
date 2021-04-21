@@ -31,6 +31,7 @@ import { Themes } from '../../../domain/Theme';
 import {
   ColumnResponse,
   emptyColumnResponse,
+  findThought,
 } from '../../../domain/column-response';
 import { WebsocketResponse } from '../../../domain/websocket-response';
 import { CdkDragSortEvent } from '@angular/cdk/drag-drop';
@@ -193,6 +194,7 @@ export class ThoughtsColumnComponent implements OnInit {
 
   deleteThought(thought: Thought) {
     if (thought.id === -1) {
+      // this appears to clear out the section of the column ??
       if (thought.discussed) {
         this.thoughtAggregation.items.completed.splice(
           0,
@@ -204,22 +206,26 @@ export class ThoughtsColumnComponent implements OnInit {
           this.thoughtAggregation.items.active.length
         );
       }
-    } else {
-      if (thought.discussed) {
-        this.thoughtAggregation.items.completed.splice(
-          this.thoughtAggregation.items.completed.findIndex(
-            (item: Thought) => item.id === thought.id
-          ),
-          1
-        );
-      } else {
-        const foundedness = this.thoughtAggregation.items.active.findIndex(
+      return;
+    }
+    if (!findThought(this.thoughtAggregation, thought.id)) {
+      // it is not here
+      return;
+    }
+    if (thought.discussed) {
+      this.thoughtAggregation.items.completed.splice(
+        this.thoughtAggregation.items.completed.findIndex(
           (item: Thought) => item.id === thought.id
-        );
-        if (this.indexWasFound(foundedness)) {
-          this.thoughtAggregation.items.active.splice(foundedness, 1);
-        }
-      }
+        ),
+        1
+      );
+    } else {
+      this.thoughtAggregation.items.active.splice(
+        this.thoughtAggregation.items.active.findIndex(
+          (item: Thought) => item.id === thought.id
+        ),
+        1
+      );
     }
   }
 
