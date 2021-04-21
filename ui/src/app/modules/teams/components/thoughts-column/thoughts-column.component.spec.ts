@@ -16,11 +16,10 @@
  */
 
 import { ThoughtsColumnComponent } from './thoughts-column.component';
+import { emptyThought, Thought } from '../../../domain/thought';
+import { ColumnResponse, findThought } from '../../../domain/column-response';
 import { Observable } from 'rxjs/index';
 import 'jest';
-import { emptyThought, Thought } from '../../../domain/thought';
-import { ItemSorter } from '../../../domain/column/item-sorter';
-import { ColumnResponse, findThought } from '../../../domain/column-response';
 
 describe('ThoughtColumnComponent', () => {
   let component: ThoughtsColumnComponent;
