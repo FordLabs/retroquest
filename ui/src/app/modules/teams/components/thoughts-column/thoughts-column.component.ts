@@ -139,12 +139,10 @@ export class ThoughtsColumnComponent implements OnInit {
   }
 
   sortChanged(sorted: boolean) {
-    console.log('THE SORT WAS CHANGED');
     this.thoughtsAreSorted = sorted;
   }
 
   onThoughtDrop(event: CdkDragSortEvent) {
-    console.log('YO!! from ', event, 'by', this.thoughtAggregation.topic);
     const thoughtId = event.item.data;
     const newTopic = event.container.data; // expected to equal this.thoughtAggregation.topic
     this.thoughtService.moveThought(thoughtId, newTopic);

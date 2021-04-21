@@ -125,7 +125,6 @@ export class WebsocketService {
         `/topic/${this.dataService.team.id}/thoughts`
       );
       sub.messages.subscribe((m) => {
-        console.log('I have a thought:', m);
         observer.next(m);
       });
     });
