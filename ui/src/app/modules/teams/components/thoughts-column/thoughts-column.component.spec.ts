@@ -17,6 +17,7 @@
 
 import { ThoughtsColumnComponent } from './thoughts-column.component';
 import { Observable } from 'rxjs/index';
+import 'jest';
 
 describe('ThoughtColumnComponent', () => {
   let component: ThoughtsColumnComponent;
@@ -78,6 +79,31 @@ describe('ThoughtColumnComponent', () => {
       expect(mockThoughtService.updateThought).toHaveBeenCalledWith(
         testThought
       );
+    });
+  });
+
+  describe('updating the thoughts inside the component', () => {
+    test.todo(
+      'does nothing when the thought is not in this column, and was not before'
+    );
+    test.todo('does nothing when the thought has not changed');
+    describe('deleting a thought that was in this column and is not now', () => {
+      // note: there is some behavior in the deleteThought method for when thoughtId is -1. Not tested here.
+      test.todo('removes an active thought that was deleted');
+      test.todo('removes a completed thought that was deleted');
+    });
+    test.todo('adds an active thought that was not here before');
+    describe('updating thought discussedness', () => {
+      test.todo('moves a discussed thought from active to completed');
+      test.todo('moves a not-discussed thought from completed to active');
+    });
+    describe('setting the thought state to active', () => {
+      // I don't know why it sets it to active, but never to anything else.
+      // 'active' has something to do with an animation, but I don't understand it.
+      // Testing it here so that I don't unintentionally change it.
+      test.todo('sets a formerly-discussed thought state to active');
+      test.todo('sets a newly-discussed thought state to active');
+      test.todo('sets a new-to-this-topic thought state to active');
     });
   });
 });
