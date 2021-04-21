@@ -20,7 +20,7 @@ import { AuthService } from '../../auth/auth.service';
 import { LoggerFactory } from '@elderbyte/ts-logger';
 import { StompClient } from '@elderbyte/ts-stomp';
 import { Observable } from 'rxjs/internal/Observable';
-import { Thought, Topic } from '../../domain/thought';
+import { Thought } from '../../domain/thought';
 import { ActionItem } from '../../domain/action-item';
 import { Column } from '../../domain/column';
 import { DataService } from '../../data.service';
@@ -154,7 +154,10 @@ export class WebsocketService {
     );
   }
 
-  public moveThought(thoughtId: Thought['id'], newTopic: Topic): void {
+  public moveThought(
+    thoughtId: Thought['id'],
+    newTopic: Thought['topic']
+  ): void {
     this.checkForOpenSocket();
     const enoughInformation: Partial<Thought> = {
       id: thoughtId,

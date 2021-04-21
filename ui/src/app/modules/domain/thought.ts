@@ -17,11 +17,10 @@
 
 import { Column } from './column';
 
-export type Topic = string;
 export interface Thought {
   id: number;
   teamId: string;
-  topic: Topic;
+  topic: string;
   message: string;
   hearts: number;
   discussed: boolean;
