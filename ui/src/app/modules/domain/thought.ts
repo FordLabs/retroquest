@@ -15,12 +15,13 @@
  *  limitations under the License.
  */
 
-import {Column} from './column';
+import { Column } from './column';
 
+export type Topic = string;
 export interface Thought {
   id: number;
   teamId: string;
-  topic: string;
+  topic: Topic;
   message: string;
   hearts: number;
   discussed: boolean;
@@ -28,7 +29,7 @@ export interface Thought {
   state?: string;
 }
 
-export function emptyThought (): Thought {
+export function emptyThought(): Thought {
   return {
     id: -1,
     message: '',
@@ -36,11 +37,11 @@ export function emptyThought (): Thought {
     teamId: '',
     hearts: 0,
     discussed: false,
-    columnTitle: null
+    columnTitle: null,
   };
 }
 
-export function emptyThoughtWithColumn (): Thought {
+export function emptyThoughtWithColumn(): Thought {
   return {
     id: -1,
     message: '',
@@ -48,6 +49,6 @@ export function emptyThoughtWithColumn (): Thought {
     teamId: '',
     hearts: 0,
     discussed: false,
-    columnTitle: {sorted: false, id: 1, topic: '', title: '', teamId: ''}
+    columnTitle: { sorted: false, id: 1, topic: '', title: '', teamId: '' },
   };
 }

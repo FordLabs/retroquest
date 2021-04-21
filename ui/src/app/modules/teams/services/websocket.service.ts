@@ -20,7 +20,7 @@ import { AuthService } from '../../auth/auth.service';
 import { LoggerFactory } from '@elderbyte/ts-logger';
 import { StompClient } from '@elderbyte/ts-stomp';
 import { Observable } from 'rxjs/internal/Observable';
-import { Thought } from '../../domain/thought';
+import { Thought, Topic } from '../../domain/thought';
 import { ActionItem } from '../../domain/action-item';
 import { Column } from '../../domain/column';
 import { DataService } from '../../data.service';
@@ -151,6 +151,15 @@ export class WebsocketService {
     this.checkForOpenSocket();
     this.stompClient.send(
       `/app/${this.dataService.team.id}/thought/${thought.id}/edit`,
+      JSON.stringify(thought)
+    );
+  }
+
+  public moveThought(thought: Thought, newTopic: Topic): void {
+    this.checkForOpenSocket();
+    thought.topic = newTopic;
+    this.stompClient.send(
+      `/app/${this.dataService.team.id}/thought/${thought.id}/move`,
       JSON.stringify(thought)
     );
   }
