@@ -120,7 +120,6 @@ export class WebsocketService {
 
   public thoughtsTopic(): Observable<any> {
     this.checkForOpenSocket();
-
     return new Observable<any>((observer) => {
       const sub = this.stompClient.subscribe(
         `/topic/${this.dataService.team.id}/thoughts`
@@ -152,6 +151,21 @@ export class WebsocketService {
     this.stompClient.send(
       `/app/${this.dataService.team.id}/thought/${thought.id}/edit`,
       JSON.stringify(thought)
+    );
+  }
+
+  public moveThought(
+    thoughtId: Thought['id'],
+    newTopic: Thought['topic']
+  ): void {
+    this.checkForOpenSocket();
+    const enoughInformation: Partial<Thought> = {
+      id: thoughtId,
+      topic: newTopic,
+    };
+    this.stompClient.send(
+      `/app/${this.dataService.team.id}/thought/${thoughtId}/move`,
+      JSON.stringify(enoughInformation)
     );
   }
 

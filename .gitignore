@@ -50,3 +50,4 @@ gradle/wrapper/gradle-wrapper.jar
 **/testem.log
 **/typings
 
+.vscode/

@@ -31,8 +31,10 @@ import { Themes } from '../../../domain/Theme';
 import {
   ColumnResponse,
   emptyColumnResponse,
+  findThought,
 } from '../../../domain/column-response';
 import { WebsocketResponse } from '../../../domain/websocket-response';
+import { CdkDragSortEvent } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'rq-thoughts-column',
@@ -75,13 +77,8 @@ export class ThoughtsColumnComponent implements OnInit {
 
     this.thoughtChanged.subscribe((response) => {
       const thought = response.payload as Thought;
-      if (thought.topic === this.thoughtAggregation.topic) {
-        if (response.type === 'delete') {
-          this.deleteThought(thought);
-        } else {
-          this.updateThought(thought);
-        }
-      }
+      const responseType = response.type;
+      this.respondToThought(responseType, thought);
     });
 
     this.columnChanged.subscribe((column) => {
@@ -89,6 +86,17 @@ export class ThoughtsColumnComponent implements OnInit {
         this.thoughtAggregation.title = column.title;
       }
     });
+  }
+
+  respondToThought(responseType: string, thought: Thought) {
+    if (
+      responseType === 'delete' ||
+      thought.topic !== this.thoughtAggregation.topic
+    ) {
+      this.deleteThought(thought);
+    } else {
+      this.updateThought(thought);
+    }
   }
 
   get activeThoughtsCount(): number {
@@ -132,6 +140,12 @@ export class ThoughtsColumnComponent implements OnInit {
 
   sortChanged(sorted: boolean) {
     this.thoughtsAreSorted = sorted;
+  }
+
+  onThoughtDrop(event: CdkDragSortEvent) {
+    const thoughtId = event.item.data;
+    const newTopic = event.container.data; // expected to equal this.thoughtAggregation.topic
+    this.thoughtService.moveThought(thoughtId, newTopic);
   }
 
   updateThought(thought: Thought) {
@@ -178,6 +192,7 @@ export class ThoughtsColumnComponent implements OnInit {
 
   deleteThought(thought: Thought) {
     if (thought.id === -1) {
+      // this appears to clear out the section of the column ??
       if (thought.discussed) {
         this.thoughtAggregation.items.completed.splice(
           0,
@@ -189,22 +204,26 @@ export class ThoughtsColumnComponent implements OnInit {
           this.thoughtAggregation.items.active.length
         );
       }
+      return;
+    }
+    if (!findThought(this.thoughtAggregation, thought.id)) {
+      // it is not here
+      return;
+    }
+    if (thought.discussed) {
+      this.thoughtAggregation.items.completed.splice(
+        this.thoughtAggregation.items.completed.findIndex(
+          (item: Thought) => item.id === thought.id
+        ),
+        1
+      );
     } else {
-      if (thought.discussed) {
-        this.thoughtAggregation.items.completed.splice(
-          this.thoughtAggregation.items.completed.findIndex(
-            (item: Thought) => item.id === thought.id
-          ),
-          1
-        );
-      } else {
-        this.thoughtAggregation.items.active.splice(
-          this.thoughtAggregation.items.active.findIndex(
-            (item: Thought) => item.id === thought.id
-          ),
-          1
-        );
-      }
+      this.thoughtAggregation.items.active.splice(
+        this.thoughtAggregation.items.active.findIndex(
+          (item: Thought) => item.id === thought.id
+        ),
+        1
+      );
     }
   }
 

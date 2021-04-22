@@ -16,60 +16,66 @@
   -->
 
 <rq-thoughts-header
-  [teamId]="teamId"
-  [thoughtAggregation]="thoughtAggregation"
-  [thoughtCount]="activeThoughtsCount"
-  [hideNewThought]="hideNewThought"
-  [theme]="theme"
-  (sortChanged)="sortChanged($event)"
+    [teamId]="teamId"
+    [thoughtAggregation]="thoughtAggregation"
+    [thoughtCount]="activeThoughtsCount"
+    [hideNewThought]="hideNewThought"
+    [theme]="theme"
+    (sortChanged)="sortChanged($event)"
 ></rq-thoughts-header>
 
-<div class="rq-thought-list {{thoughtAggregation.topic}}">
-  <rq-task
-    *ngFor="let thought of activeThoughts"
-    [task]="thought"
-    [type]="thoughtAggregation.topic"
-    (messageChanged)="onMessageChanged($event, thought)"
-    (deleted)="onDeleted($event)"
-    (messageClicked)="displayPopup(thought)"
-    (starCountIncreased)="starCountChanged($event, thought)"
-    (completed)="onCompleted($event, thought)"
-    [@fadeInOutAnimation]="thought.state"
-    [readOnly]="readOnly"
-    [theme]="theme"
-    [archived]="archived"
-  >
-  </rq-task>
+<div
+    class="rq-thought-list {{ thoughtAggregation.topic }}"
+    cdkDropList
+    [cdkDropListData]="thoughtAggregation.topic"
+    (cdkDropListDropped)="onThoughtDrop($event)"
+>
+    <rq-task
+        *ngFor="let thought of activeThoughts"
+        [task]="thought"
+        [type]="thoughtAggregation.topic"
+        (messageChanged)="onMessageChanged($event, thought)"
+        (deleted)="onDeleted($event)"
+        (messageClicked)="displayPopup(thought)"
+        (starCountIncreased)="starCountChanged($event, thought)"
+        (completed)="onCompleted($event, thought)"
+        [@fadeInOutAnimation]="thought.state"
+        [readOnly]="readOnly"
+        [theme]="theme"
+        [archived]="archived"
+        cdkDrag
+        [cdkDragData]="thought.id"
+    >
+    </rq-task>
 
-  <rq-task
-    *ngFor="let thought of completedThoughts"
-    [task]="thought"
-    [type]="thoughtAggregation.topic"
-    (messageChanged)="onMessageChanged($event, thought)"
-    (deleted)="onDeleted($event)"
-    (messageClicked)="displayPopup(thought)"
-    (starCountIncreased)="starCountChanged($event, thought)"
-    (completed)="onCompleted($event, thought)"
-    [@fadeInOutAnimation]="thought.state"
-    [readOnly]="readOnly"
-    [theme]="theme"
-    [archived]="archived"
-  >
-  </rq-task>
-
+    <rq-task
+        *ngFor="let thought of completedThoughts"
+        [task]="thought"
+        [type]="thoughtAggregation.topic"
+        (messageChanged)="onMessageChanged($event, thought)"
+        (deleted)="onDeleted($event)"
+        (messageClicked)="displayPopup(thought)"
+        (starCountIncreased)="starCountChanged($event, thought)"
+        (completed)="onCompleted($event, thought)"
+        [@fadeInOutAnimation]="thought.state"
+        [readOnly]="readOnly"
+        [theme]="theme"
+        [archived]="archived"
+    >
+    </rq-task>
 </div>
 
 <rq-task-dialog
-  [teamId]="teamId"
-  [theme]="theme"
-  [readOnly]="readOnly"
-  [archived]="archived"
-  [visible]="dialogIsVisible"
-  [type]="thoughtAggregation.topic"
-  [task]="selectedThought"
-  (visibilityChanged)="dialogIsVisible = $event"
-  (messageChanged)="onMessageChanged($event, selectedThought)"
-  (deleted)="onDeleted($event)"
-  (starCountIncreased)="starCountChanged($event, selectedThought)"
-  (completed)="onCompleted($event, selectedThought)"
+    [teamId]="teamId"
+    [theme]="theme"
+    [readOnly]="readOnly"
+    [archived]="archived"
+    [visible]="dialogIsVisible"
+    [type]="thoughtAggregation.topic"
+    [task]="selectedThought"
+    (visibilityChanged)="dialogIsVisible = $event"
+    (messageChanged)="onMessageChanged($event, selectedThought)"
+    (deleted)="onDeleted($event)"
+    (starCountIncreased)="starCountChanged($event, selectedThought)"
+    (completed)="onCompleted($event, selectedThought)"
 ></rq-task-dialog>
