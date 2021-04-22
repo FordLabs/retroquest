@@ -161,8 +161,7 @@ describe('ThoughtColumnComponent', () => {
           )
         ).toBeUndefined();
       });
-      // note: there is some behavior in the deleteThought method for when thoughtId is -1. Not tested here.
-      // also in the deleteThought method: a thought marked discussed and then deleted, will be missed if those messages arrive in the wrong order.
+      test.todo('When thoughtId is -1, it does something weird. Why?');
       it('removes an active thought that was deleted', () => {
         const randomThought: Thought = {
           ...emptyThought(),
