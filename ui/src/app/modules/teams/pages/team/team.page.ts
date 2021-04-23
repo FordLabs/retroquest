@@ -39,6 +39,7 @@ import { ActionItem } from '../../../domain/action-item';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { Subscription } from 'rxjs';
 import { EndRetroService } from '../../services/end-retro.service';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'rq-team',
@@ -88,6 +89,8 @@ export class TeamPageComponent implements OnInit, OnDestroy {
   private isMobileView = (): boolean => window.innerWidth <= 610;
 
   ngOnInit(): void {
+    this.ensureRxStompClientHeadersContainAuthorization();
+
     this.teamId = this.dataService.team.id;
     this.teamName = this.dataService.team.name;
     this.theme = this.dataService.theme;
@@ -216,5 +219,25 @@ export class TeamPageComponent implements OnInit, OnDestroy {
     pageGestures.on('swiperight', () => {
       this.decrementSelectedIndex();
     });
+  }
+
+  /*
+   * Protects against a race condition
+   * - RxStompConfig is set before login and is not mutable
+   * - Cookie is not set until after login so, token is not being set to websocket
+   *
+   * The error this was producing was a websocket connection could not be made without refreshing the browser
+   */
+  private ensureRxStompClientHeadersContainAuthorization() {
+    const headersSetCorrectly =
+      this.rxStompService.stompClient.connectHeaders['Authorization'] ===
+      AuthService.getToken();
+
+    if (!headersSetCorrectly) {
+      this.rxStompService.stompClient.connectHeaders = {
+        Authorization: `Bearer ${AuthService.getToken()}`,
+      };
+      this.rxStompService.stompClient.forceDisconnect();
+    }
   }
 }
