@@ -4,7 +4,8 @@
     "outDir": "./out-tsc/spec",
     "types": ["jest", "node"],
     "esModuleInterop": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "types": ["cypress", "@testing-library/cypress"]
   },
   "files": [
     "src/test.ts",
