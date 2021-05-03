@@ -37,6 +37,10 @@ This command will execute the unit tests once and then terminate.
 ```
 yarn unit-watch
 ```
+or
+```
+yarn test
+```
 
 This command will execute all the unit tests and then enter "watch mode" in which case it will execute any tests again where the code has changed.
 
