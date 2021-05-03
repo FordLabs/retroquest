@@ -68,6 +68,8 @@ case is included in the Cypress End to End testing suite.  Instances where it is
 This code base uses [Cypress](https://www.cypress.io/) to execute end to end tests as well as UI tests that require a browser to fully simulate.  Cypress tests take much 
 longer to run than Jest tests so it is recommended to use them sparingly.
 
+Before starting your cypress tests, you must start the [springboot and angular servers](../README.md#Running-the-Application).
+
 To run end to end tests in headless mode:
 ```
 yarn cypress
