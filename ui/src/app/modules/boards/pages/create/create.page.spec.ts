@@ -96,36 +96,6 @@ describe('CreateComponent', () => {
       component.getByText('create board').click();
       await component.findByText('Please enter matching passwords');
     });
-
-    it('Requires at least one capital letter', async () => {
-      enterTextIntoFormElement(component, 'Board name', 'test');
-      enterTextIntoFormElement(component, 'Password', 'test1234');
-      enterTextIntoFormElement(component, 'Confirm Password', 'test1234');
-      component.getByText('create board').click();
-      await component.findByText(
-        'Password must be greater than 7 characters and contain one capital letter, one lowercase letter and 1 numeral'
-      );
-    });
-
-    it('Requires at least one lowercase letter', async () => {
-      enterTextIntoFormElement(component, 'Board name', 'test');
-      enterTextIntoFormElement(component, 'Password', 'TEST1234');
-      enterTextIntoFormElement(component, 'Confirm Password', 'TEST1234');
-      component.getByText('create board').click();
-      await component.findByText(
-        'Password must be greater than 7 characters and contain one capital letter, one lowercase letter and 1 numeral'
-      );
-    });
-
-    it('Requires at least one number', async () => {
-      enterTextIntoFormElement(component, 'Board name', 'test');
-      enterTextIntoFormElement(component, 'Password', 'TESTtest');
-      enterTextIntoFormElement(component, 'Confirm Password', 'TESTtest');
-      component.getByText('create board').click();
-      await component.findByText(
-        'Password must be greater than 7 characters and contain one capital letter, one lowercase letter and 1 numeral'
-      );
-    });
   });
 
   describe('Submitting form', () => {

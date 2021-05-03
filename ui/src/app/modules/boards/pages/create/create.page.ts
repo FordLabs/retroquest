@@ -97,15 +97,6 @@ export class CreateComponent {
       return false;
     }
 
-    const passwordRegex = new RegExp(
-      /(?=^.{8,}$)((?=.*\w)(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]))^.*/
-    );
-    if (!passwordRegex.test(this.password)) {
-      this.errorMessage =
-        'Password must be greater than 7 characters and contain one capital letter, one lowercase letter and 1 numeral';
-      return false;
-    }
-
     this.errorMessage = '';
     return true;
   }
