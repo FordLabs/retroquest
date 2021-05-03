@@ -87,7 +87,7 @@
       }
     },
     "retroquest-ui-e2e": {
-      "root": "e2e",
+      "root": "cypress",
       "projectType": "application",
       "architect": {
         "lint": {
