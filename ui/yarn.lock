@@ -1880,18 +1880,6 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jasmine@*", "@types/jasmine@~3.6.0":
-  version "3.6.9"
-  resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-3.6.9.tgz#8785870f87839b7d91b45d7b226380f28dee5d9f"
-  integrity sha512-B53NIwMj/AO0O+xfSWLYmKB0Mo6TYxfv2Mk8/c1T2w/e38t55iaPR6p7pHXTTtqfTmevPK3i8T1YweYFTZlxDw==
-
-"@types/jasminewd2@^2.0.8":
-  version "2.0.8"
-  resolved "https://registry.yarnpkg.com/@types/jasminewd2/-/jasminewd2-2.0.8.tgz#67afe5098d5ef2386073a7b7384b69a840dfe93b"
-  integrity sha512-d9p31r7Nxk0ZH0U39PTH0hiDlJ+qNVGjlt1ucOoTUptxb2v+Y5VMnsxfwN+i3hK4yQnqBi3FMmoMFcd1JHDxdg==
-  dependencies:
-    "@types/jasmine" "*"
-
 "@types/jest@*", "@types/jest@^26.0.22":
   version "26.0.22"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-26.0.22.tgz#8308a1debdf1b807aa47be2838acdcd91e88fbe6"
@@ -3632,7 +3620,7 @@ colorette@^1.2.1, colorette@^1.2.2:
   resolved "https://registry.yarnpkg.com/colorette/-/colorette-1.2.2.tgz#cbcc79d5e99caea2dbf10eb3a26fd8b3e6acfa94"
   integrity sha512-MKGMzyfeuutC/ZJ1cba9NqcNpfeqMUcYmyF1ZFY6/Cn7CNSAKx6a+s48sqLqyAiZuaP2TcqMhoo+dlwFnVxT9w==
 
-colors@1.4.0, colors@^1.1.2:
+colors@^1.1.2:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/colors/-/colors-1.4.0.tgz#c50491479d4c1bdaed2c9ced32cf7c7dc2360f78"
   integrity sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==
@@ -6770,18 +6758,6 @@ istanbul-reports@^3.0.2:
   dependencies:
     html-escaper "^2.0.0"
     istanbul-lib-report "^3.0.0"
-
-jasmine-core@~3.6.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/jasmine-core/-/jasmine-core-3.6.0.tgz#491f3bb23941799c353ceb7a45b38a950ebc5a20"
-  integrity sha512-8uQYa7zJN8hq9z+g8z1bqCfdC8eoDAeVnM5sfqs7KHv9/ifoJ500m018fpFc7RDaO6SWCLCXwo/wPSNcdYTgcw==
-
-jasmine-spec-reporter@~5.0.0:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/jasmine-spec-reporter/-/jasmine-spec-reporter-5.0.2.tgz#b61288ab074ad440dc2477c4d42840b0e74a6b95"
-  integrity sha512-6gP1LbVgJ+d7PKksQBc2H0oDGNRQI3gKUsWlswKaQ2fif9X5gzhQcgM5+kiJGCQVurOG09jqNhk7payggyp5+g==
-  dependencies:
-    colors "1.4.0"
 
 jest-changed-files@^26.6.2:
   version "26.6.2"
