@@ -15,21 +15,21 @@
  *  limitations under the License.
  */
 
-import {Component, Input} from '@angular/core';
-import {Themes} from '../../domain/Theme';
+import { Component, Input } from '@angular/core';
+import { Themes } from '../../domain/Theme';
 
 @Component({
   selector: 'rq-floating-character-countdown',
   templateUrl: './floating-character-countdown.component.html',
   styleUrls: ['./floating-character-countdown.component.scss'],
   host: {
+    '[class.display-error-text]': 'charactersRemainingHaveRunOut()',
     '[class.display-warning-text]': 'charactersRemainingAreAboutToRunOut()',
-    '[style.visibility]': 'textIsEmpty() ? \'hidden\' : \'visible\'',
-    '[class.dark-theme]': 'darkThemeIsEnabled'
-  }
+    '[style.visibility]': "textIsEmpty() ? 'hidden' : 'visible'",
+    '[class.dark-theme]': 'darkThemeIsEnabled',
+  },
 })
 export class FloatingCharacterCountdownComponent {
-
   @Input() maxCharacterCount = 255;
   @Input() charsAreRunningOutThreshold = 50;
   @Input() characterCount = 0;
@@ -40,7 +40,14 @@ export class FloatingCharacterCountdownComponent {
   }
 
   public charactersRemainingAreAboutToRunOut(): boolean {
-    return this.charactersRemaining() < this.charsAreRunningOutThreshold;
+    return (
+      this.charactersRemaining() < this.charsAreRunningOutThreshold &&
+      !this.charactersRemainingHaveRunOut()
+    );
+  }
+
+  public charactersRemainingHaveRunOut(): boolean {
+    return this.charactersRemaining() <= 0;
   }
 
   public textIsEmpty(): boolean {
@@ -50,5 +57,4 @@ export class FloatingCharacterCountdownComponent {
   get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;
   }
-
 }

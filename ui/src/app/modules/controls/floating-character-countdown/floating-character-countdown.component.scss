@@ -19,7 +19,7 @@
 :host {
   bottom: -24px;
   color: $wet-asphalt;
-  font-size: .8rem;
+  font-size: 0.8rem;
   font-weight: bold;
   height: auto;
   position: absolute;
@@ -31,6 +31,10 @@
   }
 
   &.display-warning-text {
+    color: $action-yellow;
+  }
+
+  &.display-error-text {
     color: $unhappy-red;
   }
 }
