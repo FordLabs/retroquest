@@ -20,29 +20,6 @@ then
 fi
 
 set -x
-pushd ui
-  npm install
-  npm run lint-fix
-
-  set +x
-  if [[ $(git diff .) ]]
-  then
-    git add -A
-    git commit --amend --no-edit
-    echo "Amended lint fixes to last commit"
-    
-  fi
-  set -x
-
-  npm run build
-
-  if npm run unit | grep -E "ERROR|FAILED"
-  then
-    exit 1
-  fi
-
-popd
-
 pushd api
   ./gradlew clean build test apiTest
 popd
