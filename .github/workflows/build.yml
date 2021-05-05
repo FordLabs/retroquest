@@ -1,14 +1,18 @@
 name: Build
 on:
+  workflow_dispatch:
   push:
     branches:
-      - $default-branch
+      - main
   pull_request:
     branches:
-      - $default-branch
+      - main
 jobs:
   ui-checks:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ui
     steps:
       - uses: actions/checkout@v2
       - name: get yarn cache directory path
@@ -31,3 +35,8 @@ jobs:
       - run: yarn lint
       - run: yarn unit
       - run: yarn build
+  api-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: ./gradlew runAllTestsDockerDb

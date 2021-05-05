@@ -9,7 +9,6 @@ services:
 
 cache:
   directories:
-    - $HOME/.npm
     - $HOME/.m2
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
