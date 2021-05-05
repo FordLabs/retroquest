@@ -1,7 +1,7 @@
 
 ## Welcome to RetroQuest!
 
-[![Build Status](https://secure.travis-ci.org/FordLabs/retroquest.svg?branch=develop)](http://travis-ci.org/FordLabs/retroquest)
+![Build Status](https://github.com/fordlabs/retroquest/actions/workflows/build.yml/badge.svg?branch=main)
 
 - [Request new features](https://github.com/FordLabs/retroquest/issues)
 - [Contribute](https://github.com/FordLabs/retroquest/pulls)
