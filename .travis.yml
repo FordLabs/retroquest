@@ -9,14 +9,12 @@ services:
 
 cache:
   directories:
-    - ./ui/node_modules
     - $HOME/.npm
     - $HOME/.m2
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
 env:
-  - TEST_SUITE=ui
   - TEST_SUITE=api
 
 before_install:
@@ -29,18 +27,10 @@ before_install:
 
 install:
   - |
-    if [ "${TEST_SUITE}" == "ui" ]; then
-      cd ./ui && npm install && cd ..
-    fi
-  - |
     if [ "${TEST_SUITE}" == "api" ]; then
       gradle assemble
     fi
 script:
-  - |
-    if [ "${TEST_SUITE}" == "ui" ]; then
-      cd ./ui && npm run lint && npm run sass-lint && npm run unit && cd ..
-    fi
   - |
     if [ "${TEST_SUITE}" == "api" ]; then
       SPRING_PROFILES_ACTIVE=docker gradle check dockerApiTest
