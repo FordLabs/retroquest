@@ -143,6 +143,18 @@ public class ThoughtController {
         return null;
     }
 
+    @MessageMapping("/{teamId}/thought/{thoughtId}/move")
+    @SendTo("/topic/{teamId}/thoughts")
+    public WebsocketPutResponse<Thought> moveThoughtWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("thoughtId") Long thoughtId, Thought thought, Authentication authentication) {
+        if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
+            Thought savedThought = thoughtRepository.findById(thoughtId).orElseThrow();
+            savedThought.setTopic(thought.getTopic());
+            thoughtRepository.save(savedThought);
+            return new WebsocketPutResponse<>(savedThought);
+        }
+        return null;
+    }
+
     @Transactional
     @MessageMapping("/{teamId}/thought/{thoughtId}/delete")
     @SendTo("/topic/{teamId}/thoughts")

@@ -346,4 +346,52 @@ public class ThoughtApiTest extends ApiTest {
                 .andExpect(status().isForbidden());
     }
 
+    @Test
+    public void should_move_thought() throws Exception {
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
+
+        Thought savedThought = thoughtRepository.save(Thought.builder()
+                .teamId(teamId)
+                .topic("hamburgers")
+                .message("message")
+                .discussed(false)
+                .hearts(1)
+                .build());
+
+        Thought sentThought = Thought.builder()
+                .id(savedThought.getId())
+                .topic("cheeseburgers")
+                .build();
+
+        session.send(BASE_ENDPOINT_URL + "/" + savedThought.getId().toString() + "/move",
+                objectMapper.writeValueAsBytes(sentThought));
+
+        Thought responseThought = takeObjectInSocket(Thought.class);
+
+        Thought updatedThought = thoughtRepository.findById(savedThought.getId()).orElseThrow(Exception::new);
+
+        assertThat(updatedThought.getId()).isEqualTo(sentThought.getId());
+        assertThat(updatedThought.getMessage()).isEqualTo(savedThought.getMessage());
+        assertThat(updatedThought.getTopic()).isEqualTo(sentThought.getTopic());
+    }
+
+    @Test
+    public void should_not_move_thought_unauthorized() throws Exception {
+        StompSession session = getUnauthorizedSession();
+        subscribe(session, BASE_SUB_URL);
+
+        Thought savedThought = thoughtRepository.save(Thought.builder().teamId(teamId).message("message").topic("hamburgers").build());
+        Thought sentThought = Thought.builder().id(savedThought.getId()).topic("cheeseburgers").build();
+
+        session.send(BASE_ENDPOINT_URL + "/" + savedThought.getId().toString() + "/move",
+                objectMapper.writeValueAsBytes(sentThought));
+
+        Thought responseThought = takeObjectInSocket(Thought.class);
+
+        Thought updatedThought = thoughtRepository.findById(savedThought.getId()).orElseThrow(Exception::new);
+
+        assertThat(updatedThought).isEqualToComparingFieldByField(savedThought);
+        assertThat(responseThought).isNull();
+    }
 }
