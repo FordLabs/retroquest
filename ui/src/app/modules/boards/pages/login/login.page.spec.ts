@@ -90,23 +90,6 @@ describe('LoginComponent', () => {
   });
 
   describe('requestCaptchaStateAndLogIn', () => {
-    it('should set the error message for empty teamName', () => {
-      component.teamName = '';
-
-      component.requestCaptchaStateAndLogIn();
-
-      expect(component.errorMessage).toEqual('Please enter a team name');
-    });
-
-    it('should set the error message for empty password', () => {
-      component.teamName = 'Team Name';
-      component.password = '';
-
-      component.requestCaptchaStateAndLogIn();
-
-      expect(component.errorMessage).toEqual('Please enter a password');
-    });
-
     it('should not set an error message when the teamName and password are not empty', () => {
       component.teamName = 'Team Name';
       component.password = 'p4ssw0rd';
