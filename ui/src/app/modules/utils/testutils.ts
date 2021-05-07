@@ -1,9 +1,12 @@
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/index';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Observable, of } from 'rxjs/index';
 import 'jest-preset-angular/setup-jest';
 import { WebsocketService } from '../teams/services/websocket.service';
 import { EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
+import { TeamService } from '../teams/services/team.service';
+import { RenderResult } from '@testing-library/angular/src/lib/models';
+import userEvent from '@testing-library/user-event';
 
 export function createMockHttpClient(): HttpClient {
   // @ts-ignore
@@ -64,4 +67,31 @@ export function createMockRecaptchaComponent() {
     reset: jest.fn(),
     execute: jest.fn(),
   };
+}
+
+export function createMockTeamService(): TeamService {
+  const captchResponse = {
+    status: 200,
+    body: '{"captchaEnabled":false}',
+  };
+
+  const createTeamResponse: HttpResponse<string> = new HttpResponse({
+    body: 'im.a.jwt',
+    headers: new HttpHeaders({ location: 'team/teamId' }),
+  });
+
+  return ({
+    isCaptchaEnabled: jest.fn().mockReturnValue(of(captchResponse)),
+    isCaptchaEnabledForTeam: jest.fn().mockReturnValue(of(captchResponse)),
+    create: jest.fn().mockReturnValue(of(createTeamResponse)),
+  } as unknown) as TeamService;
+}
+
+export function enterTextIntoFormElement(
+  component: RenderResult<any>,
+  labelByText: string,
+  formValue: string
+): void {
+  const input = component.getByLabelText(labelByText);
+  userEvent.type(input, formValue);
 }
