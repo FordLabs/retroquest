@@ -17,210 +17,117 @@
 
 import { CreateComponent } from './create.page';
 import { AuthService } from '../../../auth/auth.service';
-import { Subject, throwError } from 'rxjs';
 import { of } from 'rxjs/internal/observable/of';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import {
-  createMockRecaptchaComponent,
-  createMockRouter,
+  createMockHttpClient,
+  createMockTeamService,
+  enterTextIntoFormElement,
 } from '../../../utils/testutils';
 import { TeamService } from '../../../teams/services/team.service';
+import { render } from '@testing-library/angular';
+import { BoardsModule } from '../../boards.module';
+import { RenderResult } from '@testing-library/angular/src/lib/models';
+import { TestModule } from '../../../test/test.module';
+import { EmptyComponent } from '../../../test/empty.page';
 
 describe('CreateComponent', () => {
-  let component: CreateComponent;
-  let mockTeamService: TeamService;
-  let mockRouter;
-  let mockRecaptchaComponent;
+  async function createComponent(
+    teamService: TeamService
+  ): Promise<RenderResult<CreateComponent>> {
+    return render(CreateComponent, {
+      routes: [
+        {
+          path: 'create',
+          component: CreateComponent,
+        },
+        {
+          path: 'team/:teamId',
+          component: EmptyComponent,
+        },
+      ],
+      imports: [BoardsModule, TestModule],
+      excludeComponentDeclaration: true,
+      providers: [
+        {
+          provide: TeamService,
+          useValue: teamService,
+        },
+        {
+          provide: HttpClient,
+          useValue: createMockHttpClient(),
+        },
+      ],
+    });
+  }
 
-  beforeEach(() => {
-    // @ts-ignore
-    mockTeamService = {
-      create: jest.fn().mockReturnValue(new Subject()),
-      isCaptchaEnabled: jest.fn().mockReturnValue(new Subject()),
-    } as TeamService;
-    mockRouter = createMockRouter();
-    mockRecaptchaComponent = createMockRecaptchaComponent();
+  describe('Validating form fields', () => {
+    let component: RenderResult<CreateComponent>;
+    let mockTeamService;
 
-    spyOn(AuthService, 'setToken');
-    spyOn(console, 'error');
+    beforeEach(async () => {
+      mockTeamService = createMockTeamService();
 
-    component = new CreateComponent(mockTeamService, mockRouter);
-    component.recaptchaComponent = mockRecaptchaComponent;
-  });
-
-  describe('requestCaptchaStateAndCreateTeam', () => {
-    it('should set the error message for empty teamName', () => {
-      component.teamName = '';
-
-      component.requestCaptchaStateAndCreateTeam();
-
-      expect(component.errorMessage).toEqual('Please enter a team name');
+      component = await createComponent(mockTeamService);
     });
 
-    it('should set the error message for empty password', () => {
-      component.teamName = 'Team Name';
-      component.password = '';
-
-      component.requestCaptchaStateAndCreateTeam();
-
-      expect(component.errorMessage).toEqual('Please enter a password');
+    it('Requires a team name to be entered', async () => {
+      component.getByText('create board').click();
+      await component.findByText('Please enter a team name');
     });
 
-    it('should set the error message and return false with miss matching passwords', () => {
-      component.teamName = 'Team Name';
-      component.password = 'p4ssw0rd';
-      component.confirmPassword = 'password';
-
-      component.requestCaptchaStateAndCreateTeam();
-
-      expect(component.errorMessage).toEqual('Please enter matching passwords');
+    it('Requires a password to be entered', async () => {
+      enterTextIntoFormElement(component, 'Board name', 'test');
+      component.getByText('create board').click();
+      await component.findByText('Please enter a password');
     });
 
-    it('should not set an error when the teamName and password are not empty and the passwords match', () => {
-      component.teamName = 'Team Name';
-      component.password = 'p4ssw0rd';
-      component.confirmPassword = 'p4ssw0rd';
-
-      component.requestCaptchaStateAndCreateTeam();
-
-      expect(component.errorMessage).toEqual('');
+    it('Requires a confirmation password to be entered', async () => {
+      enterTextIntoFormElement(component, 'Board name', 'test');
+      enterTextIntoFormElement(component, 'Password', 'Test1234');
+      component.getByText('create board').click();
+      await component.findByText('Please enter matching passwords');
     });
 
-    it('should set jwt as cookie and navigate to team page when captcha is disabled', () => {
-      component.teamName = 'Team Name';
-      component.password = 'p4ssw0rd';
-      component.confirmPassword = 'p4ssw0rd';
-
-      const teamUrl = 'team/teamId';
-      const jwt = 'im.a.jwt';
-      const createTeamResponse: HttpResponse<string> = new HttpResponse({
-        body: jwt,
-        headers: new HttpHeaders({ location: teamUrl }),
-      });
-
-      const captchaResponse: HttpResponse<string> = new HttpResponse({
-        body: JSON.stringify({ captchaEnabled: false }),
-      });
-
-      mockTeamService.isCaptchaEnabled = jest
-        .fn()
-        .mockReturnValue(of(captchaResponse));
-      mockTeamService.create = jest
-        .fn()
-        .mockReturnValue(of(createTeamResponse));
-
-      component.requestCaptchaStateAndCreateTeam();
-
-      expect(AuthService.setToken).toHaveBeenCalledWith(jwt);
-      expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(teamUrl);
-    });
-
-    it('should set the error message and log it when create has an error', () => {
-      component.teamName = 'Team Name';
-      component.password = 'p4ssw0rd';
-      component.confirmPassword = 'p4ssw0rd';
-
-      const httpErrorMessage = 'server error message';
-      const error = { error: JSON.stringify({ message: httpErrorMessage }) };
-
-      const captchaResponse: HttpResponse<string> = new HttpResponse({
-        body: JSON.stringify({ captchaEnabled: false }),
-      });
-
-      mockTeamService.isCaptchaEnabled = jest
-        .fn()
-        .mockReturnValue(of(captchaResponse));
-      mockTeamService.create = jest.fn().mockReturnValue(throwError(error));
-
-      component.requestCaptchaStateAndCreateTeam();
-
-      expect(component.errorMessage).toEqual(httpErrorMessage);
-      expect(console.error).toHaveBeenCalledWith(
-        'A registration error occurred: ',
-        httpErrorMessage
-      );
-    });
-
-    it('should set the error message and log it when isCaptchaEnabled has an error', () => {
-      component.teamName = 'Team Name';
-      component.password = 'p4ssw0rd';
-      component.confirmPassword = 'p4ssw0rd';
-
-      const httpErrorMessage = 'server error message';
-      const error = {
-        error: JSON.stringify({ message: httpErrorMessage }),
-      };
-
-      mockTeamService.isCaptchaEnabled = jest
-        .fn()
-        .mockReturnValue(throwError(error));
-
-      component.requestCaptchaStateAndCreateTeam();
-
-      expect(component.errorMessage).toEqual(httpErrorMessage);
-      expect(console.error).toHaveBeenCalledWith(
-        'A registration error occurred: ',
-        httpErrorMessage
-      );
-    });
-
-    it('should not call create when isCaptchaEnabled has an error', () => {
-      component.teamName = 'Team Name';
-      component.password = 'p4ssw0rd';
-      component.confirmPassword = 'p4ssw0rd';
-
-      const error = { error: JSON.stringify({ message: 'error' }) };
-
-      mockTeamService.isCaptchaEnabled = jest
-        .fn()
-        .mockReturnValue(throwError(error));
-
-      component.requestCaptchaStateAndCreateTeam();
-
-      expect(mockTeamService.create).not.toHaveBeenCalled();
+    it('Requires a confirmation password to match entered password', async () => {
+      enterTextIntoFormElement(component, 'Board name', 'test');
+      enterTextIntoFormElement(component, 'Password', 'Test1234');
+      enterTextIntoFormElement(component, 'Confirm Password', 'peanutButter');
+      component.getByText('create board').click();
+      await component.findByText('Please enter matching passwords');
     });
   });
 
-  describe('create', () => {
-    it('should set jwt as cookie and navigate to team page', () => {
-      component.teamName = 'Team Name';
-      component.password = 'p4ssw0rd';
-      component.confirmPassword = 'p4ssw0rd';
+  describe('Submitting form', () => {
+    let component: RenderResult<CreateComponent>;
+    let mockTeamService;
 
-      const teamUrl = 'team/teamId';
-      const jwt = 'im.a.jwt';
+    const jwt = 'im.a.jwt';
+    const teamUrl = '/team/teamId';
+    const loginResponse: HttpResponse<string> = new HttpResponse({
+      body: 'im.a.jwt',
+      headers: new HttpHeaders({ location: teamUrl }),
+    });
+    const createSpy = jest.fn().mockReturnValue(of(loginResponse));
+    const authSpy = jest.spyOn(AuthService, 'setToken');
 
-      const loginResponse: HttpResponse<string> = new HttpResponse({
-        body: jwt,
-        headers: new HttpHeaders({ location: teamUrl }),
-      });
+    beforeEach(async () => {
+      mockTeamService = createMockTeamService();
+      mockTeamService.create = createSpy;
+      component = await createComponent(mockTeamService);
 
-      mockTeamService.create = jest.fn().mockReturnValue(of(loginResponse));
-
-      component.create('some captcha');
-
-      expect(AuthService.setToken).toHaveBeenCalledWith(jwt);
-      expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(teamUrl);
+      enterTextIntoFormElement(component, 'Board name', 'test');
+      enterTextIntoFormElement(component, 'Password', 'Test1234');
+      enterTextIntoFormElement(component, 'Confirm Password', 'Test1234');
+      component.getByText('create board').click();
     });
 
-    it('should set the error message and log it', () => {
-      component.teamName = 'Team Name';
-      component.password = 'p4ssw0rd';
-      component.confirmPassword = 'p4ssw0rd';
+    it('Makes call to create team service if form entry is valid', () => {
+      expect(createSpy).toHaveBeenCalled();
+    });
 
-      const httpErrorMessage = 'server error message';
-      const error = {
-        error: JSON.stringify({ message: httpErrorMessage }),
-      };
-
-      mockTeamService.create = jest.fn().mockReturnValue(throwError(error));
-      component.create('some captcha');
-
-      expect(component.errorMessage).toEqual(httpErrorMessage);
-      expect(console.error).toHaveBeenCalledWith(
-        'A registration error occurred: ',
-        httpErrorMessage
-      );
+    it('Sets the JWT token on auth service', () => {
+      expect(authSpy).toHaveBeenCalledWith(jwt);
     });
   });
 });
