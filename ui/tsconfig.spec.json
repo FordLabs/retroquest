@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
-    "types": ["jest", "node"],
+    "types": ["jest", "node", "cypress", "@testing-library/cypress"],    
     "esModuleInterop": true,
     "emitDecoratorMetadata": true
   },

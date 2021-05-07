@@ -21,8 +21,8 @@ fi
 
 set -x
 pushd ui
-  npm install
-  npm run lint-fix
+  yarn install
+  yarn lint-fix
 
   set +x
   if [[ $(git diff .) ]]
@@ -34,16 +34,16 @@ pushd ui
   fi
   set -x
 
-  npm run build
+  yarn build-prod
 
-  if npm run unit | grep -E "ERROR|FAILED"
+  if yarn unit | grep -E "ERROR|FAILED"
   then
     exit 1
   fi
 
 popd
 
-pushd api
+pushd ./
   ./gradlew clean build test apiTest
 popd
 
