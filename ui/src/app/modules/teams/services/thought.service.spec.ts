@@ -33,7 +33,10 @@ describe('ThoughtService', () => {
   const dataService: DataService = new DataService();
   const teamId = 'teamId';
 
-  function createTestThought(team: string, id: number = null) {
+  function createTestThought(
+    team: string,
+    id: number = Math.floor(Math.random() * 999999999)
+  ) {
     return {
       id,
       teamId: team,
@@ -135,5 +138,25 @@ describe('ThoughtService', () => {
 
       expect(spiedStompService.publish).not.toHaveBeenCalled();
     });
+  });
+
+  describe('moveThought', () => {
+    it('should send a message', () => {
+      const testThought = createTestThought(teamId, 1);
+      const newTopic = 'move';
+      service.moveThought(testThought.id, newTopic);
+
+      const expectedBody = {
+        id: testThought.id,
+        topic: newTopic,
+      };
+
+      expect(spiedStompService.publish).toHaveBeenCalledWith({
+        destination: `/app/${testThought.teamId}/thought/${testThought.id}/move`,
+        body: JSON.stringify(expectedBody),
+      });
+    });
+
+    test.todo('does not allow messages to be moved for other teams');
   });
 });

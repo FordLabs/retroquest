@@ -7,11 +7,7 @@ module.exports = {
       files: ['*.ts'],
       parserOptions: {
         tsconfigRootDir: __dirname,
-        project: [
-          'tsconfig.app.json',
-          'tsconfig.spec.json',
-          'e2e/tsconfig.e2e.json',
-        ],
+        project: ['tsconfig.app.json', 'tsconfig.spec.json'],
         createDefaultProgram: true,
       },
       extends: [

@@ -16,16 +16,37 @@
  */
 
 import { ThoughtsColumnComponent } from './thoughts-column.component';
+import { Thought } from '../../../domain/thought';
 import { Observable } from 'rxjs/index';
 import { WebsocketResponse } from '../../../domain/websocket-response';
-import { Thought } from '../../../domain/thought';
 
 describe('ThoughtColumnComponent', () => {
   let component: ThoughtsColumnComponent;
   let mockThoughtService;
 
   let testThought;
-  const topic = 'happy';
+  const defaultTopic = 'happy';
+  const defaultTeamId = 'teamId';
+  const otherTopic = 'otherTopic';
+
+  const undiscussedThought = createThought(1, 'Undiscussed thought');
+  const discussedThought = createThought(
+    2,
+    'Undiscussed thought',
+    defaultTopic,
+    true
+  );
+  const undiscussedThoughtInOtherColumn = createThought(
+    3,
+    'Thought in other column',
+    otherTopic
+  );
+  const discussedThoughtInOtherColumn = createThought(
+    4,
+    'Thought in other column',
+    otherTopic,
+    true
+  );
 
   beforeEach(() => {
     mockThoughtService = {
@@ -36,11 +57,9 @@ describe('ThoughtColumnComponent', () => {
     };
 
     component = new ThoughtsColumnComponent(mockThoughtService);
-    component.thoughtAggregation.topic = topic;
+    component.thoughtAggregation.topic = defaultTopic;
 
     testThought = createThought(1, 'Test Thought');
-
-    // component.thoughts = [testThought];
   });
 
   it('should create', () => {
@@ -122,7 +141,7 @@ describe('ThoughtColumnComponent', () => {
       });
     });
 
-    describe('Thought from a different column', () => {
+    describe('Thought from a different column updated', () => {
       const message: WebsocketResponse = {
         type: 'put',
         payload: createThought(12, 'Thought from different column', 'confused'),
@@ -139,28 +158,82 @@ describe('ThoughtColumnComponent', () => {
         expect(deleteThoughtSpy).not.toHaveBeenCalled();
       });
     });
+
+    describe('Thought moved', () => {
+      describe('thought moved away from column', () => {
+        const movedThought = createThought(
+          12,
+          'Moving thought to new column',
+          'otherTopic'
+        );
+        movedThought.columnTitle.topic = defaultTopic;
+
+        const message: WebsocketResponse = {
+          type: 'put',
+          payload: movedThought,
+        };
+
+        beforeEach(() => {
+          component.processThoughtChange(message);
+        });
+
+        it('Should update (add) thought', () => {
+          expect(updateThoughtSpy).not.toHaveBeenCalled();
+        });
+        it('Should delete a thought', () => {
+          expect(deleteThoughtSpy).toHaveBeenCalledWith(movedThought);
+        });
+      });
+
+      describe('thought moved to column', () => {
+        const movedThought = createThought(12, 'Moving thought to this column');
+        movedThought.columnTitle.topic = 'otherTopic';
+
+        const message: WebsocketResponse = {
+          type: 'put',
+          payload: movedThought,
+        };
+
+        beforeEach(() => {
+          component.processThoughtChange(message);
+        });
+
+        it('Should not update a thought', () => {
+          expect(updateThoughtSpy).toHaveBeenCalledWith(movedThought);
+        });
+        it('Should delete a thought', () => {
+          expect(deleteThoughtSpy).not.toHaveBeenCalled();
+        });
+      });
+
+      describe('thought moved from a different column to yet another different column', () => {
+        const movedThought = createThought(
+          12,
+          'Moving thought to this column',
+          'alternateTopic1'
+        );
+        movedThought.columnTitle.topic = 'alternateTopic2';
+
+        const message: WebsocketResponse = {
+          type: 'put',
+          payload: movedThought,
+        };
+
+        beforeEach(() => {
+          component.processThoughtChange(message);
+        });
+
+        it('Should not update a thought', () => {
+          expect(updateThoughtSpy).not.toHaveBeenCalled();
+        });
+        it('Should delete a thought', () => {
+          expect(deleteThoughtSpy).not.toHaveBeenCalled();
+        });
+      });
+    });
   });
 
   describe('deleting a thought', () => {
-    const undiscussedThought = createThought(1, 'Undiscussed thought');
-    const discussedThought = createThought(
-      2,
-      'Undiscussed thought',
-      'happy',
-      true
-    );
-    const undiscussedThoughtInOtherColumn = createThought(
-      3,
-      'Thought in other column',
-      'confused'
-    );
-    const discussedThoughtInOtherColumn = createThought(
-      4,
-      'Thought in other column',
-      'confused',
-      true
-    );
-
     let active;
     let completed;
 
@@ -198,10 +271,82 @@ describe('ThoughtColumnComponent', () => {
     });
   });
 
+  describe('updating a thought', () => {
+    let active;
+    let completed;
+
+    beforeEach(() => {
+      active = [undiscussedThought];
+      completed = [discussedThought];
+      component.thoughtAggregation.items = {
+        active,
+        completed,
+      };
+    });
+
+    function verifyThoughtUpdate(
+      newThought: Thought,
+      activeContains: boolean,
+      completedContains: boolean
+    ) {
+      function verifyContains(arr: Array<object>, arrContains: boolean) {
+        if (arrContains) {
+          expect(
+            arr.findIndex((thought) => thought === newThought)
+          ).toBeGreaterThan(-1);
+        } else {
+          expect(arr.findIndex((thought) => thought === newThought)).toEqual(
+            -1
+          );
+        }
+      }
+
+      const activeLength = activeContains ? 2 : 1;
+      const completedLength = completedContains ? 2 : 1;
+
+      expect(component.thoughtAggregation.items.active.length).toEqual(
+        activeLength
+      );
+      expect(component.thoughtAggregation.items.completed.length).toEqual(
+        completedLength
+      );
+      verifyContains(component.thoughtAggregation.items.active, activeContains);
+      verifyContains(
+        component.thoughtAggregation.items.completed,
+        completedContains
+      );
+    }
+
+    it('Properly adds a new thought', () => {
+      const newThought = createThought(99, 'New Thought');
+      component.updateThought(newThought);
+
+      verifyThoughtUpdate(newThought, true, false);
+    });
+
+    it('Properly adds a new discussed thought', () => {
+      const newThought = createThought(99, 'New Thought');
+      newThought.discussed = true;
+      component.updateThought(newThought);
+
+      verifyThoughtUpdate(newThought, false, true);
+    });
+
+    it('Properly adds a new thought via move', () => {
+      const newThought = createThought(99, 'New Thought');
+      newThought.columnTitle.topic = otherTopic;
+      component.updateThought(newThought);
+
+      verifyThoughtUpdate(newThought, true, false);
+    });
+
+    test.todo('updating a thought that already existed in the column');
+  });
+
   function createThought(
     id: number,
     message: string,
-    thoughtTopic: string = 'happy',
+    thoughtTopic: string = defaultTopic,
     discussed: boolean = false
   ): Thought {
     return {
@@ -210,12 +355,12 @@ describe('ThoughtColumnComponent', () => {
       hearts: 0,
       topic: thoughtTopic,
       discussed,
-      teamId: 'test',
+      teamId: defaultTeamId,
       columnTitle: {
         id: 1,
         topic: thoughtTopic,
         title: thoughtTopic,
-        teamId: 'test',
+        teamId: defaultTeamId,
       },
       boardId: null,
     } as Thought;

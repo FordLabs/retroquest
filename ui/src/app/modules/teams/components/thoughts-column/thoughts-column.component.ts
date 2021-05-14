@@ -32,9 +32,10 @@ import {
   ColumnResponse,
   deleteColumnResponse,
   emptyColumnResponse,
+  findThought,
 } from '../../../domain/column-response';
 import { WebsocketResponse } from '../../../domain/websocket-response';
-import { ItemSorter } from '../../../domain/column/item-sorter';
+import { CdkDragSortEvent } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'rq-thoughts-column',
@@ -104,6 +105,17 @@ export class ThoughtsColumnComponent implements OnInit {
       return thoughtTopic === thoughtAggregationTopic;
     }
 
+    function thoughtWasMovedFromThisColumn(
+      thoughtTopic: string,
+      thoughtTopicPreviousColumn: string,
+      thoughtAggregationTopic: string
+    ) {
+      return (
+        thoughtTopic !== thoughtAggregationTopic &&
+        thoughtTopicPreviousColumn === thoughtAggregationTopic
+      );
+    }
+
     const thought = retrieveThoughtFromPayload(response);
 
     if (response.type === 'delete') {
@@ -112,6 +124,14 @@ export class ThoughtsColumnComponent implements OnInit {
       thoughtIsInThisColumn(thought.topic, this.thoughtAggregation.topic)
     ) {
       this.updateThought(thought);
+    } else if (
+      thoughtWasMovedFromThisColumn(
+        thought.topic,
+        thought.columnTitle.topic,
+        this.thoughtAggregation.topic
+      )
+    ) {
+      this.deleteThought(thought);
     }
   }
 
@@ -158,46 +178,58 @@ export class ThoughtsColumnComponent implements OnInit {
     this.thoughtsAreSorted = sorted;
   }
 
-  updateThought(thought: Thought) {
-    const completedIndex = this.thoughtAggregation.items.completed.findIndex(
-      (item: Thought) => item.id === thought.id
-    );
-    const activeIndex = this.thoughtAggregation.items.active.findIndex(
-      (item: Thought) => item.id === thought.id
-    );
-
-    if (!this.indexWasFound(completedIndex)) {
-      if (this.indexWasFound(activeIndex)) {
-        if (thought.discussed) {
-          thought.state = 'active';
-          this.thoughtAggregation.items.active.splice(activeIndex, 1);
-          this.thoughtAggregation.items.completed.push(thought);
-        } else {
-          Object.assign(
-            this.thoughtAggregation.items.active[activeIndex],
-            thought
-          );
-        }
-      } else {
-        thought.state = 'active';
-        this.thoughtAggregation.items.active.push(thought);
-      }
-    } else {
-      if (!thought.discussed) {
-        thought.state = 'active';
-        this.thoughtAggregation.items.completed.splice(completedIndex, 1);
-        this.thoughtAggregation.items.active.push(thought);
-      } else {
-        Object.assign(
-          this.thoughtAggregation.items.completed[completedIndex],
-          thought
-        );
-      }
-    }
+  onThoughtDrop(event: CdkDragSortEvent) {
+    const thoughtId = event.item.data;
+    const newTopic = event.container.data; // expected to equal this.thoughtAggregation.topic
+    this.thoughtService.moveThought(thoughtId, newTopic);
   }
 
-  private indexWasFound(index: number): boolean {
-    return index !== -1;
+  updateThought(updatedThought: Thought) {
+    const completedIndex = this.thoughtAggregation.items.completed.findIndex(
+      (item: Thought) => item.id === updatedThought.id
+    );
+    const activeIndex = this.thoughtAggregation.items.active.findIndex(
+      (item: Thought) => item.id === updatedThought.id
+    );
+
+    function indexWasFound(index: number): boolean {
+      return index !== -1;
+    }
+
+    function ensureInColumn(thought: Thought, column: Array<object>) {
+      const index = column.findIndex(
+        (item: Thought) => item.id === updatedThought.id
+      );
+
+      if (indexWasFound(index)) {
+        Object.assign(column[index], thought);
+      } else {
+        thought.state = 'active';
+        column.push(thought);
+      }
+    }
+
+    function ensureNotInColumn(thought: Thought, column: Array<object>) {
+      const index = column.findIndex(
+        (item: Thought) => item.id === updatedThought.id
+      );
+
+      if (indexWasFound(index)) {
+        thought.state = 'active';
+        column.splice(index, 1);
+      }
+    }
+
+    if (updatedThought.discussed) {
+      ensureInColumn(updatedThought, this.thoughtAggregation.items.completed);
+      ensureNotInColumn(updatedThought, this.thoughtAggregation.items.active);
+    } else {
+      ensureInColumn(updatedThought, this.thoughtAggregation.items.active);
+      ensureNotInColumn(
+        updatedThought,
+        this.thoughtAggregation.items.completed
+      );
+    }
   }
 
   deleteThought(thought: Thought) {

@@ -16,6 +16,7 @@
  */
 
 import { ItemSorter } from './column/item-sorter';
+import { Thought } from './thought';
 
 export interface ColumnResponse {
   id: number;
@@ -67,4 +68,12 @@ export function deleteColumnResponse(
 
 export interface ResponseWithId {
   id: number;
+}
+
+export function findThought(
+  { items: { active, completed } }: ColumnResponse,
+  thoughtId: Thought['id']
+): Thought | undefined {
+  const allThoughts: Thought[] = [...active, ...completed] as Thought[]; // these arrays aren't typed properly
+  return allThoughts.find((t) => t.id === thoughtId);
 }

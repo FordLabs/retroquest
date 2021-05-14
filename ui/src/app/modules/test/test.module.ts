@@ -1,4 +1,4 @@
-/*!
+/*
  *  Copyright (c) 2020 Ford Motor Company
  *  All rights reserved.
  *
@@ -14,30 +14,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-@import 'color-vars';
 
-:host {
-  display: block;
+import { NgModule } from '@angular/core';
+import { EmptyComponent } from './empty.page';
 
-  .rq-thought-list {
-    display: flex;
-    flex: 1;
-    flex-basis: 0;
-    flex-flow: column nowrap;
-    font-size: 1rem;
-    min-height: 60px;
-
-    rq-task {
-      height: auto;
-      margin-bottom: 24px;
-      transition: y 1s cubic-bezier(0.25, 0.8, 0.25, 1);
-
-      width: 100%;
-
-      @media only screen and (max-width: 610px) {
-        font-size: 1rem;
-        margin-bottom: 12px;
-      }
-    }
-  }
-}
+@NgModule({
+  declarations: [EmptyComponent],
+})
+export class TestModule {}

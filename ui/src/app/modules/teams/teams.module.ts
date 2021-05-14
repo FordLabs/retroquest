@@ -29,19 +29,20 @@ import { ActionsColumnComponent } from './components/actions-column/actions-colu
 import { TeamService } from './services/team.service';
 import { ActionItemService } from './services/action.service';
 import { ColumnService } from './services/column.service';
-import { FeedbackService } from './services/feedback.service';
-import { AuthGuard } from '../auth/auth-guard/auth.guard';
 import { TeamPageQueryParamGuard } from './services/team-page-query-param-guard';
-import { ControlsModule } from '../controls/controls.module';
-import { SaveCheckerService } from './services/save-checker.service';
-import { ArchivesPageComponent } from './pages/archives/archives.page';
-import { TopHeaderComponent } from '../controls/top-header/top-header.component';
-import { BoardSummaryComponent } from './components/board-summary/board-summary.component';
-import { ArchivedBoardPageComponent } from './pages/archived-board/archived-board.page';
 import { SubAppComponent } from '../sub-app/sub-app.component';
+import { AuthGuard } from '../auth/auth-guard/auth.guard';
 import { ActionsRadiatorViewComponent } from '../controls/actions-radiator-view/actions-radiator-view.component';
+import { ArchivesPageComponent } from './pages/archives/archives.page';
+import { ArchivedBoardPageComponent } from './pages/archived-board/archived-board.page';
+import { ControlsModule } from '../controls/controls.module';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { FeedbackService } from './services/feedback.service';
+import { SaveCheckerService } from './services/save-checker.service';
 import { EndRetroService } from './services/end-retro.service';
+import { BoardSummaryComponent } from './components/board-summary/board-summary.component';
+import { TopHeaderComponent } from '../controls/top-header/top-header.component';
 
 @NgModule({
   imports: [
@@ -80,6 +81,7 @@ import { EndRetroService } from './services/end-retro.service';
     ]),
     ControlsModule,
     InfiniteScrollModule,
+    DragDropModule,
   ],
   providers: [
     ThoughtService,

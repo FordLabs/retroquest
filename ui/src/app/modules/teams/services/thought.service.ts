@@ -65,4 +65,14 @@ export class ThoughtService {
       });
     }
   }
+
+  moveThought(thoughtId: Thought['id'], newTopic: Thought['topic']): void {
+    this.rxStompService.publish({
+      destination: `/app/${this.dataService.team.id}/thought/${thoughtId}/move`,
+      body: JSON.stringify({
+        id: thoughtId,
+        topic: newTopic,
+      }),
+    });
+  }
 }

@@ -139,10 +139,17 @@ export class TeamPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.thoughtSubscription.unsubscribe();
-    this.actionItemSubscription.unsubscribe();
-    this.columnTitleSubscription.unsubscribe();
-    this.endRetroSubscription.unsubscribe();
+    function unsubscribe(subscription: Subscription) {
+      try {
+        subscription.unsubscribe();
+      } catch (e) {
+        //oh well, we tried
+      }
+    }
+    unsubscribe(this.thoughtSubscription);
+    unsubscribe(this.actionItemSubscription);
+    unsubscribe(this.columnTitleSubscription);
+    unsubscribe(this.endRetroSubscription);
   }
 
   public onEndRetro(): void {
