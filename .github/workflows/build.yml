@@ -63,6 +63,15 @@ jobs:
       - name: run all tests using docker
         run: ./gradlew runAllTestsDockerDb
 
+      - name: build application JAR
+        run: ./gradlew assemble withPostgres
+
+      - name: release artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: retroquest.jar
+          path: build/libs/retroquest.jar
+
       - name: cleanup gradle cache
         run: |
           rm -f ~/.gradle/caches/modules-2/modules-2.lock
