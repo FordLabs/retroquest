@@ -43,7 +43,7 @@ jobs:
       - name: release artifact
         uses: actions/upload-artifact@v2
         with:
-          name: retroquest-ui.zip
+          name: retroquest-ui
           path: ui/dist/retroquest-ui/
 
   api-checks:
@@ -74,7 +74,7 @@ jobs:
       - name: release artifact
         uses: actions/upload-artifact@v2
         with:
-          name: retroquest.jar
+          name: retroquest-api
           path: build/libs/retroquest.jar
 
       - name: cleanup gradle cache
