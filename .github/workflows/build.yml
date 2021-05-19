@@ -44,7 +44,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: retroquest-ui
-          path: ui/dist/retroquest-ui/
+          path: ui/dist/
 
   api-checks:
     runs-on: ubuntu-latest
