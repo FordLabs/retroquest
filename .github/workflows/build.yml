@@ -55,7 +55,7 @@ jobs:
         run: yarn unit
       - name: build ui
         working-directory: ./ui
-        run: yarn build
+        run: yarn build-prod
       - name: run all api tests using docker
         run: ./gradlew runAllTestsDockerDb
       - name: build application JAR
