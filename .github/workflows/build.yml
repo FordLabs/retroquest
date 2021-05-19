@@ -14,13 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: get yarn cache directory path
-        working-directory: ./ui
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
       - name: cache yarn dependencies
         uses: actions/cache@v2
-        working-directory: ./ui
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -30,7 +28,6 @@ jobs:
 
       - name: use node.js
         uses: actions/setup-node@v1
-        working-directory: ./ui
         with:
           node-version: '12.x'
       - name: Set up JDK 11
