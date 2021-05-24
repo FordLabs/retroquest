@@ -1,15 +1,19 @@
-name: Build
+name: Check
 on:
   workflow_dispatch:
-  push:
+  pull_request:
     branches:
       - main
 
 jobs:
-  build:
+  ui-checks:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ui
     steps:
       - uses: actions/checkout@v2
+
       - name: get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -22,11 +26,21 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-
       - name: use node.js
         uses: actions/setup-node@v1
         with:
           node-version: '12.x'
+
+      - name: install dependencies
+        run: yarn --frozen-lockfile
+      - run: yarn lint
+      - run: yarn unit
+      - run: yarn build
+
+  api-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
       - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
@@ -41,27 +55,8 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: install ui dependencies
-        working-directory: ./ui
-        run: yarn --frozen-lockfile
-      - name: lint ui
-        working-directory: ./ui
-        run: yarn lint
-      - name: run ui tests
-        working-directory: ./ui
-        run: yarn unit
-      - name: build ui
-        working-directory: ./ui
-        run: yarn build-prod
-      - name: run all api tests using docker
+      - name: run all tests using docker
         run: ./gradlew runAllTestsDockerDb
-      - name: build application JAR
-        run: ./gradlew assemble withPostgres
-      - name: release artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: retroquest
-          path: build/libs/retroquest.jar
 
       - name: cleanup gradle cache
         run: |
