@@ -31,7 +31,7 @@ import { Themes } from '../../domain/Theme';
 })
 export class FloatingCharacterCountdownComponent {
   @Input() maxCharacterCount = 255;
-  @Input() charsAreRunningOutThreshold = 50;
+  @Input() charsAreRunningOutThreshold = 20;
   @Input() characterCount = 0;
   @Input() theme: Themes = Themes.Light;
 
