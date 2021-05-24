@@ -1,0 +1,33 @@
+plugins {
+    id 'com.github.node-gradle.node' version '3.1.0'
+}
+
+node {
+    download = true
+    version = "12.16.2"
+}
+
+task check(type: YarnTask) {
+    args = ['unit-coverage']
+
+    inputs.files('package.json', 'package-lock.json', 'tsconfig.json')
+    inputs.dir('src')
+    inputs.dir(fileTree('node_modules').exclude('.cache'))
+
+    outputs.files('test-report.xml')
+    outputs.dir('coverage')
+}
+
+task build(type: YarnTask) {
+    args = ['build']
+
+    inputs.files('package.json', 'package-lock.json', 'tsconfig.json')
+    inputs.dir('src')
+    inputs.dir(fileTree('node_modules').exclude('.cache'))
+
+    outputs.dir('build')
+}
+
+build.configure {
+    dependsOn yarn_install
+}
