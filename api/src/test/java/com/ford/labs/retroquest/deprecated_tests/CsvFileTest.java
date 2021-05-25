@@ -73,7 +73,7 @@ public class CsvFileTest {
                 Arrays.asList(firstThought, secondThoght, thirdThought),
                 Collections.singletonList(actionItem) ).getCSVString();
 
-        String expected = FileUtils.readFileToString(new File("api/src/test/resources/sampleOutput.csv"), Charset.defaultCharset());
+        String expected = FileUtils.readFileToString(new File("src/test/resources/sampleOutput.csv"), Charset.defaultCharset());
 
         assertThat(actual, is(equalTo(expected)));
     }

@@ -6,3 +6,4 @@
 /src/main/resources/static/
 
 /src/main/appengine/app.yaml
+bin
