@@ -10,7 +10,7 @@ node {
 task check(type: YarnTask) {
     args = ['unit-coverage']
 
-    inputs.files('package.json', 'package-lock.json', 'tsconfig.json')
+    inputs.files('package.json', 'yarn.lock', 'tsconfig.json')
     inputs.dir('src')
     inputs.dir(fileTree('node_modules').exclude('.cache'))
 
@@ -21,7 +21,7 @@ task check(type: YarnTask) {
 task build(type: YarnTask) {
     args = ['build']
 
-    inputs.files('package.json', 'package-lock.json', 'tsconfig.json')
+    inputs.files('package.json', 'yarn.lock', 'tsconfig.json')
     inputs.dir('src')
     inputs.dir(fileTree('node_modules').exclude('.cache'))
 
