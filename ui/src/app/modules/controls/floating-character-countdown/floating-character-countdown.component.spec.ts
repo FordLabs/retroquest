@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-import {FloatingCharacterCountdownComponent} from './floating-character-countdown.component';
+import { FloatingCharacterCountdownComponent } from './floating-character-countdown.component';
 
 describe('FloatingCharacterCountdownComponent', () => {
   let component: FloatingCharacterCountdownComponent;
@@ -32,7 +32,9 @@ describe('FloatingCharacterCountdownComponent', () => {
     it('should return the number of remaining characters', () => {
       component.characterCount = 'new actionItem'.length;
       component.maxCharacterCount = 20;
-      expect(component.charactersRemaining()).toBe(component.maxCharacterCount - component.characterCount);
+      expect(component.charactersRemaining()).toBe(
+        component.maxCharacterCount - component.characterCount
+      );
     });
   });
 
@@ -61,6 +63,27 @@ describe('FloatingCharacterCountdownComponent', () => {
       component.maxCharacterCount = 3;
       component.charsAreRunningOutThreshold = 2;
       expect(component.charactersRemainingAreAboutToRunOut()).toBeFalsy();
+    });
+
+    it('should return false if the remaining characters have run out', () => {
+      component.characterCount = '123'.length;
+      component.maxCharacterCount = 3;
+      component.charsAreRunningOutThreshold = 2;
+      expect(component.charactersRemainingAreAboutToRunOut()).toBeFalsy();
+    });
+  });
+
+  describe('charactersRemainingHaveRunOut', () => {
+    it('should return true if the remaining characters are less than or equal to 0', () => {
+      component.characterCount = '123'.length;
+      component.maxCharacterCount = 3;
+      expect(component.charactersRemainingHaveRunOut()).toBeTruthy();
+    });
+
+    it('should return false if the remaining characters are greater than 0', () => {
+      component.characterCount = '12'.length;
+      component.maxCharacterCount = 3;
+      expect(component.charactersRemainingHaveRunOut()).toBeFalsy();
     });
   });
 });
