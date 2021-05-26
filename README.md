@@ -134,9 +134,6 @@ yarn cypress-supervise
 ## Connecting to the local Database
 The application uses a Postgresql instance. The connection properties can be found in the application's property file.
 
-## Deploying to Google App Engine
-Please read [GOOGLE_APP_ENGINE.md](/docs/GOOGLE_APP_ENGINE.md) for details on deploying Retroquest to Google App Engine.
-
 ## Contributing
 Please read [CONTRIBUTING.md](/docs/CONTRIBUTING.md) for details on our code of conduct, and the process for contributing, including how to fork and submit pull requests.
 
