@@ -221,9 +221,3 @@ tasks.withType(Test) {
     }
     finalizedBy('jacocoTestReport')
 }
-
-def getDateTs() {
-    def date = new Date()
-    def formattedDate = date.format('yyyyMMddHHmmss')
-    return formattedDate
-}
