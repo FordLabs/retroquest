@@ -55,8 +55,10 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: run all tests using docker
-        run: ./gradlew runAllTestsDockerDb
+      - name: run unit tests
+        run: ./gradlew api:test
+      - name: run integration tests
+        run: ./gradlew apiTestDockerDb
 
       - name: cleanup gradle cache
         run: |

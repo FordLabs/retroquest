@@ -53,8 +53,10 @@ jobs:
       - name: build ui
         working-directory: ./ui
         run: yarn build-prod
-      - name: run all api tests using docker
-        run: ./gradlew runAllTestsDockerDb
+      - name: run unit tests
+        run: ./gradlew api:test
+      - name: run integration tests
+        run: ./gradlew apiTestDockerDb
       - name: build application JAR
         run: ./gradlew assemble withPostgres
       - name: release artifact
