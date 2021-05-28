@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/index';
 import { HttpClient } from '@angular/common/http';
 
