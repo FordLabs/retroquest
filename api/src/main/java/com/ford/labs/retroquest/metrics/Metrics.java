@@ -25,7 +25,7 @@ public class Metrics {
 
     @ManagedAttribute
     public int getTeamCount() {
-        return teamRepository.findAll().size();
+        return (int) getTeamCount(null, null);
     }
 
     public long getTeamCount(LocalDate startDate, LocalDate endDate) {
@@ -46,9 +46,9 @@ public class Metrics {
         LocalDateTime finalEndTime = endTime == null ? LocalDateTime.now() : endTime.atStartOfDay();
         LocalDateTime finalStartTime = startTime == null ? LocalDateTime.MIN : startTime.atStartOfDay();
         List<Feedback> feedbackList = feedbackRepository.findAll().stream()
-                .filter(feedback -> !feedback.getDateCreated().isBefore(finalStartTime))
-                .filter(feedback -> !feedback.getDateCreated().isAfter(finalEndTime))
-                .collect(toList());
+            .filter(feedback -> !feedback.getDateCreated().isBefore(finalStartTime))
+            .filter(feedback -> !feedback.getDateCreated().isAfter(finalEndTime))
+            .collect(toList());
         return feedbackList.size();
     }
 
@@ -63,11 +63,11 @@ public class Metrics {
         LocalDateTime finalEndTime = endTime == null ? LocalDateTime.now() : endTime.atStartOfDay();
         LocalDateTime finalStartTime = startTime == null ? LocalDateTime.MIN : startTime.atStartOfDay();
         return feedbackRepository.findAllByStarsIsGreaterThanEqual(1).stream()
-                .filter(feedback -> !feedback.getDateCreated().isBefore(finalStartTime))
-                .filter(feedback -> !feedback.getDateCreated().isAfter(finalEndTime))
-                .mapToInt(Feedback::getStars)
-                .average()
-                .orElse(0);
+            .filter(feedback -> !feedback.getDateCreated().isBefore(finalStartTime))
+            .filter(feedback -> !feedback.getDateCreated().isAfter(finalEndTime))
+            .mapToInt(Feedback::getStars)
+            .average()
+            .orElse(0);
     }
 
     public int getTeamLogins(LocalDate startDate, LocalDate endDate) {
