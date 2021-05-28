@@ -108,7 +108,6 @@ export class TeamPageComponent implements OnInit, OnDestroy {
     this.thoughtSubscription = this.rxStompService
       .watch(`/topic/${this.dataService.team.id}/thoughts`)
       .subscribe((message) => {
-        console.log(message);
         this.thoughtChanged.emit(JSON.parse(message.body) as WebsocketResponse);
         this.saveCheckerService.updateTimestamp();
       });
