@@ -17,17 +17,17 @@
 
 package com.ford.labs.retroquest.contributors;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@Api(tags = {"Contributor Controller"}, description = "The controller that manages the contributors to Retroquest")
+@Tag(name = "Contributor Controller", description = "The controller that manages the contributors to Retroquest")
 public class ContributorController {
 
     private final ContributorsService contributorService;
@@ -37,8 +37,8 @@ public class ContributorController {
     }
 
     @GetMapping("/api/contributors")
-    @ApiOperation(value = "Gets the all of the contributors to Retroquest", notes = "getColumnTitlesForTeam")
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK", response = Contributor.class, responseContainer = "List")})
+    @Operation(summary = "Gets the all of the contributors to Retroquest", description = "getColumnTitlesForTeam")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public List<Contributor> getContributors() {
         return contributorService.getContributors();
     }

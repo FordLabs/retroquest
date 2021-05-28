@@ -1,0 +1,223 @@
+buildscript {
+    ext {
+        javaVersion = 11
+        springBootVersion = '2.4.5'
+        lombokVersion = '1.18.12'
+        springCloudVersion='2020.0.2'
+        moshiVersion = '1.9.3'
+        jacocoOutputDirectory = "${project.buildDir}/jacoco"
+        jacocoHtmlDirectory = "${project.buildDir}/jacoco-html"
+        jacocoXml = "${project.buildDir}/jacoco-xml/jacoco.xml"
+        springdocVersion = '1.5.9'
+    }
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
+    }
+    dependencies {
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.10.RELEASE"
+    }
+}
+
+plugins {
+    id 'java'
+    id 'idea'
+    id 'jacoco'
+    id 'org.sonarqube' version '3.0'
+    id 'org.gradle.test-retry' version '1.1.6'
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'com.avast.gradle.docker-compose' version '0.13.0'
+    id "rkennel.withdb" version "1.0.4"
+}
+
+apply plugin: "io.spring.dependency-management"
+
+group = 'com.ford.labs'
+archivesBaseName = 'retroquest'
+sourceCompatibility = javaVersion
+targetCompatibility = javaVersion
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+
+dependencyManagement {
+  imports {
+    mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+  }
+}
+
+dependencies {
+    implementation platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
+    implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation "com.squareup.moshi:moshi:$moshiVersion"
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.1'
+    implementation 'org.apache.commons:commons-csv:1.8'
+    implementation 'org.apache.commons:commons-lang3:3.11'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.12'
+    implementation 'commons-io:commons-io:2.7'
+    implementation 'org.liquibase:liquibase-core:4.3.1'
+
+    implementation "org.springdoc:springdoc-openapi-ui:$springdocVersion"
+
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'io.micrometer:micrometer-registry-statsd'
+
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    testImplementation 'com.h2database:h2:1.4.200'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+}
+
+def noProfileOrDbDefined(tasks) {
+
+    def envProfile = System.getenv("SPRING_PROFILES_ACTIVE")
+    def systemProfile = System.getProperty("spring.profiles.active")
+
+    if(envProfile !=null || systemProfile!=null){
+        return false;
+    }
+
+    boolean dbDeclared = false;
+    tasks.forEach { task ->
+        if(task.name.contains('with')){
+            dbDeclared=true;
+        }
+    }
+
+    if(dbDeclared){
+        return false;
+    }
+
+    return true;
+
+}
+
+bootRun {
+    sourceResources sourceSets.main
+
+    gradle.taskGraph.whenReady { graph ->
+
+        if(noProfileOrDbDefined(graph.getAllTasks())){
+            logger.lifecycle('>>> Setting spring.profiles.active == "local" <<<')
+            bootRun {
+                dependencies {
+                    implementation 'com.h2database:h2:1.4.200'
+                }
+                System.setProperty("spring.profiles.active","local")
+                systemProperties System.properties
+            }
+        }
+    }
+}
+
+task bootRunDockerDb(type: Exec){
+    dependsOn 'withPostgres'
+    dependsOn 'bootRun'
+
+    tasks.findByName('bootRun').mustRunAfter 'withPostgres'
+
+    group 'Application'
+    description 'Runs this project as a Spring Boot application using containerized database'
+
+    gradle.taskGraph.whenReady { graph ->
+        if (graph.hasTask(bootRunDockerDb)) {
+            logger.lifecycle('>>> Setting spring.profiles.active == "dockerdb" <<<')
+            bootRun {
+                systemProperty "spring.profiles.active", "dockerdb"
+            }
+        }
+    }
+}
+
+test {
+    useJUnitPlatform {
+        excludeTags 'api'
+    }
+}
+
+task apiTest(type: Test) {
+    group 'Verification'
+    description 'Runs API Tests against h2 database'
+    useJUnitPlatform {
+        includeTags 'api'
+    }
+}
+
+task apiTestDockerDb(type: Test){
+    dependsOn 'composeUp'
+    dependsOn 'withPostgres'
+    dependsOn 'apiTest'
+    finalizedBy 'composeDown'
+
+    tasks.findByName('withPostgres').mustRunAfter 'composeUp'
+    tasks.findByName('apiTest').mustRunAfter 'withPostgres'
+
+    group 'Verification'
+    description 'Runs API Tests against docker database'
+
+    gradle.taskGraph.whenReady { graph ->
+        if (graph.hasTask(apiTestDockerDb)) {
+            logger.lifecycle('>>> Setting spring.profiles.active == "dockerdb" <<<')
+            systemProperty "spring.profiles.active", "dockerdb"
+        }
+    }
+}
+
+dockerCompose {
+    useComposeFiles = ['docker-compose.yml']
+    waitForTcpPorts = true
+}
+
+jacoco {
+    toolVersion = '0.8.3'
+}
+
+jacocoTestReport {
+    executionData.setFrom(fileTree(jacocoOutputDirectory).include("*.exec"))
+    reports {
+        xml.enabled true
+        xml.destination file(jacocoXml)
+        html.destination file(jacocoHtmlDirectory)
+    }
+}
+
+sonarqube {
+    properties {
+        property 'sonar.host.url', System.getProperty("sonar.url")
+        property 'sonar.projectName', 'RetroQuest API'
+        property 'sonar.projectKey', 'com.ford.labs.retroquest'
+        property 'sonar.analysis.mode', 'publish'
+        property 'sonar.login', System.getProperty("sonar.token")
+        property 'sonar.password', ''
+        property 'sonar.exclusions', '**/MainApplication.java'
+        property 'sonar.scm.provider', 'git'
+        property 'sonar.coverage.jacoco.xmlReportPaths', "$jacocoXml".toString()
+    }
+}
+
+tasks['sonarqube'].dependsOn 'build', 'apiTest'
+tasks['sonarqube'].group = 'verification'
+
+tasks.withType(Test) {
+    retry {
+        maxRetries = 3
+        maxFailures = 1
+        failOnPassedAfterRetry = false
+    }
+    finalizedBy('jacocoTestReport')
+}

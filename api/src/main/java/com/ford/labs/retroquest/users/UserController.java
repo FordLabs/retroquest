@@ -5,10 +5,10 @@ import com.ford.labs.retroquest.statuscodeexceptions.BadRequestException;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import com.ford.labs.retroquest.team.TeamService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequestMapping(value = "/api")
-@Api(tags = {"User Controller"}, description = "The controller that manages a user")
+@Tag(name = "User Controller", description = "The controller that manages a user")
 public class UserController {
 
     private final UserRepository userRepository;
@@ -52,10 +52,10 @@ public class UserController {
 
     @PostMapping(value = "user")
     @Transactional
-    @ApiOperation(value = "Creates a new user", notes = "requires a non-blank name and password")
+    @Operation(summary = "Creates a new user", description = "requires a non-blank name and password")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Created", response = String.class),
-            @ApiResponse(code = 400, message = "Bad Request", response = String.class)
+            @ApiResponse(responseCode = "201", description = "Created"),
+            @ApiResponse(responseCode = "400", description = "Bad Request")
     })
     public ResponseEntity<String> createNewUser(@RequestBody NewUserRequest newUserRequest) {
 
@@ -83,9 +83,9 @@ public class UserController {
 
     @GetMapping(value = "user/{name}")
     @PreAuthorize("#name.toLowerCase() == authentication.principal")
-    @ApiOperation(value = "validates a user given a name", notes = "this has no implementation")
+    @Operation(summary = "validates a user given a name", description = "this has no implementation")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK")
+            @ApiResponse(responseCode = "200", description = "OK")
     })
     public void validateUser(@PathVariable("name") String name) {
         // For Sonarqube
@@ -94,11 +94,11 @@ public class UserController {
     @PutMapping(value = "user/{name}/team")
     @PreAuthorize("#name.toLowerCase() == authentication.principal")
     @Transactional
-    @ApiOperation(value = "adds a given user to an existing team", notes = "addUserToExistingTeam")
+    @Operation(summary = "adds a given user to an existing team", description = "addUserToExistingTeam")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK"),
-            @ApiResponse(code = 400, message = "Team does not exist or the password for the team in the request is invalid"),
-            @ApiResponse(code = 409, message = "The user already belongs to the existing team")
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Team does not exist or the password for the team in the request is invalid"),
+            @ApiResponse(responseCode = "409", description = "The user already belongs to the existing team")
     })
     public ResponseEntity<Void> addUserToExistingTeam(@PathVariable("name") String name, @RequestBody ExistingTeamRequest request) {
 
@@ -125,10 +125,10 @@ public class UserController {
     @PostMapping(value = "user/{name}/team")
     @PreAuthorize("#name.toLowerCase() == authentication.principal")
     @Transactional
-    @ApiOperation(value = "Adds a given user to a new team", notes = "requires a non-blank name")
+    @Operation(summary = "Adds a given user to a new team", description = "requires a non-blank name")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Created"),
-            @ApiResponse(code = 400, message = "Bad Request")
+            @ApiResponse(responseCode = "201", description = "Created"),
+            @ApiResponse(responseCode = "400", description = "Bad Request")
     })
     public ResponseEntity<Void> addUserToNewTeam(@PathVariable("name") String name, @RequestBody NewTeamRequest request) {
 
@@ -151,9 +151,9 @@ public class UserController {
     @GetMapping(value = "user/{name}/team")
     @PreAuthorize("#name.toLowerCase() == authentication.principal")
     @Transactional
-    @ApiOperation(value = "Returns all of teams assigned to a given user", notes = "getTeamsAssignedToUser")
+    @Operation(summary = "Returns all of teams assigned to a given user", description = "getTeamsAssignedToUser")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Created", response = Team.class, responseContainer = "Set")
+            @ApiResponse(responseCode = "200", description = "Created")
     })
     public ResponseEntity<Set<Team>> getTeamsAssignedToUser(@PathVariable("name") String name) {
 
@@ -164,10 +164,10 @@ public class UserController {
 
     @PostMapping(value = "user/login")
     @Transactional
-    @ApiOperation(value = "Returns a token for a new user", notes = "getUserToken")
+    @Operation(summary = "Returns a token for a new user", description = "getUserToken")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = String.class),
-            @ApiResponse(code = 404, message = "User Not Found", response = String.class)
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "User Not Found")
     })
     public ResponseEntity<String> getUserToken(@RequestBody NewUserRequest newUserRequest) {
 
