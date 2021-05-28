@@ -198,6 +198,7 @@ jacocoTestReport {
 
 sonarqube {
     properties {
+        property "sonar.projectName", "RetroQuest API"
         property "sonar.projectKey", "retroquest_api"
         property "sonar.organization", "fordlabs"
         property "sonar.host.url", "https://sonarcloud.io"
