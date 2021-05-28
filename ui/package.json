@@ -12,7 +12,6 @@
     "unit-coverage": "jest --coverage=true",
     "lint": "ng lint --cache",
     "lint-fix": "ng lint --fix",
-    "sonarqube": "sonar-scanner -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_UI_TOKEN",
     "postinstall": "ngcc",
     "prepare": "cd .. && husky install ui/.husky",
     "cypress": "cypress run --headless --browser chrome",

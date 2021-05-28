@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - main
+  push:
+    branches:
+      - main
 
 jobs:
   ui-checks:
@@ -34,8 +37,12 @@ jobs:
       - name: install dependencies
         run: yarn --frozen-lockfile
       - run: yarn lint
-      - run: yarn unit
+      - run: yarn unit-coverage
       - run: yarn build
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_UI_TOKEN }}
 
   api-checks:
     runs-on: ubuntu-latest
@@ -46,6 +53,12 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
+      - name: cache sonarcloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
       - name: cache gradle packages
         uses: actions/cache@v2
         with:
@@ -59,6 +72,10 @@ jobs:
         run: ./gradlew api:test
       - name: run integration tests
         run: ./gradlew apiTestDockerDb
+      - name: SonarCloud Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_API_TOKEN }}
+        run: ./gradlew api:sonarqube --info
 
       - name: cleanup gradle cache
         run: |

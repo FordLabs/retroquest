@@ -26,7 +26,7 @@ plugins {
     id 'java'
     id 'idea'
     id 'jacoco'
-    id 'org.sonarqube' version '3.0'
+    id 'org.sonarqube' version '3.2.0'
     id 'org.gradle.test-retry' version '1.1.6'
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'com.avast.gradle.docker-compose' version '0.13.0'
@@ -198,15 +198,9 @@ jacocoTestReport {
 
 sonarqube {
     properties {
-        property 'sonar.host.url', System.getProperty("sonar.url")
-        property 'sonar.projectName', 'RetroQuest API'
-        property 'sonar.projectKey', 'com.ford.labs.retroquest'
-        property 'sonar.analysis.mode', 'publish'
-        property 'sonar.login', System.getProperty("sonar.token")
-        property 'sonar.password', ''
-        property 'sonar.exclusions', '**/MainApplication.java'
-        property 'sonar.scm.provider', 'git'
-        property 'sonar.coverage.jacoco.xmlReportPaths', "$jacocoXml".toString()
+        property "sonar.projectKey", "retroquest_api"
+        property "sonar.organization", "fordlabs"
+        property "sonar.host.url", "https://sonarcloud.io"
     }
 }
 
