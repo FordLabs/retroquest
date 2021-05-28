@@ -38,7 +38,7 @@ public class MetricsTest {
 
     @Test
     public void returnsTheTotalNumberOfTeamsCreated() {
-        given(mockTeamRepository.findAll()).willReturn(asList(new Team(), new Team()));
+        given(mockTeamRepository.count()).willReturn(2L);
         assertEquals(2, metrics.getTeamCount());
     }
 
