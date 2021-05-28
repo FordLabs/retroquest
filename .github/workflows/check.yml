@@ -48,7 +48,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_UI_TOKEN }}
         run: ./gradlew ui:sonarqube --info
-        working-directory: ../
+        working-directory: ./
 
   api-checks:
     runs-on: ubuntu-latest
