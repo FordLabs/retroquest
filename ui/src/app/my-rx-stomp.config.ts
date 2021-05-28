@@ -29,8 +29,5 @@ export const myRxStompConfig: InjectableRxStompConfig = {
   // Will log diagnostics on console
   // It can be quite verbose, not recommended in production
   // Skip this key to stop logging to console
-  debug: (msg: string): void => {
-    // eslint-disable-next-line no-console
-    console.debug(new Date(), msg);
-  },
+  debug: (msg: string): void => {},
 };
