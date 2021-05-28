@@ -17,10 +17,10 @@
 
 package com.ford.labs.retroquest.feedback;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +30,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/feedback")
-@Api(tags = {"Admin Feedback Controller"}, description = "The controller that manages all feedback")
+@Tag(name = "Admin Feedback Controller", description = "The controller that manages all feedback")
 public class AdminFeedbackController {
 
     private FeedbackRepository feedbackRepository;
@@ -41,8 +41,8 @@ public class AdminFeedbackController {
     }
 
     @GetMapping("/all")
-    @ApiOperation(value = "Gets all feedback", notes = "getAllFeedBack")
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "OK", response = Feedback.class, responseContainer = "List")})
+    @Operation(summary = "Gets all feedback", description = "getAllFeedBack")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public List<Feedback> getAllFeedBack() {
         return feedbackRepository.findAll();
     }

@@ -8,7 +8,7 @@ buildscript {
         jacocoOutputDirectory = "${project.buildDir}/jacoco"
         jacocoHtmlDirectory = "${project.buildDir}/jacoco-html"
         jacocoXml = "${project.buildDir}/jacoco-xml/jacoco.xml"
-        swaggerVersion = '2.9.2'
+        springdocVersion = '1.5.9'
     }
     repositories {
         mavenCentral()
@@ -70,8 +70,8 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpclient:4.5.12'
     implementation 'commons-io:commons-io:2.7'
     implementation 'org.liquibase:liquibase-core:4.3.1'
-    implementation "io.springfox:springfox-swagger2:${swaggerVersion}"
-    implementation "io.springfox:springfox-swagger-ui:${swaggerVersion}"
+
+    implementation "org.springdoc:springdoc-openapi-ui:$springdocVersion"
 
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'io.micrometer:micrometer-registry-statsd'

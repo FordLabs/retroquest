@@ -17,10 +17,10 @@
 
 package com.ford.labs.retroquest.v2.columns;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/v2/team")
-@Api(tags = {"Column Controller"}, description = "The controller that aggregates all of the items given a team id")
+@Tag(name = "Column Controller", description = "The controller that aggregates all of the items given a team id")
 public class ColumnController {
 
     private final ColumnCombinerService columnCombinerService;
@@ -41,8 +41,8 @@ public class ColumnController {
 
     @GetMapping("/{teamId}/columns")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
-    @ApiOperation(value = "Gets all thoughts for a given team id", notes = "getThoughtsForTeam")
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "All the thoughts for a team id", response = ColumnCombinerResponse.class)})
+    @Operation(summary = "Gets all thoughts for a given team id", description = "getThoughtsForTeam")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "All the thoughts for a team id")})
     public ColumnCombinerResponse getThoughtsForTeam(@PathVariable("teamId") String teamId, Authentication authentication) {
         return columnCombinerService.aggregateResponse(teamId);
     }
