@@ -77,7 +77,9 @@ jobs:
       - name: run unit tests
         run: ./gradlew api:test
       - name: run integration tests
-        run: ./gradlew apiTestDockerDb
+        run: ./gradlew api:apiTestDockerDb
+      - name: generate coverage reports
+        run: ./gradlew api:jacocoTestReport
       - name: SonarCloud Scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_API_TOKEN }}
