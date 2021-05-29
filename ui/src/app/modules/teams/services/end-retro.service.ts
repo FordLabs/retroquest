@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { DataService } from '../../data.service';
 

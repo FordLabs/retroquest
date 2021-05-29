@@ -37,7 +37,6 @@ describe('ThoughtService', () => {
   });
 
   describe('Ending Retro', () => {
-    test.todo('Is End Retro Service even required?');
     it('should send a message to end retro', () => {
       service.endRetro();
 
