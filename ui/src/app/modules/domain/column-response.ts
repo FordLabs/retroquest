@@ -38,29 +38,17 @@ export function deleteColumnResponse(
   response: ResponseWithId,
   items: ItemSorter
 ): void {
-  function findIndex(
-    inputResponse: ResponseWithId,
-    responses: Array<Object>
-  ): number {
-    let index = -1;
-    for (let i = 0; i < responses.length; i++) {
-      const comparatorResponse: ResponseWithId = responses[i] as ResponseWithId;
-      if (comparatorResponse.id === inputResponse.id) {
-        index = i;
-        break;
-      }
-    }
-
-    return index;
-  }
-
-  let removeIndex = findIndex(response, items.active);
+  let removeIndex = items.active.findIndex(
+    (item: ResponseWithId) => item.id === response.id
+  );
   if (removeIndex > -1) {
     items.active.splice(removeIndex, 1);
     return;
   }
 
-  removeIndex = findIndex(response, items.completed);
+  removeIndex = items.completed.findIndex(
+    (item: ResponseWithId) => item.id === response.id
+  );
   if (removeIndex > -1) {
     items.completed.splice(removeIndex, 1);
   }
