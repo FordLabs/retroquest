@@ -73,12 +73,12 @@ export class ActionsColumnComponent implements OnInit {
 
   processActionItemChange(response: WebsocketResponse) {
     function retrieveActionItemFromPayload(message: WebsocketResponse) {
-      if (response.type === 'delete') {
+      if (message.type === 'delete') {
         return {
-          id: response.payload,
+          id: message.payload,
         } as ActionItem;
       } else {
-        return response.payload as ActionItem;
+        return message.payload as ActionItem;
       }
     }
 
