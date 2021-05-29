@@ -32,7 +32,7 @@ describe('ThoughtColumnComponent', () => {
   const undiscussedThought = createThought(1, 'Undiscussed thought');
   const discussedThought = createThought(
     2,
-    'Undiscussed thought',
+    'discussed thought',
     defaultTopic,
     true
   );
@@ -340,7 +340,16 @@ describe('ThoughtColumnComponent', () => {
       verifyThoughtUpdate(newThought, true, false);
     });
 
-    test.todo('updating a thought that already existed in the column');
+    it('updating a thought that already existed in the column', () => {
+      const newMessage = 'I updated the text';
+      const updatedThought = discussedThought;
+      updatedThought.message = newMessage;
+
+      component.updateThought(updatedThought);
+
+      component.completedThoughts.length = 1;
+      component.completedThoughts[0].message = newMessage;
+    });
   });
 
   function createThought(
