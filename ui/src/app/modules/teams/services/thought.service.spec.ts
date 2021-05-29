@@ -156,7 +156,5 @@ describe('ThoughtService', () => {
         body: JSON.stringify(expectedBody),
       });
     });
-
-    test.todo('does not allow messages to be moved for other teams');
   });
 });
