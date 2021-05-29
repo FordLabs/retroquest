@@ -22,12 +22,10 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { TeamService } from '../../services/team.service';
 import { WebsocketResponse } from '../../../domain/websocket-response';
 
 import * as Hammer from 'hammerjs';
 import { ActionsRadiatorViewComponent } from '../../../controls/actions-radiator-view/actions-radiator-view.component';
-import { SaveCheckerService } from '../../services/save-checker.service';
 import { Themes } from '../../../domain/Theme';
 import { BoardService } from '../../services/board.service';
 import { ColumnAggregationService } from '../../services/column-aggregation.service';
@@ -36,10 +34,8 @@ import { Column } from '../../../domain/column';
 import { DataService } from '../../../data.service';
 import { ActionItemService } from '../../services/action.service';
 import { ActionItem } from '../../../domain/action-item';
-import { RxStompService } from '@stomp/ng2-stompjs';
-import { Subscription } from 'rxjs';
 import { EndRetroService } from '../../services/end-retro.service';
-import { AuthService } from '../../../auth/auth.service';
+import { SubscriptionService } from '../../services/subscription.service';
 
 @Component({
   selector: 'rq-team',
@@ -51,13 +47,11 @@ export class TeamPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private dataService: DataService,
-    private teamsService: TeamService,
-    private saveCheckerService: SaveCheckerService,
     private boardService: BoardService,
     private columnAggregationService: ColumnAggregationService,
     private actionItemService: ActionItemService,
     private endRetroService: EndRetroService,
-    private rxStompService: RxStompService
+    private subscriptionService: SubscriptionService
   ) {}
 
   teamId: string;
@@ -69,15 +63,9 @@ export class TeamPageComponent implements OnInit, OnDestroy {
 
   columnsAggregation: Array<ColumnResponse> = [];
 
-  thoughtSubscription: Subscription;
-  actionItemSubscription: Subscription;
-  columnTitleSubscription: Subscription;
-  endRetroSubscription: Subscription;
-
   thoughtChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
   actionItemChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
   columnChanged: EventEmitter<Column> = new EventEmitter();
-
   retroEnded: EventEmitter<void> = new EventEmitter();
 
   theme: Themes;
@@ -89,7 +77,10 @@ export class TeamPageComponent implements OnInit, OnDestroy {
   private isMobileView = (): boolean => window.innerWidth <= 610;
 
   ngOnInit(): void {
-    this.ensureRxStompClientHeadersContainAuthorization();
+    this.subscriptionService.subscribeToThoughts(this.thoughtChanged);
+    this.subscriptionService.subscribeToActionItems(this.actionItemChanged);
+    this.subscriptionService.subscribeToColumnTitles(this.columnChanged);
+    this.subscriptionService.subscribeToEndRetro(this.retroEnded);
 
     this.teamId = this.dataService.team.id;
     this.teamName = this.dataService.team.name;
@@ -104,51 +95,10 @@ export class TeamPageComponent implements OnInit, OnDestroy {
     this.columnAggregationService.getColumns(this.teamId).subscribe((body) => {
       this.columnsAggregation = body.columns;
     });
-
-    this.thoughtSubscription = this.rxStompService
-      .watch(`/topic/${this.dataService.team.id}/thoughts`)
-      .subscribe((message) => {
-        this.thoughtChanged.emit(JSON.parse(message.body) as WebsocketResponse);
-        this.saveCheckerService.updateTimestamp();
-      });
-
-    this.actionItemSubscription = this.rxStompService
-      .watch(`/topic/${this.dataService.team.id}/action-items`)
-      .subscribe((message) => {
-        this.actionItemChanged.emit(
-          JSON.parse(message.body) as WebsocketResponse
-        );
-        this.saveCheckerService.updateTimestamp();
-      });
-
-    this.columnTitleSubscription = this.rxStompService
-      .watch(`/topic/${this.dataService.team.id}/column-titles`)
-      .subscribe((message) => {
-        this.columnChanged.emit(
-          (JSON.parse(message.body) as WebsocketResponse).payload as Column
-        );
-        this.saveCheckerService.updateTimestamp();
-      });
-
-    this.endRetroSubscription = this.rxStompService
-      .watch(`/topic/${this.dataService.team.id}/end-retro`)
-      .subscribe((message) => {
-        this.retroEnded.emit();
-      });
   }
 
   ngOnDestroy(): void {
-    function unsubscribe(subscription: Subscription) {
-      try {
-        subscription.unsubscribe();
-      } catch (e) {
-        //oh well, we tried
-      }
-    }
-    unsubscribe(this.thoughtSubscription);
-    unsubscribe(this.actionItemSubscription);
-    unsubscribe(this.columnTitleSubscription);
-    unsubscribe(this.endRetroSubscription);
+    this.subscriptionService.closeSubscriptions();
   }
 
   public onEndRetro(): void {
@@ -225,25 +175,5 @@ export class TeamPageComponent implements OnInit, OnDestroy {
     pageGestures.on('swiperight', () => {
       this.decrementSelectedIndex();
     });
-  }
-
-  /*
-   * Protects against a race condition
-   * - RxStompConfig is set before login and is not mutable
-   * - Cookie is not set until after login so, token is not being set to websocket
-   *
-   * The error this was producing was a websocket connection could not be made without refreshing the browser
-   */
-  private ensureRxStompClientHeadersContainAuthorization() {
-    const headersSetCorrectly =
-      this.rxStompService.stompClient.connectHeaders['Authorization'] ===
-      AuthService.getToken();
-
-    if (!headersSetCorrectly) {
-      this.rxStompService.stompClient.connectHeaders = {
-        Authorization: `Bearer ${AuthService.getToken()}`,
-      };
-      this.rxStompService.stompClient.forceDisconnect();
-    }
   }
 }

@@ -31,6 +31,8 @@ import {
   createMockSubscription,
 } from '../../../utils/testutils';
 import { EndRetroService } from '../../services/end-retro.service';
+import { SubscriptionService } from '../../services/subscription.service';
+import { RxStompService } from '@stomp/ng2-stompjs';
 
 describe('TeamPageComponent', () => {
   let component: TeamPageComponent;
@@ -41,10 +43,9 @@ describe('TeamPageComponent', () => {
   let columnAggregationService: ColumnAggregationService;
   let teamService: TeamService;
   let endRetroService: EndRetroService;
+  let subscriptionService: SubscriptionService;
 
   const fakeTeamId = 'team-id';
-
-  const spiedStompService = createMockRxStompService();
 
   beforeEach(() => {
     dataService = new DataService();
@@ -53,16 +54,19 @@ describe('TeamPageComponent', () => {
     boardService = mock(BoardService);
     saveCheckerService = mock(SaveCheckerService);
     endRetroService = mock(EndRetroService);
+    subscriptionService = new SubscriptionService(
+      dataService,
+      saveCheckerService,
+      createMockRxStompService()
+    );
 
     component = new TeamPageComponent(
       dataService,
-      instance(teamService),
-      null,
       instance(boardService),
       instance(columnAggregationService),
       null,
       instance(endRetroService),
-      spiedStompService
+      subscriptionService
     );
   });
 
@@ -107,63 +111,34 @@ describe('TeamPageComponent', () => {
 
     describe('Subscriptions', () => {
       it('Should subscribe to the Thoughts topic', () => {
+        const spy = jest.spyOn(subscriptionService, 'subscribeToThoughts');
         component.ngOnInit();
-        expect(spiedStompService.watch).toHaveBeenCalledWith(
-          `/topic/${dataService.team.id}/thoughts`
-        );
+        expect(spy).toHaveBeenCalledWith(component.thoughtChanged);
       });
 
       it('Should subscribe to the action items topic', () => {
+        const spy = jest.spyOn(subscriptionService, 'subscribeToActionItems');
         component.ngOnInit();
-        expect(spiedStompService.watch).toHaveBeenCalledWith(
-          `/topic/${dataService.team.id}/action-items`
-        );
+        expect(spy).toHaveBeenCalledWith(component.actionItemChanged);
       });
 
       it('Should subscribe to the column title topic', () => {
+        const spy = jest.spyOn(subscriptionService, 'subscribeToColumnTitles');
         component.ngOnInit();
-        expect(spiedStompService.watch).toHaveBeenCalledWith(
-          `/topic/${dataService.team.id}/column-titles`
-        );
+        expect(spy).toHaveBeenCalledWith(component.columnChanged);
       });
 
       it('Should subscribe to the end retro topic', () => {
+        const spy = jest.spyOn(subscriptionService, 'subscribeToEndRetro');
         component.ngOnInit();
-        expect(spiedStompService.watch).toHaveBeenCalledWith(
-          `/topic/${dataService.team.id}/end-retro`
-        );
+        expect(spy).toHaveBeenCalledWith(component.retroEnded);
       });
     });
   });
 
   describe('ngOnDestroy', () => {
-    beforeEach(() => {
-      component.thoughtSubscription = createMockSubscription();
-      component.actionItemSubscription = createMockSubscription();
-      component.columnTitleSubscription = createMockSubscription();
-      component.endRetroSubscription = createMockSubscription();
-    });
-
-    it('should unsubscribe from thoughts', () => {
-      const spy = jest.spyOn(component.thoughtSubscription, 'unsubscribe');
-      component.ngOnDestroy();
-      expect(spy).toHaveBeenCalled();
-    });
-
-    it('should unsubscribe from action items', () => {
-      const spy = jest.spyOn(component.actionItemSubscription, 'unsubscribe');
-      component.ngOnDestroy();
-      expect(spy).toHaveBeenCalled();
-    });
-
-    it('should unsubscribe from column titles', () => {
-      const spy = jest.spyOn(component.columnTitleSubscription, 'unsubscribe');
-      component.ngOnDestroy();
-      expect(spy).toHaveBeenCalled();
-    });
-
-    it('should unsubscribe from end retro', () => {
-      const spy = jest.spyOn(component.endRetroSubscription, 'unsubscribe');
+    it('should close subscriptions', () => {
+      const spy = jest.spyOn(subscriptionService, 'closeSubscriptions');
       component.ngOnDestroy();
       expect(spy).toHaveBeenCalled();
     });
