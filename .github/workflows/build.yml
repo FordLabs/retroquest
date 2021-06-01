@@ -63,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: retroquest
-          path: build/libs/retroquest.jar
+          path: api/build/libs/retroquest.jar
 
       - name: cleanup gradle cache
         run: |
