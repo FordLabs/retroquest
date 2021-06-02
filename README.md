@@ -9,7 +9,7 @@
 RetroQuest is a website that enables teams to run retrospectives online and in a fun way. It is designed to accomodate both local and distributed teams.
 
 ### What is a Retro?
-If you are unfamiliar with what a retrospective is, it is a meeting that is held at the and of each iteration on a Agile team. Retrospectives are designed to allow the team time to decompress and reflect upon what happened during the iteration and indentify actions that can improve the team as a whole.
+If you are unfamiliar with what a retrospective is, it is a meeting that is held at the end of each iteration on an Agile team. Retrospectives are designed to allow the team time to decompress and reflect upon what happened during the iteration and identify actions that can improve the team as a whole.
 
 ![](https://user-images.githubusercontent.com/6293337/55166030-c8ccc600-5144-11e9-9156-e44c4a565020.png)
 
