@@ -2,13 +2,12 @@ import { render, RenderResult } from '@testing-library/angular';
 import { TeamPageComponent } from './team.page';
 import {
   createMockHttpClient,
+  createMockRxStompService,
   createMockTeamService,
-  createMockWebSocketService,
 } from '../../../utils/testutils';
 import { TeamsModule } from '../../teams.module';
 import { TeamService } from '../../services/team.service';
 import { DataService } from '../../../data.service';
-import { WebsocketService } from '../../services/websocket.service';
 import { SaveCheckerService } from '../../services/save-checker.service';
 import { BoardService } from '../../services/board.service';
 import { of } from 'rxjs/internal/observable/of';
@@ -16,6 +15,7 @@ import { Board } from '../../../domain/board';
 import { ColumnAggregationService } from '../../services/column-aggregation.service';
 import { ActionItemService } from '../../services/action.service';
 import { HttpClient } from '@angular/common/http';
+import { RxStompService } from '@stomp/ng2-stompjs';
 
 describe('Setting up Team Board', () => {
   let mockTeamService;
@@ -41,10 +41,6 @@ describe('Setting up Team Board', () => {
           useValue: mockTeamService,
         },
         {
-          provide: WebsocketService,
-          useValue: createMockWebSocketService(),
-        },
-        {
           provide: SaveCheckerService,
           useValue: new SaveCheckerService(),
         },
@@ -64,6 +60,10 @@ describe('Setting up Team Board', () => {
           provide: HttpClient,
           useValue: createMockHttpClient(),
         },
+        {
+          provide: RxStompService,
+          useValue: createMockRxStompService(),
+        },
       ],
     });
   }
@@ -75,13 +75,13 @@ describe('Setting up Team Board', () => {
 
     mockTeamService = createMockTeamService();
 
-    boardService = ({
+    boardService = {
       createBoard: jest.fn().mockReturnValue(of(new Board())),
-    } as unknown) as BoardService;
+    } as unknown as BoardService;
 
-    actionItemService = ({
+    actionItemService = {
       archiveActionItems: jest.fn(),
-    } as unknown) as ActionItemService;
+    } as unknown as ActionItemService;
   });
 
   describe('Normal Scenario - 3 thought columns, 1 Action Item column', () => {
@@ -159,9 +159,9 @@ describe('Setting up Team Board', () => {
     let component: RenderResult<TeamPageComponent>;
 
     beforeEach(async () => {
-      columnAggregationService = ({
+      columnAggregationService = {
         getColumns: jest.fn().mockReturnValue(of({ columns })),
-      } as unknown) as ColumnAggregationService;
+      } as unknown as ColumnAggregationService;
 
       component = await createComponent();
 

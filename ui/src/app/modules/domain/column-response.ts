@@ -34,6 +34,30 @@ export function emptyColumnResponse(): ColumnResponse {
   };
 }
 
+export function deleteColumnResponse(
+  response: ResponseWithId,
+  items: ItemSorter
+): void {
+  let removeIndex = items.active.findIndex(
+    (item: ResponseWithId) => item.id === response.id
+  );
+  if (removeIndex > -1) {
+    items.active.splice(removeIndex, 1);
+    return;
+  }
+
+  removeIndex = items.completed.findIndex(
+    (item: ResponseWithId) => item.id === response.id
+  );
+  if (removeIndex > -1) {
+    items.completed.splice(removeIndex, 1);
+  }
+}
+
+export interface ResponseWithId {
+  id: number;
+}
+
 export function findThought(
   { items: { active, completed } }: ColumnResponse,
   thoughtId: Thought['id']

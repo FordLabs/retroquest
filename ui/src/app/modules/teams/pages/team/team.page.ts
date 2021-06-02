@@ -15,41 +15,44 @@
  *  limitations under the License.
  */
 
-import {Component, EventEmitter, OnInit, ViewChild} from '@angular/core';
-import {WebsocketService} from '../../services/websocket.service';
-import {TeamService} from '../../services/team.service';
-import {WebsocketResponse} from '../../../domain/websocket-response';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { WebsocketResponse } from '../../../domain/websocket-response';
 
 import * as Hammer from 'hammerjs';
-import {ActionsRadiatorViewComponent} from '../../../controls/actions-radiator-view/actions-radiator-view.component';
-import {SaveCheckerService} from '../../services/save-checker.service';
-import {Themes} from '../../../domain/Theme';
-import {BoardService} from '../../services/board.service';
-import {ColumnAggregationService} from '../../services/column-aggregation.service';
-import {ColumnResponse} from '../../../domain/column-response';
-import {Column} from '../../../domain/column';
-import {DataService} from '../../../data.service';
-import {ActionItemService} from '../../services/action.service';
-import {ActionItem} from '../../../domain/action-item';
+import { ActionsRadiatorViewComponent } from '../../../controls/actions-radiator-view/actions-radiator-view.component';
+import { Themes } from '../../../domain/Theme';
+import { BoardService } from '../../services/board.service';
+import { ColumnAggregationService } from '../../services/column-aggregation.service';
+import { ColumnResponse } from '../../../domain/column-response';
+import { Column } from '../../../domain/column';
+import { DataService } from '../../../data.service';
+import { ActionItemService } from '../../services/action.service';
+import { ActionItem } from '../../../domain/action-item';
+import { EndRetroService } from '../../services/end-retro.service';
+import { SubscriptionService } from '../../services/subscription.service';
 
 @Component({
   selector: 'rq-team',
   templateUrl: './team.page.html',
-  styleUrls: ['./team.page.scss']
+  styleUrls: ['./team.page.scss'],
 })
-export class TeamPageComponent implements OnInit {
-
+export class TeamPageComponent implements OnInit, OnDestroy {
   @ViewChild('radiatorView') radiatorView: ActionsRadiatorViewComponent;
 
-  constructor(private dataService: DataService,
-              private teamsService: TeamService,
-              private websocketService: WebsocketService,
-              private saveCheckerService: SaveCheckerService,
-              private boardService: BoardService,
-              private columnAggregationService: ColumnAggregationService,
-              private actionItemService: ActionItemService
-  ) {
-  }
+  constructor(
+    private dataService: DataService,
+    private boardService: BoardService,
+    private columnAggregationService: ColumnAggregationService,
+    private actionItemService: ActionItemService,
+    private endRetroService: EndRetroService,
+    private subscriptionService: SubscriptionService
+  ) {}
 
   teamId: string;
   teamName: string;
@@ -63,11 +66,9 @@ export class TeamPageComponent implements OnInit {
   thoughtChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
   actionItemChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
   columnChanged: EventEmitter<Column> = new EventEmitter();
-
   retroEnded: EventEmitter<void> = new EventEmitter();
 
   theme: Themes;
-
 
   get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;
@@ -76,71 +77,31 @@ export class TeamPageComponent implements OnInit {
   private isMobileView = (): boolean => window.innerWidth <= 610;
 
   ngOnInit(): void {
+    this.subscriptionService.subscribeToThoughts(this.thoughtChanged);
+    this.subscriptionService.subscribeToActionItems(this.actionItemChanged);
+    this.subscriptionService.subscribeToColumnTitles(this.columnChanged);
+    this.subscriptionService.subscribeToEndRetro(this.retroEnded);
+
     this.teamId = this.dataService.team.id;
     this.teamName = this.dataService.team.name;
     this.theme = this.dataService.theme;
 
-    this.dataService.themeChanged.subscribe(theme => this.theme = theme);
+    this.dataService.themeChanged.subscribe((theme) => (this.theme = theme));
 
     if (this.isMobileView()) {
       this.addTouchListeners();
     }
 
-    this.columnAggregationService.getColumns(this.teamId).subscribe(
-      (body) => {
-        this.columnsAggregation = body.columns;
-      }
-    );
-
-    if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
-      this.websocketInit();
-    } else if (this.websocketService.getWebsocketState() === WebSocket.OPEN) {
-      this.subscribeToWebsocket();
-    }
-
-    this.websocketService.intervalId = this.globalWindowRef.setInterval(() => {
-      if (this.websocketService.getWebsocketState() === WebSocket.CLOSED) {
-        this.websocketService.closeWebsocket();
-        this.websocketInit();
-      } else if (this.websocketService.getWebsocketState() === WebSocket.OPEN) {
-        this.websocketService.sendHeartbeat();
-      }
-    }, 1000 * 60);
-  }
-
-  private subscribeToWebsocket() {
-
-    this.websocketService.heartbeatTopic().subscribe();
-
-    this.websocketService.thoughtsTopic().subscribe((message) => {
-      this.thoughtChanged.emit(message.bodyJson as WebsocketResponse);
-      this.saveCheckerService.updateTimestamp();
-    });
-
-    this.websocketService.actionItemTopic().subscribe((message) => {
-      this.actionItemChanged.emit(message.bodyJson as WebsocketResponse);
-      this.saveCheckerService.updateTimestamp();
-    });
-
-    this.websocketService.columnTitleTopic().subscribe((message) => {
-      const response: WebsocketResponse = message.bodyJson;
-      this.columnChanged.emit(response.payload as Column);
-      this.saveCheckerService.updateTimestamp();
-    });
-
-    this.websocketService.endRetroTopic().subscribe(() => {
-      this.retroEnded.emit();
+    this.columnAggregationService.getColumns(this.teamId).subscribe((body) => {
+      this.columnsAggregation = body.columns;
     });
   }
 
-  private websocketInit() {
-    this.websocketService.openWebsocket().subscribe(() => {
-      this.subscribeToWebsocket();
-    });
+  ngOnDestroy(): void {
+    this.subscriptionService.closeSubscriptions();
   }
 
   public onEndRetro(): void {
-
     const thoughts = [];
     const archivedActionItems: Array<ActionItem> = [];
 
@@ -149,7 +110,9 @@ export class TeamPageComponent implements OnInit {
         thoughts.push(...column.items.active);
         thoughts.push(...column.items.completed);
       } else {
-        archivedActionItems.push(...column.items.completed as Array<ActionItem>);
+        archivedActionItems.push(
+          ...(column.items.completed as Array<ActionItem>)
+        );
         archivedActionItems.forEach((actionItem: ActionItem) => {
           actionItem.archived = true;
         });
@@ -163,12 +126,12 @@ export class TeamPageComponent implements OnInit {
       if (archivedActionItems.length > 0) {
         this.actionItemService.archiveActionItems(archivedActionItems);
       }
-      this.websocketService.endRetro();
+      this.endRetroService.endRetro();
     }
   }
 
   public isSelectedIndex(index: number): boolean {
-    return (index === this.selectedIndex);
+    return index === this.selectedIndex;
   }
 
   public setSelectedIndex(index: number): void {
@@ -191,7 +154,7 @@ export class TeamPageComponent implements OnInit {
     if (!state) {
       this.radiatorView.resetScroll();
     }
-    this.currentView = (state) ? 'actionsRadiatorView' : 'normalView';
+    this.currentView = state ? 'actionsRadiatorView' : 'normalView';
   }
 
   public get actionsRadiatorViewIsSelected(): boolean {
@@ -213,5 +176,4 @@ export class TeamPageComponent implements OnInit {
       this.decrementSelectedIndex();
     });
   }
-
 }

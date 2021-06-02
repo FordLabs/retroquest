@@ -28,7 +28,10 @@ import { ActionItemDialogComponent } from '../../../controls/action-item-dialog/
 import { fadeInOutAnimation } from '../../../animations/add-delete-animation';
 import { Themes } from '../../../domain/Theme';
 import moment from 'moment';
-import { ColumnResponse } from '../../../domain/column-response';
+import {
+  ColumnResponse,
+  deleteColumnResponse,
+} from '../../../domain/column-response';
 import { WebsocketResponse } from '../../../domain/websocket-response';
 import { Column } from '../../../domain/column';
 
@@ -63,38 +66,38 @@ export class ActionsColumnComponent implements OnInit {
       );
     });
 
-    this.actionItemChanged.subscribe((response) => {
-      const actionItem = response.payload as ActionItem;
-
-      if (response.type === 'delete') {
-        this.deleteActionItem(actionItem);
-      } else {
-        if (!actionItem.archived) {
-          this.updateActionItems(actionItem);
-        }
-      }
-    });
+    this.actionItemChanged.subscribe((response) =>
+      this.processActionItemChange(response)
+    );
   }
 
-  private deleteActionItem(actionItem: ActionItem) {
-    if (actionItem.completed) {
-      this.actionItemAggregation.items.completed.splice(
-        this.actionItemAggregation.items.completed.findIndex(
-          (item: ActionItem) => item.id === actionItem.id
-        ),
-        1
-      );
+  processActionItemChange(response: WebsocketResponse) {
+    function retrieveActionItemFromPayload(message: WebsocketResponse) {
+      if (message.type === 'delete') {
+        return {
+          id: message.payload,
+        } as ActionItem;
+      } else {
+        return message.payload as ActionItem;
+      }
+    }
+
+    const actionItem = retrieveActionItemFromPayload(response);
+
+    if (response.type === 'delete') {
+      this.deleteActionItem(actionItem);
     } else {
-      this.actionItemAggregation.items.active.splice(
-        this.actionItemAggregation.items.active.findIndex(
-          (item: ActionItem) => item.id === actionItem.id
-        ),
-        1
-      );
+      if (!actionItem.archived) {
+        this.updateActionItems(actionItem);
+      }
     }
   }
 
-  private updateActionItems(actionItem: ActionItem) {
+  deleteActionItem(actionItem: ActionItem) {
+    deleteColumnResponse(actionItem, this.actionItemAggregation.items);
+  }
+
+  updateActionItems(actionItem: ActionItem) {
     const completedIndex = this.actionItemAggregation.items.completed.findIndex(
       (item: ActionItem) => item.id === actionItem.id
     );

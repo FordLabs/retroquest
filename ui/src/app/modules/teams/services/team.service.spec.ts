@@ -99,11 +99,12 @@ describe('TeamService', () => {
 
       const returnObj = service.fetchTeamName(teamId);
 
-      expect(
-        fakeHttpClient.get
-      ).toHaveBeenCalledWith(`/api/team/${teamId}/name`, {
-        responseType: 'text',
-      });
+      expect(fakeHttpClient.get).toHaveBeenCalledWith(
+        `/api/team/${teamId}/name`,
+        {
+          responseType: 'text',
+        }
+      );
       expect(returnObj instanceof Observable).toBe(true);
     });
   });
@@ -114,11 +115,12 @@ describe('TeamService', () => {
 
       const returnObj = service.validateTeamId(teamId);
 
-      expect(
-        fakeHttpClient.get
-      ).toHaveBeenCalledWith(`/api/team/${teamId}/validate`, {
-        observe: 'response',
-      });
+      expect(fakeHttpClient.get).toHaveBeenCalledWith(
+        `/api/team/${teamId}/validate`,
+        {
+          observe: 'response',
+        }
+      );
       expect(returnObj instanceof Observable).toBeTruthy();
     });
   });
@@ -129,12 +131,13 @@ describe('TeamService', () => {
 
       const returnObj = service.isCaptchaEnabledForTeam(teamName);
 
-      expect(
-        fakeHttpClient.get
-      ).toHaveBeenCalledWith(`/api/team/${teamName}/captcha`, {
-        observe: 'response',
-        responseType: 'text',
-      });
+      expect(fakeHttpClient.get).toHaveBeenCalledWith(
+        `/api/team/${teamName}/captcha`,
+        {
+          observe: 'response',
+          responseType: 'text',
+        }
+      );
       expect(returnObj instanceof Observable).toBe(true);
     });
   });

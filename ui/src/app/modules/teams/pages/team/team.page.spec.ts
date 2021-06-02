@@ -15,28 +15,35 @@
  *  limitations under the License.
  */
 
-import {TeamPageComponent} from './team.page';
-import {WebsocketService} from '../../services/websocket.service';
-import {BoardService} from '../../services/board.service';
-import {ColumnAggregationService} from '../../services/column-aggregation.service';
-import {of} from 'rxjs';
-import {ColumnCombinerResponse} from '../../../domain/column-combiner-response';
-import {TeamService} from '../../services/team.service';
-import {anything, instance, mock, verify, when} from 'ts-mockito';
-import {emptyThought} from '../../../domain/thought';
-import {emptyColumnResponse} from '../../../domain/column-response';
-import {DataService} from '../../../data.service';
-import {SaveCheckerService} from '../../services/save-checker.service';
+import { TeamPageComponent } from './team.page';
+import { BoardService } from '../../services/board.service';
+import { ColumnAggregationService } from '../../services/column-aggregation.service';
+import { of } from 'rxjs';
+import { ColumnCombinerResponse } from '../../../domain/column-combiner-response';
+import { TeamService } from '../../services/team.service';
+import { anything, instance, mock, verify, when } from 'ts-mockito';
+import { emptyThought } from '../../../domain/thought';
+import { emptyColumnResponse } from '../../../domain/column-response';
+import { DataService } from '../../../data.service';
+import { SaveCheckerService } from '../../services/save-checker.service';
+import {
+  createMockRxStompService,
+  createMockSubscription,
+} from '../../../utils/testutils';
+import { EndRetroService } from '../../services/end-retro.service';
+import { SubscriptionService } from '../../services/subscription.service';
+import { RxStompService } from '@stomp/ng2-stompjs';
 
 describe('TeamPageComponent', () => {
   let component: TeamPageComponent;
 
   let dataService: DataService;
-  let websocketService: WebsocketService;
   let saveCheckerService: SaveCheckerService;
   let boardService: BoardService;
   let columnAggregationService: ColumnAggregationService;
   let teamService: TeamService;
+  let endRetroService: EndRetroService;
+  let subscriptionService: SubscriptionService;
 
   const fakeTeamId = 'team-id';
 
@@ -44,36 +51,47 @@ describe('TeamPageComponent', () => {
     dataService = new DataService();
     columnAggregationService = mock(ColumnAggregationService);
     teamService = mock(TeamService);
-    websocketService = mock(WebsocketService);
     boardService = mock(BoardService);
     saveCheckerService = mock(SaveCheckerService);
+    endRetroService = mock(EndRetroService);
+    subscriptionService = new SubscriptionService(
+      dataService,
+      saveCheckerService,
+      createMockRxStompService()
+    );
 
     component = new TeamPageComponent(
       dataService,
-      instance(teamService),
-      instance(websocketService),
-      null,
       instance(boardService),
       instance(columnAggregationService),
-      null
+      null,
+      instance(endRetroService),
+      subscriptionService
     );
-
   });
 
   describe('ngOnInit', () => {
-
     const expectedColumns: ColumnCombinerResponse = {
       columns: [
-        {id: 1, items: {active: [], completed: []}, title: 'Happy', topic: 'happy'}
-      ]
+        {
+          id: 1,
+          items: { active: [], completed: [] },
+          title: 'Happy',
+          topic: 'happy',
+        },
+      ],
     };
     const expectedTeamName = 'team-name';
 
     beforeEach(() => {
       dataService.team.name = expectedTeamName;
       dataService.team.id = fakeTeamId;
-      when(columnAggregationService.getColumns(fakeTeamId)).thenReturn(of(expectedColumns));
-      when(teamService.fetchTeamName(fakeTeamId)).thenReturn(of(expectedTeamName));
+      when(columnAggregationService.getColumns(fakeTeamId)).thenReturn(
+        of(expectedColumns)
+      );
+      when(teamService.fetchTeamName(fakeTeamId)).thenReturn(
+        of(expectedTeamName)
+      );
     });
 
     it('should set the team id', () => {
@@ -91,46 +109,42 @@ describe('TeamPageComponent', () => {
       expect(component.teamName).toEqual(expectedTeamName);
     });
 
-    describe('opening the websocket', () => {
-
-      beforeEach(() => {
-        when(websocketService.openWebsocket()).thenReturn(of());
-        when(websocketService.heartbeatTopic()).thenReturn(of());
-        when(websocketService.thoughtsTopic()).thenReturn(of());
-        when(websocketService.actionItemTopic()).thenReturn(of());
-        when(websocketService.columnTitleTopic()).thenReturn(of());
-        when(websocketService.endRetroTopic()).thenReturn(of());
+    describe('Subscriptions', () => {
+      it('Should subscribe to the Thoughts topic', () => {
+        const spy = jest.spyOn(subscriptionService, 'subscribeToThoughts');
+        component.ngOnInit();
+        expect(spy).toHaveBeenCalledWith(component.thoughtChanged);
       });
 
-      it('should open the websocket if the state is closed', () => {
-        when(websocketService.getWebsocketState()).thenReturn(WebSocket.CLOSED);
-
+      it('Should subscribe to the action items topic', () => {
+        const spy = jest.spyOn(subscriptionService, 'subscribeToActionItems');
         component.ngOnInit();
-        verify(websocketService.openWebsocket()).called();
+        expect(spy).toHaveBeenCalledWith(component.actionItemChanged);
       });
 
-      it('should not open the websocket if the state is already opened', () => {
-        when(websocketService.getWebsocketState()).thenReturn(WebSocket.OPEN);
-
+      it('Should subscribe to the column title topic', () => {
+        const spy = jest.spyOn(subscriptionService, 'subscribeToColumnTitles');
         component.ngOnInit();
-        verify(websocketService.openWebsocket()).never();
+        expect(spy).toHaveBeenCalledWith(component.columnChanged);
       });
 
-      it('should resubscribe to the websocket', () => {
-        when(websocketService.getWebsocketState()).thenReturn(WebSocket.OPEN);
-
+      it('Should subscribe to the end retro topic', () => {
+        const spy = jest.spyOn(subscriptionService, 'subscribeToEndRetro');
         component.ngOnInit();
-        verify(websocketService.heartbeatTopic()).called();
-        verify(websocketService.thoughtsTopic()).called();
-        verify(websocketService.actionItemTopic()).called();
-        verify(websocketService.columnTitleTopic()).called();
-        verify(websocketService.endRetroTopic()).called();
+        expect(spy).toHaveBeenCalledWith(component.retroEnded);
       });
     });
   });
 
-  describe('onEndRetro', () => {
+  describe('ngOnDestroy', () => {
+    it('should close subscriptions', () => {
+      const spy = jest.spyOn(subscriptionService, 'closeSubscriptions');
+      component.ngOnDestroy();
+      expect(spy).toHaveBeenCalled();
+    });
+  });
 
+  describe('onEndRetro', () => {
     const expectedThoughts = [emptyThought(), emptyThought()];
 
     beforeEach(() => {
@@ -142,7 +156,9 @@ describe('TeamPageComponent', () => {
       expectedThoughts[1].discussed = true;
       expectedThoughts[1].id = 1;
 
-      when(boardService.createBoard(anything(), anything())).thenReturn(of(null));
+      when(boardService.createBoard(anything(), anything())).thenReturn(
+        of(null)
+      );
     });
 
     it('should create a board if there are thoughts to archive', () => {
@@ -162,14 +178,12 @@ describe('TeamPageComponent', () => {
     });
 
     it('should emit the end retro event to the websocket', () => {
-
       component.columnsAggregation = [emptyColumnResponse()];
       component.columnsAggregation[0].items.active = [expectedThoughts[0]];
 
       component.onEndRetro();
 
-      verify(websocketService.endRetro()).called();
+      verify(endRetroService.endRetro()).called();
     });
   });
-
 });

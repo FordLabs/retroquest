@@ -30,6 +30,7 @@ import { fadeInOutAnimation } from '../../../animations/add-delete-animation';
 import { Themes } from '../../../domain/Theme';
 import {
   ColumnResponse,
+  deleteColumnResponse,
   emptyColumnResponse,
   findThought,
 } from '../../../domain/column-response';
@@ -76,9 +77,7 @@ export class ThoughtsColumnComponent implements OnInit {
     });
 
     this.thoughtChanged.subscribe((response) => {
-      const thought = response.payload as Thought;
-      const responseType = response.type;
-      this.respondToThought(responseType, thought);
+      this.processThoughtChange(response);
     });
 
     this.columnChanged.subscribe((column) => {
@@ -88,14 +87,51 @@ export class ThoughtsColumnComponent implements OnInit {
     });
   }
 
-  respondToThought(responseType: string, thought: Thought) {
-    if (
-      responseType === 'delete' ||
-      thought.topic !== this.thoughtAggregation.topic
+  processThoughtChange(response: WebsocketResponse): void {
+    function retrieveThoughtFromPayload(message: WebsocketResponse): Thought {
+      if (message.type === 'delete') {
+        return {
+          id: message.payload,
+        } as Thought;
+      } else {
+        return message.payload as Thought;
+      }
+    }
+
+    function thoughtIsInThisColumn(
+      thoughtTopic: string,
+      thoughtAggregationTopic: string
+    ) {
+      return thoughtTopic === thoughtAggregationTopic;
+    }
+
+    function thoughtWasMovedFromThisColumn(
+      thoughtTopic: string,
+      thoughtTopicPreviousColumn: string,
+      thoughtAggregationTopic: string
+    ) {
+      return (
+        thoughtTopic !== thoughtAggregationTopic &&
+        thoughtTopicPreviousColumn === thoughtAggregationTopic
+      );
+    }
+
+    const thought = retrieveThoughtFromPayload(response);
+
+    if (response.type === 'delete') {
+      this.deleteThought(thought);
+    } else if (
+      thoughtIsInThisColumn(thought.topic, this.thoughtAggregation.topic)
+    ) {
+      this.updateThought(thought);
+    } else if (
+      thoughtWasMovedFromThisColumn(
+        thought.topic,
+        thought.columnTitle.topic,
+        this.thoughtAggregation.topic
+      )
     ) {
       this.deleteThought(thought);
-    } else {
-      this.updateThought(thought);
     }
   }
 
@@ -148,83 +184,56 @@ export class ThoughtsColumnComponent implements OnInit {
     this.thoughtService.moveThought(thoughtId, newTopic);
   }
 
-  updateThought(thought: Thought) {
+  updateThought(updatedThought: Thought) {
     const completedIndex = this.thoughtAggregation.items.completed.findIndex(
-      (item: Thought) => item.id === thought.id
+      (item: Thought) => item.id === updatedThought.id
     );
     const activeIndex = this.thoughtAggregation.items.active.findIndex(
-      (item: Thought) => item.id === thought.id
+      (item: Thought) => item.id === updatedThought.id
     );
 
-    if (!this.indexWasFound(completedIndex)) {
-      if (this.indexWasFound(activeIndex)) {
-        if (thought.discussed) {
-          thought.state = 'active';
-          this.thoughtAggregation.items.active.splice(activeIndex, 1);
-          this.thoughtAggregation.items.completed.push(thought);
-        } else {
-          Object.assign(
-            this.thoughtAggregation.items.active[activeIndex],
-            thought
-          );
-        }
+    function indexWasFound(index: number): boolean {
+      return index !== -1;
+    }
+
+    function ensureInColumn(thought: Thought, column: Array<object>) {
+      const index = column.findIndex(
+        (item: Thought) => item.id === updatedThought.id
+      );
+
+      if (indexWasFound(index)) {
+        Object.assign(column[index], thought);
       } else {
         thought.state = 'active';
-        this.thoughtAggregation.items.active.push(thought);
-      }
-    } else {
-      if (!thought.discussed) {
-        thought.state = 'active';
-        this.thoughtAggregation.items.completed.splice(completedIndex, 1);
-        this.thoughtAggregation.items.active.push(thought);
-      } else {
-        Object.assign(
-          this.thoughtAggregation.items.completed[completedIndex],
-          thought
-        );
+        column.push(thought);
       }
     }
-  }
 
-  private indexWasFound(index: number): boolean {
-    return index !== -1;
+    function ensureNotInColumn(thought: Thought, column: Array<object>) {
+      const index = column.findIndex(
+        (item: Thought) => item.id === updatedThought.id
+      );
+
+      if (indexWasFound(index)) {
+        thought.state = 'active';
+        column.splice(index, 1);
+      }
+    }
+
+    if (updatedThought.discussed) {
+      ensureInColumn(updatedThought, this.thoughtAggregation.items.completed);
+      ensureNotInColumn(updatedThought, this.thoughtAggregation.items.active);
+    } else {
+      ensureInColumn(updatedThought, this.thoughtAggregation.items.active);
+      ensureNotInColumn(
+        updatedThought,
+        this.thoughtAggregation.items.completed
+      );
+    }
   }
 
   deleteThought(thought: Thought) {
-    if (thought.id === -1) {
-      // this appears to clear out the section of the column ??
-      if (thought.discussed) {
-        this.thoughtAggregation.items.completed.splice(
-          0,
-          this.thoughtAggregation.items.completed.length
-        );
-      } else {
-        this.thoughtAggregation.items.active.splice(
-          0,
-          this.thoughtAggregation.items.active.length
-        );
-      }
-      return;
-    }
-    if (!findThought(this.thoughtAggregation, thought.id)) {
-      // it is not here
-      return;
-    }
-    if (thought.discussed) {
-      this.thoughtAggregation.items.completed.splice(
-        this.thoughtAggregation.items.completed.findIndex(
-          (item: Thought) => item.id === thought.id
-        ),
-        1
-      );
-    } else {
-      this.thoughtAggregation.items.active.splice(
-        this.thoughtAggregation.items.active.findIndex(
-          (item: Thought) => item.id === thought.id
-        ),
-        1
-      );
-    }
+    deleteColumnResponse(thought, this.thoughtAggregation.items);
   }
 
   discussThought(thought: Thought): void {

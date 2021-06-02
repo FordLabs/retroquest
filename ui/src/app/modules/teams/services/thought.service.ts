@@ -16,39 +16,63 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs/index';
+import { Observable } from 'rxjs/index';
 import { HttpClient } from '@angular/common/http';
 
 import { Thought } from '../../domain/thought';
-import { WebsocketService } from './websocket.service';
+import { RxStompService } from '@stomp/ng2-stompjs';
+import { DataService } from '../../data.service';
 
 @Injectable()
 export class ThoughtService {
-  resetThoughtsObserver: Subject<null> = new Subject<null>();
+  constructor(
+    private http: HttpClient,
+    private rxStompService: RxStompService,
+    private dataService: DataService
+  ) {}
 
-  constructor(private http: HttpClient, private websocket: WebsocketService) {}
+  private validTeamId(teamId: string) {
+    return this.dataService.team.id === teamId;
+  }
 
   fetchThoughts(teamId: string): Observable<Array<Thought>> {
     return this.http.get<Array<Thought>>(`/api/team/${teamId}/thoughts`);
   }
 
   addThought(thought: Thought): void {
-    this.websocket.createThought(thought);
-  }
-
-  deleteThought(thought: Thought): void {
-    this.websocket.deleteThought(thought);
+    if (this.validTeamId(thought.teamId)) {
+      this.rxStompService.publish({
+        destination: `/app/${this.dataService.team.id}/thought/create`,
+        body: JSON.stringify(thought),
+      });
+    }
   }
 
   updateThought(thought: Thought): void {
-    this.websocket.updateThought(thought);
+    if (this.validTeamId(thought.teamId)) {
+      this.rxStompService.publish({
+        destination: `/app/${this.dataService.team.id}/thought/${thought.id}/edit`,
+        body: JSON.stringify(thought),
+      });
+    }
+  }
+
+  deleteThought(thought: Thought): void {
+    if (this.validTeamId(thought.teamId)) {
+      this.rxStompService.publish({
+        destination: `/app/${this.dataService.team.id}/thought/${thought.id}/delete`,
+        body: JSON.stringify(thought),
+      });
+    }
   }
 
   moveThought(thoughtId: Thought['id'], newTopic: Thought['topic']): void {
-    this.websocket.moveThought(thoughtId, newTopic);
-  }
-
-  deleteAllThoughts(): void {
-    this.websocket.deleteAllThoughts();
+    this.rxStompService.publish({
+      destination: `/app/${this.dataService.team.id}/thought/${thoughtId}/move`,
+      body: JSON.stringify({
+        id: thoughtId,
+        topic: newTopic,
+      }),
+    });
   }
 }

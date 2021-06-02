@@ -15,17 +15,24 @@
  *  limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs/index';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/index';
 
-import {ActionItem} from '../../domain/action-item';
-import {WebsocketService} from './websocket.service';
+import { ActionItem } from '../../domain/action-item';
+import { RxStompService } from '@stomp/ng2-stompjs';
+import { DataService } from '../../data.service';
 
 @Injectable()
 export class ActionItemService {
+  constructor(
+    private http: HttpClient,
+    private rxStompService: RxStompService,
+    private dataService: DataService
+  ) {}
 
-  constructor(private http: HttpClient, private webSocketService: WebsocketService) {
+  private validTeamId(teamId: string) {
+    return this.dataService.team.id === teamId;
   }
 
   fetchActionItems(teamId): Observable<Array<ActionItem>> {
@@ -33,24 +40,41 @@ export class ActionItemService {
   }
 
   fetchArchivedActionItems(teamId): Observable<Array<ActionItem>> {
-    return this.http.get<Array<ActionItem>>(`/api/team/${teamId}/action-items/archived`);
+    return this.http.get<Array<ActionItem>>(
+      `/api/team/${teamId}/action-items/archived`
+    );
   }
 
   addActionItem(actionItem: ActionItem): void {
-    this.webSocketService.createActionItem(actionItem);
+    if (this.validTeamId(actionItem.teamId)) {
+      this.rxStompService.publish({
+        destination: `/app/${this.dataService.team.id}/action-item/create`,
+        body: JSON.stringify(actionItem),
+      });
+    }
   }
 
   deleteActionItem(actionItem: ActionItem): void {
-    this.webSocketService.deleteActionItem(actionItem);
+    if (this.validTeamId(actionItem.teamId)) {
+      this.rxStompService.publish({
+        destination: `/app/${this.dataService.team.id}/action-item/${actionItem.id}/delete`,
+        body: JSON.stringify(actionItem),
+      });
+    }
   }
 
   updateActionItem(actionItem: ActionItem): void {
-    this.webSocketService.updateActionItem(actionItem);
+    if (this.validTeamId(actionItem.teamId)) {
+      this.rxStompService.publish({
+        destination: `/app/${this.dataService.team.id}/action-item/${actionItem.id}/edit`,
+        body: JSON.stringify(actionItem),
+      });
+    }
   }
 
   archiveActionItems(archivedActionItems: Array<ActionItem>) {
-    archivedActionItems.forEach(actionItem => {
-      this.webSocketService.updateActionItem(actionItem);
+    archivedActionItems.forEach((actionItem) => {
+      this.updateActionItem(actionItem);
     });
   }
 }
