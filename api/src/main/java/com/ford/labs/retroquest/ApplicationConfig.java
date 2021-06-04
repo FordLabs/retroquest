@@ -10,21 +10,13 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class ApplicationConfig {
-    private final TeamRepository teamRepository;
-    private final FeedbackRepository feedbackRepository;
-
-    public ApplicationConfig(TeamRepository teamRepository, FeedbackRepository feedbackRepository) {
-        this.teamRepository = teamRepository;
-        this.feedbackRepository = feedbackRepository;
-    }
-
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.build();
     }
 
     @Bean
-    public Metrics metrics() {
+    public Metrics metrics(TeamRepository teamRepository, FeedbackRepository feedbackRepository) {
         return new Metrics(teamRepository, feedbackRepository);
     }
 }

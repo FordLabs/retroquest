@@ -1,6 +1,5 @@
 package com.ford.labs.retroquest.metrics;
 
-import com.ford.labs.retroquest.feedback.Feedback;
 import com.ford.labs.retroquest.feedback.FeedbackRepository;
 import com.ford.labs.retroquest.team.TeamRepository;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
@@ -8,10 +7,8 @@ import org.springframework.jmx.export.annotation.ManagedResource;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.OptionalDouble;
-
-import static java.util.stream.Collectors.toList;
+import java.time.Month;
+import java.util.Optional;
 
 @ManagedResource
 public class Metrics {
@@ -39,40 +36,43 @@ public class Metrics {
 
     @ManagedAttribute
     public int getFeedbackCount() {
-        return feedbackRepository.findAll().size();
+        return getFeedbackCount(null, null);
     }
 
     public int getFeedbackCount(LocalDate startTime, LocalDate endTime) {
-        LocalDateTime finalEndTime = endTime == null ? LocalDateTime.now() : endTime.atStartOfDay();
-        LocalDateTime finalStartTime = startTime == null ? LocalDateTime.MIN : startTime.atStartOfDay();
-        List<Feedback> feedbackList = feedbackRepository.findAll().stream()
-            .filter(feedback -> !feedback.getDateCreated().isBefore(finalStartTime))
-            .filter(feedback -> !feedback.getDateCreated().isAfter(finalEndTime))
-            .collect(toList());
-        return feedbackList.size();
+        LocalDateTime finalEndTime = Optional.ofNullable(endTime)
+            .map(LocalDate::atStartOfDay)
+            .orElseGet(LocalDateTime::now);
+        LocalDateTime finalStartTime = Optional.ofNullable(startTime)
+            .map(LocalDate::atStartOfDay)
+            .orElseGet(() -> LocalDateTime.of(1900, Month.JANUARY, 1, 0, 0));
+
+        return (int) feedbackRepository.countByDateCreatedGreaterThanEqualAndDateCreatedLessThanEqual(finalStartTime, finalEndTime);
     }
 
     @ManagedAttribute
     public double getAverageRating() {
-        List<Feedback> allFeedback = feedbackRepository.findAllByStarsIsGreaterThanEqual(1);
-        OptionalDouble average = allFeedback.stream().mapToDouble(Feedback::getStars).average();
-        return average.isPresent() ? average.getAsDouble() : 0.0;
+        return getAverageRating(null, null);
     }
 
     public double getAverageRating(LocalDate startTime, LocalDate endTime) {
-        LocalDateTime finalEndTime = endTime == null ? LocalDateTime.now() : endTime.atStartOfDay();
-        LocalDateTime finalStartTime = startTime == null ? LocalDateTime.MIN : startTime.atStartOfDay();
-        return feedbackRepository.findAllByStarsIsGreaterThanEqual(1).stream()
-            .filter(feedback -> !feedback.getDateCreated().isBefore(finalStartTime))
-            .filter(feedback -> !feedback.getDateCreated().isAfter(finalEndTime))
-            .mapToInt(Feedback::getStars)
-            .average()
-            .orElse(0);
+        LocalDateTime finalEndTime = Optional.ofNullable(endTime)
+            .map(LocalDate::atStartOfDay)
+            .orElseGet(LocalDateTime::now);
+        LocalDateTime finalStartTime = Optional.ofNullable(startTime)
+            .map(LocalDate::atStartOfDay)
+            .orElseGet(() -> LocalDateTime.of(1900, Month.JANUARY, 1, 0, 0));
+
+        return feedbackRepository.getAverageRating(finalStartTime, finalEndTime);
+    }
+
+    public int getTeamLogins() {
+        return getTeamLogins(null, null);
     }
 
     public int getTeamLogins(LocalDate startDate, LocalDate endDate) {
-        LocalDate finalEndDate = endDate == null ? LocalDate.now() : endDate;
-        LocalDate finalStartDate = startDate == null ? LocalDate.of(1900, 1, 1) : startDate;
-        return teamRepository.findAllByLastLoginDateBetween(finalStartDate, finalEndDate).size();
+        LocalDate finalEndDate = Optional.ofNullable(endDate).orElseGet(LocalDate::now);
+        LocalDate finalStartDate = Optional.ofNullable(startDate).orElseGet(() -> LocalDate.of(1900, Month.JANUARY, 1));
+        return (int) teamRepository.countByLastLoginDateBetween(finalStartDate, finalEndDate);
     }
 }

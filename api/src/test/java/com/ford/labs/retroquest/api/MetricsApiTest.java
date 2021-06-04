@@ -47,23 +47,23 @@ public class MetricsApiTest extends ApiTest {
         teamRepository.save(team);
 
         MvcResult result = mockMvc.perform(get("/api/admin/metrics/team/count")
-                .with(httpBasic(getAdminUsername(), getAdminPassword())))
-                .andExpect(status().isOk())
-                .andReturn();
+            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+            .andExpect(status().isOk())
+            .andReturn();
         assertThat(result.getResponse().getContentAsString()).isEqualTo("1");
     }
 
     @Test
     public void cannotReadTheTotalNumberOfTeamsWithInvalidAuthorization() throws Exception {
         mockMvc.perform(get("/api/admin/metrics/team/count")
-                .with(httpBasic("foo", "bar")))
-                .andExpect(status().isUnauthorized());
+            .with(httpBasic("foo", "bar")))
+            .andExpect(status().isUnauthorized());
     }
 
     @Test
     public void cannotReadTheTotalNumberOfTeamsWithoutAuthorization() throws Exception {
         mockMvc.perform(get("/api/admin/metrics/team/count"))
-                .andExpect(status().isUnauthorized());
+            .andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -82,14 +82,14 @@ public class MetricsApiTest extends ApiTest {
     @Test
     public void cannotGetFeedbackWithInvalidAuthorization() throws Exception {
         mockMvc.perform(get("/api/admin/metrics/feedback/count")
-                .with(httpBasic("foo", "bar")))
-                .andExpect(status().isUnauthorized());
+            .with(httpBasic("foo", "bar")))
+            .andExpect(status().isUnauthorized());
     }
 
     @Test
     public void cannotGetFeedbackWithoutAuthorization() throws Exception {
         mockMvc.perform(get("/api/admin/metrics/feedback/count"))
-                .andExpect(status().isUnauthorized());
+            .andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -104,10 +104,10 @@ public class MetricsApiTest extends ApiTest {
 
 
         MvcResult result = mockMvc.perform(get("/api/admin/metrics/feedback/average")
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic(getAdminUsername(), getAdminPassword())))
-                .andExpect(status().isOk())
-                .andReturn();
+            .contentType(MediaType.APPLICATION_JSON)
+            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+            .andExpect(status().isOk())
+            .andReturn();
         assertThat(result.getResponse().getContentAsString()).isEqualTo("3.0");
     }
 
@@ -123,10 +123,10 @@ public class MetricsApiTest extends ApiTest {
         feedbackRepository.saveAll(asList(feedback1, feedback2));
 
         MvcResult result = mockMvc.perform(get("/api/admin/metrics/feedback/average")
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic(getAdminUsername(), getAdminPassword())))
-                .andExpect(status().isOk())
-                .andReturn();
+            .contentType(MediaType.APPLICATION_JSON)
+            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+            .andExpect(status().isOk())
+            .andReturn();
 
         assertThat(result.getResponse().getContentAsString()).isEqualTo("4.0");
     }
@@ -134,14 +134,14 @@ public class MetricsApiTest extends ApiTest {
     @Test
     public void cannotGetAverageRatingWithInvalidAuthorization() throws Exception {
         mockMvc.perform(get("/api/admin/metrics/feedback/average")
-                .with(httpBasic("foo", "bar")))
-                .andExpect(status().isUnauthorized());
+            .with(httpBasic("foo", "bar")))
+            .andExpect(status().isUnauthorized());
     }
 
     @Test
     public void cannotGetAverageRatingWithoutAuthorization() throws Exception {
         mockMvc.perform(get("/api/admin/metrics/feedback/average"))
-                .andExpect(status().isUnauthorized());
+            .andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -155,10 +155,10 @@ public class MetricsApiTest extends ApiTest {
         feedbackRepository.saveAll(asList(feedback1, feedback2));
 
         mockMvc.perform(get("/api/admin/metrics/feedback/count?start=2018-02-02")
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic(getAdminUsername(), getAdminPassword())))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", Matchers.is(1)));
+            .contentType(MediaType.APPLICATION_JSON)
+            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", Matchers.is(1)));
     }
 
     @Test
@@ -172,10 +172,10 @@ public class MetricsApiTest extends ApiTest {
         feedbackRepository.saveAll(asList(feedback1, feedback2));
 
         mockMvc.perform(get("/api/admin/metrics/feedback/count?end=2018-02-02")
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic(getAdminUsername(), getAdminPassword())))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", Matchers.is(1)));
+            .contentType(MediaType.APPLICATION_JSON)
+            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", Matchers.is(1)));
     }
 
     @Test
@@ -191,10 +191,10 @@ public class MetricsApiTest extends ApiTest {
         feedbackRepository.saveAll(asList(feedback1, feedback2, feedback3));
 
         mockMvc.perform(get("/api/admin/metrics/feedback/count?start=2018-05-01&end=2018-12-01")
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic(getAdminUsername(), getAdminPassword())))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", Matchers.is(1)));
+            .contentType(MediaType.APPLICATION_JSON)
+            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", Matchers.is(1)));
     }
 
     @Test
@@ -213,10 +213,10 @@ public class MetricsApiTest extends ApiTest {
         feedbackRepository.saveAll(asList(feedback1, feedback2, feedback3));
 
         mockMvc.perform(get("/api/admin/metrics/feedback/average?start=2018-05-01&end=2018-12-01")
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic(getAdminUsername(), getAdminPassword())))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", Matchers.is(2.0)));
+            .contentType(MediaType.APPLICATION_JSON)
+            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", Matchers.is(2.0)));
     }
 
     @Test
@@ -232,10 +232,10 @@ public class MetricsApiTest extends ApiTest {
         feedbackRepository.saveAll(asList(feedback1, feedback2));
 
         mockMvc.perform(get("/api/admin/metrics/feedback/average?start=2018-02-02")
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic(getAdminUsername(), getAdminPassword())))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", Matchers.is(3.0)));
+            .contentType(MediaType.APPLICATION_JSON)
+            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", Matchers.is(3.0)));
     }
 
     @Test
@@ -251,10 +251,10 @@ public class MetricsApiTest extends ApiTest {
         feedbackRepository.saveAll(asList(feedback1, feedback2));
 
         mockMvc.perform(get("/api/admin/metrics/feedback/average?end=2018-02-02")
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic(getAdminUsername(), getAdminPassword())))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", Matchers.is(3.0)));
+            .contentType(MediaType.APPLICATION_JSON)
+            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", Matchers.is(3.0)));
     }
 
     @Test
@@ -269,10 +269,10 @@ public class MetricsApiTest extends ApiTest {
         teamRepository.saveAll(asList(team1, team2));
 
         mockMvc.perform(get("/api/admin/metrics/team/count?start=2018-03-03")
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic(getAdminUsername(), getAdminPassword())))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", Matchers.is(1)));
+            .contentType(MediaType.APPLICATION_JSON)
+            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", Matchers.is(1)));
     }
 
     @Test
@@ -286,9 +286,9 @@ public class MetricsApiTest extends ApiTest {
         teamRepository.saveAll(asList(team1, team2));
 
         mockMvc.perform(get("/api/admin/metrics/team/logins?start=2018-02-02")
-                .with(httpBasic(getAdminUsername(), getAdminPassword())))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", Matchers.is(1)));
+            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", Matchers.is(1)));
     }
 
     @Test
@@ -302,9 +302,9 @@ public class MetricsApiTest extends ApiTest {
         teamRepository.saveAll(asList(team1, team2));
 
         mockMvc.perform(get("/api/admin/metrics/team/logins?end=2018-02-02")
-                .with(httpBasic(getAdminUsername(), getAdminPassword())))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", Matchers.is(1)));
+            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", Matchers.is(1)));
     }
 
     @Test
@@ -324,9 +324,9 @@ public class MetricsApiTest extends ApiTest {
         teamRepository.saveAll(asList(team1, team2, team3));
 
         mockMvc.perform(
-                get("/api/admin/metrics/team/logins?start=2018-02-02&end=2018-04-04")
-                        .with(httpBasic(getAdminUsername(), getAdminPassword())))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", Matchers.is(1)));
+            get("/api/admin/metrics/team/logins?start=2018-02-02&end=2018-04-04")
+                .with(httpBasic(getAdminUsername(), getAdminPassword())))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", Matchers.is(1)));
     }
 }

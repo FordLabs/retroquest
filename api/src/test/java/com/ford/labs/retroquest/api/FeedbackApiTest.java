@@ -3,13 +3,12 @@ package com.ford.labs.retroquest.api;
 import com.ford.labs.retroquest.api.setup.ApiTest;
 import com.ford.labs.retroquest.feedback.Feedback;
 import com.ford.labs.retroquest.feedback.FeedbackRepository;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-
-import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -26,6 +25,9 @@ public class FeedbackApiTest extends ApiTest {
     @Autowired
     private FeedbackRepository feedbackRepository;
 
+    @Autowired
+    private MeterRegistry meterRegistry;
+
     @AfterEach
     public void tearDown() {
         feedbackRepository.deleteAllInBatch();
@@ -33,7 +35,10 @@ public class FeedbackApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldPostFeedbackAndUpdateMetric() throws Exception {
+    public void shouldPostFeedbackAndUpdateMetrics() throws Exception {
+        meterRegistry.gauge("retroquest.feedback.count", 0);
+        meterRegistry.gauge("retroquest.feedback.averageRating", 0);
+
         var feedback = Feedback.builder()
             .stars(4)
             .comment("This is a comment")
@@ -49,6 +54,11 @@ public class FeedbackApiTest extends ApiTest {
         )
             .andExpect(status().isCreated())
             .andReturn();
+
+        assertThat(meterRegistry.get("retroquest.feedback.count").gauge().value())
+            .isEqualTo(1);
+        assertThat(meterRegistry.get("retroquest.feedback.averageRating").gauge().value())
+            .isEqualTo(4);
     }
 
     @Test
