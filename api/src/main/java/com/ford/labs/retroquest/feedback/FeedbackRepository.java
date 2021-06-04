@@ -18,8 +18,10 @@
 package com.ford.labs.retroquest.feedback;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -28,4 +30,9 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
     List<Feedback> findAllByStarsIsGreaterThanEqual(int minimumValue);
 
     List<Feedback> findAllByTeamId(String teamId);
+
+    long countByDateCreatedGreaterThanEqualAndDateCreatedLessThanEqual(LocalDateTime startTime, LocalDateTime endTime);
+
+    @Query("select avg(f.stars) from Feedback f where f.stars > 0 and f.dateCreated >= ?1 and f.dateCreated <= ?2")
+    double getAverageRating(LocalDateTime startTime, LocalDateTime endTime);
 }

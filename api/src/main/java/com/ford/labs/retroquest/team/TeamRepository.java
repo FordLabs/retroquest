@@ -33,7 +33,8 @@ import java.util.Set;
 public interface TeamRepository extends JpaRepository<Team, String> {
     Optional<Team> findTeamByNameIgnoreCase(String name);
     Optional<Team> findTeamByUri(String uri);
-    List<Team> findAllByLastLoginDateBetween(LocalDate start, LocalDate end);
+
+    long countByLastLoginDateBetween(LocalDate start, LocalDate end);
 
     long countAllByDateCreatedAfterAndDateCreatedIsNotNull(LocalDate start);
     long countAllByDateCreatedBetweenAndDateCreatedNotNull(LocalDate start, LocalDate end);
