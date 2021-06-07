@@ -21,6 +21,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,8 +37,9 @@ import java.time.LocalDateTime;
 @RequestMapping("/api/feedback")
 @Tag(name = "Feedback Controller", description = "The controller that manages feedback for Retroquest")
 public class FeedbackController {
+    private static final Logger log = LoggerFactory.getLogger(FeedbackController.class);
 
-    private FeedbackRepository feedbackRepository;
+    private final FeedbackRepository feedbackRepository;
 
     public FeedbackController(FeedbackRepository feedbackRepository) {
         this.feedbackRepository = feedbackRepository;
@@ -46,6 +49,13 @@ public class FeedbackController {
     @Operation(summary = "Creates a feedback entry", description = "saveFeedback")
     @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Created")})
     public ResponseEntity<URI> saveFeedback(@RequestBody Feedback feedback) throws URISyntaxException {
+        log.info(
+            "[FEEDBACK_SUBMITTED] stars:'{}' comment:'{}' email:'{}' teamId:'{}'",
+            feedback.getStars(),
+            feedback.getComment(),
+            feedback.getUserEmail(),
+            feedback.getTeamId()
+        );
         feedback.setDateCreated(LocalDateTime.now());
         Feedback savedFeedback = feedbackRepository.save(feedback);
         return ResponseEntity.created(new URI("/api/feedback/" + savedFeedback.getId())).build();
