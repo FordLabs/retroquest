@@ -10,9 +10,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.any;
@@ -29,44 +32,85 @@ public class MetricsTest {
     @InjectMocks
     private Metrics metrics;
 
-
     @Test
-    public void returnsTheTotalNumberOfTeamsCreated() {
-        given(mockTeamRepository.count()).willReturn(2L);
+    public void getTeamCount_whenCalledWithNoArguments_returnsTheTotalNumberOfTeamsCreated() {
+        given(mockTeamRepository.countAllByDateCreatedBetweenAndDateCreatedNotNull(any(), any())).willReturn(2L);
         assertEquals(2, metrics.getTeamCount());
     }
 
     @Test
-    public void noStartOrEndDateReturnsAllCountOfTeams() {
-        given(mockTeamRepository.count()).willReturn(2L);
-        long teamCount = metrics.getTeamCount(null, null);
-        then(mockTeamRepository).should().count();
-        assertThat(teamCount).isEqualTo(2L);
-    }
+    public void getTeamCount_whenGivenBothAStartAndEndDate_passesDatesToRepository() {
+        LocalDate startDate = LocalDate.of(2018, 2, 2);
+        LocalDate endDate = LocalDate.of(2018, 4, 4);
 
-    @Test
-    public void callsDateCreatedAfter_whenGivenOnlyAStartDate() {
-        given(mockTeamRepository.countAllByDateCreatedAfterAndDateCreatedIsNotNull(any())).willReturn(1L);
-        metrics.getTeamCount(LocalDate.of(2018, 2, 2), null);
-        then(mockTeamRepository).should().countAllByDateCreatedAfterAndDateCreatedIsNotNull(any());
-    }
-
-    @Test
-    public void callsDateCreatedBetween_whenGivenBothAStartAndEndDate() {
         given(mockTeamRepository.countAllByDateCreatedBetweenAndDateCreatedNotNull(any(), any())).willReturn(1L);
-        metrics.getTeamCount(LocalDate.of(2018, 2, 2), LocalDate.of(2018, 4, 4));
-        then(mockTeamRepository).should().countAllByDateCreatedBetweenAndDateCreatedNotNull(any(), any());
+
+        metrics.getTeamCount(startDate, endDate);
+
+        then(mockTeamRepository).should()
+            .countAllByDateCreatedBetweenAndDateCreatedNotNull(startDate, endDate);
     }
 
     @Test
-    public void returnsTheFeedbackCount() {
+    public void getFeedbackCount_whenCalledWithNoArguments_returnsTheTotalFeedbackCount() {
         given(mockFeedbackRepository.countByDateCreatedGreaterThanEqualAndDateCreatedLessThanEqual(any(), any())).willReturn(2L);
         assertEquals(2, metrics.getFeedbackCount());
     }
 
     @Test
-    public void returnsTheAverageFeedback() {
+    public void getFeedbackCount_whenGivenBothAStartAndEndDate_passesDatesToRepository() {
+        LocalDate startDate = LocalDate.of(2018, 2, 2);
+        LocalDate endDate = LocalDate.of(2018, 4, 4);
+
+        given(mockFeedbackRepository.countByDateCreatedGreaterThanEqualAndDateCreatedLessThanEqual(any(), any())).willReturn(2L);
+
+        metrics.getFeedbackCount(startDate, endDate);
+
+        then(mockFeedbackRepository).should()
+            .countByDateCreatedGreaterThanEqualAndDateCreatedLessThanEqual(
+                startDate.atStartOfDay(),
+                endDate.atStartOfDay()
+            );
+    }
+
+    @Test
+    public void getAverageRating_whenCalledWithNoArguments_returnsTheAverageOfAllFeedback() {
         given(mockFeedbackRepository.getAverageRating(any(), any())).willReturn(2.5);
         assertEquals(2.5, metrics.getAverageRating(), 0);
+    }
+
+    @Test
+    public void getAverageRating_whenGivenBothAStartAndEndDate_passesDatesToRepository() {
+        LocalDate startDate = LocalDate.of(2018, 2, 2);
+        LocalDate endDate = LocalDate.of(2018, 4, 4);
+
+        given(mockFeedbackRepository.getAverageRating(any(), any())).willReturn(2.5);
+
+        metrics.getAverageRating(startDate, endDate);
+
+        then(mockFeedbackRepository).should()
+            .getAverageRating(
+                startDate.atStartOfDay(),
+                endDate.atStartOfDay()
+            );
+    }
+
+    @Test
+    public void getTeamLogins_whenCalledWithNoArguments_returnsTheTotalNumberOfTeamsCreated() {
+        given(mockTeamRepository.countByLastLoginDateBetween(any(), any())).willReturn(2L);
+        assertEquals(2, metrics.getTeamLogins());
+    }
+
+    @Test
+    public void getTeamLogins_whenGivenBothAStartAndEndDate_passesDatesToRepository() {
+        LocalDate startDate = LocalDate.of(2018, 2, 2);
+        LocalDate endDate = LocalDate.of(2018, 4, 4);
+
+        given(mockTeamRepository.countByLastLoginDateBetween(any(), any())).willReturn(1L);
+
+        metrics.getTeamLogins(startDate, endDate);
+
+        then(mockTeamRepository).should()
+            .countByLastLoginDateBetween(startDate, endDate);
     }
 }

@@ -45,7 +45,8 @@ public class Team implements Persistable<String> {
     private String password;
 
     @JsonIgnore
-    private LocalDate dateCreated;
+    @Builder.Default
+    private LocalDate dateCreated = LocalDate.now();
 
     private Integer failedAttempts;
 

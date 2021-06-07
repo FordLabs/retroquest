@@ -27,7 +27,7 @@ public class MetricsController {
     @GetMapping("/team/count")
     @Operation(summary = "Gets the number of teams between a start and end date", description = "getTeamCount")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public ResponseEntity<Long> getTeamCount(
+    public ResponseEntity<Integer> getTeamCount(
         @RequestParam(name = "start", required = false)
         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate startDate,
