@@ -6,9 +6,6 @@ import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.Optional;
 
 @ManagedResource
 public class Metrics {
@@ -22,16 +19,17 @@ public class Metrics {
 
     @ManagedAttribute
     public int getTeamCount() {
-        return (int) getTeamCount(null, null);
+        return getTeamCount(null, null);
     }
 
-    public long getTeamCount(LocalDate startDate, LocalDate endDate) {
-        if (startDate == null && endDate == null) {
-            return teamRepository.count();
-        } else if (endDate == null) {
-            return teamRepository.countAllByDateCreatedAfterAndDateCreatedIsNotNull(startDate);
-        }
-        return teamRepository.countAllByDateCreatedBetweenAndDateCreatedNotNull(startDate, endDate);
+    public int getTeamCount(LocalDate startDate, LocalDate endDate) {
+        var dateRange = DateTimeRange.fromStartAndEnd(startDate, endDate);
+
+        return (int) teamRepository
+            .countAllByDateCreatedBetweenAndDateCreatedNotNull(
+                dateRange.getStartDate(),
+                dateRange.getEndDate()
+            );
     }
 
     @ManagedAttribute
@@ -39,15 +37,14 @@ public class Metrics {
         return getFeedbackCount(null, null);
     }
 
-    public int getFeedbackCount(LocalDate startTime, LocalDate endTime) {
-        LocalDateTime finalEndTime = Optional.ofNullable(endTime)
-            .map(LocalDate::atStartOfDay)
-            .orElseGet(LocalDateTime::now);
-        LocalDateTime finalStartTime = Optional.ofNullable(startTime)
-            .map(LocalDate::atStartOfDay)
-            .orElseGet(() -> LocalDateTime.of(1900, Month.JANUARY, 1, 0, 0));
+    public int getFeedbackCount(LocalDate startDate, LocalDate endDate) {
+        var dateRange = DateTimeRange.fromStartAndEnd(startDate, endDate);
 
-        return (int) feedbackRepository.countByDateCreatedGreaterThanEqualAndDateCreatedLessThanEqual(finalStartTime, finalEndTime);
+        return (int) feedbackRepository
+            .countByDateCreatedGreaterThanEqualAndDateCreatedLessThanEqual(
+                dateRange.getStartDateTime(),
+                dateRange.getEndDateTime()
+            );
     }
 
     @ManagedAttribute
@@ -55,15 +52,14 @@ public class Metrics {
         return getAverageRating(null, null);
     }
 
-    public double getAverageRating(LocalDate startTime, LocalDate endTime) {
-        LocalDateTime finalEndTime = Optional.ofNullable(endTime)
-            .map(LocalDate::atStartOfDay)
-            .orElseGet(LocalDateTime::now);
-        LocalDateTime finalStartTime = Optional.ofNullable(startTime)
-            .map(LocalDate::atStartOfDay)
-            .orElseGet(() -> LocalDateTime.of(1900, Month.JANUARY, 1, 0, 0));
+    public double getAverageRating(LocalDate startDate, LocalDate endDate) {
+        var dateRange = DateTimeRange.fromStartAndEnd(startDate, endDate);
 
-        return feedbackRepository.getAverageRating(finalStartTime, finalEndTime);
+        return feedbackRepository
+            .getAverageRating(
+                dateRange.getStartDateTime(),
+                dateRange.getEndDateTime()
+            );
     }
 
     public int getTeamLogins() {
@@ -71,8 +67,11 @@ public class Metrics {
     }
 
     public int getTeamLogins(LocalDate startDate, LocalDate endDate) {
-        LocalDate finalEndDate = Optional.ofNullable(endDate).orElseGet(LocalDate::now);
-        LocalDate finalStartDate = Optional.ofNullable(startDate).orElseGet(() -> LocalDate.of(1900, Month.JANUARY, 1));
-        return (int) teamRepository.countByLastLoginDateBetween(finalStartDate, finalEndDate);
+        var dateRange = DateTimeRange.fromStartAndEnd(startDate, endDate);
+
+        return (int) teamRepository.countByLastLoginDateBetween(
+            dateRange.getStartDate(),
+            dateRange.getEndDate()
+        );
     }
 }
