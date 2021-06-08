@@ -52,7 +52,7 @@ public class FeedbackController {
         log.info(
             "[FEEDBACK_SUBMITTED] stars:'{}' comment:'{}' email:'{}' teamId:'{}'",
             feedback.getStars(),
-            feedback.getComment(),
+            feedback.getComment().replaceAll("\\R", " "),
             feedback.getUserEmail(),
             feedback.getTeamId()
         );
