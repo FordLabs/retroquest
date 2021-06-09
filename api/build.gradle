@@ -2,9 +2,9 @@ buildscript {
     ext {
         javaVersion = 11
         springBootVersion = '2.4.5'
-        lombokVersion = '1.18.12'
+        lombokVersion = '1.18.20'
         springCloudVersion='2020.0.2'
-        moshiVersion = '1.9.3'
+        moshiVersion = '1.12.0'
         jacocoOutputDirectory = "${project.buildDir}/jacoco"
         jacocoHtmlDirectory = "${project.buildDir}/jacoco-html"
         jacocoXml = "${project.buildDir}/jacoco-xml/jacoco.xml"
@@ -18,7 +18,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "io.spring.gradle:dependency-management-plugin:1.0.10.RELEASE"
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE"
     }
 }
 
@@ -27,10 +27,10 @@ plugins {
     id 'idea'
     id 'jacoco'
     id 'org.sonarqube'
-    id 'org.gradle.test-retry' version '1.1.6'
+    id 'org.gradle.test-retry' version '1.2.1'
     id 'org.springframework.boot' version "${springBootVersion}"
-    id 'com.avast.gradle.docker-compose' version '0.13.0'
-    id "rkennel.withdb" version "1.0.4"
+    id 'com.avast.gradle.docker-compose' version '0.14.3'
+    id "rkennel.withdb" version "1.0.6"
     id 'com.github.ben-manes.versions'
 }
 
@@ -65,12 +65,12 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation "com.squareup.moshi:moshi:$moshiVersion"
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.1'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     implementation 'org.apache.commons:commons-csv:1.8'
-    implementation 'org.apache.commons:commons-lang3:3.11'
-    implementation 'org.apache.httpcomponents:httpclient:4.5.12'
-    implementation 'commons-io:commons-io:2.7'
-    implementation 'org.liquibase:liquibase-core:4.3.1'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    implementation 'commons-io:commons-io:2.9.0'
+    implementation 'org.liquibase:liquibase-core:4.3.5'
 
     implementation "org.springdoc:springdoc-openapi-ui:$springdocVersion"
 
