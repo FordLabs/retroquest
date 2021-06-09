@@ -13,10 +13,9 @@ plugins {
 group = 'com.ford.labs'
 archivesBaseName = 'retroquest'
 
-def jvmVersion = JavaLanguageVersion.of(11)
 java {
     toolchain {
-        languageVersion = jvmVersion
+        languageVersion = JavaLanguageVersion.of(11)
     }
 }
 
@@ -61,27 +60,27 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
-def noProfileOrDbDefined(tasks) {
+static def noProfileOrDbDefined(tasks) {
 
     def envProfile = System.getenv("SPRING_PROFILES_ACTIVE")
     def systemProfile = System.getProperty("spring.profiles.active")
 
     if (envProfile != null || systemProfile != null) {
-        return false;
+        return false
     }
 
-    boolean dbDeclared = false;
+    boolean dbDeclared = false
     tasks.forEach { task ->
         if (task.name.contains('with')) {
-            dbDeclared = true;
+            dbDeclared = true
         }
     }
 
     if (dbDeclared) {
-        return false;
+        return false
     }
 
-    return true;
+    return true
 
 }
 
@@ -125,7 +124,7 @@ task bootRunDockerDb(type: Exec) {
 test {
     useJUnitPlatform {
         excludeTags 'api'
-        maxParallelForks = Runtime.getRuntime().availableProcessors() / 2
+        maxParallelForks = (int) (Runtime.getRuntime().availableProcessors() / 2)
     }
 }
 
@@ -134,7 +133,7 @@ task apiTest(type: Test) {
     description 'Runs API Tests against h2 database'
     useJUnitPlatform {
         includeTags 'api'
-        maxParallelForks = Runtime.getRuntime().availableProcessors() / 2
+        maxParallelForks = (int) (Runtime.getRuntime().availableProcessors() / 2)
     }
 }
 
