@@ -31,6 +31,7 @@ plugins {
     id 'org.springframework.boot' version "${springBootVersion}"
     id 'com.avast.gradle.docker-compose' version '0.13.0'
     id "rkennel.withdb" version "1.0.4"
+    id 'com.github.ben-manes.versions'
 }
 
 apply plugin: "io.spring.dependency-management"
