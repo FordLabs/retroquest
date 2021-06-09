@@ -120,6 +120,7 @@ task bootRunDockerDb(type: Exec) {
 test {
     useJUnitPlatform {
         excludeTags 'api'
+        maxParallelForks = Runtime.getRuntime().availableProcessors() / 2
     }
 }
 
@@ -128,6 +129,7 @@ task apiTest(type: Test) {
     description 'Runs API Tests against h2 database'
     useJUnitPlatform {
         includeTags 'api'
+        maxParallelForks = Runtime.getRuntime().availableProcessors() / 2
     }
 }
 
