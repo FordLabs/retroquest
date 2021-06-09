@@ -1,40 +1,15 @@
-buildscript {
-    ext {
-        javaVersion = 11
-        springBootVersion = '2.4.5'
-        lombokVersion = '1.18.20'
-        springCloudVersion='2020.0.2'
-        moshiVersion = '1.12.0'
-        jacocoOutputDirectory = "${project.buildDir}/jacoco"
-        jacocoHtmlDirectory = "${project.buildDir}/jacoco-html"
-        jacocoXml = "${project.buildDir}/jacoco-xml/jacoco.xml"
-        springdocVersion = '1.5.9'
-    }
-    repositories {
-        mavenCentral()
-        jcenter()
-        maven {
-            url 'https://plugins.gradle.org/m2/'
-        }
-    }
-    dependencies {
-        classpath "io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE"
-    }
-}
-
 plugins {
     id 'java'
     id 'idea'
     id 'jacoco'
     id 'org.sonarqube'
     id 'org.gradle.test-retry' version '1.2.1'
-    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'org.springframework.boot' version '2.4.5'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'com.avast.gradle.docker-compose' version '0.14.3'
     id "rkennel.withdb" version "1.0.6"
     id 'com.github.ben-manes.versions'
 }
-
-apply plugin: "io.spring.dependency-management"
 
 group = 'com.ford.labs'
 archivesBaseName = 'retroquest'
@@ -43,13 +18,12 @@ targetCompatibility = javaVersion
 
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' }
 }
 
 
 dependencyManagement {
   imports {
-    mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    mavenBom "org.springframework.cloud:spring-cloud-dependencies:2020.0.2"
   }
 }
 
@@ -64,7 +38,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
-    implementation "com.squareup.moshi:moshi:$moshiVersion"
+    implementation 'com.squareup.moshi:moshi:1.12.0'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     implementation 'org.apache.commons:commons-csv:1.8'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
@@ -72,7 +46,7 @@ dependencies {
     implementation 'commons-io:commons-io:2.9.0'
     implementation 'org.liquibase:liquibase-core:4.3.5'
 
-    implementation "org.springdoc:springdoc-openapi-ui:$springdocVersion"
+    implementation 'org.springdoc:springdoc-openapi-ui:1.5.9'
 
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'io.micrometer:micrometer-registry-statsd'
@@ -189,11 +163,11 @@ jacoco {
 }
 
 jacocoTestReport {
-    executionData.setFrom(fileTree(jacocoOutputDirectory).include("*.exec"))
+    executionData.setFrom(fileTree("${project.buildDir}/jacoco").include("*.exec"))
     reports {
         xml.enabled true
-        xml.destination file(jacocoXml)
-        html.destination file(jacocoHtmlDirectory)
+        xml.destination file("${project.buildDir}/jacoco-xml/jacoco.xml")
+        html.destination file("${project.buildDir}/jacoco-html")
     }
 }
 
