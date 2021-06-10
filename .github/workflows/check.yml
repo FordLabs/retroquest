@@ -44,6 +44,12 @@ jobs:
       - run: yarn lint
       - run: yarn unit-coverage
       - run: yarn build
+      - name: SonarCloud Scan
+        if: ${{ github.repository == 'FordLabs/retroquest' }}
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_UI_TOKEN }}
+        run: ./gradlew ui:sonarqube --info
+        working-directory: ./
 
   api-checks:
     runs-on: ubuntu-latest
@@ -69,7 +75,11 @@ jobs:
         run: ./gradlew api:apiTestDockerDb
       - name: generate coverage reports
         run: ./gradlew api:jacocoTestReport
-
+      - name: SonarCloud Scan
+        if: ${{ github.repository == 'FordLabs/retroquest' }}
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_API_TOKEN }}
+        run: ./gradlew api:sonarqube --info
       - name: cleanup gradle cache
         run: |
           rm -f ~/.gradle/caches/modules-2/modules-2.lock
