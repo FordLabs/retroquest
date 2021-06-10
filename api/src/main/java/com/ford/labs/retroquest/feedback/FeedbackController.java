@@ -48,7 +48,8 @@ public class FeedbackController {
     @PostMapping
     @Operation(summary = "Creates a feedback entry", description = "saveFeedback")
     @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Created")})
-    public ResponseEntity<URI> saveFeedback(@RequestBody Feedback feedback) throws URISyntaxException {
+    public ResponseEntity<URI> saveFeedback(@RequestBody FeedbackDto feedbackDto) throws URISyntaxException {
+        var feedback = Feedback.fromDto(feedbackDto);
         log.info(
             "[FEEDBACK_SUBMITTED] stars:'{}' comment:'{}' email:'{}' teamId:'{}'",
             feedback.getStars(),
@@ -56,8 +57,7 @@ public class FeedbackController {
             feedback.getUserEmail(),
             feedback.getTeamId()
         );
-        feedback.setDateCreated(LocalDateTime.now());
-        Feedback savedFeedback = feedbackRepository.save(feedback);
-        return ResponseEntity.created(new URI("/api/feedback/" + savedFeedback.getId())).build();
+        feedback = feedbackRepository.save(feedback);
+        return ResponseEntity.created(new URI("/api/feedback/" + feedback.getId())).build();
     }
 }
