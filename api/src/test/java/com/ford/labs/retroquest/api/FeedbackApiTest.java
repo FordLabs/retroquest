@@ -2,6 +2,7 @@ package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.api.setup.ApiTest;
 import com.ford.labs.retroquest.feedback.Feedback;
+import com.ford.labs.retroquest.feedback.FeedbackDto;
 import com.ford.labs.retroquest.feedback.FeedbackRepository;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.AfterEach;
@@ -39,13 +40,12 @@ public class FeedbackApiTest extends ApiTest {
         meterRegistry.gauge("retroquest.feedback.count", 0);
         meterRegistry.gauge("retroquest.feedback.averageRating", 0);
 
-        var feedback = Feedback.builder()
-            .stars(4)
-            .comment("This is a comment")
-            .userEmail("email@email.email")
-            .teamId("teamId")
-            .dateCreated(null)
-            .build();
+        var feedback = new FeedbackDto(
+            4,
+            "This is a comment",
+            "email@email.email",
+            "teamId"
+        );
 
         mockMvc.perform(
             post("/api/feedback/")

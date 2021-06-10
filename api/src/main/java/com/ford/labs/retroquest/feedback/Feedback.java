@@ -44,4 +44,15 @@ public class Feedback {
     @EqualsAndHashCode.Exclude
     @Builder.Default
     private LocalDateTime dateCreated = LocalDateTime.now();
+
+    static Feedback fromDto(FeedbackDto dto) {
+        return new Feedback(
+            null,
+            dto.getStars(),
+            dto.getComment(),
+            dto.getUserEmail(),
+            dto.getTeamId(),
+            LocalDateTime.now()
+        );
+    }
 }
