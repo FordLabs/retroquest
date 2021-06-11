@@ -81,13 +81,13 @@ public class TeamNameCleanup implements ApplicationListener<ApplicationReadyEven
     }
 
     private void fixConflictingTeamNames() {
-        Set<CanonicalTeamNameAndCount> conflictTeams = teamRepository.findAllTeamsWithConflictingCanonicalNames();
+        var conflictTeams = teamRepository.findAllTeamsWithConflictingCanonicalNames();
         conflictTeams.forEach(this::resolveTeamNameConflict);
     }
 
     private void resolveTeamNameConflict(CanonicalTeamNameAndCount teamNameRecord) {
-        List<Team> teams = teamRepository.findAllTeamsByNameWithTrimmingAndIgnoreCase(teamNameRecord.getName());
-        Team teamToKeep = getTeamToKeep(teams);
+        var teams = teamRepository.findAllTeamsByNameWithTrimmingAndIgnoreCase(teamNameRecord.getName());
+        var teamToKeep = getTeamToKeep(teams);
         deleteDuplicateTeams(teams, teamToKeep);
     }
 
@@ -109,11 +109,11 @@ public class TeamNameCleanup implements ApplicationListener<ApplicationReadyEven
 
 
     private Team getTeamToKeep(List<Team> teams) {
-        Team maxTeam = teams.get(0);
-        Long maxId = 0L;
+        var maxTeam = teams.get(0);
+        var maxId = 0L;
 
-        for (Team t : teams) {
-            Long maxIdForTeam = thoughtRepository.getMaxIdByTeamId(t.getId()).orElse(0L);
+        for (var t : teams) {
+            var maxIdForTeam = thoughtRepository.getMaxIdByTeamId(t.getId()).orElse(0L);
             if (maxIdForTeam > maxId) {
                 maxId = maxIdForTeam;
                 maxTeam = t;
@@ -123,14 +123,14 @@ public class TeamNameCleanup implements ApplicationListener<ApplicationReadyEven
     }
 
     private void moveThoughtsWithBoardsToNewTeamOrElseDelete(Team oldTeam, Team newTeam) {
-        List<ColumnTitle> columnTitles = columnTitleRepository.findAllByTeamId(newTeam.getId());
-        Map<String, ColumnTitle> topicsToNewTitles = columnTitles.stream()
+        var columnTitles = columnTitleRepository.findAllByTeamId(newTeam.getId());
+        var topicsToNewTitles = columnTitles.stream()
                 .collect(toMap(ColumnTitle::getTopic, columnTitle -> columnTitle));
 
-        List<Thought> oldThoughts = thoughtRepository.findAllByTeamId(oldTeam.getId());
-        for (Thought oldThought : oldThoughts) {
+        var oldThoughts = thoughtRepository.findAllByTeamId(oldTeam.getId());
+        for (var oldThought : oldThoughts) {
             if (oldThought.getBoardId() != null && oldThought.getBoardId() != 0) {
-                Thought newThought = oldThought.toBuilder()
+                var newThought = oldThought.toBuilder()
                         .teamId(newTeam.getId())
                         .columnTitle(topicsToNewTitles.get(oldThought.getTopic()))
                         .build();
@@ -142,38 +142,36 @@ public class TeamNameCleanup implements ApplicationListener<ApplicationReadyEven
     }
 
     private void deleteColumnTitles(Team oldTeam) {
-        List<ColumnTitle> columnTitles = columnTitleRepository.findAllByTeamId(oldTeam.getId());
-        columnTitles.forEach(ct -> columnTitleRepository.delete(ct));
+        var columnTitles = columnTitleRepository.findAllByTeamId(oldTeam.getId());
+        columnTitles.forEach(columnTitleRepository::delete);
     }
 
     private void moveBoardsToNewTeam(Team oldTeam, Team newTeam) {
-        List<Board> boards = boardRepository.findAllByTeamId(oldTeam.getId());
+        var boards = boardRepository.findAllByTeamId(oldTeam.getId());
         boards.forEach(oldBoard -> {
-            Board newBoard = oldBoard.toBuilder().teamId(newTeam.getId()).build();
+            var newBoard = oldBoard.toBuilder().teamId(newTeam.getId()).build();
             boardRepository.save(newBoard);
         });
     }
 
     private void deleteActionItems(Team oldTeam) {
-        List<ActionItem> actionItems = actionItemRepository.findAllByTeamId(oldTeam.getId());
-        actionItems.forEach(oldActionItem -> {
-            actionItemRepository.delete(oldActionItem);
-        });
+        var actionItems = actionItemRepository.findAllByTeamId(oldTeam.getId());
+        actionItems.forEach(actionItemRepository::delete);
     }
 
     private void moveFeedbackToNewTeam(Team oldTeam, Team newTeam) {
-        List<Feedback> feedback = feedbackRepository.findAllByTeamId(oldTeam.getId());
+        var feedback = feedbackRepository.findAllByTeamId(oldTeam.getId());
         feedback.forEach(oldFeedback -> {
-            Feedback newFeedback = oldFeedback.toBuilder().teamId(newTeam.getId()).build();
+            var newFeedback = oldFeedback.toBuilder().teamId(newTeam.getId()).build();
             feedbackRepository.save(newFeedback);
         });
     }
 
     private void moveUserTeamMappingsToNewTeam(Team oldTeam, Team newTeam) {
-        List<UserTeamMapping> userTeamMappings = userTeamMappingRepository.findAllByTeamUri(oldTeam.getUri());
+        var userTeamMappings = userTeamMappingRepository.findAllByTeamUri(oldTeam.getUri());
         userTeamMappings.forEach(oldUserTeamMapping -> {
             if (userTeamMappingRepository.findAllByTeamUriAndUserId(newTeam.getUri(), oldUserTeamMapping.getUserId()).size() == 0) {
-                UserTeamMapping newUserTeamMapping = oldUserTeamMapping.toBuilder().teamUri(newTeam.getUri()).build();
+                var newUserTeamMapping = oldUserTeamMapping.toBuilder().teamUri(newTeam.getUri()).build();
                 userTeamMappingRepository.save(newUserTeamMapping);
             } else {
                 userTeamMappingRepository.delete(oldUserTeamMapping);

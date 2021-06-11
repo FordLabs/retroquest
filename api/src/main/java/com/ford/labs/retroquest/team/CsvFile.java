@@ -42,26 +42,26 @@ public class CsvFile {
     private List<ActionItem> actionItems;
 
     public String getFileName() {
-        LocalDate today = LocalDate.now();
+        var today = LocalDate.now();
         return String.format("\"%s-retro-%d-%d-%d.csv\"", teamName, today.getMonthValue(), today.getDayOfMonth(), today.getYear());
     }
 
     public String getCSVString() throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
+        var out = new ByteArrayOutputStream();
+        var writer = new BufferedWriter(new OutputStreamWriter(out));
 
-        CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT
+        var csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT
                 .withHeader("Column", "Message", "Likes", "Completed", "Assigned To"));
-        for (Thought thought: thoughts) {
+        for (var thought: thoughts) {
             csvPrinter.printRecord(thought.getCSVFields());
         }
 
-        for (ActionItem actionItem : actionItems) {
+        for (var actionItem : actionItems) {
             csvPrinter.printRecord(actionItem.getCSVFields());
         }
 
         csvPrinter.flush();
-        return new String(out.toByteArray());
+        return out.toString();
     }
 
 }

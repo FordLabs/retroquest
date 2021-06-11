@@ -61,13 +61,13 @@ public class TeamService {
     }
 
     public CsvFile buildCsvFileFromTeam(String team) {
-        List<Thought> thoughts = thoughtRepository.findAllByTeamIdAndBoardIdIsNullOrderByTopic(team);
-        List<ActionItem> actionItems = actionItemRepository.findAllByTeamIdAndArchivedIsFalse(team);
+        var thoughts = thoughtRepository.findAllByTeamIdAndBoardIdIsNullOrderByTopic(team);
+        var actionItems = actionItemRepository.findAllByTeamIdAndArchivedIsFalse(team);
         return new CsvFile(team, thoughts, actionItems);
     }
 
     public Team createNewTeam(CreateTeamRequest createTeamRequest) {
-        String encryptedPassword = passwordEncoder.encode(createTeamRequest.getPassword());
+        var encryptedPassword = passwordEncoder.encode(createTeamRequest.getPassword());
 
         return createTeamEntity(createTeamRequest.getName(), encryptedPassword);
     }
@@ -77,15 +77,15 @@ public class TeamService {
     }
 
     private Team createTeamEntity(String name, String password) {
-        String trimmedName = name.trim();
-        String uri = convertTeamNameToURI(trimmedName);
+        var trimmedName = name.trim();
+        var uri = convertTeamNameToURI(trimmedName);
         teamRepository
                 .findTeamByUri(uri)
                 .ifPresent(s -> {
                     throw new DataIntegrityViolationException(s.getUri());
                 });
 
-        Team teamEntity = new Team(uri, trimmedName, password);
+        var teamEntity = new Team(uri, trimmedName, password);
         teamEntity.setDateCreated(LocalDate.now());
 
         teamEntity = teamRepository.save(teamEntity);
@@ -95,22 +95,22 @@ public class TeamService {
     }
 
     public List<ColumnTitle> generateColumns(Team teamEntity) {
-        ColumnTitle happyColumnTitle = new ColumnTitle();
+        var happyColumnTitle = new ColumnTitle();
         happyColumnTitle.setTeamId(teamEntity.getUri());
         happyColumnTitle.setTopic("happy");
         happyColumnTitle.setTitle("Happy");
 
-        ColumnTitle confusedColumnTitle = new ColumnTitle();
+        var confusedColumnTitle = new ColumnTitle();
         confusedColumnTitle.setTeamId(teamEntity.getUri());
         confusedColumnTitle.setTopic("confused");
         confusedColumnTitle.setTitle("Confused");
 
-        ColumnTitle unhappyColumnTitle = new ColumnTitle();
+        var unhappyColumnTitle = new ColumnTitle();
         unhappyColumnTitle.setTeamId(teamEntity.getUri());
         unhappyColumnTitle.setTopic("unhappy");
         unhappyColumnTitle.setTitle("Sad");
 
-        List<ColumnTitle> columns = new ArrayList<>();
+        var columns = new ArrayList<ColumnTitle>();
 
         columns.add(columnTitleRepository.save(happyColumnTitle));
         columns.add(columnTitleRepository.save(confusedColumnTitle));
@@ -119,10 +119,10 @@ public class TeamService {
     }
 
     public Team login(LoginRequest loginRequest) {
-        Team savedTeam = getTeamByName(loginRequest.getName());
+        var savedTeam = getTeamByName(loginRequest.getName());
 
         if (loginRequest.getPassword() == null || !passwordEncoder.matches(loginRequest.getPassword(), savedTeam.getPassword())) {
-            Integer failedAttempts = savedTeam.getFailedAttempts() != null ? savedTeam.getFailedAttempts() : 0;
+            int failedAttempts = savedTeam.getFailedAttempts() != null ? savedTeam.getFailedAttempts() : 0;
             updateFailedAttempts(savedTeam, failedAttempts + 1);
             throw new PasswordInvalidException();
         }
@@ -134,9 +134,9 @@ public class TeamService {
     }
 
     public Team updatePassword(UpdatePasswordRequest updatePasswordRequest) {
-        Team savedTeam = getTeamByUri(updatePasswordRequest.getTeamId());
+        var savedTeam = getTeamByUri(updatePasswordRequest.getTeamId());
         if (passwordEncoder.matches(updatePasswordRequest.getPreviousPassword(), savedTeam.getPassword())) {
-            String encryptedPassword = passwordEncoder.encode(updatePasswordRequest.getNewPassword());
+            var encryptedPassword = passwordEncoder.encode(updatePasswordRequest.getNewPassword());
             savedTeam.setPassword(encryptedPassword);
             return teamRepository.save(savedTeam);
         } else {
@@ -150,7 +150,7 @@ public class TeamService {
     }
 
     public Team getTeamByName(String teamName) {
-        Optional<Team> team = teamRepository.findTeamByNameIgnoreCase(teamName.trim());
+        var team = teamRepository.findTeamByNameIgnoreCase(teamName.trim());
         if (team.isPresent()) {
             return team.get();
         }
@@ -158,7 +158,7 @@ public class TeamService {
     }
 
     public Team getTeamByUri(String teamUri) {
-        Optional<Team> team = teamRepository.findTeamByUri(teamUri.toLowerCase());
+        var team = teamRepository.findTeamByUri(teamUri.toLowerCase());
         if (team.isPresent()) {
             return team.get();
         }

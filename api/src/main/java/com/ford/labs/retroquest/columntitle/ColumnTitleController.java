@@ -37,8 +37,8 @@ import java.util.List;
 @Tag(name = "Column Title Controller", description = "The controller that manages the titles of each column on a retro board")
 public class ColumnTitleController {
 
-    private ColumnTitleRepository columnTitleRepository;
-    private ApiAuthorization apiAuthorization;
+    private final ColumnTitleRepository columnTitleRepository;
+    private final ApiAuthorization apiAuthorization;
 
     public ColumnTitleController(ColumnTitleRepository columnTitleRepository,
                                  ApiAuthorization apiAuthorization) {
@@ -60,7 +60,7 @@ public class ColumnTitleController {
     @Operation(summary = "Updates the title of a column of a retro board given a team id and column id", description = "updateTitleOfColumn")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public void updateTitleOfColumn(@PathVariable("teamId") String teamId, @RequestBody ColumnTitle columnTitle, @PathVariable("columnId") Long columnId) {
-        ColumnTitle returnedColumnTitle = columnTitleRepository.findById(columnId).orElseThrow();
+        var returnedColumnTitle = columnTitleRepository.findById(columnId).orElseThrow();
         returnedColumnTitle.setTitle(columnTitle.getTitle());
         columnTitleRepository.save(returnedColumnTitle);
     }
@@ -69,7 +69,7 @@ public class ColumnTitleController {
     @SendTo("/topic/{teamId}/column-titles")
     public WebsocketPutResponse<ColumnTitle> editColumnTitleWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("columnId") Long columnId, ColumnTitle columnTitle, Authentication authentication) {
         if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            ColumnTitle savedColumnTitle = columnTitleRepository.findById(columnId).orElseThrow();
+            var savedColumnTitle = columnTitleRepository.findById(columnId).orElseThrow();
             savedColumnTitle.setTitle(columnTitle.getTitle());
             columnTitleRepository.save(savedColumnTitle);
             return new WebsocketPutResponse<>(savedColumnTitle);

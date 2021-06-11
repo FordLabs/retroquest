@@ -63,12 +63,12 @@ public class TeamController {
     @Operation(summary = "Creates a new team", description = "createTeam")
     @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Created")})
     public ResponseEntity<String> createTeam(@RequestBody @Valid CreateTeamRequest createTeamRequest) {
-        Team team = teamService.createNewTeam(createTeamRequest);
+        var team = teamService.createNewTeam(createTeamRequest);
 
-        MultiValueMap<String, String> headers = new HttpHeaders();
+        var headers = new HttpHeaders();
         headers.add("Location", "/team/" + team.getUri());
 
-        String jwt = jwtBuilder.buildJwt(team.getUri());
+        var jwt = jwtBuilder.buildJwt(team.getUri());
 
         return new ResponseEntity<>(jwt, headers, CREATED);
     }
@@ -95,7 +95,7 @@ public class TeamController {
     @Operation(summary = "downloads a team board", description = "downloadTeamBoard")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public ResponseEntity<byte[]> downloadTeamBoard(@PathVariable("teamId") String teamId) throws IOException {
-        CsvFile file = teamService.buildCsvFileFromTeam(teamId);
+        var file = teamService.buildCsvFileFromTeam(teamId);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFileName())
                 .contentType(MediaType.parseMediaType("text/csv"))
@@ -113,10 +113,10 @@ public class TeamController {
     @Operation(summary = "Logs in a user given a login request", description = "deprecated")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public ResponseEntity<String> login(@RequestBody @Valid LoginRequest team) {
-        Team savedTeamEntity = teamService.login(team);
-        String jwt = jwtBuilder.buildJwt(savedTeamEntity.getUri());
+        var savedTeamEntity = teamService.login(team);
+        var jwt = jwtBuilder.buildJwt(savedTeamEntity.getUri());
 
-        HttpHeaders headers = new HttpHeaders();
+        var headers = new HttpHeaders();
         headers.add(HttpHeaders.LOCATION, savedTeamEntity.getUri());
 
         return new ResponseEntity<>(jwt, headers, OK);

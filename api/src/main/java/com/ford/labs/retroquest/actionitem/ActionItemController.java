@@ -56,7 +56,7 @@ public class ActionItemController {
     @Operation(summary = "Marks a thought as complete for a given team id", description = "completeActionItem")
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "No Content")})
     public void completeActionItem(@PathVariable("thoughtId") Long id, @PathVariable("teamId") String teamId) {
-        final ActionItem actionItem = actionItemRepository.findById(id).orElseThrow();
+        var actionItem = actionItemRepository.findById(id).orElseThrow();
         actionItem.toggleCompleted();
         actionItemRepository.save(actionItem);
     }
@@ -66,7 +66,7 @@ public class ActionItemController {
     @Operation(summary = "Updates an action item given a thought id and a team id", description = "updateActionItemTask")
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "No Content")})
     public void updateActionItemTask(@PathVariable("thoughtId") Long actionItemId, @PathVariable("teamId") String teamId, @RequestBody ActionItem updatedActionItem) {
-        ActionItem savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
+        var savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
         savedActionItem.setTask(updatedActionItem.getTask());
         actionItemRepository.save(savedActionItem);
     }
@@ -76,7 +76,7 @@ public class ActionItemController {
     @Operation(summary = "Updates an action item assignee a thought id and a team id", description = "updateActionItemAssignee")
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "No Content")})
     public void updateActionItemAssignee(@PathVariable("thoughtId") Long actionItemId, @PathVariable("teamId") String teamId, @RequestBody ActionItem updatedActionItem) {
-        ActionItem savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
+        var savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
         savedActionItem.setAssignee(updatedActionItem.getAssignee());
         actionItemRepository.save(savedActionItem);
     }
@@ -103,8 +103,8 @@ public class ActionItemController {
     @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Created")})
     public ResponseEntity<URI> createActionItemForTeam(@PathVariable("teamId") String teamId, @RequestBody ActionItem actionItem) throws URISyntaxException {
         actionItem.setTeamId(teamId);
-        ActionItem savedActionItem = actionItemRepository.save(actionItem);
-        URI savedActionItemUri = new URI("/api/team/" + teamId + "/action-item/" + savedActionItem.getId());
+        var savedActionItem = actionItemRepository.save(actionItem);
+        var savedActionItemUri = new URI("/api/team/" + teamId + "/action-item/" + savedActionItem.getId());
         return ResponseEntity.created(savedActionItemUri).build();
     }
 
@@ -115,7 +115,7 @@ public class ActionItemController {
             return null;
         }
         actionItem.setTeamId(teamId);
-        ActionItem savedActionItem = actionItemRepository.save(actionItem);
+        var savedActionItem = actionItemRepository.save(actionItem);
         return new WebsocketPutResponse<>(savedActionItem);
     }
 
@@ -126,7 +126,7 @@ public class ActionItemController {
             return null;
         }
 
-        ActionItem savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
+        var savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
         savedActionItem.setTask(updatedActionItem.getTask());
         savedActionItem.setAssignee(updatedActionItem.getAssignee());
         savedActionItem.setCompleted(updatedActionItem.isCompleted());

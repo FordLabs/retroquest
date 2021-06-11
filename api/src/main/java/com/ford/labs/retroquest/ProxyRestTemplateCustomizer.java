@@ -38,24 +38,24 @@ public class ProxyRestTemplateCustomizer implements RestTemplateCustomizer {
 
     @Override
     public void customize(RestTemplate restTemplate) {
-        if(httpProxy.isEmpty()) {
+        if (httpProxy.isEmpty()) {
             return;
         }
 
-        HttpHost proxy = HttpHost.create(httpProxy);
-        HttpClient httpClient = HttpClientBuilder.create().setRoutePlanner(new DefaultProxyRoutePlanner(proxy) {
-
-            @Override
-            public HttpHost determineProxy(HttpHost target, HttpRequest request,
-                                           HttpContext context) throws HttpException {
-                if (target.getHostName().equals("localhost")) {
-                    return null;
+        var proxyHost = HttpHost.create(httpProxy);
+        var proxyClient = HttpClientBuilder.create()
+            .setRoutePlanner(new DefaultProxyRoutePlanner(proxyHost) {
+                @Override
+                public HttpHost determineProxy(HttpHost target, HttpRequest request,
+                                               HttpContext context) throws HttpException {
+                    if (target.getHostName().equals("localhost")) {
+                        return null;
+                    }
+                    return super.determineProxy(target, request, context);
                 }
-                return super.determineProxy(target, request, context);
-            }
+            }).build();
 
-        }).build();
-        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(httpClient));
+        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory(proxyClient));
 
     }
 }
