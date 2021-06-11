@@ -33,7 +33,7 @@ public class CaptchaValidator implements ConstraintValidator<CaptchaConstraint, 
 
     private final RestTemplate restTemplate;
     private final CaptchaProperties captchaProperties;
-    private CaptchaService captchaService;
+    private final CaptchaService captchaService;
 
     public CaptchaValidator(RestTemplate restTemplate, CaptchaProperties captchaProperties, CaptchaService captchaService) {
         this.restTemplate = restTemplate;
@@ -47,7 +47,7 @@ public class CaptchaValidator implements ConstraintValidator<CaptchaConstraint, 
             return true;
         }
 
-        if(teamRequest instanceof LoginRequest) {
+        if (teamRequest instanceof LoginRequest) {
             return validateLoginCaptcha(teamRequest);
         }
 
@@ -55,7 +55,7 @@ public class CaptchaValidator implements ConstraintValidator<CaptchaConstraint, 
     }
 
     private boolean validateLoginCaptcha(TeamRequest teamRequest) {
-        if(!captchaService.isCaptchaEnabledForTeam(teamRequest.getName())) {
+        if (!captchaService.isCaptchaEnabledForTeam(teamRequest.getName())) {
             return true;
         }
 
@@ -67,20 +67,16 @@ public class CaptchaValidator implements ConstraintValidator<CaptchaConstraint, 
             throw new CaptchaInvalidException();
         }
 
-        ReCaptchaResponse response = restTemplate.getForObject(
-                captchaProperties.getUrl() + "?secret={secret}&response={response}",
-                ReCaptchaResponse.class,
-                captchaProperties.getSecret(),
-                teamRequest.getCaptchaResponse()
+        var response = restTemplate.getForObject(
+            captchaProperties.getUrl() + "?secret={secret}&response={response}",
+            ReCaptchaResponse.class,
+            captchaProperties.getSecret(),
+            teamRequest.getCaptchaResponse()
         );
 
-        if (!response.isSuccess()) {
+        if (response == null || !response.isSuccess()) {
             throw new CaptchaInvalidException();
         }
         return true;
-    }
-
-    @Override
-    public void initialize(CaptchaConstraint constraintAnnotation) {
     }
 }
