@@ -19,6 +19,7 @@ package com.ford.labs.retroquest.websocket;
 
 
 import com.ford.labs.retroquest.security.JwtAuthentication;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -31,10 +32,11 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
+import java.util.Optional;
 
 
 @Configuration
@@ -42,8 +44,11 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Order(Ordered.HIGHEST_PRECEDENCE + 99)
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    @Value("${jwt.signing.secret}")
-    private String jwtSecret;
+    private final String jwtSecret;
+
+    public WebSocketConfig(@Value("${jwt.signing.secret}") String jwtSecret) {
+        this.jwtSecret = jwtSecret;
+    }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
@@ -54,22 +59,24 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry
-                .addEndpoint("/websocket")
-                .setAllowedOriginPatterns("*")
-                .withSockJS();
+            .addEndpoint("/websocket")
+            .setAllowedOriginPatterns("*")
+            .withSockJS();
     }
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(new ChannelInterceptor() {
             @Override
-            public Message<?> preSend(Message<?> message, MessageChannel channel) {
-                StompHeaderAccessor accessor =
-                        MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-                if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-                    String token = accessor.getNativeHeader("Authorization").get(0).replaceAll("Bearer ", "");
-                    Authentication user = new JwtAuthentication(token, false, jwtSecret);
-                    accessor.setUser(user);
+            public Message<?> preSend(@NotNull Message<?> message, @NotNull MessageChannel channel) {
+                var accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+                if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
+                    var token = Optional.ofNullable(accessor.getNativeHeader("Authorization"))
+                        .map(headers -> headers.get(0))
+                        .map(header -> header.replace("Bearer ", ""))
+                        .orElse(null);
+
+                    accessor.setUser(new JwtAuthentication(token, false, jwtSecret));
                 }
                 return message;
             }
