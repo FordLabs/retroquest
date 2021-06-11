@@ -58,7 +58,6 @@ public class Team implements Persistable<String> {
         this.name = name;
         this.password = password;
         this.failedAttempts = 0;
-//        this.users = new HashSet<>();
     }
 
     @Override
