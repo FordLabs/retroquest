@@ -19,7 +19,6 @@ package com.ford.labs.retroquest.websocket;
 
 
 import com.ford.labs.retroquest.security.JwtAuthentication;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -68,7 +67,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(new ChannelInterceptor() {
             @Override
-            public Message<?> preSend(@NotNull Message<?> message, @NotNull MessageChannel channel) {
+            public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 var accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
                 if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
                     var token = Optional.ofNullable(accessor.getNativeHeader("Authorization"))

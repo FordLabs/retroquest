@@ -11,7 +11,6 @@ import com.ford.labs.retroquest.team.TeamService;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
 import com.ford.labs.retroquest.users.UserTeamMappingRepository;
 import lombok.extern.java.Log;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -68,7 +67,7 @@ public class TeamNameCleanup implements ApplicationListener<ApplicationReadyEven
     }
 
     @Override
-    public void onApplicationEvent(@NotNull ApplicationReadyEvent event) {
+    public void onApplicationEvent(ApplicationReadyEvent event) {
         if (runCleanupJob) {
             fixConflictingTeamNames();
             teamService.trimAllTeamNames();
