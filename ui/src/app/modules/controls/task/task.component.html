@@ -16,153 +16,161 @@
   -->
 
 <rq-deletion-overlay
-  *ngIf="deleteWasToggled"
-  (declineButtonClicked)="deleteWasToggled = false"
-  (acceptButtonClicked)="emitDeleteItem()"
-  (blur)="onDeleteConfirmationBlur()"
-  heading="Delete this Thought?"
-  [theme]="theme"
+    *ngIf="deleteWasToggled"
+    (declineButtonClicked)="deleteWasToggled = false"
+    (acceptButtonClicked)="emitDeleteItem()"
+    (blur)="onDeleteConfirmationBlur()"
+    heading="Delete this Thought?"
+    [theme]="theme"
 ></rq-deletion-overlay>
 
 <div
-  class="content-area"
-  (click)="emitTaskContentClicked()"
-  [ngClass]="{'disable': !archived && (task.discussed || readOnly)}"
+    class="content-area"
+    (click)="emitTaskContentClicked()"
+    [ngClass]="{ disable: !archived && (task.discussed || readOnly) }"
 >
-  <textarea
-    #content_value
-    [(ngModel)]="taskMessage"
-    class="content-message edit-input"
-    [ngClass]="{
-      'disable': task.discussed,
-      'opacify': task.discussed && !archived
-    }"
-    [readonly]="!taskEditModeEnabled"
-    (blur)="editModeOff()"
-    (keydown.enter)="forceBlur(); $event.preventDefault()"
-    (keydown.escape)="forceBlur()"
-    [maxlength]="maxMessageLength"
-    oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
-  ></textarea>
+    <textarea
+        #content_value
+        [(ngModel)]="taskMessage"
+        class="content-message edit-input"
+        [ngClass]="{
+            disable: task.discussed,
+            opacify: task.discussed && !archived
+        }"
+        [readonly]="!taskEditModeEnabled"
+        (blur)="editModeOff()"
+        (keydown.enter)="forceBlur(); $event.preventDefault()"
+        (keydown.escape)="forceBlur()"
+        [maxlength]="maxMessageLength"
+        oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
+    ></textarea>
 
-  <rq-floating-character-countdown
-    [characterCount]="taskMessage.length"
-    [charsAreRunningOutThreshold]="50"
-    [maxCharacterCount]="maxMessageLength"
-    [ngClass]="{'remove': !taskEditModeEnabled}"
-    [theme]="theme"
-  >
-  </rq-floating-character-countdown>
-
+    <rq-floating-character-countdown
+        [characterCount]="taskMessage.length"
+        [charsAreRunningOutThreshold]="50"
+        [maxCharacterCount]="maxMessageLength"
+        [ngClass]="{ remove: !taskEditModeEnabled }"
+        [theme]="theme"
+    >
+    </rq-floating-character-countdown>
 </div>
-
 
 <div
-  class="footer"
-  [ngClass]="{
-    'dark-theme': darkThemeIsEnabled
-  }"
+    class="footer"
+    [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+    }"
 >
-  <div
-    class="container star-count-container"
-    (click)="addStar()"
-    *ngIf="type !== 'action'"
-    [ngClass]="{
-      'disable': task.discussed || taskEditModeEnabled || readOnly,
-      'dark-theme': darkThemeIsEnabled
-    }"
-  >
-    <rq-tooltip text="Upvote" [theme]="theme"></rq-tooltip>
-
     <div
-      class="star-background"
-      [ngClass]="{
-        'opacify': (task.discussed || taskEditModeEnabled) && !archived,
-        'dark-theme': darkThemeIsEnabled
-      }"
-    >
-      <i
-        class="fas fa-star star-icon"
+        class="container star-count-container"
+        (click)="addStar()"
+        *ngIf="type !== 'action'"
         [ngClass]="{
-          'dark-theme': darkThemeIsEnabled
+            disable: task.discussed || taskEditModeEnabled || readOnly,
+            'dark-theme': darkThemeIsEnabled
         }"
-      ></i>
-    </div>
-    <div class="star-count"
-         [ngClass]="{'opacify': (task.discussed || taskEditModeEnabled) && !archived}"
-    >{{task.hearts}}
-    </div>
-  </div>
-
-  <div
-    class="container edit-container"
-    (click)="toggleEditMode()"
-    *ngIf="!taskEditModeEnabled; else exit_edit_mode_icon"
-    [ngClass]="{
-      'disable': task.discussed || taskEditModeEnabled || readOnly,
-      'dark-theme': darkThemeIsEnabled
-    }"
-  >
-    <i class="fas fa-edit"
-       [ngClass]="{'opacify': task.discussed || taskEditModeEnabled || readOnly}"
-    ></i>
-
-    <rq-tooltip text="Edit" [theme]="theme"></rq-tooltip>
-  </div>
-
-  <ng-template #exit_edit_mode_icon>
-    <div
-      class="container edit-container"
-      [ngClass]="{
-        'dark-theme': darkThemeIsEnabled
-      }"
-      (click)="forceBlur()"
     >
-      <rq-tooltip text="Cancel" [theme]="theme"></rq-tooltip>
+        <rq-tooltip text="Upvote" [theme]="theme"></rq-tooltip>
 
-      <i class="fas fa-times exit-edit-mode-icon"></i>
+        <div
+            class="star-background"
+            [ngClass]="{
+                opacify: (task.discussed || taskEditModeEnabled) && !archived,
+                'dark-theme': darkThemeIsEnabled
+            }"
+        >
+            <i
+                class="fas fa-star star-icon"
+                [ngClass]="{
+                    'dark-theme': darkThemeIsEnabled
+                }"
+                aria-hidden="true"
+            ></i>
+        </div>
+        <div
+            class="star-count"
+            [ngClass]="{
+                opacify: (task.discussed || taskEditModeEnabled) && !archived
+            }"
+        >
+            {{ task.hearts }}
+        </div>
     </div>
-  </ng-template>
-
-  <div
-    class="container delete-container"
-    [ngClass]="{
-      'dark-theme': darkThemeIsEnabled,
-      'disable': readOnly || taskEditModeEnabled
-    }"
-    (click)="emitDeleteItem()"
-  >
-    <rq-tooltip text="Delete" [theme]="theme"></rq-tooltip>
-
-
-    <i class="fas fa-trash-alt"
-       [ngClass]="{'opacify': readOnly || taskEditModeEnabled}"
-    ></i>
-  </div>
-
-  <div
-    class="complete-container"
-    [ngClass]="{
-      'opacify': (taskEditModeEnabled || readOnly),
-      'dark-theme': darkThemeIsEnabled,
-      'disable': taskEditModeEnabled || archived
-    }"
-    (click)="toggleTaskComplete()"
-  >
-    <rq-tooltip [text]="task.discussed ? 'Open' : 'Close'" [theme]="theme"></rq-tooltip>
 
     <div
-      class="checkbox"
-      [ngClass]="{'completed-task':  task.discussed}"
+        class="container edit-container"
+        (click)="toggleEditMode()"
+        *ngIf="!taskEditModeEnabled; else exit_edit_mode_icon"
+        [ngClass]="{
+            disable: task.discussed || taskEditModeEnabled || readOnly,
+            'dark-theme': darkThemeIsEnabled
+        }"
     >
+        <i
+            class="fas fa-edit"
+            [ngClass]="{
+                opacify: task.discussed || taskEditModeEnabled || readOnly
+            }"
+            aria-hidden="true"
+        ></i>
+
+        <rq-tooltip text="Edit" [theme]="theme"></rq-tooltip>
     </div>
 
-    <i
-      class="fas fa-check checkmark"
-      [ngClass]="{'show-checkmark':  task.discussed}"
-    ></i>
+    <ng-template #exit_edit_mode_icon>
+        <div
+            class="container edit-container"
+            [ngClass]="{
+                'dark-theme': darkThemeIsEnabled
+            }"
+            (click)="forceBlur()"
+        >
+            <rq-tooltip text="Cancel" [theme]="theme"></rq-tooltip>
 
-  </div>
+            <i class="fas fa-times exit-edit-mode-icon" aria-hidden="true"></i>
+        </div>
+    </ng-template>
 
+    <div
+        class="container delete-container"
+        [ngClass]="{
+            'dark-theme': darkThemeIsEnabled,
+            disable: readOnly || taskEditModeEnabled
+        }"
+        (click)="emitDeleteItem()"
+    >
+        <rq-tooltip text="Delete" [theme]="theme"></rq-tooltip>
+
+        <i
+            class="fas fa-trash-alt"
+            [ngClass]="{ opacify: readOnly || taskEditModeEnabled }"
+            aria-hidden="true"
+        ></i>
+    </div>
+
+    <div
+        class="complete-container"
+        [ngClass]="{
+            opacify: taskEditModeEnabled || readOnly,
+            'dark-theme': darkThemeIsEnabled,
+            disable: taskEditModeEnabled || archived
+        }"
+        (click)="toggleTaskComplete()"
+    >
+        <rq-tooltip
+            [text]="task.discussed ? 'Open' : 'Close'"
+            [theme]="theme"
+        ></rq-tooltip>
+
+        <div
+            class="checkbox"
+            [ngClass]="{ 'completed-task': task.discussed }"
+        ></div>
+
+        <i
+            class="fas fa-check checkmark"
+            [ngClass]="{ 'show-checkmark': task.discussed }"
+            aria-hidden="true"
+        ></i>
+    </div>
 </div>
-

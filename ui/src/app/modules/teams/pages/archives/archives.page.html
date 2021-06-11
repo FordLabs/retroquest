@@ -15,160 +15,159 @@
   ~  limitations under the License.
   -->
 
-<div id="page"
-     infiniteScroll
-     [infiniteScrollDistance]="3"
-     [infiniteScrollThrottle]="1000"
-     [infiniteScrollContainer]="'rq-sub-app'"
-     [fromRoot]="true"
-     (scrolled)="onScroll()"
+<div
+    id="page"
+    infiniteScroll
+    [infiniteScrollDistance]="3"
+    [infiniteScrollThrottle]="1000"
+    [infiniteScrollContainer]="'rq-sub-app'"
+    [fromRoot]="true"
+    (scrolled)="onScroll()"
 >
+    <div class="header" [ngClass]="{'dark-theme': darkThemeIsEnabled}">
+        <div id="headerBottom" [ngClass]="{'dark-theme': darkThemeIsEnabled}">
+            <div class="header-bottom-content">
+                <rq-button
+                    class="retro-view-button"
+                    text="thoughts"
+                    [theme]="theme"
+                    [ngClass]="{'selected': thoughtArchivesAreSelected }"
+                    (click)="selectedArchives = 'thoughts'"
+                ></rq-button>
 
-  <div class="header" [ngClass]="{'dark-theme': darkThemeIsEnabled}">
-
-    <div id="headerBottom" [ngClass]="{'dark-theme': darkThemeIsEnabled}">
-
-      <div class="header-bottom-content">
-        <rq-button
-          class="retro-view-button"
-          text="thoughts"
-          [theme]="theme"
-          [ngClass]="{'selected': thoughtArchivesAreSelected }"
-          (click)="selectedArchives = 'thoughts'"
-        ></rq-button>
-
-        <rq-button
-          class="retro-view-button"
-          text="action items"
-          [theme]="theme"
-          [ngClass]="{'selected': actionItemArchivesAreSelected }"
-          (click)="selectedArchives = 'action items'"
-        ></rq-button>
-
-      </div>
-
+                <rq-button
+                    class="retro-view-button"
+                    text="action items"
+                    [theme]="theme"
+                    [ngClass]="{'selected': actionItemArchivesAreSelected }"
+                    (click)="selectedArchives = 'action items'"
+                ></rq-button>
+            </div>
+        </div>
     </div>
 
-  </div>
-
-  <div class="archives" *ngIf="thoughtArchivesAreSelected">
-
-    <div class="thought-archives-section">
-
-      <div
-        class="no-archives-info"
-        *ngIf="boards.length === 0 && !thoughtArchivesAreLoading"
-        [ngClass]="{
+    <div class="archives" *ngIf="thoughtArchivesAreSelected">
+        <div class="thought-archives-section">
+            <div
+                class="no-archives-info"
+                *ngIf="boards.length === 0 && !thoughtArchivesAreLoading"
+                [ngClass]="{
         'dark-theme': darkThemeIsEnabled
       }"
-      >
-        <div class="heading">Looks Like A New Team!</div>
-        <div class="sub-heading">No archives were found.</div>
+            >
+                <div class="heading">Looks Like A New Team!</div>
+                <div class="sub-heading">No archives were found.</div>
 
-        <div class="info">Boards will appear when retros are ended with <b>thoughts</b>.</div>
-      </div>
+                <div class="info">
+                    Boards will appear when retros are ended with
+                    <strong>thoughts</strong>.
+                </div>
+            </div>
 
-      <div class="heading-container">
-        <div
-          *ngIf="boards.length > 0"
-          class="archives-heading"
-          [ngClass]="{'dark-theme': darkThemeIsEnabled}"
-        >Thought Archives
-        </div>
-      </div>
+            <div class="heading-container">
+                <div
+                    *ngIf="boards.length > 0"
+                    class="archives-heading"
+                    [ngClass]="{'dark-theme': darkThemeIsEnabled}"
+                >
+                    Thought Archives
+                </div>
+            </div>
 
+            <div
+                class="archives-sort-section"
+                *ngIf="boards.length > 0"
+                [ngClass]="{'dark-theme': darkThemeIsEnabled}"
+            >
+                <div
+                    class="sort-container count-sort-container"
+                    [ngClass]="{'add-translucence': !countSortEnabled }"
+                    (click)="toggleCountSort()"
+                >
+                    <div class="filter-button count-sort">#</div>
+                    <div class="fas fa-sort-down sort"></div>
+                </div>
 
-      <div
-        class="archives-sort-section"
-        *ngIf="boards.length > 0"
-        [ngClass]="{'dark-theme': darkThemeIsEnabled}"
-      >
-
-        <div class="sort-container count-sort-container"
-             [ngClass]="{'add-translucence': !countSortEnabled }"
-             (click)="toggleCountSort()"
-        >
-          <div class="filter-button count-sort">#</div>
-          <div class="fas fa-sort-down sort"></div>
-        </div>
-
-        <div class="sort-container"
-             [ngClass]="{
+                <div
+                    class="sort-container"
+                    [ngClass]="{
                'add-translucence': countSortEnabled,
                'add-pointer': countSortEnabled
              }"
-             (click)="countSortEnabled = false"
-        >
-          <div class="filter-button date-sort">date</div>
-          <div class="fas fa-sort-down sort"></div>
+                    (click)="countSortEnabled = false"
+                >
+                    <div class="filter-button date-sort">date</div>
+                    <div class="fas fa-sort-down sort"></div>
+                </div>
+            </div>
+
+            <rq-board-summary
+                *ngFor="let board of archiveBoardList"
+                [theme]="theme"
+                [board]="board"
+                [teamId]="teamId"
+                (boardDeleted)="removeBoardFromBoards($event)"
+            >
+            </rq-board-summary>
         </div>
-
-      </div>
-
-      <rq-board-summary
-        *ngFor="let board of archiveBoardList"
-        [theme]="theme"
-        [board]="board"
-        [teamId]="teamId"
-        (boardDeleted)="removeBoardFromBoards($event)">
-      </rq-board-summary>
     </div>
 
-  </div>
-
-  <div class="archives" *ngIf="actionItemArchivesAreSelected">
-
-    <div class="grid-wrapper">
-
-      <div
-        class="no-archives-info"
-        *ngIf="noActionItemArchivesWereFound"
-        [ngClass]="{
+    <div class="archives" *ngIf="actionItemArchivesAreSelected">
+        <div class="grid-wrapper">
+            <div
+                class="no-archives-info"
+                *ngIf="noActionItemArchivesWereFound"
+                [ngClass]="{
         'dark-theme': darkThemeIsEnabled
       }"
-      >
-        <div class="heading">Looks Like A New Team!</div>
-        <div class="sub-heading">No archives were found.</div>
+            >
+                <div class="heading">Looks Like A New Team!</div>
+                <div class="sub-heading">No archives were found.</div>
 
-        <div class="info">Archives will appear when retros are ended with <b>completed action items</b>.</div>
-      </div>
+                <div class="info">
+                    Archives will appear when retros are ended with
+                    <strong>completed action items</strong>.
+                </div>
+            </div>
 
-      <div class="heading-container" *ngIf="!noActionItemArchivesWereFound">
-        <div
-          class="archives-heading"
-          [ngClass]="{'dark-theme': darkThemeIsEnabled}"
-        >Action Item Archives
+            <div
+                class="heading-container"
+                *ngIf="!noActionItemArchivesWereFound"
+            >
+                <div
+                    class="archives-heading"
+                    [ngClass]="{'dark-theme': darkThemeIsEnabled}"
+                >
+                    Action Item Archives
+                </div>
+
+                <div
+                    class="archives-sub-heading"
+                    [ngClass]="{'dark-theme': darkThemeIsEnabled}"
+                >
+                    Examine completed action items from times gone by
+                </div>
+            </div>
+
+            <div class="action-item-container">
+                <rq-action-item-task
+                    *ngFor="let actionItem of archivedActionItems"
+                    [actionItem]="actionItem"
+                    [theme]="theme"
+                    [readOnly]="true"
+                    [archived]="true"
+                    (click)="showDialog(actionItem); actionItemDialog.show()"
+                ></rq-action-item-task>
+            </div>
         </div>
-
-        <div
-          class="archives-sub-heading"
-          [ngClass]="{'dark-theme': darkThemeIsEnabled}"
-        >Examine completed action items from times gone by
-        </div>
-      </div>
-
-      <div class="action-item-container">
-        <rq-action-item-task
-          *ngFor="let actionItem of archivedActionItems"
-          [actionItem]="actionItem"
-          [theme]="theme"
-          [readOnly]="true"
-          [archived]="true"
-          (click)="showDialog(actionItem); actionItemDialog.show()"
-        ></rq-action-item-task>
-      </div>
-
     </div>
-
-  </div>
 </div>
 
 <rq-action-item-dialog
-  #actionItemDialog
-  [theme]="theme"
-  [actionItem]="selectedActionItem"
-  (visibilityChanged)="dialogIsVisible = $event"
-  [readonly]="true"
+    #actionItemDialog
+    [theme]="theme"
+    [actionItem]="selectedActionItem"
+    (visibilityChanged)="dialogIsVisible = $event"
+    [readonly]="true"
 >
-
 </rq-action-item-dialog>

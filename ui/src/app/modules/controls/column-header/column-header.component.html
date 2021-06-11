@@ -16,54 +16,51 @@
   -->
 
 <input
-  #inputField
-  [readonly]="readOnlyEnabled"
-  [maxlength]="maxTextLength"
-  [(ngModel)]="titleCopy"
-  (blur)="emitTitleChangedAndEnableReadonlyMode()"
-  (keydown.enter)="blurInput()"
-  (keydown.escape)="onEscapeKeyPressed()"
-  [ngClass]="{'hide': readOnlyEnabled}"
+    #inputField
+    [readonly]="readOnlyEnabled"
+    [maxlength]="maxTextLength"
+    [(ngModel)]="titleCopy"
+    (blur)="emitTitleChangedAndEnableReadonlyMode()"
+    (keydown.enter)="blurInput()"
+    (keydown.escape)="onEscapeKeyPressed()"
+    [ngClass]="{ hide: readOnlyEnabled }"
 />
 
-<div
-  class="display-text"
-  [ngClass]="{'hide': !readOnlyEnabled}"
->
-  {{emojifyText(title)}}
+<div class="display-text" [ngClass]="{ hide: !readOnlyEnabled }">
+    {{ emojifyText(title) }}
 </div>
 
 <div class="sort-container">
-  <div class="fas fa-sort-down sort"
-       [ngClass]="{
-        'sort-icon-translucent': !sorted,
-        'hide': !readOnlyEnabled
-     }"
-       (click)="toggleSort()"
-  >
-  </div>
-  <rq-tooltip [theme]="theme" [text]="sorted ? 'Unsort' : 'Sort'"></rq-tooltip>
+    <div
+        class="fas fa-sort-down sort"
+        [ngClass]="{
+            'sort-icon-translucent': !sorted,
+            hide: !readOnlyEnabled
+        }"
+        (click)="toggleSort()"
+    ></div>
+    <rq-tooltip
+        [theme]="theme"
+        [text]="sorted ? 'Unsort' : 'Sort'"
+    ></rq-tooltip>
 </div>
 
-
 <span
-  class="edit-button"
-  [ngClass]="{
-    'edit-button-enabled': !readOnlyEnabled || type === 'action'
+    class="edit-button"
+    [ngClass]="{
+        'edit-button-enabled': !readOnlyEnabled || type === 'action'
     }"
-  *ngIf="!readOnly"
+    *ngIf="!readOnly"
 >
-  <i class="fas fa-pencil-alt" (click)="toggleEdit()"></i>
+    <i class="fas fa-pencil-alt" (click)="toggleEdit()" aria-hidden="true"></i>
 
-  <rq-tooltip [theme]="theme" text="Edit"></rq-tooltip>
-
+    <rq-tooltip [theme]="theme" text="Edit"></rq-tooltip>
 </span>
 
 <rq-floating-character-countdown
-  [characterCount]="readOnlyEnabled ? 0 : titleCopy.length"
-  [maxCharacterCount]="maxTextLength"
-  [charsAreRunningOutThreshold]="5"
-  [theme]="theme"
+    [characterCount]="readOnlyEnabled ? 0 : titleCopy.length"
+    [maxCharacterCount]="maxTextLength"
+    [charsAreRunningOutThreshold]="5"
+    [theme]="theme"
 >
-
 </rq-floating-character-countdown>
