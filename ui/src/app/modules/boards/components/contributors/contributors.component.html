@@ -16,12 +16,15 @@
   -->
 
 <div class="contributors">
-  <div class="contributors-title">
-    Contributors
-  </div>
-  <div *ngFor="let contributorRow of contributors">
-    <a *ngFor="let contributor of contributorRow" href="{{contributor.accountUrl}}" target="_blank">
-      <img [src]="contributor.image" >
-    </a>
-  </div>
+    <div class="contributors-title">Contributors</div>
+    <div *ngFor="let contributorRow of contributors">
+        <a
+            *ngFor="let contributor of contributorRow"
+            href="{{ contributor.accountUrl }}"
+            target="_blank"
+            rel="noopener"
+        >
+            <img [src]="contributor.image" alt="{{ contributor.accountUrl }}" />
+        </a>
+    </div>
 </div>
