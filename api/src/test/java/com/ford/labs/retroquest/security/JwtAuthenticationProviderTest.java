@@ -19,32 +19,32 @@ package com.ford.labs.retroquest.security;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class JwtAuthenticationProviderTest {
 
-    private JwtAuthenticationProvider jwtAuthenticationProvider = new JwtAuthenticationProvider();
+    private final JwtAuthenticationProvider jwtAuthenticationProvider = new JwtAuthenticationProvider();
 
     @Test
     void jwtWithInvalidFormatThrowsException() {
+        var invalidJwt = new JwtAuthentication("", false, "SOSECRET");
         Assertions.assertThrows(
-                AuthenticationException.class,
-                () -> jwtAuthenticationProvider.authenticate(new JwtAuthentication("", false, "SOSECRET")
-            ));
+            AuthenticationException.class,
+            () -> jwtAuthenticationProvider.authenticate(invalidJwt)
+        );
     }
 
     @Test
     void shouldReturnAuthenticationWithTrueIfValidToken() {
-        String unverifiedJwtString = new JwtBuilder("SOSECRET").buildJwt("a-team");
-        JwtAuthentication unverifiedJwt = new JwtAuthentication(unverifiedJwtString, false, "SOSECRET");
+        var unverifiedJwtString = new JwtBuilder("SOSECRET").buildJwt("a-team");
+        var unverifiedJwt = new JwtAuthentication(unverifiedJwtString, false, "SOSECRET");
 
-        Authentication actualAuthentication = jwtAuthenticationProvider.authenticate(unverifiedJwt);
+        var actualAuthentication = jwtAuthenticationProvider.authenticate(unverifiedJwt);
 
         assertThat(actualAuthentication.isAuthenticated()).isTrue();
-        assertThat("a-team").isEqualTo(actualAuthentication.getPrincipal());
+        assertThat(actualAuthentication.getPrincipal())
+            .isEqualTo("a-team");
     }
-
 }

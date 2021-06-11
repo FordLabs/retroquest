@@ -35,7 +35,7 @@ import static java.util.Comparator.comparing;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-properties = { "com.retroquest.runTeamCleanupJob=true"})
+    properties = {"com.retroquest.runTeamCleanupJob=true"})
 class TeamNameCleanupTest {
 
     @Autowired
@@ -113,15 +113,15 @@ class TeamNameCleanupTest {
     void canDetectConflictingTeams() {
         Set<CanonicalTeamNameAndCount> actual = teamRepository.findAllTeamsWithConflictingCanonicalNames();
         Set<CanonicalTeamNameAndCount> expected = teamsToFix.stream()
-                .map(t -> new CanonicalTeamNameAndCount(t.getName().trim().toUpperCase(), 2L))
-                .collect(Collectors.toSet());
+            .map(t -> new CanonicalTeamNameAndCount(t.getName().trim().toUpperCase(), 2L))
+            .collect(Collectors.toSet());
         assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void theTeamWithTheLeastRecentThoughtIsDeleted() {
         teamNameCleanup.onApplicationEvent(applicationReadyEvent);
-        assertThat(teamRepository.findAllTeamsWithConflictingCanonicalNames().size()).isEqualTo(0);
+        assertThat(teamRepository.findAllTeamsWithConflictingCanonicalNames().size()).isZero();
         List<Team> existingTeams = teamRepository.findAll();
         assertThat(existingTeams).isEqualTo(teamsToKeep);
         assertThat(disjoint(existingTeams, teamsToDeleteToReplacement.keySet())).isTrue();
@@ -165,13 +165,13 @@ class TeamNameCleanupTest {
             Team newTeam = teamsToDeleteToReplacement.get(oldTeam);
             for (Board oldBoard : teamsToBoards.get(oldTeam)) {
                 Board newBoard = oldBoard.toBuilder()
-                        .teamId(newTeam.getId())
-                        .thoughts(new ArrayList<>())
-                        .build();
+                    .teamId(newTeam.getId())
+                    .thoughts(new ArrayList<>())
+                    .build();
                 for (Thought oldThought : oldBoard.getThoughts()) {
                     Thought expectedThought = expectedThoughts.stream()
-                            .filter(t -> t.getId().equals(oldThought.getId()))
-                            .findFirst().orElseThrow();
+                        .filter(t -> t.getId().equals(oldThought.getId()))
+                        .findFirst().orElseThrow();
                     newBoard.getThoughts().add(expectedThought);
                 }
                 expectedBoards.add(newBoard);
@@ -207,11 +207,11 @@ class TeamNameCleanupTest {
         teamsToDeleteToReplacement.keySet().forEach(oldTeam -> {
             existingUserTeamMappings.put(oldTeam, new ArrayList<>());
             existingUserTeamMappings.get(oldTeam)
-                    .add(userTeamMappingRepository.save(new UserTeamMapping(0L, 0L, oldTeam.getUri())));
+                .add(userTeamMappingRepository.save(new UserTeamMapping(0L, 0L, oldTeam.getUri())));
             existingUserTeamMappings.get(oldTeam)
-                    .add(userTeamMappingRepository.save(new UserTeamMapping(0L, 1L, oldTeam.getUri())));
+                .add(userTeamMappingRepository.save(new UserTeamMapping(0L, 1L, oldTeam.getUri())));
             existingUserTeamMappings.get(oldTeam)
-                    .add(userTeamMappingRepository.save(new UserTeamMapping(0L, 2L, oldTeam.getUri())));
+                .add(userTeamMappingRepository.save(new UserTeamMapping(0L, 2L, oldTeam.getUri())));
         });
 
         teamNameCleanup.onApplicationEvent(applicationReadyEvent);
@@ -239,11 +239,11 @@ class TeamNameCleanupTest {
         teamsToKeep.forEach(newTeam -> {
             existingUserTeamMappings.put(newTeam, new ArrayList<>());
             existingUserTeamMappings.get(newTeam)
-                    .add(userTeamMappingRepository.save(new UserTeamMapping(0L, 0L, newTeam.getUri())));
+                .add(userTeamMappingRepository.save(new UserTeamMapping(0L, 0L, newTeam.getUri())));
             existingUserTeamMappings.get(newTeam)
-                    .add(userTeamMappingRepository.save(new UserTeamMapping(0L, 1L, newTeam.getUri())));
+                .add(userTeamMappingRepository.save(new UserTeamMapping(0L, 1L, newTeam.getUri())));
             existingUserTeamMappings.get(newTeam)
-                    .add(userTeamMappingRepository.save(new UserTeamMapping(0L, 2L, newTeam.getUri())));
+                .add(userTeamMappingRepository.save(new UserTeamMapping(0L, 2L, newTeam.getUri())));
             expectedUserTeamMappings.addAll(existingUserTeamMappings.get(newTeam));
         });
 
@@ -251,11 +251,11 @@ class TeamNameCleanupTest {
         teamsToDeleteToReplacement.keySet().forEach(oldTeam -> {
             existingUserTeamMappings.put(oldTeam, new ArrayList<>());
             existingUserTeamMappings.get(oldTeam)
-                    .add(userTeamMappingRepository.save(new UserTeamMapping(0L, 0L, oldTeam.getUri())));
+                .add(userTeamMappingRepository.save(new UserTeamMapping(0L, 0L, oldTeam.getUri())));
             existingUserTeamMappings.get(oldTeam)
-                    .add(userTeamMappingRepository.save(new UserTeamMapping(0L, 1L, oldTeam.getUri())));
+                .add(userTeamMappingRepository.save(new UserTeamMapping(0L, 1L, oldTeam.getUri())));
             existingUserTeamMappings.get(oldTeam)
-                    .add(userTeamMappingRepository.save(new UserTeamMapping(0L, 2L, oldTeam.getUri())));
+                .add(userTeamMappingRepository.save(new UserTeamMapping(0L, 2L, oldTeam.getUri())));
         });
 
         teamNameCleanup.onApplicationEvent(applicationReadyEvent);
@@ -296,8 +296,8 @@ class TeamNameCleanupTest {
         teamNameCleanup.onApplicationEvent(applicationReadyEvent);
 
         List<Team> expectedTeams = teamsToKeep.stream()
-                .map(t -> t.toBuilder().name(t.getName().trim()).build())
-                .collect(Collectors.toList());
+            .map(t -> t.toBuilder().name(t.getName().trim()).build())
+            .collect(Collectors.toList());
         List<Team> actualTeams = teamRepository.findAll();
         actualTeams.sort(comparing(Team::getUri));
         expectedTeams.sort(comparing(Team::getUri));
@@ -308,10 +308,11 @@ class TeamNameCleanupTest {
     void doesNothingIfPropertyIsNotSet() {
         ReflectionTestUtils.setField(teamNameCleanup, "runCleanupJob", false);
         teamNameCleanup.onApplicationEvent(applicationReadyEvent);
-        assertThat(teamRepository.findAllTeamsWithConflictingCanonicalNames().size()).isNotEqualTo(0);
+        assertThat(teamRepository.findAllTeamsWithConflictingCanonicalNames()).isNotEmpty();
         List<Team> existingTeams = teamRepository.findAll();
-        assertThat(existingTeams).containsAll(teamsToKeep);
-        assertThat(existingTeams).containsAll(teamsToDeleteToReplacement.keySet());
+        assertThat(existingTeams)
+            .containsAll(teamsToKeep)
+            .containsAll(teamsToDeleteToReplacement.keySet());
     }
 
     private void createConflictingTeamNames() {
@@ -370,15 +371,15 @@ class TeamNameCleanupTest {
         int minThoughts = atLeastOne ? 1 : 0;
         List<Thought> createdThoughts = new ArrayList<>();
         teamsToTopicsToColumnTitles.get(team)
-                .values()
-                .forEach(columnTitle -> {
-                    for (int i = 0; i < (rand.nextInt(3) + minThoughts); i++) {
-                        Thought thought = new Thought(0L, "test " + columnTitle.getTopic(), 0, columnTitle.getTopic(), false, team.getId(), columnTitle, boardId);
-                        Thought savedThought = thoughtRepository.save(thought);
-                        teamsToTopicsToThoughts.get(team).get(columnTitle.getTopic()).add(savedThought);
-                        createdThoughts.add(savedThought);
-                    }
-                });
+            .values()
+            .forEach(columnTitle -> {
+                for (int i = 0; i < (rand.nextInt(3) + minThoughts); i++) {
+                    Thought thought = new Thought(0L, "test " + columnTitle.getTopic(), 0, columnTitle.getTopic(), false, team.getId(), columnTitle, boardId);
+                    Thought savedThought = thoughtRepository.save(thought);
+                    teamsToTopicsToThoughts.get(team).get(columnTitle.getTopic()).add(savedThought);
+                    createdThoughts.add(savedThought);
+                }
+            });
         return createdThoughts;
     }
 
@@ -426,9 +427,9 @@ class TeamNameCleanupTest {
                 for (Thought oldThought : oldThoughts) {
                     if (oldThought.getBoardId() != null && oldThought.getBoardId() != 0) {
                         Thought newThought = oldThought.toBuilder()
-                                .teamId(newTeam.getId())
-                                .columnTitle(teamsToTopicsToColumnTitles.get(newTeam).get(oldThought.getTopic()))
-                                .build();
+                            .teamId(newTeam.getId())
+                            .columnTitle(teamsToTopicsToColumnTitles.get(newTeam).get(oldThought.getTopic()))
+                            .build();
                         expectedThoughts.add(newThought);
                     }
                 }

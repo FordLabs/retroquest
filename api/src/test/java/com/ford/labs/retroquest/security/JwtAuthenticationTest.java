@@ -25,11 +25,11 @@ class JwtAuthenticationTest {
 
     @Test
     void getNameOnTokenWithValidJwt_ReturnsSubject() {
-        String jwt = new JwtBuilder("SOSECRET").buildJwt("i-am-a-team");
+        var jwt = new JwtBuilder("SOSECRET").buildJwt("i-am-a-team");
 
-        JwtAuthentication authentication = new JwtAuthentication(jwt, false, "SOSECRET");
+        var authentication = new JwtAuthentication(jwt, false, "SOSECRET");
 
-        assertThat("i-am-a-team").isEqualTo(authentication.getPrincipal());
+        assertThat(authentication.getPrincipal())
+            .isEqualTo("i-am-a-team");
     }
-
 }
