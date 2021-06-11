@@ -87,7 +87,7 @@ class TeamNameCleanupTest {
 
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         teamsToFix.clear();
         teamsToKeep.clear();
         teamsToDeleteToReplacement.clear();
@@ -110,7 +110,7 @@ class TeamNameCleanupTest {
     }
 
     @Test
-    public void canDetectConflictingTeams() {
+    void canDetectConflictingTeams() {
         Set<CanonicalTeamNameAndCount> actual = teamRepository.findAllTeamsWithConflictingCanonicalNames();
         Set<CanonicalTeamNameAndCount> expected = teamsToFix.stream()
                 .map(t -> new CanonicalTeamNameAndCount(t.getName().trim().toUpperCase(), 2L))
@@ -119,7 +119,7 @@ class TeamNameCleanupTest {
     }
 
     @Test
-    public void theTeamWithTheLeastRecentThoughtIsDeleted() {
+    void theTeamWithTheLeastRecentThoughtIsDeleted() {
         teamNameCleanup.onApplicationEvent(applicationReadyEvent);
         assertThat(teamRepository.findAllTeamsWithConflictingCanonicalNames().size()).isEqualTo(0);
         List<Team> existingTeams = teamRepository.findAll();
@@ -128,7 +128,7 @@ class TeamNameCleanupTest {
     }
 
     @Test
-    public void thoughtsWithBoardsArePointedToNewTeamAndColumnsOnNewTeam_andThoughtsWithoutBoardsAreDeleted() {
+    void thoughtsWithBoardsArePointedToNewTeamAndColumnsOnNewTeam_andThoughtsWithoutBoardsAreDeleted() {
         teamNameCleanup.onApplicationEvent(applicationReadyEvent);
         List<Thought> expectedThoughts = getExpectedThoughts();
 
@@ -138,7 +138,7 @@ class TeamNameCleanupTest {
     }
 
     @Test
-    public void columnTitlesAreDeletedAlongWithTeams() {
+    void columnTitlesAreDeletedAlongWithTeams() {
         teamNameCleanup.onApplicationEvent(applicationReadyEvent);
 
         List<ColumnTitle> expectedColumnTitles = new ArrayList<>();
@@ -152,7 +152,7 @@ class TeamNameCleanupTest {
     }
 
     @Test
-    public void boardsArePointedToNewTeam() {
+    void boardsArePointedToNewTeam() {
         teamNameCleanup.onApplicationEvent(applicationReadyEvent);
 
         List<Board> expectedBoards = new ArrayList<>();
@@ -186,7 +186,7 @@ class TeamNameCleanupTest {
     }
 
     @Test
-    public void actionItemsAreDeletedAlongWithTeams() {
+    void actionItemsAreDeletedAlongWithTeams() {
         teamNameCleanup.onApplicationEvent(applicationReadyEvent);
 
         List<ActionItem> expectedActionItems = new ArrayList<>();
@@ -201,7 +201,7 @@ class TeamNameCleanupTest {
     }
 
     @Test
-    public void userTeamMappingsAreRepointedToNewTeamWhenNoConflicts() {
+    void userTeamMappingsAreRepointedToNewTeamWhenNoConflicts() {
 
         Map<Team, List<UserTeamMapping>> existingUserTeamMappings = new HashMap<>();
         teamsToDeleteToReplacement.keySet().forEach(oldTeam -> {
@@ -232,7 +232,7 @@ class TeamNameCleanupTest {
     }
 
     @Test
-    public void userTeamMappingsAreDeletedWhenConflicts() {
+    void userTeamMappingsAreDeletedWhenConflicts() {
 
         Map<Team, List<UserTeamMapping>> existingUserTeamMappings = new HashMap<>();
         List<UserTeamMapping> expectedUserTeamMappings = new ArrayList<>();
@@ -267,7 +267,7 @@ class TeamNameCleanupTest {
     }
 
     @Test
-    public void feedbackIsPointedToNewTeam() {
+    void feedbackIsPointedToNewTeam() {
         teamNameCleanup.onApplicationEvent(applicationReadyEvent);
 
         List<Feedback> expectedFeedback = new ArrayList<>();
@@ -289,7 +289,7 @@ class TeamNameCleanupTest {
     }
 
     @Test
-    public void teamNamesRemoveExtraSpaces() {
+    void teamNamesRemoveExtraSpaces() {
         createTeamToKeep(new Team("name-with-trailing", "nameWithTrailing    ", "Password1"));
         createTeamToKeep(new Team("name-with-leading", "   nameWithLeading", "Password1"));
         createTeamToKeep(new Team("name-with-extras", "  name   with   extras  ", "Password1"));
@@ -305,7 +305,7 @@ class TeamNameCleanupTest {
     }
 
     @Test
-    public void doesNothingIfPropertyIsNotSet() {
+    void doesNothingIfPropertyIsNotSet() {
         ReflectionTestUtils.setField(teamNameCleanup, "runCleanupJob", false);
         teamNameCleanup.onApplicationEvent(applicationReadyEvent);
         assertThat(teamRepository.findAllTeamsWithConflictingCanonicalNames().size()).isNotEqualTo(0);

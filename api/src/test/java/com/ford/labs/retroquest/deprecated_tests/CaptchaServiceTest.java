@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
-public class CaptchaServiceTest {
+class CaptchaServiceTest {
 
     @Mock
     private TeamRepository teamRepository;
@@ -25,7 +25,7 @@ public class CaptchaServiceTest {
     private CaptchaProperties captchaProperties = new CaptchaProperties();
 
     @Test
-    public void returnsTrueWhenFailedLoginAttemptsIsAboveThreshold() {
+    void returnsTrueWhenFailedLoginAttemptsIsAboveThreshold() {
         Team team = new Team();
         team.setFailedAttempts(5);
 
@@ -39,7 +39,7 @@ public class CaptchaServiceTest {
     }
 
     @Test
-    public void returnsFalseWhenFailedLoginAttemptsIsBelowThreshold() {
+    void returnsFalseWhenFailedLoginAttemptsIsBelowThreshold() {
         Team team = new Team();
         team.setFailedAttempts(5);
 
@@ -53,7 +53,7 @@ public class CaptchaServiceTest {
     }
 
     @Test
-    public void returnsFalseWhenCaptchaIsDisabled() {
+    void returnsFalseWhenCaptchaIsDisabled() {
         Team team = new Team();
         team.setFailedAttempts(5);
 
@@ -64,7 +64,7 @@ public class CaptchaServiceTest {
     }
 
     @Test
-    public void trimsSpaceFromTramName() {
+    void trimsSpaceFromTramName() {
         Team team = new Team();
         team.setFailedAttempts(5);
 
@@ -78,7 +78,7 @@ public class CaptchaServiceTest {
     }
 
     @Test
-    public void handlesNullFailedAttempts() {
+    void handlesNullFailedAttempts() {
         Team team = new Team();
         captchaProperties.setEnabled(true);
         captchaProperties.setFailedLoginThreshold(1);

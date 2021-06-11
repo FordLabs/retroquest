@@ -26,12 +26,12 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class PasswordValidatorTest {
+class PasswordValidatorTest {
 
     private final PasswordValidator validator = new PasswordValidator();
 
     @Test
-    public void whenEmptyPasswordIsSubmitted_ThrowPasswordTooShortException() {
+    void whenEmptyPasswordIsSubmitted_ThrowPasswordTooShortException() {
         assertThrows(
                 PasswordTooShortException.class,
                 () -> validator.isValid("", null)
@@ -39,7 +39,7 @@ public class PasswordValidatorTest {
     }
 
     @Test
-    public void whenNullPasswordIsSubmitted_ThrowPasswordTooShortException() {
+    void whenNullPasswordIsSubmitted_ThrowPasswordTooShortException() {
         assertThrows(
                 PasswordTooShortException.class,
                 () -> validator.isValid(null, null)
@@ -47,7 +47,7 @@ public class PasswordValidatorTest {
     }
 
     @Test
-    public void whenPasswordShorterThanEightCharactersIsSubmitted_ThrowPasswordTooShortException() {
+    void whenPasswordShorterThanEightCharactersIsSubmitted_ThrowPasswordTooShortException() {
         assertThrows(
                 PasswordTooShortException.class,
                 () -> validator.isValid("Passw0r", null)
@@ -55,7 +55,7 @@ public class PasswordValidatorTest {
     }
 
     @Test
-    public void whenPasswordIsMissingANumber_ThrowPasswordMissingNumberException() {
+    void whenPasswordIsMissingANumber_ThrowPasswordMissingNumberException() {
         assertThrows(
                 PasswordMissingNumberException.class,
                 () -> validator.isValid("Password", null)
@@ -63,7 +63,7 @@ public class PasswordValidatorTest {
     }
 
     @Test
-    public void whenPasswordIsMissingALowerCaseAlpha_ThrowPasswordMissingLowerCaseAlphaException() {
+    void whenPasswordIsMissingALowerCaseAlpha_ThrowPasswordMissingLowerCaseAlphaException() {
         assertThrows(
                 PasswordMissingLowerCaseAlphaException.class,
                 () -> validator.isValid("PASSW0RD", null)
@@ -71,7 +71,7 @@ public class PasswordValidatorTest {
     }
 
     @Test
-    public void whenPasswordIsMissingAUpperCaseAlpha_ThrowPasswordMissingUpperCaseAlphaException() {
+    void whenPasswordIsMissingAUpperCaseAlpha_ThrowPasswordMissingUpperCaseAlphaException() {
         assertThrows(
                 PasswordMissingUpperCaseAlphaException.class,
                 () -> validator.isValid("passw0rd", null)
@@ -79,7 +79,7 @@ public class PasswordValidatorTest {
     }
 
     @Test
-    public void validPasswordReturnsTrue() {
+    void validPasswordReturnsTrue() {
         assertThat(validator.isValid("Passw0rd", null)).isTrue();
     }
 

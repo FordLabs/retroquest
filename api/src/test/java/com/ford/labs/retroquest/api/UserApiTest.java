@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
-public class UserApiTest extends ApiTest {
+class UserApiTest extends ApiTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -27,18 +27,18 @@ public class UserApiTest extends ApiTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private NewUserRequest validNewUserRequest = NewUserRequest.builder().name("jake").password("paul").build();
-    private NewUserRequest missingPasswordUser = NewUserRequest.builder().name("jake").password("").build();
-    private NewUserRequest missingNameUser = NewUserRequest.builder().name("").password("paul").build();
+    private final NewUserRequest validNewUserRequest = NewUserRequest.builder().name("jake").password("paul").build();
+    private final NewUserRequest missingPasswordUser = NewUserRequest.builder().name("jake").password("").build();
+    private final NewUserRequest missingNameUser = NewUserRequest.builder().name("").password("paul").build();
 
     @AfterEach
-    public void teardown() {
+    void teardown() {
         userRepository.deleteAllInBatch();
         assertThat(userRepository.count()).isZero();
     }
 
     @Test
-    public void shouldHaveACreateNewUserEndpoint() throws Exception {
+    void shouldHaveACreateNewUserEndpoint() throws Exception {
 
         mockMvc.perform(post("/api/user")
                 .content(objectMapper.writeValueAsString(validNewUserRequest))
@@ -49,7 +49,7 @@ public class UserApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldSaveANewUserToTheDatabaseWithUserNameAndEncryptedPassword() throws Exception {
+    void shouldSaveANewUserToTheDatabaseWithUserNameAndEncryptedPassword() throws Exception {
 
         mockMvc.perform(post("/api/user")
                 .content(objectMapper.writeValueAsString(validNewUserRequest))
@@ -70,7 +70,7 @@ public class UserApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldNotSaveANewUserToTheDatabaseWithAMissingPassword() throws Exception {
+    void shouldNotSaveANewUserToTheDatabaseWithAMissingPassword() throws Exception {
 
         mockMvc.perform(post("/api/user")
                 .content(objectMapper.writeValueAsString(missingPasswordUser))
@@ -83,7 +83,7 @@ public class UserApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldNotSaveANewUserToTheDatabaseWithAMissingUserName() throws Exception {
+    void shouldNotSaveANewUserToTheDatabaseWithAMissingUserName() throws Exception {
 
         mockMvc.perform(post("/api/user")
                 .content(objectMapper.writeValueAsString(missingNameUser))
@@ -96,7 +96,7 @@ public class UserApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldReturnAJwtTokenWithTheUserNameAsTheSubject() throws Exception {
+    void shouldReturnAJwtTokenWithTheUserNameAsTheSubject() throws Exception {
 
         MvcResult result = mockMvc.perform(post("/api/user")
                 .content(objectMapper.writeValueAsString(validNewUserRequest))
@@ -111,7 +111,7 @@ public class UserApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldHaveTheRedirectLocationInTheHeader() throws Exception {
+    void shouldHaveTheRedirectLocationInTheHeader() throws Exception {
 
         MvcResult result = mockMvc.perform(post("/api/user")
                 .content(objectMapper.writeValueAsString(validNewUserRequest))
@@ -126,7 +126,7 @@ public class UserApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldBeAbleToSeeIfAUserIsValid() throws Exception {
+    void shouldBeAbleToSeeIfAUserIsValid() throws Exception {
 
         mockMvc.perform(post("/api/user")
                 .content(objectMapper.writeValueAsString(validNewUserRequest))
@@ -141,7 +141,7 @@ public class UserApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldReturnAnUnauthorizedStatusIfTokenIsNotValid() throws Exception {
+    void shouldReturnAnUnauthorizedStatusIfTokenIsNotValid() throws Exception {
 
         mockMvc.perform(post("/api/user")
                 .content(objectMapper.writeValueAsString(validNewUserRequest))
@@ -156,7 +156,7 @@ public class UserApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldReturnTokenWithAValidUsernameAndPassword() throws Exception {
+    void shouldReturnTokenWithAValidUsernameAndPassword() throws Exception {
 
         userRepository.save(User.builder()
                 .name(validNewUserRequest.getName())
@@ -176,7 +176,7 @@ public class UserApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldReturnNullIfUserNotFound() throws Exception {
+    void shouldReturnNullIfUserNotFound() throws Exception {
         MvcResult result = mockMvc.perform(post("/api/user/login")
                 .content(objectMapper.writeValueAsString(validNewUserRequest))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -190,7 +190,7 @@ public class UserApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldReturnNullIfBadUserPassword() throws Exception {
+    void shouldReturnNullIfBadUserPassword() throws Exception {
         userRepository.save(User.builder()
                 .name(validNewUserRequest.getName())
                 .password(passwordEncoder.encode(validNewUserRequest.getPassword()))

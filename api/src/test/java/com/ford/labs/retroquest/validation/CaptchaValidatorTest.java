@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class CaptchaValidatorTest {
+class CaptchaValidatorTest {
 
     @Mock
     private RestTemplate restTemplate;
@@ -49,7 +49,7 @@ public class CaptchaValidatorTest {
     private CaptchaValidator validator;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         captchaProperties.setSecret("secret");
         captchaProperties.setUrl("http://myUrl");
         captchaProperties.setFailedLoginThreshold(5);
@@ -57,7 +57,7 @@ public class CaptchaValidatorTest {
     }
 
     @Test
-    public void whenCaptchaIsDisabled_returnsTrue() {
+    void whenCaptchaIsDisabled_returnsTrue() {
         captchaProperties.setEnabled(false);
         validator = new CaptchaValidator(restTemplate, captchaProperties, captchaService);
 
@@ -67,7 +67,7 @@ public class CaptchaValidatorTest {
     }
 
     @Test
-    public void whenFailedLoginAttemptsIsBelowThreshold_returnsTrue() {
+    void whenFailedLoginAttemptsIsBelowThreshold_returnsTrue() {
         Team team = new Team();
         team.setFailedAttempts(2);
 
@@ -78,7 +78,7 @@ public class CaptchaValidatorTest {
     }
 
     @Test
-    public void whenFailedLoginAttemptsIsAboveThreshold_AndCaptchaIsEmpty_throwsCaptchaInvalidException() {
+    void whenFailedLoginAttemptsIsAboveThreshold_AndCaptchaIsEmpty_throwsCaptchaInvalidException() {
         Team team = new Team();
         team.setFailedAttempts(7);
 
@@ -94,7 +94,7 @@ public class CaptchaValidatorTest {
     }
 
     @Test
-    public void whenFailedLoginAttemptsIsAboveThreshold_AndCaptchaIsValid_returnsTrue() {
+    void whenFailedLoginAttemptsIsAboveThreshold_AndCaptchaIsValid_returnsTrue() {
         Team team = new Team();
         team.setFailedAttempts(7);
 
@@ -104,7 +104,7 @@ public class CaptchaValidatorTest {
     }
 
     @Test
-    public void whenTeamIsNull_AndCaptchaIsInvalid_throwsCaptchaInvalidException() {
+    void whenTeamIsNull_AndCaptchaIsInvalid_throwsCaptchaInvalidException() {
         when(restTemplate.getForObject("http://myUrl?secret={secret}&response={response}", ReCaptchaResponse.class, "secret", "InvalidCaptcha"))
                 .thenReturn(new ReCaptchaResponse(false, Collections.emptyList()));
         CreateTeamRequest createTeamRequest = new CreateTeamRequest("name", "password", "InvalidCaptcha");
@@ -116,7 +116,7 @@ public class CaptchaValidatorTest {
     }
 
     @Test
-    public void whenTeamIsNull_AndCaptchaIsValid_returnsTrue() {
+    void whenTeamIsNull_AndCaptchaIsValid_returnsTrue() {
         when(restTemplate.getForObject("http://myUrl?secret={secret}&response={response}", ReCaptchaResponse.class, "secret", "ValidCaptcha"))
                 .thenReturn(new ReCaptchaResponse(true, Collections.emptyList()));
         CreateTeamRequest createTeamRequest = new CreateTeamRequest("name", "password", "ValidCaptcha");

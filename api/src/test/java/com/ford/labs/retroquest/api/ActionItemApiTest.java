@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
-public class ActionItemApiTest extends ApiTest {
+class ActionItemApiTest extends ApiTest {
 
     @Autowired
     private ActionItemRepository actionItemRepository;
@@ -30,20 +30,20 @@ public class ActionItemApiTest extends ApiTest {
     private String BASE_ENDPOINT_URL;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         BASE_SUB_URL = "/topic/" + teamId + "/action-items";
         BASE_ENDPOINT_URL = "/app/" + teamId + "/action-item";
     }
 
     @AfterEach
-    public void teardown() {
+    void teardown() {
         actionItemRepository.deleteAllInBatch();
 
         assertThat(actionItemRepository.count()).isZero();
     }
 
     @Test
-    public void should_create_action_item() throws Exception {
+    void should_create_action_item() throws Exception {
 
         StompSession session = getAuthorizedSession();
         subscribe(session, BASE_SUB_URL);
@@ -63,7 +63,7 @@ public class ActionItemApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_create_action_item_when_unauthorized() throws Exception {
+    void should_not_create_action_item_when_unauthorized() throws Exception {
         ActionItem sentActionItem = ActionItem.builder()
                 .task("do the thing")
                 .build();
@@ -77,7 +77,7 @@ public class ActionItemApiTest extends ApiTest {
     }
 
     @Test
-    public void should_get_edited_action_item() throws Exception {
+    void should_get_edited_action_item() throws Exception {
         ActionItem sentActionItem = ActionItem.builder()
                 .task("do the thing")
                 .build();
@@ -104,7 +104,7 @@ public class ActionItemApiTest extends ApiTest {
     }
 
     @Test
-    public void should_delete_all_action_items_attached_to_team() throws Exception {
+    void should_delete_all_action_items_attached_to_team() throws Exception {
         StompSession session = getAuthorizedSession();
         subscribe(session, BASE_SUB_URL);
 
@@ -132,7 +132,7 @@ public class ActionItemApiTest extends ApiTest {
     }
 
     @Test
-    public void should_get_action_items_only_for_team_in_token() throws Exception {
+    void should_get_action_items_only_for_team_in_token() throws Exception {
         String jwt = jwtBuilder.buildJwt("beach-bums2");
 
         ActionItem actionItem1 = ActionItem.builder()
@@ -158,7 +158,7 @@ public class ActionItemApiTest extends ApiTest {
     }
 
     @Test
-    public void should_set_action_item_as_completed() throws Exception {
+    void should_set_action_item_as_completed() throws Exception {
 
         ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder().teamId(teamId).build());
 
@@ -177,7 +177,7 @@ public class ActionItemApiTest extends ApiTest {
     }
 
     @Test
-    public void should_set_action_item_as_incomplete() throws Exception {
+    void should_set_action_item_as_incomplete() throws Exception {
         ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder()
                 .teamId(teamId)
                 .completed(true)
@@ -197,7 +197,7 @@ public class ActionItemApiTest extends ApiTest {
     }
 
     @Test
-    public void should_delete_action_items_for_team_in_token() throws Exception {
+    void should_delete_action_items_for_team_in_token() throws Exception {
         ActionItem actionItem1 = ActionItem.builder().teamId(teamId).build();
 
         ActionItem actionItem2 = ActionItem.builder()
@@ -230,7 +230,7 @@ public class ActionItemApiTest extends ApiTest {
     }
 
     @Test
-    public void should_edit_action_item() throws Exception {
+    void should_edit_action_item() throws Exception {
 
         ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder()
                 .task("I AM A TEMPORARY TASK")
@@ -251,7 +251,7 @@ public class ActionItemApiTest extends ApiTest {
     }
 
     @Test
-    public void should_add_assignee_to_action_item() throws Exception {
+    void should_add_assignee_to_action_item() throws Exception {
         ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder()
                 .task(teamId)
                 .teamId("suchateam")
@@ -272,7 +272,7 @@ public class ActionItemApiTest extends ApiTest {
     }
 
     @Test
-    public void should_authenticate_all_action_item_endpoints_properly() throws Exception {
+    void should_authenticate_all_action_item_endpoints_properly() throws Exception {
         String unauthorizedTeamJwt = jwtBuilder.buildJwt("not-beach-bums");
 
         ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder()

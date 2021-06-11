@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
-public class ThoughtApiTest extends ApiTest {
+class ThoughtApiTest extends ApiTest {
 
     @Autowired
     private ThoughtRepository thoughtRepository;
@@ -42,14 +42,14 @@ public class ThoughtApiTest extends ApiTest {
     private final Moshi moshi = new Moshi.Builder().build();
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         BASE_SUB_URL = "/topic/" + teamId + "/thoughts";
         BASE_ENDPOINT_URL = "/app/" + teamId + "/thought";
         BASE_GET_URL = "/api/team/" + teamId;
     }
 
     @AfterEach
-    public void teardown() {
+    void teardown() {
         thoughtRepository.deleteAllInBatch();
         columnTitleRepository.deleteAllInBatch();
         assertThat(thoughtRepository.count()).isZero();
@@ -57,7 +57,7 @@ public class ThoughtApiTest extends ApiTest {
     }
 
     @Test
-    public void should_like_thought_on_upvote() throws Exception {
+    void should_like_thought_on_upvote() throws Exception {
         Thought savedThought = thoughtRepository.save(Thought.builder().teamId(teamId).hearts(1).build());
 
         mockMvc.perform(put("/api/team/" + teamId + "/thought/" + savedThought.getId() + "/heart")
@@ -68,7 +68,7 @@ public class ThoughtApiTest extends ApiTest {
     }
 
     @Test
-    public void should_discuss_not_discussed_thought() throws Exception {
+    void should_discuss_not_discussed_thought() throws Exception {
         Thought savedThought = thoughtRepository.save(Thought.builder().teamId(teamId).discussed(false).build());
 
         mockMvc.perform(put("/api/team/" + teamId + "/thought/" + savedThought.getId() + "/discuss")
@@ -79,7 +79,7 @@ public class ThoughtApiTest extends ApiTest {
     }
 
     @Test
-    public void should_update_thought_message() throws Exception {
+    void should_update_thought_message() throws Exception {
         Thought savedThought = thoughtRepository.save(Thought.builder().teamId(teamId).message("hello").build());
         Thought updatedThought = Thought.builder().id(savedThought.getId()).teamId(teamId).message("goodbye").build();
 
@@ -95,7 +95,7 @@ public class ThoughtApiTest extends ApiTest {
     }
 
     @Test
-    public void should_return_all_thoughts_by_team_id() throws Exception {
+    void should_return_all_thoughts_by_team_id() throws Exception {
         List<Thought> expectedThoughts = Arrays.asList(
                 Thought.builder().teamId(teamId).message("hello").build(),
                 Thought.builder().teamId(teamId).message("goodbye").build());
@@ -114,7 +114,7 @@ public class ThoughtApiTest extends ApiTest {
     }
 
     @Test
-    public void should_delete_all_thoughts_by_team_id() throws Exception {
+    void should_delete_all_thoughts_by_team_id() throws Exception {
         List<Thought> savedThoughts = Arrays.asList(
                 Thought.builder().teamId(teamId).message("hello").build(),
                 Thought.builder().teamId(teamId).message("goodbye").build());
@@ -130,7 +130,7 @@ public class ThoughtApiTest extends ApiTest {
     }
 
     @Test
-    public void should_delete_thoughts_by_thought_id() throws Exception {
+    void should_delete_thoughts_by_thought_id() throws Exception {
 
 
         List<Thought> thoughtsToSave = Arrays.asList(
@@ -155,7 +155,7 @@ public class ThoughtApiTest extends ApiTest {
     }
 
     @Test
-    public void should_create_thought_no_websocket() throws Exception {
+    void should_create_thought_no_websocket() throws Exception {
         Thought thoughtToSave = Thought.builder().teamId(teamId).message("hello").build();
 
         JsonAdapter<Thought> jsonAdapter = moshi.adapter(Thought.class);
@@ -170,7 +170,7 @@ public class ThoughtApiTest extends ApiTest {
     }
 
     @Test
-    public void should_delete_all_thoughts_on_team() throws Exception {
+    void should_delete_all_thoughts_on_team() throws Exception {
         StompSession session = getAuthorizedSession();
         subscribe(session, BASE_SUB_URL);
 
@@ -186,7 +186,7 @@ public class ThoughtApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_delete_all_thoughts_unauthorized() throws Exception {
+    void should_not_delete_all_thoughts_unauthorized() throws Exception {
         StompSession session = getUnauthorizedSession();
         subscribe(session, BASE_SUB_URL);
 
@@ -198,7 +198,7 @@ public class ThoughtApiTest extends ApiTest {
     }
 
     @Test
-    public void should_edit_thought() throws Exception {
+    void should_edit_thought() throws Exception {
         StompSession session = getAuthorizedSession();
         subscribe(session, BASE_SUB_URL);
 
@@ -232,7 +232,7 @@ public class ThoughtApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_edit_thought_unauthorized() throws Exception {
+    void should_not_edit_thought_unauthorized() throws Exception {
         StompSession session = getUnauthorizedSession();
         subscribe(session, BASE_SUB_URL);
 
@@ -251,7 +251,7 @@ public class ThoughtApiTest extends ApiTest {
     }
 
     @Test
-    public void should_create_thought() throws Exception {
+    void should_create_thought() throws Exception {
         StompSession session = getAuthorizedSession();
         subscribe(session, BASE_SUB_URL);
 
@@ -271,7 +271,7 @@ public class ThoughtApiTest extends ApiTest {
     }
 
     @Test
-    public void should_create_thought_and_assign_column_title() throws Exception {
+    void should_create_thought_and_assign_column_title() throws Exception {
         StompSession session = getAuthorizedSession();
         subscribe(session, BASE_SUB_URL);
 
@@ -294,7 +294,7 @@ public class ThoughtApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_create_thought_unauthorized() throws Exception {
+    void should_not_create_thought_unauthorized() throws Exception {
         StompSession session = getUnauthorizedSession();
         subscribe(session, BASE_SUB_URL);
 
@@ -310,7 +310,7 @@ public class ThoughtApiTest extends ApiTest {
     }
 
     @Test
-    public void should_get_thoughts_on_same_team() throws Exception {
+    void should_get_thoughts_on_same_team() throws Exception {
 
         List<Thought> savedThoughts = Arrays.asList(
                 Thought.builder().message("message 1").teamId(teamId).build(),
@@ -332,7 +332,7 @@ public class ThoughtApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_get_thoughts_unauthorized() throws Exception {
+    void should_not_get_thoughts_unauthorized() throws Exception {
 
         List<Thought> savedThoughts = Collections.singletonList(
                 Thought.builder().message("message 1").teamId(teamId).build()
@@ -347,7 +347,7 @@ public class ThoughtApiTest extends ApiTest {
     }
 
     @Test
-    public void should_move_thought() throws Exception {
+    void should_move_thought() throws Exception {
         StompSession session = getAuthorizedSession();
         subscribe(session, BASE_SUB_URL);
 
@@ -377,7 +377,7 @@ public class ThoughtApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_move_thought_unauthorized() throws Exception {
+    void should_not_move_thought_unauthorized() throws Exception {
         StompSession session = getUnauthorizedSession();
         subscribe(session, BASE_SUB_URL);
 

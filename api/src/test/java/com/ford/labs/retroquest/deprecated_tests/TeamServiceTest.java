@@ -37,7 +37,7 @@ import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class TeamServiceTest {
+class TeamServiceTest {
 
     @Mock
     private TeamRepository teamRepository;
@@ -52,12 +52,12 @@ public class TeamServiceTest {
     private TeamService teamService;
 
     @Test
-    public void convertValidTeamNametoURI() {
+    void convertValidTeamNametoURI() {
         assertEquals("ford-labs", teamService.convertTeamNameToURI("Ford Labs"));
     }
 
     @Test
-    public void createNewBoard_WithValidInformation_ReturnsSavedTeamUri() {
+    void createNewBoard_WithValidInformation_ReturnsSavedTeamUri() {
         CreateTeamRequest requestedTeam = new CreateTeamRequest();
         requestedTeam.setName("A name");
         requestedTeam.setPassword("password");
@@ -75,7 +75,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void createNewBoard_WithValidInformation_trimsNameWhitespaceFromTeamName() {
+    void createNewBoard_WithValidInformation_trimsNameWhitespaceFromTeamName() {
         CreateTeamRequest requestedTeam = new CreateTeamRequest();
         requestedTeam.setName("   A name");
         requestedTeam.setPassword("password");
@@ -93,7 +93,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void updatePassword_WithValidInformation_SavesNewPassword() {
+    void updatePassword_WithValidInformation_SavesNewPassword() {
         Team savedTeam = new Team();
         savedTeam.setUri("a-name");
         savedTeam.setName("A name");
@@ -116,7 +116,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void updatePassword_WithIncorrectOldPassword_DoesNotSavePassword() {
+    void updatePassword_WithIncorrectOldPassword_DoesNotSavePassword() {
         Team savedTeam = new Team();
         savedTeam.setUri("a-name");
         savedTeam.setName("A name");
@@ -138,7 +138,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void returnsSavedTeamOnSuccessfulLogin() {
+    void returnsSavedTeamOnSuccessfulLogin() {
         LoginRequest loginRequest = new LoginRequest("beach-bums", "password", "captcha");
         Team expectedTeam = new Team();
         expectedTeam.setPassword("encryptedPassword");
@@ -151,7 +151,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void trimsTeamNameWhenLoggingIn() {
+    void trimsTeamNameWhenLoggingIn() {
         LoginRequest loginRequest = new LoginRequest("  beach-bums    ", "password", "captcha");
         Team expectedTeam = new Team();
         expectedTeam.setPassword("encryptedPassword");
@@ -164,7 +164,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void login_throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
+    void login_throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
         LoginRequest loginRequest = new LoginRequest("beach-bums", "password", "captcha");
 
         when(teamRepository.findTeamByNameIgnoreCase("beach-bums")).thenReturn(Optional.empty());
@@ -175,7 +175,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void throwsPasswordInvalidExceptionWhenNoPasswordGiven() {
+    void throwsPasswordInvalidExceptionWhenNoPasswordGiven() {
         LoginRequest loginRequest = new LoginRequest("beach-bums", null, "captcha");
         when(teamRepository.findTeamByNameIgnoreCase("beach-bums")).thenReturn(Optional.of(new Team()));
 
@@ -186,7 +186,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void throwsPasswordInvalidExceptionWhenPasswordsDoNotMatch() {
+    void throwsPasswordInvalidExceptionWhenPasswordsDoNotMatch() {
         LoginRequest loginRequest = new LoginRequest("beach-bums", "notPassword", "captcha");
         Team expectedTeam = new Team();
 
@@ -203,7 +203,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void incrementFailedAttemptsCountWhenPasswordsDoNotMatch() {
+    void incrementFailedAttemptsCountWhenPasswordsDoNotMatch() {
         String teamName = "beach-bums";
         String teamPassword = "encryptedPassword";
 
@@ -224,7 +224,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void resetsFailedAttemptsCountWhenPasswordsMatch() {
+    void resetsFailedAttemptsCountWhenPasswordsMatch() {
         String teamName = "beach-bums";
         String teamPassword = "encryptedPassword";
 
@@ -242,7 +242,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void creatingTeamAlsoCreatesThreeColumnTitles() {
+    void creatingTeamAlsoCreatesThreeColumnTitles() {
         when(teamRepository.save(any(Team.class))).then(returnsFirstArg());
         when(teamRepository.findTeamByUri("beach-bums")).thenReturn(Optional.empty());
 
@@ -260,7 +260,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void getTeamByName_throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
+    void getTeamByName_throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
         when(teamRepository.findTeamByNameIgnoreCase("beach-bums")).thenReturn(Optional.empty());
         assertThrows(
                 BoardDoesNotExistException.class,
@@ -269,7 +269,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void getTeamByName_ReturnsTeam() {
+    void getTeamByName_ReturnsTeam() {
         Team expectedTeam = new Team();
         String name = "expected-name";
         expectedTeam.setName(name);
@@ -281,7 +281,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void getTeamByName_trimsWhitespace() {
+    void getTeamByName_trimsWhitespace() {
         Team expectedTeam = new Team();
         String name = "expected-name";
         expectedTeam.setName(name);
@@ -293,7 +293,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void getTeamByUri_throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
+    void getTeamByUri_throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
         when(teamRepository.findTeamByUri("beach-bums")).thenReturn(Optional.empty());
         assertThrows(
                 BoardDoesNotExistException.class,
@@ -302,7 +302,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void getTeamByUri_ReturnsTeam() {
+    void getTeamByUri_ReturnsTeam() {
         Team expectedTeam = new Team();
         String uri = "expected-uri";
         expectedTeam.setUri(uri);
@@ -314,7 +314,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void loggingInUpdatesLastLoginDateOfTeam() {
+    void loggingInUpdatesLastLoginDateOfTeam() {
 
         Team savedTeam = new Team();
         savedTeam.setName("Name");

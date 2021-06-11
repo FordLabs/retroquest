@@ -26,14 +26,14 @@ import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JwtBuilderTest {
+class JwtBuilderTest {
 
     private static final String JWT_SECRET = "IMSUCHAGOODSECRET";
 
     private JwtBuilder jwtBuilder = new JwtBuilder(JWT_SECRET);
 
     @Test
-    public void canCreateSignedJwtWithParameters() {
+    void canCreateSignedJwtWithParameters() {
         String teamId = "team-id";
 
         String jwt = jwtBuilder.buildJwt(teamId);

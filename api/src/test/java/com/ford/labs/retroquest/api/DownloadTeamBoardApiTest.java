@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
-public class DownloadTeamBoardApiTest extends ApiTest {
+class DownloadTeamBoardApiTest extends ApiTest {
 
     @Autowired
     private TeamRepository teamRepository;
@@ -46,12 +46,12 @@ public class DownloadTeamBoardApiTest extends ApiTest {
     private LoginRequest loginRequest;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         loginRequest = LoginRequest.builder().name(teamId).password("password").build();
     }
 
     @AfterEach
-    public void teardown() {
+    void teardown() {
         teamRepository.deleteAllInBatch();
         actionItemRepository.deleteAllInBatch();
         thoughtRepository.deleteAllInBatch();
@@ -64,8 +64,7 @@ public class DownloadTeamBoardApiTest extends ApiTest {
     }
 
     @Test
-    public void should_get_csv_with_thoughts_and_action_items() throws Exception {
-
+    void should_get_csv_with_thoughts_and_action_items() throws Exception {
         ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder()
                 .task("task")
                 .teamId(teamId)
@@ -106,8 +105,7 @@ public class DownloadTeamBoardApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_get_csv_unauthorized() throws Exception {
-
+    void should_not_get_csv_unauthorized() throws Exception {
         restTemplate.postForObject("/api/team/", loginRequest, String.class);
 
         mockMvc.perform(get("/api/team/" + teamId + "/csv")

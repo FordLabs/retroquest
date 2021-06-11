@@ -39,7 +39,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class BoardServiceTest {
+class BoardServiceTest {
     @Mock
     private BoardRepository boardRepository;
 
@@ -49,12 +49,12 @@ public class BoardServiceTest {
     private BoardService boardService;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         boardService = new BoardService(boardRepository, thoughtRepository);
     }
 
     @Test
-    public void getBoardsForTeamId() {
+    void getBoardsForTeamId() {
         Board expectedBoard = Board.builder()
                 .teamId("team1")
                 .dateCreated(LocalDate.of(2012, 12, 12))
@@ -86,7 +86,7 @@ public class BoardServiceTest {
 
 
     @Test
-    public void getBoardsForTeamId_shouldReturnAPagedResult() {
+    void getBoardsForTeamId_shouldReturnAPagedResult() {
 
         boardService.pageSize = 5;
 
@@ -102,7 +102,7 @@ public class BoardServiceTest {
     }
 
     @Test
-    public void saveBoard() {
+    void saveBoard() {
         Board boardToSave = Board.builder()
                 .teamId("team1")
                 .thoughts(Collections.singletonList(Thought.builder().message("hello").build()))

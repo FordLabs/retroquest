@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
-public class ColumnTitleApiTest extends ApiTest {
+class ColumnTitleApiTest extends ApiTest {
 
     @Autowired
     private ColumnTitleRepository columnTitleRepository;
@@ -29,19 +29,19 @@ public class ColumnTitleApiTest extends ApiTest {
     private String BASE_ENDPOINT_URL;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         BASE_SUB_URL = "/topic/" + teamId + "/column-titles";
         BASE_ENDPOINT_URL = "/app/" + teamId + "/column-title";
     }
 
     @AfterEach
-    public void teardown() {
+    void teardown() {
         columnTitleRepository.deleteAllInBatch();
         assertThat(columnTitleRepository.count()).isZero();
     }
 
     @Test
-    public void canEditColumnTitleWithWebSockets() throws Exception {
+    void canEditColumnTitleWithWebSockets() throws Exception {
 
         ColumnTitle savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder()
                 .title("old title")
@@ -68,7 +68,7 @@ public class ColumnTitleApiTest extends ApiTest {
     }
 
     @Test
-    public void should_get_list_of_columns() throws Exception {
+    void should_get_list_of_columns() throws Exception {
         columnTitleRepository.saveAll(Arrays.asList(
                 ColumnTitle.builder().teamId("BeachBums").title("one").build(),
                 ColumnTitle.builder().teamId("BeachBums").title("two").build(),
@@ -85,7 +85,7 @@ public class ColumnTitleApiTest extends ApiTest {
     }
 
     @Test
-    public void should_update_column_title() throws Exception {
+    void should_update_column_title() throws Exception {
 
         ColumnTitle savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder()
                 .teamId("BeachBums")

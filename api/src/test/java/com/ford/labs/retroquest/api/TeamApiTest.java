@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
-public class TeamApiTest extends ApiTest {
+class TeamApiTest extends ApiTest {
 
     @Autowired
     private TeamRepository teamRepository;
@@ -48,7 +48,7 @@ public class TeamApiTest extends ApiTest {
     private static final String VALID_PASSWORD = "Passw0rd";
 
     @AfterEach
-    public void teardown() {
+    void teardown() {
         teamRepository.deleteAllInBatch();
         columnTitleRepository.deleteAllInBatch();
         assertThat(teamRepository.count()).isZero();
@@ -56,7 +56,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_create_team_and_update_metric() throws Exception {
+    void should_create_team_and_update_metric() throws Exception {
         meterRegistry.gauge("retroquest.teams.count", 0);
 
         installSuccessCaptcha();
@@ -77,7 +77,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_create_team_with_valid_name_and_password() throws Exception {
+    void should_create_team_with_valid_name_and_password() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest sentCreateTeamRequest = CreateTeamRequest.builder()
@@ -101,7 +101,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_create_team_with_empty_password() throws Exception {
+    void should_not_create_team_with_empty_password() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest sentCreateTeamRequest = CreateTeamRequest.builder()
@@ -117,7 +117,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_create_team_with_invalid_captcha() throws Exception {
+    void should_not_create_team_with_invalid_captcha() throws Exception {
         installInvalidCaptcha();
 
         CreateTeamRequest sentCreateTeamRequest = CreateTeamRequest.builder()
@@ -134,7 +134,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_create_team_with_empty_name() throws Exception {
+    void should_not_create_team_with_empty_name() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest sentCreateTeamRequest = CreateTeamRequest.builder()
@@ -151,7 +151,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_create_team_with_special_characters_in_name() throws Exception {
+    void should_not_create_team_with_special_characters_in_name() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest sentCreateTeamRequest = CreateTeamRequest.builder()
@@ -168,7 +168,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_create_team_with_duplicate_name() throws Exception {
+    void should_not_create_team_with_duplicate_name() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest sentCreateTeamRequest = CreateTeamRequest.builder()
@@ -191,7 +191,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_create_team_with_duplicate_lower_case_name() throws Exception {
+    void should_not_create_team_with_duplicate_lower_case_name() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest upperCaseCreateTeamRequest = CreateTeamRequest.builder()
@@ -216,7 +216,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_create_team_with_duplicate_upper_case_name() throws Exception {
+    void should_not_create_team_with_duplicate_upper_case_name() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest upperCaseCreateTeamRequest = CreateTeamRequest.builder()
@@ -241,7 +241,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_create_team_with_duplicate_with_leading_spaces() throws Exception {
+    void should_not_create_team_with_duplicate_with_leading_spaces() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
@@ -266,7 +266,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_create_team_with_duplicate_with_trailing_spaces() throws Exception {
+    void should_not_create_team_with_duplicate_with_trailing_spaces() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
@@ -291,7 +291,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_create_team_with_leading_spaces_dropped_from_team_name_and_uri() throws Exception {
+    void should_create_team_with_leading_spaces_dropped_from_team_name_and_uri() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest sentCreateTeamRequest = CreateTeamRequest.builder()
@@ -315,7 +315,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_create_team_with_trailing_spaces_dropped_from_team_name_and_uri() throws Exception {
+    void should_create_team_with_trailing_spaces_dropped_from_team_name_and_uri() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest sentCreateTeamRequest = CreateTeamRequest.builder()
@@ -339,7 +339,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_update_password() throws Exception {
+    void should_update_password() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
@@ -368,7 +368,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_update_password_with_incorrect_previous_password() throws Exception {
+    void should_not_update_password_with_incorrect_previous_password() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
@@ -393,7 +393,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_update_password_with_an_invalid_new_password() throws Exception {
+    void should_not_update_password_with_an_invalid_new_password() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
@@ -418,7 +418,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_get_team_name() throws Exception {
+    void should_get_team_name() throws Exception {
         installSuccessCaptcha();
 
         String expectedName = "Beachity Bums";
@@ -440,14 +440,14 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_get_team_name_with_nonexistant_name() throws Exception {
+    void should_not_get_team_name_with_nonexistant_name() throws Exception {
         mockMvc.perform(get("/api/team/nonExistentTeamName/name"))
             .andExpect(status().isForbidden())
             .andExpect(status().reason("Incorrect board name. Please try again."));
     }
 
     @Test
-    public void should_get_token_when_logged_in() throws Exception {
+    void should_get_token_when_logged_in() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
@@ -474,7 +474,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_login_when_failed_password_threshold_is_not_reached() throws Exception {
+    void should_login_when_failed_password_threshold_is_not_reached() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
@@ -501,7 +501,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_login_with_wrong_team_name() throws Exception {
+    void should_not_login_with_wrong_team_name() throws Exception {
         installSuccessCaptcha();
 
         LoginRequest loginRequest = LoginRequest.builder()
@@ -518,7 +518,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_login_with_incorrect_password() throws Exception {
+    void should_not_login_with_incorrect_password() throws Exception {
         installInvalidCaptchaTwice();
 
         CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
@@ -543,7 +543,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_login_with_lower_case_board_name_in_request() throws Exception {
+    void should_login_with_lower_case_board_name_in_request() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
@@ -570,7 +570,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_login_with_upper_case_board_name_in_request() throws Exception {
+    void should_login_with_upper_case_board_name_in_request() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
@@ -597,7 +597,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_login_with_board_name_with_leading_spaces_in_request() throws Exception {
+    void should_login_with_board_name_with_leading_spaces_in_request() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
@@ -624,7 +624,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_login_with_board_name_with_trailing_spaces_in_request() throws Exception {
+    void should_login_with_board_name_with_trailing_spaces_in_request() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
@@ -651,7 +651,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_login_with_board_name_with_leading_and_trailing_spaces_in_request() throws Exception {
+    void should_login_with_board_name_with_leading_and_trailing_spaces_in_request() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
@@ -678,7 +678,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_login_with_board_name_with_middle_spaces_in_request() throws Exception {
+    void should_not_login_with_board_name_with_middle_spaces_in_request() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
@@ -703,21 +703,21 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void should_return_ok_for_valid_token() throws Exception {
+    void should_return_ok_for_valid_token() throws Exception {
         mockMvc.perform(get("/api/team/teamId/validate")
             .header("Authorization", "Bearer " + jwtBuilder.buildJwt("teamId")))
             .andExpect(status().isOk());
     }
 
     @Test
-    public void should_return_forbidden_token_doesnt_match_teamid() throws Exception {
+    void should_return_forbidden_token_doesnt_match_teamid() throws Exception {
         mockMvc.perform(get("/api/team/wrongTeamId/validate")
             .header("Authorization", "Bearer " + jwtBuilder.buildJwt("teamId")))
             .andExpect(status().isForbidden());
     }
 
     @Test
-    public void shouldAllowCaptchaRequestWithInvalidToken() throws Exception {
+    void shouldAllowCaptchaRequestWithInvalidToken() throws Exception {
         installSuccessCaptcha();
 
         CreateTeamRequest createTeamRequest = CreateTeamRequest.builder()
@@ -734,7 +734,7 @@ public class TeamApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldReturnIsCaptchaEnabledWithCaptchaRequest() throws Exception {
+    void shouldReturnIsCaptchaEnabledWithCaptchaRequest() throws Exception {
         mockMvc.perform(get("/api/captcha")
             .header("Authorization", "Bearer " + jwtBuilder.buildJwt("teamId"))
         ).andExpect(status().isOk());

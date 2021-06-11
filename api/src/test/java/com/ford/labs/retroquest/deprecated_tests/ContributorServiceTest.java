@@ -37,7 +37,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-public class ContributorServiceTest {
+class ContributorServiceTest {
     @Mock(lenient = true)
     private RestTemplate restTemplate;
     private ContributorsService contributorService;
@@ -50,7 +50,7 @@ public class ContributorServiceTest {
     private Contributor contributor2;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         contributorService = new ContributorsService(restTemplate);
         contributor1 = new Contributor(avatarUrl1.getBytes(), accountUrl1);
         contributor2 = new Contributor(avatarUrl2.getBytes(), accountUrl2);
@@ -59,7 +59,7 @@ public class ContributorServiceTest {
     }
 
     @Test
-    public void given_a_list_of_two_contributors_when_fetching_return_the_contributors() {
+    void given_a_list_of_two_contributors_when_fetching_return_the_contributors() {
         GithubContributor[] githubContributors = {
                 new GithubContributor(avatarUrl1, accountUrl1),
                 new GithubContributor(avatarUrl2, accountUrl2),
@@ -78,7 +78,7 @@ public class ContributorServiceTest {
 
 
     @Test
-    public void given_a_list_of_two_contributors_with_one_invalid_email_address_when_fetching_return_one_valid_contributor() {
+    void given_a_list_of_two_contributors_with_one_invalid_email_address_when_fetching_return_one_valid_contributor() {
 
         GithubContributor[] githubContributors = {
                 new GithubContributor(avatarUrl1, accountUrl1),
@@ -95,7 +95,7 @@ public class ContributorServiceTest {
     }
 
     @Test
-    public void given_a_call_to_github_contributors_returns_null_when_fetching_contributors_return_empty_list() {
+    void given_a_call_to_github_contributors_returns_null_when_fetching_contributors_return_empty_list() {
         given(restTemplate.getForObject(
                 githubContributorsUrl,
                 GithubContributor[].class))
