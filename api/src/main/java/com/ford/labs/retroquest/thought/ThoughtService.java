@@ -21,19 +21,19 @@ public class ThoughtService {
     }
 
     public int likeThought(String thoughtId) {
-        Thought thought = fetchThought(thoughtId);
+        var thought = fetchThought(thoughtId);
         thought.incrementHearts();
         return thoughtRepository.save(thought).getHearts();
     }
 
     public void discussThought(String thoughtId) {
-        Thought thought = fetchThought(thoughtId);
+        var thought = fetchThought(thoughtId);
         thought.toggleDiscussed();
         thoughtRepository.save(thought);
     }
 
     public void updateThoughtMessage(String thoughtId, String updatedMessage) {
-        Thought returnedThought = fetchThought(thoughtId);
+        var returnedThought = fetchThought(thoughtId);
         returnedThought.setMessage(updatedMessage);
         thoughtRepository.save(returnedThought);
     }
@@ -61,10 +61,10 @@ public class ThoughtService {
     public String createThoughtAndReturnURI(String teamId, Thought thought) {
         thought.setTeamId(teamId);
 
-        ColumnTitle columnTitle = columnTitleRepository.findByTeamIdAndAndTopic(teamId, thought.getTopic());
+        var columnTitle = columnTitleRepository.findByTeamIdAndAndTopic(teamId, thought.getTopic());
         thought.setColumnTitle(columnTitle);
 
-        Thought save = thoughtRepository.save(thought);
+        var save = thoughtRepository.save(thought);
 
         return "/api/team/" + teamId + "/thought/" + save.getId();
     }

@@ -35,9 +35,9 @@ import java.util.stream.Stream;
 @Service
 public class ColumnCombinerService {
 
-    private ThoughtRepository thoughtRepository;
-    private ActionItemRepository actionItemRepository;
-    private ColumnTitleRepository columnTitleRepository;
+    private final ThoughtRepository thoughtRepository;
+    private final ActionItemRepository actionItemRepository;
+    private final ColumnTitleRepository columnTitleRepository;
 
     public ColumnCombinerService(ThoughtRepository thoughtRepository, ActionItemRepository actionItemRepository,
                                  ColumnTitleRepository columnTitleRepository) {
@@ -47,20 +47,20 @@ public class ColumnCombinerService {
     }
 
     public ColumnCombinerResponse aggregateResponse(String teamId) {
-        List<Thought> thoughts = thoughtRepository.findAllByTeamIdAndBoardIdIsNull(teamId);
-        List<ActionItem> actionItems = actionItemRepository.findAllByTeamIdAndArchivedIsFalse(teamId);
-        List<ColumnTitle> columnTitles = columnTitleRepository.findAllByTeamId(teamId);
+        var thoughts = thoughtRepository.findAllByTeamIdAndBoardIdIsNull(teamId);
+        var actionItems = actionItemRepository.findAllByTeamIdAndArchivedIsFalse(teamId);
+        var columnTitles = columnTitleRepository.findAllByTeamId(teamId);
 
         Map<ColumnTitle, List<Thought>> columnTitleListMap = columnTitles.stream().collect(
                 Collectors.toMap(title -> title, title -> new ArrayList<>()));
-        Map<ColumnTitle, List<Thought>> groupedThoughts = thoughts.stream()
+        var groupedThoughts = thoughts.stream()
                 .collect(Collectors.groupingBy(Thought::getColumnTitle));
 
-        Map<ColumnTitle, List<Thought>> mergedThoughts = mergeMaps(columnTitleListMap, groupedThoughts);
+        var mergedThoughts = mergeMaps(columnTitleListMap, groupedThoughts);
 
-        List<ColumnResponse> unorderedColumnResponses = buildColumnResponses(mergedThoughts);
+        var unorderedColumnResponses = buildColumnResponses(mergedThoughts);
 
-        ColumnResponse actionItemColumnResponse = ColumnResponse.builder()
+        var actionItemColumnResponse = ColumnResponse.builder()
                 .title("Action Item")
                 .topic("action")
                 .items(ItemSorterResponse.builder()
@@ -69,7 +69,7 @@ public class ColumnCombinerService {
                         .build())
                 .build();
 
-        List<ColumnResponse> orderedColumns = unorderedColumnResponses.stream()
+        var orderedColumns = unorderedColumnResponses.stream()
                 .sorted(Comparator.comparing(ColumnResponse::getId)).collect(Collectors.toList());
 
         orderedColumns.add(actionItemColumnResponse);

@@ -61,16 +61,16 @@ public class UserController {
 
         if (!newUserRequest.getPassword().isEmpty() && !newUserRequest.getName().isEmpty()) {
 
-            String encryptedPassword = passwordEncoder.encode(newUserRequest.getPassword());
+            var encryptedPassword = passwordEncoder.encode(newUserRequest.getPassword());
 
-            User newUser = User.builder()
+            var newUser = User.builder()
                     .name(newUserRequest.getName())
                     .password(encryptedPassword)
                     .build();
 
             userRepository.save(newUser);
 
-            String jwt = jwtBuilder.buildJwt(newUserRequest.getName());
+            var jwt = jwtBuilder.buildJwt(newUserRequest.getName());
 
             MultiValueMap<String, String> headers = new HttpHeaders();
             headers.add("Location", "/user/" + newUserRequest.getName().toLowerCase());
@@ -102,11 +102,11 @@ public class UserController {
     })
     public ResponseEntity<Void> addUserToExistingTeam(@PathVariable("name") String name, @RequestBody ExistingTeamRequest request) {
 
-        Optional<Team> team = teamRepository.findTeamByNameIgnoreCase(request.getName());
+        var team = teamRepository.findTeamByNameIgnoreCase(request.getName());
         if (team.isPresent() && passwordEncoder.matches(request.getPassword(), team.get().getPassword())) {
-            User foundUser = userRepository.findByName(name).orElse(null);
+            var foundUser = userRepository.findByName(name).orElse(null);
 
-            Set<Team> userTeams = Objects.requireNonNull(foundUser).getTeams();
+            var userTeams = Objects.requireNonNull(foundUser).getTeams();
 
             if (userTeams.contains(team.get())) {
                 return ResponseEntity.status(CONFLICT).build();
@@ -133,11 +133,11 @@ public class UserController {
     public ResponseEntity<Void> addUserToNewTeam(@PathVariable("name") String name, @RequestBody NewTeamRequest request) {
 
         if (request != null && !request.getName().isEmpty()) {
-            User foundUser = userRepository.findByName(name).orElse(null);
+            var foundUser = userRepository.findByName(name).orElse(null);
 
-            Team createdTeam = teamService.createNewTeam(request.getName());
+            var createdTeam = teamService.createNewTeam(request.getName());
 
-            Set<Team> userTeams = Objects.requireNonNull(foundUser).getTeams();
+            var userTeams = Objects.requireNonNull(foundUser).getTeams();
             userTeams.add(createdTeam);
 
             userRepository.save(foundUser);
@@ -157,7 +157,7 @@ public class UserController {
     })
     public ResponseEntity<Set<Team>> getTeamsAssignedToUser(@PathVariable("name") String name) {
 
-        User foundUser = userRepository.findByName(name).orElse(new User());
+        var foundUser = userRepository.findByName(name).orElse(new User());
 
         return ResponseEntity.ok(Optional.ofNullable(foundUser.getTeams()).orElse(new HashSet<>()));
     }
@@ -171,7 +171,7 @@ public class UserController {
     })
     public ResponseEntity<String> getUserToken(@RequestBody NewUserRequest newUserRequest) {
 
-        User foundUser = userRepository.findByName(newUserRequest.getName()).orElse(null);
+        var foundUser = userRepository.findByName(newUserRequest.getName()).orElse(null);
 
         if (foundUser != null && passwordEncoder.matches(newUserRequest.getPassword(), foundUser.getPassword())) {
             return ResponseEntity.ok(jwtBuilder.buildJwt(foundUser.getName()));

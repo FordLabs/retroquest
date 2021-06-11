@@ -41,7 +41,7 @@ import java.util.List;
 @Tag(name = "Thought Controller", description = "The controller that manages thoughts on a team board")
 public class ThoughtController {
 
-    private ThoughtService thoughtService;
+    private final ThoughtService thoughtService;
     private final ThoughtRepository thoughtRepository;
     private final ApiAuthorization apiAuthorization;
 
@@ -114,7 +114,7 @@ public class ThoughtController {
             @ApiResponse(responseCode = "400", description = "Path to saved thought is not a valid URI")
     })
     public ResponseEntity<Void> createThoughtForTeam(@PathVariable("teamId") String teamId, @RequestBody Thought thought) throws URISyntaxException {
-        URI savedThoughtUri = new URI(thoughtService.createThoughtAndReturnURI(teamId, thought));
+        var savedThoughtUri = new URI(thoughtService.createThoughtAndReturnURI(teamId, thought));
         return ResponseEntity.created(savedThoughtUri).build();
     }
 
@@ -123,7 +123,7 @@ public class ThoughtController {
     public WebsocketPutResponse<Thought> createThoughtWebsocket(@DestinationVariable("teamId") String teamId, Thought thought, Authentication authentication) {
         if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
             thought.setTeamId(teamId);
-            Thought savedThought = thoughtRepository.save(thought);
+            var savedThought = thoughtRepository.save(thought);
             return new WebsocketPutResponse<>(thoughtService.fetchThought(savedThought.getId()));
         }
         return null;
@@ -133,7 +133,7 @@ public class ThoughtController {
     @SendTo("/topic/{teamId}/thoughts")
     public WebsocketPutResponse<Thought> editThoughtWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("thoughtId") Long thoughtId, Thought thought, Authentication authentication) {
         if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            Thought savedThought = thoughtRepository.findById(thoughtId).orElseThrow();
+            var savedThought = thoughtRepository.findById(thoughtId).orElseThrow();
             savedThought.setMessage(thought.getMessage());
             savedThought.setDiscussed(thought.isDiscussed());
             savedThought.setHearts(thought.getHearts());
@@ -147,7 +147,7 @@ public class ThoughtController {
     @SendTo("/topic/{teamId}/thoughts")
     public WebsocketPutResponse<Thought> moveThoughtWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("thoughtId") Long thoughtId, Thought thought, Authentication authentication) {
         if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            Thought savedThought = thoughtRepository.findById(thoughtId).orElseThrow();
+            var savedThought = thoughtRepository.findById(thoughtId).orElseThrow();
             savedThought.setTopic(thought.getTopic());
             thoughtRepository.save(savedThought);
             return new WebsocketPutResponse<>(savedThought);
