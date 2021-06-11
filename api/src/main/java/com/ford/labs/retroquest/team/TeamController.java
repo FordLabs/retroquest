@@ -17,7 +17,6 @@
 
 package com.ford.labs.retroquest.team;
 
-import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
 import com.ford.labs.retroquest.security.JwtBuilder;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,7 +26,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -45,16 +49,15 @@ public class TeamController {
     private final TeamService teamService;
     private final JwtBuilder jwtBuilder;
     private final CaptchaService captchaService;
-    private final ApiAuthorization apiAuthorization;
 
-    public TeamController(TeamService teamService,
-                          JwtBuilder jwtBuilder,
-                          CaptchaService captchaService,
-                          ApiAuthorization apiAuthorization) {
+    public TeamController(
+        TeamService teamService,
+        JwtBuilder jwtBuilder,
+        CaptchaService captchaService
+    ) {
         this.teamService = teamService;
         this.jwtBuilder = jwtBuilder;
         this.captchaService = captchaService;
-        this.apiAuthorization = apiAuthorization;
     }
 
     @PostMapping("/team")
