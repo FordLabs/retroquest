@@ -25,15 +25,8 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 public class TeamNameValidator implements ConstraintValidator<TeamNameConstraint, String> {
-
-    @Override
-    public void initialize(TeamNameConstraint constraintAnnotation) {
-
-    }
-
     @Override
     public boolean isValid(String teamName, ConstraintValidatorContext context) {
-
         if (StringUtils.isBlank(teamName)) {
             throw new EmptyTeamNameException();
         }
