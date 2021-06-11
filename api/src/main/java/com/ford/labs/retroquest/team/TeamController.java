@@ -96,16 +96,17 @@ public class TeamController {
     public ResponseEntity<byte[]> downloadTeamBoard(@PathVariable("teamId") String teamId) throws IOException {
         var file = teamService.buildCsvFileFromTeam(teamId);
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFileName())
-                .contentType(MediaType.parseMediaType("text/csv"))
-                .body(file.getCSVString().getBytes());
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFileName())
+            .contentType(MediaType.parseMediaType("text/csv"))
+            .body(file.getCSVString().getBytes());
     }
 
     @GetMapping(value = "team/{teamId}/validate")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Validates a team id", description = "deprecated")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public void validateTeamId(@PathVariable("teamId") String teamId) {
+    public ResponseEntity<Void> validateTeamId(@PathVariable("teamId") String teamId) {
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/team/login")
