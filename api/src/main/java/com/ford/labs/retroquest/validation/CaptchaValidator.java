@@ -43,40 +43,40 @@ public class CaptchaValidator implements ConstraintValidator<CaptchaConstraint, 
 
     @Override
     public boolean isValid(TeamRequest teamRequest, ConstraintValidatorContext context) {
-        if (!captchaProperties.isEnabled()) {
+        if (captchaIsValid(teamRequest)) {
             return true;
         }
 
-        if (teamRequest instanceof LoginRequest) {
-            return validateLoginCaptcha(teamRequest);
-        }
-
-        return validateCaptcha(teamRequest);
+        throw new CaptchaInvalidException();
     }
 
-    private boolean validateLoginCaptcha(TeamRequest teamRequest) {
-        if (!captchaService.isCaptchaEnabledForTeam(teamRequest.getName())) {
-            return true;
-        }
-
-        return validateCaptcha(teamRequest);
+    private boolean captchaIsValid(TeamRequest teamRequest) {
+        return captchaIsDisabled()
+               || requestIsForLoginAndTeamHasCaptchaDisabled(teamRequest)
+               || captchaResponseIsValid(teamRequest);
     }
 
-    private boolean validateCaptcha(TeamRequest teamRequest) {
+    private boolean captchaIsDisabled() {
+        return !captchaProperties.isEnabled();
+    }
+
+    private boolean requestIsForLoginAndTeamHasCaptchaDisabled(TeamRequest teamRequest) {
+        return teamRequest instanceof LoginRequest
+               && !captchaService.isCaptchaEnabledForTeam(teamRequest.getName());
+    }
+
+    private boolean captchaResponseIsValid(TeamRequest teamRequest) {
         if (StringUtils.isBlank(teamRequest.getCaptchaResponse())) {
-            throw new CaptchaInvalidException();
+            return false;
         }
 
         var response = restTemplate.getForObject(
-            captchaProperties.getUrl() + "?secret={secret}&response={response}",
+            String.format("%s?secret={secret}&response={response}", captchaProperties.getUrl()),
             ReCaptchaResponse.class,
             captchaProperties.getSecret(),
             teamRequest.getCaptchaResponse()
         );
 
-        if (response == null || !response.isSuccess()) {
-            throw new CaptchaInvalidException();
-        }
-        return true;
+        return response != null && response.isSuccess();
     }
 }
