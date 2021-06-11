@@ -31,14 +31,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class JwtAuthenticationFilterTest {
+class JwtAuthenticationFilterTest {
 
     private MockHttpServletRequest request;
     private MockHttpServletResponse response;
     private FilterChain filterChainMock;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         request = new MockHttpServletRequest();
         response = mock(MockHttpServletResponse.class);
         SecurityContextHolder.getContext().setAuthentication(null);
@@ -46,7 +46,7 @@ public class JwtAuthenticationFilterTest {
     }
 
     @Test
-    public void should_call_security_filter_when_security_is_not_set() throws ServletException, IOException {
+    void should_call_security_filter_when_security_is_not_set() throws ServletException, IOException {
 
         JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter("SOSECRET");
 
@@ -57,7 +57,7 @@ public class JwtAuthenticationFilterTest {
     }
 
     @Test
-    public void ifValidBearerHeaderIsSet_DontCallDoFilterAndSetAuthentication() throws ServletException, IOException {
+    void ifValidBearerHeaderIsSet_DontCallDoFilterAndSetAuthentication() throws ServletException, IOException {
         JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter("SOSECRET");
 
         String expectedJwt = new JwtBuilder("SOSECRET").buildJwt("anyteam");
@@ -72,7 +72,7 @@ public class JwtAuthenticationFilterTest {
     }
 
     @Test
-    public void ifRequestDoesnotHaveATokenInHeader_CallDoFilter() throws ServletException, IOException {
+    void ifRequestDoesnotHaveATokenInHeader_CallDoFilter() throws ServletException, IOException {
         request.addHeader("Authorization", "Bearer ");
 
         JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter("SOSECRET");

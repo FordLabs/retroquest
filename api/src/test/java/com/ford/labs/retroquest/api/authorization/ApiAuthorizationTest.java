@@ -31,12 +31,12 @@ class ApiAuthorizationTest {
     private Set<Team> teams;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         teams = new HashSet<>();
     }
 
     @Test
-    public void given_team_id_equals_the_authenticated_principal_when_request_authorized_return_true() {
+    void given_team_id_equals_the_authenticated_principal_when_request_authorized_return_true() {
         final String teamId = "bob";
         given(authentication.getPrincipal()).willReturn(teamId);
 
@@ -45,7 +45,7 @@ class ApiAuthorizationTest {
     }
 
     @Test
-    public void given_logged_in_user_belongs_to_a_team_when_request_authorized_return_true() {
+    void given_logged_in_user_belongs_to_a_team_when_request_authorized_return_true() {
         final String teamName = "team";
         String loggedInUser = "bob";
         String teamId = "/team/uri";
@@ -69,7 +69,7 @@ class ApiAuthorizationTest {
     }
 
     @Test
-    public void given_a_teamId_that_is_not_authorized_a_when_request_authorized_return_false() {
+    void given_a_teamId_that_is_not_authorized_a_when_request_authorized_return_false() {
         final String unauthorizedUser = "notAuthorized";
         String authorizedUser = "authorizedUser";
         given(authentication.getPrincipal()).willReturn(authorizedUser);

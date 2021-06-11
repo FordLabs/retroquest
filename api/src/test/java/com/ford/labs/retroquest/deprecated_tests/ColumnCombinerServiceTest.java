@@ -38,7 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ColumnCombinerServiceTest {
+class ColumnCombinerServiceTest {
 
     @Mock
     private ThoughtRepository thoughtRepository;
@@ -55,7 +55,7 @@ public class ColumnCombinerServiceTest {
     private ColumnCombinerResponse response;
 
     @BeforeEach
-    public void init() {
+    void init() {
         when(thoughtRepository.findAllByTeamIdAndBoardIdIsNull(fakeTeamId)).thenReturn(
                 Arrays.asList(
                         expectedActiveHappyThoughts,
@@ -135,14 +135,14 @@ public class ColumnCombinerServiceTest {
 
     // "should contain all the columns"
     @Test
-    public void createResponse() {
+    void createResponse() {
         assertThat(response.getColumns()).hasSize(4);
     }
 
 
     // "should set the column topics in order"
     @Test
-    public void columnTopicInOrder() {
+    void columnTopicInOrder() {
         assertThat(response.getColumns().get(0).getTopic()).isEqualTo("happy");
         assertThat(response.getColumns().get(1).getTopic()).isEqualTo("confused");
         assertThat(response.getColumns().get(2).getTopic()).isEqualTo("sad");
@@ -151,7 +151,7 @@ public class ColumnCombinerServiceTest {
 
     // "should set the column titles in order"
     @Test
-    public void columnTitleInOrder() {
+    void columnTitleInOrder() {
         assertThat(response.getColumns().get(0).getTitle()).isEqualTo("Happy");
         assertThat(response.getColumns().get(1).getTitle()).isEqualTo("Confused");
         assertThat(response.getColumns().get(2).getTitle()).isEqualTo("Sad");
@@ -160,7 +160,7 @@ public class ColumnCombinerServiceTest {
 
     // "should put active items in correct list"
     @Test
-    public void activeItemsList() {
+    void activeItemsList() {
         assertThat(response.getColumns().get(0).getItems().getActive()).containsExactly(expectedActiveHappyThoughts);
         assertThat(response.getColumns().get(1).getItems().getActive()).containsExactly(expectedActiveConfusedThoughts);
         assertThat(response.getColumns().get(2).getItems().getActive()).containsExactly(expectedActiveSadThoughts);
@@ -169,7 +169,7 @@ public class ColumnCombinerServiceTest {
 
     // "should put completed items in correct list"
     @Test
-    public void completedItemsList() {
+    void completedItemsList() {
         assertThat(response.getColumns().get(0).getItems().getCompleted()).containsExactly(
                 expectedCompletedHappyThoughts);
         assertThat(response.getColumns().get(1).getItems().getCompleted()).containsExactly(

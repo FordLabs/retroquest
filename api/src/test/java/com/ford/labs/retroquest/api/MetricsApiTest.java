@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
-public class MetricsApiTest extends ApiTest {
+class MetricsApiTest extends ApiTest {
 
     @Autowired
     private TeamRepository teamRepository;
@@ -33,13 +33,13 @@ public class MetricsApiTest extends ApiTest {
     private FeedbackRepository feedbackRepository;
 
     @AfterEach
-    public void teardown() {
+    void teardown() {
         teamRepository.deleteAllInBatch();
         feedbackRepository.deleteAllInBatch();
     }
 
     @Test
-    public void canReadTheTotalNumberOfTeamsCreated() throws Exception {
+    void canReadTheTotalNumberOfTeamsCreated() throws Exception {
         Team team = new Team();
         String teamUri = "teamUri";
         team.setUri(teamUri);
@@ -54,20 +54,20 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    public void cannotReadTheTotalNumberOfTeamsWithInvalidAuthorization() throws Exception {
+    void cannotReadTheTotalNumberOfTeamsWithInvalidAuthorization() throws Exception {
         mockMvc.perform(get("/api/admin/metrics/team/count")
             .with(httpBasic("foo", "bar")))
             .andExpect(status().isUnauthorized());
     }
 
     @Test
-    public void cannotReadTheTotalNumberOfTeamsWithoutAuthorization() throws Exception {
+    void cannotReadTheTotalNumberOfTeamsWithoutAuthorization() throws Exception {
         mockMvc.perform(get("/api/admin/metrics/team/count"))
             .andExpect(status().isUnauthorized());
     }
 
     @Test
-    public void canGetFeedbackCount() throws Exception {
+    void canGetFeedbackCount() throws Exception {
         Feedback feedback = new Feedback();
         feedback.setDateCreated(LocalDateTime.now());
         feedbackRepository.save(feedback);
@@ -80,20 +80,20 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    public void cannotGetFeedbackWithInvalidAuthorization() throws Exception {
+    void cannotGetFeedbackWithInvalidAuthorization() throws Exception {
         mockMvc.perform(get("/api/admin/metrics/feedback/count")
             .with(httpBasic("foo", "bar")))
             .andExpect(status().isUnauthorized());
     }
 
     @Test
-    public void cannotGetFeedbackWithoutAuthorization() throws Exception {
+    void cannotGetFeedbackWithoutAuthorization() throws Exception {
         mockMvc.perform(get("/api/admin/metrics/feedback/count"))
             .andExpect(status().isUnauthorized());
     }
 
     @Test
-    public void canGetAverageRatingAsAdmin() throws Exception {
+    void canGetAverageRatingAsAdmin() throws Exception {
         Feedback feedback1 = new Feedback();
         feedback1.setStars(4);
         feedback1.setDateCreated(LocalDateTime.now());
@@ -112,7 +112,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    public void averageRatingIgnoresStarsWithAZeroValue() throws Exception {
+    void averageRatingIgnoresStarsWithAZeroValue() throws Exception {
 
         Feedback feedback1 = new Feedback();
         feedback1.setStars(4);
@@ -132,20 +132,20 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    public void cannotGetAverageRatingWithInvalidAuthorization() throws Exception {
+    void cannotGetAverageRatingWithInvalidAuthorization() throws Exception {
         mockMvc.perform(get("/api/admin/metrics/feedback/average")
             .with(httpBasic("foo", "bar")))
             .andExpect(status().isUnauthorized());
     }
 
     @Test
-    public void cannotGetAverageRatingWithoutAuthorization() throws Exception {
+    void cannotGetAverageRatingWithoutAuthorization() throws Exception {
         mockMvc.perform(get("/api/admin/metrics/feedback/average"))
             .andExpect(status().isUnauthorized());
     }
 
     @Test
-    public void whenGettingTheTotalNumberOfReviews_providingOnlyAStartDate_getsAllFromThatDateUntilNow() throws Exception {
+    void whenGettingTheTotalNumberOfReviews_providingOnlyAStartDate_getsAllFromThatDateUntilNow() throws Exception {
 
         Feedback feedback1 = new Feedback();
         feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
@@ -162,7 +162,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    public void whenGettingTheTotalNumberOfReviews_providingOnlyAnEndDate_getsAllFromNowToThatDate() throws Exception {
+    void whenGettingTheTotalNumberOfReviews_providingOnlyAnEndDate_getsAllFromNowToThatDate() throws Exception {
 
         Feedback feedback1 = new Feedback();
         feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
@@ -179,7 +179,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    public void whenGettingTheTotalNumberOfReviews_providingOnlyStartAndEndDate_getsAllBetweenThoseDates() throws Exception {
+    void whenGettingTheTotalNumberOfReviews_providingOnlyStartAndEndDate_getsAllBetweenThoseDates() throws Exception {
 
         Feedback feedback1 = new Feedback();
         feedback1.setDateCreated(LocalDateTime.of(2018, 4, 1, 1, 1));
@@ -198,7 +198,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    public void whenGettingTheAverageRating_providingAStartAndEndDate_getsTheBetweenDates() throws Exception {
+    void whenGettingTheAverageRating_providingAStartAndEndDate_getsTheBetweenDates() throws Exception {
 
         Feedback feedback1 = new Feedback();
         feedback1.setDateCreated(LocalDateTime.of(2018, 4, 1, 1, 1));
@@ -220,7 +220,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    public void whenGettingTheAverageRating_providingOnlyAStartDate_getsAllFromThatDateUntilNow() throws Exception {
+    void whenGettingTheAverageRating_providingOnlyAStartDate_getsAllFromThatDateUntilNow() throws Exception {
 
         Feedback feedback1 = new Feedback();
         feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
@@ -239,7 +239,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    public void whenGettingTheAverageRating_providingOnlyAnEndDate_getsAllFromNowToThatDate() throws Exception {
+    void whenGettingTheAverageRating_providingOnlyAnEndDate_getsAllFromNowToThatDate() throws Exception {
 
         Feedback feedback1 = new Feedback();
         feedback1.setStars(3);
@@ -258,7 +258,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    public void whenGettingTeamCount_providingOnlyAStartDate_getsAllFromNowToThatDate() throws Exception {
+    void whenGettingTeamCount_providingOnlyAStartDate_getsAllFromNowToThatDate() throws Exception {
 
         Team team1 = new Team();
         team1.setUri("team" + LocalDate.now().toEpochDay());
@@ -276,7 +276,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    public void whenGettingTeamLogins_providingOnlyAStartDate_getsAllFromThenToNow() throws Exception {
+    void whenGettingTeamLogins_providingOnlyAStartDate_getsAllFromThenToNow() throws Exception {
         Team team1 = new Team();
         team1.setUri("teamLoginOnlyStartDate1");
         team1.setLastLoginDate(LocalDate.of(2018, 1, 1));
@@ -292,7 +292,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    public void whenGettingTeamLogins_providingOnlyAnEndDate_getsAllFromTheBeginningOfTimeToThatDate() throws Exception {
+    void whenGettingTeamLogins_providingOnlyAnEndDate_getsAllFromTheBeginningOfTimeToThatDate() throws Exception {
         Team team1 = new Team();
         team1.setUri("teamLoginsOnlyEndDate1");
         team1.setLastLoginDate(LocalDate.of(2018, 1, 1));
@@ -308,7 +308,7 @@ public class MetricsApiTest extends ApiTest {
     }
 
     @Test
-    public void whenGettingTeamLogins_providingAStartAndEndDate_getsAllBetweenThem() throws Exception {
+    void whenGettingTeamLogins_providingAStartAndEndDate_getsAllBetweenThem() throws Exception {
         Team team1 = new Team();
         team1.setUri("teamLoginStartAndEndDate1");
         team1.setName("teamLoginStartAndEndDate1");

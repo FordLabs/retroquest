@@ -34,10 +34,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 
-public class CsvFileTest {
+class CsvFileTest {
 
     @Test
-    public void shouldConvertThoughtsAndActionItemsToACSV() throws IOException {
+    void shouldConvertThoughtsAndActionItemsToACSV() throws IOException {
 
         Thought firstThought = Thought.builder()
                 .topic("confused")

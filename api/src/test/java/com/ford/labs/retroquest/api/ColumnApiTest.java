@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
-public class ColumnApiTest extends ApiTest {
+class ColumnApiTest extends ApiTest {
 
     @Autowired
     ApiAuthorization apiAuthorization;
@@ -47,7 +47,7 @@ public class ColumnApiTest extends ApiTest {
     private ColumnCombinerResponse expectedBody;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         expectedBody = ColumnCombinerResponse.builder()
                 .columns(
                         Collections.singletonList(ColumnResponse.builder().topic("happy").build())
@@ -57,20 +57,20 @@ public class ColumnApiTest extends ApiTest {
     }
 
     @Test
-    public void should_return_unauthorized_if_no_bearer_token_is_sent() throws Exception {
+    void should_return_unauthorized_if_no_bearer_token_is_sent() throws Exception {
         mockMvc.perform(get("/api/v2/team/" + teamId + "/columns"))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
-    public void should_return_ok_since_user_is_authorized() throws Exception {
+    void should_return_ok_since_user_is_authorized() throws Exception {
         mockMvc.perform(get("/api/v2/team/" + teamId + "/columns")
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void should_get_a_filled_out_aggregated_response_with_a_200() throws Exception {
+    void should_get_a_filled_out_aggregated_response_with_a_200() throws Exception {
         String body = mockMvc.perform(get("/api/v2/team/" + teamId + "/columns")
                 .header("Authorization", getBearerAuthToken()))
                 .andReturn().getResponse().getContentAsString();
@@ -78,5 +78,4 @@ public class ColumnApiTest extends ApiTest {
         assertThat(objectMapper.readValue(body, ColumnCombinerResponse.class))
                 .isEqualToComparingFieldByField(expectedBody);
     }
-
 }

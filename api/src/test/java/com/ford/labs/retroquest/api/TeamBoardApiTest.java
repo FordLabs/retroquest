@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
-public class TeamBoardApiTest extends ApiTest {
+class TeamBoardApiTest extends ApiTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -48,7 +48,7 @@ public class TeamBoardApiTest extends ApiTest {
     private String jwt;
 
     @BeforeEach
-    public void setup() throws Exception {
+    void setup() throws Exception {
         teamService.createNewTeam(CreateTeamRequest.builder()
                 .name(validNewTeamRequest.getName())
                 .password(validNewTeamRequest.getPassword())
@@ -71,7 +71,7 @@ public class TeamBoardApiTest extends ApiTest {
     }
 
     @AfterEach
-    public void teardown() {
+    void teardown() {
         userRepository.deleteAllInBatch();
         teamRepository.deleteAllInBatch();
         columnTitleRepository.deleteAllInBatch();
@@ -84,7 +84,7 @@ public class TeamBoardApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldAddTwoExistingTeamsToTheUser() throws Exception {
+    void shouldAddTwoExistingTeamsToTheUser() throws Exception {
 
         // First Call
 
@@ -117,7 +117,7 @@ public class TeamBoardApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldReturnAConflictStatusCodeWhenExistingTeamIsAddedToUserTwice() throws Exception {
+    void shouldReturnAConflictStatusCodeWhenExistingTeamIsAddedToUserTwice() throws Exception {
 
         // First Call
 
@@ -141,7 +141,7 @@ public class TeamBoardApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldNotAddExistingTeamToUserWithNoToken() throws Exception {
+    void shouldNotAddExistingTeamToUserWithNoToken() throws Exception {
 
         mockMvc.perform(put("/api/user/" + validNewUserRequest.getName() + "/team")
                 .content(objectMapper.writeValueAsString(validNewTeamRequest))
@@ -153,7 +153,7 @@ public class TeamBoardApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldNotAddExistingTeamToUserWithAnInvalidToken() throws Exception {
+    void shouldNotAddExistingTeamToUserWithAnInvalidToken() throws Exception {
 
         mockMvc.perform(put("/api/user/" + validNewUserRequest.getName() + "/team")
                 .content(objectMapper.writeValueAsString(validNewTeamRequest))
@@ -166,7 +166,7 @@ public class TeamBoardApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldNotAddNewTeamToUserWithNoToken() throws Exception {
+    void shouldNotAddNewTeamToUserWithNoToken() throws Exception {
 
         mockMvc.perform(post("/api/user/" + validNewUserRequest.getName() + "/team")
                 .content(objectMapper.writeValueAsString(validNewTeamRequest))
@@ -178,7 +178,7 @@ public class TeamBoardApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldNotAddNewTeamToUserWithAnInvalidToken() throws Exception {
+    void shouldNotAddNewTeamToUserWithAnInvalidToken() throws Exception {
 
         mockMvc.perform(post("/api/user/" + validNewUserRequest.getName() + "/team")
                 .content(objectMapper.writeValueAsString(validNewTeamRequest))
@@ -191,7 +191,7 @@ public class TeamBoardApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldNotAddNewTeamToUserWithMissingBody() throws Exception {
+    void shouldNotAddNewTeamToUserWithMissingBody() throws Exception {
         mockMvc.perform(post("/api/user/" + validNewUserRequest.getName() + "/team")
                 .content("")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -203,7 +203,7 @@ public class TeamBoardApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldNotAddNewTeamToUserWithEmptyBody() throws Exception {
+    void shouldNotAddNewTeamToUserWithEmptyBody() throws Exception {
         mockMvc.perform(post("/api/user/" + validNewUserRequest.getName() + "/team")
                 .content(objectMapper.writeValueAsString(NewTeamRequest.builder().name("").build()))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -215,7 +215,7 @@ public class TeamBoardApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldAddNewTeamToUser() throws Exception {
+    void shouldAddNewTeamToUser() throws Exception {
         NewTeamRequest validNewSecondTeamRequest = NewTeamRequest.builder()
                 .name("johnny")
                 .build();
@@ -231,7 +231,7 @@ public class TeamBoardApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldAddTwoNewTeamsToUser() throws Exception {
+    void shouldAddTwoNewTeamsToUser() throws Exception {
         NewTeamRequest validNewSecondTeamRequest = NewTeamRequest.builder()
                 .name("johnny")
                 .build();
@@ -266,7 +266,7 @@ public class TeamBoardApiTest extends ApiTest {
     }
 
     @Test
-    public void shouldGetTeamsAssignedToUser() throws Exception {
+    void shouldGetTeamsAssignedToUser() throws Exception {
         NewTeamRequest validNewSecondTeamRequest = NewTeamRequest.builder()
                 .name("johnny")
                 .build();

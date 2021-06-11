@@ -25,12 +25,12 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class TeamNameValidatorTest {
+class TeamNameValidatorTest {
 
-    private TeamNameValidator validator = new TeamNameValidator();
+    private final TeamNameValidator validator = new TeamNameValidator();
 
     @Test
-    public void cannotSubmitEmptyTeamName() {
+    void cannotSubmitEmptyTeamName() {
         assertThrows(
                 EmptyTeamNameException.class,
                 () -> validator.isValid("", null)
@@ -38,7 +38,7 @@ public class TeamNameValidatorTest {
     }
 
     @Test
-    public void cannotSubmitNullTeamName() {
+    void cannotSubmitNullTeamName() {
         assertThrows(
                 EmptyTeamNameException.class,
                 () -> validator.isValid(null, null)
@@ -46,7 +46,7 @@ public class TeamNameValidatorTest {
     }
 
     @Test
-    public void cannotSubmitTeamNameWithSpecialCharacters() {
+    void cannotSubmitTeamNameWithSpecialCharacters() {
         String teamName = "Ford~!@#$%^&*()+=<>?`.,/|[]{};:'Labs\"";
         assertThrows(
                 SpecialCharacterTeamNameException.class,
@@ -55,17 +55,17 @@ public class TeamNameValidatorTest {
     }
 
     @Test
-    public void canSubmitValidTeamName() {
+    void canSubmitValidTeamName() {
         assertThat(validator.isValid("Ford Labs", null)).isTrue();
     }
 
     @Test
-    public void canSubmitValidTeamNameWithNumbers() {
+    void canSubmitValidTeamNameWithNumbers() {
         assertThat(validator.isValid("Ford Labs 2018", null)).isTrue();
     }
 
     @Test
-    public void cannotSubmitTeamNameWithOnlyWhitespace() {
+    void cannotSubmitTeamNameWithOnlyWhitespace() {
         assertThrows(
                 EmptyTeamNameException.class,
                 () -> validator.isValid("            ", null)

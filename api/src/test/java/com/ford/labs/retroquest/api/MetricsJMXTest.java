@@ -32,9 +32,10 @@ import javax.management.ObjectName;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 @Tag("api")
 @SpringBootTest(properties = "spring.jmx.enabled=true")
-public class MetricsJMXTest {
+class MetricsJMXTest {
 
     @Autowired
     private MBeanServer mBeanServer;
@@ -46,7 +47,7 @@ public class MetricsJMXTest {
     private FeedbackRepository feedbackRepository;
 
     @AfterEach
-    public void teardown() {
+    void teardown() {
         teamRepository.deleteAllInBatch();
         feedbackRepository.deleteAllInBatch();
 
@@ -55,7 +56,7 @@ public class MetricsJMXTest {
     }
 
     @Test
-    public void should_return_total_count_of_all_teams() throws Exception {
+    void should_return_total_count_of_all_teams() throws Exception {
         teamRepository.save(Team.builder().uri("uri").build());
 
         Integer teamCount = (Integer) mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metrics,type=Metrics"), "TeamCount");
@@ -63,7 +64,7 @@ public class MetricsJMXTest {
     }
 
     @Test
-    public void should_return_total_count_of_feedback() throws Exception {
+    void should_return_total_count_of_feedback() throws Exception {
         feedbackRepository.save(Feedback.builder().build());
 
         Integer feedbackCount = (Integer) mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metrics,type=Metrics"), "FeedbackCount");
@@ -71,7 +72,7 @@ public class MetricsJMXTest {
     }
 
     @Test
-    public void should_return_average_of_all_feedback_ratings() throws Exception {
+    void should_return_average_of_all_feedback_ratings() throws Exception {
         feedbackRepository.saveAll(Arrays.asList(
                 Feedback.builder().stars(5).build(),
                 Feedback.builder().stars(1).build()
@@ -82,7 +83,7 @@ public class MetricsJMXTest {
     }
 
     @Test
-    public void _should_return_average_of_all_feedback_ratings_ignoring_zeros() throws Exception {
+    void _should_return_average_of_all_feedback_ratings_ignoring_zeros() throws Exception {
         feedbackRepository.saveAll(Arrays.asList(
                 Feedback.builder().stars(5).build(),
                 Feedback.builder().stars(2).build(),

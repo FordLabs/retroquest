@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class BoardControllerTest {
+class BoardControllerTest {
     @Mock
     private BoardService boardService;
 
@@ -44,7 +44,7 @@ public class BoardControllerTest {
     private BoardController controller;
 
     @Test
-    public void returnsAllBoardsForTeamWithoutThoughts() {
+    void returnsAllBoardsForTeamWithoutThoughts() {
         Board expectedBoard = Board.builder()
                 .dateCreated(LocalDate.of(2012, 12, 25))
                 .teamId("team-id")
@@ -58,7 +58,7 @@ public class BoardControllerTest {
     }
 
     @Test
-    public void saveBoardReturnsSavedBoard() {
+    void saveBoardReturnsSavedBoard() {
         Board boardToSave = Board.builder()
                 .teamId("team-id")
                 .thoughts(Collections.singletonList(Thought.builder().message("hello").build()))

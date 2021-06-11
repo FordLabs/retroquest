@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
-public class FeedbackApiTest extends ApiTest {
+class FeedbackApiTest extends ApiTest {
 
     @Autowired
     private FeedbackRepository feedbackRepository;
@@ -30,13 +30,13 @@ public class FeedbackApiTest extends ApiTest {
     private MeterRegistry meterRegistry;
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         feedbackRepository.deleteAllInBatch();
         assertThat(feedbackRepository.count()).isZero();
     }
 
     @Test
-    public void shouldPostFeedbackAndUpdateMetrics() throws Exception {
+    void shouldPostFeedbackAndUpdateMetrics() throws Exception {
         meterRegistry.gauge("retroquest.feedback.count", 0);
         meterRegistry.gauge("retroquest.feedback.averageRating", 0);
 
@@ -62,7 +62,7 @@ public class FeedbackApiTest extends ApiTest {
     }
 
     @Test
-    public void should_get_all_feedback_as_an_admin() throws Exception {
+    void should_get_all_feedback_as_an_admin() throws Exception {
         feedbackRepository.save(Feedback.builder().build());
 
         mockMvc.perform(
@@ -74,14 +74,14 @@ public class FeedbackApiTest extends ApiTest {
     }
 
     @Test
-    public void should_not_get_all_feedback_being_unauthorized() throws Exception {
+    void should_not_get_all_feedback_being_unauthorized() throws Exception {
         mockMvc.perform(get("/api/admin/feedback/all").contentType(MediaType.APPLICATION_JSON)
             .with(httpBasic("foo", "bar")))
             .andExpect(status().isUnauthorized());
     }
 
     @Test
-    public void should_not_get_all_feedback_without_basic_auth_token() throws Exception {
+    void should_not_get_all_feedback_without_basic_auth_token() throws Exception {
         mockMvc.perform(get("/api/admin/feedback/all")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isUnauthorized());

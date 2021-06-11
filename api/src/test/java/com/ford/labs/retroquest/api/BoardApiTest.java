@@ -18,20 +18,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
-public class BoardApiTest extends ApiTest {
+class BoardApiTest extends ApiTest {
 
     @Autowired
     private BoardRepository boardRepository;
 
     @AfterEach
-    public void teardown() {
+    void teardown() {
         boardRepository.deleteAllInBatch();
 
         assertThat(boardRepository.count()).isZero();
     }
 
     @Test
-    public void should_get_boards_assigned_to_requested_team_with_newest_boards_first() throws Exception {
+    void should_get_boards_assigned_to_requested_team_with_newest_boards_first() throws Exception {
         Board oldBoard = Board.builder()
                 .dateCreated(LocalDate.of(2018, 1, 1))
                 .teamId(teamId)

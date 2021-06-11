@@ -21,10 +21,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JwtAuthenticationTest {
+class JwtAuthenticationTest {
 
     @Test
-    public void getNameOnTokenWithValidJwt_ReturnsSubject() {
+    void getNameOnTokenWithValidJwt_ReturnsSubject() {
         String jwt = new JwtBuilder("SOSECRET").buildJwt("i-am-a-team");
 
         JwtAuthentication authentication = new JwtAuthentication(jwt, false, "SOSECRET");

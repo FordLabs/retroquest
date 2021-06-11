@@ -24,12 +24,12 @@ import org.springframework.security.core.AuthenticationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JwtAuthenticationProviderTest {
+class JwtAuthenticationProviderTest {
 
     private JwtAuthenticationProvider jwtAuthenticationProvider = new JwtAuthenticationProvider();
 
     @Test
-    public void jwtWithInvalidFormatThrowsException() {
+    void jwtWithInvalidFormatThrowsException() {
         Assertions.assertThrows(
                 AuthenticationException.class,
                 () -> jwtAuthenticationProvider.authenticate(new JwtAuthentication("", false, "SOSECRET")
@@ -37,7 +37,7 @@ public class JwtAuthenticationProviderTest {
     }
 
     @Test
-    public void shouldReturnAuthenticationWithTrueIfValidToken() {
+    void shouldReturnAuthenticationWithTrueIfValidToken() {
         String unverifiedJwtString = new JwtBuilder("SOSECRET").buildJwt("a-team");
         JwtAuthentication unverifiedJwt = new JwtAuthentication(unverifiedJwtString, false, "SOSECRET");
 
