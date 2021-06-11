@@ -49,13 +49,15 @@ public class FeedbackController {
     @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Created")})
     public ResponseEntity<URI> saveFeedback(@RequestBody FeedbackDto feedbackDto) throws URISyntaxException {
         var feedback = Feedback.fromDto(feedbackDto);
-        log.info(
-            "[FEEDBACK_SUBMITTED] stars:'{}' comment:'{}' email:'{}' teamId:'{}'",
-            feedback.getStars(),
-            feedback.getComment().replaceAll("\\R", " "),
-            feedback.getUserEmail(),
-            feedback.getTeamId()
-        );
+        if (log.isInfoEnabled()) {
+            log.info(
+                "[FEEDBACK_SUBMITTED] stars:'{}' comment:'{}' email:'{}' teamId:'{}'",
+                feedback.getStars(),
+                feedback.getComment().replaceAll("\\R", " "),
+                feedback.getUserEmail(),
+                feedback.getTeamId()
+            );
+        }
         feedback = feedbackRepository.save(feedback);
         return ResponseEntity.created(new URI("/api/feedback/" + feedback.getId())).build();
     }
