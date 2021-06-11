@@ -30,23 +30,26 @@ class JwtBuilderTest {
 
     private static final String JWT_SECRET = "IMSUCHAGOODSECRET";
 
-    private JwtBuilder jwtBuilder = new JwtBuilder(JWT_SECRET);
+    private final JwtBuilder jwtBuilder = new JwtBuilder(JWT_SECRET);
 
     @Test
     void canCreateSignedJwtWithParameters() {
-        String teamId = "team-id";
+        var teamId = "team-id";
 
-        String jwt = jwtBuilder.buildJwt(teamId);
+        var jwt = jwtBuilder.buildJwt(teamId);
 
-        String jwtHeader = StringUtils.substringBefore(jwt, ".");
+        var jwtHeader = StringUtils.substringBefore(jwt, ".");
 
-        JwtParser parser = Jwts.parser();
+        var parser = Jwts.parser();
         parser.requireIssuer("RetroQuest")
-                .requireSubject("team-id")
-                .setSigningKey(JWT_SECRET.getBytes())
-                .parse(jwt);
+            .requireSubject("team-id")
+            .setSigningKey(JWT_SECRET.getBytes())
+            .parse(jwt);
 
-        assertThat("{\"alg\":\"HS512\"}").isEqualTo(new String(Base64.getDecoder().decode(jwtHeader.getBytes())));
+        var decodedJwt = new String(Base64.getDecoder().decode(jwtHeader.getBytes()));
+
+        assertThat(decodedJwt)
+            .isEqualTo("{\"alg\":\"HS512\"}");
         assertThat(parser.isSigned(jwt)).isTrue();
     }
 }
