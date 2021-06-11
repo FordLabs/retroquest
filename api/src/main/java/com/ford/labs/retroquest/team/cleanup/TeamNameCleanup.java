@@ -165,7 +165,7 @@ public class TeamNameCleanup implements ApplicationListener<ApplicationReadyEven
     private void moveUserTeamMappingsToNewTeam(Team oldTeam, Team newTeam) {
         var userTeamMappings = userTeamMappingRepository.findAllByTeamUri(oldTeam.getUri());
         userTeamMappings.forEach(oldUserTeamMapping -> {
-            if (userTeamMappingRepository.findAllByTeamUriAndUserId(newTeam.getUri(), oldUserTeamMapping.getUserId()).size() == 0) {
+            if (userTeamMappingRepository.findAllByTeamUriAndUserId(newTeam.getUri(), oldUserTeamMapping.getUserId()).isEmpty()) {
                 var newUserTeamMapping = oldUserTeamMapping.toBuilder().teamUri(newTeam.getUri()).build();
                 userTeamMappingRepository.save(newUserTeamMapping);
             } else {
