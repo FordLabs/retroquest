@@ -11,12 +11,14 @@ import com.ford.labs.retroquest.team.TeamService;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
 import com.ford.labs.retroquest.users.UserTeamMappingRepository;
 import lombok.extern.java.Log;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -66,7 +68,7 @@ public class TeamNameCleanup implements ApplicationListener<ApplicationReadyEven
     }
 
     @Override
-    public void onApplicationEvent(ApplicationReadyEvent event) {
+    public void onApplicationEvent(@NotNull ApplicationReadyEvent event) {
         if (runCleanupJob) {
             fixConflictingTeamNames();
             teamService.trimAllTeamNames();
@@ -86,7 +88,7 @@ public class TeamNameCleanup implements ApplicationListener<ApplicationReadyEven
 
     private void deleteDuplicateTeams(List<Team> teams, Team teamToKeep) {
         teams.stream()
-                .filter(t -> !t.getId().equals(teamToKeep.getId()))
+                .filter(t -> !Objects.equals(t.getId(), teamToKeep.getId()))
                 .forEach(t -> deleteTeam(t, teamToKeep));
     }
 
