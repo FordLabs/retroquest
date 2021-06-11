@@ -147,19 +147,13 @@ public class TeamService {
     }
 
     public Team getTeamByName(String teamName) {
-        var team = teamRepository.findTeamByNameIgnoreCase(teamName.trim());
-        if (team.isPresent()) {
-            return team.get();
-        }
-        throw new BoardDoesNotExistException();
+        return teamRepository.findTeamByNameIgnoreCase(teamName.trim())
+            .orElseThrow(BoardDoesNotExistException::new);
     }
 
     public Team getTeamByUri(String teamUri) {
-        var team = teamRepository.findTeamByUri(teamUri.toLowerCase());
-        if (team.isPresent()) {
-            return team.get();
-        }
-        throw new BoardDoesNotExistException();
+       return teamRepository.findTeamByUri(teamUri.toLowerCase())
+            .orElseThrow(BoardDoesNotExistException::new);
     }
 
     public int trimAllTeamNames() {
