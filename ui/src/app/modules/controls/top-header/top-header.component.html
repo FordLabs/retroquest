@@ -16,78 +16,84 @@
   -->
 
 <div class="header-top-content">
-
-  <div class="left-content">
-    <a routerLink="/" class="logo-link">
-      <img
-        [src]="darkThemeIsEnabled ? '/assets/icons/icon-light-72x72.png' : '/assets/icons/icon-72x72.png'"
-        title="RetroQuest"
-        id="logo"
-        [ngClass]="{
-        'dark-theme': darkThemeIsEnabled
-      }"
-      />
-    </a>
-    <div
-      class="horizontal-separator"
-      [ngClass]="{
-        'dark-theme': darkThemeIsEnabled
-      }"
-    ></div>
-    <div
-      id="teamName"
-      [ngClass]="{
-      'dark-theme': darkThemeIsEnabled
-    }"
-    >{{teamName}}
+    <div class="left-content">
+        <a routerLink="/" class="logo-link">
+            <img
+                [src]="
+                    darkThemeIsEnabled
+                        ? '/assets/icons/icon-light-72x72.png'
+                        : '/assets/icons/icon-72x72.png'
+                "
+                title="RetroQuest"
+                id="logo"
+                [ngClass]="{
+                    'dark-theme': darkThemeIsEnabled
+                }"
+                alt="RetroQuest"
+            />
+        </a>
+        <div
+            class="horizontal-separator"
+            [ngClass]="{
+                'dark-theme': darkThemeIsEnabled
+            }"
+        ></div>
+        <div
+            id="teamName"
+            [ngClass]="{
+                'dark-theme': darkThemeIsEnabled
+            }"
+        >
+            {{ teamName }}
+        </div>
     </div>
-  </div>
 
-  <div class="center-content">
-    <rq-button
-      class="retro-view-button"
-      [type]="retroViewIsSelected ? 'primary' : 'secondary'"
-      text="retro"
-      [theme]="theme"
-      [ngClass]="{'selected': retroViewIsSelected}"
-      (click)="changeView('retro')"
-    ></rq-button>
+    <div class="center-content">
+        <rq-button
+            class="retro-view-button"
+            [type]="retroViewIsSelected ? 'primary' : 'secondary'"
+            text="retro"
+            [theme]="theme"
+            [ngClass]="{ selected: retroViewIsSelected }"
+            (click)="changeView('retro')"
+        ></rq-button>
 
-    <rq-button
-      class="archives-view-button"
-      [type]="archivesViewIsSelected ? 'primary' : 'secondary'"
-      text="archives"
-      [theme]="theme"
-      [ngClass]="{'selected': archivesViewIsSelected}"
-      (click)="changeView('archives')"
-    ></rq-button>
+        <rq-button
+            class="archives-view-button"
+            [type]="archivesViewIsSelected ? 'primary' : 'secondary'"
+            text="archives"
+            [theme]="theme"
+            [ngClass]="{ selected: archivesViewIsSelected }"
+            (click)="changeView('archives')"
+        ></rq-button>
 
-    <rq-button
-      class="radiator-view-button"
-      [type]="radiatorViewIsSelected ? 'primary' : 'secondary'"
-      text="radiator"
-      [theme]="theme"
-      [ngClass]="{'selected': radiatorViewIsSelected}"
-      (click)="changeView('radiator')"
-    ></rq-button>
+        <rq-button
+            class="radiator-view-button"
+            [type]="radiatorViewIsSelected ? 'primary' : 'secondary'"
+            text="radiator"
+            [theme]="theme"
+            [ngClass]="{ selected: radiatorViewIsSelected }"
+            (click)="changeView('radiator')"
+        ></rq-button>
+    </div>
 
-  </div>
-
-  <div
-    class="right-content"
-    [ngClass]="{
-      'dark-theme': darkThemeIsEnabled
-    }"
-  >
-    <div class="last-saved-text">{{lastSavedText}}</div>
-    <div class="settings-button fas fa-cog" (click)="settingsDialog.show()"></div>
-  </div>
-
+    <div
+        class="right-content"
+        [ngClass]="{
+            'dark-theme': darkThemeIsEnabled
+        }"
+    >
+        <div class="last-saved-text">{{ lastSavedText }}</div>
+        <div
+            class="settings-button fas fa-cog"
+            (click)="settingsDialog.show()"
+        ></div>
+    </div>
 </div>
 
 <rq-settings-dialog
-  #settingsDialog
-  [teamId]="teamId"
-  [theme]="theme"
-  (themeChanged)="themeChanged.emit($event)"
+    #settingsDialog
+    [teamId]="teamId"
+    [theme]="theme"
+    (themeChanged)="themeChanged.emit($event)"
 ></rq-settings-dialog>

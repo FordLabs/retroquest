@@ -16,79 +16,83 @@
   -->
 
 <div
-  class="dialog"
-  (click)="$event.stopPropagation()"
-  [ngClass]="{
-    'dark-theme': darkThemeIsEnabled
-  }"
->
-  <div class="heading-container">
-    <div class="heading">settings</div>
-    <div
-      class="sub-heading"
-      [ngClass]="{
+    class="dialog"
+    (click)="$event.stopPropagation()"
+    [ngClass]="{
         'dark-theme': darkThemeIsEnabled
-      }"
-    >choose your preferences <em>(Beta)</em>
-    </div>
-  </div>
-
-  <div class="body">
-    <div class="tab-heading">
-      <div
-        class="tab"
-        (click)="stylesTabIsVisible = true"
-        [ngClass]="{
-          'selected': stylesTabIsVisible,
-          'dark-theme': darkThemeIsEnabled
-        }"
-      >styles
-      </div>
-      <div
-        class="tab"
-        (click)="accountTabIsVisible = true"
-        [ngClass]="{
-          'selected': accountTabIsVisible,
-          'dark-theme': darkThemeIsEnabled
-        }"
-      >account
-      </div>
-    </div>
-
-    <div class="tab-body styles-tab-body" *ngIf="stylesTabIsVisible">
-      <div class="label">appearance</div>
-      <div class="tab-heading theme-tab-heading">
-
-        <div class="theme-icon-container">
-          <img
-            src="./assets/light-theme-picture.jpg"
+    }"
+>
+    <div class="heading-container">
+        <div class="heading">settings</div>
+        <div
+            class="sub-heading"
             [ngClass]="{
-            'selected': lightThemeIsEnabled
-          }"
-            (click)="enableLightTheme()"
-          />
-          <div class="theme-icon-label">light</div>
+                'dark-theme': darkThemeIsEnabled
+            }"
+        >
+            choose your preferences <em>(Beta)</em>
+        </div>
+    </div>
+
+    <div class="body">
+        <div class="tab-heading">
+            <div
+                class="tab"
+                (click)="stylesTabIsVisible = true"
+                [ngClass]="{
+                    selected: stylesTabIsVisible,
+                    'dark-theme': darkThemeIsEnabled
+                }"
+            >
+                styles
+            </div>
+            <div
+                class="tab"
+                (click)="accountTabIsVisible = true"
+                [ngClass]="{
+                    selected: accountTabIsVisible,
+                    'dark-theme': darkThemeIsEnabled
+                }"
+            >
+                account
+            </div>
         </div>
 
-        <div class="theme-icon-container">
+        <div class="tab-body styles-tab-body" *ngIf="stylesTabIsVisible">
+            <div class="label">appearance</div>
+            <div class="tab-heading theme-tab-heading">
+                <div class="theme-icon-container">
+                    <img
+                        src="./assets/light-theme-picture.jpg"
+                        [ngClass]="{
+                            selected: lightThemeIsEnabled
+                        }"
+                        (click)="enableLightTheme()"
+                        alt="Light Theme"
+                    />
+                    <div class="theme-icon-label">light</div>
+                </div>
 
-          <img
-            src="./assets/dark-theme-picture.jpg"
-            [ngClass]="{
-            'selected': darkThemeIsEnabled
-          }"
-            (click)="enableDarkTheme()"
-          />
-          <div class="theme-icon-label">dark</div>
-
+                <div class="theme-icon-container">
+                    <img
+                        src="./assets/dark-theme-picture.jpg"
+                        [ngClass]="{
+                            selected: darkThemeIsEnabled
+                        }"
+                        (click)="enableDarkTheme()"
+                        alt="Dark Theme"
+                    />
+                    <div class="theme-icon-label">dark</div>
+                </div>
+            </div>
         </div>
-      </div>
 
+        <div class="tab-body account-tab-body" *ngIf="accountTabIsVisible">
+            <rq-button
+                text="logout"
+                type="primary"
+                (click)="logoutOfAccount()"
+            ></rq-button>
+        </div>
     </div>
-
-    <div class="tab-body account-tab-body" *ngIf="accountTabIsVisible">
-      <rq-button text="logout" type="primary" (click)="logoutOfAccount()"></rq-button>
-    </div>
-
-  </div>
 </div>

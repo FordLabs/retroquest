@@ -16,65 +16,83 @@
   -->
 
 <div class="login-container">
+    <re-captcha
+        #captchaRef="reCaptcha"
+        size="invisible"
+        siteKey="6LeZOmMUAAAAAOq4uXmluNuIio7XGx7U-ncmOzGT"
+        (resolved)="$event && login($event)"
+    ></re-captcha>
 
-  <re-captcha
-    #captchaRef="reCaptcha"
-    size="invisible"
-    siteKey="6LeZOmMUAAAAAOq4uXmluNuIio7XGx7U-ncmOzGT"
-    (resolved)="$event && login($event)"
-  ></re-captcha>
+    <div id="app-content">
+        <div class="logo-container">
+            <img
+                src="/assets/RetroQuest.png"
+                title="RetroQuest Logo"
+                id="logo"
+                alt="RetroQuest"
+            />
+        </div>
+        <div class="rq-team-controls">
+            <form id="loginForm" class="rq-form">
+                <div class="rq-form-header">
+                    <div class="header-text">Sign into your board!</div>
+                    <a id="createBoard" routerLink="/create"
+                        >Don’t have a board?</a
+                    >
+                </div>
 
-  <div id="app-content">
-    <div class="logo-container">
-      <img src="/assets/RetroQuest.png" title="RetroQuest Logo" id="logo"/>
-    </div>
-    <div class="rq-team-controls">
-      <form id="loginForm" class="rq-form">
-        <div class="rq-form-header">
-          <div class="header-text">Sign into your board!</div>
-          <a id="createBoard" routerLink="/create">Don’t have a board?</a>
+                <form
+                    class="rq-form-body"
+                    (keydown.enter)="requestCaptchaStateAndLogIn()"
+                >
+                    <div class="rq-input-group">
+                        <label for="teamNameInput">Board name</label>
+                        <input
+                            id="teamNameInput"
+                            class="rq-input"
+                            name="teamName"
+                            [(ngModel)]="teamName"
+                            rqFocusOnLoad
+                        />
+                    </div>
+                    <div class="rq-input-group">
+                        <label for="teamPasswordInput">Password</label>
+                        <input
+                            id="teamPasswordInput"
+                            class="rq-input"
+                            name="password"
+                            type="password"
+                            [(ngModel)]="password"
+                        />
+                    </div>
+                    <span id="errorMessage" class="rq-error-message"
+                        >{{errorMessage}}</span
+                    >
+
+                    <rq-button
+                        id="signInButton"
+                        class="rq-button"
+                        (click)="requestCaptchaStateAndLogIn()"
+                        type="primary"
+                        text="Sign In"
+                    >
+                    </rq-button>
+
+                    <div class="recaptcha-message">
+                        This site is protected by reCAPTCHA and the Google
+                        <a href="https://policies.google.com/privacy"
+                            >Privacy Policy</a
+                        >
+                        and
+                        <a href="https://policies.google.com/terms"
+                            >Terms of Service</a
+                        >
+                        apply.
+                    </div>
+                </form>
+            </form>
         </div>
 
-        <form class="rq-form-body" (keydown.enter)="requestCaptchaStateAndLogIn()">
-          <div class="rq-input-group">
-            <label for="teamNameInput">Board name</label>
-            <input
-              id="teamNameInput"
-              class="rq-input"
-              name="teamName"
-              [(ngModel)]="teamName"
-              rqFocusOnLoad
-            />
-          </div>
-          <div class="rq-input-group">
-            <label for="teamPasswordInput">Password</label>
-            <input id="teamPasswordInput"
-                   class="rq-input"
-                   name="password"
-                   type="password"
-                   [(ngModel)]="password"/>
-          </div>
-          <span id="errorMessage" class="rq-error-message">{{errorMessage}}</span>
-
-          <rq-button
-            id="signInButton"
-            class="rq-button"
-            (click)="requestCaptchaStateAndLogIn()"
-            type="primary"
-            text="Sign In"
-          >
-          </rq-button>
-
-          <div class="recaptcha-message">This site is protected by reCAPTCHA and the Google
-            <a href="https://policies.google.com/privacy">Privacy Policy</a> and
-            <a href="https://policies.google.com/terms">Terms of Service</a> apply.
-          </div>
-
-        </form>
-      </form>
+        <rq-brand-footer></rq-brand-footer>
     </div>
-
-    <rq-brand-footer></rq-brand-footer>
-
-  </div>
 </div>
