@@ -1,6 +1,6 @@
 package com.ford.labs.retroquest.api;
 
-import com.ford.labs.retroquest.api.setup.ApiTest;
+import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
-class ColumnTitleApiTest extends ApiTest {
+class ColumnTitleApiTest extends ApiTestBase {
 
     @Autowired
     private ColumnTitleRepository columnTitleRepository;

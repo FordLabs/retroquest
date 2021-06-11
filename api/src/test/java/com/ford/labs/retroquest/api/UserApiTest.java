@@ -1,6 +1,6 @@
 package com.ford.labs.retroquest.api;
 
-import com.ford.labs.retroquest.api.setup.ApiTest;
+import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.users.NewUserRequest;
 import com.ford.labs.retroquest.users.User;
 import com.ford.labs.retroquest.users.UserRepository;
@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
-class UserApiTest extends ApiTest {
+class UserApiTest extends ApiTestBase {
 
     @Autowired
     private UserRepository userRepository;

@@ -2,7 +2,7 @@ package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.actionitem.ActionItem;
 import com.ford.labs.retroquest.actionitem.ActionItemRepository;
-import com.ford.labs.retroquest.api.setup.ApiTest;
+import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.team.LoginRequest;
@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
-class DownloadTeamBoardApiTest extends ApiTest {
+class DownloadTeamBoardApiTest extends ApiTestBase {
 
     @Autowired
     private TeamRepository teamRepository;

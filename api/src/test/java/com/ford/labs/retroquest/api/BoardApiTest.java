@@ -1,6 +1,6 @@
 package com.ford.labs.retroquest.api;
 
-import com.ford.labs.retroquest.api.setup.ApiTest;
+import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.board.Board;
 import com.ford.labs.retroquest.board.BoardRepository;
 import org.hamcrest.Matchers;
@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
-class BoardApiTest extends ApiTest {
+class BoardApiTest extends ApiTestBase {
 
     @Autowired
     private BoardRepository boardRepository;

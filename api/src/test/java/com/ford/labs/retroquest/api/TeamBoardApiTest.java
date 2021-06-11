@@ -1,6 +1,6 @@
 package com.ford.labs.retroquest.api;
 
-import com.ford.labs.retroquest.api.setup.ApiTest;
+import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.team.CreateTeamRequest;
 import com.ford.labs.retroquest.team.Team;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
-class TeamBoardApiTest extends ApiTest {
+class TeamBoardApiTest extends ApiTestBase {
 
     @Autowired
     private UserRepository userRepository;

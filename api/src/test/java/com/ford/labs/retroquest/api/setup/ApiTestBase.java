@@ -40,7 +40,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Disabled
 @Tag("api")
-public class ApiTest {
+public abstract class ApiTestBase {
 
     @Autowired
     public ObjectMapper objectMapper;

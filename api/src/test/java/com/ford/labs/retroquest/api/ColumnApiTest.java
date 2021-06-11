@@ -18,7 +18,7 @@
 package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
-import com.ford.labs.retroquest.api.setup.ApiTest;
+import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.v2.columns.ColumnCombinerResponse;
 import com.ford.labs.retroquest.v2.columns.ColumnCombinerService;
 import com.ford.labs.retroquest.v2.columns.ColumnResponse;
@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
-class ColumnApiTest extends ApiTest {
+class ColumnApiTest extends ApiTestBase {
 
     @Autowired
     ApiAuthorization apiAuthorization;
