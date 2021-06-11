@@ -17,7 +17,7 @@
 
 package com.ford.labs.retroquest.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -32,18 +32,21 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private String jwtSecret;
+    private final String jwtSecret;
 
-    @Autowired
     public JwtAuthenticationFilter(@Value("${jwt.signing.secret}") String jwtSecret){
         this.jwtSecret = jwtSecret;
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+        HttpServletRequest request,
+        @NotNull HttpServletResponse response,
+        @NotNull FilterChain filterChain
+    ) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
         if(authHeader != null && !authHeader.contains("Basic")) {
-            String token = authHeader.replaceAll("Bearer ", "");
+            String token = authHeader.replace("Bearer ", "");
             if(!token.isEmpty()){
                 SecurityContextHolder.getContext().setAuthentication(new JwtAuthentication(token, false, jwtSecret));
             }
