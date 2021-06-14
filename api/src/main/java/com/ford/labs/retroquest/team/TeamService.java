@@ -28,8 +28,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class TeamService {
@@ -40,17 +38,27 @@ public class TeamService {
     private final ColumnTitleRepository columnTitleRepository;
 
     public TeamService(
-            ThoughtRepository thoughtRepository,
-            ActionItemRepository actionItemRepository,
-            TeamRepository teamRepository,
-            PasswordEncoder passwordEncoder,
-            ColumnTitleRepository columnTitleRepository
+        ThoughtRepository thoughtRepository,
+        ActionItemRepository actionItemRepository,
+        TeamRepository teamRepository,
+        PasswordEncoder passwordEncoder,
+        ColumnTitleRepository columnTitleRepository
     ) {
         this.thoughtRepository = thoughtRepository;
         this.actionItemRepository = actionItemRepository;
         this.teamRepository = teamRepository;
         this.passwordEncoder = passwordEncoder;
         this.columnTitleRepository = columnTitleRepository;
+    }
+
+    public Team getTeamByName(String teamName) {
+        return teamRepository.findTeamByNameIgnoreCase(teamName.trim())
+            .orElseThrow(BoardDoesNotExistException::new);
+    }
+
+    public Team getTeamByUri(String teamUri) {
+        return teamRepository.findTeamByUri(teamUri.toLowerCase())
+            .orElseThrow(BoardDoesNotExistException::new);
     }
 
     public String convertTeamNameToURI(String teamName) {
@@ -71,48 +79,6 @@ public class TeamService {
 
     public Team createNewTeam(String name) {
         return createTeamEntity(name, null);
-    }
-
-    private Team createTeamEntity(String name, String password) {
-        var trimmedName = name.trim();
-        var uri = convertTeamNameToURI(trimmedName);
-        teamRepository
-                .findTeamByUri(uri)
-                .ifPresent(s -> {
-                    throw new DataIntegrityViolationException(s.getUri());
-                });
-
-        var teamEntity = new Team(uri, trimmedName, password);
-        teamEntity.setDateCreated(LocalDate.now());
-
-        teamEntity = teamRepository.save(teamEntity);
-        generateColumns(teamEntity);
-
-        return teamEntity;
-    }
-
-    public List<ColumnTitle> generateColumns(Team teamEntity) {
-        var happyColumnTitle = new ColumnTitle();
-        happyColumnTitle.setTeamId(teamEntity.getUri());
-        happyColumnTitle.setTopic("happy");
-        happyColumnTitle.setTitle("Happy");
-
-        var confusedColumnTitle = new ColumnTitle();
-        confusedColumnTitle.setTeamId(teamEntity.getUri());
-        confusedColumnTitle.setTopic("confused");
-        confusedColumnTitle.setTitle("Confused");
-
-        var unhappyColumnTitle = new ColumnTitle();
-        unhappyColumnTitle.setTeamId(teamEntity.getUri());
-        unhappyColumnTitle.setTopic("unhappy");
-        unhappyColumnTitle.setTitle("Sad");
-
-        var columns = new ArrayList<ColumnTitle>();
-
-        columns.add(columnTitleRepository.save(happyColumnTitle));
-        columns.add(columnTitleRepository.save(confusedColumnTitle));
-        columns.add(columnTitleRepository.save(unhappyColumnTitle));
-        return columns;
     }
 
     public Team login(LoginRequest loginRequest) {
@@ -141,22 +107,47 @@ public class TeamService {
         }
     }
 
+    private Team createTeamEntity(String name, String password) {
+        var trimmedName = name.trim();
+        var uri = convertTeamNameToURI(trimmedName);
+        teamRepository
+            .findTeamByUri(uri)
+            .ifPresent(s -> {
+                throw new DataIntegrityViolationException(s.getUri());
+            });
+
+        var teamEntity = new Team(uri, trimmedName, password);
+        teamEntity.setDateCreated(LocalDate.now());
+
+        teamEntity = teamRepository.save(teamEntity);
+        generateColumns(teamEntity);
+
+        return teamEntity;
+    }
+
+    private void generateColumns(Team teamEntity) {
+        var happyColumnTitle = new ColumnTitle();
+        happyColumnTitle.setTeamId(teamEntity.getUri());
+        happyColumnTitle.setTopic("happy");
+        happyColumnTitle.setTitle("Happy");
+
+        var confusedColumnTitle = new ColumnTitle();
+        confusedColumnTitle.setTeamId(teamEntity.getUri());
+        confusedColumnTitle.setTopic("confused");
+        confusedColumnTitle.setTitle("Confused");
+
+        var unhappyColumnTitle = new ColumnTitle();
+        unhappyColumnTitle.setTeamId(teamEntity.getUri());
+        unhappyColumnTitle.setTopic("unhappy");
+        unhappyColumnTitle.setTitle("Sad");
+
+        columnTitleRepository.save(happyColumnTitle);
+        columnTitleRepository.save(confusedColumnTitle);
+        columnTitleRepository.save(unhappyColumnTitle);
+    }
+
     private void updateFailedAttempts(Team savedTeam, int failedAttempts) {
         savedTeam.setFailedAttempts(failedAttempts);
         teamRepository.save(savedTeam);
-    }
-
-    public Team getTeamByName(String teamName) {
-        return teamRepository.findTeamByNameIgnoreCase(teamName.trim())
-            .orElseThrow(BoardDoesNotExistException::new);
-    }
-
-    public Team getTeamByUri(String teamUri) {
-       return teamRepository.findTeamByUri(teamUri.toLowerCase())
-            .orElseThrow(BoardDoesNotExistException::new);
-    }
-
-    public int trimAllTeamNames() {
-        return teamRepository.trimAllTeamNames();
     }
 }
