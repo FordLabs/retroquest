@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.v2.columns;
 
+import com.ford.labs.retroquest.actionitem.ActionItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,7 +29,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ItemSorterResponse {
-    private List<Object> completed;
-    private List<Object> active;
+public class ItemSorterResponse<T> {
+    private List<T> completed;
+    private List<T> active;
 }

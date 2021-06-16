@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.v2.columns;
 
+import com.ford.labs.retroquest.actionitem.ActionItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,11 +27,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ColumnResponse {
+public class ColumnResponse<T> {
 
     private Long id;
 
     private String topic;
     private String title;
-    private ItemSorterResponse items;
+    private ItemSorterResponse<T> items;
 }

@@ -18,7 +18,9 @@
 import { Thought } from '../thought';
 import { ActionItem } from '../action-item';
 
+type Item = Thought | ActionItem;
+
 export interface ItemSorter {
-  active: Array<Thought | ActionItem>;
-  completed: Array<Thought | ActionItem>;
+  active: Item[];
+  completed: Item[];
 }
