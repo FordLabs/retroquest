@@ -16,7 +16,6 @@
  */
 
 import { ActionItemService } from './action.service';
-import { Observable } from 'rxjs/index';
 import { ActionItem } from '../../domain/action-item';
 import { HttpClient } from '@angular/common/http';
 import { RxStompService } from '@stomp/ng2-stompjs';

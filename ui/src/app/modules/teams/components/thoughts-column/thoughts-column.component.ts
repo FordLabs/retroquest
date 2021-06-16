@@ -32,7 +32,6 @@ import {
   ColumnResponse,
   deleteColumnResponse,
   emptyColumnResponse,
-  findThought,
 } from '../../../domain/column-response';
 import { WebsocketResponse } from '../../../domain/websocket-response';
 import { CdkDragSortEvent } from '@angular/cdk/drag-drop';

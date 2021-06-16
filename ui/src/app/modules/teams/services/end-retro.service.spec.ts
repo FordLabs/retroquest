@@ -15,7 +15,6 @@
  *  limitations under the License.
  */
 
-import { ThoughtService } from './thought.service';
 import { createMockRxStompService } from '../../utils/testutils';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { DataService } from '../../data.service';

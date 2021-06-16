@@ -15,7 +15,6 @@
  *  limitations under the License.
  */
 
-import { waitForAsync } from '@angular/core/testing';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { TeamPageQueryParamGuard } from './team-page-query-param-guard';
 import { createMockRouter } from '../../utils/testutils';
