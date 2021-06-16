@@ -26,11 +26,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ColumnResponse {
+public class ColumnResponse<T> {
 
     private Long id;
 
     private String topic;
     private String title;
-    private ItemSorterResponse items;
+    private ItemSorterResponse<T> items;
 }

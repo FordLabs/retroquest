@@ -15,7 +15,12 @@
  *  limitations under the License.
  */
 
+import { Thought } from '../thought';
+import { ActionItem } from '../action-item';
+
+type Item = Thought | ActionItem;
+
 export interface ItemSorter {
-  active: Array<object>;
-  completed: Array<object>;
+  active: Item[];
+  completed: Item[];
 }

@@ -25,12 +25,10 @@ describe('TeamPageQueryParamGuard', () => {
   let mockRouter;
   const fakeTeamId = 'FAKE TEAM ID';
 
-  beforeEach(
-    waitForAsync(() => {
-      mockRouter = createMockRouter();
-      service = new TeamPageQueryParamGuard(mockRouter);
-    })
-  );
+  beforeEach(() => {
+    mockRouter = createMockRouter();
+    service = new TeamPageQueryParamGuard(mockRouter);
+  });
 
   it('should continue to the team/teamId url if a team id query param is provided', () => {
     const mockNextRouteSnapshot = new ActivatedRouteSnapshot();
@@ -45,14 +43,17 @@ describe('TeamPageQueryParamGuard', () => {
     expect(result).toBeTruthy();
   });
 
-  it('should navigate to the login if no teamId is provided in the query param', () => {
+  it('should navigate to the login if no teamId is provided in the query param', async () => {
     const mockNextRouteSnapshot = new ActivatedRouteSnapshot();
     mockNextRouteSnapshot.params = {
       teamId: '',
     };
 
     const mockState = null;
-    service.canActivate(mockNextRouteSnapshot, mockState);
+    await (service.canActivate(
+      mockNextRouteSnapshot,
+      mockState
+    ) as Promise<boolean>);
     expect(mockRouter.navigate).toHaveBeenCalledWith(['login']);
   });
 });
