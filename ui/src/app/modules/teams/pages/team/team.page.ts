@@ -36,7 +36,6 @@ import { ActionItemService } from '../../services/action.service';
 import { ActionItem } from '../../../domain/action-item';
 import { EndRetroService } from '../../services/end-retro.service';
 import { SubscriptionService } from '../../services/subscription.service';
-import { Thought } from '../../../domain/thought';
 
 @Component({
   selector: 'rq-team',
