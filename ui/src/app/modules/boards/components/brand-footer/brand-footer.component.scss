@@ -19,14 +19,15 @@
 .rq-brand-footer {
   align-items: center;
   display: flex;
-  font-size: .8rem;
+  font-size: 1rem;
+  font-weight: bold;
   height: auto;
   justify-content: center;
   margin-top: 36px;
   width: 100%;
 
   .labs-text {
-    color: opacity($wet-asphalt, .5);
+    color: $wet-asphalt;
     font-size: inherit;
 
     .labs-link {
@@ -44,7 +45,7 @@
     display: inline-block;
     height: 16px;
     margin: 0 12px;
-    opacity: .1;
+    opacity: 0.1;
     width: 2px;
   }
 
