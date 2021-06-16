@@ -17,6 +17,8 @@
 
 import { ItemSorter } from './column/item-sorter';
 import { Thought } from './thought';
+import { Column } from './column';
+import { ActionItem } from './action-item';
 
 export interface ColumnResponse {
   id: number;

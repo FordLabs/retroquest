@@ -15,26 +15,29 @@
  *  limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs';
+import { Injectable } from '@angular/core';
+import {
+  ActivatedRouteSnapshot,
+  CanActivate,
+  Router,
+  RouterStateSnapshot,
+} from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TeamPageQueryParamGuard implements CanActivate {
-
-  constructor(private router: Router) {
-  }
+  constructor(private router: Router) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-
     const teamId = next.params.teamId;
-    if ( !teamId || teamId === '' ) {
-      this.router.navigate( ['login'] );
+    if (!teamId || teamId === '') {
+      console.log(this.router);
+      this.router.navigate(['login']);
     }
 
     return true;
