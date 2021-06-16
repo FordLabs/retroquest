@@ -1,8 +1,4 @@
-import {
-  createTeamIfNecessaryAndLogin,
-  goToTeamBoard,
-  TeamCredentials,
-} from '../util/utils';
+import { createTeamIfNecessaryAndLogin, TeamCredentials } from '../util/utils';
 
 describe('Create Page', () => {
   const teamCredentials = {

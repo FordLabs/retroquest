@@ -26,13 +26,9 @@ import { emptyThought } from '../../../domain/thought';
 import { emptyColumnResponse } from '../../../domain/column-response';
 import { DataService } from '../../../data.service';
 import { SaveCheckerService } from '../../services/save-checker.service';
-import {
-  createMockRxStompService,
-  createMockSubscription,
-} from '../../../utils/testutils';
+import { createMockRxStompService } from '../../../utils/testutils';
 import { EndRetroService } from '../../services/end-retro.service';
 import { SubscriptionService } from '../../services/subscription.service';
-import { RxStompService } from '@stomp/ng2-stompjs';
 
 describe('TeamPageComponent', () => {
   let component: TeamPageComponent;

@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable, OnDestroy, OnInit } from '@angular/core';
+import { EventEmitter, Injectable, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { DataService } from '../../data.service';

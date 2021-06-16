@@ -5,13 +5,8 @@ import {
 } from '../../utils/testutils';
 import { Subscription } from 'rxjs';
 import { DataService } from '../../data.service';
-import { instance, mock } from 'ts-mockito';
-import { ColumnAggregationService } from './column-aggregation.service';
-import { TeamService } from './team.service';
-import { BoardService } from './board.service';
+import { mock } from 'ts-mockito';
 import { SaveCheckerService } from './save-checker.service';
-import { EndRetroService } from './end-retro.service';
-import { TeamPageComponent } from '../pages/team/team.page';
 import { EventEmitter } from '@angular/core';
 import { WebsocketResponse } from '../../domain/websocket-response';
 import { Column } from '../../domain/column';

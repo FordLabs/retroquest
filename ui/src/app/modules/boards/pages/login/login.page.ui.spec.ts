@@ -10,7 +10,6 @@ import { TeamService } from '../../../teams/services/team.service';
 import { RouterModule } from '@angular/router';
 import { APP_BASE_HREF } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { of } from 'rxjs/index';
 
 describe('Logging in', () => {
   let mockTeamService;
