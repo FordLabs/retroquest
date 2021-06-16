@@ -2,6 +2,7 @@ module.exports = {
   root: true,
   ignorePatterns: ['projects/**/*', 'jest.config.js'],
   extends: ['prettier'],
+  plugins: ['unused-imports'],
   overrides: [
     {
       files: ['*.ts'],
@@ -40,6 +41,9 @@ module.exports = {
         'id-match': 'off',
         'no-underscore-dangle': 'off',
         'prefer-arrow/prefer-arrow-functions': 'off',
+        'no-unused-vars': 'off',
+        'unused-imports/no-unused-imports': 'error',
+        'unused-imports/no-unused-vars': ['warn'],
       },
     },
     {
