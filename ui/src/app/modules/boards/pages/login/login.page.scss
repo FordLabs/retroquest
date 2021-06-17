@@ -41,8 +41,9 @@
     border-radius: 3px;
     display: block;
     margin: auto;
-    padding: 3rem 3rem;
-    width: 55%;
+    padding: 3rem 14rem;
+    width: 60%;
+    box-sizing: border-box;
 
     .logo-container {
       align-items: center;
@@ -108,7 +109,7 @@
         }
 
         #createBoard {
-          color: $turquoise;
+          color: #00a887;
           font-size: 1.2rem;
         }
       }
@@ -156,7 +157,7 @@
             }
 
             &:focus {
-              box-shadow: 0 0 0 2px $turquoise;
+              box-shadow: 0 0 0 2px #00a887;
             }
           }
         }
@@ -173,7 +174,7 @@
     }
 
     rq-button {
-      background-color: $turquoise;
+      background-color: #00a887;
       border-radius: 3px;
       box-shadow: none;
       font-size: 1rem;
