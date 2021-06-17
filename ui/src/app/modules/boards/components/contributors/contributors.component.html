@@ -16,7 +16,14 @@
   -->
 
 <div class="contributors">
-    <div class="contributors-title">Contributors</div>
+    <div class="contributors-title-container">
+        <div class="contributors-title">Code Contributors</div>
+        <div class="contributors-sub-title">
+            Some of the people that help make
+            <span class="logo-span">RetroQuest</span> possible
+        </div>
+    </div>
+
     <div *ngFor="let contributorRow of contributors">
         <a
             *ngFor="let contributor of contributorRow"
