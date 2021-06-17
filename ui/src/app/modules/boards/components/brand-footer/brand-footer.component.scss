@@ -24,7 +24,7 @@
 
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   flex-direction: row;
   gap: 4rem;
 
@@ -55,6 +55,7 @@
       font-weight: bold;
       margin: 0;
       color: $wet-asphalt;
+      box-sizing: border-box;
 
       display: flex;
       align-items: center;
