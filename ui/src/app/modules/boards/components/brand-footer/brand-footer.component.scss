@@ -17,14 +17,16 @@
 @import 'color-vars';
 
 .rq-brand-footer {
-  align-items: center;
-  display: flex;
   font-size: 1rem;
   font-weight: bold;
   height: auto;
+  margin-top: 2rem;
+
+  display: flex;
+  align-items: center;
   justify-content: center;
-  margin-top: 36px;
-  width: 100%;
+  flex-direction: row;
+  column-gap: 2rem;
 
   .labs-text {
     color: $wet-asphalt;
@@ -49,12 +51,35 @@
     width: 2px;
   }
 
-  .github-link {
-    color: inherit;
-    font-size: inherit;
-    font-weight: bold;
-    margin: 0;
-    padding: 0;
+  .link-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    column-gap: 2rem;
+
+    .link {
+      flex: 1 1 auto;
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin: 0;
+      padding: 8px 25px;
+      background-color: $wet-asphalt;
+      color: $white;
+      border-radius: 3rem;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: row;
+      column-gap: 0.3rem;
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+    }
   }
 }
 
