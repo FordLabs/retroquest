@@ -15,10 +15,21 @@
  *  limitations under the License.
  */
 
+@import 'color-vars';
+
 .contributors {
-  .contributors-title {
-    font-size: 2rem;
-    margin: 2rem 0;
+  .contributors-title-container {
+    margin: 3rem 0;
+    color: $white;
+
+    .contributors-title {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    .logo-span {
+      font-family: 'Carter One', sans-serif;
+    }
   }
 
   a {
