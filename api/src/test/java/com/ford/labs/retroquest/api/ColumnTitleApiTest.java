@@ -3,6 +3,7 @@ package com.ford.labs.retroquest.api;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
+import com.ford.labs.retroquest.columntitle.UpdateColumnTitleRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -87,24 +88,21 @@ class ColumnTitleApiTest extends ApiTestBase {
     @Test
     void should_update_column_title() throws Exception {
 
-        ColumnTitle savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder()
+        var savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder()
                 .teamId("BeachBums")
                 .title("old title")
                 .build());
 
-        ColumnTitle sentColumnTitle = ColumnTitle.builder()
-                .id(savedColumnTitle.getId())
-                .teamId("BeachBums")
-                .title("new title")
-                .build();
+        var request = new UpdateColumnTitleRequest("new title");
 
         mockMvc.perform(put("/api/team/BeachBums/column/" + savedColumnTitle.getId() + "/title")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(sentColumnTitle))
+                .content(objectMapper.writeValueAsBytes(request))
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk());
 
         assertThat(columnTitleRepository.count()).isEqualTo(1);
-        assertThat(columnTitleRepository.findAll().get(0)).isEqualTo(sentColumnTitle);
+        assertThat(columnTitleRepository.findAll().get(0).getTitle()).isEqualTo("new title");
     }
 }
+

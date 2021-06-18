@@ -59,9 +59,9 @@ public class ColumnTitleController {
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Updates the title of a column of a retro board given a team id and column id", description = "updateTitleOfColumn")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public void updateTitleOfColumn(@PathVariable("teamId") String teamId, @RequestBody ColumnTitle columnTitle, @PathVariable("columnId") Long columnId) {
+    public void updateTitleOfColumn(@PathVariable("teamId") String teamId, @RequestBody UpdateColumnTitleRequest request, @PathVariable("columnId") Long columnId) {
         var returnedColumnTitle = columnTitleRepository.findById(columnId).orElseThrow();
-        returnedColumnTitle.setTitle(columnTitle.getTitle());
+        returnedColumnTitle.setTitle(request.getTitle());
         columnTitleRepository.save(returnedColumnTitle);
     }
 
