@@ -70,17 +70,17 @@ public class ColumnCombinerService {
                 .build();
 
         var orderedColumns = unorderedColumnResponses.stream()
-                .sorted(Comparator.comparing(ColumnResponse::getId)).collect(Collectors.toList());
+                .sorted(Comparator.comparing(ColumnResponse::getId))
+                .collect(Collectors.toList());
 
         orderedColumns.add(actionItemColumnResponse);
 
         return ColumnCombinerResponse.builder()
                 .columns(orderedColumns)
                 .build();
-
     }
 
-    private List<ColumnResponse> buildColumnResponses(final Map<ColumnTitle, List<Thought>> mergedThoughts) {
+    private List<ColumnResponse<?>> buildColumnResponses(final Map<ColumnTitle, List<Thought>> mergedThoughts) {
         return mergedThoughts.entrySet().stream()
                     .map(iter -> ColumnResponse.builder()
                             .id(iter.getKey().getId())
