@@ -6,8 +6,11 @@ import lombok.Getter;
 public class ThoughtNotFoundException extends RuntimeException {
     private final String message;
 
+    public ThoughtNotFoundException(Long thoughtId) {
+        this.message = String.format("Thought with ID [%d] could not be found", thoughtId);
+    }
+
     public ThoughtNotFoundException(String thoughtId) {
-        this.message = String.join(" ",
-                "Thought with ID", thoughtId, "could not be found");
+        this(Long.valueOf(thoughtId));
     }
 }

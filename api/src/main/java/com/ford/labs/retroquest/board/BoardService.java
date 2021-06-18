@@ -18,29 +18,31 @@
 package com.ford.labs.retroquest.board;
 
 import com.ford.labs.retroquest.thought.Thought;
-import com.ford.labs.retroquest.thought.ThoughtRepository;
+import com.ford.labs.retroquest.thought.ThoughtService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class BoardService {
     private final BoardRepository boardRepository;
-    private final ThoughtRepository thoughtRepository;
+    private final ThoughtService thoughtService;
 
-    @Value("${app.archive.thought.pageSize}")
-    public int pageSize;
+    private final int pageSize;
 
     public BoardService(
-            BoardRepository boardRepository,
-            ThoughtRepository thoughtRepository
+        BoardRepository boardRepository,
+        ThoughtService thoughtService,
+        @Value("${app.archive.thought.pageSize}") int pageSize
     ) {
         this.boardRepository = boardRepository;
-        this.thoughtRepository = thoughtRepository;
+        this.thoughtService = thoughtService;
+        this.pageSize = pageSize;
     }
 
 
@@ -54,13 +56,17 @@ public class BoardService {
         );
     }
 
-    public Board saveBoard(Board board) {
+    public Board createBoard(CreateBoardRequest request) {
+        Board board = new Board();
+        board.setTeamId(request.getTeamId());
+        board.setThoughts(new ArrayList<>());
         board.setDateCreated(LocalDate.now());
         board = this.boardRepository.save(board);
-        for (Thought thought : board.getThoughts()) {
-            thought.setBoardId(board.getId());
-            thoughtRepository.save(thought);
+        for (var thoughtRequest : request.getThoughts()) {
+            var thought = thoughtService.createThought(request.getTeamId(), board.getId(), thoughtRequest);
+            board.getThoughts().add(thought);
         }
+        board = this.boardRepository.save(board);
         return board;
     }
 

@@ -20,8 +20,10 @@ package com.ford.labs.retroquest.deprecated_tests;
 import com.ford.labs.retroquest.board.Board;
 import com.ford.labs.retroquest.board.BoardRepository;
 import com.ford.labs.retroquest.board.BoardService;
+import com.ford.labs.retroquest.board.CreateBoardRequest;
+import com.ford.labs.retroquest.thought.CreateThoughtRequest;
 import com.ford.labs.retroquest.thought.Thought;
-import com.ford.labs.retroquest.thought.ThoughtRepository;
+import com.ford.labs.retroquest.thought.ThoughtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +36,11 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -44,40 +50,39 @@ class BoardServiceTest {
     private BoardRepository boardRepository;
 
     @Mock
-    private ThoughtRepository thoughtRepository;
+    private ThoughtService thoughtService;
 
     private BoardService boardService;
 
     @BeforeEach
     void setUp() {
-        boardService = new BoardService(boardRepository, thoughtRepository);
+        var pageSize = 2;
+        boardService = new BoardService(boardRepository, thoughtService, pageSize);
     }
 
     @Test
     void getBoardsForTeamId() {
         Board expectedBoard = Board.builder()
-                .teamId("team1")
-                .dateCreated(LocalDate.of(2012, 12, 12))
-                .id(1L)
-                .build();
+            .teamId("team1")
+            .dateCreated(LocalDate.of(2012, 12, 12))
+            .id(1L)
+            .build();
 
         Board savedBoard = Board.builder()
-                .teamId("team1")
-                .dateCreated(LocalDate.of(2012, 12, 12))
-                .id(1L)
-                .build();
-
-        boardService.pageSize = 2;
+            .teamId("team1")
+            .dateCreated(LocalDate.of(2012, 12, 12))
+            .id(1L)
+            .build();
 
         final PageRequest pageRequest = PageRequest.of(
-                0,
-                boardService.pageSize,
-                Sort.by(Sort.Order.desc("dateCreated"))
+            0,
+            2,
+            Sort.by(Sort.Order.desc("dateCreated"))
         );
 
 
         when(boardRepository.findAllByTeamIdOrderByDateCreatedDesc("team1", pageRequest))
-                .thenReturn(Collections.singletonList(savedBoard));
+            .thenReturn(Collections.singletonList(savedBoard));
 
         List<Board> actualBoards = boardService.getBoardsForTeamId("team1", 0);
 
@@ -87,13 +92,13 @@ class BoardServiceTest {
 
     @Test
     void getBoardsForTeamId_shouldReturnAPagedResult() {
-
-        boardService.pageSize = 5;
+        var pageSize = 5;
+        boardService = new BoardService(boardRepository, thoughtService, pageSize);
 
         final PageRequest pageRequest = PageRequest.of(
-                0,
-                boardService.pageSize,
-                Sort.by(Sort.Order.desc("dateCreated"))
+            0,
+            pageSize,
+            Sort.by(Sort.Order.desc("dateCreated"))
         );
 
         boardService.getBoardsForTeamId("team1", 0);
@@ -103,21 +108,50 @@ class BoardServiceTest {
 
     @Test
     void saveBoard() {
-        Board boardToSave = Board.builder()
-                .teamId("team1")
-                .thoughts(Collections.singletonList(Thought.builder().message("hello").build()))
-                .build();
+        var expectedTeamId = "team1";
+        var expectedMessage = "hello";
+        var boardToSave = new CreateBoardRequest(
+            expectedTeamId,
+            List.of(
+                new CreateThoughtRequest(
+                    expectedMessage,
+                    0,
+                    null,
+                    false,
+                    null,
+                    null
+                )
+            )
+        );
 
-        Board savedBoard = Board.builder()
-                .id(1L)
-                .teamId("team1")
-                .dateCreated(LocalDate.now())
-                .thoughts(Collections.singletonList(Thought.builder().message("hello").build()))
-                .build();
+        when(boardRepository.save(any(Board.class))).thenAnswer(a -> {
+            var board = a.<Board>getArgument(0);
+            board.setId(1234L);
+            return board;
+        });
+        when(thoughtService.createThought(anyString(), anyLong(), any(CreateThoughtRequest.class)))
+            .thenAnswer(a -> {
+                var teamId = a.<String>getArgument(0);
+                var boardId = a.<Long>getArgument(1);
+                var request = a.<CreateThoughtRequest>getArgument(2);
+                return new Thought(
+                    4321L,
+                    request.getMessage(),
+                    request.getHearts(),
+                    request.getTopic(),
+                    request.isDiscussed(),
+                    teamId,
+                    null,
+                    boardId
+                );
+            });
 
-        when(boardRepository.save(boardToSave)).thenReturn(savedBoard);
+        var returnedBoard = boardService.createBoard(boardToSave);
 
-        Board returnedBoard = boardService.saveBoard(boardToSave);
-        assertEquals(savedBoard, returnedBoard);
+        assertThat(returnedBoard.getId()).isEqualTo(1234L);
+        assertThat(returnedBoard.getTeamId()).isEqualTo(expectedTeamId);
+        assertThat(returnedBoard.getThoughts()).hasSize(1);
+        assertThat(returnedBoard.getThoughts()).hasSize(1);
+        assertThat(returnedBoard.getThoughts().get(0).getBoardId()).isEqualTo(1234L);
     }
 }

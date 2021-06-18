@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.atMostOnce;
@@ -116,16 +117,26 @@ class ThoughtServiceTest {
 
     @Test
     void whenCreatingThoughtColumnTitleWillGetSetAndThoughtWillBeSaved() {
-        Thought thought = Thought.builder().topic("topic").build();
-        ColumnTitle columnTitle = ColumnTitle.builder().title("Happy").build();
-        Thought createdThought = Thought.builder().columnTitle(columnTitle).id(Long.valueOf(thoughtId)).build();
+        var topic = "topic";
+        var columnTitle = ColumnTitle.builder().title("Happy").build();
+        var request = new CreateThoughtRequest(
+            null,
+            0,
+            topic,
+            false,
+            teamId,
+            null
+        );
+        given(columnTitleRepository.findByTeamIdAndAndTopic(teamId, topic)).willReturn(columnTitle);
+        given(thoughtRepository.save(any(Thought.class))).willAnswer(a -> {
+            var thought = a.<Thought>getArgument(0);
+            thought.setId(1234L);
+            return thought;
+        });
 
-        given(columnTitleRepository.findByTeamIdAndAndTopic(teamId, thought.getTopic())).willReturn(columnTitle);
-        given(thoughtRepository.save(thought)).willReturn(createdThought);
+        var thought = thoughtService.createThought(teamId, request);
 
-        String returnURI = thoughtService.createThoughtAndReturnURI(teamId, thought);
         assertThat(thought.getColumnTitle()).isEqualTo(columnTitle);
-        assertThat(returnURI).isEqualTo("/api/team/" + teamId + "/thought/" + createdThought.getId());
         then(columnTitleRepository).should().findByTeamIdAndAndTopic(teamId, thought.getTopic());
         then(thoughtRepository).should().save(thought);
     }

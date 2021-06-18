@@ -20,6 +20,8 @@ package com.ford.labs.retroquest.deprecated_tests;
 import com.ford.labs.retroquest.board.Board;
 import com.ford.labs.retroquest.board.BoardController;
 import com.ford.labs.retroquest.board.BoardService;
+import com.ford.labs.retroquest.board.CreateBoardRequest;
+import com.ford.labs.retroquest.thought.CreateThoughtRequest;
 import com.ford.labs.retroquest.thought.Thought;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +30,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -45,35 +46,45 @@ class BoardControllerTest {
 
     @Test
     void returnsAllBoardsForTeamWithoutThoughts() {
-        Board expectedBoard = Board.builder()
+        var expectedBoard = Board.builder()
                 .dateCreated(LocalDate.of(2012, 12, 25))
                 .teamId("team-id")
                 .id(1L)
                 .build();
+        var expectedResponse = List.of(expectedBoard);
 
-        when(boardService.getBoardsForTeamId("team-id", 0)).thenReturn(Arrays.asList(expectedBoard));
+        when(boardService.getBoardsForTeamId("team-id", 0)).thenReturn(expectedResponse);
 
-        List<Board> response = controller.getBoardsForTeamId("team-id", 0);
-        assertEquals(Collections.singletonList(expectedBoard), response);
+        var response = controller.getBoardsForTeamId("team-id", 0);
+        assertEquals(expectedResponse, response);
     }
 
     @Test
     void saveBoardReturnsSavedBoard() {
-        Board boardToSave = Board.builder()
-                .teamId("team-id")
-                .thoughts(Collections.singletonList(Thought.builder().message("hello").build()))
-                .build();
+        var boardToSave = new CreateBoardRequest(
+            "team-id",
+            List.of(
+                new CreateThoughtRequest(
+                    "hello",
+                    0,
+                    null,
+                    false,
+                    null,
+                    null
+                )
+            )
+        );
 
-        Board savedBoard = Board.builder()
+        var savedBoard = Board.builder()
                 .id(1L)
                 .teamId("team-id")
                 .dateCreated(LocalDate.now())
                 .thoughts(Collections.singletonList(Thought.builder().message("hello").build()))
                 .build();
 
-        when(boardService.saveBoard(boardToSave)).thenReturn(savedBoard);
+        when(boardService.createBoard(boardToSave)).thenReturn(savedBoard);
 
-        Board returnedBoard = controller.saveBoard("team-id", boardToSave);
+        var returnedBoard = controller.saveBoard("team-id", boardToSave);
         assertEquals(savedBoard, returnedBoard);
     }
 }

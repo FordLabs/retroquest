@@ -76,8 +76,8 @@ public class ThoughtController {
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Updates the content of a thought given a thought and team id", description = "updateThoughtMessage")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public void updateThoughtMessage(@PathVariable("id") Long id, @RequestBody Thought thought, @PathVariable("teamId") String teamId) {
-        thoughtService.updateThoughtMessage(String.valueOf(id), thought.getMessage());
+    public void updateThoughtMessage(@PathVariable("id") Long id, @RequestBody UpdateThoughtMessageRequest request, @PathVariable("teamId") String teamId) {
+        thoughtService.updateThoughtMessage(String.valueOf(id), request.getMessage());
     }
 
     @GetMapping("/api/team/{teamId}/thoughts")
@@ -110,33 +110,39 @@ public class ThoughtController {
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Creates a thought given a team id and thought", description = "createThoughtForTeam")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Created"),
-            @ApiResponse(responseCode = "400", description = "Path to saved thought is not a valid URI")
+        @ApiResponse(responseCode = "201", description = "Created"),
+        @ApiResponse(responseCode = "400", description = "Path to saved thought is not a valid URI")
     })
-    public ResponseEntity<Void> createThoughtForTeam(@PathVariable("teamId") String teamId, @RequestBody Thought thought) throws URISyntaxException {
-        var savedThoughtUri = new URI(thoughtService.createThoughtAndReturnURI(teamId, thought));
-        return ResponseEntity.created(savedThoughtUri).build();
+    public ResponseEntity<Void> createThoughtForTeam(@PathVariable("teamId") String teamId, @RequestBody CreateThoughtRequest request) throws URISyntaxException {
+        var thought = thoughtService.createThought(teamId, request);
+        var uri = new URI(String.format("/api/team/%s/thought/%s", teamId, thought.getId()));
+        return ResponseEntity.created(uri).build();
     }
 
     @MessageMapping("/{teamId}/thought/create")
     @SendTo("/topic/{teamId}/thoughts")
-    public WebsocketPutResponse<Thought> createThoughtWebsocket(@DestinationVariable("teamId") String teamId, Thought thought, Authentication authentication) {
+    public WebsocketPutResponse<Thought> createThoughtWebsocket(@DestinationVariable("teamId") String teamId, CreateThoughtRequest request, Authentication authentication) {
         if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            thought.setTeamId(teamId);
-            var savedThought = thoughtRepository.save(thought);
-            return new WebsocketPutResponse<>(thoughtService.fetchThought(savedThought.getId()));
+            var savedThought = thoughtService.createThought(teamId, request);
+            return new WebsocketPutResponse<>(savedThought);
         }
         return null;
     }
 
     @MessageMapping("/{teamId}/thought/{thoughtId}/edit")
     @SendTo("/topic/{teamId}/thoughts")
-    public WebsocketPutResponse<Thought> editThoughtWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("thoughtId") Long thoughtId, Thought thought, Authentication authentication) {
+    public WebsocketPutResponse<Thought> editThoughtWebsocket(
+        @DestinationVariable("teamId") String teamId,
+        @DestinationVariable("thoughtId") Long thoughtId,
+        EditThoughtRequest request,
+        Authentication authentication
+    ) {
         if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
             var savedThought = thoughtRepository.findById(thoughtId).orElseThrow();
-            savedThought.setMessage(thought.getMessage());
-            savedThought.setDiscussed(thought.isDiscussed());
-            savedThought.setHearts(thought.getHearts());
+            savedThought.setMessage(request.getMessage());
+            savedThought.setDiscussed(request.isDiscussed());
+            savedThought.setHearts(request.getHearts());
+
             thoughtRepository.save(savedThought);
             return new WebsocketPutResponse<>(savedThought);
         }
@@ -145,10 +151,15 @@ public class ThoughtController {
 
     @MessageMapping("/{teamId}/thought/{thoughtId}/move")
     @SendTo("/topic/{teamId}/thoughts")
-    public WebsocketPutResponse<Thought> moveThoughtWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("thoughtId") Long thoughtId, Thought thought, Authentication authentication) {
+    public WebsocketPutResponse<Thought> moveThoughtWebsocket(
+        @DestinationVariable("teamId") String teamId,
+        @DestinationVariable("thoughtId") Long thoughtId,
+        MoveThoughtRequest request,
+        Authentication authentication
+    ) {
         if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
             var savedThought = thoughtRepository.findById(thoughtId).orElseThrow();
-            savedThought.setTopic(thought.getTopic());
+            savedThought.setTopic(request.getTopic());
             thoughtRepository.save(savedThought);
             return new WebsocketPutResponse<>(savedThought);
         }
