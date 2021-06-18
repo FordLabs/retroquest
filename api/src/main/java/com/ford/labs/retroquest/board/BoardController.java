@@ -62,8 +62,8 @@ public class BoardController {
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Saves a board given a team id", description = "saveBoard")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public Board saveBoard(@PathVariable("teamId") String teamId, @RequestBody @Valid Board board) {
-        return this.boardService.saveBoard(board);
+    public Board saveBoard(@PathVariable("teamId") String teamId, @RequestBody @Valid CreateBoardRequest request) {
+        return this.boardService.createBoard(request);
     }
 
     @Transactional

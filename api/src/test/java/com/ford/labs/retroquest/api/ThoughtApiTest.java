@@ -4,6 +4,7 @@ import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.exception.ThoughtNotFoundException;
+import com.ford.labs.retroquest.thought.MoveThoughtRequest;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
 import com.squareup.moshi.JsonAdapter;
@@ -61,8 +62,8 @@ class ThoughtApiTest extends ApiTestBase {
         Thought savedThought = thoughtRepository.save(Thought.builder().teamId(teamId).hearts(1).build());
 
         mockMvc.perform(put("/api/team/" + teamId + "/thought/" + savedThought.getId() + "/heart")
-                .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isOk());
+            .header("Authorization", getBearerAuthToken()))
+            .andExpect(status().isOk());
 
         assertThat(thoughtRepository.findById(savedThought.getId()).orElseThrow(() -> new ThoughtNotFoundException(String.valueOf(savedThought.getId()))).getHearts()).isEqualTo(2);
     }
@@ -72,8 +73,8 @@ class ThoughtApiTest extends ApiTestBase {
         Thought savedThought = thoughtRepository.save(Thought.builder().teamId(teamId).discussed(false).build());
 
         mockMvc.perform(put("/api/team/" + teamId + "/thought/" + savedThought.getId() + "/discuss")
-                .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isOk());
+            .header("Authorization", getBearerAuthToken()))
+            .andExpect(status().isOk());
 
         assertThat(thoughtRepository.findById(savedThought.getId()).orElseThrow(() -> new ThoughtNotFoundException(String.valueOf(savedThought.getId()))).isDiscussed()).isTrue();
     }
@@ -86,10 +87,10 @@ class ThoughtApiTest extends ApiTestBase {
         JsonAdapter<Thought> jsonAdapter = moshi.adapter(Thought.class);
 
         mockMvc.perform(put("/api/team/" + teamId + "/thought/" + savedThought.getId() + "/message")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonAdapter.toJson(updatedThought))
-                .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isOk());
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonAdapter.toJson(updatedThought))
+            .header("Authorization", getBearerAuthToken()))
+            .andExpect(status().isOk());
 
         assertThat(thoughtRepository.findById(savedThought.getId()).orElseThrow(() -> new ThoughtNotFoundException(String.valueOf(savedThought.getId()))).getMessage()).isEqualTo("goodbye");
     }
@@ -97,18 +98,18 @@ class ThoughtApiTest extends ApiTestBase {
     @Test
     void should_return_all_thoughts_by_team_id() throws Exception {
         List<Thought> expectedThoughts = Arrays.asList(
-                Thought.builder().teamId(teamId).message("hello").build(),
-                Thought.builder().teamId(teamId).message("goodbye").build());
+            Thought.builder().teamId(teamId).message("hello").build(),
+            Thought.builder().teamId(teamId).message("goodbye").build());
 
         List<Thought> persistedExpectedThoughts = thoughtRepository.saveAll(expectedThoughts);
 
         JsonAdapter<List<Thought>> thoughtsAdapter = moshi.adapter(Types.newParameterizedType(List.class, Thought.class));
 
         MvcResult result = mockMvc.perform(get(String.join("", "/api/team/", teamId, "/thoughts"))
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isOk())
-                .andReturn();
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", getBearerAuthToken()))
+            .andExpect(status().isOk())
+            .andReturn();
 
         assertThat(thoughtsAdapter.fromJson(result.getResponse().getContentAsString())).isEqualTo(persistedExpectedThoughts);
     }
@@ -116,15 +117,15 @@ class ThoughtApiTest extends ApiTestBase {
     @Test
     void should_delete_all_thoughts_by_team_id() throws Exception {
         List<Thought> savedThoughts = Arrays.asList(
-                Thought.builder().teamId(teamId).message("hello").build(),
-                Thought.builder().teamId(teamId).message("goodbye").build());
+            Thought.builder().teamId(teamId).message("hello").build(),
+            Thought.builder().teamId(teamId).message("goodbye").build());
         thoughtRepository.saveAll(savedThoughts);
         assertThat(thoughtRepository.findAll().size()).isEqualTo(2);
 
         mockMvc.perform(delete(String.join("", "/api/team/", teamId, "/thoughts"))
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isOk());
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", getBearerAuthToken()))
+            .andExpect(status().isOk());
 
         assertThat(thoughtRepository.findAll()).isEmpty();
     }
@@ -134,8 +135,8 @@ class ThoughtApiTest extends ApiTestBase {
 
 
         List<Thought> thoughtsToSave = Arrays.asList(
-                Thought.builder().teamId(teamId).message("hello").build(),
-                Thought.builder().teamId(teamId).message("goodbye").build());
+            Thought.builder().teamId(teamId).message("hello").build(),
+            Thought.builder().teamId(teamId).message("goodbye").build());
 
         List<Thought> persistedThoughts = thoughtRepository.saveAll(thoughtsToSave);
 
@@ -145,9 +146,9 @@ class ThoughtApiTest extends ApiTestBase {
         Thought thoughToKeep = persistedThoughts.get(1);
 
         mockMvc.perform(delete(String.join("", "/api/team/", teamId, "/thought/" + thoughtToDelete.getId()))
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isOk());
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", getBearerAuthToken()))
+            .andExpect(status().isOk());
 
         assertThat(thoughtRepository.exists(Example.of(thoughtToDelete))).isFalse();
         assertThat(thoughtRepository.exists(Example.of(thoughToKeep))).isTrue();
@@ -161,10 +162,10 @@ class ThoughtApiTest extends ApiTestBase {
         JsonAdapter<Thought> jsonAdapter = moshi.adapter(Thought.class);
 
         mockMvc.perform(post(String.join("", "/api/team/", teamId, "/thought"))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(jsonAdapter.toJson(thoughtToSave))
-                .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isCreated());
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonAdapter.toJson(thoughtToSave))
+            .header("Authorization", getBearerAuthToken()))
+            .andExpect(status().isCreated());
 
         assertThat(thoughtRepository.exists(Example.of(thoughtToSave))).isTrue();
     }
@@ -175,11 +176,11 @@ class ThoughtApiTest extends ApiTestBase {
         subscribe(session, BASE_SUB_URL);
 
         thoughtRepository.saveAll(Arrays.asList(
-                Thought.builder().teamId(teamId).message("message").build(),
-                Thought.builder().teamId("team 2").message("message").build()
+            Thought.builder().teamId(teamId).message("message").build(),
+            Thought.builder().teamId("team 2").message("message").build()
         ));
 
-        session.send(BASE_ENDPOINT_URL + "/delete", null);
+        session.send(BASE_ENDPOINT_URL + "/delete", new byte[0]);
 
         assertThat(takeObjectInSocket(Long.class)).isEqualTo(-1L);
         assertThat(thoughtRepository.count()).isEqualTo(1);
@@ -192,7 +193,7 @@ class ThoughtApiTest extends ApiTestBase {
 
         thoughtRepository.save(Thought.builder().teamId(teamId).message("message").build());
 
-        session.send(BASE_ENDPOINT_URL + "/delete", null);
+        session.send(BASE_ENDPOINT_URL + "/delete", new byte[0]);
 
         assertThat(thoughtRepository.count()).isEqualTo(1);
     }
@@ -203,27 +204,29 @@ class ThoughtApiTest extends ApiTestBase {
         subscribe(session, BASE_SUB_URL);
 
         Thought savedThought = thoughtRepository.save(Thought.builder()
-                .teamId(teamId)
-                .message("message")
-                .discussed(false)
-                .hearts(1)
-                .build());
+            .teamId(teamId)
+            .message("message")
+            .discussed(false)
+            .hearts(1)
+            .build());
 
         Thought sentThought = Thought.builder()
-                .id(savedThought.getId())
-                .message("message 2")
-                .discussed(true)
-                .hearts(2)
-                .build();
+            .id(savedThought.getId())
+            .message("message 2")
+            .discussed(true)
+            .hearts(2)
+            .build();
 
         session.send(BASE_ENDPOINT_URL + "/" + savedThought.getId().toString() + "/edit",
-                objectMapper.writeValueAsBytes(sentThought));
+            objectMapper.writeValueAsBytes(sentThought));
 
         Thought responseThought = takeObjectInSocket(Thought.class);
 
         Thought updatedThought = thoughtRepository.findById(savedThought.getId()).orElseThrow(Exception::new);
 
-        assertThat(responseThought).isEqualToComparingFieldByField(responseThought);
+        assertThat(responseThought)
+            .usingRecursiveComparison()
+            .isEqualTo(responseThought);
 
         assertThat(updatedThought.getId()).isEqualTo(sentThought.getId());
         assertThat(updatedThought.getMessage()).isEqualTo(sentThought.getMessage());
@@ -240,13 +243,15 @@ class ThoughtApiTest extends ApiTestBase {
         Thought sentThought = Thought.builder().id(savedThought.getId()).message("message 2").build();
 
         session.send(BASE_ENDPOINT_URL + "/" + savedThought.getId().toString() + "/edit",
-                objectMapper.writeValueAsBytes(sentThought));
+            objectMapper.writeValueAsBytes(sentThought));
 
         Thought responseThought = takeObjectInSocket(Thought.class);
 
         Thought updatedThought = thoughtRepository.findById(savedThought.getId()).orElseThrow(Exception::new);
 
-        assertThat(updatedThought).isEqualToComparingFieldByField(savedThought);
+        assertThat(updatedThought)
+            .usingRecursiveComparison()
+            .isEqualTo(savedThought);
         assertThat(responseThought).isNull();
     }
 
@@ -256,18 +261,19 @@ class ThoughtApiTest extends ApiTestBase {
         subscribe(session, BASE_SUB_URL);
 
         Thought sentThought = Thought.builder()
-                .teamId(teamId)
-                .message("message")
-                .build();
+            .teamId(teamId)
+            .message("message")
+            .build();
 
         session.send(BASE_ENDPOINT_URL + "/create",
-                objectMapper.writeValueAsBytes(sentThought));
+            objectMapper.writeValueAsBytes(sentThought));
 
         Thought responseThought = takeObjectInSocket(Thought.class);
 
         Thought savedThought = thoughtRepository.findById(responseThought.getId()).orElseThrow(Exception::new);
 
-        assertThat(savedThought).isEqualToComparingFieldByField(responseThought);
+        assertThat(savedThought).usingRecursiveComparison()
+            .isEqualTo(responseThought);
     }
 
     @Test
@@ -276,15 +282,15 @@ class ThoughtApiTest extends ApiTestBase {
         subscribe(session, BASE_SUB_URL);
 
         Thought sentThought = Thought.builder()
-                .teamId(teamId)
-                .message("message")
-                .topic("happy")
-                .build();
+            .teamId(teamId)
+            .message("message")
+            .topic("happy")
+            .build();
 
         ColumnTitle savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder().teamId(teamId).topic("happy").build());
 
         session.send(BASE_ENDPOINT_URL + "/create",
-                objectMapper.writeValueAsBytes(sentThought));
+            objectMapper.writeValueAsBytes(sentThought));
 
         Thought responseThought = takeObjectInSocket(Thought.class);
 
@@ -301,7 +307,7 @@ class ThoughtApiTest extends ApiTestBase {
         Thought sentThought = Thought.builder().teamId(teamId).message("message").build();
 
         session.send(BASE_ENDPOINT_URL + "/create",
-                objectMapper.writeValueAsBytes(sentThought));
+            objectMapper.writeValueAsBytes(sentThought));
 
         Thought responseThought = takeObjectInSocket(Thought.class);
 
@@ -313,18 +319,18 @@ class ThoughtApiTest extends ApiTestBase {
     void should_get_thoughts_on_same_team() throws Exception {
 
         List<Thought> savedThoughts = Arrays.asList(
-                Thought.builder().message("message 1").teamId(teamId).build(),
-                Thought.builder().message("message 2").teamId(teamId).build(),
-                Thought.builder().message("message 2").teamId("team 2").build()
+            Thought.builder().message("message 1").teamId(teamId).build(),
+            Thought.builder().message("message 2").teamId(teamId).build(),
+            Thought.builder().message("message 2").teamId("team 2").build()
         );
 
         thoughtRepository.saveAll(savedThoughts);
 
         MvcResult result = mockMvc.perform(get(BASE_GET_URL + "/thoughts")
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isOk())
-                .andReturn();
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", getBearerAuthToken()))
+            .andExpect(status().isOk())
+            .andReturn();
 
         Thought[] response = objectMapper.readValue(result.getResponse().getContentAsByteArray(), Thought[].class);
 
@@ -335,15 +341,15 @@ class ThoughtApiTest extends ApiTestBase {
     void should_not_get_thoughts_unauthorized() throws Exception {
 
         List<Thought> savedThoughts = Collections.singletonList(
-                Thought.builder().message("message 1").teamId(teamId).build()
+            Thought.builder().message("message 1").teamId(teamId).build()
         );
 
         thoughtRepository.saveAll(savedThoughts);
 
         mockMvc.perform(get(BASE_GET_URL + "/thoughts")
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
-                .andExpect(status().isForbidden());
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+            .andExpect(status().isForbidden());
     }
 
     @Test
@@ -351,27 +357,30 @@ class ThoughtApiTest extends ApiTestBase {
         StompSession session = getAuthorizedSession();
         subscribe(session, BASE_SUB_URL);
 
-        Thought savedThought = thoughtRepository.save(Thought.builder()
+        Thought savedThought = thoughtRepository.save(
+            Thought.builder()
                 .teamId(teamId)
                 .topic("hamburgers")
                 .message("message")
                 .discussed(false)
                 .hearts(1)
-                .build());
+                .build()
+        );
 
-        Thought sentThought = Thought.builder()
-                .id(savedThought.getId())
-                .topic("cheeseburgers")
-                .build();
+        MoveThoughtRequest sentThought = new MoveThoughtRequest(
+            "cheeseburgers"
+        );
 
-        session.send(BASE_ENDPOINT_URL + "/" + savedThought.getId().toString() + "/move",
-                objectMapper.writeValueAsBytes(sentThought));
+        session.send(
+            String.format("%s/%s/move", BASE_ENDPOINT_URL, savedThought.getId().toString()),
+            objectMapper.writeValueAsBytes(sentThought)
+        );
 
-        Thought responseThought = takeObjectInSocket(Thought.class);
+        takeObjectInSocket(Thought.class);
 
         Thought updatedThought = thoughtRepository.findById(savedThought.getId()).orElseThrow(Exception::new);
 
-        assertThat(updatedThought.getId()).isEqualTo(sentThought.getId());
+        assertThat(updatedThought.getId()).isEqualTo(savedThought.getId());
         assertThat(updatedThought.getMessage()).isEqualTo(savedThought.getMessage());
         assertThat(updatedThought.getTopic()).isEqualTo(sentThought.getTopic());
     }
@@ -385,13 +394,14 @@ class ThoughtApiTest extends ApiTestBase {
         Thought sentThought = Thought.builder().id(savedThought.getId()).topic("cheeseburgers").build();
 
         session.send(BASE_ENDPOINT_URL + "/" + savedThought.getId().toString() + "/move",
-                objectMapper.writeValueAsBytes(sentThought));
+            objectMapper.writeValueAsBytes(sentThought));
 
         Thought responseThought = takeObjectInSocket(Thought.class);
 
         Thought updatedThought = thoughtRepository.findById(savedThought.getId()).orElseThrow(Exception::new);
 
-        assertThat(updatedThought).isEqualToComparingFieldByField(savedThought);
+        assertThat(updatedThought).usingRecursiveComparison()
+            .isEqualTo(savedThought);
         assertThat(responseThought).isNull();
     }
 }

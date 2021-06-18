@@ -38,11 +38,11 @@ public class ThoughtService {
     }
 
     public Thought fetchThought(String thoughtId) {
-        return thoughtRepository.findById(Long.valueOf(thoughtId)).orElseThrow(() -> new ThoughtNotFoundException(thoughtId));
+        return fetchThought(Long.valueOf(thoughtId));
     }
 
     public Thought fetchThought(Long thoughtId) {
-        return fetchThought(String.valueOf(thoughtId));
+        return thoughtRepository.findById(thoughtId).orElseThrow(() -> new ThoughtNotFoundException(thoughtId));
     }
 
     public List<Thought> fetchAllThoughtsByTeam(String teamId) {
@@ -57,14 +57,22 @@ public class ThoughtService {
         thoughtRepository.deleteThoughtByTeamIdAndId(teamId, id);
     }
 
-    public String createThoughtAndReturnURI(String teamId, Thought thought) {
+    public Thought createThought(String teamId, CreateThoughtRequest request) {
+        return createThought(teamId, null, request);
+    }
+
+    public Thought createThought(String teamId, Long boardId, CreateThoughtRequest request) {
+        var thought = new Thought();
+        thought.setMessage(request.getMessage());
+        thought.setHearts(request.getHearts());
+        thought.setTopic(request.getTopic());
+        thought.setDiscussed(request.isDiscussed());
         thought.setTeamId(teamId);
+        thought.setBoardId(boardId);
 
         var columnTitle = columnTitleRepository.findByTeamIdAndAndTopic(teamId, thought.getTopic());
         thought.setColumnTitle(columnTitle);
+        return thoughtRepository.save(thought);
 
-        var save = thoughtRepository.save(thought);
-
-        return "/api/team/" + teamId + "/thought/" + save.getId();
     }
 }
