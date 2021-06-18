@@ -57,7 +57,7 @@ public class BoardService {
     }
 
     public Board createBoard(CreateBoardRequest request) {
-        Board board = new Board();
+        var board = new Board();
         board.setTeamId(request.getTeamId());
         board.setThoughts(new ArrayList<>());
         board.setDateCreated(LocalDate.now());
