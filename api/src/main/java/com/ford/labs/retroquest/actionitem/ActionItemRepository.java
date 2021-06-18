@@ -29,5 +29,4 @@ public interface ActionItemRepository extends JpaRepository<ActionItem, Long>{
     List<ActionItem> findAllByTeamIdAndArchivedIsTrue(String teamId);
 
     void deleteActionItemByTeamIdAndId(String teamId, Long id);
-
 }

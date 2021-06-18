@@ -65,7 +65,11 @@ public class ActionItemController {
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Updates an action item given a thought id and a team id", description = "updateActionItemTask")
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "No Content")})
-    public void updateActionItemTask(@PathVariable("thoughtId") Long actionItemId, @PathVariable("teamId") String teamId, @RequestBody ActionItem updatedActionItem) {
+    public void updateActionItemTask(
+        @PathVariable("thoughtId") Long actionItemId,
+        @PathVariable("teamId") String teamId,
+        @RequestBody UpdateActionItemTaskRequest updatedActionItem
+    ) {
         var savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
         savedActionItem.setTask(updatedActionItem.getTask());
         actionItemRepository.save(savedActionItem);
@@ -75,7 +79,11 @@ public class ActionItemController {
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Updates an action item assignee a thought id and a team id", description = "updateActionItemAssignee")
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "No Content")})
-    public void updateActionItemAssignee(@PathVariable("thoughtId") Long actionItemId, @PathVariable("teamId") String teamId, @RequestBody ActionItem updatedActionItem) {
+    public void updateActionItemAssignee(
+        @PathVariable("thoughtId") Long actionItemId,
+        @PathVariable("teamId") String teamId,
+        @RequestBody UpdateActionItemAssigneeRequest updatedActionItem
+    ) {
         var savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
         savedActionItem.setAssignee(updatedActionItem.getAssignee());
         actionItemRepository.save(savedActionItem);
@@ -101,22 +109,30 @@ public class ActionItemController {
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Creates an action item given a team id", description = "createActionItemForTeam")
     @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Created")})
-    public ResponseEntity<URI> createActionItemForTeam(@PathVariable("teamId") String teamId, @RequestBody ActionItem actionItem) throws URISyntaxException {
-        actionItem.setTeamId(teamId);
-        var savedActionItem = actionItemRepository.save(actionItem);
-        var savedActionItemUri = new URI("/api/team/" + teamId + "/action-item/" + savedActionItem.getId());
-        return ResponseEntity.created(savedActionItemUri).build();
+    public ResponseEntity<URI> createActionItemForTeam(
+        @PathVariable("teamId") String teamId,
+        @RequestBody CreateActionItemRequest request
+    ) throws URISyntaxException {
+        var actionItem = createActionItem(teamId, request);
+        var actionItemUri = new URI("/api/team/" + teamId + "/action-item/" + actionItem.getId());
+        return ResponseEntity.created(actionItemUri).build();
+    }
+
+    @Transactional
+    @DeleteMapping("/api/team/{teamId}/action-item/{id}")
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    public void deleteActionItemByTeamIdAndId(@PathVariable("teamId") String teamId, @PathVariable("id") Long id) {
+        actionItemRepository.deleteActionItemByTeamIdAndId(teamId, id);
     }
 
     @MessageMapping("/{teamId}/action-item/create")
     @SendTo("/topic/{teamId}/action-items")
-    public WebsocketPutResponse<ActionItem> createActionItemWebsocket(@DestinationVariable("teamId") String teamId, ActionItem actionItem, Authentication authentication) {
+    public WebsocketPutResponse<ActionItem> createActionItemWebsocket(@DestinationVariable("teamId") String teamId, CreateActionItemRequest request, Authentication authentication) {
         if (!apiAuthorization.requestIsAuthorized(authentication, teamId)) {
             return null;
         }
-        actionItem.setTeamId(teamId);
-        var savedActionItem = actionItemRepository.save(actionItem);
-        return new WebsocketPutResponse<>(savedActionItem);
+        var actionItem = createActionItem(teamId, request);
+        return new WebsocketPutResponse<>(actionItem);
     }
 
     @MessageMapping("/{teamId}/action-item/{actionItemId}/edit")
@@ -146,21 +162,9 @@ public class ActionItemController {
         return new WebsocketDeleteResponse<>(actionItemId);
     }
 
-    @Transactional
-    @MessageMapping("/{teamId}/action-item/delete")
-    @SendTo("/topic/{teamId}/action-items")
-    public WebsocketDeleteResponse<ActionItem> deleteActionItem(@DestinationVariable("teamId") String teamId, ActionItem actionItem, Authentication authentication) {
-        if (!apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            return null;
-        }
-        actionItemRepository.deleteActionItemByTeamIdAndId(teamId, actionItem.getId());
-        return new WebsocketDeleteResponse<>(actionItem);
-    }
-
-    @Transactional
-    @DeleteMapping("/api/team/{teamId}/action-item/{id}")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
-    public void deleteActionItemByTeamIdAndId(@PathVariable("teamId") String teamId, @PathVariable("id") Long id) {
-        actionItemRepository.deleteActionItemByTeamIdAndId(teamId, id);
+    private ActionItem createActionItem(String teamId, CreateActionItemRequest request) {
+        var actionItem = request.toActionItem();
+        actionItem.setTeamId(teamId);
+        return actionItemRepository.save(actionItem);
     }
 }
