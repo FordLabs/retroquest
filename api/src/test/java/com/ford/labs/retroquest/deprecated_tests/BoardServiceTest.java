@@ -151,7 +151,6 @@ class BoardServiceTest {
         assertThat(returnedBoard.getId()).isEqualTo(1234L);
         assertThat(returnedBoard.getTeamId()).isEqualTo(expectedTeamId);
         assertThat(returnedBoard.getThoughts()).hasSize(1);
-        assertThat(returnedBoard.getThoughts()).hasSize(1);
         assertThat(returnedBoard.getThoughts().get(0).getBoardId()).isEqualTo(1234L);
     }
 }
