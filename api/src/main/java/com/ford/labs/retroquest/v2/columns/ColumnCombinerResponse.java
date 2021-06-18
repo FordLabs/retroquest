@@ -29,5 +29,5 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class ColumnCombinerResponse {
-    private List<ColumnResponse> columns;
+    private List<ColumnResponse<?>> columns;
 }

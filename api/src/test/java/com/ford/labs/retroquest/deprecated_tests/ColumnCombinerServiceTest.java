@@ -33,6 +33,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -88,48 +89,48 @@ class ColumnCombinerServiceTest {
 
     }
 
-    private String fakeTeamId = "some team id";
+    private final String fakeTeamId = "some team id";
 
-    private Thought expectedActiveHappyThoughts = Thought.builder()
+    private final Thought expectedActiveHappyThoughts = Thought.builder()
             .teamId(fakeTeamId).message("happy 1").topic("happy").discussed(false)
             .columnTitle(ColumnTitle.builder().id(0L).title("Happy").topic("happy").build())
             .build();
 
-    private Thought expectedActiveConfusedThoughts = Thought.builder()
+    private final Thought expectedActiveConfusedThoughts = Thought.builder()
             .teamId(fakeTeamId).message("confused 1").topic("confused").discussed(false)
             .columnTitle(ColumnTitle.builder().id(1L).title("Confused").topic("confused").build())
             .build();
 
 
-    private Thought expectedActiveSadThoughts = Thought.builder()
+    private final Thought expectedActiveSadThoughts = Thought.builder()
             .teamId(fakeTeamId).message("sad 1").topic("sad").discussed(false)
             .columnTitle(ColumnTitle.builder().id(2L).title("Sad").topic("sad").build())
             .build();
 
 
-    private ActionItem expectedActiveActionItems = ActionItem.builder()
+    private final ActionItem expectedActiveActionItems = ActionItem.builder()
             .teamId(fakeTeamId).task("sad 2").completed(false)
             .build();
 
 
-    private Thought expectedCompletedHappyThoughts = Thought.builder()
+    private final Thought expectedCompletedHappyThoughts = Thought.builder()
             .teamId(fakeTeamId).message("happy 2").topic("happy").discussed(true)
             .columnTitle(ColumnTitle.builder().id(0L).title("Happy").topic("happy").build())
             .build();
 
 
-    private Thought expectedCompletedConfusedThoughts = Thought.builder()
+    private final Thought expectedCompletedConfusedThoughts = Thought.builder()
             .teamId(fakeTeamId).message("confused 2").topic("confused").discussed(true)
             .columnTitle(ColumnTitle.builder().id(1L).title("Confused").topic("confused").build())
             .build();
 
 
-    private Thought expectedCompletedSadThoughts = Thought.builder()
+    private final Thought expectedCompletedSadThoughts = Thought.builder()
             .teamId(fakeTeamId).message("sad 2").topic("sad").discussed(true)
             .columnTitle(ColumnTitle.builder().id(2L).title("Sad").topic("sad").build())
             .build();
 
-    private ActionItem expectedCompletedActionItems = ActionItem.builder()
+    private final ActionItem expectedCompletedActionItems = ActionItem.builder()
             .teamId(fakeTeamId).task("sad 2").completed(true)
             .build();
 
@@ -161,23 +162,27 @@ class ColumnCombinerServiceTest {
     // "should put active items in correct list"
     @Test
     void activeItemsList() {
-        assertThat(response.getColumns().get(0).getItems().getActive()).containsExactly(expectedActiveHappyThoughts);
-        assertThat(response.getColumns().get(1).getItems().getActive()).containsExactly(expectedActiveConfusedThoughts);
-        assertThat(response.getColumns().get(2).getItems().getActive()).containsExactly(expectedActiveSadThoughts);
-        assertThat(response.getColumns().get(3).getItems().getActive()).containsExactly(expectedActiveActionItems);
+        assertThat((List<Thought>) response.getColumns().get(0).getItems().getActive())
+            .containsExactly(expectedActiveHappyThoughts);
+        assertThat((List<Thought>) response.getColumns().get(1).getItems().getActive())
+            .containsExactly(expectedActiveConfusedThoughts);
+        assertThat((List<Thought>) response.getColumns().get(2).getItems().getActive())
+            .containsExactly(expectedActiveSadThoughts);
+        assertThat((List<ActionItem>) response.getColumns().get(3).getItems().getActive())
+            .containsExactly(expectedActiveActionItems);
     }
 
     // "should put completed items in correct list"
     @Test
     void completedItemsList() {
-        assertThat(response.getColumns().get(0).getItems().getCompleted()).containsExactly(
-                expectedCompletedHappyThoughts);
-        assertThat(response.getColumns().get(1).getItems().getCompleted()).containsExactly(
-                expectedCompletedConfusedThoughts);
-        assertThat(response.getColumns().get(2).getItems().getCompleted()).containsExactly(
-                expectedCompletedSadThoughts);
-        assertThat(response.getColumns().get(3).getItems().getCompleted()).containsExactly(
-                expectedCompletedActionItems);
+        assertThat((List<Thought>) response.getColumns().get(0).getItems().getCompleted())
+            .containsExactly(expectedCompletedHappyThoughts);
+        assertThat((List<Thought>) response.getColumns().get(1).getItems().getCompleted())
+            .containsExactly(expectedCompletedConfusedThoughts);
+        assertThat((List<Thought>) response.getColumns().get(2).getItems().getCompleted())
+            .containsExactly(expectedCompletedSadThoughts);
+        assertThat((List<ActionItem>) response.getColumns().get(3).getItems().getCompleted())
+            .containsExactly(expectedCompletedActionItems);
     }
 
 }
