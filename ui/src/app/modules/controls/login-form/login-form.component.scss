@@ -1,0 +1,44 @@
+@import 'color-vars';
+
+:host {
+  background-color: #fafafa;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  flex-direction: row;
+  overflow: auto;
+  width: 100%;
+  min-height: 100%;
+
+  font-family: 'Open Sans', sans-serif;
+
+  @media only screen and (max-width: 900px) {
+    flex-direction: column;
+  }
+
+  re-captcha {
+    visibility: hidden;
+  }
+
+  .form-background {
+    background-color: transparent;
+    border-radius: 3px;
+    display: block;
+    margin: auto;
+    width: 60%;
+    box-sizing: border-box;
+    padding: 3rem 0;
+
+    .form-content {
+      margin: 0 auto;
+      width: 500px;
+    }
+  }
+
+  .contributors {
+    flex: 1;
+    box-sizing: border-box;
+    padding: 2rem 5rem;
+    background-color: $midnight-blue;
+  }
+}

@@ -15,36 +15,41 @@
  *  limitations under the License.
  */
 
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {ButtonComponent} from './button/button.component';
-import {StyleGuidePageComponent} from './style-guide-page/style-guide-page.component';
-import {RouterModule} from '@angular/router';
-import {RqPageComponent} from './rq-page/rq-page.component';
-import {ActionBarComponent} from './action-bar/action-bar.component';
-import {TextFieldComponent} from './text-field/text-field.component';
-import {FormsModule} from '@angular/forms';
-import {CountSeperatorComponent} from './count-seperator/count-seperator.component';
-import {ColumnHeaderComponent} from './column-header/column-header.component';
-import {FloatingCharacterCountdownComponent} from './floating-character-countdown/floating-character-countdown.component';
-import {TaskComponent} from './task/task.component';
-import {ActionItemTaskComponent} from './action-item-task/action-item-task.component';
-import {TaskDialogComponent} from './task-dialog/task-dialog.component';
-import {ActionItemDialogComponent} from './action-item-dialog/action-item-dialog.component';
-import {EndRetroDialogComponent} from './end-retro-dialog/end-retro-dialog.component';
-import {FeedbackDialogComponent} from './feedback-dialog/feedback-dialog.component';
-import {ActionsRadiatorViewComponent} from './actions-radiator-view/actions-radiator-view.component';
-import {DeletionOverlayComponent} from './deletion-overlay/deletion-overlay.component';
-import {TooltipComponent} from './tooltip/tooltip.component';
-import {SettingsDialogComponent} from './settings-dialog/settings-dialog.component';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ButtonComponent } from './button/button.component';
+import { StyleGuidePageComponent } from './style-guide-page/style-guide-page.component';
+import { RouterModule } from '@angular/router';
+import { RqPageComponent } from './rq-page/rq-page.component';
+import { ActionBarComponent } from './action-bar/action-bar.component';
+import { TextFieldComponent } from './text-field/text-field.component';
+import { FormsModule } from '@angular/forms';
+import { CountSeperatorComponent } from './count-seperator/count-seperator.component';
+import { ColumnHeaderComponent } from './column-header/column-header.component';
+import { FloatingCharacterCountdownComponent } from './floating-character-countdown/floating-character-countdown.component';
+import { TaskComponent } from './task/task.component';
+import { ActionItemTaskComponent } from './action-item-task/action-item-task.component';
+import { TaskDialogComponent } from './task-dialog/task-dialog.component';
+import { ActionItemDialogComponent } from './action-item-dialog/action-item-dialog.component';
+import { EndRetroDialogComponent } from './end-retro-dialog/end-retro-dialog.component';
+import { FeedbackDialogComponent } from './feedback-dialog/feedback-dialog.component';
+import { ActionsRadiatorViewComponent } from './actions-radiator-view/actions-radiator-view.component';
+import { DeletionOverlayComponent } from './deletion-overlay/deletion-overlay.component';
+import { TooltipComponent } from './tooltip/tooltip.component';
+import { SettingsDialogComponent } from './settings-dialog/settings-dialog.component';
+import { PageLogoComponent } from './page-logo/page-logo.component';
+import { LoginFormComponent } from './login-form/login-form.component';
+import { RecaptchaModule } from 'ng-recaptcha';
+import { ContributorsComponent } from './contributors/contributors.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     RouterModule.forChild([
-      {path: 'styleguide', component: StyleGuidePageComponent},
-    ])
+      { path: 'styleguide', component: StyleGuidePageComponent },
+    ]),
+    RecaptchaModule,
   ],
   declarations: [
     ButtonComponent,
@@ -64,7 +69,10 @@ import {SettingsDialogComponent} from './settings-dialog/settings-dialog.compone
     ActionsRadiatorViewComponent,
     DeletionOverlayComponent,
     TooltipComponent,
-    SettingsDialogComponent
+    SettingsDialogComponent,
+    PageLogoComponent,
+    LoginFormComponent,
+    ContributorsComponent,
   ],
 
   exports: [
@@ -84,9 +92,9 @@ import {SettingsDialogComponent} from './settings-dialog/settings-dialog.compone
     FeedbackDialogComponent,
     ActionsRadiatorViewComponent,
     DeletionOverlayComponent,
-    SettingsDialogComponent
-  ]
-
+    SettingsDialogComponent,
+    PageLogoComponent,
+    LoginFormComponent,
+  ],
 })
-export class ControlsModule {
-}
+export class ControlsModule {}

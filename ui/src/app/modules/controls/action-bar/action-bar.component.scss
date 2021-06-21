@@ -26,7 +26,7 @@ $height: 50px;
   height: $height;
   width: 100%;
 
-  .content {
+  .form-background {
     align-self: center;
     display: flex;
     flex-direction: row;
@@ -39,6 +39,5 @@ $height: 50px;
     ::ng-deep * {
       margin-left: 24px;
     }
-
   }
 }

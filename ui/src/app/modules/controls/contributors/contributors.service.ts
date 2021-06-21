@@ -15,24 +15,21 @@
  *  limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {Contributor} from '../../../domain/contributor';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Contributor } from '../../domain/contributor';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ContributorsService {
-
-  constructor(
-    private http: HttpClient
-  ) { }
+  constructor(private http: HttpClient) {}
 
   public getContributors(): Observable<Contributor[]> {
-    return new Observable<Contributor[]>(observer => {
-      this.http.get<Contributor[]>('/api/contributors').subscribe(result => {
-        result.forEach(contributor => {
+    return new Observable<Contributor[]>((observer) => {
+      this.http.get<Contributor[]>('/api/contributors').subscribe((result) => {
+        result.forEach((contributor) => {
           contributor.image = `data:image/png;base64,${contributor.image}`;
         });
         observer.next(result);

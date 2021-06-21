@@ -1,0 +1,16 @@
+<div class="form-background">
+    <div class="form-content">
+        <ng-content></ng-content>
+    </div>
+</div>
+
+<re-captcha
+    #captchaRef="reCaptcha"
+    size="invisible"
+    siteKey="6LeZOmMUAAAAAOq4uXmluNuIio7XGx7U-ncmOzGT"
+    (resolved)="$event && captchaResolved.emit($event)"
+></re-captcha>
+
+<div class="contributors">
+    <rq-contributors></rq-contributors>
+</div>

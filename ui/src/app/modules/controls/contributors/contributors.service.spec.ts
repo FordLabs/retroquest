@@ -18,7 +18,7 @@
 import { ContributorsService } from './contributors.service';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
-import { createMockHttpClient } from '../../../utils/testutils';
+import { createMockHttpClient } from '../../utils/testutils';
 
 describe('ContributorsService', () => {
   let service: ContributorsService;
