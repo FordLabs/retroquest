@@ -1,0 +1,109 @@
+<!--
+  ~  Copyright (c) 2020 Ford Motor Company
+  ~  All rights reserved.
+  ~
+  ~  Licensed under the Apache License, Version 2.0 (the "License");
+  ~  you may not use this file except in compliance with the License.
+  ~  You may obtain a copy of the License at
+  ~
+  ~  http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<div
+    class="dialog"
+    [ngClass]="{
+        'dark-theme': darkThemeIsEnabled
+    }"
+    (click)="$event.stopPropagation()"
+>
+    <div class="body">
+        <div
+            class="heading"
+            [ngClass]="{
+                'dark-theme': darkThemeIsEnabled
+            }"
+        >
+            feedback
+        </div>
+        <div
+            class="sub-heading"
+            [ngClass]="{
+                'dark-theme': darkThemeIsEnabled
+            }"
+        >
+            How can we improve RetroQuest?
+        </div>
+
+        <div class="section star-line" (mouseleave)="clearStars()">
+            <div
+                class="fa-star"
+                *ngFor="let starState of starStates; let i = index"
+                [ngClass]="{
+                    active: starState,
+                    fas: starState,
+                    far: !starState
+                }"
+                (mouseenter)="onStarHovered(i)"
+                (click)="onStarClicked(i)"
+            ></div>
+        </div>
+
+        <div class="section comments-section">
+            <div
+                class="label"
+                [ngClass]="{
+                    'dark-theme': darkThemeIsEnabled
+                }"
+            >
+                comments<span class="required-field">*</span>
+            </div>
+            <textarea
+                [(ngModel)]="feedback.comment"
+                [ngClass]="{
+                    'dark-theme': darkThemeIsEnabled
+                }"
+            ></textarea>
+        </div>
+
+        <div class="section feedback-email-section">
+            <div
+                class="label"
+                [ngClass]="{
+                    'dark-theme': darkThemeIsEnabled
+                }"
+            >
+                feedback email
+            </div>
+            <input
+                [type]="'text'"
+                [(ngModel)]="feedback.userEmail"
+                [ngClass]="{
+                    'dark-theme': darkThemeIsEnabled
+                }"
+            />
+        </div>
+    </div>
+    <div class="footer">
+        <div class="container">
+            <rq-button
+                type="secondary"
+                text="cancel"
+                (click)="hide()"
+                [theme]="theme"
+            ></rq-button>
+        </div>
+        <div class="container">
+            <rq-button
+                type="primary"
+                text="send!"
+                (click)="onSendButtonClicked()"
+            ></rq-button>
+        </div>
+    </div>
+</div>

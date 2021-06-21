@@ -15,23 +15,30 @@
  *  limitations under the License.
  */
 
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {EndRetroDialogComponent} from '../../../controls/end-retro-dialog/end-retro-dialog.component';
-import {FeedbackService} from '../../services/feedback.service';
-import {Feedback} from '../../../domain/feedback';
-import {FeedbackDialogComponent} from '../../../controls/feedback-dialog/feedback-dialog.component';
-import {SaveCheckerService} from '../../services/save-checker.service';
-import {Themes} from '../../../domain/Theme';
-import {HttpClient} from '@angular/common/http';
-import {saveAs} from 'file-saver';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import { EndRetroDialogComponent } from '../../../components/end-retro-dialog/end-retro-dialog.component';
+import { FeedbackService } from '../../services/feedback.service';
+import { Feedback } from '../../../domain/feedback';
+import { FeedbackDialogComponent } from '../../../components/feedback-dialog/feedback-dialog.component';
+import { SaveCheckerService } from '../../services/save-checker.service';
+import { Themes } from '../../../domain/Theme';
+import { HttpClient } from '@angular/common/http';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'rq-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   host: {
-    '[class.dark-theme]': 'darkThemeIsEnabled'
-  }
+    '[class.dark-theme]': 'darkThemeIsEnabled',
+  },
 })
 export class HeaderComponent implements OnInit {
   @Input() teamName: string;
@@ -49,12 +56,9 @@ export class HeaderComponent implements OnInit {
     private feedbackService: FeedbackService,
     private saveChecker: SaveCheckerService,
     private http: HttpClient
-  ) {
+  ) {}
 
-  }
-
-  public ngOnInit(): void {
-  }
+  public ngOnInit(): void {}
 
   get boardIsOpenToEveryone(): boolean {
     return this.teamId.toLowerCase() === 'techtrek';
@@ -82,8 +86,10 @@ export class HeaderComponent implements OnInit {
   }
 
   giveZipDownloadToUser() {
-    this.http.get(this.getCsvUrl(), {responseType: 'blob'}).subscribe(csvData => {
-      saveAs(csvData, `${this.teamId}-board.csv`);
-    });
+    this.http
+      .get(this.getCsvUrl(), { responseType: 'blob' })
+      .subscribe((csvData) => {
+        saveAs(csvData, `${this.teamId}-board.csv`);
+      });
   }
 }

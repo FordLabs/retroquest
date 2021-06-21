@@ -24,7 +24,7 @@ import {
 } from '@angular/core';
 import { ActionItem, emptyActionItem } from '../../../domain/action-item';
 import { ActionItemService } from '../../services/action.service';
-import { ActionItemDialogComponent } from '../../../controls/action-item-dialog/action-item-dialog.component';
+import { ActionItemDialogComponent } from '../../../components/action-item-dialog/action-item-dialog.component';
 import { fadeInOutAnimation } from '../../../animations/add-delete-animation';
 import { Themes } from '../../../domain/Theme';
 import moment from 'moment';

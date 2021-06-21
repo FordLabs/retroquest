@@ -25,7 +25,7 @@ import {
 import { WebsocketResponse } from '../../../domain/websocket-response';
 
 import * as Hammer from 'hammerjs';
-import { ActionsRadiatorViewComponent } from '../../../controls/actions-radiator-view/actions-radiator-view.component';
+import { ActionsRadiatorViewComponent } from '../../../components/actions-radiator-view/actions-radiator-view.component';
 import { Themes } from '../../../domain/Theme';
 import { BoardService } from '../../services/board.service';
 import { ColumnAggregationService } from '../../services/column-aggregation.service';

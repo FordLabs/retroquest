@@ -24,7 +24,7 @@ import { RouterModule } from '@angular/router';
 import { AppTitleComponent } from './components/app-title/app-title.component';
 import { BrandFooterComponent } from './components/brand-footer/brand-footer.component';
 import { RecaptchaModule } from 'ng-recaptcha';
-import { ControlsModule } from '../controls/controls.module';
+import { ComponentsModule } from '../components/components.module';
 import { FocusOnLoadDirective } from './pages/directives/focus-on-load.component';
 import { UpdatePasswordComponent } from './pages/update-password/update-password.page';
 import { CreateUserComponent } from './pages/create-user/create-user.component';
@@ -35,7 +35,7 @@ import { LoginUserComponent } from './pages/login-user/login-user.component';
   imports: [
     CommonModule,
     FormsModule,
-    ControlsModule,
+    ComponentsModule,
     RouterModule.forChild([
       { path: 'create', component: CreateComponent },
       { path: 'login', component: LoginComponent },

@@ -18,7 +18,7 @@
 import { ActionsColumnComponent } from './actions-column.component';
 import { ActionItem } from '../../../domain/action-item';
 import { ActionItemService } from '../../services/action.service';
-import { ActionItemDialogComponent } from '../../../controls/action-item-dialog/action-item-dialog.component';
+import { ActionItemDialogComponent } from '../../../components/action-item-dialog/action-item-dialog.component';
 
 describe('ActionsColumnComponent', () => {
   let component: ActionsColumnComponent;

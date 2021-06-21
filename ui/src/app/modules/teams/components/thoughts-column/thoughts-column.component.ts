@@ -25,7 +25,7 @@ import {
 import { emptyThought, Thought } from '../../../domain/thought';
 import { Column } from '../../../domain/column';
 import { ThoughtService } from '../../services/thought.service';
-import { TaskDialogComponent } from '../../../controls/task-dialog/task-dialog.component';
+import { TaskDialogComponent } from '../../../components/task-dialog/task-dialog.component';
 import { fadeInOutAnimation } from '../../../animations/add-delete-animation';
 import { Themes } from '../../../domain/Theme';
 import {

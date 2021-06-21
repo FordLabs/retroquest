@@ -32,17 +32,17 @@ import { ColumnService } from './services/column.service';
 import { TeamPageQueryParamGuard } from './services/team-page-query-param-guard';
 import { SubAppComponent } from '../sub-app/sub-app.component';
 import { AuthGuard } from '../auth/auth-guard/auth.guard';
-import { ActionsRadiatorViewComponent } from '../controls/actions-radiator-view/actions-radiator-view.component';
+import { ActionsRadiatorViewComponent } from '../components/actions-radiator-view/actions-radiator-view.component';
 import { ArchivesPageComponent } from './pages/archives/archives.page';
 import { ArchivedBoardPageComponent } from './pages/archived-board/archived-board.page';
-import { ControlsModule } from '../controls/controls.module';
+import { ComponentsModule } from '../components/components.module';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FeedbackService } from './services/feedback.service';
 import { SaveCheckerService } from './services/save-checker.service';
 import { EndRetroService } from './services/end-retro.service';
 import { BoardSummaryComponent } from './components/board-summary/board-summary.component';
-import { TopHeaderComponent } from '../controls/top-header/top-header.component';
+import { TopHeaderComponent } from '../components/top-header/top-header.component';
 
 @NgModule({
   imports: [
@@ -79,7 +79,7 @@ import { TopHeaderComponent } from '../controls/top-header/top-header.component'
         ],
       },
     ]),
-    ControlsModule,
+    ComponentsModule,
     InfiniteScrollModule,
     DragDropModule,
   ],
