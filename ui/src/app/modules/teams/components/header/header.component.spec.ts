@@ -25,7 +25,7 @@ import {
   createMockEventEmitter,
   createMockHttpClient,
 } from '../../../utils/testutils';
-import { EndRetroDialogComponent } from '../../../controls/end-retro-dialog/end-retro-dialog.component';
+import { EndRetroDialogComponent } from '../../../components/end-retro-dialog/end-retro-dialog.component';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;

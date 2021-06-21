@@ -24,7 +24,7 @@ import { TeamsModule } from './modules/teams/teams.module';
 import { BoardsModule } from './modules/boards/boards.module';
 import { TokenInterceptor } from './modules/auth/token-interceptor/token.interceptor';
 import { TeamService } from './modules/teams/services/team.service';
-import { ControlsModule } from './modules/controls/controls.module';
+import { ComponentsModule } from './modules/components/components.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
@@ -41,7 +41,7 @@ import { myRxStompConfig } from './my-rx-stomp.config';
   declarations: [AppComponent],
   imports: [
     TeamsModule,
-    ControlsModule,
+    ComponentsModule,
     BoardsModule,
     BrowserModule,
     BrowserAnimationsModule,
