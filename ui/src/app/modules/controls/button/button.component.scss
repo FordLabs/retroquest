@@ -42,22 +42,22 @@
   }
 
   &.primary {
-    background-color: $wet-asphalt;
+    background-color: $asphalt;
     box-shadow: 0 4px 15px opacity($black, 0.25);
-    color: $clouds;
+    color: $gray;
     outline: none;
 
     &.dark-theme {
-      background-color: $clouds;
-      color: $wet-asphalt;
+      background-color: $gray;
+      color: $asphalt;
 
       &:hover {
-        color: $clouds;
+        color: $gray;
       }
     }
 
     &:hover {
-      background-color: $grape;
+      background-color: $purple;
       cursor: pointer;
     }
   }
@@ -67,11 +67,11 @@
     color: inherit;
 
     &.dark-theme {
-      color: opacity($clouds, 0.8);
+      color: opacity($gray, 0.8);
     }
 
     &:hover {
-      color: $grape;
+      color: $purple;
       cursor: pointer;
     }
   }

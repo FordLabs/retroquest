@@ -51,27 +51,27 @@
     }
 
     .guide-button {
-      background-color: $happy-green;
+      background-color: $green;
       box-sizing: border-box;
       height: 100%;
       opacity: 0.35;
       width: 25%;
 
-      $dark-theme-accent-color: $clouds;
+      $dark-theme-accent-color: $gray;
 
       &.dark-theme {
         opacity: 0.65;
       }
 
       &.happy-guide-button {
-        background-color: $happy-green;
+        background-color: $green;
 
         &.dark-theme {
-          background-color: $nephritis;
+          background-color: $dark-green;
         }
 
         &.selected {
-          border-top: 6px solid $wet-asphalt;
+          border-top: 6px solid $asphalt;
           opacity: 1;
 
           &.dark-theme {
@@ -81,14 +81,14 @@
       }
 
       &.confused-guide-button {
-        background-color: $confused-blue;
+        background-color: $blue;
 
         &.dark-theme {
           background-color: $belize-hole;
         }
 
         &.selected {
-          border-top: 6px solid $wet-asphalt;
+          border-top: 6px solid $asphalt;
           opacity: 1;
 
           &.dark-theme {
@@ -98,28 +98,28 @@
       }
 
       &.sad-guide-button {
-        background-color: $unhappy-red;
+        background-color: $red;
 
         &.selected {
-          border-top: 6px solid $wet-asphalt;
+          border-top: 6px solid $asphalt;
           opacity: 1;
 
           &.dark-theme {
-            background-color: $pomegranate;
+            background-color: $dark-red;
             border-top-color: $dark-theme-accent-color;
           }
         }
       }
 
       &.action-guide-button {
-        background-color: $action-yellow;
+        background-color: $yellow;
 
         &.selected {
-          border-top: 6px solid $wet-asphalt;
+          border-top: 6px solid $asphalt;
           opacity: 1;
 
           &.dark-theme {
-            background-color: $orange;
+            background-color: $dark-yellow;
             border-top-color: $dark-theme-accent-color;
           }
         }

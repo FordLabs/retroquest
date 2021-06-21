@@ -41,7 +41,7 @@
     $base-drop-shadow: 0 19px 38px opacity($black, 0.3);
     $border-width: 8px;
 
-    $dialog-shadow: 0 0 0 $border-width $wet-asphalt, $base-drop-shadow;
+    $dialog-shadow: 0 0 0 $border-width $asphalt, $base-drop-shadow;
 
     background-color: $white;
     border-radius: 6px;
@@ -87,11 +87,11 @@
       position: relative;
 
       .sub-heading {
-        color: opacity($wet-asphalt, 0.5);
+        color: opacity($asphalt, 0.5);
         font-size: 1rem;
 
         &.dark-theme {
-          color: opacity($clouds, 0.5);
+          color: opacity($gray, 0.5);
         }
 
         @media only screen and (max-width: 610px) {
@@ -101,7 +101,7 @@
 
       .heading {
         &.dark-theme {
-          color: $clouds;
+          color: $gray;
         }
       }
 
@@ -135,14 +135,14 @@
       }
 
       #cancel-button-container {
-        border-top: 2px solid opacity($wet-asphalt, 0.06);
+        border-top: 2px solid opacity($asphalt, 0.06);
 
         &.dark-theme {
           border-top-color: $task-footer-separator-dark;
         }
 
         rq-button {
-          color: opacity($wet-asphalt, 0.5);
+          color: opacity($asphalt, 0.5);
           font-size: 1.2rem;
           height: 100%;
           width: 100%;
@@ -152,10 +152,10 @@
           }
 
           &.dark-theme {
-            color: opacity($clouds, 0.5);
+            color: opacity($gray, 0.5);
 
             &:hover {
-              color: $clouds;
+              color: $gray;
             }
           }
         }
@@ -163,7 +163,7 @@
 
       #end-button-container {
         rq-button {
-          background-color: $grape;
+          background-color: $purple;
           border-radius: 0 0 4px;
           box-shadow: none;
           box-sizing: border-box;
@@ -173,7 +173,7 @@
           width: 100%;
 
           &:hover {
-            color: $wet-asphalt;
+            color: $asphalt;
           }
         }
       }

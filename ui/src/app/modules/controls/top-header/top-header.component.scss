@@ -51,7 +51,7 @@
     }
 
     .horizontal-separator {
-      background-color: $wet-asphalt;
+      background-color: $asphalt;
       border-radius: 6px;
       box-sizing: border-box;
       height: 24px;
@@ -112,7 +112,7 @@
         text-overflow: ellipsis;
 
         &.dark-theme {
-          color: opacity($clouds, 0.75);
+          color: opacity($gray, 0.75);
         }
       }
     }
@@ -134,23 +134,23 @@
 
       rq-button {
         box-shadow: none;
-        color: opacity($wet-asphalt, 0.4);
+        color: opacity($asphalt, 0.4);
         font-size: 1.1rem;
         height: 28px;
         width: auto;
 
         &.dark-theme {
-          color: opacity($clouds, 0.4);
+          color: opacity($gray, 0.4);
         }
 
         &.selected {
-          background-color: opacity($wet-asphalt, 0.2);
+          background-color: opacity($asphalt, 0.2);
           border-radius: 32px;
-          color: $wet-asphalt;
+          color: $asphalt;
 
           &.dark-theme {
-            background-color: opacity($clouds, 0.2);
-            color: $clouds;
+            background-color: opacity($gray, 0.2);
+            color: $gray;
           }
         }
       }
@@ -171,7 +171,7 @@
       right: 0;
 
       &.dark-theme {
-        color: $clouds;
+        color: $gray;
       }
 
       .last-saved-text {
@@ -199,7 +199,7 @@
         }
 
         &:hover {
-          color: $grape;
+          color: $purple;
         }
       }
     }

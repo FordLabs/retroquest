@@ -89,7 +89,7 @@
         font-weight: 500;
 
         &.dark-theme {
-          color: $clouds;
+          color: $gray;
         }
       }
 
@@ -98,7 +98,7 @@
         opacity: 0.6;
 
         &.dark-theme {
-          color: $clouds;
+          color: $gray;
         }
       }
     }
@@ -124,7 +124,7 @@
 
       &.add-team-button {
         align-items: center;
-        color: opacity($wet-asphalt, 0.35);
+        color: opacity($asphalt, 0.35);
         cursor: pointer;
         font-size: 1.6rem;
         justify-content: center;
@@ -132,7 +132,7 @@
 
       &.dark-theme {
         background-color: $task-background-dark;
-        color: $clouds;
+        color: $gray;
       }
 
       .team-name {
@@ -152,7 +152,7 @@
         right: 0;
 
         .separator {
-          background-color: opacity($wet-asphalt, 0.04);
+          background-color: opacity($asphalt, 0.04);
           height: 100%;
           width: 3px;
 
@@ -162,7 +162,7 @@
         }
 
         .view-button {
-          color: opacity($wet-asphalt, 0.68);
+          color: opacity($asphalt, 0.68);
           font-size: inherit;
           height: 100%;
           padding: 0;
@@ -174,7 +174,7 @@
           }
 
           &.dark-theme {
-            color: opacity($clouds, 0.68);
+            color: opacity($gray, 0.68);
 
             &:hover {
               color: $turquoise;

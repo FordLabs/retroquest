@@ -23,7 +23,7 @@
 
 :host {
   &.dark-theme {
-    color: opacity($clouds, 0.8);
+    color: opacity($gray, 0.8);
   }
 }
 
@@ -103,7 +103,7 @@
         outline: none;
 
         &:hover {
-          color: $grape;
+          color: $purple;
         }
 
         @media only screen and (max-width: 610px) {
@@ -124,7 +124,7 @@
         outline: none;
 
         &:hover {
-          color: $grape;
+          color: $purple;
         }
 
         .button-text {

@@ -35,7 +35,7 @@
   width: 100px;
 
   &.dark-theme {
-    color: $clouds;
+    color: $gray;
   }
 
   .input-container {
@@ -136,7 +136,7 @@
     top: 5px;
 
     &.edit-button-enabled {
-      color: $wet-asphalt;
+      color: $asphalt;
       display: none;
     }
 
@@ -150,15 +150,15 @@
   }
 
   &.happy {
-    background-color: $happy-green;
+    background-color: $green;
 
     &.dark-theme {
-      background-color: $nephritis;
+      background-color: $dark-green;
     }
   }
 
   &.confused {
-    background-color: $confused-blue;
+    background-color: $blue;
 
     &.dark-theme {
       background-color: $belize-hole;
@@ -166,18 +166,18 @@
   }
 
   &.sad {
-    background-color: $unhappy-red;
+    background-color: $red;
 
     &.dark-theme {
-      background-color: $pomegranate;
+      background-color: $dark-red;
     }
   }
 
   &.action {
-    background-color: $action-yellow;
+    background-color: $yellow;
 
     &.dark-theme {
-      background-color: $orange;
+      background-color: $dark-yellow;
     }
   }
 }

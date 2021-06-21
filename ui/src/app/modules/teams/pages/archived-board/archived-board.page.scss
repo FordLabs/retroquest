@@ -48,14 +48,14 @@
     }
 
     .guide-button {
-      background-color: $happy-green;
+      background-color: $green;
       box-sizing: border-box;
       height: 100%;
       opacity: 0.35;
       width: calc(100% / 3);
 
       &.happy-guide-button {
-        background-color: $happy-green;
+        background-color: $green;
 
         &.selected {
           opacity: 1;
@@ -63,7 +63,7 @@
       }
 
       &.confused-guide-button {
-        background-color: $confused-blue;
+        background-color: $blue;
 
         &.selected {
           opacity: 1;
@@ -71,7 +71,7 @@
       }
 
       &.sad-guide-button {
-        background-color: $unhappy-red;
+        background-color: $red;
 
         &.selected {
           opacity: 1;
@@ -79,7 +79,7 @@
       }
 
       &.action-guide-button {
-        background-color: $action-yellow;
+        background-color: $yellow;
 
         &.selected {
           opacity: 1;

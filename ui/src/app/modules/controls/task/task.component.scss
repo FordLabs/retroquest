@@ -38,14 +38,14 @@
   &.dark-theme {
     background-color: $task-background-dark;
     box-shadow: 0 1px 2px opacity($black, 0.35);
-    color: $clouds;
+    color: $gray;
   }
 
   &.dialog-overlay-border {
     rq-deletion-overlay {
       $border-width: 8px;
 
-      box-shadow: 0 0 0 $border-width $unhappy-red;
+      box-shadow: 0 0 0 $border-width $red;
     }
   }
 
@@ -67,25 +67,25 @@
 
   &.happy {
     &:hover {
-      box-shadow: 0 0 0 $host-border-width $happy-green;
+      box-shadow: 0 0 0 $host-border-width $green;
 
       &.dark-theme {
-        box-shadow: 0 0 0 $host-border-width $nephritis;
+        box-shadow: 0 0 0 $host-border-width $dark-green;
       }
     }
 
     &.edit-mode {
-      box-shadow: 0 0 0 4px $grape;
+      box-shadow: 0 0 0 4px $purple;
 
       &.dark-theme {
-        box-shadow: 0 0 0 4px $wisteria;
+        box-shadow: 0 0 0 4px $dark-purple;
       }
 
       &:hover {
-        box-shadow: 0 0 0 4px $grape;
+        box-shadow: 0 0 0 4px $purple;
 
         &.dark-theme {
-          box-shadow: 0 0 0 4px $wisteria;
+          box-shadow: 0 0 0 4px $dark-purple;
         }
       }
     }
@@ -93,7 +93,7 @@
 
   &.confused {
     &:hover {
-      box-shadow: 0 0 0 $host-border-width $confused-blue;
+      box-shadow: 0 0 0 $host-border-width $blue;
 
       &.dark-theme {
         box-shadow: 0 0 0 $host-border-width $belize-hole;
@@ -103,17 +103,17 @@
 
   &.sad {
     &:hover {
-      box-shadow: 0 0 0 $host-border-width $unhappy-red;
+      box-shadow: 0 0 0 $host-border-width $red;
 
       &.dark-theme {
-        box-shadow: 0 0 0 $host-border-width $pomegranate;
+        box-shadow: 0 0 0 $host-border-width $dark-red;
       }
     }
   }
 
   &.action {
     &:hover {
-      box-shadow: 0 0 0 $host-border-width $action-yellow;
+      box-shadow: 0 0 0 $host-border-width $yellow;
     }
   }
 
@@ -129,10 +129,10 @@
   }
 
   &.edit-mode {
-    box-shadow: 0 0 0 4px $grape;
+    box-shadow: 0 0 0 4px $purple;
 
     &:hover {
-      box-shadow: 0 0 0 4px $grape;
+      box-shadow: 0 0 0 4px $purple;
     }
   }
 
@@ -202,7 +202,7 @@
     background-color: inherit;
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
-    border-top: 2px solid opacity($wet-asphalt, 0.06);
+    border-top: 2px solid opacity($asphalt, 0.06);
     display: flex;
     height: 40px;
     justify-content: flex-start;
@@ -223,14 +223,14 @@
     }
 
     .container {
-      border-right: 2px solid opacity($wet-asphalt, 0.06);
+      border-right: 2px solid opacity($asphalt, 0.06);
       cursor: pointer;
       position: relative;
       user-select: none;
 
       &.dark-theme {
         border-color: $task-footer-separator-dark;
-        color: $clouds;
+        color: $gray;
       }
     }
 
@@ -286,7 +286,7 @@
       }
 
       .star-background {
-        background-color: $action-yellow;
+        background-color: $yellow;
         border-radius: 12px / 6px;
         height: 10px;
         margin-top: 10px;
@@ -294,7 +294,7 @@
         width: 25px;
 
         &.dark-theme {
-          background-color: $midnight-blue;
+          background-color: $dark-asphalt;
         }
 
         .star-icon {
@@ -310,7 +310,7 @@
           top: -10px;
 
           &.dark-theme {
-            color: $action-yellow;
+            color: $yellow;
           }
         }
       }

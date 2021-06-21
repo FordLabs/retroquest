@@ -23,7 +23,7 @@
   width: 100px;
 
   &.dark-theme {
-    color: $clouds;
+    color: $gray;
   }
 
   .separator {
@@ -40,16 +40,16 @@
     background: linear-gradient(
       to right,
       transparent,
-      opacity($wet-asphalt, 0.1) 15%,
-      opacity($wet-asphalt, 0.15)
+      opacity($asphalt, 0.1) 15%,
+      opacity($asphalt, 0.15)
     );
   }
 
   .right-count-separator {
     background: linear-gradient(
       to right,
-      opacity($wet-asphalt, 0.15) 0%,
-      opacity($wet-asphalt, 0.1) 85%,
+      opacity($asphalt, 0.15) 0%,
+      opacity($asphalt, 0.1) 85%,
       transparent
     );
   }

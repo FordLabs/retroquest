@@ -19,8 +19,8 @@
 $base-drop-shadow: 0 19px 38px opacity($black, 0.3);
 $border-width: 8px;
 
-$sad-shadow: 0 0 0 $border-width $unhappy-red, $base-drop-shadow;
-$sad-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
+$sad-shadow: 0 0 0 $border-width $red, $base-drop-shadow;
+$sad-shadow-dark: 0 0 0 $border-width $dark-red, $base-drop-shadow;
 
 .shake {
   animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
@@ -80,18 +80,18 @@ $sad-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
   }
 
   rq-task {
-    $action-shadow: 0 0 0 $border-width $action-yellow, $base-drop-shadow;
+    $action-shadow: 0 0 0 $border-width $yellow, $base-drop-shadow;
 
-    $action-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
+    $action-shadow-dark: 0 0 0 $border-width $dark-red, $base-drop-shadow;
 
-    $confused-shadow: 0 0 0 $border-width $confused-blue, $base-drop-shadow;
+    $confused-shadow: 0 0 0 $border-width $blue, $base-drop-shadow;
     $confused-shadow-dark: 0 0 0 $border-width $belize-hole, $base-drop-shadow;
 
-    $edit-mode-shadow: 0 0 0 8px $grape, $base-drop-shadow;
-    $edit-mode-shadow-dark: 0 0 0 8px $wisteria, $base-drop-shadow;
+    $edit-mode-shadow: 0 0 0 8px $purple, $base-drop-shadow;
+    $edit-mode-shadow-dark: 0 0 0 8px $dark-purple, $base-drop-shadow;
 
-    $happy-shadow: 0 0 0 $border-width $happy-green, $base-drop-shadow;
-    $happy-shadow-dark: 0 0 0 $border-width $nephritis, $base-drop-shadow;
+    $happy-shadow: 0 0 0 $border-width $green, $base-drop-shadow;
+    $happy-shadow-dark: 0 0 0 $border-width $dark-green, $base-drop-shadow;
 
     border-radius: 6px;
     box-sizing: border-box;
@@ -255,7 +255,7 @@ $sad-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
 
       &.dark-theme {
         background-color: $task-background-dark;
-        color: $clouds;
+        color: $gray;
       }
     }
   }
@@ -265,8 +265,8 @@ $sad-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
       display: none;
     }
 
-    $action-shadow: 0 0 0 $border-width $action-yellow, $base-drop-shadow;
-    $action-shadow-dark: 0 0 0 $border-width $orange, $base-drop-shadow;
+    $action-shadow: 0 0 0 $border-width $yellow, $base-drop-shadow;
+    $action-shadow-dark: 0 0 0 $border-width $dark-yellow, $base-drop-shadow;
 
     border-radius: 6px;
 

@@ -65,7 +65,7 @@
   }
 
   rq-button {
-    background-color: $happy-green;
+    background-color: $green;
     border-radius: 6px 6px 0 0;
 
     bottom: 0;
@@ -79,7 +79,7 @@
     width: 400px;
 
     &.stop {
-      background-color: $unhappy-red;
+      background-color: $red;
     }
   }
 }

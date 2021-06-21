@@ -18,7 +18,7 @@
 
 :host {
   bottom: -24px;
-  color: $wet-asphalt;
+  color: $asphalt;
   font-size: 0.8rem;
   font-weight: bold;
   height: auto;
@@ -27,14 +27,14 @@
   width: auto;
 
   &.dark-theme {
-    color: $clouds;
+    color: $gray;
   }
 
   &.display-warning-text {
-    color: $action-yellow;
+    color: $yellow;
   }
 
   &.display-error-text {
-    color: $unhappy-red;
+    color: $red;
   }
 }
