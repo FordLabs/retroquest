@@ -15,20 +15,41 @@
  *  limitations under the License.
  */
 
-$white: #fff;
-$black: #000;
+$white: #ffffff;
+$black: #000000;
 
-$happy-green: #2ecc71;
+$gray: #ecf0f1;
+$dark-gray: #95a5a6;
+
+$green: #2ecc71;
+$dark-green: #27ae60;
+
+$blue: #3498db;
+$dark-blue: #1b89ef;
+
+$red: #e74c3c;
+$dark-red: #c0392b;
+
+$yellow: #f1c40f;
+$dark-yellow: #f39c12;
+
+$asphalt: #34495e;
+$dark-asphalt: #2c3e50;
+
+$turquoise: #1abc9c;
+$dark-turquoise: #16a085;
+
+$purple: #a56de2;
+$dark-purple: #8e44ad;
+
+$belize-hole: #2980b9;
+
 $happy-hover-green: #d6f9d6;
-$confused-blue: #3498db;
 $confused-hover-blue: #d1f0f8;
-$unhappy-red: #e74c3c;
 $unhappy-hover-red: #ffdfde;
-$action-yellow: #f1c40f;
 $end-retro-button-red: #ff7365;
 
 $guide-link-text-color: #333;
-$link-blue: #1b89ef;
 
 $text-gray: #a5a5a5;
 $text-error: #d22e36;
@@ -55,21 +76,6 @@ $modal-blur: #333;
 
 $positive-action: #65d68a;
 $negative-action: #f16a6a;
-
-$wet-asphalt: #34495e;
-$midnight-blue: #2c3e50;
-$concrete: #95a5a6;
-
-$turquoise: #1abc9c;
-$green-sea: #16a085;
-
-$clouds: #ecf0f1;
-$grape: #a56de2;
-$wisteria: #8e44ad;
-$nephritis: #27ae60;
-$belize-hole: #2980b9;
-$orange: #f39c12;
-$pomegranate: #c0392b;
 
 @function opacity($color, $level) {
   @return rgba($color, $level);

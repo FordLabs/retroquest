@@ -35,7 +35,7 @@
 
     &.dark-theme {
       background-color: $header-background-color-dark;
-      color: $clouds;
+      color: $gray;
     }
 
     .no-archives-info {
@@ -69,23 +69,23 @@
 
         rq-button {
           box-shadow: none;
-          color: opacity($wet-asphalt, 0.4);
+          color: opacity($asphalt, 0.4);
           font-size: 0.9rem;
           height: 28px;
           width: auto;
 
           &.dark-theme {
-            color: opacity($clouds, 0.4);
+            color: opacity($gray, 0.4);
           }
 
           &.selected {
-            background-color: opacity($wet-asphalt, 0.12);
+            background-color: opacity($asphalt, 0.12);
             border-radius: 32px;
-            color: $wet-asphalt;
+            color: $asphalt;
 
             &.dark-theme {
-              background-color: opacity($clouds, 0.12);
-              color: $clouds;
+              background-color: opacity($gray, 0.12);
+              color: $gray;
             }
           }
         }
@@ -110,7 +110,7 @@
         font-weight: 500;
 
         &.dark-theme {
-          color: $clouds;
+          color: $gray;
         }
       }
 
@@ -119,14 +119,14 @@
         opacity: 0.6;
 
         &.dark-theme {
-          color: $clouds;
+          color: $gray;
         }
       }
     }
 
     .archives-sort-section {
       align-items: center;
-      background-color: opacity($wet-asphalt, 0.07);
+      background-color: opacity($asphalt, 0.07);
       border-radius: 6px;
       box-sizing: border-box;
       display: flex;
@@ -137,8 +137,8 @@
       width: $archives-content-base-width;
 
       &.dark-theme {
-        background-color: opacity($clouds, 0.07);
-        color: $clouds;
+        background-color: opacity($gray, 0.07);
+        color: $gray;
       }
 
       .sort-container {
@@ -181,7 +181,7 @@
       text-align: center;
 
       &.dark-theme {
-        color: $clouds;
+        color: $gray;
       }
 
       .heading {
@@ -190,7 +190,7 @@
         font-weight: bold;
 
         &.dark-theme {
-          color: $clouds;
+          color: $gray;
         }
       }
 

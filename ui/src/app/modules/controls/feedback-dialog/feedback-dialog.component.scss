@@ -94,7 +94,7 @@
         width: 100%;
 
         &.dark-theme {
-          color: $clouds;
+          color: $gray;
         }
 
         @media only screen and (max-width: 610px) {
@@ -103,7 +103,7 @@
       }
 
       .sub-heading {
-        color: opacity($wet-asphalt, 0.5);
+        color: opacity($asphalt, 0.5);
         cursor: default;
         font-size: 1rem;
         font-weight: bold;
@@ -111,7 +111,7 @@
         width: 100%;
 
         &.dark-theme {
-          color: opacity($clouds, 0.5);
+          color: opacity($gray, 0.5);
         }
 
         @media only screen and (max-width: 610px) {
@@ -120,7 +120,7 @@
       }
 
       .star-line {
-        color: $confused-blue;
+        color: $blue;
         font-size: 3.3rem;
         text-align: center;
 
@@ -129,7 +129,7 @@
         }
 
         .active {
-          color: $action-yellow;
+          color: $yellow;
         }
       }
 
@@ -139,7 +139,7 @@
       }
 
       .required-field {
-        color: $unhappy-red;
+        color: $red;
         font-size: 1.5rem;
         font-weight: bold;
       }
@@ -151,13 +151,13 @@
 
         .label {
           &.dark-theme {
-            color: $clouds;
+            color: $gray;
           }
         }
 
         textarea {
           background-color: inherit;
-          border: 5px $confused-blue solid;
+          border: 5px $blue solid;
           border-radius: 6px;
           box-sizing: border-box;
           color: inherit;
@@ -172,7 +172,7 @@
           width: 100%;
 
           &.dark-theme {
-            color: $clouds;
+            color: $gray;
           }
 
           @media only screen and (max-width: 610px) {
@@ -190,17 +190,17 @@
         padding: 0 12px;
 
         .label {
-          color: opacity($wet-asphalt, 0.4);
+          color: opacity($asphalt, 0.4);
 
           &.dark-theme {
-            color: opacity($clouds, 0.4);
+            color: opacity($gray, 0.4);
           }
         }
 
         input {
           background-color: inherit;
           border: 0;
-          border-bottom: 4px opacity($wet-asphalt, 0.15) solid;
+          border-bottom: 4px opacity($asphalt, 0.15) solid;
           box-sizing: border-box;
           color: inherit;
           font-family: inherit;
@@ -212,8 +212,8 @@
           width: 100%;
 
           &.dark-theme {
-            border-bottom-color: opacity($clouds, 0.15);
-            color: $clouds;
+            border-bottom-color: opacity($gray, 0.15);
+            color: $gray;
           }
 
           @media only screen and (max-width: 610px) {
@@ -258,15 +258,15 @@
           width: 100%;
 
           &.secondary {
-            color: opacity($wet-asphalt, 0.5);
+            color: opacity($asphalt, 0.5);
 
             &.dark-theme {
-              color: opacity($clouds, 0.5);
+              color: opacity($gray, 0.5);
             }
           }
 
           &.primary {
-            background-color: $confused-blue;
+            background-color: $blue;
           }
         }
       }

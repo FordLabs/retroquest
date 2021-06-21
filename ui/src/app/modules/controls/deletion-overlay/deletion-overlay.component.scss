@@ -21,7 +21,7 @@
   background-color: opacity($white, 0.98);
   border-radius: 6px;
   bottom: 0;
-  box-shadow: 0 0 0 4px $unhappy-red;
+  box-shadow: 0 0 0 4px $red;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -59,7 +59,7 @@
 
   .button-container {
     align-items: center;
-    border-top: 2px solid opacity($wet-asphalt, 0.06);
+    border-top: 2px solid opacity($asphalt, 0.06);
     display: flex;
     height: 40px;
     justify-content: center;
@@ -75,9 +75,9 @@
       height: 100%;
 
       &.delete-decline-button {
-        border-right: 2px solid opacity($wet-asphalt, 0.06);
+        border-right: 2px solid opacity($asphalt, 0.06);
         box-sizing: border-box;
-        color: opacity($wet-asphalt, 0.6);
+        color: opacity($asphalt, 0.6);
 
         &:hover {
           color: inherit;
@@ -85,10 +85,10 @@
 
         &.dark-mode {
           border-right-color: $task-footer-separator-dark;
-          color: opacity($clouds, 0.6);
+          color: opacity($gray, 0.6);
 
           &:hover {
-            color: $clouds;
+            color: $gray;
           }
         }
       }
@@ -97,7 +97,7 @@
         background-color: transparent;
         border-radius: 0 0 6px;
         box-shadow: none;
-        color: $unhappy-red;
+        color: $red;
       }
     }
   }

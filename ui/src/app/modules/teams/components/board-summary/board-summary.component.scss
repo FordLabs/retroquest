@@ -37,14 +37,14 @@
 
   &.dark-theme {
     background-color: $task-background-dark;
-    color: $clouds;
+    color: $gray;
   }
 
   .thought-count {
     $size: 36px;
 
     align-items: center;
-    background-color: opacity($wet-asphalt, 0.05);
+    background-color: opacity($asphalt, 0.05);
     border-radius: $size / 2;
     display: flex;
     font-size: 1.1rem;
@@ -54,7 +54,7 @@
     width: $size;
 
     &.dark-theme {
-      background-color: opacity($clouds, 0.03);
+      background-color: opacity($gray, 0.03);
     }
 
     @media only screen and (max-width: 610px) {
@@ -80,7 +80,7 @@
     right: 0;
 
     .separator {
-      background-color: opacity($wet-asphalt, 0.04);
+      background-color: opacity($asphalt, 0.04);
       height: 100%;
       width: 3px;
 
@@ -90,7 +90,7 @@
     }
 
     .view-button {
-      color: opacity($wet-asphalt, 0.68);
+      color: opacity($asphalt, 0.68);
       font-size: inherit;
       height: 100%;
       padding: 0;
@@ -102,7 +102,7 @@
       }
 
       &.dark-theme {
-        color: opacity($clouds, 0.68);
+        color: opacity($gray, 0.68);
 
         &:hover {
           color: $turquoise;

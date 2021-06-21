@@ -51,27 +51,27 @@
 
     &.dark-theme {
       background-color: $text-field-background-color;
-      color: $clouds;
+      color: $gray;
 
       &::placeholder {
-        color: opacity($clouds, 0.4);
+        color: opacity($gray, 0.4);
       }
     }
 
     &::placeholder {
-      color: opacity($wet-asphalt, 0.4);
+      color: opacity($asphalt, 0.4);
     }
 
     &.happy {
-      border-color: $happy-green;
+      border-color: $green;
 
       &.dark-theme {
-        border-color: $nephritis;
+        border-color: $dark-green;
       }
     }
 
     &.confused {
-      border-color: $confused-blue;
+      border-color: $blue;
 
       &.dark-theme {
         border-color: $belize-hole;
@@ -79,18 +79,18 @@
     }
 
     &.sad {
-      border-color: $unhappy-red;
+      border-color: $red;
 
       &.dark-theme {
-        border-color: $pomegranate;
+        border-color: $dark-red;
       }
     }
 
     &.action {
-      border-color: $action-yellow;
+      border-color: $yellow;
 
       &.dark-theme {
-        border-color: $orange;
+        border-color: $dark-yellow;
       }
     }
   }
