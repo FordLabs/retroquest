@@ -14,13 +14,13 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-@import 'color-vars';
+@import 'colors';
 
 :host {
   align-items: center;
   background-color: $black;
   border-radius: 6px;
-  box-shadow: 0 2px 20px opacity($black, .25);
+  box-shadow: 0 2px 20px opacity($black, 0.25);
   box-sizing: border-box;
   color: $white;
   cursor: default;
@@ -110,7 +110,7 @@
       font-size: 1.5rem;
 
       &.sort-icon-translucent {
-        opacity: .45;
+        opacity: 0.45;
       }
 
       &.hide {
@@ -180,5 +180,4 @@
       background-color: $orange;
     }
   }
-
 }

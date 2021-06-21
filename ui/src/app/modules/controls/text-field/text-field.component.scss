@@ -15,12 +15,12 @@
  *  limitations under the License.
  */
 
-@import 'color-vars';
+@import 'colors';
 
 :host {
   box-sizing: border-box;
   display: block;
-  font-size: .9rem;
+  font-size: 0.9rem;
   font-weight: bold;
   height: 50px;
   position: relative;
@@ -35,7 +35,7 @@
   input {
     border: 4px solid $black;
     border-radius: 6px;
-    box-shadow: 0 2px 15px opacity($black, .15);
+    box-shadow: 0 2px 15px opacity($black, 0.15);
     box-sizing: inherit;
     color: inherit;
     display: block;
@@ -54,12 +54,12 @@
       color: $clouds;
 
       &::placeholder {
-        color: opacity($clouds, .4);
+        color: opacity($clouds, 0.4);
       }
     }
 
     &::placeholder {
-      color: opacity($wet-asphalt, .4);
+      color: opacity($wet-asphalt, 0.4);
     }
 
     &.happy {
@@ -95,4 +95,3 @@
     }
   }
 }
-

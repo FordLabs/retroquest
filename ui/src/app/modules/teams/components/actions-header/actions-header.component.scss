@@ -14,14 +14,13 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-@import 'color-vars';
+@import 'colors';
 
 .rq-action-column-header {
-
   rq-column-header {
     height: 60px;
     margin-bottom: 30px;
-    padding: .2em 24px;
+    padding: 0.2em 24px;
     width: 100%;
   }
 

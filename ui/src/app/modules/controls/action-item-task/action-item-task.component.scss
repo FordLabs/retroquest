@@ -14,29 +14,29 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-@import 'color-vars';
+@import 'colors';
 
 :host {
   $host-border-width: 2px;
-  $host-opacity: .1;
+  $host-opacity: 0.1;
   background-color: $white;
   border-radius: 6px;
-  box-shadow: 0 1px 2px opacity($black, .25);
+  box-shadow: 0 1px 2px opacity($black, 0.25);
   box-sizing: border-box;
   color: inherit;
   display: flex;
   flex-direction: column;
-  font-size: .8rem;
+  font-size: 0.8rem;
   font-weight: bold;
   height: 75px;
   justify-content: flex-end;
   position: relative;
-  transition: box-shadow .2s cubic-bezier(.25, .8, .25, 1);
+  transition: box-shadow 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
   width: 100px;
 
   &.dark-theme {
     background-color: $task-background-dark;
-    box-shadow: 0 1px 2px opacity($black, .35);
+    box-shadow: 0 1px 2px opacity($black, 0.35);
     color: $clouds;
   }
 
@@ -52,7 +52,7 @@
     box-shadow: none;
 
     &.dark-theme {
-      background-color: opacity($task-background-dark, .3);
+      background-color: opacity($task-background-dark, 0.3);
     }
   }
 
@@ -68,10 +68,9 @@
     }
   }
 
-
   @media only screen and (max-width: 610px) {
     &:hover {
-      box-shadow: 0 1px 2px opacity($black, .25);
+      box-shadow: 0 1px 2px opacity($black, 0.25);
     }
   }
 
@@ -101,7 +100,6 @@
   }
 
   .content-area {
-
     $content-area-padding: 12px;
 
     background-color: inherit;
@@ -128,8 +126,8 @@
       top: 0;
       width: 25px;
 
-      .link-icon  {
-        font-size: .8rem;
+      .link-icon {
+        font-size: 0.8rem;
       }
     }
 
@@ -191,8 +189,8 @@
 
     .label {
       cursor: default;
-      font-size: .7rem;
-      opacity: .6;
+      font-size: 0.7rem;
+      opacity: 0.6;
       text-transform: lowercase;
     }
 
@@ -214,7 +212,7 @@
         box-sizing: border-box;
         color: inherit;
         display: inline-block;
-        font-size: .8rem;
+        font-size: 0.8rem;
         font-weight: bold;
         height: 22px;
         outline: none;
@@ -222,7 +220,7 @@
         padding-right: $right-side-padding;
 
         text-overflow: ellipsis;
-        transition: border-bottom-color .2s cubic-bezier(.25, .8, .25, 1);
+        transition: border-bottom-color 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
         width: 100%;
 
         @media only screen and (max-width: 610px) {
@@ -239,18 +237,15 @@
           &.dark-theme {
             border-bottom-color: $wisteria;
           }
-
         }
       }
     }
-
   }
 
   .footer {
-
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
-    border-top: 2px solid opacity($wet-asphalt, .06);
+    border-top: 2px solid opacity($wet-asphalt, 0.06);
     display: flex;
     height: 40px;
     justify-content: flex-start;
@@ -284,14 +279,13 @@
       }
 
       .discard-button {
-        border-right: 2px solid opacity($wet-asphalt, .06);
-        color: opacity($wet-asphalt, .5);
+        border-right: 2px solid opacity($wet-asphalt, 0.06);
+        color: opacity($wet-asphalt, 0.5);
 
         &.dark-theme {
           border-color: $task-footer-separator-dark;
-          color: opacity($clouds, .5);
+          color: opacity($clouds, 0.5);
         }
-
       }
 
       .create-button {
@@ -299,7 +293,6 @@
           margin-right: 6px;
         }
       }
-
     }
 
     .tooltip {
@@ -329,7 +322,7 @@
     }
 
     .container {
-      border-right: 2px solid opacity($wet-asphalt, .06);
+      border-right: 2px solid opacity($wet-asphalt, 0.06);
       cursor: pointer;
       position: relative;
       user-select: none;
@@ -359,7 +352,6 @@
           opacity: $host-opacity;
           position: absolute;
         }
-
       }
 
       .checkmark {
@@ -390,9 +382,9 @@
       flex-direction: column;
 
       .date-created-header {
-        font-size: .65rem;
+        font-size: 0.65rem;
         font-weight: bold;
-        opacity: .6;
+        opacity: 0.6;
 
         &.opacify {
           opacity: $host-opacity;
@@ -405,10 +397,9 @@
       }
 
       .date-created-value {
-        font-size: .75rem;
+        font-size: 0.75rem;
         font-weight: bold;
       }
-
     }
   }
 }

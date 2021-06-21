@@ -14,17 +14,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-@import 'color-vars';
+@import 'colors';
 
-
-$base-drop-shadow: 0 19px 38px opacity($black, .3);
+$base-drop-shadow: 0 19px 38px opacity($black, 0.3);
 $border-width: 8px;
 
 $sad-shadow: 0 0 0 $border-width $unhappy-red, $base-drop-shadow;
 $sad-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
 
 .shake {
-  animation: shake .5s cubic-bezier(.36, .07, .19, .97) both;
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   backface-visibility: hidden;
   perspective: 1000px;
   transform: scale(1.65) translate3d(0, 0, 0);
@@ -58,9 +57,8 @@ $sad-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
 }
 
 :host {
-
   align-items: center;
-  background-color: opacity($black, .5);
+  background-color: opacity($black, 0.5);
   bottom: 0;
   box-sizing: border-box;
   display: flex;
@@ -82,7 +80,6 @@ $sad-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
   }
 
   rq-task {
-
     $action-shadow: 0 0 0 $border-width $action-yellow, $base-drop-shadow;
 
     $action-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
@@ -130,7 +127,6 @@ $sad-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
         &.dark-theme {
           box-shadow: $happy-shadow-dark;
         }
-
       }
 
       &.edit-mode {
@@ -148,7 +144,6 @@ $sad-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
           }
         }
       }
-
     }
 
     &.confused {
@@ -245,7 +240,7 @@ $sad-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
       align-items: center;
       background-color: $white;
       border-radius: 36px;
-      box-shadow: 0 19px 38px opacity($black, .15);
+      box-shadow: 0 19px 38px opacity($black, 0.15);
       box-sizing: border-box;
       display: flex;
       font-size: 1.2rem;
@@ -263,11 +258,9 @@ $sad-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
         color: $clouds;
       }
     }
-
   }
 
   rq-action-item-task {
-
     @media only screen and (max-width: 610px) {
       display: none;
     }
@@ -300,4 +293,3 @@ $sad-shadow-dark: 0 0 0 $border-width $pomegranate, $base-drop-shadow;
     }
   }
 }
-

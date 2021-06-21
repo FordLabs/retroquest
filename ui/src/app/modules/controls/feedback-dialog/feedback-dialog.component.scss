@@ -15,11 +15,11 @@
  *  limitations under the License.
  */
 
-@import 'color-vars';
+@import 'colors';
 
 :host {
   align-items: center;
-  background-color: opacity($black, .5);
+  background-color: opacity($black, 0.5);
   bottom: 0;
   box-sizing: border-box;
   display: flex;
@@ -39,7 +39,7 @@
   }
 
   .dialog {
-    $base-drop-shadow: 0 19px 38px opacity($black, .3);
+    $base-drop-shadow: 0 19px 38px opacity($black, 0.3);
     $border-width: 8px;
 
     background-color: $white;
@@ -100,11 +100,10 @@
         @media only screen and (max-width: 610px) {
           font-size: 2rem;
         }
-
       }
 
       .sub-heading {
-        color: opacity($wet-asphalt, .5);
+        color: opacity($wet-asphalt, 0.5);
         cursor: default;
         font-size: 1rem;
         font-weight: bold;
@@ -112,11 +111,11 @@
         width: 100%;
 
         &.dark-theme {
-          color: opacity($clouds, .5);
+          color: opacity($clouds, 0.5);
         }
 
         @media only screen and (max-width: 610px) {
-          font-size: .9rem;
+          font-size: 0.9rem;
         }
       }
 
@@ -163,7 +162,7 @@
           box-sizing: border-box;
           color: inherit;
           font-family: inherit;
-          font-size: .9rem;
+          font-size: 0.9rem;
           font-weight: bold;
           height: 125px;
           margin: 12px 0 0;
@@ -175,8 +174,6 @@
           &.dark-theme {
             color: $clouds;
           }
-
-
 
           @media only screen and (max-width: 610px) {
             font-size: 1rem;
@@ -193,21 +190,21 @@
         padding: 0 12px;
 
         .label {
-          color: opacity($wet-asphalt, .4);
+          color: opacity($wet-asphalt, 0.4);
 
           &.dark-theme {
-            color: opacity($clouds, .4);
+            color: opacity($clouds, 0.4);
           }
         }
 
         input {
           background-color: inherit;
           border: 0;
-          border-bottom: 4px opacity($wet-asphalt, .15) solid;
+          border-bottom: 4px opacity($wet-asphalt, 0.15) solid;
           box-sizing: border-box;
           color: inherit;
           font-family: inherit;
-          font-size: .9rem;
+          font-size: 0.9rem;
           font-weight: bold;
           margin: 12px 0 0;
           outline: none;
@@ -215,7 +212,7 @@
           width: 100%;
 
           &.dark-theme {
-            border-bottom-color: opacity($clouds, .15);
+            border-bottom-color: opacity($clouds, 0.15);
             color: $clouds;
           }
 
@@ -225,7 +222,6 @@
           }
         }
       }
-
     }
 
     .footer {
@@ -262,20 +258,18 @@
           width: 100%;
 
           &.secondary {
-            color: opacity($wet-asphalt, .5);
+            color: opacity($wet-asphalt, 0.5);
 
             &.dark-theme {
-              color: opacity($clouds, .5);
+              color: opacity($clouds, 0.5);
             }
           }
 
           &.primary {
             background-color: $confused-blue;
           }
-
         }
       }
     }
-
   }
 }

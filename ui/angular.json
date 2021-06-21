@@ -24,13 +24,13 @@
               "src/manifest.json"
             ],
             "styles": [
-              "src/styles.scss",
+              "src/styles/styles.scss",
               "./node_modules/@fortawesome/fontawesome-free/css/all.css"
             ],
             "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/global-styles"
+                "src/styles"
               ]
             }
           },

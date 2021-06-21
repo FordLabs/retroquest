@@ -14,8 +14,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-@import 'color-vars';
-@import 'global-vars';
+@import 'colors';
+@import 'sizes';
 
 :host {
   align-items: center;
@@ -24,8 +24,8 @@
 
   height: 64px;
   margin: 0 auto;
-  max-width: $desktop-max-width;
-  min-width: $desktop-max-width;
+  max-width: $max-width;
+  min-width: $max-width;
 
   padding-left: $global-side-padding;
   padding-right: $global-side-padding;
@@ -56,7 +56,7 @@
       box-sizing: border-box;
       height: 24px;
       margin: 0 24px;
-      opacity: .1;
+      opacity: 0.1;
       width: 3px;
 
       @media only screen and (max-width: 610px) {
@@ -112,7 +112,7 @@
         text-overflow: ellipsis;
 
         &.dark-theme {
-          color: opacity($clouds, .75);
+          color: opacity($clouds, 0.75);
         }
       }
     }
@@ -134,26 +134,25 @@
 
       rq-button {
         box-shadow: none;
-        color: opacity($wet-asphalt, .4);
+        color: opacity($wet-asphalt, 0.4);
         font-size: 1.1rem;
         height: 28px;
         width: auto;
 
         &.dark-theme {
-          color: opacity($clouds, .4);
+          color: opacity($clouds, 0.4);
         }
 
         &.selected {
-          background-color: opacity($wet-asphalt, .2);
+          background-color: opacity($wet-asphalt, 0.2);
           border-radius: 32px;
           color: $wet-asphalt;
 
           &.dark-theme {
-            background-color: opacity($clouds, .2);
+            background-color: opacity($clouds, 0.2);
             color: $clouds;
           }
         }
-
       }
 
       .horizontal-separator {
@@ -176,9 +175,9 @@
       }
 
       .last-saved-text {
-        font-size: .8rem;
+        font-size: 0.8rem;
         font-weight: 500;
-        opacity: .5;
+        opacity: 0.5;
         text-align: right;
 
         @media only screen and (max-width: 610px) {

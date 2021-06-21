@@ -14,8 +14,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-@import 'color-vars';
-@import 'global-vars';
+@import 'colors';
+@import 'sizes';
 
 .hide {
   display: none;
@@ -23,7 +23,7 @@
 
 :host {
   &.dark-theme {
-    color: opacity($clouds, .8);
+    color: opacity($clouds, 0.8);
   }
 }
 
@@ -42,7 +42,7 @@
     background: $white;
     box-sizing: border-box;
     height: 45px;
-    min-width: $desktop-max-width;
+    min-width: $max-width;
 
     position: relative;
 
@@ -66,7 +66,7 @@
 
       justify-content: flex-end;
       margin: 0 auto;
-      max-width: $desktop-max-width;
+      max-width: $max-width;
       min-width: inherit;
 
       padding-left: $global-side-padding;
@@ -144,11 +144,10 @@
         outline: none;
 
         @media only screen and (max-width: 610px) {
-          font-size: .9rem;
+          font-size: 0.9rem;
           height: 100%;
           padding: 0 18px;
         }
-
       }
     }
   }

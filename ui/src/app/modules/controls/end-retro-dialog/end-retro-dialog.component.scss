@@ -14,11 +14,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-@import 'color-vars';
+@import 'colors';
 
 :host {
   align-items: center;
-  background-color: opacity($black, .5);
+  background-color: opacity($black, 0.5);
   bottom: 0;
   box-sizing: border-box;
   display: flex;
@@ -38,7 +38,7 @@
   }
 
   .dialog {
-    $base-drop-shadow: 0 19px 38px opacity($black, .3);
+    $base-drop-shadow: 0 19px 38px opacity($black, 0.3);
     $border-width: 8px;
 
     $dialog-shadow: 0 0 0 $border-width $wet-asphalt, $base-drop-shadow;
@@ -87,15 +87,15 @@
       position: relative;
 
       .sub-heading {
-        color: opacity($wet-asphalt, .5);
+        color: opacity($wet-asphalt, 0.5);
         font-size: 1rem;
 
         &.dark-theme {
-          color: opacity($clouds, .5);
+          color: opacity($clouds, 0.5);
         }
 
         @media only screen and (max-width: 610px) {
-          font-size: .9rem;
+          font-size: 0.9rem;
         }
       }
 
@@ -135,14 +135,14 @@
       }
 
       #cancel-button-container {
-        border-top: 2px solid opacity($wet-asphalt, .06);
+        border-top: 2px solid opacity($wet-asphalt, 0.06);
 
         &.dark-theme {
           border-top-color: $task-footer-separator-dark;
         }
 
         rq-button {
-          color: opacity($wet-asphalt, .5);
+          color: opacity($wet-asphalt, 0.5);
           font-size: 1.2rem;
           height: 100%;
           width: 100%;
@@ -152,7 +152,7 @@
           }
 
           &.dark-theme {
-            color: opacity($clouds, .5);
+            color: opacity($clouds, 0.5);
 
             &:hover {
               color: $clouds;
@@ -177,7 +177,6 @@
           }
         }
       }
-
     }
   }
 }

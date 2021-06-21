@@ -15,8 +15,8 @@
  *  limitations under the License.
  */
 
-@import 'color-vars';
-@import 'global-vars';
+@import 'colors';
+@import 'sizes';
 
 :host {
   align-items: center;
@@ -43,7 +43,7 @@
 
   &.primary {
     background-color: $wet-asphalt;
-    box-shadow: 0 4px 15px opacity($black, .25);
+    box-shadow: 0 4px 15px opacity($black, 0.25);
     color: $clouds;
     outline: none;
 
@@ -54,14 +54,12 @@
       &:hover {
         color: $clouds;
       }
-
     }
 
     &:hover {
       background-color: $grape;
       cursor: pointer;
     }
-
   }
 
   &.secondary {
@@ -69,7 +67,7 @@
     color: inherit;
 
     &.dark-theme {
-      color: opacity($clouds, .8);
+      color: opacity($clouds, 0.8);
     }
 
     &:hover {
@@ -78,5 +76,3 @@
     }
   }
 }
-
-

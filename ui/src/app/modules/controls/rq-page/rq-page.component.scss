@@ -15,8 +15,8 @@
  *  limitations under the License.
  */
 
-@import 'global-vars';
-@import 'color-vars';
+@import 'sizes';
+@import 'colors';
 
 :host {
   background-color: $clouds;

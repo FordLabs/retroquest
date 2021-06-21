@@ -15,10 +15,10 @@
  *  limitations under the License.
  */
 
-@import 'color-vars';
+@import 'colors';
 
 :host {
-  background-color: opacity($white, .98);
+  background-color: opacity($white, 0.98);
   border-radius: 6px;
   bottom: 0;
   box-shadow: 0 0 0 4px $unhappy-red;
@@ -59,7 +59,7 @@
 
   .button-container {
     align-items: center;
-    border-top: 2px solid opacity($wet-asphalt, .06);
+    border-top: 2px solid opacity($wet-asphalt, 0.06);
     display: flex;
     height: 40px;
     justify-content: center;
@@ -75,9 +75,9 @@
       height: 100%;
 
       &.delete-decline-button {
-        border-right: 2px solid opacity($wet-asphalt, .06);
+        border-right: 2px solid opacity($wet-asphalt, 0.06);
         box-sizing: border-box;
-        color: opacity($wet-asphalt, .6);
+        color: opacity($wet-asphalt, 0.6);
 
         &:hover {
           color: inherit;
@@ -85,12 +85,11 @@
 
         &.dark-mode {
           border-right-color: $task-footer-separator-dark;
-          color: opacity($clouds, .6);
+          color: opacity($clouds, 0.6);
 
           &:hover {
             color: $clouds;
           }
-
         }
       }
 
@@ -101,6 +100,5 @@
         color: $unhappy-red;
       }
     }
-
   }
 }
