@@ -15,25 +15,21 @@
  *  limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
-import {ContributorsService} from './contributors.service';
-import {Contributor} from '../../../domain/contributor';
+import { Component, OnInit } from '@angular/core';
+import { ContributorsService } from './contributors.service';
+import { Contributor } from '../../domain/contributor';
 
 @Component({
   selector: 'rq-contributors',
   templateUrl: './contributors.component.html',
-  styleUrls: ['./contributors.component.scss']
+  styleUrls: ['./contributors.component.scss'],
 })
 export class ContributorsComponent implements OnInit {
-
   contributors: Contributor[][];
 
   ROW_SIZE = 5;
 
-  constructor(
-    private contributorService: ContributorsService
-  ) {
-  }
+  constructor(private contributorService: ContributorsService) {}
 
   ngOnInit() {
     this.contributorService.getContributors().subscribe((result) => {
@@ -41,11 +37,22 @@ export class ContributorsComponent implements OnInit {
       this.contributors = new Array(rows);
       let currentRow;
       let contributorsPos = 0;
-      for (currentRow = 0; currentRow < this.contributors.length; currentRow++) {
-        this.contributors[currentRow] = new Array(this.remaningSpace(result, currentRow));
+      for (
+        currentRow = 0;
+        currentRow < this.contributors.length;
+        currentRow++
+      ) {
+        this.contributors[currentRow] = new Array(
+          this.remaningSpace(result, currentRow)
+        );
         let currentColumn;
-        for (currentColumn = 0; currentColumn < this.contributors[currentRow].length; currentColumn++) {
-          this.contributors[currentRow][currentColumn] = result[contributorsPos];
+        for (
+          currentColumn = 0;
+          currentColumn < this.contributors[currentRow].length;
+          currentColumn++
+        ) {
+          this.contributors[currentRow][currentColumn] =
+            result[contributorsPos];
           contributorsPos++;
         }
       }
@@ -56,7 +63,10 @@ export class ContributorsComponent implements OnInit {
     return Math.ceil(contributors.length / this.ROW_SIZE);
   }
 
-  private remaningSpace(contributors: Contributor[], currentRow: number): number {
+  private remaningSpace(
+    contributors: Contributor[],
+    currentRow: number
+  ): number {
     const rows = this.rowCountFromContributorCount(contributors);
     const leftover: number = contributors.length % this.ROW_SIZE;
     if (currentRow === rows - 1) {

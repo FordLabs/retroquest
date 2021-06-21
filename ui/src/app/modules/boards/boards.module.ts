@@ -15,22 +15,21 @@
  *  limitations under the License.
  */
 
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {LoginComponent} from './pages/login/login.page';
-import {CreateComponent} from './pages/create/create.page';
-import {RouterModule} from '@angular/router';
-import {AppTitleComponent} from './components/app-title/app-title.component';
-import {BrandFooterComponent} from './components/brand-footer/brand-footer.component';
-import {RecaptchaModule} from 'ng-recaptcha';
-import {ControlsModule} from '../controls/controls.module';
-import {FocusOnLoadDirective} from './pages/directives/focus-on-load.component';
-import {ContributorsComponent} from './components/contributors/contributors.component';
-import {UpdatePasswordComponent} from './pages/update-password/update-password.page';
-import {CreateUserComponent} from './pages/create-user/create-user.component';
-import {UserViewComponent} from './pages/user-view/user-view.component';
-import {LoginUserComponent} from './pages/login-user/login-user.component';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { LoginComponent } from './pages/login/login.page';
+import { CreateComponent } from './pages/create/create.page';
+import { RouterModule } from '@angular/router';
+import { AppTitleComponent } from './components/app-title/app-title.component';
+import { BrandFooterComponent } from './components/brand-footer/brand-footer.component';
+import { RecaptchaModule } from 'ng-recaptcha';
+import { ControlsModule } from '../controls/controls.module';
+import { FocusOnLoadDirective } from './pages/directives/focus-on-load.component';
+import { UpdatePasswordComponent } from './pages/update-password/update-password.page';
+import { CreateUserComponent } from './pages/create-user/create-user.component';
+import { UserViewComponent } from './pages/user-view/user-view.component';
+import { LoginUserComponent } from './pages/login-user/login-user.component';
 
 @NgModule({
   imports: [
@@ -38,15 +37,15 @@ import {LoginUserComponent} from './pages/login-user/login-user.component';
     FormsModule,
     ControlsModule,
     RouterModule.forChild([
-      {path: 'create', component: CreateComponent},
-      {path: 'login', component: LoginComponent},
-      {path: 'login/:teamId', component: LoginComponent},
-      {path: 'update-password/:teamId', component: UpdatePasswordComponent},
-      {path: 'create-user', component: CreateUserComponent},
-      {path: 'login-user', component: LoginUserComponent},
-      {path: 'user/:user', component: UserViewComponent}
+      { path: 'create', component: CreateComponent },
+      { path: 'login', component: LoginComponent },
+      { path: 'login/:teamId', component: LoginComponent },
+      { path: 'update-password/:teamId', component: UpdatePasswordComponent },
+      { path: 'create-user', component: CreateUserComponent },
+      { path: 'login-user', component: LoginUserComponent },
+      { path: 'user/:user', component: UserViewComponent },
     ]),
-    RecaptchaModule
+    RecaptchaModule,
   ],
   declarations: [
     LoginComponent,
@@ -55,12 +54,10 @@ import {LoginUserComponent} from './pages/login-user/login-user.component';
     AppTitleComponent,
     BrandFooterComponent,
     FocusOnLoadDirective,
-    ContributorsComponent,
     CreateUserComponent,
     UserViewComponent,
-    LoginUserComponent
+    LoginUserComponent,
   ],
-  exports: [CreateComponent]
+  exports: [CreateComponent],
 })
-export class BoardsModule {
-}
+export class BoardsModule {}

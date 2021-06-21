@@ -1,0 +1,46 @@
+@import 'color-vars';
+
+.logo-container {
+  align-items: center;
+  display: flex;
+  height: 45px;
+  justify-content: center;
+  margin-bottom: 4rem;
+  column-gap: 1rem;
+  max-width: 100%;
+  width: 100%;
+
+  #logo {
+    height: 100%;
+    margin: 0 auto;
+  }
+
+  .logo-image {
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 6px;
+  }
+
+  .logo-text-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+
+    .logo-text {
+      font-family: 'Carter One', sans-serif;
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+
+    .logo-sub-text {
+      font-size: 0.8rem;
+      margin-top: -3px;
+
+      .fordlabs-label {
+        color: $confused-blue;
+        font-weight: bold;
+      }
+    }
+  }
+}

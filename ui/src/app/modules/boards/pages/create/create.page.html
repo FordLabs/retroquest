@@ -15,32 +15,10 @@
   ~  limitations under the License.
   -->
 
-<div id="createContainer">
+<rq-login-form (captchaResolved)="create($event)">
     <div id="app-content">
-        <re-captcha
-            #captchaRef="reCaptcha"
-            size="invisible"
-            siteKey="6LeZOmMUAAAAAOq4uXmluNuIio7XGx7U-ncmOzGT"
-            (resolved)="$event && create($event)"
-        ></re-captcha>
+        <rq-page-logo></rq-page-logo>
 
-        <div class="logo-container">
-            <img
-                src="/assets/icons/icon-72x72.png"
-                title="RetroQuest Icon"
-                id="logo-pic"
-                alt="Logo"
-                class="logo-image"
-            />
-
-            <div class="logo-text-container">
-                <label class="logo-text">RetroQuest</label>
-                <label class="logo-sub-text"
-                    >A
-                    <span class="fordlabs-label">FordLabs</span> Product</label
-                >
-            </div>
-        </div>
         <div class="rq-team-controls">
             <form id="createForm" class="rq-form">
                 <div class="rq-form-header">
@@ -122,8 +100,4 @@
             </form>
         </div>
     </div>
-
-    <div class="contributors">
-        <rq-contributors></rq-contributors>
-    </div>
-</div>
+</rq-login-form>

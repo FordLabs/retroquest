@@ -1448,6 +1448,11 @@
   "resolved" "https://registry.npmjs.org/@fontsource/open-sans/-/open-sans-4.4.5.tgz"
   "version" "4.4.5"
 
+"@fontsource/quicksand@^4.4.5":
+  "integrity" "sha512-HpOyxJbhvNm8I0QRHj8zgF1rjob1wCJKT6FxR/nGv/Jou6mOxx7q5850yMi4eUUH7uvBzmkQ/H6lllBBtauB9w=="
+  "resolved" "https://registry.npmjs.org/@fontsource/quicksand/-/quicksand-4.4.5.tgz"
+  "version" "4.4.5"
+
 "@fortawesome/fontawesome-free@^5.9.0":
   "integrity" "sha512-rFnSUN/QOtnOAgqFRooTA3H57JLDm0QEG/jPdk+tLQNL/eWd+Aok8g3qCI+Q1xuDPWpGW/i9JySpJVsq8Q0s9w=="
   "resolved" "https://registry.npmjs.org/@fortawesome/fontawesome-free/-/fontawesome-free-5.15.3.tgz"

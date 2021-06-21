@@ -16,181 +16,100 @@
  */
 @import 'color-vars';
 
-#createContainer {
-  background-color: #fafafa;
-  display: flex;
-  justify-content: center;
-  align-items: stretch;
-  flex-direction: row;
-  overflow: auto;
-  width: 100%;
-  min-height: 100%;
+#app-content {
+  .rq-team-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-  font-family: 'Open Sans', sans-serif;
+    .rq-form-header {
+      margin-bottom: 3rem;
+      text-align: center;
 
-  @media only screen and (max-width: 900px) {
-    flex-direction: column;
-  }
+      .header-text {
+        font-size: 2.5rem;
+        font-weight: bold;
 
-  #app-content {
-    background-color: transparent;
-    border-radius: 3px;
-    display: block;
-    margin: auto;
-    padding: 3rem 14rem;
-    width: 60%;
-    box-sizing: border-box;
+        @media only screen and (max-width: 610px) {
+          font-size: 1.3rem;
+        }
+      }
 
-    re-captcha {
-      visibility: hidden;
+      #loginBoard {
+        color: #00a887;
+        font-size: 1.2rem;
+      }
     }
 
-    .logo-container {
-      align-items: center;
+    .rq-input-group {
+      box-sizing: border-box;
+      color: inherit;
       display: flex;
-      height: 45px;
-      justify-content: center;
-      margin-bottom: 4rem;
-      column-gap: 1rem;
-      max-width: 100%;
+      flex-direction: column;
+      margin-top: 12px;
+      position: relative;
       width: 100%;
 
-      #logo {
-        height: 100%;
-        margin: 0 auto;
-      }
-
-      .logo-image {
-        height: 2.5rem;
-        width: 2.5rem;
-        border-radius: 6px;
-      }
-
-      .logo-text-container {
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        flex-direction: column;
-
-        .logo-text {
-          font-family: 'Carter One', sans-serif;
-          font-weight: bold;
-          font-size: 1.5rem;
-        }
-
-        .logo-sub-text {
+      ::ng-deep {
+        .rq-validation-message {
+          margin-top: 0.5rem;
           font-size: 0.8rem;
-          margin-top: -3px;
-
-          .fordlabs-label {
-            color: $confused-blue;
-            font-weight: bold;
-          }
         }
-      }
-    }
 
-    .rq-team-controls {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      .rq-form-header {
-        margin-bottom: 3rem;
-        text-align: center;
-
-        .header-text {
-          font-size: 2.5rem;
+        label {
+          font-size: 0.9rem;
           font-weight: bold;
+        }
+
+        input {
+          background-color: $white;
+          border: 0;
+          border-radius: 3px;
+          box-sizing: border-box;
+          color: $wet-asphalt;
+          font-size: 0.9rem;
+          font-weight: bold;
+          height: 35px;
+          margin: 12px 0 0;
+          outline: none;
+          padding: 12px 36px 12px 12px;
+          width: 100%;
+          box-shadow: 0 0 0 1px $wet-asphalt;
 
           @media only screen and (max-width: 610px) {
-            font-size: 1.3rem;
-          }
-        }
-
-        #loginBoard {
-          color: #00a887;
-          font-size: 1.2rem;
-        }
-      }
-
-      .rq-input-group {
-        box-sizing: border-box;
-        color: inherit;
-        display: flex;
-        flex-direction: column;
-        margin-top: 12px;
-        position: relative;
-        width: 100%;
-
-        ::ng-deep {
-          .rq-validation-message {
-            margin-top: 0.5rem;
-            font-size: 0.8rem;
+            font-size: 1rem;
           }
 
-          label {
-            font-size: 0.9rem;
-            font-weight: bold;
+          &::placeholder {
+            opacity: 0.3;
           }
 
-          input {
-            background-color: $white;
-            border: 0;
-            border-radius: 3px;
-            box-sizing: border-box;
-            color: $wet-asphalt;
-            font-size: 0.9rem;
-            font-weight: bold;
-            height: 35px;
-            margin: 12px 0 0;
-            outline: none;
-            padding: 12px 36px 12px 12px;
-            width: 100%;
-            box-shadow: 0 0 0 1px $wet-asphalt;
-
-            @media only screen and (max-width: 610px) {
-              font-size: 1rem;
-            }
-
-            &::placeholder {
-              opacity: 0.3;
-            }
-
-            &:focus {
-              box-shadow: 0 0 0 2px #00a887;
-            }
+          &:focus {
+            box-shadow: 0 0 0 2px #00a887;
           }
         }
       }
-    }
-
-    .recaptcha-message {
-      font-size: 0.8rem;
-      margin-top: 12px;
-
-      a {
-        font-size: 0.9rem;
-      }
-    }
-
-    rq-button {
-      background-color: #00a887;
-      border-radius: 3px;
-      box-shadow: none;
-      font-size: 1rem;
-      font-weight: bold;
-      margin-top: 3rem;
-      text-transform: capitalize;
-      width: 100%;
-      color: $white;
     }
   }
 
-  .contributors {
-    flex: 1;
-    box-sizing: border-box;
-    padding: 2rem 5rem;
-    background-color: $midnight-blue;
+  .recaptcha-message {
+    font-size: 0.8rem;
+    margin-top: 12px;
+
+    a {
+      font-size: 0.9rem;
+    }
+  }
+
+  rq-button {
+    background-color: #00a887;
+    border-radius: 3px;
+    box-shadow: none;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 3rem;
+    text-transform: capitalize;
+    width: 100%;
+    color: $white;
   }
 }
