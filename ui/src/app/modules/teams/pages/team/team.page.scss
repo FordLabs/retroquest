@@ -14,8 +14,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-@import 'color-vars';
-@import 'global-vars';
+@import 'colors';
+@import 'sizes';
 
 #page {
   $guide-button-section-height: 35px;
@@ -23,12 +23,12 @@
   font-family: 'Quicksand', sans-serif;
   height: 100%;
   padding: 0;
-  transition: top .5s;
+  transition: top 0.5s;
 
   .guide-button-section {
     background-color: $white;
     bottom: 0;
-    box-shadow: 1px 0 2px opacity($black, .1);
+    box-shadow: 1px 0 2px opacity($black, 0.1);
     display: none;
     height: $guide-button-section-height;
     left: 0;
@@ -36,11 +36,9 @@
     right: 0;
     z-index: 3;
 
-
     &.dark-theme {
       background-color: $black;
     }
-
 
     @media only screen and (max-width: 610px) {
       align-items: center;
@@ -56,15 +54,14 @@
       background-color: $happy-green;
       box-sizing: border-box;
       height: 100%;
-      opacity: .35;
+      opacity: 0.35;
       width: 25%;
 
       $dark-theme-accent-color: $clouds;
 
       &.dark-theme {
-        opacity: .65;
+        opacity: 0.65;
       }
-
 
       &.happy-guide-button {
         background-color: $happy-green;
@@ -143,7 +140,7 @@
     padding-left: $global-side-padding;
     padding-right: $global-side-padding;
     padding-top: $global-side-padding;
-    width: $desktop-max-width;
+    width: $max-width;
     z-index: 2;
 
     @media only screen and (max-width: 610px) {
@@ -180,6 +177,5 @@
         }
       }
     }
-
   }
 }

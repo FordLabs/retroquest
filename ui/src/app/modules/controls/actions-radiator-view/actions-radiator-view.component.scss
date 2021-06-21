@@ -14,8 +14,8 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-@import 'color-vars';
-@import 'global-vars';
+@import 'colors';
+@import 'sizes';
 
 :host {
   align-items: center;
@@ -25,7 +25,7 @@
 
   justify-content: flex-start;
   margin: 0 auto;
-  min-width: $desktop-max-width;
+  min-width: $max-width;
   position: relative;
   width: 100%;
 
@@ -46,7 +46,6 @@
     &.dark-theme {
       background-color: $header-background-color-dark;
     }
-
   }
 
   rq-action-item-task {
@@ -83,5 +82,4 @@
       background-color: $unhappy-red;
     }
   }
-
 }

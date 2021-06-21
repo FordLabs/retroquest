@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-@import 'color-vars';
+@import 'colors';
 
 #createContainer {
   background-color: $clouds;
@@ -69,9 +69,8 @@
 
         #loginBoard {
           color: $confused-blue;
-          font-size: .9rem;
+          font-size: 0.9rem;
         }
-
       }
 
       .rq-input-group {
@@ -84,13 +83,12 @@
         width: 100%;
 
         ::ng-deep {
-
           .rq-validation-message {
-            font-size: .8rem;
+            font-size: 0.8rem;
           }
 
           label {
-            font-size: .9rem;
+            font-size: 0.9rem;
             font-weight: bold;
           }
 
@@ -100,7 +98,7 @@
             border-radius: 3px;
             box-sizing: border-box;
             color: $wet-asphalt;
-            font-size: .9rem;
+            font-size: 0.9rem;
             font-weight: bold;
             height: 35px;
             margin: 12px 0 0;
@@ -113,7 +111,7 @@
             }
 
             &::placeholder {
-              opacity: .3;
+              opacity: 0.3;
             }
 
             &:focus {
@@ -125,11 +123,11 @@
     }
 
     .recaptcha-message {
-      font-size: .8rem;
+      font-size: 0.8rem;
       margin-top: 12px;
 
       a {
-        font-size: .9rem;
+        font-size: 0.9rem;
       }
     }
 

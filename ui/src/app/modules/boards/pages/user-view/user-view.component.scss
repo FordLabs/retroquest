@@ -14,7 +14,7 @@
 *  See the License for the specific language governing permissions and
 *  limitations under the License.
 */
-@import 'color-vars';
+@import 'colors';
 
 :host {
   box-sizing: border-box;
@@ -91,12 +91,11 @@
         &.dark-theme {
           color: $clouds;
         }
-
       }
 
       .team-sub-heading {
         font-size: 1.1rem;
-        opacity: .6;
+        opacity: 0.6;
 
         &.dark-theme {
           color: $clouds;
@@ -106,11 +105,11 @@
 
     .team-item {
       $host-border-width: 2px;
-      $host-opacity: .1;
+      $host-opacity: 0.1;
       align-items: center;
       background-color: $white;
       border-radius: 6px;
-      box-shadow: 0 4px 20px opacity($black, .12);
+      box-shadow: 0 4px 20px opacity($black, 0.12);
       box-sizing: border-box;
       color: inherit;
       display: flex;
@@ -120,12 +119,12 @@
       max-width: 90%;
       padding-left: 18px;
       position: relative;
-      transition: box-shadow .2s cubic-bezier(.25, .8, .25, 1);
+      transition: box-shadow 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
       width: 100%;
 
       &.add-team-button {
         align-items: center;
-        color: opacity($wet-asphalt, .35);
+        color: opacity($wet-asphalt, 0.35);
         cursor: pointer;
         font-size: 1.6rem;
         justify-content: center;
@@ -153,17 +152,17 @@
         right: 0;
 
         .separator {
-          background-color: opacity($wet-asphalt, .04);
+          background-color: opacity($wet-asphalt, 0.04);
           height: 100%;
           width: 3px;
 
           &.dark-theme {
-            background-color: opacity($black, .08);
+            background-color: opacity($black, 0.08);
           }
         }
 
         .view-button {
-          color: opacity($wet-asphalt, .68);
+          color: opacity($wet-asphalt, 0.68);
           font-size: inherit;
           height: 100%;
           padding: 0;
@@ -175,7 +174,7 @@
           }
 
           &.dark-theme {
-            color: opacity($clouds, .68);
+            color: opacity($clouds, 0.68);
 
             &:hover {
               color: $turquoise;
@@ -183,7 +182,7 @@
           }
 
           @media only screen and (max-width: 610px) {
-            font-size: .95rem;
+            font-size: 0.95rem;
             width: 65px;
           }
         }

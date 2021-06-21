@@ -15,14 +15,14 @@
  *  limitations under the License.
  */
 
-@import 'color-vars';
+@import 'colors';
 
 :host {
   $host-border-width: 2px;
-  $host-opacity: .1;
+  $host-opacity: 0.1;
   background-color: $white;
   border-radius: 6px;
-  box-shadow: 0 1px 2px opacity($black, .25);
+  box-shadow: 0 1px 2px opacity($black, 0.25);
   color: inherit;
   display: flex;
   flex-direction: column;
@@ -32,12 +32,12 @@
   justify-content: flex-end;
   position: relative;
 
-  transition: box-shadow .2s cubic-bezier(.25, .8, .25, 1);
+  transition: box-shadow 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
   width: 100px;
 
   &.dark-theme {
     background-color: $task-background-dark;
-    box-shadow: 0 1px 2px opacity($black, .35);
+    box-shadow: 0 1px 2px opacity($black, 0.35);
     color: $clouds;
   }
 
@@ -57,7 +57,7 @@
     box-shadow: none;
 
     &.dark-theme {
-      background-color: opacity($task-background-dark, .3);
+      background-color: opacity($task-background-dark, 0.3);
     }
   }
 
@@ -66,14 +66,12 @@
   }
 
   &.happy {
-
     &:hover {
       box-shadow: 0 0 0 $host-border-width $happy-green;
 
       &.dark-theme {
         box-shadow: 0 0 0 $host-border-width $nephritis;
       }
-
     }
 
     &.edit-mode {
@@ -120,17 +118,14 @@
   }
 
   @media only screen and (max-width: 610px) {
-
     &.action,
     &.sad,
     &.confused,
     &.happy {
-
       &:hover {
-        box-shadow: 0 1px 2px opacity($black, .25);
+        box-shadow: 0 1px 2px opacity($black, 0.25);
       }
     }
-
   }
 
   &.edit-mode {
@@ -140,7 +135,6 @@
       box-shadow: 0 0 0 4px $grape;
     }
   }
-
 
   .opacify {
     opacity: $host-opacity;
@@ -152,7 +146,6 @@
   }
 
   .content-area {
-
     $content-area-padding: 12px;
 
     background-color: inherit;
@@ -206,11 +199,10 @@
   }
 
   .footer {
-
     background-color: inherit;
     border-bottom-left-radius: inherit;
     border-bottom-right-radius: inherit;
-    border-top: 2px solid opacity($wet-asphalt, .06);
+    border-top: 2px solid opacity($wet-asphalt, 0.06);
     display: flex;
     height: 40px;
     justify-content: flex-start;
@@ -231,7 +223,7 @@
     }
 
     .container {
-      border-right: 2px solid opacity($wet-asphalt, .06);
+      border-right: 2px solid opacity($wet-asphalt, 0.06);
       cursor: pointer;
       position: relative;
       user-select: none;
@@ -260,7 +252,6 @@
           opacity: $host-opacity;
           position: absolute;
         }
-
       }
 
       .checkmark {
@@ -288,7 +279,7 @@
 
       .star-count {
         box-sizing: border-box;
-        font-size: .9rem;
+        font-size: 0.9rem;
         margin-left: 3px;
         padding-bottom: 2px;
         width: 15px;

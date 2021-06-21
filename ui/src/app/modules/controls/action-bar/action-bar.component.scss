@@ -15,8 +15,8 @@
  *  limitations under the License.
  */
 
-@import 'color-vars';
-@import 'global-vars';
+@import 'colors';
+@import 'sizes';
 
 $height: 50px;
 
@@ -34,7 +34,7 @@ $height: 50px;
     justify-content: flex-end;
     margin: 0 auto;
 
-    max-width: $desktop-max-width;
+    max-width: $max-width;
 
     ::ng-deep * {
       margin-left: 24px;

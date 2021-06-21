@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-@import 'color-vars';
+@import 'colors';
 
 .rq-action-item-list {
   display: flex;
@@ -24,7 +24,7 @@
   justify-content: flex-end;
 
   rq-action-item-task {
-    font-size: .9rem;
+    font-size: 0.9rem;
     height: auto;
     margin-bottom: 24px;
     width: 100%;
