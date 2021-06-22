@@ -32,7 +32,6 @@
     "@angular/service-worker": "~11.2.7",
     "@fontsource/carter-one": "^4.4.5",
     "@fontsource/open-sans": "^4.4.5",
-    "@fontsource/quicksand": "^4.4.5",
     "@fortawesome/fontawesome-free": "^5.9.0",
     "@stomp/ng2-stompjs": "^8.0.0",
     "core-js": "^3.6.5",
