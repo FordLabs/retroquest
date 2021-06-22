@@ -29,9 +29,18 @@
     box-sizing: border-box;
     padding: 3rem 0;
 
+    @media only screen and (max-width: 900px) {
+      width: 100%;
+      padding: 2rem;
+    }
+
     .form-content {
       margin: 0 auto;
       width: 500px;
+
+      @media only screen and (max-width: 900px) {
+        width: 100%;
+      }
     }
   }
 
