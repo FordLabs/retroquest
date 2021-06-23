@@ -1320,6 +1320,11 @@
   resolved "https://registry.yarnpkg.com/@fontsource/open-sans/-/open-sans-4.4.5.tgz#07b31617e62ed753c94cabcf552ebaed4de497ce"
   integrity sha512-PDWEvO1/p8OAHHiielvEmwGXHNbZhrZn96ojV7+/mKgFu+cCUcGVJl9sFs97rCWLe3hKQsYLEsJs4EiLjwa+UQ==
 
+"@fontsource/quicksand@^4.4.5":
+  version "4.4.5"
+  resolved "https://registry.yarnpkg.com/@fontsource/quicksand/-/quicksand-4.4.5.tgz#75daf09298719ce9e55d93b0f0a13a42834e927d"
+  integrity sha512-HpOyxJbhvNm8I0QRHj8zgF1rjob1wCJKT6FxR/nGv/Jou6mOxx7q5850yMi4eUUH7uvBzmkQ/H6lllBBtauB9w==
+
 "@fortawesome/fontawesome-free@^5.9.0":
   version "5.15.3"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.15.3.tgz#c36ffa64a2a239bf948541a97b6ae8d729e09a9a"
