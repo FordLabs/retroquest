@@ -22,6 +22,7 @@ import moment from 'moment';
 import { createMockEventEmitter } from '../../utils/testutils';
 import MockDate from 'mockdate';
 import { ActionItemTaskComponent } from '../action-item-task/action-item-task.component';
+import { emptyThought } from '../../domain/thought';
 
 describe('TaskDialogComponent', () => {
   let component: TaskDialogComponent;
@@ -38,6 +39,7 @@ describe('TaskDialogComponent', () => {
 
     component = new TaskDialogComponent(mockActionItemService);
     component.myWindow = myWindow;
+    component.task = emptyThought();
   });
 
   it('should create', () => {
@@ -156,16 +158,17 @@ describe('TaskDialogComponent', () => {
           focusInput: jest.fn(),
         } as ActionItemTaskComponent;
         component.actionItemTaskComponent = mockActionItemTaskComponent;
-        component.createLinking();
       });
 
       it('should not do anything but start an animation for the user', () => {
+        component.createLinking();
         expect(component.assignedActionItem.state).toEqual('active');
         expect(component.visible).toBeTruthy();
         expect(component.actionItemIsVisible).toBeTruthy();
       });
 
       it('should refocus the action item', () => {
+        component.createLinking();
         expect(mockActionItemTaskComponent.focusInput).toHaveBeenCalled();
       });
     });
@@ -178,6 +181,8 @@ describe('TaskDialogComponent', () => {
         MockDate.set(fakeDate.toDate());
         component.assignedActionItem.task = fakeTaskMessage;
         component.actionItemIsVisible = true;
+        component.task = emptyThought();
+        component.task.teamId = '1';
         component.createLinking();
       });
 
@@ -197,6 +202,7 @@ describe('TaskDialogComponent', () => {
       it('should call the backend to add the assigned action item', () => {
         const expectedActionItem = emptyActionItem();
         expectedActionItem.task = fakeTaskMessage;
+        expectedActionItem.teamId = '1';
         expectedActionItem.dateCreated = fakeDate.format();
         expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(
           expectedActionItem
