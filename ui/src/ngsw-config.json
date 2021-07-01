@@ -1,5 +1,7 @@
 {
   "index": "/index.html",
+  "strategy": "freshness",
+  "timeout": "0u",
   "assetGroups": [
     {
       "name": "app",
