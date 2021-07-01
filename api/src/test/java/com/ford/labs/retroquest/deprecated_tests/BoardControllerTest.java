@@ -65,6 +65,7 @@ class BoardControllerTest {
             "team-id",
             List.of(
                 new CreateThoughtRequest(
+                        -1L,
                     "hello",
                     0,
                     null,
