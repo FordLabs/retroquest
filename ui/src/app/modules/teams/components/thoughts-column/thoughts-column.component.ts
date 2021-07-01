@@ -63,6 +63,8 @@ export class ThoughtsColumnComponent implements OnInit {
   dialogIsVisible = false;
   thoughtsAreSorted = false;
 
+  isMobileView = (): boolean => window.innerWidth <= 610;
+
   ngOnInit(): void {
     this.retroEnded.subscribe(() => {
       this.thoughtAggregation.items.active.splice(
