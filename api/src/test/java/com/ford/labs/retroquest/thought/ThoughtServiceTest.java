@@ -137,6 +137,7 @@ class ThoughtServiceTest {
         var topic = "topic";
         var columnTitle = ColumnTitle.builder().title("Happy").build();
         var request = new CreateThoughtRequest(
+                -1L,
             null,
             0,
             topic,

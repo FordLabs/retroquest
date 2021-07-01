@@ -114,6 +114,7 @@ class BoardServiceTest {
             expectedTeamId,
             List.of(
                 new CreateThoughtRequest(
+                        0L,
                     expectedMessage,
                     0,
                     null,
