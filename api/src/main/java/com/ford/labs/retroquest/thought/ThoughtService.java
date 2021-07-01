@@ -21,6 +21,7 @@ import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.exception.ThoughtNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -80,6 +81,7 @@ public class ThoughtService {
 
     public Thought createThought(String teamId, Long boardId, CreateThoughtRequest request) {
         var thought = new Thought();
+        thought.setId(request.getId());
         thought.setMessage(request.getMessage());
         thought.setHearts(request.getHearts());
         thought.setTopic(request.getTopic());
