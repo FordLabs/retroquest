@@ -24,6 +24,7 @@ import lombok.Value;
 @Value
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CreateThoughtRequest {
+    Long id;
     String message;
     int hearts;
     String topic;
