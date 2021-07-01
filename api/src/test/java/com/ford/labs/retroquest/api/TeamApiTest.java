@@ -19,11 +19,7 @@ package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
-import com.ford.labs.retroquest.team.CreateTeamRequest;
-import com.ford.labs.retroquest.team.LoginRequest;
-import com.ford.labs.retroquest.team.Team;
-import com.ford.labs.retroquest.team.TeamRepository;
-import com.ford.labs.retroquest.team.UpdatePasswordRequest;
+import com.ford.labs.retroquest.team.*;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
