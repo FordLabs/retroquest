@@ -31,6 +31,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -56,24 +57,22 @@ class UserApiTest extends ApiTestBase {
 
     @Test
     void shouldHaveACreateNewUserEndpoint() throws Exception {
-
-        mockMvc.perform(post("/api/user")
+        mockMvc.perform(
+            post("/api/user")
                 .content(objectMapper.writeValueAsString(validNewUserRequest))
                 .contentType(MediaType.APPLICATION_JSON)
-        )
-                .andExpect(status().is(201));
-
+                .with(csrf())
+        ).andExpect(status().is(201));
     }
 
     @Test
     void shouldSaveANewUserToTheDatabaseWithUserNameAndEncryptedPassword() throws Exception {
-
-        mockMvc.perform(post("/api/user")
+        mockMvc.perform(
+            post("/api/user")
                 .content(objectMapper.writeValueAsString(validNewUserRequest))
                 .contentType(MediaType.APPLICATION_JSON)
-        )
-                .andExpect(status().is(201));
-
+                .with(csrf())
+        ).andExpect(status().is(201));
 
         assertThat(userRepository.count()).isEqualTo(1);
 
@@ -81,46 +80,43 @@ class UserApiTest extends ApiTestBase {
 
         assertThat(savedUser.getName()).isEqualTo(validNewUserRequest.getName());
         assertThat(passwordEncoder
-                .matches(validNewUserRequest.getPassword(), savedUser.getPassword()))
-                .isTrue();
+            .matches(validNewUserRequest.getPassword(), savedUser.getPassword()))
+            .isTrue();
         assertThat(savedUser.getId()).isNotNull();
     }
 
     @Test
     void shouldNotSaveANewUserToTheDatabaseWithAMissingPassword() throws Exception {
-
-        mockMvc.perform(post("/api/user")
+        mockMvc.perform(
+            post("/api/user")
                 .content(objectMapper.writeValueAsString(missingPasswordUser))
                 .contentType(MediaType.APPLICATION_JSON)
-        )
-                .andExpect(status().is(400));
-
+                .with(csrf())
+        ).andExpect(status().is(400));
 
         assertThat(userRepository.count()).isZero();
     }
 
     @Test
     void shouldNotSaveANewUserToTheDatabaseWithAMissingUserName() throws Exception {
-
-        mockMvc.perform(post("/api/user")
+        mockMvc.perform(
+            post("/api/user")
                 .content(objectMapper.writeValueAsString(missingNameUser))
                 .contentType(MediaType.APPLICATION_JSON)
-        )
-                .andExpect(status().is(400));
-
+                .with(csrf())
+        ).andExpect(status().is(400));
 
         assertThat(userRepository.count()).isZero();
     }
 
     @Test
     void shouldReturnAJwtTokenWithTheUserNameAsTheSubject() throws Exception {
-
-        MvcResult result = mockMvc.perform(post("/api/user")
+        MvcResult result = mockMvc.perform(
+            post("/api/user")
                 .content(objectMapper.writeValueAsString(validNewUserRequest))
                 .contentType(MediaType.APPLICATION_JSON)
-        )
-                .andExpect(status().is(201))
-                .andReturn();
+                .with(csrf())
+        ).andExpect(status().is(201)).andReturn();
 
         Claims claims = decodeJWT(result.getResponse().getContentAsString());
 
@@ -129,62 +125,60 @@ class UserApiTest extends ApiTestBase {
 
     @Test
     void shouldHaveTheRedirectLocationInTheHeader() throws Exception {
-
-        MvcResult result = mockMvc.perform(post("/api/user")
+        MvcResult result = mockMvc.perform(
+            post("/api/user")
                 .content(objectMapper.writeValueAsString(validNewUserRequest))
                 .contentType(MediaType.APPLICATION_JSON)
-        )
-                .andExpect(status().is(201))
-                .andReturn();
-
+                .with(csrf())
+        ).andExpect(status().is(201)).andReturn();
 
         assertThat(result.getResponse().getHeader("Location"))
-                .isEqualTo("/user/" + validNewUserRequest.getName().toLowerCase());
+            .isEqualTo("/user/" + validNewUserRequest.getName().toLowerCase());
     }
 
     @Test
     void shouldBeAbleToSeeIfAUserIsValid() throws Exception {
-
-        mockMvc.perform(post("/api/user")
+        mockMvc.perform(
+            post("/api/user")
                 .content(objectMapper.writeValueAsString(validNewUserRequest))
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(csrf())
         );
 
-        mockMvc.perform(get("/api/user/" + "Jake")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt(validNewUserRequest.getName()))
-        )
-                .andExpect(status().is(200));
-
+        mockMvc.perform(
+            get("/api/user/{user}", "Jake")
+                .header("Authorization", buildAuthorizationHeaderFromTeamId(validNewUserRequest.getName()))
+        ).andExpect(status().is(200));
     }
 
     @Test
     void shouldReturnAnUnauthorizedStatusIfTokenIsNotValid() throws Exception {
-
-        mockMvc.perform(post("/api/user")
+        mockMvc.perform(
+            post("/api/user")
                 .content(objectMapper.writeValueAsString(validNewUserRequest))
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(csrf())
         );
 
-        mockMvc.perform(get("/api/user/" + validNewUserRequest.getName().toLowerCase())
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("invalid-name"))
-        )
-                .andExpect(status().is(403));
-
+        mockMvc.perform(
+            get("/api/user/{user}", validNewUserRequest.getName().toLowerCase())
+                .header("Authorization", buildAuthorizationHeaderFromTeamId("invalid-name"))
+        ).andExpect(status().is(403));
     }
 
     @Test
     void shouldReturnTokenWithAValidUsernameAndPassword() throws Exception {
-
         userRepository.save(User.builder()
-                .name(validNewUserRequest.getName())
-                .password(passwordEncoder.encode(validNewUserRequest.getPassword()))
-                .build());
+            .name(validNewUserRequest.getName())
+            .password(passwordEncoder.encode(validNewUserRequest.getPassword()))
+            .build());
 
-        MvcResult result = mockMvc.perform(post("/api/user/login")
+        MvcResult result = mockMvc.perform(
+            post("/api/user/login")
                 .content(objectMapper.writeValueAsString(validNewUserRequest))
                 .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk())
-                .andReturn();
+                .with(csrf())
+        ).andExpect(status().isOk()).andReturn();
 
         String jwt = result.getResponse().getContentAsString();
         Claims claims = decodeJWT(jwt);
@@ -194,11 +188,12 @@ class UserApiTest extends ApiTestBase {
 
     @Test
     void shouldReturnNullIfUserNotFound() throws Exception {
-        MvcResult result = mockMvc.perform(post("/api/user/login")
+        MvcResult result = mockMvc.perform(
+            post("/api/user/login")
                 .content(objectMapper.writeValueAsString(validNewUserRequest))
                 .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isNotFound())
-                .andReturn();
+                .with(csrf())
+        ).andExpect(status().isNotFound()).andReturn();
 
         String jwt = result.getResponse().getContentAsString();
         Claims claims = decodeJWT(jwt);
@@ -209,16 +204,16 @@ class UserApiTest extends ApiTestBase {
     @Test
     void shouldReturnNullIfBadUserPassword() throws Exception {
         userRepository.save(User.builder()
-                .name(validNewUserRequest.getName())
-                .password(passwordEncoder.encode(validNewUserRequest.getPassword()))
-                .build());
+            .name(validNewUserRequest.getName())
+            .password(passwordEncoder.encode(validNewUserRequest.getPassword()))
+            .build());
 
-
-        MvcResult result = mockMvc.perform(post("/api/user/login")
+        MvcResult result = mockMvc.perform(
+            post("/api/user/login")
                 .content(objectMapper.writeValueAsString(missingPasswordUser))
                 .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isNotFound())
-                .andReturn();
+                .with(csrf())
+        ).andExpect(status().isNotFound()).andReturn();
 
         String jwt = result.getResponse().getContentAsString();
         Claims claims = decodeJWT(jwt);

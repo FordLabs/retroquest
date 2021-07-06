@@ -31,6 +31,7 @@ import org.springframework.http.MediaType;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -68,6 +69,7 @@ class FeedbackApiTest extends ApiTestBase {
             post("/api/feedback/")
                 .content(objectMapper.writeValueAsString(feedback))
                 .contentType(APPLICATION_JSON)
+                .with(csrf())
         )
             .andExpect(status().isCreated())
             .andReturn();
@@ -85,22 +87,26 @@ class FeedbackApiTest extends ApiTestBase {
         mockMvc.perform(
             get("/api/admin/feedback/all")
                 .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic(getAdminUsername(), getAdminPassword())))
+                .with(httpBasic(getAdminUsername(), getAdminPassword()))
+        )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(1)));
     }
 
     @Test
     void should_not_get_all_feedback_being_unauthorized() throws Exception {
-        mockMvc.perform(get("/api/admin/feedback/all").contentType(MediaType.APPLICATION_JSON)
-            .with(httpBasic("foo", "bar")))
-            .andExpect(status().isUnauthorized());
+        mockMvc.perform(
+            get("/api/admin/feedback/all")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(httpBasic("foo", "bar"))
+        ).andExpect(status().isUnauthorized());
     }
 
     @Test
     void should_not_get_all_feedback_without_basic_auth_token() throws Exception {
-        mockMvc.perform(get("/api/admin/feedback/all")
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isUnauthorized());
+        mockMvc.perform(
+            get("/api/admin/feedback/all")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isUnauthorized());
     }
 }

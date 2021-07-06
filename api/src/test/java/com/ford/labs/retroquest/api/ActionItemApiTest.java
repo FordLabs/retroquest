@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -167,8 +168,10 @@ class ActionItemApiTest extends ApiTestBase {
 
         actionItemRepository.saveAll(Arrays.asList(actionItem1, actionItem2));
 
-        mockMvc.perform(get("/api/team/beach-bums2/action-items")
-            .header("Authorization", "Bearer " + jwt))
+        mockMvc.perform(
+            get("/api/team/beach-bums2/action-items")
+                .header("Authorization", buildAuthorizationHeaderFromJwt(jwt))
+        )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.[0].task").value("Some Action"))
             .andExpect(jsonPath("$.[0].teamId").value("beach-bums2"))
@@ -179,16 +182,18 @@ class ActionItemApiTest extends ApiTestBase {
 
     @Test
     void should_set_action_item_as_completed() throws Exception {
-
         ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder().teamId(teamId).build());
 
-        mockMvc.perform(put(String.format("/api/team/%s/action-item/%d/complete", teamId, savedActionItem.getId()))
-            .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isOk());
+        mockMvc.perform(
+            put("/api/team/{team}/action-item/{action-item}/complete", teamId, savedActionItem.getId())
+                .header("Authorization", getBearerAuthToken())
+                .with(csrf())
+        ).andExpect(status().isOk());
 
-        MvcResult checkThoughtsRequest = mockMvc.perform(get(String.format("/api/team/%s/action-items", teamId))
-            .header("Authorization", getBearerAuthToken()))
-            .andReturn();
+        MvcResult checkThoughtsRequest = mockMvc.perform(
+            get("/api/team/{team}/action-items", teamId)
+                .header("Authorization", getBearerAuthToken())
+        ).andReturn();
 
         ActionItem resultActionItem = objectMapper.readValue(
             checkThoughtsRequest.getResponse().getContentAsByteArray(),
@@ -205,13 +210,16 @@ class ActionItemApiTest extends ApiTestBase {
             .completed(true)
             .build());
 
-        mockMvc.perform(put(String.format("/api/team/%s/action-item/%d/complete", teamId, savedActionItem.getId()))
-            .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isOk());
+        mockMvc.perform(
+            put("/api/team/{team}/action-item/{action-item}/complete", teamId, savedActionItem.getId())
+                .header("Authorization", getBearerAuthToken())
+                .with(csrf())
+        ).andExpect(status().isOk());
 
-        MvcResult checkThoughtsRequest = mockMvc.perform(get(String.format("/api/team/%s/action-items", teamId))
-            .header("Authorization", getBearerAuthToken()))
-            .andReturn();
+        MvcResult checkThoughtsRequest = mockMvc.perform(
+            get("/api/team/{team}/action-items", teamId)
+                .header("Authorization", getBearerAuthToken())
+        ).andReturn();
 
         ActionItem resultActionItem = objectMapper.readValue(
             checkThoughtsRequest.getResponse().getContentAsByteArray(),
@@ -234,18 +242,22 @@ class ActionItemApiTest extends ApiTestBase {
 
         actionItemRepository.saveAll(Arrays.asList(actionItem1, actionItem2, actionItem3));
 
-        mockMvc.perform(delete(String.format("/api/team/%s/action-item/%d", teamId, actionItem1.getId()))
-            .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isOk());
+        mockMvc.perform(
+            delete("/api/team/{team}/action-item/{action-item}", teamId, actionItem1.getId())
+                .header("Authorization", getBearerAuthToken())
+                .with(csrf())
+        ).andExpect(status().isOk());
 
-        mockMvc.perform(delete(String.format("/api/team/%s/action-item/%d", teamId, actionItem3.getId()))
-            .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isOk());
+        mockMvc.perform(
+            delete("/api/team/{team}/action-item/{action-item}", teamId, actionItem3.getId())
+                .header("Authorization", getBearerAuthToken())
+                .with(csrf())
+        ).andExpect(status().isOk());
 
-        MvcResult returnedActionItems = mockMvc.perform(get(String.format("/api/team/%s/action-items", teamId))
-            .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isOk())
-            .andReturn();
+        MvcResult returnedActionItems = mockMvc.perform(
+            get("/api/team/{team}/action-items", teamId)
+                .header("Authorization", getBearerAuthToken())
+        ).andExpect(status().isOk()).andReturn();
 
         ActionItem[] actionItems = objectMapper.readValue(
             returnedActionItems.getResponse().getContentAsByteArray(),
@@ -266,11 +278,13 @@ class ActionItemApiTest extends ApiTestBase {
 
         actionItem.setTask("i am updated");
 
-        mockMvc.perform(put(String.format("/api/team/%s/action-item/%d/task", teamId, actionItem.getId()))
-            .content(objectMapper.writeValueAsBytes(actionItem))
-            .contentType(MediaType.APPLICATION_JSON)
-            .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isOk());
+        mockMvc.perform(
+            put("/api/team/{team}/action-item/{action-item}/task", teamId, actionItem.getId())
+                .content(objectMapper.writeValueAsBytes(actionItem))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", getBearerAuthToken())
+                .with(csrf())
+        ).andExpect(status().isOk());
 
         assertThat(actionItemRepository.count()).isEqualTo(1);
         assertThat(actionItemRepository.findAll().get(0)).isEqualTo(actionItem);
@@ -288,12 +302,13 @@ class ActionItemApiTest extends ApiTestBase {
             "heyo!"
         );
 
-        mockMvc.perform(put(String.format("/api/team/%s/action-item/%d/assignee", teamId, actionItem.getId()))
-            .content(objectMapper.writeValueAsBytes(request))
-            .contentType(MediaType.APPLICATION_JSON)
-            .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isOk())
-            .andReturn();
+        mockMvc.perform(
+            put("/api/team/{team}/action-item/{action-item}/assignee", teamId, actionItem.getId())
+                .content(objectMapper.writeValueAsBytes(request))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", getBearerAuthToken())
+                .with(csrf())
+        ).andExpect(status().isOk()).andReturn();
 
         assertThat(actionItemRepository.count()).isEqualTo(1);
         assertThat(actionItemRepository.findAll().get(0).getAssignee()).isEqualTo("heyo!");
@@ -309,34 +324,64 @@ class ActionItemApiTest extends ApiTestBase {
             .teamId("beach-bums")
             .build());
 
-        mockMvc.perform(get("/api/team/beach-bums/action-items")
-            .header("Authorization", authorizationHeader))
-            .andExpect(status().isForbidden());
+        mockMvc.perform(
+            get("/api/team/beach-bums/action-items")
+                .header("Authorization", authorizationHeader)
+        ).andExpect(status().isForbidden());
 
-        mockMvc.perform(post("/api/team/beach-bums/action-item")
-            .header("Authorization", authorizationHeader)
-            .content("{}")
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isForbidden());
+        mockMvc.perform(
+            post("/api/team/beach-bums/action-item")
+                .header("Authorization", authorizationHeader)
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(csrf())
+        ).andExpect(status().isForbidden());
+        mockMvc.perform(
+            post("/api/team/beach-bums/action-item")
+                .header("Authorization", getBearerAuthToken())
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isForbidden());
 
-        mockMvc.perform(put("/api/team/beach-bums/action-item/1/task")
-            .header("Authorization", authorizationHeader)
-            .content("{}")
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isForbidden());
+        mockMvc.perform(
+            put("/api/team/beach-bums/action-item/1/task")
+                .header("Authorization", authorizationHeader)
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(csrf())
+        ).andExpect(status().isForbidden());
+        mockMvc.perform(
+            put("/api/team/beach-bums/action-item/1/task")
+                .header("Authorization", getBearerAuthToken())
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isForbidden());
 
-        mockMvc.perform(put("/api/team/beach-bums/action-item/1/complete")
-            .header("Authorization", authorizationHeader)
-            .content("{}")
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isForbidden());
+        mockMvc.perform(
+            put("/api/team/beach-bums/action-item/1/complete")
+                .header("Authorization", authorizationHeader)
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(csrf())
+        ).andExpect(status().isForbidden());
+        mockMvc.perform(
+            put("/api/team/beach-bums/action-item/1/complete")
+                .header("Authorization", getBearerAuthToken())
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isForbidden());
 
-        mockMvc.perform(delete("/api/team/beach-bums/action-item/1")
-            .header("Authorization", authorizationHeader))
-            .andExpect(status().isForbidden());
+        mockMvc.perform(
+            delete("/api/team/beach-bums/action-item/1")
+                .header("Authorization", authorizationHeader)
+                .with(csrf())
+        ).andExpect(status().isForbidden());
+        mockMvc.perform(
+            delete("/api/team/beach-bums/action-item/1")
+                .header("Authorization", getBearerAuthToken())
+        ).andExpect(status().isForbidden());
 
         assertThat(actionItemRepository.count()).isEqualTo(1);
         assertThat(savedActionItem).isEqualTo(actionItemRepository.findAll().get(0));
     }
-
 }

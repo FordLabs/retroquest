@@ -33,6 +33,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,8 +49,8 @@ class ColumnTitleApiTest extends ApiTestBase {
 
     @BeforeEach
     void setup() {
-        BASE_SUB_URL = "/topic/" + teamId + "/column-titles";
-        BASE_ENDPOINT_URL = "/app/" + teamId + "/column-title";
+        BASE_SUB_URL = String.format("/topic/%s/column-titles", teamId);
+        BASE_ENDPOINT_URL = String.format("/app/%s/column-title", teamId);
     }
 
     @AfterEach
@@ -60,23 +61,22 @@ class ColumnTitleApiTest extends ApiTestBase {
 
     @Test
     void canEditColumnTitleWithWebSockets() throws Exception {
-
         ColumnTitle savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder()
-                .title("old title")
-                .teamId("beach-bums")
-                .build());
+            .title("old title")
+            .teamId("beach-bums")
+            .build());
 
         StompSession session = getAuthorizedSession();
         subscribe(session, BASE_SUB_URL);
 
         ColumnTitle sentColumnTitle = ColumnTitle.builder()
-                .id(savedColumnTitle.getId())
-                .title("new title")
-                .teamId(savedColumnTitle.getTeamId())
-                .build();
+            .id(savedColumnTitle.getId())
+            .title("new title")
+            .teamId(savedColumnTitle.getTeamId())
+            .build();
 
-        session.send(BASE_ENDPOINT_URL + "/" + sentColumnTitle.getId() + "/edit",
-                objectMapper.writeValueAsBytes(sentColumnTitle));
+        session.send(String.format("%s/%d/edit", BASE_ENDPOINT_URL, sentColumnTitle.getId()),
+            objectMapper.writeValueAsBytes(sentColumnTitle));
 
         ColumnTitle response = takeObjectInSocket(ColumnTitle.class);
 
@@ -88,14 +88,16 @@ class ColumnTitleApiTest extends ApiTestBase {
     @Test
     void should_get_list_of_columns() throws Exception {
         columnTitleRepository.saveAll(Arrays.asList(
-                ColumnTitle.builder().teamId("BeachBums").title("one").build(),
-                ColumnTitle.builder().teamId("BeachBums").title("two").build(),
-                ColumnTitle.builder().teamId("BeachBums").title("three").build()
+            ColumnTitle.builder().teamId("BeachBums").title("one").build(),
+            ColumnTitle.builder().teamId("BeachBums").title("two").build(),
+            ColumnTitle.builder().teamId("BeachBums").title("three").build()
         ));
 
-        MvcResult columnListRequest = mockMvc.perform(get("/api/team/BeachBums/columns").contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", getBearerAuthToken()))
-                .andReturn();
+        MvcResult columnListRequest = mockMvc.perform(
+            get("/api/team/BeachBums/columns")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", getBearerAuthToken())
+        ).andReturn();
 
         ColumnTitle[] result = objectMapper.readValue(columnListRequest.getResponse().getContentAsByteArray(), ColumnTitle[].class);
 
@@ -104,22 +106,22 @@ class ColumnTitleApiTest extends ApiTestBase {
 
     @Test
     void should_update_column_title() throws Exception {
-
         var savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder()
-                .teamId("BeachBums")
-                .title("old title")
-                .build());
+            .teamId("BeachBums")
+            .title("old title")
+            .build());
 
         var request = new UpdateColumnTitleRequest("new title");
 
-        mockMvc.perform(put("/api/team/BeachBums/column/" + savedColumnTitle.getId() + "/title")
+        mockMvc.perform(
+            put("/api/team/BeachBums/column/{column}/title", savedColumnTitle.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(request))
-                .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isOk());
+                .header("Authorization", getBearerAuthToken())
+                .with(csrf())
+        ).andExpect(status().isOk());
 
         assertThat(columnTitleRepository.count()).isEqualTo(1);
         assertThat(columnTitleRepository.findAll().get(0).getTitle()).isEqualTo("new title");
     }
 }
-

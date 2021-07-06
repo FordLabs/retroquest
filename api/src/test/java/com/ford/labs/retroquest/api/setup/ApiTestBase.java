@@ -95,13 +95,13 @@ public abstract class ApiTestBase {
     @BeforeEach
     public void __setup() {
         teamId = "BeachBums";
-        websocketUrl = "ws://localhost:" + port + "/websocket";
-        bearerAuthToken = "Bearer " + jwtBuilder.buildJwt(teamId);
+        websocketUrl = String.format("ws://localhost:%d/websocket", port);
+        bearerAuthToken = buildAuthorizationHeaderFromTeamId(teamId);
 
         blockingQueue = new LinkedBlockingDeque<>();
 
         stompClient = new WebSocketStompClient(new SockJsClient(
-                Collections.singletonList(new WebSocketTransport(new StandardWebSocketClient()))));
+            Collections.singletonList(new WebSocketTransport(new StandardWebSocketClient()))));
     }
 
     public String getBearerAuthToken() {
@@ -111,33 +111,42 @@ public abstract class ApiTestBase {
     public Claims decodeJWT(String jwt) {
         //This line will throw an exception if it is not a signed JWS (as expected)
         return Jwts.parser()
-                .setSigningKey(TextCodec.BASE64.encode(jwtSigningSecret))
-                .parseClaimsJws(jwt)
-                .getBody();
+            .setSigningKey(TextCodec.BASE64.encode(jwtSigningSecret))
+            .parseClaimsJws(jwt)
+            .getBody();
     }
 
     public StompSession getAuthorizedSession() throws InterruptedException, ExecutionException, TimeoutException {
-
         StompHeaders headers = new StompHeaders();
         headers.add("Authorization", bearerAuthToken);
 
-        return stompClient
-                .connect(websocketUrl, new WebSocketHttpHeaders() {
-                }, headers, new StompSessionHandlerAdapter() {
-                })
-                .get(1, SECONDS);
+        return stompClient.connect(
+            websocketUrl,
+            new WebSocketHttpHeaders(),
+            headers,
+            new StompSessionHandlerAdapter() {}
+        ).get(1, SECONDS);
     }
 
     public StompSession getUnauthorizedSession() throws InterruptedException, ExecutionException, TimeoutException {
 
         StompHeaders headers = new StompHeaders();
-        headers.add("Authorization", "Bearer " + jwtBuilder.buildJwt("unauth-team"));
+        headers.add("Authorization", buildAuthorizationHeaderFromTeamId("unauth-team"));
 
-        return stompClient
-                .connect(websocketUrl, new WebSocketHttpHeaders() {
-                }, headers, new StompSessionHandlerAdapter() {
-                })
-                .get(1, SECONDS);
+        return stompClient.connect(
+            websocketUrl,
+            new WebSocketHttpHeaders(),
+            headers,
+            new StompSessionHandlerAdapter() {}
+        ).get(1, SECONDS);
+    }
+
+    protected String buildAuthorizationHeaderFromTeamId(String teamId) {
+        return buildAuthorizationHeaderFromJwt(jwtBuilder.buildJwt(teamId));
+    }
+
+    protected String buildAuthorizationHeaderFromJwt(String jwt) {
+        return String.format("Bearer %s", jwt);
     }
 
     private class DefaultStompFrameHandler implements StompFrameHandler {

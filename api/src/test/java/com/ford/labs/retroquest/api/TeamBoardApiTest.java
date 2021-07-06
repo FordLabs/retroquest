@@ -23,7 +23,13 @@ import com.ford.labs.retroquest.team.CreateTeamRequest;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import com.ford.labs.retroquest.team.TeamService;
-import com.ford.labs.retroquest.users.*;
+import com.ford.labs.retroquest.users.ExistingTeamRequest;
+import com.ford.labs.retroquest.users.NewTeamRequest;
+import com.ford.labs.retroquest.users.NewUserRequest;
+import com.ford.labs.retroquest.users.User;
+import com.ford.labs.retroquest.users.UserRepository;
+import com.ford.labs.retroquest.users.UserTeamMapping;
+import com.ford.labs.retroquest.users.UserTeamMappingRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -36,7 +42,10 @@ import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
@@ -67,22 +76,21 @@ class TeamBoardApiTest extends ApiTestBase {
     @BeforeEach
     void setup() throws Exception {
         teamService.createNewTeam(CreateTeamRequest.builder()
-                .name(validNewTeamRequest.getName())
-                .password(validNewTeamRequest.getPassword())
-                .build());
+            .name(validNewTeamRequest.getName())
+            .password(validNewTeamRequest.getPassword())
+            .build());
 
         teamService.createNewTeam(CreateTeamRequest.builder()
-                .name(validSecondTeamRequest.getName())
-                .password(validSecondTeamRequest.getPassword())
-                .build());
+            .name(validSecondTeamRequest.getName())
+            .password(validSecondTeamRequest.getPassword())
+            .build());
 
-
-        MvcResult result = mockMvc.perform(post("/api/user")
+        MvcResult result = mockMvc.perform(
+            post("/api/user")
                 .content(objectMapper.writeValueAsString(validNewUserRequest))
                 .contentType(MediaType.APPLICATION_JSON)
-        )
-                .andExpect(status().is(201))
-                .andReturn();
+                .with(csrf())
+        ).andExpect(status().is(201)).andReturn();
 
         jwt = result.getResponse().getContentAsString();
     }
@@ -102,15 +110,13 @@ class TeamBoardApiTest extends ApiTestBase {
 
     @Test
     void shouldAddTwoExistingTeamsToTheUser() throws Exception {
-
-        // First Call
-
-        mockMvc.perform(put("/api/user/" + validNewUserRequest.getName() + "/team")
+        mockMvc.perform(
+            put("/api/user/{user}/team", validNewUserRequest.getName())
                 .content(objectMapper.writeValueAsString(validNewTeamRequest))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwt)
-        )
-                .andExpect(status().is(201));
+                .header("Authorization", buildAuthorizationHeaderFromJwt(jwt))
+                .with(csrf())
+        ).andExpect(status().is(201));
 
         assertThat(userRepository.count()).isEqualTo(1);
 
@@ -119,14 +125,13 @@ class TeamBoardApiTest extends ApiTestBase {
         assertThat(firstedSavedUser.getTeams()).hasSize(1);
         assertThat(userTeamMappingRepository.count()).isEqualTo(1);
 
-        // Second Call
-
-        mockMvc.perform(put("/api/user/" + validNewUserRequest.getName() + "/team")
+        mockMvc.perform(
+            put("/api/user/{user}/team", validNewUserRequest.getName())
                 .content(objectMapper.writeValueAsString(validSecondTeamRequest))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwt)
-        )
-                .andExpect(status().is(201));
+                .header("Authorization", buildAuthorizationHeaderFromJwt(jwt))
+                .with(csrf())
+        ).andExpect(status().is(201));
 
         List<UserTeamMapping> mappingsList = userTeamMappingRepository.findAll();
         assertThat(mappingsList).hasSize(2);
@@ -135,98 +140,121 @@ class TeamBoardApiTest extends ApiTestBase {
 
     @Test
     void shouldReturnAConflictStatusCodeWhenExistingTeamIsAddedToUserTwice() throws Exception {
-
-        // First Call
-
-        mockMvc.perform(put("/api/user/" + validNewUserRequest.getName() + "/team")
+        mockMvc.perform(
+            put("/api/user/{user}/team", validNewUserRequest.getName())
                 .content(objectMapper.writeValueAsString(validNewTeamRequest))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwt)
-        )
-                .andExpect(status().is(201));
+                .header("Authorization", buildAuthorizationHeaderFromJwt(jwt))
+                .with(csrf())
+        ).andExpect(status().is(201));
 
-        // Second Call
-
-        mockMvc.perform(put("/api/user/" + validNewUserRequest.getName() + "/team")
+        mockMvc.perform(
+            put("/api/user/{user}/team", validNewUserRequest.getName())
                 .content(objectMapper.writeValueAsString(validNewTeamRequest))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwt)
-        )
-                .andExpect(status().is(409));
+                .header("Authorization", buildAuthorizationHeaderFromJwt(jwt))
+                .with(csrf())
+        ).andExpect(status().is(409));
 
         assertThat(userRepository.count()).isEqualTo(1);
     }
 
     @Test
-    void shouldNotAddExistingTeamToUserWithNoToken() throws Exception {
-
-        mockMvc.perform(put("/api/user/" + validNewUserRequest.getName() + "/team")
+    void shouldNotAddExistingTeamToUserWithNoCsrfToken() throws Exception {
+        mockMvc.perform(
+            put("/api/user/{user}/team", validNewUserRequest.getName())
                 .content(objectMapper.writeValueAsString(validNewTeamRequest))
                 .contentType(MediaType.APPLICATION_JSON)
-        )
-                .andExpect(status().is(401));
+                .header("Authorization", buildAuthorizationHeaderFromJwt(jwt))
+        ).andExpect(status().is(403));
+
+        assertThat(userTeamMappingRepository.count()).isZero();
+    }
+
+    @Test
+    void shouldNotAddExistingTeamToUserWithNoToken() throws Exception {
+        mockMvc.perform(
+            put("/api/user/{user}/team", validNewUserRequest.getName())
+                .content(objectMapper.writeValueAsString(validNewTeamRequest))
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(csrf())
+        ).andExpect(status().is(401));
 
         assertThat(userTeamMappingRepository.count()).isZero();
     }
 
     @Test
     void shouldNotAddExistingTeamToUserWithAnInvalidToken() throws Exception {
-
-        mockMvc.perform(put("/api/user/" + validNewUserRequest.getName() + "/team")
+        mockMvc.perform(
+            put("/api/user/{user}/team", validNewUserRequest.getName())
                 .content(objectMapper.writeValueAsString(validNewTeamRequest))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("invalid-team"))
-        )
-                .andExpect(status().is(403));
+                .header("Authorization", buildAuthorizationHeaderFromJwt(jwtBuilder.buildJwt("invalid-team")))
+                .with(csrf())
+        ).andExpect(status().is(403));
+
+        assertThat(userTeamMappingRepository.count()).isZero();
+    }
+
+    @Test
+    void shouldNotAddNewTeamToUserWithNoCsrfToken() throws Exception {
+        mockMvc.perform(
+            post("/api/user/{user}/team", validNewUserRequest.getName())
+                .content(objectMapper.writeValueAsString(validNewTeamRequest))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", buildAuthorizationHeaderFromJwt(jwt))
+        ).andExpect(status().is(403));
 
         assertThat(userTeamMappingRepository.count()).isZero();
     }
 
     @Test
     void shouldNotAddNewTeamToUserWithNoToken() throws Exception {
-
-        mockMvc.perform(post("/api/user/" + validNewUserRequest.getName() + "/team")
+        mockMvc.perform(
+            post("/api/user/{user}/team", validNewUserRequest.getName())
                 .content(objectMapper.writeValueAsString(validNewTeamRequest))
                 .contentType(MediaType.APPLICATION_JSON)
-        )
-                .andExpect(status().is(401));
+                .with(csrf())
+        ).andExpect(status().is(401));
 
         assertThat(userTeamMappingRepository.count()).isZero();
     }
 
     @Test
     void shouldNotAddNewTeamToUserWithAnInvalidToken() throws Exception {
-
-        mockMvc.perform(post("/api/user/" + validNewUserRequest.getName() + "/team")
+        mockMvc.perform(
+            post("/api/user/{user}/team", validNewUserRequest.getName())
                 .content(objectMapper.writeValueAsString(validNewTeamRequest))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("invalid-team"))
-        )
-                .andExpect(status().is(403));
+                .header("Authorization", buildAuthorizationHeaderFromJwt(jwtBuilder.buildJwt("invalid-team")))
+                .with(csrf())
+        ).andExpect(status().is(403));
 
         assertThat(userTeamMappingRepository.count()).isZero();
     }
 
     @Test
     void shouldNotAddNewTeamToUserWithMissingBody() throws Exception {
-        mockMvc.perform(post("/api/user/" + validNewUserRequest.getName() + "/team")
+        mockMvc.perform(
+            post("/api/user/{user}/team", validNewUserRequest.getName())
                 .content("")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwt)
-        )
-                .andExpect(status().is(400));
+                .header("Authorization", buildAuthorizationHeaderFromJwt(jwt))
+                .with(csrf())
+        ).andExpect(status().is(400));
 
         assertThat(userTeamMappingRepository.count()).isZero();
     }
 
     @Test
     void shouldNotAddNewTeamToUserWithEmptyBody() throws Exception {
-        mockMvc.perform(post("/api/user/" + validNewUserRequest.getName() + "/team")
+        mockMvc.perform(
+            post("/api/user/{user}/team", validNewUserRequest.getName())
                 .content(objectMapper.writeValueAsString(NewTeamRequest.builder().name("").build()))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwt)
-        )
-                .andExpect(status().is(400));
+                .header("Authorization", buildAuthorizationHeaderFromJwt(jwt))
+                .with(csrf())
+        ).andExpect(status().is(400));
 
         assertThat(userTeamMappingRepository.count()).isZero();
     }
@@ -234,15 +262,16 @@ class TeamBoardApiTest extends ApiTestBase {
     @Test
     void shouldAddNewTeamToUser() throws Exception {
         NewTeamRequest validNewSecondTeamRequest = NewTeamRequest.builder()
-                .name("johnny")
-                .build();
+            .name("johnny")
+            .build();
 
-        mockMvc.perform(post("/api/user/" + validNewUserRequest.getName() + "/team")
+        mockMvc.perform(
+            post("/api/user/{user}/team", validNewUserRequest.getName())
                 .content(objectMapper.writeValueAsString(validNewSecondTeamRequest))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwt)
-        )
-                .andExpect(status().is(201));
+                .header("Authorization", buildAuthorizationHeaderFromJwt(jwt))
+                .with(csrf())
+        ).andExpect(status().is(201));
 
         assertThat(userTeamMappingRepository.count()).isEqualTo(1);
     }
@@ -250,31 +279,32 @@ class TeamBoardApiTest extends ApiTestBase {
     @Test
     void shouldAddTwoNewTeamsToUser() throws Exception {
         NewTeamRequest validNewSecondTeamRequest = NewTeamRequest.builder()
-                .name("johnny")
-                .build();
+            .name("johnny")
+            .build();
 
-        mockMvc.perform(post("/api/user/" + validNewUserRequest.getName() + "/team")
+        mockMvc.perform(
+            post("/api/user/{user}/team", validNewUserRequest.getName())
                 .content(objectMapper.writeValueAsString(validNewSecondTeamRequest))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwt)
-        )
-                .andExpect(status().is(201));
+                .header("Authorization", buildAuthorizationHeaderFromJwt(jwt))
+                .with(csrf())
+        ).andExpect(status().is(201));
 
         assertThat(userTeamMappingRepository.count()).isEqualTo(1);
 
 
         NewUserRequest validNewThirdTeamRequest = NewUserRequest.builder()
-                .name("johnny2")
-                .password("appleseed2")
-                .build();
+            .name("johnny2")
+            .password("appleseed2")
+            .build();
 
-
-        mockMvc.perform(post("/api/user/" + validNewUserRequest.getName() + "/team")
+        mockMvc.perform(
+            post("/api/user/{user}/team", validNewUserRequest.getName())
                 .content(objectMapper.writeValueAsString(validNewThirdTeamRequest))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwt)
-        )
-                .andExpect(status().is(201));
+                .header("Authorization", buildAuthorizationHeaderFromJwt(jwt))
+                .with(csrf())
+        ).andExpect(status().is(201));
 
         assertThat(userTeamMappingRepository.count()).isEqualTo(2);
 
@@ -285,32 +315,31 @@ class TeamBoardApiTest extends ApiTestBase {
     @Test
     void shouldGetTeamsAssignedToUser() throws Exception {
         NewTeamRequest validNewSecondTeamRequest = NewTeamRequest.builder()
-                .name("johnny")
-                .build();
+            .name("johnny")
+            .build();
 
-        mockMvc.perform(post("/api/user/" + validNewUserRequest.getName() + "/team")
+        mockMvc.perform(
+            post("/api/user/{user}/team", validNewUserRequest.getName())
                 .content(objectMapper.writeValueAsString(validNewSecondTeamRequest))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwt)
-        )
-                .andExpect(status().is(201));
+                .header("Authorization", buildAuthorizationHeaderFromJwt(jwt))
+                .with(csrf())
+        ).andExpect(status().is(201));
 
         assertThat(userTeamMappingRepository.count()).isEqualTo(1);
 
-        MvcResult result = mockMvc.perform(get("/api/user/" + validNewUserRequest.getName() + "/team")
+        MvcResult result = mockMvc.perform(
+            get("/api/user/{user}/team", validNewUserRequest.getName())
                 .content(objectMapper.writeValueAsString(validNewSecondTeamRequest))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwt)
-        )
-                .andExpect(status().is(200))
-                .andReturn();
+                .header("Authorization", buildAuthorizationHeaderFromJwt(jwt))
+        ).andExpect(status().is(200)).andReturn();
 
         Set<Team> teams = objectMapper.readValue(
-                result.getResponse().getContentAsByteArray(),
-                objectMapper.getTypeFactory().constructCollectionType(Set.class, Team.class)
+            result.getResponse().getContentAsByteArray(),
+            objectMapper.getTypeFactory().constructCollectionType(Set.class, Team.class)
         );
 
         assertThat(teams).hasSize(1);
     }
-
 }

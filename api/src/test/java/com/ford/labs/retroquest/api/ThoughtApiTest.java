@@ -42,6 +42,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -61,9 +62,9 @@ class ThoughtApiTest extends ApiTestBase {
 
     @BeforeEach
     void setup() {
-        BASE_SUB_URL = "/topic/" + teamId + "/thoughts";
-        BASE_ENDPOINT_URL = "/app/" + teamId + "/thought";
-        BASE_GET_URL = "/api/team/" + teamId;
+        BASE_SUB_URL = String.format("/topic/%s/thoughts", teamId);
+        BASE_ENDPOINT_URL = String.format("/app/%s/thought", teamId);
+        BASE_GET_URL = String.format("/api/team/%s", teamId);
     }
 
     @AfterEach
@@ -78,9 +79,11 @@ class ThoughtApiTest extends ApiTestBase {
     void should_like_thought_on_upvote() throws Exception {
         Thought savedThought = thoughtRepository.save(Thought.builder().teamId(teamId).hearts(1).build());
 
-        mockMvc.perform(put("/api/team/" + teamId + "/thought/" + savedThought.getId() + "/heart")
-            .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isOk());
+        mockMvc.perform(
+            put("/api/team/{team}/thought/{thought}/heart", teamId, savedThought.getId())
+                .header("Authorization", getBearerAuthToken())
+                .with(csrf())
+        ).andExpect(status().isOk());
 
         assertThat(thoughtRepository.findById(savedThought.getId()).orElseThrow(() -> new ThoughtNotFoundException(String.valueOf(savedThought.getId()))).getHearts()).isEqualTo(2);
     }
@@ -89,11 +92,17 @@ class ThoughtApiTest extends ApiTestBase {
     void should_discuss_not_discussed_thought() throws Exception {
         Thought savedThought = thoughtRepository.save(Thought.builder().teamId(teamId).discussed(false).build());
 
-        mockMvc.perform(put("/api/team/" + teamId + "/thought/" + savedThought.getId() + "/discuss")
-            .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isOk());
+        mockMvc.perform(
+            put("/api/team/{team}/thought/{thought}/discuss", teamId, savedThought.getId())
+                .header("Authorization", getBearerAuthToken())
+                .with(csrf())
+        ).andExpect(status().isOk());
 
-        assertThat(thoughtRepository.findById(savedThought.getId()).orElseThrow(() -> new ThoughtNotFoundException(String.valueOf(savedThought.getId()))).isDiscussed()).isTrue();
+        assertThat(
+            thoughtRepository.findById(savedThought.getId())
+                .orElseThrow(() -> new ThoughtNotFoundException(String.valueOf(savedThought.getId())))
+                .isDiscussed()
+        ).isTrue();
     }
 
     @Test
@@ -103,13 +112,18 @@ class ThoughtApiTest extends ApiTestBase {
 
         JsonAdapter<Thought> jsonAdapter = moshi.adapter(Thought.class);
 
-        mockMvc.perform(put("/api/team/" + teamId + "/thought/" + savedThought.getId() + "/message")
+        mockMvc.perform(put("/api/team/{team}/thought/{thought}/message", teamId, savedThought.getId())
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonAdapter.toJson(updatedThought))
-            .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isOk());
+            .header("Authorization", getBearerAuthToken())
+            .with(csrf())
+        ).andExpect(status().isOk());
 
-        assertThat(thoughtRepository.findById(savedThought.getId()).orElseThrow(() -> new ThoughtNotFoundException(String.valueOf(savedThought.getId()))).getMessage()).isEqualTo("goodbye");
+        assertThat(
+            thoughtRepository.findById(savedThought.getId())
+                .orElseThrow(() -> new ThoughtNotFoundException(String.valueOf(savedThought.getId())))
+                .getMessage()
+        ).isEqualTo("goodbye");
     }
 
     @Test
@@ -122,11 +136,11 @@ class ThoughtApiTest extends ApiTestBase {
 
         JsonAdapter<List<Thought>> thoughtsAdapter = moshi.adapter(Types.newParameterizedType(List.class, Thought.class));
 
-        MvcResult result = mockMvc.perform(get(String.join("", "/api/team/", teamId, "/thoughts"))
-            .contentType(MediaType.APPLICATION_JSON)
-            .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isOk())
-            .andReturn();
+        MvcResult result = mockMvc.perform(
+            get("/api/team/{team}/thoughts", teamId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", getBearerAuthToken())
+        ).andExpect(status().isOk()).andReturn();
 
         assertThat(thoughtsAdapter.fromJson(result.getResponse().getContentAsString())).isEqualTo(persistedExpectedThoughts);
     }
@@ -139,18 +153,18 @@ class ThoughtApiTest extends ApiTestBase {
         thoughtRepository.saveAll(savedThoughts);
         assertThat(thoughtRepository.findAll().size()).isEqualTo(2);
 
-        mockMvc.perform(delete(String.join("", "/api/team/", teamId, "/thoughts"))
-            .contentType(MediaType.APPLICATION_JSON)
-            .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isOk());
+        mockMvc.perform(
+            delete("/api/team/{team}/thoughts", teamId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", getBearerAuthToken())
+                .with(csrf())
+        ).andExpect(status().isOk());
 
         assertThat(thoughtRepository.findAll()).isEmpty();
     }
 
     @Test
     void should_delete_thoughts_by_thought_id() throws Exception {
-
-
         List<Thought> thoughtsToSave = Arrays.asList(
             Thought.builder().teamId(teamId).message("hello").build(),
             Thought.builder().teamId(teamId).message("goodbye").build());
@@ -162,14 +176,15 @@ class ThoughtApiTest extends ApiTestBase {
         Thought thoughtToDelete = persistedThoughts.get(0);
         Thought thoughToKeep = persistedThoughts.get(1);
 
-        mockMvc.perform(delete(String.join("", "/api/team/", teamId, "/thought/" + thoughtToDelete.getId()))
-            .contentType(MediaType.APPLICATION_JSON)
-            .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isOk());
+        mockMvc.perform(
+            delete("/api/team/{team}/thought/{thought}", teamId, thoughtToDelete.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", getBearerAuthToken())
+                .with(csrf())
+        ).andExpect(status().isOk());
 
         assertThat(thoughtRepository.exists(Example.of(thoughtToDelete))).isFalse();
         assertThat(thoughtRepository.exists(Example.of(thoughToKeep))).isTrue();
-
     }
 
     @Test
@@ -178,11 +193,13 @@ class ThoughtApiTest extends ApiTestBase {
 
         JsonAdapter<Thought> jsonAdapter = moshi.adapter(Thought.class);
 
-        mockMvc.perform(post(String.join("", "/api/team/", teamId, "/thought"))
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(jsonAdapter.toJson(thoughtToSave))
-            .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isCreated());
+        mockMvc.perform(
+            post("/api/team/{team}/thought", teamId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonAdapter.toJson(thoughtToSave))
+                .header("Authorization", getBearerAuthToken())
+                .with(csrf())
+        ).andExpect(status().isCreated());
 
         assertThat(thoughtRepository.exists(Example.of(thoughtToSave))).isTrue();
     }
@@ -343,11 +360,11 @@ class ThoughtApiTest extends ApiTestBase {
 
         thoughtRepository.saveAll(savedThoughts);
 
-        MvcResult result = mockMvc.perform(get(BASE_GET_URL + "/thoughts")
-            .contentType(MediaType.APPLICATION_JSON)
-            .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isOk())
-            .andReturn();
+        MvcResult result = mockMvc.perform(
+            get("/api/team/{team}/thoughts", teamId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", getBearerAuthToken())
+        ).andExpect(status().isOk()).andReturn();
 
         Thought[] response = objectMapper.readValue(result.getResponse().getContentAsByteArray(), Thought[].class);
 
@@ -363,10 +380,11 @@ class ThoughtApiTest extends ApiTestBase {
 
         thoughtRepository.saveAll(savedThoughts);
 
-        mockMvc.perform(get(BASE_GET_URL + "/thoughts")
-            .contentType(MediaType.APPLICATION_JSON)
-            .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
-            .andExpect(status().isForbidden());
+        mockMvc.perform(
+            get("/api/team/{team}/thoughts", teamId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized"))
+        ).andExpect(status().isForbidden());
     }
 
     @Test

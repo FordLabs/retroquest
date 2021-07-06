@@ -63,18 +63,20 @@ class MetricsApiTest extends ApiTestBase {
         team.setDateCreated(LocalDate.now());
         teamRepository.save(team);
 
-        MvcResult result = mockMvc.perform(get("/api/admin/metrics/team/count")
-            .with(httpBasic(getAdminUsername(), getAdminPassword())))
-            .andExpect(status().isOk())
-            .andReturn();
+        MvcResult result = mockMvc.perform(
+            get("/api/admin/metrics/team/count")
+                .with(httpBasic(getAdminUsername(), getAdminPassword()))
+        ).andExpect(status().isOk()).andReturn();
+
         assertThat(result.getResponse().getContentAsString()).isEqualTo("1");
     }
 
     @Test
     void cannotReadTheTotalNumberOfTeamsWithInvalidAuthorization() throws Exception {
-        mockMvc.perform(get("/api/admin/metrics/team/count")
-            .with(httpBasic("foo", "bar")))
-            .andExpect(status().isUnauthorized());
+        mockMvc.perform(
+            get("/api/admin/metrics/team/count")
+                .with(httpBasic("foo", "bar"))
+        ).andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -89,18 +91,20 @@ class MetricsApiTest extends ApiTestBase {
         feedback.setDateCreated(LocalDateTime.now());
         feedbackRepository.save(feedback);
 
-        MvcResult result = mockMvc.perform(get("/api/admin/metrics/feedback/count")
-                .with(httpBasic(getAdminUsername(), getAdminPassword())))
-                .andExpect(status().isOk())
-                .andReturn();
+        MvcResult result = mockMvc.perform(
+            get("/api/admin/metrics/feedback/count")
+                .with(httpBasic(getAdminUsername(), getAdminPassword()))
+        ).andExpect(status().isOk()).andReturn();
+
         assertThat(result.getResponse().getContentAsString()).isEqualTo("1");
     }
 
     @Test
     void cannotGetFeedbackWithInvalidAuthorization() throws Exception {
-        mockMvc.perform(get("/api/admin/metrics/feedback/count")
-            .with(httpBasic("foo", "bar")))
-            .andExpect(status().isUnauthorized());
+        mockMvc.perform(
+            get("/api/admin/metrics/feedback/count")
+                .with(httpBasic("foo", "bar"))
+        ).andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -120,11 +124,12 @@ class MetricsApiTest extends ApiTestBase {
         feedbackRepository.saveAll(asList(feedback1, feedback2));
 
 
-        MvcResult result = mockMvc.perform(get("/api/admin/metrics/feedback/average")
-            .contentType(MediaType.APPLICATION_JSON)
-            .with(httpBasic(getAdminUsername(), getAdminPassword())))
-            .andExpect(status().isOk())
-            .andReturn();
+        MvcResult result = mockMvc.perform(
+            get("/api/admin/metrics/feedback/average")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(httpBasic(getAdminUsername(), getAdminPassword()))
+        ).andExpect(status().isOk()).andReturn();
+
         assertThat(result.getResponse().getContentAsString()).isEqualTo("3.0");
     }
 
@@ -139,11 +144,11 @@ class MetricsApiTest extends ApiTestBase {
         feedback2.setDateCreated(LocalDateTime.now());
         feedbackRepository.saveAll(asList(feedback1, feedback2));
 
-        MvcResult result = mockMvc.perform(get("/api/admin/metrics/feedback/average")
-            .contentType(MediaType.APPLICATION_JSON)
-            .with(httpBasic(getAdminUsername(), getAdminPassword())))
-            .andExpect(status().isOk())
-            .andReturn();
+        MvcResult result = mockMvc.perform(
+            get("/api/admin/metrics/feedback/average")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(httpBasic(getAdminUsername(), getAdminPassword()))
+        ).andExpect(status().isOk()).andReturn();
 
         assertThat(result.getResponse().getContentAsString()).isEqualTo("4.0");
     }
@@ -163,7 +168,6 @@ class MetricsApiTest extends ApiTestBase {
 
     @Test
     void whenGettingTheTotalNumberOfReviews_providingOnlyAStartDate_getsAllFromThatDateUntilNow() throws Exception {
-
         Feedback feedback1 = new Feedback();
         feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         Feedback feedback2 = new Feedback();
@@ -171,16 +175,17 @@ class MetricsApiTest extends ApiTestBase {
 
         feedbackRepository.saveAll(asList(feedback1, feedback2));
 
-        mockMvc.perform(get("/api/admin/metrics/feedback/count?start=2018-02-02")
-            .contentType(MediaType.APPLICATION_JSON)
-            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+        mockMvc.perform(
+            get("/api/admin/metrics/feedback/count?start=2018-02-02")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(httpBasic(getAdminUsername(), getAdminPassword()))
+        )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", Matchers.is(1)));
     }
 
     @Test
     void whenGettingTheTotalNumberOfReviews_providingOnlyAnEndDate_getsAllFromNowToThatDate() throws Exception {
-
         Feedback feedback1 = new Feedback();
         feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         Feedback feedback2 = new Feedback();
@@ -188,16 +193,17 @@ class MetricsApiTest extends ApiTestBase {
 
         feedbackRepository.saveAll(asList(feedback1, feedback2));
 
-        mockMvc.perform(get("/api/admin/metrics/feedback/count?end=2018-02-02")
-            .contentType(MediaType.APPLICATION_JSON)
-            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+        mockMvc.perform(
+            get("/api/admin/metrics/feedback/count?end=2018-02-02")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(httpBasic(getAdminUsername(), getAdminPassword()))
+        )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", Matchers.is(1)));
     }
 
     @Test
     void whenGettingTheTotalNumberOfReviews_providingOnlyStartAndEndDate_getsAllBetweenThoseDates() throws Exception {
-
         Feedback feedback1 = new Feedback();
         feedback1.setDateCreated(LocalDateTime.of(2018, 4, 1, 1, 1));
         Feedback feedback2 = new Feedback();
@@ -207,16 +213,17 @@ class MetricsApiTest extends ApiTestBase {
 
         feedbackRepository.saveAll(asList(feedback1, feedback2, feedback3));
 
-        mockMvc.perform(get("/api/admin/metrics/feedback/count?start=2018-05-01&end=2018-12-01")
-            .contentType(MediaType.APPLICATION_JSON)
-            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+        mockMvc.perform(
+            get("/api/admin/metrics/feedback/count?start=2018-05-01&end=2018-12-01")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(httpBasic(getAdminUsername(), getAdminPassword()))
+        )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", Matchers.is(1)));
     }
 
     @Test
     void whenGettingTheAverageRating_providingAStartAndEndDate_getsTheBetweenDates() throws Exception {
-
         Feedback feedback1 = new Feedback();
         feedback1.setDateCreated(LocalDateTime.of(2018, 4, 1, 1, 1));
         feedback1.setStars(1);
@@ -229,16 +236,17 @@ class MetricsApiTest extends ApiTestBase {
 
         feedbackRepository.saveAll(asList(feedback1, feedback2, feedback3));
 
-        mockMvc.perform(get("/api/admin/metrics/feedback/average?start=2018-05-01&end=2018-12-01")
-            .contentType(MediaType.APPLICATION_JSON)
-            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+        mockMvc.perform(
+            get("/api/admin/metrics/feedback/average?start=2018-05-01&end=2018-12-01")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(httpBasic(getAdminUsername(), getAdminPassword()))
+        )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", Matchers.is(2.0)));
     }
 
     @Test
     void whenGettingTheAverageRating_providingOnlyAStartDate_getsAllFromThatDateUntilNow() throws Exception {
-
         Feedback feedback1 = new Feedback();
         feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
         feedback1.setStars(1);
@@ -248,16 +256,17 @@ class MetricsApiTest extends ApiTestBase {
 
         feedbackRepository.saveAll(asList(feedback1, feedback2));
 
-        mockMvc.perform(get("/api/admin/metrics/feedback/average?start=2018-02-02")
-            .contentType(MediaType.APPLICATION_JSON)
-            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+        mockMvc.perform(
+            get("/api/admin/metrics/feedback/average?start=2018-02-02")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(httpBasic(getAdminUsername(), getAdminPassword()))
+        )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", Matchers.is(3.0)));
     }
 
     @Test
     void whenGettingTheAverageRating_providingOnlyAnEndDate_getsAllFromNowToThatDate() throws Exception {
-
         Feedback feedback1 = new Feedback();
         feedback1.setStars(3);
         feedback1.setDateCreated(LocalDateTime.of(2018, 1, 1, 1, 1));
@@ -267,16 +276,17 @@ class MetricsApiTest extends ApiTestBase {
 
         feedbackRepository.saveAll(asList(feedback1, feedback2));
 
-        mockMvc.perform(get("/api/admin/metrics/feedback/average?end=2018-02-02")
-            .contentType(MediaType.APPLICATION_JSON)
-            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+        mockMvc.perform(
+            get("/api/admin/metrics/feedback/average?end=2018-02-02")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(httpBasic(getAdminUsername(), getAdminPassword()))
+        )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", Matchers.is(3.0)));
     }
 
     @Test
     void whenGettingTeamCount_providingOnlyAStartDate_getsAllFromNowToThatDate() throws Exception {
-
         Team team1 = new Team();
         team1.setUri("team" + LocalDate.now().toEpochDay());
         team1.setDateCreated(LocalDate.of(2018, 2, 2));
@@ -285,9 +295,11 @@ class MetricsApiTest extends ApiTestBase {
         team2.setDateCreated(LocalDate.of(2018, 4, 4));
         teamRepository.saveAll(asList(team1, team2));
 
-        mockMvc.perform(get("/api/admin/metrics/team/count?start=2018-03-03")
-            .contentType(MediaType.APPLICATION_JSON)
-            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+        mockMvc.perform(
+            get("/api/admin/metrics/team/count?start=2018-03-03")
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(httpBasic(getAdminUsername(), getAdminPassword()))
+        )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", Matchers.is(1)));
     }
@@ -302,8 +314,10 @@ class MetricsApiTest extends ApiTestBase {
         team2.setLastLoginDate(LocalDate.of(2018, 3, 3));
         teamRepository.saveAll(asList(team1, team2));
 
-        mockMvc.perform(get("/api/admin/metrics/team/logins?start=2018-02-02")
-            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+        mockMvc.perform(
+            get("/api/admin/metrics/team/logins?start=2018-02-02")
+                .with(httpBasic(getAdminUsername(), getAdminPassword()))
+        )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", Matchers.is(1)));
     }
@@ -318,8 +332,10 @@ class MetricsApiTest extends ApiTestBase {
         team2.setLastLoginDate(LocalDate.of(2018, 3, 3));
         teamRepository.saveAll(asList(team1, team2));
 
-        mockMvc.perform(get("/api/admin/metrics/team/logins?end=2018-02-02")
-            .with(httpBasic(getAdminUsername(), getAdminPassword())))
+        mockMvc.perform(
+            get("/api/admin/metrics/team/logins?end=2018-02-02")
+                .with(httpBasic(getAdminUsername(), getAdminPassword()))
+        )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", Matchers.is(1)));
     }
@@ -342,7 +358,8 @@ class MetricsApiTest extends ApiTestBase {
 
         mockMvc.perform(
             get("/api/admin/metrics/team/logins?start=2018-02-02&end=2018-04-04")
-                .with(httpBasic(getAdminUsername(), getAdminPassword())))
+                .with(httpBasic(getAdminUsername(), getAdminPassword()))
+        )
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", Matchers.is(1)));
     }

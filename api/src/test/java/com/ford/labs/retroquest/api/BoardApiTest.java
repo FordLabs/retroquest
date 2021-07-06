@@ -37,6 +37,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -80,8 +81,10 @@ class BoardApiTest extends ApiTestBase {
         boardRepository.save(oldBoard);
         boardRepository.save(newBoard);
 
-        mockMvc.perform(get("/api/team/" + teamId + "/boards")
-                .header("Authorization", getBearerAuthToken()))
+        mockMvc.perform(
+            get("/api/team/{team}/boards", teamId)
+                .header("Authorization", getBearerAuthToken())
+        )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].dateCreated", Matchers.is("2018-02-02")))
                 .andExpect(jsonPath("$[1].dateCreated", Matchers.is("2018-01-01")));
@@ -89,15 +92,16 @@ class BoardApiTest extends ApiTestBase {
 
     @Test
     void should_save_a_board_with_thoughts() throws Exception {
-
         Thought savedThought = thoughtService.createThought(teamId, new CreateThoughtRequest(-1L, "TEST_MESSAGE", 0, "happy", false, teamId, -1L));
         CreateBoardRequest request = new CreateBoardRequest(teamId, Lists.emptyList());
 
-        mockMvc.perform(post("/api/team/" + teamId + "/board")
+        mockMvc.perform(
+            post("/api/team/{team}/board", teamId)
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isOk());
+                .header("Authorization", getBearerAuthToken())
+                .with(csrf())
+        ).andExpect(status().isOk());
 
         assertThat(boardRepository.count()).isEqualTo(1);
         assertThat(thoughtService.fetchAllThoughtsByTeam(teamId)).containsExactly(savedThought);
@@ -105,7 +109,6 @@ class BoardApiTest extends ApiTestBase {
 
     @Test
     void should_save_a_board_with_thoughts_and_clear_away_the_thoughts_without_a_board_id() throws Exception {
-
         Thought savedThought = thoughtService.createThought(teamId, new CreateThoughtRequest(
                 -1L,
                 "TEST_MESSAGE",
@@ -128,10 +131,13 @@ class BoardApiTest extends ApiTestBase {
                 )
         ));
 
-        mockMvc.perform(post("/api/team/" + teamId + "/board")
+        mockMvc.perform(
+            post("/api/team/{team}/board", teamId)
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", getBearerAuthToken()))
+                .header("Authorization", getBearerAuthToken())
+                .with(csrf())
+        )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.thoughts[0].id", Matchers.notNullValue()))
                 .andExpect(jsonPath("$.thoughts[0].message", Matchers.is(savedThought.getMessage())))
@@ -139,7 +145,6 @@ class BoardApiTest extends ApiTestBase {
                 .andExpect(jsonPath("$.thoughts[0].discussed", Matchers.is(savedThought.isDiscussed())))
                 .andExpect(jsonPath("$.thoughts[0].teamId", Matchers.is(savedThought.getTeamId())))
                 .andExpect(jsonPath("$.thoughts[0].boardId", Matchers.notNullValue()));
-
 
         assertThat(boardRepository.count()).isEqualTo(1);
         assertThat(thoughtService.fetchAllThoughtsByTeam(teamId)).isEmpty();

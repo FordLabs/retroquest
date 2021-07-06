@@ -49,33 +49,36 @@ class ColumnApiTest extends ApiTestBase {
     @BeforeEach
     void setup() {
         expectedBody = ColumnCombinerResponse.builder()
-                .columns(
-                        Collections.singletonList(ColumnResponse.builder().topic("happy").build())
-                ).build();
+            .columns(Collections.singletonList(ColumnResponse.builder().topic("happy").build()))
+            .build();
 
         when(columnCombinerService.aggregateResponse(teamId)).thenReturn(expectedBody);
     }
 
     @Test
     void should_return_unauthorized_if_no_bearer_token_is_sent() throws Exception {
-        mockMvc.perform(get("/api/v2/team/" + teamId + "/columns"))
-                .andExpect(status().isUnauthorized());
+        mockMvc.perform(
+            get("/api/v2/team/{team}/columns", teamId)
+        ).andExpect(status().isUnauthorized());
     }
 
     @Test
     void should_return_ok_since_user_is_authorized() throws Exception {
-        mockMvc.perform(get("/api/v2/team/" + teamId + "/columns")
-                .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isOk());
+        mockMvc.perform(
+            get("/api/v2/team/{team}/columns", teamId)
+                .header("Authorization", getBearerAuthToken())
+        ).andExpect(status().isOk());
     }
 
     @Test
     void should_get_a_filled_out_aggregated_response_with_a_200() throws Exception {
-        String body = mockMvc.perform(get("/api/v2/team/" + teamId + "/columns")
-                .header("Authorization", getBearerAuthToken()))
-                .andReturn().getResponse().getContentAsString();
+        String body = mockMvc.perform(
+            get("/api/v2/team/{team}/columns", teamId)
+                .header("Authorization", getBearerAuthToken())
+        ).andReturn().getResponse().getContentAsString();
 
         assertThat(objectMapper.readValue(body, ColumnCombinerResponse.class))
-                .isEqualToComparingFieldByField(expectedBody);
+            .usingRecursiveComparison()
+            .isEqualTo(expectedBody);
     }
 }

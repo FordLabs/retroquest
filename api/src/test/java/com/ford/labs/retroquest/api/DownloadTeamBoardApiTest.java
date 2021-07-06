@@ -22,7 +22,7 @@ import com.ford.labs.retroquest.actionitem.ActionItemRepository;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
-import com.ford.labs.retroquest.team.LoginRequest;
+import com.ford.labs.retroquest.team.CreateTeamRequest;
 import com.ford.labs.retroquest.team.TeamRepository;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
@@ -38,7 +38,10 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.sql.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -60,11 +63,11 @@ class DownloadTeamBoardApiTest extends ApiTestBase {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private LoginRequest loginRequest;
+    private CreateTeamRequest createTeamRequest;
 
     @BeforeEach
     void setup() {
-        loginRequest = LoginRequest.builder().name(teamId).password("password").build();
+        createTeamRequest = CreateTeamRequest.builder().name(teamId).password("password").build();
     }
 
     @AfterEach
@@ -83,37 +86,39 @@ class DownloadTeamBoardApiTest extends ApiTestBase {
     @Test
     void should_get_csv_with_thoughts_and_action_items() throws Exception {
         ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder()
-                .task("task")
-                .teamId(teamId)
-                .archived(false)
-                .assignee("assignee")
-                .completed(false)
-                .dateCreated(Date.valueOf("2019-01-01"))
-                .build());
+            .task("task")
+            .teamId(teamId)
+            .archived(false)
+            .assignee("assignee")
+            .completed(false)
+            .dateCreated(Date.valueOf("2019-01-01"))
+            .build());
 
         ColumnTitle savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder()
-                .title("Happy")
-                .teamId(teamId)
-                .topic("happy")
-                .build());
+            .title("Happy")
+            .teamId(teamId)
+            .topic("happy")
+            .build());
 
         Thought savedThought = thoughtRepository.save(
-                Thought.builder()
-                        .message("task")
-                        .columnTitle(savedColumnTitle)
-                        .teamId(teamId)
-                        .hearts(5)
-                        .discussed(false)
-                        .topic("happy")
-                        .build()
+            Thought.builder()
+                .message("task")
+                .columnTitle(savedColumnTitle)
+                .teamId(teamId)
+                .hearts(5)
+                .discussed(false)
+                .topic("happy")
+                .build()
         );
 
-        MvcResult result = mockMvc.perform(get("/api/team/" + teamId + "/csv")
-                .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isOk())
-                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, "text/csv"))
-                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, "text/csv"))
-                .andReturn();
+        MvcResult result = mockMvc.perform(
+            get("/api/team/{team}/csv", teamId)
+                .header("Authorization", getBearerAuthToken())
+        )
+            .andExpect(status().isOk())
+            .andExpect(header().string(HttpHeaders.CONTENT_TYPE, "text/csv"))
+            .andExpect(header().string(HttpHeaders.CONTENT_TYPE, "text/csv"))
+            .andReturn();
 
         String[] csvContentsList = result.getResponse().getContentAsString().split("\n");
         assertThat(csvContentsList[0].trim()).isEqualTo("Column,Message,Likes,Completed,Assigned To");
@@ -123,10 +128,15 @@ class DownloadTeamBoardApiTest extends ApiTestBase {
 
     @Test
     void should_not_get_csv_unauthorized() throws Exception {
-        restTemplate.postForObject("/api/team/", loginRequest, String.class);
+        mockMvc.perform(
+            post("/api/team")
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(createTeamRequest))
+                .with(csrf())
+        );
 
-        mockMvc.perform(get("/api/team/" + teamId + "/csv")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("not-beach-bums")))
-                .andExpect(status().isForbidden());
+        mockMvc.perform(get("/api/team/{team}/csv", teamId)
+            .header("Authorization", buildAuthorizationHeaderFromTeamId("not-beach-bums")))
+            .andExpect(status().isForbidden());
     }
 }
