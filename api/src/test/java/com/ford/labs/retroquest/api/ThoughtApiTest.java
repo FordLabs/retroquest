@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.api;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
@@ -24,9 +25,6 @@ import com.ford.labs.retroquest.exception.ThoughtNotFoundException;
 import com.ford.labs.retroquest.thought.MoveThoughtRequest;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
-import com.squareup.moshi.JsonAdapter;
-import com.squareup.moshi.Moshi;
-import com.squareup.moshi.Types;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -42,7 +40,10 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
@@ -57,7 +58,6 @@ class ThoughtApiTest extends ApiTestBase {
     private String BASE_SUB_URL;
     private String BASE_ENDPOINT_URL;
     private String BASE_GET_URL;
-    private final Moshi moshi = new Moshi.Builder().build();
 
     @BeforeEach
     void setup() {
@@ -101,11 +101,9 @@ class ThoughtApiTest extends ApiTestBase {
         Thought savedThought = thoughtRepository.save(Thought.builder().teamId(teamId).message("hello").build());
         Thought updatedThought = Thought.builder().id(savedThought.getId()).teamId(teamId).message("goodbye").build();
 
-        JsonAdapter<Thought> jsonAdapter = moshi.adapter(Thought.class);
-
         mockMvc.perform(put("/api/team/" + teamId + "/thought/" + savedThought.getId() + "/message")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(jsonAdapter.toJson(updatedThought))
+            .content(objectMapper.writeValueAsBytes(updatedThought))
             .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isOk());
 
@@ -120,15 +118,17 @@ class ThoughtApiTest extends ApiTestBase {
 
         List<Thought> persistedExpectedThoughts = thoughtRepository.saveAll(expectedThoughts);
 
-        JsonAdapter<List<Thought>> thoughtsAdapter = moshi.adapter(Types.newParameterizedType(List.class, Thought.class));
-
         MvcResult result = mockMvc.perform(get(String.join("", "/api/team/", teamId, "/thoughts"))
             .contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isOk())
             .andReturn();
 
-        assertThat(thoughtsAdapter.fromJson(result.getResponse().getContentAsString())).isEqualTo(persistedExpectedThoughts);
+        List<Thought> actualThoughts = objectMapper.readValue(result.getResponse().getContentAsByteArray(), new TypeReference<>() {});
+
+        assertThat(actualThoughts)
+            .usingRecursiveComparison()
+            .isEqualTo(persistedExpectedThoughts);
     }
 
     @Test
@@ -149,8 +149,6 @@ class ThoughtApiTest extends ApiTestBase {
 
     @Test
     void should_delete_thoughts_by_thought_id() throws Exception {
-
-
         List<Thought> thoughtsToSave = Arrays.asList(
             Thought.builder().teamId(teamId).message("hello").build(),
             Thought.builder().teamId(teamId).message("goodbye").build());
@@ -169,18 +167,15 @@ class ThoughtApiTest extends ApiTestBase {
 
         assertThat(thoughtRepository.exists(Example.of(thoughtToDelete))).isFalse();
         assertThat(thoughtRepository.exists(Example.of(thoughToKeep))).isTrue();
-
     }
 
     @Test
     void should_create_thought_no_websocket() throws Exception {
         Thought thoughtToSave = Thought.builder().teamId(teamId).message("hello").build();
 
-        JsonAdapter<Thought> jsonAdapter = moshi.adapter(Thought.class);
-
         mockMvc.perform(post(String.join("", "/api/team/", teamId, "/thought"))
             .contentType(MediaType.APPLICATION_JSON)
-            .content(jsonAdapter.toJson(thoughtToSave))
+            .content(objectMapper.writeValueAsBytes(thoughtToSave))
             .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isCreated());
 
@@ -334,7 +329,6 @@ class ThoughtApiTest extends ApiTestBase {
 
     @Test
     void should_get_thoughts_on_same_team() throws Exception {
-
         List<Thought> savedThoughts = Arrays.asList(
             Thought.builder().message("message 1").teamId(teamId).build(),
             Thought.builder().message("message 2").teamId(teamId).build(),
@@ -356,7 +350,6 @@ class ThoughtApiTest extends ApiTestBase {
 
     @Test
     void should_not_get_thoughts_unauthorized() throws Exception {
-
         List<Thought> savedThoughts = Collections.singletonList(
             Thought.builder().message("message 1").teamId(teamId).build()
         );
