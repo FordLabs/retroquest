@@ -24,6 +24,7 @@ import com.ford.labs.retroquest.security.JwtBuilder;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.impl.TextCodec;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
@@ -70,12 +71,6 @@ public abstract class ApiTestBase {
 
     @MockBean
     public ContributorController contributorController;
-
-    @Value("${com.retroquest.adminUsername}")
-    private String adminUsername;
-
-    @Value("${com.retroquest.adminPassword}")
-    private String adminPassword;
 
     @Value("${local.server.port}")
     private int port;
@@ -141,13 +136,14 @@ public abstract class ApiTestBase {
     }
 
     private class DefaultStompFrameHandler implements StompFrameHandler {
+        @NotNull
         @Override
-        public Type getPayloadType(StompHeaders stompHeaders) {
+        public Type getPayloadType(@NotNull StompHeaders stompHeaders) {
             return byte[].class;
         }
 
         @Override
-        public void handleFrame(StompHeaders stompHeaders, Object object) {
+        public void handleFrame(@NotNull StompHeaders stompHeaders, Object object) {
             blockingQueue.offer(new String((byte[]) object));
         }
     }
@@ -163,14 +159,6 @@ public abstract class ApiTestBase {
 
     public void subscribe(StompSession session, String url) {
         session.subscribe(url, new DefaultStompFrameHandler());
-    }
-
-    public String getAdminUsername() {
-        return adminUsername;
-    }
-
-    public String getAdminPassword() {
-        return adminPassword;
     }
 
 }

@@ -77,30 +77,4 @@ class FeedbackApiTest extends ApiTestBase {
         assertThat(meterRegistry.get("retroquest.feedback.averageRating").gauge().value())
             .isEqualTo(4);
     }
-
-    @Test
-    void should_get_all_feedback_as_an_admin() throws Exception {
-        feedbackRepository.save(Feedback.builder().build());
-
-        mockMvc.perform(
-            get("/api/admin/feedback/all")
-                .contentType(MediaType.APPLICATION_JSON)
-                .with(httpBasic(getAdminUsername(), getAdminPassword())))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(1)));
-    }
-
-    @Test
-    void should_not_get_all_feedback_being_unauthorized() throws Exception {
-        mockMvc.perform(get("/api/admin/feedback/all").contentType(MediaType.APPLICATION_JSON)
-            .with(httpBasic("foo", "bar")))
-            .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    void should_not_get_all_feedback_without_basic_auth_token() throws Exception {
-        mockMvc.perform(get("/api/admin/feedback/all")
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isUnauthorized());
-    }
 }
