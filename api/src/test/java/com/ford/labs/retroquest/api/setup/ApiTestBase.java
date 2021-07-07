@@ -24,7 +24,6 @@ import com.ford.labs.retroquest.security.JwtBuilder;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.impl.TextCodec;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
@@ -136,14 +135,13 @@ public abstract class ApiTestBase {
     }
 
     private class DefaultStompFrameHandler implements StompFrameHandler {
-        @NotNull
         @Override
-        public Type getPayloadType(@NotNull StompHeaders stompHeaders) {
+        public Type getPayloadType(StompHeaders stompHeaders) {
             return byte[].class;
         }
 
         @Override
-        public void handleFrame(@NotNull StompHeaders stompHeaders, Object object) {
+        public void handleFrame(StompHeaders stompHeaders, Object object) {
             blockingQueue.offer(new String((byte[]) object));
         }
     }
