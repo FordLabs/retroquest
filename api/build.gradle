@@ -57,7 +57,6 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
 
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-    implementation 'com.squareup.moshi:moshi:1.12.0'
     implementation 'commons-io:commons-io:2.9.0'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation 'io.micrometer:micrometer-registry-statsd'
