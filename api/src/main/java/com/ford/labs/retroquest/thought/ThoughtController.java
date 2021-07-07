@@ -115,7 +115,7 @@ public class ThoughtController {
     })
     public ResponseEntity<Void> createThoughtForTeam(@PathVariable("teamId") String teamId, @RequestBody CreateThoughtRequest request) throws URISyntaxException {
         var thought = thoughtService.createThought(teamId, request);
-        var uri = new URI(String.format("/api/team/%s/thought/%s", teamId, thought.getId()));
+        var uri = new URI(String.format("/api/team/%s/thought/%s", thought.getTeamId(), thought.getId()));
         return ResponseEntity.created(uri).build();
     }
 
