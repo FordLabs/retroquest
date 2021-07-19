@@ -21,10 +21,6 @@ import org.springframework.security.core.AuthenticationException;
 
 public class UserUnauthenticatedException extends AuthenticationException {
 
-    public UserUnauthenticatedException(String msg, Throwable t) {
-        super(msg, t);
-    }
-
     public UserUnauthenticatedException(String msg) {
         super(msg);
     }
