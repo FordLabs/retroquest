@@ -17,23 +17,29 @@
 
 package com.ford.labs.retroquest.security;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.AuthenticationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class JwtAuthenticationProviderTest {
 
+    public static final String INVALID_JWT = "eyJhbGciOiJIUzUxMiJ9.eyJleHAiOjE2MjY4ODA4NzYsInN1YiI6InRlc3QiLCJpc3MiOiJSZXRyb1F1ZXN0In0.AJgA5Bhr-MZgBFyQV64BphMKJ7ScK5roBLBL7K2KSyGMl5snrhQ6yxmIwMFffC7m3aZ1kCA-y_QvaGIqru37LQ";
     private final JwtAuthenticationProvider jwtAuthenticationProvider = new JwtAuthenticationProvider();
 
     @Test
     void jwtWithInvalidFormatThrowsException() {
-        var invalidJwt = new JwtAuthentication("", false, "SOSECRET");
-        Assertions.assertThrows(
-            AuthenticationException.class,
-            () -> jwtAuthenticationProvider.authenticate(invalidJwt)
-        );
+        var invalidJwt = new JwtAuthentication(INVALID_JWT, false, "SOSECRET");
+
+        try {
+            jwtAuthenticationProvider.authenticate(invalidJwt);
+            fail();
+        } catch(AuthenticationException exception) {
+            assertThat(exception.getMessage()).isEqualTo("JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.");
+        } catch (Exception exception) {
+            fail();
+        }
     }
 
     @Test
