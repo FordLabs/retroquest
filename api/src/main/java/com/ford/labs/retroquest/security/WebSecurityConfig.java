@@ -59,16 +59,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             httpSecurity.requiresChannel().antMatchers("/*").requiresSecure();
         }
 
-        httpSecurity.authorizeRequests().antMatchers("/api/admin/**")
-                .hasRole("ADMIN").and().httpBasic();
-
         httpSecurity
                 .authorizeRequests()
-                .antMatchers("/contributors").permitAll()
-                .antMatchers("/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
+                .antMatchers("/**").permitAll()
+                .anyRequest().authenticated()
+                .and().httpBasic()
                 .and().addFilterAfter(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
 
         httpSecurity.csrf().disable();

@@ -15,19 +15,21 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpResponse} from '@angular/common/http';
-import {Observable} from 'rxjs/index';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TeamService {
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) {
-  }
-
-  create(name: string, password: string, captchaResponse: string): Observable<HttpResponse<string>> {
+  create(
+    name: string,
+    password: string,
+    captchaResponse: string
+  ): Observable<HttpResponse<string>> {
     return this.doPostRequest('/api/team', name, password, captchaResponse);
   }
 
@@ -35,56 +37,66 @@ export class TeamService {
     return this.doPostRequest('/api/user', name, password);
   }
 
-  login(name: string, password: string, captchaResponse: string): Observable<HttpResponse<string>> {
+  login(
+    name: string,
+    password: string,
+    captchaResponse: string
+  ): Observable<HttpResponse<string>> {
     return this.http.post(
       '/api/team/login',
-      {name, password, captchaResponse},
-      {observe: 'response', responseType: 'text'}
+      { name, password, captchaResponse },
+      { observe: 'response', responseType: 'text' }
     );
   }
 
-  updatePassword(teamId: string, previousPassword: string, newPassword: string): Observable<HttpResponse<string>> {
+  updatePassword(
+    teamId: string,
+    previousPassword: string,
+    newPassword: string
+  ): Observable<HttpResponse<string>> {
     return this.http.post(
       '/api/update-password',
-      {teamId, previousPassword, newPassword},
-      {observe: 'response', responseType: 'text'}
+      { teamId, previousPassword, newPassword },
+      { observe: 'response', responseType: 'text' }
     );
   }
 
   fetchTeamName(teamId: string): Observable<string> {
-    return this.http.get(
-      `/api/team/${teamId}/name`,
-      {responseType: 'text'}
-    );
+    return this.http.get(`/api/team/${teamId}/name`, { responseType: 'text' });
   }
 
   validateTeamId(teamId: string): Observable<HttpResponse<Object>> {
-    return this.http.get(
-      `/api/team/${teamId}/validate`,
-      {observe: 'response'}
-    );
+    return this.http.get(`/api/team/${teamId}/validate`, {
+      observe: 'response',
+    });
   }
 
   isCaptchaEnabledForTeam(teamName: string): Observable<HttpResponse<string>> {
-    return this.http.get(
-      `/api/team/${teamName}/captcha`,
-      {observe: 'response', responseType: 'text'}
-    );
+    return this.http.get(`/api/team/${teamName}/captcha`, {
+      observe: 'response',
+      responseType: 'text',
+    });
   }
 
   isCaptchaEnabled(): Observable<HttpResponse<string>> {
-    return this.http.get(
-      `/api/captcha`,
-      {observe: 'response', responseType: 'text'}
-    );
+    return this.http.get(`/api/captcha`, {
+      observe: 'response',
+      responseType: 'text',
+    });
   }
 
-  private doPostRequest(endpoint: string, name: string, password: string, captchaResponse?: string) {
-    const payload = captchaResponse ? {name, password, captchaResponse} : {name, password};
-    return this.http.post(
-      endpoint,
-      payload,
-      {observe: 'response', responseType: 'text'}
-    );
+  private doPostRequest(
+    endpoint: string,
+    name: string,
+    password: string,
+    captchaResponse?: string
+  ) {
+    const payload = captchaResponse
+      ? { name, password, captchaResponse }
+      : { name, password };
+    return this.http.post(endpoint, payload, {
+      observe: 'response',
+      responseType: 'text',
+    });
   }
 }
