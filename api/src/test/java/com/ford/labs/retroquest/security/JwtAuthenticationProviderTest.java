@@ -34,11 +34,11 @@ class JwtAuthenticationProviderTest {
 
         try {
             jwtAuthenticationProvider.authenticate(invalidJwt);
-            fail();
+            fail("Test did not throw an exception");
         } catch(AuthenticationException exception) {
             assertThat(exception.getMessage()).isEqualTo("JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.");
         } catch (Exception exception) {
-            fail();
+            fail("Test threw an exception other than an AuthenticationException");
         }
     }
 
