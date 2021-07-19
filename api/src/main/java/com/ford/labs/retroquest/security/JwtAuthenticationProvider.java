@@ -31,7 +31,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         try {
             authentication.getPrincipal();
         } catch(Exception e) {
-            throw new UserUnauthenticatedException("Invalid Token", e);
+            throw new UserUnauthenticatedException(e.getMessage());
         }
 
         authentication.setAuthenticated(true);
