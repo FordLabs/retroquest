@@ -21,11 +21,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/auth.service';
 import { TeamService } from '../../../teams/services/team.service';
 import { RecaptchaComponent } from 'ng-recaptcha';
-import { concatMap, map } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
-import { Observable } from 'rxjs/internal/Observable';
+import { concatMap, map, of, EMPTY, Observable } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
-import { of } from 'rxjs/internal/observable/of';
 
 @Component({
   selector: 'rq-create',

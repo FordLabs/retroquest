@@ -16,7 +16,7 @@
  */
 
 import { FeedbackService } from './feedback.service';
-import { Observable } from 'rxjs/index';
+import { Observable } from 'rxjs';
 import { createMockHttpClient } from '../../utils/testutils';
 
 describe('FeedbackService', () => {

@@ -15,9 +15,8 @@
  * limitations under the License.
  */
 
-import { Observable } from 'rxjs/internal/Observable';
+import { Subject, Observable } from 'rxjs';
 import { ActivatedRouteSnapshot } from '@angular/router';
-import { Subject } from 'rxjs/internal/Subject';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from '../auth.service';
 import { createMockRouter } from '../../utils/testutils';
@@ -45,10 +44,12 @@ describe('AuthGuard', () => {
     const mockNextRouteSnapshot = new ActivatedRouteSnapshot();
     const mockState = { url: '/team/incorrect-team' };
 
-    (guard.canActivate(
-      mockNextRouteSnapshot,
-      mockState as any
-    ) as Observable<boolean>).subscribe(() => {
+    (
+      guard.canActivate(
+        mockNextRouteSnapshot,
+        mockState as any
+      ) as Observable<boolean>
+    ).subscribe(() => {
       expect(mockRouter.navigate).toHaveBeenCalledWith([
         'login',
         'incorrect-team',
@@ -62,10 +63,12 @@ describe('AuthGuard', () => {
     const mockNextRouteSnapshot = new ActivatedRouteSnapshot();
     const mockState = { url: '/team/incorrect-team' };
 
-    (guard.canActivate(
-      mockNextRouteSnapshot,
-      mockState as any
-    ) as Observable<boolean>).subscribe(() => {
+    (
+      guard.canActivate(
+        mockNextRouteSnapshot,
+        mockState as any
+      ) as Observable<boolean>
+    ).subscribe(() => {
       expect(mockRouter.navigate).not.toHaveBeenCalled();
     });
     mockTeamService.validateTeamId().next();
@@ -75,10 +78,12 @@ describe('AuthGuard', () => {
     const mockNextRouteSnapshot = new ActivatedRouteSnapshot();
     const mockState = { url: '/team/incorrect-team' };
 
-    (guard.canActivate(
-      mockNextRouteSnapshot,
-      mockState as any
-    ) as Observable<boolean>).subscribe(() => {
+    (
+      guard.canActivate(
+        mockNextRouteSnapshot,
+        mockState as any
+      ) as Observable<boolean>
+    ).subscribe(() => {
       expect(mockRouter.navigate).toHaveBeenCalledWith([
         'login',
         'incorrect-team',

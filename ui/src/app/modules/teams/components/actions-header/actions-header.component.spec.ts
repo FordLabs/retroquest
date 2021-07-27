@@ -16,7 +16,7 @@
  */
 
 import { ActionsHeaderComponent } from './actions-header.component';
-import { Observable } from 'rxjs/index';
+import { Observable } from 'rxjs';
 import { ActionItem } from '../../../domain/action-item';
 import moment from 'moment';
 import { createMockEventEmitter } from '../../../utils/testutils';

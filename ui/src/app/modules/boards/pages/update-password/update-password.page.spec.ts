@@ -17,8 +17,7 @@
 
 import { UpdatePasswordComponent } from './update-password.page';
 import { AuthService } from '../../../auth/auth.service';
-import { Subject, throwError } from 'rxjs';
-import { of } from 'rxjs/internal/observable/of';
+import { of, Subject, throwError } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 import {
   createMockRecaptchaComponent,
