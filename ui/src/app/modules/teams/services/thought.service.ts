@@ -16,7 +16,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/index';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 import { Thought } from '../../domain/thought';

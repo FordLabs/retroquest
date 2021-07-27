@@ -16,7 +16,7 @@
  */
 
 import { ColumnService } from './column.service';
-import { Observable } from 'rxjs/index';
+import { Observable } from 'rxjs';
 import { Column } from '../../domain/column';
 import {
   createMockHttpClient,

@@ -17,7 +17,7 @@
 
 import { ThoughtsColumnComponent } from './thoughts-column.component';
 import { Thought } from '../../../domain/thought';
-import { Observable } from 'rxjs/index';
+import { Observable } from 'rxjs';
 import { WebsocketResponse } from '../../../domain/websocket-response';
 
 describe('ThoughtColumnComponent', () => {

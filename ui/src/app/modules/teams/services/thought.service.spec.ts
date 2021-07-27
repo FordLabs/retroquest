@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Observable } from 'rxjs/index';
+import { Observable } from 'rxjs';
 import { ThoughtService } from './thought.service';
 import {
   createMockHttpClient,

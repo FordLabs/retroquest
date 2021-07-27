@@ -17,7 +17,7 @@
 
 import { CreateComponent } from './create.page';
 import { AuthService } from '../../../auth/auth.service';
-import { of } from 'rxjs/internal/observable/of';
+import { of } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import {
   createMockHttpClient,

@@ -15,22 +15,16 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpResponse} from '@angular/common/http';
-import {Observable} from 'rxjs/index';
-import {Feedback} from '../../domain/feedback';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Feedback } from '../../domain/feedback';
 
 @Injectable()
 export class FeedbackService {
-
-  constructor(
-    private http: HttpClient
-  ) {
-  }
+  constructor(private http: HttpClient) {}
 
   addFeedback(feedback: Feedback): Observable<HttpResponse<Object>> {
-    return this.http.post(
-      '/api/feedback/', feedback, {observe: 'response'},
-    );
+    return this.http.post('/api/feedback/', feedback, { observe: 'response' });
   }
 }

@@ -16,7 +16,7 @@
  */
 
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Observable, of } from 'rxjs/index';
+import { Observable, of } from 'rxjs';
 import 'jest-preset-angular/setup-jest';
 import { EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
