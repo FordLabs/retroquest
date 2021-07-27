@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/index';
 import { ThoughtsHeaderComponent } from './thoughts-header.component';
 import { createMockEventEmitter } from '../../../utils/testutils';
 

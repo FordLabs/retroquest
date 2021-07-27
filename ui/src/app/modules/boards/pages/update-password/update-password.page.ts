@@ -15,23 +15,21 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RecaptchaComponent } from 'ng-recaptcha';
-import { of } from 'rxjs';
-import { TeamService } from '../../../teams/services/team.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {TeamService} from '../../../teams/services/team.service';
+import {RecaptchaComponent} from 'ng-recaptcha';
+import {of} from 'rxjs/internal/observable/of';
 
 @Component({
   selector: 'rq-update-password',
   templateUrl: './update-password.page.html',
-  styleUrls: ['./update-password.page.scss'],
+  styleUrls: ['./update-password.page.scss']
 })
 export class UpdatePasswordComponent implements OnInit {
-  constructor(
-    private teamService: TeamService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
+
+  constructor(private teamService: TeamService, private route: ActivatedRoute, private router: Router) {
+  }
 
   @ViewChild(RecaptchaComponent) recaptchaComponent: RecaptchaComponent;
 
@@ -47,11 +45,10 @@ export class UpdatePasswordComponent implements OnInit {
 
   updatePassword(): void {
     if (this.validateInput()) {
-      this.teamService
-        .updatePassword(this.teamId, this.previousPassword, this.newPassword)
+      this.teamService.updatePassword(this.teamId, this.previousPassword, this.newPassword)
         .subscribe(
-          (response) => this.handleResponse(response),
-          (error) => this.handleError(error)
+          response => this.handleResponse(response),
+          error => this.handleError(error)
         );
     }
   }
@@ -82,9 +79,7 @@ export class UpdatePasswordComponent implements OnInit {
 
   private handleError(error) {
     error.error = JSON.parse(error.error);
-    this.errorMessage = error.error.message
-      ? error.error.message
-      : `${error.status} ${error.error}`;
+    this.errorMessage = error.error.message ? error.error.message : `${error.status} ${error.error}`;
     console.error('A registration error occurred: ', this.errorMessage);
     return of(this.errorMessage);
   }
