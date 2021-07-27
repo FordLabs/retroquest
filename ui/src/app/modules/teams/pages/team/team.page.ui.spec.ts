@@ -27,7 +27,7 @@ import { TeamService } from '../../services/team.service';
 import { DataService } from '../../../data.service';
 import { SaveCheckerService } from '../../services/save-checker.service';
 import { BoardService } from '../../services/board.service';
-import { of } from 'rxjs';
+import { of } from 'rxjs/internal/observable/of';
 import { Board } from '../../../domain/board';
 import { ColumnAggregationService } from '../../services/column-aggregation.service';
 import { ActionItemService } from '../../services/action.service';

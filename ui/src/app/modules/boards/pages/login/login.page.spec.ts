@@ -17,7 +17,8 @@
 
 import { LoginComponent } from './login.page';
 import { AuthService } from '../../../auth/auth.service';
-import { of, Subject, throwError } from 'rxjs';
+import { Subject, throwError } from 'rxjs';
+import { of } from 'rxjs/internal/observable/of';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import {

@@ -15,58 +15,57 @@
  * limitations under the License.
  */
 
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Observable, concatMap, map, of } from 'rxjs';
-import { HttpResponse } from '@angular/common/http';
-import { TeamService } from '../../../teams/services/team.service';
-import { AuthService } from '../../../auth/auth.service';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {concatMap, map} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {HttpResponse} from '@angular/common/http';
+import {TeamService} from '../../../teams/services/team.service';
+import {AuthService} from '../../../auth/auth.service';
 
 @Component({
   selector: 'rq-create-user',
   templateUrl: './create-user.component.html',
-  styleUrls: ['./create-user.component.scss'],
+  styleUrls: ['./create-user.component.scss']
 })
 export class CreateUserComponent implements OnInit {
-  constructor(private teamService: TeamService, private router: Router) {}
+
+
+  constructor(private teamService: TeamService, private router: Router) {
+  }
 
   teamName: string;
   password: string;
   confirmPassword: string;
   errorMessage: string;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   requestCaptchaStateAndCreateTeam() {
     if (!this.validateInput()) {
       return;
     }
 
-    this.teamService
-      .isCaptchaEnabled()
-      .pipe(
-        map((response) => JSON.parse(response.body).captchaEnabled),
-        concatMap((captchaEnabled) =>
-          this.createTeamOrExecuteCaptcha(captchaEnabled)
-        )
-      )
-      .subscribe(
-        (response) => this.handleResponse(response),
-        (error) => this.handleError(error)
-      );
+    this.teamService.isCaptchaEnabled().pipe(
+      map(response => JSON.parse(response.body).captchaEnabled),
+      concatMap(captchaEnabled => this.createTeamOrExecuteCaptcha(captchaEnabled)),
+    ).subscribe(
+      response => this.handleResponse(response),
+      error => this.handleError(error)
+    );
   }
 
-  private createTeamOrExecuteCaptcha(
-    captchaEnabled
-  ): Observable<HttpResponse<Object>> {
+  private createTeamOrExecuteCaptcha(captchaEnabled): Observable<HttpResponse<Object>> {
     return this.teamService.createUser(this.teamName, this.password);
   }
 
   create(captchaResponse: string = null): void {
-    this.teamService.createUser(this.teamName, this.password).subscribe(
-      (response) => this.handleResponse(response),
-      (error) => this.handleError(error)
-    );
+    this.teamService.createUser(this.teamName, this.password)
+      .subscribe(
+        response => this.handleResponse(response),
+        error => this.handleError(error)
+      );
   }
 
   private validateInput(): boolean {
@@ -97,10 +96,9 @@ export class CreateUserComponent implements OnInit {
 
   private handleError(error) {
     error.error = JSON.parse(error.error);
-    this.errorMessage = error.error.message
-      ? error.error.message
-      : `${error.status} ${error.error}`;
+    this.errorMessage = error.error.message ? error.error.message : `${error.status} ${error.error}`;
     console.error('A registration error occurred: ', this.errorMessage);
     return of(this.errorMessage);
   }
+
 }
