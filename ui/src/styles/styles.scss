@@ -33,9 +33,18 @@ body {
 }
 
 body {
-  background-color: $gray;
+  background-color: $background-color-light;
   color: $asphalt;
   font-family: 'Quicksand', sans-serif;
   font-size: 1rem;
   font-weight: normal;
+
+  display: block;
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+
+  &.dark-theme {
+    background-color: $background-color-dark;
+  }
 }
