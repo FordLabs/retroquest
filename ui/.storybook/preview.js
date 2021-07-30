@@ -2,6 +2,7 @@ import React from 'react';
 import { themes } from '@storybook/theming';
 
 import '../src/styles/styles.scss';
+import '@fortawesome/fontawesome-free/css/all.css';
 
 export const globalTypes = {
   theme: {
