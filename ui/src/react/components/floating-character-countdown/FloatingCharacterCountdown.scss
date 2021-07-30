@@ -27,7 +27,7 @@
   width: auto;
   visibility: hidden;
 
-  &.dark-theme {
+  .dark-theme & {
     color: $gray;
   }
 
