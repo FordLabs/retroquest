@@ -25,6 +25,10 @@
 @import '~@fontsource/quicksand/500.css';
 @import '~@fontsource/quicksand/700.css';
 
+* {
+  box-sizing: border-box;
+}
+
 html,
 body {
   height: 100%;
@@ -33,18 +37,19 @@ body {
 }
 
 body {
+  display: block;
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+
   background-color: $background-color-light;
   color: $asphalt;
   font-family: 'Quicksand', sans-serif;
   font-size: 1rem;
   font-weight: normal;
 
-  display: block;
-  overflow: auto;
-  height: 100%;
-  width: 100%;
-
   &.dark-theme {
     background-color: $background-color-dark;
+    color: $gray;
   }
 }
