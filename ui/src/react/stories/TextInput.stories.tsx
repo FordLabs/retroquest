@@ -4,7 +4,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import TextField from '../components/text-field/TextField';
 
 export default {
-  title: 'TextField',
+  title: 'components/TextField',
   component: TextField,
 } as ComponentMeta<typeof TextField>;
 
@@ -24,4 +24,4 @@ const Template: ComponentStory<typeof TextField> = () => (
   </span>
 );
 
-export const TextFieldExample = Template.bind({});
+export const Example = Template.bind({});

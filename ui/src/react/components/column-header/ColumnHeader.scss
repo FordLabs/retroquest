@@ -21,7 +21,6 @@
   background-color: $black;
   border-radius: 6px;
   box-shadow: 0 2px 20px opacity($black, 0.25);
-  box-sizing: border-box;
   color: $white;
   cursor: default;
   display: flex;
@@ -54,7 +53,6 @@
   input {
     background-color: transparent;
     border: 0;
-    box-sizing: border-box;
     color: $text-off-white;
     cursor: inherit;
     display: inline-block;
@@ -78,7 +76,6 @@
   .display-text {
     background-color: transparent;
     border: 0;
-    box-sizing: border-box;
     color: inherit;
     cursor: inherit;
     display: inline-block;
@@ -115,14 +112,6 @@
 
       &.hide {
         display: none;
-      }
-    }
-
-    &:hover {
-      .tool-tip {
-        opacity: 1;
-        top: 35px;
-        visibility: visible;
       }
     }
   }

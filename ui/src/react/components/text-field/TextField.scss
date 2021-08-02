@@ -18,12 +18,13 @@
 @import '../../../styles/colors';
 
 .text-field {
-  box-sizing: border-box;
   display: block;
+
   font-size: 0.9rem;
   font-weight: bold;
-  height: 50px;
+
   position: relative;
+  height: 50px;
   width: 175px;
 
   @media only screen and (max-width: 610px) {
@@ -33,20 +34,22 @@
   }
 
   input {
+    display: block;
+    margin: inherit;
+    padding: 0 12px;
+    outline: 0;
+    box-shadow: 0 2px 15px opacity($black, 0.15);
+
     border: 4px solid $black;
     border-radius: 6px;
-    box-shadow: 0 2px 15px opacity($black, 0.15);
-    box-sizing: inherit;
+
     color: inherit;
-    display: block;
     font-family: inherit;
     font-size: inherit;
     font-weight: inherit;
-    height: inherit;
-    margin: inherit;
-    outline: 0;
-    padding: 0 12px;
     text-transform: initial;
+
+    height: inherit;
     width: inherit;
 
     .dark-theme & {
