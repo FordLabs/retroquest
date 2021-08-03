@@ -22,11 +22,15 @@ import classnames from 'classnames';
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 function Button(props: ButtonProps) {
-  const { className, ...buttonProps } = props;
+  const { className, children, ...buttonProps } = props;
 
   const classNames = classnames('button', className);
 
-  return <button className={classNames} {...buttonProps} />;
+  return (
+    <button className={classNames} {...buttonProps}>
+      <span className="button-text">{children}</span>
+    </button>
+  );
 }
 
 export function PrimaryButton(props: ButtonProps) {
