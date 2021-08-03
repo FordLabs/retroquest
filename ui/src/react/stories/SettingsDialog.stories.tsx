@@ -1,7 +1,8 @@
 import * as React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { SettingsDialogRenderer } from '../components/settings-dialog/SettingsDialog';
+import Theme from '../types/theme';
 
 export default {
   title: 'components/SettingsDialog',
@@ -9,7 +10,7 @@ export default {
 } as ComponentMeta<typeof SettingsDialogRenderer>;
 
 const Template: ComponentStory<typeof SettingsDialogRenderer> = () => {
-  const [theme, setTheme] = React.useState<'light-theme' | 'dark-theme'>('light-theme');
+  const [theme, setTheme] = React.useState<Theme>(Theme.LIGHT);
 
   return (
     <SettingsDialogRenderer

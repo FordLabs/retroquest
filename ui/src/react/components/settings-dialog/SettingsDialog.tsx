@@ -24,8 +24,9 @@ import './SettingsDialog.scss';
 
 import lightThemeImage from '../../../assets/light-theme-picture.jpg';
 import darkThemeImage from '../../../assets/dark-theme-picture.jpg';
-
-type Theme = 'light-theme' | 'dark-theme';
+import Theme from '../../types/theme';
+import useAuth from '../../hooks/useAuth';
+import useTheme from '../../hooks/useTheme';
 
 type SettingsDialogProps = {
   theme: Theme;
@@ -42,8 +43,8 @@ export type SettingsDialogMethods = {
 function SettingsDialog(props, ref) {
   const [show, setShow] = React.useState(false);
 
-  const [theme, setTheme] = React.useState<'light-theme' | 'dark-theme'>();
-  const logout = React.useCallback(() => {}, []);
+  const [theme, setTheme] = useTheme();
+  const { logout } = useAuth();
 
   React.useImperativeHandle(ref, () => ({
     show: () => setShow(true),
@@ -86,8 +87,8 @@ export function SettingsDialogRenderer(props: SettingsDialogProps) {
                 <div className="theme-icon-container">
                   <img
                     src={lightThemeImage}
-                    className={classnames({ selected: theme === 'light-theme' })}
-                    onClick={() => onThemeChange('light-theme')}
+                    className={classnames({ selected: theme === Theme.LIGHT })}
+                    onClick={() => onThemeChange(Theme.LIGHT)}
                     alt="Light Theme"
                   />
                   <div className="theme-icon-label">light</div>
@@ -96,8 +97,8 @@ export function SettingsDialogRenderer(props: SettingsDialogProps) {
                 <div className="theme-icon-container">
                   <img
                     src={darkThemeImage}
-                    className={classnames({ selected: theme === 'dark-theme' })}
-                    onClick={() => onThemeChange('dark-theme')}
+                    className={classnames({ selected: theme === Theme.DARK })}
+                    onClick={() => onThemeChange(Theme.DARK)}
                     alt="Dark Theme"
                   />
                   <div className="theme-icon-label">dark</div>
