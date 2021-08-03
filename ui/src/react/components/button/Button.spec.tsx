@@ -31,11 +31,11 @@ describe('Buttons', () => {
   describe('PrimaryButton', () => {
     it('should render and click', () => {
       render(<PrimaryButton onClick={mockOnClick}>PrimaryButton</PrimaryButton>);
-      const primaryButton = screen.getByText('PrimaryButton');
+      const buttonText = screen.getByText('PrimaryButton');
 
-      userEvent.click(primaryButton);
+      userEvent.click(buttonText);
 
-      expect(primaryButton.className).toContain('primary');
+      expect(buttonText.parentElement.className).toContain('primary');
       expect(mockOnClick).toHaveBeenCalledTimes(1);
     });
   });
@@ -43,11 +43,11 @@ describe('Buttons', () => {
   describe('SecondaryButton', () => {
     it('should render and click', () => {
       render(<SecondaryButton onClick={mockOnClick}>SecondaryButton</SecondaryButton>);
-      const primaryButton = screen.getByText('SecondaryButton');
+      const buttonText = screen.getByText('SecondaryButton');
 
-      userEvent.click(primaryButton);
+      userEvent.click(buttonText);
 
-      expect(primaryButton.className).toContain('secondary');
+      expect(buttonText.parentElement.className).toContain('secondary');
       expect(mockOnClick).toHaveBeenCalledTimes(1);
     });
   });
