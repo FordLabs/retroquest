@@ -67,10 +67,6 @@
     &[readonly] {
       cursor: default;
     }
-
-    &.hide {
-      display: none;
-    }
   }
 
   .display-text {
@@ -91,10 +87,6 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     width: auto;
-
-    &.hide {
-      display: none;
-    }
   }
 
   .sort-container {
@@ -108,10 +100,6 @@
 
       &.sort-icon-translucent {
         opacity: 0.45;
-      }
-
-      &.hide {
-        display: none;
       }
     }
   }
