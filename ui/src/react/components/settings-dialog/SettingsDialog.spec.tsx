@@ -19,6 +19,7 @@ import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import SettingsDialog, { SettingsDialogMethods, SettingsDialogRenderer } from './SettingsDialog';
+import Theme from '../../types/theme';
 
 describe('SettingsDialog', () => {
   it('should show', () => {
@@ -47,7 +48,7 @@ describe('SettingsDialog', () => {
     beforeEach(() => {
       render(
         <SettingsDialogRenderer
-          theme={'light-theme'}
+          theme={Theme.LIGHT}
           onThemeChange={mockOnThemeChange}
           onLogout={mockOnLogout}
           onHide={mockOnHide}
@@ -68,7 +69,7 @@ describe('SettingsDialog', () => {
       userEvent.click(screen.getByText('appearance'));
       userEvent.click(screen.getByAltText('Light Theme'));
 
-      expect(mockOnThemeChange).toHaveBeenCalledWith('light-theme');
+      expect(mockOnThemeChange).toHaveBeenCalledWith(Theme.LIGHT);
     });
 
     it('should change to dark theme', () => {
