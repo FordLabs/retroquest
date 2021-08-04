@@ -18,7 +18,9 @@
 import * as React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
+import { DialogMethods } from '../components/dialog/Dialog';
 import { FeedbackDialogRenderer } from '../components/feedback-dialog/FeedbackDialog';
+import { PrimaryButton } from '../components/button/Button';
 
 export default {
   title: 'components/FeedbackDialog',
@@ -26,12 +28,20 @@ export default {
 } as ComponentMeta<typeof FeedbackDialogRenderer>;
 
 const Template: ComponentStory<typeof FeedbackDialogRenderer> = () => {
+  const ref = React.createRef<DialogMethods>();
+
   return (
-    <FeedbackDialogRenderer
-      teamId="team-id"
-      onSubmit={(feedback) => alert(`submitting \n ${JSON.stringify(feedback, null, 2)}`)}
-      onHide={() => alert('hide dialog')}
-    />
+    <>
+      <PrimaryButton onClick={() => ref.current.show()}>Give Feedback</PrimaryButton>
+      <FeedbackDialogRenderer
+        teamId="team-id"
+        onSubmit={(feedback) => {
+          alert(`submitting \n ${JSON.stringify(feedback, null, 2)}`);
+          ref.current.hide();
+        }}
+        ref={ref}
+      />
+    </>
   );
 };
 

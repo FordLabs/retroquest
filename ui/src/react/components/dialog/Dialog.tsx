@@ -55,7 +55,7 @@ function Dialog(props: DialogProps, ref: React.Ref<DialogMethods>) {
       <div className={classnames('dialog', className)} onClick={(event) => event.stopPropagation()}>
         <div className="dialog-body">
           <div className="dialog-heading">{header}</div>
-          <div className="dialog-sub-heading">{subHeader}</div>
+          {subHeader && <div className="dialog-sub-heading">{subHeader}</div>}
           {children}
         </div>
         {buttons && (

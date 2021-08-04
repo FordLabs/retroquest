@@ -19,19 +19,28 @@ import * as React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { DialogMethods } from '../dialog/Dialog';
 import SettingsDialog, { SettingsDialogRenderer } from './SettingsDialog';
 import Theme from '../../types/theme';
-import Dialog from '../../types/dialog';
 
 describe('SettingsDialog', () => {
-  it('should show', () => {
-    const ref = React.createRef<Dialog>();
-    render(<SettingsDialog ref={ref} />);
+  const ref = React.createRef<DialogMethods>();
+  const mockOnThemeChange = jest.fn();
+  const mockOnLogout = jest.fn();
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    render(
+      <SettingsDialogRenderer theme={Theme.LIGHT} onThemeChange={mockOnThemeChange} onLogout={mockOnLogout} ref={ref} />
+    );
 
     act(() => {
       ref.current.show();
     });
+  });
 
+  it('should show and hide from ref methods', () => {
     screen.getByText('settings');
     screen.getByText('choose your preferences');
 
@@ -42,49 +51,24 @@ describe('SettingsDialog', () => {
     expect(screen.queryByText('settings')).toBeFalsy();
   });
 
-  describe('SettingsDialogRenderer', () => {
-    const mockOnThemeChange = jest.fn();
-    const mockOnLogout = jest.fn();
-    const mockOnHide = jest.fn();
+  it('should logout', () => {
+    userEvent.click(screen.getByText('account'));
+    userEvent.click(screen.getByText('logout'));
 
-    beforeEach(() => {
-      render(
-        <SettingsDialogRenderer
-          theme={Theme.LIGHT}
-          onThemeChange={mockOnThemeChange}
-          onLogout={mockOnLogout}
-          onHide={mockOnHide}
-        />
-      );
+    expect(mockOnLogout).toHaveBeenCalledTimes(1);
+  });
 
-      jest.clearAllMocks();
-    });
+  it('should change to light theme', () => {
+    userEvent.click(screen.getByText('appearance'));
+    userEvent.click(screen.getByAltText('Light Theme'));
 
-    it('should logout', () => {
-      userEvent.click(screen.getByText('account'));
-      userEvent.click(screen.getByText('logout'));
+    expect(mockOnThemeChange).toHaveBeenCalledWith(Theme.LIGHT);
+  });
 
-      expect(mockOnLogout).toHaveBeenCalledTimes(1);
-    });
+  it('should change to dark theme', () => {
+    userEvent.click(screen.getByText('appearance'));
+    userEvent.click(screen.getByAltText('Dark Theme'));
 
-    it('should change to light theme', () => {
-      userEvent.click(screen.getByText('appearance'));
-      userEvent.click(screen.getByAltText('Light Theme'));
-
-      expect(mockOnThemeChange).toHaveBeenCalledWith(Theme.LIGHT);
-    });
-
-    it('should change to dark theme', () => {
-      userEvent.click(screen.getByText('appearance'));
-      userEvent.click(screen.getByAltText('Dark Theme'));
-
-      expect(mockOnThemeChange).toHaveBeenCalledWith('dark-theme');
-    });
-
-    it('should hide', () => {
-      userEvent.click(screen.getByTestId('dialogBackdrop'));
-
-      expect(mockOnHide).toHaveBeenCalledTimes(1);
-    });
+    expect(mockOnThemeChange).toHaveBeenCalledWith('dark-theme');
   });
 });

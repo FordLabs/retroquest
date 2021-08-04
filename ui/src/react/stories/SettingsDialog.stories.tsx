@@ -18,7 +18,9 @@
 import * as React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
+import { DialogMethods } from '../components/dialog/Dialog';
 import { SettingsDialogRenderer } from '../components/settings-dialog/SettingsDialog';
+import { PrimaryButton } from '../components/button/Button';
 import Theme from '../types/theme';
 
 export default {
@@ -27,18 +29,22 @@ export default {
 } as ComponentMeta<typeof SettingsDialogRenderer>;
 
 const Template: ComponentStory<typeof SettingsDialogRenderer> = () => {
+  const ref = React.createRef<DialogMethods>();
   const [theme, setTheme] = React.useState<Theme>(Theme.LIGHT);
 
   return (
-    <SettingsDialogRenderer
-      theme={theme}
-      onThemeChange={(theme) => {
-        setTheme(theme);
-        alert(`theme changed to ${theme}`);
-      }}
-      onLogout={() => alert('logout')}
-      onHide={() => alert('hide dialog')}
-    />
+    <>
+      <PrimaryButton onClick={() => ref.current.show()}>Change Settings</PrimaryButton>
+      <SettingsDialogRenderer
+        theme={theme}
+        onThemeChange={(theme) => {
+          setTheme(theme);
+          alert(`theme changed to ${theme}`);
+        }}
+        onLogout={() => alert('logout')}
+        ref={ref}
+      />
+    </>
   );
 };
 
