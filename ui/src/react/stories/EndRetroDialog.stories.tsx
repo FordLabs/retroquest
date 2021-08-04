@@ -18,7 +18,9 @@
 import * as React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
+import { DialogMethods } from '../components/dialog/Dialog';
 import { EndRetroDialogRenderer } from '../components/end-retro-dialog/EndRetroDialog';
+import { PrimaryButton } from '../components/button/Button';
 
 export default {
   title: 'components/EndRetroDialog',
@@ -26,7 +28,20 @@ export default {
 } as ComponentMeta<typeof EndRetroDialogRenderer>;
 
 const Template: ComponentStory<typeof EndRetroDialogRenderer> = () => {
-  return <EndRetroDialogRenderer onSubmit={() => alert('ending retro')} onHide={() => alert('hide dialog')} />;
+  const ref = React.createRef<DialogMethods>();
+
+  return (
+    <>
+      <PrimaryButton onClick={() => ref.current.show()}>End Retro</PrimaryButton>
+      <EndRetroDialogRenderer
+        onSubmit={() => {
+          alert('ending retro');
+          ref.current.hide();
+        }}
+        ref={ref}
+      />
+    </>
+  );
 };
 
 export const Example = Template.bind({});

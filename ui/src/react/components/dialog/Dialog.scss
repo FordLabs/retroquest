@@ -100,10 +100,11 @@
       .dialog-sub-heading {
         color: opacity($asphalt, 0.5);
         cursor: default;
-        font-size: 1rem;
+        font-size: 1.2rem;
         font-weight: bold;
         text-align: center;
         width: 100%;
+        margin-top: 1rem;
 
         .dark-theme & {
           color: opacity($gray, 0.5);

@@ -19,49 +19,43 @@ import * as React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import EndRetroDialog, { EndRetroDialogRenderer } from './EndRetroDialog';
-import Dialog from '../../types/dialog';
+import { DialogMethods } from '../dialog/Dialog';
+import { EndRetroDialogRenderer } from './EndRetroDialog';
 
 describe('EndRetroDialog', () => {
-  it('should show', () => {
-    const ref = React.createRef<Dialog>();
-    render(<EndRetroDialog ref={ref} />);
+  const ref = React.createRef<DialogMethods>();
+  const mockSubmit = jest.fn();
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    render(<EndRetroDialogRenderer onSubmit={mockSubmit} ref={ref} />);
 
     act(() => {
       ref.current.show();
     });
+  });
 
-    screen.getByText('Do you want to end the retro?');
+  it('should show and hide from ref methods', () => {
+    screen.getByText('End the retro?');
     screen.getByText('This will archive all thoughts!');
 
     act(() => {
       ref.current.hide();
     });
 
-    expect(screen.queryByText('Do you want to end the retro?')).toBeFalsy();
+    expect(screen.queryByText('End the retro?')).toBeFalsy();
   });
 
-  describe('EndRetroDialogRenderer', () => {
-    const mockOnSubmit = jest.fn();
-    const mockOnHide = jest.fn();
+  it('should hide on cancel', () => {
+    userEvent.click(screen.getByText('nope'));
 
-    beforeEach(() => {
-      render(<EndRetroDialogRenderer onSubmit={mockOnSubmit} onHide={mockOnHide} />);
+    expect(screen.queryByText('End the retro?')).toBeFalsy();
+  });
 
-      jest.clearAllMocks();
-    });
+  it('should submit', () => {
+    userEvent.click(screen.getByText('yes!'));
 
-    it('should end retro', () => {
-      userEvent.click(screen.getByText('yes!'));
-
-      expect(mockOnSubmit).toHaveBeenCalledTimes(1);
-    });
-
-    it('should hide', () => {
-      userEvent.click(screen.getByTestId('dialogBackdrop'));
-      userEvent.click(screen.getByText('nope'));
-
-      expect(mockOnHide).toHaveBeenCalledTimes(2);
-    });
+    expect(mockSubmit).toHaveBeenCalledTimes(1);
   });
 });
