@@ -12,7 +12,7 @@ export default {
 const Template: ComponentStory<typeof TopHeader> = () => {
   return (
     <MemoryRouter initialEntries={['/team/team-id/']}>
-      <TopHeader teamId="team-id" teamName="Team Name" />
+      <TopHeader />
     </MemoryRouter>
   );
 };
