@@ -1,0 +1,167 @@
+/*!
+ * Copyright (c) 2021 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import '../../../styles/colors';
+
+.dialog-backdrop {
+  align-items: center;
+  background-color: opacity($black, 0.5);
+  bottom: 0;
+  box-sizing: border-box;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  overflow: auto;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+
+  @media only screen and (max-width: 610px) {
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .dialog {
+    $base-drop-shadow: 0 19px 38px opacity($black, 0.3);
+    $border-width: 8px;
+
+    background-color: $white;
+    border-radius: 6px;
+    box-shadow: $base-drop-shadow;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+    height: auto;
+    padding: 24px;
+    position: relative;
+    width: 450px;
+
+    .dark-theme & {
+      background-color: $task-background-dark;
+    }
+
+    @media only screen and (max-width: 610px) {
+      margin: $border-width;
+      padding: 12px 6px;
+      transform: none;
+      width: calc(100% - 16px);
+    }
+
+    .dialog-body {
+      $content-area-padding: 12px;
+
+      background-color: inherit;
+
+      border-top-left-radius: inherit;
+      border-top-right-radius: inherit;
+      cursor: pointer;
+      display: block;
+      flex: 1 1 auto;
+      font-size: inherit;
+      position: relative;
+      word-break: break-word;
+      word-wrap: break-word;
+
+      .dialog-heading {
+        cursor: default;
+        font-size: 2.5rem;
+        font-weight: bold;
+        text-align: center;
+        text-transform: capitalize;
+        width: 100%;
+
+        .dark-theme & {
+          color: $gray;
+        }
+
+        @media only screen and (max-width: 610px) {
+          font-size: 2rem;
+        }
+      }
+
+      .dialog-sub-heading {
+        color: opacity($asphalt, 0.5);
+        cursor: default;
+        font-size: 1rem;
+        font-weight: bold;
+        text-align: center;
+        width: 100%;
+
+        .dark-theme & {
+          color: opacity($gray, 0.5);
+        }
+
+        @media only screen and (max-width: 610px) {
+          font-size: 0.9rem;
+        }
+      }
+    }
+
+    .dialog-footer {
+      border-bottom-left-radius: inherit;
+      border-bottom-right-radius: inherit;
+      box-sizing: border-box;
+      display: flex;
+      height: 80px;
+      justify-content: flex-start;
+      margin-top: 24px;
+      padding: 12px 12px 6px;
+      width: 100%;
+
+      @media only screen and (max-width: 610px) {
+        height: 50px;
+        margin-top: 12px;
+        padding-bottom: 0;
+        padding-top: 0;
+      }
+
+      .dialog-footer-container {
+        align-items: center;
+        box-sizing: border-box;
+        cursor: pointer;
+        display: flex;
+        height: 100%;
+        justify-content: center;
+        user-select: none;
+        width: 50%;
+
+        .button {
+          font-size: 1.3rem;
+          height: 100%;
+          width: 100%;
+
+          &.secondary {
+            color: opacity($asphalt, 0.5);
+
+            .dark-theme & {
+              color: opacity($gray, 0.5);
+            }
+          }
+
+          &.primary {
+            color: $gray;
+            background-color: $blue;
+          }
+        }
+      }
+    }
+  }
+}
