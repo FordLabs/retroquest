@@ -26,8 +26,8 @@ describe('TopHeader', () => {
 
   beforeEach(() => {
     render(
-      <MemoryRouter initialEntries={['/team/team-name']}>
-        <TopHeader teamName="Team Name" teamId="team-name" />
+      <MemoryRouter initialEntries={['/team/team-id']}>
+        <TopHeader />
         <Route
           path="*"
           render={({ location }) => {
@@ -50,13 +50,13 @@ describe('TopHeader', () => {
 
   it('should render nav links', () => {
     userEvent.click(screen.getByText('archives'));
-    expect(testLocation.pathname).toBe('/team/team-name/archives');
+    expect(testLocation.pathname).toBe('/team/team-id/archives');
 
     userEvent.click(screen.getByText('radiator'));
-    expect(testLocation.pathname).toBe('/team/team-name/radiator');
+    expect(testLocation.pathname).toBe('/team/team-id/radiator');
 
     userEvent.click(screen.getByText('retro'));
-    expect(testLocation.pathname).toBe('/team/team-name');
+    expect(testLocation.pathname).toBe('/team/team-id');
   });
 
   it('should render the settings button and setting dialog', () => {

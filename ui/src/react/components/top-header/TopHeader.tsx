@@ -18,6 +18,7 @@
 import * as React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
+import useBoard from '../../hooks/useBoard';
 import useTheme from '../../hooks/useTheme';
 import SaveCheckerService from '../../services/SaveCheckerService';
 import SettingsDialog from '../settings-dialog/SettingsDialog';
@@ -40,13 +41,8 @@ const LINKS: RqLink[] = [
   { label: 'radiator', path: '/radiator' },
 ];
 
-type TopHeaderProps = {
-  teamName: string;
-  teamId: string;
-};
-
-export default function TopHeader(props: TopHeaderProps) {
-  const { teamName, teamId } = props;
+export default function TopHeader() {
+  const { teamId, teamName } = useBoard();
 
   const [theme] = useTheme();
 
