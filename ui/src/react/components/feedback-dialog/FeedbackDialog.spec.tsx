@@ -78,8 +78,9 @@ describe('FeedbackDialog', () => {
 
     it('should hide', () => {
       userEvent.click(screen.getByTestId('dialogBackdrop'));
+      userEvent.click(screen.getByText('cancel'));
 
-      expect(mockOnHide).toHaveBeenCalledTimes(1);
+      expect(mockOnHide).toHaveBeenCalledTimes(2);
     });
   });
 });
