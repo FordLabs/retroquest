@@ -16,49 +16,38 @@
  */
 
 import * as React from 'react';
-
 import classnames from 'classnames';
 
 import { PrimaryButton } from '../button/Button';
+import useAuth from '../../hooks/useAuth';
+import useTheme from '../../hooks/useTheme';
+import useDialog from '../../hooks/useDialog';
+import Theme from '../../types/theme';
+import Dialog from '../../types/dialog';
+
 import './SettingsDialog.scss';
 
 import lightThemeImage from '../../../assets/light-theme-picture.jpg';
 import darkThemeImage from '../../../assets/dark-theme-picture.jpg';
-import Theme from '../../types/theme';
-import useAuth from '../../hooks/useAuth';
-import useTheme from '../../hooks/useTheme';
 
-type SettingsDialogProps = {
-  theme: Theme;
-  onThemeChange: (theme: Theme) => void;
-  onLogout: () => void;
-  onHide: () => void;
-};
-
-export type SettingsDialogMethods = {
-  show: () => void;
-  hide: () => void;
-};
-
-function SettingsDialog(props, ref) {
-  const [show, setShow] = React.useState(false);
-
+function SettingsDialog(props: unknown, ref: React.Ref<Dialog>) {
+  const [show, setShow] = useDialog(ref);
   const [theme, setTheme] = useTheme();
   const { logout } = useAuth();
-
-  React.useImperativeHandle(ref, () => ({
-    show: () => setShow(true),
-    hide: () => setShow(false),
-  }));
 
   return show ? (
     <SettingsDialogRenderer theme={theme} onThemeChange={setTheme} onLogout={logout} onHide={() => setShow(false)} />
   ) : null;
 }
 
-export default React.forwardRef<SettingsDialogMethods>(SettingsDialog);
+type SettingsDialogRendererProps = {
+  theme: Theme;
+  onThemeChange: (theme: Theme) => void;
+  onLogout: () => void;
+  onHide: () => void;
+};
 
-export function SettingsDialogRenderer(props: SettingsDialogProps) {
+export function SettingsDialogRenderer(props: SettingsDialogRendererProps) {
   const { theme, onThemeChange, onLogout, onHide } = props;
 
   const [tab, setTab] = React.useState<'styles' | 'account'>('styles');
@@ -116,3 +105,5 @@ export function SettingsDialogRenderer(props: SettingsDialogProps) {
     </div>
   );
 }
+
+export default React.forwardRef<Dialog>(SettingsDialog);
