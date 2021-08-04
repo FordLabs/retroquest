@@ -18,11 +18,11 @@
 import * as React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
+import { DialogMethods } from '../dialog/Dialog';
+import SettingsDialog from '../settings-dialog/SettingsDialog';
 import useBoard from '../../hooks/useBoard';
 import useTheme from '../../hooks/useTheme';
 import SaveCheckerService from '../../services/SaveCheckerService';
-import SettingsDialog from '../settings-dialog/SettingsDialog';
-import Dialog from '../../types/dialog';
 import Theme from '../../types/theme';
 
 import './TopHeader.scss';
@@ -46,7 +46,7 @@ export default function TopHeader() {
 
   const [theme] = useTheme();
 
-  const dialogRef = React.useRef<Dialog>();
+  const dialogRef = React.useRef<DialogMethods>();
 
   const lastSavedText = React.useMemo(() => {
     if (SaveCheckerService.lastSavedDateTime === '') {

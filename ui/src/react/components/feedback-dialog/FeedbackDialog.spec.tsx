@@ -19,18 +19,28 @@ import * as React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import FeedbackDialog, { FeedbackDialogRenderer } from './FeedbackDialog';
-import Dialog from '../../types/dialog';
+import { FeedbackDialogRenderer } from './FeedbackDialog';
+import { DialogMethods } from '../dialog/Dialog';
 
 describe('FeedbackDialog', () => {
-  it('should show', () => {
-    const ref = React.createRef<Dialog>();
-    render(<FeedbackDialog ref={ref} />);
+  const mockOnSubmit = jest.fn();
+  const fakeTeamId = 'fake-team-id';
+  const fakeComment = 'This is a fake comment';
+  const fakeEmail = 'user@ford.com';
+
+  const ref = React.createRef<DialogMethods>();
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    render(<FeedbackDialogRenderer teamId={fakeTeamId} onSubmit={mockOnSubmit} ref={ref} />);
 
     act(() => {
       ref.current.show();
     });
+  });
 
+  it('should show and hide from ref methods', () => {
     screen.getByText('feedback');
     screen.getByText('How can we improve RetroQuest?');
 
@@ -41,46 +51,31 @@ describe('FeedbackDialog', () => {
     expect(screen.queryByText('feedback')).toBeFalsy();
   });
 
-  describe('FeedbackDialogRenderer', () => {
-    const mockOnSubmit = jest.fn();
-    const mockOnHide = jest.fn();
-    const fakeTeamId = 'fake-team-id';
-    const fakeComment = 'This is a fake comment';
-    const fakeEmail = 'user@ford.com';
+  it('should submit feedback', () => {
+    userEvent.click(screen.getByTestId('star4'));
+    userEvent.type(screen.getByLabelText('feedback email'), fakeEmail);
+    userEvent.type(screen.getByLabelText('comments*'), fakeComment);
+    userEvent.click(screen.getByText('send!'));
 
-    beforeEach(() => {
-      render(<FeedbackDialogRenderer teamId={fakeTeamId} onSubmit={mockOnSubmit} onHide={mockOnHide} />);
-
-      jest.clearAllMocks();
+    expect(mockOnSubmit).toHaveBeenCalledWith({
+      teamId: fakeTeamId,
+      stars: 5,
+      comment: fakeComment,
+      userEmail: fakeEmail,
     });
+  });
 
-    it('should submit feedback', () => {
-      userEvent.click(screen.getByTestId('star4'));
-      userEvent.type(screen.getByLabelText('feedback email'), fakeEmail);
-      userEvent.type(screen.getByLabelText('comments*'), fakeComment);
-      userEvent.click(screen.getByText('send!'));
+  it('should not submit with empty comments', () => {
+    userEvent.click(screen.getByTestId('star4'));
+    userEvent.type(screen.getByLabelText('feedback email'), fakeEmail);
+    userEvent.click(screen.getByText('send!'));
 
-      expect(mockOnSubmit).toHaveBeenCalledWith({
-        teamId: fakeTeamId,
-        stars: 5,
-        comment: fakeComment,
-        userEmail: fakeEmail,
-      });
-    });
+    expect(mockOnSubmit).not.toHaveBeenCalled();
+  });
 
-    it('should not submit with empty comments', () => {
-      userEvent.click(screen.getByTestId('star4'));
-      userEvent.type(screen.getByLabelText('feedback email'), fakeEmail);
-      userEvent.click(screen.getByText('send!'));
+  it('should hide on cancel', () => {
+    userEvent.click(screen.getByText('cancel'));
 
-      expect(mockOnSubmit).not.toHaveBeenCalled();
-    });
-
-    it('should hide', () => {
-      userEvent.click(screen.getByTestId('dialogBackdrop'));
-      userEvent.click(screen.getByText('cancel'));
-
-      expect(mockOnHide).toHaveBeenCalledTimes(2);
-    });
+    expect(screen.queryByText('feedback')).toBeFalsy();
   });
 });
