@@ -18,12 +18,13 @@ import * as React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import SettingsDialog, { SettingsDialogMethods, SettingsDialogRenderer } from './SettingsDialog';
+import SettingsDialog, { SettingsDialogRenderer } from './SettingsDialog';
 import Theme from '../../types/theme';
+import Dialog from '../../types/dialog';
 
 describe('SettingsDialog', () => {
   it('should show', () => {
-    const ref = React.createRef<SettingsDialogMethods>();
+    const ref = React.createRef<Dialog>();
     render(<SettingsDialog ref={ref} />);
 
     act(() => {
