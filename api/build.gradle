@@ -19,7 +19,6 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.5.1'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.sonarqube'
     id 'jacoco'
     id 'org.gradle.test-retry' version '1.2.1'
     id 'com.avast.gradle.docker-compose' version '0.14.3'
@@ -190,18 +189,6 @@ jacocoTestReport {
         html.destination file("${project.buildDir}/jacoco-html")
     }
 }
-
-sonarqube {
-    properties {
-        property "sonar.projectName", "RetroQuest API"
-        property "sonar.projectKey", "retroquest_api"
-        property "sonar.organization", "fordlabs"
-        property "sonar.host.url", "https://sonarcloud.io"
-    }
-}
-
-tasks['sonarqube'].dependsOn 'build', 'apiTest'
-tasks['sonarqube'].group = 'verification'
 
 tasks.withType(Test) {
     retry {
