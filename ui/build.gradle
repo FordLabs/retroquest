@@ -17,7 +17,6 @@
 
 plugins {
     id 'com.github.node-gradle.node' version '3.1.0'
-    id 'org.sonarqube'
     id 'com.github.ben-manes.versions'
 }
 
@@ -49,20 +48,4 @@ task build(type: YarnTask) {
 
 build.configure {
     dependsOn yarn_install
-}
-
-sonarqube {
-    properties {
-        property "sonar.projectName", "RetroQuest UI"
-        property "sonar.projectKey", "retroquest_ui"
-        property "sonar.organization", "fordlabs"
-        property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.sources", "./src/app"
-        property "sonar.exclusions", "**/*.spec.ts, src/testing/*, e2e/*"
-        property "sonar.tests", "./src/app"
-        property "sonar.test.inclusions", "**/*.spec.ts, src/testing/*, e2e/*"
-
-        property "sonar.testExecutionReportPaths", "test-report.xml"
-        property "sonar.javascript.lcov.reportPaths", "./coverage/lcov.info"
-    }
 }

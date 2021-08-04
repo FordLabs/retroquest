@@ -30,5 +30,4 @@ module.exports = {
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths || {}, {
     prefix: './',
   }),
-  testResultsProcessor: 'jest-sonar-reporter',
 };
