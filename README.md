@@ -2,6 +2,7 @@
 ## Welcome to RetroQuest!
 
 ![Build Status](https://github.com/fordlabs/retroquest/actions/workflows/build.yml/badge.svg?branch=main)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=FordLabs_retroquest&metric=alert_status)](https://sonarcloud.io/dashboard?id=FordLabs_retroquest)
 
 - [Request new features](https://github.com/FordLabs/retroquest/issues)
 - [Contribute](https://github.com/FordLabs/retroquest/pulls)
