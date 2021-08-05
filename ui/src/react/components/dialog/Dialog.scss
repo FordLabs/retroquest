@@ -17,152 +17,118 @@
 
 @import '../../../styles/colors';
 
-.dialog-backdrop {
-  align-items: center;
-  background-color: opacity($black, 0.5);
-  bottom: 0;
-  box-sizing: border-box;
+.dialog {
+  $base-drop-shadow: 0 19px 38px opacity($black, 0.3);
+  $border-width: 8px;
   display: flex;
-  height: 100%;
-  justify-content: center;
-  left: 0;
-  overflow: auto;
-  position: fixed;
-  right: 0;
-  top: 0;
-  width: 100%;
-  z-index: 100;
+  flex-direction: column;
+  width: 450px;
+  height: auto;
+  padding: 24px;
 
-  @media only screen and (max-width: 610px) {
-    flex-direction: column;
-    justify-content: flex-end;
+  font-size: 1rem;
+
+  background-color: $white;
+  border-radius: 6px;
+  box-shadow: $base-drop-shadow;
+
+  position: relative;
+
+  .dark-theme & {
+    background-color: $task-background-dark;
   }
 
-  .dialog {
-    $base-drop-shadow: 0 19px 38px opacity($black, 0.3);
-    $border-width: 8px;
+  @media only screen and (max-width: 610px) {
+    width: calc(100% - 16px);
+    margin: $border-width;
+    padding: 12px 6px;
 
-    background-color: $white;
-    border-radius: 6px;
-    box-shadow: $base-drop-shadow;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    font-size: 1rem;
-    height: auto;
-    padding: 24px;
+    transform: none;
+  }
+
+  .dialog-body {
+    $content-area-padding: 12px;
+    display: block;
+    flex: 1 1 auto;
+
+    font-size: inherit;
+    word-wrap: break-word;
+    word-break: break-word;
+
+    background-color: inherit;
+
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+    cursor: pointer;
+
     position: relative;
-    width: 450px;
+  }
+
+  .dialog-heading {
+    width: 100%;
+    margin-bottom: 1rem;
+
+    font-weight: bold;
+    font-size: 2.5rem;
+    text-align: center;
+    text-transform: capitalize;
+
+    cursor: default;
 
     .dark-theme & {
-      background-color: $task-background-dark;
+      color: $gray;
     }
 
     @media only screen and (max-width: 610px) {
-      margin: $border-width;
-      padding: 12px 6px;
-      transform: none;
-      width: calc(100% - 16px);
+      font-size: 2rem;
+    }
+  }
+
+  .dialog-sub-heading {
+    width: 100%;
+    margin-bottom: 1rem;
+
+    color: opacity($asphalt, 0.5);
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-align: center;
+    text-transform: capitalize;
+
+    cursor: default;
+
+    .dark-theme & {
+      color: opacity($gray, 0.5);
     }
 
-    .dialog-body {
-      $content-area-padding: 12px;
+    @media only screen and (max-width: 610px) {
+      font-size: 0.9rem;
+    }
+  }
 
-      background-color: inherit;
+  .dialog-footer {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    height: 80px;
+    margin-top: 24px;
+    padding: 12px 12px 6px;
 
-      border-top-left-radius: inherit;
-      border-top-right-radius: inherit;
-      cursor: pointer;
-      display: block;
-      flex: 1 1 auto;
-      font-size: inherit;
-      position: relative;
-      word-break: break-word;
-      word-wrap: break-word;
+    border-bottom-right-radius: inherit;
+    border-bottom-left-radius: inherit;
 
-      .dialog-heading {
-        cursor: default;
-        font-size: 2.5rem;
-        font-weight: bold;
-        text-align: center;
-        text-transform: capitalize;
-        width: 100%;
+    .button {
+      flex-grow: 1;
+      height: 100%;
+      margin: 0 0.5rem;
 
-        .dark-theme & {
-          color: $gray;
-        }
-
-        @media only screen and (max-width: 610px) {
-          font-size: 2rem;
-        }
-      }
-
-      .dialog-sub-heading {
-        color: opacity($asphalt, 0.5);
-        cursor: default;
-        font-size: 1.2rem;
-        font-weight: bold;
-        text-align: center;
-        width: 100%;
-        margin-top: 1rem;
-
-        .dark-theme & {
-          color: opacity($gray, 0.5);
-        }
-
-        @media only screen and (max-width: 610px) {
-          font-size: 0.9rem;
-        }
-      }
+      font-size: 1.3rem;
     }
 
-    .dialog-footer {
-      border-bottom-left-radius: inherit;
-      border-bottom-right-radius: inherit;
-      box-sizing: border-box;
-      display: flex;
-      height: 80px;
-      justify-content: flex-start;
-      margin-top: 24px;
-      padding: 12px 12px 6px;
-      width: 100%;
-
-      @media only screen and (max-width: 610px) {
-        height: 50px;
-        margin-top: 12px;
-        padding-bottom: 0;
-        padding-top: 0;
-      }
-
-      .dialog-footer-container {
-        align-items: center;
-        box-sizing: border-box;
-        cursor: pointer;
-        display: flex;
-        height: 100%;
-        justify-content: center;
-        user-select: none;
-        width: 50%;
-
-        .button {
-          font-size: 1.3rem;
-          height: 100%;
-          width: 100%;
-
-          &.secondary {
-            color: opacity($asphalt, 0.5);
-
-            .dark-theme & {
-              color: opacity($gray, 0.5);
-            }
-          }
-
-          &.primary {
-            color: $gray;
-            background-color: $blue;
-          }
-        }
-      }
+    @media only screen and (max-width: 610px) {
+      height: 50px;
+      margin-top: 12px;
+      padding-top: 0;
+      padding-bottom: 0;
     }
   }
 }

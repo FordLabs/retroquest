@@ -18,7 +18,7 @@
 import * as React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
-import { DialogMethods } from '../dialog/Dialog';
+import { ModalMethods } from '../modal/Modal';
 import SettingsDialog from '../settings-dialog/SettingsDialog';
 import useBoard from '../../hooks/useBoard';
 import useTheme from '../../hooks/useTheme';
@@ -46,7 +46,7 @@ export default function TopHeader() {
 
   const [theme] = useTheme();
 
-  const dialogRef = React.useRef<DialogMethods>();
+  const modalRef = React.useRef<ModalMethods>();
 
   const lastSavedText = React.useMemo(() => {
     if (SaveCheckerService.lastSavedDateTime === '') {
@@ -84,12 +84,12 @@ export default function TopHeader() {
           <div className="last-saved-text">{lastSavedText}</div>
           <div
             className="settings-button fas fa-cog"
-            onClick={() => dialogRef.current?.show()}
+            onClick={() => modalRef.current?.show()}
             data-testid="settingsBtn"
           />
         </div>
       </div>
-      <SettingsDialog ref={dialogRef} />
+      <SettingsDialog ref={modalRef} />
     </div>
   );
 }

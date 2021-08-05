@@ -19,7 +19,8 @@ import * as React from 'react';
 import classnames from 'classnames';
 
 import { PrimaryButton } from '../button/Button';
-import Dialog, { DialogMethods } from '../dialog/Dialog';
+import Dialog from '../dialog/Dialog';
+import Modal, { ModalMethods } from '../modal/Modal';
 import useAuth from '../../hooks/useAuth';
 import useTheme from '../../hooks/useTheme';
 import Theme from '../../types/theme';
@@ -29,11 +30,15 @@ import './SettingsDialog.scss';
 import lightThemeImage from '../../../assets/light-theme-picture.jpg';
 import darkThemeImage from '../../../assets/dark-theme-picture.jpg';
 
-function SettingsDialog(props: unknown, ref: React.Ref<DialogMethods>) {
+function SettingsDialog(props: unknown, ref: React.Ref<ModalMethods>) {
   const [theme, setTheme] = useTheme();
   const { logout } = useAuth();
 
-  return <SettingsDialogRenderer theme={theme} onThemeChange={setTheme} onLogout={logout} ref={ref} />;
+  return (
+    <Modal ref={ref}>
+      <SettingsDialogRenderer theme={theme} onThemeChange={setTheme} onLogout={logout} />
+    </Modal>
+  );
 }
 
 type SettingsDialogRendererProps = {
@@ -42,13 +47,13 @@ type SettingsDialogRendererProps = {
   onLogout: () => void;
 };
 
-export const SettingsDialogRenderer = React.forwardRef<DialogMethods, SettingsDialogRendererProps>((props, ref) => {
+export function SettingsDialogRenderer(props: SettingsDialogRendererProps) {
   const { theme, onThemeChange, onLogout } = props;
 
   const [tab, setTab] = React.useState<'styles' | 'account'>('styles');
 
   return (
-    <Dialog className="settings-dialog" header="settings" subHeader="choose your preferences" ref={ref}>
+    <Dialog className="settings-dialog" header="settings" subHeader="choose your preferences">
       <div className="tab-container">
         <div className="tab-heading">
           <div className={classnames('tab', { selected: tab === 'styles' })} onClick={() => setTab('styles')}>
@@ -93,6 +98,6 @@ export const SettingsDialogRenderer = React.forwardRef<DialogMethods, SettingsDi
       </div>
     </Dialog>
   );
-});
+}
 
-export default React.forwardRef<DialogMethods>(SettingsDialog);
+export default React.forwardRef<ModalMethods>(SettingsDialog);

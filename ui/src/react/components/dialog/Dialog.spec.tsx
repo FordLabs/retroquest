@@ -16,14 +16,12 @@
  */
 
 import * as React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import Dialog, { DialogMethods } from '../dialog/Dialog';
+import Dialog from './Dialog';
 
 describe('Dialog', () => {
-  const ref = React.createRef<DialogMethods>();
-
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -31,38 +29,16 @@ describe('Dialog', () => {
   describe('default dialog', () => {
     beforeEach(() => {
       render(
-        <Dialog header="Dialog Header" subHeader="Dialog Sub Header" ref={ref}>
+        <Dialog header="Dialog Header" subHeader="Dialog Sub Header">
           Dialog Content
         </Dialog>
       );
-
-      act(() => {
-        ref.current.show();
-      });
     });
 
-    it('should show and hide by ref methods', () => {
+    it('should render', () => {
       screen.getByText('Dialog Header');
       screen.getByText('Dialog Sub Header');
       screen.getByText('Dialog Content');
-
-      act(() => {
-        ref.current.hide();
-      });
-
-      expect(screen.queryByText('Dialog Header')).toBeFalsy();
-    });
-
-    it('should hide when backdrop is clicked', () => {
-      userEvent.click(screen.getByTestId('dialogBackdrop'));
-
-      expect(screen.queryByText('Dialog Header')).toBeFalsy();
-    });
-
-    it('should hide when escape key is pressed', () => {
-      userEvent.type(document.body, '{escape}');
-
-      expect(screen.queryByText('Dialog Header')).toBeFalsy();
     });
   });
 
@@ -82,14 +58,10 @@ describe('Dialog', () => {
 
     beforeEach(() => {
       render(
-        <Dialog header="Dialog Header" subHeader="Dialog Sub Header" ref={ref} buttons={buttons}>
+        <Dialog header="Dialog Header" subHeader="Dialog Sub Header" buttons={buttons}>
           Dialog Content
         </Dialog>
       );
-
-      act(() => {
-        ref.current.show();
-      });
     });
 
     it('should render footer buttons', () => {
