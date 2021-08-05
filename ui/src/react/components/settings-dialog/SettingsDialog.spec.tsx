@@ -19,21 +19,15 @@ import * as React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { DialogMethods } from '../dialog/Dialog';
 import SettingsDialog, { SettingsDialogRenderer } from './SettingsDialog';
+import { ModalMethods } from '../modal/Modal';
 import Theme from '../../types/theme';
 
 describe('SettingsDialog', () => {
-  const ref = React.createRef<DialogMethods>();
-  const mockOnThemeChange = jest.fn();
-  const mockOnLogout = jest.fn();
+  const ref = React.createRef<ModalMethods>();
 
   beforeEach(() => {
-    jest.clearAllMocks();
-
-    render(
-      <SettingsDialogRenderer theme={Theme.LIGHT} onThemeChange={mockOnThemeChange} onLogout={mockOnLogout} ref={ref} />
-    );
+    render(<SettingsDialog ref={ref} />);
 
     act(() => {
       ref.current.show();
@@ -49,6 +43,17 @@ describe('SettingsDialog', () => {
     });
 
     expect(screen.queryByText('settings')).toBeFalsy();
+  });
+});
+
+describe('SettingsDialogRenderer', () => {
+  const mockOnThemeChange = jest.fn();
+  const mockOnLogout = jest.fn();
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    render(<SettingsDialogRenderer theme={Theme.LIGHT} onThemeChange={mockOnThemeChange} onLogout={mockOnLogout} />);
   });
 
   it('should logout', () => {

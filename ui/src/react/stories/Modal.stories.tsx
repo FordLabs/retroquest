@@ -16,24 +16,28 @@
  */
 
 import * as React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import EndRetroDialog from '../components/end-retro-dialog/EndRetroDialog';
 import { PrimaryButton } from '../components/button/Button';
-import { ModalMethods } from '../components/modal/Modal';
+import Modal, { ModalMethods } from '../components/modal/Modal';
 
 export default {
-  title: 'components/EndRetroDialog',
-  component: EndRetroDialog,
-} as ComponentMeta<typeof EndRetroDialog>;
+  title: 'components/Modal',
+  component: Modal,
+} as ComponentMeta<typeof Modal>;
 
-const Template: ComponentStory<typeof EndRetroDialog> = () => {
+const Template: ComponentStory<typeof Modal> = () => {
   const ref = React.createRef<ModalMethods>();
 
   return (
     <>
-      <PrimaryButton onClick={() => ref.current.show()}>End Retro</PrimaryButton>
-      <EndRetroDialog ref={ref} />
+      <div style={{ display: 'flex' }}>
+        <PrimaryButton onClick={() => ref.current.show()}>Show Modal</PrimaryButton>
+      </div>
+
+      <Modal ref={ref}>
+        <div style={{ color: 'white' }}>This is some modal content</div>
+      </Modal>
     </>
   );
 };

@@ -17,20 +17,30 @@
 
 import * as React from 'react';
 
-import Dialog, { DialogMethods } from '../dialog/Dialog';
+import Modal, { ModalMethods } from '../modal/Modal';
+import Dialog from '../dialog/Dialog';
 
 import './EndRetroDialog.scss';
 
 function EndRetroDialog(props, ref) {
-  return <EndRetroDialogRenderer onSubmit={() => ref.current.hide()} ref={ref} />;
+  function hide() {
+    ref.current?.hide();
+  }
+
+  return (
+    <Modal ref={ref}>
+      <EndRetroDialogRenderer onSubmit={hide} onCancel={hide} />
+    </Modal>
+  );
 }
 
 type EndRetroDialogRendererProps = {
   onSubmit: () => void;
+  onCancel: () => void;
 };
 
-export const EndRetroDialogRenderer = React.forwardRef<DialogMethods, EndRetroDialogRendererProps>((props, ref) => {
-  const { onSubmit } = props;
+export function EndRetroDialogRenderer(props: EndRetroDialogRendererProps) {
+  const { onSubmit, onCancel } = props;
 
   return (
     <Dialog
@@ -38,15 +48,11 @@ export const EndRetroDialogRenderer = React.forwardRef<DialogMethods, EndRetroDi
       header="End the retro?"
       subHeader="This will archive all thoughts!"
       buttons={{
-        cancel: { text: 'nope' },
-        confirm: {
-          text: 'yes!',
-          onClick: onSubmit,
-        },
+        cancel: { text: 'nope', onClick: onCancel },
+        confirm: { text: 'yes!', onClick: onSubmit },
       }}
-      ref={ref}
     />
   );
-});
+}
 
-export default React.forwardRef<DialogMethods>(EndRetroDialog);
+export default React.forwardRef<ModalMethods>(EndRetroDialog);

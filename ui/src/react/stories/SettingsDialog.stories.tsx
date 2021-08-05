@@ -18,32 +18,22 @@
 import * as React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { DialogMethods } from '../components/dialog/Dialog';
-import { SettingsDialogRenderer } from '../components/settings-dialog/SettingsDialog';
+import SettingsDialog from '../components/settings-dialog/SettingsDialog';
 import { PrimaryButton } from '../components/button/Button';
-import Theme from '../types/theme';
+import { ModalMethods } from '../components/modal/Modal';
 
 export default {
   title: 'components/SettingsDialog',
-  component: SettingsDialogRenderer,
-} as ComponentMeta<typeof SettingsDialogRenderer>;
+  component: SettingsDialog,
+} as ComponentMeta<typeof SettingsDialog>;
 
-const Template: ComponentStory<typeof SettingsDialogRenderer> = () => {
-  const ref = React.createRef<DialogMethods>();
-  const [theme, setTheme] = React.useState<Theme>(Theme.LIGHT);
+const Template: ComponentStory<typeof SettingsDialog> = () => {
+  const ref = React.createRef<ModalMethods>();
 
   return (
     <>
       <PrimaryButton onClick={() => ref.current.show()}>Change Settings</PrimaryButton>
-      <SettingsDialogRenderer
-        theme={theme}
-        onThemeChange={(theme) => {
-          setTheme(theme);
-          alert(`theme changed to ${theme}`);
-        }}
-        onLogout={() => alert('logout')}
-        ref={ref}
-      />
+      <SettingsDialog ref={ref} />
     </>
   );
 };

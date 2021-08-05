@@ -19,17 +19,14 @@ import * as React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { DialogMethods } from '../dialog/Dialog';
-import { EndRetroDialogRenderer } from './EndRetroDialog';
+import { ModalMethods } from '../modal/Modal';
+import EndRetroDialog, { EndRetroDialogRenderer } from './EndRetroDialog';
 
 describe('EndRetroDialog', () => {
-  const ref = React.createRef<DialogMethods>();
-  const mockSubmit = jest.fn();
+  const ref = React.createRef<ModalMethods>();
 
   beforeEach(() => {
-    jest.clearAllMocks();
-
-    render(<EndRetroDialogRenderer onSubmit={mockSubmit} ref={ref} />);
+    render(<EndRetroDialog ref={ref} />);
 
     act(() => {
       ref.current.show();
@@ -46,16 +43,27 @@ describe('EndRetroDialog', () => {
 
     expect(screen.queryByText('End the retro?')).toBeFalsy();
   });
+});
 
-  it('should hide on cancel', () => {
-    userEvent.click(screen.getByText('nope'));
+describe('EndRetroDialogRenderer', () => {
+  const mockOnSubmit = jest.fn();
+  const mockOnCancel = jest.fn();
 
-    expect(screen.queryByText('End the retro?')).toBeFalsy();
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    render(<EndRetroDialogRenderer onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
   });
 
   it('should submit', () => {
     userEvent.click(screen.getByText('yes!'));
 
-    expect(mockSubmit).toHaveBeenCalledTimes(1);
+    expect(mockOnSubmit).toHaveBeenCalledTimes(1);
+  });
+
+  it('should cancel', () => {
+    userEvent.click(screen.getByText('nope'));
+
+    expect(mockOnCancel).toHaveBeenCalledTimes(1);
   });
 });
