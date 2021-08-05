@@ -17,7 +17,8 @@
 
 import * as React from 'react';
 
-import Dialog, { DialogMethods } from '../dialog/Dialog';
+import Dialog from '../dialog/Dialog';
+import Modal, { ModalMethods } from '../modal/Modal';
 import FeedbackStars from '../feedback-stars/FeedbackStars';
 import useBoard from '../../hooks/useBoard';
 import Feedback from '../../types/feedback';
@@ -27,16 +28,25 @@ import './FeedbackDialog.scss';
 function FeedbackDialog(props, ref) {
   const { teamId } = useBoard();
 
-  return <FeedbackDialogRenderer teamId={teamId} onSubmit={() => ref.current.hide()} ref={ref} />;
+  function hide() {
+    ref.current?.hide();
+  }
+
+  return (
+    <Modal ref={ref}>
+      <FeedbackDialogRenderer teamId={teamId} onSubmit={hide} onCancel={hide} />
+    </Modal>
+  );
 }
 
 type FeedbackDialogRendererProps = {
   teamId: string;
   onSubmit: (feedback: Feedback) => void;
+  onCancel: () => void;
 };
 
-export const FeedbackDialogRenderer = React.forwardRef<DialogMethods, FeedbackDialogRendererProps>((props, ref) => {
-  const { teamId, onSubmit } = props;
+export function FeedbackDialogRenderer(props: FeedbackDialogRendererProps) {
+  const { teamId, onSubmit, onCancel } = props;
 
   const [stars, setStars] = React.useState(0);
   const [comment, setComment] = React.useState<string>('');
@@ -59,13 +69,9 @@ export const FeedbackDialogRenderer = React.forwardRef<DialogMethods, FeedbackDi
       header="feedback"
       subHeader="How can we improve RetroQuest?"
       buttons={{
-        cancel: { text: 'cancel' },
-        confirm: {
-          text: 'send!',
-          onClick: handleSubmit,
-        },
+        cancel: { text: 'cancel', onClick: onCancel },
+        confirm: { text: 'send!', onClick: handleSubmit },
       }}
-      ref={ref}
     >
       <FeedbackStars className="section" value={stars} onChange={setStars} />
 
@@ -84,6 +90,6 @@ export const FeedbackDialogRenderer = React.forwardRef<DialogMethods, FeedbackDi
       </div>
     </Dialog>
   );
-});
+}
 
-export default React.forwardRef<DialogMethods>(FeedbackDialog);
+export default React.forwardRef<ModalMethods>(FeedbackDialog);

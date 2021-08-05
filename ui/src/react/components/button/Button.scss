@@ -19,60 +19,63 @@
 @import '../../../styles/sizes';
 
 .button {
+  display: flex;
   align-items: center;
+  justify-content: center;
+  min-width: 125px;
+  height: 45px;
+  padding: 0 24px;
+
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: capitalize;
+
   border: 0;
   border-radius: 6px;
-  box-shadow: none;
-  box-sizing: border-box;
-  cursor: pointer;
-  display: flex;
-  font-family: inherit;
-  font-size: 1rem;
-  font-weight: 700;
-  height: 45px;
-  justify-content: center;
   outline: 0;
-  padding: 0 24px;
-  text-transform: capitalize;
+  box-shadow: none;
+  cursor: pointer;
+
   user-select: none;
-  min-width: 125px;
 
   .button-text {
     white-space: nowrap;
   }
+}
 
-  &.primary {
-    background-color: $asphalt;
-    box-shadow: 0 4px 15px opacity($black, 0.25);
-    color: $gray;
-    outline: none;
+.primary {
+  color: $gray;
 
-    .dark-theme & {
-      background-color: $gray;
-      color: $asphalt;
+  background-color: $asphalt;
+  outline: none;
+  box-shadow: 0 4px 15px opacity($black, 0.25);
 
-      &:hover {
-        color: $gray;
-      }
-    }
+  .dark-theme & {
+    color: $asphalt;
+    background-color: $gray;
 
-    &:hover {
-      background-color: $purple;
-      cursor: pointer;
+    &:hover, &:focus {
+      color: $gray;
     }
   }
 
-  &.secondary {
-    background: transparent;
-    color: inherit;
+  &:hover, &:focus {
+    background-color: $purple;
+    cursor: pointer;
+  }
+}
 
-    .dark-theme & {
-      color: opacity($gray, 0.8);
-    }
+.secondary {
+  color: inherit;
+  background: transparent;
 
-    &:hover {
-      color: $purple;
-      cursor: pointer;
-    }
+  .dark-theme & {
+    color: opacity($gray, 0.8);
+  }
+
+  &:hover, &:focus {
+    color: $purple;
+    cursor: pointer;
   }
 }

@@ -16,25 +16,25 @@
  */
 
 import * as React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import EndRetroDialog from '../components/end-retro-dialog/EndRetroDialog';
-import { PrimaryButton } from '../components/button/Button';
-import { ModalMethods } from '../components/modal/Modal';
+import Dialog from '../components/dialog/Dialog';
 
 export default {
-  title: 'components/EndRetroDialog',
-  component: EndRetroDialog,
-} as ComponentMeta<typeof EndRetroDialog>;
+  title: 'components/Dialog',
+  component: Dialog,
+} as ComponentMeta<typeof Dialog>;
 
-const Template: ComponentStory<typeof EndRetroDialog> = () => {
-  const ref = React.createRef<ModalMethods>();
-
+const Template: ComponentStory<typeof Dialog> = () => {
   return (
-    <>
-      <PrimaryButton onClick={() => ref.current.show()}>End Retro</PrimaryButton>
-      <EndRetroDialog ref={ref} />
-    </>
+    <Dialog
+      header="I am a dialog"
+      subHeader="This is the question?"
+      buttons={{
+        confirm: { text: 'To be', onClick: () => alert('Be') },
+        cancel: { text: 'Not to be', onClick: () => alert('Not Be') },
+      }}
+    />
   );
 };
 

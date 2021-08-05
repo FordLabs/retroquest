@@ -18,29 +18,22 @@
 import * as React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import { DialogMethods } from '../components/dialog/Dialog';
-import { FeedbackDialogRenderer } from '../components/feedback-dialog/FeedbackDialog';
 import { PrimaryButton } from '../components/button/Button';
+import FeedbackDialog from '../components/feedback-dialog/FeedbackDialog';
+import { ModalMethods } from '../components/modal/Modal';
 
 export default {
   title: 'components/FeedbackDialog',
-  component: FeedbackDialogRenderer,
-} as ComponentMeta<typeof FeedbackDialogRenderer>;
+  component: FeedbackDialog,
+} as ComponentMeta<typeof FeedbackDialog>;
 
-const Template: ComponentStory<typeof FeedbackDialogRenderer> = () => {
-  const ref = React.createRef<DialogMethods>();
+const Template: ComponentStory<typeof FeedbackDialog> = () => {
+  const ref = React.createRef<ModalMethods>();
 
   return (
     <>
       <PrimaryButton onClick={() => ref.current.show()}>Give Feedback</PrimaryButton>
-      <FeedbackDialogRenderer
-        teamId="team-id"
-        onSubmit={(feedback) => {
-          alert(`submitting \n ${JSON.stringify(feedback, null, 2)}`);
-          ref.current.hide();
-        }}
-        ref={ref}
-      />
+      <FeedbackDialog ref={ref} />
     </>
   );
 };

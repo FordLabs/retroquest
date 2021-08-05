@@ -19,21 +19,14 @@ import * as React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { FeedbackDialogRenderer } from './FeedbackDialog';
-import { DialogMethods } from '../dialog/Dialog';
+import FeedbackDialog, { FeedbackDialogRenderer } from './FeedbackDialog';
+import { ModalMethods } from '../modal/Modal';
 
 describe('FeedbackDialog', () => {
-  const mockOnSubmit = jest.fn();
-  const fakeTeamId = 'fake-team-id';
-  const fakeComment = 'This is a fake comment';
-  const fakeEmail = 'user@ford.com';
-
-  const ref = React.createRef<DialogMethods>();
+  const ref = React.createRef<ModalMethods>();
 
   beforeEach(() => {
-    jest.clearAllMocks();
-
-    render(<FeedbackDialogRenderer teamId={fakeTeamId} onSubmit={mockOnSubmit} ref={ref} />);
+    render(<FeedbackDialog ref={ref} />);
 
     act(() => {
       ref.current.show();
@@ -49,6 +42,20 @@ describe('FeedbackDialog', () => {
     });
 
     expect(screen.queryByText('feedback')).toBeFalsy();
+  });
+});
+
+describe('FeedbackDialogRenderer', () => {
+  const mockOnSubmit = jest.fn();
+  const mockOnCancel = jest.fn();
+  const fakeTeamId = 'fake-team-id';
+  const fakeComment = 'This is a fake comment';
+  const fakeEmail = 'user@ford.com';
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    render(<FeedbackDialogRenderer teamId={fakeTeamId} onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
   });
 
   it('should submit feedback', () => {
@@ -73,9 +80,9 @@ describe('FeedbackDialog', () => {
     expect(mockOnSubmit).not.toHaveBeenCalled();
   });
 
-  it('should hide on cancel', () => {
+  it('should cancel', () => {
     userEvent.click(screen.getByText('cancel'));
 
-    expect(screen.queryByText('feedback')).toBeFalsy();
+    expect(mockOnCancel).toHaveBeenCalled();
   });
 });
