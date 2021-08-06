@@ -18,22 +18,22 @@
 import * as React from 'react';
 
 import { PrimaryButton, SecondaryButton } from '../button/Button';
+
 import './DeletionOverlay.scss';
 
-interface OverlayProps {
-  header?: string;
+type OverlayProps = React.PropsWithChildren<{
   onConfirm: () => void;
   onCancel: () => void;
-}
+}>;
 
 export default function DeletionOverlay(props: OverlayProps): React.ReactElement {
-  const { header = '', onConfirm, onCancel } = props;
+  const { onConfirm, onCancel, children } = props;
 
   return (
     <div className="deletion-overlay">
       <input autoFocus={true} className="hidden-input" onBlur={onCancel} />
       <div className="heading">
-        <p>{header}</p>
+        <p>{children}</p>
       </div>
       <div className="button-container">
         <SecondaryButton className="delete-decline-button" onMouseDown={(e) => e.preventDefault()} onClick={onCancel}>
