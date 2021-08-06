@@ -38,7 +38,6 @@
 
       .tab {
         background-color: $gray;
-        box-sizing: border-box;
         cursor: pointer;
         font-weight: bold;
         padding: 9px;
@@ -61,7 +60,6 @@
     }
 
     .tab-body {
-      box-sizing: border-box;
       margin-top: 36px;
       padding: 0 48px;
       position: relative;

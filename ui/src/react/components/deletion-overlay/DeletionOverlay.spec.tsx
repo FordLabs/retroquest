@@ -27,7 +27,11 @@ describe('DeletionOverlay', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    render(<DeletionOverlay header={'Continue the test?'} onConfirm={mockOnConfirm} onCancel={mockOnCancel} />);
+    render(
+      <DeletionOverlay onConfirm={mockOnConfirm} onCancel={mockOnCancel}>
+        Continue the test?
+      </DeletionOverlay>
+    );
   });
 
   it('should show the header', () => {

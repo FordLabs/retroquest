@@ -55,7 +55,9 @@ const Template: ComponentStory<typeof DeletionOverlay> = () => {
         }}
       >
         {show ? (
-          <DeletionOverlay header="Delete item?" onConfirm={onConfirm} onCancel={onCancel} />
+          <DeletionOverlay onConfirm={onConfirm} onCancel={onCancel}>
+            Delete item?
+          </DeletionOverlay>
         ) : (
           <div onClick={() => setShow(true)}>Click to delete</div>
         )}

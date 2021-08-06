@@ -20,7 +20,6 @@
 
 .top-header {
   align-items: center;
-  box-sizing: border-box;
   display: block;
 
   height: 64px;
@@ -41,7 +40,6 @@
   }
 
   .header-top-content {
-    box-sizing: border-box;
     height: 100%;
     position: relative;
     width: 100%;
@@ -54,7 +52,6 @@
     .horizontal-separator {
       background-color: $asphalt;
       border-radius: 6px;
-      box-sizing: border-box;
       height: 24px;
       margin: 0 24px;
       opacity: 0.1;
