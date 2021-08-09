@@ -20,6 +20,7 @@ import classnames from 'classnames';
 
 import FloatingCharacterCountdown from '../floating-character-countdown/FloatingCharacterCountdown';
 import RetroItemType from '../../types/RetroItemType';
+import { onChange, onKeys } from '../../utils/EventUtils';
 
 import './TextField.scss';
 
@@ -36,19 +37,6 @@ export default function TextField(props: TextFieldProps): React.ReactElement {
 
   const [text, setText] = React.useState('');
 
-  const handleTextChange = (changeEvent) => {
-    setText(changeEvent.target.value);
-  };
-
-  const handleKeyPress = (keyPressEvent) => {
-    if (keyPressEvent.key === 'Enter') {
-      handleSubmission(text);
-      setText('');
-    }
-  };
-
-  const className = classNames('text-field', type);
-
   return (
     <span {...spanProps} className={classnames('text-field', type)}>
       <input
@@ -56,8 +44,11 @@ export default function TextField(props: TextFieldProps): React.ReactElement {
         placeholder={placeholder}
         maxLength={maxCharacterCount}
         value={text}
-        onChange={handleTextChange}
-        onKeyPress={handleKeyPress}
+        onChange={onChange(setText)}
+        onKeyPress={onKeys('Enter', () => {
+          handleSubmission(text);
+          setText('');
+        })}
       />
       <FloatingCharacterCountdown
         maxCharacterCount={maxCharacterCount}
