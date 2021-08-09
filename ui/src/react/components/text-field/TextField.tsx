@@ -16,13 +16,15 @@
  */
 
 import * as React from 'react';
-import classNames from 'classnames';
+import classnames from 'classnames';
 
 import FloatingCharacterCountdown from '../floating-character-countdown/FloatingCharacterCountdown';
+import RetroItemType from '../../types/RetroItemType';
+
 import './TextField.scss';
 
 export interface TextFieldProps extends React.HTMLAttributes<HTMLSpanElement> {
-  type: string;
+  type: RetroItemType;
   placeholder: string;
   handleSubmission: (string) => void;
 }
@@ -48,7 +50,7 @@ export default function TextField(props: TextFieldProps): React.ReactElement {
   const className = classNames('text-field', type);
 
   return (
-    <span {...spanProps} className={className}>
+    <span {...spanProps} className={classnames('text-field', type)}>
       <input
         type="text"
         placeholder={placeholder}

@@ -17,7 +17,7 @@
 
 import * as React from 'react';
 
-import Theme from '../types/theme';
+import Theme from '../types/Theme';
 
 export default function useTheme(): [Theme, (theme: Theme) => void] {
   const [theme, setTheme] = React.useState<Theme>(getThemeOffBody());

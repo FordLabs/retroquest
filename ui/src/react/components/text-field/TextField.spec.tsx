@@ -20,6 +20,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import TextField from './TextField';
+import RetroItemType from '../../types/RetroItemType';
 
 describe('TextField', () => {
   const mockHandleSubmit = jest.fn();
@@ -31,23 +32,38 @@ describe('TextField', () => {
 
   it('should style based on type', () => {
     const result = render(
-      <TextField data-testid="happy" type="happy" placeholder={placeholder} handleSubmission={mockHandleSubmit} />
+      <TextField
+        data-testid="happy"
+        type={RetroItemType.HAPPY}
+        placeholder={placeholder}
+        handleSubmission={mockHandleSubmit}
+      />
     );
     expect(screen.getByTestId('happy').className).toContain('happy');
 
     result.rerender(
-      <TextField data-testid="confused" type="confused" placeholder={placeholder} handleSubmission={mockHandleSubmit} />
+      <TextField
+        data-testid="confused"
+        type={RetroItemType.CONFUSED}
+        placeholder={placeholder}
+        handleSubmission={mockHandleSubmit}
+      />
     );
     expect(screen.getByTestId('confused').className).toContain('confused');
 
     result.rerender(
-      <TextField data-testid="unhappy" type="unhappy" placeholder={placeholder} handleSubmission={mockHandleSubmit} />
+      <TextField
+        data-testid="unhappy"
+        type={RetroItemType.UNHAPPY}
+        placeholder={placeholder}
+        handleSubmission={mockHandleSubmit}
+      />
     );
     expect(screen.getByTestId('unhappy').className).toContain('unhappy');
   });
 
   it('should submit on enter', () => {
-    render(<TextField type="happy" placeholder={placeholder} handleSubmission={mockHandleSubmit} />);
+    render(<TextField type={RetroItemType.HAPPY} placeholder={placeholder} handleSubmission={mockHandleSubmit} />);
     const textField = screen.getByPlaceholderText(placeholder);
 
     userEvent.type(textField, 'Submission Text{enter}');
