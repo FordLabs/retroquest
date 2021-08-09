@@ -19,6 +19,7 @@ import * as React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import ColumnHeader from '../components/column-header/ColumnHeader';
+import RetroItemType from '../types/RetroItemType';
 
 export default {
   title: 'components/ColumnHeader',
@@ -39,10 +40,10 @@ const Template: ComponentStory<typeof ColumnHeader> = () => (
   <span
     style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flexBasis: 800, flexShrink: 1 }}
   >
-    <ColumnHeader {...props} type="happy" style={{ marginBottom: '5rem' }} />
-    <ColumnHeader {...props} type="confused" style={{ marginBottom: '5rem' }} />
-    <ColumnHeader {...props} type="unhappy" style={{ marginBottom: '5rem' }} />
-    <ColumnHeader {...props} readOnly={true} type="action" />
+    <ColumnHeader {...props} type={RetroItemType.HAPPY} style={{ marginBottom: '5rem' }} />
+    <ColumnHeader {...props} type={RetroItemType.CONFUSED} style={{ marginBottom: '5rem' }} />
+    <ColumnHeader {...props} type={RetroItemType.UNHAPPY} style={{ marginBottom: '5rem' }} />
+    <ColumnHeader {...props} readOnly={true} type={RetroItemType.ACTION} />
   </span>
 );
 

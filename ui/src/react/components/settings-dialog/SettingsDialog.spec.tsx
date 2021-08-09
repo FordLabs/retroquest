@@ -21,7 +21,7 @@ import userEvent from '@testing-library/user-event';
 
 import SettingsDialog, { SettingsDialogRenderer } from './SettingsDialog';
 import { ModalMethods } from '../modal/Modal';
-import Theme from '../../types/theme';
+import Theme from '../../types/Theme';
 
 describe('SettingsDialog', () => {
   const ref = React.createRef<ModalMethods>();

@@ -23,7 +23,7 @@ import SettingsDialog from '../settings-dialog/SettingsDialog';
 import useBoard from '../../hooks/useBoard';
 import useTheme from '../../hooks/useTheme';
 import SaveCheckerService from '../../services/SaveCheckerService';
-import Theme from '../../types/theme';
+import Theme from '../../types/Theme';
 
 import './TopHeader.scss';
 
