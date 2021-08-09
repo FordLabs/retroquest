@@ -21,7 +21,7 @@ import Dialog from '../dialog/Dialog';
 import Modal, { ModalMethods } from '../modal/Modal';
 import FeedbackStars from '../feedback-stars/FeedbackStars';
 import useBoard from '../../hooks/useBoard';
-import Feedback from '../../types/feedback';
+import Feedback from '../../types/Feedback';
 
 import './FeedbackDialog.scss';
 

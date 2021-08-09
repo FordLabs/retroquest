@@ -23,7 +23,7 @@ import Dialog from '../dialog/Dialog';
 import Modal, { ModalMethods } from '../modal/Modal';
 import useAuth from '../../hooks/useAuth';
 import useTheme from '../../hooks/useTheme';
-import Theme from '../../types/theme';
+import Theme from '../../types/Theme';
 
 import './SettingsDialog.scss';
 
