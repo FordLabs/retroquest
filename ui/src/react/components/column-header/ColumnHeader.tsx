@@ -22,6 +22,7 @@ import Tooltip from '../tooltip/Tooltip';
 import FloatingCharacterCountdown from '../floating-character-countdown/FloatingCharacterCountdown';
 import { emojify } from '../../../app/modules/utils/EmojiGenerator';
 import RetroItemType from '../../types/RetroItemType';
+import { onChange, onEachKey } from '../../utils/EventUtils';
 
 import './ColumnHeader.scss';
 
@@ -43,24 +44,20 @@ export default function ColumnHeader(props: ColumnHeaderProps): React.ReactEleme
   const [editing, setEditing] = React.useState(false);
   const [sorted, setSorted] = React.useState(false);
 
-  const handleBlur = () => {
-    updateTitle(editedTitle);
-  };
-
-  const handleTitleChange = (changeEvent) => {
-    setEditedTitle(changeEvent.target.value);
-  };
-
-  const handleKeyDown = (keyPressEvent) => {
-    if (keyPressEvent.key === 'Enter') updateTitle(editedTitle);
-    else if (keyPressEvent.key === 'Escape') updateTitle(title);
-  };
-
   const updateTitle = (newTitle: string) => {
     setTitle(newTitle);
     setEditing(false);
     titleChanged(newTitle);
   };
+
+  const handleBlur = () => {
+    updateTitle(editedTitle);
+  };
+
+  const handleKeyDown = onEachKey({
+    Enter: () => updateTitle(editedTitle),
+    Escape: () => setEditing(false),
+  });
 
   const toggleSort = () => {
     const newSorted = !sorted;
@@ -69,6 +66,7 @@ export default function ColumnHeader(props: ColumnHeaderProps): React.ReactEleme
   };
 
   const enableEditing = () => {
+    setEditedTitle(title);
     setEditing(true);
   };
 
@@ -82,7 +80,7 @@ export default function ColumnHeader(props: ColumnHeaderProps): React.ReactEleme
           data-testid={'column-input'}
           maxLength={maxTitleLength}
           value={editedTitle}
-          onChange={handleTitleChange}
+          onChange={onChange(setEditedTitle)}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
           autoFocus={true}

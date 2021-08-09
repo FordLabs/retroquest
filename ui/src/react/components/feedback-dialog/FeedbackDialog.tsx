@@ -22,6 +22,7 @@ import Modal, { ModalMethods } from '../modal/Modal';
 import FeedbackStars from '../feedback-stars/FeedbackStars';
 import useBoard from '../../hooks/useBoard';
 import Feedback from '../../types/Feedback';
+import { onChange } from '../../utils/EventUtils';
 
 import './FeedbackDialog.scss';
 
@@ -79,14 +80,14 @@ export function FeedbackDialogRenderer(props: FeedbackDialogRendererProps) {
         <label className="label" htmlFor="comments">
           comments<span className="required-field">*</span>
         </label>
-        <textarea id="comments" value={comment} onChange={(e) => setComment(e.target.value)} />
+        <textarea id="comments" value={comment} onChange={onChange(setComment)} />
       </div>
 
       <div className="section feedback-email-section">
         <label className="label" htmlFor="email">
           feedback email
         </label>
-        <input id="email" type="text" value={userEmail} onChange={(e) => setUserEmail(e.target.value)} />
+        <input id="email" type="text" value={userEmail} onChange={onChange(setUserEmail)} />
       </div>
     </Dialog>
   );
