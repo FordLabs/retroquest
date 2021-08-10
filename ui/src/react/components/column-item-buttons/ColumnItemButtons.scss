@@ -1,0 +1,124 @@
+/*!
+ * Copyright (c) 2021 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import '../../../styles/colors';
+
+$opacity: 0.25;
+
+.column-item-button-group {
+  display: flex;
+  justify-content: stretch;
+  height: 40px;
+
+  background-color: inherit;
+  border-top: 2px solid opacity($asphalt, 0.06);
+  border-bottom-right-radius: inherit;
+  border-bottom-left-radius: inherit;
+
+  > * {
+    flex: 1 1 0;
+
+    &:first-child {
+      border-bottom-left-radius: inherit;
+    }
+
+    &:last-child {
+      border-bottom-right-radius: inherit;
+    }
+  }
+
+  .dark-theme & {
+    border-top-color: $task-footer-separator-dark;
+  }
+}
+
+.column-item-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: inherit;
+  text-align: center;
+
+  background-color: transparent;
+  border: 0;
+  box-shadow: none;
+  cursor: pointer;
+
+  user-select: none;
+
+  position: relative;
+
+  &:not(:last-child) {
+    border-right: 2px solid opacity($asphalt, 0.06);;
+  }
+
+  &:not(.readonly) {
+    &[disabled],
+    &.disabled {
+      user-select: none;
+      pointer-events: none;
+
+      > * {
+        opacity: $opacity;
+      }
+    }
+  }
+
+  &.readonly {
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .dark-theme & {
+    color: $gray;
+    border-color: $task-footer-separator-dark;
+  }
+
+  .checkbox {
+    position: relative;
+
+    .checkbox-border {
+      $size: 15px;
+      width: $size;
+      height: $size;
+
+      background-color: transparent;
+      border: 2px solid;
+      border-radius: 4px;
+    }
+
+    .fa-check {
+      font-size: 1.1rem;
+
+      position: absolute;
+      top: -1px;
+      left: -1px;
+    }
+  }
+
+  &:not(.disabled) {
+    .checked .checkbox-border {
+      opacity: $opacity;
+    }
+  }
+
+  &.primary,
+  &.secondary {
+    font-size: 1rem;
+  }
+}
