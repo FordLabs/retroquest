@@ -76,8 +76,8 @@ export default function ColumnHeader(props: ColumnHeaderProps): React.ReactEleme
     <div {...divProps} className={classNames('column-header', type)}>
       {editing && (
         <input
-          type={'text'}
-          data-testid={'column-input'}
+          type="text"
+          data-testid="column-input"
           maxLength={maxTitleLength}
           value={editedTitle}
           onChange={onChange(setEditedTitle)}

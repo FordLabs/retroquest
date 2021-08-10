@@ -45,11 +45,11 @@
 }
 
 .primary {
-  color: $gray;
+    color: $gray;
 
-  background-color: $asphalt;
-  outline: none;
-  box-shadow: 0 4px 15px opacity($black, 0.25);
+    background-color: $asphalt;
+    outline: none;
+    box-shadow: 0 4px 15px opacity($black, 0.25);
 
   .dark-theme & {
     color: $asphalt;
@@ -68,7 +68,7 @@
 
 .secondary {
   color: inherit;
-  background: transparent;
+    background: transparent;
 
   .dark-theme & {
     color: opacity($gray, 0.8);
