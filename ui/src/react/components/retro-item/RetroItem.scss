@@ -17,35 +17,35 @@
 
 @import '../../../styles/colors';
 
-.floating-character-countdown {
-  width: auto;
-  height: auto;
+.upvote-button {
+  .star-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 4px;
 
-  color: $asphalt;
-  font-weight: bold;
-  font-size: 0.8rem;
-
-  visibility: hidden;
-
-  pointer-events: none;
-
-  bottom: -24px;
-  position: absolute;
-  right: 0;
-
-  .dark-theme & {
-    color: $gray;
+    font-size: 0.9rem;
   }
 
-  &.display-warning-text {
-    color: $yellow;
+  .fa-star {
+    z-index: 2;
+
+    .dark-theme & {
+      color: $yellow;
+    }
   }
 
-  &.display-error-text {
-    color: $red;
-  }
+  .star-shadow {
+    width: 25px;
+    height: 10px;
+    margin-top: -0.35rem;
 
-  &.visible {
-    visibility: visible;
+    background-color: $yellow;
+    border-radius: 12px / 6px;
+
+    .dark-theme & {
+      background-color: $dark-asphalt;
+    }
   }
 }
