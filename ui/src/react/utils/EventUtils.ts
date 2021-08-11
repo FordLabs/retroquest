@@ -1,4 +1,4 @@
-import { ChangeEventHandler, KeyboardEvent, KeyboardEventHandler } from 'react';
+import { ChangeEventHandler, KeyboardEvent as ReactKeyboardEvent } from 'react';
 
 export function onChange<T = Element>(callback: (value: unknown) => void): ChangeEventHandler<T> {
   return (event) => {
@@ -7,10 +7,9 @@ export function onChange<T = Element>(callback: (value: unknown) => void): Chang
   };
 }
 
-export function onKeys<T = Element>(
-  keys: string | string[],
-  callback: (event: KeyboardEvent<T>) => void
-): KeyboardEventHandler<T> {
+type KeyEvent = KeyboardEvent | ReactKeyboardEvent;
+
+export function onKeys<T extends KeyEvent>(keys: string | string[], callback: (event: T) => void): (event: T) => void {
   const listOfKeys = Array.isArray(keys) ? keys : [keys];
 
   return (e) => {
@@ -20,9 +19,7 @@ export function onKeys<T = Element>(
   };
 }
 
-export function onEachKey<T = Element>(
-  keyMap: Record<string, (event: KeyboardEvent<T>) => void>
-): KeyboardEventHandler<T> {
+export function onEachKey<T extends KeyEvent>(keyMap: Record<string, (event: T) => void>): (event: T) => void {
   return (e) => {
     const callback = keyMap[e.key];
     if (callback) {
