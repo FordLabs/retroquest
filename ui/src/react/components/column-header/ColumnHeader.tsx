@@ -18,8 +18,8 @@
 import * as React from 'react';
 import classNames from 'classnames';
 
-import Tooltip from '../tooltip/Tooltip';
 import FloatingCharacterCountdown from '../floating-character-countdown/FloatingCharacterCountdown';
+import Tooltip from '../tooltip/Tooltip';
 import { emojify } from '../../../app/modules/utils/EmojiGenerator';
 import ColumnType from '../../types/ColumnType';
 import { onChange, onEachKey } from '../../utils/EventUtils';
@@ -74,22 +74,29 @@ export default function ColumnHeader(props: ColumnHeaderProps): React.ReactEleme
 
   return (
     <div {...divProps} className={classNames('column-header', type)}>
-      {editing && (
-        <input
-          type="text"
-          data-testid="column-input"
-          maxLength={maxTitleLength}
-          value={editedTitle}
-          onChange={onChange(setEditedTitle)}
-          onBlur={handleBlur}
-          onKeyDown={handleKeyDown}
-          autoFocus={true}
-          onFocus={handleInputFocus}
-        />
-      )}
-      {!editing && (
+      {editing ? (
+        <>
+          <input
+            type="text"
+            data-testid="column-input"
+            maxLength={maxTitleLength}
+            value={editedTitle}
+            onChange={onChange(setEditedTitle)}
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
+            autoFocus={true}
+            onFocus={handleInputFocus}
+          />
+          <FloatingCharacterCountdown
+            characterCount={editedTitle.length}
+            maxCharacterCount={maxTitleLength}
+            charsAreRunningOutThreshold={almostOutOfCharactersThreshold}
+          />
+        </>
+      ) : (
         <>
           <p className="display-text">{emojify(title)}</p>
+
           <div className="sort-container">
             <div
               data-testid="sort-button"
@@ -98,20 +105,14 @@ export default function ColumnHeader(props: ColumnHeaderProps): React.ReactEleme
             />
             <Tooltip>{sorted ? 'Unsort' : 'Sort'}</Tooltip>
           </div>
+
+          {!readOnly && (
+            <span className={classNames(['edit-button'])}>
+              <i data-testid="edit-button" className="fas fa-pencil-alt" onClick={enableEditing} aria-hidden="true" />
+              <Tooltip>Edit</Tooltip>
+            </span>
+          )}
         </>
-      )}
-      {!readOnly && !editing && (
-        <span className={classNames(['edit-button'])}>
-          <i data-testid="edit-button" className="fas fa-pencil-alt" onClick={enableEditing} aria-hidden="true" />
-          <Tooltip>Edit</Tooltip>
-        </span>
-      )}
-      {editing && (
-        <FloatingCharacterCountdown
-          characterCount={editedTitle.length}
-          maxCharacterCount={maxTitleLength}
-          charsAreRunningOutThreshold={almostOutOfCharactersThreshold}
-        />
       )}
     </div>
   );
