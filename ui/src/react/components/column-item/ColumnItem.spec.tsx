@@ -20,7 +20,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import ColumnItem from './ColumnItem';
-import RetroItemType from '../../types/RetroItemType';
+import ColumnType from '../../types/ColumnType';
 
 describe('ColumnItem', () => {
   const mockSelect = jest.fn();
@@ -34,7 +34,7 @@ describe('ColumnItem', () => {
     jest.clearAllMocks();
   });
 
-  it.each([[RetroItemType.HAPPY], [RetroItemType.CONFUSED], [RetroItemType.UNHAPPY], [RetroItemType.ACTION]])(
+  it.each([[ColumnType.HAPPY], [ColumnType.CONFUSED], [ColumnType.UNHAPPY], [ColumnType.ACTION]])(
     'should render %s type',
     (type) => {
       render(<ColumnItem text={startingText} type={type} />);
@@ -47,7 +47,7 @@ describe('ColumnItem', () => {
     beforeEach(() => {
       render(
         <ColumnItem
-          type={RetroItemType.HAPPY}
+          type={ColumnType.HAPPY}
           text={startingText}
           onSelect={mockSelect}
           onEdit={mockEdit}
@@ -136,7 +136,7 @@ describe('ColumnItem', () => {
     beforeEach(() => {
       render(
         <ColumnItem
-          type={RetroItemType.HAPPY}
+          type={ColumnType.HAPPY}
           text={startingText}
           checked={true}
           onSelect={mockSelect}
@@ -173,7 +173,7 @@ describe('ColumnItem', () => {
     beforeEach(() => {
       render(
         <ColumnItem
-          type={RetroItemType.HAPPY}
+          type={ColumnType.HAPPY}
           text={startingText}
           readOnly={true}
           checked={true}
@@ -204,7 +204,7 @@ describe('ColumnItem', () => {
 
   describe('without default buttons', () => {
     beforeEach(() => {
-      render(<ColumnItem type={RetroItemType.HAPPY} text={startingText} defaultButtons={false} />);
+      render(<ColumnItem type={ColumnType.HAPPY} text={startingText} defaultButtons={false} />);
     });
 
     it('should not render the edit, delete, and checkbox buttons', () => {
@@ -218,7 +218,7 @@ describe('ColumnItem', () => {
     beforeEach(() => {
       render(
         <ColumnItem
-          type={RetroItemType.HAPPY}
+          type={ColumnType.HAPPY}
           text={startingText}
           customButtons={() => <button data-testid="columnItem-upvote" />}
         />
@@ -233,7 +233,7 @@ describe('ColumnItem', () => {
   describe('with children', () => {
     beforeEach(() => {
       render(
-        <ColumnItem type={RetroItemType.HAPPY} text={startingText}>
+        <ColumnItem type={ColumnType.HAPPY} text={startingText}>
           {() => "I'm a child"}
         </ColumnItem>
       );

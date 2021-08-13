@@ -26,14 +26,14 @@ import {
 } from '../column-item-buttons/ColumnItemButtons';
 import DeletionOverlay from '../deletion-overlay/DeletionOverlay';
 import EditableText from '../editable-text/EditableText';
-import RetroItemType from '../../types/RetroItemType';
+import ColumnType from '../../types/ColumnType';
 
 import './ColumnItem.scss';
 
 const NO_OP = () => undefined;
 
 type ColumnItemProps = React.ComponentPropsWithoutRef<'div'> & {
-  type: RetroItemType;
+  type: ColumnType;
   text: string;
   checked?: boolean;
   readOnly?: boolean;
@@ -155,7 +155,7 @@ export default function ColumnItem(props: ColumnItemProps) {
 
       {deleting && (
         <DeletionOverlay onCancel={onDeleteCanceled} onConfirm={onDeleteConfirmed}>
-          Delete this {type === RetroItemType.ACTION ? 'Action Item' : 'Thought'}?
+          Delete this {type === ColumnType.ACTION ? 'Action Item' : 'Thought'}?
         </DeletionOverlay>
       )}
     </div>

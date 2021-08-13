@@ -19,7 +19,7 @@ import * as React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import TextField from '../components/text-field/TextField';
-import RetroItemType from '../types/RetroItemType';
+import ColumnType from '../types/ColumnType';
 
 export default {
   title: 'components/TextField',
@@ -35,10 +35,10 @@ const props = {
 
 const Template: ComponentStory<typeof TextField> = () => (
   <span style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', maxWidth: '800px' }}>
-    <TextField {...props} type={RetroItemType.HAPPY} />
-    <TextField {...props} type={RetroItemType.CONFUSED} />
-    <TextField {...props} type={RetroItemType.UNHAPPY} />
-    <TextField {...props} type={RetroItemType.ACTION} />
+    <TextField {...props} type={ColumnType.HAPPY} />
+    <TextField {...props} type={ColumnType.CONFUSED} />
+    <TextField {...props} type={ColumnType.UNHAPPY} />
+    <TextField {...props} type={ColumnType.ACTION} />
   </span>
 );
 
