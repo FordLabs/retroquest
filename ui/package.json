@@ -14,7 +14,7 @@
     "lint-fix": "ng lint --fix",
     "postinstall": "ngcc",
     "prepare": "cd .. && husky install ui/.husky",
-    "cypress": "cypress run --headless --browser chrome",
+    "cypress": "cypress run --headless",
     "cypress-supervise": "cypress open"
   },
   "private": true,
