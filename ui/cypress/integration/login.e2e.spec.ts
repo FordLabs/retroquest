@@ -23,8 +23,8 @@ import {
 
 describe('Logging In', () => {
   const teamCredentials = {
-    teamName: 'Login Tests',
-    teamId: 'login-tests',
+    teamName: 'Test Login',
+    teamId: 'test-login',
     password: 'Login1234',
     jwt: '',
   } as TeamCredentials;
@@ -38,6 +38,9 @@ describe('Logging In', () => {
     cy.get('#teamNameInput').type(teamCredentials.teamName);
     cy.get('#teamPasswordInput').type(teamCredentials.password);
     cy.get('#signInButton').click();
-    cy.url().should('eq', teamBoardUrl(teamCredentials.teamId));
+    cy.url().should(
+      'eq',
+      Cypress.config().baseUrl + teamBoardUrl(teamCredentials.teamId)
+    );
   });
 });

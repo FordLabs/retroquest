@@ -19,8 +19,8 @@ import { createTeamIfNecessaryAndLogin, TeamCredentials } from '../util/utils';
 
 describe('Conduct Retro', () => {
   const teamCredentials = {
-    teamName: 'Conduct Retro',
-    teamId: 'conduct-retro',
+    teamName: 'Test Conduct Retro',
+    teamId: 'test-conduct-retro',
     password: 'Retro1234',
     jwt: '',
   } as TeamCredentials;
@@ -38,6 +38,10 @@ describe('Conduct Retro', () => {
   }
 
   function clearBoard() {
+    // cy.get() will hang forever if the query is empty
+    enterThought('happy', 'first thought');
+    enterActionItems('first action item');
+
     cy.get(`rq-thoughts-column rq-task`)
       .each((input) => {
         deleteCard(input);
@@ -86,13 +90,18 @@ describe('Conduct Retro', () => {
     columnClass: string,
     expectedCount: number
   ): void {
-    cy.get(
-      `rq-thoughts-column rq-task[ng-reflect-type="${columnClass}"] textarea`
-    ).should('have.length', expectedCount);
+    cy.get(`rq-thoughts-column rq-task.${columnClass} textarea`).should(
+      'have.length',
+      expectedCount
+    );
   }
 
   before(() => {
+    cy.visit('/create');
     createTeamIfNecessaryAndLogin(teamCredentials);
+
+    clearBoard();
+
     enterThought('happy', 'Good flow to our work this week');
     enterThought('happy', 'Switching to e2e was a good idea');
     enterThought(
@@ -152,8 +161,8 @@ describe('Conduct Retro', () => {
     it('There is one thought in the confused column', () => {
       confirmNumberOfThoughtsInColumn('confused', 1);
     });
-    it('There is one thought in the unhappy column', () => {
-      confirmNumberOfThoughtsInColumn('unhappy', 1);
+    it('There is one thought in the sad column', () => {
+      confirmNumberOfThoughtsInColumn('sad', 1);
     });
     it('There are two action items', () => {
       cy.get(`rq-actions-column rq-action-item-task`).should('have.length', 2);

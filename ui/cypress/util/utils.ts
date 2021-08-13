@@ -24,7 +24,7 @@ export interface TeamCredentials {
 
 export function teamBoardUrl(teamId: string): string {
   console.log(`**** ${teamId} *****`);
-  return `http://localhost:4200/team/${teamId}`;
+  return `/team/${teamId}`;
 }
 
 export function goToTeamBoard(teamCredentials: TeamCredentials) {
@@ -62,7 +62,7 @@ export function createTeamIfNecessaryAndLogin(
   teamCredentials: TeamCredentials
 ) {
   cy.request({
-    url: `http://localhost:4200/api/team/login`,
+    url: `/api/team/login`,
     failOnStatusCode: false,
     method: 'POST',
     body: {

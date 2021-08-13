@@ -19,26 +19,22 @@ import { createTeamIfNecessaryAndLogin, TeamCredentials } from '../util/utils';
 
 describe('Create Page', () => {
   const teamCredentials = {
-    teamName: 'Create Board Tests',
-    teamId: 'create-board-tests',
+    teamName: 'Test Create Board',
+    teamId: 'test-create-board',
     password: 'Test1234',
     jwt: '',
   } as TeamCredentials;
 
-  const teamName = 'Create Board Tests';
-  const teamId = 'create-board-tests';
-  const password = 'Test1234';
-
   describe('navigation', () => {
     it('should be able to navigate to /create', () => {
       cy.visit('/create');
-      cy.url().should('eq', 'http://localhost:4200/create');
+      cy.url().should('eq', Cypress.config().baseUrl + '/create');
     });
 
     it('should be able to navigate to /login from link', () => {
       cy.visit('/create');
       cy.get('#loginBoard').click();
-      cy.url().should('eq', 'http://localhost:4200/login');
+      cy.url().should('eq', Cypress.config().baseUrl + '/login');
     });
   });
 
