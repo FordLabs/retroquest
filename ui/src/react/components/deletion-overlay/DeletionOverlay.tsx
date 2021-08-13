@@ -17,32 +17,40 @@
 
 import * as React from 'react';
 
-import { PrimaryButton, SecondaryButton } from '../button/Button';
+import { CancelButton, ConfirmButton, ColumnItemButtonGroup } from '../column-item-buttons/ColumnItemButtons';
+import { onKeys } from '../../utils/EventUtils';
 
 import './DeletionOverlay.scss';
 
-type OverlayProps = React.PropsWithChildren<{
-  onConfirm: () => void;
-  onCancel: () => void;
+type DeletionOverlayProps = React.PropsWithChildren<{
+  onConfirm?: () => void;
+  onCancel?: () => void;
 }>;
 
-export default function DeletionOverlay(props: OverlayProps): React.ReactElement {
+export default function DeletionOverlay(props: DeletionOverlayProps) {
   const { onConfirm, onCancel, children } = props;
+
+  React.useEffect(() => {
+    cancelButtonRef.current?.focus();
+    const escapeListener = onKeys('Escape', onCancel);
+    document.addEventListener('keydown', escapeListener);
+
+    return () => {
+      document.removeEventListener('keydown', escapeListener);
+    };
+  }, [onCancel]);
+
+  const cancelButtonRef = React.useRef<HTMLButtonElement>();
 
   return (
     <div className="deletion-overlay">
-      <input autoFocus={true} className="hidden-input" onBlur={onCancel} />
-      <div className="heading">
-        <p>{children}</p>
-      </div>
-      <div className="button-container">
-        <SecondaryButton className="delete-decline-button" onMouseDown={(e) => e.preventDefault()} onClick={onCancel}>
+      <div className="delete-message">{children}</div>
+      <ColumnItemButtonGroup>
+        <CancelButton onClick={onCancel} ref={cancelButtonRef}>
           No
-        </SecondaryButton>
-        <PrimaryButton className="delete-accept-button" onMouseDown={(e) => e.preventDefault()} onClick={onConfirm}>
-          Yes
-        </PrimaryButton>
-      </div>
+        </CancelButton>
+        <ConfirmButton onClick={onConfirm}>Yes</ConfirmButton>
+      </ColumnItemButtonGroup>
     </div>
   );
 }
