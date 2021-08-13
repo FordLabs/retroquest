@@ -34,7 +34,7 @@ describe('DeletionOverlay', () => {
     );
   });
 
-  it('should show the header', () => {
+  it('should show the delete message', () => {
     expect(screen.queryByText('Continue the test?')).not.toBeNull();
   });
 
@@ -50,8 +50,9 @@ describe('DeletionOverlay', () => {
     expect(mockOnCancel).toHaveBeenCalled();
   });
 
-  it('should notify observers of decline when unfocused', () => {
-    userEvent.click(screen.getByText('Continue the test?'));
+  it('should notify observers of decline when escaped', () => {
+    userEvent.type(document.body, '{Escape}');
+
     expect(mockOnConfirm).not.toHaveBeenCalled();
     expect(mockOnCancel).toHaveBeenCalled();
   });

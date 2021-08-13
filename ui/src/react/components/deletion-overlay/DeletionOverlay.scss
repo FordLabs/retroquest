@@ -15,87 +15,24 @@
  * limitations under the License.
  */
 
-@import '../../../styles/colors';
-
 .deletion-overlay {
-  background-color: opacity($white, 0.98);
-  border-radius: 6px;
-  bottom: 0;
-  box-shadow: 0 0 0 4px $red;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
   width: 100%;
-  z-index: 20;
+  height: 100%;
 
-  .dark-theme & {
-    background-color: $task-background-dark;
-  }
+  background-color: inherit;
+  border-radius: inherit;
 
-  .hidden-input {
-    border: 0;
-    height: 0;
-    margin: 0;
-    opacity: 0;
-    padding: 0;
-    pointer-events: none;
-    width: 0;
-  }
+  position: absolute;
+  top: 0;
+  left: 0;
 
-  .heading {
-    align-items: center;
+
+  .delete-message {
     display: flex;
-    flex: 1;
-    font-size: 1rem;
-    justify-content: center;
-    min-height: 40px;
-  }
-
-  .button-container {
+    flex: 1 1 0;
     align-items: center;
-    border-top: 2px solid opacity($asphalt, 0.06);
-    display: flex;
-    height: 40px;
     justify-content: center;
-
-    .dark-theme & {
-      border-top-color: $task-footer-separator-dark;
-    }
-
-    .button {
-      border-radius: 0;
-      flex: 1;
-      font-size: 1rem;
-      height: 100%;
-
-      &.delete-decline-button {
-        border-right: 2px solid opacity($asphalt, 0.06);
-        color: opacity($asphalt, 0.6);
-
-        &:hover {
-          color: inherit;
-        }
-
-        .dark-theme & {
-          border-right-color: $task-footer-separator-dark;
-          color: opacity($gray, 0.6);
-
-          &:hover {
-            color: $gray;
-          }
-        }
-      }
-
-      &.delete-accept-button {
-        background-color: transparent;
-        border-radius: 0 0 6px;
-        box-shadow: none;
-        color: $red;
-      }
-    }
   }
 }
