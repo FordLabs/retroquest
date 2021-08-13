@@ -19,7 +19,7 @@ import * as React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import ColumnItem from '../components/column-item/ColumnItem';
-import RetroItemType from '../types/RetroItemType';
+import ColumnType from '../types/ColumnType';
 
 export default {
   title: 'components/ColumnItem',
@@ -61,7 +61,7 @@ const Template: ComponentStory<typeof ColumnItem> = () => {
     <>
       <div style={{ width: '400px', marginBottom: '20px' }}>
         <ColumnItem
-          type={RetroItemType.HAPPY}
+          type={ColumnType.HAPPY}
           text={text}
           checked={checked}
           onEdit={onEdit}
@@ -71,9 +71,9 @@ const Template: ComponentStory<typeof ColumnItem> = () => {
         />
       </div>
       <div style={{ width: '400px', display: 'flex', flexDirection: 'column' }}>
-        <ColumnItem type={RetroItemType.CONFUSED} {...props} />
-        <ColumnItem type={RetroItemType.UNHAPPY} {...props} />
-        <ColumnItem type={RetroItemType.ACTION} {...props} />
+        <ColumnItem type={ColumnType.CONFUSED} {...props} />
+        <ColumnItem type={ColumnType.UNHAPPY} {...props} />
+        <ColumnItem type={ColumnType.ACTION} {...props} />
       </div>
     </>
   );

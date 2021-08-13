@@ -20,7 +20,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import TextField from './TextField';
-import RetroItemType from '../../types/RetroItemType';
+import ColumnType from '../../types/ColumnType';
 
 describe('TextField', () => {
   const mockHandleSubmit = jest.fn();
@@ -34,7 +34,7 @@ describe('TextField', () => {
     const result = render(
       <TextField
         data-testid="happy"
-        type={RetroItemType.HAPPY}
+        type={ColumnType.HAPPY}
         placeholder={placeholder}
         handleSubmission={mockHandleSubmit}
       />
@@ -44,7 +44,7 @@ describe('TextField', () => {
     result.rerender(
       <TextField
         data-testid="confused"
-        type={RetroItemType.CONFUSED}
+        type={ColumnType.CONFUSED}
         placeholder={placeholder}
         handleSubmission={mockHandleSubmit}
       />
@@ -54,7 +54,7 @@ describe('TextField', () => {
     result.rerender(
       <TextField
         data-testid="unhappy"
-        type={RetroItemType.UNHAPPY}
+        type={ColumnType.UNHAPPY}
         placeholder={placeholder}
         handleSubmission={mockHandleSubmit}
       />
@@ -63,7 +63,7 @@ describe('TextField', () => {
   });
 
   it('should submit on enter', () => {
-    render(<TextField type={RetroItemType.HAPPY} placeholder={placeholder} handleSubmission={mockHandleSubmit} />);
+    render(<TextField type={ColumnType.HAPPY} placeholder={placeholder} handleSubmission={mockHandleSubmit} />);
     const textField = screen.getByPlaceholderText(placeholder);
 
     userEvent.type(textField, 'Submission Text{enter}');

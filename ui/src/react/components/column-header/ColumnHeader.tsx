@@ -21,7 +21,7 @@ import classNames from 'classnames';
 import Tooltip from '../tooltip/Tooltip';
 import FloatingCharacterCountdown from '../floating-character-countdown/FloatingCharacterCountdown';
 import { emojify } from '../../../app/modules/utils/EmojiGenerator';
-import RetroItemType from '../../types/RetroItemType';
+import ColumnType from '../../types/ColumnType';
 import { onChange, onEachKey } from '../../utils/EventUtils';
 
 import './ColumnHeader.scss';
@@ -31,7 +31,7 @@ const almostOutOfCharactersThreshold = 5;
 
 interface ColumnHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   initialTitle?: string;
-  type?: RetroItemType;
+  type?: ColumnType;
   readOnly?: boolean;
   sortedChanged: (changed: boolean) => void;
   titleChanged: (title: string) => void;
