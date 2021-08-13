@@ -19,13 +19,13 @@ import * as React from 'react';
 import classnames from 'classnames';
 
 import FloatingCharacterCountdown from '../floating-character-countdown/FloatingCharacterCountdown';
-import RetroItemType from '../../types/RetroItemType';
+import ColumnType from '../../types/ColumnType';
 import { onChange, onKeys } from '../../utils/EventUtils';
 
 import './TextField.scss';
 
 export interface TextFieldProps extends React.HTMLAttributes<HTMLSpanElement> {
-  type: RetroItemType;
+  type: ColumnType;
   placeholder: string;
   handleSubmission: (string) => void;
 }

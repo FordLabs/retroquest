@@ -1,8 +1,8 @@
-enum RetroItemType {
+enum ColumnType {
   HAPPY = 'happy',
   CONFUSED = 'confused',
   UNHAPPY = 'unhappy',
   ACTION = 'action',
 }
 
-export default RetroItemType;
+export default ColumnType;
