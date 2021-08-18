@@ -87,6 +87,50 @@
     box-shadow: 0 0 0 4px $red !important;
   }
 
+  .text-container {
+    $padding: 18px;
+
+    border-radius: inherit;
+    cursor: pointer;
+
+    position: relative;
+
+    .text-area {
+      display: inline-block;
+      width: 100%;
+      height: 56px;
+      min-height: 56px;
+      padding: $padding;
+      overflow: auto;
+
+      color: inherit;
+      font-family: inherit;
+      font-weight: inherit;
+      font-size: inherit;
+      white-space: pre-wrap;
+      word-break: break-word;
+
+      background-color: inherit;
+
+      border: 0;
+      border-radius: inherit;
+      box-shadow: none;
+      cursor: default;
+
+      resize: none;
+
+      &[readonly] {
+        cursor: pointer;
+        caret-color: transparent;
+      }
+    }
+
+    .floating-character-countdown {
+      bottom: 2px;
+      right: $padding;
+    }
+  }
+
   @media only screen and (max-width: 610px) {
     &.action,
     &.unhappy,
