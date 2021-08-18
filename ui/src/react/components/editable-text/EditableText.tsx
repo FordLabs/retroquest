@@ -84,7 +84,7 @@ export default function EditableText(props: EditableTextProps) {
     >
       <textarea
         data-testid="editableText"
-        className="editable-text"
+        className="text-area"
         ref={textAreaRef}
         value={editing ? editValue : value}
         onChange={onChange(setEditValue)}
