@@ -27,16 +27,30 @@ export default {
 } as ComponentMeta<typeof Modal>;
 
 const Template: ComponentStory<typeof Modal> = () => {
-  const ref = React.createRef<ModalMethods>();
+  const modalRef = React.createRef<ModalMethods>();
+  const noEscapeRef = React.createRef<ModalMethods>();
+  const noBackdropRef = React.createRef<ModalMethods>();
 
   return (
     <>
-      <div style={{ display: 'flex' }}>
-        <PrimaryButton onClick={() => ref.current.show()}>Show Modal</PrimaryButton>
+      <div
+        style={{ display: 'inline-flex', flexDirection: 'column', justifyContent: 'space-between', height: '180px' }}
+      >
+        <PrimaryButton onClick={() => modalRef.current.show()}>Show Modal</PrimaryButton>
+        <PrimaryButton onClick={() => noEscapeRef.current.show()}>Show No Escape Modal</PrimaryButton>
+        <PrimaryButton onClick={() => noBackdropRef.current.show()}>Show No Backdrop Modal</PrimaryButton>
       </div>
 
-      <Modal ref={ref}>
+      <Modal ref={modalRef}>
         <div style={{ color: 'white' }}>This is some modal content</div>
+      </Modal>
+
+      <Modal ref={noEscapeRef} hideOnEscape={false}>
+        <div style={{ color: 'white' }}>This modal cannot be closed with escape</div>
+      </Modal>
+
+      <Modal ref={noBackdropRef} hideOnBackdropClick={false}>
+        <div style={{ color: 'white' }}>This modal cannot be close by clicking the backdrop</div>
       </Modal>
     </>
   );
