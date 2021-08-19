@@ -20,7 +20,17 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import ColumnItem from './ColumnItem';
+import * as Modal from '../modal/Modal';
 import ColumnType from '../../types/ColumnType';
+
+const mockUseModalValue = {
+  hide: jest.fn(),
+  show: jest.fn(),
+  setHideOnEscape: jest.fn(),
+  setHideOnBackdropClick: jest.fn(),
+};
+
+jest.spyOn(Modal, 'useModal').mockReturnValue(mockUseModalValue);
 
 describe('ColumnItem', () => {
   const mockSelect = jest.fn();
@@ -98,6 +108,18 @@ describe('ColumnItem', () => {
       expect(mockCheck).not.toHaveBeenCalled();
     });
 
+    it('should disable modal closing while editing', () => {
+      clickEdit();
+
+      expect(mockUseModalValue.setHideOnEscape).toHaveBeenCalledWith(false);
+      expect(mockUseModalValue.setHideOnBackdropClick).toHaveBeenCalledWith(false);
+
+      clickEdit();
+
+      expect(mockUseModalValue.setHideOnEscape).toHaveBeenCalledWith(true);
+      expect(mockUseModalValue.setHideOnBackdropClick).toHaveBeenCalledWith(true);
+    });
+
     it('can complete edit', () => {
       clickEdit();
       editText('New Fake Text{Enter}');
@@ -118,6 +140,18 @@ describe('ColumnItem', () => {
 
       clickCancelDelete();
       expect(deleteMessage()).toBeFalsy();
+    });
+
+    it('should disable modal closing while deleting', () => {
+      clickDelete();
+
+      expect(mockUseModalValue.setHideOnEscape).toHaveBeenCalledWith(false);
+      expect(mockUseModalValue.setHideOnBackdropClick).toHaveBeenCalledWith(false);
+
+      escapeKey();
+
+      expect(mockUseModalValue.setHideOnEscape).toHaveBeenCalledWith(true);
+      expect(mockUseModalValue.setHideOnBackdropClick).toHaveBeenCalledWith(true);
     });
 
     it('can complete delete', () => {

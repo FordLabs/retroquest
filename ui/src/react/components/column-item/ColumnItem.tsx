@@ -26,6 +26,7 @@ import {
 } from '../column-item-buttons/ColumnItemButtons';
 import DeletionOverlay from '../deletion-overlay/DeletionOverlay';
 import EditableText from '../editable-text/EditableText';
+import { useModal } from '../modal/Modal';
 import ColumnType from '../../types/ColumnType';
 
 import './ColumnItem.scss';
@@ -63,6 +64,8 @@ export default function ColumnItem(props: ColumnItemProps) {
     ...divProps
   } = props;
 
+  const { setHideOnEscape, setHideOnBackdropClick } = useModal();
+
   const editButtonRef = React.useRef<HTMLButtonElement>();
   const deleteButtonRef = React.useRef<HTMLButtonElement>();
 
@@ -70,6 +73,18 @@ export default function ColumnItem(props: ColumnItemProps) {
   const [deleting, setDeleting] = React.useState<boolean>();
 
   const canSelect = ((!editing && !deleting && !checked) || readOnly) && !!onSelect;
+
+  React.useEffect(() => {
+    if (editing || deleting) {
+      setHideOnEscape(false);
+      setHideOnBackdropClick(false);
+
+      return () => {
+        setHideOnEscape(true);
+        setHideOnBackdropClick(true);
+      };
+    }
+  }, [setHideOnEscape, editing, deleting]);
 
   function onEditToggle() {
     return setEditing((editing) => !editing);
