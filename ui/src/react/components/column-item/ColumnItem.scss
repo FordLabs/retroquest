@@ -240,7 +240,6 @@
   }
 
   .shake {
-    transform: scale(1.65) translate3d(0, 0, 0);
     backface-visibility: hidden;
     perspective: 1000px;
 
@@ -257,26 +256,26 @@
     10%,
     90% {
       box-shadow: $unhappy-shadow;
-      transform: scale(1.65) translate3d(-1px, 0, 0);
+      transform: translate3d(-1px, 0, 0);
     }
 
     20%,
     80% {
       box-shadow: $unhappy-shadow;
-      transform: scale(1.65) translate3d(3px, 0, 0);
+      transform: translate3d(3px, 0, 0);
     }
 
     30%,
     50%,
     70% {
       box-shadow: $unhappy-shadow;
-      transform: scale(1.65) translate3d(-6px, 0, 0);
+      transform: translate3d(-6px, 0, 0);
     }
 
     40%,
     60% {
       box-shadow: $unhappy-shadow;
-      transform: scale(1.65) translate3d(6px, 0, 0);
+      transform: translate3d(6px, 0, 0);
     }
   }
 }
