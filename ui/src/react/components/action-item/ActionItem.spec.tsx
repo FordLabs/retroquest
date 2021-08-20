@@ -18,8 +18,18 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import * as Modal from '../modal/Modal';
 
-import ActionItem from './ActionItem';
+import ActionItem, { AddActionItem } from './ActionItem';
+
+const mockUseModalValue = {
+  hide: jest.fn(),
+  show: jest.fn(),
+  setHideOnEscape: jest.fn(),
+  setHideOnBackdropClick: jest.fn(),
+};
+
+jest.spyOn(Modal, 'useModal').mockReturnValue(mockUseModalValue);
 
 describe('ActionItem', () => {
   const mockSelect = jest.fn();
@@ -225,6 +235,45 @@ describe('ActionItem', () => {
   });
 });
 
+describe('AddActionItem', () => {
+  const mockConfirm = jest.fn();
+  const mockCancel = jest.fn();
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    render(<AddActionItem onConfirm={mockConfirm} onCancel={mockCancel} />);
+  });
+
+  it('should cancel on escape and discard', () => {
+    escapeKey();
+    clickDiscard();
+
+    expect(mockCancel).toHaveBeenCalledTimes(2);
+  });
+
+  it('should call onConfirm with task and assignee', () => {
+    editTask('Run this test');
+    typeAssignee('jest');
+    clickCreate();
+
+    expect(mockConfirm).toHaveBeenCalledWith('Run this test', 'jest');
+  });
+
+  it('should shake and not call onConfirm when task is empty', () => {
+    typeAssignee('jest');
+    clickCreate();
+
+    expect(mockConfirm).not.toHaveBeenCalled();
+    expect(screen.getByTestId('addActionItem').className).toContain('shake');
+  });
+
+  it('should stop modal from closing', () => {
+    expect(mockUseModalValue.setHideOnEscape).toHaveBeenCalledWith(false);
+    expect(mockUseModalValue.setHideOnBackdropClick).toHaveBeenCalledWith(false);
+  });
+});
+
 function taskReadonly() {
   return screen.getByTestId('editableText').getAttribute('readonly') === '';
 }
@@ -234,7 +283,8 @@ function assigneeDisable() {
 }
 
 function editTask(text) {
-  const textArea = screen.getByTestId('editableText') as HTMLTextAreaElement;
+  const textArea = (screen.queryByTestId('editableText') ||
+    screen.queryByTestId('addActionItem-task')) as HTMLTextAreaElement;
   textArea.select();
   userEvent.type(textArea, text);
 }
@@ -265,6 +315,14 @@ function clickCancelDelete() {
 
 function clickConfirmDelete() {
   userEvent.click(screen.getByText('Yes'));
+}
+
+function clickDiscard() {
+  userEvent.click(screen.getByText('Discard'));
+}
+
+function clickCreate() {
+  userEvent.click(screen.getByText('Create', { exact: false }));
 }
 
 function escapeKey() {
