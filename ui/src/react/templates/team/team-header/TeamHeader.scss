@@ -1,0 +1,172 @@
+/*!
+ * Copyright (c) 2021 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import '../../../../styles/colors';
+@import '../../../../styles/mixins';
+@import '../../../../styles/sizes';
+
+.team-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+
+  position: relative;
+
+  @include mobile {
+    height: 42px;
+  }
+
+  .left-content {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    overflow: hidden;
+
+    font-size: 1.5rem;
+
+    @include mobile {
+      font-size: 1rem;
+    }
+  }
+
+  .center-content {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  .right-content {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: flex-end;
+
+    @include mobile {
+      flex: initial;
+    }
+
+    @include dark-theme {
+      color: $gray;
+    }
+  }
+
+  .logo-link {
+    font-size: 0;
+  }
+
+  .logo {
+    height: 36px;
+    border-radius: 6px;
+
+    @include mobile {
+      height: 24px;
+    }
+  }
+
+  .horizontal-separator {
+    width: 3px;
+    height: 24px;
+    margin: 0 24px;
+
+    background-color: $asphalt;
+    border-radius: 6px;
+    opacity: 0.1;
+
+    @include mobile {
+      display: none;
+    }
+
+    @include dark-theme {
+      background-color: $count-separator-background-dark;
+      opacity: 1;
+    }
+  }
+
+  .team-name {
+    overflow: hidden;
+
+    color: inherit;
+    font-weight: bold;
+    font-size: inherit;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    @include mobile {
+      flex: 1;
+      padding: 0 6px;
+
+      text-align: center;
+    }
+
+    @include dark-theme {
+      color: opacity($gray, 0.75);
+    }
+  }
+
+  .nav-link {
+    height: 28px;
+
+    color: opacity($asphalt, 0.4);
+    font-size: 1.1rem;
+    text-decoration: none;
+
+    border-radius: 32px;
+
+    @include dark-theme {
+      color: opacity($gray, 0.4);
+    }
+
+    &.selected {
+      color: $asphalt;
+      background-color: opacity($asphalt, 0.2);
+
+      @include dark-theme {
+        color: $gray;
+        background-color: opacity($gray, 0.2);
+      }
+    }
+  }
+
+  .last-saved-text {
+    margin-right: 18px;
+
+    font-weight: 500;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    text-align: right;
+
+    opacity: 0.5;
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  .settings-button {
+    font-size: 1.3rem;
+
+    &:hover, &:focus {
+      color: $purple;
+    }
+  }
+}

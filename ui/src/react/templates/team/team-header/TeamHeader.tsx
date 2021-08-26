@@ -18,17 +18,17 @@
 import * as React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
-import { ModalMethods } from '../modal/Modal';
-import SettingsDialog from '../settings-dialog/SettingsDialog';
-import useBoard from '../../hooks/useBoard';
-import useTheme from '../../hooks/useTheme';
-import SaveCheckerService from '../../services/SaveCheckerService';
-import Theme from '../../types/Theme';
+import { ModalMethods } from '../../../components/modal/Modal';
+import SettingsDialog from '../../../components/settings-dialog/SettingsDialog';
+import useBoard from '../../../hooks/useBoard';
+import useTheme from '../../../hooks/useTheme';
+import SaveCheckerService from '../../../services/SaveCheckerService';
+import Theme from '../../../types/Theme';
 
-import './TopHeader.scss';
+import './TeamHeader.scss';
 
-import logoLight from '../../../assets/icons/icon-light-72x72.png';
-import logoDark from '../../../assets/icons/icon-72x72.png';
+import logoLight from '../../../../assets/icons/icon-light-72x72.png';
+import logoDark from '../../../../assets/icons/icon-72x72.png';
 
 type RqLink = {
   label: 'retro' | 'archives' | 'radiator';
@@ -41,7 +41,7 @@ const LINKS: RqLink[] = [
   { label: 'radiator', path: '/radiator' },
 ];
 
-export default function TopHeader() {
+export default function TeamHeader() {
   const { teamId, teamName } = useBoard();
 
   const [theme] = useTheme();
@@ -56,17 +56,22 @@ export default function TopHeader() {
   }, []);
 
   return (
-    <div className="top-header">
-      <div className="header-top-content">
+    <>
+      <header className="team-header">
         <div className="left-content">
           <Link to="/" className="logo-link">
-            <img src={theme === Theme.DARK ? logoLight : logoDark} title="RetroQuest" id="logo" alt="RetroQuest" />
+            <img
+              src={theme === Theme.DARK ? logoLight : logoDark}
+              className="logo"
+              title="RetroQuest"
+              alt="RetroQuest"
+            />
           </Link>
           <div className="horizontal-separator" />
-          <div id="teamName">{teamName}</div>
+          <div className="team-name">{teamName}</div>
         </div>
 
-        <div className="center-content">
+        <nav className="center-content">
           {LINKS.map((link) => (
             <NavLink
               key={link.path}
@@ -78,18 +83,18 @@ export default function TopHeader() {
               {link.label}
             </NavLink>
           ))}
-        </div>
+        </nav>
 
         <div className="right-content">
           <div className="last-saved-text">{lastSavedText}</div>
-          <div
+          <button
             className="settings-button fas fa-cog"
             onClick={() => modalRef.current?.show()}
-            data-testid="settingsBtn"
+            data-testid="settingsButton"
           />
         </div>
-      </div>
+      </header>
       <SettingsDialog ref={modalRef} />
-    </div>
+    </>
   );
 }
