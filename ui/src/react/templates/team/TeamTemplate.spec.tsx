@@ -14,24 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import * as React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
-import TopHeader from '../components/top-header/TopHeader';
+import TeamTemplate from './TeamTemplate';
 
-export default {
-  title: 'components/TopHeader',
-  component: TopHeader,
-} as ComponentMeta<typeof TopHeader>;
+describe('TeamTemplate', () => {
+  it('should render the team header, sub header, and children', () => {
+    render(
+      <MemoryRouter initialEntries={['/team/team-id']}>
+        <TeamTemplate subHeader={<div>sub header</div>}>
+          <div>children</div>
+        </TeamTemplate>
+      </MemoryRouter>
+    );
 
-const Template: ComponentStory<typeof TopHeader> = () => {
-  return (
-    <MemoryRouter initialEntries={['/team/team-id/']}>
-      <TopHeader />
-    </MemoryRouter>
-  );
-};
-
-export const Example = Template.bind({});
+    screen.getByText('retro');
+    screen.getByText('archives');
+    screen.getByText('radiator');
+    screen.getByText('sub header');
+    screen.getByText('children');
+  });
+});

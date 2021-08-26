@@ -20,15 +20,15 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route } from 'react-router-dom';
 
-import TopHeader from './TopHeader';
+import TeamHeader from './TeamHeader';
 
-describe('TopHeader', () => {
+describe('TeamHeader', () => {
   let testLocation;
 
   beforeEach(() => {
     render(
       <MemoryRouter initialEntries={['/team/team-id']}>
-        <TopHeader />
+        <TeamHeader />
         <Route
           path="*"
           render={({ location }) => {
@@ -61,7 +61,7 @@ describe('TopHeader', () => {
   });
 
   it('should render the settings button and setting dialog', () => {
-    userEvent.click(screen.getByTestId('settingsBtn'));
+    userEvent.click(screen.getByTestId('settingsButton'));
     screen.getByText('settings');
     screen.getByText('choose your preferences');
   });
