@@ -20,3 +20,8 @@ $global-side-padding-mobile: 6px;
 
 $max-width: 1440px + (2 * $global-side-padding);
 $min-width: 610px;
+
+$max-width-desktop: 1440px + (2 * $global-side-padding);
+$max-width-tablet: 992px;
+$max-width-mobile: 610px;
+

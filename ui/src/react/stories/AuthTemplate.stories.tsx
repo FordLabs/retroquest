@@ -17,25 +17,22 @@
 
 import * as React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { MemoryRouter } from 'react-router-dom';
+import { Link, MemoryRouter } from 'react-router-dom';
 
-import TeamTemplate from '../templates/team/TeamTemplate';
+import AuthTemplate from '../templates/auth/AuthTemplate';
+import { PrimaryButton } from '../components/button/Button';
 
 export default {
-  title: 'templates/TeamTemplate',
-  component: TeamTemplate,
-} as ComponentMeta<typeof TeamTemplate>;
+  title: 'templates/AuthTemplate',
+  component: AuthTemplate,
+} as ComponentMeta<typeof AuthTemplate>;
 
-const Template: ComponentStory<typeof TeamTemplate> = () => {
+const Template: ComponentStory<typeof AuthTemplate> = () => {
   return (
     <MemoryRouter initialEntries={['/team/team-id/']}>
-      <TeamTemplate
-        subHeader={
-          <div style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            sub header content
-          </div>
-        }
-      />
+      <AuthTemplate header="Sign in to your Board!" subHeader={<Link to="/create">or create a new board</Link>}>
+        <PrimaryButton>Sign in</PrimaryButton>
+      </AuthTemplate>
     </MemoryRouter>
   );
 };
