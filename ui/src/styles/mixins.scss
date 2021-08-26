@@ -1,0 +1,13 @@
+@import 'sizes';
+
+@mixin mobile {
+  @media only screen and (max-width: $min-width) {
+    @content;
+  }
+}
+
+@mixin dark-theme {
+  .dark-theme & {
+    @content;
+  }
+}
