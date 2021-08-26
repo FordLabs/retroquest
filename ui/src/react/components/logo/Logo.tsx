@@ -24,18 +24,18 @@ import logo from '../../../assets/icons/icon-72x72.png';
 export default function Logo() {
   return (
     <div className="logo-container">
-      <img src={logo} title="RetroQuest Icon" id="logo-pic" alt="Logo" className="logo-image" />
+      <img className="logo-image" src={logo} title="RetroQuest Icon" alt="Logo" />
 
-      <div className="logo-text-container">
-        <label className="logo-text">RetroQuest</label>
-        <label className="logo-sub-text">
+      <h1 className="logo-text-container">
+        <span className="logo-text">RetroQuest</span>
+        <span className="logo-sub-text">
           A{' '}
           <a className="fordlabs-label" href="https://fordlabs.com" target="_blank" rel="noopener">
             FordLabs
           </a>{' '}
           Product
-        </label>
-      </div>
+        </span>
+      </h1>
     </div>
   );
 }
