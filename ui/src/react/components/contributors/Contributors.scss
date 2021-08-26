@@ -15,15 +15,23 @@
  * limitations under the License.
  */
 
+@import '../../../styles/mixins';
 @import '../../../styles/colors';
 
 .contributors {
   padding: 2rem 4rem;
+
+  color: $white;
+
   background-color: $dark-asphalt;
+
+  @include dark-theme {
+    color: $dark-asphalt;
+    background-color: $background-color-light;
+  }
 
   .contributors-title-container {
     margin: 3rem 0;
-    color: $white;
 
     .contributors-title {
       font-weight: bold;
