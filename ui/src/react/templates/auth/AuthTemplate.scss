@@ -21,6 +21,7 @@
 
 .auth-template {
   display: flex;
+  height: 100%;
 
   font-family: 'Open Sans', sans-serif;
 
@@ -28,6 +29,10 @@
 
   @include tablet {
     display: block;
+  }
+
+  @include dark-theme {
+    background-color: $background-color-dark;
   }
 
   .auth-template-container {

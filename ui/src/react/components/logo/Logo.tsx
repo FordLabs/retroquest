@@ -17,14 +17,25 @@
 
 import * as React from 'react';
 
+import useTheme from '../../hooks/useTheme';
+import Theme from '../../types/Theme';
+
 import './Logo.scss';
 
-import logo from '../../../assets/icons/icon-72x72.png';
+import logoLight from '../../../assets/icons/icon-light-72x72.png';
+import logoDark from '../../../assets/icons/icon-72x72.png';
 
 export default function Logo() {
+  const [theme] = useTheme();
+
   return (
     <div className="logo-container">
-      <img className="logo-image" src={logo} title="RetroQuest Icon" alt="Logo" />
+      <img
+        className="logo-image"
+        src={theme === Theme.DARK ? logoLight : logoDark}
+        title="RetroQuest Icon"
+        alt="Logo"
+      />
 
       <h1 className="logo-text-container">
         <span className="logo-text">RetroQuest</span>
