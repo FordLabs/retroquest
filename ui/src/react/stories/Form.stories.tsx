@@ -38,7 +38,7 @@ const Template: ComponentStory<typeof Form> = () => {
   const teamNameErrorMessage = validateTeamName(teamName);
   const passwordErrorMessage = validatePassword(password);
 
-  function submit() {
+  function submit(): Promise<void> {
     setValidate(true);
 
     if (teamNameErrorMessage || passwordErrorMessage) {
@@ -46,11 +46,18 @@ const Template: ComponentStory<typeof Form> = () => {
       if (teamNameErrorMessage) errors.push(teamNameErrorMessage);
       if (passwordErrorMessage) errors.push(passwordErrorMessage);
       setErrorMessages(errors);
+
+      return Promise.resolve();
     } else {
-      setValidate(false);
-      setTeamName('');
-      setPassword('');
-      setErrorMessages([]);
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          setValidate(false);
+          setTeamName('');
+          setPassword('');
+          setErrorMessages([]);
+          resolve();
+        }, 1000);
+      });
     }
   }
 
