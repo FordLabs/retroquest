@@ -29,9 +29,11 @@ type FormProps = React.ComponentPropsWithoutRef<'form'> & {
 
 export default function Form(props: FormProps) {
   const { submitButtonText = 'submit', errorMessages = [], onSubmit, className, children, ...formProps } = props;
+  const [loading, setLoading] = React.useState(false);
 
   function handleSubmit(e) {
-    onSubmit(e);
+    setLoading(true);
+    Promise.resolve(onSubmit(e)).finally(() => setLoading(false));
     e.preventDefault();
   }
 
@@ -43,7 +45,9 @@ export default function Form(props: FormProps) {
           {errorMessage}
         </div>
       ))}
-      <PrimaryButton className="submit-button">{submitButtonText}</PrimaryButton>
+      <PrimaryButton className="submit-button" disabled={loading}>
+        {submitButtonText}
+      </PrimaryButton>
     </form>
   );
 }
