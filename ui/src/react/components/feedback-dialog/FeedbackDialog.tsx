@@ -20,14 +20,14 @@ import * as React from 'react';
 import Dialog from '../dialog/Dialog';
 import Modal, { ModalMethods } from '../modal/Modal';
 import FeedbackStars from '../feedback-stars/FeedbackStars';
-import useBoard from '../../hooks/useBoard';
+import useTeam from '../../hooks/useTeam';
 import Feedback from '../../types/Feedback';
 import { onChange } from '../../utils/EventUtils';
 
 import './FeedbackDialog.scss';
 
 function FeedbackDialog(props, ref) {
-  const { teamId } = useBoard();
+  const { teamId } = useTeam();
 
   function hide() {
     ref.current?.hide();

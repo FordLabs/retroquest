@@ -1,15 +1,15 @@
-export const BOARD_NAME_REGEX = /^[A-Za-z0-9 ]+$/;
+export const TEAM_NAME_REGEX = /^[A-Za-z0-9 ]+$/;
 export const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 
 export const LOWERCASE_REGEX = /^.*[a-z]+.*$/;
 export const UPPERCASE_REGEX = /^.*[A-Z]+.*$/;
 export const NUMBER_REGEX = /^.*\d+.*$/;
 
-export function validateBoardName(board: string): string | undefined {
-  if (!board) {
-    return 'Please enter a board name.';
-  } else if (!board.match(BOARD_NAME_REGEX)) {
-    return 'Please enter a board name without any special characters.';
+export function validateTeamName(team: string): string | undefined {
+  if (!team) {
+    return 'Please enter a team name.';
+  } else if (!team.match(TEAM_NAME_REGEX)) {
+    return 'Please enter a team name without any special characters.';
   }
 }
 
