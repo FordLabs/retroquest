@@ -1,13 +1,13 @@
-import { validateBoardName, validatePassword } from './StringUtils';
+import { validateTeamName, validatePassword } from './StringUtils';
 
 describe('String Utils', () => {
-  const emptyBoardNameError = 'Please enter a board name.';
-  const specialCharacterError = 'Please enter a board name without any special characters.';
+  const emptyTeamNameError = 'Please enter a team name.';
+  const specialCharacterError = 'Please enter a team name without any special characters.';
 
   it.each([
-    ['', emptyBoardNameError],
-    [null, emptyBoardNameError],
-    [undefined, emptyBoardNameError],
+    ['', emptyTeamNameError],
+    [null, emptyTeamNameError],
+    [undefined, emptyTeamNameError],
     ['!', specialCharacterError],
     ['@', specialCharacterError],
     ['-', specialCharacterError],
@@ -16,8 +16,8 @@ describe('String Utils', () => {
     ['a', undefined],
     ['1', undefined],
     ['a1', undefined],
-  ])('validating board name "%s" should return error message "%s"', (boardName, error) => {
-    expect(validateBoardName(boardName)).toBe(error);
+  ])('validating team name "%s" should return error message "%s"', (teamName, error) => {
+    expect(validateTeamName(teamName)).toBe(error);
   });
 
   const emptyPasswordError = 'Please enter a password.';

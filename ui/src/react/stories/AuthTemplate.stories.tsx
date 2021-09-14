@@ -30,7 +30,7 @@ export default {
 const Template: ComponentStory<typeof AuthTemplate> = () => {
   return (
     <MemoryRouter initialEntries={['/team/team-id/']}>
-      <AuthTemplate header="Sign in to your Board!" subHeader={<Link to="/create">or create a new board</Link>}>
+      <AuthTemplate header="Sign in to your Team!" subHeader={<Link to="/create">or create a new Team</Link>}>
         <PrimaryButton>Sign in</PrimaryButton>
       </AuthTemplate>
     </MemoryRouter>
