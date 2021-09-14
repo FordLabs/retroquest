@@ -21,7 +21,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import Form from '../components/form/Form';
 import InputText from '../components/input-text/InputText';
 import { onChange } from '../utils/EventUtils';
-import { validateBoardName, validatePassword } from '../utils/StringUtils';
+import { validateTeamName, validatePassword } from '../utils/StringUtils';
 
 export default {
   title: 'components/Form',
@@ -29,26 +29,26 @@ export default {
 } as ComponentMeta<typeof Form>;
 
 const Template: ComponentStory<typeof Form> = () => {
-  const [board, setBoard] = React.useState('');
+  const [teamName, setTeamName] = React.useState('');
   const [password, setPassword] = React.useState('');
 
   const [validate, setValidate] = React.useState(false);
   const [errorMessages, setErrorMessages] = React.useState([]);
 
-  const boardErrorMessage = validateBoardName(board);
+  const teamNameErrorMessage = validateTeamName(teamName);
   const passwordErrorMessage = validatePassword(password);
 
   function submit() {
     setValidate(true);
 
-    if (boardErrorMessage || passwordErrorMessage) {
+    if (teamNameErrorMessage || passwordErrorMessage) {
       const errors = [];
-      if (boardErrorMessage) errors.push(boardErrorMessage);
+      if (teamNameErrorMessage) errors.push(teamNameErrorMessage);
       if (passwordErrorMessage) errors.push(passwordErrorMessage);
       setErrorMessages(errors);
     } else {
       setValidate(false);
-      setBoard('');
+      setTeamName('');
       setPassword('');
       setErrorMessages([]);
     }
@@ -57,12 +57,12 @@ const Template: ComponentStory<typeof Form> = () => {
   return (
     <Form onSubmit={submit} errorMessages={errorMessages} style={{ maxWidth: '600px' }}>
       <InputText
-        id="board"
-        label="Board name"
-        value={board}
-        onChange={onChange(setBoard)}
+        id="teamName"
+        label="Team name"
+        value={teamName}
+        onChange={onChange(setTeamName)}
         validationMessage="Names must not contain special characters. "
-        invalid={validate && !!boardErrorMessage}
+        invalid={validate && !!teamNameErrorMessage}
       />
       <InputText
         id="password"

@@ -20,7 +20,7 @@ import { Link, NavLink } from 'react-router-dom';
 
 import { ModalMethods } from '../../../components/modal/Modal';
 import SettingsDialog from '../../../components/settings-dialog/SettingsDialog';
-import useBoard from '../../../hooks/useBoard';
+import useTeam from '../../../hooks/useTeam';
 import useTheme from '../../../hooks/useTheme';
 import SaveCheckerService from '../../../services/SaveCheckerService';
 import Theme from '../../../types/Theme';
@@ -42,7 +42,7 @@ const LINKS: RqLink[] = [
 ];
 
 export default function TeamHeader() {
-  const { teamId, teamName } = useBoard();
+  const { teamId, teamName } = useTeam();
 
   const [theme] = useTheme();
 

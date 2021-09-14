@@ -16,6 +16,6 @@
  */
 
 // placeholder implementation
-export default function useBoard() {
+export default function useTeam() {
   return { teamId: 'team-id', teamName: 'Team Name' };
 }
