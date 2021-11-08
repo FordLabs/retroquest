@@ -41,6 +41,7 @@ import { PageLogoComponent } from './page-logo/page-logo.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { RecaptchaModule } from 'ng-recaptcha';
 import { ContributorsComponent } from './contributors/contributors.component';
+import { CountdownTimerComponent } from './countdown-timer/countdown-timer.component';
 
 @NgModule({
   imports: [
@@ -73,6 +74,7 @@ import { ContributorsComponent } from './contributors/contributors.component';
     PageLogoComponent,
     LoginFormComponent,
     ContributorsComponent,
+    CountdownTimerComponent,
   ],
 
   exports: [
@@ -95,6 +97,7 @@ import { ContributorsComponent } from './contributors/contributors.component';
     SettingsDialogComponent,
     PageLogoComponent,
     LoginFormComponent,
+    CountdownTimerComponent
   ],
 })
 export class ComponentsModule {}
