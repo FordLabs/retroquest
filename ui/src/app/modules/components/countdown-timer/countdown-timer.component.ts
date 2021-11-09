@@ -6,11 +6,11 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./countdown-timer.component.scss']
 })
 export class CountdownTimerComponent implements OnInit {
-  @Input() minutes: number = 5;
-  @Input() seconds: number = 0;
+  @Input() minutes = 5;
+  @Input() seconds = 0;
   time!: number;
   interval!: any;
-  border: string = "set";
+  border = "set";
 
   startTimer() {
     this.border = "set";
