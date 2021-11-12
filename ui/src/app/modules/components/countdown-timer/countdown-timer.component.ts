@@ -13,6 +13,14 @@ export class CountdownTimerComponent implements OnInit {
   border = "set";
 
   startTimer() {
+    if(this.minutes === undefined){
+      this.minutes = 0;
+    }
+
+    if(this.seconds === undefined){
+      this.seconds = 0;
+    }
+
     this.border = "set";
     clearInterval(this.interval);
     this.time = (this.minutes * 60) + this.seconds;
@@ -30,6 +38,14 @@ export class CountdownTimerComponent implements OnInit {
 
   pauseTimer() {
     clearInterval(this.interval);
+  }
+
+  minClick(){
+    this.minutes = undefined;
+  }
+
+  secClick(){
+    this.seconds = undefined;
   }
 
   constructor() { }
