@@ -24,15 +24,16 @@ div#countdown {
     input {
       border: 0.1rem solid;
       border-radius: 0.5em;
-      background-color: -internal-light-dark(
-        rgb(255, 255, 255),
-        rgb(59, 59, 59)
-      );
       width: 2em;
       height: 2em;
       font-size: 1em;
       text-align: center;
       font-weight: bold;
+    }
+
+    input:disabled{
+      background-color: white;
+      // color: black;
     }
 
     input::-webkit-outer-spin-button,
@@ -84,6 +85,7 @@ div#countdown {
       font-size: 0.75em;
       font-weight: bold;
       margin-left: 0.25em;
+      cursor: pointer;
     }
 
     #start {
@@ -91,9 +93,17 @@ div#countdown {
       border: solid #2ecc71 0.2em;
     }
 
+    #start:hover{
+      border: solid #ecf0f1 0.2em;
+    }
+
     #pause {
       background-color: #e74c3c;
       border: solid #e74c3c 0.2em;
+    }
+
+    #pause:hover{
+      border: solid #ecf0f1 0.2em;
     }
   }
 }
