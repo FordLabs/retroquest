@@ -15,11 +15,11 @@
 
     <div class="container row" id="controls">
 
-        <button type="button" (click)="startTimer()"
+        <button type="button" (click)="startTimer()" *ngIf="!running"
         id="start"><i aria-label="start" class="fas fa-play" aria-hidden="true"></i>
     </button>
 
-        <button type="button" (click)="pauseTimer()" 
+        <button type="button" (click)="pauseTimer()" *ngIf="running"
         id="pause"><i aria-label="pause" class="fas fa-pause" aria-hidden="true"></i>
     </button>
 
