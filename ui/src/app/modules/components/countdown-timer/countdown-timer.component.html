@@ -2,14 +2,14 @@
     <div class="container row" id="clock">
 
         <input class={{border}} type="number" value="{{ minutes | number: '2.0'}}" id="minutes" (click)="minClick()"
-            (input)="minutes = $any($event.target).value" aria-label="minutes"/>
+            (input)="minutes = $any($event.target).value" aria-label="minutes" [disabled]="running"/>
 
         <div class="container" id="colon">
             <p>:</p>
         </div>
 
         <input class={{border}} type="number" value="{{ seconds | number: '2.0'}}" id="seconds" (click)="secClick()"
-            (input)="seconds = $any($event.target).value" aria-label="seconds"/>
+            (input)="seconds = $any($event.target).value" aria-label="seconds" [disabled]="running"/>
 
     </div>
 
