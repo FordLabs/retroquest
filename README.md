@@ -54,10 +54,10 @@ SPRING_PROFILES_ACTIVE=local ./gradlew bootRun withH2
 The schema produced for H2 may not conform exactly to the Postgresql schema used in production.
 
 ### Docker
-Running the application locally with Postgresql requires a running instance of the Docker Postgresql container:
+Running the application locally with Postgresql requires a running instance of the Docker Postgresql container, which can be started from the ```./api``` directory:
 
 ```
-cd ./api && docker-compose up
+docker-compose up
 ```  
 
 Start the backend with Gradle:  
@@ -71,9 +71,9 @@ SPRING_PROFILES_ACTIVE=dockerdb ./gradlew bootRun withPostgres
 ### Frontend
 If you are only working on the backend, a static build will be accessible from [localhost:8080](http://localhost:8080) after running `yarn build-prod`
 
-Start the frontend with yarn for live development:  
+From the ```./ui``` directory, start the frontend with yarn for live development:  
 ```
-cd ./ui && yarn start
+yarn start
 ```
 
 This will start the frontend with a proxy to direct all requests to localhost:8080 where the api is running. The application will start at [localhost:4200](http://localhost:4200)
