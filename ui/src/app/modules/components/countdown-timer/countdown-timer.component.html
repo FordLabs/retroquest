@@ -2,26 +2,30 @@
     <div class="container row" id="clock">
 
         <input class={{border}} type="number" value="{{ minutes | number: '2.0'}}" id="minutes" (click)="minClick()"
-            (input)="minutes = $any($event.target).value" aria-label="minutes" [disabled]="running"/>
+            (input)="minutes = $any($event.target).value" aria-label="minutes" [disabled]="running" />
 
         <div class="container" id="colon">
             <p>:</p>
         </div>
 
         <input class={{border}} type="number" value="{{ seconds | number: '2.0'}}" id="seconds" (click)="secClick()"
-            (input)="seconds = $any($event.target).value" aria-label="seconds" [disabled]="running"/>
+            (input)="seconds = $any($event.target).value" aria-label="seconds" [disabled]="running" />
 
     </div>
 
     <div class="container row" id="controls">
 
-        <button type="button" (click)="startTimer()" *ngIf="!running"
-        id="start"><i aria-label="start" class="fas fa-play" aria-hidden="true"></i>
-    </button>
+        <button type="button" (click)="startTimer()" *ngIf="!running" id="start"><i aria-label="start"
+                class="fas fa-play" aria-hidden="true"></i>
+        </button>
 
-        <button type="button" (click)="pauseTimer()" *ngIf="running"
-        id="pause"><i aria-label="pause" class="fas fa-pause" aria-hidden="true"></i>
-    </button>
+        <button type="button" (click)="pauseTimer()" *ngIf="running" id="pause"><i aria-label="pause"
+                class="fas fa-pause" aria-hidden="true"></i>
+        </button>
+
+        <button type="button" (click)="clearTimer()" id="clear"><i aria-label="clear" class="fas fa-times"
+                aria-hidden="true"></i>
+        </button>
 
     </div>
 </div>

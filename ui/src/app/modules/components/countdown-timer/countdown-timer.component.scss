@@ -33,7 +33,7 @@ div#countdown {
 
     input:disabled{
       background-color: white;
-      // color: black;
+      color: black;
     }
 
     input::-webkit-outer-spin-button,
@@ -98,11 +98,20 @@ div#countdown {
     }
 
     #pause {
+      background-color: #f1c40f;
+      border: solid #f1c40f 0.2em;
+    }
+
+    #pause:hover{
+      border: solid #ecf0f1 0.2em;
+    }
+
+    #clear {
       background-color: #e74c3c;
       border: solid #e74c3c 0.2em;
     }
 
-    #pause:hover{
+    #clear:hover{
       border: solid #ecf0f1 0.2em;
     }
   }

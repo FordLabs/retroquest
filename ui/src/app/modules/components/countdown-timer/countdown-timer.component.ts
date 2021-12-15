@@ -43,6 +43,13 @@ export class CountdownTimerComponent implements OnInit {
     this.running = false;
   }
 
+  clearTimer(){
+    clearInterval(this.interval);
+    this.running = false;
+    this.minutes = 0;
+    this.seconds = 0;
+  }
+
   minClick(){
     this.minutes = undefined;
   }
