@@ -41,4 +41,10 @@ describe('CountdownTimerComponent', () => {
     fireEvent.click(screen.getByLabelText('start'));
     expect(screen.queryAllByDisplayValue('03')).toHaveLength(2);
   });
+
+  it('should set minutes and seconds as whatever values are entered', async () => {
+    await render(CountdownTimerComponent, { componentProperties: { minutes: 1, seconds: 1}, });
+    fireEvent.click(screen.getByLabelText('clear'));
+    expect(screen.queryAllByDisplayValue('00')).toHaveLength(2);
+  });
 });
