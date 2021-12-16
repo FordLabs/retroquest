@@ -73,7 +73,7 @@ If you are only working on the backend, a static build will be accessible from [
 
 From the ```./ui``` directory, start the frontend with yarn for live development:  
 ```
-cd ./ui && yarn start
+yarn start
 ```
 
 This will start the frontend with a proxy to direct all requests to localhost:8080 where the api is running. The application will start at [localhost:4200](http://localhost:4200)
