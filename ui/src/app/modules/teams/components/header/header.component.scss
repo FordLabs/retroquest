@@ -56,6 +56,17 @@
       width: 100%;
     }
 
+    #header-bottom-content_left{
+      width: $max-width;
+    }
+
+    #header-bottom-content_right{
+      width: $max-width;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+    }
+
     .header-bottom-content {
       align-self: center;
       box-sizing: inherit;
@@ -64,7 +75,7 @@
 
       height: inherit;
 
-      justify-content: flex-end;
+      // justify-content: space-evenly;
       margin: 0 auto;
       max-width: $max-width;
       min-width: inherit;
