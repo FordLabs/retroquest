@@ -49,25 +49,47 @@ div#countdown {
       border-color: lightgray;
     }
 
-    .out {
-      animation: border 1s linear 10;
+    #minutes.out {
+      animation: border1 1s linear 10;
     }
 
-    @keyframes border {
+    #seconds.out{
+      animation: border2 1s linear 10
+    }
+
+    @keyframes border1 {
       0% {
-        border-color: lightgray;
+        background-color: lightgray;
       }
       25% {
-        border-color: #e74c3c;
+        background-color: #e74c3c;
       }
       50% {
-        border-color: lightgray;
+        background-color: lightgray;
       }
       75% {
-        border-color: #e74c3c;
+        background-color: #e74c3c;
       }
       100% {
-        border-color: lightgray;
+        background-color: lightgray;
+      }
+    }
+
+    @keyframes border2 {
+      0% {
+        background-color: #e74c3c;
+      }
+      25% {
+        background-color: lightgray;
+      }
+      50% {
+        background-color: #e74c3c;
+      }
+      75% {
+        background-color: lightgray;
+      }
+      100% {
+        background-color: #e74c3c;
       }
     }
   }
