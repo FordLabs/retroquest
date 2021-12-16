@@ -14,12 +14,18 @@ export class CountdownTimerComponent implements OnInit {
   running = false;
 
   startTimer() {
-    if(this.minutes === undefined){
+    if(this.minutes === undefined || this.minutes < 0){
       this.minutes = 0;
     }
+    if(this.minutes > 99){
+      this.minutes = 99;
+    }
 
-    if(this.seconds === undefined){
+    if(this.seconds === undefined || this.seconds < 0){
       this.seconds = 0;
+    }
+    if(this.seconds > 99){
+      this.seconds = 99;
     }
 
     this.border = "set";

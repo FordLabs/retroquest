@@ -42,9 +42,25 @@ describe('CountdownTimerComponent', () => {
     expect(screen.queryAllByDisplayValue('03')).toHaveLength(2);
   });
 
-  it('should set minutes and seconds as whatever values are entered', async () => {
+  it('should set minutes and seconds to 0 when clear button is hit', async () => {
     await render(CountdownTimerComponent, { componentProperties: { minutes: 1, seconds: 1}, });
     fireEvent.click(screen.getByLabelText('clear'));
     expect(screen.queryAllByDisplayValue('00')).toHaveLength(2);
+  });
+
+  it('should set minutes and seconds to 0 when negative values are entered', async () => {
+    await render(CountdownTimerComponent, { componentProperties: { minutes: 1, seconds: 0}, });
+    userEvent.type(screen.getByLabelText('minutes'), '-03');
+    userEvent.type(screen.getByLabelText('seconds'), '-03');
+    fireEvent.click(screen.getByLabelText('start'));
+    expect(screen.queryAllByDisplayValue('00')).toHaveLength(2);
+  });
+
+  it('should set minutes and seconds to 99 when values over 99 are entered', async () => {
+    await render(CountdownTimerComponent, { componentProperties: { minutes: 1, seconds: 0}, });
+    userEvent.type(screen.getByLabelText('minutes'), '4567');
+    userEvent.type(screen.getByLabelText('seconds'), '4567');
+    fireEvent.click(screen.getByLabelText('start'));
+    expect(screen.queryAllByDisplayValue('99')).toHaveLength(2);
   });
 });
