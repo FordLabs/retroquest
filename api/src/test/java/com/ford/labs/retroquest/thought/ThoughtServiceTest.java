@@ -17,36 +17,35 @@
 
 package com.ford.labs.retroquest.thought;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.exception.ThoughtNotFoundException;
+import com.ford.labs.retroquest.websocket.WebsocketEvent;
+import com.ford.labs.retroquest.websocket.WebsocketEventType;
+import com.ford.labs.retroquest.websocket.WebsocketService;
+import com.ford.labs.retroquest.websocket.WebsocketThoughtEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.ford.labs.retroquest.websocket.WebsocketEventType.UPDATE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.atMostOnce;
-import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 class ThoughtServiceTest {
 
-    @Mock
-    private ThoughtRepository thoughtRepository;
-
-    @Mock
-    private ColumnTitleRepository columnTitleRepository;
+    private final ThoughtRepository thoughtRepository = mock(ThoughtRepository.class);
+    private final ColumnTitleRepository columnTitleRepository = mock(ColumnTitleRepository.class);
+    private final WebsocketService websocketService = mock(WebsocketService.class);
 
     private ThoughtService thoughtService;
     private final String thoughtId = "1";
@@ -54,14 +53,14 @@ class ThoughtServiceTest {
 
     @BeforeEach
     void setup() {
-            this.thoughtService = new ThoughtService(this.thoughtRepository, this.columnTitleRepository);
+            this.thoughtService = new ThoughtService(this.thoughtRepository, this.columnTitleRepository, this.websocketService);
     }
 
     @Test
     void likeThoughtShouldIncrementNumberOfLikesByOne() {
         Thought thought = Thought.builder().hearts(5).build();
 
-        given(this.thoughtRepository.findById(Long.valueOf(thoughtId))).willReturn(Optional.ofNullable(thought));
+        given(this.thoughtRepository.findById(Long.valueOf(thoughtId))).willReturn(Optional.of(thought));
         given(thoughtRepository.save(thought)).willReturn(thought);
 
         assertThat(this.thoughtService.likeThought(thoughtId)).isEqualTo(6);
@@ -97,6 +96,34 @@ class ThoughtServiceTest {
         thoughtService.discussThought(thoughtId);
         assertThat(Objects.requireNonNull(thought).isDiscussed()).isFalse();
         then(thoughtRepository).should().save(thought);
+    }
+
+    @Test
+    public void updateTopic_WithNewTopic_ReturnsUpdatedThought() {
+        String newTopic = "right-column";
+        Thought thought = Thought.builder().id(Long.valueOf(thoughtId)).topic("wrong-column").build();
+        Thought expectedThought = Thought.builder().id(Long.valueOf(thoughtId)).topic(newTopic).build();
+        given(this.thoughtRepository.findById(Long.valueOf(thoughtId))).willReturn(Optional.ofNullable(thought));
+        given(this.thoughtRepository.save(expectedThought)).willReturn(expectedThought);
+
+        Thought actualThought = thoughtService.updateTopic(Long.valueOf(thoughtId), newTopic);
+
+        assertThat(actualThought).isEqualTo(expectedThought);
+    }
+
+    @Test
+    public void updateTopic_WithNewTopic_EmitsUpdatedThought() {
+        String newTopic = "right-column";
+        Thought thought = Thought.builder().id(Long.valueOf(thoughtId)).topic("wrong-column").build();
+        Thought expectedThought = Thought.builder().id(Long.valueOf(thoughtId)).topic(newTopic).build();
+        given(this.thoughtRepository.findById(Long.valueOf(thoughtId))).willReturn(Optional.ofNullable(thought));
+        given(this.thoughtRepository.save(expectedThought)).willReturn(expectedThought);
+
+        thoughtService.updateTopic(Long.valueOf(thoughtId), newTopic);
+
+        WebsocketEvent expectedEvent = new WebsocketThoughtEvent(teamId, UPDATE, expectedThought);
+        verify(websocketService).publishEvent(eq(expectedEvent));
+
     }
 
     @Test

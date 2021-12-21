@@ -17,7 +17,11 @@ public class WebsocketService {
         this.mapper = objectMapper;
     }
 
-    public void publishEvent(WebsocketEvent event) throws JsonProcessingException {
-        messagingTemplate.convertAndSend(event.getRoute(), mapper.writeValueAsString(event));
+    public void publishEvent(WebsocketEvent event) {
+        try {
+            messagingTemplate.convertAndSend(event.getRoute(), mapper.writeValueAsString(event));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 }
