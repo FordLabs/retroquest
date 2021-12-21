@@ -79,10 +79,6 @@ public class ThoughtService {
         return thoughtRepository.findAllByTeamIdAndBoardIdIsNull(teamId);
     }
 
-    public void deleteAllThoughtsByTeamId(String teamId) {
-        thoughtRepository.deleteAllByTeamId(teamId);
-    }
-
     public void deleteThought(String teamId, Long thoughtId) {
         thoughtRepository.deleteThoughtByTeamIdAndId(teamId, thoughtId);
         websocketService.publishEvent(new WebsocketThoughtEvent(teamId, DELETE, Thought.builder().id(thoughtId).build()));

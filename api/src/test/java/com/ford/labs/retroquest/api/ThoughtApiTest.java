@@ -177,22 +177,6 @@ class ThoughtApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_delete_all_thoughts_by_team_id() throws Exception {
-        List<Thought> savedThoughts = Arrays.asList(
-            Thought.builder().teamId(teamId).message("hello").build(),
-            Thought.builder().teamId(teamId).message("goodbye").build());
-        thoughtRepository.saveAll(savedThoughts);
-        assertThat(thoughtRepository.findAll().size()).isEqualTo(2);
-
-        mockMvc.perform(delete(String.join("", "/api/team/", teamId, "/thoughts"))
-            .contentType(APPLICATION_JSON)
-            .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isOk());
-
-        assertThat(thoughtRepository.findAll()).isEmpty();
-    }
-
-    @Test
     void should_delete_thoughts_by_thought_id() throws Exception {
         StompSession session = getAuthorizedSession();
         subscribe(session, BASE_SUB_URL);
@@ -240,22 +224,6 @@ class ThoughtApiTest extends ApiTestBase {
             .andExpect(status().isCreated());
 
         assertThat(thoughtRepository.exists(Example.of(thoughtToSave))).isTrue();
-    }
-
-    @Test
-    void should_delete_all_thoughts_on_team() throws Exception {
-        StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
-
-        thoughtRepository.saveAll(Arrays.asList(
-            Thought.builder().teamId(teamId).message("message").build(),
-            Thought.builder().teamId("team 2").message("message").build()
-        ));
-
-        session.send(BASE_ENDPOINT_URL + "/delete", new byte[0]);
-
-        assertThat(takeObjectInSocket(Long.class)).isEqualTo(-1L);
-        assertThat(thoughtRepository.count()).isEqualTo(1);
     }
 
     @Test

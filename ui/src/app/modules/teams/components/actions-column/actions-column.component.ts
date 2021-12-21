@@ -30,7 +30,7 @@ import { Themes } from '../../../domain/Theme';
 import moment from 'moment';
 import {
   ColumnResponse,
-  deleteColumnResponse,
+  removeItemFromColumn,
 } from '../../../domain/column-response';
 import { WebsocketResponse } from '../../../domain/websocket-response';
 import { Column } from '../../../domain/column';
@@ -94,7 +94,7 @@ export class ActionsColumnComponent implements OnInit {
   }
 
   deleteActionItem(actionItem: ActionItem) {
-    deleteColumnResponse(actionItem, this.actionItemAggregation.items);
+    removeItemFromColumn(actionItem, this.actionItemAggregation.items);
   }
 
   updateActionItems(actionItem: ActionItem) {

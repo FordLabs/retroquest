@@ -147,12 +147,6 @@ class ThoughtServiceTest {
     }
 
     @Test
-    void whenDeletingThoughtsByTeamIdAllThoughtsAreDeleted() {
-        thoughtService.deleteAllThoughtsByTeamId(teamId);
-        then(thoughtRepository).should().deleteAllByTeamId(teamId);
-    }
-
-    @Test
     void whenDeletingThoughtsByTeamIdAndThoughtIdThoughtIsDeleted() {
         var expectedEvent = new WebsocketThoughtEvent(teamId, DELETE, Thought.builder().id(thoughtId).build());
         thoughtService.deleteThought(teamId, thoughtId);

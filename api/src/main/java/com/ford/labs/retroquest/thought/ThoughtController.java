@@ -18,7 +18,6 @@
 package com.ford.labs.retroquest.thought;
 
 import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
-import com.ford.labs.retroquest.websocket.WebsocketDeleteResponse;
 import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -98,15 +97,6 @@ public class ThoughtController {
     }
 
     @Transactional
-    @DeleteMapping("/api/team/{teamId}/thoughts")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
-    @Operation(summary = "Removes all thoughts given a team id", description = "clearThoughtsForTeam")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public void clearThoughtsForTeam(@PathVariable("teamId") String teamId) {
-        thoughtService.deleteAllThoughtsByTeamId(teamId);
-    }
-
-    @Transactional
     @DeleteMapping("/api/team/{teamId}/thought/{thoughtId}")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Removes a thought given a team id and thought id", description = "clearIndividualThoughtForTeam")
@@ -156,16 +146,5 @@ public class ThoughtController {
             return new WebsocketPutResponse<>(savedThought);
         }
         return null;
-    }
-
-    @Transactional
-    @MessageMapping("/{teamId}/thought/delete")
-    @SendTo("/topic/{teamId}/thoughts")
-    public WebsocketDeleteResponse<Long> deleteThoughtWebsocket(@DestinationVariable("teamId") String teamId, Authentication authentication) {
-        if (!apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            return null;
-        }
-        thoughtRepository.deleteAllByTeamId(teamId);
-        return new WebsocketDeleteResponse<>(-1L);
     }
 }
