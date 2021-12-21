@@ -194,6 +194,9 @@ class ThoughtApiTest extends ApiTestBase {
 
     @Test
     void should_delete_thoughts_by_thought_id() throws Exception {
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
+
         List<Thought> thoughtsToSave = Arrays.asList(
             Thought.builder().teamId(teamId).message("hello").build(),
             Thought.builder().teamId(teamId).message("goodbye").build());
@@ -205,13 +208,25 @@ class ThoughtApiTest extends ApiTestBase {
         Thought thoughtToDelete = persistedThoughts.get(0);
         Thought thoughToKeep = persistedThoughts.get(1);
 
-        mockMvc.perform(delete(String.join("", "/api/team/", teamId, "/thought/" + thoughtToDelete.getId()))
+
+        mockMvc.perform(delete(String.format("%s/thought/%d", BASE_API_URL, thoughtToDelete.getId()))
             .contentType(APPLICATION_JSON)
             .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isOk());
 
+        var emittedThought = takeObjectInSocket(Thought.class);
+
         assertThat(thoughtRepository.exists(Example.of(thoughtToDelete))).isFalse();
         assertThat(thoughtRepository.exists(Example.of(thoughToKeep))).isTrue();
+        assertThat(emittedThought.getId()).isEqualTo(thoughtToDelete.getId());
+    }
+
+    @Test
+    public void should_not_delete_thoughts_by_id_unauthorized() throws Exception {
+        mockMvc.perform(delete(String.format("%s/thought/%d", BASE_API_URL, 1))
+                .contentType(APPLICATION_JSON)
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .andExpect(status().isForbidden());
     }
 
     @Test
