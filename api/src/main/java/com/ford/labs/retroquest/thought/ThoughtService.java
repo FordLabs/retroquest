@@ -85,7 +85,9 @@ public class ThoughtService {
     }
 
     public Thought createThought(String teamId, CreateThoughtRequest request) {
-        return createThought(teamId, null, request);
+        Thought createdThought = createThought(teamId, null, request);
+        websocketService.publishEvent(new WebsocketThoughtEvent(teamId, UPDATE, createdThought));
+        return createdThought;
     }
 
     public Thought createThought(String teamId, Long boardId, CreateThoughtRequest request) {
