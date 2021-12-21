@@ -52,7 +52,11 @@ class ThoughtServiceTest {
 
     @BeforeEach
     void setup() {
-            this.thoughtService = new ThoughtService(this.thoughtRepository, this.columnTitleRepository, this.websocketService);
+        this.thoughtService = new ThoughtService(
+                this.thoughtRepository,
+                this.columnTitleRepository,
+                this.websocketService
+        );
     }
 
     @Test
@@ -155,18 +159,32 @@ class ThoughtServiceTest {
     }
 
     @Test
-    void whenCreatingThoughtColumnTitleWillGetSetAndThoughtWillBeSaved() {
+    void shouldCreateThought() {
+        var message = "Hello there!";
         var topic = "topic";
         var columnTitle = ColumnTitle.builder().title("Happy").build();
         var request = new CreateThoughtRequest(
-                -1L,
             null,
+            message,
             0,
             topic,
             false,
             teamId,
             null
         );
+
+        var expectedThought = new Thought(
+                1234L,
+                message,
+                0,
+                topic,
+                false,
+                teamId,
+                columnTitle,
+                null
+        );
+        var expectedEvent = new WebsocketThoughtEvent(teamId, UPDATE, expectedThought);
+
         given(columnTitleRepository.findByTeamIdAndAndTopic(teamId, topic)).willReturn(columnTitle);
         given(thoughtRepository.save(any(Thought.class))).willAnswer(a -> {
             var thought = a.<Thought>getArgument(0);
@@ -174,11 +192,10 @@ class ThoughtServiceTest {
             return thought;
         });
 
-        var thought = thoughtService.createThought(teamId, request);
+        var actualThought = thoughtService.createThought(teamId, request);
 
-        assertThat(thought.getColumnTitle()).isEqualTo(columnTitle);
-        then(columnTitleRepository).should().findByTeamIdAndAndTopic(teamId, thought.getTopic());
-        then(thoughtRepository).should().save(thought);
+        assertThat(actualThought).usingRecursiveComparison().isEqualTo(expectedThought);
+        then(websocketService).should().publishEvent(expectedEvent);
     }
 
 }
