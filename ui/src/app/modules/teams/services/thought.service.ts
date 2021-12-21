@@ -58,17 +58,12 @@ export class ThoughtService {
   }
 
   deleteThought(thought: Thought): void {
-    if (this.validTeamId(thought.teamId)) {
-      this.rxStompService.publish({
-        destination: `/app/${this.dataService.team.id}/thought/${thought.id}/delete`,
-        body: JSON.stringify(thought)
-      });
-    }
+    this.http.delete(`/api/team/${this.dataService.team.id}/thought/${thought.id}`).subscribe().unsubscribe();
   }
 
-  moveThought(teamId: Thought['teamId'], thoughtId: Thought['id'], newTopic: Thought['topic']): void {
+  moveThought(thoughtId: Thought['id'], newTopic: Thought['topic']): void {
     this.http.put(
-      `/api/team/${teamId}/thought/${thoughtId}/topic`,
+      `/api/team/${this.dataService.team.id}/thought/${thoughtId}/topic`,
       JSON.stringify({
         topic: newTopic
       }),
@@ -77,6 +72,6 @@ export class ThoughtService {
           'Content-Type': 'application/json'
         }
       }
-    )
+    ).subscribe().unsubscribe();
   }
 }

@@ -19,7 +19,7 @@ import { EventEmitter, Injectable, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { DataService } from '../../data.service';
-import { WebsocketResponse } from '../../domain/websocket-response';
+import { WebsocketResponse, WebsocketThoughtResponse } from '../../domain/websocket-response';
 import { SaveCheckerService } from './save-checker.service';
 import { Column } from '../../domain/column';
 import { AuthService } from '../../auth/auth.service';
@@ -52,11 +52,11 @@ export class SubscriptionService implements OnDestroy {
     this.endRetroSubscription?.unsubscribe();
   }
 
-  subscribeToThoughts(eventEmitter: EventEmitter<WebsocketResponse>) {
+  subscribeToThoughts(eventEmitter: EventEmitter<WebsocketThoughtResponse>) {
     this.thoughtSubscription = this.rxStompService
       .watch(`/topic/${this.dataService.team.id}/thoughts`)
       .subscribe((message) => {
-        eventEmitter.emit(JSON.parse(message.body) as WebsocketResponse);
+        eventEmitter.emit(JSON.parse(message.body) as WebsocketThoughtResponse);
         this.saveCheckerService.updateTimestamp();
       });
   }
