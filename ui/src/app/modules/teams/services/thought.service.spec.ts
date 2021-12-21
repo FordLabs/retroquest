@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Observable } from 'rxjs/index';
+import { Observable } from 'rxjs';
 import { ThoughtService } from './thought.service';
 import {
   createMockHttpClient,
@@ -144,17 +144,17 @@ describe('ThoughtService', () => {
     it('should send a message', () => {
       const testThought = createTestThought(teamId, 1);
       const newTopic = 'move';
-      service.moveThought(testThought.id, newTopic);
+      service.moveThought(teamId, testThought.id, newTopic);
 
       const expectedBody = {
-        id: testThought.id,
         topic: newTopic,
       };
 
-      expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${testThought.teamId}/thought/${testThought.id}/move`,
-        body: JSON.stringify(expectedBody),
-      });
+      expect(mockHttpClient.put).toHaveBeenCalledWith(
+        `/api/team/${teamId}/thought/${testThought.id}/topic`,
+        JSON.stringify(expectedBody),
+        {headers: {'Content-Type': 'application/json'}}
+      );
     });
   });
 });

@@ -16,7 +16,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/index';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 import { Thought } from '../../domain/thought';
@@ -43,7 +43,7 @@ export class ThoughtService {
     if (this.validTeamId(thought.teamId)) {
       this.rxStompService.publish({
         destination: `/app/${this.dataService.team.id}/thought/create`,
-        body: JSON.stringify(thought),
+        body: JSON.stringify(thought)
       });
     }
   }
@@ -52,7 +52,7 @@ export class ThoughtService {
     if (this.validTeamId(thought.teamId)) {
       this.rxStompService.publish({
         destination: `/app/${this.dataService.team.id}/thought/${thought.id}/edit`,
-        body: JSON.stringify(thought),
+        body: JSON.stringify(thought)
       });
     }
   }
@@ -61,18 +61,22 @@ export class ThoughtService {
     if (this.validTeamId(thought.teamId)) {
       this.rxStompService.publish({
         destination: `/app/${this.dataService.team.id}/thought/${thought.id}/delete`,
-        body: JSON.stringify(thought),
+        body: JSON.stringify(thought)
       });
     }
   }
 
-  moveThought(thoughtId: Thought['id'], newTopic: Thought['topic']): void {
-    this.rxStompService.publish({
-      destination: `/app/${this.dataService.team.id}/thought/${thoughtId}/move`,
-      body: JSON.stringify({
-        id: thoughtId,
-        topic: newTopic,
+  moveThought(teamId: Thought['teamId'], thoughtId: Thought['id'], newTopic: Thought['topic']): void {
+    this.http.put(
+      `/api/team/${teamId}/thought/${thoughtId}/topic`,
+      JSON.stringify({
+        topic: newTopic
       }),
-    });
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    )
   }
 }
