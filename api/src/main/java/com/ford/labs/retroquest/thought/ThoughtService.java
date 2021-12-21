@@ -19,21 +19,29 @@ package com.ford.labs.retroquest.thought;
 
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.exception.ThoughtNotFoundException;
+import com.ford.labs.retroquest.websocket.WebsocketEventType;
+import com.ford.labs.retroquest.websocket.WebsocketService;
+import com.ford.labs.retroquest.websocket.WebsocketThoughtEvent;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.ford.labs.retroquest.websocket.WebsocketEventType.UPDATE;
 
 @Service
 public class ThoughtService {
 
     private final ThoughtRepository thoughtRepository;
     private final ColumnTitleRepository columnTitleRepository;
+    private final WebsocketService websocketService;
 
     public ThoughtService(ThoughtRepository thoughtRepository,
-                          ColumnTitleRepository columnTitleRepository) {
+                          ColumnTitleRepository columnTitleRepository,
+                          WebsocketService websocketService) {
 
         this.thoughtRepository = thoughtRepository;
         this.columnTitleRepository = columnTitleRepository;
+        this.websocketService = websocketService;
     }
 
     public int likeThought(String thoughtId) {
@@ -46,6 +54,14 @@ public class ThoughtService {
         var thought = fetchThought(thoughtId);
         thought.toggleDiscussed();
         thoughtRepository.save(thought);
+    }
+
+    public Thought updateTopic(Long thoughtId, String newTopic) {
+        var thought = fetchThought(thoughtId);
+        thought.setTopic(newTopic);
+        var savedThought = thoughtRepository.save(thought);
+        this.websocketService.publishEvent(new WebsocketThoughtEvent(savedThought.getTeamId(), UPDATE, savedThought));
+        return savedThought;
     }
 
     public void updateThoughtMessage(String thoughtId, String updatedMessage) {

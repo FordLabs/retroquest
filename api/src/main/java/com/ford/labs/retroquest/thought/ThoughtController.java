@@ -72,6 +72,15 @@ public class ThoughtController {
     }
 
     @Transactional
+    @PutMapping("/api/team/{teamId}/thought/{thoughtId}/topic")
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @Operation(summary = "Updates the topic of a thought given a thought and team id", description = "moveThought")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
+    public Thought moveThought(@PathVariable String teamId, @PathVariable Long thoughtId, @RequestBody MoveThoughtRequest request) {
+        return thoughtService.updateTopic(thoughtId, request.getTopic());
+    }
+
+    @Transactional
     @PutMapping("/api/team/{teamId}/thought/{id}/message")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Updates the content of a thought given a thought and team id", description = "updateThoughtMessage")
