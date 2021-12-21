@@ -15,7 +15,14 @@
  * limitations under the License.
  */
 
+import { Thought } from './thought';
+
 export interface WebsocketResponse {
   type: string;
   payload: Object;
+}
+
+export interface WebsocketThoughtResponse {
+  type: string;
+  payload: Thought
 }

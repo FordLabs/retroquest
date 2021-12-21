@@ -125,18 +125,7 @@ describe('ThoughtService', () => {
       const testThought = createTestThought(teamId, 1);
       service.deleteThought(testThought);
 
-      expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${testThought.teamId}/thought/${testThought.id}/delete`,
-        body: JSON.stringify(testThought),
-      });
-    });
-
-    it('does not allow messages to be deleted for other teams', () => {
-      const testThought = createTestThought('hacker', 1);
-
-      service.deleteThought(testThought);
-
-      expect(spiedStompService.publish).not.toHaveBeenCalled();
+      expect(mockHttpClient.delete).toHaveBeenCalledWith(`/api/team/${teamId}/thought/${testThought.id}`);
     });
   });
 
@@ -144,7 +133,7 @@ describe('ThoughtService', () => {
     it('should send a message', () => {
       const testThought = createTestThought(teamId, 1);
       const newTopic = 'move';
-      service.moveThought(teamId, testThought.id, newTopic);
+      service.moveThought(testThought.id, newTopic);
 
       const expectedBody = {
         topic: newTopic,

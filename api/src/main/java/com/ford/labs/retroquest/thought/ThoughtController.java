@@ -159,17 +159,6 @@ public class ThoughtController {
     }
 
     @Transactional
-    @MessageMapping("/{teamId}/thought/{thoughtId}/delete")
-    @SendTo("/topic/{teamId}/thoughts")
-    public WebsocketDeleteResponse<Long> deleteThoughtWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("thoughtId") Long thoughtId, Authentication authentication) {
-        if (!apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            return null;
-        }
-        thoughtRepository.deleteThoughtByTeamIdAndId(teamId, thoughtId);
-        return new WebsocketDeleteResponse<>(thoughtId);
-    }
-
-    @Transactional
     @MessageMapping("/{teamId}/thought/delete")
     @SendTo("/topic/{teamId}/thoughts")
     public WebsocketDeleteResponse<Long> deleteThoughtWebsocket(@DestinationVariable("teamId") String teamId, Authentication authentication) {

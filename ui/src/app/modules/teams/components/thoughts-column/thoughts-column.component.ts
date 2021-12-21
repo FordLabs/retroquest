@@ -33,7 +33,7 @@ import {
   deleteColumnResponse,
   emptyColumnResponse,
 } from '../../../domain/column-response';
-import { WebsocketResponse } from '../../../domain/websocket-response';
+import { WebsocketThoughtResponse } from '../../../domain/websocket-response';
 import { CdkDragSortEvent } from '@angular/cdk/drag-drop';
 
 @Component({
@@ -51,7 +51,7 @@ export class ThoughtsColumnComponent implements OnInit {
   @Input() teamId: string;
   @Input() hideNewThought = false;
 
-  @Input() thoughtChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
+  @Input() thoughtChanged: EventEmitter<WebsocketThoughtResponse> = new EventEmitter();
   @Input() columnChanged: EventEmitter<Column> = new EventEmitter();
 
   @Input() theme: Themes = Themes.Light;
@@ -88,16 +88,7 @@ export class ThoughtsColumnComponent implements OnInit {
     });
   }
 
-  processThoughtChange(response: WebsocketResponse): void {
-    function retrieveThoughtFromPayload(message: WebsocketResponse): Thought {
-      if (message.type === 'delete') {
-        return {
-          id: message.payload,
-        } as Thought;
-      } else {
-        return message.payload as Thought;
-      }
-    }
+  processThoughtChange(response: WebsocketThoughtResponse): void {
 
     function thoughtIsInThisColumn(
       thoughtTopic: string,
@@ -117,7 +108,7 @@ export class ThoughtsColumnComponent implements OnInit {
       );
     }
 
-    const thought = retrieveThoughtFromPayload(response);
+    const thought = response.payload;
 
     if (response.type === 'delete') {
       this.deleteThought(thought);
@@ -182,7 +173,7 @@ export class ThoughtsColumnComponent implements OnInit {
   onThoughtDrop(event: CdkDragSortEvent) {
     const thoughtId = event.item.data;
     const newTopic = event.container.data; // expected to equal this.thoughtAggregation.topic
-    this.thoughtService.moveThought(this.teamId, thoughtId, newTopic);
+    this.thoughtService.moveThought(thoughtId, newTopic);
   }
 
   updateThought(updatedThought: Thought) {
