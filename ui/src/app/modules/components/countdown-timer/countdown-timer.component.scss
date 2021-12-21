@@ -1,11 +1,33 @@
-div#countdown {
+/*!
+ * Copyright (c) 2021 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+ @import 'colors';
+
+ div#countdown {
   display: inline-flex;
   justify-content: center;
   flex-direction: row;
-  background-color: #34495e;
   padding: 0.3em;
   border-radius: 0.5em;
   font-family: inherit;
+
+  &.dark-theme {
+    background-color: $task-background-dark;
+  }
 
   div#clock {
     display: inline-flex;
@@ -29,11 +51,17 @@ div#countdown {
       font-size: 1em;
       text-align: center;
       font-weight: bold;
+      color: $asphalt;
+      font-family: inherit;
     }
 
     input:disabled{
       background-color: white;
-      color: black;
+      color: $asphalt;
+    }
+
+    input:hover{
+      color: $dark-purple;
     }
 
     input::-webkit-outer-spin-button,
@@ -46,7 +74,7 @@ div#countdown {
     }
 
     .set {
-      border-color: lightgray;
+      border-color: #4F5166;
     }
 
     #minutes.out {
@@ -59,37 +87,37 @@ div#countdown {
 
     @keyframes border1 {
       0% {
-        background-color: lightgray;
+        background-color: $white;
       }
       25% {
-        background-color: #e74c3c;
+        background-color: $red;
       }
       50% {
-        background-color: lightgray;
+        background-color: $white;
       }
       75% {
-        background-color: #e74c3c;
+        background-color: $red;
       }
       100% {
-        background-color: lightgray;
+        background-color: $white;
       }
     }
 
     @keyframes border2 {
       0% {
-        background-color: #e74c3c;
+        background-color: $red;
       }
       25% {
-        background-color: lightgray;
+        background-color: $white;
       }
       50% {
-        background-color: #e74c3c;
+        background-color: $red;
       }
       75% {
-        background-color: lightgray;
+        background-color: $white;
       }
       100% {
-        background-color: #e74c3c;
+        background-color: $red;
       }
     }
   }
@@ -111,30 +139,33 @@ div#countdown {
     }
 
     #start {
-      background-color: #2ecc71;
-      border: solid #2ecc71 0.2em;
+      background-color: $green;
+      border: solid $green 0.2em;
     }
 
     #start:hover{
-      border: solid #ecf0f1 0.2em;
+      border: solid $dark-green 0.2em;
     }
 
     #pause {
-      background-color: #f1c40f;
-      border: solid #f1c40f 0.2em;
+      background-color: $yellow;
+      border: solid $yellow 0.2em;
     }
 
     #pause:hover{
-      border: solid #ecf0f1 0.2em;
+      border: solid $dark-yellow 0.2em;
     }
 
     #clear {
-      background-color: #e74c3c;
-      border: solid #e74c3c 0.2em;
+      background-color: transparent;
+      border: solid $red 0.2em;
+      color: $red;
     }
 
     #clear:hover{
-      border: solid #ecf0f1 0.2em;
+      border: solid $dark-red 0.2em;
+      background-color: #e74c3c;
+      color: white;
     }
   }
 }
