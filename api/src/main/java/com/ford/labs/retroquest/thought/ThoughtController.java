@@ -57,7 +57,7 @@ public class ThoughtController {
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "adds a like to a thought given a thought and team id", description = "likeThought")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Created")})
-    public int likeThought(@PathVariable("thoughtId") String thoughtId, @PathVariable("teamId") String teamId) {
+    public int likeThought(@PathVariable("thoughtId") Long thoughtId, @PathVariable("teamId") String teamId) {
         return thoughtService.likeThought(thoughtId);
     }
 
@@ -65,7 +65,7 @@ public class ThoughtController {
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "toggles between a thought being discussed or not discussed", description = "discussThought")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public ResponseEntity<Void> discussThought(@PathVariable("thoughtId") String thoughtId, @PathVariable("teamId") String teamId) {
+    public ResponseEntity<Void> discussThought(@PathVariable("thoughtId") Long thoughtId, @PathVariable("teamId") String teamId) {
         thoughtService.discussThought(thoughtId);
 
         return ResponseEntity.ok().build();
@@ -86,7 +86,7 @@ public class ThoughtController {
     @Operation(summary = "Updates the content of a thought given a thought and team id", description = "updateThoughtMessage")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public void updateThoughtMessage(@PathVariable("id") Long id, @RequestBody UpdateThoughtMessageRequest request, @PathVariable("teamId") String teamId) {
-        thoughtService.updateThoughtMessage(String.valueOf(id), request.getMessage());
+        thoughtService.updateThoughtMessage(id, request.getMessage());
     }
 
     @GetMapping("/api/team/{teamId}/thoughts")

@@ -44,13 +44,13 @@ public class ThoughtService {
         this.websocketService = websocketService;
     }
 
-    public int likeThought(String thoughtId) {
+    public int likeThought(Long thoughtId) {
         var thought = fetchThought(thoughtId);
         thought.incrementHearts();
         return thoughtRepository.save(thought).getHearts();
     }
 
-    public void discussThought(String thoughtId) {
+    public void discussThought(Long thoughtId) {
         var thought = fetchThought(thoughtId);
         thought.toggleDiscussed();
         thoughtRepository.save(thought);
@@ -64,14 +64,10 @@ public class ThoughtService {
         return savedThought;
     }
 
-    public void updateThoughtMessage(String thoughtId, String updatedMessage) {
+    public void updateThoughtMessage(Long thoughtId, String updatedMessage) {
         var returnedThought = fetchThought(thoughtId);
         returnedThought.setMessage(updatedMessage);
         thoughtRepository.save(returnedThought);
-    }
-
-    public Thought fetchThought(String thoughtId) {
-        return fetchThought(Long.valueOf(thoughtId));
     }
 
     public Thought fetchThought(Long thoughtId) {
@@ -86,8 +82,8 @@ public class ThoughtService {
         thoughtRepository.deleteAllByTeamId(teamId);
     }
 
-    public void deleteThought(String teamId, Long id) {
-        thoughtRepository.deleteThoughtByTeamIdAndId(teamId, id);
+    public void deleteThought(String teamId, Long thoughtId) {
+        thoughtRepository.deleteThoughtByTeamIdAndId(teamId, thoughtId);
     }
 
     public Thought createThought(String teamId, CreateThoughtRequest request) {

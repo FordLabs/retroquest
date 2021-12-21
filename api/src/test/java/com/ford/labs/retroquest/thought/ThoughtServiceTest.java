@@ -17,12 +17,10 @@
 
 package com.ford.labs.retroquest.thought;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.exception.ThoughtNotFoundException;
 import com.ford.labs.retroquest.websocket.WebsocketEvent;
-import com.ford.labs.retroquest.websocket.WebsocketEventType;
 import com.ford.labs.retroquest.websocket.WebsocketService;
 import com.ford.labs.retroquest.websocket.WebsocketThoughtEvent;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +46,7 @@ class ThoughtServiceTest {
     private final WebsocketService websocketService = mock(WebsocketService.class);
 
     private ThoughtService thoughtService;
-    private final String thoughtId = "1";
+    private final Long thoughtId = 1L;
     private final String teamId = "1";
 
     @BeforeEach
@@ -60,7 +58,7 @@ class ThoughtServiceTest {
     void likeThoughtShouldIncrementNumberOfLikesByOne() {
         Thought thought = Thought.builder().hearts(5).build();
 
-        given(this.thoughtRepository.findById(Long.valueOf(thoughtId))).willReturn(Optional.of(thought));
+        given(this.thoughtRepository.findById(thoughtId)).willReturn(Optional.of(thought));
         given(thoughtRepository.save(thought)).willReturn(thought);
 
         assertThat(this.thoughtService.likeThought(thoughtId)).isEqualTo(6);
@@ -71,10 +69,10 @@ class ThoughtServiceTest {
     void whenLikingThoughtWhichDoesntHaveAValidIDThrowsThoughtNotFoundException() {
         Thought thought = Thought.builder().hearts(5).build();
 
-        given(this.thoughtRepository.findById(Long.valueOf(thoughtId))).willThrow(new ThoughtNotFoundException(thoughtId));
+        given(this.thoughtRepository.findById(thoughtId)).willThrow(new ThoughtNotFoundException(thoughtId));
 
         ThoughtNotFoundException actualException = assertThrows(ThoughtNotFoundException.class, () -> thoughtService.likeThought(thoughtId));
-        assertThat(actualException.getMessage()).contains(thoughtId);
+        assertThat(actualException.getMessage()).contains(thoughtId.toString());
         then(thoughtRepository).should(never()).save(thought);
     }
 
@@ -82,7 +80,7 @@ class ThoughtServiceTest {
     void whenDiscussingThoughtNotDiscussedThoughtIsSetToTrue() {
         Thought thought = Thought.builder().discussed(false).build();
 
-        given(this.thoughtRepository.findById(Long.valueOf(thoughtId))).willReturn(Optional.ofNullable(thought));
+        given(this.thoughtRepository.findById(thoughtId)).willReturn(Optional.ofNullable(thought));
         thoughtService.discussThought(thoughtId);
         assertThat(Objects.requireNonNull(thought).isDiscussed()).isTrue();
         then(thoughtRepository).should().save(thought);
@@ -92,7 +90,7 @@ class ThoughtServiceTest {
     void whenDiscussingThoughtPreviouslyDiscussedThoughtIsSetToFalse() {
         Thought thought = Thought.builder().discussed(true).build();
 
-        given(this.thoughtRepository.findById(Long.valueOf(thoughtId))).willReturn(Optional.ofNullable(thought));
+        given(this.thoughtRepository.findById(thoughtId)).willReturn(Optional.ofNullable(thought));
         thoughtService.discussThought(thoughtId);
         assertThat(Objects.requireNonNull(thought).isDiscussed()).isFalse();
         then(thoughtRepository).should().save(thought);
@@ -101,12 +99,12 @@ class ThoughtServiceTest {
     @Test
     public void updateTopic_WithNewTopic_ReturnsUpdatedThought() {
         String newTopic = "right-column";
-        Thought thought = Thought.builder().id(Long.valueOf(thoughtId)).topic("wrong-column").build();
-        Thought expectedThought = Thought.builder().id(Long.valueOf(thoughtId)).topic(newTopic).build();
-        given(this.thoughtRepository.findById(Long.valueOf(thoughtId))).willReturn(Optional.ofNullable(thought));
+        Thought thought = Thought.builder().id(thoughtId).topic("wrong-column").build();
+        Thought expectedThought = Thought.builder().id(thoughtId).topic(newTopic).build();
+        given(this.thoughtRepository.findById(thoughtId)).willReturn(Optional.ofNullable(thought));
         given(this.thoughtRepository.save(expectedThought)).willReturn(expectedThought);
 
-        Thought actualThought = thoughtService.updateTopic(Long.valueOf(thoughtId), newTopic);
+        Thought actualThought = thoughtService.updateTopic(thoughtId, newTopic);
 
         assertThat(actualThought).isEqualTo(expectedThought);
     }
@@ -114,12 +112,12 @@ class ThoughtServiceTest {
     @Test
     public void updateTopic_WithNewTopic_EmitsUpdatedThought() {
         String newTopic = "right-column";
-        Thought thought = Thought.builder().id(Long.valueOf(thoughtId)).topic("wrong-column").build();
-        Thought expectedThought = Thought.builder().id(Long.valueOf(thoughtId)).topic(newTopic).build();
-        given(this.thoughtRepository.findById(Long.valueOf(thoughtId))).willReturn(Optional.ofNullable(thought));
+        Thought thought = Thought.builder().id(thoughtId).topic("wrong-column").build();
+        Thought expectedThought = Thought.builder().id(thoughtId).topic(newTopic).build();
+        given(this.thoughtRepository.findById(thoughtId)).willReturn(Optional.ofNullable(thought));
         given(this.thoughtRepository.save(expectedThought)).willReturn(expectedThought);
 
-        thoughtService.updateTopic(Long.valueOf(thoughtId), newTopic);
+        thoughtService.updateTopic(thoughtId, newTopic);
 
         WebsocketEvent expectedEvent = new WebsocketThoughtEvent(teamId, UPDATE, expectedThought);
         verify(websocketService).publishEvent(eq(expectedEvent));
@@ -131,7 +129,7 @@ class ThoughtServiceTest {
         Thought thought = Thought.builder().discussed(true).build();
         String updatedMessage = "update message hello";
 
-        given(this.thoughtRepository.findById(Long.valueOf(thoughtId))).willReturn(Optional.ofNullable(thought));
+        given(this.thoughtRepository.findById(thoughtId)).willReturn(Optional.ofNullable(thought));
         thoughtService.updateThoughtMessage(thoughtId, updatedMessage);
         assertThat(Objects.requireNonNull(thought).getMessage()).isEqualTo(updatedMessage);
         then(thoughtRepository).should().save(thought);
@@ -155,8 +153,8 @@ class ThoughtServiceTest {
 
     @Test
     void whenDeletingThoughtsByTeamIdAndThoughtIdThoughtIsDeleted() {
-        thoughtService.deleteThought(teamId, Long.valueOf(thoughtId));
-        then(thoughtRepository).should().deleteThoughtByTeamIdAndId(teamId, Long.valueOf(thoughtId));
+        thoughtService.deleteThought(teamId, thoughtId);
+        then(thoughtRepository).should().deleteThoughtByTeamIdAndId(teamId, thoughtId);
     }
 
     @Test
