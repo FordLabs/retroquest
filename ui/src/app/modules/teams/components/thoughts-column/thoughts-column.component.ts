@@ -30,7 +30,7 @@ import { fadeInOutAnimation } from '../../../animations/add-delete-animation';
 import { Themes } from '../../../domain/Theme';
 import {
   ColumnResponse,
-  deleteColumnResponse,
+  removeItemFromColumn,
   emptyColumnResponse,
 } from '../../../domain/column-response';
 import { WebsocketThoughtResponse } from '../../../domain/websocket-response';
@@ -225,7 +225,7 @@ export class ThoughtsColumnComponent implements OnInit {
   }
 
   deleteThought(thought: Thought) {
-    deleteColumnResponse(thought, this.thoughtAggregation.items);
+    removeItemFromColumn(thought, this.thoughtAggregation.items);
   }
 
   discussThought(thought: Thought): void {

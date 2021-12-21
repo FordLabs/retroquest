@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { ItemSorter } from './column/item-sorter';
+import { Item, ItemSorter } from './column/item-sorter';
 import { Thought } from './thought';
 
 export interface ColumnResponse {
@@ -34,28 +34,18 @@ export function emptyColumnResponse(): ColumnResponse {
   };
 }
 
-export function deleteColumnResponse(
-  response: ResponseWithId,
-  items: ItemSorter
-): void {
-  let removeIndex = items.active.findIndex(
-    (item: ResponseWithId) => item.id === response.id
-  );
-  if (removeIndex > -1) {
-    items.active.splice(removeIndex, 1);
-    return;
-  }
-
-  removeIndex = items.completed.findIndex(
-    (item: ResponseWithId) => item.id === response.id
-  );
-  if (removeIndex > -1) {
-    items.completed.splice(removeIndex, 1);
-  }
+export function removeItemFromColumn(response: Item, items: ItemSorter): void {
+  removeItemFromList(items.active, response);
+  removeItemFromList(items.completed, response);
 }
 
-export interface ResponseWithId {
-  id: number;
+function removeItemFromList(items: Item[], itemToFind: Item): void {
+  const removeIndex = items.findIndex(
+    (item) => item.id === itemToFind.id
+  );
+  if (removeIndex > -1) {
+    items.splice(removeIndex, 1);
+  }
 }
 
 export function findThought(
