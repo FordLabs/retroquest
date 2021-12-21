@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.ford.labs.retroquest.websocket.WebsocketEventType.DELETE;
 import static com.ford.labs.retroquest.websocket.WebsocketEventType.UPDATE;
 
 @Service
@@ -84,6 +85,7 @@ public class ThoughtService {
 
     public void deleteThought(String teamId, Long thoughtId) {
         thoughtRepository.deleteThoughtByTeamIdAndId(teamId, thoughtId);
+        websocketService.publishEvent(new WebsocketThoughtEvent(teamId, DELETE, Thought.builder().id(thoughtId).build()));
     }
 
     public Thought createThought(String teamId, CreateThoughtRequest request) {

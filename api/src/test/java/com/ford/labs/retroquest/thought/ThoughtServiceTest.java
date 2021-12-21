@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.ford.labs.retroquest.websocket.WebsocketEventType.DELETE;
 import static com.ford.labs.retroquest.websocket.WebsocketEventType.UPDATE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -153,8 +154,10 @@ class ThoughtServiceTest {
 
     @Test
     void whenDeletingThoughtsByTeamIdAndThoughtIdThoughtIsDeleted() {
+        var expectedEvent = new WebsocketThoughtEvent(teamId, DELETE, Thought.builder().id(thoughtId).build());
         thoughtService.deleteThought(teamId, thoughtId);
         then(thoughtRepository).should().deleteThoughtByTeamIdAndId(teamId, thoughtId);
+        then(websocketService).should().publishEvent(expectedEvent);
     }
 
     @Test
