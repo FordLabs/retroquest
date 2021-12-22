@@ -15,24 +15,14 @@
  * limitations under the License.
  */
 
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
 import { emptyThought, Thought } from '../../../domain/thought';
 import { Column } from '../../../domain/column';
 import { ThoughtService } from '../../services/thought.service';
 import { TaskDialogComponent } from '../../../components/task-dialog/task-dialog.component';
 import { fadeInOutAnimation } from '../../../animations/add-delete-animation';
 import { Themes } from '../../../domain/Theme';
-import {
-  ColumnResponse,
-  removeItemFromColumn,
-  emptyColumnResponse,
-} from '../../../domain/column-response';
+import { ColumnResponse, emptyColumnResponse, removeItemFromColumn } from '../../../domain/column-response';
 import { WebsocketThoughtResponse } from '../../../domain/websocket-response';
 import { CdkDragSortEvent } from '@angular/cdk/drag-drop';
 
@@ -89,14 +79,6 @@ export class ThoughtsColumnComponent implements OnInit {
   }
 
   processThoughtChange(response: WebsocketThoughtResponse): void {
-
-    function thoughtIsInThisColumn(
-      thoughtTopic: string,
-      thoughtAggregationTopic: string
-    ) {
-      return thoughtTopic === thoughtAggregationTopic;
-    }
-
     function thoughtWasMovedFromThisColumn(
       thoughtTopic: string,
       thoughtTopicPreviousColumn: string,
@@ -112,9 +94,7 @@ export class ThoughtsColumnComponent implements OnInit {
 
     if (response.type === 'delete') {
       this.deleteThought(thought);
-    } else if (
-      thoughtIsInThisColumn(thought.topic, this.thoughtAggregation.topic)
-    ) {
+    } else if (thought.topic === this.thoughtAggregation.topic) {
       this.updateThought(thought);
     } else if (
       thoughtWasMovedFromThisColumn(

@@ -84,18 +84,11 @@ describe('ThoughtService', () => {
 
       service.addThought(testThought);
 
-      expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${testThought.teamId}/thought/create`,
-        body: JSON.stringify(testThought),
-      });
-    });
-
-    it('does not allow messages to be sent for other teams', () => {
-      const testThought = createTestThought('hacker');
-
-      service.addThought(testThought);
-
-      expect(spiedStompService.publish).not.toHaveBeenCalled();
+      expect(mockHttpClient.post).toHaveBeenCalledWith(
+        `/api/team/${teamId}/thought`,
+        JSON.stringify(testThought),
+        {headers: {'Content-Type': 'application/json'}}
+      );
     });
   });
 
@@ -124,7 +117,6 @@ describe('ThoughtService', () => {
     it('should send a message', () => {
       const testThought = createTestThought(teamId, 1);
       service.deleteThought(testThought);
-
       expect(mockHttpClient.delete).toHaveBeenCalledWith(`/api/team/${teamId}/thought/${testThought.id}`);
     });
   });
@@ -133,6 +125,7 @@ describe('ThoughtService', () => {
     it('should send a message', () => {
       const testThought = createTestThought(teamId, 1);
       const newTopic = 'move';
+
       service.moveThought(testThought.id, newTopic);
 
       const expectedBody = {

@@ -118,16 +118,6 @@ public class ThoughtController {
         return ResponseEntity.created(uri).build();
     }
 
-    @MessageMapping("/{teamId}/thought/create")
-    @SendTo("/topic/{teamId}/thoughts")
-    public WebsocketPutResponse<Thought> createThoughtWebsocket(@DestinationVariable("teamId") String teamId, CreateThoughtRequest request, Authentication authentication) {
-        if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            var savedThought = thoughtService.createThought(teamId, request);
-            return new WebsocketPutResponse<>(savedThought);
-        }
-        return null;
-    }
-
     @MessageMapping("/{teamId}/thought/{thoughtId}/edit")
     @SendTo("/topic/{teamId}/thoughts")
     public WebsocketPutResponse<Thought> editThoughtWebsocket(

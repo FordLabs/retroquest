@@ -29,7 +29,8 @@ export class ThoughtService {
     private http: HttpClient,
     private rxStompService: RxStompService,
     private dataService: DataService
-  ) {}
+  ) {
+  }
 
   private validTeamId(teamId: string) {
     return this.dataService.team.id === teamId;
@@ -40,12 +41,14 @@ export class ThoughtService {
   }
 
   addThought(thought: Thought): void {
-    if (this.validTeamId(thought.teamId)) {
-      this.rxStompService.publish({
-        destination: `/app/${this.dataService.team.id}/thought/create`,
-        body: JSON.stringify(thought)
-      });
-    }
+    this.http.post(`/api/team/${this.dataService.team.id}/thought`,
+      JSON.stringify(thought),
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    ).subscribe().unsubscribe();
   }
 
   updateThought(thought: Thought): void {
