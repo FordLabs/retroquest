@@ -17,10 +17,8 @@
 
 package com.ford.labs.retroquest.api;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
-import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.exception.ThoughtNotFoundException;
 import com.ford.labs.retroquest.thought.CreateThoughtRequest;
@@ -43,10 +41,7 @@ import java.util.List;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
@@ -332,43 +327,6 @@ class ThoughtApiTest extends ApiTestBase {
                 .usingRecursiveComparison()
                 .isEqualTo(savedThought);
         assertThat(responseThought).isNull();
-    }
-
-    @Test
-    void should_create_thought_websocket() throws Exception {
-        StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
-
-        Thought sentThought = Thought.builder()
-                .teamId(teamId)
-                .message("message")
-                .build();
-
-        session.send(BASE_ENDPOINT_URL + "/create",
-                objectMapper.writeValueAsBytes(sentThought));
-
-        Thought responseThought = takeObjectInSocket(Thought.class);
-
-        Thought savedThought = thoughtRepository.findById(responseThought.getId()).orElseThrow(Exception::new);
-
-        assertThat(savedThought).usingRecursiveComparison()
-                .isEqualTo(responseThought);
-    }
-
-    @Test
-    void should_not_create_thought_unauthorized_websocket() throws Exception {
-        StompSession session = getUnauthorizedSession();
-        subscribe(session, BASE_SUB_URL);
-
-        Thought sentThought = Thought.builder().teamId(teamId).message("message").build();
-
-        session.send(BASE_ENDPOINT_URL + "/create",
-                objectMapper.writeValueAsBytes(sentThought));
-
-        Thought responseThought = takeObjectInSocket(Thought.class);
-
-        assertThat(responseThought).isNull();
-        assertThat(thoughtRepository.count()).isZero();
     }
 
     @Test
