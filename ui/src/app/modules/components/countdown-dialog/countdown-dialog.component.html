@@ -1,0 +1,54 @@
+<!--
+  ~ Copyright (c) 2021 Ford Motor Company
+  ~ All rights reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<div class="dialog" [ngClass]="{
+  'dark-theme': darkThemeIsEnabled
+}"
+aria-label="timer-dialogue" aria-hidden="true">
+  <div class="content-area">
+    <div class="heading" [ngClass]="{'dark-theme': darkThemeIsEnabled}">
+      Time's Up!
+    </div>
+    <div class="sub-heading" [ngClass]="{'dark-theme': darkThemeIsEnabled}">
+      Your timer has expired.
+    </div>
+  </div>
+
+  <div class="footer">
+      <div
+          class="container"
+          id="minute-button-container"
+          [ngClass]="{
+              'dark-theme': darkThemeIsEnabled
+          }"
+      >
+          <rq-button
+              type="secondary"
+              text="+1 minute"
+              [theme]="theme"
+              (click)="oneMinute()"
+          ></rq-button>
+      </div>
+      <div class="container" id="okay-button-container">
+          <rq-button
+              type="primary"
+              text="Okay!"
+              (click)="hide()"
+          ></rq-button>
+      </div>
+  </div>
+</div>

@@ -15,50 +15,57 @@
  * limitations under the License.
  */
 
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { Themes } from '../../domain/Theme';
+import { CountdownDialogComponent } from '../countdown-dialog/countdown-dialog.component';
 
 @Component({
   selector: 'rq-countdown-timer',
   templateUrl: './countdown-timer.component.html',
   styleUrls: ['./countdown-timer.component.scss']
 })
-export class CountdownTimerComponent implements OnInit {
-  @Input() theme: Themes = Themes.Light;
+export class CountdownTimerComponent{
+  @Input() theme = Themes.Dark;
   @Input() minutes = 5;
   @Input() seconds = 0;
+
+  @ViewChild(CountdownDialogComponent) countdownDialog: CountdownDialogComponent;
+
   time!: number;
   interval!: any;
   border = "set";
   running = false;
+  started = false;
 
   get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;
   }
 
   startTimer() {
-    if(this.minutes === undefined || this.minutes < 0){
-      this.minutes = 0;
-    }
-    if(this.minutes > 99){
-      this.minutes = 99;
-    }
+    // Won't need this block if there is no typed user input
+    // if(this.minutes === undefined || this.minutes < 0){
+    //   this.minutes = 0;
+    // }
+    // if(this.minutes > 99){
+    //   this.minutes = 99;
+    // }
 
-    if(this.seconds === undefined || this.seconds < 0){
-      this.seconds = 0;
-    }
-    if(this.seconds > 99){
-      this.seconds = 99;
-    }
+    // if(this.seconds === undefined || this.seconds < 0){
+    //   this.seconds = 0;
+    // }
+    // if(this.seconds > 99){
+    //   this.seconds = 99;
+    // }
 
-    this.border = "set";
     this.running = true;
+    this.started = true;
     clearInterval(this.interval);
     this.time = (this.minutes * 60) + this.seconds;
     this.interval = setInterval(() => {
       if (this.time === 0) {
-        this.border = "out";
+        this.started = false;
         this.pauseTimer();
+        this.countdownDialog.show();
       } else {
         this.time--;
         this.minutes = Math.floor(this.time / 60);
@@ -75,6 +82,7 @@ export class CountdownTimerComponent implements OnInit {
   clearTimer(){
     clearInterval(this.interval);
     this.running = false;
+    this.started = false;
     this.minutes = 0;
     this.seconds = 0;
   }
@@ -87,9 +95,14 @@ export class CountdownTimerComponent implements OnInit {
     this.seconds = undefined;
   }
 
-  constructor() { }
+  oneMinute(){
+    this.minutes = 1;
+    this.seconds = 0;
+    this.startTimer();
+  }
 
-  ngOnInit(): void {
+  setTimer(value: number){
+    this.minutes = value;
   }
 
 }

@@ -33,21 +33,63 @@
     display: inline-flex;
     justify-content: center;
 
+    #runningClock{
+      background-color: white;
+      border: 0.2rem $asphalt solid;
+      color: $asphalt;
+      border-radius: 0.5em;
+      width: 4.65em;
+      height: 1.9em;
+      line-height: 1.9em;
+      font-size: 1em;
+      text-align: center;
+      font-weight: bold;
+      color: $asphalt;
+      font-family: inherit;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    #timeSelect{
+      background-color: white;
+      border: 0.2rem $asphalt solid;
+      color: $asphalt;
+      border-radius: 0.5em;
+      width: 5em;
+      height: 2.25em;
+      font-size: 1em;
+      text-align: center;
+      font-weight: bold;
+      color: $asphalt;
+      font-family: inherit;
+    }
+
+    #timeSelect:hover{
+      border-color: $purple;
+      cursor: pointer;
+    }
+
     div#colon {
       height: 100%;
 
       p {
-        color: lightgray;
+        color: $asphalt;
         font-size: x-small;
         font-weight: bolder;
+        vertical-align: middle;
+
+        &.dark-theme {
+          color: $gray;
+        }
       }
     }
 
     input {
-      border: 0.1rem solid;
+      border: 0.13rem #4F5166 solid;
+      line-height: 0.2em;
       border-radius: 0.5em;
-      width: 2em;
-      height: 2em;
+      width: 1.9em;
+      height: 1.9em;
       font-size: 1em;
       text-align: center;
       font-weight: bold;
@@ -71,54 +113,6 @@
 
     input[type='number'] {
       -moz-appearance: textfield;
-    }
-
-    .set {
-      border-color: #4F5166;
-    }
-
-    #minutes.out {
-      animation: border1 1s linear 10;
-    }
-
-    #seconds.out{
-      animation: border2 1s linear 10
-    }
-
-    @keyframes border1 {
-      0% {
-        background-color: $white;
-      }
-      25% {
-        background-color: $red;
-      }
-      50% {
-        background-color: $white;
-      }
-      75% {
-        background-color: $red;
-      }
-      100% {
-        background-color: $white;
-      }
-    }
-
-    @keyframes border2 {
-      0% {
-        background-color: $red;
-      }
-      25% {
-        background-color: $white;
-      }
-      50% {
-        background-color: $red;
-      }
-      75% {
-        background-color: $white;
-      }
-      100% {
-        background-color: $red;
-      }
     }
   }
 
@@ -144,6 +138,7 @@
     }
 
     #start:hover{
+      background-color: $dark-green;
       border: solid $dark-green 0.2em;
     }
 
@@ -153,6 +148,7 @@
     }
 
     #pause:hover{
+      background-color: $dark-yellow;
       border: solid $dark-yellow 0.2em;
     }
 
@@ -163,8 +159,8 @@
     }
 
     #clear:hover{
+      background-color: $dark-red;
       border: solid $dark-red 0.2em;
-      background-color: #e74c3c;
       color: white;
     }
   }

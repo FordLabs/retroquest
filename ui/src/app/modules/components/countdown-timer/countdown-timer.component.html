@@ -18,15 +18,25 @@
   <div class="container" id="countdown" [ngClass]="{'dark-theme': darkThemeIsEnabled}">
     <div class="container row" id="clock">
 
-        <input class={{border}} type="number" value="{{ minutes | number: '2.0'}}" id="minutes" (click)="minClick()"
-            (input)="minutes = $any($event.target).value" aria-label="minutes" [disabled]="running" />
+        <!-- <input class="set" type="number" value="{{ minutes | number: '2.0'}}" id="minutes" (click)="minClick()"
+            (input)="minutes = $any($event.target).value" aria-label="minutes" [disabled]="running"/>
 
         <div class="container" id="colon">
-            <p>:</p>
+            <p [ngClass]="{'dark-theme': darkThemeIsEnabled}">:</p>
         </div>
 
-        <input class={{border}} type="number" value="{{ seconds | number: '2.0'}}" id="seconds" (click)="secClick()"
-            (input)="seconds = $any($event.target).value" aria-label="seconds" [disabled]="running" />
+        <input class="set" type="number" value="{{ seconds | number: '2.0'}}" id="seconds" (click)="secClick()"
+            (input)="seconds = $any($event.target).value" aria-label="seconds" [disabled]="running" /> -->
+
+        <select id="timeSelect" *ngIf="!started">
+            <option (click)="setTimer(5)" value="5" id="five">05:00</option>
+            <option (click)="setTimer(10)" value="10">10:00</option>
+            <option (click)="setTimer(15)" value="15">15:00</option>
+            <option (click)="setTimer(30)" value="30">30:00</option>
+            <option (click)="setTimer(45)" value="45">45:00</option>
+        </select>
+
+        <div class="{{border}}" id="runningClock" *ngIf="started" aria-lebel="clock">{{ minutes | number: '2.0'}}:{{ seconds | number: '2.0'}}</div>
 
     </div>
 
@@ -46,3 +56,5 @@
 
     </div>
 </div>
+
+<rq-countdown-dialog [theme]="theme" (oneMinuteMore)="oneMinute($event)"></rq-countdown-dialog>
