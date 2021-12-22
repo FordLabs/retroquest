@@ -16,8 +16,8 @@
  */
 
 import { CountdownTimerComponent } from './countdown-timer.component';
-import { fireEvent, render, screen } from '@testing-library/angular';
-import userEvent from '@testing-library/user-event';
+//import { fireEvent, render, screen } from '@testing-library/angular';
+//import userEvent from '@testing-library/user-event';
 
 
 describe('CountdownTimerComponent', () => {
@@ -89,11 +89,11 @@ describe('CountdownTimerComponent', () => {
     });
 
     it('should set \'started\' to false', () => {
-      expect(component.started).toBeFalsy;
+      expect(component.started).toBeFalsy();
     });
 
     it('should set \'running\' to false', () => {
-      expect(component.running).toBeFalsy;
+      expect(component.running).toBeFalsy();
     });
 
     it('should clear interval', () => {
@@ -112,7 +112,7 @@ describe('CountdownTimerComponent', () => {
     });
 
     it('should set running to false', () => {
-      expect(component.running).toBeFalsy;
+      expect(component.running).toBeFalsy();
     });
   });
 
