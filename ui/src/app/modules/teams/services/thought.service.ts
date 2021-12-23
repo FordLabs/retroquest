@@ -55,8 +55,17 @@ export class ThoughtService {
     this.http.put(`/api/team/${this.dataService.team.id}/thought/${thought.id}/heart`, {}).subscribe().unsubscribe();
   }
 
-  discussThought(thought: Thought): void {
-    this.http.put(`/api/team/${this.dataService.team.id}/thought/${thought.id}/discuss`, {}).subscribe().unsubscribe();
+  discussThought(thought: Thought, discussed: boolean): void {
+    this.http.put(
+      `/api/team/${this.dataService.team.id}/thought/${thought.id}/discuss`,
+      JSON.stringify({
+        discussed
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).subscribe().unsubscribe();
   }
 
   moveThought(thoughtId: Thought['id'], newTopic: Thought['topic']): void {

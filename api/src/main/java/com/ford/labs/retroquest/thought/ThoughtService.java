@@ -60,9 +60,9 @@ public class ThoughtService {
         return savedThought;
     }
 
-    public Thought discussThought(Long thoughtId) {
+    public Thought discussThought(Long thoughtId, boolean discussed) {
         var thought = fetchThought(thoughtId);
-        thought.toggleDiscussed();
+        thought.setDiscussed(discussed);
         var savedThought = thoughtRepository.save(thought);
         websocketService.publishEvent(new WebsocketThoughtEvent(savedThought.getTeamId(), UPDATE, savedThought));
         return savedThought;

@@ -20,7 +20,6 @@ package com.ford.labs.retroquest.api;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
-import com.ford.labs.retroquest.exception.ThoughtNotFoundException;
 import com.ford.labs.retroquest.thought.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -93,12 +92,14 @@ class ThoughtApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_discuss_not_discussed_thought() throws Exception {
+    void should_update_thought_discussion() throws Exception {
         StompSession session = getAuthorizedSession();
         subscribe(session, BASE_SUB_URL);
         Thought originalThought = thoughtRepository.save(Thought.builder().teamId(teamId).discussed(false).build());
 
         mockMvc.perform(put("/api/team/" + teamId + "/thought/" + originalThought.getId() + "/discuss")
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(new UpdateThoughtDiscussedRequest(true)))
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk());
         var emittedThought = takeObjectInSocket(Thought.class);
@@ -111,6 +112,8 @@ class ThoughtApiTest extends ApiTestBase {
     @Test
     public void should_not_discuss_thought_unauthorized() throws Exception {
         mockMvc.perform(put("/api/team/" + teamId + "/thought/" + 1 + "/discuss")
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(new UpdateThoughtDiscussedRequest(true)))
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
                 .andExpect(status().isForbidden());
     }
