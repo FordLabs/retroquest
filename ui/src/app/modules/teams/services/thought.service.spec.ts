@@ -112,6 +112,12 @@ describe('ThoughtService', () => {
       expect(spiedStompService.publish).not.toHaveBeenCalled();
     });
 
+    it('should heart a thought', () => {
+      const testThought = createTestThought(teamId, 1);
+      service.heartThought(testThought);
+      expect(mockHttpClient.put).toHaveBeenCalledWith(`/api/team/${teamId}/thought/${testThought.id}/heart`, {});
+    });
+
     it('should update if a thought is discussed', () => {
       const testThought = createTestThought(teamId, 1);
       service.discussThought(testThought);
