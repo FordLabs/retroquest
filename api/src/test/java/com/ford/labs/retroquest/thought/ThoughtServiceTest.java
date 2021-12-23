@@ -61,13 +61,16 @@ class ThoughtServiceTest {
 
     @Test
     void likeThoughtShouldIncrementNumberOfLikesByOne() {
-        Thought thought = Thought.builder().hearts(5).build();
+        var thought = Thought.builder().id(1234L).message("Hello").topic("happy").hearts(5).build();
+        var expectedThought = Thought.builder().id(1234L).message("Hello").topic("happy").hearts(6).build();
+        var expectedEvent = new WebsocketThoughtEvent(teamId, UPDATE, expectedThought);
 
         given(this.thoughtRepository.findById(thoughtId)).willReturn(Optional.of(thought));
         given(thoughtRepository.save(thought)).willReturn(thought);
 
-        assertThat(this.thoughtService.likeThought(thoughtId)).isEqualTo(6);
+        assertThat(this.thoughtService.likeThought(thoughtId)).isEqualTo(expectedThought);
         then(thoughtRepository).should(atMostOnce()).save(thought);
+        then(websocketService).should().publishEvent(expectedEvent);
     }
 
     @Test
@@ -146,7 +149,7 @@ class ThoughtServiceTest {
         List<Thought> listOfThoughts = new ArrayList<>();
         listOfThoughts.add(thought);
         given(this.thoughtRepository.findAllByTeamIdAndBoardIdIsNull(teamId)).willReturn(listOfThoughts);
-        thoughtService.fetchAllThoughtsByTeam(teamId);
+        thoughtService.fetchAllThoughts(teamId);
         then(thoughtRepository).should().findAllByTeamIdAndBoardIdIsNull(teamId);
     }
 

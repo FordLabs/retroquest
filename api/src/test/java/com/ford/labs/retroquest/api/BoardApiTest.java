@@ -100,7 +100,7 @@ class BoardApiTest extends ApiTestBase {
                 .andExpect(status().isOk());
 
         assertThat(boardRepository.count()).isEqualTo(1);
-        assertThat(thoughtService.fetchAllThoughtsByTeam(teamId)).containsExactly(savedThought);
+        assertThat(thoughtService.fetchAllThoughts(teamId)).containsExactly(savedThought);
     }
 
     @Test
@@ -142,6 +142,6 @@ class BoardApiTest extends ApiTestBase {
 
 
         assertThat(boardRepository.count()).isEqualTo(1);
-        assertThat(thoughtService.fetchAllThoughtsByTeam(teamId)).isEmpty();
+        assertThat(thoughtService.fetchAllThoughts(teamId)).isEmpty();
     }
 }

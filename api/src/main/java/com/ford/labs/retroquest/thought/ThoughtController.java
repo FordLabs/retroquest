@@ -29,9 +29,9 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -52,12 +52,13 @@ public class ThoughtController {
         this.apiAuthorization = apiAuthorization;
     }
 
+    @Transactional
     @PutMapping("/api/team/{teamId}/thought/{thoughtId}/heart")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "adds a like to a thought given a thought and team id", description = "likeThought")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Created")})
-    public int likeThought(@PathVariable("thoughtId") Long thoughtId, @PathVariable("teamId") String teamId) {
-        return thoughtService.likeThought(thoughtId);
+    public void likeThought(@PathVariable("thoughtId") Long thoughtId, @PathVariable("teamId") String teamId) {
+        thoughtService.likeThought(thoughtId);
     }
 
     @PutMapping("/api/team/{teamId}/thought/{thoughtId}/discuss")
@@ -93,7 +94,7 @@ public class ThoughtController {
     @Operation(summary = "Returns all thoughts given a team id", description = "getThoughtsForTeam")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public List<Thought> getThoughtsForTeam(@PathVariable("teamId") String teamId) {
-        return thoughtService.fetchAllThoughtsByTeam(teamId);
+        return thoughtService.fetchAllThoughts(teamId);
     }
 
     @Transactional
