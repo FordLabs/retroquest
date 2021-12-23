@@ -19,7 +19,6 @@ package com.ford.labs.retroquest.thought;
 
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.exception.ThoughtNotFoundException;
-import com.ford.labs.retroquest.websocket.WebsocketEventType;
 import com.ford.labs.retroquest.websocket.WebsocketService;
 import com.ford.labs.retroquest.websocket.WebsocketThoughtEvent;
 import org.springframework.stereotype.Service;
@@ -45,10 +44,20 @@ public class ThoughtService {
         this.websocketService = websocketService;
     }
 
-    public int likeThought(Long thoughtId) {
+    public Thought fetchThought(Long thoughtId) {
+        return thoughtRepository.findById(thoughtId).orElseThrow(() -> new ThoughtNotFoundException(thoughtId));
+    }
+
+    public List<Thought> fetchAllThoughts(String teamId) {
+        return thoughtRepository.findAllByTeamIdAndBoardIdIsNull(teamId);
+    }
+
+    public Thought likeThought(Long thoughtId) {
         var thought = fetchThought(thoughtId);
         thought.incrementHearts();
-        return thoughtRepository.save(thought).getHearts();
+        var savedThought = thoughtRepository.save(thought);
+        websocketService.publishEvent(new WebsocketThoughtEvent(savedThought.getTeamId(), UPDATE, savedThought));
+        return savedThought;
     }
 
     public void discussThought(Long thoughtId) {
@@ -69,14 +78,6 @@ public class ThoughtService {
         var returnedThought = fetchThought(thoughtId);
         returnedThought.setMessage(updatedMessage);
         thoughtRepository.save(returnedThought);
-    }
-
-    public Thought fetchThought(Long thoughtId) {
-        return thoughtRepository.findById(thoughtId).orElseThrow(() -> new ThoughtNotFoundException(thoughtId));
-    }
-
-    public List<Thought> fetchAllThoughtsByTeam(String teamId) {
-        return thoughtRepository.findAllByTeamIdAndBoardIdIsNull(teamId);
     }
 
     public void deleteThought(String teamId, Long thoughtId) {

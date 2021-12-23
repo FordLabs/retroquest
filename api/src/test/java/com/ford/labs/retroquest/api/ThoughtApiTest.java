@@ -72,13 +72,18 @@ class ThoughtApiTest extends ApiTestBase {
 
     @Test
     void should_like_thought_on_upvote() throws Exception {
-        Thought savedThought = thoughtRepository.save(Thought.builder().teamId(teamId).hearts(1).build());
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
+        Thought originalThought = thoughtRepository.save(Thought.builder().teamId(teamId).hearts(1).build());
 
-        mockMvc.perform(put("/api/team/" + teamId + "/thought/" + savedThought.getId() + "/heart")
+        mockMvc.perform(put("/api/team/" + teamId + "/thought/" + originalThought.getId() + "/heart")
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk());
+        var emittedThought = takeObjectInSocket(Thought.class);
 
-        assertThat(thoughtRepository.findById(savedThought.getId()).orElseThrow(() -> new ThoughtNotFoundException(String.valueOf(savedThought.getId()))).getHearts()).isEqualTo(2);
+        Thought savedThought = thoughtRepository.findById(originalThought.getId()).orElseThrow();
+        assertThat(savedThought.getHearts()).isEqualTo(2);
+        assertThat(emittedThought).usingRecursiveComparison().isEqualTo(savedThought);
     }
 
     @Test
