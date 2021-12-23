@@ -51,6 +51,10 @@ export class ThoughtService {
     ).subscribe().unsubscribe();
   }
 
+  heartThought(thought: Thought): void {
+    this.http.put(`/api/team/${this.dataService.team.id}/thought/${thought.id}/heart`, {}).subscribe().unsubscribe();
+  }
+
   discussThought(thought: Thought): void {
     this.http.put(`/api/team/${this.dataService.team.id}/thought/${thought.id}/discuss`, {}).subscribe().unsubscribe();
   }
