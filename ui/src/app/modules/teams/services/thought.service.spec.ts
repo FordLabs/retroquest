@@ -17,17 +17,12 @@
 
 import { Observable } from 'rxjs';
 import { ThoughtService } from './thought.service';
-import {
-  createMockHttpClient,
-  createMockRxStompService,
-} from '../../utils/testutils';
+import { createMockHttpClient } from '../../utils/testutils';
 import { HttpClient } from '@angular/common/http';
-import { RxStompService } from '@stomp/ng2-stompjs';
 import { DataService } from '../../data.service';
 
 describe('ThoughtService', () => {
   let service: ThoughtService;
-  let spiedStompService: RxStompService;
   let mockHttpClient: HttpClient;
 
   const dataService: DataService = new DataService();
@@ -55,14 +50,10 @@ describe('ThoughtService', () => {
 
   beforeEach(() => {
     mockHttpClient = createMockHttpClient();
-
-    spiedStompService = createMockRxStompService();
-
     dataService.team.id = teamId;
 
     service = new ThoughtService(
       mockHttpClient,
-      spiedStompService,
       dataService
     );
   });
@@ -93,25 +84,6 @@ describe('ThoughtService', () => {
   });
 
   describe('Update Thought', () => {
-    it('should send a message', () => {
-      const testThought = createTestThought(teamId, 1);
-
-      service.updateThought(testThought);
-
-      expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${testThought.teamId}/thought/${testThought.id}/edit`,
-        body: JSON.stringify(testThought),
-      });
-    });
-
-    it('does not allow messages to be updated for other teams', () => {
-      const testThought = createTestThought('hacker', 1);
-
-      service.updateThought(testThought);
-
-      expect(spiedStompService.publish).not.toHaveBeenCalled();
-    });
-
     it('should heart a thought', () => {
       const testThought = createTestThought(teamId, 1);
       service.heartThought(testThought);
@@ -121,7 +93,7 @@ describe('ThoughtService', () => {
     it('should update if a thought is discussed', () => {
       const testThought = createTestThought(teamId, 1);
       const expectedBody = {discussed: false};
-      service.discussThought(testThought, false);
+      service.updateDiscussionStatus(testThought, false);
       expect(mockHttpClient.put).toHaveBeenCalledWith(
         `/api/team/${teamId}/thought/${testThought.id}/discuss`,
         JSON.stringify(expectedBody),
