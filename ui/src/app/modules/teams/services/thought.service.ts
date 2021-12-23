@@ -51,6 +51,10 @@ export class ThoughtService {
     ).subscribe().unsubscribe();
   }
 
+  discussThought(thought: Thought): void {
+    this.http.put(`/api/team/${this.dataService.team.id}/thought/${thought.id}/discuss`, {}).subscribe().unsubscribe();
+  }
+
   updateThought(thought: Thought): void {
     if (this.validTeamId(thought.teamId)) {
       this.rxStompService.publish({

@@ -67,7 +67,7 @@ describe('ThoughtService', () => {
     );
   });
 
-  describe('fetchThoughts', () => {
+  describe('Fetch Thoughts', () => {
     it('should request thoughts from the thoughts api', () => {
       const returnObj = service.fetchThoughts(teamId);
 
@@ -78,7 +78,7 @@ describe('ThoughtService', () => {
     });
   });
 
-  describe('addThought', () => {
+  describe('Add Thought', () => {
     it('should send a message', () => {
       const testThought = createTestThought(teamId);
 
@@ -92,7 +92,7 @@ describe('ThoughtService', () => {
     });
   });
 
-  describe('updateThought', () => {
+  describe('Update Thought', () => {
     it('should send a message', () => {
       const testThought = createTestThought(teamId, 1);
 
@@ -111,18 +111,14 @@ describe('ThoughtService', () => {
 
       expect(spiedStompService.publish).not.toHaveBeenCalled();
     });
-  });
 
-  describe('deleteThought', () => {
-    it('should send a message', () => {
+    it('should update if a thought is discussed', () => {
       const testThought = createTestThought(teamId, 1);
-      service.deleteThought(testThought);
-      expect(mockHttpClient.delete).toHaveBeenCalledWith(`/api/team/${teamId}/thought/${testThought.id}`);
+      service.discussThought(testThought);
+      expect(mockHttpClient.put).toHaveBeenCalledWith(`/api/team/${teamId}/thought/${testThought.id}/discuss`, {});
     });
-  });
 
-  describe('moveThought', () => {
-    it('should send a message', () => {
+    it('should update a thought topic', () => {
       const testThought = createTestThought(teamId, 1);
       const newTopic = 'move';
 
@@ -137,6 +133,14 @@ describe('ThoughtService', () => {
         JSON.stringify(expectedBody),
         {headers: {'Content-Type': 'application/json'}}
       );
+    });
+  });
+
+  describe('Delete Thought', () => {
+    it('should send a message', () => {
+      const testThought = createTestThought(teamId, 1);
+      service.deleteThought(testThought);
+      expect(mockHttpClient.delete).toHaveBeenCalledWith(`/api/team/${teamId}/thought/${testThought.id}`);
     });
   });
 });
