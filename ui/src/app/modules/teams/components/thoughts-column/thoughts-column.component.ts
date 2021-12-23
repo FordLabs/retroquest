@@ -213,11 +213,6 @@ export class ThoughtsColumnComponent implements OnInit {
     this.thoughtService.updateThought(thought);
   }
 
-  heartThought(thought: Thought): void {
-    thought.hearts++;
-    this.thoughtService.updateThought(thought);
-  }
-
   onMessageChanged(message: string, thought: Thought) {
     thought.message = message;
     this.thoughtService.updateThought(thought);

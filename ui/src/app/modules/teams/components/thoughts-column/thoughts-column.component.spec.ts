@@ -78,20 +78,6 @@ describe('ThoughtColumnComponent', () => {
     });
   });
 
-  describe('heartThought', () => {
-    it('should increment the hearts count', () => {
-      component.heartThought(testThought);
-      expect(testThought.hearts).toEqual(1);
-    });
-
-    it('should call ThoughtService.setCurrentThought', () => {
-      component.heartThought(testThought);
-      expect(mockThoughtService.updateThought).toHaveBeenCalledWith(
-        testThought
-      );
-    });
-  });
-
   describe('process thought change', () => {
     let deleteThoughtSpy;
     let updateThoughtSpy;
