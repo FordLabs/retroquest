@@ -21,10 +21,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.exception.ThoughtNotFoundException;
-import com.ford.labs.retroquest.thought.CreateThoughtRequest;
-import com.ford.labs.retroquest.thought.MoveThoughtRequest;
-import com.ford.labs.retroquest.thought.Thought;
-import com.ford.labs.retroquest.thought.ThoughtRepository;
+import com.ford.labs.retroquest.thought.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -106,7 +103,6 @@ class ThoughtApiTest extends ApiTestBase {
                 .andExpect(status().isOk());
         var emittedThought = takeObjectInSocket(Thought.class);
 
-        assertThat(thoughtRepository.findById(originalThought.getId()).orElseThrow(() -> new ThoughtNotFoundException(String.valueOf(originalThought.getId()))).isDiscussed()).isTrue();
         Thought savedThought = thoughtRepository.findById(originalThought.getId()).orElseThrow();
         assertThat(savedThought.isDiscussed()).isTrue();
         assertThat(emittedThought).usingRecursiveComparison().isEqualTo(savedThought);
@@ -121,16 +117,32 @@ class ThoughtApiTest extends ApiTestBase {
 
     @Test
     void should_update_thought_message() throws Exception {
-        Thought savedThought = thoughtRepository.save(Thought.builder().teamId(teamId).message("hello").build());
-        Thought updatedThought = Thought.builder().id(savedThought.getId()).teamId(teamId).message("goodbye").build();
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
+        var originalThought = thoughtRepository.save(Thought.builder().teamId(teamId).message("hello").build());
+        var updatedMessage = "goodbye";
 
-        mockMvc.perform(put("/api/team/" + teamId + "/thought/" + savedThought.getId() + "/message")
+        mockMvc.perform(put("/api/team/" + teamId + "/thought/" + originalThought.getId() + "/message")
                 .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(updatedThought))
+                .content(objectMapper.writeValueAsString(new UpdateThoughtMessageRequest(updatedMessage)))
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk());
+        var emittedThought = takeObjectInSocket(Thought.class);
 
-        assertThat(thoughtRepository.findById(savedThought.getId()).orElseThrow(() -> new ThoughtNotFoundException(String.valueOf(savedThought.getId()))).getMessage()).isEqualTo("goodbye");
+        var updatedThought = thoughtRepository.findById(originalThought.getId()).orElseThrow();
+        assertThat(updatedThought.getMessage()).isEqualTo(updatedMessage);
+        assertThat(emittedThought).usingRecursiveComparison().isEqualTo(updatedThought);
+    }
+
+    @Test
+    void should_not_update_thought_message_unauthorized() throws Exception {
+        Thought updatedThought = Thought.builder().id(1L).teamId(teamId).message("goodbye").build();
+
+        mockMvc.perform(put("/api/team/" + teamId + "/thought/" + 1 + "/message")
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedThought))
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -255,7 +267,7 @@ class ThoughtApiTest extends ApiTestBase {
 
         mockMvc.perform(post(String.join("", "/api/team/", teamId, "/thought"))
                 .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(createThoughtRequest))
+                .content(objectMapper.writeValueAsString(createThoughtRequest))
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isCreated());
         var emittedThought = takeObjectInSocket(Thought.class);
@@ -282,21 +294,9 @@ class ThoughtApiTest extends ApiTestBase {
 
         mockMvc.perform(post(String.join("", "/api/team/", teamId, "/thought"))
                 .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(createThoughtRequest))
+                .content(objectMapper.writeValueAsString(createThoughtRequest))
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
                 .andExpect(status().isForbidden());
-    }
-
-    @Test
-    void should_not_delete_all_thoughts_unauthorized() throws Exception {
-        StompSession session = getUnauthorizedSession();
-        subscribe(session, BASE_SUB_URL);
-
-        thoughtRepository.save(Thought.builder().teamId(teamId).message("message").build());
-
-        session.send(BASE_ENDPOINT_URL + "/delete", new byte[0]);
-
-        assertThat(thoughtRepository.count()).isEqualTo(1);
     }
 
     @Test

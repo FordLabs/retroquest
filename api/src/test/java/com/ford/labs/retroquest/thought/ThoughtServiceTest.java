@@ -75,7 +75,7 @@ class ThoughtServiceTest {
 
     @Test
     void whenLikingThoughtWhichDoesntHaveAValidIDThrowsThoughtNotFoundException() {
-        Thought thought = Thought.builder().id(1234L).message("Hello").topic("happy").hearts(5).build();
+        var thought = Thought.builder().id(1234L).message("Hello").topic("happy").hearts(5).build();
         var expectedThought = Thought.builder().id(1234L).message("Hello").topic("happy").hearts(6).build();
 
         given(this.thoughtRepository.findById(thought.getId())).willThrow(new ThoughtNotFoundException(thought.getId()));
@@ -87,7 +87,7 @@ class ThoughtServiceTest {
 
     @Test
     void whenDiscussingThoughtNotDiscussedThoughtIsSetToTrue() {
-        Thought thought = Thought.builder().id(1234L).message("Hello").topic("happy").discussed(false).build();
+        var thought = Thought.builder().id(1234L).message("Hello").topic("happy").discussed(false).build();
         var expectedThought = Thought.builder().id(1234L).message("Hello").topic("happy").discussed(true).build();
         given(this.thoughtRepository.findById(thought.getId())).willReturn(Optional.of(thought));
         given(this.thoughtRepository.save(expectedThought)).willReturn(expectedThought);
@@ -113,7 +113,7 @@ class ThoughtServiceTest {
 
     @Test
     public void whenDiscussingThought_EmitsUpdatedThought() {
-        Thought thought = Thought.builder().id(1234L).message("Hello").topic("happy").discussed(true).build();
+        var thought = Thought.builder().id(1234L).message("Hello").topic("happy").discussed(true).build();
         var expectedThought = Thought.builder().id(1234L).message("Hello").topic("happy").discussed(false).build();
         var expectedEvent = new WebsocketThoughtEvent(expectedThought.getTeamId(), UPDATE, expectedThought);
         given(this.thoughtRepository.findById(thought.getId())).willReturn(Optional.of(thought));
@@ -129,7 +129,7 @@ class ThoughtServiceTest {
         String newTopic = "right-column";
         Thought thought = Thought.builder().id(thoughtId).topic("wrong-column").build();
         Thought expectedThought = Thought.builder().id(thoughtId).topic(newTopic).build();
-        given(this.thoughtRepository.findById(thoughtId)).willReturn(Optional.ofNullable(thought));
+        given(this.thoughtRepository.findById(thoughtId)).willReturn(Optional.of(thought));
         given(this.thoughtRepository.save(expectedThought)).willReturn(expectedThought);
 
         Thought actualThought = thoughtService.updateTopic(thoughtId, newTopic);
@@ -142,7 +142,7 @@ class ThoughtServiceTest {
         String newTopic = "right-column";
         Thought thought = Thought.builder().id(thoughtId).topic("wrong-column").build();
         Thought expectedThought = Thought.builder().id(thoughtId).topic(newTopic).build();
-        given(this.thoughtRepository.findById(thoughtId)).willReturn(Optional.ofNullable(thought));
+        given(this.thoughtRepository.findById(thoughtId)).willReturn(Optional.of(thought));
         given(this.thoughtRepository.save(expectedThought)).willReturn(expectedThought);
 
         thoughtService.updateTopic(thoughtId, newTopic);
@@ -154,13 +154,16 @@ class ThoughtServiceTest {
 
     @Test
     void whenThoughtMessageIsUpdatedThoughtIsUpdated() {
-        Thought thought = Thought.builder().discussed(true).build();
-        String updatedMessage = "update message hello";
+        var updatedMessage = "Update message hello";
+        var thought = Thought.builder().id(1234L).message("Hello").topic("happy").build();
+        var expectedThought = Thought.builder().id(1234L).message(updatedMessage).topic("happy").build();
+        given(this.thoughtRepository.findById(thought.getId())).willReturn(Optional.of(thought));
+        given(this.thoughtRepository.save(expectedThought)).willReturn(expectedThought);
 
-        given(this.thoughtRepository.findById(thoughtId)).willReturn(Optional.ofNullable(thought));
-        thoughtService.updateThoughtMessage(thoughtId, updatedMessage);
-        assertThat(Objects.requireNonNull(thought).getMessage()).isEqualTo(updatedMessage);
-        then(thoughtRepository).should().save(thought);
+        var updatedThought = thoughtService.updateThoughtMessage(thought.getId(), updatedMessage);
+        then(thoughtRepository).should().save(expectedThought);
+        then(websocketService).should().publishEvent(new WebsocketThoughtEvent(expectedThought.getTeamId(), UPDATE, expectedThought));
+        assertThat(updatedThought).usingRecursiveComparison().isEqualTo(expectedThought);
     }
 
     @Test

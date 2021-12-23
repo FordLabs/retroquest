@@ -76,10 +76,12 @@ public class ThoughtService {
         return savedThought;
     }
 
-    public void updateThoughtMessage(Long thoughtId, String updatedMessage) {
+    public Thought updateThoughtMessage(Long thoughtId, String updatedMessage) {
         var returnedThought = fetchThought(thoughtId);
         returnedThought.setMessage(updatedMessage);
-        thoughtRepository.save(returnedThought);
+        var savedThought = thoughtRepository.save(returnedThought);
+        websocketService.publishEvent(new WebsocketThoughtEvent(savedThought.getTeamId(), UPDATE, savedThought));
+        return savedThought;
     }
 
     public void deleteThought(String teamId, Long thoughtId) {
