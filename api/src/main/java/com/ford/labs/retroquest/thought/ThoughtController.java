@@ -17,18 +17,12 @@
 
 package com.ford.labs.retroquest.thought;
 
-import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
-import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,15 +35,9 @@ import java.util.List;
 public class ThoughtController {
 
     private final ThoughtService thoughtService;
-    private final ThoughtRepository thoughtRepository;
-    private final ApiAuthorization apiAuthorization;
 
-    public ThoughtController(ThoughtService thoughtService,
-                             ThoughtRepository thoughtRepository,
-                             ApiAuthorization apiAuthorization) {
+    public ThoughtController(ThoughtService thoughtService) {
         this.thoughtService = thoughtService;
-        this.thoughtRepository = thoughtRepository;
-        this.apiAuthorization = apiAuthorization;
     }
 
     @Transactional
@@ -115,25 +103,5 @@ public class ThoughtController {
         var thought = thoughtService.createThought(teamId, request);
         var uri = new URI(String.format("/api/team/%s/thought/%s", thought.getTeamId(), thought.getId()));
         return ResponseEntity.created(uri).build();
-    }
-
-    @MessageMapping("/{teamId}/thought/{thoughtId}/edit")
-    @SendTo("/topic/{teamId}/thoughts")
-    public WebsocketPutResponse<Thought> editThoughtWebsocket(
-        @DestinationVariable("teamId") String teamId,
-        @DestinationVariable("thoughtId") Long thoughtId,
-        EditThoughtRequest request,
-        Authentication authentication
-    ) {
-        if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            var savedThought = thoughtRepository.findById(thoughtId).orElseThrow();
-            savedThought.setMessage(request.getMessage());
-            savedThought.setDiscussed(request.isDiscussed());
-            savedThought.setHearts(request.getHearts());
-
-            thoughtRepository.save(savedThought);
-            return new WebsocketPutResponse<>(savedThought);
-        }
-        return null;
     }
 }
