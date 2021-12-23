@@ -60,17 +60,19 @@ public class ThoughtService {
         return savedThought;
     }
 
-    public void discussThought(Long thoughtId) {
+    public Thought discussThought(Long thoughtId) {
         var thought = fetchThought(thoughtId);
         thought.toggleDiscussed();
-        thoughtRepository.save(thought);
+        var savedThought = thoughtRepository.save(thought);
+        websocketService.publishEvent(new WebsocketThoughtEvent(savedThought.getTeamId(), UPDATE, savedThought));
+        return savedThought;
     }
 
     public Thought updateTopic(Long thoughtId, String newTopic) {
         var thought = fetchThought(thoughtId);
         thought.setTopic(newTopic);
         var savedThought = thoughtRepository.save(thought);
-        this.websocketService.publishEvent(new WebsocketThoughtEvent(savedThought.getTeamId(), UPDATE, savedThought));
+        websocketService.publishEvent(new WebsocketThoughtEvent(savedThought.getTeamId(), UPDATE, savedThought));
         return savedThought;
     }
 

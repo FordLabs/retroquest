@@ -87,14 +87,36 @@ class ThoughtApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_discuss_not_discussed_thought() throws Exception {
-        Thought savedThought = thoughtRepository.save(Thought.builder().teamId(teamId).discussed(false).build());
+    void should_not_like_thought_unauthorized() throws Exception {
+        mockMvc.perform(put("/api/team/" + teamId + "/thought/" + 1 + "/heart")
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .andExpect(status().isForbidden());
 
-        mockMvc.perform(put("/api/team/" + teamId + "/thought/" + savedThought.getId() + "/discuss")
+
+    }
+
+    @Test
+    void should_discuss_not_discussed_thought() throws Exception {
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
+        Thought originalThought = thoughtRepository.save(Thought.builder().teamId(teamId).discussed(false).build());
+
+        mockMvc.perform(put("/api/team/" + teamId + "/thought/" + originalThought.getId() + "/discuss")
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk());
+        var emittedThought = takeObjectInSocket(Thought.class);
 
-        assertThat(thoughtRepository.findById(savedThought.getId()).orElseThrow(() -> new ThoughtNotFoundException(String.valueOf(savedThought.getId()))).isDiscussed()).isTrue();
+        assertThat(thoughtRepository.findById(originalThought.getId()).orElseThrow(() -> new ThoughtNotFoundException(String.valueOf(originalThought.getId()))).isDiscussed()).isTrue();
+        Thought savedThought = thoughtRepository.findById(originalThought.getId()).orElseThrow();
+        assertThat(savedThought.isDiscussed()).isTrue();
+        assertThat(emittedThought).usingRecursiveComparison().isEqualTo(savedThought);
+    }
+
+    @Test
+    public void should_not_discuss_thought_unauthorized() throws Exception {
+        mockMvc.perform(put("/api/team/" + teamId + "/thought/" + 1 + "/discuss")
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .andExpect(status().isForbidden());
     }
 
     @Test
