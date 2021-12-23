@@ -50,13 +50,11 @@ class ThoughtApiTest extends ApiTestBase {
     private ColumnTitleRepository columnTitleRepository;
 
     private String BASE_SUB_URL;
-    private String BASE_ENDPOINT_URL;
     private String BASE_API_URL;
 
     @BeforeEach
     void setup() {
         BASE_SUB_URL = "/topic/" + teamId + "/thoughts";
-        BASE_ENDPOINT_URL = "/app/" + teamId + "/thought";
         BASE_API_URL = "/api/team/" + teamId;
     }
 
@@ -300,63 +298,6 @@ class ThoughtApiTest extends ApiTestBase {
                 .content(objectMapper.writeValueAsString(createThoughtRequest))
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
                 .andExpect(status().isForbidden());
-    }
-
-    @Test
-    void should_edit_thought() throws Exception {
-        StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
-
-        Thought savedThought = thoughtRepository.save(Thought.builder()
-                .teamId(teamId)
-                .message("message")
-                .discussed(false)
-                .hearts(1)
-                .build());
-
-        Thought sentThought = Thought.builder()
-                .id(savedThought.getId())
-                .message("message 2")
-                .discussed(true)
-                .hearts(2)
-                .build();
-
-        session.send(BASE_ENDPOINT_URL + "/" + savedThought.getId().toString() + "/edit",
-                objectMapper.writeValueAsBytes(sentThought));
-
-        Thought responseThought = takeObjectInSocket(Thought.class);
-
-        Thought updatedThought = thoughtRepository.findById(savedThought.getId()).orElseThrow(Exception::new);
-
-        assertThat(responseThought)
-                .usingRecursiveComparison()
-                .isEqualTo(responseThought);
-
-        assertThat(updatedThought.getId()).isEqualTo(sentThought.getId());
-        assertThat(updatedThought.getMessage()).isEqualTo(sentThought.getMessage());
-        assertThat(updatedThought.isDiscussed()).isEqualTo(sentThought.isDiscussed());
-        assertThat(updatedThought.getHearts()).isEqualTo(sentThought.getHearts());
-    }
-
-    @Test
-    void should_not_edit_thought_unauthorized() throws Exception {
-        StompSession session = getUnauthorizedSession();
-        subscribe(session, BASE_SUB_URL);
-
-        Thought savedThought = thoughtRepository.save(Thought.builder().teamId(teamId).message("message").build());
-        Thought sentThought = Thought.builder().id(savedThought.getId()).message("message 2").build();
-
-        session.send(BASE_ENDPOINT_URL + "/" + savedThought.getId().toString() + "/edit",
-                objectMapper.writeValueAsBytes(sentThought));
-
-        Thought responseThought = takeObjectInSocket(Thought.class);
-
-        Thought updatedThought = thoughtRepository.findById(savedThought.getId()).orElseThrow(Exception::new);
-
-        assertThat(updatedThought)
-                .usingRecursiveComparison()
-                .isEqualTo(savedThought);
-        assertThat(responseThought).isNull();
     }
 
     @Test
