@@ -20,20 +20,14 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 import { Thought } from '../../domain/thought';
-import { RxStompService } from '@stomp/ng2-stompjs';
 import { DataService } from '../../data.service';
 
 @Injectable()
 export class ThoughtService {
   constructor(
     private http: HttpClient,
-    private rxStompService: RxStompService,
     private dataService: DataService
   ) {
-  }
-
-  private validTeamId(teamId: string) {
-    return this.dataService.team.id === teamId;
   }
 
   fetchThoughts(teamId: string): Observable<Array<Thought>> {
@@ -55,7 +49,7 @@ export class ThoughtService {
     this.http.put(`/api/team/${this.dataService.team.id}/thought/${thought.id}/heart`, {}).subscribe().unsubscribe();
   }
 
-  discussThought(thought: Thought, discussed: boolean): void {
+  updateDiscussionStatus(thought: Thought, discussed: boolean): void {
     this.http.put(
       `/api/team/${this.dataService.team.id}/thought/${thought.id}/discuss`,
       JSON.stringify({
@@ -94,15 +88,6 @@ export class ThoughtService {
         }
       }
     ).subscribe().unsubscribe();
-  }
-
-  updateThought(thought: Thought): void {
-    if (this.validTeamId(thought.teamId)) {
-      this.rxStompService.publish({
-        destination: `/app/${this.dataService.team.id}/thought/${thought.id}/edit`,
-        body: JSON.stringify(thought)
-      });
-    }
   }
 
   deleteThought(thought: Thought): void {

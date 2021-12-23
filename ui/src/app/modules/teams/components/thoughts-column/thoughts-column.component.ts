@@ -209,8 +209,7 @@ export class ThoughtsColumnComponent implements OnInit {
   }
 
   onMessageChanged(message: string, thought: Thought) {
-    thought.message = message;
-    this.thoughtService.updateThought(thought);
+    this.thoughtService.updateMessage(thought, message);
   }
 
   onDeleted(thought: Thought) {
@@ -218,13 +217,11 @@ export class ThoughtsColumnComponent implements OnInit {
   }
 
   starCountChanged(starCount: number, thought: Thought) {
-    thought.hearts = starCount;
-    this.thoughtService.updateThought(thought);
+    this.thoughtService.heartThought(thought);
   }
 
   onCompleted(completedState: boolean, thought: Thought) {
-    thought.discussed = completedState;
-    this.thoughtService.updateThought(thought);
+    this.thoughtService.updateDiscussionStatus(thought, completedState);
   }
 
   displayPopup(thought: Thought) {
