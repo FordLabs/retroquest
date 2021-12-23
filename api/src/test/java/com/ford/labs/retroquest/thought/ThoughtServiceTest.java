@@ -82,41 +82,17 @@ class ThoughtServiceTest {
 
     @Test
     void whenDiscussingThoughtNotDiscussedThoughtIsSetToTrue() {
-        var thought = Thought.builder().id(1234L).discussed(false).build();
-        var expectedThought = Thought.builder().id(1234L).discussed(true).build();
-        given(this.thoughtRepository.findById(thought.getId())).willReturn(Optional.of(thought));
-        given(this.thoughtRepository.save(expectedThought)).willReturn(expectedThought);
-
-        var actualThought = thoughtService.discussThought(thought.getId());
-
-        then(thoughtRepository).should().save(expectedThought);
-        assertThat(actualThought).usingRecursiveComparison().isEqualTo(expectedThought);
-    }
-
-    @Test
-    void whenDiscussingThoughtPreviouslyDiscussedThoughtIsSetToFalse() {
-        Thought thought = Thought.builder().id(1234L).discussed(true).build();
+        var thought = Thought.builder().id(1234L).discussed(true).build();
         var expectedThought = Thought.builder().id(1234L).discussed(false).build();
-        given(this.thoughtRepository.findById(thought.getId())).willReturn(Optional.of(thought));
-        given(this.thoughtRepository.save(expectedThought)).willReturn(expectedThought);
-
-        var actualThought = thoughtService.discussThought(thought.getId());
-
-        then(thoughtRepository).should().save(expectedThought);
-        assertThat(actualThought).usingRecursiveComparison().isEqualTo(expectedThought);
-    }
-
-    @Test
-    public void whenDiscussingThought_EmitsUpdatedThought() {
-        var thought = Thought.builder().id(1234L).teamId("the-team").discussed(true).build();
-        var expectedThought = Thought.builder().id(1234L).teamId("the-team").discussed(false).build();
         var expectedEvent = new WebsocketThoughtEvent("the-team", UPDATE, expectedThought);
         given(this.thoughtRepository.findById(thought.getId())).willReturn(Optional.of(thought));
         given(this.thoughtRepository.save(expectedThought)).willReturn(expectedThought);
 
-        thoughtService.discussThought(thought.getId());
+        var actualThought = thoughtService.discussThought(thought.getId(), false);
 
+        then(thoughtRepository).should().save(expectedThought);
         then(websocketService).should().publishEvent(expectedEvent);
+        assertThat(actualThought).usingRecursiveComparison().isEqualTo(expectedThought);
     }
 
     @Test

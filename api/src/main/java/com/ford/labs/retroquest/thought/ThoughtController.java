@@ -65,8 +65,8 @@ public class ThoughtController {
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "toggles between a thought being discussed or not discussed", description = "discussThought")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public void discussThought(@PathVariable("thoughtId") Long thoughtId, @PathVariable("teamId") String teamId) {
-        thoughtService.discussThought(thoughtId);
+    public void discussThought(@PathVariable("thoughtId") Long thoughtId, @PathVariable("teamId") String teamId, @RequestBody UpdateThoughtDiscussedRequest request) {
+        thoughtService.discussThought(thoughtId, request.isDiscussed());
     }
 
     @Transactional

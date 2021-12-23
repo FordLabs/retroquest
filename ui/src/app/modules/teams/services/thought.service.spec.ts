@@ -120,8 +120,13 @@ describe('ThoughtService', () => {
 
     it('should update if a thought is discussed', () => {
       const testThought = createTestThought(teamId, 1);
-      service.discussThought(testThought);
-      expect(mockHttpClient.put).toHaveBeenCalledWith(`/api/team/${teamId}/thought/${testThought.id}/discuss`, {});
+      const expectedBody = {discussed: false};
+      service.discussThought(testThought, false);
+      expect(mockHttpClient.put).toHaveBeenCalledWith(
+        `/api/team/${teamId}/thought/${testThought.id}/discuss`,
+        JSON.stringify(expectedBody),
+        {headers: {'Content-Type': 'application/json'}}
+        );
     });
 
     it('should update a thought topic', () => {
