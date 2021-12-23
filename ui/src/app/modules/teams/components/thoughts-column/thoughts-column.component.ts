@@ -208,11 +208,6 @@ export class ThoughtsColumnComponent implements OnInit {
     removeItemFromColumn(thought, this.thoughtAggregation.items);
   }
 
-  discussThought(thought: Thought): void {
-    thought.discussed = !thought.discussed;
-    this.thoughtService.updateThought(thought);
-  }
-
   onMessageChanged(message: string, thought: Thought) {
     thought.message = message;
     this.thoughtService.updateThought(thought);
