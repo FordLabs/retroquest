@@ -62,22 +62,6 @@ describe('ThoughtColumnComponent', () => {
     testThought = createThought(1, 'Test Thought');
   });
 
-  describe('discussThought', () => {
-    it('should toggle the discussed flag', () => {
-      component.discussThought(testThought);
-      expect(testThought.discussed).toBeTruthy();
-      component.discussThought(testThought);
-      expect(testThought.discussed).toBeFalsy();
-    });
-
-    it('should call ThoughtService.discussThought', () => {
-      component.discussThought(testThought);
-      expect(mockThoughtService.updateThought).toHaveBeenCalledWith(
-        testThought
-      );
-    });
-  });
-
   describe('process thought change', () => {
     let deleteThoughtSpy;
     let updateThoughtSpy;
