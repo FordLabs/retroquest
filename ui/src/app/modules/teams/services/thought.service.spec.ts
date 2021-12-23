@@ -140,6 +140,23 @@ describe('ThoughtService', () => {
         {headers: {'Content-Type': 'application/json'}}
       );
     });
+
+    it('should update a thought message', () => {
+      const testThought = createTestThought(teamId, 1);
+      const newMessage = 'Something else';
+
+      service.updateMessage(testThought, newMessage);
+
+      const expectedBody = {
+        message: newMessage,
+      };
+
+      expect(mockHttpClient.put).toHaveBeenCalledWith(
+        `/api/team/${teamId}/thought/${testThought.id}/message`,
+        JSON.stringify(expectedBody),
+        {headers: {'Content-Type': 'application/json'}}
+      );
+    });
   });
 
   describe('Delete Thought', () => {

@@ -59,19 +59,6 @@ export class ThoughtService {
     this.http.put(`/api/team/${this.dataService.team.id}/thought/${thought.id}/discuss`, {}).subscribe().unsubscribe();
   }
 
-  updateThought(thought: Thought): void {
-    if (this.validTeamId(thought.teamId)) {
-      this.rxStompService.publish({
-        destination: `/app/${this.dataService.team.id}/thought/${thought.id}/edit`,
-        body: JSON.stringify(thought)
-      });
-    }
-  }
-
-  deleteThought(thought: Thought): void {
-    this.http.delete(`/api/team/${this.dataService.team.id}/thought/${thought.id}`).subscribe().unsubscribe();
-  }
-
   moveThought(thoughtId: Thought['id'], newTopic: Thought['topic']): void {
     this.http.put(
       `/api/team/${this.dataService.team.id}/thought/${thoughtId}/topic`,
@@ -84,5 +71,32 @@ export class ThoughtService {
         }
       }
     ).subscribe().unsubscribe();
+  }
+
+  updateMessage(thought: Thought, newMessage: string): void {
+    this.http.put(
+      `/api/team/${this.dataService.team.id}/thought/${thought.id}/message`,
+      JSON.stringify({
+        message: newMessage
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    ).subscribe().unsubscribe();
+  }
+
+  updateThought(thought: Thought): void {
+    if (this.validTeamId(thought.teamId)) {
+      this.rxStompService.publish({
+        destination: `/app/${this.dataService.team.id}/thought/${thought.id}/edit`,
+        body: JSON.stringify(thought)
+      });
+    }
+  }
+
+  deleteThought(thought: Thought): void {
+    this.http.delete(`/api/team/${this.dataService.team.id}/thought/${thought.id}`).subscribe().unsubscribe();
   }
 }
