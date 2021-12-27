@@ -21,6 +21,8 @@ import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.columntitle.UpdateColumnTitleRequest;
+import com.ford.labs.retroquest.websocket.WebsocketColumnTitleEvent;
+import com.ford.labs.retroquest.websocket.WebsocketEventType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -32,6 +34,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Arrays;
 
+import static com.ford.labs.retroquest.websocket.WebsocketEventType.UPDATE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -104,11 +107,14 @@ class ColumnTitleApiTest extends ApiTestBase {
 
     @Test
     void should_update_column_title() throws Exception {
-
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
         var savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder()
                 .teamId("BeachBums")
                 .title("old title")
                 .build());
+        var expectedColumnTitle = new ColumnTitle(savedColumnTitle.getId(), null, "new title", "BeachBums");
+        var expectedEvent = new WebsocketColumnTitleEvent("BeachBums", UPDATE, expectedColumnTitle);
 
         var request = new UpdateColumnTitleRequest("new title");
 
@@ -118,8 +124,10 @@ class ColumnTitleApiTest extends ApiTestBase {
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk());
 
-        assertThat(columnTitleRepository.count()).isEqualTo(1);
-        assertThat(columnTitleRepository.findAll().get(0).getTitle()).isEqualTo("new title");
+        var emittedEvent = takeObjectInSocket(ColumnTitle.class);
+
+        assertThat(columnTitleRepository.findAll()).containsExactly(expectedColumnTitle);
+        assertThat(emittedEvent).usingRecursiveComparison().isEqualTo(expectedColumnTitle);
     }
 }
 

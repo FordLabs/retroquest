@@ -18,7 +18,10 @@
 package com.ford.labs.retroquest.columntitle;
 
 import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
+import com.ford.labs.retroquest.websocket.WebsocketColumnTitleEvent;
+import com.ford.labs.retroquest.websocket.WebsocketEventType;
 import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
+import com.ford.labs.retroquest.websocket.WebsocketService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -33,17 +36,21 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import java.util.List;
 
+import static com.ford.labs.retroquest.websocket.WebsocketEventType.UPDATE;
+
 @RestController
 @Tag(name = "Column Title Controller", description = "The controller that manages the titles of each column on a retro board")
 public class ColumnTitleController {
 
     private final ColumnTitleRepository columnTitleRepository;
     private final ApiAuthorization apiAuthorization;
+    private final WebsocketService websocketService;
 
     public ColumnTitleController(ColumnTitleRepository columnTitleRepository,
-                                 ApiAuthorization apiAuthorization) {
+                                 ApiAuthorization apiAuthorization, WebsocketService websocketService) {
         this.columnTitleRepository = columnTitleRepository;
         this.apiAuthorization = apiAuthorization;
+        this.websocketService = websocketService;
     }
 
     @GetMapping("/api/team/{teamId}/columns")
@@ -62,7 +69,8 @@ public class ColumnTitleController {
     public void updateTitleOfColumn(@PathVariable("teamId") String teamId, @RequestBody UpdateColumnTitleRequest request, @PathVariable("columnId") Long columnId) {
         var returnedColumnTitle = columnTitleRepository.findById(columnId).orElseThrow();
         returnedColumnTitle.setTitle(request.getTitle());
-        columnTitleRepository.save(returnedColumnTitle);
+        var updatedColumnTitle = columnTitleRepository.save(returnedColumnTitle);
+        websocketService.publishEvent(new WebsocketColumnTitleEvent(teamId, UPDATE, updatedColumnTitle));
     }
 
     @MessageMapping("/{teamId}/column-title/{columnId}/edit")
