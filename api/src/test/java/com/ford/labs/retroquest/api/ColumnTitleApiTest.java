@@ -64,13 +64,23 @@ class ColumnTitleApiTest extends ApiTestBase {
                 ColumnTitle.builder().teamId("BeachBums").title("three").build()
         ));
 
-        MvcResult columnListRequest = mockMvc.perform(get("/api/team/BeachBums/columns").contentType(MediaType.APPLICATION_JSON)
+        MvcResult columnListRequest = mockMvc.perform(get("/api/team/BeachBums/columns")
+                .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk())
                 .andReturn();
 
         ColumnTitle[] result = objectMapper.readValue(columnListRequest.getResponse().getContentAsByteArray(), ColumnTitle[].class);
 
         assertThat(result).hasSize(3);
+    }
+
+    @Test
+    public void should_not_get_list_of_columns_unauthorized() throws Exception {
+        mockMvc.perform(get("/api/team/BeachBums/columns")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -95,6 +105,16 @@ class ColumnTitleApiTest extends ApiTestBase {
 
         assertThat(columnTitleRepository.findAll()).containsExactly(expectedColumnTitle);
         assertThat(emittedEvent).usingRecursiveComparison().isEqualTo(expectedColumnTitle);
+    }
+
+    @Test
+    public void should_not_update_column_title_unauthorized() throws Exception{
+        var request = new UpdateColumnTitleRequest("new title");
+        mockMvc.perform(put("/api/team/BeachBums/column/1/title")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(request))
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .andExpect(status().isForbidden());
     }
 }
 
