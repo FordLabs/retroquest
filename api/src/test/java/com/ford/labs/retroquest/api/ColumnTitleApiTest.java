@@ -21,8 +21,6 @@ import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.columntitle.UpdateColumnTitleRequest;
-import com.ford.labs.retroquest.websocket.WebsocketColumnTitleEvent;
-import com.ford.labs.retroquest.websocket.WebsocketEventType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -34,7 +32,6 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Arrays;
 
-import static com.ford.labs.retroquest.websocket.WebsocketEventType.UPDATE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -47,45 +44,16 @@ class ColumnTitleApiTest extends ApiTestBase {
     private ColumnTitleRepository columnTitleRepository;
 
     private String BASE_SUB_URL;
-    private String BASE_ENDPOINT_URL;
 
     @BeforeEach
     void setup() {
         BASE_SUB_URL = "/topic/" + teamId + "/column-titles";
-        BASE_ENDPOINT_URL = "/app/" + teamId + "/column-title";
     }
 
     @AfterEach
     void teardown() {
         columnTitleRepository.deleteAllInBatch();
         assertThat(columnTitleRepository.count()).isZero();
-    }
-
-    @Test
-    void canEditColumnTitleWithWebSockets() throws Exception {
-
-        ColumnTitle savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder()
-                .title("old title")
-                .teamId("beach-bums")
-                .build());
-
-        StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
-
-        ColumnTitle sentColumnTitle = ColumnTitle.builder()
-                .id(savedColumnTitle.getId())
-                .title("new title")
-                .teamId(savedColumnTitle.getTeamId())
-                .build();
-
-        session.send(BASE_ENDPOINT_URL + "/" + sentColumnTitle.getId() + "/edit",
-                objectMapper.writeValueAsBytes(sentColumnTitle));
-
-        ColumnTitle response = takeObjectInSocket(ColumnTitle.class);
-
-        assertThat(response).isEqualTo(sentColumnTitle);
-        assertThat(columnTitleRepository.count()).isEqualTo(1);
-        assertThat(columnTitleRepository.findAll().get(0)).isEqualTo(sentColumnTitle);
     }
 
     @Test
@@ -114,7 +82,6 @@ class ColumnTitleApiTest extends ApiTestBase {
                 .title("old title")
                 .build());
         var expectedColumnTitle = new ColumnTitle(savedColumnTitle.getId(), null, "new title", "BeachBums");
-        var expectedEvent = new WebsocketColumnTitleEvent("BeachBums", UPDATE, expectedColumnTitle);
 
         var request = new UpdateColumnTitleRequest("new title");
 

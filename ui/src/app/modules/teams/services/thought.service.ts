@@ -42,11 +42,11 @@ export class ThoughtService {
           'Content-Type': 'application/json'
         }
       }
-    ).subscribe().unsubscribe();
+    ).subscribe();
   }
 
   heartThought(thought: Thought): void {
-    this.http.put(`/api/team/${this.dataService.team.id}/thought/${thought.id}/heart`, {}).subscribe().unsubscribe();
+    this.http.put(`/api/team/${this.dataService.team.id}/thought/${thought.id}/heart`, {}).subscribe();
   }
 
   updateDiscussionStatus(thought: Thought, discussed: boolean): void {
@@ -59,7 +59,7 @@ export class ThoughtService {
         headers: {
           'Content-Type': 'application/json'
         }
-      }).subscribe().unsubscribe();
+      }).subscribe();
   }
 
   moveThought(thoughtId: Thought['id'], newTopic: Thought['topic']): void {
@@ -73,7 +73,7 @@ export class ThoughtService {
           'Content-Type': 'application/json'
         }
       }
-    ).subscribe().unsubscribe();
+    ).subscribe();
   }
 
   updateMessage(thought: Thought, newMessage: string): void {
@@ -87,10 +87,10 @@ export class ThoughtService {
           'Content-Type': 'application/json'
         }
       }
-    ).subscribe().unsubscribe();
+    ).subscribe();
   }
 
   deleteThought(thought: Thought): void {
-    this.http.delete(`/api/team/${this.dataService.team.id}/thought/${thought.id}`).subscribe().unsubscribe();
+    this.http.delete(`/api/team/${this.dataService.team.id}/thought/${thought.id}`).subscribe();
   }
 }

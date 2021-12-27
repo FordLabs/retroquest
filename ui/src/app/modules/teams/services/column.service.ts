@@ -17,17 +17,15 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/index';
+import { Observable } from 'rxjs';
 
 import { Column } from '../../domain/column';
-import { RxStompService } from '@stomp/ng2-stompjs';
 import { DataService } from '../../data.service';
 
 @Injectable()
 export class ColumnService {
   constructor(
     private http: HttpClient,
-    private rxStompService: RxStompService,
     private dataService: DataService
   ) {}
 
@@ -35,16 +33,13 @@ export class ColumnService {
     return this.http.get<Array<Column>>(`/api/team/${teamId}/columns`);
   }
 
-  private validTeamId(teamId: string) {
-    return this.dataService.team.id === teamId;
-  }
-
   updateColumn(column: Column): void {
-    if (this.validTeamId(column.teamId)) {
-      this.rxStompService.publish({
-        destination: `/app/${this.dataService.team.id}/column-title/${column.id}/edit`,
-        body: JSON.stringify(column),
-      });
-    }
+    this.http.put(`/api/team/${this.dataService.team.id}/column/${column.id}/title`,
+      JSON.stringify({ title: column.title }),
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).subscribe();
   }
 }

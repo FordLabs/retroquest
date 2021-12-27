@@ -16,27 +16,22 @@
  */
 
 import { ColumnService } from './column.service';
-import { Observable } from 'rxjs/index';
+import { Observable } from 'rxjs';
 import { Column } from '../../domain/column';
-import {
-  createMockHttpClient,
-  createMockRxStompService,
-} from '../../utils/testutils';
+import { createMockHttpClient } from '../../utils/testutils';
 import { DataService } from '../../data.service';
 
 describe('ColumnService', () => {
   let service: ColumnService;
   let mockHttpClient;
-  let spiedStompService;
 
   const dataService: DataService = new DataService();
   const teamId = 'teamId';
 
   beforeEach(() => {
     mockHttpClient = createMockHttpClient();
-    spiedStompService = createMockRxStompService();
     dataService.team.id = teamId;
-    service = new ColumnService(mockHttpClient, spiedStompService, dataService);
+    service = new ColumnService(mockHttpClient, dataService);
   });
 
   it('should be created', () => {
@@ -65,26 +60,17 @@ describe('ColumnService', () => {
         teamId,
       };
 
-      service.updateColumn(testColumn);
-
-      expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${dataService.team.id}/column-title/${testColumn.id}/edit`,
-        body: JSON.stringify(testColumn),
-      });
-    });
-    it('cannot update columns for other teams', () => {
-      const newTitle = 'title 2';
-
-      const testColumn: Column = {
-        id: 1,
-        topic: 'happy',
-        title: newTitle,
-        teamId: 'hacker',
-      };
+      const expectedBody = {
+        title: 'title 2'
+      }
 
       service.updateColumn(testColumn);
 
-      expect(spiedStompService.publish).not.toHaveBeenCalled();
+      expect(mockHttpClient.put).toHaveBeenCalledWith(
+        `/api/team/${dataService.team.id}/column/${testColumn.id}/title`,
+        JSON.stringify(expectedBody),
+        {headers: {'Content-Type': 'application/json'}}
+      );
     });
   });
 });
