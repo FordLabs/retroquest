@@ -19,7 +19,7 @@ import { EventEmitter, Injectable, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { DataService } from '../../data.service';
-import { WebsocketResponse, WebsocketThoughtResponse } from '../../domain/websocket-response';
+import { WebsocketColumnResponse, WebsocketResponse, WebsocketThoughtResponse } from '../../domain/websocket-response';
 import { SaveCheckerService } from './save-checker.service';
 import { Column } from '../../domain/column';
 import { AuthService } from '../../auth/auth.service';
@@ -75,7 +75,7 @@ export class SubscriptionService implements OnDestroy {
       .watch(`/topic/${this.dataService.team.id}/column-titles`)
       .subscribe((message) => {
         eventEmitter.emit(
-          (JSON.parse(message.body) as WebsocketResponse).payload as Column
+          (JSON.parse(message.body) as WebsocketColumnResponse).payload as Column
         );
         this.saveCheckerService.updateTimestamp();
       });

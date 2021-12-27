@@ -16,6 +16,7 @@
  */
 
 import { Thought } from './thought';
+import { Column } from './column';
 
 export interface WebsocketResponse {
   type: string;
@@ -25,4 +26,9 @@ export interface WebsocketResponse {
 export interface WebsocketThoughtResponse {
   type: string;
   payload: Thought
+}
+
+export interface WebsocketColumnResponse {
+  type: string;
+  payload: Column;
 }
