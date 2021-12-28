@@ -19,8 +19,7 @@ package com.ford.labs.retroquest.actionitem;
 
 
 import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
-import com.ford.labs.retroquest.websocket.WebsocketDeleteResponse;
-import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
+import com.ford.labs.retroquest.websocket.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -38,17 +37,21 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import static com.ford.labs.retroquest.websocket.WebsocketEventType.DELETE;
+
 @RestController
 @Tag(name = "Action Item Controller", description = "The controller that manages action items to a board given a team id")
 public class ActionItemController {
 
     private final ActionItemRepository actionItemRepository;
     private final ApiAuthorization apiAuthorization;
+    private final WebsocketService websocketService;
 
     public ActionItemController(ActionItemRepository actionItemRepository,
-                                ApiAuthorization apiAuthorization) {
+                                ApiAuthorization apiAuthorization, WebsocketService websocketService) {
         this.actionItemRepository = actionItemRepository;
         this.apiAuthorization = apiAuthorization;
+        this.websocketService = websocketService;
     }
 
     @PutMapping("/api/team/{teamId}/action-item/{thoughtId}/complete")
@@ -123,6 +126,7 @@ public class ActionItemController {
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     public void deleteActionItemByTeamIdAndId(@PathVariable("teamId") String teamId, @PathVariable("id") Long id) {
         actionItemRepository.deleteActionItemByTeamIdAndId(teamId, id);
+        websocketService.publishEvent(new WebsocketActionItemEvent(teamId, DELETE, ActionItem.builder().id(id).build()));
     }
 
     @MessageMapping("/{teamId}/action-item/create")

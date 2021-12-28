@@ -21,6 +21,7 @@ import com.ford.labs.retroquest.actionitem.ActionItem;
 import com.ford.labs.retroquest.actionitem.ActionItemRepository;
 import com.ford.labs.retroquest.actionitem.UpdateActionItemAssigneeRequest;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
+import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -223,20 +224,23 @@ class ActionItemApiTest extends ApiTestBase {
 
     @Test
     void should_delete_action_items_for_team_in_token() throws Exception {
-        ActionItem actionItem1 = ActionItem.builder().teamId(teamId).build();
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
+        var actionItem1 = actionItemRepository.save(ActionItem.builder().teamId(teamId).build());
 
-        ActionItem actionItem2 = ActionItem.builder()
+        var actionItem2 = actionItemRepository.save(ActionItem.builder()
             .teamId(teamId)
             .task("Please don't be deleted")
-            .build();
+            .build());
 
-        ActionItem actionItem3 = ActionItem.builder().teamId(teamId).build();
+        var actionItem3 = actionItemRepository.save(ActionItem.builder().teamId(teamId).build());
 
-        actionItemRepository.saveAll(Arrays.asList(actionItem1, actionItem2, actionItem3));
+        var expectedItem = ActionItem.builder().id(actionItem1.getId()).build();
 
         mockMvc.perform(delete(String.format("/api/team/%s/action-item/%d", teamId, actionItem1.getId()))
             .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isOk());
+        var emittedEvent = takeObjectInSocket(ActionItem.class);
 
         mockMvc.perform(delete(String.format("/api/team/%s/action-item/%d", teamId, actionItem3.getId()))
             .header("Authorization", getBearerAuthToken()))
@@ -254,6 +258,14 @@ class ActionItemApiTest extends ApiTestBase {
 
         assertThat(actionItems).hasSize(1);
         assertThat(actionItems[0]).isEqualTo(actionItem2);
+        assertThat(emittedEvent).usingRecursiveComparison().isEqualTo(expectedItem);
+    }
+
+    @Test
+    public void should_not_delete_action_item_unauthorized() throws Exception {
+        mockMvc.perform(delete(String.format("/api/team/%s/action-item/%d", teamId, 1))
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .andExpect(status().isForbidden());
     }
 
     @Test
