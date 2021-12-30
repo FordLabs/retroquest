@@ -19,6 +19,7 @@ package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.actionitem.ActionItem;
 import com.ford.labs.retroquest.actionitem.ActionItemRepository;
+import com.ford.labs.retroquest.actionitem.CreateActionItemRequest;
 import com.ford.labs.retroquest.actionitem.UpdateActionItemAssigneeRequest;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
@@ -34,13 +35,17 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
 class ActionItemApiTest extends ApiTestBase {
+
+    private static final String BASE_API_URL = "/api/team/BeachBums/action-item";
 
     @Autowired
     private ActionItemRepository actionItemRepository;
@@ -50,8 +55,8 @@ class ActionItemApiTest extends ApiTestBase {
 
     @BeforeEach
     void setup() {
-        BASE_SUB_URL = String.format("/topic/%s/action-items", teamId);
-        BASE_ENDPOINT_URL = String.format("/app/%s/action-item", teamId);
+        BASE_SUB_URL = format("/topic/%s/action-items", teamId);
+        BASE_ENDPOINT_URL = format("/app/%s/action-item", teamId);
     }
 
     @AfterEach
@@ -62,7 +67,30 @@ class ActionItemApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_create_action_item() throws Exception {
+    public void should_create_action_item() throws Exception {
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
+
+        ActionItem sentActionItem = ActionItem.builder()
+                .task("do the thing")
+                .build();
+
+        mockMvc.perform(post(BASE_API_URL)
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(sentActionItem))
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isCreated());
+
+        ActionItem returnedActionItem = takeObjectInSocket(ActionItem.class);
+
+        assertThat(actionItemRepository.count()).isEqualTo(1);
+        assertThat(actionItemRepository.findAll().get(0)).isEqualTo(returnedActionItem);
+
+        assertThat(sentActionItem.getTask()).isEqualTo(returnedActionItem.getTask());
+    }
+
+    @Test
+    void should_create_action_item_websocket() throws Exception {
 
         StompSession session = getAuthorizedSession();
         subscribe(session, BASE_SUB_URL);
@@ -71,7 +99,7 @@ class ActionItemApiTest extends ApiTestBase {
             .task("do the thing")
             .build();
 
-        session.send(String.format("%s/create", BASE_ENDPOINT_URL), objectMapper.writeValueAsBytes(sentActionItem));
+        session.send(format("%s/create", BASE_ENDPOINT_URL), objectMapper.writeValueAsBytes(sentActionItem));
 
         ActionItem returnedActionItem = takeObjectInSocket(ActionItem.class);
 
@@ -90,7 +118,7 @@ class ActionItemApiTest extends ApiTestBase {
         StompSession session = getUnauthorizedSession();
         subscribe(session, BASE_SUB_URL);
 
-        session.send(String.format("%s/create", BASE_ENDPOINT_URL), objectMapper.writeValueAsBytes(sentActionItem));
+        session.send(format("%s/create", BASE_ENDPOINT_URL), objectMapper.writeValueAsBytes(sentActionItem));
 
         assertThat(takeObjectInSocket(ActionItem.class)).isNull();
     }
@@ -104,13 +132,13 @@ class ActionItemApiTest extends ApiTestBase {
         StompSession session = getAuthorizedSession();
         subscribe(session, BASE_SUB_URL);
 
-        session.send(String.format("%s/create", BASE_ENDPOINT_URL), objectMapper.writeValueAsBytes(sentActionItem));
+        session.send(format("%s/create", BASE_ENDPOINT_URL), objectMapper.writeValueAsBytes(sentActionItem));
 
         ActionItem savedActionItem = takeObjectInSocket(ActionItem.class);
 
         savedActionItem.setTask("edited the thing");
 
-        session.send(String.format("%s/%d/edit", BASE_ENDPOINT_URL, savedActionItem.getId()),
+        session.send(format("%s/%d/edit", BASE_ENDPOINT_URL, savedActionItem.getId()),
             objectMapper.writeValueAsBytes(savedActionItem));
 
         ActionItem returnedUpdatedActionItem = takeObjectInSocket(ActionItem.class);
@@ -152,11 +180,11 @@ class ActionItemApiTest extends ApiTestBase {
 
         ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder().teamId(teamId).build());
 
-        mockMvc.perform(put(String.format("/api/team/%s/action-item/%d/complete", teamId, savedActionItem.getId()))
+        mockMvc.perform(put(format(BASE_API_URL + "/%d/complete", savedActionItem.getId()))
             .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isOk());
 
-        MvcResult checkThoughtsRequest = mockMvc.perform(get(String.format("/api/team/%s/action-items", teamId))
+        MvcResult checkThoughtsRequest = mockMvc.perform(get(BASE_API_URL + "s")
             .header("Authorization", getBearerAuthToken()))
             .andReturn();
 
@@ -175,11 +203,11 @@ class ActionItemApiTest extends ApiTestBase {
             .completed(true)
             .build());
 
-        mockMvc.perform(put(String.format("/api/team/%s/action-item/%d/complete", teamId, savedActionItem.getId()))
+        mockMvc.perform(put(format(BASE_API_URL + "/%d/complete", savedActionItem.getId()))
             .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isOk());
 
-        MvcResult checkThoughtsRequest = mockMvc.perform(get(String.format("/api/team/%s/action-items", teamId))
+        MvcResult checkThoughtsRequest = mockMvc.perform(get(BASE_API_URL + "s")
             .header("Authorization", getBearerAuthToken()))
             .andReturn();
 
@@ -206,16 +234,16 @@ class ActionItemApiTest extends ApiTestBase {
 
         var expectedItem = ActionItem.builder().id(actionItem1.getId()).build();
 
-        mockMvc.perform(delete(String.format("/api/team/%s/action-item/%d", teamId, actionItem1.getId()))
+        mockMvc.perform(delete(format(BASE_API_URL + "/%d", actionItem1.getId()))
             .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isOk());
         var emittedEvent = takeObjectInSocket(ActionItem.class);
 
-        mockMvc.perform(delete(String.format("/api/team/%s/action-item/%d", teamId, actionItem3.getId()))
+        mockMvc.perform(delete(format(BASE_API_URL + "/%d", actionItem3.getId()))
             .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isOk());
 
-        MvcResult returnedActionItems = mockMvc.perform(get(String.format("/api/team/%s/action-items", teamId))
+        MvcResult returnedActionItems = mockMvc.perform(get(BASE_API_URL + "s")
             .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isOk())
             .andReturn();
@@ -240,7 +268,7 @@ class ActionItemApiTest extends ApiTestBase {
 
         actionItem.setTask("i am updated");
 
-        mockMvc.perform(put(String.format("/api/team/%s/action-item/%d/task", teamId, actionItem.getId()))
+        mockMvc.perform(put(format(BASE_API_URL + "/%d/task", actionItem.getId()))
             .content(objectMapper.writeValueAsBytes(actionItem))
             .contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", getBearerAuthToken()))
@@ -262,7 +290,7 @@ class ActionItemApiTest extends ApiTestBase {
             "heyo!"
         );
 
-        mockMvc.perform(put(String.format("/api/team/%s/action-item/%d/assignee", teamId, actionItem.getId()))
+        mockMvc.perform(put(format(BASE_API_URL + "/%d/assignee", actionItem.getId()))
             .content(objectMapper.writeValueAsBytes(request))
             .contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", getBearerAuthToken()))
@@ -276,7 +304,7 @@ class ActionItemApiTest extends ApiTestBase {
     @Test
     void should_authenticate_all_action_item_endpoints_properly() throws Exception {
         String unauthorizedTeamJwt = jwtBuilder.buildJwt("not-beach-bums");
-        String authorizationHeader = String.format("Bearer %s", unauthorizedTeamJwt);
+        String authorizationHeader = format("Bearer %s", unauthorizedTeamJwt);
 
         ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder()
             .task("Some Action")

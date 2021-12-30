@@ -38,6 +38,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import static com.ford.labs.retroquest.websocket.WebsocketEventType.DELETE;
+import static com.ford.labs.retroquest.websocket.WebsocketEventType.UPDATE;
+import static java.lang.String.format;
 
 @RestController
 @Tag(name = "Action Item Controller", description = "The controller that manages action items to a board given a team id")
@@ -117,7 +119,8 @@ public class ActionItemController {
         @RequestBody CreateActionItemRequest request
     ) throws URISyntaxException {
         var actionItem = createActionItem(teamId, request);
-        var actionItemUri = new URI("/api/team/" + teamId + "/action-item/" + actionItem.getId());
+        var actionItemUri = new URI(format("/api/team/%s/action-item/%d", teamId, actionItem.getId()));
+        websocketService.publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, actionItem));
         return ResponseEntity.created(actionItemUri).build();
     }
 
