@@ -60,31 +60,22 @@ describe('ActionItemService', () => {
     );
   });
 
-  describe('addActionItem', () => {
-    it('should add over websocket', () => {
-      const actionItem = createActionItem(teamId);
-      service.addActionItem(actionItem);
-      expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${dataService.team.id}/action-item/create`,
-        body: JSON.stringify(actionItem),
-      });
-    });
-
-    it('should not add with invalid team id', () => {
-      const actionItem = createActionItem('hacker');
-      service.addActionItem(actionItem);
-      expect(spiedStompService.publish).not.toHaveBeenCalled();
-    });
+  it('should add Action Item', () => {
+    const actionItem = createActionItem(teamId);
+    service.addActionItem(actionItem);
+    expect(mockHttpClient.post).toHaveBeenCalledWith(
+      `/api/team/${dataService.team.id}/action-item`,
+      JSON.stringify(actionItem),
+      { headers: { 'Content-Type': 'application/json' } }
+    );
   });
 
-  describe('deleteActionItem', () => {
-    it('should delete over websocket', () => {
-      const actionItem = createActionItem(teamId, 1);
-      service.deleteActionItem(actionItem);
-      expect(mockHttpClient.delete).toHaveBeenCalledWith(
-        `/api/team/${actionItem.teamId}/action-item/${actionItem.id}`
-      );
-    });
+  it('should delete Action Item', () => {
+    const actionItem = createActionItem(teamId, 1);
+    service.deleteActionItem(actionItem);
+    expect(mockHttpClient.delete).toHaveBeenCalledWith(
+      `/api/team/${actionItem.teamId}/action-item/${actionItem.id}`
+    );
   });
 
   describe('updateActionItem', () => {

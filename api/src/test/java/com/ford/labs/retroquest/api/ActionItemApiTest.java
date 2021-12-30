@@ -90,26 +90,6 @@ class ActionItemApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_create_action_item_websocket() throws Exception {
-
-        StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
-
-        ActionItem sentActionItem = ActionItem.builder()
-            .task("do the thing")
-            .build();
-
-        session.send(format("%s/create", BASE_ENDPOINT_URL), objectMapper.writeValueAsBytes(sentActionItem));
-
-        ActionItem returnedActionItem = takeObjectInSocket(ActionItem.class);
-
-        assertThat(actionItemRepository.count()).isEqualTo(1);
-        assertThat(actionItemRepository.findAll().get(0)).isEqualTo(returnedActionItem);
-
-        assertThat(sentActionItem.getTask()).isEqualTo(returnedActionItem.getTask());
-    }
-
-    @Test
     void should_not_create_action_item_when_unauthorized() throws Exception {
         ActionItem sentActionItem = ActionItem.builder()
             .task("do the thing")
@@ -132,7 +112,10 @@ class ActionItemApiTest extends ApiTestBase {
         StompSession session = getAuthorizedSession();
         subscribe(session, BASE_SUB_URL);
 
-        session.send(format("%s/create", BASE_ENDPOINT_URL), objectMapper.writeValueAsBytes(sentActionItem));
+        mockMvc.perform(post(BASE_API_URL)
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(sentActionItem))
+                .header("Authorization", getBearerAuthToken()));
 
         ActionItem savedActionItem = takeObjectInSocket(ActionItem.class);
 

@@ -132,16 +132,6 @@ public class ActionItemController {
         websocketService.publishEvent(new WebsocketActionItemEvent(teamId, DELETE, ActionItem.builder().id(id).build()));
     }
 
-    @MessageMapping("/{teamId}/action-item/create")
-    @SendTo("/topic/{teamId}/action-items")
-    public WebsocketPutResponse<ActionItem> createActionItemWebsocket(@DestinationVariable("teamId") String teamId, CreateActionItemRequest request, Authentication authentication) {
-        if (!apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            return null;
-        }
-        var actionItem = createActionItem(teamId, request);
-        return new WebsocketPutResponse<>(actionItem);
-    }
-
     @MessageMapping("/{teamId}/action-item/{actionItemId}/edit")
     @SendTo("/topic/{teamId}/action-items")
     public WebsocketPutResponse<ActionItem> editActionItemWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("actionItemId") Long actionItemId, ActionItem updatedActionItem, Authentication authentication) {
