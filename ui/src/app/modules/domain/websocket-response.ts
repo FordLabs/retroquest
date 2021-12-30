@@ -19,11 +19,6 @@ import { Thought } from './thought';
 import { Column } from './column';
 import { ActionItem } from './action-item';
 
-export interface WebsocketResponse {
-  type: string;
-  payload: Object;
-}
-
 export interface WebsocketThoughtResponse {
   type: string;
   payload: Thought
