@@ -15,24 +15,15 @@
  * limitations under the License.
  */
 
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
 import { ActionItem, emptyActionItem } from '../../../domain/action-item';
 import { ActionItemService } from '../../services/action.service';
 import { ActionItemDialogComponent } from '../../../components/action-item-dialog/action-item-dialog.component';
 import { fadeInOutAnimation } from '../../../animations/add-delete-animation';
 import { Themes } from '../../../domain/Theme';
 import moment from 'moment';
-import {
-  ColumnResponse,
-  removeItemFromColumn,
-} from '../../../domain/column-response';
-import { WebsocketResponse } from '../../../domain/websocket-response';
+import { ColumnResponse, removeItemFromColumn } from '../../../domain/column-response';
+import { WebsocketActionItemResponse } from '../../../domain/websocket-response';
 import { Column } from '../../../domain/column';
 
 @Component({
@@ -48,7 +39,7 @@ export class ActionsColumnComponent implements OnInit {
   @Input() theme: Themes = Themes.Light;
   @Input() teamId: string;
   @Input()
-  actionItemChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
+  actionItemChanged: EventEmitter<WebsocketActionItemResponse> = new EventEmitter();
   @Input() retroEnded: EventEmitter<Column> = new EventEmitter();
 
   sorted = false;
@@ -71,18 +62,9 @@ export class ActionsColumnComponent implements OnInit {
     );
   }
 
-  processActionItemChange(response: WebsocketResponse) {
-    function retrieveActionItemFromPayload(message: WebsocketResponse) {
-      if (message.type === 'delete') {
-        return {
-          id: message.payload,
-        } as ActionItem;
-      } else {
-        return message.payload as ActionItem;
-      }
-    }
+  processActionItemChange(response: WebsocketActionItemResponse) {
 
-    const actionItem = retrieveActionItemFromPayload(response);
+    const actionItem = response.payload;
 
     if (response.type === 'delete') {
       this.deleteActionItem(actionItem);

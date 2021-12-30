@@ -79,18 +79,11 @@ describe('ActionItemService', () => {
 
   describe('deleteActionItem', () => {
     it('should delete over websocket', () => {
-      const actionItem = createActionItem(teamId);
+      const actionItem = createActionItem(teamId, 1);
       service.deleteActionItem(actionItem);
-      expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${dataService.team.id}/action-item/${actionItem.id}/delete`,
-        body: JSON.stringify(actionItem),
-      });
-    });
-
-    it('should not delete with invalid team id', () => {
-      const actionItem = createActionItem('hacker');
-      service.deleteActionItem(actionItem);
-      expect(spiedStompService.publish).not.toHaveBeenCalled();
+      expect(mockHttpClient.delete).toHaveBeenCalledWith(
+        `/api/team/${actionItem.teamId}/action-item/${actionItem.id}`
+      );
     });
   });
 

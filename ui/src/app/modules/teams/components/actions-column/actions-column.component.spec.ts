@@ -19,6 +19,7 @@ import { ActionsColumnComponent } from './actions-column.component';
 import { ActionItem } from '../../../domain/action-item';
 import { ActionItemService } from '../../services/action.service';
 import { ActionItemDialogComponent } from '../../../components/action-item-dialog/action-item-dialog.component';
+import { WebsocketActionItemResponse } from '../../../domain/websocket-response';
 
 describe('ActionsColumnComponent', () => {
   let component: ActionsColumnComponent;
@@ -185,7 +186,7 @@ describe('ActionsColumnComponent', () => {
     });
 
     it('Handles delete correctly', () => {
-      const response = { type: 'delete', payload: 11 };
+      const response = { type: 'delete', payload: { id: 11 } } as WebsocketActionItemResponse;
       component.processActionItemChange(response);
 
       expect(updateSpy).not.toHaveBeenCalled();

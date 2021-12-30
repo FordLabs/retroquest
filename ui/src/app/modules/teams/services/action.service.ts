@@ -17,7 +17,7 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/index';
+import { Observable } from 'rxjs';
 
 import { ActionItem } from '../../domain/action-item';
 import { RxStompService } from '@stomp/ng2-stompjs';
@@ -55,12 +55,7 @@ export class ActionItemService {
   }
 
   deleteActionItem(actionItem: ActionItem): void {
-    if (this.validTeamId(actionItem.teamId)) {
-      this.rxStompService.publish({
-        destination: `/app/${this.dataService.team.id}/action-item/${actionItem.id}/delete`,
-        body: JSON.stringify(actionItem),
-      });
-    }
+    this.http.delete(`/api/team/${this.dataService.team.id}/action-item/${actionItem.id}`).subscribe();
   }
 
   updateActionItem(actionItem: ActionItem): void {

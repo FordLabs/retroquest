@@ -155,17 +155,6 @@ public class ActionItemController {
         return new WebsocketPutResponse<>(savedActionItem);
     }
 
-    @Transactional
-    @MessageMapping("/{teamId}/action-item/{actionItemId}/delete")
-    @SendTo("/topic/{teamId}/action-items")
-    public WebsocketDeleteResponse<Long> deleteActionItemWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("actionItemId") Long actionItemId, Authentication authentication) {
-        if (!apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            return null;
-        }
-        actionItemRepository.deleteActionItemByTeamIdAndId(teamId, actionItemId);
-        return new WebsocketDeleteResponse<>(actionItemId);
-    }
-
     private ActionItem createActionItem(String teamId, CreateActionItemRequest request) {
         var actionItem = request.toActionItem();
         actionItem.setTeamId(teamId);
