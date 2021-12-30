@@ -46,12 +46,16 @@ export class ActionItemService {
   }
 
   addActionItem(actionItem: ActionItem): void {
-    if (this.validTeamId(actionItem.teamId)) {
-      this.rxStompService.publish({
-        destination: `/app/${this.dataService.team.id}/action-item/create`,
-        body: JSON.stringify(actionItem),
-      });
-    }
+    this.http.post(
+      `/api/team/${this.dataService.team.id}/action-item`,
+      JSON.stringify(actionItem),
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    ).subscribe();
+
   }
 
   deleteActionItem(actionItem: ActionItem): void {
