@@ -17,6 +17,7 @@
 
 import { Thought } from './thought';
 import { Column } from './column';
+import { ActionItem } from './action-item';
 
 export interface WebsocketResponse {
   type: string;
@@ -31,4 +32,9 @@ export interface WebsocketThoughtResponse {
 export interface WebsocketColumnResponse {
   type: string;
   payload: Column;
+}
+
+export interface WebsocketActionItemResponse {
+  type: string;
+  payload: ActionItem;
 }

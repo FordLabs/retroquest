@@ -122,37 +122,6 @@ class ActionItemApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_delete_all_action_items_attached_to_team() throws Exception {
-        StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
-
-        List<ActionItem> savedActionItems = actionItemRepository.saveAll(Arrays.asList(
-            ActionItem.builder()
-                .teamId(teamId)
-                .task("do the thing")
-                .build(),
-            ActionItem.builder()
-                .teamId("team2")
-                .task("do the thing")
-                .build()
-        ));
-
-        ActionItem sameTeamSavedActionItem = savedActionItems.get(0);
-
-        session.send(
-            String.format("%s/%d/delete", BASE_ENDPOINT_URL, sameTeamSavedActionItem.getId()),
-            objectMapper.writeValueAsBytes(sameTeamSavedActionItem)
-        );
-
-        Long returnActionItemId = takeObjectInSocket(Long.class);
-
-        assertThat(returnActionItemId).isEqualTo(sameTeamSavedActionItem.getId());
-
-        assertThat(actionItemRepository.count()).isEqualTo(1);
-        assertThat(actionItemRepository.findAll().get(0)).isEqualTo(savedActionItems.get(1));
-    }
-
-    @Test
     void should_get_action_items_only_for_team_in_token() throws Exception {
         String jwt = jwtBuilder.buildJwt("beach-bums2");
 
@@ -259,13 +228,6 @@ class ActionItemApiTest extends ApiTestBase {
         assertThat(actionItems).hasSize(1);
         assertThat(actionItems[0]).isEqualTo(actionItem2);
         assertThat(emittedEvent).usingRecursiveComparison().isEqualTo(expectedItem);
-    }
-
-    @Test
-    public void should_not_delete_action_item_unauthorized() throws Exception {
-        mockMvc.perform(delete(String.format("/api/team/%s/action-item/%d", teamId, 1))
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
-                .andExpect(status().isForbidden());
     }
 
     @Test
