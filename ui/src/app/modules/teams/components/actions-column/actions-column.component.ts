@@ -121,23 +121,20 @@ export class ActionsColumnComponent implements OnInit {
     return index !== -1;
   }
 
+  public onMessageChanged(message: string, actionItem: ActionItem): void {
+    this.actionItemService.updateTask(actionItem, message);
+  }
+
+  public onAssigneeUpdated(assignee: string, actionItem: ActionItem): void {
+    this.actionItemService.updateAssignee(actionItem, assignee);
+  }
+
   public onCompleted(state: boolean, actionItem: ActionItem) {
-    actionItem.completed = state;
-    this.actionItemService.updateActionItem(actionItem);
+    this.actionItemService.updateCompleted(actionItem, state);
   }
 
   public onDeleted(actionItem: ActionItem) {
     this.actionItemService.deleteActionItem(actionItem);
-  }
-
-  public onMessageChanged(message: string, actionItem: ActionItem): void {
-    actionItem.task = message;
-    this.actionItemService.updateActionItem(actionItem);
-  }
-
-  public onAssigneeUpdated(assignee: string, actionItem: ActionItem): void {
-    actionItem.assignee = assignee;
-    this.actionItemService.updateActionItem(actionItem);
   }
 
   public displayPopup(actionItem: ActionItem): void {

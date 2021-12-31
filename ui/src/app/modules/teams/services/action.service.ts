@@ -54,28 +54,28 @@ export class ActionItemService {
 
   }
 
-  updateTask(actionItem: ActionItem, updatedTask: string) {
+  updateTask(actionItem: ActionItem, updatedTask: string): void {
     this.http.put(
       `/api/team/${this.dataService.team.id}/action-item/${actionItem.id}/task`,
       JSON.stringify({task: updatedTask}),
       { headers: { 'Content-Type': 'application/json' } }
-      )
+      ).subscribe();
   }
 
-  updateAssignee(actionItem: ActionItem, assignee: string) {
+  updateAssignee(actionItem: ActionItem, assignee: string): void {
     this.http.put(
       `/api/team/${this.dataService.team.id}/action-item/${actionItem.id}/assignee`,
       JSON.stringify({assignee}),
       { headers: { 'Content-Type': 'application/json' } }
-    )
+    ).subscribe();
   }
 
-  updateCompleted(actionItem: ActionItem, completed: boolean) {
+  updateCompleted(actionItem: ActionItem, completed: boolean): void {
     this.http.put(
       `/api/team/${this.dataService.team.id}/action-item/${actionItem.id}/completed`,
       JSON.stringify({completed}),
       { headers: { 'Content-Type': 'application/json' } }
-    )
+    ).subscribe();
   }
 
   deleteActionItem(actionItem: ActionItem): void {
