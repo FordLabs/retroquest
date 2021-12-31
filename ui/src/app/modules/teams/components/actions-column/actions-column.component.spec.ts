@@ -32,6 +32,9 @@ describe('ActionsColumnComponent', () => {
     mockActionItemService = {
       updateActionItem: jest.fn(),
       deleteActionItem: jest.fn(),
+      updateTask: jest.fn(),
+      updateAssignee: jest.fn(),
+      updateCompleted: jest.fn()
     } as ActionItemService;
 
     component = new ActionsColumnComponent(mockActionItemService);
@@ -58,65 +61,30 @@ describe('ActionsColumnComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('onCompleted', () => {
-    it('should update the action item on the backend with the passed in state', () => {
-      component.onCompleted(true, fakeActionItem);
-      expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(
-        fakeActionItem
-      );
-    });
-
-    it('should set the action item with the passed in index to false', () => {
-      component.onCompleted(false, fakeActionItem);
-      expect(fakeActionItem.completed).toBeFalsy();
-    });
-
-    it('should set the action item with the passed in index to true', () => {
-      component.onCompleted(true, fakeActionItem);
-      expect(fakeActionItem.completed).toBeTruthy();
-    });
+  it('should update the action item on the backend with the passed in state on completed', () => {
+    component.onCompleted(true, fakeActionItem);
+    expect(mockActionItemService.updateCompleted).toHaveBeenCalledWith(fakeActionItem, true);
   });
 
-  describe('onDeleted', () => {
-    it('should delete the action item on the backend', () => {
-      component.onDeleted(fakeActionItem);
-
-      expect(mockActionItemService.deleteActionItem).toHaveBeenCalledWith(
-        fakeActionItem
-      );
-    });
+  it('should delete the action item on the backend', () => {
+    component.onDeleted(fakeActionItem);
+    expect(mockActionItemService.deleteActionItem).toHaveBeenCalledWith(
+      fakeActionItem
+    );
   });
 
-  describe('onMessageChanged', () => {
-    const fakeMessage = 'I AM A FAKE MESSAGE';
-
-    it('should update the action item on the backend', () => {
-      component.onMessageChanged(fakeMessage, fakeActionItem);
-      expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(
-        fakeActionItem
-      );
-    });
-
-    it('should set the message on the action item with the passed in index', () => {
-      component.onMessageChanged(fakeMessage, fakeActionItem);
-      expect(fakeActionItem.task).toEqual(fakeMessage);
-    });
+  it('should update the action item on the backend on message changed', () => {
+    component.onMessageChanged('I AM A FAKE MESSAGE', fakeActionItem);
+    expect(mockActionItemService.updateTask).toHaveBeenCalledWith(
+      fakeActionItem, 'I AM A FAKE MESSAGE'
+    );
   });
 
-  describe('onAssigneeUpdated', () => {
-    const fakeAssignee = 'I AM A FAKE ASSIGNEE';
-
-    it('should update the action item on the backend', () => {
-      component.onAssigneeUpdated(fakeAssignee, fakeActionItem);
-      expect(mockActionItemService.updateActionItem).toHaveBeenCalledWith(
-        fakeActionItem
-      );
-    });
-
-    it('should set the assignee on the action item with the passed in index', () => {
-      component.onAssigneeUpdated(fakeAssignee, fakeActionItem);
-      expect(fakeActionItem.assignee).toEqual(fakeAssignee);
-    });
+  it('should update the action item on the backend on assignee updated', () => {
+    component.onAssigneeUpdated('I AM A FAKE ASSIGNEE', fakeActionItem);
+    expect(mockActionItemService.updateAssignee).toHaveBeenCalledWith(
+      fakeActionItem, 'I AM A FAKE ASSIGNEE'
+    );
   });
 
   describe('displayPopup', () => {
