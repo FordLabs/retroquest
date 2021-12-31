@@ -49,13 +49,33 @@ export class ActionItemService {
     this.http.post(
       `/api/team/${this.dataService.team.id}/action-item`,
       JSON.stringify(actionItem),
-      {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }
+      { headers: { 'Content-Type': 'application/json' } }
     ).subscribe();
 
+  }
+
+  updateTask(actionItem: ActionItem, updatedTask: string) {
+    this.http.put(
+      `/api/team/${this.dataService.team.id}/action-item/${actionItem.id}/task`,
+      JSON.stringify({task: updatedTask}),
+      { headers: { 'Content-Type': 'application/json' } }
+      )
+  }
+
+  updateAssignee(actionItem: ActionItem, assignee: string) {
+    this.http.put(
+      `/api/team/${this.dataService.team.id}/action-item/${actionItem.id}/assignee`,
+      JSON.stringify({assignee}),
+      { headers: { 'Content-Type': 'application/json' } }
+    )
+  }
+
+  updateCompleted(actionItem: ActionItem, completed: boolean) {
+    this.http.put(
+      `/api/team/${this.dataService.team.id}/action-item/${actionItem.id}/completed`,
+      JSON.stringify({completed}),
+      { headers: { 'Content-Type': 'application/json' } }
+    )
   }
 
   deleteActionItem(actionItem: ActionItem): void {
