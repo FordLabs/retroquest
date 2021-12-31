@@ -242,7 +242,9 @@ class ActionItemApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_edit_action_item() throws Exception {
+    void should_edit_action_item_task() throws Exception {
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
         ActionItem actionItem = actionItemRepository.save(ActionItem.builder()
             .task("I AM A TEMPORARY TASK")
             .teamId(teamId)
@@ -256,9 +258,12 @@ class ActionItemApiTest extends ApiTestBase {
             .contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isOk());
+        ActionItem emittedActionItem = takeObjectInSocket(ActionItem.class);
 
         assertThat(actionItemRepository.count()).isEqualTo(1);
-        assertThat(actionItemRepository.findAll().get(0)).isEqualTo(actionItem);
+        ActionItem updatedActionItem = actionItemRepository.findAll().get(0);
+        assertThat(updatedActionItem).isEqualTo(actionItem);
+        assertThat(emittedActionItem).usingRecursiveComparison().isEqualTo(updatedActionItem);
     }
 
     @Test
