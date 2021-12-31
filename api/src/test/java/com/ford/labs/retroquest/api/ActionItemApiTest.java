@@ -263,6 +263,8 @@ class ActionItemApiTest extends ApiTestBase {
 
     @Test
     void should_add_assignee_to_action_item() throws Exception {
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
         ActionItem actionItem = actionItemRepository.save(ActionItem.builder()
             .task(teamId)
             .teamId("suchateam")
@@ -279,9 +281,12 @@ class ActionItemApiTest extends ApiTestBase {
             .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isOk())
             .andReturn();
+        ActionItem emittedActionItem = takeObjectInSocket(ActionItem.class);
 
         assertThat(actionItemRepository.count()).isEqualTo(1);
-        assertThat(actionItemRepository.findAll().get(0).getAssignee()).isEqualTo("heyo!");
+        ActionItem updatedActionItem = actionItemRepository.findAll().get(0);
+        assertThat(updatedActionItem.getAssignee()).isEqualTo("heyo!");
+        assertThat(emittedActionItem).usingRecursiveComparison().isEqualTo(updatedActionItem);
     }
 
     @Test
