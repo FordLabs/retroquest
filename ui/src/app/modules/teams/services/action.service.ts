@@ -78,6 +78,14 @@ export class ActionItemService {
     ).subscribe();
   }
 
+  updateArchived(actionItem: ActionItem, archived: boolean) {
+    this.http.put(
+      `/api/team/${this.dataService.team.id}/action-item/${actionItem.id}/archived`,
+      JSON.stringify({archived}),
+      { headers: { 'Content-Type': 'application/json' } }
+    ).subscribe();
+  }
+
   deleteActionItem(actionItem: ActionItem): void {
     this.http.delete(`/api/team/${this.dataService.team.id}/action-item/${actionItem.id}`).subscribe();
   }

@@ -109,6 +109,16 @@ describe('ActionItemService', () => {
       );
     });
 
+    it('should update archived status', () => {
+      const actionItem = createActionItem(teamId, 1);
+      service.updateArchived(actionItem, true);
+      expect(mockHttpClient.put).toHaveBeenCalledWith(
+        `/api/team/${dataService.team.id}/action-item/1/archived`,
+        JSON.stringify({archived: true}),
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+    });
+
     it('should update over websocket', () => {
       const actionItem = createActionItem(teamId);
       service.updateActionItem(actionItem);
