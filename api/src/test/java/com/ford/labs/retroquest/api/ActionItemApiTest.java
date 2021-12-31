@@ -17,10 +17,7 @@
 
 package com.ford.labs.retroquest.api;
 
-import com.ford.labs.retroquest.actionitem.ActionItem;
-import com.ford.labs.retroquest.actionitem.ActionItemRepository;
-import com.ford.labs.retroquest.actionitem.CreateActionItemRequest;
-import com.ford.labs.retroquest.actionitem.UpdateActionItemAssigneeRequest;
+import com.ford.labs.retroquest.actionitem.*;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import org.junit.jupiter.api.AfterEach;
@@ -160,46 +157,23 @@ class ActionItemApiTest extends ApiTestBase {
 
     @Test
     void should_set_action_item_as_completed() throws Exception {
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
+        ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder().teamId(teamId).completed(true).build());
 
-        ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder().teamId(teamId).build());
+        var request = new UpdateActionItemCompletedRequest(false);
 
-        mockMvc.perform(put(format(BASE_API_URL + "/%d/complete", savedActionItem.getId()))
+        mockMvc.perform(put(format(BASE_API_URL + "/%d/completed", savedActionItem.getId()))
+            .content(objectMapper.writeValueAsBytes(request))
+            .contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isOk());
+        ActionItem emittedActionItem = takeObjectInSocket(ActionItem.class);
 
-        MvcResult checkThoughtsRequest = mockMvc.perform(get(BASE_API_URL + "s")
-            .header("Authorization", getBearerAuthToken()))
-            .andReturn();
-
-        ActionItem resultActionItem = objectMapper.readValue(
-            checkThoughtsRequest.getResponse().getContentAsByteArray(),
-            ActionItem[].class
-        )[0];
-
-        assertThat(resultActionItem.isCompleted()).isTrue();
-    }
-
-    @Test
-    void should_set_action_item_as_incomplete() throws Exception {
-        ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder()
-            .teamId(teamId)
-            .completed(true)
-            .build());
-
-        mockMvc.perform(put(format(BASE_API_URL + "/%d/complete", savedActionItem.getId()))
-            .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isOk());
-
-        MvcResult checkThoughtsRequest = mockMvc.perform(get(BASE_API_URL + "s")
-            .header("Authorization", getBearerAuthToken()))
-            .andReturn();
-
-        ActionItem resultActionItem = objectMapper.readValue(
-            checkThoughtsRequest.getResponse().getContentAsByteArray(),
-            ActionItem[].class
-        )[0];
-
-        assertThat(resultActionItem.isCompleted()).isFalse();
+        assertThat(actionItemRepository.count()).isEqualTo(1);
+        ActionItem updatedActionItem = actionItemRepository.findAll().get(0);
+        assertThat(updatedActionItem.isCompleted()).isFalse();
+        assertThat(emittedActionItem).usingRecursiveComparison().isEqualTo(updatedActionItem);
     }
 
     @Test
@@ -245,16 +219,17 @@ class ActionItemApiTest extends ApiTestBase {
     void should_edit_action_item_task() throws Exception {
         StompSession session = getAuthorizedSession();
         subscribe(session, BASE_SUB_URL);
-        ActionItem actionItem = actionItemRepository.save(ActionItem.builder()
+        ActionItem expectedActionItem = actionItemRepository.save(ActionItem.builder()
             .task("I AM A TEMPORARY TASK")
             .teamId(teamId)
             .build()
         );
+        expectedActionItem.setTask("I am updated");
 
-        actionItem.setTask("i am updated");
+        var request = new UpdateActionItemTaskRequest("I am updated");
 
-        mockMvc.perform(put(format(BASE_API_URL + "/%d/task", actionItem.getId()))
-            .content(objectMapper.writeValueAsBytes(actionItem))
+        mockMvc.perform(put(format(BASE_API_URL + "/%d/task", expectedActionItem.getId()))
+            .content(objectMapper.writeValueAsBytes(request))
             .contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isOk());
@@ -262,7 +237,7 @@ class ActionItemApiTest extends ApiTestBase {
 
         assertThat(actionItemRepository.count()).isEqualTo(1);
         ActionItem updatedActionItem = actionItemRepository.findAll().get(0);
-        assertThat(updatedActionItem).isEqualTo(actionItem);
+        assertThat(updatedActionItem).isEqualTo(expectedActionItem);
         assertThat(emittedActionItem).usingRecursiveComparison().isEqualTo(updatedActionItem);
     }
 
@@ -320,7 +295,7 @@ class ActionItemApiTest extends ApiTestBase {
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden());
 
-        mockMvc.perform(put("/api/team/beach-bums/action-item/1/complete")
+        mockMvc.perform(put("/api/team/beach-bums/action-item/1/completed")
             .header("Authorization", authorizationHeader)
             .content("{}")
             .contentType(MediaType.APPLICATION_JSON))

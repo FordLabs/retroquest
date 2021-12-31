@@ -54,9 +54,4 @@ public class ActionItem {
     public List<String> getCSVFields() {
         return Arrays.asList("action item", task, "", getCompletedString(), assignee);
     }
-
-    public void toggleCompleted() {
-        completed = !completed;
-    }
-
 }

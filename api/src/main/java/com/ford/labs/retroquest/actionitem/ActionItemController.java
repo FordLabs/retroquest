@@ -56,14 +56,19 @@ public class ActionItemController {
         this.websocketService = websocketService;
     }
 
-    @PutMapping("/api/team/{teamId}/action-item/{thoughtId}/complete")
+    @PutMapping("/api/team/{teamId}/action-item/{thoughtId}/completed")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Marks a thought as complete for a given team id", description = "completeActionItem")
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "No Content")})
-    public void completeActionItem(@PathVariable("thoughtId") Long id, @PathVariable("teamId") String teamId) {
+    public void completeActionItem(
+            @PathVariable("thoughtId") Long id,
+            @PathVariable("teamId") String teamId,
+            @RequestBody UpdateActionItemCompletedRequest request
+    ) {
         var actionItem = actionItemRepository.findById(id).orElseThrow();
-        actionItem.toggleCompleted();
-        actionItemRepository.save(actionItem);
+        actionItem.setCompleted(request.isCompleted());
+        var updatedActionItem = actionItemRepository.save(actionItem);
+        websocketService.publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, updatedActionItem));
     }
 
     @PutMapping("/api/team/{teamId}/action-item/{thoughtId}/task")
