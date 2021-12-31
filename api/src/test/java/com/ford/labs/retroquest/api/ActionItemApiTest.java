@@ -19,7 +19,6 @@ package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.actionitem.*;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
-import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -30,7 +29,6 @@ import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,12 +46,10 @@ class ActionItemApiTest extends ApiTestBase {
     private ActionItemRepository actionItemRepository;
 
     private String BASE_SUB_URL;
-    private String BASE_ENDPOINT_URL;
 
     @BeforeEach
     void setup() {
         BASE_SUB_URL = format("/topic/%s/action-items", teamId);
-        BASE_ENDPOINT_URL = format("/app/%s/action-item", teamId);
     }
 
     @AfterEach
@@ -84,35 +80,6 @@ class ActionItemApiTest extends ApiTestBase {
         assertThat(actionItemRepository.findAll().get(0)).isEqualTo(returnedActionItem);
 
         assertThat(sentActionItem.getTask()).isEqualTo(returnedActionItem.getTask());
-    }
-
-    @Test
-    void should_get_edited_action_item() throws Exception {
-        ActionItem sentActionItem = ActionItem.builder()
-            .task("do the thing")
-            .build();
-
-        StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
-
-        mockMvc.perform(post(BASE_API_URL)
-                .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsBytes(sentActionItem))
-                .header("Authorization", getBearerAuthToken()));
-
-        ActionItem savedActionItem = takeObjectInSocket(ActionItem.class);
-
-        savedActionItem.setTask("edited the thing");
-
-        session.send(format("%s/%d/edit", BASE_ENDPOINT_URL, savedActionItem.getId()),
-            objectMapper.writeValueAsBytes(savedActionItem));
-
-        ActionItem returnedUpdatedActionItem = takeObjectInSocket(ActionItem.class);
-
-        assertThat(actionItemRepository.count()).isEqualTo(1);
-        assertThat(actionItemRepository.findAll().get(0)).isEqualTo(returnedUpdatedActionItem);
-
-        assertThat(savedActionItem.getTask()).isEqualTo(returnedUpdatedActionItem.getTask());
     }
 
     @Test

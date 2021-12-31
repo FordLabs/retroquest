@@ -18,16 +18,11 @@
 import { ActionItemService } from './action.service';
 import { ActionItem } from '../../domain/action-item';
 import { HttpClient } from '@angular/common/http';
-import { RxStompService } from '@stomp/ng2-stompjs';
 import { DataService } from '../../data.service';
-import {
-  createMockHttpClient,
-  createMockRxStompService,
-} from '../../utils/testutils';
+import { createMockHttpClient } from '../../utils/testutils';
 
 describe('ActionItemService', () => {
   let service: ActionItemService;
-  let spiedStompService: RxStompService;
   let mockHttpClient: HttpClient;
   const dataService: DataService = new DataService();
   const teamId = 'teamId';
@@ -48,14 +43,10 @@ describe('ActionItemService', () => {
     // @ts-ignore
     mockHttpClient = createMockHttpClient();
 
-    // @ts-ignore
-    spiedStompService = createMockRxStompService();
-
     dataService.team.id = teamId;
 
     service = new ActionItemService(
       mockHttpClient,
-      spiedStompService,
       dataService
     );
   });
