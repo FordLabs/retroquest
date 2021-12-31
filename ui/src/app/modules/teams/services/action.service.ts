@@ -31,10 +31,6 @@ export class ActionItemService {
     private dataService: DataService
   ) {}
 
-  private validTeamId(teamId: string) {
-    return this.dataService.team.id === teamId;
-  }
-
   fetchActionItems(teamId): Observable<Array<ActionItem>> {
     return this.http.get<Array<ActionItem>>(`/api/team/${teamId}/action-items`);
   }
@@ -90,18 +86,9 @@ export class ActionItemService {
     this.http.delete(`/api/team/${this.dataService.team.id}/action-item/${actionItem.id}`).subscribe();
   }
 
-  updateActionItem(actionItem: ActionItem): void {
-    if (this.validTeamId(actionItem.teamId)) {
-      this.rxStompService.publish({
-        destination: `/app/${this.dataService.team.id}/action-item/${actionItem.id}/edit`,
-        body: JSON.stringify(actionItem),
-      });
-    }
-  }
-
   archiveActionItems(archivedActionItems: Array<ActionItem>) {
     archivedActionItems.forEach((actionItem) => {
-      this.updateActionItem(actionItem);
+      this.updateArchived(actionItem, true);
     });
   }
 }

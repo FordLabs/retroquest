@@ -118,21 +118,6 @@ describe('ActionItemService', () => {
         { headers: { 'Content-Type': 'application/json' } }
       );
     });
-
-    it('should update over websocket', () => {
-      const actionItem = createActionItem(teamId);
-      service.updateActionItem(actionItem);
-      expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${dataService.team.id}/action-item/${actionItem.id}/edit`,
-        body: JSON.stringify(actionItem),
-      });
-    });
-
-    it('should not update with invalid team id', () => {
-      const actionItem = createActionItem('hacker');
-      service.updateActionItem(actionItem);
-      expect(spiedStompService.publish).not.toHaveBeenCalled();
-    });
   });
 
   describe('fetchArchivedActionItems', () => {
@@ -154,15 +139,16 @@ describe('ActionItemService', () => {
 
     it('should call the backend api with the correct url', () => {
       service.archiveActionItems(archivedActionItems);
-      expect(spiedStompService.publish).toHaveBeenCalledTimes(2);
-      expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${dataService.team.id}/action-item/${firstActionItem.id}/edit`,
-        body: JSON.stringify(firstActionItem),
-      });
-      expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${dataService.team.id}/action-item/${secondActionItem.id}/edit`,
-        body: JSON.stringify(secondActionItem),
-      });
+      expect(mockHttpClient.put).toHaveBeenCalledTimes(2);
+      expect(mockHttpClient.put).toHaveBeenCalledWith(
+        `/api/team/${dataService.team.id}/action-item/${firstActionItem.id}/archived`,
+        JSON.stringify({archived: true}),
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+      expect(mockHttpClient.put).toHaveBeenCalledWith(
+        `/api/team/${dataService.team.id}/action-item/${secondActionItem.id}/archived`,
+        JSON.stringify({archived: true}),
+        { headers: { 'Content-Type': 'application/json' } });
     });
   });
 });
