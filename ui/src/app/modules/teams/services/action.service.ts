@@ -20,14 +20,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { ActionItem } from '../../domain/action-item';
-import { RxStompService } from '@stomp/ng2-stompjs';
 import { DataService } from '../../data.service';
 
 @Injectable()
 export class ActionItemService {
   constructor(
     private http: HttpClient,
-    private rxStompService: RxStompService,
     private dataService: DataService
   ) {}
 

@@ -18,18 +18,14 @@
 package com.ford.labs.retroquest.actionitem;
 
 
-import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
-import com.ford.labs.retroquest.websocket.*;
+import com.ford.labs.retroquest.websocket.WebsocketActionItemEvent;
+import com.ford.labs.retroquest.websocket.WebsocketService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -46,13 +42,10 @@ import static java.lang.String.format;
 public class ActionItemController {
 
     private final ActionItemRepository actionItemRepository;
-    private final ApiAuthorization apiAuthorization;
     private final WebsocketService websocketService;
 
-    public ActionItemController(ActionItemRepository actionItemRepository,
-                                ApiAuthorization apiAuthorization, WebsocketService websocketService) {
+    public ActionItemController(ActionItemRepository actionItemRepository, WebsocketService websocketService) {
         this.actionItemRepository = actionItemRepository;
-        this.apiAuthorization = apiAuthorization;
         this.websocketService = websocketService;
     }
 
@@ -152,22 +145,6 @@ public class ActionItemController {
     public void deleteActionItemByTeamIdAndId(@PathVariable("teamId") String teamId, @PathVariable("id") Long id) {
         actionItemRepository.deleteActionItemByTeamIdAndId(teamId, id);
         websocketService.publishEvent(new WebsocketActionItemEvent(teamId, DELETE, ActionItem.builder().id(id).build()));
-    }
-
-    @MessageMapping("/{teamId}/action-item/{actionItemId}/edit")
-    @SendTo("/topic/{teamId}/action-items")
-    public WebsocketPutResponse<ActionItem> editActionItemWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("actionItemId") Long actionItemId, ActionItem updatedActionItem, Authentication authentication) {
-        if (!apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            return null;
-        }
-
-        var savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
-        savedActionItem.setTask(updatedActionItem.getTask());
-        savedActionItem.setAssignee(updatedActionItem.getAssignee());
-        savedActionItem.setCompleted(updatedActionItem.isCompleted());
-        savedActionItem.setArchived(updatedActionItem.isArchived());
-        actionItemRepository.save(savedActionItem);
-        return new WebsocketPutResponse<>(savedActionItem);
     }
 
     private ActionItem createActionItem(String teamId, CreateActionItemRequest request) {
