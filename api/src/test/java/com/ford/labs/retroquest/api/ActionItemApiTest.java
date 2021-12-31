@@ -87,20 +87,6 @@ class ActionItemApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_not_create_action_item_when_unauthorized() throws Exception {
-        ActionItem sentActionItem = ActionItem.builder()
-            .task("do the thing")
-            .build();
-
-        StompSession session = getUnauthorizedSession();
-        subscribe(session, BASE_SUB_URL);
-
-        session.send(format("%s/create", BASE_ENDPOINT_URL), objectMapper.writeValueAsBytes(sentActionItem));
-
-        assertThat(takeObjectInSocket(ActionItem.class)).isNull();
-    }
-
-    @Test
     void should_get_edited_action_item() throws Exception {
         ActionItem sentActionItem = ActionItem.builder()
             .task("do the thing")
@@ -251,22 +237,44 @@ class ActionItemApiTest extends ApiTestBase {
             .build()
         );
 
-        var request = new UpdateActionItemAssigneeRequest(
-            "heyo!"
-        );
+        var request = new UpdateActionItemAssigneeRequest("heyo!");
 
         mockMvc.perform(put(format(BASE_API_URL + "/%d/assignee", actionItem.getId()))
             .content(objectMapper.writeValueAsBytes(request))
             .contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isOk())
-            .andReturn();
+            .andExpect(status().isOk());
         ActionItem emittedActionItem = takeObjectInSocket(ActionItem.class);
 
         assertThat(actionItemRepository.count()).isEqualTo(1);
         ActionItem updatedActionItem = actionItemRepository.findAll().get(0);
         assertThat(updatedActionItem.getAssignee()).isEqualTo("heyo!");
         assertThat(emittedActionItem).usingRecursiveComparison().isEqualTo(updatedActionItem);
+    }
+
+    @Test
+    public void should_archive_action_item() throws Exception{
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
+        var request = new UpdateActionItemArchivedRequest(true);
+        ActionItem actionItem = actionItemRepository.save(ActionItem.builder()
+                .task(teamId)
+                .teamId("suchateam")
+                .build()
+        );
+
+        mockMvc.perform(put(format(BASE_API_URL + "/%d/archived", actionItem.getId()))
+                .content(objectMapper.writeValueAsBytes(request))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk());
+        ActionItem emittedActionItem = takeObjectInSocket(ActionItem.class);
+
+        assertThat(actionItemRepository.count()).isEqualTo(1);
+        ActionItem updatedActionItem = actionItemRepository.findAll().get(0);
+        assertThat(updatedActionItem.isArchived()).isTrue();
+        assertThat(emittedActionItem).usingRecursiveComparison().isEqualTo(updatedActionItem);
+
     }
 
     @Test
@@ -295,11 +303,23 @@ class ActionItemApiTest extends ApiTestBase {
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden());
 
+        mockMvc.perform(put("/api/team/beach-bums/action-item/1/assignee")
+                .header("Authorization", authorizationHeader)
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+
         mockMvc.perform(put("/api/team/beach-bums/action-item/1/completed")
             .header("Authorization", authorizationHeader)
             .content("{}")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden());
+
+        mockMvc.perform(put("/api/team/beach-bums/action-item/1/archived")
+                .header("Authorization", authorizationHeader)
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
 
         mockMvc.perform(delete("/api/team/beach-bums/action-item/1")
             .header("Authorization", authorizationHeader))

@@ -101,6 +101,21 @@ public class ActionItemController {
         websocketService.publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, updatedActionItem));
     }
 
+    @PutMapping("/api/team/{teamId}/action-item/{actionItemId}/archived")
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @Operation(summary = "Updates an action item's archived status with a thought id and a team id", description = "updateActionItemArchivedStatus")
+    @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "No Content")})
+    public void updateActionItemArchivedStatus(
+            @PathVariable String teamId,
+            @PathVariable Long actionItemId,
+            @RequestBody UpdateActionItemArchivedRequest request
+    ) {
+        var savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
+        savedActionItem.setArchived(request.isArchived());
+        var updatedActionItem = actionItemRepository.save(savedActionItem);
+        websocketService.publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, updatedActionItem));
+    }
+
     @GetMapping("/api/team/{teamId}/action-items")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Retrieves all action items given a team id", description = "getActionItemsForTeam")
