@@ -30,11 +30,11 @@ describe('ActionsColumnComponent', () => {
   beforeEach(() => {
     // @ts-ignore
     mockActionItemService = {
-      updateActionItem: jest.fn(),
       deleteActionItem: jest.fn(),
       updateTask: jest.fn(),
       updateAssignee: jest.fn(),
-      updateCompleted: jest.fn()
+      updateCompleted: jest.fn(),
+      updateArchived: jest.fn()
     } as ActionItemService;
 
     component = new ActionsColumnComponent(mockActionItemService);
