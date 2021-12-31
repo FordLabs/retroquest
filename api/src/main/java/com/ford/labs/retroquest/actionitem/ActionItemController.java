@@ -73,11 +73,12 @@ public class ActionItemController {
     public void updateActionItemTask(
         @PathVariable("thoughtId") Long actionItemId,
         @PathVariable("teamId") String teamId,
-        @RequestBody UpdateActionItemTaskRequest updatedActionItem
+        @RequestBody UpdateActionItemTaskRequest request
     ) {
         var savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
-        savedActionItem.setTask(updatedActionItem.getTask());
-        actionItemRepository.save(savedActionItem);
+        savedActionItem.setTask(request.getTask());
+        var updatedActionItem = actionItemRepository.save(savedActionItem);
+        websocketService.publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, updatedActionItem));
     }
 
     @PutMapping("/api/team/{teamId}/action-item/{thoughtId}/assignee")
