@@ -78,8 +78,38 @@ describe('ActionItemService', () => {
     );
   });
 
-  describe('updateActionItem', () => {
-    it('should delete over websocket', () => {
+  describe('update ActionItem', () => {
+    it('should update task', () => {
+      const actionItem = createActionItem(teamId, 1);
+      service.updateTask(actionItem, 'updated task');
+      expect(mockHttpClient.put).toHaveBeenCalledWith(
+        `/api/team/${dataService.team.id}/action-item/1/task`,
+        JSON.stringify({task: 'updated task'}),
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+    });
+
+    it('should update assignee', () => {
+      const actionItem = createActionItem(teamId, 1);
+      service.updateAssignee(actionItem, 'updated assignee');
+      expect(mockHttpClient.put).toHaveBeenCalledWith(
+        `/api/team/${dataService.team.id}/action-item/1/assignee`,
+        JSON.stringify({assignee: 'updated assignee'}),
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+    });
+
+    it('should update completed status', () => {
+      const actionItem = createActionItem(teamId, 1);
+      service.updateCompleted(actionItem, true);
+      expect(mockHttpClient.put).toHaveBeenCalledWith(
+        `/api/team/${dataService.team.id}/action-item/1/completed`,
+        JSON.stringify({completed: true}),
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+    });
+
+    it('should update over websocket', () => {
       const actionItem = createActionItem(teamId);
       service.updateActionItem(actionItem);
       expect(spiedStompService.publish).toHaveBeenCalledWith({
@@ -88,7 +118,7 @@ describe('ActionItemService', () => {
       });
     });
 
-    it('should not delete with invalid team id', () => {
+    it('should not update with invalid team id', () => {
       const actionItem = createActionItem('hacker');
       service.updateActionItem(actionItem);
       expect(spiedStompService.publish).not.toHaveBeenCalled();
