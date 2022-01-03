@@ -57,26 +57,6 @@ describe('CountdownTimerComponent', () => {
      })
   });
 
-  describe('secClick', () => {
-    beforeEach(() => {
-      component.secClick();
-    });
-
-    it('should set seconds to undefined', () => {
-      expect(component.seconds).toBe(undefined);
-    });
-  });
-
-  describe('minClick', () => {
-    beforeEach(() => {
-      component.minClick();
-    });
-
-    it('should set minutes to undefined', () => {
-      expect(component.minutes).toBe(undefined);
-    });
-  });
-
   describe('clearTimer', () => {
     beforeEach(() => {
       component.clearTimer();
