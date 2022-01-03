@@ -15,22 +15,40 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {Observable} from 'rxjs/index';
-import {AuthService} from '../auth.service';
+import { Injectable } from '@angular/core';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { EMPTY, Observable, throwError } from 'rxjs';
+import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (AuthService.getToken() !== '' && AuthService.getToken() !== null && request.url !== '/api/team' &&
-      request.url !== '/api/team/login' &&
-      request.url !== 'https://api.github.com/repos/FordLabs/retroquest/contributors' &&
-      request.url !== '/api/contributors' &&
-      request.url !== 'api/captcha'
-    ) {
+  constructor(
+    private router: Router,
+  ) {}
 
+  static urlWhiteList: string[] = [
+    '/api/team',
+    '/api/team/login',
+    'https://api.github.com/repos/FordLabs/retroquest/contributors',
+    '/api/contributors',
+    'api/captcha'
+  ]
+
+  private handleAuthError(error: HttpErrorResponse): Observable<never> {
+    if (error.status === 401 || error.status === 403) {
+      AuthService.clearToken();
+      this.router.navigateByUrl('/login');
+      return EMPTY;
+    } else {
+      return throwError(error);
+    }
+  }
+
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    if (AuthService.getToken() && !TokenInterceptor.urlWhiteList.includes(request.url)) {
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${AuthService.getToken()}`
@@ -38,6 +56,6 @@ export class TokenInterceptor implements HttpInterceptor {
       });
     }
 
-    return next.handle(request);
+    return next.handle(request).pipe(catchError((error) => this.handleAuthError(error)));
   }
 }

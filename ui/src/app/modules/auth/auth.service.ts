@@ -31,7 +31,7 @@ export class AuthService {
     document.cookie = `${AuthService.tokenKey}=${token};expires=${expires};`;
   }
 
-  static getToken () {
+  static getToken(): string {
     let token = null;
     const cookie = document.cookie;
     const keyIndex = cookie.indexOf(`${AuthService.tokenKey}=`);
