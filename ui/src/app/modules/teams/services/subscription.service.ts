@@ -79,7 +79,7 @@ export class SubscriptionService implements OnDestroy {
       .watch(`/topic/${this.dataService.team.id}/column-titles`)
       .subscribe((message) => {
         eventEmitter.emit(
-          (JSON.parse(message.body) as WebsocketColumnResponse).payload as Column
+          (JSON.parse(message.body) as WebsocketColumnResponse).payload
         );
         this.saveCheckerService.updateTimestamp();
       });
