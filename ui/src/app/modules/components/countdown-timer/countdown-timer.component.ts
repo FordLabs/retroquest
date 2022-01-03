@@ -76,14 +76,6 @@ export class CountdownTimerComponent{
     this.seconds = 0;
   }
 
-  minClick(){
-    this.minutes = undefined;
-  }
-
-  secClick(){
-    this.seconds = undefined;
-  }
-
   oneMinute(){
     this.minutes = 1;
     this.seconds = 0;
