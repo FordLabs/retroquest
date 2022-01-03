@@ -42,20 +42,9 @@ export class CountdownTimerComponent{
   }
 
   startTimer() {
-    // Won't need this block if there is no typed user input
-    // if(this.minutes === undefined || this.minutes < 0){
-    //   this.minutes = 0;
-    // }
-    // if(this.minutes > 99){
-    //   this.minutes = 99;
-    // }
-
-    // if(this.seconds === undefined || this.seconds < 0){
-    //   this.seconds = 0;
-    // }
-    // if(this.seconds > 99){
-    //   this.seconds = 99;
-    // }
+    if(this.minutes === 0){
+      this.minutes = 5;
+    }
 
     this.running = true;
     this.started = true;
