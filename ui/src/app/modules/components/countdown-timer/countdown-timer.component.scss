@@ -66,52 +66,6 @@
       border-color: $purple;
       cursor: pointer;
     }
-
-    div#colon {
-      height: 100%;
-
-      p {
-        color: $asphalt;
-        font-size: x-small;
-        font-weight: bolder;
-        vertical-align: middle;
-
-        &.dark-theme {
-          color: $gray;
-        }
-      }
-    }
-
-    input {
-      border: 0.13rem #4F5166 solid;
-      line-height: 0.2em;
-      border-radius: 0.5em;
-      width: 1.9em;
-      height: 1.9em;
-      font-size: 1em;
-      text-align: center;
-      font-weight: bold;
-      color: $asphalt;
-      font-family: inherit;
-    }
-
-    input:disabled{
-      background-color: white;
-      color: $asphalt;
-    }
-
-    input:hover{
-      color: $dark-purple;
-    }
-
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-    }
-
-    input[type='number'] {
-      -moz-appearance: textfield;
-    }
   }
 
   div#controls {
