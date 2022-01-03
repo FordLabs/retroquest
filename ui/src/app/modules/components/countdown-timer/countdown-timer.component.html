@@ -28,12 +28,12 @@
         <input class="set" type="number" value="{{ seconds | number: '2.0'}}" id="seconds" (click)="secClick()"
             (input)="seconds = $any($event.target).value" aria-label="seconds" [disabled]="running" /> -->
 
-        <select id="timeSelect" *ngIf="!started">
-            <option (click)="setTimer(5)" value="5" id="five">05:00</option>
-            <option (click)="setTimer(10)" value="10">10:00</option>
-            <option (click)="setTimer(15)" value="15">15:00</option>
-            <option (click)="setTimer(30)" value="30">30:00</option>
-            <option (click)="setTimer(45)" value="45">45:00</option>
+        <select id="timeSelect" *ngIf="!started" (change)="setTimer($event.target.value)">
+            <option value="5" >05:00</option>
+            <option value="10">10:00</option>
+            <option value="15">15:00</option>
+            <option value="30">30:00</option>
+            <option value="45">45:00</option>
         </select>
 
         <div class="{{border}}" id="runningClock" *ngIf="started" aria-lebel="clock">{{ minutes | number: '2.0'}}:{{ seconds | number: '2.0'}}</div>
