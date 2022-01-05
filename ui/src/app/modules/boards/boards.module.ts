@@ -32,8 +32,7 @@ import { LoginComponent } from './pages/login/login.page';
 import { LoginUserComponent } from './pages/login-user/login-user.component';
 import { UpdatePasswordComponent } from './pages/update-password/update-password.page';
 import { UserViewComponent } from './pages/user-view/user-view.component';
-// @ts-ignore
-import { MyComponentWrapperComponent } from './pages/my-react-page/MyReactComponentWrapper';
+import { ReactLoginPageWrapper } from '../../../react/pages/login/ReactLoginPageWrapper';
 
 @NgModule({
   imports: [
@@ -42,7 +41,7 @@ import { MyComponentWrapperComponent } from './pages/my-react-page/MyReactCompon
     ComponentsModule,
     RouterModule.forChild([
       { path: 'create', component: CreateComponent },
-      { path: 'login', component: MyComponentWrapperComponent },
+      { path: 'login', component: ReactLoginPageWrapper },
       { path: 'login/:teamId', component: LoginComponent },
       { path: 'update-password/:teamId', component: UpdatePasswordComponent },
       { path: 'create-user', component: CreateUserComponent },
