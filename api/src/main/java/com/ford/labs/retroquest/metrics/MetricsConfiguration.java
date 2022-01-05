@@ -46,5 +46,9 @@ public class MetricsConfiguration {
         Gauge.builder("retroquest.feedback.averageRating", this.metrics, Metrics::getAverageRating)
             .strongReference(true)
             .register(this.meterRegistry);
+
+        Gauge.builder("retroquest.teams.activeTeams.count", this.metrics, Metrics::getActiveTeams)
+            .strongReference(true)
+            .register(this.meterRegistry);
     }
 }

@@ -111,7 +111,7 @@ class MetricsTest {
     @Test
     void getTeamLogins_whenCalledWithNoArguments_returnsTheTotalNumberOfTeamsCreated() {
         given(mockTeamRepository.countByLastLoginDateBetween(any(), any())).willReturn(2L);
-        assertEquals(2, metrics.getTeamLogins());
+        assertEquals(2, metrics.getActiveTeams());
     }
 
     @Test
@@ -121,7 +121,7 @@ class MetricsTest {
 
         given(mockTeamRepository.countByLastLoginDateBetween(any(), any())).willReturn(1L);
 
-        metrics.getTeamLogins(startDate, endDate);
+        metrics.getActiveTeams(startDate, endDate);
 
         then(mockTeamRepository).should()
             .countByLastLoginDateBetween(startDate, endDate);

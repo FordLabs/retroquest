@@ -23,6 +23,7 @@ import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 @ManagedResource
 public class Metrics {
@@ -79,11 +80,11 @@ public class Metrics {
             );
     }
 
-    public int getTeamLogins() {
-        return getTeamLogins(null, null);
+    public int getActiveTeams() {
+        return getActiveTeams(LocalDate.now().minus(Period.ofMonths(3)), LocalDate.now());
     }
 
-    public int getTeamLogins(LocalDate startDate, LocalDate endDate) {
+    public int getActiveTeams(LocalDate startDate, LocalDate endDate) {
         var dateRange = DateTimeRange.fromStartAndEnd(startDate, endDate);
 
         return (int) teamRepository.countByLastLoginDateBetween(
