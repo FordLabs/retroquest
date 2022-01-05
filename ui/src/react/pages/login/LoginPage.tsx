@@ -45,21 +45,29 @@ export function LoginPage() {
   const teamNameErrorMessage = validateTeamName(teamName);
   const passwordErrorMessage = validatePassword(password);
 
+  const captureErrors = () => {
+    const errors = [];
+    if (teamNameErrorMessage) errors.push(teamNameErrorMessage);
+    if (passwordErrorMessage) errors.push(passwordErrorMessage);
+    setErrorMessages(errors);
+  };
+
+  const loginTeam = () => {
+    TeamService.login(teamName, password)
+      .then((location) => history.push(`/team/${location}`))
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  };
+
   function submit() {
     setValidate(true);
     setErrorMessages([]);
 
     if (teamNameErrorMessage || passwordErrorMessage) {
-      const errors = [];
-      if (teamNameErrorMessage) errors.push(teamNameErrorMessage);
-      if (passwordErrorMessage) errors.push(passwordErrorMessage);
-      setErrorMessages(errors);
+      captureErrors();
     } else {
       setLoading(true);
-      TeamService.login(teamName, password)
-        .then((location) => history.push(`/team/${location}`))
-        .catch(console.error)
-        .finally(() => setLoading(false));
+      loginTeam();
     }
   }
 
