@@ -15,18 +15,24 @@
  * limitations under the License.
  */
 
+import axios from 'axios';
+
 import { AuthService } from '../../app/modules/auth/auth.service';
 
 export default class TeamService {
   static login(name: string, password: string): Promise<string> {
-    return fetch('/api/team/login', { method: 'post', body: JSON.stringify({ name, password }) }).then((response) => {
-      const token = response.json();
+    const url = '/api/team/login';
+    const data = { name, password };
+
+    return axios.post(url, data).then((response) => {
+      const token = response.data;
       AuthService.setToken(token);
-      return response.headers.get('location');
+      return response.headers.location;
     });
   }
 
   static getTeamName(teamId: string): Promise<string> {
-    return fetch(`/api/team/${teamId}/name`).then((response) => response.json());
+    const url = `/api/team/${teamId}/name`;
+    return axios.get(url).then((res) => res.data);
   }
 }
