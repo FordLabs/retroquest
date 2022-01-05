@@ -60,7 +60,9 @@ export function LoginPage(props: Props): JSX.Element {
       .then((location) => {
         routeTo(`/team/${location}`);
       })
-      .catch(console.error)
+      .catch(() => {
+        setErrorMessages(['Incorrect board or password. Please try again.']);
+      })
       .finally(() => setLoading(false));
   };
 
