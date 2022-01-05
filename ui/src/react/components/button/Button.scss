@@ -24,6 +24,7 @@
   justify-content: center;
   min-width: 125px;
   height: 45px;
+  margin-top: 48px;
   padding: 0 24px;
 
   font-family: inherit;
@@ -65,7 +66,7 @@
 
 .secondary {
   color: inherit;
-    background: transparent;
+  background: transparent;
 
   .dark-theme & {
     color: opacity($gray, 0.8);

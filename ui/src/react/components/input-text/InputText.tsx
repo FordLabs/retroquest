@@ -55,7 +55,11 @@ export default function InputText(props: InputTextProps) {
         type={type}
         {...inputProps}
       />
-      {validationMessage && <span className="validation-message">{validationMessage}</span>}
+      {invalid && validationMessage && (
+          <span className="validation-message">
+            {validationMessage}
+          </span>
+      )}
     </div>
   );
 }
