@@ -21,6 +21,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { RecaptchaModule } from 'ng-recaptcha';
 
+import { ReactLoginPageWrapper } from '../../../react/pages/login/ReactLoginPageWrapper';
 import { ComponentsModule } from '../components/components.module';
 
 import { AppTitleComponent } from './components/app-title/app-title.component';
@@ -32,7 +33,6 @@ import { LoginComponent } from './pages/login/login.page';
 import { LoginUserComponent } from './pages/login-user/login-user.component';
 import { UpdatePasswordComponent } from './pages/update-password/update-password.page';
 import { UserViewComponent } from './pages/user-view/user-view.component';
-import { ReactLoginPageWrapper } from '../../../react/pages/login/ReactLoginPageWrapper';
 
 @NgModule({
   imports: [
@@ -42,7 +42,7 @@ import { ReactLoginPageWrapper } from '../../../react/pages/login/ReactLoginPage
     RouterModule.forChild([
       { path: 'create', component: CreateComponent },
       { path: 'login', component: ReactLoginPageWrapper },
-      { path: 'login/:teamId', component: LoginComponent },
+      { path: 'login/:teamId', component: ReactLoginPageWrapper },
       { path: 'update-password/:teamId', component: UpdatePasswordComponent },
       { path: 'create-user', component: CreateUserComponent },
       { path: 'login-user', component: LoginUserComponent },

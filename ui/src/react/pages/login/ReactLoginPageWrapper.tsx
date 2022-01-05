@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2022 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import {
   AfterViewInit,
   Component,
@@ -11,8 +27,9 @@ import {
 import * as React from 'react';
 
 import * as ReactDOM from 'react-dom';
+
 import { LoginPage } from './LoginPage';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { ActivatedRoute, Router as AngularRouter } from '@angular/router';
 
 const containerElementName = 'reactLoginPageWrapper';
 
@@ -33,6 +50,8 @@ const containerElementName = 'reactLoginPageWrapper';
 export class ReactLoginPageWrapper implements OnChanges, OnDestroy, AfterViewInit {
   @ViewChild(containerElementName, { static: false }) containerRef: ElementRef;
 
+  constructor(private angularRoute: ActivatedRoute, private angularRouter: AngularRouter) {}
+
   ngOnChanges(changes: SimpleChanges): void {
     this.render();
   }
@@ -47,9 +66,12 @@ export class ReactLoginPageWrapper implements OnChanges, OnDestroy, AfterViewIni
 
   private render() {
     ReactDOM.render(
-      <Router>
-        <LoginPage />
-      </Router>,
+      <LoginPage
+        teamId={this.angularRoute.snapshot.params['teamId'] as string}
+        routeTo={(path: string) => {
+          this.angularRouter.navigateByUrl(path).then();
+        }}
+      />,
       this.containerRef.nativeElement
     );
   }

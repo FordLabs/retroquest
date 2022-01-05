@@ -27,7 +27,7 @@ type AuthTemplateProps = React.PropsWithChildren<{
   subHeader: React.ReactNode;
 }>;
 
-export default function AuthTemplate(props: AuthTemplateProps) {
+export default function AuthTemplate(props: AuthTemplateProps): JSX.Element {
   const { header, subHeader, children } = props;
 
   return (

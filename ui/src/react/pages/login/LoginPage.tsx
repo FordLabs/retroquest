@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,21 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import * as React from 'react';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 import Form from '../../components/form/Form';
 import InputText from '../../components/input-text/InputText';
-import AuthTemplate from '../../templates/auth/AuthTemplate';
-import { validatePassword, validateTeamName } from '../../utils/StringUtils';
-import { onChange } from '../../utils/EventUtils';
 import TeamService from '../../services/TeamService';
-import { useEffect, useState } from 'react';
+import AuthTemplate from '../../templates/auth/AuthTemplate';
+import { onChange } from '../../utils/EventUtils';
+import { validatePassword, validateTeamName } from '../../utils/StringUtils';
 
-export function LoginPage() {
-  const history = useHistory();
-  const { teamId } = useParams<{ teamId: string }>();
+interface Props {
+  teamId?: string;
+  routeTo?: (string) => void;
+}
+
+export function LoginPage(props: Props): JSX.Element {
+  const { teamId, routeTo } = props;
+
+  // const history = useHistory();
+  // const { teamId } = useParams<{ teamId: string }>();
   const [teamName, setTeamName] = useState('');
   const [password, setPassword] = useState('');
 
@@ -40,7 +45,7 @@ export function LoginPage() {
     if (teamId) {
       TeamService.getTeamName(teamId).then(setTeamName);
     }
-  }, [teamId, setTeamName]);
+  }, [teamId]);
 
   const teamNameErrorMessage = validateTeamName(teamName);
   const passwordErrorMessage = validatePassword(password);
@@ -54,7 +59,11 @@ export function LoginPage() {
 
   const loginTeam = () => {
     TeamService.login(teamName, password)
-      .then((location) => history.push(`/team/${location}`))
+      .then((location) => {
+        const path = `/team/${location}`;
+        // history.push(path);
+        routeTo(path);
+      })
       .catch(console.error)
       .finally(() => setLoading(false));
   };
@@ -71,10 +80,11 @@ export function LoginPage() {
     }
   }
 
+  // @todo convert to Link element once create page is written in react
   const CreateTeamLink = () => (
-    <Link className="create-page-link" to="/create">
+    <a className="create-page-link" href="/create">
       or create a new team
-    </Link>
+    </a>
   );
 
   return (
