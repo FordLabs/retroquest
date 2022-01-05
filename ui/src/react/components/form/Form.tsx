@@ -16,7 +16,6 @@
  */
 
 import * as React from 'react';
-
 import { ComponentPropsWithoutRef } from 'react';
 import classnames from 'classnames';
 
@@ -29,7 +28,7 @@ interface FormProps extends ComponentPropsWithoutRef<'form'> {
   submitButtonText?: string;
 }
 
-export default function Form(props: FormProps) {
+export default function Form(props: FormProps): JSX.Element {
   const { submitButtonText = 'submit', errorMessages = [], onSubmit, className, children, ...formProps } = props;
   const [loading, setLoading] = React.useState(false);
 
