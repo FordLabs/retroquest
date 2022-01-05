@@ -16,16 +16,18 @@
  */
 
 import * as React from 'react';
+
+import { ComponentPropsWithoutRef } from 'react';
 import classnames from 'classnames';
 
 import { PrimaryButton } from '../button/Button';
 
 import './Form.scss';
 
-type FormProps = React.ComponentPropsWithoutRef<'form'> & {
+interface FormProps extends ComponentPropsWithoutRef<'form'> {
   errorMessages?: string[];
   submitButtonText?: string;
-};
+}
 
 export default function Form(props: FormProps) {
   const { submitButtonText = 'submit', errorMessages = [], onSubmit, className, children, ...formProps } = props;
@@ -48,11 +50,6 @@ export default function Form(props: FormProps) {
       <PrimaryButton className="submit-button" disabled={loading}>
         {submitButtonText}
       </PrimaryButton>
-      <div className="recaptcha-message">
-        This site is protected by reCAPTCHA and the
-        Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and
-        {` `}<a href="https://policies.google.com/terms">Terms of Service</a> apply.
-      </div>
     </form>
   );
 }
