@@ -1,13 +1,11 @@
-import * as React from 'react';
-
 import { Contributor } from '../types/Contributor';
+import {useEffect, useState} from "react";
 
 export default function (): Contributor[] {
-  const [contributors, setContributors] = React.useState<Contributor[]>([]);
+  const [contributors, setContributors] = useState<Contributor[]>([]);
 
-  React.useEffect(() => {
-    // @ts-ignore
-    global.fetch('/api/contributors').then((result) =>
+  useEffect(() => {
+    fetch('/api/contributors').then((result) =>
       result.json().then((contributorArray) =>
         setContributors(
           contributorArray.map((contributor) => ({

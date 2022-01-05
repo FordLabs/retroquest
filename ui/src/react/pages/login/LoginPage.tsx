@@ -24,28 +24,30 @@ import AuthTemplate from '../../templates/auth/AuthTemplate';
 import { validatePassword, validateTeamName } from '../../utils/StringUtils';
 import { onChange } from '../../utils/EventUtils';
 import TeamService from '../../services/TeamService';
+import { useEffect, useState } from 'react';
 
 export function LoginPage() {
   const history = useHistory();
   const { teamId } = useParams<{ teamId: string }>();
-  const [teamName, setTeamName] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [teamName, setTeamName] = useState('');
+  const [password, setPassword] = useState('');
 
-  const [validate, setValidate] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
-  const [errorMessages, setErrorMessages] = React.useState([]);
+  const [validate, setValidate] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMessages, setErrorMessages] = useState([]);
 
-  React.useEffect(() => {
-    TeamService.getTeamName(teamId).then((teamName) => {
-      setTeamName(teamName);
-    });
-  });
+  useEffect(() => {
+    if (teamId) {
+      TeamService.getTeamName(teamId).then(setTeamName);
+    }
+  }, [teamId, setTeamName]);
 
   const teamNameErrorMessage = validateTeamName(teamName);
   const passwordErrorMessage = validatePassword(password);
 
   function submit() {
     setValidate(true);
+    setErrorMessages([]);
 
     if (teamNameErrorMessage || passwordErrorMessage) {
       const errors = [];
@@ -56,19 +58,28 @@ export function LoginPage() {
       setLoading(true);
       TeamService.login(teamName, password)
         .then((location) => history.push(`/team/${location}`))
-        .catch()
+        .catch(console.error)
         .finally(() => setLoading(false));
     }
   }
 
+  const CreateTeamLink = () => (
+    <Link className="create-page-link" to="/create">
+      or create a new team
+    </Link>
+  );
+
   return (
-    <AuthTemplate header="Sign in to your Team!" subHeader={<Link to="/create">or create a new team</Link>}>
+    <AuthTemplate header="Sign in to your Team!" subHeader={<CreateTeamLink />}>
       <Form onSubmit={submit} errorMessages={errorMessages} submitButtonText="Sign in">
         <InputText
           id="teamName"
           label="Team name"
           value={teamName}
-          onChange={onChange(setTeamName)}
+          onChange={onChange((updatedTeamName: string) => {
+            setTeamName(updatedTeamName);
+            setErrorMessages([]);
+          })}
           validationMessage="Names must not contain special characters. "
           invalid={validate && !!teamNameErrorMessage}
           readOnly={loading}
@@ -78,7 +89,10 @@ export function LoginPage() {
           label="Password"
           type="password"
           value={password}
-          onChange={onChange(setPassword)}
+          onChange={onChange((updatedPassword: string) => {
+            setPassword(updatedPassword);
+            setErrorMessages([]);
+          })}
           validationMessage="8 or more characters with a mix of numbers and letters"
           invalid={validate && !!passwordErrorMessage}
           readOnly={loading}

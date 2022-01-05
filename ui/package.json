@@ -133,7 +133,7 @@
       "eslint --fix",
       "prettier --write"
     ],
-    "*.{css,scss,sass}": "stylint --fix"
+    "*.{css,scss,sass}": "stylelint --fix"
   },
   "husky": {
     "hooks": {
