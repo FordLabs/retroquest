@@ -42,8 +42,7 @@ import { TaskComponent } from './task/task.component';
 import { TaskDialogComponent } from './task-dialog/task-dialog.component';
 import { TextFieldComponent } from './text-field/text-field.component';
 import { TooltipComponent } from './tooltip/tooltip.component';
-// @ts-ignore
-import { MyComponentWrapperComponent } from '../boards/pages/my-react-page/MyReactComponentWrapper';
+import { ReactLoginPageWrapper } from '../../../react/pages/login/ReactLoginPageWrapper';
 
 @NgModule({
   imports: [
@@ -74,7 +73,7 @@ import { MyComponentWrapperComponent } from '../boards/pages/my-react-page/MyRea
     PageLogoComponent,
     LoginFormComponent,
     ContributorsComponent,
-    MyComponentWrapperComponent,
+    ReactLoginPageWrapper,
   ],
 
   exports: [
