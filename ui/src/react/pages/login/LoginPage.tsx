@@ -32,8 +32,6 @@ interface Props {
 export function LoginPage(props: Props): JSX.Element {
   const { teamId, routeTo } = props;
 
-  // const history = useHistory();
-  // const { teamId } = useParams<{ teamId: string }>();
   const [teamName, setTeamName] = useState('');
   const [password, setPassword] = useState('');
 
@@ -60,9 +58,7 @@ export function LoginPage(props: Props): JSX.Element {
   const loginTeam = () => {
     TeamService.login(teamName, password)
       .then((location) => {
-        const path = `/team/${location}`;
-        // history.push(path);
-        routeTo(path);
+        routeTo(`/team/${location}`);
       })
       .catch(console.error)
       .finally(() => setLoading(false));
