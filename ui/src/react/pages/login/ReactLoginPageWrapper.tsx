@@ -11,27 +11,26 @@ import {
 import * as React from 'react';
 
 import * as ReactDOM from 'react-dom';
-import { LoginPage } from '../../../../../react/pages/login/LoginPage';
+import { LoginPage } from './LoginPage';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-const containerElementName = 'myReactComponentContainer';
+const containerElementName = 'reactLoginPageWrapper';
 
-// @ts-ignore
 @Component({
-  selector: 'my-react-component-wrapper',
+  selector: 'react-login-page-wrapper',
   template: `<span #${containerElementName}></span>`,
   styleUrls: [
-    '../../../../../react/pages/login/LoginPage.scss',
-    '../../../../../react/templates/auth/AuthTemplate.scss',
-    '../../../../../react/components/form/Form.scss',
-    '../../../../../react/components/input-text/InputText.scss',
-    '../../../../../react/components/contributors/Contributors.scss',
-    '../../../../../react/components/logo/Logo.scss',
-    '../../../../../react/components/button/Button.scss',
+    './LoginPage.scss',
+    '../../templates/auth/AuthTemplate.scss',
+    '../../components/form/Form.scss',
+    '../../components/input-text/InputText.scss',
+    '../../components/contributors/Contributors.scss',
+    '../../components/logo/Logo.scss',
+    '../../components/button/Button.scss',
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class MyComponentWrapperComponent implements OnChanges, OnDestroy, AfterViewInit {
+export class ReactLoginPageWrapper implements OnChanges, OnDestroy, AfterViewInit {
   @ViewChild(containerElementName, { static: false }) containerRef: ElementRef;
 
   ngOnChanges(changes: SimpleChanges): void {
