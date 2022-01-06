@@ -15,34 +15,7 @@
  * limitations under the License.
  */
 
-.rq-root {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  justify-content: center;
-  width: 100%;
-  min-height: 100%;
-  overflow: auto;
-
-  font-family: 'Open Sans', sans-serif;
-
-  background-color: #fafafa;
-
-  @media only screen and (max-width: 900px) {
-    flex-direction: column;
-  }
-
-  .create-page-link {
-    color: #00a887;
-    font-size: 1.2rem;
-  }
-
-  .recaptcha-message {
-    margin-top: 1.5rem;
-    font-size: 0.8rem;
-
-    a {
-      font-size: 0.9rem;
-    }
-  }
+.create-page-link {
+  color: #00a887;
+  font-size: 1.2rem;
 }
