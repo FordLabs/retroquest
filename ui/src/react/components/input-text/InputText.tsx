@@ -27,7 +27,7 @@ type InputTextProps = React.ComponentPropsWithoutRef<'input'> & {
   validationMessage?: string;
 };
 
-export default function InputText(props: InputTextProps) {
+export default function InputText(props: InputTextProps): JSX.Element {
   const {
     id,
     label,
@@ -55,11 +55,7 @@ export default function InputText(props: InputTextProps) {
         type={type}
         {...inputProps}
       />
-      {invalid && validationMessage && (
-          <span className="validation-message">
-            {validationMessage}
-          </span>
-      )}
+      {invalid && validationMessage && <span className="validation-message">{validationMessage}</span>}
     </div>
   );
 }

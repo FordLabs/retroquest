@@ -17,9 +17,11 @@
 
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
+import mockAxios from 'axios';
+
+import { Contributor } from '../../types/Contributor';
 
 import Contributors from './Contributors';
-import { Contributor } from '../../types/Contributor';
 
 const mockContributors: Contributor[] = [
   {
@@ -32,14 +34,11 @@ const mockContributors: Contributor[] = [
   },
 ];
 
-const mockResponse = {
-  json: jest.fn().mockResolvedValue(mockContributors),
-};
-
-// @ts-ignore
-global.fetch = jest.fn().mockResolvedValue(mockResponse);
-
 describe('Contributors', () => {
+  beforeEach(() => {
+    mockAxios.get = jest.fn().mockResolvedValue({ data: mockContributors });
+  });
+
   it('should render contributor images with links to profiles', async () => {
     render(<Contributors />);
 
