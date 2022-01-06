@@ -89,7 +89,7 @@ export function LoginPage(props: Props): JSX.Element {
     <AuthTemplate header="Sign in to your Team!" subHeader={<CreateTeamLink />}>
       <Form onSubmit={submit} errorMessages={errorMessages} submitButtonText="Sign in">
         <InputText
-          id="teamName"
+          id="teamNameInput"
           label="Team name"
           value={teamName}
           onChange={onChange((updatedTeamName: string) => {
@@ -101,7 +101,7 @@ export function LoginPage(props: Props): JSX.Element {
           readOnly={loading}
         />
         <InputText
-          id="password"
+          id="teamPasswordInput"
           label="Password"
           type="password"
           value={password}

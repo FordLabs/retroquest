@@ -35,12 +35,11 @@ describe('Logging In', () => {
 
   it('Redirects to login page when action comes back unauthorized', () => {
     cy.login(teamCredentials);
-    cy.wait('@postTeamLogin').then(() => {
-      cy.document().setCookie('token', '');
-      cy.document().setCookie('JSESSIONID', '');
-      cy.enterThought('happy', 'I have a thought');
-      cy.url().should('eq', Cypress.config().baseUrl + '/login');
-    });
+    cy.wait('@postTeamLogin');
+    cy.document().setCookie('token', '');
+    cy.document().setCookie('JSESSIONID', '');
+    cy.enterThought('happy', 'I have a thought');
+    cy.url().should('eq', Cypress.config().baseUrl + '/login');
   });
 
   it('Displays invalid team name when logging in with bad team', () => {
