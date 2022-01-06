@@ -24,13 +24,13 @@ export class AuthService {
   static tokenKey = 'token';
   static tokenDuration = 1000 * 60 * 60 * 24 * 2;
 
-  static setToken(token): void {
+  static setToken(token: string): void {
     const expiresDate = new Date(Date.now() + AuthService.tokenDuration);
     const expires = expiresDate.toUTCString();
-    document.cookie = `${AuthService.tokenKey}=${token};expires=${expires};`;
+    document.cookie = `${AuthService.tokenKey}=${token};expires=${expires};path=/`;
   }
 
-  static getToken(): string {
+  static getToken(): string | null {
     let token = null;
     const cookie = document.cookie;
     const keyIndex = cookie.indexOf(`${AuthService.tokenKey}=`);
