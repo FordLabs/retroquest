@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +49,7 @@ export default function InputText(props: InputTextProps): JSX.Element {
       )}
       <input
         id={id}
+        data-testid={id}
         className={classnames('input-text', className)}
         value={value}
         onChange={onChange}
