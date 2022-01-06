@@ -17,9 +17,9 @@
 
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import InputText from './InputText';
-import userEvent from '@testing-library/user-event';
 
 describe('InputText', () => {
   const mockChange = jest.fn();
@@ -30,6 +30,7 @@ describe('InputText', () => {
         id="sample"
         label="Sample Label"
         value="Sample Value"
+        invalid={true}
         validationMessage="Sample Message"
         onChange={mockChange}
       />

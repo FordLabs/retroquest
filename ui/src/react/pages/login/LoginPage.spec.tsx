@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,3 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import React from 'react';
+import { render } from '@testing-library/react';
+import { axe } from 'jest-axe';
+
+import { LoginPage } from './LoginPage';
+
+describe('LoginPage.spec.tsx', () => {
+  let container: HTMLElement;
+
+  beforeEach(() => {
+    ({ container } = render(<LoginPage routeTo={jest.fn()} teamId="team-name" />));
+  });
+
+  it('should render without axe errors', async () => {
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
+});

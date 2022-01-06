@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,11 +16,13 @@
  */
 
 import * as React from 'react';
-import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { render, screen } from '@testing-library/react';
+import mockAxios from 'axios';
+
+import { Contributor } from '../../types/Contributor';
 
 import AuthTemplate from './AuthTemplate';
-import { Contributor } from '../../types/Contributor';
 
 const mockContributors: Contributor[] = [
   {
@@ -33,14 +35,13 @@ const mockContributors: Contributor[] = [
   },
 ];
 
-const mockResponse = {
-  json: jest.fn().mockResolvedValue(mockContributors),
-};
-
-// @ts-ignore
-global.fetch = jest.fn().mockResolvedValue(mockResponse);
-
 describe('AuthTemplate', () => {
+  beforeEach(() => {
+    mockAxios.get = jest.fn().mockResolvedValue({
+      data: mockContributors,
+    });
+  });
+
   it('should render the logo, header, sub header, children, footer, and contributors', async () => {
     render(
       <MemoryRouter initialEntries={['/team/team-id']}>
