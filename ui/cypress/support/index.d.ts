@@ -14,11 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{
-  "compilerOptions": {
-    "target": "es5",
-    "lib": ["es5", "dom"],
-    "types": ["cypress",  "@testing-library/cypress"]
-  },
-  "include": ["**/*.ts"]
+
+import TeamCredentials from './types/teamCredentials';
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      login(teamCredentials: TeamCredentials): Chainable<void>;
+      createTeam(teamCredentials: TeamCredentials): Chainable<void>;
+      createTeamIfNecessaryAndLogin(teamCredentials: TeamCredentials): Chainable<void>;
+    }
+  }
 }

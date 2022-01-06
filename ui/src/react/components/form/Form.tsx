@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,7 +46,7 @@ export default function Form(props: FormProps): JSX.Element {
           {errorMessage}
         </div>
       ))}
-      <PrimaryButton className="submit-button" disabled={loading}>
+      <PrimaryButton className="submit-button" disabled={loading} data-testid="formSubmitButton">
         {submitButtonText}
       </PrimaryButton>
     </form>

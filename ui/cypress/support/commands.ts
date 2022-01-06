@@ -32,9 +32,9 @@ import TeamCredentials from './types/teamCredentials';
 
 Cypress.Commands.add('login', (teamCredentials: TeamCredentials) => {
   cy.visit('/login');
-  enterText('#teamNameInput', teamCredentials.teamName);
-  enterText('#teamPasswordInput', teamCredentials.password);
-  click('#signInButton');
+  enterText('[data-testid=teamNameInput]', teamCredentials.teamName);
+  enterText('[data-testid=teamPasswordInput]', teamCredentials.password);
+  click('[data-testid=formSubmitButton]');
 });
 
 Cypress.Commands.add('createTeam', (teamCredentials: TeamCredentials) => {
