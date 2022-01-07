@@ -21,6 +21,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { RecaptchaModule } from 'ng-recaptcha';
 
+import { ReactLoginPageWrapper } from '../../../react/pages/login/ReactLoginPageWrapper';
+
 import { ActionBarComponent } from './action-bar/action-bar.component';
 import { ActionItemDialogComponent } from './action-item-dialog/action-item-dialog.component';
 import { ActionItemTaskComponent } from './action-item-task/action-item-task.component';
@@ -42,7 +44,6 @@ import { TaskComponent } from './task/task.component';
 import { TaskDialogComponent } from './task-dialog/task-dialog.component';
 import { TextFieldComponent } from './text-field/text-field.component';
 import { TooltipComponent } from './tooltip/tooltip.component';
-import { ReactLoginPageWrapper } from '../../../react/pages/login/ReactLoginPageWrapper';
 
 @NgModule({
   imports: [

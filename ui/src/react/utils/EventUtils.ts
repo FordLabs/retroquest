@@ -19,8 +19,7 @@ import { ChangeEventHandler, KeyboardEvent as ReactKeyboardEvent } from 'react';
 
 export function onChange<T = Element>(callback: (value: unknown) => void): ChangeEventHandler<T> {
   return (event) => {
-    // @ts-ignore
-    callback(event.target.value);
+    callback((event.target as unknown as { value: unknown }).value);
   };
 }
 

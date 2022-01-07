@@ -15,10 +15,12 @@
  * limitations under the License.
  */
 
+/* eslint-disable */
+
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'rq-empty',
-  template: ` <div>Empty Component Used For Testing</div> `,
+  template: `<div>Empty Component Used For Testing</div>`,
 })
 export class EmptyComponent {}
