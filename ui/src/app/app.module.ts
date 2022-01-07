@@ -22,7 +22,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { TeamsModule } from './modules/teams/teams.module';
 import { BoardsModule } from './modules/boards/boards.module';
-import { TokenInterceptor } from './modules/auth/token-interceptor/token.interceptor';
+import { AuthInterceptor } from './modules/auth/auth-interceptor/auth-interceptor.service';
 import { TeamService } from './modules/teams/services/team.service';
 import { ComponentsModule } from './modules/components/components.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -60,7 +60,7 @@ import { myRxStompConfig } from './my-rx-stomp.config';
     ColumnAggregationService,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
+      useClass: AuthInterceptor,
       multi: true,
     },
     {

@@ -78,5 +78,8 @@ export function createTeamIfNecessaryAndLogin(
     } else {
       createBoard(teamCredentials);
     }
+    Cypress.Cookies.defaults({
+      preserve: 'token',
+    });
   });
 }
