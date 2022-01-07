@@ -43,10 +43,10 @@ function click(selector: string) {
   cy.get(selector).click();
 }
 
-function login(teamCredentials: TeamCredentials) {
+export function login(teamName: string, teamPassword: string) {
   cy.visit('/login');
-  enterText('#teamNameInput', teamCredentials.teamName);
-  enterText('#teamPasswordInput', teamCredentials.password);
+  enterText('#teamNameInput', teamName);
+  enterText('#teamPasswordInput', teamPassword);
   click('#signInButton');
 }
 
@@ -74,12 +74,9 @@ export function createTeamIfNecessaryAndLogin(
     console.log(response.body);
     if (response.status === 200) {
       teamCredentials.jwt = response.body;
-      login(teamCredentials);
+      login(teamCredentials.teamName, teamCredentials.password);
     } else {
       createBoard(teamCredentials);
     }
-    Cypress.Cookies.defaults({
-      preserve: 'token',
-    });
   });
 }
