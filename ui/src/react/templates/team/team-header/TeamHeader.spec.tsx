@@ -16,27 +16,26 @@
  */
 
 import * as React from 'react';
+import { MemoryRouter as Router, useLocation } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter, Route } from 'react-router-dom';
 
 import TeamHeader from './TeamHeader';
 
 describe('TeamHeader', () => {
   let testLocation;
 
+  function LocationExtractor() {
+    testLocation = useLocation();
+    return null;
+  }
+
   beforeEach(() => {
     render(
-      <MemoryRouter initialEntries={['/team/team-id']}>
+      <Router initialEntries={['/team/team-id']}>
         <TeamHeader />
-        <Route
-          path="*"
-          render={({ location }) => {
-            testLocation = location;
-            return null;
-          }}
-        />
-      </MemoryRouter>
+        <LocationExtractor />
+      </Router>
     );
   });
 
