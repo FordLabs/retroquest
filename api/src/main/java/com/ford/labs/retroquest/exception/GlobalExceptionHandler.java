@@ -39,6 +39,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         // Used by Spring for Controller Advice
     }
 
+    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Column Title with that ID not found")
+    @ExceptionHandler(ColumnTitleNotFoundException.class)
+    public void columnTitleNotFound(){
+        // Used by Spring for Controller Advice
+    }
+
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Please enter a board name without any special characters.")
     @ExceptionHandler(SpecialCharacterTeamNameException.class)
     public void badTeamNameWithSpecialCharactersRequest() {

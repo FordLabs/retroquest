@@ -1,5 +1,7 @@
 package com.ford.labs.retroquest.columntitle;
 
+import com.ford.labs.retroquest.exception.ColumnTitleNotFoundException;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -7,7 +9,7 @@ import java.util.List;
 @Service
 public class ColumnTitleService {
 
-    private ColumnTitleRepository columnTitleRepository;
+    private final ColumnTitleRepository columnTitleRepository;
 
     public ColumnTitleService(ColumnTitleRepository columnTitleRepository) {
         this.columnTitleRepository = columnTitleRepository;
@@ -18,7 +20,7 @@ public class ColumnTitleService {
     }
 
     public ColumnTitle editColumnTitleName(Long columnId, String newColumnName) {
-        var savedColumnTitle = columnTitleRepository.findById(columnId).orElseThrow();
+        var savedColumnTitle = columnTitleRepository.findById(columnId).orElseThrow(ColumnTitleNotFoundException::new);
         savedColumnTitle.setTitle(newColumnName);
         return columnTitleRepository.save(savedColumnTitle);
     }

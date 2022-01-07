@@ -37,12 +37,12 @@ import java.util.List;
 @Tag(name = "Column Title Controller", description = "The controller that manages the titles of each column on a retro board")
 public class ColumnTitleController {
 
-    private final ColumnTitleRepository columnTitleRepository;
     private final ApiAuthorization apiAuthorization;
+    private final ColumnTitleService columnTitleService;
 
-    public ColumnTitleController(ColumnTitleRepository columnTitleRepository,
+    public ColumnTitleController(ColumnTitleService columnTitleService,
                                  ApiAuthorization apiAuthorization) {
-        this.columnTitleRepository = columnTitleRepository;
+        this.columnTitleService = columnTitleService;
         this.apiAuthorization = apiAuthorization;
     }
 
@@ -51,7 +51,7 @@ public class ColumnTitleController {
     @Operation(summary = "Gets a the column titles on a retro board for a given team id", description = "getColumnTitlesForTeam")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public List<ColumnTitle> getColumnTitlesForTeam(@PathVariable("teamId") String teamId) {
-        return columnTitleRepository.findAllByTeamId(teamId);
+        return columnTitleService.getColumnTitlesByTeamId(teamId);
     }
 
     @Transactional
@@ -60,18 +60,14 @@ public class ColumnTitleController {
     @Operation(summary = "Updates the title of a column of a retro board given a team id and column id", description = "updateTitleOfColumn")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public void updateTitleOfColumn(@PathVariable("teamId") String teamId, @RequestBody UpdateColumnTitleRequest request, @PathVariable("columnId") Long columnId) {
-        var returnedColumnTitle = columnTitleRepository.findById(columnId).orElseThrow();
-        returnedColumnTitle.setTitle(request.getTitle());
-        columnTitleRepository.save(returnedColumnTitle);
+        columnTitleService.editColumnTitleName(columnId, request.getTitle());
     }
 
     @MessageMapping("/{teamId}/column-title/{columnId}/edit")
     @SendTo("/topic/{teamId}/column-titles")
     public WebsocketPutResponse<ColumnTitle> editColumnTitleWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("columnId") Long columnId, ColumnTitle columnTitle, Authentication authentication) {
         if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            var savedColumnTitle = columnTitleRepository.findById(columnId).orElseThrow();
-            savedColumnTitle.setTitle(columnTitle.getTitle());
-            columnTitleRepository.save(savedColumnTitle);
+            var savedColumnTitle = columnTitleService.editColumnTitleName(columnId, columnTitle.getTitle());
             return new WebsocketPutResponse<>(savedColumnTitle);
         }
         return null;

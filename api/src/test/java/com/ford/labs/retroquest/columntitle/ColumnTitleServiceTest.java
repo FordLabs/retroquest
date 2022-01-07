@@ -1,5 +1,7 @@
 package com.ford.labs.retroquest.columntitle;
 
+import com.ford.labs.retroquest.exception.ColumnTitleNotFoundException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,34 +23,42 @@ class ColumnTitleServiceTest {
         columnTitleRepository.deleteAll();
     }
 
+    @AfterEach
+    void afterEach() {
+        columnTitleRepository.deleteAll();
+    }
+
+    private final ColumnTitle.ColumnTitleBuilder columnTitleBuilder = ColumnTitle.builder();
+
     @Test
     void given_teamid_get_column_titles() {
         String teamId = "some team id";
-        var columnTitle = new ColumnTitle(1L, "happy", "Some Title", teamId);
-        var columnTitle2 = new ColumnTitle(2L, "meh", "Some Other Title", teamId);
         String teamId2 = "some other team id";
-        var columnTitle3 = new ColumnTitle(3L, "happy", "Some Title", teamId2);
-        columnTitleRepository.save(columnTitle);
-        columnTitleRepository.save(columnTitle2);
-        columnTitleRepository.save(columnTitle3);
+        var columnTitle1 = columnTitleRepository.save(columnTitleBuilder.topic("happy").title("Some Title").teamId(teamId).build());
+        var columnTitle2 = columnTitleRepository.save(columnTitleBuilder.topic("meh").title("Some Other Title").teamId(teamId).build());
+        var columnTitle3 = columnTitleRepository.save(columnTitleBuilder.topic("happy").title("Some Title").teamId(teamId2).build());
 
-
-        assertThat(columnTitleService.getColumnTitlesByTeamId(teamId)).containsExactlyInAnyOrder(columnTitle, columnTitle2);
+        assertThat(columnTitleService.getColumnTitlesByTeamId(teamId)).containsExactlyInAnyOrder(columnTitle1, columnTitle2);
         assertThat(columnTitleService.getColumnTitlesByTeamId(teamId2)).containsExactlyInAnyOrder(columnTitle3);
-
     }
 
     @Test
     void given_column_id_and_column_title_rename_column_in_db_and_return_new_column_title() {
-        long columnId = 1L;
-        var columnTitle = new ColumnTitle(columnId, "happy", "Some Title", "some team id");
-        columnTitleRepository.save(columnTitle);
+        var columnTitle = columnTitleRepository.save(columnTitleBuilder.topic("happy").title("Some Title").teamId("some team ID").build());
 
         String newColumnName = "Some new Title";
-        var savedColumnTitle = columnTitleService.editColumnTitleName(columnId, newColumnName);
+        var savedColumnTitle = columnTitleService.editColumnTitleName(columnTitle.getId(), newColumnName);
 
         assertThat(savedColumnTitle.getTitle()).isEqualTo(newColumnName);
-        assertThat(savedColumnTitle.getId()).isEqualTo(columnId);
+        assertThat(savedColumnTitle.getId()).isEqualTo(columnTitle.getId());
     }
 
+    @Test
+    void throws_column_title_not_found_exception_when_column_title_not_in_db() {
+        try {
+            columnTitleService.editColumnTitleName(42L, "some name");
+        } catch (RuntimeException exception) {
+            assertThat(exception).isInstanceOf(ColumnTitleNotFoundException.class);
+        }
+    }
 }
