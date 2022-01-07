@@ -36,8 +36,7 @@ describe('AuthInterceptor', () => {
     mockRouter = { navigateByUrl: jest.fn() } as unknown as Router;
     mockHttpHandler = { handle: jest.fn(() => of({})) };
 
-    const spiedGetToken = jest.spyOn(AuthService, 'getToken');
-    spiedGetToken.mockImplementation(() => fakeToken);
+    AuthService.getToken = jest.fn(() => fakeToken);
 
     interceptor = new AuthInterceptor(mockRouter);
   });
@@ -66,7 +65,7 @@ describe('AuthInterceptor', () => {
 
   describe.each([401, 403]) ('handle auth error for %d', (status) => {
     beforeEach(() => {
-      jest.spyOn(AuthService, 'clearToken');
+      AuthService.clearToken = jest.fn();
       mockHttpHandler.handle = jest.fn(() => throwError({status, url: '/api/team/teamId/thought'} as HttpErrorResponse));
     })
 
