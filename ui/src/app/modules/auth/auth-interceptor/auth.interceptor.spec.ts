@@ -64,10 +64,10 @@ describe('AuthInterceptor', () => {
     });
   });
 
-  describe.each([401, 403]) ('handle auth error for %d', (statusCode) => {
+  describe.each([401, 403]) ('handle auth error for %d', (status) => {
     beforeEach(() => {
       jest.spyOn(AuthService, 'clearToken');
-      mockHttpHandler.handle = jest.fn(() => throwError({status: statusCode} as HttpErrorResponse));
+      mockHttpHandler.handle = jest.fn(() => throwError({status, url: '/api/team/teamId/thought'} as HttpErrorResponse));
     })
 
     it('should redirect to the login page', () => {
@@ -90,11 +90,23 @@ describe('AuthInterceptor', () => {
   });
 
   it('should only rethrow error if not auth issue', (done) => {
-    mockHttpHandler.handle = jest.fn(() => throwError({status: 500} as HttpErrorResponse));
+    mockHttpHandler.handle = jest.fn(() => throwError({status: 500, url: '/something'} as HttpErrorResponse));
     interceptor.intercept(mockHttpRequest, mockHttpHandler).subscribe(
       () => done.fail('Should rethrow error'),
       error => {
         expect(error.status).toEqual(500);
+        done();
+      }
+    );
+  });
+
+  it('should rethrow error if url is login url', (done) => {
+    mockHttpHandler.handle = jest.fn(() => throwError({status: 401, url: 'http://localhost:4200/api/team/login'} as HttpErrorResponse));
+    interceptor.intercept(mockHttpRequest, mockHttpHandler).subscribe(
+      () => done.fail('Should rethrow error'),
+      error => {
+        expect(error.status).toEqual(401);
+        expect(error.url).toEqual('http://localhost:4200/api/team/login');
         done();
       }
     );
