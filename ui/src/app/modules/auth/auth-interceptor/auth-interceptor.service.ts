@@ -23,7 +23,7 @@ import { Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 
 @Injectable()
-export class TokenInterceptor implements HttpInterceptor {
+export class AuthInterceptor implements HttpInterceptor {
 
   constructor(
     private router: Router,
@@ -48,7 +48,7 @@ export class TokenInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (AuthService.getToken() && !TokenInterceptor.urlWhiteList.includes(request.url)) {
+    if (AuthService.getToken() && !AuthInterceptor.urlWhiteList.includes(request.url)) {
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${AuthService.getToken()}`
