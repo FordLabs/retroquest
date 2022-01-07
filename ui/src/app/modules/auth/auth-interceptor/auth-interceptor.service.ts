@@ -34,11 +34,11 @@ export class AuthInterceptor implements HttpInterceptor {
     '/api/team/login',
     'https://api.github.com/repos/FordLabs/retroquest/contributors',
     '/api/contributors',
-    'api/captcha'
+    '/api/captcha'
   ]
 
   private handleAuthError(error: HttpErrorResponse): Observable<never> {
-    if (error.status === 401 || error.status === 403) {
+    if ((error.status === 401 || error.status === 403) && !error.url.includes('/api/team/login')) {
       AuthService.clearToken();
       this.router.navigateByUrl('/login');
       return EMPTY;
