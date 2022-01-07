@@ -18,6 +18,8 @@
 import * as React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
+import logoDark from '../../../../assets/icons/icon-72x72.png';
+import logoLight from '../../../../assets/icons/icon-light-72x72.png';
 import { ModalMethods } from '../../../components/modal/Modal';
 import SettingsDialog from '../../../components/settings-dialog/SettingsDialog';
 import useTeam from '../../../hooks/useTeam';
@@ -26,9 +28,6 @@ import SaveCheckerService from '../../../services/SaveCheckerService';
 import Theme from '../../../types/Theme';
 
 import './TeamHeader.scss';
-
-import logoLight from '../../../../assets/icons/icon-light-72x72.png';
-import logoDark from '../../../../assets/icons/icon-72x72.png';
 
 type RqLink = {
   label: 'retro' | 'archives' | 'radiator';
@@ -75,10 +74,9 @@ export default function TeamHeader() {
           {LINKS.map((link) => (
             <NavLink
               key={link.path}
-              className="nav-link button"
+              className={({ isActive }) => 'nav-link button' + (isActive ? ' activated' : '')}
               to={`/team/${teamId}${link.path}`}
-              activeClassName="selected"
-              exact={true}
+              end
             >
               {link.label}
             </NavLink>

@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, ElementRef, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { AfterViewInit, ElementRef, OnChanges, OnDestroy } from '@angular/core';
 
 export default class ReactWrapper<T extends React.FunctionComponent<P>, P = React.ComponentProps<T>>
   implements OnChanges, OnDestroy, AfterViewInit
@@ -36,7 +36,7 @@ export default class ReactWrapper<T extends React.FunctionComponent<P>, P = Reac
     this.render();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.render();
   }
 

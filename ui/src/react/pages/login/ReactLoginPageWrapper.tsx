@@ -66,12 +66,14 @@ export class ReactLoginPageWrapper implements OnChanges, OnDestroy, AfterViewIni
 
   private render() {
     ReactDOM.render(
-      <LoginPage
-        teamId={this.angularRoute.snapshot.params['teamId'] as string}
-        routeTo={(path: string) => {
-          this.angularRouter.navigateByUrl(path).then();
-        }}
-      />,
+      <React.StrictMode>
+        <LoginPage
+          teamId={this.angularRoute.snapshot.params['teamId'] as string}
+          routeTo={(path: string) => {
+            this.angularRouter.navigateByUrl(path).then();
+          }}
+        />
+      </React.StrictMode>,
       this.containerRef.nativeElement
     );
   }

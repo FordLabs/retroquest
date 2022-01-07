@@ -1,4 +1,4 @@
-import { validateTeamName, validatePassword } from './StringUtils';
+import { validatePassword, validateTeamName } from './StringUtils';
 
 describe('String Utils', () => {
   const emptyTeamNameError = 'Please enter a team name.';
