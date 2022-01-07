@@ -34,5 +34,9 @@
 import './commands';
 import 'cypress-jest-adapter';
 
+Cypress.Cookies.defaults({
+  preserve: 'token',
+});
+
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
