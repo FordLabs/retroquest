@@ -42,6 +42,6 @@ export class AuthService {
   }
 
   static clearToken(): void {
-    document.cookie = `${AuthService.tokenKey}=;expires=-99999999;`;
+    document.cookie = `${AuthService.tokenKey}=;expires=-99999999;path=/`;
   }
 }
