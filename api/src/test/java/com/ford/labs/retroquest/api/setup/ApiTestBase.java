@@ -24,6 +24,7 @@ import com.ford.labs.retroquest.security.JwtBuilder;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.impl.TextCodec;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
@@ -98,6 +99,11 @@ public abstract class ApiTestBase {
                 Collections.singletonList(new WebSocketTransport(new StandardWebSocketClient()))));
     }
 
+    @AfterEach
+    public void __cleanup() {
+        blockingQueue.clear();
+    }
+
     public String getBearerAuthToken() {
         return bearerAuthToken;
     }
@@ -147,7 +153,7 @@ public abstract class ApiTestBase {
     }
 
     public <T> T takeObjectInSocket(Class<T> clazz) throws InterruptedException, IOException {
-        String obj = blockingQueue.poll(1, SECONDS);
+        String obj = blockingQueue.poll(10, SECONDS);
         try {
             return objectMapper.treeToValue(objectMapper.readValue(obj, ObjectNode.class).get("payload"), clazz);
         } catch (NullPointerException | IllegalArgumentException exp) {
