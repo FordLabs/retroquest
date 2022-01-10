@@ -146,7 +146,7 @@ test {
 task apiTest(type: Test) {
     group 'Verification'
     description 'Runs API Tests against h2 database'
-    testLogging.showStandardStreams = true
+    testLogging.exceptionFormat.showStackTraces = true
     useJUnitPlatform {
         includeTags 'api'
         maxParallelForks = (int) (Runtime.getRuntime().availableProcessors() / 2)
