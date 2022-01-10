@@ -220,7 +220,6 @@ class ActionItemApiTest extends ApiTestBase {
         ActionItem updatedActionItem = actionItemRepository.findAll().get(0);
         assertThat(updatedActionItem.isArchived()).isTrue();
         assertThat(emittedActionItem).usingRecursiveComparison().isEqualTo(updatedActionItem);
-
     }
 
     @Test
