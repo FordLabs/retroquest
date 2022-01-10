@@ -137,6 +137,7 @@ task bootRunDockerDb(type: Exec) {
 }
 
 test {
+    testLogging { events "failed" exceptionFormat "full" }
     useJUnitPlatform {
         excludeTags 'api'
         maxParallelForks = (int) (Runtime.getRuntime().availableProcessors() / 2)
