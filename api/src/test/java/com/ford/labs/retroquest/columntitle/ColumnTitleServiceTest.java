@@ -1,6 +1,7 @@
 package com.ford.labs.retroquest.columntitle;
 
 import com.ford.labs.retroquest.exception.ColumnTitleNotFoundException;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,9 @@ class ColumnTitleServiceTest {
 
     @Autowired
     ColumnTitleRepository columnTitleRepository;
+
+    @Autowired
+    MeterRegistry meterRegistry;
 
     @Autowired
     ColumnTitleService columnTitleService;
@@ -49,6 +53,7 @@ class ColumnTitleServiceTest {
         String newColumnName = "Some new Title";
         var savedColumnTitle = columnTitleService.editColumnTitleName(columnTitle.getId(), newColumnName);
 
+        assertThat(meterRegistry.get("retroquest.columns.changed.count").counter().count()).isEqualTo(1);
         assertThat(savedColumnTitle.getTitle()).isEqualTo(newColumnName);
         assertThat(savedColumnTitle.getId()).isEqualTo(columnTitle.getId());
     }
