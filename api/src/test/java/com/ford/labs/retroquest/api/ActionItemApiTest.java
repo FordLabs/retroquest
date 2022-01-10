@@ -20,13 +20,11 @@ package com.ford.labs.retroquest.api;
 import com.ford.labs.retroquest.actionitem.*;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.stomp.StompSession;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Arrays;
 
@@ -41,28 +39,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ActionItemApiTest extends ApiTestBase {
 
     private static final String BASE_API_URL = "/api/team/BeachBums/action-item";
+    private final String ACTION_ITEMS_SUBSCRIPTION_URL = format("/topic/%s/action-items", teamId);
 
     @Autowired
     private ActionItemRepository actionItemRepository;
 
-    private String BASE_SUB_URL;
-
-    @BeforeEach
-    void setup() {
-        BASE_SUB_URL = format("/topic/%s/action-items", teamId);
-    }
-
     @AfterEach
     void teardown() {
         actionItemRepository.deleteAllInBatch();
-
-        assertThat(actionItemRepository.count()).isZero();
     }
 
     @Test
     public void should_create_action_item() throws Exception {
         StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
+        subscribe(session, ACTION_ITEMS_SUBSCRIPTION_URL);
 
         ActionItem sentActionItem = ActionItem.builder()
                 .task("do the thing")
@@ -105,13 +95,12 @@ class ActionItemApiTest extends ApiTestBase {
             .andExpect(jsonPath("$.[0].teamId").value("beach-bums2"))
             .andExpect(jsonPath("$.[1].task").value("Another Action"))
             .andExpect(jsonPath("$.[1].teamId").value("beach-bums2"));
-
     }
 
     @Test
     void should_set_action_item_as_completed() throws Exception {
         StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
+        subscribe(session, ACTION_ITEMS_SUBSCRIPTION_URL);
         ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder().teamId(teamId).completed(true).build());
 
         var request = new UpdateActionItemCompletedRequest(false);
@@ -132,46 +121,29 @@ class ActionItemApiTest extends ApiTestBase {
     @Test
     void should_delete_action_items_for_team_in_token() throws Exception {
         StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
+        subscribe(session, ACTION_ITEMS_SUBSCRIPTION_URL);
         var actionItem1 = actionItemRepository.save(ActionItem.builder().teamId(teamId).build());
-
         var actionItem2 = actionItemRepository.save(ActionItem.builder()
             .teamId(teamId)
             .task("Please don't be deleted")
             .build());
-
-        var actionItem3 = actionItemRepository.save(ActionItem.builder().teamId(teamId).build());
-
-        var expectedItem = ActionItem.builder().id(actionItem1.getId()).build();
 
         mockMvc.perform(delete(format(BASE_API_URL + "/%d", actionItem1.getId()))
             .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isOk());
         var emittedEvent = takeObjectInSocket(ActionItem.class);
 
-        mockMvc.perform(delete(format(BASE_API_URL + "/%d", actionItem3.getId()))
-            .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isOk());
-
-        MvcResult returnedActionItems = mockMvc.perform(get(BASE_API_URL + "s")
-            .header("Authorization", getBearerAuthToken()))
-            .andExpect(status().isOk())
-            .andReturn();
-
-        ActionItem[] actionItems = objectMapper.readValue(
-            returnedActionItems.getResponse().getContentAsByteArray(),
-            ActionItem[].class
-        );
-
-        assertThat(actionItems).hasSize(1);
-        assertThat(actionItems[0]).isEqualTo(actionItem2);
+        var expectedItem = ActionItem.builder().id(actionItem1.getId()).build();
+        var savedActionItems = actionItemRepository.findAll();
+        assertThat(savedActionItems).hasSize(1);
+        assertThat(savedActionItems.get(0)).usingRecursiveComparison().isEqualTo(actionItem2);
         assertThat(emittedEvent).usingRecursiveComparison().isEqualTo(expectedItem);
     }
 
     @Test
     void should_edit_action_item_task() throws Exception {
         StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
+        subscribe(session, ACTION_ITEMS_SUBSCRIPTION_URL);
         ActionItem expectedActionItem = actionItemRepository.save(ActionItem.builder()
             .task("I AM A TEMPORARY TASK")
             .teamId(teamId)
@@ -197,7 +169,7 @@ class ActionItemApiTest extends ApiTestBase {
     @Test
     void should_add_assignee_to_action_item() throws Exception {
         StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
+        subscribe(session, ACTION_ITEMS_SUBSCRIPTION_URL);
         ActionItem actionItem = actionItemRepository.save(ActionItem.builder()
             .task(teamId)
             .teamId("suchateam")
@@ -222,7 +194,7 @@ class ActionItemApiTest extends ApiTestBase {
     @Test
     public void should_archive_action_item() throws Exception{
         StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
+        subscribe(session, ACTION_ITEMS_SUBSCRIPTION_URL);
         var request = new UpdateActionItemArchivedRequest(true);
         ActionItem actionItem = actionItemRepository.save(ActionItem.builder()
                 .task(teamId)
