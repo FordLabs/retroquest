@@ -116,5 +116,16 @@ class ColumnTitleApiTest extends ApiTestBase {
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
                 .andExpect(status().isForbidden());
     }
+
+    @Test
+    void returns_404_when_column_id_not_found() throws Exception {
+        var request = new UpdateColumnTitleRequest("new title");
+
+        mockMvc.perform(put("/api/team/BeachBums/column/42/title")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(request))
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isNotFound());
+    }
 }
 
