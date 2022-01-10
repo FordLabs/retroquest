@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,23 +17,28 @@
 
 @import 'colors';
 
+@media screen and (prefers-reduced-motion: reduce) {
 :host {
+  display: inline-block;
+  box-sizing: border-box;
+  padding: 6px 18px;
+
+  color: $white;
+  font-size: 1rem;
+  text-align: center;
+
   background-color: $asphalt;
   border-radius: 6px;
   box-shadow: 0 1px 2px opacity($black, 0.25);
-  box-sizing: border-box;
-  color: $white;
-  display: inline-block;
-  font-size: 1rem;
-  left: 50%;
-  opacity: 0;
-  padding: 6px 18px;
-  position: absolute;
-  text-align: center;
-  top: 42px;
   transform: translateX(-50%);
-  transition: opacity 0.7s;
   visibility: hidden;
+  opacity: 0;
+
+  transition: none;
+
+  left: 50%;
+  position: absolute;
+  top: 42px;
   z-index: 1000;
 
   @media only screen and (max-width: 610px) {
@@ -42,16 +47,18 @@
 
   .tip-arrow {
     $arrow-size: 12px;
-    background-color: $asphalt;
+    width: $arrow-size;
     height: $arrow-size;
-    left: 0;
-    margin-left: auto;
     margin-right: auto;
+    margin-left: auto;
+
+    background-color: $asphalt;
+    transform: rotate(45deg);
+
+    left: 0;
     position: absolute;
     right: 0;
-    top: -$arrow-size / 2;
-    transform: rotate(45deg);
-    width: $arrow-size;
+    top: calc(-#{$arrow-size} / 2);
     z-index: 999;
 
     &.dark-theme {
@@ -60,7 +67,62 @@
   }
 
   &.dark-theme {
-    background-color: $gray;
     color: $dark-asphalt;
+    background-color: $gray;
+  }
+}
+}
+
+:host {
+  display: inline-block;
+  box-sizing: border-box;
+  padding: 6px 18px;
+
+  color: $white;
+  font-size: 1rem;
+  text-align: center;
+
+  background-color: $asphalt;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px opacity($black, 0.25);
+  transform: translateX(-50%);
+  visibility: hidden;
+  opacity: 0;
+
+  transition: opacity 0.7s;
+
+  left: 50%;
+  position: absolute;
+  top: 42px;
+  z-index: 1000;
+
+  @media only screen and (max-width: 610px) {
+    display: none;
+  }
+
+  .tip-arrow {
+    $arrow-size: 12px;
+    width: $arrow-size;
+    height: $arrow-size;
+    margin-right: auto;
+    margin-left: auto;
+
+    background-color: $asphalt;
+    transform: rotate(45deg);
+
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: calc(-#{$arrow-size} / 2);
+    z-index: 999;
+
+    &.dark-theme {
+      background-color: $gray;
+    }
+  }
+
+  &.dark-theme {
+    color: $dark-asphalt;
+    background-color: $gray;
   }
 }
