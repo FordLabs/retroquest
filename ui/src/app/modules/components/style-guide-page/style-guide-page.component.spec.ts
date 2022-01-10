@@ -31,11 +31,10 @@ describe('StyleGuidePageComponent', () => {
   describe('scrollToId', () => {
     it('should be able to scroll to any page id if it exists on the page', () => {
       const fakeFoundElement = {
-        scrollIntoView: jest.fn(),
-      };
-      const spyQuerySelector = spyOn(document, 'querySelector').and.returnValue(
-        fakeFoundElement
-      );
+        scrollIntoView: jest.fn()
+      } as unknown as HTMLElement;
+      const spyQuerySelector = jest.spyOn(document, 'querySelector');
+      spyQuerySelector.mockImplementationOnce(() => fakeFoundElement);
       const fakeId = 'FAKE ID';
 
       component.scrollToId(fakeId);
@@ -46,9 +45,8 @@ describe('StyleGuidePageComponent', () => {
 
     it('should not be able to scroll to page id if it doesnt exist on the page', () => {
       const elementNotFound = null;
-      const spyQuerySelector = spyOn(document, 'querySelector').and.returnValue(
-        elementNotFound
-      );
+      const spyQuerySelector = jest.spyOn(document, 'querySelector');
+      spyQuerySelector.mockImplementationOnce(() => elementNotFound);
       const fakeId = 'FAKE ID';
 
       component.scrollToId(fakeId);

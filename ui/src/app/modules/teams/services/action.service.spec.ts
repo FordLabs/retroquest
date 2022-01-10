@@ -18,16 +18,11 @@
 import { ActionItemService } from './action.service';
 import { ActionItem } from '../../domain/action-item';
 import { HttpClient } from '@angular/common/http';
-import { RxStompService } from '@stomp/ng2-stompjs';
 import { DataService } from '../../data.service';
-import {
-  createMockHttpClient,
-  createMockRxStompService,
-} from '../../utils/testutils';
+import { createMockHttpClient } from '../../utils/testutils';
 
 describe('ActionItemService', () => {
   let service: ActionItemService;
-  let spiedStompService: RxStompService;
   let mockHttpClient: HttpClient;
   const dataService: DataService = new DataService();
   const teamId = 'teamId';
@@ -48,66 +43,71 @@ describe('ActionItemService', () => {
     // @ts-ignore
     mockHttpClient = createMockHttpClient();
 
-    // @ts-ignore
-    spiedStompService = createMockRxStompService();
-
     dataService.team.id = teamId;
 
     service = new ActionItemService(
       mockHttpClient,
-      spiedStompService,
       dataService
     );
   });
 
-  describe('addActionItem', () => {
-    it('should add over websocket', () => {
-      const actionItem = createActionItem(teamId);
-      service.addActionItem(actionItem);
-      expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${dataService.team.id}/action-item/create`,
-        body: JSON.stringify(actionItem),
-      });
-    });
-
-    it('should not add with invalid team id', () => {
-      const actionItem = createActionItem('hacker');
-      service.addActionItem(actionItem);
-      expect(spiedStompService.publish).not.toHaveBeenCalled();
-    });
+  it('should add Action Item', () => {
+    const actionItem = createActionItem(teamId);
+    service.addActionItem(actionItem);
+    expect(mockHttpClient.post).toHaveBeenCalledWith(
+      `/api/team/${dataService.team.id}/action-item`,
+      JSON.stringify(actionItem),
+      { headers: { 'Content-Type': 'application/json' } }
+    );
   });
 
-  describe('deleteActionItem', () => {
-    it('should delete over websocket', () => {
-      const actionItem = createActionItem(teamId);
-      service.deleteActionItem(actionItem);
-      expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${dataService.team.id}/action-item/${actionItem.id}/delete`,
-        body: JSON.stringify(actionItem),
-      });
-    });
-
-    it('should not delete with invalid team id', () => {
-      const actionItem = createActionItem('hacker');
-      service.deleteActionItem(actionItem);
-      expect(spiedStompService.publish).not.toHaveBeenCalled();
-    });
+  it('should delete Action Item', () => {
+    const actionItem = createActionItem(teamId, 1);
+    service.deleteActionItem(actionItem);
+    expect(mockHttpClient.delete).toHaveBeenCalledWith(
+      `/api/team/${actionItem.teamId}/action-item/${actionItem.id}`
+    );
   });
 
-  describe('updateActionItem', () => {
-    it('should delete over websocket', () => {
-      const actionItem = createActionItem(teamId);
-      service.updateActionItem(actionItem);
-      expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${dataService.team.id}/action-item/${actionItem.id}/edit`,
-        body: JSON.stringify(actionItem),
-      });
+  describe('update ActionItem', () => {
+    it('should update task', () => {
+      const actionItem = createActionItem(teamId, 1);
+      service.updateTask(actionItem, 'updated task');
+      expect(mockHttpClient.put).toHaveBeenCalledWith(
+        `/api/team/${dataService.team.id}/action-item/1/task`,
+        JSON.stringify({task: 'updated task'}),
+        { headers: { 'Content-Type': 'application/json' } }
+      );
     });
 
-    it('should not delete with invalid team id', () => {
-      const actionItem = createActionItem('hacker');
-      service.updateActionItem(actionItem);
-      expect(spiedStompService.publish).not.toHaveBeenCalled();
+    it('should update assignee', () => {
+      const actionItem = createActionItem(teamId, 1);
+      service.updateAssignee(actionItem, 'updated assignee');
+      expect(mockHttpClient.put).toHaveBeenCalledWith(
+        `/api/team/${dataService.team.id}/action-item/1/assignee`,
+        JSON.stringify({assignee: 'updated assignee'}),
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+    });
+
+    it('should update completed status', () => {
+      const actionItem = createActionItem(teamId, 1);
+      service.updateCompleted(actionItem, true);
+      expect(mockHttpClient.put).toHaveBeenCalledWith(
+        `/api/team/${dataService.team.id}/action-item/1/completed`,
+        JSON.stringify({completed: true}),
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+    });
+
+    it('should update archived status', () => {
+      const actionItem = createActionItem(teamId, 1);
+      service.updateArchived(actionItem, true);
+      expect(mockHttpClient.put).toHaveBeenCalledWith(
+        `/api/team/${dataService.team.id}/action-item/1/archived`,
+        JSON.stringify({archived: true}),
+        { headers: { 'Content-Type': 'application/json' } }
+      );
     });
   });
 
@@ -130,15 +130,16 @@ describe('ActionItemService', () => {
 
     it('should call the backend api with the correct url', () => {
       service.archiveActionItems(archivedActionItems);
-      expect(spiedStompService.publish).toHaveBeenCalledTimes(2);
-      expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${dataService.team.id}/action-item/${firstActionItem.id}/edit`,
-        body: JSON.stringify(firstActionItem),
-      });
-      expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${dataService.team.id}/action-item/${secondActionItem.id}/edit`,
-        body: JSON.stringify(secondActionItem),
-      });
+      expect(mockHttpClient.put).toHaveBeenCalledTimes(2);
+      expect(mockHttpClient.put).toHaveBeenCalledWith(
+        `/api/team/${dataService.team.id}/action-item/${firstActionItem.id}/archived`,
+        JSON.stringify({archived: true}),
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+      expect(mockHttpClient.put).toHaveBeenCalledWith(
+        `/api/team/${dataService.team.id}/action-item/${secondActionItem.id}/archived`,
+        JSON.stringify({archived: true}),
+        { headers: { 'Content-Type': 'application/json' } });
     });
   });
 });

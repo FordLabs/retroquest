@@ -42,8 +42,8 @@ describe('UpdatePasswordComponent', () => {
     mockRouter = createMockRouter();
     mockRecaptchaComponent = createMockRecaptchaComponent();
 
-    spyOn(AuthService, 'setToken');
-    spyOn(console, 'error');
+    jest.spyOn(AuthService, 'setToken');
+    jest.spyOn(console, 'error');
 
     component = new UpdatePasswordComponent(
       mockTeamService,

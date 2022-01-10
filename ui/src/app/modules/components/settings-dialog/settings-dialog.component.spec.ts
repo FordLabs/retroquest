@@ -39,18 +39,6 @@ describe('SettingsDialogComponent', () => {
 
     component = new SettingsDialogComponent(fakeRouter);
     component.themeChanged = fakeThemeChangedEmitter;
-
-    let store = {};
-
-    spyOn(localStorage, 'getItem').and.callFake((key) => {
-      return store[key];
-    });
-    spyOn(localStorage, 'setItem').and.callFake((key, value) => {
-      return (store[key] = value + '');
-    });
-    spyOn(localStorage, 'clear').and.callFake(() => {
-      store = {};
-    });
   });
 
   it('should create', () => {
@@ -62,13 +50,9 @@ describe('SettingsDialogComponent', () => {
     const fakeTeamId = 'FAKE TEAM ID';
 
     beforeEach(() => {
-      spyClearToken = spyOn(AuthService, 'clearToken');
+      spyClearToken = jest.spyOn(AuthService, 'clearToken');
       component.teamId = fakeTeamId;
       component.logoutOfAccount();
-    });
-
-    afterEach(() => {
-      spyClearToken.calls.reset();
     });
 
     it('should clear the user token from cookies', () => {

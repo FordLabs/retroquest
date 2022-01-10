@@ -16,23 +16,18 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/index';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 import { Thought } from '../../domain/thought';
-import { RxStompService } from '@stomp/ng2-stompjs';
 import { DataService } from '../../data.service';
 
 @Injectable()
 export class ThoughtService {
   constructor(
     private http: HttpClient,
-    private rxStompService: RxStompService,
     private dataService: DataService
-  ) {}
-
-  private validTeamId(teamId: string) {
-    return this.dataService.team.id === teamId;
+  ) {
   }
 
   fetchThoughts(teamId: string): Observable<Array<Thought>> {
@@ -40,39 +35,62 @@ export class ThoughtService {
   }
 
   addThought(thought: Thought): void {
-    if (this.validTeamId(thought.teamId)) {
-      this.rxStompService.publish({
-        destination: `/app/${this.dataService.team.id}/thought/create`,
-        body: JSON.stringify(thought),
-      });
-    }
+    this.http.post(`/api/team/${this.dataService.team.id}/thought`,
+      JSON.stringify(thought),
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    ).subscribe();
   }
 
-  updateThought(thought: Thought): void {
-    if (this.validTeamId(thought.teamId)) {
-      this.rxStompService.publish({
-        destination: `/app/${this.dataService.team.id}/thought/${thought.id}/edit`,
-        body: JSON.stringify(thought),
-      });
-    }
+  heartThought(thought: Thought): void {
+    this.http.put(`/api/team/${this.dataService.team.id}/thought/${thought.id}/heart`, {}).subscribe();
   }
 
-  deleteThought(thought: Thought): void {
-    if (this.validTeamId(thought.teamId)) {
-      this.rxStompService.publish({
-        destination: `/app/${this.dataService.team.id}/thought/${thought.id}/delete`,
-        body: JSON.stringify(thought),
-      });
-    }
+  updateDiscussionStatus(thought: Thought, discussed: boolean): void {
+    this.http.put(
+      `/api/team/${this.dataService.team.id}/thought/${thought.id}/discuss`,
+      JSON.stringify({
+        discussed
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).subscribe();
   }
 
   moveThought(thoughtId: Thought['id'], newTopic: Thought['topic']): void {
-    this.rxStompService.publish({
-      destination: `/app/${this.dataService.team.id}/thought/${thoughtId}/move`,
-      body: JSON.stringify({
-        id: thoughtId,
-        topic: newTopic,
+    this.http.put(
+      `/api/team/${this.dataService.team.id}/thought/${thoughtId}/topic`,
+      JSON.stringify({
+        topic: newTopic
       }),
-    });
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    ).subscribe();
+  }
+
+  updateMessage(thought: Thought, newMessage: string): void {
+    this.http.put(
+      `/api/team/${this.dataService.team.id}/thought/${thought.id}/message`,
+      JSON.stringify({
+        message: newMessage
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    ).subscribe();
+  }
+
+  deleteThought(thought: Thought): void {
+    this.http.delete(`/api/team/${this.dataService.team.id}/thought/${thought.id}`).subscribe();
   }
 }

@@ -17,22 +17,15 @@
 
 package com.ford.labs.retroquest.thought;
 
-import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
-import com.ford.labs.retroquest.websocket.WebsocketDeleteResponse;
-import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -42,33 +35,35 @@ import java.util.List;
 public class ThoughtController {
 
     private final ThoughtService thoughtService;
-    private final ThoughtRepository thoughtRepository;
-    private final ApiAuthorization apiAuthorization;
 
-    public ThoughtController(ThoughtService thoughtService,
-                             ThoughtRepository thoughtRepository,
-                             ApiAuthorization apiAuthorization) {
+    public ThoughtController(ThoughtService thoughtService) {
         this.thoughtService = thoughtService;
-        this.thoughtRepository = thoughtRepository;
-        this.apiAuthorization = apiAuthorization;
     }
 
+    @Transactional
     @PutMapping("/api/team/{teamId}/thought/{thoughtId}/heart")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "adds a like to a thought given a thought and team id", description = "likeThought")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Created")})
-    public int likeThought(@PathVariable("thoughtId") String thoughtId, @PathVariable("teamId") String teamId) {
-        return thoughtService.likeThought(thoughtId);
+    public void likeThought(@PathVariable("thoughtId") Long thoughtId, @PathVariable("teamId") String teamId) {
+        thoughtService.likeThought(thoughtId);
     }
 
     @PutMapping("/api/team/{teamId}/thought/{thoughtId}/discuss")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "toggles between a thought being discussed or not discussed", description = "discussThought")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public ResponseEntity<Void> discussThought(@PathVariable("thoughtId") String thoughtId, @PathVariable("teamId") String teamId) {
-        thoughtService.discussThought(thoughtId);
+    public void discussThought(@PathVariable("thoughtId") Long thoughtId, @PathVariable("teamId") String teamId, @RequestBody UpdateThoughtDiscussedRequest request) {
+        thoughtService.discussThought(thoughtId, request.isDiscussed());
+    }
 
-        return ResponseEntity.ok().build();
+    @Transactional
+    @PutMapping("/api/team/{teamId}/thought/{thoughtId}/topic")
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @Operation(summary = "Updates the topic of a thought given a thought and team id", description = "moveThought")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
+    public void moveThought(@PathVariable String teamId, @PathVariable Long thoughtId, @RequestBody MoveThoughtRequest request) {
+        thoughtService.updateTopic(thoughtId, request.getTopic());
     }
 
     @Transactional
@@ -77,7 +72,7 @@ public class ThoughtController {
     @Operation(summary = "Updates the content of a thought given a thought and team id", description = "updateThoughtMessage")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public void updateThoughtMessage(@PathVariable("id") Long id, @RequestBody UpdateThoughtMessageRequest request, @PathVariable("teamId") String teamId) {
-        thoughtService.updateThoughtMessage(String.valueOf(id), request.getMessage());
+        thoughtService.updateThoughtMessage(id, request.getMessage());
     }
 
     @GetMapping("/api/team/{teamId}/thoughts")
@@ -85,16 +80,7 @@ public class ThoughtController {
     @Operation(summary = "Returns all thoughts given a team id", description = "getThoughtsForTeam")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public List<Thought> getThoughtsForTeam(@PathVariable("teamId") String teamId) {
-        return thoughtService.fetchAllThoughtsByTeam(teamId);
-    }
-
-    @Transactional
-    @DeleteMapping("/api/team/{teamId}/thoughts")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
-    @Operation(summary = "Removes all thoughts given a team id", description = "clearThoughtsForTeam")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public void clearThoughtsForTeam(@PathVariable("teamId") String teamId) {
-        thoughtService.deleteAllThoughtsByTeamId(teamId);
+        return thoughtService.fetchAllThoughts(teamId);
     }
 
     @Transactional
@@ -117,97 +103,5 @@ public class ThoughtController {
         var thought = thoughtService.createThought(teamId, request);
         var uri = new URI(String.format("/api/team/%s/thought/%s", thought.getTeamId(), thought.getId()));
         return ResponseEntity.created(uri).build();
-    }
-
-    @MessageMapping("/{teamId}/thought/create")
-    @SendTo("/topic/{teamId}/thoughts")
-    public WebsocketPutResponse<Thought> createThoughtWebsocket(@DestinationVariable("teamId") String teamId, CreateThoughtRequest request, Authentication authentication) {
-        if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            var savedThought = thoughtService.createThought(teamId, request);
-            return new WebsocketPutResponse<>(savedThought);
-        }
-        return null;
-    }
-
-    @MessageMapping("/{teamId}/thought/{thoughtId}/edit")
-    @SendTo("/topic/{teamId}/thoughts")
-    public WebsocketPutResponse<Thought> editThoughtWebsocket(
-        @DestinationVariable("teamId") String teamId,
-        @DestinationVariable("thoughtId") Long thoughtId,
-        EditThoughtRequest request,
-        Authentication authentication
-    ) {
-        if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            var savedThought = thoughtRepository.findById(thoughtId).orElseThrow();
-            savedThought.setMessage(request.getMessage());
-            savedThought.setDiscussed(request.isDiscussed());
-            savedThought.setHearts(request.getHearts());
-
-            thoughtRepository.save(savedThought);
-            return new WebsocketPutResponse<>(savedThought);
-        }
-        return null;
-    }
-
-    @MessageMapping("/{teamId}/thought/{thoughtId}/move")
-    @SendTo("/topic/{teamId}/thoughts")
-    public WebsocketPutResponse<Thought> moveThoughtWebsocket(
-        @DestinationVariable("teamId") String teamId,
-        @DestinationVariable("thoughtId") Long thoughtId,
-        MoveThoughtRequest request,
-        Authentication authentication
-    ) {
-        if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            var savedThought = thoughtRepository.findById(thoughtId).orElseThrow();
-            savedThought.setTopic(request.getTopic());
-            thoughtRepository.save(savedThought);
-            return new WebsocketPutResponse<>(savedThought);
-        }
-        return null;
-    }
-
-    @Transactional
-    @MessageMapping("/{teamId}/thought/{thoughtId}/delete")
-    @SendTo("/topic/{teamId}/thoughts")
-    public WebsocketDeleteResponse<Long> deleteThoughtWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("thoughtId") Long thoughtId, Authentication authentication) {
-        if (!apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            return null;
-        }
-        thoughtRepository.deleteThoughtByTeamIdAndId(teamId, thoughtId);
-        return new WebsocketDeleteResponse<>(thoughtId);
-    }
-
-    @Transactional
-    @MessageMapping("/{teamId}/thought/delete")
-    @SendTo("/topic/{teamId}/thoughts")
-    public WebsocketDeleteResponse<Long> deleteThoughtWebsocket(@DestinationVariable("teamId") String teamId, Authentication authentication) {
-        if (!apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            return null;
-        }
-        thoughtRepository.deleteAllByTeamId(teamId);
-        return new WebsocketDeleteResponse<>(-1L);
-    }
-
-    @Transactional
-    @MessageMapping("/v2/{teamId}/thought/delete")
-    @SendTo("/topic/{teamId}/thoughts")
-    public WebsocketDeleteResponse<Thought> deleteThoughtWebsocket(@DestinationVariable("teamId") String teamId, Thought thought, Authentication authentication) {
-        if (!apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            return null;
-        }
-        thoughtRepository.deleteThoughtByTeamIdAndId(teamId, thought.getId());
-        return new WebsocketDeleteResponse<>(thought);
-    }
-
-    @Transactional
-    @MessageMapping("/v2/{teamId}/thought/deleteAll")
-    @SendTo("/topic/{teamId}/thoughts")
-    public WebsocketDeleteResponse<Thought> deleteAllThoughtsWebsocket(@DestinationVariable("teamId") String teamId, Authentication authentication) {
-        if (!apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            return null;
-        }
-
-        thoughtRepository.deleteAllByTeamId(teamId);
-        return new WebsocketDeleteResponse<>(Thought.builder().id(-1L).build());
     }
 }

@@ -16,16 +16,13 @@
  */
 
 import { SubscriptionService } from './subscription.service';
-import {
-  createMockRxStompService,
-  createMockSubscription,
-} from '../../utils/testutils';
+import { createMockRxStompService, createMockSubscription } from '../../utils/testutils';
 import { Subscription } from 'rxjs';
 import { DataService } from '../../data.service';
 import { mock } from 'ts-mockito';
 import { SaveCheckerService } from './save-checker.service';
 import { EventEmitter } from '@angular/core';
-import { WebsocketResponse } from '../../domain/websocket-response';
+import { WebsocketActionItemResponse, WebsocketThoughtResponse } from '../../domain/websocket-response';
 import { Column } from '../../domain/column';
 
 describe('destroying service', () => {
@@ -112,14 +109,14 @@ describe('destroying service', () => {
     });
 
     it('Subscribes to thought subscription', () => {
-      service.subscribeToThoughts(new EventEmitter<WebsocketResponse>());
+      service.subscribeToThoughts(new EventEmitter<WebsocketThoughtResponse>());
       expect(spiedStompService.watch).toHaveBeenCalledWith(
         `/topic/${dataService.team.id}/thoughts`
       );
     });
 
     it('Subscribes to action item subscription', () => {
-      service.subscribeToActionItems(new EventEmitter<WebsocketResponse>());
+      service.subscribeToActionItems(new EventEmitter<WebsocketActionItemResponse>());
       expect(spiedStompService.watch).toHaveBeenCalledWith(
         `/topic/${dataService.team.id}/action-items`
       );

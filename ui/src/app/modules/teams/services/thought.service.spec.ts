@@ -15,19 +15,14 @@
  * limitations under the License.
  */
 
-import { Observable } from 'rxjs/index';
+import { Observable } from 'rxjs';
 import { ThoughtService } from './thought.service';
-import {
-  createMockHttpClient,
-  createMockRxStompService,
-} from '../../utils/testutils';
+import { createMockHttpClient } from '../../utils/testutils';
 import { HttpClient } from '@angular/common/http';
-import { RxStompService } from '@stomp/ng2-stompjs';
 import { DataService } from '../../data.service';
 
 describe('ThoughtService', () => {
   let service: ThoughtService;
-  let spiedStompService: RxStompService;
   let mockHttpClient: HttpClient;
 
   const dataService: DataService = new DataService();
@@ -55,19 +50,15 @@ describe('ThoughtService', () => {
 
   beforeEach(() => {
     mockHttpClient = createMockHttpClient();
-
-    spiedStompService = createMockRxStompService();
-
     dataService.team.id = teamId;
 
     service = new ThoughtService(
       mockHttpClient,
-      spiedStompService,
       dataService
     );
   });
 
-  describe('fetchThoughts', () => {
+  describe('Fetch Thoughts', () => {
     it('should request thoughts from the thoughts api', () => {
       const returnObj = service.fetchThoughts(teamId);
 
@@ -78,83 +69,78 @@ describe('ThoughtService', () => {
     });
   });
 
-  describe('addThought', () => {
+  describe('Add Thought', () => {
     it('should send a message', () => {
       const testThought = createTestThought(teamId);
 
       service.addThought(testThought);
 
-      expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${testThought.teamId}/thought/create`,
-        body: JSON.stringify(testThought),
-      });
-    });
-
-    it('does not allow messages to be sent for other teams', () => {
-      const testThought = createTestThought('hacker');
-
-      service.addThought(testThought);
-
-      expect(spiedStompService.publish).not.toHaveBeenCalled();
+      expect(mockHttpClient.post).toHaveBeenCalledWith(
+        `/api/team/${teamId}/thought`,
+        JSON.stringify(testThought),
+        {headers: {'Content-Type': 'application/json'}}
+      );
     });
   });
 
-  describe('updateThought', () => {
-    it('should send a message', () => {
+  describe('Update Thought', () => {
+    it('should heart a thought', () => {
       const testThought = createTestThought(teamId, 1);
-
-      service.updateThought(testThought);
-
-      expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${testThought.teamId}/thought/${testThought.id}/edit`,
-        body: JSON.stringify(testThought),
-      });
+      service.heartThought(testThought);
+      expect(mockHttpClient.put).toHaveBeenCalledWith(`/api/team/${teamId}/thought/${testThought.id}/heart`, {});
     });
 
-    it('does not allow messages to be updated for other teams', () => {
-      const testThought = createTestThought('hacker', 1);
-
-      service.updateThought(testThought);
-
-      expect(spiedStompService.publish).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('deleteThought', () => {
-    it('should send a message', () => {
+    it('should update if a thought is discussed', () => {
       const testThought = createTestThought(teamId, 1);
-      service.deleteThought(testThought);
-
-      expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${testThought.teamId}/thought/${testThought.id}/delete`,
-        body: JSON.stringify(testThought),
-      });
+      const expectedBody = {discussed: false};
+      service.updateDiscussionStatus(testThought, false);
+      expect(mockHttpClient.put).toHaveBeenCalledWith(
+        `/api/team/${teamId}/thought/${testThought.id}/discuss`,
+        JSON.stringify(expectedBody),
+        {headers: {'Content-Type': 'application/json'}}
+        );
     });
 
-    it('does not allow messages to be deleted for other teams', () => {
-      const testThought = createTestThought('hacker', 1);
-
-      service.deleteThought(testThought);
-
-      expect(spiedStompService.publish).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('moveThought', () => {
-    it('should send a message', () => {
+    it('should update a thought topic', () => {
       const testThought = createTestThought(teamId, 1);
       const newTopic = 'move';
+
       service.moveThought(testThought.id, newTopic);
 
       const expectedBody = {
-        id: testThought.id,
         topic: newTopic,
       };
 
-      expect(spiedStompService.publish).toHaveBeenCalledWith({
-        destination: `/app/${testThought.teamId}/thought/${testThought.id}/move`,
-        body: JSON.stringify(expectedBody),
-      });
+      expect(mockHttpClient.put).toHaveBeenCalledWith(
+        `/api/team/${teamId}/thought/${testThought.id}/topic`,
+        JSON.stringify(expectedBody),
+        {headers: {'Content-Type': 'application/json'}}
+      );
+    });
+
+    it('should update a thought message', () => {
+      const testThought = createTestThought(teamId, 1);
+      const newMessage = 'Something else';
+
+      service.updateMessage(testThought, newMessage);
+
+      const expectedBody = {
+        message: newMessage,
+      };
+
+      expect(mockHttpClient.put).toHaveBeenCalledWith(
+        `/api/team/${teamId}/thought/${testThought.id}/message`,
+        JSON.stringify(expectedBody),
+        {headers: {'Content-Type': 'application/json'}}
+      );
+    });
+  });
+
+  describe('Delete Thought', () => {
+    it('should send a message', () => {
+      const testThought = createTestThought(teamId, 1);
+      service.deleteThought(testThought);
+      expect(mockHttpClient.delete).toHaveBeenCalledWith(`/api/team/${teamId}/thought/${testThought.id}`);
     });
   });
 });

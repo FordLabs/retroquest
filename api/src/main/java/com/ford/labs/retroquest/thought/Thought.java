@@ -67,10 +67,6 @@ public class Thought {
         return Arrays.asList(columnTitle.getTitle(), message, String.valueOf(hearts), getDiscussedString());
     }
 
-    public void toggleDiscussed() {
-        discussed = !discussed;
-    }
-
     public void incrementHearts() {
         hearts++;
     }

@@ -17,23 +17,17 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/index';
+import { Observable } from 'rxjs';
 
 import { ActionItem } from '../../domain/action-item';
-import { RxStompService } from '@stomp/ng2-stompjs';
 import { DataService } from '../../data.service';
 
 @Injectable()
 export class ActionItemService {
   constructor(
     private http: HttpClient,
-    private rxStompService: RxStompService,
     private dataService: DataService
   ) {}
-
-  private validTeamId(teamId: string) {
-    return this.dataService.team.id === teamId;
-  }
 
   fetchActionItems(teamId): Observable<Array<ActionItem>> {
     return this.http.get<Array<ActionItem>>(`/api/team/${teamId}/action-items`);
@@ -46,35 +40,53 @@ export class ActionItemService {
   }
 
   addActionItem(actionItem: ActionItem): void {
-    if (this.validTeamId(actionItem.teamId)) {
-      this.rxStompService.publish({
-        destination: `/app/${this.dataService.team.id}/action-item/create`,
-        body: JSON.stringify(actionItem),
-      });
-    }
+    this.http.post(
+      `/api/team/${this.dataService.team.id}/action-item`,
+      JSON.stringify(actionItem),
+      { headers: { 'Content-Type': 'application/json' } }
+    ).subscribe();
+
+  }
+
+  updateTask(actionItem: ActionItem, updatedTask: string): void {
+    this.http.put(
+      `/api/team/${this.dataService.team.id}/action-item/${actionItem.id}/task`,
+      JSON.stringify({task: updatedTask}),
+      { headers: { 'Content-Type': 'application/json' } }
+      ).subscribe();
+  }
+
+  updateAssignee(actionItem: ActionItem, assignee: string): void {
+    this.http.put(
+      `/api/team/${this.dataService.team.id}/action-item/${actionItem.id}/assignee`,
+      JSON.stringify({assignee}),
+      { headers: { 'Content-Type': 'application/json' } }
+    ).subscribe();
+  }
+
+  updateCompleted(actionItem: ActionItem, completed: boolean): void {
+    this.http.put(
+      `/api/team/${this.dataService.team.id}/action-item/${actionItem.id}/completed`,
+      JSON.stringify({completed}),
+      { headers: { 'Content-Type': 'application/json' } }
+    ).subscribe();
+  }
+
+  updateArchived(actionItem: ActionItem, archived: boolean) {
+    this.http.put(
+      `/api/team/${this.dataService.team.id}/action-item/${actionItem.id}/archived`,
+      JSON.stringify({archived}),
+      { headers: { 'Content-Type': 'application/json' } }
+    ).subscribe();
   }
 
   deleteActionItem(actionItem: ActionItem): void {
-    if (this.validTeamId(actionItem.teamId)) {
-      this.rxStompService.publish({
-        destination: `/app/${this.dataService.team.id}/action-item/${actionItem.id}/delete`,
-        body: JSON.stringify(actionItem),
-      });
-    }
-  }
-
-  updateActionItem(actionItem: ActionItem): void {
-    if (this.validTeamId(actionItem.teamId)) {
-      this.rxStompService.publish({
-        destination: `/app/${this.dataService.team.id}/action-item/${actionItem.id}/edit`,
-        body: JSON.stringify(actionItem),
-      });
-    }
+    this.http.delete(`/api/team/${this.dataService.team.id}/action-item/${actionItem.id}`).subscribe();
   }
 
   archiveActionItems(archivedActionItems: Array<ActionItem>) {
     archivedActionItems.forEach((actionItem) => {
-      this.updateActionItem(actionItem);
+      this.updateArchived(actionItem, true);
     });
   }
 }

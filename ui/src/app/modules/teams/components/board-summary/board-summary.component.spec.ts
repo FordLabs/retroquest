@@ -60,7 +60,7 @@ describe('BoardSummaryComponent', () => {
 
     it('should subscribe to the return value of deleteBoard', () => {
       const boardToDelete: Board = emptyBoardWithThought();
-      spyOn(
+      jest.spyOn(
         mockBoardService.deleteBoard('team-id', boardToDelete.id),
         'subscribe'
       );

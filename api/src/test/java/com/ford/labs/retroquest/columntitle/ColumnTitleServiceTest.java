@@ -48,10 +48,11 @@ class ColumnTitleServiceTest {
 
     @Test
     void given_column_id_and_column_title_rename_column_in_db_and_return_new_column_title() {
-        var columnTitle = columnTitleRepository.save(columnTitleBuilder.topic("happy").title("Some Title").teamId("some team ID").build());
+        String teamId = "some team ID";
+        var columnTitle = columnTitleRepository.save(columnTitleBuilder.topic("happy").title("Some Title").teamId(teamId).build());
 
         String newColumnName = "Some new Title";
-        var savedColumnTitle = columnTitleService.editColumnTitleName(columnTitle.getId(), newColumnName);
+        var savedColumnTitle = columnTitleService.editColumnTitleName(columnTitle.getId(), newColumnName, teamId );
 
         assertThat(meterRegistry.get("retroquest.columns.changed.count").counter().count()).isEqualTo(1);
         assertThat(savedColumnTitle.getTitle()).isEqualTo(newColumnName);
@@ -61,7 +62,7 @@ class ColumnTitleServiceTest {
     @Test
     void throws_column_title_not_found_exception_when_column_title_not_in_db() {
         try {
-            columnTitleService.editColumnTitleName(42L, "some name");
+            columnTitleService.editColumnTitleName(42L, "some name", "some team id");
         } catch (RuntimeException exception) {
             assertThat(exception).isInstanceOf(ColumnTitleNotFoundException.class);
         }

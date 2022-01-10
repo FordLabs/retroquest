@@ -17,8 +17,8 @@
 
 import { ThoughtsColumnComponent } from './thoughts-column.component';
 import { Thought } from '../../../domain/thought';
-import { Observable } from 'rxjs/index';
-import { WebsocketResponse } from '../../../domain/websocket-response';
+import { Observable } from 'rxjs';
+import { WebsocketThoughtResponse } from '../../../domain/websocket-response';
 
 describe('ThoughtColumnComponent', () => {
   let component: ThoughtsColumnComponent;
@@ -62,40 +62,6 @@ describe('ThoughtColumnComponent', () => {
     testThought = createThought(1, 'Test Thought');
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  describe('discussThought', () => {
-    it('should toggle the discussed flag', () => {
-      component.discussThought(testThought);
-      expect(testThought.discussed).toBeTruthy();
-      component.discussThought(testThought);
-      expect(testThought.discussed).toBeFalsy();
-    });
-
-    it('should call ThoughtService.discussThought', () => {
-      component.discussThought(testThought);
-      expect(mockThoughtService.updateThought).toHaveBeenCalledWith(
-        testThought
-      );
-    });
-  });
-
-  describe('heartThought', () => {
-    it('should increment the hearts count', () => {
-      component.heartThought(testThought);
-      expect(testThought.hearts).toEqual(1);
-    });
-
-    it('should call ThoughtService.setCurrentThought', () => {
-      component.heartThought(testThought);
-      expect(mockThoughtService.updateThought).toHaveBeenCalledWith(
-        testThought
-      );
-    });
-  });
-
   describe('process thought change', () => {
     let deleteThoughtSpy;
     let updateThoughtSpy;
@@ -105,19 +71,16 @@ describe('ThoughtColumnComponent', () => {
     });
 
     describe('Thought deleted', () => {
-      const message: WebsocketResponse = {
+      const message: WebsocketThoughtResponse = {
         type: 'delete',
-        payload: 14,
+        payload: createThought(14, "Thought to delete"),
       };
 
       beforeEach(() => {
         component.processThoughtChange(message);
       });
       it('Should delete a thought', () => {
-        const thoughtWithId = {
-          id: 14,
-        } as Thought;
-        expect(deleteThoughtSpy).toHaveBeenCalledWith(thoughtWithId);
+        expect(deleteThoughtSpy).toHaveBeenCalledWith(message.payload);
       });
       it('Should not update a thought', () => {
         expect(updateThoughtSpy).not.toHaveBeenCalled();
@@ -125,7 +88,7 @@ describe('ThoughtColumnComponent', () => {
     });
 
     describe('Thought updated', () => {
-      const message: WebsocketResponse = {
+      const message: WebsocketThoughtResponse = {
         type: 'put',
         payload: createThought(13, 'Updated thought'),
       };
@@ -142,7 +105,7 @@ describe('ThoughtColumnComponent', () => {
     });
 
     describe('Thought from a different column updated', () => {
-      const message: WebsocketResponse = {
+      const message: WebsocketThoughtResponse = {
         type: 'put',
         payload: createThought(12, 'Thought from different column', 'confused'),
       };
@@ -168,7 +131,7 @@ describe('ThoughtColumnComponent', () => {
         );
         movedThought.columnTitle.topic = defaultTopic;
 
-        const message: WebsocketResponse = {
+        const message: WebsocketThoughtResponse = {
           type: 'put',
           payload: movedThought,
         };
@@ -189,7 +152,7 @@ describe('ThoughtColumnComponent', () => {
         const movedThought = createThought(12, 'Moving thought to this column');
         movedThought.columnTitle.topic = 'otherTopic';
 
-        const message: WebsocketResponse = {
+        const message: WebsocketThoughtResponse = {
           type: 'put',
           payload: movedThought,
         };
@@ -214,7 +177,7 @@ describe('ThoughtColumnComponent', () => {
         );
         movedThought.columnTitle.topic = 'alternateTopic2';
 
-        const message: WebsocketResponse = {
+        const message: WebsocketThoughtResponse = {
           type: 'put',
           payload: movedThought,
         };

@@ -15,14 +15,8 @@
  * limitations under the License.
  */
 
-import {
-  Component,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { WebsocketResponse } from '../../../domain/websocket-response';
+import { Component, EventEmitter, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { WebsocketActionItemResponse, WebsocketThoughtResponse } from '../../../domain/websocket-response';
 
 import * as Hammer from 'hammerjs';
 import { ActionsRadiatorViewComponent } from '../../../components/actions-radiator-view/actions-radiator-view.component';
@@ -63,8 +57,8 @@ export class TeamPageComponent implements OnInit, OnDestroy {
 
   columnsAggregation: Array<ColumnResponse> = [];
 
-  thoughtChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
-  actionItemChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
+  thoughtChanged: EventEmitter<WebsocketThoughtResponse> = new EventEmitter();
+  actionItemChanged: EventEmitter<WebsocketActionItemResponse> = new EventEmitter();
   columnChanged: EventEmitter<Column> = new EventEmitter();
   retroEnded: EventEmitter<void> = new EventEmitter();
 

@@ -17,17 +17,11 @@
 
 package com.ford.labs.retroquest.columntitle;
 
-import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
-import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -37,13 +31,11 @@ import java.util.List;
 @Tag(name = "Column Title Controller", description = "The controller that manages the titles of each column on a retro board")
 public class ColumnTitleController {
 
-    private final ApiAuthorization apiAuthorization;
     private final ColumnTitleService columnTitleService;
 
-    public ColumnTitleController(ColumnTitleService columnTitleService,
-                                 ApiAuthorization apiAuthorization) {
+
+    public ColumnTitleController(ColumnTitleService columnTitleService) {
         this.columnTitleService = columnTitleService;
-        this.apiAuthorization = apiAuthorization;
     }
 
     @GetMapping("/api/team/{teamId}/columns")
@@ -60,16 +52,6 @@ public class ColumnTitleController {
     @Operation(summary = "Updates the title of a column of a retro board given a team id and column id", description = "updateTitleOfColumn")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public void updateTitleOfColumn(@PathVariable("teamId") String teamId, @RequestBody UpdateColumnTitleRequest request, @PathVariable("columnId") Long columnId) {
-        columnTitleService.editColumnTitleName(columnId, request.getTitle());
-    }
-
-    @MessageMapping("/{teamId}/column-title/{columnId}/edit")
-    @SendTo("/topic/{teamId}/column-titles")
-    public WebsocketPutResponse<ColumnTitle> editColumnTitleWebsocket(@DestinationVariable("teamId") String teamId, @DestinationVariable("columnId") Long columnId, ColumnTitle columnTitle, Authentication authentication) {
-        if (apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            var savedColumnTitle = columnTitleService.editColumnTitleName(columnId, columnTitle.getTitle());
-            return new WebsocketPutResponse<>(savedColumnTitle);
-        }
-        return null;
+        columnTitleService.editColumnTitleName(columnId, request.getTitle(), teamId);
     }
 }

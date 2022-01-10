@@ -44,45 +44,16 @@ class ColumnTitleApiTest extends ApiTestBase {
     private ColumnTitleRepository columnTitleRepository;
 
     private String BASE_SUB_URL;
-    private String BASE_ENDPOINT_URL;
 
     @BeforeEach
     void setup() {
         BASE_SUB_URL = "/topic/" + teamId + "/column-titles";
-        BASE_ENDPOINT_URL = "/app/" + teamId + "/column-title";
     }
 
     @AfterEach
     void teardown() {
         columnTitleRepository.deleteAllInBatch();
         assertThat(columnTitleRepository.count()).isZero();
-    }
-
-    @Test
-    void canEditColumnTitleWithWebSockets() throws Exception {
-
-        ColumnTitle savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder()
-                .title("old title")
-                .teamId("beach-bums")
-                .build());
-
-        StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
-
-        ColumnTitle sentColumnTitle = ColumnTitle.builder()
-                .id(savedColumnTitle.getId())
-                .title("new title")
-                .teamId(savedColumnTitle.getTeamId())
-                .build();
-
-        session.send(BASE_ENDPOINT_URL + "/" + sentColumnTitle.getId() + "/edit",
-                objectMapper.writeValueAsBytes(sentColumnTitle));
-
-        ColumnTitle response = takeObjectInSocket(ColumnTitle.class);
-
-        assertThat(response).isEqualTo(sentColumnTitle);
-        assertThat(columnTitleRepository.count()).isEqualTo(1);
-        assertThat(columnTitleRepository.findAll().get(0)).isEqualTo(sentColumnTitle);
     }
 
     @Test
@@ -93,8 +64,10 @@ class ColumnTitleApiTest extends ApiTestBase {
                 ColumnTitle.builder().teamId("BeachBums").title("three").build()
         ));
 
-        MvcResult columnListRequest = mockMvc.perform(get("/api/team/BeachBums/columns").contentType(MediaType.APPLICATION_JSON)
+        MvcResult columnListRequest = mockMvc.perform(get("/api/team/BeachBums/columns")
+                .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk())
                 .andReturn();
 
         ColumnTitle[] result = objectMapper.readValue(columnListRequest.getResponse().getContentAsByteArray(), ColumnTitle[].class);
@@ -103,12 +76,22 @@ class ColumnTitleApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_update_column_title() throws Exception {
+    public void should_not_get_list_of_columns_unauthorized() throws Exception {
+        mockMvc.perform(get("/api/team/BeachBums/columns")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .andExpect(status().isForbidden());
+    }
 
+    @Test
+    void should_update_column_title() throws Exception {
+        StompSession session = getAuthorizedSession();
+        subscribe(session, BASE_SUB_URL);
         var savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder()
                 .teamId("BeachBums")
                 .title("old title")
                 .build());
+        var expectedColumnTitle = new ColumnTitle(savedColumnTitle.getId(), null, "new title", "BeachBums");
 
         var request = new UpdateColumnTitleRequest("new title");
 
@@ -118,8 +101,20 @@ class ColumnTitleApiTest extends ApiTestBase {
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk());
 
-        assertThat(columnTitleRepository.count()).isEqualTo(1);
-        assertThat(columnTitleRepository.findAll().get(0).getTitle()).isEqualTo("new title");
+        var emittedEvent = takeObjectInSocket(ColumnTitle.class);
+
+        assertThat(columnTitleRepository.findAll()).containsExactly(expectedColumnTitle);
+        assertThat(emittedEvent).usingRecursiveComparison().isEqualTo(expectedColumnTitle);
+    }
+
+    @Test
+    public void should_not_update_column_title_unauthorized() throws Exception{
+        var request = new UpdateColumnTitleRequest("new title");
+        mockMvc.perform(put("/api/team/BeachBums/column/1/title")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(request))
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .andExpect(status().isForbidden());
     }
 
     @Test

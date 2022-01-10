@@ -15,7 +15,21 @@
  * limitations under the License.
  */
 
-export interface WebsocketResponse {
+import { Thought } from './thought';
+import { Column } from './column';
+import { ActionItem } from './action-item';
+
+export interface WebsocketThoughtResponse {
   type: string;
-  payload: Object;
+  payload: Thought
+}
+
+export interface WebsocketColumnResponse {
+  type: string;
+  payload: Column;
+}
+
+export interface WebsocketActionItemResponse {
+  type: string;
+  payload: ActionItem;
 }

@@ -32,7 +32,8 @@ describe('TokenInterceptor', () => {
 
     mockHttpHandler = { handle: jest.fn() };
 
-    spyOn(AuthService, 'getToken').and.returnValue(fakeToken);
+    const spiedAuthService = jest.spyOn(AuthService, 'getToken');
+    spiedAuthService.mockImplementation(() => fakeToken);
 
     interceptor = new TokenInterceptor();
   });

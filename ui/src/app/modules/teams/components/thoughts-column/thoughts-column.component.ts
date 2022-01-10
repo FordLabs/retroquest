@@ -15,25 +15,15 @@
  * limitations under the License.
  */
 
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
 import { emptyThought, Thought } from '../../../domain/thought';
 import { Column } from '../../../domain/column';
 import { ThoughtService } from '../../services/thought.service';
 import { TaskDialogComponent } from '../../../components/task-dialog/task-dialog.component';
 import { fadeInOutAnimation } from '../../../animations/add-delete-animation';
 import { Themes } from '../../../domain/Theme';
-import {
-  ColumnResponse,
-  deleteColumnResponse,
-  emptyColumnResponse,
-} from '../../../domain/column-response';
-import { WebsocketResponse } from '../../../domain/websocket-response';
+import { ColumnResponse, emptyColumnResponse, removeItemFromColumn } from '../../../domain/column-response';
+import { WebsocketThoughtResponse } from '../../../domain/websocket-response';
 import { CdkDragSortEvent } from '@angular/cdk/drag-drop';
 
 @Component({
@@ -51,7 +41,7 @@ export class ThoughtsColumnComponent implements OnInit {
   @Input() teamId: string;
   @Input() hideNewThought = false;
 
-  @Input() thoughtChanged: EventEmitter<WebsocketResponse> = new EventEmitter();
+  @Input() thoughtChanged: EventEmitter<WebsocketThoughtResponse> = new EventEmitter();
   @Input() columnChanged: EventEmitter<Column> = new EventEmitter();
 
   @Input() theme: Themes = Themes.Light;
@@ -88,24 +78,7 @@ export class ThoughtsColumnComponent implements OnInit {
     });
   }
 
-  processThoughtChange(response: WebsocketResponse): void {
-    function retrieveThoughtFromPayload(message: WebsocketResponse): Thought {
-      if (message.type === 'delete') {
-        return {
-          id: message.payload,
-        } as Thought;
-      } else {
-        return message.payload as Thought;
-      }
-    }
-
-    function thoughtIsInThisColumn(
-      thoughtTopic: string,
-      thoughtAggregationTopic: string
-    ) {
-      return thoughtTopic === thoughtAggregationTopic;
-    }
-
+  processThoughtChange(response: WebsocketThoughtResponse): void {
     function thoughtWasMovedFromThisColumn(
       thoughtTopic: string,
       thoughtTopicPreviousColumn: string,
@@ -117,13 +90,11 @@ export class ThoughtsColumnComponent implements OnInit {
       );
     }
 
-    const thought = retrieveThoughtFromPayload(response);
+    const thought = response.payload;
 
     if (response.type === 'delete') {
       this.deleteThought(thought);
-    } else if (
-      thoughtIsInThisColumn(thought.topic, this.thoughtAggregation.topic)
-    ) {
+    } else if (thought.topic === this.thoughtAggregation.topic) {
       this.updateThought(thought);
     } else if (
       thoughtWasMovedFromThisColumn(
@@ -234,22 +205,11 @@ export class ThoughtsColumnComponent implements OnInit {
   }
 
   deleteThought(thought: Thought) {
-    deleteColumnResponse(thought, this.thoughtAggregation.items);
-  }
-
-  discussThought(thought: Thought): void {
-    thought.discussed = !thought.discussed;
-    this.thoughtService.updateThought(thought);
-  }
-
-  heartThought(thought: Thought): void {
-    thought.hearts++;
-    this.thoughtService.updateThought(thought);
+    removeItemFromColumn(thought, this.thoughtAggregation.items);
   }
 
   onMessageChanged(message: string, thought: Thought) {
-    thought.message = message;
-    this.thoughtService.updateThought(thought);
+    this.thoughtService.updateMessage(thought, message);
   }
 
   onDeleted(thought: Thought) {
@@ -257,13 +217,11 @@ export class ThoughtsColumnComponent implements OnInit {
   }
 
   starCountChanged(starCount: number, thought: Thought) {
-    thought.hearts = starCount;
-    this.thoughtService.updateThought(thought);
+    this.thoughtService.heartThought(thought);
   }
 
   onCompleted(completedState: boolean, thought: Thought) {
-    thought.discussed = completedState;
-    this.thoughtService.updateThought(thought);
+    this.thoughtService.updateDiscussionStatus(thought, completedState);
   }
 
   displayPopup(thought: Thought) {
