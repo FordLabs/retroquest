@@ -20,6 +20,7 @@ package com.ford.labs.retroquest.api;
 import com.ford.labs.retroquest.actionitem.*;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +39,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("api")
 class ActionItemApiTest extends ApiTestBase {
 
-    private static final String BASE_API_URL = "/api/team/BeachBums/action-item";
-    private final String ACTION_ITEMS_SUBSCRIPTION_URL = format("/topic/%s/action-items", teamId);
+    private String BASE_API_URL = "/api/team/BeachBums/action-item";
+    private String ACTION_ITEMS_SUBSCRIPTION_URL;
 
     @Autowired
     private ActionItemRepository actionItemRepository;
+
+    @BeforeEach
+    void setup() {
+        ACTION_ITEMS_SUBSCRIPTION_URL = format("/topic/%s/action-items", teamId);
+        BASE_API_URL = format("/api/team/%s/action-item", teamId);
+    }
 
     @AfterEach
     void teardown() {
