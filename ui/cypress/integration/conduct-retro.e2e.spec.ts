@@ -97,7 +97,6 @@ describe('Conduct Retro', () => {
   }
 
   before(() => {
-    cy.visit('/create');
     createTeamIfNecessaryAndLogin(teamCredentials);
 
     clearBoard();
