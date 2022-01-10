@@ -51,19 +51,16 @@ describe('Logging In', () => {
   });
 
   it('Displays invalid team name when logging in with bad team', () => {
-    cy.visit('/login');
     login('Something not correct', 'Something else wrong');
     cy.findByText('Incorrect board name. Please try again.').should('exist');
   });
 
   it('Displays invalid team name/password when using bad password', () => {
-    cy.visit('/login');
     login(teamCredentials.teamName, 'Something else wrong');
     cy.findByText('Incorrect board or password. Please try again.').should('exist');
   });
 
   it('Navigates to team board after successful login', () => {
-    cy.visit('/login');
     login(teamCredentials.teamName, teamCredentials.password);
     cy.url().should('eq', Cypress.config().baseUrl + teamBoardUrl(teamCredentials.teamId));
   });
