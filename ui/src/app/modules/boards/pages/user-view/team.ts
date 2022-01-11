@@ -23,6 +23,6 @@ export interface Team {
 export function emptyTeam(): Team {
   return {
     name: '',
-    id: ''
+    id: '',
   };
 }

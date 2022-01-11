@@ -14,23 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import moment from 'moment';
-
-import { emptyThoughtWithColumn, Thought } from './thought';
-
-export class Board {
-  id: number;
-  dateCreated: moment.Moment;
-  teamId: string;
-  thoughts: Array<Thought>;
-}
-
-export function emptyBoardWithThought(): Board {
-  const board = new Board();
-  board.dateCreated = moment();
-  board.id = -1;
-  board.teamId = '';
-  board.thoughts = [emptyThoughtWithColumn()];
-  return board;
-}
+module.exports = {
+  extends: ['plugin:cypress/recommended'],
+};

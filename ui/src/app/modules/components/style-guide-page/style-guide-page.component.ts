@@ -16,6 +16,7 @@
  */
 
 import { Component } from '@angular/core';
+
 import { Thought } from '../../domain/thought';
 
 @Component({

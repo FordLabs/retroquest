@@ -15,8 +15,9 @@
  * limitations under the License.
  */
 
-import { AuthService } from './modules/auth/auth.service';
 import { InjectableRxStompConfig } from '@stomp/ng2-stompjs';
+
+import { AuthService } from './modules/auth/auth.service';
 
 function getBrokerUrl(): string {
   const protocol = location.protocol === 'http:' ? 'ws://' : 'wss://';
@@ -46,5 +47,5 @@ export const myRxStompConfig: InjectableRxStompConfig = {
   // Will log diagnostics on console
   // It can be quite verbose, not recommended in production
   // Skip this key to stop logging to console
-  debug: (msg: string): void => {},
+  debug: (): void => {},
 };

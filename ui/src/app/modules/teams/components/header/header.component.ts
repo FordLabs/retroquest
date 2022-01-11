@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,22 +15,16 @@
  * limitations under the License.
  */
 
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
-import { EndRetroDialogComponent } from '../../../components/end-retro-dialog/end-retro-dialog.component';
-import { FeedbackService } from '../../services/feedback.service';
-import { Feedback } from '../../../domain/feedback';
-import { FeedbackDialogComponent } from '../../../components/feedback-dialog/feedback-dialog.component';
-import { SaveCheckerService } from '../../services/save-checker.service';
-import { Themes } from '../../../domain/Theme';
 import { HttpClient } from '@angular/common/http';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { saveAs } from 'file-saver';
+
+import { EndRetroDialogComponent } from '../../../components/end-retro-dialog/end-retro-dialog.component';
+import { FeedbackDialogComponent } from '../../../components/feedback-dialog/feedback-dialog.component';
+import { Feedback } from '../../../domain/feedback';
+import { Themes } from '../../../domain/Theme';
+import { FeedbackService } from '../../services/feedback.service';
+import { SaveCheckerService } from '../../services/save-checker.service';
 
 @Component({
   selector: 'rq-header',
@@ -86,10 +80,8 @@ export class HeaderComponent implements OnInit {
   }
 
   giveZipDownloadToUser() {
-    this.http
-      .get(this.getCsvUrl(), { responseType: 'blob' })
-      .subscribe((csvData) => {
-        saveAs(csvData, `${this.teamId}-board.csv`);
-      });
+    this.http.get(this.getCsvUrl(), { responseType: 'blob' }).subscribe((csvData) => {
+      saveAs(csvData, `${this.teamId}-board.csv`);
+    });
   }
 }

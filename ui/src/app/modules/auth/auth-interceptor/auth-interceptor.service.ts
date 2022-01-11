@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,27 +15,25 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { EMPTY, Observable, throwError } from 'rxjs';
-import { AuthService } from '../auth.service';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { EMPTY, Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+
+import { AuthService } from '../auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-
-  constructor(
-    private router: Router,
-  ) {}
+  constructor(private router: Router) {}
 
   static urlWhiteList: string[] = [
     '/api/team',
     '/api/team/login',
     'https://api.github.com/repos/FordLabs/retroquest/contributors',
     '/api/contributors',
-    '/api/captcha'
-  ]
+    '/api/captcha',
+  ];
 
   private handleAuthError(error: HttpErrorResponse): Observable<never> {
     if ((error.status === 401 || error.status === 403) && !error.url.includes('/api/team/login')) {
@@ -51,8 +49,8 @@ export class AuthInterceptor implements HttpInterceptor {
     if (AuthService.getToken() && !AuthInterceptor.urlWhiteList.includes(request.url)) {
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${AuthService.getToken()}`
-        }
+          Authorization: `Bearer ${AuthService.getToken()}`,
+        },
       });
     }
 

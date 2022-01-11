@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import {BoardsModule} from './boards.module';
+import { BoardsModule } from './boards.module';
 
 describe('BoardsModule', () => {
   let loginModule: BoardsModule;

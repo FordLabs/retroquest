@@ -16,17 +16,19 @@
  */
 
 import { EventEmitter, Injectable, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { Subscription } from 'rxjs';
+
+import { AuthService } from '../../auth/auth.service';
 import { DataService } from '../../data.service';
+import { Column } from '../../domain/column';
 import {
   WebsocketActionItemResponse,
   WebsocketColumnResponse,
-  WebsocketThoughtResponse
+  WebsocketThoughtResponse,
 } from '../../domain/websocket-response';
+
 import { SaveCheckerService } from './save-checker.service';
-import { Column } from '../../domain/column';
-import { AuthService } from '../../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -78,9 +80,7 @@ export class SubscriptionService implements OnDestroy {
     this.columnTitleSubscription = this.rxStompService
       .watch(`/topic/${this.dataService.team.id}/column-titles`)
       .subscribe((message) => {
-        eventEmitter.emit(
-          (JSON.parse(message.body) as WebsocketColumnResponse).payload
-        );
+        eventEmitter.emit((JSON.parse(message.body) as WebsocketColumnResponse).payload);
         this.saveCheckerService.updateTimestamp();
       });
   }
@@ -88,7 +88,7 @@ export class SubscriptionService implements OnDestroy {
   subscribeToEndRetro(eventEmitter: EventEmitter<void>) {
     this.endRetroSubscription = this.rxStompService
       .watch(`/topic/${this.dataService.team.id}/end-retro`)
-      .subscribe((message) => {
+      .subscribe(() => {
         eventEmitter.emit();
       });
   }
@@ -102,8 +102,7 @@ export class SubscriptionService implements OnDestroy {
    */
   private ensureRxStompClientHeadersContainAuthorization() {
     const headersSetCorrectly =
-      this.rxStompService.stompClient.connectHeaders['Authorization'] ===
-      AuthService.getToken();
+      this.rxStompService.stompClient.connectHeaders['Authorization'] === AuthService.getToken();
 
     if (!headersSetCorrectly) {
       this.rxStompService.stompClient.connectHeaders = {

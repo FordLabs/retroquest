@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,26 +15,22 @@
  * limitations under the License.
  */
 
-import { CreateComponent } from './create.page';
-import { AuthService } from '../../../auth/auth.service';
-import { of } from 'rxjs/internal/observable/of';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import {
-  createMockHttpClient,
-  createMockTeamService,
-  enterTextIntoFormElement,
-} from '../../../utils/testutils';
-import { TeamService } from '../../../teams/services/team.service';
 import { render } from '@testing-library/angular';
-import { BoardsModule } from '../../boards.module';
 import { RenderResult } from '@testing-library/angular/src/lib/models';
-import { TestModule } from '../../../test/test.module';
+import { of } from 'rxjs/internal/observable/of';
+
+import { AuthService } from '../../../auth/auth.service';
+import { TeamService } from '../../../teams/services/team.service';
 import { EmptyComponent } from '../../../test/empty.page';
+import { TestModule } from '../../../test/test.module';
+import { createMockHttpClient, createMockTeamService, enterTextIntoFormElement } from '../../../utils/testutils';
+import { BoardsModule } from '../../boards.module';
+
+import { CreateComponent } from './create.page';
 
 describe('CreateComponent', () => {
-  async function createComponent(
-    teamService: TeamService
-  ): Promise<RenderResult<CreateComponent>> {
+  async function createComponent(teamService: TeamService): Promise<RenderResult<CreateComponent>> {
     return render(CreateComponent, {
       routes: [
         {

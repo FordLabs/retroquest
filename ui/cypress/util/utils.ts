@@ -58,9 +58,7 @@ function createBoard(teamCredentials: TeamCredentials) {
   click('#createRetroButton');
 }
 
-export function createTeamIfNecessaryAndLogin(
-  teamCredentials: TeamCredentials
-) {
+export function createTeamIfNecessaryAndLogin(teamCredentials: TeamCredentials) {
   cy.request({
     url: `/api/team/login`,
     failOnStatusCode: false,

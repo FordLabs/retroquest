@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,9 +32,7 @@ describe('Conduct Retro', () => {
   }
 
   function enterActionItems(actionItem: string) {
-    cy.get(`rq-actions-column`)
-      .find('input[placeholder="Enter an Action Item"]')
-      .type(`${actionItem}{enter}`);
+    cy.get(`rq-actions-column`).find('input[placeholder="Enter an Action Item"]').type(`${actionItem}{enter}`);
   }
 
   function clearBoard() {
@@ -56,9 +54,7 @@ describe('Conduct Retro', () => {
   function deleteCard(card) {
     card.find(`div.container.delete-container`).click();
     card
-      .find(
-        `rq-deletion-overlay.ng-star-inserted div.button-container rq-button.delete-accept-button.primary`
-      )
+      .find(`rq-deletion-overlay.ng-star-inserted div.button-container rq-button.delete-accept-button.primary`)
       .click();
   }
 
@@ -86,14 +82,8 @@ describe('Conduct Retro', () => {
     });
   }
 
-  function confirmNumberOfThoughtsInColumn(
-    columnClass: string,
-    expectedCount: number
-  ): void {
-    cy.get(`rq-thoughts-column rq-task.${columnClass} textarea`).should(
-      'have.length',
-      expectedCount
-    );
+  function confirmNumberOfThoughtsInColumn(columnClass: string, expectedCount: number): void {
+    cy.get(`rq-thoughts-column rq-task.${columnClass} textarea`).should('have.length', expectedCount);
   }
 
   before(() => {
@@ -103,14 +93,8 @@ describe('Conduct Retro', () => {
 
     enterThought('happy', 'Good flow to our work this week');
     enterThought('happy', 'Switching to e2e was a good idea');
-    enterThought(
-      'happy',
-      `I'm a little uneasy about sharing this with the team`
-    );
-    enterThought(
-      'confused',
-      'How do I prevent end to end testing from being flaky?'
-    );
+    enterThought('happy', `I'm a little uneasy about sharing this with the team`);
+    enterThought('confused', 'How do I prevent end to end testing from being flaky?');
     enterThought('unhappy', 'I wish end to end tests were faster');
     enterActionItems('Increase Code Coverage');
     enterActionItems('Speed Up Tests');
@@ -120,10 +104,7 @@ describe('Conduct Retro', () => {
 
     thoughtDiscussed('happy', 'Switching to e2e was a good idea');
 
-    deleteThought(
-      'happy',
-      `I'm a little uneasy about sharing this with the team`
-    );
+    deleteThought('happy', `I'm a little uneasy about sharing this with the team`);
   });
 
   after(() => {
@@ -136,22 +117,15 @@ describe('Conduct Retro', () => {
     });
     it('The first thought has two stars', () => {
       cy.get(`rq-thoughts-column rq-task.happy`).each((input) => {
-        if (
-          'Good flow to our work this week' === input.find('textarea').val()
-        ) {
-          expect(input.find('div.star-count')[0].innerText.trim()).toEqual('2');
+        if ('Good flow to our work this week' === input.find('textarea').val()) {
+          expect(input.find('div.star-count')[0].innerText.trim()).to.equal('2');
         }
       });
     });
     it('The second thought was discussed', () => {
       cy.get(`rq-thoughts-column rq-task.happy`).each((input) => {
-        if (
-          'Switching to e2e was a good idea' === input.find('textarea').val()
-        ) {
-          expect(
-            input.find('div.complete-container div.checkbox.completed-task')
-              .length
-          ).toEqual(1);
+        if ('Switching to e2e was a good idea' === input.find('textarea').val()) {
+          expect(input.find('div.complete-container div.checkbox.completed-task').length).to.equal(1);
         }
       });
     });

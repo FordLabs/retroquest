@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,11 +15,13 @@
  * limitations under the License.
  */
 
-import { ColumnService } from './column.service';
 import { Observable } from 'rxjs';
+
+import { DataService } from '../../data.service';
 import { Column } from '../../domain/column';
 import { createMockHttpClient } from '../../utils/testutils';
-import { DataService } from '../../data.service';
+
+import { ColumnService } from './column.service';
 
 describe('ColumnService', () => {
   let service: ColumnService;
@@ -42,9 +44,7 @@ describe('ColumnService', () => {
     it('should request Columns from the columns api', () => {
       const returnObj = service.fetchColumns(teamId);
 
-      expect(mockHttpClient.get).toHaveBeenCalledWith(
-        `/api/team/${teamId}/columns`
-      );
+      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/columns`);
       expect(returnObj instanceof Observable).toBe(true);
     });
   });
@@ -61,15 +61,15 @@ describe('ColumnService', () => {
       };
 
       const expectedBody = {
-        title: 'title 2'
-      }
+        title: 'title 2',
+      };
 
       service.updateColumn(testColumn);
 
       expect(mockHttpClient.put).toHaveBeenCalledWith(
         `/api/team/${dataService.team.id}/column/${testColumn.id}/title`,
         JSON.stringify(expectedBody),
-        {headers: {'Content-Type': 'application/json'}}
+        { headers: { 'Content-Type': 'application/json' } }
       );
     });
   });

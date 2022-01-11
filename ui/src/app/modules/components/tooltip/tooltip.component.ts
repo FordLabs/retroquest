@@ -16,6 +16,7 @@
  */
 
 import { Component, Input } from '@angular/core';
+
 import { Themes } from '../../domain/Theme';
 
 @Component({

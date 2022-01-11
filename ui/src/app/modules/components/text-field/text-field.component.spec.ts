@@ -15,8 +15,9 @@
  * limitations under the License.
  */
 
-import { TextFieldComponent } from './text-field.component';
 import { createMockEventEmitter } from '../../utils/testutils';
+
+import { TextFieldComponent } from './text-field.component';
 
 describe('TextFieldComponent', () => {
   let component: TextFieldComponent;

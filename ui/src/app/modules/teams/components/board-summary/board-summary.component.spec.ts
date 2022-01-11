@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,29 +15,25 @@
  * limitations under the License.
  */
 
-import { BoardSummaryComponent } from './board-summary.component';
-import { Board, emptyBoardWithThought } from '../../../domain/board';
-import { BoardService } from '../../services/board.service';
 import { Subject } from 'rxjs';
+
+import { Board, emptyBoardWithThought } from '../../../domain/board';
 import { createMockEventEmitter } from '../../../utils/testutils';
+import { BoardService } from '../../services/board.service';
+
+import { BoardSummaryComponent } from './board-summary.component';
 
 describe('BoardSummaryComponent', () => {
   let deleteBoardSubject: Subject<any>;
   let mockBoardService: BoardService;
-  let mockEvent: Event;
   let router;
   let component: BoardSummaryComponent;
 
   beforeEach(() => {
     deleteBoardSubject = new Subject();
-    // @ts-ignore
     mockBoardService = {
       deleteBoard: jest.fn().mockReturnValue(deleteBoardSubject),
-    } as BoardService;
-    // @ts-ignore
-    mockEvent = {
-      preventDefault: jest.fn(),
-    } as Event;
+    } as unknown as BoardService;
     router = { navigateByUrl: jest.fn() };
 
     component = new BoardSummaryComponent(mockBoardService, router);
@@ -52,22 +48,16 @@ describe('BoardSummaryComponent', () => {
     it('should call deleteBoard in the boardService', () => {
       const boardToDelete: Board = emptyBoardWithThought();
       component.deleteBoard(boardToDelete);
-      expect(mockBoardService.deleteBoard).toHaveBeenCalledWith(
-        'team-id',
-        boardToDelete.id
-      );
+      expect(mockBoardService.deleteBoard).toHaveBeenCalledWith('team-id', boardToDelete.id);
     });
 
     it('should subscribe to the return value of deleteBoard', () => {
       const boardToDelete: Board = emptyBoardWithThought();
-      jest.spyOn(
-        mockBoardService.deleteBoard('team-id', boardToDelete.id),
-        'subscribe'
-      );
+      jest.spyOn(mockBoardService.deleteBoard('team-id', boardToDelete.id), 'subscribe');
       component.deleteBoard(boardToDelete);
-      expect(
-        mockBoardService.deleteBoard('team-id', boardToDelete.id).subscribe
-      ).toHaveBeenCalledWith(expect.any(Function));
+      expect(mockBoardService.deleteBoard('team-id', boardToDelete.id).subscribe).toHaveBeenCalledWith(
+        expect.any(Function)
+      );
     });
 
     it('should emit a boardDeleted event', () => {
@@ -75,9 +65,7 @@ describe('BoardSummaryComponent', () => {
       component.boardDeleted = createMockEventEmitter();
       component.deleteBoard(boardToDelete);
       deleteBoardSubject.next();
-      expect(component.boardDeleted.emit).toHaveBeenCalledWith(
-        boardToDelete.id
-      );
+      expect(component.boardDeleted.emit).toHaveBeenCalledWith(boardToDelete.id);
     });
   });
 
@@ -94,9 +82,7 @@ describe('BoardSummaryComponent', () => {
     });
 
     it('should navigate to the specified board', () => {
-      expect(router.navigateByUrl).toHaveBeenCalledWith(
-        `/team/${fakeTeamId}/archives/${fakeBoardId}`
-      );
+      expect(router.navigateByUrl).toHaveBeenCalledWith(`/team/${fakeTeamId}/archives/${fakeBoardId}`);
     });
   });
 });

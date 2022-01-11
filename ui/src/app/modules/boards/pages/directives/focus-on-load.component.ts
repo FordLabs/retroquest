@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,20 +15,17 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Directive, ElementRef} from '@angular/core';
+import { AfterViewInit, Directive, ElementRef } from '@angular/core';
 
 @Directive({
-  selector: '[rqFocusOnLoad]'
+  selector: '[rqFocusOnLoad]',
 })
 export class FocusOnLoadDirective implements AfterViewInit {
-
-  constructor(private elementRef: ElementRef) {
-  }
+  constructor(private elementRef: ElementRef) {}
 
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.elementRef.nativeElement.focus();
     }, 0);
-
   }
 }

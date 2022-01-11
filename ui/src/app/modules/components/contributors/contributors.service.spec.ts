@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +15,12 @@
  * limitations under the License.
  */
 
-import { ContributorsService } from './contributors.service';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
+
 import { createMockHttpClient } from '../../utils/testutils';
+
+import { ContributorsService } from './contributors.service';
 
 describe('ContributorsService', () => {
   let service: ContributorsService;
@@ -44,13 +46,9 @@ describe('ContributorsService', () => {
     });
     it('should prepend data:image/png;base64 to all image data', () => {
       service.getContributors().subscribe((result) => {
-        expect(
-          result[0].image.startsWith('data:image/png;base64,')
-        ).toBeTruthy();
+        expect(result[0].image.startsWith('data:image/png;base64,')).toBeTruthy();
       });
-      mockHttpClientGetSubject.next([
-        { accountUrl: 'accountUrl', image: 'imageData' },
-      ]);
+      mockHttpClientGetSubject.next([{ accountUrl: 'accountUrl', image: 'imageData' }]);
     });
   });
 });

@@ -15,21 +15,15 @@
  * limitations under the License.
  */
 
-import {
-  AfterContentChecked,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChild,
-} from '@angular/core';
-import { emptyThought, Thought } from '../../domain/thought';
-import { TaskComponent } from '../task/task.component';
-import { Themes } from '../../domain/Theme';
+import { AfterContentChecked, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import moment from 'moment';
+
 import { ActionItem, emptyActionItem } from '../../domain/action-item';
+import { Themes } from '../../domain/Theme';
+import { emptyThought, Thought } from '../../domain/thought';
 import { ActionItemService } from '../../teams/services/action.service';
 import { ActionItemTaskComponent } from '../action-item-task/action-item-task.component';
-import moment from 'moment';
+import { TaskComponent } from '../task/task.component';
 
 const ESC_KEY = 27;
 
@@ -67,7 +61,7 @@ export class TaskDialogComponent implements AfterContentChecked {
 
   assignedActionItem: ActionItem = emptyActionItem();
   actionItemIsVisible = false;
-  myWindow: object = window;
+  myWindow: Window = window;
 
   constructor(private actionItemService: ActionItemService) {}
 
@@ -134,7 +128,6 @@ export class TaskDialogComponent implements AfterContentChecked {
 
   private triggerAnimation() {
     this.assignedActionItem.state = undefined;
-    // @ts-ignore
     this.myWindow.setTimeout(() => {
       this.assignedActionItem.state = 'active';
       this.actionItemTaskComponent.focusInput();

@@ -15,29 +15,25 @@
  * limitations under the License.
  */
 
-import { render, RenderResult } from '@testing-library/angular';
-import { TeamPageComponent } from './team.page';
-import {
-  createMockHttpClient,
-  createMockRxStompService,
-  createMockTeamService,
-} from '../../../utils/testutils';
-import { TeamsModule } from '../../teams.module';
-import { TeamService } from '../../services/team.service';
-import { DataService } from '../../../data.service';
-import { SaveCheckerService } from '../../services/save-checker.service';
-import { BoardService } from '../../services/board.service';
-import { of } from 'rxjs/internal/observable/of';
-import { Board } from '../../../domain/board';
-import { ColumnAggregationService } from '../../services/column-aggregation.service';
-import { ActionItemService } from '../../services/action.service';
 import { HttpClient } from '@angular/common/http';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { render, RenderResult } from '@testing-library/angular';
+import { of } from 'rxjs/internal/observable/of';
+
+import { DataService } from '../../../data.service';
+import { createMockHttpClient, createMockRxStompService, createMockTeamService } from '../../../utils/testutils';
+import { ActionItemService } from '../../services/action.service';
+import { BoardService } from '../../services/board.service';
+import { ColumnAggregationService } from '../../services/column-aggregation.service';
+import { SaveCheckerService } from '../../services/save-checker.service';
+import { TeamService } from '../../services/team.service';
+import { TeamsModule } from '../../teams.module';
+
+import { TeamPageComponent } from './team.page';
 
 describe('Setting up Team Board', () => {
   let mockTeamService;
   let dataService: DataService;
-  let boardService: BoardService;
   let columnAggregationService: ColumnAggregationService;
   let actionItemService: ActionItemService;
 
@@ -91,10 +87,6 @@ describe('Setting up Team Board', () => {
     dataService.team.name = teamName;
 
     mockTeamService = createMockTeamService();
-
-    boardService = {
-      createBoard: jest.fn().mockReturnValue(of(new Board())),
-    } as unknown as BoardService;
 
     actionItemService = {
       archiveActionItems: jest.fn(),

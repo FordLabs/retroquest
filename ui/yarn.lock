@@ -6758,6 +6758,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-prettier@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "eslint-plugin-prettier@npm:4.0.0"
+  dependencies:
+    prettier-linter-helpers: ^1.0.0
+  peerDependencies:
+    eslint: ">=7.28.0"
+    prettier: ">=2.0.0"
+  peerDependenciesMeta:
+    eslint-config-prettier:
+      optional: true
+  checksum: 03d69177a3c21fa2229c7e427ce604429f0b20ab7f411e2e824912f572a207c7f5a41fd1f0a95b9b8afe121e291c1b1f1dc1d44c7aad4b0837487f9c19f5210d
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-simple-import-sort@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "eslint-plugin-simple-import-sort@npm:7.0.0"
+  peerDependencies:
+    eslint: ">=5.0.0"
+  checksum: 6aacb7179c213cd2081950630368d1f3b1dcb4f5674d8b989fe7839e7b317ee521d74761676e8b1a7cab49f20405dbcc9aac05358ae804e6bcba6cbf1daccb3d
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-unused-imports@npm:^1.1.1":
   version: 1.1.2
   resolution: "eslint-plugin-unused-imports@npm:1.1.2"
@@ -13005,6 +13029,8 @@ __metadata:
     eslint-plugin-import: 2.25.2
     eslint-plugin-jsdoc: 30.7.6
     eslint-plugin-prefer-arrow: 1.2.2
+    eslint-plugin-prettier: ^4.0.0
+    eslint-plugin-simple-import-sort: ^7.0.0
     eslint-plugin-unused-imports: ^1.1.1
     file-saver: ^2.0.0
     hammerjs: ^2.0.8

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,22 +15,17 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpResponse} from '@angular/common/http';
-import {Observable} from 'rxjs/index';
-import {Feedback} from '../../domain/feedback';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/index';
+
+import { Feedback } from '../../domain/feedback';
 
 @Injectable()
 export class FeedbackService {
-
-  constructor(
-    private http: HttpClient
-  ) {
-  }
+  constructor(private http: HttpClient) {}
 
   addFeedback(feedback: Feedback): Observable<HttpResponse<Object>> {
-    return this.http.post(
-      '/api/feedback/', feedback, {observe: 'response'},
-    );
+    return this.http.post('/api/feedback/', feedback, { observe: 'response' });
   }
 }

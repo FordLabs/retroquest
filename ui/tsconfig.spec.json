@@ -7,7 +7,7 @@
     "emitDecoratorMetadata": true
   },
   "files": [
-    "src/test.ts",
+    "src/setupTests.ts",
     "src/polyfills.ts"
   ],
   "include": [

@@ -31,7 +31,7 @@ describe('StyleGuidePageComponent', () => {
   describe('scrollToId', () => {
     it('should be able to scroll to any page id if it exists on the page', () => {
       const fakeFoundElement = {
-        scrollIntoView: jest.fn()
+        scrollIntoView: jest.fn(),
       } as unknown as HTMLElement;
       const spyQuerySelector = jest.spyOn(document, 'querySelector');
       spyQuerySelector.mockImplementationOnce(() => fakeFoundElement);

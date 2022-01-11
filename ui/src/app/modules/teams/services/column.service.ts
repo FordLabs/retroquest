@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,31 +15,28 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { Column } from '../../domain/column';
 import { DataService } from '../../data.service';
+import { Column } from '../../domain/column';
 
 @Injectable()
 export class ColumnService {
-  constructor(
-    private http: HttpClient,
-    private dataService: DataService
-  ) {}
+  constructor(private http: HttpClient, private dataService: DataService) {}
 
   fetchColumns(teamId): Observable<Array<Column>> {
     return this.http.get<Array<Column>>(`/api/team/${teamId}/columns`);
   }
 
   updateColumn(column: Column): void {
-    this.http.put(`/api/team/${this.dataService.team.id}/column/${column.id}/title`,
-      JSON.stringify({ title: column.title }),
-      {
+    this.http
+      .put(`/api/team/${this.dataService.team.id}/column/${column.id}/title`, JSON.stringify({ title: column.title }), {
         headers: {
-          'Content-Type': 'application/json'
-        }
-      }).subscribe();
+          'Content-Type': 'application/json',
+        },
+      })
+      .subscribe();
   }
 }

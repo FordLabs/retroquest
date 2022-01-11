@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,13 +15,11 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'rq-brand-footer',
   templateUrl: './brand-footer.component.html',
-  styleUrls: ['./brand-footer.component.scss']
+  styleUrls: ['./brand-footer.component.scss'],
 })
-export class BrandFooterComponent {
-
-}
+export class BrandFooterComponent {}

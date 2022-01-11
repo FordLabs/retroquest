@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,17 +15,16 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-
   static tokenKey = 'token';
   static tokenDuration = 1000 * 60 * 60 * 24 * 2;
 
-  static setToken (token): void {
+  static setToken(token): void {
     const expiresDate = new Date(Date.now() + AuthService.tokenDuration);
     const expires = expiresDate.toUTCString();
     document.cookie = `${AuthService.tokenKey}=${token};expires=${expires};`;
@@ -45,5 +44,4 @@ export class AuthService {
   static clearToken(): void {
     document.cookie = `${AuthService.tokenKey}=;expires=-99999999;`;
   }
-
 }

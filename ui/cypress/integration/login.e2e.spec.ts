@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,18 +15,14 @@
  * limitations under the License.
  */
 
-import {
-  createTeamIfNecessaryAndLogin, login,
-  teamBoardUrl,
-  TeamCredentials
-} from '../util/utils';
+import { createTeamIfNecessaryAndLogin, login, teamBoardUrl, TeamCredentials } from '../util/utils';
 
 describe('Logging In', () => {
   const teamCredentials = {
     teamName: 'Test Login',
     teamId: 'test-login',
     password: 'Login1234',
-    jwt: ''
+    jwt: '',
   } as TeamCredentials;
 
   beforeEach(() => {

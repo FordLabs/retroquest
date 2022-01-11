@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,11 +15,13 @@
  * limitations under the License.
  */
 
-import { ActionsRadiatorViewComponent } from './actions-radiator-view.component';
-import { ActionItemService } from '../../teams/services/action.service';
-import { of } from 'rxjs';
-import { DataService } from '../../data.service';
 import { EventEmitter } from '@angular/core';
+import { of } from 'rxjs';
+
+import { DataService } from '../../data.service';
+import { ActionItemService } from '../../teams/services/action.service';
+
+import { ActionsRadiatorViewComponent } from './actions-radiator-view.component';
 
 describe('ActionsRadiatorViewComponent', () => {
   let component: ActionsRadiatorViewComponent;
@@ -27,17 +29,13 @@ describe('ActionsRadiatorViewComponent', () => {
   let dataService: DataService;
 
   beforeEach(() => {
-    // @ts-ignore
     mockActionItemService = {
       fetchActionItems: jest.fn().mockReturnValue(of([])),
-    } as ActionItemService;
+    } as unknown as ActionItemService;
 
     dataService = new DataService();
 
-    component = new ActionsRadiatorViewComponent(
-      mockActionItemService,
-      dataService
-    );
+    component = new ActionsRadiatorViewComponent(mockActionItemService, dataService);
   });
 
   it('should create', () => {
@@ -60,10 +58,9 @@ describe('ActionsRadiatorViewComponent', () => {
 
   describe('hide', () => {
     beforeEach(() => {
-      // @ts-ignore
       component.visibilityChanged = {
         emit: jest.fn(),
-      } as EventEmitter<boolean>;
+      } as unknown as EventEmitter<boolean>;
 
       component.hide();
     });

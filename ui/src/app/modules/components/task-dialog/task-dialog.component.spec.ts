@@ -15,27 +15,28 @@
  * limitations under the License.
  */
 
-import { TaskDialogComponent } from './task-dialog.component';
-import { emptyActionItem } from '../../domain/action-item';
-import { ActionItemService } from '../../teams/services/action.service';
-import moment from 'moment';
-import { createMockEventEmitter } from '../../utils/testutils';
 import MockDate from 'mockdate';
-import { ActionItemTaskComponent } from '../action-item-task/action-item-task.component';
+import moment from 'moment';
+
+import { emptyActionItem } from '../../domain/action-item';
 import { emptyThought } from '../../domain/thought';
+import { ActionItemService } from '../../teams/services/action.service';
+import { createMockEventEmitter } from '../../utils/testutils';
+import { ActionItemTaskComponent } from '../action-item-task/action-item-task.component';
+
+import { TaskDialogComponent } from './task-dialog.component';
 
 describe('TaskDialogComponent', () => {
   let component: TaskDialogComponent;
   let mockActionItemService: ActionItemService;
-  const myWindow = {
+  const myWindow: Window = {
     setTimeout: (fn: Function) => fn(),
-  };
+  } as unknown as Window;
 
   beforeEach(() => {
-    // @ts-ignore
     mockActionItemService = {
       addActionItem: jest.fn(),
-    } as ActionItemService;
+    } as unknown as ActionItemService;
 
     component = new TaskDialogComponent(mockActionItemService);
     component.myWindow = myWindow;
@@ -153,10 +154,9 @@ describe('TaskDialogComponent', () => {
       let mockActionItemTaskComponent;
 
       beforeEach(() => {
-        // @ts-ignore
         mockActionItemTaskComponent = {
           focusInput: jest.fn(),
-        } as ActionItemTaskComponent;
+        } as unknown as ActionItemTaskComponent;
         component.actionItemTaskComponent = mockActionItemTaskComponent;
       });
 
@@ -204,9 +204,7 @@ describe('TaskDialogComponent', () => {
         expectedActionItem.task = fakeTaskMessage;
         expectedActionItem.teamId = '1';
         expectedActionItem.dateCreated = fakeDate.format();
-        expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(
-          expectedActionItem
-        );
+        expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(expectedActionItem);
       });
     });
   });

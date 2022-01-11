@@ -16,8 +16,9 @@
  */
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
+
+import { AuthService } from '../../auth/auth.service';
 import { Themes, themeToString } from '../../domain/Theme';
 
 @Component({

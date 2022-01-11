@@ -16,6 +16,7 @@
  */
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+
 import { Themes } from '../../domain/Theme';
 
 @Component({

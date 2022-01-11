@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,12 +15,13 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import moment from 'moment';
 import { Observable } from 'rxjs';
+
 import { Board } from '../../domain/board';
 import { Thought } from '../../domain/thought';
-import moment from 'moment';
 
 @Injectable({
   providedIn: 'root',
@@ -34,24 +35,20 @@ export class BoardService {
     };
 
     return new Observable((subscriber) => {
-      this.http
-        .get(`/api/team/${teamId}/boards`, { params })
-        .subscribe((data: Array<Object>) => {
-          data.map((boardObject) => {
-            boardObject['dateCreated'] = moment(boardObject['dateCreated']);
-          });
-          subscriber.next(data as Array<Board>);
+      this.http.get(`/api/team/${teamId}/boards`, { params }).subscribe((data: Array<Object>) => {
+        data.map((boardObject) => {
+          boardObject['dateCreated'] = moment(boardObject['dateCreated']);
         });
+        subscriber.next(data as Array<Board>);
+      });
     });
   }
 
   createBoard(teamId: string, thoughts: Array<Thought>): Observable<Board> {
     return new Observable((subscriber) => {
-      this.http
-        .post(`/api/team/${teamId}/board`, { teamId, thoughts })
-        .subscribe((data) => {
-          subscriber.next(data as Board);
-        });
+      this.http.post(`/api/team/${teamId}/board`, { teamId, thoughts }).subscribe((data) => {
+        subscriber.next(data as Board);
+      });
     });
   }
 

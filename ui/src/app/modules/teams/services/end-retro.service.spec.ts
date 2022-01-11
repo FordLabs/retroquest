@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +15,11 @@
  * limitations under the License.
  */
 
-import { createMockRxStompService } from '../../utils/testutils';
 import { RxStompService } from '@stomp/ng2-stompjs';
+
 import { DataService } from '../../data.service';
+import { createMockRxStompService } from '../../utils/testutils';
+
 import { EndRetroService } from './end-retro.service';
 
 describe('ThoughtService', () => {

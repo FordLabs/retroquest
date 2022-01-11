@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,7 @@
  */
 
 import { Component, Input } from '@angular/core';
+
 import { Themes } from '../../domain/Theme';
 
 @Component({
@@ -40,10 +41,7 @@ export class FloatingCharacterCountdownComponent {
   }
 
   public charactersRemainingAreAboutToRunOut(): boolean {
-    return (
-      this.charactersRemaining() < this.charsAreRunningOutThreshold &&
-      !this.charactersRemainingHaveRunOut()
-    );
+    return this.charactersRemaining() < this.charsAreRunningOutThreshold && !this.charactersRemainingHaveRunOut();
   }
 
   public charactersRemainingHaveRunOut(): boolean {

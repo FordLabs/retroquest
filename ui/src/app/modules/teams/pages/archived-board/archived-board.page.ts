@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,18 +17,17 @@
 
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Thought } from '../../../domain/thought';
-
-import { ThoughtService } from '../../services/thought.service';
-import { TeamService } from '../../services/team.service';
-import { ColumnService } from '../../services/column.service';
 
 import { ActionsRadiatorViewComponent } from '../../../components/actions-radiator-view/actions-radiator-view.component';
-import { BoardService } from '../../services/board.service';
-import { Themes } from '../../../domain/Theme';
-import { ColumnResponse } from '../../../domain/column-response';
-import { ColumnAggregationService } from '../../services/column-aggregation.service';
 import { DataService } from '../../../data.service';
+import { ColumnResponse } from '../../../domain/column-response';
+import { Themes } from '../../../domain/Theme';
+import { Thought } from '../../../domain/thought';
+import { BoardService } from '../../services/board.service';
+import { ColumnService } from '../../services/column.service';
+import { ColumnAggregationService } from '../../services/column-aggregation.service';
+import { TeamService } from '../../services/team.service';
+import { ThoughtService } from '../../services/thought.service';
 
 @Component({
   selector: 'rq-archived-board',
@@ -74,29 +73,23 @@ export class ArchivedBoardPageComponent implements OnInit {
     this.activatedRoute.params.subscribe((params) => {
       this.boardId = params.boardId;
 
-      this.columnAggregationService
-        .getColumns(this.teamId)
-        .subscribe((response) => {
-          response.columns.map((column) => {
-            column.items.active = [];
-            column.items.completed = [];
-          });
-          this.columnAggregations = response.columns;
-          this.getThoughts();
+      this.columnAggregationService.getColumns(this.teamId).subscribe((response) => {
+        response.columns.map((column) => {
+          column.items.active = [];
+          column.items.completed = [];
         });
+        this.columnAggregations = response.columns;
+        this.getThoughts();
+      });
     });
   }
 
   private getThoughts(): void {
-    this.boardService
-      .fetchThoughtsForBoard(this.teamId, this.boardId)
-      .subscribe((thoughts: Array<Thought>) => {
-        this.columnAggregations.map((aggregation) => {
-          aggregation.items.completed = thoughts.filter(
-            (thought) => thought.topic === aggregation.topic
-          );
-        });
+    this.boardService.fetchThoughtsForBoard(this.teamId, this.boardId).subscribe((thoughts: Array<Thought>) => {
+      this.columnAggregations.map((aggregation) => {
+        aggregation.items.completed = thoughts.filter((thought) => thought.topic === aggregation.topic);
       });
+    });
   }
 
   public isSelectedIndex(index: number): boolean {

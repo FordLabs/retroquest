@@ -15,38 +15,25 @@
  * limitations under the License.
  */
 
-import { ThoughtsColumnComponent } from './thoughts-column.component';
-import { Thought } from '../../../domain/thought';
 import { Observable } from 'rxjs';
+
+import { Thought } from '../../../domain/thought';
 import { WebsocketThoughtResponse } from '../../../domain/websocket-response';
+
+import { ThoughtsColumnComponent } from './thoughts-column.component';
 
 describe('ThoughtColumnComponent', () => {
   let component: ThoughtsColumnComponent;
   let mockThoughtService;
 
-  let testThought;
   const defaultTopic = 'happy';
   const defaultTeamId = 'teamId';
   const otherTopic = 'otherTopic';
 
   const undiscussedThought = createThought(1, 'Undiscussed thought');
-  const discussedThought = createThought(
-    2,
-    'discussed thought',
-    defaultTopic,
-    true
-  );
-  const undiscussedThoughtInOtherColumn = createThought(
-    3,
-    'Thought in other column',
-    otherTopic
-  );
-  const discussedThoughtInOtherColumn = createThought(
-    4,
-    'Thought in other column',
-    otherTopic,
-    true
-  );
+  const discussedThought = createThought(2, 'discussed thought', defaultTopic, true);
+  const undiscussedThoughtInOtherColumn = createThought(3, 'Thought in other column', otherTopic);
+  const discussedThoughtInOtherColumn = createThought(4, 'Thought in other column', otherTopic, true);
 
   beforeEach(() => {
     mockThoughtService = {
@@ -58,8 +45,6 @@ describe('ThoughtColumnComponent', () => {
 
     component = new ThoughtsColumnComponent(mockThoughtService);
     component.thoughtAggregation.topic = defaultTopic;
-
-    testThought = createThought(1, 'Test Thought');
   });
 
   describe('process thought change', () => {
@@ -73,7 +58,7 @@ describe('ThoughtColumnComponent', () => {
     describe('Thought deleted', () => {
       const message: WebsocketThoughtResponse = {
         type: 'delete',
-        payload: createThought(14, "Thought to delete"),
+        payload: createThought(14, 'Thought to delete'),
       };
 
       beforeEach(() => {
@@ -124,11 +109,7 @@ describe('ThoughtColumnComponent', () => {
 
     describe('Thought moved', () => {
       describe('thought moved away from column', () => {
-        const movedThought = createThought(
-          12,
-          'Moving thought to new column',
-          'otherTopic'
-        );
+        const movedThought = createThought(12, 'Moving thought to new column', 'otherTopic');
         movedThought.columnTitle.topic = defaultTopic;
 
         const message: WebsocketThoughtResponse = {
@@ -170,11 +151,7 @@ describe('ThoughtColumnComponent', () => {
       });
 
       describe('thought moved from a different column to yet another different column', () => {
-        const movedThought = createThought(
-          12,
-          'Moving thought to this column',
-          'alternateTopic1'
-        );
+        const movedThought = createThought(12, 'Moving thought to this column', 'alternateTopic1');
         movedThought.columnTitle.topic = 'alternateTopic2';
 
         const message: WebsocketThoughtResponse = {
@@ -247,37 +224,22 @@ describe('ThoughtColumnComponent', () => {
       };
     });
 
-    function verifyThoughtUpdate(
-      newThought: Thought,
-      activeContains: boolean,
-      completedContains: boolean
-    ) {
+    function verifyThoughtUpdate(newThought: Thought, activeContains: boolean, completedContains: boolean) {
       function verifyContains(arr: Array<object>, arrContains: boolean) {
         if (arrContains) {
-          expect(
-            arr.findIndex((thought) => thought === newThought)
-          ).toBeGreaterThan(-1);
+          expect(arr.findIndex((thought) => thought === newThought)).toBeGreaterThan(-1);
         } else {
-          expect(arr.findIndex((thought) => thought === newThought)).toEqual(
-            -1
-          );
+          expect(arr.findIndex((thought) => thought === newThought)).toEqual(-1);
         }
       }
 
       const activeLength = activeContains ? 2 : 1;
       const completedLength = completedContains ? 2 : 1;
 
-      expect(component.thoughtAggregation.items.active.length).toEqual(
-        activeLength
-      );
-      expect(component.thoughtAggregation.items.completed.length).toEqual(
-        completedLength
-      );
+      expect(component.thoughtAggregation.items.active.length).toEqual(activeLength);
+      expect(component.thoughtAggregation.items.completed.length).toEqual(completedLength);
       verifyContains(component.thoughtAggregation.items.active, activeContains);
-      verifyContains(
-        component.thoughtAggregation.items.completed,
-        completedContains
-      );
+      verifyContains(component.thoughtAggregation.items.completed, completedContains);
     }
 
     it('Properly adds a new thought', () => {

@@ -15,15 +15,17 @@
  * limitations under the License.
  */
 
-import { SubscriptionService } from './subscription.service';
-import { createMockRxStompService, createMockSubscription } from '../../utils/testutils';
-import { Subscription } from 'rxjs';
-import { DataService } from '../../data.service';
-import { mock } from 'ts-mockito';
-import { SaveCheckerService } from './save-checker.service';
 import { EventEmitter } from '@angular/core';
-import { WebsocketActionItemResponse, WebsocketThoughtResponse } from '../../domain/websocket-response';
+import { Subscription } from 'rxjs';
+import { mock } from 'ts-mockito';
+
+import { DataService } from '../../data.service';
 import { Column } from '../../domain/column';
+import { WebsocketActionItemResponse, WebsocketThoughtResponse } from '../../domain/websocket-response';
+import { createMockRxStompService, createMockSubscription } from '../../utils/testutils';
+
+import { SaveCheckerService } from './save-checker.service';
+import { SubscriptionService } from './subscription.service';
 
 describe('destroying service', () => {
   const dataService = new DataService();
@@ -37,11 +39,7 @@ describe('destroying service', () => {
   describe('closing subscription', () => {
     let service: SubscriptionService;
     beforeEach(() => {
-      service = new SubscriptionService(
-        dataService,
-        saveCheckerService,
-        createMockRxStompService()
-      );
+      service = new SubscriptionService(dataService, saveCheckerService, createMockRxStompService());
       service.thoughtSubscription = createMockSubscription();
       service.actionItemSubscription = createMockSubscription();
       service.columnTitleSubscription = createMockSubscription();
@@ -101,39 +99,27 @@ describe('destroying service', () => {
     const spiedStompService = createMockRxStompService();
 
     beforeEach(() => {
-      service = new SubscriptionService(
-        dataService,
-        saveCheckerService,
-        spiedStompService
-      );
+      service = new SubscriptionService(dataService, saveCheckerService, spiedStompService);
     });
 
     it('Subscribes to thought subscription', () => {
       service.subscribeToThoughts(new EventEmitter<WebsocketThoughtResponse>());
-      expect(spiedStompService.watch).toHaveBeenCalledWith(
-        `/topic/${dataService.team.id}/thoughts`
-      );
+      expect(spiedStompService.watch).toHaveBeenCalledWith(`/topic/${dataService.team.id}/thoughts`);
     });
 
     it('Subscribes to action item subscription', () => {
       service.subscribeToActionItems(new EventEmitter<WebsocketActionItemResponse>());
-      expect(spiedStompService.watch).toHaveBeenCalledWith(
-        `/topic/${dataService.team.id}/action-items`
-      );
+      expect(spiedStompService.watch).toHaveBeenCalledWith(`/topic/${dataService.team.id}/action-items`);
     });
 
     it('Subscribes to column titles subscription', () => {
       service.subscribeToColumnTitles(new EventEmitter<Column>());
-      expect(spiedStompService.watch).toHaveBeenCalledWith(
-        `/topic/${dataService.team.id}/column-titles`
-      );
+      expect(spiedStompService.watch).toHaveBeenCalledWith(`/topic/${dataService.team.id}/column-titles`);
     });
 
     it('Subscribes to action item subscription', () => {
       service.subscribeToEndRetro(new EventEmitter<void>());
-      expect(spiedStompService.watch).toHaveBeenCalledWith(
-        `/topic/${dataService.team.id}/end-retro`
-      );
+      expect(spiedStompService.watch).toHaveBeenCalledWith(`/topic/${dataService.team.id}/end-retro`);
     });
   });
 });

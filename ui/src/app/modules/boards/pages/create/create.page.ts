@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,17 +15,17 @@
  * limitations under the License.
  */
 
+import { HttpResponse } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { RecaptchaComponent } from 'ng-recaptcha';
+import { EMPTY } from 'rxjs';
+import { Observable } from 'rxjs/internal/Observable';
+import { of } from 'rxjs/internal/observable/of';
+import { concatMap, map } from 'rxjs/operators';
 
 import { AuthService } from '../../../auth/auth.service';
 import { TeamService } from '../../../teams/services/team.service';
-import { RecaptchaComponent } from 'ng-recaptcha';
-import { concatMap, map } from 'rxjs/operators';
-import { EMPTY } from 'rxjs';
-import { Observable } from 'rxjs/internal/Observable';
-import { HttpResponse } from '@angular/common/http';
-import { of } from 'rxjs/internal/observable/of';
 
 @Component({
   selector: 'rq-create',
@@ -51,9 +51,7 @@ export class CreateComponent {
       .isCaptchaEnabled()
       .pipe(
         map((response) => JSON.parse(response.body).captchaEnabled),
-        concatMap((captchaEnabled) =>
-          this.createTeamOrExecuteCaptcha(captchaEnabled)
-        )
+        concatMap((captchaEnabled) => this.createTeamOrExecuteCaptcha(captchaEnabled))
       )
       .subscribe(
         (response) => this.handleResponse(response),
@@ -61,9 +59,7 @@ export class CreateComponent {
       );
   }
 
-  private createTeamOrExecuteCaptcha(
-    captchaEnabled
-  ): Observable<HttpResponse<Object>> {
+  private createTeamOrExecuteCaptcha(captchaEnabled): Observable<HttpResponse<Object>> {
     if (captchaEnabled) {
       this.recaptchaComponent.reset();
       this.recaptchaComponent.execute();
@@ -73,12 +69,10 @@ export class CreateComponent {
   }
 
   create(captchaResponse: string = null): void {
-    this.teamService
-      .create(this.teamName, this.password, captchaResponse)
-      .subscribe(
-        (response) => this.handleResponse(response),
-        (error) => this.handleError(error)
-      );
+    this.teamService.create(this.teamName, this.password, captchaResponse).subscribe(
+      (response) => this.handleResponse(response),
+      (error) => this.handleError(error)
+    );
   }
 
   private validateInput(): boolean {
@@ -109,9 +103,7 @@ export class CreateComponent {
 
   private handleError(error) {
     error.error = JSON.parse(error.error);
-    this.errorMessage = error.error.message
-      ? error.error.message
-      : `${error.status} ${error.error}`;
+    this.errorMessage = error.error.message ? error.error.message : `${error.status} ${error.error}`;
     console.error('A registration error occurred: ', this.errorMessage);
     return of(this.errorMessage);
   }

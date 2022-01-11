@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,13 +15,15 @@
  * limitations under the License.
  */
 
-import { Observable } from 'rxjs/internal/Observable';
 import { ActivatedRouteSnapshot } from '@angular/router';
+import { Observable } from 'rxjs/internal/Observable';
 import { Subject } from 'rxjs/internal/Subject';
-import { AuthGuard } from './auth.guard';
-import { AuthService } from '../auth.service';
-import { createMockRouter } from '../../utils/testutils';
+
 import { TeamService } from '../../teams/services/team.service';
+import { createMockRouter } from '../../utils/testutils';
+import { AuthService } from '../auth.service';
+
+import { AuthGuard } from './auth.guard';
 
 describe('AuthGuard', () => {
   let guard: AuthGuard;
@@ -30,10 +32,9 @@ describe('AuthGuard', () => {
 
   beforeEach(() => {
     mockRouter = createMockRouter();
-    // @ts-ignore
     mockTeamService = {
       validateTeamId: jest.fn().mockReturnValue(new Subject()),
-    } as TeamService;
+    } as unknown as TeamService;
     guard = new AuthGuard(mockTeamService, mockRouter);
   });
 
@@ -45,14 +46,8 @@ describe('AuthGuard', () => {
     const mockNextRouteSnapshot = new ActivatedRouteSnapshot();
     const mockState = { url: '/team/incorrect-team' };
 
-    (guard.canActivate(
-      mockNextRouteSnapshot,
-      mockState as any
-    ) as Observable<boolean>).subscribe(() => {
-      expect(mockRouter.navigate).toHaveBeenCalledWith([
-        'login',
-        'incorrect-team',
-      ]);
+    (guard.canActivate(mockNextRouteSnapshot, mockState as any) as Observable<boolean>).subscribe(() => {
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['login', 'incorrect-team']);
     });
     mockTeamService.validateTeamId().error();
   });
@@ -62,10 +57,7 @@ describe('AuthGuard', () => {
     const mockNextRouteSnapshot = new ActivatedRouteSnapshot();
     const mockState = { url: '/team/incorrect-team' };
 
-    (guard.canActivate(
-      mockNextRouteSnapshot,
-      mockState as any
-    ) as Observable<boolean>).subscribe(() => {
+    (guard.canActivate(mockNextRouteSnapshot, mockState as any) as Observable<boolean>).subscribe(() => {
       expect(mockRouter.navigate).not.toHaveBeenCalled();
     });
     mockTeamService.validateTeamId().next();
@@ -75,14 +67,8 @@ describe('AuthGuard', () => {
     const mockNextRouteSnapshot = new ActivatedRouteSnapshot();
     const mockState = { url: '/team/incorrect-team' };
 
-    (guard.canActivate(
-      mockNextRouteSnapshot,
-      mockState as any
-    ) as Observable<boolean>).subscribe(() => {
-      expect(mockRouter.navigate).toHaveBeenCalledWith([
-        'login',
-        'incorrect-team',
-      ]);
+    (guard.canActivate(mockNextRouteSnapshot, mockState as any) as Observable<boolean>).subscribe(() => {
+      expect(mockRouter.navigate).toHaveBeenCalledWith(['login', 'incorrect-team']);
     });
     mockTeamService.validateTeamId().next();
   });

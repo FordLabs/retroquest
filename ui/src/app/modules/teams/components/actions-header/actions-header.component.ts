@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,10 +16,11 @@
  */
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ActionItem } from '../../../domain/action-item';
-import { ActionItemService } from '../../services/action.service';
 import moment from 'moment';
+
+import { ActionItem } from '../../../domain/action-item';
 import { Themes } from '../../../domain/Theme';
+import { ActionItemService } from '../../services/action.service';
 
 const ASSIGNEE_PARSE_SYMBOL = '@';
 const ASSIGNEE_PARSE_REGEX = /(\@[a-zA-Z0-9]+\b)/g;
@@ -45,10 +46,7 @@ export class ActionsHeaderComponent {
     if (newMessage && newMessage.length) {
       const todaysDate = moment().format();
       const assignees = this.parseAssignees(newMessage);
-      const updatedMessage = this.removeAssigneesFromMessage(
-        newMessage,
-        assignees
-      );
+      const updatedMessage = this.removeAssigneesFromMessage(newMessage, assignees);
 
       if (updatedMessage && updatedMessage.length) {
         const actionItem: ActionItem = {
@@ -56,9 +54,7 @@ export class ActionsHeaderComponent {
           teamId: this.teamId,
           task: updatedMessage,
           completed: false,
-          assignee: assignees
-            ? assignees.join(', ').substring(0, this.maxAssigneeLength)
-            : null,
+          assignee: assignees ? assignees.join(', ').substring(0, this.maxAssigneeLength) : null,
           dateCreated: todaysDate,
           archived: false,
         };
@@ -75,17 +71,12 @@ export class ActionsHeaderComponent {
   private parseAssignees(newMessage: string): string[] {
     const matches = newMessage.match(ASSIGNEE_PARSE_REGEX);
     if (matches) {
-      return matches.map((assignee) =>
-        assignee.replace(ASSIGNEE_PARSE_SYMBOL, '')
-      );
+      return matches.map((assignee) => assignee.replace(ASSIGNEE_PARSE_SYMBOL, ''));
     }
     return null;
   }
 
-  private removeAssigneesFromMessage(
-    newMessage: string,
-    assignees: string[]
-  ): string {
+  private removeAssigneesFromMessage(newMessage: string, assignees: string[]): string {
     if (assignees) {
       return newMessage
         .replace(ASSIGNEE_PARSE_REGEX, '')

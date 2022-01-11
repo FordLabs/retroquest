@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,15 +16,16 @@
  */
 
 import { Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
-import { ActionItem, emptyActionItem } from '../../../domain/action-item';
-import { ActionItemService } from '../../services/action.service';
-import { ActionItemDialogComponent } from '../../../components/action-item-dialog/action-item-dialog.component';
-import { fadeInOutAnimation } from '../../../animations/add-delete-animation';
-import { Themes } from '../../../domain/Theme';
 import moment from 'moment';
-import { ColumnResponse, removeItemFromColumn } from '../../../domain/column-response';
-import { WebsocketActionItemResponse } from '../../../domain/websocket-response';
+
+import { fadeInOutAnimation } from '../../../animations/add-delete-animation';
+import { ActionItemDialogComponent } from '../../../components/action-item-dialog/action-item-dialog.component';
+import { ActionItem, emptyActionItem } from '../../../domain/action-item';
 import { Column } from '../../../domain/column';
+import { ColumnResponse, removeItemFromColumn } from '../../../domain/column-response';
+import { Themes } from '../../../domain/Theme';
+import { WebsocketActionItemResponse } from '../../../domain/websocket-response';
+import { ActionItemService } from '../../services/action.service';
 
 @Component({
   selector: 'rq-actions-column',
@@ -51,19 +52,13 @@ export class ActionsColumnComponent implements OnInit {
 
   ngOnInit(): void {
     this.retroEnded.subscribe(() => {
-      this.actionItemAggregation.items.completed.splice(
-        0,
-        this.actionItemAggregation.items.completed.length
-      );
+      this.actionItemAggregation.items.completed.splice(0, this.actionItemAggregation.items.completed.length);
     });
 
-    this.actionItemChanged.subscribe((response) =>
-      this.processActionItemChange(response)
-    );
+    this.actionItemChanged.subscribe((response) => this.processActionItemChange(response));
   }
 
   processActionItemChange(response: WebsocketActionItemResponse) {
-
     const actionItem = response.payload;
 
     if (response.type === 'delete') {
@@ -94,10 +89,7 @@ export class ActionsColumnComponent implements OnInit {
           this.actionItemAggregation.items.active.splice(activeIndex, 1);
           this.actionItemAggregation.items.completed.push(actionItem);
         } else {
-          Object.assign(
-            this.actionItemAggregation.items.active[activeIndex],
-            actionItem
-          );
+          Object.assign(this.actionItemAggregation.items.active[activeIndex], actionItem);
         }
       } else {
         actionItem.state = 'active';
@@ -109,10 +101,7 @@ export class ActionsColumnComponent implements OnInit {
         this.actionItemAggregation.items.completed.splice(completedIndex, 1);
         this.actionItemAggregation.items.active.push(actionItem);
       } else {
-        Object.assign(
-          this.actionItemAggregation.items.completed[completedIndex],
-          actionItem
-        );
+        Object.assign(this.actionItemAggregation.items.completed[completedIndex], actionItem);
       }
     }
   }
@@ -151,9 +140,7 @@ export class ActionsColumnComponent implements OnInit {
       return this.actionItemAggregation.items.active
         .slice()
         .sort((a: ActionItem, b: ActionItem) =>
-          moment
-            .utc(this.checkForNullDate(b.dateCreated))
-            .diff(moment.utc(this.checkForNullDate(a.dateCreated)))
+          moment.utc(this.checkForNullDate(b.dateCreated)).diff(moment.utc(this.checkForNullDate(a.dateCreated)))
         ) as Array<ActionItem>;
     }
 

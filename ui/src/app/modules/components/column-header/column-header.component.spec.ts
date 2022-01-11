@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,14 +15,15 @@
  * limitations under the License.
  */
 
-import { ColumnHeaderComponent } from './column-header.component';
 import { createMockEventEmitter } from '../../utils/testutils';
+
+import { ColumnHeaderComponent } from './column-header.component';
 
 describe('ColumnHeaderComponent', () => {
   let component: ColumnHeaderComponent;
-  const myWindow = {
+  const myWindow: Window = {
     setTimeout: (fn: Function) => fn(),
-  };
+  } as unknown as Window;
 
   beforeEach(() => {
     component = new ColumnHeaderComponent();
@@ -83,37 +84,25 @@ describe('ColumnHeaderComponent', () => {
       expect(component.readOnlyEnabled).toBeTruthy();
     });
 
-    it(
-      'should copy the value of temp title into the title variable ' +
-        'if the escape key was not pressed',
-      () => {
-        component.emitTitleChangedAndEnableReadonlyMode();
+    it('should copy the value of temp title into the title variable ' + 'if the escape key was not pressed', () => {
+      component.emitTitleChangedAndEnableReadonlyMode();
 
-        expect(component.title).toEqual(fakeText);
-      }
-    );
+      expect(component.title).toEqual(fakeText);
+    });
 
-    it(
-      'should not copy the value of temp title into the title variable' +
-        'if the escape key was pressed',
-      () => {
-        component.escapeKeyPressed = true;
-        component.emitTitleChangedAndEnableReadonlyMode();
+    it('should not copy the value of temp title into the title variable' + 'if the escape key was pressed', () => {
+      component.escapeKeyPressed = true;
+      component.emitTitleChangedAndEnableReadonlyMode();
 
-        expect(component.title).toEqual('');
-      }
-    );
+      expect(component.title).toEqual('');
+    });
 
-    it(
-      'should set the temp title to empty string' +
-        'if the escape key was pressed',
-      () => {
-        component.escapeKeyPressed = true;
-        component.emitTitleChangedAndEnableReadonlyMode();
+    it('should set the temp title to empty string' + 'if the escape key was pressed', () => {
+      component.escapeKeyPressed = true;
+      component.emitTitleChangedAndEnableReadonlyMode();
 
-        expect(component.titleCopy).toEqual('');
-      }
-    );
+      expect(component.titleCopy).toEqual('');
+    });
 
     it('should set the escape key pressed flag to false', () => {
       component.escapeKeyPressed = true;

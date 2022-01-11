@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import {TeamsModule} from './teams.module';
+import { TeamsModule } from './teams.module';
 
 describe('TeamsModule', () => {
   let teamsModule: TeamsModule;

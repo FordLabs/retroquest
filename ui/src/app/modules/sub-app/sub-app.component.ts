@@ -15,34 +15,34 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {TeamService} from '../teams/services/team.service';
-import {DataService} from '../data.service';
-import {parseTheme, Themes} from '../domain/Theme';
-import {Title} from '@angular/platform-browser';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
+
+import { DataService } from '../data.service';
+import { parseTheme, Themes } from '../domain/Theme';
+import { TeamService } from '../teams/services/team.service';
 
 @Component({
   selector: 'rq-sub-app',
   templateUrl: './sub-app.component.html',
   styleUrls: ['./sub-app.component.scss'],
   host: {
-    '[class.dark-theme]': 'darkThemeIsEnabled'
-  }
+    '[class.dark-theme]': 'darkThemeIsEnabled',
+  },
 })
 export class SubAppComponent implements OnInit, AfterViewInit {
-
   teamId: string;
   teamName: string;
 
-  constructor(private activatedRoute: ActivatedRoute,
-              private teamService: TeamService,
-              private dataService: DataService,
-              private titleService: Title) {
-  }
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private teamService: TeamService,
+    private dataService: DataService,
+    private titleService: Title
+  ) {}
 
   ngOnInit() {
-
     this.activatedRoute.params.subscribe((params) => {
       this.teamId = params.teamId;
       this.dataService.team.id = this.teamId;
@@ -52,7 +52,7 @@ export class SubAppComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    window.setTimeout(_ => this.loadTheme());
+    window.setTimeout(() => this.loadTheme());
   }
 
   get theme(): Themes {
@@ -71,13 +71,11 @@ export class SubAppComponent implements OnInit, AfterViewInit {
   }
 
   private setTeamName(): void {
-    this.teamService.fetchTeamName(this.teamId).subscribe(
-      (teamName) => {
-        this.teamName = teamName;
-        this.dataService.team.name = this.teamName;
-        this.titleService.setTitle(this.teamName + ' | RetroQuest');
-      }
-    );
+    this.teamService.fetchTeamName(this.teamId).subscribe((teamName) => {
+      this.teamName = teamName;
+      this.dataService.team.name = this.teamName;
+      this.titleService.setTitle(this.teamName + ' | RetroQuest');
+    });
   }
 
   emitThemeChanged(theme: Themes) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,13 +16,14 @@
  */
 
 import { Component, Input, OnInit } from '@angular/core';
-import { TeamService } from '../../services/team.service';
-import { Board } from '../../../domain/board';
-import { BoardService } from '../../services/board.service';
-import { Themes } from '../../../domain/Theme';
+
 import { DataService } from '../../../data.service';
-import { ActionItemService } from '../../services/action.service';
 import { ActionItem } from '../../../domain/action-item';
+import { Board } from '../../../domain/board';
+import { Themes } from '../../../domain/Theme';
+import { ActionItemService } from '../../services/action.service';
+import { BoardService } from '../../services/board.service';
+import { TeamService } from '../../services/team.service';
 
 @Component({
   selector: 'rq-archives',
@@ -96,9 +97,7 @@ export class ArchivesPageComponent implements OnInit {
 
   get archiveBoardList(): Array<Board> {
     if (this.countSortEnabled) {
-      return this.boards
-        .slice()
-        .sort((a, b) => b.thoughts.length - a.thoughts.length);
+      return this.boards.slice().sort((a, b) => b.thoughts.length - a.thoughts.length);
     }
     return this.boards;
   }
@@ -109,9 +108,7 @@ export class ArchivesPageComponent implements OnInit {
   }
 
   get noActionItemArchivesWereFound(): boolean {
-    return (
-      this.archivedActionItems.length === 0 && !this.thoughtArchivesAreLoading
-    );
+    return this.archivedActionItems.length === 0 && !this.thoughtArchivesAreLoading;
   }
 
   fetchBoards(teamId: string, pageIndex: number) {

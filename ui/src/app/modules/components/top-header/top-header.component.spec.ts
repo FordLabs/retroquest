@@ -15,10 +15,12 @@
  * limitations under the License.
  */
 
-import { TopHeaderComponent } from './top-header.component';
 import { Router } from '@angular/router';
+
 import { SaveCheckerService } from '../../teams/services/save-checker.service';
 import { createMockRouter } from '../../utils/testutils';
+
+import { TopHeaderComponent } from './top-header.component';
 
 describe('TopHeaderComponent', () => {
   let component: TopHeaderComponent;
@@ -88,9 +90,7 @@ describe('TopHeaderComponent', () => {
 
     it('should navigate to the archives board', () => {
       component.changeView('archives');
-      expect(router.navigateByUrl).toHaveBeenCalledWith(
-        `/team/${fakeId}/archives`
-      );
+      expect(router.navigateByUrl).toHaveBeenCalledWith(`/team/${fakeId}/archives`);
     });
   });
 });

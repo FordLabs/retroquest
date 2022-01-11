@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,19 +15,20 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Board} from '../../../domain/board';
-import {BoardService} from '../../services/board.service';
-import {Themes} from '../../../domain/Theme';
-import {Router} from '@angular/router';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { Board } from '../../../domain/board';
+import { Themes } from '../../../domain/Theme';
+import { BoardService } from '../../services/board.service';
 
 @Component({
   selector: 'rq-board-summary',
   templateUrl: './board-summary.component.html',
   styleUrls: ['./board-summary.component.scss'],
   host: {
-    '[class.dark-theme]': 'theme'
-  }
+    '[class.dark-theme]': 'theme',
+  },
 })
 export class BoardSummaryComponent {
   @Input() board: Board;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,17 +15,11 @@
  * limitations under the License.
  */
 
-import {
-  AfterContentChecked,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { AfterContentChecked, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+
 import { ActionItem, emptyActionItem } from '../../domain/action-item';
-import { ActionItemTaskComponent } from '../action-item-task/action-item-task.component';
 import { Themes } from '../../domain/Theme';
+import { ActionItemTaskComponent } from '../action-item-task/action-item-task.component';
 
 const ESC_KEY = 27;
 
@@ -46,8 +40,7 @@ export class ActionItemDialogComponent implements AfterContentChecked {
   @Input() theme: Themes = Themes.Light;
   @Input() readonly = false;
 
-  @Output() visibilityChanged: EventEmitter<boolean> =
-    new EventEmitter<boolean>();
+  @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
   @Output() deleted: EventEmitter<ActionItem> = new EventEmitter<ActionItem>();
   @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();

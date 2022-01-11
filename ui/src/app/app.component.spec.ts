@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,18 +15,17 @@
  * limitations under the License.
  */
 
-import { TestBed, waitForAsync } from '@angular/core/testing';
-import { AppComponent } from './app.component';
-import { RouterModule } from '@angular/router';
 import { APP_BASE_HREF } from '@angular/common';
+import { TestBed, waitForAsync } from '@angular/core/testing';
+import { RouterModule } from '@angular/router';
+
+import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
   beforeEach(
     waitForAsync(() => {
       TestBed.configureTestingModule({
-        imports: [
-          RouterModule.forRoot([], { relativeLinkResolution: 'legacy' }),
-        ],
+        imports: [RouterModule.forRoot([], { relativeLinkResolution: 'legacy' })],
         declarations: [AppComponent],
         providers: [{ provide: APP_BASE_HREF, useValue: '/' }],
       }).compileComponents();
