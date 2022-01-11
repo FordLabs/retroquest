@@ -14,3 +14,9 @@ test-report.xml
 !.yarn/sdks
 !.yarn/versions
 .pnp.*
+
+# testing
+/coverage
+/cypress/screenshots
+/cypress/videos
+/reports

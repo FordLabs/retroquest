@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { createTeamIfNecessaryAndLogin, TeamCredentials } from '../util/utils';
+import TeamCredentials from '../support/types/teamCredentials';
 
 describe('Create Page', () => {
   const teamCredentials = {
@@ -40,8 +40,7 @@ describe('Create Page', () => {
 
   describe('default board creation', () => {
     before(() => {
-      createTeamIfNecessaryAndLogin(teamCredentials); //have this function somehow return JWT
-      console.log(teamCredentials);
+      cy.createTeamIfNecessaryAndLogin(teamCredentials);
     });
 
     describe('Sections', () => {
