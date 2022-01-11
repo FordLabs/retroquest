@@ -23,6 +23,7 @@ nbdist/
 **/node_modules/
 
 /out/
+**/out-tsc
 
 **/.DS_Store
 **/coverage/

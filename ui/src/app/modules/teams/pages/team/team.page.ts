@@ -16,18 +16,18 @@
  */
 
 import { Component, EventEmitter, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { WebsocketActionItemResponse, WebsocketThoughtResponse } from '../../../domain/websocket-response';
-
 import * as Hammer from 'hammerjs';
+
 import { ActionsRadiatorViewComponent } from '../../../components/actions-radiator-view/actions-radiator-view.component';
+import { DataService } from '../../../data.service';
+import { ActionItem } from '../../../domain/action-item';
+import { Column } from '../../../domain/column';
+import { ColumnResponse } from '../../../domain/column-response';
 import { Themes } from '../../../domain/Theme';
+import { WebsocketActionItemResponse, WebsocketThoughtResponse } from '../../../domain/websocket-response';
+import { ActionItemService } from '../../services/action.service';
 import { BoardService } from '../../services/board.service';
 import { ColumnAggregationService } from '../../services/column-aggregation.service';
-import { ColumnResponse } from '../../../domain/column-response';
-import { Column } from '../../../domain/column';
-import { DataService } from '../../../data.service';
-import { ActionItemService } from '../../services/action.service';
-import { ActionItem } from '../../../domain/action-item';
 import { EndRetroService } from '../../services/end-retro.service';
 import { SubscriptionService } from '../../services/subscription.service';
 
@@ -104,9 +104,7 @@ export class TeamPageComponent implements OnInit, OnDestroy {
         thoughts.push(...column.items.active);
         thoughts.push(...column.items.completed);
       } else {
-        archivedActionItems.push(
-          ...(column.items.completed as Array<ActionItem>)
-        );
+        archivedActionItems.push(...(column.items.completed as Array<ActionItem>));
         archivedActionItems.forEach((actionItem: ActionItem) => {
           actionItem.archived = true;
         });

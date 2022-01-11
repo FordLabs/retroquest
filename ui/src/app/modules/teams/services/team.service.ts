@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -25,11 +25,7 @@ import { Observable } from 'rxjs';
 export class TeamService {
   constructor(private http: HttpClient) {}
 
-  create(
-    name: string,
-    password: string,
-    captchaResponse: string
-  ): Observable<HttpResponse<string>> {
+  create(name: string, password: string, captchaResponse: string): Observable<HttpResponse<string>> {
     return this.doPostRequest('/api/team', name, password, captchaResponse);
   }
 
@@ -37,11 +33,7 @@ export class TeamService {
     return this.doPostRequest('/api/user', name, password);
   }
 
-  login(
-    name: string,
-    password: string,
-    captchaResponse: string
-  ): Observable<HttpResponse<string>> {
+  login(name: string, password: string, captchaResponse: string): Observable<HttpResponse<string>> {
     return this.http.post(
       '/api/team/login',
       { name, password, captchaResponse },
@@ -49,11 +41,7 @@ export class TeamService {
     );
   }
 
-  updatePassword(
-    teamId: string,
-    previousPassword: string,
-    newPassword: string
-  ): Observable<HttpResponse<string>> {
+  updatePassword(teamId: string, previousPassword: string, newPassword: string): Observable<HttpResponse<string>> {
     return this.http.post(
       '/api/update-password',
       { teamId, previousPassword, newPassword },
@@ -85,15 +73,8 @@ export class TeamService {
     });
   }
 
-  private doPostRequest(
-    endpoint: string,
-    name: string,
-    password: string,
-    captchaResponse?: string
-  ) {
-    const payload = captchaResponse
-      ? { name, password, captchaResponse }
-      : { name, password };
+  private doPostRequest(endpoint: string, name: string, password: string, captchaResponse?: string) {
+    const payload = captchaResponse ? { name, password, captchaResponse } : { name, password };
     return this.http.post(endpoint, payload, {
       observe: 'response',
       responseType: 'text',

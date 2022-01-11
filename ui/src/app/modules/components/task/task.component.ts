@@ -15,18 +15,11 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewChecked,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+
+import { Themes } from '../../domain/Theme';
 import { emptyThought, Thought } from '../../domain/thought';
 import { emojify } from '../../utils/EmojiGenerator';
-import { Themes } from '../../domain/Theme';
 
 @Component({
   selector: 'rq-task',
@@ -55,8 +48,7 @@ export class TaskComponent implements AfterViewChecked {
   @Output() messageChanged: EventEmitter<string> = new EventEmitter<string>();
   @Output() deleted: EventEmitter<Thought> = new EventEmitter<Thought>();
   @Output() messageClicked: EventEmitter<Thought> = new EventEmitter<Thought>();
-  @Output() starCountIncreased: EventEmitter<number> =
-    new EventEmitter<number>();
+  @Output() starCountIncreased: EventEmitter<number> = new EventEmitter<number>();
   @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @ViewChild('content_value') editableTextArea: ElementRef;
@@ -66,7 +58,7 @@ export class TaskComponent implements AfterViewChecked {
   taskEditModeEnabled = false;
   _textValueLength = 0;
   deleteWasToggled = false;
-  myWindow: object = window;
+  myWindow: Window = window;
 
   get darkThemeIsEnabled(): boolean {
     return this.theme === Themes.Dark;
@@ -119,12 +111,10 @@ export class TaskComponent implements AfterViewChecked {
   }
 
   public initializeTextAreaHeight(): void {
-    this.editableTextArea.nativeElement.style.height =
-      this.editableTextArea.nativeElement.scrollHeight + 'px';
+    this.editableTextArea.nativeElement.style.height = this.editableTextArea.nativeElement.scrollHeight + 'px';
   }
 
   private focusInput(): void {
-    // @ts-ignore
     this.myWindow.setTimeout(() => {
       this.editableTextArea.nativeElement.focus();
       this.editableTextArea.nativeElement.select();
@@ -132,7 +122,6 @@ export class TaskComponent implements AfterViewChecked {
   }
 
   public forceBlur() {
-    // @ts-ignore
     this.myWindow.setTimeout(() => {
       this.editableTextArea.nativeElement.blur();
     }, 0);

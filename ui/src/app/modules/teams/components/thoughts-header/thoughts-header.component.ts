@@ -15,23 +15,22 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {Column} from '../../../domain/column';
-import {Thought} from '../../../domain/thought';
-import {ThoughtService} from '../../services/thought.service';
-import {ColumnService} from '../../services/column.service';
-import {Themes} from '../../../domain/Theme';
-import {ColumnResponse} from '../../../domain/column-response';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+
+import { Column } from '../../../domain/column';
+import { ColumnResponse } from '../../../domain/column-response';
+import { Themes } from '../../../domain/Theme';
+import { Thought } from '../../../domain/thought';
+import { ColumnService } from '../../services/column.service';
+import { ThoughtService } from '../../services/thought.service';
 
 @Component({
   selector: 'rq-thoughts-header',
   templateUrl: './thoughts-header.component.html',
-  styleUrls: ['./thoughts-header.component.scss']
+  styleUrls: ['./thoughts-header.component.scss'],
 })
 export class ThoughtsHeaderComponent implements OnInit {
-
-  constructor(private thoughtService: ThoughtService, private columnService: ColumnService) {
-  }
+  constructor(private thoughtService: ThoughtService, private columnService: ColumnService) {}
 
   @Input() thoughtAggregation: ColumnResponse;
   @Input() thoughtCount: number;
@@ -73,11 +72,10 @@ export class ThoughtsHeaderComponent implements OnInit {
         message: newMessage,
         hearts: 0,
         discussed: false,
-        columnTitle: this.column
+        columnTitle: this.column,
       };
 
       this.thoughtService.addThought(thought);
     }
   }
-
 }

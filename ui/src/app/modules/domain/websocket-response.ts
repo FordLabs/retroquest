@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-import { Thought } from './thought';
-import { Column } from './column';
 import { ActionItem } from './action-item';
+import { Column } from './column';
+import { Thought } from './thought';
 
 export interface WebsocketThoughtResponse {
   type: string;
-  payload: Thought
+  payload: Thought;
 }
 
 export interface WebsocketColumnResponse {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,7 @@
  */
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+
 import { emptyFeedback, Feedback } from '../../domain/feedback';
 import { Themes } from '../../domain/Theme';
 
@@ -34,8 +35,7 @@ export class FeedbackDialogComponent {
   @Input() visible = false;
   @Input() theme: Themes = Themes.Light;
 
-  @Output() visibilityChanged: EventEmitter<boolean> =
-    new EventEmitter<boolean>();
+  @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() submitted: EventEmitter<Feedback> = new EventEmitter<Feedback>();
 
   feedback: Feedback = emptyFeedback();

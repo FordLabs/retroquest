@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,26 +15,16 @@
  * limitations under the License.
  */
 
-import {ArchivedBoardPageComponent} from './archived-board.page';
+import { ArchivedBoardPageComponent } from './archived-board.page';
 
 describe('ArchivedBoardPageComponent', () => {
   let component: ArchivedBoardPageComponent;
 
-  beforeEach((() => {
-    component = new ArchivedBoardPageComponent(
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
-    );
-
-  }));
+  beforeEach(() => {
+    component = new ArchivedBoardPageComponent(null, null, null, null, null, null, null);
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
 });

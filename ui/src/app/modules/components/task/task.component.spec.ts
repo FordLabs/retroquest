@@ -15,15 +15,16 @@
  * limitations under the License.
  */
 
-import { TaskComponent } from './task.component';
 import { emptyThought } from '../../domain/thought';
 import { createMockEventEmitter } from '../../utils/testutils';
 
+import { TaskComponent } from './task.component';
+
 describe('TaskComponent', () => {
   let component: TaskComponent;
-  const myWindow = {
+  const myWindow: Window = {
     setTimeout: (fn: Function) => fn(),
-  };
+  } as unknown as Window;
 
   beforeEach(() => {
     component = new TaskComponent();
@@ -82,25 +83,19 @@ describe('TaskComponent', () => {
     it('should not focus the title area when the edit mode is toggled false', () => {
       component.taskEditModeEnabled = true;
       component.toggleEditMode();
-      expect(
-        component.editableTextArea.nativeElement.focus
-      ).not.toHaveBeenCalled();
+      expect(component.editableTextArea.nativeElement.focus).not.toHaveBeenCalled();
     });
 
     it('should select all the text in the div when focused', () => {
       component.taskEditModeEnabled = false;
       component.toggleEditMode();
-      expect(
-        component.editableTextArea.nativeElement.select
-      ).toHaveBeenCalled();
+      expect(component.editableTextArea.nativeElement.select).toHaveBeenCalled();
     });
 
     it('should not select all the text in the div when not focusesd', () => {
       component.taskEditModeEnabled = true;
       component.toggleEditMode();
-      expect(
-        component.editableTextArea.nativeElement.select
-      ).not.toHaveBeenCalled();
+      expect(component.editableTextArea.nativeElement.select).not.toHaveBeenCalled();
     });
   });
 
@@ -179,9 +174,7 @@ describe('TaskComponent', () => {
       component.task.hearts = 1;
       component.emitTaskContentClicked();
 
-      expect(component.messageClicked.emit).toHaveBeenCalledWith(
-        component.task
-      );
+      expect(component.messageClicked.emit).toHaveBeenCalledWith(component.task);
     });
 
     it('should not emit the actionItem when edit mode is enabled', () => {
@@ -221,9 +214,7 @@ describe('TaskComponent', () => {
       };
 
       component.initializeTextAreaHeight();
-      expect(component.editableTextArea.nativeElement.style.height).toEqual(
-        '40px'
-      );
+      expect(component.editableTextArea.nativeElement.style.height).toEqual('40px');
     });
   });
 

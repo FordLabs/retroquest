@@ -16,8 +16,10 @@
  */
 
 import { Observable } from 'rxjs/index';
-import { ThoughtsHeaderComponent } from './thoughts-header.component';
+
 import { createMockEventEmitter } from '../../../utils/testutils';
+
+import { ThoughtsHeaderComponent } from './thoughts-header.component';
 
 describe('ThoughtsHeaderComponent', () => {
   let component: ThoughtsHeaderComponent;
@@ -41,10 +43,7 @@ describe('ThoughtsHeaderComponent', () => {
       updateColumn: jest.fn().mockReturnValue(new Observable()),
     };
 
-    component = new ThoughtsHeaderComponent(
-      mockThoughtService,
-      mockColumnService
-    );
+    component = new ThoughtsHeaderComponent(mockThoughtService, mockColumnService);
     component.column = testColumn;
   });
 
@@ -68,9 +67,7 @@ describe('ThoughtsHeaderComponent', () => {
 
       component.addThought(newThoughtMessage);
 
-      expect(mockThoughtService.addThought).toHaveBeenCalledWith(
-        expectedThought
-      );
+      expect(mockThoughtService.addThought).toHaveBeenCalledWith(expectedThought);
     });
   });
 
@@ -101,9 +98,7 @@ describe('ThoughtsHeaderComponent', () => {
       };
 
       component.editTitle('someTitle');
-      expect(mockColumnService.updateColumn).toHaveBeenCalledWith(
-        component.column
-      );
+      expect(mockColumnService.updateColumn).toHaveBeenCalledWith(component.column);
       expect(component.column.title).toEqual('someTitle');
     });
   });

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +15,9 @@
  * limitations under the License.
  */
 
-import { ColumnAggregationService } from './column-aggregation.service';
 import { createMockHttpClient } from '../../utils/testutils';
+
+import { ColumnAggregationService } from './column-aggregation.service';
 
 describe('ColumnAggregationService', () => {
   const mockHttpClient = createMockHttpClient();

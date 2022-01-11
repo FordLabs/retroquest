@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,9 +32,7 @@ describe('FloatingCharacterCountdownComponent', () => {
     it('should return the number of remaining characters', () => {
       component.characterCount = 'new actionItem'.length;
       component.maxCharacterCount = 20;
-      expect(component.charactersRemaining()).toBe(
-        component.maxCharacterCount - component.characterCount
-      );
+      expect(component.charactersRemaining()).toBe(component.maxCharacterCount - component.characterCount);
     });
   });
 

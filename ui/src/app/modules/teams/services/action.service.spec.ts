@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,11 +15,13 @@
  * limitations under the License.
  */
 
-import { ActionItemService } from './action.service';
-import { ActionItem } from '../../domain/action-item';
 import { HttpClient } from '@angular/common/http';
+
 import { DataService } from '../../data.service';
+import { ActionItem } from '../../domain/action-item';
 import { createMockHttpClient } from '../../utils/testutils';
+
+import { ActionItemService } from './action.service';
 
 describe('ActionItemService', () => {
   let service: ActionItemService;
@@ -40,15 +42,11 @@ describe('ActionItemService', () => {
   }
 
   beforeEach(() => {
-    // @ts-ignore
     mockHttpClient = createMockHttpClient();
 
     dataService.team.id = teamId;
 
-    service = new ActionItemService(
-      mockHttpClient,
-      dataService
-    );
+    service = new ActionItemService(mockHttpClient, dataService);
   });
 
   it('should add Action Item', () => {
@@ -64,9 +62,7 @@ describe('ActionItemService', () => {
   it('should delete Action Item', () => {
     const actionItem = createActionItem(teamId, 1);
     service.deleteActionItem(actionItem);
-    expect(mockHttpClient.delete).toHaveBeenCalledWith(
-      `/api/team/${actionItem.teamId}/action-item/${actionItem.id}`
-    );
+    expect(mockHttpClient.delete).toHaveBeenCalledWith(`/api/team/${actionItem.teamId}/action-item/${actionItem.id}`);
   });
 
   describe('update ActionItem', () => {
@@ -75,7 +71,7 @@ describe('ActionItemService', () => {
       service.updateTask(actionItem, 'updated task');
       expect(mockHttpClient.put).toHaveBeenCalledWith(
         `/api/team/${dataService.team.id}/action-item/1/task`,
-        JSON.stringify({task: 'updated task'}),
+        JSON.stringify({ task: 'updated task' }),
         { headers: { 'Content-Type': 'application/json' } }
       );
     });
@@ -85,7 +81,7 @@ describe('ActionItemService', () => {
       service.updateAssignee(actionItem, 'updated assignee');
       expect(mockHttpClient.put).toHaveBeenCalledWith(
         `/api/team/${dataService.team.id}/action-item/1/assignee`,
-        JSON.stringify({assignee: 'updated assignee'}),
+        JSON.stringify({ assignee: 'updated assignee' }),
         { headers: { 'Content-Type': 'application/json' } }
       );
     });
@@ -95,7 +91,7 @@ describe('ActionItemService', () => {
       service.updateCompleted(actionItem, true);
       expect(mockHttpClient.put).toHaveBeenCalledWith(
         `/api/team/${dataService.team.id}/action-item/1/completed`,
-        JSON.stringify({completed: true}),
+        JSON.stringify({ completed: true }),
         { headers: { 'Content-Type': 'application/json' } }
       );
     });
@@ -105,7 +101,7 @@ describe('ActionItemService', () => {
       service.updateArchived(actionItem, true);
       expect(mockHttpClient.put).toHaveBeenCalledWith(
         `/api/team/${dataService.team.id}/action-item/1/archived`,
-        JSON.stringify({archived: true}),
+        JSON.stringify({ archived: true }),
         { headers: { 'Content-Type': 'application/json' } }
       );
     });
@@ -116,9 +112,7 @@ describe('ActionItemService', () => {
 
     it('should call the backend api with the correct url', () => {
       service.fetchArchivedActionItems(fakeTeamId);
-      expect(mockHttpClient.get).toHaveBeenCalledWith(
-        `/api/team/${fakeTeamId}/action-items/archived`
-      );
+      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${fakeTeamId}/action-items/archived`);
     });
   });
 
@@ -133,13 +127,14 @@ describe('ActionItemService', () => {
       expect(mockHttpClient.put).toHaveBeenCalledTimes(2);
       expect(mockHttpClient.put).toHaveBeenCalledWith(
         `/api/team/${dataService.team.id}/action-item/${firstActionItem.id}/archived`,
-        JSON.stringify({archived: true}),
+        JSON.stringify({ archived: true }),
         { headers: { 'Content-Type': 'application/json' } }
       );
       expect(mockHttpClient.put).toHaveBeenCalledWith(
         `/api/team/${dataService.team.id}/action-item/${secondActionItem.id}/archived`,
-        JSON.stringify({archived: true}),
-        { headers: { 'Content-Type': 'application/json' } });
+        JSON.stringify({ archived: true }),
+        { headers: { 'Content-Type': 'application/json' } }
+      );
     });
   });
 });

@@ -15,34 +15,29 @@
  * limitations under the License.
  */
 
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 
-import { Thought } from '../../domain/thought';
 import { DataService } from '../../data.service';
+import { Thought } from '../../domain/thought';
 
 @Injectable()
 export class ThoughtService {
-  constructor(
-    private http: HttpClient,
-    private dataService: DataService
-  ) {
-  }
+  constructor(private http: HttpClient, private dataService: DataService) {}
 
   fetchThoughts(teamId: string): Observable<Array<Thought>> {
     return this.http.get<Array<Thought>>(`/api/team/${teamId}/thoughts`);
   }
 
   addThought(thought: Thought): void {
-    this.http.post(`/api/team/${this.dataService.team.id}/thought`,
-      JSON.stringify(thought),
-      {
+    this.http
+      .post(`/api/team/${this.dataService.team.id}/thought`, JSON.stringify(thought), {
         headers: {
-          'Content-Type': 'application/json'
-        }
-      }
-    ).subscribe();
+          'Content-Type': 'application/json',
+        },
+      })
+      .subscribe();
   }
 
   heartThought(thought: Thought): void {
@@ -50,44 +45,51 @@ export class ThoughtService {
   }
 
   updateDiscussionStatus(thought: Thought, discussed: boolean): void {
-    this.http.put(
-      `/api/team/${this.dataService.team.id}/thought/${thought.id}/discuss`,
-      JSON.stringify({
-        discussed
-      }),
-      {
-        headers: {
-          'Content-Type': 'application/json'
+    this.http
+      .put(
+        `/api/team/${this.dataService.team.id}/thought/${thought.id}/discuss`,
+        JSON.stringify({
+          discussed,
+        }),
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
         }
-      }).subscribe();
+      )
+      .subscribe();
   }
 
   moveThought(thoughtId: Thought['id'], newTopic: Thought['topic']): void {
-    this.http.put(
-      `/api/team/${this.dataService.team.id}/thought/${thoughtId}/topic`,
-      JSON.stringify({
-        topic: newTopic
-      }),
-      {
-        headers: {
-          'Content-Type': 'application/json'
+    this.http
+      .put(
+        `/api/team/${this.dataService.team.id}/thought/${thoughtId}/topic`,
+        JSON.stringify({
+          topic: newTopic,
+        }),
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
         }
-      }
-    ).subscribe();
+      )
+      .subscribe();
   }
 
   updateMessage(thought: Thought, newMessage: string): void {
-    this.http.put(
-      `/api/team/${this.dataService.team.id}/thought/${thought.id}/message`,
-      JSON.stringify({
-        message: newMessage
-      }),
-      {
-        headers: {
-          'Content-Type': 'application/json'
+    this.http
+      .put(
+        `/api/team/${this.dataService.team.id}/thought/${thought.id}/message`,
+        JSON.stringify({
+          message: newMessage,
+        }),
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
         }
-      }
-    ).subscribe();
+      )
+      .subscribe();
   }
 
   deleteThought(thought: Thought): void {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,11 +15,12 @@
  * limitations under the License.
  */
 
-import { ActionsColumnComponent } from './actions-column.component';
-import { ActionItem } from '../../../domain/action-item';
-import { ActionItemService } from '../../services/action.service';
 import { ActionItemDialogComponent } from '../../../components/action-item-dialog/action-item-dialog.component';
+import { ActionItem } from '../../../domain/action-item';
 import { WebsocketActionItemResponse } from '../../../domain/websocket-response';
+import { ActionItemService } from '../../services/action.service';
+
+import { ActionsColumnComponent } from './actions-column.component';
 
 describe('ActionsColumnComponent', () => {
   let component: ActionsColumnComponent;
@@ -28,14 +29,13 @@ describe('ActionsColumnComponent', () => {
   let fakeActionItem: ActionItem;
 
   beforeEach(() => {
-    // @ts-ignore
     mockActionItemService = {
       deleteActionItem: jest.fn(),
       updateTask: jest.fn(),
       updateAssignee: jest.fn(),
       updateCompleted: jest.fn(),
-      updateArchived: jest.fn()
-    } as ActionItemService;
+      updateArchived: jest.fn(),
+    } as unknown as ActionItemService;
 
     component = new ActionsColumnComponent(mockActionItemService);
 
@@ -68,31 +68,24 @@ describe('ActionsColumnComponent', () => {
 
   it('should delete the action item on the backend', () => {
     component.onDeleted(fakeActionItem);
-    expect(mockActionItemService.deleteActionItem).toHaveBeenCalledWith(
-      fakeActionItem
-    );
+    expect(mockActionItemService.deleteActionItem).toHaveBeenCalledWith(fakeActionItem);
   });
 
   it('should update the action item on the backend on message changed', () => {
     component.onMessageChanged('I AM A FAKE MESSAGE', fakeActionItem);
-    expect(mockActionItemService.updateTask).toHaveBeenCalledWith(
-      fakeActionItem, 'I AM A FAKE MESSAGE'
-    );
+    expect(mockActionItemService.updateTask).toHaveBeenCalledWith(fakeActionItem, 'I AM A FAKE MESSAGE');
   });
 
   it('should update the action item on the backend on assignee updated', () => {
     component.onAssigneeUpdated('I AM A FAKE ASSIGNEE', fakeActionItem);
-    expect(mockActionItemService.updateAssignee).toHaveBeenCalledWith(
-      fakeActionItem, 'I AM A FAKE ASSIGNEE'
-    );
+    expect(mockActionItemService.updateAssignee).toHaveBeenCalledWith(fakeActionItem, 'I AM A FAKE ASSIGNEE');
   });
 
   describe('displayPopup', () => {
     beforeEach(() => {
-      // @ts-ignore
       component.actionItemDialog = {
         show: jest.fn(),
-      } as ActionItemDialogComponent;
+      } as unknown as ActionItemDialogComponent;
     });
 
     it('should show the action item dialog', () => {
@@ -166,11 +159,7 @@ describe('ActionsColumnComponent', () => {
 
   describe('deleting action items', () => {
     const incompleteActionItem = createActionItem(1, 'take out the trash');
-    const completedActionItem = createActionItem(
-      2,
-      'wipe off the dry erase board',
-      true
-    );
+    const completedActionItem = createActionItem(2, 'wipe off the dry erase board', true);
 
     let active;
     let completed;
@@ -197,11 +186,7 @@ describe('ActionsColumnComponent', () => {
     });
   });
 
-  function createActionItem(
-    id: number,
-    task: string,
-    completed: boolean = false
-  ): ActionItem {
+  function createActionItem(id: number, task: string, completed: boolean = false): ActionItem {
     return {
       id,
       task,

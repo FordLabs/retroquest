@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,14 +17,12 @@
 
 import { Injectable } from '@angular/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
+
 import { DataService } from '../../data.service';
 
 @Injectable()
 export class EndRetroService {
-  constructor(
-    private rxStompService: RxStompService,
-    private dataService: DataService
-  ) {}
+  constructor(private rxStompService: RxStompService, private dataService: DataService) {}
 
   endRetro() {
     this.rxStompService.publish({

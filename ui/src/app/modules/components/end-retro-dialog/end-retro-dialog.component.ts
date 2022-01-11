@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,7 @@
  */
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+
 import { Themes } from '../../domain/Theme';
 
 const ESC_KEY = 27;

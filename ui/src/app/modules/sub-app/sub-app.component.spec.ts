@@ -15,15 +15,17 @@
  * limitations under the License.
  */
 
-import { SubAppComponent } from './sub-app.component';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { TeamService } from '../teams/services/team.service';
-import { DataService } from '../data.service';
 import { of } from 'rxjs';
 import { instance, mock, verify, when } from 'ts-mockito';
+
+import { DataService } from '../data.service';
 import { Themes } from '../domain/Theme';
-import { Title } from '@angular/platform-browser';
+import { TeamService } from '../teams/services/team.service';
 import { createMockEventEmitter } from '../utils/testutils';
+
+import { SubAppComponent } from './sub-app.component';
 
 describe('SubAppComponent', () => {
   let component: SubAppComponent;

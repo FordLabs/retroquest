@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,16 +15,18 @@
  * limitations under the License.
  */
 
-import { ActionItemTaskComponent } from './action-item-task.component';
-import { emptyActionItem } from '../../domain/action-item';
 import { ElementRef } from '@angular/core';
+
+import { emptyActionItem } from '../../domain/action-item';
 import { createMockEventEmitter } from '../../utils/testutils';
+
+import { ActionItemTaskComponent } from './action-item-task.component';
 
 describe('ActionItemTaskComponent', () => {
   let component: ActionItemTaskComponent;
-  const myWindow = {
+  const myWindow: Window = {
     setTimeout: (fn: Function) => fn(),
-  };
+  } as unknown as Window;
 
   beforeEach(() => {
     component = new ActionItemTaskComponent();
@@ -36,13 +38,12 @@ describe('ActionItemTaskComponent', () => {
   });
 
   describe('toggleEditMode', () => {
-    // @ts-ignore
     const fakeElementRef: ElementRef = {
       nativeElement: {
         focus: jest.fn(),
         select: jest.fn(),
       },
-    } as ElementRef;
+    } as unknown as ElementRef;
 
     beforeEach(() => {
       component.editableTextArea = fakeElementRef;
@@ -84,25 +85,19 @@ describe('ActionItemTaskComponent', () => {
     it('should not focus the title area when the edit mode is toggled false', () => {
       component.taskEditModeEnabled = true;
       component.toggleEditMode();
-      expect(
-        component.editableTextArea.nativeElement.focus
-      ).not.toHaveBeenCalled();
+      expect(component.editableTextArea.nativeElement.focus).not.toHaveBeenCalled();
     });
 
     it('should select all the text in the div when focused', () => {
       component.taskEditModeEnabled = false;
       component.toggleEditMode();
-      expect(
-        component.editableTextArea.nativeElement.select
-      ).toHaveBeenCalled();
+      expect(component.editableTextArea.nativeElement.select).toHaveBeenCalled();
     });
 
     it('should not select all the text in the div when not focused', () => {
       component.taskEditModeEnabled = true;
       component.toggleEditMode();
-      expect(
-        component.editableTextArea.nativeElement.select
-      ).not.toHaveBeenCalled();
+      expect(component.editableTextArea.nativeElement.select).not.toHaveBeenCalled();
     });
   });
 
@@ -148,9 +143,7 @@ describe('ActionItemTaskComponent', () => {
 
       component.emitDeleteItem();
 
-      expect(component.deleted.emit).not.toHaveBeenCalledWith(
-        component.actionItem
-      );
+      expect(component.deleted.emit).not.toHaveBeenCalledWith(component.actionItem);
     });
   });
 
@@ -163,9 +156,7 @@ describe('ActionItemTaskComponent', () => {
       component.actionItem.task = 'FAKE TASK';
       component.emitTaskContentClicked();
 
-      expect(component.messageClicked.emit).toHaveBeenCalledWith(
-        component.actionItem
-      );
+      expect(component.messageClicked.emit).toHaveBeenCalledWith(component.actionItem);
     });
 
     it('should not emit the actionItem when edit mode is enabled', () => {
@@ -205,9 +196,7 @@ describe('ActionItemTaskComponent', () => {
       };
 
       component.initializeTextAreaHeight();
-      expect(component.editableTextArea.nativeElement.style.height).toEqual(
-        '40px'
-      );
+      expect(component.editableTextArea.nativeElement.style.height).toEqual('40px');
     });
   });
 

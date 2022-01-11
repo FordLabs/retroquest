@@ -15,20 +15,22 @@
  * limitations under the License.
  */
 
-import { TeamPageComponent } from './team.page';
+import { of } from 'rxjs';
+import { anything, instance, mock, verify, when } from 'ts-mockito';
+
+import { DataService } from '../../../data.service';
+import { ColumnCombinerResponse } from '../../../domain/column-combiner-response';
+import { emptyColumnResponse } from '../../../domain/column-response';
+import { emptyThought } from '../../../domain/thought';
+import { createMockRxStompService } from '../../../utils/testutils';
 import { BoardService } from '../../services/board.service';
 import { ColumnAggregationService } from '../../services/column-aggregation.service';
-import { of } from 'rxjs';
-import { ColumnCombinerResponse } from '../../../domain/column-combiner-response';
-import { TeamService } from '../../services/team.service';
-import { anything, instance, mock, verify, when } from 'ts-mockito';
-import { emptyThought } from '../../../domain/thought';
-import { emptyColumnResponse } from '../../../domain/column-response';
-import { DataService } from '../../../data.service';
-import { SaveCheckerService } from '../../services/save-checker.service';
-import { createMockRxStompService } from '../../../utils/testutils';
 import { EndRetroService } from '../../services/end-retro.service';
+import { SaveCheckerService } from '../../services/save-checker.service';
 import { SubscriptionService } from '../../services/subscription.service';
+import { TeamService } from '../../services/team.service';
+
+import { TeamPageComponent } from './team.page';
 
 describe('TeamPageComponent', () => {
   let component: TeamPageComponent;
@@ -50,11 +52,7 @@ describe('TeamPageComponent', () => {
     boardService = mock(BoardService);
     saveCheckerService = mock(SaveCheckerService);
     endRetroService = mock(EndRetroService);
-    subscriptionService = new SubscriptionService(
-      dataService,
-      saveCheckerService,
-      createMockRxStompService()
-    );
+    subscriptionService = new SubscriptionService(dataService, saveCheckerService, createMockRxStompService());
 
     component = new TeamPageComponent(
       dataService,
@@ -82,12 +80,8 @@ describe('TeamPageComponent', () => {
     beforeEach(() => {
       dataService.team.name = expectedTeamName;
       dataService.team.id = fakeTeamId;
-      when(columnAggregationService.getColumns(fakeTeamId)).thenReturn(
-        of(expectedColumns)
-      );
-      when(teamService.fetchTeamName(fakeTeamId)).thenReturn(
-        of(expectedTeamName)
-      );
+      when(columnAggregationService.getColumns(fakeTeamId)).thenReturn(of(expectedColumns));
+      when(teamService.fetchTeamName(fakeTeamId)).thenReturn(of(expectedTeamName));
     });
 
     it('should set the team id', () => {
@@ -152,9 +146,7 @@ describe('TeamPageComponent', () => {
       expectedThoughts[1].discussed = true;
       expectedThoughts[1].id = 1;
 
-      when(boardService.createBoard(anything(), anything())).thenReturn(
-        of(null)
-      );
+      when(boardService.createBoard(anything(), anything())).thenReturn(of(null));
     });
 
     it('should create a board if there are thoughts to archive', () => {

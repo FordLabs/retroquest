@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,17 +15,16 @@
  * limitations under the License.
  */
 
-import { HeaderComponent } from './header.component';
-import { FeedbackService } from '../../services/feedback.service';
-import { emptyFeedback, Feedback } from '../../../domain/feedback';
-import { Subject } from 'rxjs';
-import { SaveCheckerService } from '../../services/save-checker.service';
 import { HttpClient } from '@angular/common/http';
-import {
-  createMockEventEmitter,
-  createMockHttpClient,
-} from '../../../utils/testutils';
+import { Subject } from 'rxjs';
+
 import { EndRetroDialogComponent } from '../../../components/end-retro-dialog/end-retro-dialog.component';
+import { emptyFeedback, Feedback } from '../../../domain/feedback';
+import { createMockEventEmitter, createMockHttpClient } from '../../../utils/testutils';
+import { FeedbackService } from '../../services/feedback.service';
+import { SaveCheckerService } from '../../services/save-checker.service';
+
+import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -34,18 +33,13 @@ describe('HeaderComponent', () => {
   const mockSaveCheckerService: SaveCheckerService = null;
 
   beforeEach(() => {
-    // @ts-ignore
     mockFeedbackService = {
       addFeedback: jest.fn().mockReturnValue(new Subject()),
-    } as FeedbackService;
+    } as unknown as FeedbackService;
 
     mockHttpClient = createMockHttpClient();
 
-    component = new HeaderComponent(
-      mockFeedbackService,
-      mockSaveCheckerService,
-      mockHttpClient
-    );
+    component = new HeaderComponent(mockFeedbackService, mockSaveCheckerService, mockHttpClient);
   });
 
   it('should create', () => {
@@ -62,10 +56,9 @@ describe('HeaderComponent', () => {
 
   describe('showEndRetroDialog', () => {
     it('should show the dialog', () => {
-      // @ts-ignore
       component.endRetroDialog = {
         show: jest.fn(),
-      } as EndRetroDialogComponent;
+      } as unknown as EndRetroDialogComponent;
       component.showEndRetroDialog();
       expect(component.endRetroDialog.show).toHaveBeenCalled();
     });
@@ -90,9 +83,7 @@ describe('HeaderComponent', () => {
     });
 
     it('should send the feedback to the backend', () => {
-      expect(mockFeedbackService.addFeedback).toHaveBeenCalledWith(
-        fakeFeedback
-      );
+      expect(mockFeedbackService.addFeedback).toHaveBeenCalledWith(fakeFeedback);
     });
 
     it('should send the feedback to the backend', () => {

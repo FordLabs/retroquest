@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,38 +15,30 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router} from '@angular/router';
-import {Observable, Subscriber} from 'rxjs';
-import {TeamService} from '../../teams/services/team.service';
-import {AuthService} from '../auth.service';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
+import { Observable, Subscriber } from 'rxjs';
+
+import { TeamService } from '../../teams/services/team.service';
+import { AuthService } from '../auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-
-  constructor(
-    private teamService: TeamService,
-    private router: Router
-  ) {
-  }
+  constructor(private teamService: TeamService, private router: Router) {}
 
   private navigateToTeamLoginPage(subscriber: Subscriber<boolean>, teamId: string) {
     this.router.navigate(['login', teamId]);
     subscriber.next(true);
   }
 
-  canActivate(
-    next: ActivatedRouteSnapshot,
-    state): Observable<boolean> | Promise<boolean> | boolean {
-
-    return new Observable<boolean>(subscriber => {
+  canActivate(next: ActivatedRouteSnapshot, state): Observable<boolean> | Promise<boolean> | boolean {
+    return new Observable<boolean>((subscriber) => {
       const urls = state.url.split('/');
       const teamId = urls[2];
 
       if (AuthService.getToken()) {
-
         this.teamService.validateTeamId(teamId).subscribe(
           () => {
             subscriber.next(true);
@@ -56,7 +48,6 @@ export class AuthGuard implements CanActivate {
       } else {
         this.navigateToTeamLoginPage(subscriber, teamId);
       }
-
     });
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,16 +15,17 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
-import { emptyThought, Thought } from '../../../domain/thought';
-import { Column } from '../../../domain/column';
-import { ThoughtService } from '../../services/thought.service';
-import { TaskDialogComponent } from '../../../components/task-dialog/task-dialog.component';
-import { fadeInOutAnimation } from '../../../animations/add-delete-animation';
-import { Themes } from '../../../domain/Theme';
-import { ColumnResponse, emptyColumnResponse, removeItemFromColumn } from '../../../domain/column-response';
-import { WebsocketThoughtResponse } from '../../../domain/websocket-response';
 import { CdkDragSortEvent } from '@angular/cdk/drag-drop';
+import { Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
+
+import { fadeInOutAnimation } from '../../../animations/add-delete-animation';
+import { TaskDialogComponent } from '../../../components/task-dialog/task-dialog.component';
+import { Column } from '../../../domain/column';
+import { ColumnResponse, emptyColumnResponse, removeItemFromColumn } from '../../../domain/column-response';
+import { Themes } from '../../../domain/Theme';
+import { emptyThought, Thought } from '../../../domain/thought';
+import { WebsocketThoughtResponse } from '../../../domain/websocket-response';
+import { ThoughtService } from '../../services/thought.service';
 
 @Component({
   selector: 'rq-thoughts-column',
@@ -57,14 +58,8 @@ export class ThoughtsColumnComponent implements OnInit {
 
   ngOnInit(): void {
     this.retroEnded.subscribe(() => {
-      this.thoughtAggregation.items.active.splice(
-        0,
-        this.thoughtAggregation.items.active.length
-      );
-      this.thoughtAggregation.items.completed.splice(
-        0,
-        this.thoughtAggregation.items.completed.length
-      );
+      this.thoughtAggregation.items.active.splice(0, this.thoughtAggregation.items.active.length);
+      this.thoughtAggregation.items.completed.splice(0, this.thoughtAggregation.items.completed.length);
     });
 
     this.thoughtChanged.subscribe((response) => {
@@ -84,10 +79,7 @@ export class ThoughtsColumnComponent implements OnInit {
       thoughtTopicPreviousColumn: string,
       thoughtAggregationTopic: string
     ) {
-      return (
-        thoughtTopic !== thoughtAggregationTopic &&
-        thoughtTopicPreviousColumn === thoughtAggregationTopic
-      );
+      return thoughtTopic !== thoughtAggregationTopic && thoughtTopicPreviousColumn === thoughtAggregationTopic;
     }
 
     const thought = response.payload;
@@ -96,13 +88,7 @@ export class ThoughtsColumnComponent implements OnInit {
       this.deleteThought(thought);
     } else if (thought.topic === this.thoughtAggregation.topic) {
       this.updateThought(thought);
-    } else if (
-      thoughtWasMovedFromThisColumn(
-        thought.topic,
-        thought.columnTitle.topic,
-        this.thoughtAggregation.topic
-      )
-    ) {
+    } else if (thoughtWasMovedFromThisColumn(thought.topic, thought.columnTitle.topic, this.thoughtAggregation.topic)) {
       this.deleteThought(thought);
     }
   }
@@ -112,19 +98,14 @@ export class ThoughtsColumnComponent implements OnInit {
   }
 
   get totalThoughtCount(): number {
-    return (
-      this.thoughtAggregation.items.active.length +
-      this.thoughtAggregation.items.completed.length
-    );
+    return this.thoughtAggregation.items.active.length + this.thoughtAggregation.items.completed.length;
   }
 
   get activeThoughts(): Array<Thought> {
     let thoughts = [];
 
     if (this.thoughtsAreSorted) {
-      thoughts = this.thoughtAggregation.items.active
-        .slice()
-        .sort((a: Thought, b: Thought) => b.hearts - a.hearts);
+      thoughts = this.thoughtAggregation.items.active.slice().sort((a: Thought, b: Thought) => b.hearts - a.hearts);
     } else {
       thoughts = this.thoughtAggregation.items.active;
     }
@@ -136,9 +117,7 @@ export class ThoughtsColumnComponent implements OnInit {
     let thoughts = [];
 
     if (this.archived && this.thoughtsAreSorted) {
-      thoughts = this.thoughtAggregation.items.completed
-        .slice()
-        .sort((a: Thought, b: Thought) => b.hearts - a.hearts);
+      thoughts = this.thoughtAggregation.items.completed.slice().sort((a: Thought, b: Thought) => b.hearts - a.hearts);
     } else {
       thoughts = this.thoughtAggregation.items.completed;
     }
@@ -157,21 +136,12 @@ export class ThoughtsColumnComponent implements OnInit {
   }
 
   updateThought(updatedThought: Thought) {
-    const completedIndex = this.thoughtAggregation.items.completed.findIndex(
-      (item: Thought) => item.id === updatedThought.id
-    );
-    const activeIndex = this.thoughtAggregation.items.active.findIndex(
-      (item: Thought) => item.id === updatedThought.id
-    );
-
     function indexWasFound(index: number): boolean {
       return index !== -1;
     }
 
     function ensureInColumn(thought: Thought, column: Array<object>) {
-      const index = column.findIndex(
-        (item: Thought) => item.id === updatedThought.id
-      );
+      const index = column.findIndex((item: Thought) => item.id === updatedThought.id);
 
       if (indexWasFound(index)) {
         Object.assign(column[index], thought);
@@ -182,9 +152,7 @@ export class ThoughtsColumnComponent implements OnInit {
     }
 
     function ensureNotInColumn(thought: Thought, column: Array<object>) {
-      const index = column.findIndex(
-        (item: Thought) => item.id === updatedThought.id
-      );
+      const index = column.findIndex((item: Thought) => item.id === updatedThought.id);
 
       if (indexWasFound(index)) {
         thought.state = 'active';
@@ -197,10 +165,7 @@ export class ThoughtsColumnComponent implements OnInit {
       ensureNotInColumn(updatedThought, this.thoughtAggregation.items.active);
     } else {
       ensureInColumn(updatedThought, this.thoughtAggregation.items.active);
-      ensureNotInColumn(
-        updatedThought,
-        this.thoughtAggregation.items.completed
-      );
+      ensureNotInColumn(updatedThought, this.thoughtAggregation.items.completed);
     }
   }
 

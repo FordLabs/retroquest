@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,19 +15,24 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-alert, no-console */
-const { pathsToModuleNameMapper } = require('ts-jest');
-const { compilerOptions } = require('./tsconfig');
+const angularPreset = require('jest-preset-angular/jest-preset');
 
 module.exports = {
   preset: 'jest-preset-angular',
   roots: ['./src/'],
-  testMatch: ['**/+(*.)+(spec).+(ts)'],
-  setupFilesAfterEnv: ['./src/test.ts'],
+  testMatch: ['**/+(*.)+(spec|test).+(ts|js)?(x)'],
+  transform: {
+    '^.+\\.(tsx|jsx)$': 'ts-jest',
+    '^.+\\.(ts|js|html)$': 'jest-preset-angular',
+  },
+  moduleFileExtensions: ['js', 'json', 'jsx', 'node', 'ts', 'tsx', 'html'],
+  moduleNameMapper: {
+    ...angularPreset.moduleNameMapper,
+    '\\.(scss|css|jpg|png|gif)$': '<rootDir>/src/file.mock.ts',
+  },
+  setupFilesAfterEnv: ['./src/setupTests.ts'],
   collectCoverage: true,
   coverageReporters: ['html'],
   coverageDirectory: 'coverage',
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths || {}, {
-    prefix: './',
-  }),
+  testEnvironment: 'jsdom',
 };

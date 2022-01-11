@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,9 +52,7 @@ describe('Create Page', () => {
 
         it('The Happy Column Header is Green', () => {
           cy.findByText('Happy').then((happyElement) => {
-            expect(
-              window.getComputedStyle(happyElement.parent()[0]).backgroundColor
-            ).toEqual('rgb(46, 204, 113)');
+            expect(window.getComputedStyle(happyElement.parent()[0]).backgroundColor).to.equal('rgb(46, 204, 113)');
           });
         });
       });
@@ -66,9 +64,7 @@ describe('Create Page', () => {
 
         it('The Confused Column Header is Green', () => {
           cy.findByText('Confused').then((happyElement) => {
-            expect(
-              window.getComputedStyle(happyElement.parent()[0]).backgroundColor
-            ).toEqual('rgb(52, 152, 219)');
+            expect(window.getComputedStyle(happyElement.parent()[0]).backgroundColor).to.equal('rgb(52, 152, 219)');
           });
         });
       });
@@ -80,9 +76,7 @@ describe('Create Page', () => {
 
         it('The Sad Column Header is Green', () => {
           cy.findByText('Sad').then((happyElement) => {
-            expect(
-              window.getComputedStyle(happyElement.parent()[0]).backgroundColor
-            ).toEqual('rgb(231, 76, 60)');
+            expect(window.getComputedStyle(happyElement.parent()[0]).backgroundColor).to.equal('rgb(231, 76, 60)');
           });
         });
       });
@@ -94,9 +88,7 @@ describe('Create Page', () => {
 
         it('The Action Items Column Header is Green', () => {
           cy.findByText('Action Items').then((happyElement) => {
-            expect(
-              window.getComputedStyle(happyElement.parent()[0]).backgroundColor
-            ).toEqual('rgb(241, 196, 15)');
+            expect(window.getComputedStyle(happyElement.parent()[0]).backgroundColor).to.equal('rgb(241, 196, 15)');
           });
         });
       });

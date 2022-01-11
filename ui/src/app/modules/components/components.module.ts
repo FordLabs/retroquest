@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,40 +15,39 @@
  * limitations under the License.
  */
 
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ButtonComponent } from './button/button.component';
-import { StyleGuidePageComponent } from './style-guide-page/style-guide-page.component';
-import { RouterModule } from '@angular/router';
-import { RqPageComponent } from './rq-page/rq-page.component';
-import { ActionBarComponent } from './action-bar/action-bar.component';
-import { TextFieldComponent } from './text-field/text-field.component';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CountSeperatorComponent } from './count-seperator/count-seperator.component';
-import { ColumnHeaderComponent } from './column-header/column-header.component';
-import { FloatingCharacterCountdownComponent } from './floating-character-countdown/floating-character-countdown.component';
-import { TaskComponent } from './task/task.component';
-import { ActionItemTaskComponent } from './action-item-task/action-item-task.component';
-import { TaskDialogComponent } from './task-dialog/task-dialog.component';
+import { RouterModule } from '@angular/router';
+import { RecaptchaModule } from 'ng-recaptcha';
+
+import { ActionBarComponent } from './action-bar/action-bar.component';
 import { ActionItemDialogComponent } from './action-item-dialog/action-item-dialog.component';
+import { ActionItemTaskComponent } from './action-item-task/action-item-task.component';
+import { ActionsRadiatorViewComponent } from './actions-radiator-view/actions-radiator-view.component';
+import { ButtonComponent } from './button/button.component';
+import { ColumnHeaderComponent } from './column-header/column-header.component';
+import { ContributorsComponent } from './contributors/contributors.component';
+import { CountSeperatorComponent } from './count-seperator/count-seperator.component';
+import { DeletionOverlayComponent } from './deletion-overlay/deletion-overlay.component';
 import { EndRetroDialogComponent } from './end-retro-dialog/end-retro-dialog.component';
 import { FeedbackDialogComponent } from './feedback-dialog/feedback-dialog.component';
-import { ActionsRadiatorViewComponent } from './actions-radiator-view/actions-radiator-view.component';
-import { DeletionOverlayComponent } from './deletion-overlay/deletion-overlay.component';
-import { TooltipComponent } from './tooltip/tooltip.component';
-import { SettingsDialogComponent } from './settings-dialog/settings-dialog.component';
-import { PageLogoComponent } from './page-logo/page-logo.component';
+import { FloatingCharacterCountdownComponent } from './floating-character-countdown/floating-character-countdown.component';
 import { LoginFormComponent } from './login-form/login-form.component';
-import { RecaptchaModule } from 'ng-recaptcha';
-import { ContributorsComponent } from './contributors/contributors.component';
+import { PageLogoComponent } from './page-logo/page-logo.component';
+import { RqPageComponent } from './rq-page/rq-page.component';
+import { SettingsDialogComponent } from './settings-dialog/settings-dialog.component';
+import { StyleGuidePageComponent } from './style-guide-page/style-guide-page.component';
+import { TaskComponent } from './task/task.component';
+import { TaskDialogComponent } from './task-dialog/task-dialog.component';
+import { TextFieldComponent } from './text-field/text-field.component';
+import { TooltipComponent } from './tooltip/tooltip.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule.forChild([
-      { path: 'styleguide', component: StyleGuidePageComponent },
-    ]),
+    RouterModule.forChild([{ path: 'styleguide', component: StyleGuidePageComponent }]),
     RecaptchaModule,
   ],
   declarations: [

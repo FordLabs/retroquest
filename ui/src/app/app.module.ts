@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,26 +15,24 @@
  * limitations under the License.
  */
 
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { AppComponent } from './app.component';
-import { TeamsModule } from './modules/teams/teams.module';
-import { BoardsModule } from './modules/boards/boards.module';
-import { AuthInterceptor } from './modules/auth/auth-interceptor/auth-interceptor.service';
-import { TeamService } from './modules/teams/services/team.service';
-import { ComponentsModule } from './modules/components/components.module';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
+
 import { environment } from '../environments/environment';
-import { ColumnAggregationService } from './modules/teams/services/column-aggregation.service';
+
+import { AuthInterceptor } from './modules/auth/auth-interceptor/auth-interceptor.service';
+import { BoardsModule } from './modules/boards/boards.module';
+import { ComponentsModule } from './modules/components/components.module';
 import { DataService } from './modules/data.service';
-import {
-  InjectableRxStompConfig,
-  RxStompService,
-  rxStompServiceFactory,
-} from '@stomp/ng2-stompjs';
+import { ColumnAggregationService } from './modules/teams/services/column-aggregation.service';
+import { TeamService } from './modules/teams/services/team.service';
+import { TeamsModule } from './modules/teams/teams.module';
+import { AppComponent } from './app.component';
 import { myRxStompConfig } from './my-rx-stomp.config';
 
 @NgModule({
@@ -46,10 +44,7 @@ import { myRxStompConfig } from './my-rx-stomp.config';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    RouterModule.forRoot(
-      [{ path: '', redirectTo: 'login', pathMatch: 'full' }],
-      { relativeLinkResolution: 'legacy' }
-    ),
+    RouterModule.forRoot([{ path: '', redirectTo: 'login', pathMatch: 'full' }], { relativeLinkResolution: 'legacy' }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
     }),

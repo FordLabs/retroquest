@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,18 +15,11 @@
  * limitations under the License.
  */
 
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+
 import { Column } from '../../domain/column';
-import { emojify } from '../../utils/EmojiGenerator';
 import { Themes } from '../../domain/Theme';
+import { emojify } from '../../utils/EmojiGenerator';
 
 @Component({
   selector: 'rq-column-header',
@@ -60,7 +53,7 @@ export class ColumnHeaderComponent implements OnInit {
   sorted = false;
   maxTextLength = 16;
   escapeKeyPressed = false;
-  myWindow: object = window;
+  myWindow: Window = window;
 
   public ngOnInit() {
     this.titleCopy = this.title.slice(0);
@@ -93,7 +86,6 @@ export class ColumnHeaderComponent implements OnInit {
   }
 
   private focusInput(): void {
-    // @ts-ignore
     this.myWindow.setTimeout(() => {
       this.inputFieldRef.nativeElement.focus();
       this.inputFieldRef.nativeElement.select();
@@ -101,7 +93,6 @@ export class ColumnHeaderComponent implements OnInit {
   }
 
   public blurInput(): void {
-    // @ts-ignore
     this.myWindow.setTimeout(() => {
       this.inputFieldRef.nativeElement.blur();
     }, 0);

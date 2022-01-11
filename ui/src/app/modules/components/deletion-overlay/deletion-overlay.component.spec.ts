@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +15,9 @@
  * limitations under the License.
  */
 
-import { DeletionOverlayComponent } from './deletion-overlay.component';
 import { createMockEventEmitter } from '../../utils/testutils';
+
+import { DeletionOverlayComponent } from './deletion-overlay.component';
 
 describe('DeletionOverlayComponent', () => {
   let component: DeletionOverlayComponent;

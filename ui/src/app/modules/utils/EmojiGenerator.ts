@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,8 +23,8 @@ const emojiMap = {
   ':p': '😋',
   ':|': '😐',
   ';p': '\uD83D\uDE1C',
-  ':\'(': '😭',
-  '^^': '😊'
+  ":'(": '😭',
+  '^^': '😊',
 };
 
 function escapeSpecialChars(regex) {
@@ -32,7 +32,6 @@ function escapeSpecialChars(regex) {
 }
 
 export function emojify(str: string): string {
-
   for (const key of Object.keys(emojiMap)) {
     const regex = new RegExp(escapeSpecialChars(key), 'gim');
     str = str.replace(regex, emojiMap[key]);

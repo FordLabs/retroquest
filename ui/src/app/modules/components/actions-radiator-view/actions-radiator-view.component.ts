@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,19 +15,13 @@
  * limitations under the License.
  */
 
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { ActionItem } from '../../domain/action-item';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import * as $ from 'jquery';
+
+import { DataService } from '../../data.service';
+import { ActionItem } from '../../domain/action-item';
 import { Themes } from '../../domain/Theme';
 import { ActionItemService } from '../../teams/services/action.service';
-import { DataService } from '../../data.service';
 
 const ESC_KEY = 27;
 
@@ -44,8 +38,7 @@ export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
   @Input() theme;
   @Input() teamId: string;
 
-  @Output() visibilityChanged: EventEmitter<boolean> =
-    new EventEmitter<boolean>();
+  @Output() visibilityChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   actionItems: Array<ActionItem>;
 
@@ -54,10 +47,7 @@ export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
   pageIsAutoScrolling = false;
   scrollingIntervalId: any = null;
 
-  constructor(
-    private actionItemService: ActionItemService,
-    private dataService: DataService
-  ) {}
+  constructor(private actionItemService: ActionItemService, private dataService: DataService) {}
 
   ngOnInit(): void {
     this.teamId = this.dataService.team.id;
@@ -65,11 +55,9 @@ export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
 
     this.dataService.themeChanged.subscribe((theme) => (this.theme = theme));
 
-    this.actionItemService
-      .fetchActionItems(this.teamId)
-      .subscribe((actionItems) => {
-        this.actionItems = actionItems.filter((action) => !action.completed);
-      });
+    this.actionItemService.fetchActionItems(this.teamId).subscribe((actionItems) => {
+      this.actionItems = actionItems.filter((action) => !action.completed);
+    });
   }
 
   ngOnDestroy(): void {
@@ -89,10 +77,7 @@ export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
 
   private scrollToBottomOfPage() {
     const rootPage = $('rq-sub-app');
-    rootPage.animate(
-      { scrollTop: rootPage[0].scrollHeight },
-      this.scrollInterval
-    );
+    rootPage.animate({ scrollTop: rootPage[0].scrollHeight }, this.scrollInterval);
   }
 
   public autoScrollPage() {

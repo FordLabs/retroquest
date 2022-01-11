@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,12 +15,14 @@
  * limitations under the License.
  */
 
-import { BoardService } from './board.service';
 import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
 import moment from 'moment';
-import { emptyThoughtWithColumn } from '../../domain/thought';
+import { Subject } from 'rxjs';
+
 import { Board } from '../../domain/board';
+import { emptyThoughtWithColumn } from '../../domain/thought';
+
+import { BoardService } from './board.service';
 
 describe('BoardService', () => {
   let service: BoardService;
@@ -36,12 +38,11 @@ describe('BoardService', () => {
     postRequestSubject = jest.fn().mockReturnValue(new Subject<Board[]>());
     deleteRequestSubject = jest.fn().mockReturnValue(new Subject<Board[]>());
 
-    // @ts-ignore
     mockHttpClient = {
       get: getRequestSubject,
       post: postRequestSubject,
       delete: deleteRequestSubject,
-    } as HttpClient;
+    } as unknown as HttpClient;
     service = new BoardService(mockHttpClient);
   });
 
@@ -56,9 +57,7 @@ describe('BoardService', () => {
 
     it(`should request thoughts from the thoughts api with a page index of 0`, () => {
       service.fetchBoards(teamId, 0).subscribe();
-      expect(
-        mockHttpClient.get
-      ).toHaveBeenCalledWith(`/api/team/${teamId}/boards`, { params });
+      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/boards`, { params });
     });
 
     it('should send the boards on successful request', () => {
@@ -84,13 +83,10 @@ describe('BoardService', () => {
 
       service.createBoard(teamId, thoughts).subscribe();
 
-      expect(mockHttpClient.post).toHaveBeenCalledWith(
-        `/api/team/${teamId}/board`,
-        {
-          teamId,
-          thoughts,
-        }
-      );
+      expect(mockHttpClient.post).toHaveBeenCalledWith(`/api/team/${teamId}/board`, {
+        teamId,
+        thoughts,
+      });
     });
   });
 
@@ -98,9 +94,7 @@ describe('BoardService', () => {
     it('should call the delete board endpoint', () => {
       const boardId = -1;
       service.deleteBoard(teamId, boardId).subscribe();
-      expect(mockHttpClient.delete).toHaveBeenCalledWith(
-        `/api/team/${teamId}/board/${boardId}`
-      );
+      expect(mockHttpClient.delete).toHaveBeenCalledWith(`/api/team/${teamId}/board/${boardId}`);
     });
   });
 
@@ -108,9 +102,7 @@ describe('BoardService', () => {
     it('should call the get thoughts for board endpoint', () => {
       const boardId = -1;
       service.fetchThoughtsForBoard(teamId, boardId).subscribe();
-      expect(mockHttpClient.get).toHaveBeenCalledWith(
-        `/api/team/${teamId}/board/${boardId}/thoughts`
-      );
+      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/board/${boardId}/thoughts`);
     });
   });
 });

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,9 +40,7 @@ export function removeItemFromColumn(response: Item, items: ItemSorter): void {
 }
 
 function removeItemFromList(items: Item[], itemToFind: Item): void {
-  const removeIndex = items.findIndex(
-    (item) => item.id === itemToFind.id
-  );
+  const removeIndex = items.findIndex((item) => item.id === itemToFind.id);
   if (removeIndex > -1) {
     items.splice(removeIndex, 1);
   }

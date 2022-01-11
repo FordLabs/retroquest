@@ -15,11 +15,13 @@
  * limitations under the License.
  */
 
-import { Observable } from 'rxjs';
-import { ThoughtService } from './thought.service';
-import { createMockHttpClient } from '../../utils/testutils';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
 import { DataService } from '../../data.service';
+import { createMockHttpClient } from '../../utils/testutils';
+
+import { ThoughtService } from './thought.service';
 
 describe('ThoughtService', () => {
   let service: ThoughtService;
@@ -28,10 +30,7 @@ describe('ThoughtService', () => {
   const dataService: DataService = new DataService();
   const teamId = 'teamId';
 
-  function createTestThought(
-    team: string,
-    id: number = Math.floor(Math.random() * 999999999)
-  ) {
+  function createTestThought(team: string, id: number = Math.floor(Math.random() * 999999999)) {
     return {
       id,
       teamId: team,
@@ -52,19 +51,14 @@ describe('ThoughtService', () => {
     mockHttpClient = createMockHttpClient();
     dataService.team.id = teamId;
 
-    service = new ThoughtService(
-      mockHttpClient,
-      dataService
-    );
+    service = new ThoughtService(mockHttpClient, dataService);
   });
 
   describe('Fetch Thoughts', () => {
     it('should request thoughts from the thoughts api', () => {
       const returnObj = service.fetchThoughts(teamId);
 
-      expect(mockHttpClient.get).toHaveBeenCalledWith(
-        `/api/team/${teamId}/thoughts`
-      );
+      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${teamId}/thoughts`);
       expect(returnObj instanceof Observable).toBe(true);
     });
   });
@@ -75,11 +69,9 @@ describe('ThoughtService', () => {
 
       service.addThought(testThought);
 
-      expect(mockHttpClient.post).toHaveBeenCalledWith(
-        `/api/team/${teamId}/thought`,
-        JSON.stringify(testThought),
-        {headers: {'Content-Type': 'application/json'}}
-      );
+      expect(mockHttpClient.post).toHaveBeenCalledWith(`/api/team/${teamId}/thought`, JSON.stringify(testThought), {
+        headers: { 'Content-Type': 'application/json' },
+      });
     });
   });
 
@@ -92,13 +84,13 @@ describe('ThoughtService', () => {
 
     it('should update if a thought is discussed', () => {
       const testThought = createTestThought(teamId, 1);
-      const expectedBody = {discussed: false};
+      const expectedBody = { discussed: false };
       service.updateDiscussionStatus(testThought, false);
       expect(mockHttpClient.put).toHaveBeenCalledWith(
         `/api/team/${teamId}/thought/${testThought.id}/discuss`,
         JSON.stringify(expectedBody),
-        {headers: {'Content-Type': 'application/json'}}
-        );
+        { headers: { 'Content-Type': 'application/json' } }
+      );
     });
 
     it('should update a thought topic', () => {
@@ -114,7 +106,7 @@ describe('ThoughtService', () => {
       expect(mockHttpClient.put).toHaveBeenCalledWith(
         `/api/team/${teamId}/thought/${testThought.id}/topic`,
         JSON.stringify(expectedBody),
-        {headers: {'Content-Type': 'application/json'}}
+        { headers: { 'Content-Type': 'application/json' } }
       );
     });
 
@@ -131,7 +123,7 @@ describe('ThoughtService', () => {
       expect(mockHttpClient.put).toHaveBeenCalledWith(
         `/api/team/${teamId}/thought/${testThought.id}/message`,
         JSON.stringify(expectedBody),
-        {headers: {'Content-Type': 'application/json'}}
+        { headers: { 'Content-Type': 'application/json' } }
       );
     });
   });

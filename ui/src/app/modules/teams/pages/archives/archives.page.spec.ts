@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,16 +15,17 @@
  * limitations under the License.
  */
 
-import { ArchivesPageComponent } from './archives.page';
 import { Subject } from 'rxjs';
-import { TeamService } from '../../services/team.service';
-import { BoardService } from '../../services/board.service';
-import { Board, emptyBoardWithThought } from '../../../domain/board';
+
 import { DataService } from '../../../data.service';
+import { Board, emptyBoardWithThought } from '../../../domain/board';
 import { ActionItemService } from '../../services/action.service';
+import { BoardService } from '../../services/board.service';
+import { TeamService } from '../../services/team.service';
+
+import { ArchivesPageComponent } from './archives.page';
 
 describe('ArchivesPageComponent', () => {
-  let paramsSubject: Subject<Object>;
   let fetchTeamNameSubject: Subject<string>;
   let fetchBoardsSubject: Subject<Array<Board>>;
 
@@ -36,49 +37,30 @@ describe('ArchivesPageComponent', () => {
 
   let component: ArchivesPageComponent;
 
-  let paramsObj;
-  let returnBoard;
-
   beforeEach(() => {
-    paramsSubject = new Subject();
     fetchTeamNameSubject = new Subject();
     fetchBoardsSubject = new Subject();
 
-    // @ts-ignore
     mockTeamService = {
       fetchTeamName: jest.fn().mockReturnValue(fetchTeamNameSubject),
-    } as TeamService;
+    } as unknown as TeamService;
 
-    // @ts-ignore
     mockBoardService = {
       fetchBoards: jest.fn().mockReturnValue(fetchBoardsSubject),
-    } as BoardService;
+    } as unknown as BoardService;
 
-    // @ts-ignore
     mockWindow = {
       clearInterval: jest.fn(),
-    } as Window;
+    } as unknown as Window;
 
     mockDataService = new DataService();
 
-    // @ts-ignore
     mockActionItemService = {
       fetchArchivedActionItems: jest.fn().mockReturnValue(new Subject()),
-    } as ActionItemService;
+    } as unknown as ActionItemService;
 
-    component = new ArchivesPageComponent(
-      mockDataService,
-      mockTeamService,
-      mockBoardService,
-      mockActionItemService
-    );
+    component = new ArchivesPageComponent(mockDataService, mockTeamService, mockBoardService, mockActionItemService);
     component.globalWindowRef = mockWindow;
-
-    paramsObj = {
-      teamId: 'test-id',
-    };
-
-    returnBoard = emptyBoardWithThought();
   });
 
   it('should create', () => {

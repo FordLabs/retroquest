@@ -15,34 +15,36 @@
  * limitations under the License.
  */
 
-import { NgModule } from '@angular/core';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { TeamPageComponent } from './pages/team/team.page';
-import { RouterModule } from '@angular/router';
-import { HeaderComponent } from './components/header/header.component';
-import { ThoughtsColumnComponent } from './components/thoughts-column/thoughts-column.component';
-import { ThoughtService } from './services/thought.service';
-import { ThoughtsHeaderComponent } from './components/thoughts-header/thoughts-header.component';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActionsHeaderComponent } from './components/actions-header/actions-header.component';
-import { ActionsColumnComponent } from './components/actions-column/actions-column.component';
-import { TeamService } from './services/team.service';
-import { ActionItemService } from './services/action.service';
-import { ColumnService } from './services/column.service';
-import { TeamPageQueryParamGuard } from './services/team-page-query-param-guard';
-import { SubAppComponent } from '../sub-app/sub-app.component';
+import { RouterModule } from '@angular/router';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+
 import { AuthGuard } from '../auth/auth-guard/auth.guard';
 import { ActionsRadiatorViewComponent } from '../components/actions-radiator-view/actions-radiator-view.component';
-import { ArchivesPageComponent } from './pages/archives/archives.page';
-import { ArchivedBoardPageComponent } from './pages/archived-board/archived-board.page';
 import { ComponentsModule } from '../components/components.module';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { DragDropModule } from '@angular/cdk/drag-drop';
+import { TopHeaderComponent } from '../components/top-header/top-header.component';
+import { SubAppComponent } from '../sub-app/sub-app.component';
+
+import { ActionsColumnComponent } from './components/actions-column/actions-column.component';
+import { ActionsHeaderComponent } from './components/actions-header/actions-header.component';
+import { BoardSummaryComponent } from './components/board-summary/board-summary.component';
+import { HeaderComponent } from './components/header/header.component';
+import { ThoughtsColumnComponent } from './components/thoughts-column/thoughts-column.component';
+import { ThoughtsHeaderComponent } from './components/thoughts-header/thoughts-header.component';
+import { ArchivedBoardPageComponent } from './pages/archived-board/archived-board.page';
+import { ArchivesPageComponent } from './pages/archives/archives.page';
+import { TeamPageComponent } from './pages/team/team.page';
+import { ActionItemService } from './services/action.service';
+import { ColumnService } from './services/column.service';
+import { EndRetroService } from './services/end-retro.service';
 import { FeedbackService } from './services/feedback.service';
 import { SaveCheckerService } from './services/save-checker.service';
-import { EndRetroService } from './services/end-retro.service';
-import { BoardSummaryComponent } from './components/board-summary/board-summary.component';
-import { TopHeaderComponent } from '../components/top-header/top-header.component';
+import { TeamService } from './services/team.service';
+import { TeamPageQueryParamGuard } from './services/team-page-query-param-guard';
+import { ThoughtService } from './services/thought.service';
 
 @NgModule({
   imports: [

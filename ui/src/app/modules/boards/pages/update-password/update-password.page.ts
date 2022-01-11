@@ -15,21 +15,20 @@
  * limitations under the License.
  */
 
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {TeamService} from '../../../teams/services/team.service';
-import {RecaptchaComponent} from 'ng-recaptcha';
-import {of} from 'rxjs/internal/observable/of';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RecaptchaComponent } from 'ng-recaptcha';
+import { of } from 'rxjs/internal/observable/of';
+
+import { TeamService } from '../../../teams/services/team.service';
 
 @Component({
   selector: 'rq-update-password',
   templateUrl: './update-password.page.html',
-  styleUrls: ['./update-password.page.scss']
+  styleUrls: ['./update-password.page.scss'],
 })
 export class UpdatePasswordComponent implements OnInit {
-
-  constructor(private teamService: TeamService, private route: ActivatedRoute, private router: Router) {
-  }
+  constructor(private teamService: TeamService, private route: ActivatedRoute, private router: Router) {}
 
   @ViewChild(RecaptchaComponent) recaptchaComponent: RecaptchaComponent;
 
@@ -45,11 +44,10 @@ export class UpdatePasswordComponent implements OnInit {
 
   updatePassword(): void {
     if (this.validateInput()) {
-      this.teamService.updatePassword(this.teamId, this.previousPassword, this.newPassword)
-        .subscribe(
-          response => this.handleResponse(response),
-          error => this.handleError(error)
-        );
+      this.teamService.updatePassword(this.teamId, this.previousPassword, this.newPassword).subscribe(
+        () => this.handleResponse(),
+        (error) => this.handleError(error)
+      );
     }
   }
 
@@ -73,7 +71,7 @@ export class UpdatePasswordComponent implements OnInit {
     return true;
   }
 
-  private handleResponse(response): void {
+  private handleResponse(): void {
     this.router.navigateByUrl(`team/${this.teamId}`);
   }
 

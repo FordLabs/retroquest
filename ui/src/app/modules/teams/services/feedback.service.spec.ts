@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +15,11 @@
  * limitations under the License.
  */
 
-import { FeedbackService } from './feedback.service';
 import { Observable } from 'rxjs/index';
+
 import { createMockHttpClient } from '../../utils/testutils';
+
+import { FeedbackService } from './feedback.service';
 
 describe('FeedbackService', () => {
   let service: FeedbackService;
@@ -43,11 +45,7 @@ describe('FeedbackService', () => {
 
     const response = service.addFeedback(feedback);
 
-    expect(mockHttpClient.post).toHaveBeenCalledWith(
-      '/api/feedback/',
-      feedback,
-      { observe: 'response' }
-    );
+    expect(mockHttpClient.post).toHaveBeenCalledWith('/api/feedback/', feedback, { observe: 'response' });
 
     expect(response instanceof Observable).toBe(true);
   });

@@ -1,5 +1,5 @@
-/*!
- * Copyright (c) 2021 Ford Motor Company
+/*
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,21 +37,11 @@
   }
 
   .left-count-separator {
-    background: linear-gradient(
-      to right,
-      transparent,
-      opacity($asphalt, 0.1) 15%,
-      opacity($asphalt, 0.15)
-    );
+    background: linear-gradient(to right, transparent, opacity($asphalt, 0.1) 15%, opacity($asphalt, 0.15));
   }
 
   .right-count-separator {
-    background: linear-gradient(
-      to right,
-      opacity($asphalt, 0.15) 0%,
-      opacity($asphalt, 0.1) 85%,
-      transparent
-    );
+    background: linear-gradient(to right, opacity($asphalt, 0.15) 0%, opacity($asphalt, 0.1) 85%, transparent);
   }
 
   .count-value {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,17 +15,17 @@
  * limitations under the License.
  */
 
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { HttpResponse } from '@angular/common/http';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RecaptchaComponent } from 'ng-recaptcha';
+import { EMPTY } from 'rxjs';
+import { Observable } from 'rxjs/internal/Observable';
+import { of } from 'rxjs/internal/observable/of';
+import { concatMap, map } from 'rxjs/operators';
 
-import {AuthService} from '../../../auth/auth.service';
-import {TeamService} from '../../../teams/services/team.service';
-import {RecaptchaComponent} from 'ng-recaptcha';
-import {concatMap, map} from 'rxjs/operators';
-import {EMPTY} from 'rxjs';
-import {Observable} from 'rxjs/internal/Observable';
-import {HttpResponse} from '@angular/common/http';
-import {of} from 'rxjs/internal/observable/of';
+import { AuthService } from '../../../auth/auth.service';
+import { TeamService } from '../../../teams/services/team.service';
 
 @Component({
   selector: 'rq-login',
@@ -33,11 +33,7 @@ import {of} from 'rxjs/internal/observable/of';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginComponent implements OnInit {
-
-  constructor(private teamService: TeamService,
-              private route: ActivatedRoute,
-              private router: Router) {
-  }
+  constructor(private teamService: TeamService, private route: ActivatedRoute, private router: Router) {}
 
   @ViewChild(RecaptchaComponent) recaptchaComponent: RecaptchaComponent;
 
@@ -52,8 +48,8 @@ export class LoginComponent implements OnInit {
         (teamName) => {
           this.teamName = teamName;
         },
-        (error) => {
-        });
+        () => {}
+      );
     }
   }
 
@@ -62,21 +58,23 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.teamService.isCaptchaEnabledForTeam(this.teamName).pipe(
-      map(response => JSON.parse(response.body).captchaEnabled),
-      concatMap(captchaEnabled => this.loginOrExecuteReCaptcha(captchaEnabled))
-    ).subscribe(
-      response => this.handleResponse(response),
-      error => this.handleError(error)
-    );
+    this.teamService
+      .isCaptchaEnabledForTeam(this.teamName)
+      .pipe(
+        map((response) => JSON.parse(response.body).captchaEnabled),
+        concatMap((captchaEnabled) => this.loginOrExecuteReCaptcha(captchaEnabled))
+      )
+      .subscribe(
+        (response) => this.handleResponse(response),
+        (error) => this.handleError(error)
+      );
   }
 
   login(captchaResponse: string): void {
-    this.teamService.login(this.teamName, this.password, captchaResponse)
-      .subscribe(
-        response => this.handleResponse(response),
-        error => this.handleError(error)
-      );
+    this.teamService.login(this.teamName, this.password, captchaResponse).subscribe(
+      (response) => this.handleResponse(response),
+      (error) => this.handleError(error)
+    );
   }
 
   private loginOrExecuteReCaptcha(captchaEnabled): Observable<HttpResponse<Object>> {
@@ -115,5 +113,4 @@ export class LoginComponent implements OnInit {
     console.error('A login error occurred: ', this.errorMessage);
     return of(this.errorMessage);
   }
-
 }

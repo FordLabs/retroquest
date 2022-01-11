@@ -16,6 +16,7 @@
  */
 
 import { NgModule } from '@angular/core';
+
 import { EmptyComponent } from './empty.page';
 
 @NgModule({

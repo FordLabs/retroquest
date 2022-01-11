@@ -15,18 +15,12 @@
  * limitations under the License.
  */
 
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
-import { Themes } from '../../domain/Theme';
-import { SettingsDialogComponent } from '../settings-dialog/settings-dialog.component';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { Themes } from '../../domain/Theme';
 import { SaveCheckerService } from '../../teams/services/save-checker.service';
+import { SettingsDialogComponent } from '../settings-dialog/settings-dialog.component';
 
 @Component({
   selector: 'rq-top-header',
@@ -45,10 +39,7 @@ export class TopHeaderComponent implements OnInit {
 
   @Input() selectedView = '';
 
-  constructor(
-    private router: Router,
-    private saveCheckerService: SaveCheckerService
-  ) {}
+  constructor(private router: Router, private saveCheckerService: SaveCheckerService) {}
 
   ngOnInit(): void {
     if (this.router.url.endsWith(this.teamId)) {

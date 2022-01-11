@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,12 +15,14 @@
  * limitations under the License.
  */
 
-import { AuthInterceptor } from './auth-interceptor.service';
-import { AuthService } from '../auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
 import { isEmpty } from 'rxjs/operators';
+
+import { AuthService } from '../auth.service';
+
+import { AuthInterceptor } from './auth-interceptor.service';
 
 describe('AuthInterceptor', () => {
   const fakeToken = 'fake-token';
@@ -63,11 +65,13 @@ describe('AuthInterceptor', () => {
     });
   });
 
-  describe.each([401, 403]) ('handle auth error for %d', (status) => {
+  describe.each([401, 403])('handle auth error for %d', (status) => {
     beforeEach(() => {
       AuthService.clearToken = jest.fn();
-      mockHttpHandler.handle = jest.fn(() => throwError({status, url: '/api/team/teamId/thought'} as HttpErrorResponse));
-    })
+      mockHttpHandler.handle = jest.fn(() =>
+        throwError({ status, url: '/api/team/teamId/thought' } as HttpErrorResponse)
+      );
+    });
 
     it('should redirect to the login page', () => {
       interceptor.intercept(mockHttpRequest, mockHttpHandler).subscribe();
@@ -80,19 +84,21 @@ describe('AuthInterceptor', () => {
     });
 
     it('should return EMPTY if auth error', (done) => {
-      interceptor.intercept(mockHttpRequest, mockHttpHandler).pipe(isEmpty()).subscribe(response => {
-        expect(response).toEqual(true)
-        done()
-      });
+      interceptor
+        .intercept(mockHttpRequest, mockHttpHandler)
+        .pipe(isEmpty())
+        .subscribe((response) => {
+          expect(response).toEqual(true);
+          done();
+        });
     });
-
   });
 
   it('should only rethrow error if not auth issue', (done) => {
-    mockHttpHandler.handle = jest.fn(() => throwError({status: 500, url: '/something'} as HttpErrorResponse));
+    mockHttpHandler.handle = jest.fn(() => throwError({ status: 500, url: '/something' } as HttpErrorResponse));
     interceptor.intercept(mockHttpRequest, mockHttpHandler).subscribe(
       () => done.fail('Should rethrow error'),
-      error => {
+      (error) => {
         expect(error.status).toEqual(500);
         done();
       }
@@ -100,10 +106,12 @@ describe('AuthInterceptor', () => {
   });
 
   it('should rethrow error if url is login url', (done) => {
-    mockHttpHandler.handle = jest.fn(() => throwError({status: 401, url: 'http://localhost:4200/api/team/login'} as HttpErrorResponse));
+    mockHttpHandler.handle = jest.fn(() =>
+      throwError({ status: 401, url: 'http://localhost:4200/api/team/login' } as HttpErrorResponse)
+    );
     interceptor.intercept(mockHttpRequest, mockHttpHandler).subscribe(
       () => done.fail('Should rethrow error'),
-      error => {
+      (error) => {
         expect(error.status).toEqual(401);
         expect(error.url).toEqual('http://localhost:4200/api/team/login');
         done();

@@ -16,16 +16,18 @@
  */
 
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Observable, of } from 'rxjs/index';
-import 'jest-preset-angular/setup-jest';
 import { EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { Client, IMessage } from '@stomp/stompjs';
-import { Subscription } from 'rxjs';
-import { TeamService } from '../teams/services/team.service';
 import { RenderResult } from '@testing-library/angular/src/lib/models';
 import userEvent from '@testing-library/user-event';
+import { Subscription } from 'rxjs';
+import { Observable, of } from 'rxjs/index';
+
+import 'jest-preset-angular/setup-jest';
+
+import { TeamService } from '../teams/services/team.service';
 
 export function createMockHttpClient(): HttpClient {
   return {
@@ -102,11 +104,7 @@ export function createMockTeamService(): TeamService {
   } as unknown as TeamService;
 }
 
-export function enterTextIntoFormElement(
-  component: RenderResult<any>,
-  labelByText: string,
-  formValue: string
-): void {
+export function enterTextIntoFormElement(component: RenderResult<any>, labelByText: string, formValue: string): void {
   const input = component.getByLabelText(labelByText);
   userEvent.type(input, formValue);
 }

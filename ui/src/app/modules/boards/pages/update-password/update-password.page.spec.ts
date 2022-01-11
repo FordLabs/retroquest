@@ -15,16 +15,15 @@
  * limitations under the License.
  */
 
-import { UpdatePasswordComponent } from './update-password.page';
-import { AuthService } from '../../../auth/auth.service';
+import { HttpResponse } from '@angular/common/http';
 import { Subject, throwError } from 'rxjs';
 import { of } from 'rxjs/internal/observable/of';
-import { HttpResponse } from '@angular/common/http';
-import {
-  createMockRecaptchaComponent,
-  createMockRouter,
-} from '../../../utils/testutils';
+
+import { AuthService } from '../../../auth/auth.service';
 import { TeamService } from '../../../teams/services/team.service';
+import { createMockRecaptchaComponent, createMockRouter } from '../../../utils/testutils';
+
+import { UpdatePasswordComponent } from './update-password.page';
 
 describe('UpdatePasswordComponent', () => {
   let component: UpdatePasswordComponent;
@@ -34,10 +33,9 @@ describe('UpdatePasswordComponent', () => {
   let mockRecaptchaComponent;
 
   beforeEach(() => {
-    // @ts-ignore
     mockTeamService = {
       updatePassword: jest.fn().mockReturnValue(new Subject()),
-    } as TeamService;
+    } as unknown as TeamService;
     mockActivatedRoute = { snapshot: { params: { teamId: -1 } } };
     mockRouter = createMockRouter();
     mockRecaptchaComponent = createMockRecaptchaComponent();
@@ -45,11 +43,7 @@ describe('UpdatePasswordComponent', () => {
     jest.spyOn(AuthService, 'setToken');
     jest.spyOn(console, 'error');
 
-    component = new UpdatePasswordComponent(
-      mockTeamService,
-      mockActivatedRoute,
-      mockRouter
-    );
+    component = new UpdatePasswordComponent(mockTeamService, mockActivatedRoute, mockRouter);
     component.recaptchaComponent = mockRecaptchaComponent;
   });
 
@@ -60,11 +54,7 @@ describe('UpdatePasswordComponent', () => {
       component.newPassword = 'newPassword';
       component.confirmPassword = 'newPassword';
       component.updatePassword();
-      expect(mockTeamService.updatePassword).toHaveBeenCalledWith(
-        'teamId',
-        'oldPassword',
-        'newPassword'
-      );
+      expect(mockTeamService.updatePassword).toHaveBeenCalledWith('teamId', 'oldPassword', 'newPassword');
     });
 
     it('should navigate back to team page', () => {
@@ -77,9 +67,7 @@ describe('UpdatePasswordComponent', () => {
         body: 'Password updated successfully',
       });
 
-      mockTeamService.updatePassword = jest
-        .fn()
-        .mockReturnValue(of(updatePasswordResponse));
+      mockTeamService.updatePassword = jest.fn().mockReturnValue(of(updatePasswordResponse));
 
       component.updatePassword();
       expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('team/teamId');
@@ -94,39 +82,26 @@ describe('UpdatePasswordComponent', () => {
       const httpErrorMessage = 'server error message';
       const error = { error: JSON.stringify({ message: httpErrorMessage }) };
 
-      const captchaResponse: HttpResponse<string> = new HttpResponse({
-        body: JSON.stringify({ captchaEnabled: false }),
-      });
-
-      mockTeamService.updatePassword = jest
-        .fn()
-        .mockReturnValue(throwError(error));
+      mockTeamService.updatePassword = jest.fn().mockReturnValue(throwError(error));
 
       component.updatePassword();
 
       expect(component.errorMessage).toEqual(httpErrorMessage);
-      expect(console.error).toHaveBeenCalledWith(
-        'A registration error occurred: ',
-        httpErrorMessage
-      );
+      expect(console.error).toHaveBeenCalledWith('A registration error occurred: ', httpErrorMessage);
     });
 
     describe('input validation', () => {
       it('should not update if the previous password field is null', () => {
         component.previousPassword = null;
         component.updatePassword();
-        expect(component.errorMessage).toBe(
-          'Please enter your original password'
-        );
+        expect(component.errorMessage).toBe('Please enter your original password');
         expect(mockTeamService.updatePassword).not.toHaveBeenCalled();
       });
 
       it('should not update if the previous password field is empty', () => {
         component.previousPassword = '';
         component.updatePassword();
-        expect(component.errorMessage).toBe(
-          'Please enter your original password'
-        );
+        expect(component.errorMessage).toBe('Please enter your original password');
         expect(mockTeamService.updatePassword).not.toHaveBeenCalled();
       });
 
@@ -153,9 +128,7 @@ describe('UpdatePasswordComponent', () => {
         component.newPassword = 'newPassword';
         component.confirmPassword = 'aNewPassword';
         component.updatePassword();
-        expect(component.errorMessage).toBe(
-          'Please enter matching new passwords'
-        );
+        expect(component.errorMessage).toBe('Please enter matching new passwords');
         expect(mockTeamService.updatePassword).not.toHaveBeenCalled();
       });
     });

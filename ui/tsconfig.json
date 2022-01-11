@@ -11,11 +11,15 @@
     "experimentalDecorators": true,
     "target": "es2015",
     "typeRoots": ["node_modules/@types"],
-    "types": [],
-    "lib": ["es2018", "dom"]
+    "types": ["jest"],
+    "lib": ["es2018", "dom"],
+    "jsx": "react",
   },
+  "include": [
+    "src/**/*"
+  ],
   "files": ["src/main.ts", "src/polyfills.ts"],
-  "exclude": ["src/test.ts"],
+  "exclude": ["**/node_modules","src/setupTests.ts", "**/*.spec.ts"],
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true

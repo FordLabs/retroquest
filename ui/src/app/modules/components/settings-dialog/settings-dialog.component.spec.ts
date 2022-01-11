@@ -15,11 +15,13 @@
  * limitations under the License.
  */
 
-import { SettingsDialogComponent } from './settings-dialog.component';
-import { AuthService } from '../../auth/auth.service';
-import { Router } from '@angular/router';
 import { EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { AuthService } from '../../auth/auth.service';
 import { Themes, themeToString } from '../../domain/Theme';
+
+import { SettingsDialogComponent } from './settings-dialog.component';
 
 describe('SettingsDialogComponent', () => {
   let component: SettingsDialogComponent;
@@ -27,15 +29,13 @@ describe('SettingsDialogComponent', () => {
   let fakeThemeChangedEmitter: EventEmitter<Themes>;
 
   beforeEach(() => {
-    // @ts-ignore
     fakeRouter = {
       navigate: jest.fn().mockReturnValue(null),
-    };
+    } as unknown as Router;
 
-    // @ts-ignore
     fakeThemeChangedEmitter = {
       emit: jest.fn().mockReturnValue(null),
-    };
+    } as unknown as EventEmitter<Themes>;
 
     component = new SettingsDialogComponent(fakeRouter);
     component.themeChanged = fakeThemeChangedEmitter;
@@ -69,10 +69,7 @@ describe('SettingsDialogComponent', () => {
       const fakeTeamId = 'fake-id';
       component.teamId = fakeTeamId;
       component.updatePassword();
-      expect(fakeRouter.navigate).toHaveBeenCalledWith([
-        'update-password',
-        fakeTeamId,
-      ]);
+      expect(fakeRouter.navigate).toHaveBeenCalledWith(['update-password', fakeTeamId]);
     });
   });
 
@@ -100,9 +97,7 @@ describe('SettingsDialogComponent', () => {
     });
 
     it('should set theme value in local storage to light', () => {
-      expect(localStorage.getItem('theme')).toEqual(
-        themeToString(Themes.Light)
-      );
+      expect(localStorage.getItem('theme')).toEqual(themeToString(Themes.Light));
     });
 
     it('should emit the theme changed as light', () => {

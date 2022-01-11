@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,21 +15,21 @@
  * limitations under the License.
  */
 
-import {animate, group, style, transition, trigger} from '@angular/animations';
+import { animate, group, style, transition, trigger } from '@angular/animations';
 
 export const fadeInOutAnimation = trigger('fadeInOutAnimation', [
   transition('* => void', [
-    style({ height: '*', overflow: 'visible', opacity: '1', transform: 'translateX(0)'}),
+    style({ height: '*', overflow: 'visible', opacity: '1', transform: 'translateX(0)' }),
     group([
       animate('.4s ease', style({ height: '0', 'margin-bottom': '0' })),
-      animate('.2s ease', style({ opacity: '0', transform: 'translateX(20px)' }))
-    ])
+      animate('.2s ease', style({ opacity: '0', transform: 'translateX(20px)' })),
+    ]),
   ]),
   transition('void => active', [
     style({ height: '0', opacity: '0', transform: 'translateX(20px)' }),
     group([
       animate('.2s ease', style({ height: '*' })),
-      animate('.4s ease', style({ opacity: 1, transform: 'translateX(0)' }))
-    ])
-  ])
+      animate('.4s ease', style({ opacity: 1, transform: 'translateX(0)' })),
+    ]),
+  ]),
 ]);

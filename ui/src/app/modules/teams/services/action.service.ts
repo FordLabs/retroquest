@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,69 +15,71 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { ActionItem } from '../../domain/action-item';
 import { DataService } from '../../data.service';
+import { ActionItem } from '../../domain/action-item';
 
 @Injectable()
 export class ActionItemService {
-  constructor(
-    private http: HttpClient,
-    private dataService: DataService
-  ) {}
+  constructor(private http: HttpClient, private dataService: DataService) {}
 
   fetchActionItems(teamId): Observable<Array<ActionItem>> {
     return this.http.get<Array<ActionItem>>(`/api/team/${teamId}/action-items`);
   }
 
   fetchArchivedActionItems(teamId): Observable<Array<ActionItem>> {
-    return this.http.get<Array<ActionItem>>(
-      `/api/team/${teamId}/action-items/archived`
-    );
+    return this.http.get<Array<ActionItem>>(`/api/team/${teamId}/action-items/archived`);
   }
 
   addActionItem(actionItem: ActionItem): void {
-    this.http.post(
-      `/api/team/${this.dataService.team.id}/action-item`,
-      JSON.stringify(actionItem),
-      { headers: { 'Content-Type': 'application/json' } }
-    ).subscribe();
-
+    this.http
+      .post(`/api/team/${this.dataService.team.id}/action-item`, JSON.stringify(actionItem), {
+        headers: { 'Content-Type': 'application/json' },
+      })
+      .subscribe();
   }
 
   updateTask(actionItem: ActionItem, updatedTask: string): void {
-    this.http.put(
-      `/api/team/${this.dataService.team.id}/action-item/${actionItem.id}/task`,
-      JSON.stringify({task: updatedTask}),
-      { headers: { 'Content-Type': 'application/json' } }
-      ).subscribe();
+    this.http
+      .put(
+        `/api/team/${this.dataService.team.id}/action-item/${actionItem.id}/task`,
+        JSON.stringify({ task: updatedTask }),
+        { headers: { 'Content-Type': 'application/json' } }
+      )
+      .subscribe();
   }
 
   updateAssignee(actionItem: ActionItem, assignee: string): void {
-    this.http.put(
-      `/api/team/${this.dataService.team.id}/action-item/${actionItem.id}/assignee`,
-      JSON.stringify({assignee}),
-      { headers: { 'Content-Type': 'application/json' } }
-    ).subscribe();
+    this.http
+      .put(
+        `/api/team/${this.dataService.team.id}/action-item/${actionItem.id}/assignee`,
+        JSON.stringify({ assignee }),
+        { headers: { 'Content-Type': 'application/json' } }
+      )
+      .subscribe();
   }
 
   updateCompleted(actionItem: ActionItem, completed: boolean): void {
-    this.http.put(
-      `/api/team/${this.dataService.team.id}/action-item/${actionItem.id}/completed`,
-      JSON.stringify({completed}),
-      { headers: { 'Content-Type': 'application/json' } }
-    ).subscribe();
+    this.http
+      .put(
+        `/api/team/${this.dataService.team.id}/action-item/${actionItem.id}/completed`,
+        JSON.stringify({ completed }),
+        { headers: { 'Content-Type': 'application/json' } }
+      )
+      .subscribe();
   }
 
   updateArchived(actionItem: ActionItem, archived: boolean) {
-    this.http.put(
-      `/api/team/${this.dataService.team.id}/action-item/${actionItem.id}/archived`,
-      JSON.stringify({archived}),
-      { headers: { 'Content-Type': 'application/json' } }
-    ).subscribe();
+    this.http
+      .put(
+        `/api/team/${this.dataService.team.id}/action-item/${actionItem.id}/archived`,
+        JSON.stringify({ archived }),
+        { headers: { 'Content-Type': 'application/json' } }
+      )
+      .subscribe();
   }
 
   deleteActionItem(actionItem: ActionItem): void {

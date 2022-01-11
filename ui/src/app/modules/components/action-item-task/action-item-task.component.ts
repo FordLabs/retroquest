@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,27 +15,19 @@
  * limitations under the License.
  */
 
-import {
-  AfterViewChecked,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChild,
-} from '@angular/core';
-import { ActionItem, emptyActionItem } from '../../domain/action-item';
+import { AfterViewChecked, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import moment from 'moment';
-import { emojify } from '../../utils/EmojiGenerator';
+
+import { ActionItem, emptyActionItem } from '../../domain/action-item';
 import { Themes } from '../../domain/Theme';
+import { emojify } from '../../utils/EmojiGenerator';
 
 @Component({
   selector: 'rq-action-item-task',
   templateUrl: './action-item-task.component.html',
   styleUrls: ['./action-item-task.component.scss'],
   host: {
-    '[class.push-order-to-bottom]':
-      'actionItem.completed && !actionItem.archived',
+    '[class.push-order-to-bottom]': 'actionItem.completed && !actionItem.archived',
     '[class.edit-mode]': '!displayAsLinkable && taskEditModeEnabled',
     '[class.dialog-overlay-border]': 'enableOverlayBorder',
     '[class.dark-theme]': 'darkThemeIsEnabled',
@@ -67,7 +59,7 @@ export class ActionItemTaskComponent implements AfterViewChecked {
   _textValueLength = 0;
   deleteWasToggled = false;
   _displayAsLinkable = false;
-  myWindow: object = window;
+  myWindow: Window = window;
 
   get displayAsLinkable(): boolean {
     return this._displayAsLinkable;
@@ -132,12 +124,10 @@ export class ActionItemTaskComponent implements AfterViewChecked {
   }
 
   public initializeTextAreaHeight(): void {
-    this.editableTextArea.nativeElement.style.height =
-      this.editableTextArea.nativeElement.scrollHeight + 'px';
+    this.editableTextArea.nativeElement.style.height = this.editableTextArea.nativeElement.scrollHeight + 'px';
   }
 
   public focusInput(): void {
-    // @ts-ignore
     this.myWindow.setTimeout(() => {
       this.editableTextArea.nativeElement.focus();
       this.editableTextArea.nativeElement.select();
@@ -145,14 +135,12 @@ export class ActionItemTaskComponent implements AfterViewChecked {
   }
 
   public forceBlur() {
-    // @ts-ignore
     this.myWindow.setTimeout(() => {
       this.editableTextArea.nativeElement.blur();
     }, 0);
   }
 
   public forceBlurOnAssigneeTextField() {
-    // @ts-ignore
     this.myWindow.setTimeout(() => {
       this.assigneeTextField.nativeElement.blur();
     }, 0);

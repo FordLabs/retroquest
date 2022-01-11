@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,12 +15,14 @@
  * limitations under the License.
  */
 
-import { ActionsHeaderComponent } from './actions-header.component';
-import { Observable } from 'rxjs/index';
-import { ActionItem } from '../../../domain/action-item';
-import moment from 'moment';
-import { createMockEventEmitter } from '../../../utils/testutils';
 import MockDate from 'mockdate';
+import moment from 'moment';
+import { Observable } from 'rxjs/index';
+
+import { ActionItem } from '../../../domain/action-item';
+import { createMockEventEmitter } from '../../../utils/testutils';
+
+import { ActionsHeaderComponent } from './actions-header.component';
 
 describe('ActionsHeaderComponent', () => {
   let component: ActionsHeaderComponent;
@@ -68,9 +70,7 @@ describe('ActionsHeaderComponent', () => {
 
       component.addActionItem(newMessage);
 
-      expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(
-        expectedActionItem
-      );
+      expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(expectedActionItem);
     });
 
     it('should parse out the assignees from the new message and add it to the action item', () => {
@@ -89,9 +89,7 @@ describe('ActionsHeaderComponent', () => {
 
       component.addActionItem(newUnformattedMessage);
 
-      expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(
-        expectedActionItem
-      );
+      expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(expectedActionItem);
     });
 
     it('should set the assignees in the action item to null if none could be parsed out of the message', () => {
@@ -109,14 +107,11 @@ describe('ActionsHeaderComponent', () => {
 
       component.addActionItem(newMessage);
 
-      expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(
-        expectedActionItem
-      );
+      expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(expectedActionItem);
     });
 
     it('should not let the user submit a assignee string greater than the max limit', () => {
-      const expectedAssignee =
-        'llllllllllllllllllllllllllllllllllllllllllllllllll';
+      const expectedAssignee = 'llllllllllllllllllllllllllllllllllllllllllllllllll';
       const newMessage = `a new actionItem @${expectedAssignee}p`;
       const expectedFormattedMessage = 'a new actionItem';
 
@@ -132,9 +127,7 @@ describe('ActionsHeaderComponent', () => {
 
       component.addActionItem(newMessage);
 
-      expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(
-        expectedActionItem
-      );
+      expect(mockActionItemService.addActionItem).toHaveBeenCalledWith(expectedActionItem);
     });
   });
 
