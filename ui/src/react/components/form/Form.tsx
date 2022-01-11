@@ -42,7 +42,7 @@ export default function Form(props: FormProps): JSX.Element {
     <form className={classnames('form', className)} onSubmit={handleSubmit} {...formProps}>
       {children}
       {errorMessages.map((errorMessage, index) => (
-        <div className="error-message" key={index}>
+        <div className="error-message" key={index} data-testid="formErrorMessage">
           {errorMessage}
         </div>
       ))}
