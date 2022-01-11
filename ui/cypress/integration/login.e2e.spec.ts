@@ -46,18 +46,20 @@ describe('Logging In', () => {
     cy.login({
       teamName: 'Something not correct',
       teamId: 'Something not correct',
-      password: 'Something else wrong',
+      password: 'Something else wrong 1',
       jwt: '',
     });
-    cy.findByText('Incorrect board name. Please try again.').should('exist');
+    cy.wait('@postTeamLogin');
+    cy.get('[data-testid=formErrorMessage]').should('contain', 'Incorrect board or password. Please try again.');
   });
 
   it('Displays invalid team name/password when using bad password', () => {
     cy.login({
       ...teamCredentials,
-      password: 'Something else wrong',
+      password: 'Something else wrong 1',
     });
-    cy.findByText('Incorrect board or password. Please try again.').should('exist');
+    cy.wait('@postTeamLogin');
+    cy.get('[data-testid=formErrorMessage]').should('contain', 'Incorrect board or password. Please try again.');
   });
 
   it('Navigates to team board after successful login', () => {
@@ -67,7 +69,7 @@ describe('Logging In', () => {
 
   it('Pre-populates team name', () => {
     cy.visit('/login');
-    cy.contains('Sign in to your Board!');
+    cy.contains('Sign in to your Team!');
 
     cy.get('#teamNameInput').as('teamNameInput');
     cy.get('@teamNameInput').should('have.value', '');
