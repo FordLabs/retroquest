@@ -14,24 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { useEffect, useState } from 'react';
+import { Contributor } from '../../types/Contributor';
 
-import ContributorsService from '../services/ContributorsService';
-import { Contributor } from '../types/Contributor';
+export const mockContributors: Contributor[] = [
+  {
+    accountUrl: 'https://github.com/aaa',
+    image: 'aaa.jpg',
+  },
+  {
+    accountUrl: 'https://github.com/bbb',
+    image: 'bbb.jpg',
+  },
+];
 
-export default function (): Contributor[] {
-  const [contributors, setContributors] = useState<Contributor[]>([]);
-
-  useEffect(() => {
-    ContributorsService.getContributors().then((contributorArray) => {
-      setContributors(
-        contributorArray.map((contributor) => ({
-          accountUrl: contributor.accountUrl,
-          image: `data:image/png;base64,${contributor.image}`,
-        }))
-      );
-    });
-  }, []);
-
-  return contributors;
+export default class ContributorsService {
+  static getContributors = jest.fn();
 }

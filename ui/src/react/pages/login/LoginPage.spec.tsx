@@ -18,17 +18,25 @@ import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import { axe } from 'jest-axe';
 
-import TeamService from '../../services/__mocks__/TeamService';
+import { mockContributors } from '../../services/__mocks__/ContributorsService';
+import ContributorsService from '../../services/ContributorsService';
+import TeamService from '../../services/TeamService';
 
 import { LoginPage } from './LoginPage';
 
-describe.skip('LoginPage.spec.tsx', () => {
+jest.mock('../../services/ContributorsService');
+jest.mock('../../services/TeamService');
+
+describe('LoginPage.spec.tsx', () => {
   let container: HTMLElement;
 
   beforeEach(async () => {
-    TeamService.getTeamName.mockResolvedValue('Team Name');
+    ContributorsService.getContributors = jest.fn().mockResolvedValue(mockContributors);
+    TeamService.getTeamName = jest.fn().mockResolvedValue('Team Name');
 
-    ({ container } = render(<LoginPage routeTo={jest.fn()} teamId="team-name" />));
+    await waitFor(() => {
+      ({ container } = render(<LoginPage routeTo={jest.fn()} teamId="team-name" />));
+    });
   });
 
   it('should render without axe errors', async () => {

@@ -14,24 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-import ContributorsService from '../services/ContributorsService';
 import { Contributor } from '../types/Contributor';
 
-export default function (): Contributor[] {
-  const [contributors, setContributors] = useState<Contributor[]>([]);
-
-  useEffect(() => {
-    ContributorsService.getContributors().then((contributorArray) => {
-      setContributors(
-        contributorArray.map((contributor) => ({
-          accountUrl: contributor.accountUrl,
-          image: `data:image/png;base64,${contributor.image}`,
-        }))
-      );
-    });
-  }, []);
-
-  return contributors;
+export default class ContributorsService {
+  static getContributors(): Promise<Contributor[]> {
+    const url = '/api/contributors';
+    return axios.get(url).then((res) => res.data);
+  }
 }
