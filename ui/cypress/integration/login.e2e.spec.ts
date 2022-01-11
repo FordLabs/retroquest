@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { createTeamIfNecessaryAndLogin, login, teamBoardUrl, TeamCredentials } from '../util/utils';
+import TeamCredentials from '../support/types/teamCredentials';
 
 describe('Logging In', () => {
   const teamCredentials = {
@@ -25,39 +25,55 @@ describe('Logging In', () => {
     jwt: '',
   } as TeamCredentials;
 
-  beforeEach(() => {
-    cy.intercept('POST', '/api/team/login').as('postTeamLogin');
-
-    createTeamIfNecessaryAndLogin(teamCredentials);
+  before(() => {
+    cy.createTeam(teamCredentials);
   });
 
-  function enterThought(columnClass: string, thought: string) {
-    cy.get(`div.${columnClass}.rq-thought-column-header`)
-      .find('input[placeholder="Enter A Thought"]')
-      .type(`${thought}{enter}`);
-  }
+  beforeEach(() => {
+    cy.intercept('POST', '/api/team/login').as('postTeamLogin');
+  });
 
   it('Redirects to login page when action comes back unauthorized', () => {
+    cy.login(teamCredentials);
     cy.wait('@postTeamLogin').then(() => {
       cy.document().setCookie('token', '');
       cy.document().setCookie('JSESSIONID', '');
-      enterThought('happy', 'I have a thought');
+      cy.enterThought('happy', 'I have a thought');
       cy.url().should('eq', Cypress.config().baseUrl + '/login');
     });
   });
 
   it('Displays invalid team name when logging in with bad team', () => {
-    login('Something not correct', 'Something else wrong');
+    cy.login({
+      teamName: 'Something not correct',
+      teamId: 'Something not correct',
+      password: 'Something else wrong',
+      jwt: '',
+    });
     cy.findByText('Incorrect board name. Please try again.').should('exist');
   });
 
   it('Displays invalid team name/password when using bad password', () => {
-    login(teamCredentials.teamName, 'Something else wrong');
+    cy.login({
+      ...teamCredentials,
+      password: 'Something else wrong',
+    });
     cy.findByText('Incorrect board or password. Please try again.').should('exist');
   });
 
   it('Navigates to team board after successful login', () => {
-    login(teamCredentials.teamName, teamCredentials.password);
-    cy.url().should('eq', Cypress.config().baseUrl + teamBoardUrl(teamCredentials.teamId));
+    cy.login(teamCredentials);
+    cy.url().should('eq', `${Cypress.config().baseUrl}/team/${teamCredentials.teamId}`);
+  });
+
+  it('Pre-populates team name', () => {
+    cy.visit('/login');
+    cy.contains('Sign in to your Board!');
+
+    cy.get('#teamNameInput').as('teamNameInput');
+    cy.get('@teamNameInput').should('have.value', '');
+
+    cy.visit(`/login/${teamCredentials.teamId}`);
+    cy.get('@teamNameInput').should('have.value', teamCredentials.teamName);
   });
 });
