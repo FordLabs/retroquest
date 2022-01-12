@@ -53,11 +53,10 @@ public class ThoughtService {
     }
 
     public Thought likeThought(Long thoughtId) {
+        thoughtRepository.incrementHeartCount(thoughtId);
         var thought = fetchThought(thoughtId);
-        thought.incrementHearts();
-        var savedThought = thoughtRepository.save(thought);
-        websocketService.publishEvent(new WebsocketThoughtEvent(savedThought.getTeamId(), UPDATE, savedThought));
-        return savedThought;
+        websocketService.publishEvent(new WebsocketThoughtEvent(thought.getTeamId(), UPDATE, thought));
+        return thought;
     }
 
     public Thought discussThought(Long thoughtId, boolean discussed) {

@@ -18,11 +18,12 @@
 package com.ford.labs.retroquest.thought;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ThoughtRepository extends JpaRepository<Thought, Long> {
@@ -32,10 +33,9 @@ public interface ThoughtRepository extends JpaRepository<Thought, Long> {
 
     List<Thought> findAllByTeamIdAndBoardIdIsNullOrderByTopic(String teamId);
 
-    void deleteAllByTeamId(String teamId);
-
     void deleteThoughtByTeamIdAndId(String teamId, Long id);
 
-    @Query("SELECT MAX(t.id) FROM Thought t Where t.teamId = :teamId")
-    Optional<Long> getMaxIdByTeamId(String teamId);
+    @Modifying
+    @Query("UPDATE Thought thought set thought.hearts = thought.hearts + 1 where thought.id = :thoughtId")
+    void incrementHeartCount(@Param("thoughtId") Long thoughtId);
 }
