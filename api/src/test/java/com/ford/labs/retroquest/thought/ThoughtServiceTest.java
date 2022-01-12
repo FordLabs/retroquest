@@ -25,10 +25,10 @@ import com.ford.labs.retroquest.websocket.WebsocketService;
 import com.ford.labs.retroquest.websocket.WebsocketThoughtEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import static com.ford.labs.retroquest.websocket.WebsocketEventType.DELETE;
@@ -59,15 +59,17 @@ class ThoughtServiceTest {
 
     @Test
     void likeThoughtShouldIncrementNumberOfLikesByOne() {
-        var thought = Thought.builder().id(1234L).teamId("the-team").hearts(5).build();
-        var expectedThought = Thought.builder().id(1234L).teamId("the-team").hearts(6).build();
+        long thoughtId = 1234L;
+        var expectedThought = Thought.builder().id(thoughtId).teamId("the-team").hearts(6).build();
         var expectedEvent = new WebsocketThoughtEvent("the-team", UPDATE, expectedThought);
 
-        given(this.thoughtRepository.findById(thought.getId())).willReturn(Optional.of(thought));
-        given(thoughtRepository.save(thought)).willReturn(thought);
+        given(this.thoughtRepository.findById(thoughtId)).willReturn(Optional.of(expectedThought));
 
-        assertThat(this.thoughtService.likeThought(thought.getId())).isEqualTo(expectedThought);
-        then(thoughtRepository).should(atMostOnce()).save(thought);
+
+        assertThat(this.thoughtService.likeThought(thoughtId)).isEqualTo(expectedThought);
+        InOrder inOrder = inOrder(thoughtRepository);
+        inOrder.verify(thoughtRepository).incrementHeartCount(thoughtId);
+        inOrder.verify(thoughtRepository).findById(thoughtId);
         then(websocketService).should().publishEvent(expectedEvent);
     }
 
