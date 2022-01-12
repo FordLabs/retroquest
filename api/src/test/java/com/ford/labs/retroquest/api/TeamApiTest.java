@@ -22,6 +22,7 @@ import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.team.*;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -66,8 +67,9 @@ class TeamApiTest extends ApiTestBase {
 
     private static final String VALID_PASSWORD = "Passw0rd";
 
+    @BeforeEach
     @AfterEach
-    void teardown() {
+    void clean() {
         teamRepository.deleteAllInBatch();
         columnTitleRepository.deleteAllInBatch();
         assertThat(teamRepository.count()).isZero();
