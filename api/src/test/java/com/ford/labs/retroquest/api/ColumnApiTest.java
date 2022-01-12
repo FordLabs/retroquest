@@ -17,7 +17,7 @@
 
 package com.ford.labs.retroquest.api;
 
-import com.ford.labs.retroquest.api.authorization.ApiAuthorization;
+import com.ford.labs.retroquest.security.ApiAuthorization;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.v2.columns.ColumnCombinerResponse;
 import com.ford.labs.retroquest.v2.columns.ColumnCombinerService;
@@ -76,6 +76,6 @@ class ColumnApiTest extends ApiTestBase {
                 .andReturn().getResponse().getContentAsString();
 
         assertThat(objectMapper.readValue(body, ColumnCombinerResponse.class))
-                .isEqualToComparingFieldByField(expectedBody);
+                .usingRecursiveComparison().isEqualTo(expectedBody);
     }
 }
