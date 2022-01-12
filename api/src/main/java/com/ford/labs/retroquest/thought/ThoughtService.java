@@ -44,7 +44,7 @@ public class ThoughtService {
         this.websocketService = websocketService;
     }
 
-    public Thought fetchThought(Long thoughtId) {
+    public Thought fetchThought(Long thoughtId) throws ThoughtNotFoundException {
         return thoughtRepository.findById(thoughtId).orElseThrow(() -> new ThoughtNotFoundException(thoughtId));
     }
 
