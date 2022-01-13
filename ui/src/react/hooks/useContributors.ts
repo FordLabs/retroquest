@@ -19,18 +19,20 @@ import { useEffect, useState } from 'react';
 import ContributorsService from '../services/ContributorsService';
 import { Contributor } from '../types/Contributor';
 
-export default function (): Contributor[] {
+export default function useContributors(): Contributor[] {
   const [contributors, setContributors] = useState<Contributor[]>([]);
 
   useEffect(() => {
-    ContributorsService.getContributors().then((contributorArray) => {
-      setContributors(
-        contributorArray.map((contributor) => ({
-          accountUrl: contributor.accountUrl,
-          image: `data:image/png;base64,${contributor.image}`,
-        }))
-      );
-    });
+    if (!contributors.length) {
+      ContributorsService.getContributors().then((contributorArray) => {
+        setContributors(
+          contributorArray.map((contributor) => ({
+            accountUrl: contributor.accountUrl,
+            image: `data:image/png;base64,${contributor.image}`,
+          }))
+        );
+      });
+    }
   }, []);
 
   return contributors;

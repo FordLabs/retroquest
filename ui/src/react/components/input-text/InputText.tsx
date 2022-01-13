@@ -56,7 +56,11 @@ export default function InputText(props: InputTextProps): JSX.Element {
         type={type}
         {...inputProps}
       />
-      {invalid && validationMessage && <span className="validation-message">{validationMessage}</span>}
+      {invalid && validationMessage && (
+        <span className="validation-message" data-testid="inputValidationMessage">
+          {validationMessage}
+        </span>
+      )}
     </div>
   );
 }
