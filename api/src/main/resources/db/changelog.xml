@@ -164,4 +164,16 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet author="nreuter"  id="delete-user-1">
+        <preConditions>
+            <tableExists tableName="user_team_mapping" />
+        </preConditions>
+        <dropTable  cascadeConstraints="true" tableName="user_team_mapping"/>
+    </changeSet>
+    <changeSet author="nreuter"  id="delete-user-2">
+        <preConditions>
+            <tableExists tableName="user" />
+        </preConditions>
+        <dropTable  cascadeConstraints="true" tableName="user"/>
+    </changeSet>
 </databaseChangeLog>
