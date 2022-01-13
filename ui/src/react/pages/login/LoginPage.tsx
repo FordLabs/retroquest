@@ -61,7 +61,7 @@ export function LoginPage(props: Props): JSX.Element {
         routeTo(`/team/${location}`);
       })
       .catch(() => {
-        setErrorMessages(['Incorrect board or password. Please try again.']);
+        setErrorMessages(['Incorrect team name or password. Please try again.']);
       })
       .finally(() => setLoading(false));
   };
@@ -96,7 +96,7 @@ export function LoginPage(props: Props): JSX.Element {
             setTeamName(updatedTeamName);
             setErrorMessages([]);
           })}
-          validationMessage="Names must not contain special characters. "
+          validationMessage="Names must not contain special characters."
           invalid={validate && !!teamNameErrorMessage}
           readOnly={loading}
         />
