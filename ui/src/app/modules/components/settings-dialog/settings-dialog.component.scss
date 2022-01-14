@@ -114,6 +114,7 @@
         width: 235px;
 
         .tab {
+          border: none;
           background-color: $gray;
           box-sizing: border-box;
           cursor: pointer;
@@ -124,6 +125,7 @@
 
           &.dark-theme {
             background-color: $header-background-color-dark;
+            color: $white;
           }
 
           &.selected {
@@ -205,6 +207,26 @@
                 text-transform: capitalize;
               }
             }
+          }
+        }
+
+        &.info-tab-body {
+          .version-label {
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+
+            font-size: 1.5rem;
+          }
+
+          .version-container {
+            display: inline-block;
+            font-weight: bold;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: $purple;
+            width: 7rem;
           }
         }
       }
