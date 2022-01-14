@@ -7583,7 +7583,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cli-table3@npm:^0.6.1, cli-table3@npm:~0.6.0":
+"cli-table3@npm:^0.6.1, cli-table3@npm:~0.6.1":
   version: 0.6.1
   resolution: "cli-table3@npm:0.6.1"
   dependencies:
@@ -8447,9 +8447,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:9.2.0":
-  version: 9.2.0
-  resolution: "cypress@npm:9.2.0"
+"cypress@npm:^9.2.0":
+  version: 9.2.1
+  resolution: "cypress@npm:9.2.1"
   dependencies:
     "@cypress/request": ^2.88.10
     "@cypress/xvfb": ^1.2.4
@@ -8463,7 +8463,7 @@ __metadata:
     chalk: ^4.1.0
     check-more-types: ^2.24.0
     cli-cursor: ^3.1.0
-    cli-table3: ~0.6.0
+    cli-table3: ~0.6.1
     commander: ^5.1.0
     common-tags: ^1.8.0
     dayjs: ^1.10.4
@@ -8494,7 +8494,7 @@ __metadata:
     yauzl: ^2.10.0
   bin:
     cypress: bin/cypress
-  checksum: 1378c4d0822c52505cdd71b3bd567c0399bac054a1f99f5e8d9adfb3f6991a0dcbb58de7662b7dbfd2b302bb94dc924c22047152ea8777661fa9b8819308d69f
+  checksum: 9d8d6ea74f92088d11261b8879154a063a041f77eac54c7a2ab11f16c35aa586e48f411f465049dd17b5f63f9dd9893d4c4c77007b099d51d3887f6fd9ea1c6c
   languageName: node
   linkType: hard
 
@@ -9961,30 +9961,6 @@ __metadata:
   peerDependencies:
     eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8
   checksum: 90293d0fd53bb1f735ffd32141cdd211fb1120c9f7bbe5342f9e923261a39e52a2b2575d4e46c9cd77d257f42db4a99b8b339689fc5b5c1c26048929f69b1784
-  languageName: node
-  linkType: hard
-
-"eslint-plugin-simple-import-sort@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "eslint-plugin-simple-import-sort@npm:7.0.0"
-  peerDependencies:
-    eslint: ">=5.0.0"
-  checksum: 6aacb7179c213cd2081950630368d1f3b1dcb4f5674d8b989fe7839e7b317ee521d74761676e8b1a7cab49f20405dbcc9aac05358ae804e6bcba6cbf1daccb3d
-  languageName: node
-  linkType: hard
-
-"eslint-plugin-prettier@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "eslint-plugin-prettier@npm:4.0.0"
-  dependencies:
-    prettier-linter-helpers: ^1.0.0
-  peerDependencies:
-    eslint: ">=7.28.0"
-    prettier: ">=2.0.0"
-  peerDependenciesMeta:
-    eslint-config-prettier:
-      optional: true
-  checksum: 03d69177a3c21fa2229c7e427ce604429f0b20ab7f411e2e824912f572a207c7f5a41fd1f0a95b9b8afe121e291c1b1f1dc1d44c7aad4b0837487f9c19f5210d
   languageName: node
   linkType: hard
 
@@ -18558,7 +18534,7 @@ resolve@^2.0.0-next.3:
     classnames: ^2.3.1
     core-js: ^3.6.5
     css-loader: ^6.2.0
-    cypress: 9.2.0
+    cypress: ^9.2.0
     cypress-angular-unit-test: ^3.6.1
     cypress-jest-adapter: ^0.1.1
     eslint: ^8.2.0
