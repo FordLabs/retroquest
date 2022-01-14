@@ -17,8 +17,8 @@
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import versionJson from '../../../../application-version.json';
 
+import versionJson from '../../../../application-version.json';
 import { AuthService } from '../../auth/auth.service';
 import { Themes, themeToString } from '../../domain/Theme';
 
