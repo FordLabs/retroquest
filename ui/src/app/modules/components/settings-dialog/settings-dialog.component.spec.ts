@@ -41,10 +41,6 @@ describe('SettingsDialogComponent', () => {
     component.themeChanged = fakeThemeChangedEmitter;
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
   describe('logoutOfAccount', () => {
     let spyClearToken;
     const fakeTeamId = 'FAKE TEAM ID';
@@ -61,15 +57,6 @@ describe('SettingsDialogComponent', () => {
 
     it('should navigate to the login page with the teamId', () => {
       expect(fakeRouter.navigate).toHaveBeenCalledWith(['login', fakeTeamId]);
-    });
-  });
-
-  describe('updatePassword', () => {
-    it('should navigate to password update page', () => {
-      const fakeTeamId = 'fake-id';
-      component.teamId = fakeTeamId;
-      component.updatePassword();
-      expect(fakeRouter.navigate).toHaveBeenCalledWith(['update-password', fakeTeamId]);
     });
   });
 
@@ -106,6 +93,13 @@ describe('SettingsDialogComponent', () => {
 
     it('should set the theme to light', () => {
       expect(component.theme).toEqual(Themes.Light);
+    });
+  });
+
+  describe('getApplicationVersion', () => {
+    it('should return version from json file', () => {
+      const actual = component.applicationVersion;
+      expect(actual).toEqual('%PLACEHOLDER%');
     });
   });
 });

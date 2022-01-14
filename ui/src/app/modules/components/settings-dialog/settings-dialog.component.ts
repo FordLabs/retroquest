@@ -17,9 +17,16 @@
 
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import versionJson from '../../../../application-version.json';
 
 import { AuthService } from '../../auth/auth.service';
 import { Themes, themeToString } from '../../domain/Theme';
+
+enum SettingsTab {
+  STYLES,
+  ACCOUNT,
+  INFO
+}
 
 @Component({
   selector: 'rq-settings-dialog',
@@ -30,33 +37,24 @@ import { Themes, themeToString } from '../../domain/Theme';
     '[style.display]': 'visible ? "flex": "none"',
   },
 })
+
 export class SettingsDialogComponent {
   @Input() visible = false;
   @Input() teamId: string;
   @Input() theme: Themes;
   @Output() themeChanged: EventEmitter<Themes> = new EventEmitter();
 
-  _stylesTabIsVisible = true;
-  _accountTabIsVisible = false;
+  _visibleTab: SettingsTab = SettingsTab.STYLES;
+  settingsTab = SettingsTab;
 
   constructor(private router: Router) {}
 
-  set stylesTabIsVisible(visible: boolean) {
-    this._stylesTabIsVisible = visible;
-    this._accountTabIsVisible = !visible;
+  set currentlyVisibleTab(tab: SettingsTab) {
+    this._visibleTab = tab;
   }
 
-  get stylesTabIsVisible(): boolean {
-    return this._stylesTabIsVisible;
-  }
-
-  set accountTabIsVisible(visible: boolean) {
-    this._accountTabIsVisible = visible;
-    this._stylesTabIsVisible = !visible;
-  }
-
-  get accountTabIsVisible(): boolean {
-    return this._accountTabIsVisible;
+  tabIsVisible(tab: SettingsTab): boolean {
+    return this._visibleTab === tab;
   }
 
   show() {
@@ -70,10 +68,6 @@ export class SettingsDialogComponent {
   logoutOfAccount() {
     AuthService.clearToken();
     this.router.navigate(['login', this.teamId]);
-  }
-
-  updatePassword() {
-    this.router.navigate(['update-password', this.teamId]);
   }
 
   enableDarkTheme() {
@@ -96,6 +90,10 @@ export class SettingsDialogComponent {
 
   get lightThemeIsEnabled(): boolean {
     return this.theme === Themes.Light;
+  }
+
+  get applicationVersion(): string {
+    return versionJson.version;
   }
 
   private saveTheme(): void {

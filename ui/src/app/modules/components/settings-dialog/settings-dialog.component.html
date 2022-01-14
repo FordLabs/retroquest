@@ -36,29 +36,39 @@
 
     <div class="body">
         <div class="tab-heading">
-            <div
+            <button
                 class="tab"
-                (click)="stylesTabIsVisible = true"
+                (click)="currentlyVisibleTab = settingsTab.STYLES"
                 [ngClass]="{
-                    selected: stylesTabIsVisible,
+                    selected: tabIsVisible(settingsTab.STYLES),
                     'dark-theme': darkThemeIsEnabled
                 }"
             >
                 styles
-            </div>
-            <div
+            </button>
+            <button
                 class="tab"
-                (click)="accountTabIsVisible = true"
+                (click)="currentlyVisibleTab = settingsTab.ACCOUNT"
                 [ngClass]="{
-                    selected: accountTabIsVisible,
+                    selected: tabIsVisible(settingsTab.ACCOUNT),
                     'dark-theme': darkThemeIsEnabled
                 }"
             >
                 account
-            </div>
+            </button>
+            <button
+              class="tab"
+              (click)="currentlyVisibleTab = settingsTab.INFO"
+              [ngClass]="{
+                    selected: tabIsVisible(settingsTab.INFO),
+                    'dark-theme': darkThemeIsEnabled
+                }"
+            >
+                info
+            </button>
         </div>
 
-        <div class="tab-body styles-tab-body" *ngIf="stylesTabIsVisible">
+        <div class="tab-body styles-tab-body" *ngIf="tabIsVisible(settingsTab.STYLES)">
             <div class="label">appearance</div>
             <div class="tab-heading theme-tab-heading">
                 <div class="theme-icon-container">
@@ -87,12 +97,19 @@
             </div>
         </div>
 
-        <div class="tab-body account-tab-body" *ngIf="accountTabIsVisible">
+        <div class="tab-body account-tab-body" *ngIf="tabIsVisible(settingsTab.ACCOUNT)">
             <rq-button
                 text="logout"
                 type="primary"
                 (click)="logoutOfAccount()"
             ></rq-button>
+        </div>
+
+        <div class="tab-body info-tab-body" *ngIf="tabIsVisible(settingsTab.INFO)">
+            <label class="version-label">
+                Version:
+                <input class="version-container" id="application-version" disabled [value]="applicationVersion"/>
+            </label>
         </div>
     </div>
 </div>
