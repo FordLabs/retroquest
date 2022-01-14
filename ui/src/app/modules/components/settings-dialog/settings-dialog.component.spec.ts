@@ -99,7 +99,7 @@ describe('SettingsDialogComponent', () => {
   describe('getApplicationVersion', () => {
     it('should return version from json file', () => {
       const actual = component.applicationVersion;
-      expect(actual).toEqual('%PLACEHOLDER%');
+      expect(actual).toEqual('0ddb411');
     });
   });
 });
