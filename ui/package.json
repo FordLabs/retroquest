@@ -4,9 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --configuration local",
+    "start:react": "ng serve --configuration local,react",
     "build": "ng build",
     "prebuild-prod": "node getApplicationVersion.js",
     "build-prod": "ng build --configuration production --build-optimizer --output-path=../api/src/main/resources/static",
+    "build-prod:react": "ng build --configuration production,react-prod --build-optimizer --output-path=../api/src/main/resources/static",
     "test": "yarn unit-watch",
     "unit": "jest",
     "unit-watch": "jest --watchAll --runInBand",

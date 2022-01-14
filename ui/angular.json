@@ -58,6 +58,22 @@
               "vendorChunk": false,
               "buildOptimizer": true,
               "serviceWorker": false
+            },
+            "react-prod": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod-react.ts"
+                }
+              ]
+            },
+            "react": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.react.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": ""
@@ -73,6 +89,9 @@
             },
             "local": {
               "proxyConfig": "local-proxy.config.json"
+            },
+            "react": {
+              "browserTarget": "retroquest-ui:build:react"
             }
           }
         },
