@@ -17,5 +17,5 @@
 
 export const environment = {
   production: false,
-  useReact: false,
+  useReact: true,
 };

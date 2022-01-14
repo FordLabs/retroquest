@@ -21,6 +21,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { RecaptchaModule } from 'ng-recaptcha';
 
+import { environment } from '../../../environments/environment';
 import { ReactLoginPageWrapper } from '../../../react/pages/login/ReactLoginPageWrapper';
 import { ComponentsModule } from '../components/components.module';
 
@@ -34,22 +35,30 @@ import { LoginUserComponent } from './pages/login-user/login-user.component';
 import { UpdatePasswordComponent } from './pages/update-password/update-password.page';
 import { UserViewComponent } from './pages/user-view/user-view.component';
 
+function routes() {
+  return environment.useReact
+    ? [
+        { path: 'create', component: CreateComponent },
+        { path: 'login', component: ReactLoginPageWrapper },
+        { path: 'login/:teamId', component: ReactLoginPageWrapper },
+        { path: 'update-password/:teamId', component: UpdatePasswordComponent },
+        { path: 'create-user', component: CreateUserComponent },
+        { path: 'login-user', component: LoginUserComponent },
+        { path: 'user/:user', component: UserViewComponent },
+      ]
+    : [
+        { path: 'create', component: CreateComponent },
+        { path: 'login', component: LoginComponent },
+        { path: 'login/:teamId', component: LoginComponent },
+        { path: 'update-password/:teamId', component: UpdatePasswordComponent },
+        { path: 'create-user', component: CreateUserComponent },
+        { path: 'login-user', component: LoginUserComponent },
+        { path: 'user/:user', component: UserViewComponent },
+      ];
+}
+
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    ComponentsModule,
-    RouterModule.forChild([
-      { path: 'create', component: CreateComponent },
-      { path: 'login', component: ReactLoginPageWrapper },
-      { path: 'login/:teamId', component: ReactLoginPageWrapper },
-      { path: 'update-password/:teamId', component: UpdatePasswordComponent },
-      { path: 'create-user', component: CreateUserComponent },
-      { path: 'login-user', component: LoginUserComponent },
-      { path: 'user/:user', component: UserViewComponent },
-    ]),
-    RecaptchaModule,
-  ],
+  imports: [CommonModule, FormsModule, ComponentsModule, RouterModule.forChild(routes()), RecaptchaModule],
   declarations: [
     LoginComponent,
     CreateComponent,
