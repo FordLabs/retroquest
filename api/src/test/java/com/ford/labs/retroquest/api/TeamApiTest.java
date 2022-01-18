@@ -148,7 +148,7 @@ class TeamApiTest extends ApiTestBase {
             .contentType(APPLICATION_JSON)
             .content(objectMapper.writeValueAsBytes(sentCreateTeamRequest)))
             .andExpect(status().isForbidden())
-            .andExpect(status().reason(containsString("Incorrect board or password. Please try again.")));
+            .andExpect(status().reason(containsString("Incorrect team name or password. Please try again.")));
     }
 
     @Test
@@ -164,7 +164,7 @@ class TeamApiTest extends ApiTestBase {
             .contentType(APPLICATION_JSON)
             .content(objectMapper.writeValueAsBytes(sentCreateTeamRequest)))
             .andExpect(status()
-                .reason(containsString("Please enter a board name.")))
+                .reason(containsString("Please enter a team name.")))
             .andExpect(status().isBadRequest());
     }
 
@@ -181,7 +181,7 @@ class TeamApiTest extends ApiTestBase {
         mockMvc.perform(post("/api/team")
             .contentType(APPLICATION_JSON)
             .content(objectMapper.writeValueAsBytes(sentCreateTeamRequest)))
-            .andExpect(status().reason(containsString("Please enter a board name without any special characters.")))
+            .andExpect(status().reason(containsString("Please enter a team name without any special characters.")))
             .andExpect(status().isBadRequest());
     }
 
@@ -204,7 +204,7 @@ class TeamApiTest extends ApiTestBase {
         mockMvc.perform(post("/api/team")
             .contentType(APPLICATION_JSON)
             .content(objectMapper.writeValueAsBytes(sentCreateTeamRequest)))
-            .andExpect(status().reason(containsString("This board name is already in use. Please try another one.")))
+            .andExpect(status().reason(containsString("This team name is already in use. Please try another one.")))
             .andExpect(status().isConflict());
     }
 
@@ -229,7 +229,7 @@ class TeamApiTest extends ApiTestBase {
         mockMvc.perform(post("/api/team")
             .contentType(APPLICATION_JSON)
             .content(objectMapper.writeValueAsBytes(lowerCaseCreateTeamRequest)))
-            .andExpect(status().reason(containsString("This board name is already in use. Please try another one.")))
+            .andExpect(status().reason(containsString("This team name is already in use. Please try another one.")))
             .andExpect(status().isConflict());
     }
 
@@ -254,7 +254,7 @@ class TeamApiTest extends ApiTestBase {
         mockMvc.perform(post("/api/team")
             .contentType(APPLICATION_JSON)
             .content(objectMapper.writeValueAsBytes(upperCaseCreateTeamRequest)))
-            .andExpect(status().reason(containsString("This board name is already in use. Please try another one.")))
+            .andExpect(status().reason(containsString("This team name is already in use. Please try another one.")))
             .andExpect(status().isConflict());
     }
 
@@ -279,7 +279,7 @@ class TeamApiTest extends ApiTestBase {
         mockMvc.perform(post("/api/team")
             .contentType(APPLICATION_JSON)
             .content(objectMapper.writeValueAsBytes(leadingSpacesRequest)))
-            .andExpect(status().reason(containsString("This board name is already in use. Please try another one.")))
+            .andExpect(status().reason(containsString("This team name is already in use. Please try another one.")))
             .andExpect(status().isConflict());
     }
 
@@ -304,7 +304,7 @@ class TeamApiTest extends ApiTestBase {
         mockMvc.perform(post("/api/team")
             .contentType(APPLICATION_JSON)
             .content(objectMapper.writeValueAsBytes(trailingSpacesRequest)))
-            .andExpect(status().reason(containsString("This board name is already in use. Please try another one.")))
+            .andExpect(status().reason(containsString("This team name is already in use. Please try another one.")))
             .andExpect(status().isConflict());
     }
 
@@ -463,7 +463,7 @@ class TeamApiTest extends ApiTestBase {
     void should_not_get_team_name_with_nonexistant_name() throws Exception {
         mockMvc.perform(get("/api/team/nonExistentTeamName/name"))
             .andExpect(status().isForbidden())
-            .andExpect(status().reason("Incorrect board name. Please try again."));
+            .andExpect(status().reason("Incorrect team name or password. Please try again."));
     }
 
     @ParameterizedTest
@@ -518,7 +518,7 @@ class TeamApiTest extends ApiTestBase {
             .content(objectMapper.writeValueAsBytes(loginRequest))
             .contentType(APPLICATION_JSON))
             .andExpect(status().isForbidden())
-            .andExpect(status().reason("Incorrect board name. Please try again."));
+            .andExpect(status().reason("Incorrect team name or password. Please try again."));
     }
 
     @Test
@@ -543,11 +543,11 @@ class TeamApiTest extends ApiTestBase {
             .content(objectMapper.writeValueAsBytes(loginRequest))
             .contentType(APPLICATION_JSON))
             .andExpect(status().isForbidden())
-            .andExpect(status().reason("Incorrect board or password. Please try again."));
+            .andExpect(status().reason("Incorrect team name or password. Please try again."));
     }
 
     @Test
-    void should_not_login_with_board_name_with_middle_spaces_in_request() throws Exception {
+    void should_not_login_with_team_name_with_middle_spaces_in_request() throws Exception {
         installSuccessCaptcha();
 
         var createTeamRequest = CreateTeamRequest.builder()
@@ -568,7 +568,7 @@ class TeamApiTest extends ApiTestBase {
             .content(objectMapper.writeValueAsBytes(loginRequest))
             .contentType(APPLICATION_JSON))
             .andExpect(status().isForbidden())
-            .andExpect(status().reason("Incorrect board name. Please try again."));
+            .andExpect(status().reason("Incorrect team name or password. Please try again."));
     }
 
     @Test

@@ -27,13 +27,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-    @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Incorrect board or password. Please try again.")
+    @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Incorrect team name or password. Please try again.")
     @ExceptionHandler(CaptchaInvalidException.class)
     public void invalidCaptchaExceptionHandler() {
         // Used by Spring for Controller Advice
     }
     
-    @ResponseStatus(value = HttpStatus.CONFLICT, reason = "This board name is already in use. Please try another one.")
+    @ResponseStatus(value = HttpStatus.CONFLICT, reason = "This team name is already in use. Please try another one.")
     @ExceptionHandler(DataIntegrityViolationException.class)
     public void duplicateUriConflict() {
         // Used by Spring for Controller Advice
@@ -45,25 +45,25 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         // Used by Spring for Controller Advice
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Please enter a board name without any special characters.")
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Please enter a team name without any special characters.")
     @ExceptionHandler(SpecialCharacterTeamNameException.class)
     public void badTeamNameWithSpecialCharactersRequest() {
         // Used by Spring for Controller Advice
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Please enter a board name.")
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Please enter a team name.")
     @ExceptionHandler(EmptyTeamNameException.class)
     public void emptyTeamNameRequest() {
         // Used by Spring for Controller Advice
     }
 
-    @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Incorrect board name. Please try again.")
+    @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Incorrect team name or password. Please try again.")
     @ExceptionHandler(BoardDoesNotExistException.class)
     public void noTeamExceptionHandler() {
         // Used by Spring for Controller Advice
     }
 
-    @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Incorrect board or password. Please try again.")
+    @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Incorrect team name or password. Please try again.")
     @ExceptionHandler(PasswordInvalidException.class)
     public void badPasswordExceptionHandler() {
         // Used by Spring for Controller Advice
