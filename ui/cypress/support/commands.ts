@@ -31,21 +31,6 @@ import '@testing-library/cypress/add-commands';
 import TeamCredentials from './types/teamCredentials';
 
 Cypress.Commands.add('login', (teamCredentials: TeamCredentials) => {
-  cy.visit('/login');
-  enterText('[data-testid=teamNameInput]', teamCredentials.teamName);
-  enterText('[data-testid=teamPasswordInput]', teamCredentials.password);
-  click('[data-testid=formSubmitButton]');
-});
-
-Cypress.Commands.add('createTeam', (teamCredentials: TeamCredentials) => {
-  cy.visit('/create');
-  enterText('#teamNameInput', teamCredentials.teamName);
-  enterText('#teamPasswordInput', teamCredentials.password);
-  enterText('#teamPasswordConfirmInput', teamCredentials.password);
-  click('#createRetroButton');
-});
-
-Cypress.Commands.add('createTeamIfNecessaryAndLogin', (teamCredentials: TeamCredentials) => {
   cy.request({
     url: `/api/team/login`,
     failOnStatusCode: false,
@@ -56,9 +41,28 @@ Cypress.Commands.add('createTeamIfNecessaryAndLogin', (teamCredentials: TeamCred
       captchaResponse: null,
     },
   }).then((response) => {
+    return response;
+  });
+});
+
+Cypress.Commands.add('createTeam', ({ teamName, password }: TeamCredentials) => {
+  cy.request({
+    url: `/api/team`,
+    failOnStatusCode: false,
+    method: 'POST',
+    body: {
+      name: teamName,
+      password,
+    },
+  });
+});
+
+Cypress.Commands.add('createTeamIfNecessaryAndLogin', (teamCredentials: TeamCredentials) => {
+  cy.login(teamCredentials).then((response) => {
     if (response.status === 200) {
-      teamCredentials.jwt = response.body;
-      cy.login(teamCredentials);
+      const token = response.body as string;
+      cy.setCookie('token', token);
+      cy.visit(`/team/${teamCredentials.teamId}`);
     } else {
       cy.createTeam(teamCredentials);
     }
@@ -70,11 +74,3 @@ Cypress.Commands.add('enterThought', (columnClass: string, thought: string) => {
     .find('input[placeholder="Enter A Thought"]')
     .type(`${thought}{enter}`);
 });
-
-function click(selector: string) {
-  cy.get(selector).click();
-}
-
-function enterText(selector: string, textToEnter: string) {
-  cy.get(selector).type(textToEnter);
-}

@@ -101,7 +101,7 @@ export function LoginPage(props: Props): JSX.Element {
           readOnly={loading}
         />
         <InputText
-          id="teamPasswordInput"
+          id="passwordInput"
           label="Password"
           type="password"
           value={password}

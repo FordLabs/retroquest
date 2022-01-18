@@ -23,32 +23,27 @@
             <form id="createForm" class="rq-form">
                 <div class="rq-form-header">
                     <div class="header-text">Create a new Board!</div>
-                    <a id="loginBoard" routerLink="/login"
-                        >or sign in to your existing board</a
-                    >
+                    <a id="loginBoard" routerLink="/login">or sign in to your existing board</a>
                 </div>
 
-                <form
-                    class="rq-form-body"
-                    (keydown.enter)="requestCaptchaStateAndCreateTeam()"
-                >
+                <form class="rq-form-body" (keydown.enter)="requestCaptchaStateAndCreateTeam()">
                     <div class="rq-input-group">
                         <label for="teamNameInput">Board name</label>
                         <input
                             id="teamNameInput"
+                            data-testid="teamNameInput"
                             class="rq-input"
                             name="teamName"
                             [(ngModel)]="teamName"
                             rqFocusOnLoad
                         />
-                        <span class="rq-validation-message">
-                            Names must not contain special characters.
-                        </span>
+                        <span class="rq-validation-message"> Names must not contain special characters. </span>
                     </div>
                     <div class="rq-input-group">
                         <label for="teamPasswordInput">Password</label>
                         <input
                             id="teamPasswordInput"
+                            data-testid="passwordInput"
                             class="rq-input"
                             name="password"
                             type="password"
@@ -56,27 +51,24 @@
                         />
 
                         <span class="rq-validation-message"
-                            >8 or more characters with a mix of numbers and
-                            letters</span
+                            >8 or more characters with a mix of numbers and letters</span
                         >
                     </div>
                     <div class="rq-input-group">
-                        <label for="teamPasswordConfirmInput"
-                            >Confirm Password</label
-                        >
+                        <label for="teamPasswordConfirmInput">Confirm Password</label>
                         <input
                             id="teamPasswordConfirmInput"
+                            data-testid="confirmPasswordInput"
                             class="rq-input"
                             name="confirmPassword"
                             type="password"
                             [(ngModel)]="confirmPassword"
                         />
                     </div>
-                    <span id="errorMessage" class="rq-error-message"
-                        >{{errorMessage}}</span
-                    >
+                    <span id="errorMessage" class="rq-error-message">{{errorMessage}}</span>
                     <rq-button
                         id="createRetroButton"
+                        data-testid="formSubmitButton"
                         type="primary"
                         text="create board"
                         (click)="requestCaptchaStateAndCreateTeam()"
@@ -85,13 +77,9 @@
 
                     <div class="recaptcha-message">
                         This site is protected by reCAPTCHA and the Google
-                        <a href="https://policies.google.com/privacy"
-                            >Privacy Policy</a
-                        >
+                        <a href="https://policies.google.com/privacy">Privacy Policy</a>
                         and
-                        <a href="https://policies.google.com/terms"
-                            >Terms of Service</a
-                        >
+                        <a href="https://policies.google.com/terms">Terms of Service</a>
                         apply.
                     </div>
                 </form>

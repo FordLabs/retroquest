@@ -17,7 +17,7 @@
 
 import TeamCredentials from '../support/types/teamCredentials';
 
-describe('Conduct Retro', () => {
+describe('Retro Page', () => {
   const teamCredentials = {
     teamName: 'Test Conduct Retro',
     teamId: 'test-conduct-retro',
@@ -25,64 +25,91 @@ describe('Conduct Retro', () => {
     jwt: '',
   } as TeamCredentials;
 
-  before(() => {
-    cy.createTeamIfNecessaryAndLogin(teamCredentials);
+  describe('Retro Board Defaults', () => {
+    const green = 'rgb(46, 204, 113)';
+    const red = 'rgb(231, 76, 60)';
+    const blue = 'rgb(52, 152, 219)';
+    const yellow = 'rgb(241, 196, 15)';
 
-    clearBoard();
-
-    cy.enterThought('happy', 'Good flow to our work this week');
-    cy.enterThought('happy', 'Switching to e2e was a good idea');
-    cy.enterThought('happy', `I'm a little uneasy about sharing this with the team`);
-    cy.enterThought('confused', 'How do I prevent end to end testing from being flaky?');
-    cy.enterThought('unhappy', 'I wish end to end tests were faster');
-    enterActionItems('Increase Code Coverage');
-    enterActionItems('Speed Up Tests');
-
-    starThought('happy', 'Good flow to our work this week');
-    starThought('happy', 'Good flow to our work this week');
-
-    thoughtDiscussed('happy', 'Switching to e2e was a good idea');
-
-    deleteThought('happy', `I'm a little uneasy about sharing this with the team`);
-  });
-
-  after(() => {
-    clearBoard();
-  });
-
-  describe('Happy Column', () => {
-    it('There are two thoughts in happy column', () => {
-      confirmNumberOfThoughtsInColumn('happy', 2);
+    before(() => {
+      cy.createTeamIfNecessaryAndLogin(teamCredentials);
     });
 
-    it('The first thought has two stars', () => {
-      cy.get(`rq-thoughts-column rq-task.happy`).each((input) => {
-        if ('Good flow to our work this week' === input.find('textarea').val()) {
-          expect(input.find('div.star-count')[0].innerText.trim()).toEqual('2');
-        }
+    it('Confirm default heading text and colors', () => {
+      cy.log('**Should have "Happy" column header in green**');
+      cy.findByText('Happy').should('exist').parent().should('have.css', 'background-color', green);
+
+      cy.log('**Should have "Confused" column header in blue**');
+      cy.findByText('Confused').should('exist').parent().should('have.css', 'background-color', blue);
+
+      cy.log('**Should have "Sad" column header in red**');
+      cy.findByText('Sad').should('exist').parent().should('have.css', 'background-color', red);
+
+      cy.log('**Should have "Action Items" column header in yellow**');
+      cy.findByText('Action Items').should('exist').parent().should('have.css', 'background-color', yellow);
+    });
+  });
+
+  describe('Conduct a Retro', () => {
+    before(() => {
+      cy.createTeamIfNecessaryAndLogin(teamCredentials);
+
+      clearBoard();
+
+      cy.enterThought('happy', 'Good flow to our work this week');
+      cy.enterThought('happy', 'Switching to e2e was a good idea');
+      cy.enterThought('happy', `I'm a little uneasy about sharing this with the team`);
+      cy.enterThought('confused', 'How do I prevent end to end testing from being flaky?');
+      cy.enterThought('unhappy', 'I wish end to end tests were faster');
+      enterActionItems('Increase Code Coverage');
+      enterActionItems('Speed Up Tests');
+
+      starThought('happy', 'Good flow to our work this week');
+      starThought('happy', 'Good flow to our work this week');
+
+      thoughtDiscussed('happy', 'Switching to e2e was a good idea');
+
+      deleteThought('happy', `I'm a little uneasy about sharing this with the team`);
+    });
+
+    after(() => {
+      clearBoard();
+    });
+
+    describe('Happy Column', () => {
+      it('There are two thoughts in happy column', () => {
+        confirmNumberOfThoughtsInColumn('happy', 2);
+      });
+
+      it('The first thought has two stars', () => {
+        cy.get(`rq-thoughts-column rq-task.happy`).each((input) => {
+          if ('Good flow to our work this week' === input.find('textarea').val()) {
+            expect(input.find('div.star-count')[0].innerText.trim()).toEqual('2');
+          }
+        });
+      });
+
+      it('The second thought was discussed', () => {
+        cy.get(`rq-thoughts-column rq-task.happy`).each((input) => {
+          if ('Switching to e2e was a good idea' === input.find('textarea').val()) {
+            expect(input.find('div.complete-container div.checkbox.completed-task').length).toEqual(1);
+          }
+        });
       });
     });
 
-    it('The second thought was discussed', () => {
-      cy.get(`rq-thoughts-column rq-task.happy`).each((input) => {
-        if ('Switching to e2e was a good idea' === input.find('textarea').val()) {
-          expect(input.find('div.complete-container div.checkbox.completed-task').length).toEqual(1);
-        }
+    describe('Other Columns', () => {
+      it('There is one thought in the confused column', () => {
+        confirmNumberOfThoughtsInColumn('confused', 1);
       });
-    });
-  });
 
-  describe('Other Columns', () => {
-    it('There is one thought in the confused column', () => {
-      confirmNumberOfThoughtsInColumn('confused', 1);
-    });
+      it('There is one thought in the sad column', () => {
+        confirmNumberOfThoughtsInColumn('sad', 1);
+      });
 
-    it('There is one thought in the sad column', () => {
-      confirmNumberOfThoughtsInColumn('sad', 1);
-    });
-
-    it('There are two action items', () => {
-      cy.get(`rq-actions-column rq-action-item-task`).should('have.length', 2);
+      it('There are two action items', () => {
+        cy.get(`rq-actions-column rq-action-item-task`).should('have.length', 2);
+      });
     });
   });
 });
