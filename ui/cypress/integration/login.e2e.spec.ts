@@ -18,6 +18,7 @@
 import TeamCredentials from '../support/types/teamCredentials';
 
 describe('Logging In', () => {
+  const loginFailedMessage = 'Incorrect team name or password. Please try again.';
   const teamCredentials = {
     teamName: 'Test Login',
     teamId: 'test-login',
@@ -50,7 +51,7 @@ describe('Logging In', () => {
       jwt: '',
     });
     cy.wait('@postTeamLogin');
-    cy.get('[data-testid=formErrorMessage]').should('contain', 'Incorrect board or password. Please try again.');
+    cy.get('[data-testid=formErrorMessage]').should('contain', loginFailedMessage);
   });
 
   it('Displays invalid team name/password when using bad password', () => {
@@ -59,7 +60,7 @@ describe('Logging In', () => {
       password: 'Something else wrong 1',
     });
     cy.wait('@postTeamLogin');
-    cy.get('[data-testid=formErrorMessage]').should('contain', 'Incorrect board or password. Please try again.');
+    cy.get('[data-testid=formErrorMessage]').should('contain', loginFailedMessage);
   });
 
   it('Navigates to team board after successful login', () => {
