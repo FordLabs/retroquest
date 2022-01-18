@@ -21,20 +21,16 @@
         <div class="rq-team-controls">
             <form id="loginForm" class="rq-form">
                 <div class="rq-form-header">
-                    <div class="header-text">Sign in to your Board!</div>
-                    <a id="createBoard" routerLink="/create"
-                        >or create a new board</a
-                    >
+                    <div class="header-text">Sign in to your Team!</div>
+                    <a id="createBoard" routerLink="/create">or create a new team</a>
                 </div>
 
-                <form
-                    class="rq-form-body"
-                    (keydown.enter)="requestCaptchaStateAndLogIn()"
-                >
+                <form class="rq-form-body" (keydown.enter)="requestCaptchaStateAndLogIn()">
                     <div class="rq-input-group">
-                        <label for="teamNameInput">Board name</label>
+                        <label for="teamNameInput">Team name</label>
                         <input
                             id="teamNameInput"
+                            data-testid="teamNameInput"
                             class="rq-input input-field"
                             name="teamName"
                             [(ngModel)]="teamName"
@@ -45,18 +41,20 @@
                         <label for="teamPasswordInput">Password</label>
                         <input
                             id="teamPasswordInput"
+                            data-testid="teamPasswordInput"
                             class="rq-input"
                             name="password"
                             type="password"
                             [(ngModel)]="password"
                         />
                     </div>
-                    <span id="errorMessage" class="rq-error-message"
+                    <span id="errorMessage" data-testid="formErrorMessage" class="rq-error-message"
                         >{{errorMessage}}</span
                     >
 
                     <rq-button
                         id="signInButton"
+                        data-testid="formSubmitButton"
                         class="rq-button"
                         (click)="requestCaptchaStateAndLogIn()"
                         type="primary"
@@ -66,13 +64,9 @@
 
                     <div class="recaptcha-message">
                         This site is protected by reCAPTCHA and the Google
-                        <a href="https://policies.google.com/privacy"
-                            >Privacy Policy</a
-                        >
+                        <a href="https://policies.google.com/privacy">Privacy Policy</a>
                         and
-                        <a href="https://policies.google.com/terms"
-                            >Terms of Service</a
-                        >
+                        <a href="https://policies.google.com/terms">Terms of Service</a>
                         apply.
                     </div>
                 </form>

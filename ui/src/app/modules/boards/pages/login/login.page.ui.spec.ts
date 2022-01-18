@@ -60,7 +60,7 @@ describe('Logging in', () => {
           timestamp: '2021-04-04T18:04:13.234+00:00',
           status: 403,
           error: 'Forbidden',
-          message: 'Incorrect board or password. Please try again.',
+          message: 'Incorrect team name or password. Please try again.',
           path: '/api/team/login',
         }),
       };
@@ -76,22 +76,33 @@ describe('Logging in', () => {
       component = await createComponent();
     });
 
+    afterEach(() => {
+      jest.resetAllMocks();
+    });
+
     it('Displays an error message if team name is not entered', async () => {
       component.getByText('Sign In').click();
       await component.findByText('Please enter a team name');
     });
+
     it('Displays an error message if password is not entered', async () => {
-      enterTextIntoFormElement(component, 'Board name', teamName);
+      enterTextIntoFormElement(component, 'Team name', teamName);
       component.getByText('Sign In').click();
 
       await component.findByText('Please enter a password');
     });
+
     it('Displays an error message if password is entered correctly', async () => {
-      enterTextIntoFormElement(component, 'Board name', teamName);
+      console.error = jest.fn();
+      enterTextIntoFormElement(component, 'Team name', teamName);
       enterTextIntoFormElement(component, 'Password', 'wrongPassword');
       component.getByText('Sign In').click();
 
-      await component.findByText('Incorrect board or password. Please try again.');
+      await component.findByText('Incorrect team name or password. Please try again.');
+      expect(console.error).toHaveBeenCalledWith(
+        'A login error occurred: ',
+        'Incorrect team name or password. Please try again.'
+      );
     });
   });
 });

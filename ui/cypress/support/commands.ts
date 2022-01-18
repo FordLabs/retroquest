@@ -56,7 +56,6 @@ Cypress.Commands.add('createTeamIfNecessaryAndLogin', (teamCredentials: TeamCred
       captchaResponse: null,
     },
   }).then((response) => {
-    console.log(response.body);
     if (response.status === 200) {
       teamCredentials.jwt = response.body;
       cy.login(teamCredentials);
