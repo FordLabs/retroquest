@@ -16,7 +16,11 @@
  */
 module.exports = {
   root: true,
-  ignorePatterns: ['projects/**/*', 'jest.config.js', 'src/react/pages/login/ReactLoginPageWrapper.tsx'],
+  ignorePatterns: [
+    'projects/**/*',
+    'jest.config.js',
+    'src/react/pages/login/ReactLoginPageWrapper.tsx',
+  ],
   extends: ['prettier', 'plugin:@typescript-eslint/recommended'],
   plugins: ['unused-imports', 'cypress', 'simple-import-sort'],
   parserOptions: {
@@ -28,7 +32,7 @@ module.exports = {
   },
   rules: {
     semi: 2,
-    'max-len': ['error', { code: 120 }],
+    'max-len': ['error', { code: 100 }],
     'simple-import-sort/imports': [
       'error',
       {
@@ -64,10 +68,19 @@ module.exports = {
         project: ['tsconfig.app.json', 'tsconfig.spec.json'],
         createDefaultProgram: true,
       },
-      extends: ['plugin:@angular-eslint/ng-cli-compat', 'plugin:@angular-eslint/template/process-inline-templates'],
+      extends: [
+        'plugin:@angular-eslint/ng-cli-compat',
+        'plugin:@angular-eslint/template/process-inline-templates',
+      ],
       rules: {
-        '@angular-eslint/directive-selector': ['error', { type: 'attribute', prefix: 'rq', style: 'camelCase' }],
-        '@angular-eslint/component-selector': ['error', { type: 'element', prefix: 'rq', style: 'kebab-case' }],
+        '@angular-eslint/directive-selector': [
+          'error',
+          { type: 'attribute', prefix: 'rq', style: 'camelCase' },
+        ],
+        '@angular-eslint/component-selector': [
+          'error',
+          { type: 'element', prefix: 'rq', style: 'kebab-case' },
+        ],
         '@angular-eslint/no-host-metadata-property': 'off',
         '@typescript-eslint/ban-types': 'off',
         '@typescript-eslint/consistent-type-definitions': 'error',
