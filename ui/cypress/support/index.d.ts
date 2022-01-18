@@ -20,7 +20,7 @@ import TeamCredentials from './types/teamCredentials';
 declare global {
   namespace Cypress {
     interface Chainable {
-      login(teamCredentials: TeamCredentials): Chainable<void>;
+      login(teamCredentials: TeamCredentials): Chainable<Response<unknown>>;
       createTeam(teamCredentials: TeamCredentials): Chainable<void>;
       createTeamIfNecessaryAndLogin(teamCredentials: TeamCredentials): Chainable<void>;
     }

@@ -17,7 +17,7 @@
 
 import TeamCredentials from '../support/types/teamCredentials';
 
-describe('Logging In', () => {
+describe('Login Page', () => {
   const loginFailedMessage = 'Incorrect team name or password. Please try again.';
   const teamCredentials = {
     teamName: 'Test Login',
@@ -32,50 +32,62 @@ describe('Logging In', () => {
 
   beforeEach(() => {
     cy.intercept('POST', '/api/team/login').as('postTeamLogin');
-  });
 
-  it('Redirects to login page when action comes back unauthorized', () => {
-    cy.login(teamCredentials);
-    cy.wait('@postTeamLogin');
-    cy.document().setCookie('token', '');
-    cy.document().setCookie('JSESSIONID', '');
-    cy.enterThought('happy', 'I have a thought');
-    cy.url().should('eq', Cypress.config().baseUrl + '/login');
-  });
+    cy.visit('/login');
+    cy.contains('Sign in to your Team!');
 
-  it('Displays invalid team name when logging in with bad team', () => {
-    cy.login({
-      teamName: 'Something not correct',
-      teamId: 'Something not correct',
-      password: 'Something else wrong 1',
-      jwt: '',
-    });
-    cy.wait('@postTeamLogin');
-    cy.get('[data-testid=formErrorMessage]').should('contain', loginFailedMessage);
-  });
-
-  it('Displays invalid team name/password when using bad password', () => {
-    cy.login({
-      ...teamCredentials,
-      password: 'Something else wrong 1',
-    });
-    cy.wait('@postTeamLogin');
-    cy.get('[data-testid=formErrorMessage]').should('contain', loginFailedMessage);
+    cy.get('[data-testid=teamNameInput]').as('teamNameInput');
+    cy.get('[data-testid=passwordInput]').as('passwordInput');
+    cy.get('[data-testid=formSubmitButton]').as('loginButton');
   });
 
   it('Navigates to team board after successful login', () => {
-    cy.login(teamCredentials);
+    login(teamCredentials);
     cy.url().should('eq', `${Cypress.config().baseUrl}/team/${teamCredentials.teamId}`);
   });
 
   it('Pre-populates team name', () => {
-    cy.visit('/login');
-    cy.contains('Sign in to your Team!');
-
-    cy.get('#teamNameInput').as('teamNameInput');
+    cy.get('[data-testid=teamNameInput]').as('teamNameInput');
     cy.get('@teamNameInput').should('have.value', '');
 
     cy.visit(`/login/${teamCredentials.teamId}`);
     cy.get('@teamNameInput').should('have.value', teamCredentials.teamName);
   });
+
+  describe('Form Errors', () => {
+    it('Redirects to login page when action comes back unauthorized', () => {
+      login(teamCredentials);
+      cy.document().setCookie('token', '');
+      cy.document().setCookie('JSESSIONID', '');
+      cy.enterThought('happy', 'I have a thought');
+      cy.url().should('eq', Cypress.config().baseUrl + '/login');
+    });
+
+    it('Displays invalid team name when logging in with bad team', () => {
+      login({
+        teamName: 'Something not correct',
+        teamId: 'Something not correct',
+        password: 'Something else wrong 1',
+        jwt: '',
+      });
+      cy.get('[data-testid=formErrorMessage]').should('contain', loginFailedMessage);
+    });
+
+    it('Displays invalid team name/password when using bad password', () => {
+      login({
+        ...teamCredentials,
+        password: 'Something else wrong 1',
+      });
+      cy.get('[data-testid=formErrorMessage]').should('contain', loginFailedMessage);
+    });
+  });
 });
+
+function login({ teamName, password }: TeamCredentials) {
+  cy.log('**Log in using the login form**');
+  cy.get('@teamNameInput').type(teamName);
+  cy.get('@passwordInput').type(password);
+  cy.get('@loginButton').click();
+
+  cy.wait('@postTeamLogin');
+}

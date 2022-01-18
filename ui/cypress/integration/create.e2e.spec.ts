@@ -18,79 +18,27 @@
 import TeamCredentials from '../support/types/teamCredentials';
 
 describe('Create Page', () => {
+  const teamName = 'Test Login ' + Math.random().toString().replace('.', '');
+  const teamId = teamName.toLowerCase().replace(/ /g, '-');
   const teamCredentials = {
-    teamName: 'Test Create Board',
-    teamId: 'test-create-board',
-    password: 'Test1234',
+    teamName,
+    teamId,
+    password: 'Login1234',
     jwt: '',
   } as TeamCredentials;
 
-  describe('navigation', () => {
-    it('should be able to navigate to /create', () => {
-      cy.visit('/create');
-      cy.url().should('eq', Cypress.config().baseUrl + '/create');
-    });
+  it('Create a new team and go to retro page', () => {
+    cy.visit('/create');
+    cy.log('**Create a team using the create team form**');
+    cy.get('[data-testid=teamNameInput]').type(teamCredentials.teamName);
+    cy.get('[data-testid=passwordInput]').type(teamCredentials.password);
+    cy.get('[data-testid=confirmPasswordInput]').type(teamCredentials.password);
+    cy.get('[data-testid=formSubmitButton]').click();
 
-    it('should be able to navigate to /login from link', () => {
-      cy.visit('/create');
-      cy.get('#loginBoard').click();
-      cy.url().should('eq', Cypress.config().baseUrl + '/login');
-    });
-  });
-
-  describe('default board creation', () => {
-    before(() => {
-      cy.createTeamIfNecessaryAndLogin(teamCredentials);
-    });
-
-    describe('Sections', () => {
-      describe('Happy Section', () => {
-        it('Has a Happy Column Header', () => {
-          cy.findByText('Happy');
-        });
-
-        it('The Happy Column Header is Green', () => {
-          cy.findByText('Happy').then((happyElement) => {
-            expect(window.getComputedStyle(happyElement.parent()[0]).backgroundColor).to.equal('rgb(46, 204, 113)');
-          });
-        });
-      });
-
-      describe('Confused Section', () => {
-        it('Has a Happy Confused Header', () => {
-          cy.findByText('Confused');
-        });
-
-        it('The Confused Column Header is Green', () => {
-          cy.findByText('Confused').then((happyElement) => {
-            expect(window.getComputedStyle(happyElement.parent()[0]).backgroundColor).to.equal('rgb(52, 152, 219)');
-          });
-        });
-      });
-
-      describe('Sad Section', () => {
-        it('Has a Sad Sad Header', () => {
-          cy.findByText('Sad');
-        });
-
-        it('The Sad Column Header is Green', () => {
-          cy.findByText('Sad').then((happyElement) => {
-            expect(window.getComputedStyle(happyElement.parent()[0]).backgroundColor).to.equal('rgb(231, 76, 60)');
-          });
-        });
-      });
-
-      describe('Action Items Section', () => {
-        it('Has a Action Items Column Header', () => {
-          cy.findByText('Action Items');
-        });
-
-        it('The Action Items Column Header is Green', () => {
-          cy.findByText('Action Items').then((happyElement) => {
-            expect(window.getComputedStyle(happyElement.parent()[0]).backgroundColor).to.equal('rgb(241, 196, 15)');
-          });
-        });
-      });
-    });
+    cy.log(teamCredentials.teamId);
+    cy.url().should('eq', Cypress.config().baseUrl + '/team/' + teamCredentials.teamId);
+    cy.findByText('Happy');
+    cy.findByText('Confused');
+    cy.findByText('Sad');
   });
 });
