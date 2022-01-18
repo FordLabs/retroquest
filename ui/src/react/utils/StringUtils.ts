@@ -1,9 +1,9 @@
 export const TEAM_NAME_REGEX = /^[A-Za-z0-9 ]+$/;
 export const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 
-export const LOWERCASE_REGEX = /^.*[a-z].*$/;
-export const UPPERCASE_REGEX = /^.*[A-Z].*$/;
-export const NUMBER_REGEX = /^.*\d.*$/;
+export const LOWERCASE_REGEX = /[a-z]/;
+export const UPPERCASE_REGEX = /[A-Z]/;
+export const NUMBER_REGEX = /\d/;
 
 export function validateTeamName(team: string): string | undefined {
   if (!team) {
