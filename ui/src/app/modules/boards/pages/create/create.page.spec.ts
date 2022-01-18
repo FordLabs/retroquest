@@ -68,28 +68,28 @@ describe('CreateComponent', () => {
     });
 
     it('Requires a team name to be entered', async () => {
-      component.getByText('create board').click();
+      component.getByText('create team').click();
       await component.findByText('Please enter a team name');
     });
 
     it('Requires a password to be entered', async () => {
-      enterTextIntoFormElement(component, 'Board name', 'test');
-      component.getByText('create board').click();
+      enterTextIntoFormElement(component, 'Team name', 'test');
+      component.getByText('create team').click();
       await component.findByText('Please enter a password');
     });
 
     it('Requires a confirmation password to be entered', async () => {
-      enterTextIntoFormElement(component, 'Board name', 'test');
+      enterTextIntoFormElement(component, 'Team name', 'test');
       enterTextIntoFormElement(component, 'Password', 'Test1234');
-      component.getByText('create board').click();
+      component.getByText('create team').click();
       await component.findByText('Please enter matching passwords');
     });
 
     it('Requires a confirmation password to match entered password', async () => {
-      enterTextIntoFormElement(component, 'Board name', 'test');
+      enterTextIntoFormElement(component, 'Team name', 'test');
       enterTextIntoFormElement(component, 'Password', 'Test1234');
       enterTextIntoFormElement(component, 'Confirm Password', 'peanutButter');
-      component.getByText('create board').click();
+      component.getByText('create team').click();
       await component.findByText('Please enter matching passwords');
     });
   });
@@ -112,10 +112,10 @@ describe('CreateComponent', () => {
       mockTeamService.create = createSpy;
       component = await createComponent(mockTeamService);
 
-      enterTextIntoFormElement(component, 'Board name', 'test');
+      enterTextIntoFormElement(component, 'Team name', 'test');
       enterTextIntoFormElement(component, 'Password', 'Test1234');
       enterTextIntoFormElement(component, 'Confirm Password', 'Test1234');
-      component.getByText('create board').click();
+      component.getByText('create team').click();
     });
 
     it('Makes call to create team service if form entry is valid', () => {

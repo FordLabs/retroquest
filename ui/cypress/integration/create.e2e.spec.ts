@@ -29,6 +29,7 @@ describe('Create Page', () => {
 
   it('Create a new team and go to retro page', () => {
     cy.visit('/create');
+    cy.contains('Create a new Team!').should('exist');
     cy.log('**Create a team using the create team form**');
     cy.get('[data-testid=teamNameInput]').type(teamCredentials.teamName);
     cy.get('[data-testid=passwordInput]').type(teamCredentials.password);
