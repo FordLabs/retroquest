@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve --configuration local",
     "build": "ng build",
+    "prebuild-prod": "node getApplicationVersion.js",
     "build-prod": "ng build --configuration production --build-optimizer --output-path=../api/src/main/resources/static",
     "test": "yarn unit-watch",
     "unit": "jest",
