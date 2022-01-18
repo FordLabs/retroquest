@@ -34,7 +34,7 @@ describe('Login Page', () => {
     cy.intercept('POST', '/api/team/login').as('postTeamLogin');
 
     cy.visit('/login');
-    cy.contains('Sign in to your Team!');
+    cy.contains('Sign in to your Team!').should('exist');
 
     cy.get('[data-testid=teamNameInput]').as('teamNameInput');
     cy.get('[data-testid=passwordInput]').as('passwordInput');

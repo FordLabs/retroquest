@@ -22,13 +22,13 @@
         <div class="rq-team-controls">
             <form id="createForm" class="rq-form">
                 <div class="rq-form-header">
-                    <div class="header-text">Create a new Board!</div>
-                    <a id="loginBoard" routerLink="/login">or sign in to your existing board</a>
+                    <div class="header-text">Create a new Team!</div>
+                    <a id="loginBoard" routerLink="/login">or sign in to your existing team</a>
                 </div>
 
                 <form class="rq-form-body" (keydown.enter)="requestCaptchaStateAndCreateTeam()">
                     <div class="rq-input-group">
-                        <label for="teamNameInput">Board name</label>
+                        <label for="teamNameInput">Team name</label>
                         <input
                             id="teamNameInput"
                             data-testid="teamNameInput"
@@ -70,7 +70,7 @@
                         id="createRetroButton"
                         data-testid="formSubmitButton"
                         type="primary"
-                        text="create board"
+                        text="create team"
                         (click)="requestCaptchaStateAndCreateTeam()"
                     >
                     </rq-button>
