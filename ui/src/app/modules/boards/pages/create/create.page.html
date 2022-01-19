@@ -37,9 +37,7 @@
                             [(ngModel)]="teamName"
                             rqFocusOnLoad
                         />
-                        <span class="rq-validation-message">
-                            Names must not contain special characters.
-                        </span>
+                        <span class="rq-validation-message"> Names must not contain special characters. </span>
                     </div>
                     <div class="rq-input-group">
                         <label for="teamPasswordInput">Password</label>
@@ -67,7 +65,9 @@
                             [(ngModel)]="confirmPassword"
                         />
                     </div>
-                    <span id="errorMessage" class="rq-error-message">{{errorMessage}}</span>
+                    <span id="errorMessage" data-testid="formErrorMessage" class="rq-error-message">
+                        {{errorMessage}}
+                    </span>
                     <rq-button
                         id="createRetroButton"
                         data-testid="formSubmitButton"

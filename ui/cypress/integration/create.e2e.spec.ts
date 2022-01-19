@@ -14,38 +14,54 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import { getTeamCredentials } from '../support/helpers';
 import TeamCredentials from '../support/types/teamCredentials';
 
 describe('Create Page', () => {
-  const teamName = 'Test Login ' + Math.random().toString().replace('.', '');
-  const teamId = teamName.toLowerCase().replace(/ /g, '-');
-  const teamCredentials = {
-    teamName,
-    teamId,
-    password: 'Login1234',
-    jwt: '',
-  } as TeamCredentials;
+  const teamCredentials = getTeamCredentials();
 
   beforeEach(() => {
     cy.intercept('POST', '/api/team').as('postCreateTeam');
 
     cy.visit('/create');
+    cy.contains('Create a new Team!').should('exist');
+
+    cy.get('[data-testid=teamNameInput]').as('teamNameInput');
+    cy.get('[data-testid=passwordInput]').as('passwordInput');
+    cy.get('[data-testid=confirmPasswordInput]').as('confirmPasswordInput');
+    cy.get('[data-testid=formSubmitButton]').as('createButton');
   });
 
   it('Create a new team and go to retro page', () => {
-    cy.get('[data-testid=teamNameInput]').type(teamCredentials.teamName);
-    cy.get('[data-testid=passwordInput]').type(teamCredentials.password);
-    cy.get('[data-testid=confirmPasswordInput]').type(teamCredentials.password);
-    cy.get('[data-testid=formSubmitButton]').click();
-
-    cy.wait('@postCreateTeam').then(({ response }) => {
-      expect(response.statusCode).to.equal(201);
-    });
+    fillOutAndSubmitCreateForm(teamCredentials, 201);
 
     cy.url().should('eq', Cypress.config().baseUrl + '/team/' + teamCredentials.teamId);
     cy.findByText('Happy');
     cy.findByText('Confused');
     cy.findByText('Sad');
   });
+
+  describe('Form Errors', () => {
+    it('Notifies user that team name has already been used when submitting a duplicate name', () => {
+      cy.createTeam(teamCredentials);
+
+      fillOutAndSubmitCreateForm(teamCredentials, 409);
+      cy.get('[data-testid=formErrorMessage]').should(
+        'contain',
+        'This team name is already in use. Please try another one.'
+      );
+    });
+  });
 });
+
+function fillOutAndSubmitCreateForm({ teamName, password }: TeamCredentials, expectedStatusCode = 200) {
+  cy.log('**Log in using the login form**');
+  cy.get('@teamNameInput').type(teamName);
+  cy.get('@passwordInput').type(password);
+  cy.get('@confirmPasswordInput').type(password);
+  cy.get('@createButton').click();
+
+  cy.wait('@postCreateTeam').then(({ response }) => {
+    expect(response.statusCode).to.equal(expectedStatusCode);
+  });
+}

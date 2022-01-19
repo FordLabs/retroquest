@@ -15,25 +15,20 @@
  * limitations under the License.
  */
 
-import TeamCredentials from '../support/types/teamCredentials';
+import { getTeamCredentials } from '../support/helpers';
 
 describe('Retro Page', () => {
-  const teamCredentials = {
-    teamName: 'Test Conduct Retro',
-    teamId: 'test-conduct-retro',
-    password: 'Retro1234',
-    jwt: '',
-  } as TeamCredentials;
+  const teamCredentials = getTeamCredentials();
+
+  before(() => {
+    cy.createTeamAndLogin(teamCredentials);
+  });
 
   describe('Retro Board Defaults', () => {
     const green = 'rgb(46, 204, 113)';
     const red = 'rgb(231, 76, 60)';
     const blue = 'rgb(52, 152, 219)';
     const yellow = 'rgb(241, 196, 15)';
-
-    before(() => {
-      cy.createTeamIfNecessaryAndLogin(teamCredentials);
-    });
 
     it('Confirm default heading text and colors', () => {
       cy.log('**Should have "Happy" column header in green**');
@@ -52,10 +47,6 @@ describe('Retro Page', () => {
 
   describe('Conduct a Retro', () => {
     before(() => {
-      cy.createTeamIfNecessaryAndLogin(teamCredentials);
-
-      clearBoard();
-
       cy.enterThought('happy', 'Good flow to our work this week');
       cy.enterThought('happy', 'Switching to e2e was a good idea');
       cy.enterThought('happy', `I'm a little uneasy about sharing this with the team`);
@@ -70,10 +61,6 @@ describe('Retro Page', () => {
       thoughtDiscussed('happy', 'Switching to e2e was a good idea');
 
       deleteThought('happy', `I'm a little uneasy about sharing this with the team`);
-    });
-
-    after(() => {
-      clearBoard();
     });
 
     describe('Happy Column', () => {
@@ -116,22 +103,6 @@ describe('Retro Page', () => {
 
 function enterActionItems(actionItem: string) {
   cy.get(`rq-actions-column`).find('input[placeholder="Enter an Action Item"]').type(`${actionItem}{enter}`);
-}
-
-function clearBoard() {
-  // cy.get() will hang forever if the query is empty
-  cy.enterThought('happy', 'first thought');
-  enterActionItems('first action item');
-
-  cy.get(`rq-thoughts-column rq-task`)
-    .each((input) => {
-      deleteCard(input);
-    })
-    .then(() => {
-      cy.get(`rq-actions-column rq-action-item-task`).each((actionItem) => {
-        deleteCard(actionItem);
-      });
-    });
 }
 
 function deleteCard(card) {
