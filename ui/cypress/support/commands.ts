@@ -30,22 +30,8 @@ import '@testing-library/cypress/add-commands';
 
 import TeamCredentials from './types/teamCredentials';
 
-Cypress.Commands.add('login', (teamCredentials: TeamCredentials) => {
-  cy.request({
-    url: `/api/team/login`,
-    failOnStatusCode: false,
-    method: 'POST',
-    body: {
-      name: teamCredentials.teamName,
-      password: teamCredentials.password,
-      captchaResponse: null,
-    },
-  }).then((response) => {
-    return response;
-  });
-});
-
 Cypress.Commands.add('createTeam', ({ teamName, password }: TeamCredentials) => {
+  cy.log('**Creating Team via api**');
   cy.request({
     url: `/api/team`,
     failOnStatusCode: false,
@@ -57,15 +43,28 @@ Cypress.Commands.add('createTeam', ({ teamName, password }: TeamCredentials) => 
   });
 });
 
-Cypress.Commands.add('createTeamIfNecessaryAndLogin', (teamCredentials: TeamCredentials) => {
-  cy.login(teamCredentials).then((response) => {
-    if (response.status === 200) {
-      const token = response.body as string;
-      cy.setCookie('token', token);
-      cy.visit(`/team/${teamCredentials.teamId}`);
-    } else {
-      cy.createTeam(teamCredentials);
-    }
+Cypress.Commands.add('createTeamAndLogin', (teamCredentials: TeamCredentials) => {
+  cy.createTeam(teamCredentials).then(() => {
+    cy.log('**Logging in via api**');
+    cy.request({
+      url: `/api/team/login`,
+      failOnStatusCode: false,
+      method: 'POST',
+      body: {
+        name: teamCredentials.teamName,
+        password: teamCredentials.password,
+        captchaResponse: null,
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        const token = response.body as string;
+        cy.setCookie('token', token);
+        cy.visit(`/team/${teamCredentials.teamId}`);
+        cy.contains(teamCredentials.teamName).should('exist');
+      } else {
+        cy.log('**Login via api failed with status code: **' + response.status);
+      }
+    });
   });
 });
 
