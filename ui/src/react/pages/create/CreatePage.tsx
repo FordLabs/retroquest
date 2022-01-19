@@ -47,6 +47,7 @@ export default function CreatePage(props: Props): JSX.Element {
     const errors = [];
     if (teamNameErrorMessage) errors.push(teamNameErrorMessage);
     if (passwordErrorMessage) errors.push(passwordErrorMessage);
+    if (confirmPasswordErrorMessage) errors.push(confirmPasswordErrorMessage);
     setErrorMessages(errors);
   };
 
@@ -96,7 +97,7 @@ export default function CreatePage(props: Props): JSX.Element {
             setTeamName(updatedTeamName);
             setErrorMessages([]);
           })}
-          validationMessage="Names must not contain special characters. "
+          validationMessage="Names must not contain special characters."
           invalid={validate && !!teamNameErrorMessage}
           readOnly={loading}
         />
@@ -122,7 +123,6 @@ export default function CreatePage(props: Props): JSX.Element {
             setConfirmationPassword(updatedPassword);
             setErrorMessages([]);
           })}
-          validationMessage="8 or more characters with a mix of numbers and letters"
           invalid={validate && !!confirmPasswordErrorMessage}
           readOnly={loading}
         />

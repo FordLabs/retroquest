@@ -16,12 +16,12 @@
  */
 
 import * as React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import Form from '../components/form/Form';
 import InputText from '../components/input-text/InputText';
 import { onChange } from '../utils/EventUtils';
-import { validateTeamName, validatePassword } from '../utils/StringUtils';
+import { validatePassword, validateTeamName } from '../utils/StringUtils';
 
 export default {
   title: 'components/Form',
@@ -68,7 +68,7 @@ const Template: ComponentStory<typeof Form> = () => {
         label="Team name"
         value={teamName}
         onChange={onChange(setTeamName)}
-        validationMessage="Names must not contain special characters. "
+        validationMessage="Names must not contain special characters."
         invalid={validate && !!teamNameErrorMessage}
       />
       <InputText

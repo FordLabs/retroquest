@@ -72,9 +72,12 @@ describe('CreatePage.spec.tsx', () => {
   });
 
   describe('Form errors', () => {
-    it('should show validation message when team name is not valid', async () => {
+    beforeEach(() => {
       expect(screen.queryByTestId('inputValidationMessage')).toBeNull();
+      expect(screen.queryByTestId('formErrorMessage')).toBeNull();
+    });
 
+    it('should warn user with message when team name has special characters', async () => {
       await typeIntoPasswordInput(validPassword);
       await typeIntoConfirmPasswordInput(validPassword);
 
@@ -85,12 +88,14 @@ describe('CreatePage.spec.tsx', () => {
         fireEvent.submit(getTeamNameInput());
       });
 
-      expect(await screen.findByTestId('inputValidationMessage')).toBeDefined();
+      const inputValidationMessage = await screen.findByTestId('inputValidationMessage');
+      expect(inputValidationMessage.textContent).toBe('Names must not contain special characters.');
+
+      const formErrorMessage = await screen.findByTestId('formErrorMessage');
+      expect(formErrorMessage.textContent).toBe('Please enter a team name without any special characters.');
     });
 
-    it('should show validation message when password is not valid', async () => {
-      expect(screen.queryByTestId('inputValidationMessage')).toBeNull();
-
+    it('should warn user with message when password is not valid', async () => {
       await typeIntoTeamNameInput(validTeamName);
 
       const invalidPassword = 'MissingANumber';
@@ -101,12 +106,14 @@ describe('CreatePage.spec.tsx', () => {
         fireEvent.submit(getPasswordInput());
       });
 
-      expect(await screen.findByTestId('inputValidationMessage')).toBeDefined();
+      const inputValidationMessage = await screen.findByTestId('inputValidationMessage');
+      expect(inputValidationMessage.textContent).toBe('8 or more characters with a mix of numbers and letters');
+
+      const formErrorMessage = await screen.findByTestId('formErrorMessage');
+      expect(formErrorMessage.textContent).toBe('Password must contain at least one number.');
     });
 
-    it('should show validation message when passwords do not match', async () => {
-      expect(screen.queryByTestId('inputValidationMessage')).toBeNull();
-
+    it('should warn user with message when passwords do not match', async () => {
       await typeIntoTeamNameInput(validTeamName);
       await typeIntoPasswordInput(validPassword);
       await typeIntoConfirmPasswordInput(validPassword + '-nice-try');
@@ -115,7 +122,10 @@ describe('CreatePage.spec.tsx', () => {
         fireEvent.submit(getPasswordInput());
       });
 
-      expect(await screen.findByTestId('inputValidationMessage')).toBeDefined();
+      expect(screen.queryByTestId('inputValidationMessage')).toBeNull();
+
+      const formErrorMessage = await screen.findByTestId('formErrorMessage');
+      expect(formErrorMessage.textContent).toBe('Please enter matching passwords');
     });
   });
 });
