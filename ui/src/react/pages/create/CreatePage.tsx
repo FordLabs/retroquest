@@ -55,9 +55,13 @@ export default function CreatePage(props: Props): JSX.Element {
       .then((teamId) => {
         routeTo(`/team/${teamId}`);
       })
-      .catch((err) => {
-        console.error(err);
-        setErrorMessages(['Incorrect team name or password. Please try again.']);
+      .catch((error) => {
+        let errorMsg = 'Incorrect team name or password. Please try again.';
+        const { response } = error;
+        if (response.status === 409) {
+          errorMsg = typeof response !== 'undefined' ? response.data.message : error.message;
+        }
+        setErrorMessages([errorMsg]);
       })
       .finally(() => setLoading(false));
   }
