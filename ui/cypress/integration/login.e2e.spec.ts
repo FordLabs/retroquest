@@ -64,30 +64,38 @@ describe('Login Page', () => {
     });
 
     it('Displays invalid team name when logging in with bad team', () => {
-      login({
-        teamName: 'Something not correct',
-        teamId: 'Something not correct',
-        password: 'Something else wrong 1',
-        jwt: '',
-      });
+      login(
+        {
+          teamName: 'Something not correct',
+          teamId: 'Something not correct',
+          password: 'Something else wrong 1',
+          jwt: '',
+        },
+        403
+      );
       cy.get('[data-testid=formErrorMessage]').should('contain', loginFailedMessage);
     });
 
     it('Displays invalid team name/password when using bad password', () => {
-      login({
-        ...teamCredentials,
-        password: 'Something else wrong 1',
-      });
+      login(
+        {
+          ...teamCredentials,
+          password: 'Something else wrong 1',
+        },
+        403
+      );
       cy.get('[data-testid=formErrorMessage]').should('contain', loginFailedMessage);
     });
   });
 });
 
-function login({ teamName, password }: TeamCredentials) {
+function login({ teamName, password }: TeamCredentials, expectedStatusCode = 200) {
   cy.log('**Log in using the login form**');
   cy.get('@teamNameInput').type(teamName);
   cy.get('@passwordInput').type(password);
   cy.get('@loginButton').click();
 
-  cy.wait('@postTeamLogin');
+  cy.wait('@postTeamLogin').then(({ response }) => {
+    expect(response.statusCode).to.equal(expectedStatusCode);
+  });
 }

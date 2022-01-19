@@ -57,8 +57,8 @@ export function LoginPage(props: Props): JSX.Element {
 
   const loginTeam = () => {
     TeamService.login(teamName, password)
-      .then((location) => {
-        routeTo(`/team/${location}`);
+      .then((teamId) => {
+        routeTo(`/team/${teamId}`);
       })
       .catch(() => {
         setErrorMessages(['Incorrect team name or password. Please try again.']);
