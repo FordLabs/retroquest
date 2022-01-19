@@ -95,8 +95,8 @@ export class CreateComponent {
 
   private handleResponse(response): void {
     AuthService.setToken(response.body);
-    const teamUrl = response.headers.get('location');
-    this.router.navigateByUrl(teamUrl);
+    const teamId = response.headers.get('location');
+    this.router.navigateByUrl(`/team/${teamId}`);
   }
 
   private handleError(error) {

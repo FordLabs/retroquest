@@ -61,11 +61,11 @@ public class TeamController {
     @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Created")})
     public ResponseEntity<String> createTeam(@RequestBody @Valid CreateTeamRequest createTeamRequest) {
         var team = teamService.createNewTeam(createTeamRequest);
+        var teamId = team.getUri();
+        var jwt = jwtBuilder.buildJwt(teamId);
 
         var headers = new HttpHeaders();
-        headers.add("Location", "/team/" + team.getUri());
-
-        var jwt = jwtBuilder.buildJwt(team.getUri());
+        headers.add(HttpHeaders.LOCATION, teamId);
 
         return new ResponseEntity<>(jwt, headers, CREATED);
     }
@@ -112,10 +112,11 @@ public class TeamController {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public ResponseEntity<String> login(@RequestBody @Valid LoginRequest team) {
         var savedTeamEntity = teamService.login(team);
-        var jwt = jwtBuilder.buildJwt(savedTeamEntity.getUri());
+        var teamId = savedTeamEntity.getUri();
+        var jwt = jwtBuilder.buildJwt(teamId);
 
         var headers = new HttpHeaders();
-        headers.add(HttpHeaders.LOCATION, savedTeamEntity.getUri());
+        headers.add(HttpHeaders.LOCATION, teamId);
 
         return new ResponseEntity<>(jwt, headers, OK);
     }

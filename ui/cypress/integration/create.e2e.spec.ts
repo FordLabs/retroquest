@@ -27,16 +27,22 @@ describe('Create Page', () => {
     jwt: '',
   } as TeamCredentials;
 
-  it('Create a new team and go to retro page', () => {
+  beforeEach(() => {
+    cy.intercept('POST', '/api/team').as('postCreateTeam');
+
     cy.visit('/create');
-    cy.contains('Create a new Team!').should('exist');
-    cy.log('**Create a team using the create team form**');
+  });
+
+  it('Create a new team and go to retro page', () => {
     cy.get('[data-testid=teamNameInput]').type(teamCredentials.teamName);
     cy.get('[data-testid=passwordInput]').type(teamCredentials.password);
     cy.get('[data-testid=confirmPasswordInput]').type(teamCredentials.password);
     cy.get('[data-testid=formSubmitButton]').click();
 
-    cy.log(teamCredentials.teamId);
+    cy.wait('@postCreateTeam').then(({ response }) => {
+      expect(response.statusCode).to.equal(201);
+    });
+
     cy.url().should('eq', Cypress.config().baseUrl + '/team/' + teamCredentials.teamId);
     cy.findByText('Happy');
     cy.findByText('Confused');
