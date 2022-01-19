@@ -22,18 +22,17 @@ import {
   ElementRef,
   OnChanges,
   OnDestroy,
-  SimpleChanges,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { ActivatedRoute, Router as AngularRouter } from '@angular/router';
 
-import { LoginPage } from './LoginPage';
+import CreatePage from './CreatePage';
 
-const containerElementName = 'reactLoginPageWrapper';
+const containerElementName = 'reactCreatePageWrapper';
 
 @Component({
-  selector: 'react-login-page-wrapper',
+  selector: 'react-create-page-wrapper',
   template: `<span #${containerElementName}></span>`,
   styleUrls: [
     '../../templates/auth/AuthTemplate.scss',
@@ -45,12 +44,12 @@ const containerElementName = 'reactLoginPageWrapper';
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class ReactLoginPageWrapper implements OnChanges, OnDestroy, AfterViewInit {
+export class ReactCreatePageWrapper implements OnChanges, OnDestroy, AfterViewInit {
   @ViewChild(containerElementName, { static: false }) containerRef: ElementRef;
 
   constructor(private angularRoute: ActivatedRoute, private angularRouter: AngularRouter) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.render();
   }
 
@@ -65,8 +64,7 @@ export class ReactLoginPageWrapper implements OnChanges, OnDestroy, AfterViewIni
   private render() {
     ReactDOM.render(
       <React.StrictMode>
-        <LoginPage
-          teamId={this.angularRoute.snapshot.params['teamId'] as string}
+        <CreatePage
           routeTo={(path: string) => {
             this.angularRouter.navigateByUrl(path).then();
           }}

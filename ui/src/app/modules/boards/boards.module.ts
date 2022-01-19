@@ -22,6 +22,7 @@ import { RouterModule } from '@angular/router';
 import { RecaptchaModule } from 'ng-recaptcha';
 
 import { environment } from '../../../environments/environment';
+import { ReactCreatePageWrapper } from '../../../react/pages/create/ReactCreatePageWrapper';
 import { ReactLoginPageWrapper } from '../../../react/pages/login/ReactLoginPageWrapper';
 import { ComponentsModule } from '../components/components.module';
 
@@ -38,7 +39,7 @@ import { UserViewComponent } from './pages/user-view/user-view.component';
 function routes() {
   return environment.useReact
     ? [
-        { path: 'create', component: CreateComponent },
+        { path: 'create', component: ReactCreatePageWrapper },
         { path: 'login', component: ReactLoginPageWrapper },
         { path: 'login/:teamId', component: ReactLoginPageWrapper },
         { path: 'update-password/:teamId', component: UpdatePasswordComponent },
@@ -60,6 +61,8 @@ function routes() {
 @NgModule({
   imports: [CommonModule, FormsModule, ComponentsModule, RouterModule.forChild(routes()), RecaptchaModule],
   declarations: [
+    ReactCreatePageWrapper,
+    ReactLoginPageWrapper,
     LoginComponent,
     CreateComponent,
     UpdatePasswordComponent,
