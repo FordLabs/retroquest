@@ -15,16 +15,12 @@
  * limitations under the License.
  */
 
+import { getTeamCredentials } from '../support/helpers';
 import TeamCredentials from '../support/types/teamCredentials';
 
 describe('Login Page', () => {
   const loginFailedMessage = 'Incorrect team name or password. Please try again.';
-  const teamCredentials = {
-    teamName: 'Test Login',
-    teamId: 'test-login',
-    password: 'Login1234',
-    jwt: '',
-  } as TeamCredentials;
+  const teamCredentials = getTeamCredentials();
 
   before(() => {
     cy.createTeam(teamCredentials);
@@ -42,7 +38,7 @@ describe('Login Page', () => {
   });
 
   it('Navigates to team board after successful login', () => {
-    login(teamCredentials);
+    fillOutAndSubmitLoginForm(teamCredentials);
     cy.url().should('eq', `${Cypress.config().baseUrl}/team/${teamCredentials.teamId}`);
   });
 
@@ -55,16 +51,8 @@ describe('Login Page', () => {
   });
 
   describe('Form Errors', () => {
-    it('Redirects to login page when action comes back unauthorized', () => {
-      login(teamCredentials);
-      cy.document().setCookie('token', '');
-      cy.document().setCookie('JSESSIONID', '');
-      cy.enterThought('happy', 'I have a thought');
-      cy.url().should('eq', Cypress.config().baseUrl + '/login');
-    });
-
     it('Displays invalid team name when logging in with bad team', () => {
-      login(
+      fillOutAndSubmitLoginForm(
         {
           teamName: 'Something not correct',
           teamId: 'Something not correct',
@@ -77,7 +65,7 @@ describe('Login Page', () => {
     });
 
     it('Displays invalid team name/password when using bad password', () => {
-      login(
+      fillOutAndSubmitLoginForm(
         {
           ...teamCredentials,
           password: 'Something else wrong 1',
@@ -87,9 +75,19 @@ describe('Login Page', () => {
       cy.get('[data-testid=formErrorMessage]').should('contain', loginFailedMessage);
     });
   });
+
+  describe('Authorization Redirects', () => {
+    it('Redirects to login page when action comes back unauthorized', () => {
+      cy.createTeamAndLogin(teamCredentials);
+      cy.document().setCookie('token', '');
+      cy.document().setCookie('JSESSIONID', '');
+      cy.enterThought('happy', 'I have a thought');
+      cy.url().should('eq', Cypress.config().baseUrl + '/login');
+    });
+  });
 });
 
-function login({ teamName, password }: TeamCredentials, expectedStatusCode = 200) {
+function fillOutAndSubmitLoginForm({ teamName, password }: TeamCredentials, expectedStatusCode = 200) {
   cy.log('**Log in using the login form**');
   cy.get('@teamNameInput').type(teamName);
   cy.get('@passwordInput').type(password);

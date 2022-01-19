@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import 'cypress-jest-adapter';
 
 import TeamCredentials from './types/teamCredentials';
 
@@ -22,7 +23,8 @@ declare global {
     interface Chainable {
       login(teamCredentials: TeamCredentials): Chainable<Response<unknown>>;
       createTeam(teamCredentials: TeamCredentials): Chainable<void>;
-      createTeamIfNecessaryAndLogin(teamCredentials: TeamCredentials): Chainable<void>;
+      createTeamAndLogin(teamCredentials: TeamCredentials): Chainable<void>;
+      enterThought(columnClass: string, thought: string): Chainable<void>;
     }
   }
 }
