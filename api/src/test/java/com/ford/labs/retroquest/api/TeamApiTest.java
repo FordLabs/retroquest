@@ -28,6 +28,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
@@ -84,11 +85,17 @@ class TeamApiTest extends ApiTestBase {
             .captchaResponse("some captcha")
             .build();
 
-        mockMvc.perform(post("/api/team")
+        var mvcResult = mockMvc.perform(post("/api/team")
             .contentType(APPLICATION_JSON)
             .content(objectMapper.writeValueAsBytes(sentCreateTeamRequest)))
             .andExpect(status().isCreated())
             .andReturn();
+
+        assertThat(mvcResult.getResponse().getHeader(HttpHeaders.LOCATION))
+                .isEqualTo("beachbums");
+
+        assertThat(mvcResult.getResponse().getContentAsString())
+                .isEqualTo(jwtBuilder.buildJwt("beachbums"));
 
         assertThat(meterRegistry.get("retroquest.teams.count").gauge().value())
             .isEqualTo(1);
@@ -500,7 +507,7 @@ class TeamApiTest extends ApiTestBase {
         assertThat(mvcResult.getResponse().getContentAsString())
             .isEqualTo(jwtBuilder.buildJwt("peachy-beachy"));
 
-        assertThat(mvcResult.getResponse().getHeader("Location"))
+        assertThat(mvcResult.getResponse().getHeader(HttpHeaders.LOCATION))
             .isEqualTo("peachy-beachy");
     }
 

@@ -99,7 +99,7 @@ describe('LoginPage.spec.tsx', () => {
       expect(await screen.findByTestId('inputValidationMessage')).toBeDefined();
     });
 
-    it('should show validation message when validPassword is not valid', async () => {
+    it('should show validation message when password is not valid', async () => {
       expect(screen.queryByTestId('inputValidationMessage')).toBeNull();
 
       await typeIntoTeamNameInput(validTeamName);
