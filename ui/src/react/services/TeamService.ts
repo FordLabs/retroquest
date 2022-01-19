@@ -22,17 +22,25 @@ import { AuthService } from '../../app/modules/auth/auth.service';
 export default class TeamService {
   static login(name: string, password: string): Promise<string> {
     const url = '/api/team/login';
-    const data = { name, password };
+    return this.postThenSetTokenAndReturnTeamId(url, { name, password });
+  }
 
-    return axios.post(url, data).then((response) => {
-      const token = response.data;
-      AuthService.setToken(token);
-      return response.headers.location;
-    });
+  static create(name: string, password: string): Promise<string> {
+    const url = '/api/team';
+    return this.postThenSetTokenAndReturnTeamId(url, { name, password });
   }
 
   static getTeamName(teamId: string): Promise<string> {
     const url = `/api/team/${teamId}/name`;
     return axios.get(url).then((res) => res.data);
+  }
+
+  private static postThenSetTokenAndReturnTeamId(url: string, data: { name: string; password: string }) {
+    return axios.post(url, data).then((response) => {
+      const token = response.data;
+      const teamId = response.headers.location;
+      AuthService.setToken(token);
+      return teamId;
+    });
   }
 }
