@@ -19,9 +19,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { RecaptchaComponent } from 'ng-recaptcha';
-import { EMPTY } from 'rxjs';
-import { Observable } from 'rxjs/internal/Observable';
-import { of } from 'rxjs/internal/observable/of';
+import { EMPTY, Observable, of } from 'rxjs';
 import { concatMap, map } from 'rxjs/operators';
 
 import { AuthService } from '../../../auth/auth.service';

@@ -18,7 +18,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RecaptchaComponent } from 'ng-recaptcha';
-import { of } from 'rxjs/internal/observable/of';
+import { of } from 'rxjs';
 
 import { TeamService } from '../../../teams/services/team.service';
 

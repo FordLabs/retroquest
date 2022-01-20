@@ -18,7 +18,7 @@
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { render } from '@testing-library/angular';
 import { RenderResult } from '@testing-library/angular/src/lib/models';
-import { of } from 'rxjs/internal/observable/of';
+import { of } from 'rxjs';
 
 import { AuthService } from '../../../auth/auth.service';
 import { TeamService } from '../../../teams/services/team.service';

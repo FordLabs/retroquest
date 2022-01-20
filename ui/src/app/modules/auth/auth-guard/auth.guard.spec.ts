@@ -16,8 +16,7 @@
  */
 
 import { ActivatedRouteSnapshot } from '@angular/router';
-import { Observable } from 'rxjs/internal/Observable';
-import { Subject } from 'rxjs/internal/Subject';
+import { Observable, Subject } from 'rxjs';
 
 import { TeamService } from '../../teams/services/team.service';
 import { createMockRouter } from '../../utils/testutils';

@@ -17,7 +17,7 @@
 
 import MockDate from 'mockdate';
 import moment from 'moment';
-import { Observable } from 'rxjs/index';
+import { Observable } from 'rxjs';
 
 import { ActionItem } from '../../../domain/action-item';
 import { createMockEventEmitter } from '../../../utils/testutils';
