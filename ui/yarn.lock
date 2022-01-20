@@ -7287,9 +7287,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.30000981, caniuse-lite@npm:^1.0.30001109, caniuse-lite@npm:^1.0.30001125, caniuse-lite@npm:^1.0.30001286":
-  version: 1.0.30001298
-  resolution: "caniuse-lite@npm:1.0.30001298"
-  checksum: 43566732d1b8746e3dfae57f558471c701b26b2c166fb9fc53ad750d83128b2eb680a5e08233717e64055779b408c72d3b2cfad6d4ae33a3e647a11dc1c0d515
+  version: 1.0.30001300
+  resolution: "caniuse-lite@npm:1.0.30001300"
+  checksum: f8c981c0658e2ea67b5e106538a9f3b15d528a6679f2b6e7cb3f508a99e4f9f3f69c73d1b243c77e5ccb3bcef964a801a26a2ba6a13416b42baf314577e3172a
   languageName: node
   linkType: hard
 
@@ -11995,7 +11995,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"http-proxy-middleware@npm:^2.0.0":
+"http-proxy-middleware@npm:^2.0.0, http-proxy-middleware@npm:^2.0.1":
   version: 2.0.1
   resolution: "http-proxy-middleware@npm:2.0.1"
   dependencies:
@@ -18550,6 +18550,7 @@ resolve@^2.0.0-next.3:
     file-loader: ^6.2.0
     file-saver: ^2.0.0
     hammerjs: ^2.0.8
+    http-proxy-middleware: ^2.0.1
     husky: ^5.2.0
     jest: ^27.4.7
     jest-axe: ^5.0.1
@@ -18565,7 +18566,7 @@ resolve@^2.0.0-next.3:
     react-dom: ^16.13.1
     react-router-dom: ^6.2.1
     resolve-url-loader: ^4.0.0
-    rxjs: ^6.5.4
+    rxjs: ^7.5.2
     sass: ^1.36.0
     sass-loader: ^12.1.0
     style-loader: ^3.2.1
@@ -18700,6 +18701,15 @@ resolve@^2.0.0-next.3:
   dependencies:
     tslib: ^2.1.0
   checksum: 78e3eecb1644dd83adabc8d956f879dca62eb19c8afcd6acac71cf6d94534c33ea201e65387494fdeb1332395cba081e194f5a9699d58a5d48e416b8b52372aa
+  languageName: node
+  linkType: hard
+
+"rxjs@npm:^7.5.2":
+  version: 7.5.2
+  resolution: "rxjs@npm:7.5.2"
+  dependencies:
+    tslib: ^2.1.0
+  checksum: daf1fe7289de500b25d822fd96cde3c138c7902e8bf0e6aa12a3e70847a5cabeeb4d677f10e19387e1db44b12c5b1be0ff5c79b8cd63ed6ce891d765e566cf4d
   languageName: node
   linkType: hard
 
