@@ -22,8 +22,7 @@ import { RxStompService } from '@stomp/ng2-stompjs';
 import { Client, IMessage } from '@stomp/stompjs';
 import { RenderResult } from '@testing-library/angular/src/lib/models';
 import userEvent from '@testing-library/user-event';
-import { Subscription } from 'rxjs';
-import { Observable, of } from 'rxjs/index';
+import { Observable, of, Subscription } from 'rxjs';
 
 import 'jest-preset-angular/setup-jest';
 

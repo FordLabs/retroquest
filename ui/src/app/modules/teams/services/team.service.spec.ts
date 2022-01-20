@@ -16,7 +16,7 @@
  */
 
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/index';
+import { Observable } from 'rxjs';
 
 import { TeamService } from './team.service';
 
