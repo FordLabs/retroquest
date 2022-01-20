@@ -17,7 +17,6 @@
 
 @import 'colors';
 
-@media screen and (prefers-reduced-motion: reduce) {
 :host {
   display: inline-block;
   box-sizing: border-box;
@@ -70,7 +69,6 @@
     color: $dark-asphalt;
     background-color: $gray;
   }
-}
 }
 
 :host {
