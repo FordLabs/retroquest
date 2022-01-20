@@ -27,6 +27,8 @@ export const mockContributors: Contributor[] = [
   },
 ];
 
-export default class ContributorsService {
-  static getContributors = jest.fn();
-}
+const ContributorsService = {
+  getContributors: jest.fn(),
+};
+
+export default ContributorsService;
