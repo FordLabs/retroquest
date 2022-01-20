@@ -3175,7 +3175,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-actions@npm:6.4.14, @storybook/addon-actions@npm:^6.3.6":
+"@storybook/addon-actions@npm:6.4.14, @storybook/addon-actions@npm:^6.4.13":
   version: 6.4.14
   resolution: "@storybook/addon-actions@npm:6.4.14"
   dependencies:
@@ -3266,7 +3266,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-docs@npm:6.4.14, @storybook/addon-docs@npm:^6.3.6":
+"@storybook/addon-docs@npm:6.4.14, @storybook/addon-docs@npm:^6.4.13":
   version: 6.4.14
   resolution: "@storybook/addon-docs@npm:6.4.14"
   dependencies:
@@ -3364,7 +3364,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-essentials@npm:^6.3.6":
+"@storybook/addon-essentials@npm:^6.4.13":
   version: 6.4.14
   resolution: "@storybook/addon-essentials@npm:6.4.14"
   dependencies:
@@ -3408,7 +3408,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addon-links@npm:^6.3.6":
+"@storybook/addon-links@npm:^6.4.13":
   version: 6.4.14
   resolution: "@storybook/addon-links@npm:6.4.14"
   dependencies:
@@ -3535,7 +3535,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/addons@npm:6.4.14, @storybook/addons@npm:^6.3.6":
+"@storybook/addons@npm:6.4.14, @storybook/addons@npm:^6.4.13":
   version: 6.4.14
   resolution: "@storybook/addons@npm:6.4.14"
   dependencies:
@@ -3668,7 +3668,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/builder-webpack5@npm:^6.3.6":
+"@storybook/builder-webpack5@npm:^6.4.13":
   version: 6.4.14
   resolution: "@storybook/builder-webpack5@npm:6.4.14"
   dependencies:
@@ -4077,6 +4077,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@storybook/csf@npm:^0.0.1":
+  version: 0.0.1
+  resolution: "@storybook/csf@npm:0.0.1"
+  dependencies:
+    lodash: ^4.17.15
+  checksum: fb57fa028b08a51edf44e1a2bf4be40a4607f5c6ccb58aae8924f476a42b9bbd61a0ad521cfc82196f23e6a912caae0a615e70a755e6800b284c91c509fd2de6
+  languageName: node
+  linkType: hard
+
 "@storybook/manager-webpack4@npm:6.4.14":
   version: 6.4.14
   resolution: "@storybook/manager-webpack4@npm:6.4.14"
@@ -4127,7 +4136,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/manager-webpack5@npm:^6.3.6":
+"@storybook/manager-webpack5@npm:^6.4.13":
   version: 6.4.14
   resolution: "@storybook/manager-webpack5@npm:6.4.14"
   dependencies:
@@ -4196,6 +4205,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@storybook/preset-create-react-app@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@storybook/preset-create-react-app@npm:4.0.0"
+  dependencies:
+    "@pmmmwh/react-refresh-webpack-plugin": ^0.5.1
+    "@storybook/react-docgen-typescript-plugin": canary
+    "@types/babel__core": ^7.1.7
+    babel-plugin-react-docgen: ^4.1.0
+    pnp-webpack-plugin: ^1.7.0
+    semver: ^7.3.5
+  peerDependencies:
+    "@babel/core": "*"
+    "@storybook/node-logger": "*"
+    "@storybook/react": ">=5.2"
+    react-scripts: ">=3.0.0"
+  checksum: 1e0e204d5772cda2ad3392f6bd5989fc2512c17b542b6460e819f22684245d8ad0002a5cf63f35ce3682097005eda90b80efacce43ffead22e990ea77e32f2cc
+  languageName: node
+  linkType: hard
+
 "@storybook/preview-web@npm:6.4.14":
   version: 6.4.14
   resolution: "@storybook/preview-web@npm:6.4.14"
@@ -4241,7 +4269,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/react@npm:^6.3.6":
+"@storybook/react-docgen-typescript-plugin@npm:canary":
+  version: 1.0.2-canary.6.9d540b91e815f8fc2f8829189deb00553559ff63.0
+  resolution: "@storybook/react-docgen-typescript-plugin@npm:1.0.2-canary.6.9d540b91e815f8fc2f8829189deb00553559ff63.0"
+  dependencies:
+    debug: ^4.1.1
+    endent: ^2.0.1
+    find-cache-dir: ^3.3.1
+    flat-cache: ^3.0.4
+    micromatch: ^4.0.2
+    react-docgen-typescript: ^2.1.1
+    tslib: ^2.0.0
+  peerDependencies:
+    typescript: ">= 3.x"
+    webpack: ">= 4"
+  checksum: 91a3015d384e93d9ffb4def904cad51218eb1a9eaf504c758083f2988a97d8bf8748bc280aa629864eb26fd9f7fc05bd087df95383d719e0c914c722016804b9
+  languageName: node
+  linkType: hard
+
+"@storybook/react@npm:^6.4.13":
   version: 6.4.14
   resolution: "@storybook/react@npm:6.4.14"
   dependencies:
@@ -4367,7 +4413,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@storybook/theming@npm:6.4.14, @storybook/theming@npm:^6.3.6":
+"@storybook/theming@npm:6.4.14, @storybook/theming@npm:^6.4.13":
   version: 6.4.14
   resolution: "@storybook/theming@npm:6.4.14"
   dependencies:
@@ -4569,7 +4615,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14":
+"@types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14, @types/babel__core@npm:^7.1.7":
   version: 7.1.18
   resolution: "@types/babel__core@npm:7.1.18"
   dependencies:
@@ -5142,6 +5188,17 @@ __metadata:
   peerDependencies:
     eslint: "*"
   checksum: 889d6e78f35ac637b1f31d802ba6c5c30c762a402ade341a8df70f447c39ba8ece0aafd9fbdf6bf8954c957daf69025907e0b9191b9c2e61ea056d2b01a8b3c5
+  languageName: node
+  linkType: hard
+
+"@typescript-eslint/experimental-utils@npm:^5.3.0":
+  version: 5.10.0
+  resolution: "@typescript-eslint/experimental-utils@npm:5.10.0"
+  dependencies:
+    "@typescript-eslint/utils": 5.10.0
+  peerDependencies:
+    eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
+  checksum: 10937fcbd0a693c076f054ca64e3e483deb6d917787f4e323c34457878b95a730e20ae34a5fdcd84d8954d9fa2c3cd0b1bf91f3e0db418783f08b6e33b4d69ad
   languageName: node
   linkType: hard
 
@@ -6631,7 +6688,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-react-docgen@npm:^4.2.1":
+"babel-plugin-react-docgen@npm:^4.1.0, babel-plugin-react-docgen@npm:^4.2.1":
   version: 4.2.1
   resolution: "babel-plugin-react-docgen@npm:4.2.1"
   dependencies:
@@ -9951,6 +10008,19 @@ __metadata:
   peerDependencies:
     eslint: ">=5.0.0"
   checksum: 6aacb7179c213cd2081950630368d1f3b1dcb4f5674d8b989fe7839e7b317ee521d74761676e8b1a7cab49f20405dbcc9aac05358ae804e6bcba6cbf1daccb3d
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-storybook@npm:^0.5.6":
+  version: 0.5.6
+  resolution: "eslint-plugin-storybook@npm:0.5.6"
+  dependencies:
+    "@storybook/csf": ^0.0.1
+    "@typescript-eslint/experimental-utils": ^5.3.0
+    requireindex: ^1.1.0
+  peerDependencies:
+    eslint: ">=6"
+  checksum: 199a5b4db70cbdb60bbac7873ff1964fa8bda7e6aed748a0922ace72e3ae7a05dd1df9a345128c19e775f46643fe80b4cd2f6f038ccd3824a8cc271569c45f9c
   languageName: node
   linkType: hard
 
@@ -16441,6 +16511,15 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"pnp-webpack-plugin@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "pnp-webpack-plugin@npm:1.7.0"
+  dependencies:
+    ts-pnp: ^1.1.6
+  checksum: a41716d13607be5a3e06ba58b17e9e619cf07da3a0a7b10bd41cd89362873041054fd2b7966ad30a1b26b826cfb8fecc0469a95902d5b1b8ba8f591e2fe6b96d
+  languageName: node
+  linkType: hard
+
 "polished@npm:^4.0.5":
   version: 4.1.3
   resolution: "polished@npm:4.1.3"
@@ -17517,7 +17596,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-docgen-typescript@npm:^2.0.0":
+"react-docgen-typescript@npm:^2.0.0, react-docgen-typescript@npm:^2.1.1":
   version: 2.2.2
   resolution: "react-docgen-typescript@npm:2.2.2"
   peerDependencies:
@@ -18153,6 +18232,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"requireindex@npm:^1.1.0":
+  version: 1.2.0
+  resolution: "requireindex@npm:1.2.0"
+  checksum: 50d8b10a1ff1fdf6aea7a1870bc7bd238b0fb1917d8d7ca17fd03afc38a65dcd7a8a4eddd031f89128b5f0065833d5c92c4fef67f2c04e8624057fe626c9cf94
+  languageName: node
+  linkType: hard
+
 "requires-port@npm:^1.0.0":
   version: 1.0.0
   resolution: "requires-port@npm:1.0.0"
@@ -18333,15 +18419,16 @@ resolve@^2.0.0-next.3:
     "@fortawesome/fontawesome-free": ^5.9.0
     "@mdx-js/react": ^1.6.22
     "@stomp/ng2-stompjs": ^8.0.0
-    "@storybook/addon-actions": ^6.3.6
-    "@storybook/addon-docs": ^6.3.6
-    "@storybook/addon-essentials": ^6.3.6
-    "@storybook/addon-links": ^6.3.6
-    "@storybook/addons": ^6.3.6
-    "@storybook/builder-webpack5": ^6.3.6
-    "@storybook/manager-webpack5": ^6.3.6
-    "@storybook/react": ^6.3.6
-    "@storybook/theming": ^6.3.6
+    "@storybook/addon-actions": ^6.4.13
+    "@storybook/addon-docs": ^6.4.13
+    "@storybook/addon-essentials": ^6.4.13
+    "@storybook/addon-links": ^6.4.13
+    "@storybook/addons": ^6.4.13
+    "@storybook/builder-webpack5": ^6.4.13
+    "@storybook/manager-webpack5": ^6.4.13
+    "@storybook/preset-create-react-app": ^4.0.0
+    "@storybook/react": ^6.4.13
+    "@storybook/theming": ^6.4.13
     "@testing-library/angular": ^11.0.2
     "@testing-library/cypress": ^7.0.5
     "@testing-library/jest-dom": ^5.11.10
@@ -18373,6 +18460,7 @@ resolve@^2.0.0-next.3:
     eslint-plugin-prettier: ^4.0.0
     eslint-plugin-react: ^7.28.0
     eslint-plugin-simple-import-sort: ^7.0.0
+    eslint-plugin-storybook: ^0.5.6
     eslint-plugin-unused-imports: ^1.1.1
     file-loader: ^6.2.0
     file-saver: ^2.0.0
