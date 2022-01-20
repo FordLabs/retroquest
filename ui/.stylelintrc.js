@@ -2,6 +2,7 @@ module.exports = {
   extends: ['stylelint-a11y/recommended', 'stylelint-config-sass-guidelines', 'stylelint-config-prettier'],
   ignoreFiles: ['build/**/*', 'node_modules/**/*'],
   rules: {
+    'a11y/media-prefers-reduced-motion': null,
     'max-nesting-depth': [
       3,
       {

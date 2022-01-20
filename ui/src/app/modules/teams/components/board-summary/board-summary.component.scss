@@ -16,7 +16,6 @@
  */
 @import 'colors';
 
-@media screen and (prefers-reduced-motion: reduce) {
 :host {
   $host-border-width: 2px;
   $host-opacity: 0.1;
@@ -44,7 +43,6 @@
     color: $gray;
     background-color: $task-background-dark;
   }
-}
 }
 
 :host {
