@@ -17,7 +17,7 @@
 module.exports = {
   root: true,
   ignorePatterns: ['projects/**/*', 'jest.config.js', 'src/react/pages/login/ReactLoginPageWrapper.tsx'],
-  extends: ['prettier', 'plugin:@typescript-eslint/recommended'],
+  extends: ['prettier', 'plugin:@typescript-eslint/recommended', 'plugin:storybook/recommended'],
   plugins: ['unused-imports', 'cypress', 'simple-import-sort'],
   parserOptions: {
     ecmaFeatures: {
@@ -38,18 +38,12 @@ module.exports = {
           [
             // eslint-disable-next-line max-len
             '^(assert|buffer|child_process|cluster|console|constants|crypto|dgram|dns|domain|events|fs|http|https|module|net|os|path|punycode|querystring|readline|repl|stream|string_decoder|sys|timers|tls|tty|url|util|vm|zlib|freelist|v8|process|async_hooks|http2|perf_hooks)(/.*|$)',
-          ],
-          // Packages. `react` related packages come first.
-          ['^react', '^@?\\w'],
-          // Internal packages.
-          ['^(@|@company|@ui|components|utils|config|vendored-lib)(/.*|$)'],
-          // Side effect imports.
-          ['^\\u0000'],
-          // Parent imports. Put `..` last.
-          ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
-          // Other relative imports. Put same-folder imports and `.` last.
-          ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
-          // Style imports.
+          ], // Packages. `react` related packages come first.
+          ['^react', '^@?\\w'], // Internal packages.
+          ['^(@|@company|@ui|components|utils|config|vendored-lib)(/.*|$)'], // Side effect imports.
+          ['^\\u0000'], // Parent imports. Put `..` last.
+          ['^\\.\\.(?!/?$)', '^\\.\\./?$'], // Other relative imports. Put same-folder imports and `.` last.
+          ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'], // Style imports.
           ['^.+\\.s?css$'],
         ],
       },
@@ -66,8 +60,22 @@ module.exports = {
       },
       extends: ['plugin:@angular-eslint/ng-cli-compat', 'plugin:@angular-eslint/template/process-inline-templates'],
       rules: {
-        '@angular-eslint/directive-selector': ['error', { type: 'attribute', prefix: 'rq', style: 'camelCase' }],
-        '@angular-eslint/component-selector': ['error', { type: 'element', prefix: 'rq', style: 'kebab-case' }],
+        '@angular-eslint/directive-selector': [
+          'error',
+          {
+            type: 'attribute',
+            prefix: 'rq',
+            style: 'camelCase',
+          },
+        ],
+        '@angular-eslint/component-selector': [
+          'error',
+          {
+            type: 'element',
+            prefix: 'rq',
+            style: 'kebab-case',
+          },
+        ],
         '@angular-eslint/no-host-metadata-property': 'off',
         '@typescript-eslint/ban-types': 'off',
         '@typescript-eslint/consistent-type-definitions': 'error',
