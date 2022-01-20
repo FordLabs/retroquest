@@ -14,28 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export class AuthService {
-  static tokenKey = 'token';
-  static tokenDuration = 1000 * 60 * 60 * 24 * 2;
 
-  static setToken(token: string): void {
-    const expiresDate = new Date(Date.now() + AuthService.tokenDuration);
+const tokenKey = 'token';
+const tokenDuration = 1000 * 60 * 60 * 24 * 2;
+
+const AuthService = {
+  setToken: (token: string): void => {
+    const expiresDate = new Date(Date.now() + tokenDuration);
     const expires = expiresDate.toUTCString();
-    document.cookie = `${AuthService.tokenKey}=${token};expires=${expires};path=/`;
-  }
+    document.cookie = `${tokenKey}=${token};expires=${expires};path=/`;
+  },
 
-  static getToken(): string {
+  getToken: (): string => {
     let token = null;
     const cookie = document.cookie;
-    const keyIndex = cookie.indexOf(`${AuthService.tokenKey}=`);
+    const keyIndex = cookie.indexOf(`${tokenKey}=`);
     if (keyIndex >= 0) {
-      const cookieMinusKey = cookie.substr(keyIndex + AuthService.tokenKey.length + 1);
+      const cookieMinusKey = cookie.substr(keyIndex + tokenKey.length + 1);
       token = cookieMinusKey.split(';')[0];
     }
     return token;
-  }
+  },
 
-  static clearToken(): void {
-    document.cookie = `${AuthService.tokenKey}=;expires=-99999999;path=/`;
-  }
-}
+  clearToken: (): void => {
+    document.cookie = `${tokenKey}=;expires=-99999999;path=/`;
+  },
+};
+
+export default AuthService;

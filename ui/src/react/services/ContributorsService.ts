@@ -18,9 +18,11 @@ import axios from 'axios';
 
 import { Contributor } from '../types/Contributor';
 
-export default class ContributorsService {
-  static getContributors(): Promise<Contributor[]> {
+const ContributorsService = {
+  getContributors: (): Promise<Contributor[]> => {
     const url = '/api/contributors';
     return axios.get(url).then((res) => res.data);
-  }
-}
+  },
+};
+
+export default ContributorsService;
