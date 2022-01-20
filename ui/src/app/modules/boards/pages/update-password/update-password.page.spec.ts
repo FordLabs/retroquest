@@ -16,8 +16,7 @@
  */
 
 import { HttpResponse } from '@angular/common/http';
-import { Subject, throwError } from 'rxjs';
-import { of } from 'rxjs/internal/observable/of';
+import { of, Subject, throwError } from 'rxjs';
 
 import { AuthService } from '../../../auth/auth.service';
 import { TeamService } from '../../../teams/services/team.service';

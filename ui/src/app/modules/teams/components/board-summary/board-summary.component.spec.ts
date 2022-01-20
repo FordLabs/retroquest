@@ -64,7 +64,7 @@ describe('BoardSummaryComponent', () => {
       const boardToDelete: Board = emptyBoardWithThought();
       component.boardDeleted = createMockEventEmitter();
       component.deleteBoard(boardToDelete);
-      deleteBoardSubject.next();
+      deleteBoardSubject.next(null);
       expect(component.boardDeleted.emit).toHaveBeenCalledWith(boardToDelete.id);
     });
   });

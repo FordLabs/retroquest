@@ -17,8 +17,7 @@
 
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { Subject, throwError } from 'rxjs';
-import { of } from 'rxjs/internal/observable/of';
+import { of, Subject, throwError } from 'rxjs';
 
 import { AuthService } from '../../../auth/auth.service';
 import { createMockRecaptchaComponent, createMockRouter } from '../../../utils/testutils';
