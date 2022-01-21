@@ -19,11 +19,7 @@
     <div class="left-content">
         <a routerLink="/" class="logo-link">
             <img
-                [src]="
-                    darkThemeIsEnabled
-                        ? '/assets/icons/icon-light-72x72.png'
-                        : '/assets/icons/icon-72x72.png'
-                "
+                [src]="darkThemeIsEnabled ? '/assets/icons/icon-light-72x72.png' : '/assets/icons/icon-72x72.png'"
                 title="RetroQuest"
                 id="logo"
                 [ngClass]="{
@@ -84,10 +80,7 @@
         }"
     >
         <div class="last-saved-text">{{ lastSavedText }}</div>
-        <div
-            class="settings-button fas fa-cog"
-            (click)="settingsDialog.show()"
-        ></div>
+        <div class="settings-button fas fa-cog" (click)="settingsDialog.show()" data-testid="settingsButton"></div>
     </div>
 </div>
 
