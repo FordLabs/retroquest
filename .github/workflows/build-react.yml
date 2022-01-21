@@ -52,9 +52,7 @@ jobs:
         run: yarn unit
       - name: build ui
         working-directory: ./ui
-        run: |
-          yarn prebuild-prod
-          yarn build-prod
+        run: yarn build-prod:react
       - name: run unit tests
         run: ./gradlew api:test
       - name: run integration tests
