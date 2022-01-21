@@ -4,11 +4,9 @@ on:
   pull_request:
     branches:
       - main
-      - react-migration
   push:
     branches:
       - main
-      - react-migration
 
 jobs:
   ui-checks:
