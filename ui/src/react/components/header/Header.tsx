@@ -16,8 +16,8 @@
  */
 
 import React, { useMemo, useRef } from 'react';
-import { Link, NavLink } from 'react-router-dom';
 
+// import { Link, NavLink } from 'react-router-dom';
 // import logoDark from '../../../assets/icons/icon-72x72.png';
 // import logoLight from '../../../assets/icons/icon-light-72x72.png';
 import useTeam from '../../hooks/useTeam';
@@ -30,14 +30,14 @@ import SettingsDialog from '../settings-dialog/SettingsDialog';
 import './Header.scss';
 
 type RqLink = {
-  label: 'retro' | 'archives' | 'radiator';
+  label: 'Retro' | 'Archives' | 'Radiator';
   path: string;
 };
 
 const LINKS: RqLink[] = [
-  { label: 'retro', path: '' },
-  { label: 'archives', path: '/archives' },
-  { label: 'radiator', path: '/radiator' },
+  { label: 'Retro', path: '' },
+  { label: 'Archives', path: '/archives' },
+  { label: 'Radiator', path: '/radiator' },
 ];
 
 interface Props {
@@ -50,7 +50,9 @@ const darkLogoPath = '/assets/icons/icon-72x72.png';
 const lightLogoPath = '/assets/icons/icon-light-72x72.png';
 
 export default function Header(props: Props) {
-  const { teamId, teamName } = useTeam();
+  const { teamId } = props;
+
+  const { teamName } = useTeam(teamId);
 
   const [theme] = useTheme();
 
