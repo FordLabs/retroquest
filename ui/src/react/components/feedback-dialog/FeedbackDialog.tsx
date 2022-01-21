@@ -17,17 +17,17 @@
 
 import * as React from 'react';
 
-import Dialog from '../dialog/Dialog';
-import Modal, { ModalMethods } from '../modal/Modal';
-import FeedbackStars from '../feedback-stars/FeedbackStars';
 import useTeam from '../../hooks/useTeam';
 import Feedback from '../../types/Feedback';
 import { onChange } from '../../utils/EventUtils';
+import Dialog from '../dialog/Dialog';
+import FeedbackStars from '../feedback-stars/FeedbackStars';
+import Modal, { ModalMethods } from '../modal/Modal';
 
 import './FeedbackDialog.scss';
 
 function FeedbackDialog(props, ref) {
-  const { teamId } = useTeam();
+  const { teamId } = useTeam('fake-team-name');
 
   function hide() {
     ref.current?.hide();

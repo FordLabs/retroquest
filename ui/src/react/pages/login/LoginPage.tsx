@@ -15,9 +15,10 @@
  * limitations under the License.
  */
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Form, InputPassword, InputTeamName } from '../../components';
+import useTeam from '../../hooks/useTeam';
 import { CREATE_TEAM_PAGE_PATH, getRetroPagePathWithTeamId } from '../../routes/RouteConstants';
 import TeamService from '../../services/TeamService';
 import AuthTemplate from '../../templates/auth/AuthTemplate';
@@ -31,18 +32,12 @@ type Props = {
 export function LoginPage(props: Props): JSX.Element {
   const { teamId, routeTo } = props;
 
-  const [teamName, setTeamName] = useState('');
+  const { teamName, setTeamName } = useTeam(teamId);
   const [password, setPassword] = useState('');
 
   const [validate, setValidate] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessages, setErrorMessages] = useState([]);
-
-  useEffect(() => {
-    if (teamId) {
-      TeamService.getTeamName(teamId).then(setTeamName);
-    }
-  }, [teamId]);
 
   const teamNameErrorMessage = validateTeamName(teamName);
   const passwordErrorMessage = validatePassword(password);

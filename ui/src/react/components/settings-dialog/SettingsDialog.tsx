@@ -57,19 +57,19 @@ export function SettingsDialogRenderer(props: SettingsDialogRendererProps) {
   const [tab, setTab] = useState<'styles' | 'account'>('styles');
 
   return (
-    <Dialog className="settings-dialog" header="settings" subHeader="choose your preferences">
+    <Dialog className="settings-dialog" header="Settings" subHeader="choose your preferences">
       <div className="tab-container">
         <div className="tab-heading">
           <div className={classnames('tab', { selected: tab === 'styles' })} onClick={() => setTab('styles')}>
-            styles
+            Styles
           </div>
           <div className={classnames('tab', { selected: tab === 'account' })} onClick={() => setTab('account')}>
-            account
+            Account
           </div>
         </div>
         {tab === 'styles' && (
           <div className="tab-body styles-tab-body">
-            <div className="label">appearance</div>
+            <div className="label">Appearance</div>
             <div className="tab-heading theme-tab-heading">
               <div className="theme-icon-container">
                 <img
@@ -94,7 +94,7 @@ export function SettingsDialogRenderer(props: SettingsDialogRendererProps) {
         )}
         {tab === 'account' && (
           <div className="tab-body account-tab-body">
-            <PrimaryButton onClick={onLogout}>logout</PrimaryButton>
+            <PrimaryButton onClick={onLogout}>Logout</PrimaryButton>
           </div>
         )}
       </div>

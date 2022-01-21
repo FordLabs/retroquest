@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,24 @@
  * limitations under the License.
  */
 
-// placeholder implementation
-export default function useTeam() {
-  return { teamId: 'team-id', teamName: 'Team Name' };
+import { useEffect, useState } from 'react';
+
+import TeamService from '../services/TeamService';
+
+interface UseTeam {
+  teamId: string;
+  teamName: string;
+  setTeamName: Function;
+}
+
+export default function useTeam(teamId: string): UseTeam {
+  const [teamName, setTeamName] = useState('');
+
+  useEffect(() => {
+    if (teamId) {
+      TeamService.getTeamName(teamId).then(setTeamName);
+    }
+  }, [teamId]);
+
+  return { teamId, teamName, setTeamName };
 }
