@@ -18,6 +18,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 
 import { Form, InputPassword, InputTeamName } from '../../components';
+import { CREATE_TEAM_PAGE_PATH, getRetroPagePathWithTeamId } from '../../routes/RouteConstants';
 import TeamService from '../../services/TeamService';
 import AuthTemplate from '../../templates/auth/AuthTemplate';
 import { validatePassword, validateTeamName } from '../../utils/StringUtils';
@@ -56,7 +57,8 @@ export function LoginPage(props: Props): JSX.Element {
   const loginTeam = () => {
     TeamService.login(teamName, password)
       .then((_teamId) => {
-        routeTo(`/team/${_teamId}`);
+        const retroPagePath = getRetroPagePathWithTeamId(_teamId);
+        routeTo(retroPagePath);
       })
       .catch(() => {
         setErrorMessages(['Incorrect team name or password. Please try again.']);
@@ -78,7 +80,7 @@ export function LoginPage(props: Props): JSX.Element {
 
   // @todo convert to Link element once create page is written in react
   const CreateTeamLink = () => (
-    <a className="create-page-link" href="/create">
+    <a className="create-page-link" href={CREATE_TEAM_PAGE_PATH}>
       or create a new team
     </a>
   );

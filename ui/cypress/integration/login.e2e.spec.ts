@@ -15,12 +15,14 @@
  * limitations under the License.
  */
 
+import { getLoginPagePathWithTeamId, LOGIN_PAGE_PATH } from '../../src/react/routes/RouteConstants';
 import { getTeamCredentials } from '../support/helpers';
 import TeamCredentials from '../support/types/teamCredentials';
 
 describe('Login Page', () => {
   const loginFailedMessage = 'Incorrect team name or password. Please try again.';
   const teamCredentials = getTeamCredentials();
+  const LOGIN_PATH_WITH_TEAM_ID = getLoginPagePathWithTeamId(teamCredentials.teamId);
 
   before(() => {
     cy.createTeam(teamCredentials);
@@ -29,7 +31,7 @@ describe('Login Page', () => {
   beforeEach(() => {
     cy.intercept('POST', '/api/team/login').as('postTeamLogin');
 
-    cy.visit('/login');
+    cy.visit(LOGIN_PAGE_PATH);
     cy.contains('Sign in to your Team!').should('exist');
 
     cy.get('[data-testid=teamNameInput]').as('teamNameInput');
@@ -46,7 +48,7 @@ describe('Login Page', () => {
     cy.get('[data-testid=teamNameInput]').as('teamNameInput');
     cy.get('@teamNameInput').should('have.value', '');
 
-    cy.visit(`/login/${teamCredentials.teamId}`);
+    cy.visit(LOGIN_PATH_WITH_TEAM_ID);
     cy.get('@teamNameInput').should('have.value', teamCredentials.teamName);
   });
 

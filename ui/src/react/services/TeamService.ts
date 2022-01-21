@@ -19,6 +19,8 @@ import axios from 'axios';
 
 import { AuthService } from '../../app/modules/auth/auth.service';
 
+import { CREATE_TEAM_API_PATH, getTeamNameApiPath, LOGIN_API_PATH } from './ApiConstants';
+
 function postThenSetTokenAndReturnTeamId(url: string, data: { name: string; password: string }) {
   return axios.post(url, data).then((response) => {
     const token = response.data;
@@ -30,18 +32,16 @@ function postThenSetTokenAndReturnTeamId(url: string, data: { name: string; pass
 
 const TeamService = {
   login: (name: string, password: string): Promise<string> => {
-    const url = '/api/team/login';
-    return postThenSetTokenAndReturnTeamId(url, { name, password });
+    return postThenSetTokenAndReturnTeamId(LOGIN_API_PATH, { name, password });
   },
 
   create: (name: string, password: string): Promise<string> => {
-    const url = '/api/team';
-    return postThenSetTokenAndReturnTeamId(url, { name, password });
+    return postThenSetTokenAndReturnTeamId(CREATE_TEAM_API_PATH, { name, password });
   },
 
   getTeamName: (teamId: string): Promise<string> => {
-    const url = `/api/team/${teamId}/name`;
-    return axios.get(url).then((res) => res.data);
+    const TEAM_NAME_API_PATH = getTeamNameApiPath(teamId);
+    return axios.get(TEAM_NAME_API_PATH).then((res) => res.data);
   },
 };
 
