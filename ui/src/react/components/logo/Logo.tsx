@@ -25,6 +25,10 @@ import './Logo.scss';
 // import logoLight from '../../../assets/icons/icon-light-72x72.png';
 // import logoDark from '../../../assets/icons/icon-72x72.png';
 
+// @todo import images in react way when app is fully react
+const darkLogoPath = '/assets/icons/icon-72x72.png';
+const lightLogoPath = '/assets/icons/icon-light-72x72.png';
+
 export default function Logo() {
   const [theme] = useTheme();
 
@@ -32,9 +36,7 @@ export default function Logo() {
     <div className="logo-container">
       <img
         className="logo-image"
-        src={
-          theme === Theme.DARK ? '../../../assets/icons/icon-light-72x72.png' : '../../../assets/icons/icon-72x72.png'
-        }
+        src={theme === Theme.DARK ? lightLogoPath : darkLogoPath}
         title="RetroQuest Icon"
         alt="Logo"
       />

@@ -20,9 +20,9 @@ import { MemoryRouter as Router, useLocation } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import TeamHeader from './TeamHeader';
+import Header from './Header';
 
-describe('TeamHeader', () => {
+describe('Header', () => {
   let testLocation;
 
   function LocationExtractor() {
@@ -33,7 +33,7 @@ describe('TeamHeader', () => {
   beforeEach(() => {
     render(
       <Router initialEntries={['/team/team-id']}>
-        <TeamHeader />
+        <Header />
         <LocationExtractor />
       </Router>
     );

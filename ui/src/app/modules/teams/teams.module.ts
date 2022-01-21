@@ -22,6 +22,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
+import { environment } from '../../../environments/environment';
+import { ReactHeaderComponentWrapper } from '../../../react/components/header/ReactHeaderComponentWrapper';
 import { AuthGuard } from '../auth/auth-guard/auth.guard';
 import { ActionsRadiatorViewComponent } from '../components/actions-radiator-view/actions-radiator-view.component';
 import { ComponentsModule } from '../components/components.module';
@@ -46,41 +48,77 @@ import { TeamService } from './services/team.service';
 import { TeamPageQueryParamGuard } from './services/team-page-query-param-guard';
 import { ThoughtService } from './services/thought.service';
 
+function routes() {
+  return environment.useReact
+    ? [
+        {
+          path: 'team/:teamId',
+          canActivate: [TeamPageQueryParamGuard],
+          component: ReactHeaderComponentWrapper,
+          children: [
+            {
+              path: '',
+              component: TeamPageComponent,
+              pathMatch: 'full',
+              canActivate: [AuthGuard],
+            },
+            {
+              path: 'radiator',
+              component: ActionsRadiatorViewComponent,
+              canActivate: [AuthGuard],
+            },
+            {
+              path: 'archives',
+              component: ArchivesPageComponent,
+              data: { teamId: ':teamId' },
+              canActivate: [AuthGuard],
+            },
+            {
+              path: 'archives/:boardId',
+              component: ArchivedBoardPageComponent,
+              canActivate: [AuthGuard],
+            },
+          ],
+        },
+      ]
+    : [
+        {
+          path: 'team/:teamId',
+          canActivate: [TeamPageQueryParamGuard],
+          component: SubAppComponent,
+          children: [
+            {
+              path: '',
+              component: TeamPageComponent,
+              pathMatch: 'full',
+              canActivate: [AuthGuard],
+            },
+            {
+              path: 'radiator',
+              component: ActionsRadiatorViewComponent,
+              canActivate: [AuthGuard],
+            },
+            {
+              path: 'archives',
+              component: ArchivesPageComponent,
+              data: { teamId: ':teamId' },
+              canActivate: [AuthGuard],
+            },
+            {
+              path: 'archives/:boardId',
+              component: ArchivedBoardPageComponent,
+              canActivate: [AuthGuard],
+            },
+          ],
+        },
+      ];
+}
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule.forChild([
-      {
-        path: 'team/:teamId',
-        canActivate: [TeamPageQueryParamGuard],
-        component: SubAppComponent,
-        children: [
-          {
-            path: '',
-            component: TeamPageComponent,
-            pathMatch: 'full',
-            canActivate: [AuthGuard],
-          },
-          {
-            path: 'radiator',
-            component: ActionsRadiatorViewComponent,
-            canActivate: [AuthGuard],
-          },
-          {
-            path: 'archives',
-            component: ArchivesPageComponent,
-            data: { teamId: ':teamId' },
-            canActivate: [AuthGuard],
-          },
-          {
-            path: 'archives/:boardId',
-            component: ArchivedBoardPageComponent,
-            canActivate: [AuthGuard],
-          },
-        ],
-      },
-    ]),
+    RouterModule.forChild(routes()),
     ComponentsModule,
     InfiniteScrollModule,
     DragDropModule,
@@ -104,6 +142,7 @@ import { ThoughtService } from './services/thought.service';
     ArchivesPageComponent,
     BoardSummaryComponent,
     ArchivedBoardPageComponent,
+    ReactHeaderComponentWrapper,
     SubAppComponent,
     TopHeaderComponent,
   ],

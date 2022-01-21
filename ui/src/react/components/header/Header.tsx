@@ -15,19 +15,19 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import React, { useMemo, useRef } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
-import logoDark from '../../../../assets/icons/icon-72x72.png';
-import logoLight from '../../../../assets/icons/icon-light-72x72.png';
-import { ModalMethods } from '../../../components/modal/Modal';
-import SettingsDialog from '../../../components/settings-dialog/SettingsDialog';
-import useTeam from '../../../hooks/useTeam';
-import useTheme from '../../../hooks/useTheme';
-import SaveCheckerService from '../../../services/SaveCheckerService';
-import Theme from '../../../types/Theme';
+// import logoDark from '../../../assets/icons/icon-72x72.png';
+// import logoLight from '../../../assets/icons/icon-light-72x72.png';
+import useTeam from '../../hooks/useTeam';
+import useTheme from '../../hooks/useTheme';
+import SaveCheckerService from '../../services/SaveCheckerService';
+import Theme from '../../types/Theme';
+import { ModalMethods } from '../modal/Modal';
+import SettingsDialog from '../settings-dialog/SettingsDialog';
 
-import './TeamHeader.scss';
+import './Header.scss';
 
 type RqLink = {
   label: 'retro' | 'archives' | 'radiator';
@@ -40,14 +40,23 @@ const LINKS: RqLink[] = [
   { label: 'radiator', path: '/radiator' },
 ];
 
-export default function TeamHeader() {
+interface Props {
+  teamId?: string;
+  routeTo?: (string) => void;
+}
+
+// @todo import images in react way when app is fully react
+const darkLogoPath = '/assets/icons/icon-72x72.png';
+const lightLogoPath = '/assets/icons/icon-light-72x72.png';
+
+export default function Header(props: Props) {
   const { teamId, teamName } = useTeam();
 
   const [theme] = useTheme();
 
-  const modalRef = React.useRef<ModalMethods>();
+  const modalRef = useRef<ModalMethods>();
 
-  const lastSavedText = React.useMemo(() => {
+  const lastSavedText = useMemo(() => {
     if (SaveCheckerService.lastSavedDateTime === '') {
       return 'All changes saved';
     }
@@ -56,33 +65,33 @@ export default function TeamHeader() {
 
   return (
     <>
-      <header className="team-header">
+      <header className="header">
         <div className="left-content">
-          <Link to="/" className="logo-link">
+          <a href="/" className="logo-link">
             <img
-              src={theme === Theme.DARK ? logoLight : logoDark}
+              src={theme === Theme.DARK ? lightLogoPath : darkLogoPath}
               className="logo"
               title="RetroQuest"
               alt="RetroQuest"
             />
-          </Link>
+          </a>
           <div className="horizontal-separator" />
           <div className="team-name">{teamName}</div>
         </div>
-
         <nav className="center-content">
+          {/* @todo change to navlink once app is fully react */}
           {LINKS.map((link) => (
-            <NavLink
+            <a
               key={link.path}
-              className={({ isActive }) => 'nav-link button' + (isActive ? ' activated' : '')}
-              to={`/team/${teamId}${link.path}`}
-              end
+              // className={({ isActive }) => 'nav-link button' + (isActive ? ' activated' : '')}
+              className="nav-link button"
+              href={`/team/${teamId}${link.path}`}
+              // end
             >
               {link.label}
-            </NavLink>
+            </a>
           ))}
         </nav>
-
         <div className="right-content">
           <div className="last-saved-text">{lastSavedText}</div>
           <button

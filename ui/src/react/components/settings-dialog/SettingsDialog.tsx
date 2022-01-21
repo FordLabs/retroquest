@@ -16,19 +16,23 @@
  */
 
 import * as React from 'react';
+import { forwardRef, useState } from 'react';
 import classnames from 'classnames';
 
-import { PrimaryButton } from '../button/Button';
-import Dialog from '../dialog/Dialog';
-import Modal, { ModalMethods } from '../modal/Modal';
+// import darkThemeImage from '../../../assets/dark-theme-picture.jpg';
+// import lightThemeImage from '../../../assets/light-theme-picture.jpg';
 import useAuth from '../../hooks/useAuth';
 import useTheme from '../../hooks/useTheme';
 import Theme from '../../types/Theme';
+import { PrimaryButton } from '../button/Button';
+import Dialog from '../dialog/Dialog';
+import Modal, { ModalMethods } from '../modal/Modal';
 
 import './SettingsDialog.scss';
 
-import lightThemeImage from '../../../assets/light-theme-picture.jpg';
-import darkThemeImage from '../../../assets/dark-theme-picture.jpg';
+// @todo import images in react way when app is fully react
+const darkThemeImagePath = './assets/dark-theme-picture.jpg';
+const lightThemeImagePath = './assets/light-theme-picture.jpg';
 
 function SettingsDialog(props: unknown, ref: React.Ref<ModalMethods>) {
   const [theme, setTheme] = useTheme();
@@ -50,7 +54,7 @@ type SettingsDialogRendererProps = {
 export function SettingsDialogRenderer(props: SettingsDialogRendererProps) {
   const { theme, onThemeChange, onLogout } = props;
 
-  const [tab, setTab] = React.useState<'styles' | 'account'>('styles');
+  const [tab, setTab] = useState<'styles' | 'account'>('styles');
 
   return (
     <Dialog className="settings-dialog" header="settings" subHeader="choose your preferences">
@@ -63,24 +67,22 @@ export function SettingsDialogRenderer(props: SettingsDialogRendererProps) {
             account
           </div>
         </div>
-
         {tab === 'styles' && (
           <div className="tab-body styles-tab-body">
             <div className="label">appearance</div>
             <div className="tab-heading theme-tab-heading">
               <div className="theme-icon-container">
                 <img
-                  src={lightThemeImage}
+                  src={lightThemeImagePath}
                   className={classnames({ selected: theme === Theme.LIGHT })}
                   onClick={() => onThemeChange(Theme.LIGHT)}
                   alt="Light Theme"
                 />
                 <div className="theme-icon-label">light</div>
               </div>
-
               <div className="theme-icon-container">
                 <img
-                  src={darkThemeImage}
+                  src={darkThemeImagePath}
                   className={classnames({ selected: theme === Theme.DARK })}
                   onClick={() => onThemeChange(Theme.DARK)}
                   alt="Dark Theme"
@@ -100,4 +102,4 @@ export function SettingsDialogRenderer(props: SettingsDialogRendererProps) {
   );
 }
 
-export default React.forwardRef<ModalMethods>(SettingsDialog);
+export default forwardRef<ModalMethods>(SettingsDialog);

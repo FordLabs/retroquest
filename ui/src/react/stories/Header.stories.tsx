@@ -19,23 +19,17 @@ import * as React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import TeamTemplate from '../templates/team/TeamTemplate';
+import Header from '../components/header/Header';
 
 export default {
-  title: 'templates/TeamTemplate',
-  component: TeamTemplate,
-} as ComponentMeta<typeof TeamTemplate>;
+  title: 'components/Header',
+  component: Header,
+} as ComponentMeta<typeof Header>;
 
-const Template: ComponentStory<typeof TeamTemplate> = () => {
+const Template: ComponentStory<typeof Header> = () => {
   return (
     <MemoryRouter initialEntries={['/team/team-id/']}>
-      <TeamTemplate
-        subHeader={
-          <div style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            sub header content
-          </div>
-        }
-      />
+      <Header />
     </MemoryRouter>
   );
 };

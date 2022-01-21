@@ -15,11 +15,13 @@
  * limitations under the License.
  */
 
-@import '../../../../styles/colors';
-@import '../../../../styles/mixins';
-@import '../../../../styles/sizes';
+@import '../../../styles/colors';
+@import '../../../styles/mixins';
+@import '../../../styles/sizes';
 
-.team-header {
+.header {
+  @include site-max-width;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
