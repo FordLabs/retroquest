@@ -23,7 +23,7 @@
     }"
 >
     <div class="heading-container">
-        <div class="heading">settings</div>
+        <div class="heading">Settings</div>
         <div
             class="sub-heading"
             [ngClass]="{
@@ -44,7 +44,7 @@
                     'dark-theme': darkThemeIsEnabled
                 }"
             >
-                styles
+                Styles
             </button>
             <button
                 class="tab"
@@ -54,7 +54,7 @@
                     'dark-theme': darkThemeIsEnabled
                 }"
             >
-                account
+                Account
             </button>
             <button
               class="tab"
@@ -99,7 +99,7 @@
 
         <div class="tab-body account-tab-body" *ngIf="tabIsVisible(settingsTab.ACCOUNT)">
             <rq-button
-                text="logout"
+                text="Logout"
                 type="primary"
                 (click)="logoutOfAccount()"
             ></rq-button>

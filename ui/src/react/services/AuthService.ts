@@ -15,29 +15,29 @@
  * limitations under the License.
  */
 
-const tokenKey = 'token';
+export const TOKEN_KEY = 'token';
 const tokenDuration = 1000 * 60 * 60 * 24 * 2;
 
 const AuthService = {
   setToken: (token: string): void => {
     const expiresDate = new Date(Date.now() + tokenDuration);
     const expires = expiresDate.toUTCString();
-    document.cookie = `${tokenKey}=${token};expires=${expires};path=/`;
+    document.cookie = `${TOKEN_KEY}=${token};expires=${expires};path=/`;
   },
 
   getToken: (): string => {
     let token = null;
     const cookie = document.cookie;
-    const keyIndex = cookie.indexOf(`${tokenKey}=`);
+    const keyIndex = cookie.indexOf(`${TOKEN_KEY}=`);
     if (keyIndex >= 0) {
-      const cookieMinusKey = cookie.substr(keyIndex + tokenKey.length + 1);
+      const cookieMinusKey = cookie.substr(keyIndex + TOKEN_KEY.length + 1);
       token = cookieMinusKey.split(';')[0];
     }
     return token;
   },
 
   clearToken: (): void => {
-    document.cookie = `${tokenKey}=;expires=-99999999;path=/`;
+    document.cookie = `${TOKEN_KEY}=;expires=-99999999;path=/`;
   },
 };
 
