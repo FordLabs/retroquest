@@ -22,9 +22,14 @@ declare global {
   namespace Cypress {
     interface Chainable {
       login(teamCredentials: TeamCredentials): Chainable<Response<unknown>>;
+
       createTeam(teamCredentials: TeamCredentials): Chainable<void>;
+
       createTeamAndLogin(teamCredentials: TeamCredentials): Chainable<void>;
+
       enterThought(columnClass: string, thought: string): Chainable<void>;
+
+      shouldBeOnRetroPage(teamId: string): Chainable<void>;
     }
   }
 }

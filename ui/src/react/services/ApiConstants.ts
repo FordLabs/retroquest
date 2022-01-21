@@ -14,16 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import axios from 'axios';
 
-import { Contributor } from '../types/Contributor';
+export const CREATE_TEAM_API_PATH = '/api/team';
+export const LOGIN_API_PATH = `${CREATE_TEAM_API_PATH}/login`;
+export const getTeamNameApiPath = (teamId: string) => `${CREATE_TEAM_API_PATH}/${teamId}/name`;
 
-import { CONTRIBUTORS_API_PATH } from './ApiConstants';
-
-const ContributorsService = {
-  getContributors: (): Promise<Contributor[]> => {
-    return axios.get(CONTRIBUTORS_API_PATH).then((res) => res.data);
-  },
-};
-
-export default ContributorsService;
+export const CONTRIBUTORS_API_PATH = '/api/contributors';

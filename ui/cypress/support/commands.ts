@@ -28,12 +28,15 @@
 //
 import '@testing-library/cypress/add-commands';
 
+import { getRetroPagePathWithTeamId } from '../../src/react/routes/RouteConstants';
+import { CREATE_TEAM_API_PATH, LOGIN_API_PATH } from '../../src/react/services/ApiConstants';
+
 import TeamCredentials from './types/teamCredentials';
 
 Cypress.Commands.add('createTeam', ({ teamName, password }: TeamCredentials) => {
   cy.log('**Creating Team via api**');
   cy.request({
-    url: `/api/team`,
+    url: CREATE_TEAM_API_PATH,
     failOnStatusCode: false,
     method: 'POST',
     body: {
@@ -47,7 +50,7 @@ Cypress.Commands.add('createTeamAndLogin', (teamCredentials: TeamCredentials) =>
   cy.createTeam(teamCredentials).then(() => {
     cy.log('**Logging in via api**');
     cy.request({
-      url: `/api/team/login`,
+      url: LOGIN_API_PATH,
       failOnStatusCode: false,
       method: 'POST',
       body: {
@@ -59,7 +62,8 @@ Cypress.Commands.add('createTeamAndLogin', (teamCredentials: TeamCredentials) =>
       if (response.status === 200) {
         const token = response.body as string;
         cy.setCookie('token', token);
-        cy.visit(`/team/${teamCredentials.teamId}`);
+        const retroPagePath = getRetroPagePathWithTeamId(teamCredentials.teamId);
+        cy.visit(retroPagePath);
         cy.contains(teamCredentials.teamName).should('exist');
       } else {
         cy.log('**Login via api failed with status code: **' + response.status);
@@ -72,4 +76,12 @@ Cypress.Commands.add('enterThought', (columnClass: string, thought: string) => {
   cy.get(`div.${columnClass}.rq-thought-column-header`)
     .find('input[placeholder="Enter A Thought"]')
     .type(`${thought}{enter}`);
+});
+
+Cypress.Commands.add('shouldBeOnRetroPage', (teamId: string) => {
+  cy.log('**Should be on retro page**');
+  cy.url().should('eq', Cypress.config().baseUrl + getRetroPagePathWithTeamId(teamId));
+  cy.findByText('Happy').should('exist');
+  cy.findByText('Confused').should('exist');
+  cy.findByText('Sad').should('exist');
 });

@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { CREATE_TEAM_PAGE_PATH } from '../../src/react/routes/RouteConstants';
 import { getTeamCredentials } from '../support/helpers';
 import TeamCredentials from '../support/types/teamCredentials';
 
@@ -23,7 +24,7 @@ describe('Create Page', () => {
   beforeEach(() => {
     cy.intercept('POST', '/api/team').as('postCreateTeam');
 
-    cy.visit('/create');
+    cy.visit(CREATE_TEAM_PAGE_PATH);
     cy.contains('Create a new Team!').should('exist');
 
     cy.get('[data-testid=teamNameInput]').as('teamNameInput');
@@ -35,10 +36,7 @@ describe('Create Page', () => {
   it('Create a new team and go to retro page', () => {
     fillOutAndSubmitCreateForm(teamCredentials, 201);
 
-    cy.url().should('eq', Cypress.config().baseUrl + '/team/' + teamCredentials.teamId);
-    cy.findByText('Happy');
-    cy.findByText('Confused');
-    cy.findByText('Sad');
+    cy.shouldBeOnRetroPage(teamCredentials.teamId);
   });
 
   describe('Form Errors', () => {

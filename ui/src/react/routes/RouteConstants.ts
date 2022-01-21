@@ -14,16 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import axios from 'axios';
 
-import { Contributor } from '../types/Contributor';
-
-import { CONTRIBUTORS_API_PATH } from './ApiConstants';
-
-const ContributorsService = {
-  getContributors: (): Promise<Contributor[]> => {
-    return axios.get(CONTRIBUTORS_API_PATH).then((res) => res.data);
-  },
-};
-
-export default ContributorsService;
+export const CREATE_TEAM_PAGE_PATH = '/create';
+export const LOGIN_PAGE_PATH = '/login';
+export const getLoginPagePathWithTeamId = (teamId: string) => `${LOGIN_PAGE_PATH}/${teamId}`;
+export const getRetroPagePathWithTeamId = (teamId: string) => `/team/${teamId}`;
+export const getArchivesPagePathWithTeamId = (teamId: string) => `/team/${teamId}/archives`;
+export const getRadiatorPagePathWithTeamId = (teamId: string) => `/team/${teamId}/radiator`;

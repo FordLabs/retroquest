@@ -18,6 +18,7 @@ import * as React from 'react';
 import { useState } from 'react';
 
 import { Form, Input, InputPassword, InputTeamName } from '../../components';
+import { getRetroPagePathWithTeamId, LOGIN_PAGE_PATH } from '../../routes/RouteConstants';
 import TeamService from '../../services/TeamService';
 import AuthTemplate from '../../templates/auth/AuthTemplate';
 import { onChange } from '../../utils/EventUtils';
@@ -53,7 +54,8 @@ export default function CreatePage(props: Props): JSX.Element {
   function createTeam() {
     TeamService.create(teamName, password)
       .then((teamId) => {
-        routeTo(`/team/${teamId}`);
+        const retroPagePath = getRetroPagePathWithTeamId(teamId);
+        routeTo(retroPagePath);
       })
       .catch((error) => {
         let errorMsg = 'Incorrect team name or password. Please try again.';
@@ -80,7 +82,7 @@ export default function CreatePage(props: Props): JSX.Element {
 
   // @todo convert to Link element once create page is written in react
   const LoginTeamLink = () => (
-    <a className="create-page-link" href="/login" data-testid="goToLoginPageLink">
+    <a className="create-page-link" href={LOGIN_PAGE_PATH} data-testid="goToLoginPageLink">
       or sign in to your existing board
     </a>
   );
