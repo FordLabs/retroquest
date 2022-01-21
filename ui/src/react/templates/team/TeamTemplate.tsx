@@ -17,7 +17,7 @@
 
 import * as React from 'react';
 
-import TeamHeader from './team-header/TeamHeader';
+import Header from '../../components/header/Header';
 import Section from '../section/Section';
 
 import './TeamTemplate.scss';
@@ -32,7 +32,7 @@ export default function TeamTemplate(props: TeamTemplateProps) {
   return (
     <div className="team-template">
       <Section>
-        <TeamHeader />
+        <Header />
       </Section>
       <Section className="team-sub-header">{subHeader}</Section>
       <Section className="team-content">{children}</Section>

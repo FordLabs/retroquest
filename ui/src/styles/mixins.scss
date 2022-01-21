@@ -17,3 +17,15 @@
     @content;
   }
 }
+
+@mixin site-max-width() {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding-right: $global-side-padding;
+  padding-left: $global-side-padding;
+
+  @include mobile {
+    padding-right: $global-side-padding-mobile;
+    padding-left: $global-side-padding-mobile;
+  }
+}
