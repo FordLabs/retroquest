@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 import React from 'react';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 
@@ -56,6 +56,12 @@ describe('CreatePage.spec.tsx', () => {
   it('should show link to login page', () => {
     const createNewTeamLink = screen.getByText('or sign in to your existing team');
     expect(createNewTeamLink.getAttribute('href')).toBe('/login');
+  });
+
+  it('should show contributors list', async () => {
+    await waitFor(() => expect(ContributorsService.getContributors).toHaveBeenCalledTimes(1));
+    expect(screen.getByTestId('rq-contributor-0')).toBeDefined();
+    expect(screen.getByTestId('rq-contributor-1')).toBeDefined();
   });
 
   it('should successfully create team', async () => {
