@@ -54,7 +54,7 @@ describe('CreatePage.spec.tsx', () => {
   });
 
   it('should show link to login page', async () => {
-    const createNewTeamLink = await screen.findByText('or sign in to your existing board');
+    const createNewTeamLink = await screen.findByText('or sign in to your existing team');
     expect(createNewTeamLink.getAttribute('href')).toBe('/login');
   });
 

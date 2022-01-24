@@ -83,7 +83,7 @@ export default function CreatePage(props: Props): JSX.Element {
   // @todo convert to Link element once create page is written in react
   const LoginTeamLink = () => (
     <a className="create-page-link" href={LOGIN_PAGE_PATH} data-testid="goToLoginPageLink">
-      or sign in to your existing board
+      or sign in to your existing team
     </a>
   );
 
