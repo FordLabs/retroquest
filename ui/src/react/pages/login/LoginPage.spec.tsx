@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 import React, { ReactElement } from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 
@@ -41,7 +41,7 @@ describe('LoginPage.spec.tsx', () => {
     TeamService.login = jest.fn().mockResolvedValue(validTeamName);
 
     routeTo = jest.fn();
-    await waitFor(() => {
+    await act(async () => {
       ({ container, rerender } = render(<LoginPage routeTo={routeTo} teamId="" />));
     });
   });
@@ -51,12 +51,12 @@ describe('LoginPage.spec.tsx', () => {
     expect(results).toHaveNoViolations();
   });
 
-  it('should show correct heading', async () => {
-    expect(await screen.findByText('Sign in to your Team!')).toBeDefined();
+  it('should show correct heading', () => {
+    expect(screen.getByText('Sign in to your Team!')).toBeDefined();
   });
 
-  it('should show link to create new team', async () => {
-    const createNewTeamLink = await screen.findByText('or create a new team');
+  it('should show link to create new team', () => {
+    const createNewTeamLink = screen.getByText('or create a new team');
     expect(createNewTeamLink.getAttribute('href')).toBe('/create');
   });
 
@@ -64,7 +64,7 @@ describe('LoginPage.spec.tsx', () => {
     let teamNameInput = getTeamNameInput();
     expect(teamNameInput.value).toBe('');
 
-    await waitFor(() => {
+    await act(async () => {
       rerender(<LoginPage routeTo={routeTo} teamId={validTeamName} />);
     });
     teamNameInput = getTeamNameInput();
@@ -72,11 +72,12 @@ describe('LoginPage.spec.tsx', () => {
   });
 
   it('should login with correct credentials', async () => {
-    await typeIntoTeamNameInput(validTeamName);
-    await typeIntoPasswordInput(validPassword);
+    typeIntoTeamNameInput(validTeamName);
+    typeIntoPasswordInput(validPassword);
 
-    const submitButton = await screen.findByText('Sign in');
-    await waitFor(() => {
+    const submitButton = screen.getByText('Sign in');
+
+    await act(async () => {
       userEvent.click(submitButton);
     });
     expect(TeamService.login).toHaveBeenCalledWith(validTeamName, validPassword);
@@ -87,49 +88,49 @@ describe('LoginPage.spec.tsx', () => {
     it('should show validation message when team name is not valid', async () => {
       expect(screen.queryByTestId('inputValidationMessage')).toBeNull();
 
-      await typeIntoPasswordInput(validPassword);
+      typeIntoPasswordInput(validPassword);
 
       const invalidTeamName = '&%(#';
-      await typeIntoTeamNameInput(invalidTeamName);
+      typeIntoTeamNameInput(invalidTeamName);
 
-      await waitFor(() => {
+      await act(async () => {
         fireEvent.submit(getTeamNameInput());
       });
 
-      expect(await screen.findByTestId('inputValidationMessage')).toBeDefined();
+      expect(screen.getByTestId('inputValidationMessage')).toBeDefined();
     });
 
     it('should show validation message when password is not valid', async () => {
       expect(screen.queryByTestId('inputValidationMessage')).toBeNull();
 
-      await typeIntoTeamNameInput(validTeamName);
+      typeIntoTeamNameInput(validTeamName);
 
       const invalidPassword = 'MissingANumber';
-      await typeIntoPasswordInput(invalidPassword);
+      typeIntoPasswordInput(invalidPassword);
 
-      await waitFor(() => {
+      await act(async () => {
         fireEvent.submit(getPasswordInput());
       });
 
-      expect(await screen.findByTestId('inputValidationMessage')).toBeDefined();
+      expect(screen.getByTestId('inputValidationMessage')).toBeDefined();
     });
 
     it('should show error if login was unsuccessful', async () => {
       TeamService.login = jest.fn().mockRejectedValue(new Error('Async error'));
 
-      await waitFor(() => {
+      await act(async () => {
         rerender(<LoginPage routeTo={routeTo} teamId={validTeamName} />);
       });
 
-      await typeIntoPasswordInput(validPassword);
+      typeIntoPasswordInput(validPassword);
 
-      const submitButton = await screen.findByText('Sign in');
-      await waitFor(() => {
+      const submitButton = screen.getByText('Sign in');
+      await act(async () => {
         userEvent.click(submitButton);
       });
       expect(TeamService.login).toHaveBeenCalledWith(validTeamName, validPassword);
       expect(routeTo).not.toHaveBeenCalled();
-      expect(await screen.findByText('Incorrect team name or password. Please try again.')).toBeDefined();
+      expect(screen.getByText('Incorrect team name or password. Please try again.')).toBeDefined();
     });
   });
 });
@@ -137,16 +138,12 @@ describe('LoginPage.spec.tsx', () => {
 const getTeamNameInput = (): HTMLInputElement => screen.getByLabelText('Team name', { selector: 'input' });
 const getPasswordInput = (): HTMLInputElement => screen.getByLabelText('Password', { selector: 'input' });
 
-const typeIntoPasswordInput = async (password: string) => {
+const typeIntoPasswordInput = (password: string) => {
   const teamPasswordInput = getPasswordInput();
-  await waitFor(() => {
-    fireEvent.change(teamPasswordInput, { target: { value: password } });
-  });
+  fireEvent.change(teamPasswordInput, { target: { value: password } });
 };
 
-const typeIntoTeamNameInput = async (teamName: string) => {
+const typeIntoTeamNameInput = (teamName: string) => {
   const teamNameInput = getTeamNameInput();
-  await waitFor(() => {
-    fireEvent.change(teamNameInput, { target: { value: teamName } });
-  });
+  fireEvent.change(teamNameInput, { target: { value: teamName } });
 };
