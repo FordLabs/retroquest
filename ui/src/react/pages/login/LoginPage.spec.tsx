@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 import React, { ReactElement } from 'react';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 
@@ -58,6 +58,12 @@ describe('LoginPage.spec.tsx', () => {
   it('should show link to create new team', () => {
     const createNewTeamLink = screen.getByText('or create a new team');
     expect(createNewTeamLink.getAttribute('href')).toBe('/create');
+  });
+
+  it('should show contributors list', async () => {
+    await waitFor(() => expect(ContributorsService.getContributors).toHaveBeenCalledTimes(1));
+    expect(screen.getByTestId('rq-contributor-0')).toBeDefined();
+    expect(screen.getByTestId('rq-contributor-1')).toBeDefined();
   });
 
   it('should pre-populate team name if team name is in route', async () => {

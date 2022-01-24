@@ -32,10 +32,15 @@ export default function Contributors() {
           Some of the people that help make <span className="logo-span">RetroQuest</span> possible
         </div>
       </div>
-
       <div className="contributor-list">
-        {contributors.map((contributor) => (
-          <a href={contributor.accountUrl} target="_blank" rel="noopener" key={contributor.accountUrl}>
+        {contributors.map((contributor, index) => (
+          <a
+            href={contributor.accountUrl}
+            target="_blank"
+            rel="noopener"
+            key={contributor.accountUrl}
+            data-testid={`rq-contributor-${index}`}
+          >
             <img src={contributor.image} alt={contributor.accountUrl} />
           </a>
         ))}
