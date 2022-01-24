@@ -17,17 +17,15 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 
-import Form from '../../components/form/Form';
-import InputPassword from '../../components/input-password/InputPassword';
-import InputTeamName from '../../components/input-team-name/InputTeamName';
+import { Form, InputPassword, InputTeamName } from '../../components';
 import TeamService from '../../services/TeamService';
 import AuthTemplate from '../../templates/auth/AuthTemplate';
 import { validatePassword, validateTeamName } from '../../utils/StringUtils';
 
-interface Props {
+type Props = {
   teamId?: string;
   routeTo?: (string) => void;
-}
+};
 
 export function LoginPage(props: Props): JSX.Element {
   const { teamId, routeTo } = props;

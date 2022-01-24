@@ -16,11 +16,8 @@
  */
 import * as React from 'react';
 import { useState } from 'react';
-import InputPassword from 'src/react/components/input-password/InputPassword';
-import InputTeamName from 'src/react/components/input-team-name/InputTeamName';
 
-import Form from '../../components/form/Form';
-import Input from '../../components/input/Input';
+import { Form, Input, InputPassword, InputTeamName } from '../../components';
 import TeamService from '../../services/TeamService';
 import AuthTemplate from '../../templates/auth/AuthTemplate';
 import { onChange } from '../../utils/EventUtils';
