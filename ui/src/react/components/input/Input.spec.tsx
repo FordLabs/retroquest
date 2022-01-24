@@ -19,14 +19,14 @@ import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import InputText from './InputText';
+import Input from './Input';
 
-describe('InputText', () => {
+describe('Input', () => {
   const mockChange = jest.fn();
 
   it('should render label, value, and validation message', () => {
     render(
-      <InputText
+      <Input
         id="sample"
         label="Sample Label"
         value="Sample Value"
@@ -47,7 +47,7 @@ describe('InputText', () => {
 
   it('can render as invalid', () => {
     render(
-      <InputText
+      <Input
         id="sample"
         label="Sample Label"
         value="Sample Value"

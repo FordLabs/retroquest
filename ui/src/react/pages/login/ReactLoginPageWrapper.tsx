@@ -38,7 +38,7 @@ const containerElementName = 'reactLoginPageWrapper';
   styleUrls: [
     '../../templates/auth/AuthTemplate.scss',
     '../../components/form/Form.scss',
-    '../../components/input-text/InputText.scss',
+    '../../components/input/Input.scss',
     '../../components/contributors/Contributors.scss',
     '../../components/logo/Logo.scss',
     '../../components/button/Button.scss',

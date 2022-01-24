@@ -18,7 +18,9 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 
 import Form from '../../components/form/Form';
-import InputText from '../../components/input-text/InputText';
+import Input from '../../components/input/Input';
+import InputPassword from '../../components/input-password/InputPassword';
+import InputTeamName from '../../components/input-team-name/InputTeamName';
 import TeamService from '../../services/TeamService';
 import AuthTemplate from '../../templates/auth/AuthTemplate';
 import { onChange } from '../../utils/EventUtils';
@@ -88,28 +90,21 @@ export function LoginPage(props: Props): JSX.Element {
   return (
     <AuthTemplate header="Sign in to your Team!" subHeader={<CreateTeamLink />}>
       <Form onSubmit={submit} errorMessages={errorMessages} submitButtonText="Sign in">
-        <InputText
-          id="teamNameInput"
-          label="Team name"
-          value={teamName}
-          onChange={onChange((updatedTeamName: string) => {
+        <InputTeamName
+          teamName={teamName}
+          onTeamNameInputChange={(updatedTeamName: string) => {
             setTeamName(updatedTeamName);
             setErrorMessages([]);
-          })}
-          validationMessage="Names must not contain special characters."
+          }}
           invalid={validate && !!teamNameErrorMessage}
           readOnly={loading}
         />
-        <InputText
-          id="passwordInput"
-          label="Password"
-          type="password"
-          value={password}
-          onChange={onChange((updatedPassword: string) => {
+        <InputPassword
+          password={password}
+          onPasswordInputChange={(updatedPassword: string) => {
             setPassword(updatedPassword);
             setErrorMessages([]);
-          })}
-          validationMessage="8 or more characters with a mix of numbers and letters"
+          }}
           invalid={validate && !!passwordErrorMessage}
           readOnly={loading}
         />
