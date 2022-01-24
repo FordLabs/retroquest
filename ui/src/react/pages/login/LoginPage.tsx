@@ -18,12 +18,10 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 
 import Form from '../../components/form/Form';
-import Input from '../../components/input/Input';
 import InputPassword from '../../components/input-password/InputPassword';
 import InputTeamName from '../../components/input-team-name/InputTeamName';
 import TeamService from '../../services/TeamService';
 import AuthTemplate from '../../templates/auth/AuthTemplate';
-import { onChange } from '../../utils/EventUtils';
 import { validatePassword, validateTeamName } from '../../utils/StringUtils';
 
 interface Props {
@@ -59,8 +57,8 @@ export function LoginPage(props: Props): JSX.Element {
 
   const loginTeam = () => {
     TeamService.login(teamName, password)
-      .then((teamId) => {
-        routeTo(`/team/${teamId}`);
+      .then((_teamId) => {
+        routeTo(`/team/${_teamId}`);
       })
       .catch(() => {
         setErrorMessages(['Incorrect team name or password. Please try again.']);
