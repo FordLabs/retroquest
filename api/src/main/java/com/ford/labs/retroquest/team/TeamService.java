@@ -77,10 +77,6 @@ public class TeamService {
         return createTeamEntity(createTeamRequest.getName(), encryptedPassword);
     }
 
-    public Team createNewTeam(String name) {
-        return createTeamEntity(name, null);
-    }
-
     public Team login(LoginRequest loginRequest) {
         var savedTeam = getTeamByName(loginRequest.getName());
 

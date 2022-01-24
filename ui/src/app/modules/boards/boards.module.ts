@@ -29,12 +29,9 @@ import { ComponentsModule } from '../components/components.module';
 import { AppTitleComponent } from './components/app-title/app-title.component';
 import { BrandFooterComponent } from './components/brand-footer/brand-footer.component';
 import { CreateComponent } from './pages/create/create.page';
-import { CreateUserComponent } from './pages/create-user/create-user.component';
 import { FocusOnLoadDirective } from './pages/directives/focus-on-load.component';
 import { LoginComponent } from './pages/login/login.page';
-import { LoginUserComponent } from './pages/login-user/login-user.component';
 import { UpdatePasswordComponent } from './pages/update-password/update-password.page';
-import { UserViewComponent } from './pages/user-view/user-view.component';
 
 function routes() {
   return environment.useReact
@@ -43,18 +40,12 @@ function routes() {
         { path: 'login', component: ReactLoginPageWrapper },
         { path: 'login/:teamId', component: ReactLoginPageWrapper },
         { path: 'update-password/:teamId', component: UpdatePasswordComponent },
-        { path: 'create-user', component: CreateUserComponent },
-        { path: 'login-user', component: LoginUserComponent },
-        { path: 'user/:user', component: UserViewComponent },
       ]
     : [
         { path: 'create', component: CreateComponent },
         { path: 'login', component: LoginComponent },
         { path: 'login/:teamId', component: LoginComponent },
         { path: 'update-password/:teamId', component: UpdatePasswordComponent },
-        { path: 'create-user', component: CreateUserComponent },
-        { path: 'login-user', component: LoginUserComponent },
-        { path: 'user/:user', component: UserViewComponent },
       ];
 }
 
@@ -69,9 +60,6 @@ function routes() {
     AppTitleComponent,
     BrandFooterComponent,
     FocusOnLoadDirective,
-    CreateUserComponent,
-    UserViewComponent,
-    LoginUserComponent,
   ],
   exports: [CreateComponent],
 })

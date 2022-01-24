@@ -29,10 +29,6 @@ export class TeamService {
     return this.doPostRequest('/api/team', name, password, captchaResponse);
   }
 
-  createUser(name: string, password: string): Observable<HttpResponse<string>> {
-    return this.doPostRequest('/api/user', name, password);
-  }
-
   login(name: string, password: string, captchaResponse: string): Observable<HttpResponse<string>> {
     return this.http.post(
       '/api/team/login',
