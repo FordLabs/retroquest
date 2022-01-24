@@ -20,12 +20,12 @@ import * as React from 'react';
 import { onChange } from '../../utils/EventUtils';
 import Input from '../input/Input';
 
-interface Props {
+type Props = {
   password: string;
   onPasswordInputChange: (updatedTeamName: string) => void;
   readOnly: boolean;
   invalid?: boolean;
-}
+};
 
 export default function InputPassword(props: Props) {
   const { password, onPasswordInputChange, invalid, readOnly } = props;

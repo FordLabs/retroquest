@@ -16,18 +16,19 @@
  */
 
 import * as React from 'react';
+import { ComponentPropsWithoutRef } from 'react';
 import classnames from 'classnames';
 
 import './Input.scss';
 
-type InputTextProps = React.ComponentPropsWithoutRef<'input'> & {
+type Props = ComponentPropsWithoutRef<'input'> & {
   value?: string;
   label?: string;
   invalid?: boolean;
   validationMessage?: string;
 };
 
-export default function Input(props: InputTextProps): JSX.Element {
+export default function Input(props: Props): JSX.Element {
   const {
     id,
     label,

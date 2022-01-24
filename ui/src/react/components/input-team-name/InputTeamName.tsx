@@ -20,12 +20,12 @@ import * as React from 'react';
 import { onChange } from '../../utils/EventUtils';
 import Input from '../input/Input';
 
-interface Props {
+type Props = {
   teamName: string;
   onTeamNameInputChange: (updatedTeamName: string) => void;
   invalid?: boolean;
   readOnly?: boolean;
-}
+};
 
 export default function InputTeamName(props: Props) {
   const { teamName, onTeamNameInputChange, invalid, readOnly } = props;
