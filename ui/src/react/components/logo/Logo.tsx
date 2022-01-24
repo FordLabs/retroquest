@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,33 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import * as React from 'react';
 
-import useTheme from '../../hooks/useTheme';
-import Theme from '../../types/Theme';
-
-import './Logo.scss';
-
-// import logoLight from '../../../assets/icons/icon-light-72x72.png';
 // import logoDark from '../../../assets/icons/icon-72x72.png';
+import './Logo.scss';
 
 // @todo import images in react way when app is fully react
 const darkLogoPath = '/assets/icons/icon-72x72.png';
-const lightLogoPath = '/assets/icons/icon-light-72x72.png';
 
 export default function Logo() {
-  const [theme] = useTheme();
-
   return (
     <div className="logo-container">
-      <img
-        className="logo-image"
-        src={theme === Theme.DARK ? lightLogoPath : darkLogoPath}
-        title="RetroQuest Icon"
-        alt="Logo"
-      />
-
+      <img className="logo-image" src={darkLogoPath} title="RetroQuest Icon" alt="Logo" />
       <h1 className="logo-text-container">
         <span className="logo-text">RetroQuest</span>
         <span className="logo-sub-text">

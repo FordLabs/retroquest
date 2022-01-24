@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
+import { axe } from 'jest-axe';
 
 import Logo from './Logo';
 
-describe('Tooltip', () => {
-  it('should render', () => {
-    render(<Logo />);
+describe('Logo', () => {
+  let container: HTMLElement;
 
+  beforeEach(async () => {
+    ({ container } = render(<Logo />));
+  });
+
+  it('should render without axe errors', async () => {
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
+
+  it('should render title and link correctly', () => {
     screen.getByText('RetroQuest');
     expect(screen.getByText('FordLabs').getAttribute('href')).toBe('https://fordlabs.com');
   });
