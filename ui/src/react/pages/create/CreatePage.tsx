@@ -16,9 +16,11 @@
  */
 import * as React from 'react';
 import { useState } from 'react';
+import InputPassword from 'src/react/components/input-password/InputPassword';
+import InputTeamName from 'src/react/components/input-team-name/InputTeamName';
 
 import Form from '../../components/form/Form';
-import InputText from '../../components/input-text/InputText';
+import Input from '../../components/input/Input';
 import TeamService from '../../services/TeamService';
 import AuthTemplate from '../../templates/auth/AuthTemplate';
 import { onChange } from '../../utils/EventUtils';
@@ -89,32 +91,25 @@ export default function CreatePage(props: Props): JSX.Element {
   return (
     <AuthTemplate header="Create a new Team!" subHeader={<LoginTeamLink />}>
       <Form onSubmit={onSubmit} errorMessages={errorMessages} submitButtonText="Create Team">
-        <InputText
-          id="teamNameInput"
-          label="Team name"
-          value={teamName}
-          onChange={onChange((updatedTeamName: string) => {
+        <InputTeamName
+          teamName={teamName}
+          onTeamNameInputChange={(updatedTeamName: string) => {
             setTeamName(updatedTeamName);
             setErrorMessages([]);
-          })}
-          validationMessage="Names must not contain special characters."
+          }}
           invalid={validate && !!teamNameErrorMessage}
           readOnly={loading}
         />
-        <InputText
-          id="passwordInput"
-          label="Password"
-          type="password"
-          value={password}
-          onChange={onChange((updatedPassword: string) => {
+        <InputPassword
+          password={password}
+          onPasswordInputChange={(updatedPassword: string) => {
             setPassword(updatedPassword);
             setErrorMessages([]);
-          })}
-          validationMessage="8 or more characters with a mix of numbers and letters"
+          }}
           invalid={validate && !!passwordErrorMessage}
           readOnly={loading}
         />
-        <InputText
+        <Input
           id="confirmPasswordInput"
           label="Confirm Password"
           type="password"

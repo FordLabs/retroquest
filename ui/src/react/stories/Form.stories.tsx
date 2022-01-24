@@ -19,7 +19,7 @@ import * as React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import Form from '../components/form/Form';
-import InputText from '../components/input-text/InputText';
+import Input from '../components/input/Input';
 import { onChange } from '../utils/EventUtils';
 import { validatePassword, validateTeamName } from '../utils/StringUtils';
 
@@ -63,7 +63,7 @@ const Template: ComponentStory<typeof Form> = () => {
 
   return (
     <Form onSubmit={submit} errorMessages={errorMessages} style={{ maxWidth: '600px' }}>
-      <InputText
+      <Input
         id="teamName"
         label="Team name"
         value={teamName}
@@ -71,7 +71,7 @@ const Template: ComponentStory<typeof Form> = () => {
         validationMessage="Names must not contain special characters."
         invalid={validate && !!teamNameErrorMessage}
       />
-      <InputText
+      <Input
         id="password"
         label="Password"
         type="password"

@@ -18,7 +18,7 @@
 import * as React from 'react';
 import classnames from 'classnames';
 
-import './InputText.scss';
+import './Input.scss';
 
 type InputTextProps = React.ComponentPropsWithoutRef<'input'> & {
   value?: string;
@@ -27,7 +27,7 @@ type InputTextProps = React.ComponentPropsWithoutRef<'input'> & {
   validationMessage?: string;
 };
 
-export default function InputText(props: InputTextProps): JSX.Element {
+export default function Input(props: InputTextProps): JSX.Element {
   const {
     id,
     label,
