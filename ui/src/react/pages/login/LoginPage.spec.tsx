@@ -34,18 +34,16 @@ describe('LoginPage.spec.tsx', () => {
   let rerender: (ui: ReactElement) => void;
   const validTeamName = 'Team Awesome';
   const validPassword = 'Password1';
-  let routeTo;
 
   beforeEach(async () => {
     ContributorsService.getContributors = jest.fn().mockResolvedValue(mockContributors);
     TeamService.getTeamName = jest.fn().mockResolvedValue(validTeamName);
     TeamService.login = jest.fn().mockResolvedValue(validTeamName);
 
-    routeTo = jest.fn();
     await act(async () => {
       ({ container, rerender } = render(
         <RecoilRoot>
-          <LoginPage routeTo={routeTo} teamId="" />
+          <LoginPage teamId="" />
         </RecoilRoot>
       ));
     });
@@ -78,7 +76,7 @@ describe('LoginPage.spec.tsx', () => {
     await act(async () => {
       rerender(
         <RecoilRoot>
-          <LoginPage routeTo={routeTo} teamId={validTeamName} />
+          <LoginPage teamId={validTeamName} />
         </RecoilRoot>
       );
     });
@@ -96,7 +94,8 @@ describe('LoginPage.spec.tsx', () => {
       userEvent.click(submitButton);
     });
     expect(TeamService.login).toHaveBeenCalledWith(validTeamName, validPassword);
-    expect(routeTo).toHaveBeenCalledWith(`/team/${validTeamName}`);
+    // @todo test with react router once full app is in react
+    // expect(window.location.pathname).toHaveBeenCalledWith(`/team/${validTeamName}`);
   });
 
   describe('Form errors', () => {
@@ -136,7 +135,7 @@ describe('LoginPage.spec.tsx', () => {
       await act(async () => {
         rerender(
           <RecoilRoot>
-            <LoginPage routeTo={routeTo} teamId={validTeamName} />
+            <LoginPage teamId={validTeamName} />
           </RecoilRoot>
         );
       });
@@ -148,7 +147,8 @@ describe('LoginPage.spec.tsx', () => {
         userEvent.click(submitButton);
       });
       expect(TeamService.login).toHaveBeenCalledWith(validTeamName, validPassword);
-      expect(routeTo).not.toHaveBeenCalled();
+      // @todo test that route has not changed once full app is in react
+      // expect(routeTo).not.toHaveBeenCalled();
       expect(screen.getByText('Incorrect team name or password. Please try again.')).toBeDefined();
     });
   });

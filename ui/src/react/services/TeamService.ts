@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,26 +17,22 @@
 
 import axios from 'axios';
 
-import { AuthService } from '../../app/modules/auth/auth.service';
-
 import { CREATE_TEAM_API_PATH, getTeamNameApiPath, LOGIN_API_PATH } from './ApiConstants';
 
-function postThenSetTokenAndReturnTeamId(url: string, data: { name: string; password: string }) {
-  return axios.post(url, data).then((response) => {
-    const token = response.data;
-    const teamId = response.headers.location;
-    AuthService.setToken(token);
-    return teamId;
-  });
+export interface AuthResponse {
+  token: string;
+  teamId: string;
 }
 
+const returnTokenAndTeamId = (response): AuthResponse => ({ token: response.data, teamId: response.headers.location });
+
 const TeamService = {
-  login: (name: string, password: string): Promise<string> => {
-    return postThenSetTokenAndReturnTeamId(LOGIN_API_PATH, { name, password });
+  login: (name: string, password: string): Promise<AuthResponse> => {
+    return axios.post(LOGIN_API_PATH, { name, password }).then(returnTokenAndTeamId);
   },
 
-  create: (name: string, password: string): Promise<string> => {
-    return postThenSetTokenAndReturnTeamId(CREATE_TEAM_API_PATH, { name, password });
+  create: (name: string, password: string): Promise<AuthResponse> => {
+    return axios.post(CREATE_TEAM_API_PATH, { name, password }).then(returnTokenAndTeamId);
   },
 
   getTeamName: (teamId: string): Promise<string> => {

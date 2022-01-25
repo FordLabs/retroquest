@@ -32,7 +32,7 @@ export default function TeamTemplate(props: TeamTemplateProps) {
   return (
     <div className="team-template">
       <Section>
-        <Header />
+        <Header emitThemeChangedToAngular={() => undefined} teamId="" routeTo={() => undefined} />
       </Section>
       <Section className="team-sub-header">{subHeader}</Section>
       <Section className="team-content">{children}</Section>

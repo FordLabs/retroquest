@@ -29,7 +29,7 @@ export default {
 const Template: ComponentStory<typeof Header> = () => {
   return (
     <MemoryRouter initialEntries={['/team/team-id/']}>
-      <Header />
+      <Header teamId="" routeTo={() => undefined} emitThemeChangedToAngular={() => undefined} />
     </MemoryRouter>
   );
 };

@@ -18,19 +18,15 @@ import * as React from 'react';
 import { useState } from 'react';
 
 import { Form, Input, InputPassword, InputTeamName } from '../../components';
-import { getRetroPagePathWithTeamId, LOGIN_PAGE_PATH } from '../../routes/RouteConstants';
+import useAuth from '../../hooks/useAuth';
+import { LOGIN_PAGE_PATH } from '../../routes/RouteConstants';
 import TeamService from '../../services/TeamService';
 import AuthTemplate from '../../templates/auth/AuthTemplate';
 import { onChange } from '../../utils/EventUtils';
 import { validateConfirmationPassword, validatePassword, validateTeamName } from '../../utils/StringUtils';
 
-interface Props {
-  routeTo?: (string) => void;
-}
-
-export default function CreatePage(props: Props): JSX.Element {
-  const { routeTo } = props;
-
+export default function CreatePage(): JSX.Element {
+  const { login } = useAuth();
   const [teamName, setTeamName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmationPassword, setConfirmationPassword] = useState('');
@@ -53,10 +49,7 @@ export default function CreatePage(props: Props): JSX.Element {
 
   function createTeam() {
     TeamService.create(teamName, password)
-      .then((teamId) => {
-        const retroPagePath = getRetroPagePathWithTeamId(teamId);
-        routeTo(retroPagePath);
-      })
+      .then(login)
       .catch((error) => {
         let errorMsg = 'Incorrect team name or password. Please try again.';
         const { response } = error;

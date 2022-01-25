@@ -25,7 +25,7 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { ActivatedRoute, Router as AngularRouter } from '@angular/router';
+import { RecoilRoot } from 'recoil';
 
 import CreatePage from './CreatePage';
 
@@ -47,8 +47,6 @@ const containerElementName = 'reactCreatePageWrapper';
 export class ReactCreatePageWrapper implements OnChanges, OnDestroy, AfterViewInit {
   @ViewChild(containerElementName, { static: false }) containerRef: ElementRef;
 
-  constructor(private angularRoute: ActivatedRoute, private angularRouter: AngularRouter) {}
-
   ngOnChanges(): void {
     this.render();
   }
@@ -64,11 +62,9 @@ export class ReactCreatePageWrapper implements OnChanges, OnDestroy, AfterViewIn
   private render() {
     ReactDOM.render(
       <React.StrictMode>
-        <CreatePage
-          routeTo={(path: string) => {
-            this.angularRouter.navigateByUrl(path).then();
-          }}
-        />
+        <RecoilRoot>
+          <CreatePage />
+        </RecoilRoot>
       </React.StrictMode>,
       this.containerRef.nativeElement
     );
