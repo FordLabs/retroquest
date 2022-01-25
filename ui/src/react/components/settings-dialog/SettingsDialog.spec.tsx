@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,20 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import * as React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { RecoilRoot } from 'recoil';
+
+import Theme from '../../types/Theme';
+import { ModalMethods } from '../modal/Modal';
 
 import SettingsDialog, { SettingsDialogRenderer } from './SettingsDialog';
-import { ModalMethods } from '../modal/Modal';
-import Theme from '../../types/Theme';
 
 describe('SettingsDialog', () => {
   const ref = React.createRef<ModalMethods>();
 
   beforeEach(() => {
-    render(<SettingsDialog ref={ref} />);
+    render(
+      <RecoilRoot>
+        <SettingsDialog ref={ref} />
+      </RecoilRoot>
+    );
 
     act(() => {
       ref.current.show();
@@ -35,14 +40,14 @@ describe('SettingsDialog', () => {
   });
 
   it('should show and hide from ref methods', () => {
-    screen.getByText('settings');
+    screen.getByText('Settings');
     screen.getByText('choose your preferences');
 
     act(() => {
       ref.current.hide();
     });
 
-    expect(screen.queryByText('settings')).toBeFalsy();
+    expect(screen.queryByText('Settings')).toBeFalsy();
   });
 });
 
@@ -57,21 +62,21 @@ describe('SettingsDialogRenderer', () => {
   });
 
   it('should logout', () => {
-    userEvent.click(screen.getByText('account'));
-    userEvent.click(screen.getByText('logout'));
+    userEvent.click(screen.getByText('Account'));
+    userEvent.click(screen.getByText('Logout'));
 
     expect(mockOnLogout).toHaveBeenCalledTimes(1);
   });
 
   it('should change to light theme', () => {
-    userEvent.click(screen.getByText('appearance'));
+    userEvent.click(screen.getByText('Appearance'));
     userEvent.click(screen.getByAltText('Light Theme'));
 
     expect(mockOnThemeChange).toHaveBeenCalledWith(Theme.LIGHT);
   });
 
   it('should change to dark theme', () => {
-    userEvent.click(screen.getByText('appearance'));
+    userEvent.click(screen.getByText('Appearance'));
     userEvent.click(screen.getByAltText('Dark Theme'));
 
     expect(mockOnThemeChange).toHaveBeenCalledWith('dark-theme');

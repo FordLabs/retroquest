@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,54 +14,54 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import * as React from 'react';
-import { MemoryRouter as Router, useLocation } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { RecoilRoot } from 'recoil';
+
+import TeamService from '../../services/TeamService';
 
 import Header from './Header';
 
 describe('Header', () => {
-  let testLocation;
+  let routeTo;
+  const teamName = 'Lucille Ball';
+  const teamId = 'lucille-ball';
 
-  function LocationExtractor() {
-    testLocation = useLocation();
-    return null;
-  }
+  beforeEach(async () => {
+    routeTo = jest.fn();
+    TeamService.getTeamName = jest.fn().mockResolvedValue(teamName);
 
-  beforeEach(() => {
-    render(
-      <Router initialEntries={['/team/team-id']}>
-        <Header />
-        <LocationExtractor />
-      </Router>
-    );
+    await act(async () => {
+      render(
+        <RecoilRoot>
+          <Header teamId={teamId} routeTo={routeTo} />
+        </RecoilRoot>
+      );
+    });
   });
 
   it('should render logo link and team name', () => {
     const logo = screen.getByAltText('RetroQuest');
-    screen.getByText('Team Name');
+    screen.getByText(teamName);
 
-    userEvent.click(logo);
-
-    expect(testLocation.pathname).toBe('/');
+    expect(logo.closest('a').pathname).toBe('/');
   });
 
   it('should render nav links', () => {
-    userEvent.click(screen.getByText('archives'));
-    expect(testLocation.pathname).toBe('/team/team-id/archives');
+    userEvent.click(screen.getByText('Archives'));
+    expect(routeTo).toHaveBeenCalledWith(`/team/${teamId}/archives`);
 
-    userEvent.click(screen.getByText('radiator'));
-    expect(testLocation.pathname).toBe('/team/team-id/radiator');
+    userEvent.click(screen.getByText('Radiator'));
+    expect(routeTo).toHaveBeenCalledWith(`/team/${teamId}/radiator`);
 
-    userEvent.click(screen.getByText('retro'));
-    expect(testLocation.pathname).toBe('/team/team-id');
+    userEvent.click(screen.getByText('Retro'));
+    expect(routeTo).toHaveBeenCalledWith(`/team/${teamId}`);
   });
 
   it('should render the settings button and setting dialog', () => {
     userEvent.click(screen.getByTestId('settingsButton'));
-    screen.getByText('settings');
+    screen.getByText('Settings');
     screen.getByText('choose your preferences');
   });
 });

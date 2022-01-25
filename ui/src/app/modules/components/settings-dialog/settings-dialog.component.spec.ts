@@ -19,7 +19,7 @@ import { EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../../auth/auth.service';
-import { Themes, themeToString } from '../../domain/Theme';
+import { Themes } from '../../domain/Theme';
 
 import { SettingsDialogComponent } from './settings-dialog.component';
 
@@ -66,7 +66,7 @@ describe('SettingsDialogComponent', () => {
     });
 
     it('should set theme value in local storage to dark', () => {
-      expect(localStorage.getItem('theme')).toEqual(themeToString(Themes.Dark));
+      expect(localStorage.getItem('theme')).toEqual('dark-theme');
     });
 
     it('should emit the theme changed as dark', () => {
@@ -84,7 +84,7 @@ describe('SettingsDialogComponent', () => {
     });
 
     it('should set theme value in local storage to light', () => {
-      expect(localStorage.getItem('theme')).toEqual(themeToString(Themes.Light));
+      expect(localStorage.getItem('theme')).toEqual('light-theme');
     });
 
     it('should emit the theme changed as light', () => {

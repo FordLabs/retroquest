@@ -22,15 +22,17 @@ import {
   ElementRef,
   OnChanges,
   OnDestroy,
-  SimpleChanges,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router as AngularRouter } from '@angular/router';
+import { RecoilRoot } from 'recoil';
 
 import { DataService } from '../../../app/modules/data.service';
+import { parseTheme } from '../../../app/modules/domain/Theme';
 import { TeamService } from '../../../app/modules/teams/services/team.service';
+import Theme from '../../types/Theme';
 
 import Header from './Header';
 
@@ -43,10 +45,12 @@ const containerElementName = 'reactHeaderComponentWrapper';
     <router-outlet></router-outlet>
   `,
   styleUrls: [
+    '../../templates/app/App.scss',
     './Header.scss',
     '../settings-dialog/SettingsDialog.scss',
     '../dialog/Dialog.scss',
     '../button/Button.scss',
+    '../modal/Modal.scss',
   ],
   encapsulation: ViewEncapsulation.None,
 })
@@ -72,16 +76,31 @@ export class ReactHeaderComponentWrapper implements OnChanges, OnDestroy, AfterV
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngAfterViewInit(): void {
     this.render();
+    this.loadTheme();
   }
 
-  ngAfterViewInit() {
+  ngOnChanges(): void {
     this.render();
   }
 
   ngOnDestroy() {
     ReactDOM.unmountComponentAtNode(this.containerRef.nativeElement);
+  }
+
+  private loadTheme(): void {
+    const savedTheme = localStorage.getItem('theme') as Theme;
+    if (savedTheme) {
+      this.emitThemeChanged(savedTheme);
+    }
+  }
+
+  private emitThemeChanged(theme: Theme) {
+    const angularTheme = parseTheme(theme);
+
+    this.dataService.theme = angularTheme;
+    this.dataService.themeChanged.emit(angularTheme);
   }
 
   private setTeamName(): void {
@@ -95,12 +114,17 @@ export class ReactHeaderComponentWrapper implements OnChanges, OnDestroy, AfterV
   private render() {
     ReactDOM.render(
       <React.StrictMode>
-        <Header
-          teamId={this.angularRoute.snapshot.params['teamId'] as string}
-          routeTo={(path: string) => {
-            this.angularRouter.navigateByUrl(path).then();
-          }}
-        />
+        <RecoilRoot>
+          <Header
+            emitThemeChangedToAngular={(theme) => {
+              this.emitThemeChanged(theme);
+            }}
+            teamId={this.angularRoute.snapshot.params['teamId'] as string}
+            routeTo={(path: string) => {
+              this.angularRouter.navigateByUrl(path).then();
+            }}
+          />
+        </RecoilRoot>
       </React.StrictMode>,
       this.containerRef.nativeElement
     );

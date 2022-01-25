@@ -18,11 +18,12 @@
 import * as React from 'react';
 import { forwardRef, useState } from 'react';
 import classnames from 'classnames';
+import { useRecoilState } from 'recoil';
 
 // import darkThemeImage from '../../../assets/dark-theme-picture.jpg';
 // import lightThemeImage from '../../../assets/light-theme-picture.jpg';
 import useAuth from '../../hooks/useAuth';
-import useTheme from '../../hooks/useTheme';
+import { ThemeState } from '../../state/ThemeState';
 import Theme from '../../types/Theme';
 import { PrimaryButton } from '../button/Button';
 import Dialog from '../dialog/Dialog';
@@ -35,7 +36,7 @@ const darkThemeImagePath = './assets/dark-theme-picture.jpg';
 const lightThemeImagePath = './assets/light-theme-picture.jpg';
 
 function SettingsDialog(props: unknown, ref: React.Ref<ModalMethods>) {
-  const [theme, setTheme] = useTheme();
+  const [theme, setTheme] = useRecoilState<Theme>(ThemeState);
   const { logout } = useAuth();
 
   return (

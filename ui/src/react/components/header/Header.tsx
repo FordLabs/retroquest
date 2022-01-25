@@ -15,14 +15,12 @@
  * limitations under the License.
  */
 
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useRecoilState } from 'recoil';
 
-// import { Link, NavLink } from 'react-router-dom';
-// import logoDark from '../../../assets/icons/icon-72x72.png';
-// import logoLight from '../../../assets/icons/icon-light-72x72.png';
 import useTeam from '../../hooks/useTeam';
-import useTheme from '../../hooks/useTheme';
 import SaveCheckerService from '../../services/SaveCheckerService';
+import { ThemeState } from '../../state/ThemeState';
 import Theme from '../../types/Theme';
 import { ModalMethods } from '../modal/Modal';
 import SettingsDialog from '../settings-dialog/SettingsDialog';
@@ -42,7 +40,8 @@ const LINKS: RqLink[] = [
 
 interface Props {
   teamId?: string;
-  routeTo?: (string) => void;
+  routeTo?(string): void;
+  emitThemeChangedToAngular?(string): void;
 }
 
 // @todo import images in react way when app is fully react
@@ -50,11 +49,17 @@ const darkLogoPath = '/assets/icons/icon-72x72.png';
 const lightLogoPath = '/assets/icons/icon-light-72x72.png';
 
 export default function Header(props: Props) {
-  const { teamId } = props;
+  const { teamId, routeTo, emitThemeChangedToAngular } = props;
 
   const { teamName } = useTeam(teamId);
+  const [theme] = useRecoilState<Theme>(ThemeState);
 
-  const [theme] = useTheme();
+  const getActiveLinkIndex = (): number => {
+    return LINKS.findIndex((link) => {
+      return window.location.pathname === `/team/${teamId}${link.path}`;
+    });
+  };
+  const [activeLinkIndex, setActiveLinkIndex] = useState<number>(getActiveLinkIndex());
 
   const modalRef = useRef<ModalMethods>();
 
@@ -64,6 +69,13 @@ export default function Header(props: Props) {
     }
     return 'Last change saved at ' + SaveCheckerService.lastSavedDateTime;
   }, []);
+
+  // @todo delete when app is fully in react
+  useEffect(() => {
+    if (theme) {
+      emitThemeChangedToAngular(theme);
+    }
+  }, [theme]);
 
   return (
     <>
@@ -81,18 +93,25 @@ export default function Header(props: Props) {
           <div className="team-name">{teamName}</div>
         </div>
         <nav className="center-content">
-          {/* @todo change to navlink once app is fully react */}
-          {LINKS.map((link) => (
-            <a
-              key={link.path}
-              // className={({ isActive }) => 'nav-link button' + (isActive ? ' activated' : '')}
-              className="nav-link button"
-              href={`/team/${teamId}${link.path}`}
-              // end
-            >
-              {link.label}
-            </a>
-          ))}
+          {LINKS.map((link, index) => {
+            const path = `/team/${teamId}${link.path}`;
+            const isActive = activeLinkIndex === index;
+
+            return (
+              <a //  @todo change to navlink once app is fully react
+                onClick={() => {
+                  setActiveLinkIndex(index);
+                  routeTo(path);
+                }}
+                key={link.path}
+                className={`nav-link button ${isActive ? ' selected' : ''}`}
+                // className={({ isActive }) => 'nav-link button' + (isActive ? ' selected' : '')}
+                // end
+              >
+                {link.label}
+              </a>
+            );
+          })}
         </nav>
         <div className="right-content">
           <div className="last-saved-text">{lastSavedText}</div>
