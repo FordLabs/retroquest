@@ -17,6 +17,7 @@
 
 @import '../../../styles/colors';
 @import '../../../styles/sizes';
+@import '../../../styles/mixins';
 
 .button {
   display: flex;
@@ -42,20 +43,11 @@
 }
 
 .primary {
-    color: $gray;
+  color: $gray;
 
-    background-color: $asphalt;
-    outline: none;
-    box-shadow: 0 4px 15px opacity($black, 0.25);
-
-  .dark-theme & {
-    color: $asphalt;
-    background-color: $gray;
-
-    &:hover, &:focus {
-      color: $gray;
-    }
-  }
+  background-color: $asphalt;
+  outline: none;
+  box-shadow: 0 4px 15px opacity($black, 0.25);
 
   &:hover, &:focus {
     background-color: $purple;
@@ -67,12 +59,23 @@
   color: inherit;
   background: transparent;
 
-  .dark-theme & {
-    color: opacity($gray, 0.8);
-  }
-
   &:hover, &:focus {
     color: $purple;
     cursor: pointer;
+  }
+}
+
+@include dark-theme {
+  .primary {
+    color: $asphalt;
+    background-color: $gray;
+
+    &:hover, &:focus {
+      color: $gray;
+    }
+  }
+
+  .secondary {
+    color: opacity($gray, 0.8);
   }
 }
