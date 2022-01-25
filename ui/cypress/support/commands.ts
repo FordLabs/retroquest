@@ -65,6 +65,7 @@ Cypress.Commands.add('createTeamAndLogin', (teamCredentials: TeamCredentials) =>
         const retroPagePath = getRetroPagePathWithTeamId(teamCredentials.teamId);
         cy.visit(retroPagePath);
         cy.contains(teamCredentials.teamName).should('exist');
+        cy.title().should('eq', `${teamCredentials.teamName} | RetroQuest`);
       } else {
         cy.log('**Login via api failed with status code: **' + response.status);
       }
