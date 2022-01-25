@@ -100,4 +100,11 @@ describe('SettingsDialogRenderer', () => {
       expect(mockLogout).toHaveBeenCalledTimes(1);
     });
   });
+
+  describe('Info Tab', () => {
+    it('should show app version', () => {
+      userEvent.click(screen.getByText('Info'));
+      expect(screen.getByLabelText('Version:').getAttribute('value')).toBe('0ddb411');
+    });
+  });
 });

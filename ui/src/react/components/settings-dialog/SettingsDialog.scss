@@ -33,7 +33,7 @@
   align-items: center;
   justify-content: center;
   width: 235px;
-  margin: 6px auto 0;
+  margin: 6px auto 36px;
   overflow: hidden;
 
   font-size: 1.2rem;
@@ -46,6 +46,7 @@
     padding: 9px;
 
     font-weight: bold;
+    white-space: nowrap;
     text-transform: capitalize;
 
     background-color: $gray;
