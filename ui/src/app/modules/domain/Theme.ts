@@ -21,10 +21,13 @@ export enum Themes {
   None,
 }
 
+const reactDarkThemeName = 'dark-theme';
+const reactLightThemeName = 'light-theme';
+
 export function parseTheme(themeString: string): Themes {
-  if (themeString === 'light') {
+  if (themeString === reactLightThemeName || themeString === 'dark') {
     return Themes.Light;
-  } else if (themeString === 'dark') {
+  } else if (themeString === reactDarkThemeName || themeString === 'light') {
     return Themes.Dark;
   }
 
@@ -33,9 +36,9 @@ export function parseTheme(themeString: string): Themes {
 
 export function themeToString(theme: Themes): string {
   if (theme === Themes.Light) {
-    return 'light';
+    return reactLightThemeName;
   } else if (theme === Themes.Dark) {
-    return 'dark';
+    return reactDarkThemeName;
   }
 
   return '';

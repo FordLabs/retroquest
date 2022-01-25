@@ -66,10 +66,6 @@
     @include mobile {
       flex: initial;
     }
-
-    @include dark-theme {
-      color: $gray;
-    }
   }
 
   .logo-link {
@@ -97,11 +93,6 @@
     @include mobile {
       display: none;
     }
-
-    @include dark-theme {
-      background-color: $count-separator-background-dark;
-      opacity: 1;
-    }
   }
 
   .team-name {
@@ -119,10 +110,6 @@
 
       text-align: center;
     }
-
-    @include dark-theme {
-      color: opacity($gray, 0.75);
-    }
   }
 
   .nav-link {
@@ -134,18 +121,9 @@
 
     border-radius: 32px;
 
-    @include dark-theme {
-      color: opacity($gray, 0.4);
-    }
-
     &.selected {
       color: $asphalt;
       background-color: opacity($asphalt, 0.2);
-
-      @include dark-theme {
-        color: $gray;
-        background-color: opacity($gray, 0.2);
-      }
     }
   }
 
@@ -169,6 +147,32 @@
 
     &:hover, &:focus {
       color: $purple;
+    }
+  }
+}
+
+@include dark-theme {
+  .header {
+    .right-content {
+      color: $gray;
+    }
+
+    .horizontal-separator {
+      background-color: $count-separator-background-dark;
+      opacity: 1;
+    }
+
+    .team-name {
+      color: opacity($gray, 0.75);
+    }
+
+    .nav-link {
+      color: opacity($gray, 0.4);
+
+      &.selected {
+        color: $gray;
+        background-color: opacity($gray, 0.2);
+      }
     }
   }
 }
