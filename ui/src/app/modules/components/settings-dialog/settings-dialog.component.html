@@ -30,7 +30,7 @@
                 'dark-theme': darkThemeIsEnabled
             }"
         >
-            choose your preferences <em>(Beta)</em>
+            choose your preferences
         </div>
     </div>
 
@@ -57,9 +57,9 @@
                 Account
             </button>
             <button
-              class="tab"
-              (click)="currentlyVisibleTab = settingsTab.INFO"
-              [ngClass]="{
+                class="tab"
+                (click)="currentlyVisibleTab = settingsTab.INFO"
+                [ngClass]="{
                     selected: tabIsVisible(settingsTab.INFO),
                     'dark-theme': darkThemeIsEnabled
                 }"
@@ -98,17 +98,13 @@
         </div>
 
         <div class="tab-body account-tab-body" *ngIf="tabIsVisible(settingsTab.ACCOUNT)">
-            <rq-button
-                text="Logout"
-                type="primary"
-                (click)="logoutOfAccount()"
-            ></rq-button>
+            <rq-button text="Logout" type="primary" (click)="logoutOfAccount()"></rq-button>
         </div>
 
         <div class="tab-body info-tab-body" *ngIf="tabIsVisible(settingsTab.INFO)">
             <label class="version-label">
                 Version:
-                <input class="version-container" id="application-version" disabled [value]="applicationVersion"/>
+                <input class="version-container" id="application-version" disabled [value]="applicationVersion" />
             </label>
         </div>
     </div>
