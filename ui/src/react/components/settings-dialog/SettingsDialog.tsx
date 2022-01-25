@@ -23,6 +23,7 @@ import Dialog from '../dialog/Dialog';
 import Modal, { ModalMethods } from '../modal/Modal';
 
 import AccountTab from './account-tab/AccountTab';
+import InfoTab from './info-tab/InfoTab';
 import StylesTab from './styles-tab/StylesTab';
 
 import './SettingsDialog.scss';
@@ -38,6 +39,7 @@ function SettingsDialog(props: unknown, ref: React.Ref<ModalMethods>) {
 enum Tabs {
   STYLES = 'styles',
   ACCOUNT = 'account',
+  INFO = 'info',
 }
 
 export function SettingsDialogContent() {
@@ -45,6 +47,7 @@ export function SettingsDialogContent() {
 
   const stylesTabIsActive = () => tab === Tabs.STYLES;
   const accountTabIsActive = () => tab === Tabs.ACCOUNT;
+  const infoTabIsActive = () => tab === Tabs.INFO;
 
   return (
     <Dialog className="settings-dialog" header="Settings" subHeader="choose your preferences">
@@ -56,9 +59,13 @@ export function SettingsDialogContent() {
           <div className={classnames('tab', { selected: accountTabIsActive() })} onClick={() => setTab(Tabs.ACCOUNT)}>
             Account
           </div>
+          <div className={classnames('tab', { selected: infoTabIsActive() })} onClick={() => setTab(Tabs.INFO)}>
+            Info
+          </div>
         </div>
         {stylesTabIsActive() && <StylesTab />}
         {accountTabIsActive() && <AccountTab />}
+        {infoTabIsActive() && <InfoTab />}
       </div>
     </Dialog>
   );
