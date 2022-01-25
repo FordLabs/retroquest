@@ -16,6 +16,7 @@
  */
 
 @import '../../../styles/sizes';
+@import '../../../styles/mixins';
 @import '../../../styles/colors';
 
 .dialog.settings-dialog {
@@ -24,110 +25,72 @@
   .tab-container {
     flex: 1;
     width: 100%;
+  }
+}
 
-    .tab-heading {
-      align-items: center;
-      border-radius: 6px;
-      display: flex;
-      font-size: 1.2rem;
-      justify-content: center;
-      margin: 6px auto 0;
-      overflow: hidden;
-      text-align: center;
-      width: 235px;
+.tab-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 235px;
+  margin: 6px auto 0;
+  overflow: hidden;
 
-      .tab {
-        background-color: $gray;
-        cursor: pointer;
-        font-weight: bold;
-        padding: 9px;
-        text-transform: capitalize;
-        width: 50%;
+  font-size: 1.2rem;
+  text-align: center;
 
-        .dark-theme & {
-          background-color: $header-background-color-dark;
-        }
+  border-radius: 6px;
 
-        &.selected {
-          background-color: $purple;
-          color: $white;
-        }
+  .tab {
+    width: 50%;
+    padding: 9px;
 
-        &:not(:last-child) {
-          border-right: 2px solid opacity($asphalt, 0.08);
-        }
-      }
+    font-weight: bold;
+    text-transform: capitalize;
+
+    background-color: $gray;
+    cursor: pointer;
+
+    &.selected {
+      color: $white;
+      background-color: $purple;
     }
 
-    .tab-body {
-      margin-top: 36px;
-      padding: 0 48px;
-      position: relative;
-
-      .button {
-        background-color: opacity($yellow, 0.7);
-        color: $asphalt;
-        font-size: 1.2rem;
-        font-weight: bold;
-        height: 50px;
-        margin: 32px auto;
-        width: 75%;
-
-        &:hover {
-          background-color: opacity($yellow, 0.7);
-        }
-      }
-
-      &.styles-tab-body {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        width: 100%;
-
-        .label {
-          font-size: 1.2rem;
-          font-weight: bold;
-          text-transform: capitalize;
-
-          @media only screen and (max-width: 610px) {
-            font-size: 1.1rem;
-          }
-        }
-
-        .theme-tab-heading {
-          border-radius: 0;
-          margin-top: 24px;
-          overflow: visible;
-          width: 100%;
-
-          .theme-icon-container {
-            &:not(:last-child) {
-              margin-right: 32px;
-            }
-
-            img {
-              border-radius: 12px;
-
-              &.selected {
-                box-shadow: 0 0 0 8px $purple;
-              }
-
-              @media only screen and (max-width: 610px) {
-                height: 96px;
-                width: 96px;
-              }
-            }
-
-            .theme-icon-label {
-              font-size: 1rem;
-              font-weight: bolder;
-              margin: 6px auto 0;
-              text-transform: capitalize;
-            }
-          }
-        }
-      }
+    &:not(:last-child) {
+      border-right: 2px solid opacity($asphalt, 0.08);
     }
+  }
+}
+
+.tab-body {
+  margin-top: 36px;
+  padding: 0 48px;
+
+  position: relative;
+
+  .button {
+    width: 75%;
+    height: 50px;
+    margin: 32px auto;
+
+    color: $asphalt;
+    font-weight: bold;
+    font-size: 1.2rem;
+
+    background-color: opacity($yellow, 0.7);
+
+    &:hover, &:focus {
+      background-color: opacity($yellow, 0.7);
+    }
+  }
+}
+
+@include dark-theme {
+  .tab-container {
+    color: $white;
+  }
+
+  .tab {
+    background-color: $header-background-color-dark;
   }
 }

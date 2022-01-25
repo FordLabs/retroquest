@@ -15,17 +15,25 @@
  * limitations under the License.
  */
 import * as React from 'react';
+import { createRef } from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
 
-import Theme from '../../types/Theme';
 import { ModalMethods } from '../modal/Modal';
 
-import SettingsDialog, { SettingsDialogRenderer } from './SettingsDialog';
+import SettingsDialog, { SettingsDialogContent } from './SettingsDialog';
+
+const mockLogout = jest.fn();
+
+jest.mock('../../hooks/useAuth', () => {
+  return jest.fn(() => ({
+    logout: mockLogout,
+  }));
+});
 
 describe('SettingsDialog', () => {
-  const ref = React.createRef<ModalMethods>();
+  const ref = createRef<ModalMethods>();
 
   beforeEach(() => {
     render(
@@ -52,33 +60,44 @@ describe('SettingsDialog', () => {
 });
 
 describe('SettingsDialogRenderer', () => {
-  const mockOnThemeChange = jest.fn();
-  const mockOnLogout = jest.fn();
-
   beforeEach(() => {
     jest.clearAllMocks();
 
-    render(<SettingsDialogRenderer theme={Theme.LIGHT} onThemeChange={mockOnThemeChange} onLogout={mockOnLogout} />);
+    render(
+      <RecoilRoot>
+        <SettingsDialogContent />
+      </RecoilRoot>
+    );
   });
 
-  it('should logout', () => {
-    userEvent.click(screen.getByText('Account'));
-    userEvent.click(screen.getByText('Logout'));
+  describe('Styles Tab', () => {
+    it('should change theme from light to dark and back', () => {
+      userEvent.click(screen.getByText('Appearance'));
 
-    expect(mockOnLogout).toHaveBeenCalledTimes(1);
+      const lightThemeButton = screen.getByAltText('Light Theme');
+      const darkThemeButton = screen.getByAltText('Dark Theme');
+
+      expect(lightThemeButton.getAttribute('class')).toContain('selected');
+      expect(darkThemeButton.getAttribute('class')).not.toContain('selected');
+
+      userEvent.click(darkThemeButton);
+
+      expect(lightThemeButton.getAttribute('class')).not.toContain('selected');
+      expect(darkThemeButton.getAttribute('class')).toContain('selected');
+
+      userEvent.click(lightThemeButton);
+
+      expect(lightThemeButton.getAttribute('class')).toContain('selected');
+      expect(darkThemeButton.getAttribute('class')).not.toContain('selected');
+    });
   });
 
-  it('should change to light theme', () => {
-    userEvent.click(screen.getByText('Appearance'));
-    userEvent.click(screen.getByAltText('Light Theme'));
+  describe('Account Tab', () => {
+    it('should logout', () => {
+      userEvent.click(screen.getByText('Account'));
+      userEvent.click(screen.getByText('Logout'));
 
-    expect(mockOnThemeChange).toHaveBeenCalledWith(Theme.LIGHT);
-  });
-
-  it('should change to dark theme', () => {
-    userEvent.click(screen.getByText('Appearance'));
-    userEvent.click(screen.getByAltText('Dark Theme'));
-
-    expect(mockOnThemeChange).toHaveBeenCalledWith('dark-theme');
+      expect(mockLogout).toHaveBeenCalledTimes(1);
+    });
   });
 });

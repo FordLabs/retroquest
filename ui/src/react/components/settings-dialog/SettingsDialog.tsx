@@ -18,84 +18,51 @@
 import * as React from 'react';
 import { forwardRef, useState } from 'react';
 import classnames from 'classnames';
-import { useRecoilState } from 'recoil';
 
-// import darkThemeImage from '../../../assets/dark-theme-picture.jpg';
-// import lightThemeImage from '../../../assets/light-theme-picture.jpg';
 import useAuth from '../../hooks/useAuth';
-import { ThemeState } from '../../state/ThemeState';
-import Theme from '../../types/Theme';
 import { PrimaryButton } from '../button/Button';
 import Dialog from '../dialog/Dialog';
 import Modal, { ModalMethods } from '../modal/Modal';
 
+import StylesTab from './styles-tab/StylesTab';
+
 import './SettingsDialog.scss';
 
-// @todo import images in react way when app is fully react
-const darkThemeImagePath = './assets/dark-theme-picture.jpg';
-const lightThemeImagePath = './assets/light-theme-picture.jpg';
-
 function SettingsDialog(props: unknown, ref: React.Ref<ModalMethods>) {
-  const [theme, setTheme] = useRecoilState<Theme>(ThemeState);
-  const { logout } = useAuth();
-
   return (
     <Modal ref={ref}>
-      <SettingsDialogRenderer theme={theme} onThemeChange={setTheme} onLogout={logout} />
+      <SettingsDialogContent />
     </Modal>
   );
 }
 
-type SettingsDialogRendererProps = {
-  theme: Theme;
-  onThemeChange: (theme: Theme) => void;
-  onLogout: () => void;
-};
+enum Tabs {
+  STYLES = 'styles',
+  ACCOUNT = 'account',
+}
 
-export function SettingsDialogRenderer(props: SettingsDialogRendererProps) {
-  const { theme, onThemeChange, onLogout } = props;
+export function SettingsDialogContent() {
+  const { logout } = useAuth();
+  const [tab, setTab] = useState<Tabs>(Tabs.STYLES);
 
-  const [tab, setTab] = useState<'styles' | 'account'>('styles');
+  const stylesTabIsActive = () => tab === Tabs.STYLES;
+  const accountTabIsActive = () => tab === Tabs.ACCOUNT;
 
   return (
     <Dialog className="settings-dialog" header="Settings" subHeader="choose your preferences">
       <div className="tab-container">
         <div className="tab-heading">
-          <div className={classnames('tab', { selected: tab === 'styles' })} onClick={() => setTab('styles')}>
+          <div className={classnames('tab', { selected: stylesTabIsActive() })} onClick={() => setTab(Tabs.STYLES)}>
             Styles
           </div>
-          <div className={classnames('tab', { selected: tab === 'account' })} onClick={() => setTab('account')}>
+          <div className={classnames('tab', { selected: accountTabIsActive() })} onClick={() => setTab(Tabs.ACCOUNT)}>
             Account
           </div>
         </div>
-        {tab === 'styles' && (
-          <div className="tab-body styles-tab-body">
-            <div className="label">Appearance</div>
-            <div className="tab-heading theme-tab-heading">
-              <div className="theme-icon-container">
-                <img
-                  src={lightThemeImagePath}
-                  className={classnames({ selected: theme === Theme.LIGHT })}
-                  onClick={() => onThemeChange(Theme.LIGHT)}
-                  alt="Light Theme"
-                />
-                <div className="theme-icon-label">light</div>
-              </div>
-              <div className="theme-icon-container">
-                <img
-                  src={darkThemeImagePath}
-                  className={classnames({ selected: theme === Theme.DARK })}
-                  onClick={() => onThemeChange(Theme.DARK)}
-                  alt="Dark Theme"
-                />
-                <div className="theme-icon-label">dark</div>
-              </div>
-            </div>
-          </div>
-        )}
-        {tab === 'account' && (
+        {stylesTabIsActive() && <StylesTab />}
+        {accountTabIsActive() && (
           <div className="tab-body account-tab-body">
-            <PrimaryButton onClick={onLogout}>Logout</PrimaryButton>
+            <PrimaryButton onClick={logout}>Logout</PrimaryButton>
           </div>
         )}
       </div>
