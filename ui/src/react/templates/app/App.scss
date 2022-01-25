@@ -19,7 +19,7 @@
 @import '../styles/mixins';
 @import '../styles/sizes';
 
-.dark-theme {
+body.dark-theme {
   background-color: $background-color-dark;
 }
 
