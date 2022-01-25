@@ -16,7 +16,7 @@
  */
 module.exports = {
   root: true,
-  ignorePatterns: ['projects/**/*', 'jest.config.js', 'src/react/pages/login/ReactLoginPageWrapper.tsx'],
+  ignorePatterns: ['projects/**/*', 'jest.config.js'],
   extends: ['prettier', 'plugin:@typescript-eslint/recommended', 'plugin:storybook/recommended'],
   plugins: ['unused-imports', 'cypress', 'simple-import-sort'],
   parserOptions: {
