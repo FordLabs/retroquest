@@ -18,20 +18,21 @@ import * as React from 'react';
 import { useState } from 'react';
 
 import { Form, InputPassword, InputTeamName } from '../../components';
+import useAuth from '../../hooks/useAuth';
 import useTeam from '../../hooks/useTeam';
-import { CREATE_TEAM_PAGE_PATH, getRetroPagePathWithTeamId } from '../../routes/RouteConstants';
+import { CREATE_TEAM_PAGE_PATH } from '../../routes/RouteConstants';
 import TeamService from '../../services/TeamService';
 import AuthTemplate from '../../templates/auth/AuthTemplate';
 import { validatePassword, validateTeamName } from '../../utils/StringUtils';
 
 type Props = {
   teamId?: string;
-  routeTo?: (string) => void;
 };
 
 export function LoginPage(props: Props): JSX.Element {
-  const { teamId, routeTo } = props;
+  const { teamId } = props;
 
+  const { login } = useAuth();
   const { teamName, setTeamName } = useTeam(teamId);
   const [password, setPassword] = useState('');
 
@@ -51,10 +52,7 @@ export function LoginPage(props: Props): JSX.Element {
 
   const loginTeam = () => {
     TeamService.login(teamName, password)
-      .then((_teamId) => {
-        const retroPagePath = getRetroPagePathWithTeamId(_teamId);
-        routeTo(retroPagePath);
-      })
+      .then(login)
       .catch(() => {
         setErrorMessages(['Incorrect team name or password. Please try again.']);
       })

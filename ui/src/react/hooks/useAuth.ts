@@ -16,11 +16,14 @@
  */
 import { useRecoilValue } from 'recoil';
 
-import { getLoginPagePathWithTeamId } from '../routes/RouteConstants';
+import { AuthService } from '../../app/modules/auth/auth.service';
+import { getLoginPagePathWithTeamId, getRetroPagePathWithTeamId } from '../routes/RouteConstants';
 import CookieService from '../services/CookieService';
+import { AuthResponse } from '../services/TeamService';
 import { TeamState } from '../state/TeamState';
 
 interface UseAuth {
+  login: (authResponse: AuthResponse) => void;
   logout: () => void;
 }
 
@@ -34,7 +37,15 @@ export default function useAuth(): UseAuth {
     window.location.pathname = getLoginPagePathWithTeamId(team.id);
   };
 
+  const login = ({ token, teamId }: AuthResponse) => {
+    AuthService.setToken(token);
+
+    // @todo replace with react routing
+    window.location.pathname = getRetroPagePathWithTeamId(teamId);
+  };
+
   return {
+    login,
     logout,
   };
 }

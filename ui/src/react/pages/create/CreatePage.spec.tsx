@@ -18,6 +18,7 @@ import React from 'react';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
+import { RecoilRoot } from 'recoil';
 
 import { mockContributors } from '../../services/__mocks__/ContributorsService';
 import ContributorsService from '../../services/ContributorsService';
@@ -32,15 +33,17 @@ describe('CreatePage.spec.tsx', () => {
   let container: HTMLElement;
   const validTeamName = 'Team Awesome';
   const validPassword = 'Password1';
-  let routeTo;
 
   beforeEach(async () => {
     ContributorsService.getContributors = jest.fn().mockResolvedValue(mockContributors);
     TeamService.create = jest.fn().mockResolvedValue(validTeamName);
 
-    routeTo = jest.fn();
     await act(async () => {
-      ({ container } = render(<CreatePage routeTo={routeTo} />));
+      ({ container } = render(
+        <RecoilRoot>
+          <CreatePage />
+        </RecoilRoot>
+      ));
     });
   });
 
@@ -74,7 +77,8 @@ describe('CreatePage.spec.tsx', () => {
       userEvent.click(submitButton);
     });
     expect(TeamService.create).toHaveBeenCalledWith(validTeamName, validPassword);
-    expect(routeTo).toHaveBeenCalledWith(`/team/${validTeamName}`);
+    // @todo test with react router once full app is in react
+    // expect(window.location.pathname).toBe(`/team/team-awesome`);
   });
 
   describe('Form errors', () => {
