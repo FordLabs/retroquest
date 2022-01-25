@@ -20,7 +20,7 @@ import {
   getLoginPagePathWithTeamId,
   getRadiatorPagePathWithTeamId,
 } from '../../src/react/routes/RouteConstants';
-import { TOKEN_KEY } from '../../src/react/services/AuthService';
+import { TOKEN_KEY } from '../../src/react/services/CookieService';
 import { getTeamCredentials } from '../support/helpers';
 
 describe('Main Header', () => {

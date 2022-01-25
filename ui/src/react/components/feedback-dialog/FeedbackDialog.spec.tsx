@@ -18,15 +18,21 @@
 import * as React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { RecoilRoot } from 'recoil';
+
+import { ModalMethods } from '../modal/Modal';
 
 import FeedbackDialog, { FeedbackDialogRenderer } from './FeedbackDialog';
-import { ModalMethods } from '../modal/Modal';
 
 describe('FeedbackDialog', () => {
   const ref = React.createRef<ModalMethods>();
 
   beforeEach(() => {
-    render(<FeedbackDialog ref={ref} />);
+    render(
+      <RecoilRoot>
+        <FeedbackDialog ref={ref} />
+      </RecoilRoot>
+    );
 
     act(() => {
       ref.current.show();

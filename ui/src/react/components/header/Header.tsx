@@ -39,9 +39,9 @@ const LINKS: RqLink[] = [
 ];
 
 interface Props {
-  teamId?: string;
-  routeTo?(string): void;
-  emitThemeChangedToAngular?(string): void;
+  teamId: string;
+  routeTo(string): void;
+  emitThemeChangedToAngular(string): void;
 }
 
 // @todo import images in react way when app is fully react

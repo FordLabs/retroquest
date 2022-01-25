@@ -18,7 +18,7 @@
 export const TOKEN_KEY = 'token';
 const tokenDuration = 1000 * 60 * 60 * 24 * 2;
 
-const AuthService = {
+const CookieService = {
   setToken: (token: string): void => {
     const expiresDate = new Date(Date.now() + tokenDuration);
     const expires = expiresDate.toUTCString();
@@ -41,4 +41,4 @@ const AuthService = {
   },
 };
 
-export default AuthService;
+export default CookieService;
