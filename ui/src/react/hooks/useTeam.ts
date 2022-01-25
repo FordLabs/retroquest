@@ -16,8 +16,10 @@
  */
 
 import { useEffect, useState } from 'react';
+import { useSetRecoilState } from 'recoil';
 
 import TeamService from '../services/TeamService';
+import { TeamState } from '../state/TeamState';
 
 interface UseTeam {
   teamId: string;
@@ -26,11 +28,18 @@ interface UseTeam {
 }
 
 export default function useTeam(teamId: string): UseTeam {
+  const setTeam = useSetRecoilState(TeamState);
   const [teamName, setTeamName] = useState('');
 
   useEffect(() => {
     if (teamId) {
-      TeamService.getTeamName(teamId).then(setTeamName);
+      TeamService.getTeamName(teamId).then((activeTeamName) => {
+        setTeamName(activeTeamName);
+        setTeam({
+          name: activeTeamName,
+          id: teamId,
+        });
+      });
     }
   }, [teamId]);
 

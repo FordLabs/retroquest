@@ -14,27 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { useRecoilValue } from 'recoil';
 
-import { getLoginPagePathWithTeamId } from '../routes/RouteConstants';
-import CookieService from '../services/CookieService';
-import { TeamState } from '../state/TeamState';
-
-interface UseAuth {
-  logout: () => void;
+interface Team {
+  name: string;
+  id: string;
 }
 
-export default function useAuth(): UseAuth {
-  const team = useRecoilValue(TeamState);
-
-  const logout = () => {
-    CookieService.clearToken();
-
-    // @todo replace with react routing
-    window.location.pathname = getLoginPagePathWithTeamId(team.id);
-  };
-
-  return {
-    logout,
-  };
-}
+export default Team;

@@ -22,11 +22,11 @@ import {
   ElementRef,
   OnChanges,
   OnDestroy,
-  SimpleChanges,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { ActivatedRoute, Router as AngularRouter } from '@angular/router';
+import { RecoilRoot } from 'recoil';
 
 import { LoginPage } from './LoginPage';
 
@@ -50,7 +50,7 @@ export class ReactLoginPageWrapper implements OnChanges, OnDestroy, AfterViewIni
 
   constructor(private angularRoute: ActivatedRoute, private angularRouter: AngularRouter) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.render();
   }
 
@@ -65,12 +65,14 @@ export class ReactLoginPageWrapper implements OnChanges, OnDestroy, AfterViewIni
   private render() {
     ReactDOM.render(
       <React.StrictMode>
-        <LoginPage
-          teamId={this.angularRoute.snapshot.params['teamId'] as string}
-          routeTo={(path: string) => {
-            this.angularRouter.navigateByUrl(path).then();
-          }}
-        />
+        <RecoilRoot>
+          <LoginPage
+            teamId={this.angularRoute.snapshot.params['teamId'] as string}
+            routeTo={(path: string) => {
+              this.angularRouter.navigateByUrl(path).then();
+            }}
+          />
+        </RecoilRoot>
       </React.StrictMode>,
       this.containerRef.nativeElement
     );

@@ -35,7 +35,7 @@ describe('Header', () => {
     await act(async () => {
       render(
         <RecoilRoot>
-          <Header teamId={teamId} routeTo={routeTo} />
+          <Header teamId={teamId} routeTo={routeTo} emitThemeChangedToAngular={jest.fn()} />
         </RecoilRoot>
       );
     });

@@ -18,6 +18,7 @@ import React, { ReactElement } from 'react';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
+import { RecoilRoot } from 'recoil';
 
 import { mockContributors } from '../../services/__mocks__/ContributorsService';
 import ContributorsService from '../../services/ContributorsService';
@@ -42,7 +43,11 @@ describe('LoginPage.spec.tsx', () => {
 
     routeTo = jest.fn();
     await act(async () => {
-      ({ container, rerender } = render(<LoginPage routeTo={routeTo} teamId="" />));
+      ({ container, rerender } = render(
+        <RecoilRoot>
+          <LoginPage routeTo={routeTo} teamId="" />
+        </RecoilRoot>
+      ));
     });
   });
 
@@ -71,7 +76,11 @@ describe('LoginPage.spec.tsx', () => {
     expect(teamNameInput.value).toBe('');
 
     await act(async () => {
-      rerender(<LoginPage routeTo={routeTo} teamId={validTeamName} />);
+      rerender(
+        <RecoilRoot>
+          <LoginPage routeTo={routeTo} teamId={validTeamName} />
+        </RecoilRoot>
+      );
     });
     teamNameInput = getTeamNameInput();
     expect(teamNameInput.value).toBe(validTeamName);
@@ -125,7 +134,11 @@ describe('LoginPage.spec.tsx', () => {
       TeamService.login = jest.fn().mockRejectedValue(new Error('Async error'));
 
       await act(async () => {
-        rerender(<LoginPage routeTo={routeTo} teamId={validTeamName} />);
+        rerender(
+          <RecoilRoot>
+            <LoginPage routeTo={routeTo} teamId={validTeamName} />
+          </RecoilRoot>
+        );
       });
 
       typeIntoPasswordInput(validPassword);
