@@ -70,14 +70,20 @@ export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
     return this.theme === Themes.Dark;
   }
 
+  private getRootPage() {
+    return $('rq-sub-app') || $('react-header-component-wrapper');
+  }
+
   private scrollToTopOfPage() {
-    const rootPage = $('rq-sub-app');
+    const rootPage = this.getRootPage();
     rootPage.animate({ scrollTop: 0 }, this.scrollInterval);
   }
 
   private scrollToBottomOfPage() {
-    const rootPage = $('rq-sub-app');
-    rootPage.animate({ scrollTop: rootPage[0].scrollHeight }, this.scrollInterval);
+    const rootPage = this.getRootPage();
+    if (rootPage[0]) {
+      rootPage.animate({ scrollTop: rootPage[0].scrollHeight }, this.scrollInterval);
+    }
   }
 
   public autoScrollPage() {
@@ -112,7 +118,7 @@ export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
       this.autoScrollPage();
     } else {
       if (this.scrollingIntervalId) {
-        const rootPage = $('rq-sub-app');
+        const rootPage = this.getRootPage();
         rootPage.stop(true);
         window.clearInterval(this.scrollingIntervalId);
         this.scrollingIntervalId = null;
@@ -123,7 +129,7 @@ export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
   public resetScroll(): void {
     this.pageIsAutoScrolling = false;
 
-    const rootPage = $('rq-sub-app');
+    const rootPage = this.getRootPage();
     rootPage.stop(true);
 
     window.clearInterval(this.scrollingIntervalId);
@@ -132,7 +138,7 @@ export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
   }
 
   private scrollToTopWithoutAnimation() {
-    const rootPage = $('rq-sub-app');
+    const rootPage = this.getRootPage();
     rootPage.animate({ scrollTop: 0 }, 0);
   }
 }
