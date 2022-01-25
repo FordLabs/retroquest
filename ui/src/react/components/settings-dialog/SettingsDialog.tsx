@@ -19,11 +19,10 @@ import * as React from 'react';
 import { forwardRef, useState } from 'react';
 import classnames from 'classnames';
 
-import useAuth from '../../hooks/useAuth';
-import { PrimaryButton } from '../button/Button';
 import Dialog from '../dialog/Dialog';
 import Modal, { ModalMethods } from '../modal/Modal';
 
+import AccountTab from './account-tab/AccountTab';
 import StylesTab from './styles-tab/StylesTab';
 
 import './SettingsDialog.scss';
@@ -42,7 +41,6 @@ enum Tabs {
 }
 
 export function SettingsDialogContent() {
-  const { logout } = useAuth();
   const [tab, setTab] = useState<Tabs>(Tabs.STYLES);
 
   const stylesTabIsActive = () => tab === Tabs.STYLES;
@@ -60,11 +58,7 @@ export function SettingsDialogContent() {
           </div>
         </div>
         {stylesTabIsActive() && <StylesTab />}
-        {accountTabIsActive() && (
-          <div className="tab-body account-tab-body">
-            <PrimaryButton onClick={logout}>Logout</PrimaryButton>
-          </div>
-        )}
+        {accountTabIsActive() && <AccountTab />}
       </div>
     </Dialog>
   );

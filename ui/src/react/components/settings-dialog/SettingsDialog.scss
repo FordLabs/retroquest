@@ -1,5 +1,5 @@
-/*!
- * Copyright (c) 2021 Ford Motor Company
+/*
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -60,28 +60,12 @@
       border-right: 2px solid opacity($asphalt, 0.08);
     }
   }
-}
 
-.tab-body {
-  margin-top: 36px;
-  padding: 0 48px;
+  .tab-body {
+    margin-top: 36px;
+    padding: 0 48px;
 
-  position: relative;
-
-  .button {
-    width: 75%;
-    height: 50px;
-    margin: 32px auto;
-
-    color: $asphalt;
-    font-weight: bold;
-    font-size: 1.2rem;
-
-    background-color: opacity($yellow, 0.7);
-
-    &:hover, &:focus {
-      background-color: opacity($yellow, 0.7);
-    }
+    position: relative;
   }
 }
 

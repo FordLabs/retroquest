@@ -49,6 +49,7 @@ const containerElementName = 'reactHeaderComponentWrapper';
     './Header.scss',
     '../settings-dialog/SettingsDialog.scss',
     '../settings-dialog/styles-tab/StylesTab.scss',
+    '../settings-dialog/account-tab/AccountTab.scss',
     '../dialog/Dialog.scss',
     '../button/Button.scss',
     '../modal/Modal.scss',
