@@ -16,18 +16,18 @@
  */
 
 import * as React from 'react';
-import classnames from 'classnames';
 
-import ColumnItem from '../column-item/ColumnItem';
-import Tooltip from '../tooltip/Tooltip';
-import ColumnType from '../../types/ColumnType';
+import ColumnTopic from '../../types/ColumnTopic';
 import Thought from '../../types/Thought';
+import ColumnItem from '../column-item/ColumnItem';
+
+import UpvoteButton from './upvote-button/UpvoteButton';
 
 import './RetroItem.scss';
 
 const NO_OP = () => undefined;
 
-export type RetroItemType = ColumnType.HAPPY | ColumnType.CONFUSED | ColumnType.UNHAPPY;
+export type RetroItemType = ColumnTopic.HAPPY | ColumnTopic.CONFUSED | ColumnTopic.UNHAPPY;
 
 type RetroItemProps = {
   thought: Thought;
@@ -74,29 +74,5 @@ export default function RetroItem(props: RetroItemProps) {
         />
       )}
     />
-  );
-}
-
-type UpvoteButtonProps = React.ComponentPropsWithoutRef<'button'> & {
-  votes: number;
-  readOnly?: boolean;
-};
-
-function UpvoteButton(props: UpvoteButtonProps) {
-  const { votes, disabled = false, readOnly = false, className, ...buttonProps } = props;
-
-  return (
-    <button
-      {...buttonProps}
-      className={classnames('column-item-button upvote-button', className, { readonly: readOnly })}
-      disabled={disabled || readOnly}
-    >
-      <div className="star-icon">
-        <i className="fas fa-star" aria-hidden="true" />
-        <div className="star-shadow" />
-      </div>
-      <div className="star-count">{votes}</div>
-      <Tooltip>Upvote</Tooltip>
-    </button>
   );
 }
