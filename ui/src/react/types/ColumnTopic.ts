@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Ford Motor Company
+ * Copyright (c) 2021 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,21 +15,11 @@
  * limitations under the License.
  */
 
-import React, { HTMLAttributes, ReactElement } from 'react';
-
-import './CountSeparator.scss';
-
-interface SeparatorProps extends HTMLAttributes<HTMLDivElement> {
-  count: number;
+enum ColumnTopic {
+  HAPPY = 'happy',
+  CONFUSED = 'confused',
+  UNHAPPY = 'unhappy',
+  ACTION = 'action',
 }
 
-export function CountSeparator(props: SeparatorProps): ReactElement {
-  const { count, ...divProps } = props;
-  return (
-    <div {...divProps} className="count-separator">
-      <span className="separator left-count-separator" />
-      <span className="count-value">{count}</span>
-      <span className="separator right-count-separator" />
-    </div>
-  );
-}
+export default ColumnTopic;

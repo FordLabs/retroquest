@@ -15,11 +15,20 @@
  * limitations under the License.
  */
 
-enum ColumnType {
-  HAPPY = 'happy',
-  CONFUSED = 'confused',
-  UNHAPPY = 'unhappy',
-  ACTION = 'action',
+import Action from './Action';
+import ColumnTopic from './ColumnTopic';
+import Thought from './Thought';
+
+export type ColumnItem = Thought | Action;
+
+export interface ColumnItems {
+  active: ColumnItem[];
+  completed: ColumnItem[];
 }
 
-export default ColumnType;
+export interface Column {
+  id: number;
+  items: ColumnItems;
+  title: string;
+  topic: ColumnTopic;
+}

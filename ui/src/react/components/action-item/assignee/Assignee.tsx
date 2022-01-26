@@ -34,13 +34,14 @@ type AssigneeProps = {
 };
 
 function Assignee(props: AssigneeProps) {
-  const { assignee, onAssign, editing, deleting, readOnly } = props;
+  const { assignee = '', onAssign, editing, deleting, readOnly } = props;
   const assigneeInputRef = useRef<HTMLInputElement>();
 
-  const [editAssignee, setEditAssignee] = useState(assignee);
+  const [editAssignee, setEditAssignee] = useState<string>(assignee || '');
+  console.log('editAssignee', editAssignee);
 
   useEffect(() => {
-    setEditAssignee(assignee);
+    setEditAssignee(assignee || '');
   }, [assignee]);
 
   function onAssigneeConfirmed() {

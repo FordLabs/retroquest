@@ -15,21 +15,15 @@
  * limitations under the License.
  */
 
-import React, { HTMLAttributes, ReactElement } from 'react';
+import axios from 'axios';
 
-import './CountSeparator.scss';
+import { Column } from '../types/Column';
 
-interface SeparatorProps extends HTMLAttributes<HTMLDivElement> {
-  count: number;
-}
+const ColumnsService = {
+  getColumns: (teamId: string): Promise<Column[]> => {
+    const url = `/api/v2/team/${teamId}/columns`;
+    return axios.get(url).then((response) => response.data.columns);
+  },
+};
 
-export function CountSeparator(props: SeparatorProps): ReactElement {
-  const { count, ...divProps } = props;
-  return (
-    <div {...divProps} className="count-separator">
-      <span className="separator left-count-separator" />
-      <span className="count-value">{count}</span>
-      <span className="separator right-count-separator" />
-    </div>
-  );
-}
+export default ColumnsService;

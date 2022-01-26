@@ -18,11 +18,11 @@
 import * as React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import RetroItemModal from '../components/retro-item-modal/RetroItemModal';
 import { PrimaryButton } from '../components/button/Button';
 import { ModalMethods } from '../components/modal/Modal';
-import ColumnType from '../types/ColumnType';
 import { RetroItemType } from '../components/retro-item/RetroItem';
+import RetroItemModal from '../components/retro-item-modal/RetroItemModal';
+import ColumnTopic from '../types/ColumnTopic';
 
 export default {
   title: 'components/RetroItemModal',
@@ -34,12 +34,13 @@ const testThought = {
   discussed: false,
   hearts: 0,
   message:
-    "If elevators hadn't been invented, all the CEOs and important people would have their offices on the first floor as a sign of status.",
+    "If elevators hadn't been invented, all the CEOs and" +
+    'important people would have their offices on the first floor as a sign of status.',
 };
 
 const Template: ComponentStory<typeof RetroItemModal> = () => {
   const [thought, setThought] = React.useState(testThought);
-  const [type, setType] = React.useState<RetroItemType>(ColumnType.HAPPY);
+  const [type, setType] = React.useState<RetroItemType>(ColumnTopic.HAPPY);
 
   const modalRef = React.useRef<ModalMethods>();
   const readOnlyModalRef = React.useRef<ModalMethods>();
@@ -66,7 +67,7 @@ const Template: ComponentStory<typeof RetroItemModal> = () => {
         Show Modal
       </PrimaryButton>
       <RetroItemModal
-        type={ColumnType.HAPPY}
+        type={ColumnTopic.HAPPY}
         thought={thought}
         onAction={(task, assignee) => alert(`${task} @${assignee}`)}
         onUpvote={onUpvote}
@@ -80,12 +81,12 @@ const Template: ComponentStory<typeof RetroItemModal> = () => {
         onClick={() => {
           setType((currentType) => {
             switch (currentType) {
-              case ColumnType.HAPPY:
-                return ColumnType.CONFUSED;
-              case ColumnType.CONFUSED:
-                return ColumnType.UNHAPPY;
+              case ColumnTopic.HAPPY:
+                return ColumnTopic.CONFUSED;
+              case ColumnTopic.CONFUSED:
+                return ColumnTopic.UNHAPPY;
               default:
-                return ColumnType.HAPPY;
+                return ColumnTopic.HAPPY;
             }
           });
           readOnlyModalRef.current?.show();

@@ -19,8 +19,9 @@ import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import ColumnTopic from '../../types/ColumnTopic';
+
 import RetroItem, { RetroItemType } from './RetroItem';
-import ColumnType from '../../types/ColumnType';
 
 describe('RetroItem', () => {
   const mockSelect = jest.fn();
@@ -40,7 +41,7 @@ describe('RetroItem', () => {
     jest.clearAllMocks();
   });
 
-  it.each([[ColumnType.HAPPY], [ColumnType.CONFUSED], [ColumnType.UNHAPPY]])(
+  it.each([[ColumnTopic.HAPPY], [ColumnTopic.CONFUSED], [ColumnTopic.UNHAPPY]])(
     'should render %s type',
     (type: RetroItemType) => {
       render(<RetroItem thought={fakeThought} type={type} />);
@@ -50,7 +51,7 @@ describe('RetroItem', () => {
   );
 
   it('should render thought message and upvotes', () => {
-    render(<RetroItem thought={fakeThought} type={ColumnType.HAPPY} />);
+    render(<RetroItem thought={fakeThought} type={ColumnTopic.HAPPY} />);
 
     screen.getByText(fakeThought.message);
     screen.getByText(fakeThought.hearts);
@@ -61,7 +62,7 @@ describe('RetroItem', () => {
     beforeEach(() => {
       render(
         <RetroItem
-          type={ColumnType.HAPPY}
+          type={ColumnTopic.HAPPY}
           thought={fakeThought}
           onSelect={mockSelect}
           onUpvote={mockUpvote}
@@ -160,7 +161,7 @@ describe('RetroItem', () => {
     beforeEach(() => {
       render(
         <RetroItem
-          type={ColumnType.HAPPY}
+          type={ColumnTopic.HAPPY}
           thought={{ ...fakeThought, discussed: true }}
           onSelect={mockSelect}
           onUpvote={mockUpvote}
@@ -202,7 +203,7 @@ describe('RetroItem', () => {
       render(
         <RetroItem
           readOnly={true}
-          type={ColumnType.HAPPY}
+          type={ColumnTopic.HAPPY}
           thought={fakeThought}
           onSelect={mockSelect}
           onUpvote={mockUpvote}

@@ -24,6 +24,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { environment } from '../../../environments/environment';
 import { ReactHeaderComponentWrapper } from '../../../react/components/header/ReactHeaderComponentWrapper';
+import { ReactRetroPageWrapper } from '../../../react/pages/retro/ReactRetroPageWrapper';
 import { AuthGuard } from '../auth/auth-guard/auth.guard';
 import { ActionsRadiatorViewComponent } from '../components/actions-radiator-view/actions-radiator-view.component';
 import { ComponentsModule } from '../components/components.module';
@@ -57,7 +58,7 @@ function routes() {
           children: [
             {
               path: '',
-              component: TeamPageComponent,
+              component: ReactRetroPageWrapper,
               pathMatch: 'full',
               canActivate: [AuthGuard],
             },
@@ -131,6 +132,7 @@ function routes() {
     SaveCheckerService,
   ],
   declarations: [
+    ReactRetroPageWrapper,
     TeamPageComponent,
     HeaderComponent,
     ThoughtsColumnComponent,

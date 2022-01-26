@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import React, { ReactElement } from 'react';
 import classNames from 'classnames';
 
 import './FloatingCharacterCountdown.scss';
@@ -26,7 +26,7 @@ interface Props {
   charsAreRunningOutThreshold?: number;
 }
 
-export default function FloatingCharacterCountdown(props: Props): React.ReactElement {
+export default function FloatingCharacterCountdown(props: Props): ReactElement {
   const { maxCharacterCount = 255, charsAreRunningOutThreshold = 20, characterCount = 0 } = props;
 
   const charactersRemaining = maxCharacterCount - characterCount;

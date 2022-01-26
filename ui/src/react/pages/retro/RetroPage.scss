@@ -15,21 +15,18 @@
  * limitations under the License.
  */
 
-import React, { HTMLAttributes, ReactElement } from 'react';
+@import '../styles/mixins';
 
-import './CountSeparator.scss';
+.retro-page {
+  .retro-page-content {
+    @include site-max-width;
 
-interface SeparatorProps extends HTMLAttributes<HTMLDivElement> {
-  count: number;
-}
+    display: flex;
+    justify-content: space-between;
+    margin-top: 24px;
 
-export function CountSeparator(props: SeparatorProps): ReactElement {
-  const { count, ...divProps } = props;
-  return (
-    <div {...divProps} className="count-separator">
-      <span className="separator left-count-separator" />
-      <span className="count-value">{count}</span>
-      <span className="separator right-count-separator" />
-    </div>
-  );
+    .retro-column {
+      width: 324px;
+    }
+  }
 }
