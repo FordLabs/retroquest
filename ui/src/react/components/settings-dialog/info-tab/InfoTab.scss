@@ -16,25 +16,33 @@
  */
 
 @import '../../../../styles/colors';
+@import '../../../../styles/mixins';
 
 .info-tab-body {
   .version-label {
     display: inline-block;
     width: 100%;
 
-    font-size: 1.5rem;
+    font-family: inherit;
+
+    font-size: 1rem;
     text-align: center;
+
+    .version-container {
+      display: inline-block;
+      width: 5rem;
+
+      color: inherit;
+      font-family: inherit;
+      font-weight: bold;
+      font-size: inherit;
+
+      background: none;
+      border: 0;
+    }
   }
 
-  .version-container {
-    display: inline-block;
-    width: 7rem;
-
-    color: $purple;
-    font-weight: bold;
-    font-size: 1.5rem;
-
-    background: none;
-    border: 0;
+  .logo-container {
+    margin-bottom:20px;
   }
 }
