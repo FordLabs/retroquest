@@ -17,6 +17,7 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import { axe } from 'jest-axe';
+import { RecoilRoot } from 'recoil';
 
 import Logo from './Logo';
 
@@ -24,7 +25,11 @@ describe('Logo', () => {
   let container: HTMLElement;
 
   beforeEach(async () => {
-    ({ container } = render(<Logo />));
+    ({ container } = render(
+      <RecoilRoot>
+        <Logo />
+      </RecoilRoot>
+    ));
   });
 
   it('should render without axe errors', async () => {

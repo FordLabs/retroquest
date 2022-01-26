@@ -19,6 +19,7 @@ import * as React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import mockAxios from 'axios';
+import { RecoilRoot } from 'recoil';
 
 import { Contributor } from '../../types/Contributor';
 
@@ -45,9 +46,11 @@ describe('AuthTemplate', () => {
   it('should render the logo, header, sub header, children, footer, and contributors', async () => {
     render(
       <MemoryRouter initialEntries={['/team/team-id']}>
-        <AuthTemplate header="header" subHeader="sub header">
-          <div>children</div>
-        </AuthTemplate>
+        <RecoilRoot>
+          <AuthTemplate header="header" subHeader="sub header">
+            <div>children</div>
+          </AuthTemplate>
+        </RecoilRoot>
       </MemoryRouter>
     );
 
