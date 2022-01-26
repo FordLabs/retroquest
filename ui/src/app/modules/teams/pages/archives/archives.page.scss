@@ -21,12 +21,15 @@
   $archives-content-base-width: 400px;
   display: block;
 
-  .header {
-    background: $white;
+  .archives-header {
     box-sizing: border-box;
-    font-weight: normal;
-    min-width: $max-width;
     width: 100%;
+    min-width: $max-width;
+
+    font-weight: normal;
+
+    background: $white;
+
     z-index: 3;
 
     @media only screen and (max-width: 610px) {
@@ -34,8 +37,8 @@
     }
 
     &.dark-theme {
-      background-color: $header-background-color-dark;
       color: $gray;
+      background-color: $header-background-color-dark;
     }
 
     .no-archives-info {
@@ -44,48 +47,53 @@
 
     #headerBottom {
       $header-bottom-height: 32px;
-      align-items: center;
-      box-sizing: border-box;
-      color: inherit;
 
       display: flex;
-      height: 45px;
+      align-items: center;
       justify-content: center;
+      box-sizing: border-box;
+      width: 100%;
+      height: 45px;
       margin: 0 auto;
       overflow: auto;
+
+      color: inherit;
+
       position: relative;
-      width: 100%;
 
       @media only screen and (max-width: 610px) {
-        height: $header-bottom-height;
-        min-width: 0;
         width: 100%;
+        min-width: 0;
+        height: $header-bottom-height;
       }
 
       .header-bottom-content {
-        align-items: center;
         display: flex;
+        align-items: center;
         justify-content: center;
 
         rq-button {
-          box-shadow: none;
+          width: auto;
+          height: 28px;
+
           color: opacity($asphalt, 0.4);
           font-size: 0.9rem;
-          height: 28px;
-          width: auto;
+
+          box-shadow: none;
 
           &.dark-theme {
             color: opacity($gray, 0.4);
           }
 
           &.selected {
-            background-color: opacity($asphalt, 0.12);
-            border-radius: 32px;
             color: $asphalt;
 
+            background-color: opacity($asphalt, 0.12);
+            border-radius: 32px;
+
             &.dark-theme {
-              background-color: opacity($gray, 0.12);
               color: $gray;
+              background-color: opacity($gray, 0.12);
             }
           }
         }
@@ -94,20 +102,20 @@
   }
 
   .archives {
-    align-items: center;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
-    margin-top: 24px;
-    min-width: $max-width;
     width: 100%;
+    min-width: $max-width;
+    margin-top: 24px;
 
     .heading-container {
       margin-bottom: 24px;
 
       .archives-heading {
-        font-size: 1.5rem;
         font-weight: 500;
+        font-size: 1.5rem;
 
         &.dark-theme {
           color: $gray;
@@ -125,37 +133,41 @@
     }
 
     .archives-sort-section {
+      display: flex;
       align-items: center;
+      box-sizing: border-box;
+      width: $archives-content-base-width;
+      max-width: 90%;
+      margin-bottom: 24px;
+      padding: 6px;
+
+      font-weight: bold;
+
       background-color: opacity($asphalt, 0.07);
       border-radius: 6px;
-      box-sizing: border-box;
-      display: flex;
-      font-weight: bold;
-      margin-bottom: 24px;
-      max-width: 90%;
-      padding: 6px;
-      width: $archives-content-base-width;
 
       &.dark-theme {
-        background-color: opacity($gray, 0.07);
         color: $gray;
+        background-color: opacity($gray, 0.07);
       }
 
       .sort-container {
-        align-items: center;
         display: flex;
+        align-items: center;
         margin-right: 60px;
 
         @media only screen and (max-width: 610px) {
-          font-size: 0.9rem;
           margin-right: 36px;
+          font-size: 0.9rem;
         }
 
         &.count-sort-container {
-          cursor: pointer;
-          font-size: 1.2rem;
-          margin-left: 18px;
           margin-right: 86px;
+          margin-left: 18px;
+
+          font-size: 1.2rem;
+
+          cursor: pointer;
         }
 
         .filter-button {
@@ -171,9 +183,10 @@
       grid-template-columns: 350px 350px 350px;
 
       rq-action-item-task {
-        font-size: 0.9rem;
-        height: auto;
         width: inherit;
+        height: auto;
+
+        font-size: 0.9rem;
       }
     }
 
@@ -186,8 +199,8 @@
 
       .heading {
         color: inherit;
-        font-size: 1.875rem;
         font-weight: bold;
+        font-size: 1.875rem;
 
         &.dark-theme {
           color: $gray;
@@ -195,9 +208,10 @@
       }
 
       .sub-heading {
-        font-size: 1.5rem;
-        font-weight: normal;
         margin-bottom: 24px;
+
+        font-weight: normal;
+        font-size: 1.5rem;
       }
 
       .info {
