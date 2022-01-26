@@ -29,18 +29,15 @@ export const ThemeState = atom<Theme>({
       onSet((newTheme) => {
         if (isNotLoggedIn()) return Theme.LIGHT;
 
-        switch (newTheme) {
-          case Theme.DARK: {
-            // @todo replace adding and removing classes with react useEffect on top level
-            // once app is fully react
-            document.body.classList.add(Theme.DARK);
-            localStorage.setItem(ITEM_KEY, Theme.DARK);
-            break;
-          }
-          default: {
-            document.body.classList.remove(Theme.DARK);
-            localStorage.setItem(ITEM_KEY, Theme.LIGHT);
-          }
+        const isDarkMode = newTheme === Theme.DARK;
+        if (isDarkMode) {
+          // @todo replace adding and removing classes with react useEffect on top level
+          // once app is fully react
+          document.body.classList.add(Theme.DARK);
+          localStorage.setItem(ITEM_KEY, Theme.DARK);
+        } else {
+          document.body.classList.remove(Theme.DARK);
+          localStorage.setItem(ITEM_KEY, Theme.LIGHT);
         }
       });
     },
