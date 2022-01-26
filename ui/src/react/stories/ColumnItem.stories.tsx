@@ -19,7 +19,7 @@ import * as React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import ColumnItem from '../components/column-item/ColumnItem';
-import ColumnType from '../types/ColumnType';
+import ColumnTopic from '../types/ColumnTopic';
 
 export default {
   title: 'components/ColumnItem',
@@ -27,7 +27,8 @@ export default {
 } as ComponentMeta<typeof ColumnItem>;
 
 const testText =
-  "If elevators hadn't been invented, all the CEOs and important people would have their offices on the first floor as a sign of status.";
+  "If elevators hadn't been invented, all the CEOs and" +
+  'important people would have their offices on the first floor as a sign of status.';
 
 const Template: ComponentStory<typeof ColumnItem> = () => {
   const [text, setText] = React.useState(testText);
@@ -61,7 +62,7 @@ const Template: ComponentStory<typeof ColumnItem> = () => {
     <>
       <div style={{ width: '400px', marginBottom: '20px' }}>
         <ColumnItem
-          type={ColumnType.HAPPY}
+          type={ColumnTopic.HAPPY}
           text={text}
           checked={checked}
           onEdit={onEdit}
@@ -71,9 +72,9 @@ const Template: ComponentStory<typeof ColumnItem> = () => {
         />
       </div>
       <div style={{ width: '400px', display: 'flex', flexDirection: 'column' }}>
-        <ColumnItem type={ColumnType.CONFUSED} {...props} />
-        <ColumnItem type={ColumnType.UNHAPPY} {...props} />
-        <ColumnItem type={ColumnType.ACTION} {...props} />
+        <ColumnItem type={ColumnTopic.CONFUSED} {...props} />
+        <ColumnItem type={ColumnTopic.UNHAPPY} {...props} />
+        <ColumnItem type={ColumnTopic.ACTION} {...props} />
       </div>
     </>
   );

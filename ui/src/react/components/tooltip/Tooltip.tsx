@@ -16,16 +16,17 @@
  */
 
 import * as React from 'react';
+import { PropsWithChildren, useEffect, useRef } from 'react';
 
 import './Tooltip.scss';
 
-export type ToolTipProps = React.PropsWithChildren<{}>;
+export type Props = PropsWithChildren<unknown>;
 
-export default function Tooltip(props: ToolTipProps): React.ReactElement {
+export default function Tooltip(props: Props): JSX.Element {
   const { children } = props;
-  const ref = React.useRef<HTMLElement>();
+  const ref = useRef<HTMLElement>();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const parent = ref.current?.parentElement;
 
     if (parent) {

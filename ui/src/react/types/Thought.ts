@@ -15,11 +15,14 @@
  * limitations under the License.
  */
 
+import { RetroItemType } from '../components/retro-item/RetroItem';
+
 interface Thought {
   id: number;
   message: string;
   hearts: number;
   discussed: boolean;
+  topic?: RetroItemType;
 }
 
 export default Thought;

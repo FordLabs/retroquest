@@ -19,7 +19,31 @@
 @import '../styles/mixins';
 @import '../styles/sizes';
 
+/* stylelint-disable selector-no-qualifying-type */
 body.dark-theme {
   background-color: $background-color-dark;
 }
+
+.sub-header {
+  height: 45px;
+  background-color: $white;
+
+  :only-child {
+    @include site-max-width;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100%;
+  }
+}
+
+li,
+ol,
+ul {
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
 

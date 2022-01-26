@@ -16,12 +16,13 @@
  */
 
 import * as React from 'react';
+import { forwardRef, Ref, useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 
-import RetroItem, { RetroItemType } from '../retro-item/RetroItem';
-import { AddActionItem } from '../action-item/ActionItem';
-import Modal, { ModalMethods } from '../modal/Modal';
 import Thought from '../../types/Thought';
+import AddActionItem from '../action-item/add-action-item/AddActionItem';
+import Modal, { ModalMethods } from '../modal/Modal';
+import RetroItem, { RetroItemType } from '../retro-item/RetroItem';
 
 import './RetroItemModal.scss';
 
@@ -36,14 +37,14 @@ type RetroItemModalProps = {
   onAction?: (task: string, assignee: string) => void;
 };
 
-function RetroItemModal(props: RetroItemModalProps, ref: React.Ref<ModalMethods>) {
+function RetroItemModal(props: RetroItemModalProps, ref: Ref<ModalMethods>) {
   const { type, thought, readOnly, onUpvote, onEdit, onDelete, onDiscuss, onAction } = props;
 
-  const [creatingActionItem, setCreatingActionItem] = React.useState(false);
+  const [creatingActionItem, setCreatingActionItem] = useState(false);
 
-  const addActionItemButtonRef = React.useRef<HTMLButtonElement>();
+  const addActionItemButtonRef = useRef<HTMLButtonElement>();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!creatingActionItem) {
       addActionItemButtonRef.current?.focus();
     }
@@ -88,4 +89,4 @@ function RetroItemModal(props: RetroItemModalProps, ref: React.Ref<ModalMethods>
   );
 }
 
-export default React.forwardRef<ModalMethods, RetroItemModalProps>(RetroItemModal);
+export default forwardRef<ModalMethods, RetroItemModalProps>(RetroItemModal);

@@ -19,7 +19,7 @@ import * as React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import ColumnHeader from '../components/column-header/ColumnHeader';
-import ColumnType from '../types/ColumnType';
+import ColumnTopic from '../types/ColumnTopic';
 
 export default {
   title: 'components/ColumnHeader',
@@ -40,10 +40,10 @@ const Template: ComponentStory<typeof ColumnHeader> = () => (
   <span
     style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flexBasis: 800, flexShrink: 1 }}
   >
-    <ColumnHeader {...props} type={ColumnType.HAPPY} style={{ marginBottom: '5rem' }} />
-    <ColumnHeader {...props} type={ColumnType.CONFUSED} style={{ marginBottom: '5rem' }} />
-    <ColumnHeader {...props} type={ColumnType.UNHAPPY} style={{ marginBottom: '5rem' }} />
-    <ColumnHeader {...props} readOnly={true} type={ColumnType.ACTION} />
+    <ColumnHeader {...props} type={ColumnTopic.HAPPY} style={{ marginBottom: '5rem' }} />
+    <ColumnHeader {...props} type={ColumnTopic.CONFUSED} style={{ marginBottom: '5rem' }} />
+    <ColumnHeader {...props} type={ColumnTopic.UNHAPPY} style={{ marginBottom: '5rem' }} />
+    <ColumnHeader {...props} readOnly={true} type={ColumnTopic.ACTION} />
   </span>
 );
 

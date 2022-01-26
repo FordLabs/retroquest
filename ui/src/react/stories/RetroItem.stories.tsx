@@ -19,7 +19,7 @@ import * as React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import RetroItem from '../components/retro-item/RetroItem';
-import ColumnType from '../types/ColumnType';
+import ColumnTopic from '../types/ColumnTopic';
 
 export default {
   title: 'components/RetroItem',
@@ -31,7 +31,8 @@ const testThought = {
   discussed: false,
   hearts: 0,
   message:
-    "If elevators hadn't been invented, all the CEOs and important people would have their offices on the first floor as a sign of status.",
+    "If elevators hadn't been invented, all the CEOs and" +
+    'important people would have their offices on the first floor as a sign of status.',
 };
 
 const Template: ComponentStory<typeof RetroItem> = () => {
@@ -62,7 +63,7 @@ const Template: ComponentStory<typeof RetroItem> = () => {
       <div style={{ width: '400px', marginBottom: '20px' }}>
         <RetroItem
           thought={thought}
-          type={ColumnType.HAPPY}
+          type={ColumnTopic.HAPPY}
           onUpvote={onUpvote}
           onEdit={onEdit}
           onDelete={onDelete}
@@ -74,7 +75,7 @@ const Template: ComponentStory<typeof RetroItem> = () => {
         <RetroItem
           readOnly={true}
           thought={{ ...testThought, discussed: true }}
-          type={ColumnType.UNHAPPY}
+          type={ColumnTopic.UNHAPPY}
           onUpvote={onUpvote}
           onEdit={onEdit}
           onDelete={onDelete}

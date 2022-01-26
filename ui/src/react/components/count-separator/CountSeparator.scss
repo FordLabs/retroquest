@@ -18,18 +18,20 @@
 @import '../../../styles/colors';
 
 .count-separator {
-  align-items: center;
   display: flex;
+  align-items: center;
   justify-content: center;
+  margin: 24px 0;
 
   .dark-theme & {
     color: $gray;
   }
 
   .separator {
-    border-radius: 3px;
-    height: 2px;
     width: 50%;
+    height: 2px;
+
+    border-radius: 3px;
 
     .dark-theme & {
       background: $count-separator-background-dark none;
@@ -45,10 +47,12 @@
   }
 
   .count-value {
-    cursor: default;
-    font-size: 1rem;
-    font-weight: bold;
     margin: 0 6px;
+
+    font-weight: bold;
+    font-size: 1rem;
     text-align: center;
+
+    cursor: default;
   }
 }

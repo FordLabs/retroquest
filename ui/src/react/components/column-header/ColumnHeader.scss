@@ -18,30 +18,35 @@
 @import '../../../styles/colors';
 
 .column-header {
+  display: flex;
   align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 60px;
+  margin-bottom: 30px;
+  padding: 24px;
+
+  color: $white;
+  font-weight: bold;
+  font-size: 1.7rem;
+  text-align: center;
+
   background-color: $black;
   border-radius: 6px;
   box-shadow: 0 2px 20px opacity($black, 0.25);
-  color: $white;
   cursor: default;
-  display: flex;
-  font-size: 1.7rem;
-  font-weight: bold;
-  height: 75px;
-  justify-content: center;
-  padding: 24px;
+
   position: relative;
-  text-align: center;
-  width: 100%;
 
   &.dark-theme {
     color: $gray;
   }
 
   .input-container {
-    align-items: center;
     display: flex;
+    align-items: center;
     justify-content: center;
+
     position: relative;
   }
 
@@ -52,52 +57,59 @@
   }
 
   input {
+    display: inline-block;
+    width: 100%;
+    padding: 0;
+
+    color: $text-off-white;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    text-align: center;
+
     background-color: transparent;
     border: 0;
-    color: $text-off-white;
-    cursor: inherit;
-    display: inline-block;
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: inherit;
     outline: none;
-    padding: 0;
-    text-align: center;
-    width: 100%;
+    cursor: inherit;
 
+    /* stylelint-disable selector-no-qualifying-type */
     &[readonly] {
       cursor: default;
     }
   }
 
   .display-text {
-    background-color: transparent;
-    border: 0;
-    color: inherit;
-    cursor: inherit;
     display: inline-block;
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: inherit;
+    width: auto;
     height: auto;
     margin-right: 8px;
-    outline: none;
-    overflow: hidden;
     padding: 0;
+    overflow: hidden;
+
+    color: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    white-space: nowrap;
     text-align: center;
     text-overflow: ellipsis;
-    white-space: nowrap;
-    width: auto;
+
+    background-color: transparent;
+    border: 0;
+    outline: none;
+    cursor: inherit;
   }
 
   .sort-container {
-    position: relative;
     text-align: center;
+    position: relative;
 
     .sort {
-      cursor: pointer;
       display: block;
+
       font-size: 1.5rem;
+
+      cursor: pointer;
 
       &.sort-icon-translucent {
         opacity: 0.45;
@@ -107,17 +119,20 @@
 
   .edit-button {
     color: $white;
-    cursor: pointer;
     font-size: 1rem;
+
+    cursor: pointer;
+
     position: absolute;
     right: 5px;
     top: 5px;
 
-    &:hover {
+    &:hover, &:focus {
       rq-tooltip {
-        opacity: 1;
-        top: 30px;
         visibility: visible;
+        opacity: 1;
+
+        top: 30px;
       }
     }
   }

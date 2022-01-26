@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,27 +15,27 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import React, { HTMLAttributes, useState } from 'react';
 import classnames from 'classnames';
 
-import FloatingCharacterCountdown from '../floating-character-countdown/FloatingCharacterCountdown';
-import ColumnType from '../../types/ColumnType';
+import ColumnTopic from '../../types/ColumnTopic';
 import { onChange, onKeys } from '../../utils/EventUtils';
+import FloatingCharacterCountdown from '../floating-character-countdown/FloatingCharacterCountdown';
 
 import './TextField.scss';
 
-export interface TextFieldProps extends React.HTMLAttributes<HTMLSpanElement> {
-  type: ColumnType;
+export interface TextFieldProps extends HTMLAttributes<HTMLSpanElement> {
+  type: ColumnTopic;
   placeholder: string;
   handleSubmission: (string) => void;
 }
 
 const maxCharacterCount = 255;
 
-export default function TextField(props: TextFieldProps): React.ReactElement {
+export default function TextField(props: TextFieldProps): JSX.Element {
   const { placeholder, type, handleSubmission, ...spanProps } = props;
 
-  const [text, setText] = React.useState('');
+  const [text, setText] = useState('');
 
   return (
     <span {...spanProps} className={classnames('text-field', type)}>

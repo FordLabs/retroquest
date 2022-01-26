@@ -18,23 +18,23 @@
 import * as React from 'react';
 import classnames from 'classnames';
 
+import ColumnTopic from '../../types/ColumnTopic';
 import {
   CheckboxButton,
+  ColumnItemButtonGroup,
   DeleteButton,
   EditButton,
-  ColumnItemButtonGroup,
 } from '../column-item-buttons/ColumnItemButtons';
 import DeletionOverlay from '../deletion-overlay/DeletionOverlay';
 import EditableText from '../editable-text/EditableText';
 import { useModal } from '../modal/Modal';
-import ColumnType from '../../types/ColumnType';
 
 import './ColumnItem.scss';
 
 const NO_OP = () => undefined;
 
 type ColumnItemProps = React.ComponentPropsWithoutRef<'div'> & {
-  type: ColumnType;
+  type: ColumnTopic;
   text: string;
   checked?: boolean;
   readOnly?: boolean;
@@ -170,7 +170,7 @@ export default function ColumnItem(props: ColumnItemProps) {
 
       {deleting && (
         <DeletionOverlay onCancel={onDeleteCanceled} onConfirm={onDeleteConfirmed}>
-          Delete this {type === ColumnType.ACTION ? 'Action Item' : 'Thought'}?
+          Delete this {type === ColumnTopic.ACTION ? 'Action Item' : 'Thought'}?
         </DeletionOverlay>
       )}
     </div>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,34 +15,33 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import React, { HTMLAttributes, useState } from 'react';
 import classNames from 'classnames';
 
+import { emojify } from '../../../app/modules/utils/EmojiGenerator';
+import ColumnTopic from '../../types/ColumnTopic';
+import { onChange, onEachKey } from '../../utils/EventUtils';
 import FloatingCharacterCountdown from '../floating-character-countdown/FloatingCharacterCountdown';
 import Tooltip from '../tooltip/Tooltip';
-import { emojify } from '../../../app/modules/utils/EmojiGenerator';
-import ColumnType from '../../types/ColumnType';
-import { onChange, onEachKey } from '../../utils/EventUtils';
 
 import './ColumnHeader.scss';
 
 const maxTitleLength = 16;
 const almostOutOfCharactersThreshold = 5;
 
-interface ColumnHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+interface ColumnHeaderProps extends HTMLAttributes<HTMLDivElement> {
   initialTitle?: string;
-  type?: ColumnType;
+  type?: ColumnTopic;
   readOnly?: boolean;
   sortedChanged: (changed: boolean) => void;
   titleChanged: (title: string) => void;
 }
-
-export default function ColumnHeader(props: ColumnHeaderProps): React.ReactElement {
+function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
   const { initialTitle = '', type = '', readOnly = false, titleChanged, sortedChanged, ...divProps } = props;
-  const [title, setTitle] = React.useState(initialTitle);
-  const [editedTitle, setEditedTitle] = React.useState(initialTitle);
-  const [editing, setEditing] = React.useState(false);
-  const [sorted, setSorted] = React.useState(false);
+  const [title, setTitle] = useState(initialTitle);
+  const [editedTitle, setEditedTitle] = useState(initialTitle);
+  const [editing, setEditing] = useState(false);
+  const [sorted, setSorted] = useState(false);
 
   const updateTitle = (newTitle: string) => {
     setTitle(newTitle);
@@ -96,7 +95,6 @@ export default function ColumnHeader(props: ColumnHeaderProps): React.ReactEleme
       ) : (
         <>
           <p className="display-text">{emojify(title)}</p>
-
           <div className="sort-container">
             <div
               data-testid="sort-button"
@@ -105,7 +103,6 @@ export default function ColumnHeader(props: ColumnHeaderProps): React.ReactEleme
             />
             <Tooltip>{sorted ? 'Unsort' : 'Sort'}</Tooltip>
           </div>
-
           {!readOnly && (
             <span className={classNames(['edit-button'])}>
               <i data-testid="edit-button" className="fas fa-pencil-alt" onClick={enableEditing} aria-hidden="true" />
@@ -117,3 +114,5 @@ export default function ColumnHeader(props: ColumnHeaderProps): React.ReactEleme
     </div>
   );
 }
+
+export default ColumnHeader;

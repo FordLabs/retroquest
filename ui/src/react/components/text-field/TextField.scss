@@ -19,13 +19,14 @@
 
 .text-field {
   display: block;
+  width: 100%;
+  height: 50px;
 
-  font-size: 0.9rem;
   font-weight: bold;
 
+  font-size: 0.9rem;
+
   position: relative;
-  height: 50px;
-  width: 175px;
 
   @media only screen and (max-width: 610px) {
     .floating-character-countdown {
@@ -35,26 +36,26 @@
 
   input {
     display: block;
+    width: inherit;
+
+    height: inherit;
     margin: inherit;
     padding: 0 12px;
-    outline: 0;
-    box-shadow: 0 2px 15px opacity($black, 0.15);
-
-    border: 4px solid $black;
-    border-radius: 6px;
 
     color: inherit;
     font-family: inherit;
-    font-size: inherit;
     font-weight: inherit;
+    font-size: inherit;
     text-transform: initial;
 
-    height: inherit;
-    width: inherit;
+    border: 4px solid $black;
+    border-radius: 6px;
+    outline: 0;
+    box-shadow: 0 2px 15px opacity($black, 0.15);
 
     .dark-theme & {
-      background-color: $text-field-background-color;
       color: $gray;
+      background-color: $text-field-background-color;
 
       &::placeholder {
         color: opacity($gray, 0.4);

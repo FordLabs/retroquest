@@ -16,10 +16,10 @@
  */
 
 import * as React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import TextField from '../components/text-field/TextField';
-import ColumnType from '../types/ColumnType';
+import ColumnTopic from '../types/ColumnTopic';
 
 export default {
   title: 'components/TextField',
@@ -35,10 +35,10 @@ const props = {
 
 const Template: ComponentStory<typeof TextField> = () => (
   <span style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', maxWidth: '800px' }}>
-    <TextField {...props} type={ColumnType.HAPPY} />
-    <TextField {...props} type={ColumnType.CONFUSED} />
-    <TextField {...props} type={ColumnType.UNHAPPY} />
-    <TextField {...props} type={ColumnType.ACTION} />
+    <TextField {...props} type={ColumnTopic.HAPPY} />
+    <TextField {...props} type={ColumnTopic.CONFUSED} />
+    <TextField {...props} type={ColumnTopic.UNHAPPY} />
+    <TextField {...props} type={ColumnTopic.ACTION} />
   </span>
 );
 
