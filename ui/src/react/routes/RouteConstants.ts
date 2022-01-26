@@ -18,6 +18,8 @@
 export const CREATE_TEAM_PAGE_PATH = '/create';
 export const LOGIN_PAGE_PATH = '/login';
 export const getLoginPagePathWithTeamId = (teamId: string) => `${LOGIN_PAGE_PATH}/${teamId}`;
-export const getRetroPagePathWithTeamId = (teamId: string) => `/team/${teamId}`;
-export const getArchivesPagePathWithTeamId = (teamId: string) => `/team/${teamId}/archives`;
-export const getRadiatorPagePathWithTeamId = (teamId: string) => `/team/${teamId}/radiator`;
+
+export const TEAM_PAGE_ROOT = '/team';
+export const getRetroPagePathWithTeamId = (teamId: string) => `${TEAM_PAGE_ROOT}/${teamId}`;
+export const getArchivesPagePathWithTeamId = (teamId: string) => `${TEAM_PAGE_ROOT}/${teamId}/archives`;
+export const getRadiatorPagePathWithTeamId = (teamId: string) => `${TEAM_PAGE_ROOT}/${teamId}/radiator`;
