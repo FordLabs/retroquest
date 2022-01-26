@@ -15,17 +15,24 @@
  * limitations under the License.
  */
 import * as React from 'react';
+import { useRecoilValue } from 'recoil';
 
-// import logoDark from '../../../assets/icons/icon-72x72.png';
+import { ThemeState } from '../../state/ThemeState';
+import Theme from '../../types/Theme';
+
 import './Logo.scss';
 
 // @todo import images in react way when app is fully react
 const darkLogoPath = '/assets/icons/icon-72x72.png';
+const lightLogoPath = '/assets/icons/icon-light-72x72.png';
 
 export default function Logo() {
+  const theme = useRecoilValue(ThemeState);
+  const logoPath = theme === Theme.DARK ? lightLogoPath : darkLogoPath;
+
   return (
     <div className="logo-container">
-      <img className="logo-image" src={darkLogoPath} title="RetroQuest Icon" alt="Logo" />
+      <img className="logo-image" src={logoPath} title="RetroQuest Icon" alt="Logo" />
       <h1 className="logo-text-container">
         <span className="logo-text">RetroQuest</span>
         <span className="logo-sub-text">

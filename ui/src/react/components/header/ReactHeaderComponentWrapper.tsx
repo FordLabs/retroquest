@@ -54,6 +54,7 @@ const containerElementName = 'reactHeaderComponentWrapper';
     '../dialog/Dialog.scss',
     '../button/Button.scss',
     '../modal/Modal.scss',
+    '../logo/Logo.scss',
   ],
   encapsulation: ViewEncapsulation.None,
 })

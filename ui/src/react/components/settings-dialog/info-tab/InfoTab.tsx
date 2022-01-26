@@ -18,12 +18,14 @@
 import * as React from 'react';
 
 import versionJson from '../../../../application-version.json';
+import Logo from '../../logo/Logo';
 
 import './InfoTab.scss';
 
 function InfoTab(): JSX.Element {
   return (
     <div className="tab-body info-tab-body">
+      <Logo />
       <label className="version-label">
         Version: <input className="version-container" disabled value={versionJson.version} />
       </label>
