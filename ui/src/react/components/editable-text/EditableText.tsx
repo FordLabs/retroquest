@@ -18,8 +18,8 @@
 import * as React from 'react';
 import classnames from 'classnames';
 
-import FloatingCharacterCountdown from '../floating-character-countdown/FloatingCharacterCountdown';
 import { onChange, onKeys } from '../../utils/EventUtils';
+import FloatingCharacterCountdown from '../floating-character-countdown/FloatingCharacterCountdown';
 
 import './EditableText.scss';
 
@@ -100,6 +100,7 @@ export default function EditableText(props: EditableTextProps) {
       onClick={canSelect ? onSelect : undefined}
     >
       <textarea
+        aria-label="Text Area"
         data-testid="editableText"
         className="text-area"
         ref={textAreaRef}

@@ -18,6 +18,7 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { axe } from 'jest-axe';
 
 import * as Modal from '../modal/Modal';
 
@@ -49,6 +50,12 @@ describe('ActionItem', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  it('should render without axe errors', async () => {
+    const { container } = render(<ActionItem action={fakeAction} />);
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
   });
 
   it('should render as an action column item with created date', () => {

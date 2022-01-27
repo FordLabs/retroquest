@@ -16,8 +16,9 @@
  */
 
 import * as React from 'react';
-import userEvent from '@testing-library/user-event';
 import { fireEvent, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { axe } from 'jest-axe';
 
 import ColumnHeader from './ColumnHeader';
 
@@ -27,6 +28,19 @@ describe('ColumnHeader', () => {
 
   beforeEach(() => {
     jest.resetAllMocks();
+  });
+
+  it('should render without axe errors', async () => {
+    const { container } = render(
+      <ColumnHeader
+        initialTitle="Some title"
+        readOnly={false}
+        sortedChanged={mockHandleSortChange}
+        titleChanged={mockHandleTitleChange}
+      />
+    );
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
   });
 
   it('should toggle and emit sort state when the sort is toggled', () => {

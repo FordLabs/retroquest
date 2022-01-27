@@ -18,6 +18,7 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { axe } from 'jest-axe';
 
 import ColumnTopic from '../../types/ColumnTopic';
 
@@ -29,6 +30,19 @@ describe('TextField', () => {
 
   beforeEach(() => {
     jest.resetAllMocks();
+  });
+
+  it('should render without axe errors', async () => {
+    const { container } = render(
+      <TextField
+        data-testid="happy"
+        type={ColumnTopic.HAPPY}
+        placeholder={placeholder}
+        handleSubmission={mockHandleSubmit}
+      />
+    );
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
   });
 
   it('should style based on type', () => {
