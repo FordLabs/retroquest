@@ -26,6 +26,8 @@ import RetroPage from './RetroPage';
 
 jest.mock('../../services/ColumnsService');
 
+jest.setTimeout(60000);
+
 describe('RetroPage.spec.tsx', () => {
   let container: HTMLElement;
   const teamId = 'some-team-id';

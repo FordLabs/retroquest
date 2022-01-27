@@ -18,6 +18,7 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { axe } from 'jest-axe';
 
 import ColumnTopic from '../../types/ColumnTopic';
 
@@ -39,6 +40,12 @@ describe('RetroItem', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  it('should render without axe errors', async () => {
+    const { container } = render(<RetroItem thought={fakeThought} type={ColumnTopic.HAPPY} />);
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
   });
 
   it.each([[ColumnTopic.HAPPY], [ColumnTopic.CONFUSED], [ColumnTopic.UNHAPPY]])(

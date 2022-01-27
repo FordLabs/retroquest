@@ -52,20 +52,22 @@ function Assignee(props: AssigneeProps) {
 
   return (
     <div className="assignee-container">
-      <div className="label">assigned to</div>
-      <input
-        className="assignee"
-        type="text"
-        value={editAssignee}
-        onChange={onChange(setEditAssignee)}
-        onBlur={onAssigneeConfirmed}
-        onKeyDown={onKeys('Enter', onAssigneeConfirmed)}
-        maxLength={MAX_ASSIGNEE_LENGTH}
-        disabled={readOnly || editing || deleting}
-        readOnly={readOnly || editing || deleting}
-        data-testid="actionItem-assignee"
-        ref={assigneeInputRef}
-      />
+      <label className="label">
+        assigned to
+        <input
+          className="assignee"
+          type="text"
+          value={editAssignee}
+          onChange={onChange(setEditAssignee)}
+          onBlur={onAssigneeConfirmed}
+          onKeyDown={onKeys('Enter', onAssigneeConfirmed)}
+          maxLength={MAX_ASSIGNEE_LENGTH}
+          disabled={readOnly || editing || deleting}
+          readOnly={readOnly || editing || deleting}
+          data-testid="actionItem-assignee"
+          ref={assigneeInputRef}
+        />
+      </label>
       <FloatingCharacterCountdown
         characterCount={editAssignee.length}
         charsAreRunningOutThreshold={MAX_ASSIGNEE_LENGTH / 2}

@@ -18,7 +18,6 @@
 import React from 'react';
 import { act, render, screen, within } from '@testing-library/react';
 import { axe } from 'jest-axe';
-import { RecoilRoot } from 'recoil';
 
 import { getMockActionItem, getMockThought } from '../../../services/__mocks__/ColumnsService';
 import ColumnTopic from '../../../types/ColumnTopic';
@@ -48,15 +47,11 @@ describe('RetroColumn.spec.tsx', () => {
 
   beforeEach(async () => {
     await act(async () => {
-      ({ container, rerender } = render(
-        <RecoilRoot>
-          <RetroColumn column={retroItemsColumn} />
-        </RecoilRoot>
-      ));
+      ({ container, rerender } = render(<RetroColumn column={retroItemsColumn} />));
     });
   });
 
-  xit('should render without axe errors', async () => {
+  it('should render without axe errors', async () => {
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
@@ -80,11 +75,7 @@ describe('RetroColumn.spec.tsx', () => {
 
   it('should render action items if column is a actions column', async () => {
     await act(async () => {
-      rerender(
-        <RecoilRoot>
-          <RetroColumn column={actionItemsColumn} />
-        </RecoilRoot>
-      );
+      rerender(<RetroColumn column={actionItemsColumn} />);
     });
     const actionItems = screen.getAllByTestId('actionItem');
     expect(actionItems.length).toBe(3);
