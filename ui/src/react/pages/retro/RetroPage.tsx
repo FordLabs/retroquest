@@ -18,16 +18,11 @@
 import * as React from 'react';
 import { Fragment, ReactElement, useEffect, useState } from 'react';
 
-import ActionItem from '../../components/action-item/ActionItem';
-import ColumnHeader from '../../components/column-header/ColumnHeader';
-import { CountSeparator } from '../../components/count-separator/CountSeparator';
-import RetroItem from '../../components/retro-item/RetroItem';
-import TextField from '../../components/text-field/TextField';
 import ColumnsService from '../../services/ColumnsService';
-import Action from '../../types/Action';
 import { Column } from '../../types/Column';
-import ColumnTopic from '../../types/ColumnTopic';
-import Thought from '../../types/Thought';
+
+import RetroColumn from './retro-column/RetroColumn';
+import RetroSubHeader from './retro-sub-header/RetroSubHeader';
 
 type Props = {
   teamId?: string;
@@ -38,65 +33,20 @@ function RetroPage(props: Props): ReactElement {
 
   const [columns, setColumns] = useState<Column[]>([]);
 
-  const SubHeader = () => {
-    return (
-      <div className="sub-header">
-        <ul className="sub-header-links">
-          <li>
-            <button>Give Feedback</button>
-          </li>
-          <li>
-            <button>Download CSV</button>
-          </li>
-          <li>
-            <button>Archive Retro</button>
-          </li>
-        </ul>
-      </div>
-    );
-  };
-
   useEffect(() => {
     ColumnsService.getColumns(teamId).then(setColumns);
   }, []);
 
   return (
     <div className="retro-page">
-      <SubHeader />
+      <RetroSubHeader />
       <div className="retro-page-content">
         {!!columns.length &&
           columns.map((column: Column, index) => {
-            const { topic, title, items } = column;
-            const { active: activeItems, completed: completeItems } = items;
-
-            const isActionItemsColumn = topic === ColumnTopic.ACTION;
-
-            const renderItems = (item: Action) => {
-              return (
-                <Fragment key={item.id}>
-                  {isActionItemsColumn ? (
-                    <ActionItem action={item as Action} />
-                  ) : (
-                    <RetroItem thought={item as unknown as Thought} type={topic} />
-                  )}
-                </Fragment>
-              );
-            };
-
             return (
-              <div className="retro-column" key={`column-${index}`}>
-                <ColumnHeader
-                  initialTitle={title}
-                  type={topic}
-                  readOnly={isActionItemsColumn}
-                  sortedChanged={() => undefined}
-                  titleChanged={() => undefined}
-                />
-                <TextField type={topic} placeholder="Enter a Thought" handleSubmission={() => undefined} />
-                <CountSeparator count={items.active.length} />
-                {activeItems.map(renderItems)}
-                {completeItems.map(renderItems)}
-              </div>
+              <Fragment key={`column-${index}`}>
+                <RetroColumn column={column} />
+              </Fragment>
             );
           })}
       </div>

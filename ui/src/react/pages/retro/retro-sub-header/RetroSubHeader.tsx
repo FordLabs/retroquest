@@ -15,14 +15,24 @@
  * limitations under the License.
  */
 
-@import '../styles/mixins';
+import * as React from 'react';
 
-.retro-page {
-  .retro-page-content {
-    @include site-max-width;
-
-    display: flex;
-    justify-content: space-between;
-    margin-top: 24px;
-  }
+function RetroSubHeader() {
+  return (
+    <div className="sub-header">
+      <ul className="sub-header-links">
+        <li>
+          <button>Give Feedback</button>
+        </li>
+        <li>
+          <button>Download CSV</button>
+        </li>
+        <li>
+          <button>Archive Retro</button>
+        </li>
+      </ul>
+    </div>
+  );
 }
+
+export default RetroSubHeader;

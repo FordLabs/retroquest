@@ -15,14 +15,6 @@
  * limitations under the License.
  */
 
-@import '../styles/mixins';
-
-.retro-page {
-  .retro-page-content {
-    @include site-max-width;
-
-    display: flex;
-    justify-content: space-between;
-    margin-top: 24px;
-  }
+.retro-column {
+  width: 324px;
 }
