@@ -53,7 +53,7 @@ function RetroColumn(props: Props) {
   };
 
   return (
-    <div className="retro-column">
+    <div className="retro-column" data-testid={`retroColumn__${topic}`}>
       <ColumnHeader
         initialTitle={title}
         type={topic}

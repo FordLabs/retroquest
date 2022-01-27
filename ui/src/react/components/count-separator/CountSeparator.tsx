@@ -26,7 +26,7 @@ interface SeparatorProps extends HTMLAttributes<HTMLDivElement> {
 export function CountSeparator(props: SeparatorProps): ReactElement {
   const { count, ...divProps } = props;
   return (
-    <div {...divProps} className="count-separator">
+    <div {...divProps} className="count-separator" data-testid="countSeparator">
       <span className="separator left-count-separator" />
       <span className="count-value">{count}</span>
       <span className="separator right-count-separator" />
