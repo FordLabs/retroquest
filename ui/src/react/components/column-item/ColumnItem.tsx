@@ -16,6 +16,7 @@
  */
 
 import * as React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 
 import ColumnTopic from '../../types/ColumnTopic';
@@ -66,15 +67,15 @@ export default function ColumnItem(props: ColumnItemProps) {
 
   const { setHideOnEscape, setHideOnBackdropClick } = useModal();
 
-  const editButtonRef = React.useRef<HTMLButtonElement>();
-  const deleteButtonRef = React.useRef<HTMLButtonElement>();
+  const editButtonRef = useRef<HTMLButtonElement>();
+  const deleteButtonRef = useRef<HTMLButtonElement>();
 
-  const [editing, setEditing] = React.useState<boolean>();
-  const [deleting, setDeleting] = React.useState<boolean>();
+  const [editing, setEditing] = useState<boolean>();
+  const [deleting, setDeleting] = useState<boolean>();
 
   const canSelect = ((!editing && !deleting && !checked) || readOnly) && !!onSelect;
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (editing || deleting) {
       setHideOnEscape(false);
       setHideOnBackdropClick(false);

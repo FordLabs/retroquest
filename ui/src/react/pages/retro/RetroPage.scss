@@ -22,6 +22,7 @@
     @include site-max-width;
 
     display: flex;
+    gap: 1rem;
     justify-content: space-between;
     margin-top: 24px;
   }

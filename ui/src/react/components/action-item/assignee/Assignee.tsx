@@ -38,7 +38,6 @@ function Assignee(props: AssigneeProps) {
   const assigneeInputRef = useRef<HTMLInputElement>();
 
   const [editAssignee, setEditAssignee] = useState<string>(assignee || '');
-  console.log('editAssignee', editAssignee);
 
   useEffect(() => {
     setEditAssignee(assignee || '');
