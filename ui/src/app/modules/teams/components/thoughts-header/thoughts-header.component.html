@@ -15,28 +15,23 @@
   ~ limitations under the License.
   -->
 
-<div class="rq-thought-column-header {{thoughtAggregation.topic}}">
+<div class="rq-thought-column-header {{ thoughtAggregation.topic }}">
+    <rq-column-header
+        [type]="thoughtAggregation.topic"
+        [title]="thoughtAggregation.title"
+        [readOnly]="hideNewThought"
+        (sortedChanged)="sortByHearts($event)"
+        (titleChanged)="editTitle($event)"
+        [theme]="theme"
+    ></rq-column-header>
 
-  <rq-column-header
-    [type]="thoughtAggregation.topic"
-    [title]="thoughtAggregation.title"
-    [readOnly]="hideNewThought"
-    (sortedChanged)="sortByHearts($event)"
-    (titleChanged)="editTitle($event)"
-    [theme]="theme"
-  ></rq-column-header>
+    <rq-text-field
+        *ngIf="!hideNewThought"
+        [type]="thoughtAggregation.topic"
+        [placeholder]="'Enter a Thought'"
+        (newMessageAdded)="addThought($event)"
+        [theme]="theme"
+    ></rq-text-field>
 
-  <rq-text-field
-    *ngIf="!hideNewThought"
-    [type]="thoughtAggregation.topic"
-    [placeholder]="'Enter A Thought'"
-    (newMessageAdded)="addThought($event)"
-    [theme]="theme"
-  ></rq-text-field>
-
-  <rq-count-seperator
-    [count]="thoughtCount"
-    [theme]="theme"
-  ></rq-count-seperator>
-
+    <rq-count-seperator [count]="thoughtCount" [theme]="theme"></rq-count-seperator>
 </div>
