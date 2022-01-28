@@ -26,6 +26,8 @@ import { emojify } from '../../utils/EmojiGenerator';
   templateUrl: './task.component.html',
   styleUrls: ['./task.component.scss'],
   host: {
+    '[attr.data-testid]': "'retroItem'",
+    '[class.completed]': 'task.discussed',
     '[class.push-order-to-bottom]': 'task.discussed && !this.archived',
     '[class.edit-mode]': 'taskEditModeEnabled',
     '[class.happy]': "type === 'happy'",

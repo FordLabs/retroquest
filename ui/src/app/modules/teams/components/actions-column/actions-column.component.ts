@@ -29,6 +29,9 @@ import { ActionItemService } from '../../services/action.service';
 
 @Component({
   selector: 'rq-actions-column',
+  host: {
+    '[attr.data-testid]': "'retroColumn__action'",
+  },
   templateUrl: './actions-column.component.html',
   styleUrls: ['./actions-column.component.scss'],
   animations: [fadeInOutAnimation],
