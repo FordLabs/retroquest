@@ -33,12 +33,12 @@ export interface TextFieldProps extends HTMLAttributes<HTMLSpanElement> {
 const maxCharacterCount = 255;
 
 export default function TextField(props: TextFieldProps): JSX.Element {
-  const { placeholder, type, handleSubmission, ...spanProps } = props;
+  const { placeholder, type, handleSubmission, ...labelProps } = props;
 
   const [text, setText] = useState('');
 
   return (
-    <span {...spanProps} className={classnames('text-field', type)}>
+    <label {...labelProps} className={classnames('text-field', type)}>
       <input
         type="text"
         placeholder={placeholder}
@@ -55,6 +55,6 @@ export default function TextField(props: TextFieldProps): JSX.Element {
         charsAreRunningOutThreshold={50}
         characterCount={text.length}
       />
-    </span>
+    </label>
   );
 }
