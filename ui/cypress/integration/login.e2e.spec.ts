@@ -16,6 +16,7 @@
  */
 
 import { getLoginPagePathWithTeamId, LOGIN_PAGE_PATH } from '../../src/react/routes/RouteConstants';
+import ColumnTopic from '../../src/react/types/ColumnTopic';
 import { getTeamCredentials } from '../support/helpers';
 import TeamCredentials from '../support/types/teamCredentials';
 
@@ -83,7 +84,7 @@ describe('Login Page', () => {
       cy.createTeamAndLogin(teamCredentials);
       cy.document().setCookie('token', '');
       cy.document().setCookie('JSESSIONID', '');
-      cy.enterThought('happy', 'I have a thought');
+      cy.enterThought(ColumnTopic.HAPPY, 'I have a thought');
       cy.url().should('eq', Cypress.config().baseUrl + '/login');
     });
   });

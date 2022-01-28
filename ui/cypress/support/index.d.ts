@@ -16,6 +16,8 @@
  */
 import 'cypress-jest-adapter';
 
+import ColumnTopic from '../../src/react/types/ColumnTopic';
+
 import TeamCredentials from './types/teamCredentials';
 
 declare global {
@@ -27,7 +29,7 @@ declare global {
 
       createTeamAndLogin(teamCredentials: TeamCredentials): Chainable<void>;
 
-      enterThought(columnClass: string, thought: string): Chainable<void>;
+      enterThought(topic: ColumnTopic, thought: string): Chainable<void>;
 
       shouldBeOnRetroPage(teamId: string): Chainable<void>;
     }

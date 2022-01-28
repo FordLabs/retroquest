@@ -27,6 +27,7 @@ import { emojify } from '../../utils/EmojiGenerator';
   templateUrl: './action-item-task.component.html',
   styleUrls: ['./action-item-task.component.scss'],
   host: {
+    '[attr.data-testid]': "'actionItem'",
     '[class.push-order-to-bottom]': 'actionItem.completed && !actionItem.archived',
     '[class.edit-mode]': '!displayAsLinkable && taskEditModeEnabled',
     '[class.dialog-overlay-border]': 'enableOverlayBorder',

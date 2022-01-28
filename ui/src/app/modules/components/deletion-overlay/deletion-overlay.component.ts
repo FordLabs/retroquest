@@ -25,6 +25,7 @@ import { Themes } from '../../domain/Theme';
   styleUrls: ['./deletion-overlay.component.scss'],
   host: {
     '[class.dark-theme]': 'darkThemeIsEnabled',
+    '[attr.data-testid]': "'deletionOverlay'",
   },
 })
 export class DeletionOverlayComponent implements OnInit {

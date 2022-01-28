@@ -32,6 +32,9 @@ import { ThoughtService } from '../../services/thought.service';
   templateUrl: './thoughts-column.component.html',
   styleUrls: ['./thoughts-column.component.scss'],
   animations: [fadeInOutAnimation],
+  host: {
+    '[attr.data-testid]': "'retroColumn__' + thoughtAggregation.topic",
+  },
 })
 export class ThoughtsColumnComponent implements OnInit {
   constructor(private thoughtService: ThoughtService) {}

@@ -89,6 +89,7 @@
         </div>
         <div
             class="star-count"
+            [attr.data-testid]="'starCount'"
             [ngClass]="{
                 opacify: (task.discussed || taskEditModeEnabled) && !archived
             }"
@@ -133,6 +134,7 @@
 
     <div
         class="container delete-container"
+        [attr.data-testid]="'deleteButton'"
         [ngClass]="{
             'dark-theme': darkThemeIsEnabled,
             disable: readOnly || taskEditModeEnabled
@@ -141,15 +143,12 @@
     >
         <rq-tooltip text="Delete" [theme]="theme"></rq-tooltip>
 
-        <i
-            class="fas fa-trash-alt"
-            [ngClass]="{ opacify: readOnly || taskEditModeEnabled }"
-            aria-hidden="true"
-        ></i>
+        <i class="fas fa-trash-alt" [ngClass]="{ opacify: readOnly || taskEditModeEnabled }" aria-hidden="true"></i>
     </div>
 
     <div
         class="complete-container"
+        [attr.data-testid]="'completeButton'"
         [ngClass]="{
             opacify: taskEditModeEnabled || readOnly,
             'dark-theme': darkThemeIsEnabled,
@@ -157,20 +156,10 @@
         }"
         (click)="toggleTaskComplete()"
     >
-        <rq-tooltip
-            [text]="task.discussed ? 'Open' : 'Close'"
-            [theme]="theme"
-        ></rq-tooltip>
+        <rq-tooltip [text]="task.discussed ? 'Open' : 'Close'" [theme]="theme"></rq-tooltip>
 
-        <div
-            class="checkbox"
-            [ngClass]="{ 'completed-task': task.discussed }"
-        ></div>
+        <div class="checkbox" [ngClass]="{ 'completed-task': task.discussed }"></div>
 
-        <i
-            class="fas fa-check checkmark"
-            [ngClass]="{ 'show-checkmark': task.discussed }"
-            aria-hidden="true"
-        ></i>
+        <i class="fas fa-check checkmark" [ngClass]="{ 'show-checkmark': task.discussed }" aria-hidden="true"></i>
     </div>
 </div>

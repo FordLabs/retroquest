@@ -58,13 +58,8 @@
 <div
     class="assigned-to-section"
     [ngClass]="{
-        disable:
-            taskEditModeEnabled ||
-            (actionItem.completed && !actionItem.archived),
-        opacify:
-            !displayAsLinkable &&
-            (taskEditModeEnabled ||
-                (actionItem.completed && !actionItem.archived))
+        disable: taskEditModeEnabled || (actionItem.completed && !actionItem.archived),
+        opacify: !displayAsLinkable && (taskEditModeEnabled || (actionItem.completed && !actionItem.archived))
     }"
 >
     <div class="label">assigned to</div>
@@ -76,10 +71,7 @@
             class="value"
             [type]="'text'"
             [(ngModel)]="actionItem.assignee"
-            (blur)="
-                emitAssigneeUpdated();
-                assigneeCharacterCountdownIsVisible = false
-            "
+            (blur)="emitAssigneeUpdated(); assigneeCharacterCountdownIsVisible = false"
             (keydown.enter)="forceBlurOnAssigneeTextField()"
             [ngClass]="{
                 'dark-theme': darkThemeIsEnabled
@@ -137,9 +129,7 @@
         <div
             class="date-created-header"
             [ngClass]="{
-                opacify:
-                    (actionItem.completed && !actionItem.archived) ||
-                    taskEditModeEnabled
+                opacify: (actionItem.completed && !actionItem.archived) || taskEditModeEnabled
             }"
         >
             created
@@ -147,9 +137,7 @@
         <div
             class="date-created-value"
             [ngClass]="{
-                opacify:
-                    (actionItem.completed && !actionItem.archived) ||
-                    taskEditModeEnabled
+                opacify: (actionItem.completed && !actionItem.archived) || taskEditModeEnabled
             }"
         >
             {{ getDateCreated() }}
@@ -190,6 +178,7 @@
 
     <div
         class="container delete-container"
+        [attr.data-testid]="'deleteButton'"
         [ngClass]="{
             'dark-theme': darkThemeIsEnabled,
             disable: actionItem.archived || taskEditModeEnabled
@@ -208,26 +197,17 @@
 
     <div
         class="complete-container"
+        [attr.data-testid]="'completeButton'"
         [ngClass]="{
             opacify: taskEditModeEnabled || readOnly,
             disable: taskEditModeEnabled || readOnly
         }"
         (click)="toggleTaskComplete()"
     >
-        <rq-tooltip
-            [text]="actionItem.completed ? 'Open' : 'Close'"
-            [theme]="theme"
-        ></rq-tooltip>
+        <rq-tooltip [text]="actionItem.completed ? 'Open' : 'Close'" [theme]="theme"></rq-tooltip>
 
-        <div
-            class="checkbox"
-            [ngClass]="{ 'completed-task': actionItem.completed }"
-        ></div>
+        <div class="checkbox" [ngClass]="{ 'completed-task': actionItem.completed }"></div>
 
-        <i
-            class="fas fa-check checkmark"
-            [ngClass]="{ 'show-checkmark': actionItem.completed }"
-            aria-hidden="true"
-        ></i>
+        <i class="fas fa-check checkmark" [ngClass]="{ 'show-checkmark': actionItem.completed }" aria-hidden="true"></i>
     </div>
 </div>
