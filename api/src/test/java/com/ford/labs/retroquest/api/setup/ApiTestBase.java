@@ -108,30 +108,10 @@ public abstract class ApiTestBase {
         return bearerAuthToken;
     }
 
-    public Claims decodeJWT(String jwt) {
-        //This line will throw an exception if it is not a signed JWS (as expected)
-        return Jwts.parser()
-                .setSigningKey(TextCodec.BASE64.encode(jwtSigningSecret))
-                .parseClaimsJws(jwt)
-                .getBody();
-    }
-
     public StompSession getAuthorizedSession() throws InterruptedException, ExecutionException, TimeoutException {
 
         StompHeaders headers = new StompHeaders();
         headers.add("Authorization", bearerAuthToken);
-
-        return stompClient
-                .connect(websocketUrl, new WebSocketHttpHeaders() {
-                }, headers, new StompSessionHandlerAdapter() {
-                })
-                .get(1, SECONDS);
-    }
-
-    public StompSession getUnauthorizedSession() throws InterruptedException, ExecutionException, TimeoutException {
-
-        StompHeaders headers = new StompHeaders();
-        headers.add("Authorization", "Bearer " + jwtBuilder.buildJwt("unauth-team"));
 
         return stompClient
                 .connect(websocketUrl, new WebSocketHttpHeaders() {
@@ -148,7 +128,7 @@ public abstract class ApiTestBase {
 
         @Override
         public void handleFrame(StompHeaders stompHeaders, Object object) {
-            blockingQueue.offer(new String((byte[]) object));
+            blockingQueue.add(new String((byte[]) object));
         }
     }
 
