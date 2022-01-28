@@ -156,7 +156,7 @@ class ColumnCombinerServiceTest {
         assertThat(response.getColumns().get(0).getTitle()).isEqualTo("Happy");
         assertThat(response.getColumns().get(1).getTitle()).isEqualTo("Confused");
         assertThat(response.getColumns().get(2).getTitle()).isEqualTo("Sad");
-        assertThat(response.getColumns().get(3).getTitle()).isEqualTo("Action Item");
+        assertThat(response.getColumns().get(3).getTitle()).isEqualTo("Action Items");
     }
 
     // "should put all active and completed items in one list"
