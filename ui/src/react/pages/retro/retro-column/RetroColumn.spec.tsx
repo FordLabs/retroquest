@@ -37,7 +37,7 @@ const retroItemsColumn = {
 const actionItemsColumn = {
   id: 1,
   items: { active: [getMockActionItem(false), getMockActionItem(false)], completed: [getMockActionItem(true)] },
-  title: 'Action Item',
+  title: 'Action Items',
   topic: ColumnTopic.ACTION,
 };
 

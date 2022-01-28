@@ -57,7 +57,7 @@ public class ColumnCombinerService {
         var unorderedColumnResponses = buildColumnResponses(mergedThoughts);
 
         var actionItemColumnResponse = ColumnResponse.builder()
-                .title("Action Item")
+                .title("Action Items")
                 .topic("action")
                 .items(new ArrayList<>(actionItems))
                 .build();
