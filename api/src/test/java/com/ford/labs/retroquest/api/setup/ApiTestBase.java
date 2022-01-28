@@ -153,7 +153,7 @@ public abstract class ApiTestBase {
     }
 
     public <T> T takeObjectInSocket(Class<T> clazz) throws InterruptedException, IOException {
-        String obj = blockingQueue.poll(10, SECONDS);
+        String obj = blockingQueue.poll(30, SECONDS);
         try {
             return objectMapper.treeToValue(objectMapper.readValue(obj, ObjectNode.class).get("payload"), clazz);
         } catch (NullPointerException | IllegalArgumentException exp) {
