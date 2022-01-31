@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import React, { useRef, useState } from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { PrimaryButton } from '../components/button/Button';
 import { ModalMethods } from '../components/modal/Modal';
-import { RetroItemType } from '../components/retro-item/RetroItem';
+import { ThoughtTopic } from '../components/retro-item/RetroItem';
 import RetroItemModal from '../components/retro-item-modal/RetroItemModal';
 import ColumnTopic from '../types/ColumnTopic';
 
@@ -39,11 +39,11 @@ const testThought = {
 };
 
 const Template: ComponentStory<typeof RetroItemModal> = () => {
-  const [thought, setThought] = React.useState(testThought);
-  const [type, setType] = React.useState<RetroItemType>(ColumnTopic.HAPPY);
+  const [thought, setThought] = useState(testThought);
+  const [type, setType] = useState<ThoughtTopic>(ColumnTopic.HAPPY);
 
-  const modalRef = React.useRef<ModalMethods>();
-  const readOnlyModalRef = React.useRef<ModalMethods>();
+  const modalRef = useRef<ModalMethods>();
+  const readOnlyModalRef = useRef<ModalMethods>();
 
   function onUpvote() {
     setThought(({ hearts, ...rest }) => ({ ...rest, hearts: hearts + 1 }));

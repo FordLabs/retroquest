@@ -22,12 +22,12 @@ import classnames from 'classnames';
 import Thought from '../../types/Thought';
 import AddActionItem from '../action-item/add-action-item/AddActionItem';
 import Modal, { ModalMethods } from '../modal/Modal';
-import RetroItem, { RetroItemType } from '../retro-item/RetroItem';
+import RetroItem, { ThoughtTopic } from '../retro-item/RetroItem';
 
 import './RetroItemModal.scss';
 
 type RetroItemModalProps = {
-  type: RetroItemType;
+  type: ThoughtTopic;
   thought: Thought;
   readOnly?: boolean;
   onUpvote?: () => void;

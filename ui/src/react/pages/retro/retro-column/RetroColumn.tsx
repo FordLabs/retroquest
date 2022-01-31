@@ -17,12 +17,15 @@
 
 import { Fragment } from 'react';
 import * as React from 'react';
+import { useRecoilValue } from 'recoil';
 
 import ActionItem from '../../../components/action-item/ActionItem';
 import ColumnHeader from '../../../components/column-header/ColumnHeader';
 import { CountSeparator } from '../../../components/count-separator/CountSeparator';
 import RetroItem from '../../../components/retro-item/RetroItem';
 import TextField from '../../../components/text-field/TextField';
+import ThoughtService, { getCreateThoughtResponse } from '../../../services/ThoughtService';
+import { TeamState } from '../../../state/TeamState';
 import Action from '../../../types/Action';
 import { Column } from '../../../types/Column';
 import ColumnTopic from '../../../types/ColumnTopic';
@@ -38,7 +41,18 @@ function RetroColumn(props: Props) {
   const { topic, title, items } = props.column;
   const { active: activeItems, completed: completeItems } = items;
 
+  const team = useRecoilValue(TeamState);
+
   const isActionItemsColumn = topic === ColumnTopic.ACTION;
+  const placeholder = isActionItemsColumn ? 'Enter an Action Item' : 'Enter a Thought';
+
+  const onSubmit = (text: string) => {
+    addThought(text);
+  };
+
+  const addThought = (text: string) => {
+    ThoughtService.addThought(team.id, getCreateThoughtResponse(team.id, topic, text)).then().catch(console.error);
+  };
 
   const renderItems = (item: Action) => {
     return (
@@ -61,8 +75,8 @@ function RetroColumn(props: Props) {
         sortedChanged={() => undefined}
         titleChanged={() => undefined}
       />
-      <TextField type={topic} placeholder="Enter a Thought" handleSubmission={() => undefined} />
-      <CountSeparator count={items.active.length} />
+      <TextField type={topic} placeholder={placeholder} handleSubmission={onSubmit} />
+      <CountSeparator count={activeItems.length} />
       {activeItems.map(renderItems)}
       {completeItems.map(renderItems)}
     </div>
