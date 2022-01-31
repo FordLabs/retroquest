@@ -101,10 +101,10 @@ export class TeamPageComponent implements OnInit, OnDestroy {
 
     this.columnsAggregation.forEach((column) => {
       if (column.topic !== 'action') {
-        thoughts.push(...column.items.active);
-        thoughts.push(...column.items.completed);
+        thoughts.push(...column.items);
       } else {
-        archivedActionItems.push(...(column.items.completed as Array<ActionItem>));
+        const completedActionItems = this.getCompletedActionItems(column.items as ActionItem[]);
+        archivedActionItems.push(...completedActionItems);
         archivedActionItems.forEach((actionItem: ActionItem) => {
           actionItem.archived = true;
         });
@@ -120,6 +120,10 @@ export class TeamPageComponent implements OnInit, OnDestroy {
       }
       this.endRetroService.endRetro();
     }
+  }
+
+  private getCompletedActionItems(items: ActionItem[]): ActionItem[] {
+    return items.filter((item) => item.completed);
   }
 
   public isSelectedIndex(index: number): boolean {

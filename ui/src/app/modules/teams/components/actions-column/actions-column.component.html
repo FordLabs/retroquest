@@ -16,49 +16,49 @@
   -->
 
 <rq-actions-header
-  [teamId]="teamId"
-  [theme]="theme"
-  [thoughtCount]="totalActionItemCount"
-  (sortChanged)="sortChanged($event)"
+    [teamId]="teamId"
+    [theme]="theme"
+    [thoughtCount]="totalActiveActionItemCount"
+    (sortChanged)="sortChanged($event)"
 ></rq-actions-header>
 
 <div class="rq-action-item-list">
-  <rq-action-item-task
-    *ngFor="let actionItem of activeActionItems"
-    [actionItem]="actionItem"
-    (completed)="onCompleted($event, actionItem)"
-    (deleted)="onDeleted(actionItem)"
-    (messageChanged)="onMessageChanged($event, actionItem)"
-    (assigneeUpdated)="onAssigneeUpdated($event, actionItem)"
-    (messageClicked)="displayPopup(actionItem)"
-    [@fadeInOutAnimation]="actionItem.state"
-    [theme]="theme"
-  >
-  </rq-action-item-task>
+    <rq-action-item-task
+        *ngFor="let actionItem of activeActionItems"
+        [actionItem]="actionItem"
+        (completed)="onCompleted($event, actionItem)"
+        (deleted)="onDeleted(actionItem)"
+        (messageChanged)="onMessageChanged($event, actionItem)"
+        (assigneeUpdated)="onAssigneeUpdated($event, actionItem)"
+        (messageClicked)="displayPopup(actionItem)"
+        [@fadeInOutAnimation]="actionItem.state"
+        [theme]="theme"
+    >
+    </rq-action-item-task>
 
-  <rq-action-item-task
-    *ngFor="let actionItem of completedActionItems"
-    [actionItem]="actionItem"
-    (completed)="onCompleted($event, actionItem)"
-    (deleted)="onDeleted(actionItem)"
-    (messageChanged)="onMessageChanged($event, actionItem)"
-    (assigneeUpdated)="onAssigneeUpdated($event, actionItem)"
-    (messageClicked)="displayPopup(actionItem)"
-    [@fadeInOutAnimation]="actionItem.state"
-    [theme]="theme"
-  >
-  </rq-action-item-task>
+    <rq-action-item-task
+        *ngFor="let actionItem of completedActionItems"
+        [actionItem]="actionItem"
+        (completed)="onCompleted($event, actionItem)"
+        (deleted)="onDeleted(actionItem)"
+        (messageChanged)="onMessageChanged($event, actionItem)"
+        (assigneeUpdated)="onAssigneeUpdated($event, actionItem)"
+        (messageClicked)="displayPopup(actionItem)"
+        [@fadeInOutAnimation]="actionItem.state"
+        [theme]="theme"
+    >
+    </rq-action-item-task>
 </div>
 
 <rq-action-item-dialog
-  #actionItemDialog
-  [theme]="theme"
-  [visible]="dialogIsVisible"
-  [actionItem]="selectedActionItem"
-  (visibilityChanged)="dialogIsVisible = $event"
-  (messageChanged)="onMessageChanged($event, selectedActionItem)"
-  (deleted)="onDeleted(selectedActionItem)"
-  (completed)="onCompleted($event, selectedActionItem)"
-  (assignedUpdated)="onAssigneeUpdated($event, selectedActionItem)"
+    #actionItemDialog
+    [theme]="theme"
+    [visible]="dialogIsVisible"
+    [actionItem]="selectedActionItem"
+    (visibilityChanged)="dialogIsVisible = $event"
+    (messageChanged)="onMessageChanged($event, selectedActionItem)"
+    (deleted)="onDeleted(selectedActionItem)"
+    (completed)="onCompleted($event, selectedActionItem)"
+    (assignedUpdated)="onAssigneeUpdated($event, selectedActionItem)"
 >
 </rq-action-item-dialog>

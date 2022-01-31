@@ -159,30 +159,24 @@ class ColumnCombinerServiceTest {
         assertThat(response.getColumns().get(3).getTitle()).isEqualTo("Action Item");
     }
 
-    // "should put active items in correct list"
+    // "should put all active and completed items in one list"
     @Test
-    void activeItemsList() {
-        assertThat((List<Thought>) response.getColumns().get(0).getItems().getActive())
-            .containsExactly(expectedActiveHappyThoughts);
-        assertThat((List<Thought>) response.getColumns().get(1).getItems().getActive())
-            .containsExactly(expectedActiveConfusedThoughts);
-        assertThat((List<Thought>) response.getColumns().get(2).getItems().getActive())
-            .containsExactly(expectedActiveSadThoughts);
-        assertThat((List<ActionItem>) response.getColumns().get(3).getItems().getActive())
-            .containsExactly(expectedActiveActionItems);
+    void itemsList() {
+        List<Object> actualHappyItems = response.getColumns().get(0).getItems();
+        assertThat(actualHappyItems).containsExactlyInAnyOrder(
+            expectedActiveHappyThoughts, expectedCompletedHappyThoughts
+        );
+        List<Object> actualConfusedItems = response.getColumns().get(1).getItems();
+        assertThat(actualConfusedItems).containsExactlyInAnyOrder(
+            expectedActiveConfusedThoughts, expectedCompletedConfusedThoughts
+        );
+        List<Object> actualSadItems = response.getColumns().get(2).getItems();
+        assertThat(actualSadItems).containsExactlyInAnyOrder(
+            expectedActiveSadThoughts, expectedCompletedSadThoughts
+        );
+        List<Object> actualActionItems = response.getColumns().get(3).getItems();
+        assertThat(actualActionItems).containsExactlyInAnyOrder(
+            expectedActiveActionItems, expectedCompletedActionItems
+        );
     }
-
-    // "should put completed items in correct list"
-    @Test
-    void completedItemsList() {
-        assertThat((List<Thought>) response.getColumns().get(0).getItems().getCompleted())
-            .containsExactly(expectedCompletedHappyThoughts);
-        assertThat((List<Thought>) response.getColumns().get(1).getItems().getCompleted())
-            .containsExactly(expectedCompletedConfusedThoughts);
-        assertThat((List<Thought>) response.getColumns().get(2).getItems().getCompleted())
-            .containsExactly(expectedCompletedSadThoughts);
-        assertThat((List<ActionItem>) response.getColumns().get(3).getItems().getCompleted())
-            .containsExactly(expectedCompletedActionItems);
-    }
-
 }

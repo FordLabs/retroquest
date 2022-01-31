@@ -52,7 +52,7 @@ export class ActionsColumnComponent implements OnInit {
 
   ngOnInit(): void {
     this.retroEnded.subscribe(() => {
-      this.actionItemAggregation.items.completed.splice(0, this.actionItemAggregation.items.completed.length);
+      this.actionItemAggregation.items = this.actionItemAggregation.items.filter((item: ActionItem) => !item.completed);
     });
 
     this.actionItemChanged.subscribe((response) => this.processActionItemChange(response));
@@ -75,39 +75,18 @@ export class ActionsColumnComponent implements OnInit {
   }
 
   updateActionItems(actionItem: ActionItem) {
-    const completedIndex = this.actionItemAggregation.items.completed.findIndex(
-      (item: ActionItem) => item.id === actionItem.id
-    );
-    const activeIndex = this.actionItemAggregation.items.active.findIndex(
-      (item: ActionItem) => item.id === actionItem.id
-    );
+    const itemIndex = this.actionItemAggregation.items.findIndex((item: ActionItem) => item.id === actionItem.id);
+    const updateActionItem = itemIndex !== -1;
 
-    if (!this.indexWasFound(completedIndex)) {
-      if (this.indexWasFound(activeIndex)) {
-        if (actionItem.completed) {
-          actionItem.state = 'active';
-          this.actionItemAggregation.items.active.splice(activeIndex, 1);
-          this.actionItemAggregation.items.completed.push(actionItem);
-        } else {
-          Object.assign(this.actionItemAggregation.items.active[activeIndex], actionItem);
-        }
-      } else {
+    if (updateActionItem) {
+      if (actionItem.completed) {
         actionItem.state = 'active';
-        this.actionItemAggregation.items.active.push(actionItem);
       }
+      Object.assign(this.actionItemAggregation.items[itemIndex], actionItem);
     } else {
-      if (!actionItem.completed) {
-        actionItem.state = 'active';
-        this.actionItemAggregation.items.completed.splice(completedIndex, 1);
-        this.actionItemAggregation.items.active.push(actionItem);
-      } else {
-        Object.assign(this.actionItemAggregation.items.completed[completedIndex], actionItem);
-      }
+      actionItem.state = 'active';
+      this.actionItemAggregation.items.push(actionItem);
     }
-  }
-
-  private indexWasFound(index: number): boolean {
-    return index !== -1;
   }
 
   public onMessageChanged(message: string, actionItem: ActionItem): void {
@@ -137,22 +116,25 @@ export class ActionsColumnComponent implements OnInit {
 
   get activeActionItems(): Array<ActionItem> {
     if (this.sorted) {
-      return this.actionItemAggregation.items.active
+      return this.actionItemAggregation.items
         .slice()
+        .filter((items: ActionItem) => !items.completed)
         .sort((a: ActionItem, b: ActionItem) =>
           moment.utc(this.checkForNullDate(b.dateCreated)).diff(moment.utc(this.checkForNullDate(a.dateCreated)))
         ) as Array<ActionItem>;
     }
 
-    return this.actionItemAggregation.items.active.slice() as Array<ActionItem>;
+    return this.actionItemAggregation.items
+      .filter((items: ActionItem) => !items.completed)
+      .slice() as Array<ActionItem>;
   }
 
   get completedActionItems(): Array<ActionItem> {
-    return this.actionItemAggregation.items.completed as Array<ActionItem>;
+    return this.actionItemAggregation.items.filter((items: ActionItem) => items.completed) as Array<ActionItem>;
   }
 
-  get totalActionItemCount(): number {
-    return this.actionItemAggregation.items.active.length;
+  get totalActiveActionItemCount(): number {
+    return this.actionItemAggregation.items.filter((items: ActionItem) => !items.completed).length;
   }
 
   private checkForNullDate(dateCreated: string): string {

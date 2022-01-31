@@ -22,6 +22,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,5 +34,5 @@ public class ColumnResponse<T> {
 
     private String topic;
     private String title;
-    private ItemSorterResponse<T> items;
+    private List<Object> items;
 }

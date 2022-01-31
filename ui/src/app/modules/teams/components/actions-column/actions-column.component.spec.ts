@@ -51,7 +51,7 @@ describe('ActionsColumnComponent', () => {
 
     component.actionItemAggregation = {
       id: 1,
-      items: { active: [fakeActionItem], completed: [] },
+      items: [fakeActionItem],
       title: 'Action Item',
       topic: 'action',
     };
@@ -161,28 +161,62 @@ describe('ActionsColumnComponent', () => {
     const incompleteActionItem = createActionItem(1, 'take out the trash');
     const completedActionItem = createActionItem(2, 'wipe off the dry erase board', true);
 
-    let active;
-    let completed;
-
     beforeEach(() => {
-      active = [incompleteActionItem];
-      completed = [completedActionItem];
-      component.actionItemAggregation.items = {
-        active,
-        completed,
-      };
+      component.actionItemAggregation.items = [incompleteActionItem, completedActionItem];
     });
 
     it('properly deletes incomplete action items', () => {
       component.deleteActionItem({ id: incompleteActionItem.id } as ActionItem);
-      expect(component.actionItemAggregation.items.active.length).toEqual(0);
-      expect(component.actionItemAggregation.items.completed.length).toEqual(1);
+      expect(component.actionItemAggregation.items.length).toEqual(1);
+      expect(component.actionItemAggregation.items).toEqual([completedActionItem]);
     });
 
     it('properly deletes complete action items', () => {
       component.deleteActionItem({ id: completedActionItem.id } as ActionItem);
-      expect(component.actionItemAggregation.items.active.length).toEqual(1);
-      expect(component.actionItemAggregation.items.completed.length).toEqual(0);
+      expect(component.actionItemAggregation.items.length).toEqual(1);
+      expect(component.actionItemAggregation.items).toEqual([incompleteActionItem]);
+    });
+  });
+
+  describe('updating an action item', () => {
+    const incompleteActionItem = createActionItem(1, 'take out the trash');
+    const completedActionItem = createActionItem(2, 'wipe off the dry erase board', true);
+
+    beforeEach(() => {
+      component.actionItemAggregation.items = [incompleteActionItem, completedActionItem];
+    });
+
+    it('Properly adds a new action item and change action item state to active', () => {
+      expect(component.actionItemAggregation.items.length).toBe(2);
+      const newThought = createActionItem(99, 'New Action Item');
+      component.updateActionItems(newThought);
+
+      expect(component.actionItemAggregation.items.length).toBe(3);
+      expect(component.actionItemAggregation.items[2].state).toBe('active');
+    });
+
+    it('updating a discussed action item that already existed and change action item state to active', () => {
+      const newTask = 'I updated the text';
+      const updatedThought = completedActionItem;
+      updatedThought.task = newTask;
+
+      component.updateActionItems(updatedThought);
+
+      expect(component.completedActionItems.length).toBe(1);
+      expect(component.completedActionItems[0].task).toBe(newTask);
+      expect(component.completedActionItems[0].state).toBe('active');
+    });
+
+    it('updating a NOT discussed action item that already existed and do NOT change action item state to active', () => {
+      const newTask = 'I updated the text';
+      const updatedActionItem = incompleteActionItem;
+      updatedActionItem.task = newTask;
+
+      component.updateActionItems(updatedActionItem);
+
+      expect(component.activeActionItems.length).toBe(1);
+      expect(component.activeActionItems[0].task).toBe(newTask);
+      expect(component.activeActionItems[0].state).not.toBeDefined();
     });
   });
 

@@ -15,12 +15,16 @@
  * limitations under the License.
  */
 
-import { Item, ItemSorter } from './column/item-sorter';
+import { ActionItem } from './action-item';
 import { Thought } from './thought';
+
+export type Item = Thought | ActionItem;
+
+export type ColumnItems = Array<Thought | ActionItem>;
 
 export interface ColumnResponse {
   id: number;
-  items: ItemSorter;
+  items: ColumnItems;
   title: string;
   topic: string;
 }
@@ -28,15 +32,14 @@ export interface ColumnResponse {
 export function emptyColumnResponse(): ColumnResponse {
   return {
     id: -1,
-    items: { active: [], completed: [] },
+    items: [],
     topic: '',
     title: '',
   };
 }
 
-export function removeItemFromColumn(response: Item, items: ItemSorter): void {
-  removeItemFromList(items.active, response);
-  removeItemFromList(items.completed, response);
+export function removeItemFromColumn(response: Item, items: ColumnItems): void {
+  removeItemFromList(items, response);
 }
 
 function removeItemFromList(items: Item[], itemToFind: Item): void {
@@ -46,10 +49,7 @@ function removeItemFromList(items: Item[], itemToFind: Item): void {
   }
 }
 
-export function findThought(
-  { items: { active, completed } }: ColumnResponse,
-  thoughtId: Thought['id']
-): Thought | undefined {
-  const allThoughts: Thought[] = [...active, ...completed] as Thought[]; // these arrays aren't typed properly
+export function findThought({ items }: ColumnResponse, thoughtId: Thought['id']): Thought | undefined {
+  const allThoughts: Thought[] = [...items] as Thought[]; // these arrays aren't typed properly
   return allThoughts.find((t) => t.id === thoughtId);
 }

@@ -174,106 +174,71 @@ describe('ThoughtColumnComponent', () => {
   });
 
   describe('deleting a thought', () => {
-    let active;
-    let completed;
-
     beforeEach(() => {
-      active = [undiscussedThought];
-      completed = [discussedThought];
-      component.thoughtAggregation.items = {
-        active,
-        completed,
-      };
+      component.thoughtAggregation.items = [undiscussedThought, discussedThought];
     });
 
     it('properly deletes undiscussed thoughts', () => {
       component.deleteThought(undiscussedThought);
-      expect(component.thoughtAggregation.items.active.length).toEqual(0);
-      expect(component.thoughtAggregation.items.completed.length).toEqual(1);
+      expect(component.thoughtAggregation.items.length).toEqual(1);
+      expect(component.thoughtAggregation.items[0]).toEqual(discussedThought);
     });
 
     it('properly deletes discussed thoughts', () => {
       component.deleteThought(discussedThought);
-      expect(component.thoughtAggregation.items.active.length).toEqual(1);
-      expect(component.thoughtAggregation.items.completed.length).toEqual(0);
+      expect(component.thoughtAggregation.items.length).toEqual(1);
+      expect(component.thoughtAggregation.items).toEqual([undiscussedThought]);
     });
 
     it('ignores undiscussed thoughts from other columns', () => {
       component.deleteThought(undiscussedThoughtInOtherColumn);
-      expect(component.thoughtAggregation.items.active.length).toEqual(1);
-      expect(component.thoughtAggregation.items.completed.length).toEqual(1);
+      expect(component.thoughtAggregation.items.length).toEqual(2);
+      expect(component.thoughtAggregation.items).toEqual([undiscussedThought, discussedThought]);
     });
 
     it('ignores discussed thoughts from other columns', () => {
       component.deleteThought(discussedThoughtInOtherColumn);
-      expect(component.thoughtAggregation.items.active.length).toEqual(1);
-      expect(component.thoughtAggregation.items.completed.length).toEqual(1);
+      expect(component.thoughtAggregation.items.length).toEqual(2);
+      expect(component.thoughtAggregation.items).toEqual([undiscussedThought, discussedThought]);
     });
   });
 
   describe('updating a thought', () => {
-    let active;
-    let completed;
-
     beforeEach(() => {
-      active = [undiscussedThought];
-      completed = [discussedThought];
-      component.thoughtAggregation.items = {
-        active,
-        completed,
-      };
+      component.thoughtAggregation.items = [undiscussedThought, discussedThought];
     });
 
-    function verifyThoughtUpdate(newThought: Thought, activeContains: boolean, completedContains: boolean) {
-      function verifyContains(arr: Array<object>, arrContains: boolean) {
-        if (arrContains) {
-          expect(arr.findIndex((thought) => thought === newThought)).toBeGreaterThan(-1);
-        } else {
-          expect(arr.findIndex((thought) => thought === newThought)).toEqual(-1);
-        }
-      }
-
-      const activeLength = activeContains ? 2 : 1;
-      const completedLength = completedContains ? 2 : 1;
-
-      expect(component.thoughtAggregation.items.active.length).toEqual(activeLength);
-      expect(component.thoughtAggregation.items.completed.length).toEqual(completedLength);
-      verifyContains(component.thoughtAggregation.items.active, activeContains);
-      verifyContains(component.thoughtAggregation.items.completed, completedContains);
-    }
-
-    it('Properly adds a new thought', () => {
+    it('Properly adds a new thought and change thought state to active', () => {
+      expect(component.thoughtAggregation.items.length).toBe(2);
       const newThought = createThought(99, 'New Thought');
       component.updateThought(newThought);
 
-      verifyThoughtUpdate(newThought, true, false);
+      expect(component.thoughtAggregation.items.length).toBe(3);
+      expect(component.thoughtAggregation.items[2].state).toBe('active');
     });
 
-    it('Properly adds a new discussed thought', () => {
-      const newThought = createThought(99, 'New Thought');
-      newThought.discussed = true;
-      component.updateThought(newThought);
-
-      verifyThoughtUpdate(newThought, false, true);
-    });
-
-    it('Properly adds a new thought via move', () => {
-      const newThought = createThought(99, 'New Thought');
-      newThought.columnTitle.topic = otherTopic;
-      component.updateThought(newThought);
-
-      verifyThoughtUpdate(newThought, true, false);
-    });
-
-    it('updating a thought that already existed in the column', () => {
+    it('updating a discussed thought that already existed and change thought state to active', () => {
       const newMessage = 'I updated the text';
       const updatedThought = discussedThought;
       updatedThought.message = newMessage;
 
       component.updateThought(updatedThought);
 
-      component.completedThoughts.length = 1;
-      component.completedThoughts[0].message = newMessage;
+      expect(component.completedThoughts.length).toBe(1);
+      expect(component.completedThoughts[0].message).toBe(newMessage);
+      expect(component.completedThoughts[0].state).toBe('active');
+    });
+
+    it('updating a NOT discussed thought that already existed and do NOT change thought state to active', () => {
+      const newMessage = 'I updated the text';
+      const updatedThought = undiscussedThought;
+      updatedThought.message = newMessage;
+
+      component.updateThought(updatedThought);
+
+      expect(component.activeThoughts.length).toBe(1);
+      expect(component.activeThoughts[0].message).toBe(newMessage);
+      expect(component.activeThoughts[0].state).not.toBeDefined();
     });
   });
 
