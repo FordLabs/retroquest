@@ -75,8 +75,7 @@ export class ArchivedBoardPageComponent implements OnInit {
 
       this.columnAggregationService.getColumns(this.teamId).subscribe((response) => {
         response.columns.map((column) => {
-          column.items.active = [];
-          column.items.completed = [];
+          column.items = [];
         });
         this.columnAggregations = response.columns;
         this.getThoughts();
@@ -87,7 +86,7 @@ export class ArchivedBoardPageComponent implements OnInit {
   private getThoughts(): void {
     this.boardService.fetchThoughtsForBoard(this.teamId, this.boardId).subscribe((thoughts: Array<Thought>) => {
       this.columnAggregations.map((aggregation) => {
-        aggregation.items.completed = thoughts.filter((thought) => thought.topic === aggregation.topic);
+        aggregation.items = thoughts.filter((thought) => thought.topic === aggregation.topic);
       });
     });
   }

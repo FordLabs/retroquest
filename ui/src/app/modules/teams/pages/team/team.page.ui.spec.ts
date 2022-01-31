@@ -23,6 +23,7 @@ import { of } from 'rxjs';
 import '@testing-library/jest-dom';
 
 import { DataService } from '../../../data.service';
+import { ColumnResponse } from '../../../domain/column-response';
 import { createMockHttpClient, createMockRxStompService, createMockTeamService } from '../../../utils/testutils';
 import { ActionItemService } from '../../services/action.service';
 import { BoardService } from '../../services/board.service';
@@ -96,72 +97,57 @@ describe('Setting up Team Board', () => {
   });
 
   describe('Normal Scenario - 3 thought columns, 1 Action Item column', () => {
-    const columns = [
+    const columns: ColumnResponse[] = [
       {
         id: 11,
-        items: {
-          active: [
-            {
-              id: 1000,
-              message: 'Comment 1',
-              hearts: 2,
+        items: [
+          {
+            id: 1000,
+            message: 'Comment 1',
+            hearts: 2,
+            topic: 'happy',
+            discussed: false,
+            teamId,
+            columnTitle: {
+              id: 11,
               topic: 'happy',
-              discussed: false,
+              title: 'Happy',
               teamId,
-              columnTitle: {
-                id: 11,
-                topic: 'happy',
-                title: 'Happy',
-                teamId,
-              },
-              boardId: null,
             },
-          ],
-          completed: [
-            {
-              id: 1001,
-              message: 'Comment 2',
-              hearts: 5,
+          },
+          {
+            id: 1001,
+            message: 'Comment 2',
+            hearts: 5,
+            topic: 'happy',
+            discussed: true,
+            teamId,
+            columnTitle: {
+              id: 11,
               topic: 'happy',
-              discussed: true,
+              title: 'Happy',
               teamId,
-              columnTitle: {
-                id: 11,
-                topic: 'happy',
-                title: 'Happy',
-                teamId,
-              },
-              boardId: null,
             },
-          ],
-        },
+          },
+        ],
         title: 'Happy',
         topic: 'Happy',
       },
       {
         id: 12,
-        items: {
-          active: [],
-          completed: [],
-        },
+        items: [],
         title: 'Confused',
         topic: 'confused',
       },
       {
         id: 13,
-        items: {
-          active: [],
-          completed: [],
-        },
+        items: [],
         title: 'Sad',
         topic: 'unhappy',
       },
       {
         id: 14,
-        items: {
-          active: [],
-          completed: [],
-        },
+        items: [],
         title: 'Action Items',
         topic: 'action',
       },

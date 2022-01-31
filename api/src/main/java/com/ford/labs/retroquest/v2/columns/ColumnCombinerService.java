@@ -17,7 +17,6 @@
 
 package com.ford.labs.retroquest.v2.columns;
 
-import com.ford.labs.retroquest.actionitem.ActionItem;
 import com.ford.labs.retroquest.actionitem.ActionItemRepository;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
@@ -63,10 +62,7 @@ public class ColumnCombinerService {
         var actionItemColumnResponse = ColumnResponse.builder()
                 .title("Action Item")
                 .topic("action")
-                .items(ItemSorterResponse.builder()
-                        .completed(actionItems.stream().filter(ActionItem::isCompleted).collect(Collectors.toList()))
-                        .active(actionItems.stream().filter(a -> !a.isCompleted()).collect(Collectors.toList()))
-                        .build())
+                .items(new ArrayList<>(actionItems))
                 .build();
 
         var orderedColumns = unorderedColumnResponses.stream()
@@ -86,18 +82,7 @@ public class ColumnCombinerService {
                             .id(iter.getKey().getId())
                             .topic(iter.getKey().getTopic())
                             .title(iter.getKey().getTitle())
-                            .items(ItemSorterResponse.builder()
-                                    .completed(
-                                            iter.getValue().stream()
-                                                    .filter(Thought::isDiscussed)
-                                                    .collect(Collectors.toList())
-                                    )
-                                    .active(iter.getValue().stream()
-                                            .filter(t -> !t.isDiscussed())
-                                            .collect(Collectors.toList())
-                                    )
-                                    .build()
-                            )
+                            .items(new ArrayList<>(iter.getValue()))
                             .build())
                     .collect(Collectors.toList());
     }

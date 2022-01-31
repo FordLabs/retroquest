@@ -69,7 +69,7 @@ describe('TeamPageComponent', () => {
       columns: [
         {
           id: 1,
-          items: { active: [], completed: [] },
+          items: [],
           title: 'Happy',
           topic: 'happy',
         },
@@ -151,8 +151,7 @@ describe('TeamPageComponent', () => {
 
     it('should create a board if there are thoughts to archive', () => {
       component.columnsAggregation = [emptyColumnResponse()];
-      component.columnsAggregation[0].items.active = [expectedThoughts[0]];
-      component.columnsAggregation[0].items.completed = [expectedThoughts[1]];
+      component.columnsAggregation[0].items = [expectedThoughts[0], expectedThoughts[1]];
 
       component.onEndRetro();
       verify(boardService.createBoard(anything(), anything())).called();
@@ -167,7 +166,7 @@ describe('TeamPageComponent', () => {
 
     it('should emit the end retro event to the websocket', () => {
       component.columnsAggregation = [emptyColumnResponse()];
-      component.columnsAggregation[0].items.active = [expectedThoughts[0]];
+      component.columnsAggregation[0].items = [expectedThoughts[0]];
 
       component.onEndRetro();
 

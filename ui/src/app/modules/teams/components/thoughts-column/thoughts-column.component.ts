@@ -58,8 +58,7 @@ export class ThoughtsColumnComponent implements OnInit {
 
   ngOnInit(): void {
     this.retroEnded.subscribe(() => {
-      this.thoughtAggregation.items.active.splice(0, this.thoughtAggregation.items.active.length);
-      this.thoughtAggregation.items.completed.splice(0, this.thoughtAggregation.items.completed.length);
+      this.thoughtAggregation.items.splice(0, this.thoughtAggregation.items.length);
     });
 
     this.thoughtChanged.subscribe((response) => {
@@ -94,20 +93,23 @@ export class ThoughtsColumnComponent implements OnInit {
   }
 
   get activeThoughtsCount(): number {
-    return this.thoughtAggregation.items.active.length;
+    return (this.thoughtAggregation.items || []).filter((item: Thought) => !item.discussed).length;
   }
 
   get totalThoughtCount(): number {
-    return this.thoughtAggregation.items.active.length + this.thoughtAggregation.items.completed.length;
+    return this.thoughtAggregation.items.length;
   }
 
   get activeThoughts(): Array<Thought> {
     let thoughts = [];
 
     if (this.thoughtsAreSorted) {
-      thoughts = this.thoughtAggregation.items.active.slice().sort((a: Thought, b: Thought) => b.hearts - a.hearts);
+      thoughts = this.thoughtAggregation.items
+        .filter((item: Thought) => !item.discussed)
+        .slice()
+        .sort((a: Thought, b: Thought) => b.hearts - a.hearts);
     } else {
-      thoughts = this.thoughtAggregation.items.active;
+      thoughts = this.thoughtAggregation.items.filter((item: Thought) => !item.discussed);
     }
 
     return thoughts;
@@ -117,9 +119,12 @@ export class ThoughtsColumnComponent implements OnInit {
     let thoughts = [];
 
     if (this.archived && this.thoughtsAreSorted) {
-      thoughts = this.thoughtAggregation.items.completed.slice().sort((a: Thought, b: Thought) => b.hearts - a.hearts);
+      thoughts = this.thoughtAggregation.items
+        .filter((item: Thought) => item.discussed)
+        .slice()
+        .sort((a: Thought, b: Thought) => b.hearts - a.hearts);
     } else {
-      thoughts = this.thoughtAggregation.items.completed;
+      thoughts = this.thoughtAggregation.items.filter((item: Thought) => item.discussed);
     }
 
     return thoughts;
@@ -136,36 +141,17 @@ export class ThoughtsColumnComponent implements OnInit {
   }
 
   updateThought(updatedThought: Thought) {
-    function indexWasFound(index: number): boolean {
-      return index !== -1;
-    }
+    const itemIndex = this.thoughtAggregation.items.findIndex((item: Thought) => item.id === updatedThought.id);
+    const updateActionItem = itemIndex !== -1;
 
-    function ensureInColumn(thought: Thought, column: Array<object>) {
-      const index = column.findIndex((item: Thought) => item.id === updatedThought.id);
-
-      if (indexWasFound(index)) {
-        Object.assign(column[index], thought);
-      } else {
-        thought.state = 'active';
-        column.push(thought);
+    if (updateActionItem) {
+      if (updatedThought.discussed) {
+        updatedThought.state = 'active';
       }
-    }
-
-    function ensureNotInColumn(thought: Thought, column: Array<object>) {
-      const index = column.findIndex((item: Thought) => item.id === updatedThought.id);
-
-      if (indexWasFound(index)) {
-        thought.state = 'active';
-        column.splice(index, 1);
-      }
-    }
-
-    if (updatedThought.discussed) {
-      ensureInColumn(updatedThought, this.thoughtAggregation.items.completed);
-      ensureNotInColumn(updatedThought, this.thoughtAggregation.items.active);
+      Object.assign(this.thoughtAggregation.items[itemIndex], updatedThought);
     } else {
-      ensureInColumn(updatedThought, this.thoughtAggregation.items.active);
-      ensureNotInColumn(updatedThought, this.thoughtAggregation.items.completed);
+      updatedThought.state = 'active';
+      this.thoughtAggregation.items.push(updatedThought);
     }
   }
 
