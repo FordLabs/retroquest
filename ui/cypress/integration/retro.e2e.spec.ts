@@ -63,13 +63,24 @@ describe('Retro Page', () => {
     cy.intercept('PUT', `/api/team/${teamCredentials.teamId}/thought/**/discuss`).as('putMarkThoughtAsDiscussed');
 
     cy.enterThought(ColumnTopic.HAPPY, happyThoughts[0]);
+    confirmNumberOfThoughtsInColumn(ColumnTopic.HAPPY, 1);
+
     cy.enterThought(ColumnTopic.HAPPY, happyThoughts[1]);
+    confirmNumberOfThoughtsInColumn(ColumnTopic.HAPPY, 2);
+
     cy.enterThought(ColumnTopic.HAPPY, happyThoughts[2]);
+    confirmNumberOfThoughtsInColumn(ColumnTopic.HAPPY, 3);
+
     cy.enterThought(ColumnTopic.CONFUSED, confusedThought);
+    confirmNumberOfThoughtsInColumn(ColumnTopic.CONFUSED, 1);
+
     cy.enterThought(ColumnTopic.UNHAPPY, unhappyThought);
+    confirmNumberOfThoughtsInColumn(ColumnTopic.UNHAPPY, 1);
 
     enterActionItem(actionItems[0]);
+    confirmNumberOfActionItemsInColumn(1);
     enterActionItem(actionItems[1]);
+    confirmNumberOfActionItemsInColumn(2);
 
     cy.get('@happyColumn').find(`[data-testid=retroItem]`).as('happyColumnItems');
 
@@ -77,11 +88,6 @@ describe('Retro Page', () => {
     shouldStarFirstItemInHappyColumn(2);
 
     shouldMarkThoughtAsDiscussed(1);
-
-    confirmNumberOfThoughtsInColumn(ColumnTopic.HAPPY, 3);
-    confirmNumberOfThoughtsInColumn(ColumnTopic.CONFUSED, 1);
-    confirmNumberOfThoughtsInColumn(ColumnTopic.UNHAPPY, 1);
-    confirmNumberOfActionItemsInColumn(2);
 
     deleteHappyThought(1);
 

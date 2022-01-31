@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,15 +15,13 @@
  * limitations under the License.
  */
 
-import { ThoughtTopic } from '../components/retro-item/RetroItem';
-
-interface Thought {
+interface CreateThoughtRequest {
   id: number;
   message: string;
   hearts: number;
+  topic: string;
   discussed: boolean;
-  topic?: ThoughtTopic;
-  state?: string;
+  teamId: string;
 }
 
-export default Thought;
+export default CreateThoughtRequest;

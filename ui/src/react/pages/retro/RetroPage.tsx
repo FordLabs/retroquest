@@ -17,9 +17,15 @@
 
 import * as React from 'react';
 import { Fragment, ReactElement, useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
 
+import useWebSocketMessageHandler from '../../hooks/useWebSocketMessageHandler';
 import ColumnsService from '../../services/ColumnsService';
+import { ColumnState } from '../../state/ColumnState';
+import { TeamState } from '../../state/TeamState';
 import { Column } from '../../types/Column';
+import Team from '../../types/Team';
+import WebSocketService from '../../websocket/WebSocketService';
 
 import RetroColumn from './retro-column/RetroColumn';
 import RetroSubHeader from './retro-sub-header/RetroSubHeader';
@@ -31,17 +37,41 @@ type Props = {
 function RetroPage(props: Props): ReactElement {
   const { teamId } = props;
 
-  const [columns, setColumns] = useState<Column[]>([]);
+  const [team, setTeam] = useRecoilState<Team>(TeamState);
+  const [columns, setColumns] = useRecoilState<Column[]>(ColumnState);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const { thoughtMessageHandler } = useWebSocketMessageHandler();
 
   useEffect(() => {
-    ColumnsService.getColumns(teamId).then(setColumns);
+    setTeam({ ...team, id: teamId });
+
+    ColumnsService.getColumns(teamId).then((newColumns) => {
+      setColumns(newColumns);
+      setIsLoading(false);
+    });
   }, []);
+
+  useEffect(() => {
+    if (!isLoading) {
+      WebSocketService.connect(() => {
+        if (teamId) {
+          WebSocketService.subscribeToThoughts(teamId, thoughtMessageHandler);
+        }
+      });
+    }
+
+    return () => {
+      WebSocketService.disconnect();
+    };
+  }, [isLoading]);
 
   return (
     <div className="retro-page">
       <RetroSubHeader />
       <div className="retro-page-content">
-        {!!columns.length &&
+        {!isLoading &&
+          !!columns.length &&
           columns.map((column: Column, index) => {
             return (
               <Fragment key={`column-${index}`}>

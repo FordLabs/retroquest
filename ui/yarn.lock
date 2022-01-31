@@ -3122,7 +3122,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stomp/stompjs@npm:^6.0.0 >=6.1.1":
+"@stomp/stompjs@npm:^6.0.0 >=6.1.1, @stomp/stompjs@npm:^6.1.2":
   version: 6.1.2
   resolution: "@stomp/stompjs@npm:6.1.2"
   checksum: f6ef589c0a39f7ab19dad8eda2a9a31f24cd585d56ed6018f9c8578883aff11e87f9d8388c11ca6187ddafb257f42822209c0ef403ee574591fc9f9059df4bc0
@@ -18618,6 +18618,7 @@ resolve@^2.0.0-next.3:
     "@fortawesome/fontawesome-free": ^5.9.0
     "@mdx-js/react": ^1.6.22
     "@stomp/ng2-stompjs": ^8.0.0
+    "@stomp/stompjs": ^6.1.2
     "@storybook/addon-actions": ^6.4.13
     "@storybook/addon-docs": ^6.4.13
     "@storybook/addon-essentials": ^6.4.13

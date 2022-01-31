@@ -27,11 +27,11 @@ import './RetroItem.scss';
 
 const NO_OP = () => undefined;
 
-export type RetroItemType = ColumnTopic.HAPPY | ColumnTopic.CONFUSED | ColumnTopic.UNHAPPY;
+export type ThoughtTopic = ColumnTopic.HAPPY | ColumnTopic.CONFUSED | ColumnTopic.UNHAPPY;
 
 type RetroItemProps = {
   thought: Thought;
-  type: RetroItemType;
+  type: ThoughtTopic;
   readOnly?: boolean;
   onSelect?: () => void;
   onUpvote?: () => void;

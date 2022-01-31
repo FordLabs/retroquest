@@ -22,7 +22,7 @@ import { axe } from 'jest-axe';
 
 import ColumnTopic from '../../types/ColumnTopic';
 
-import RetroItem, { RetroItemType } from './RetroItem';
+import RetroItem, { ThoughtTopic } from './RetroItem';
 
 describe('RetroItem', () => {
   const mockSelect = jest.fn();
@@ -50,7 +50,7 @@ describe('RetroItem', () => {
 
   it.each([[ColumnTopic.HAPPY], [ColumnTopic.CONFUSED], [ColumnTopic.UNHAPPY]])(
     'should render %s type',
-    (type: RetroItemType) => {
+    (type: ThoughtTopic) => {
       render(<RetroItem thought={fakeThought} type={type} />);
 
       expect(screen.getByTestId('retroItem').className).toContain(type);

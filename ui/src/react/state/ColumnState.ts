@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,15 +15,11 @@
  * limitations under the License.
  */
 
-import { ThoughtTopic } from '../components/retro-item/RetroItem';
+import { atom } from 'recoil';
 
-interface Thought {
-  id: number;
-  message: string;
-  hearts: number;
-  discussed: boolean;
-  topic?: ThoughtTopic;
-  state?: string;
-}
+import { Column } from '../types/Column';
 
-export default Thought;
+export const ColumnState = atom<Column[]>({
+  key: 'columnState',
+  default: [],
+});

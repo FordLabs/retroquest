@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 
 import { onChange, onKeys } from '../../utils/EventUtils';
@@ -50,21 +50,21 @@ export default function EditableText(props: EditableTextProps) {
     ...divProps
   } = props;
 
-  const [editValue, setEditValue] = React.useState(value);
+  const [editValue, setEditValue] = useState(value);
 
-  const textAreaRef = React.useRef<HTMLTextAreaElement>();
+  const textAreaRef = useRef<HTMLTextAreaElement>();
 
   const canSelect = selectable && !disabled && !editing;
 
-  React.useEffect(() => {
+  useEffect(() => {
     resizeTextArea();
   }, [value]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     resizeTextArea();
   }, [editValue]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (editing) {
       setEditValue(value);
       textAreaRef.current?.focus();
