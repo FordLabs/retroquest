@@ -162,19 +162,19 @@ class ColumnCombinerServiceTest {
     // "should put all active and completed items in one list"
     @Test
     void itemsList() {
-        List<Object> actualHappyItems = response.getColumns().get(0).getItems();
+        var actualHappyItems = response.getColumns().get(0).getItems();
         assertThat(actualHappyItems).containsExactlyInAnyOrder(
             expectedActiveHappyThoughts, expectedCompletedHappyThoughts
         );
-        List<Object> actualConfusedItems = response.getColumns().get(1).getItems();
+        var actualConfusedItems = response.getColumns().get(1).getItems();
         assertThat(actualConfusedItems).containsExactlyInAnyOrder(
             expectedActiveConfusedThoughts, expectedCompletedConfusedThoughts
         );
-        List<Object> actualSadItems = response.getColumns().get(2).getItems();
+        var actualSadItems = response.getColumns().get(2).getItems();
         assertThat(actualSadItems).containsExactlyInAnyOrder(
             expectedActiveSadThoughts, expectedCompletedSadThoughts
         );
-        List<Object> actualActionItems = response.getColumns().get(3).getItems();
+        var actualActionItems = response.getColumns().get(3).getItems();
         assertThat(actualActionItems).containsExactlyInAnyOrder(
             expectedActiveActionItems, expectedCompletedActionItems
         );
