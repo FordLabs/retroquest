@@ -59,7 +59,7 @@ public class ColumnCombinerService {
         var actionItemColumnResponse = ColumnResponse.builder()
                 .title("Action Item")
                 .topic("action")
-                .items(List.of(actionItems))
+                .items(new ArrayList<>(actionItems))
                 .build();
 
         var orderedColumns = unorderedColumnResponses.stream()
@@ -79,7 +79,7 @@ public class ColumnCombinerService {
                             .id(iter.getKey().getId())
                             .topic(iter.getKey().getTopic())
                             .title(iter.getKey().getTitle())
-                            .items(List.of(iter.getValue()))
+                            .items(new ArrayList<>(iter.getValue()))
                             .build())
                     .collect(Collectors.toList());
     }

@@ -34,5 +34,5 @@ public class ColumnResponse<T> {
 
     private String topic;
     private String title;
-    private List<Object> items;
+    private List<T> items;
 }
