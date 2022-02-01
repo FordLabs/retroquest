@@ -18,9 +18,9 @@
 import { ActionItem } from './action-item';
 import { Thought } from './thought';
 
-export type Item = Thought | ActionItem;
+export type ColumnItem = Thought | ActionItem;
 
-export type ColumnItems = Array<Thought | ActionItem>;
+export type ColumnItems = ColumnItem[];
 
 export interface ColumnResponse {
   id: number;
@@ -38,11 +38,11 @@ export function emptyColumnResponse(): ColumnResponse {
   };
 }
 
-export function removeItemFromColumn(response: Item, items: ColumnItems): void {
-  removeItemFromList(items, response);
+export function removeItemFromColumn(columnItem: ColumnItem, items: ColumnItems): void {
+  removeItemFromList(items, columnItem);
 }
 
-function removeItemFromList(items: Item[], itemToFind: Item): void {
+function removeItemFromList(items: ColumnItem[], itemToFind: ColumnItem): void {
   const removeIndex = items.findIndex((item) => item.id === itemToFind.id);
   if (removeIndex > -1) {
     items.splice(removeIndex, 1);
