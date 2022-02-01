@@ -24,10 +24,7 @@ import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -62,7 +59,7 @@ public class ColumnCombinerService {
         var actionItemColumnResponse = ColumnResponse.builder()
                 .title("Action Item")
                 .topic("action")
-                .items(new ArrayList<>(actionItems))
+                .items(List.of(actionItems))
                 .build();
 
         var orderedColumns = unorderedColumnResponses.stream()
@@ -82,7 +79,7 @@ public class ColumnCombinerService {
                             .id(iter.getKey().getId())
                             .topic(iter.getKey().getTopic())
                             .title(iter.getKey().getTitle())
-                            .items(new ArrayList<>(iter.getValue()))
+                            .items(List.of(iter.getValue()))
                             .build())
                     .collect(Collectors.toList());
     }
