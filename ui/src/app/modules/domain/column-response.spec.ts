@@ -15,27 +15,29 @@
  * limitations under the License.
  */
 
-import { emptyColumnResponse, findThought } from './column-response';
-import { emptyThought } from './thought';
+import { ColumnItem, ColumnItems, removeItemFromColumn } from './column-response';
 
-describe('the thoughtAggregation in the ThoughtColumnComponent', () => {
-  it('can find a thought', () => {
-    const subject = emptyColumnResponse();
-    const randomThought = { ...emptyThought(), id: 42 };
-    subject.items.push(randomThought);
+describe('ColumnResponse', () => {
 
-    const result = findThought(subject, randomThought.id);
+  it('should remove ColumnItem from List', () => {
+    const item1 = {id: 1} as ColumnItem;
+    const item2 = {id: 2} as ColumnItem;
+    const columnItems: ColumnItems = [item1, item2];
 
-    expect(result).toBe(randomThought); // object equality
+    removeItemFromColumn(item1, columnItems);
+
+    expect(columnItems).toHaveLength(1);
+    expect(columnItems).toContain(item2);
   });
 
-  it('does not find one that is not there', () => {
-    const subject = emptyColumnResponse();
-    const randomThought = { ...emptyThought(), id: 42 };
-    subject.items.push(randomThought);
+  it('should do nothing if item to remove does not exist', () => {
+    const item1 = {id: 1} as ColumnItem;
+    const missingItem = {id: 2} as ColumnItem;
+    const columnItems: ColumnItems = [item1];
 
-    const result = findThought(subject, 976); // not the same id
+    removeItemFromColumn(missingItem, columnItems);
 
-    expect(result).toBeUndefined(); // object equality
+    expect(columnItems).toHaveLength(1);
+    expect(columnItems).toContain(item1);
   });
 });
