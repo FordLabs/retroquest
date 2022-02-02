@@ -20,7 +20,7 @@ import { act, render, screen, within } from '@testing-library/react';
 import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
 
-import { getMockThought } from '../../../services/__mocks__/ColumnsService';
+import { getMockThought } from '../../../services/api/__mocks__/ColumnsService';
 import { ColumnTitleByTopicState } from '../../../state/ColumnTitleState';
 import { TeamState } from '../../../state/TeamState';
 import { ActiveThoughtsByTopicState, DiscussedThoughtsState } from '../../../state/ThoughtsState';
@@ -91,7 +91,7 @@ describe('RetroColumn.spec.tsx', () => {
     expect(activeItemCount).toBeDefined();
   });
 
-  it('should render retro items if column is a retro column', () => {
+  it('should render retro items if column is a thought column', () => {
     const retroItems = screen.getAllByTestId('retroItem');
     expect(retroItems.length).toBe(3);
     const actionItems = screen.queryByTestId('actionItem');

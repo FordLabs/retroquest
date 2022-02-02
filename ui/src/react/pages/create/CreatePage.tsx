@@ -20,7 +20,7 @@ import { useState } from 'react';
 import { Form, Input, InputPassword, InputTeamName } from '../../components';
 import useAuth from '../../hooks/useAuth';
 import { LOGIN_PAGE_PATH } from '../../routes/RouteConstants';
-import TeamService from '../../services/TeamService';
+import TeamService from '../../services/api/TeamService';
 import AuthTemplate from '../../templates/auth/AuthTemplate';
 import { onChange } from '../../utils/EventUtils';
 import { validateConfirmationPassword, validatePassword, validateTeamName } from '../../utils/StringUtils';

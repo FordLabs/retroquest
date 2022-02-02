@@ -19,13 +19,13 @@ import { act, render, screen, within } from '@testing-library/react';
 import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
 
-import { mockColumns } from '../../services/__mocks__/ColumnsService';
-import ColumnsService from '../../services/ColumnsService';
+import { mockColumns } from '../../services/api/__mocks__/ColumnsService';
+import ColumnsService from '../../services/api/ColumnsService';
 
 import RetroPage from './RetroPage';
 
-jest.mock('../../services/ColumnsService');
-jest.mock('../../websocket/WebSocketService');
+jest.mock('../../services/api/ColumnsService');
+jest.mock('../../services/websocket/WebSocketService');
 
 jest.setTimeout(60000);
 

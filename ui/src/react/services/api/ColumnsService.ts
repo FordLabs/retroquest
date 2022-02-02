@@ -14,16 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import axios from 'axios';
 
-import { Contributor } from '../types/Contributor';
+import { Column } from '../../types/Column';
 
-import { CONTRIBUTORS_API_PATH } from './ApiConstants';
-
-const ContributorsService = {
-  getContributors: (): Promise<Contributor[]> => {
-    return axios.get(CONTRIBUTORS_API_PATH).then((res) => res.data);
+const ColumnsService = {
+  getColumns: (teamId: string): Promise<Column[]> => {
+    const url = `/api/v2/team/${teamId}/columns`;
+    return axios.get(url).then((response) => response.data.columns);
   },
 };
 
-export default ContributorsService;
+export default ColumnsService;

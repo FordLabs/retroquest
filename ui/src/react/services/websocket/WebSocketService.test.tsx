@@ -16,7 +16,7 @@
  */
 import { waitFor } from '@testing-library/react';
 
-import CookieService from '../services/CookieService';
+import CookieService from '../CookieService';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore

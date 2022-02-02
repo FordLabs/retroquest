@@ -14,27 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import axios from 'axios';
 
-import CreateThoughtRequest from '../types/CreateThoughtRequest';
+import { Contributor } from '../../types/Contributor';
 
-const ThoughtService = {
-  addThought: (teamId: string, createThoughtRequest: CreateThoughtRequest) => {
-    const url = `/api/team/${teamId}/thought`;
-    return axios.post(url, createThoughtRequest).then((response) => response.data);
+import { CONTRIBUTORS_API_PATH } from './ApiConstants';
+
+const ContributorsService = {
+  getContributors: (): Promise<Contributor[]> => {
+    return axios.get(CONTRIBUTORS_API_PATH).then((res) => res.data);
   },
 };
 
-export default ThoughtService;
-
-export function getCreateThoughtResponse(teamId: string, topic: string, message: string): CreateThoughtRequest {
-  return {
-    id: -1,
-    teamId,
-    topic,
-    message,
-    hearts: 0,
-    discussed: false,
-  };
-}
+export default ContributorsService;

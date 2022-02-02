@@ -21,7 +21,7 @@ import { Form, InputPassword, InputTeamName } from '../../components';
 import useAuth from '../../hooks/useAuth';
 import useTeam from '../../hooks/useTeam';
 import { CREATE_TEAM_PAGE_PATH } from '../../routes/RouteConstants';
-import TeamService from '../../services/TeamService';
+import TeamService from '../../services/api/TeamService';
 import AuthTemplate from '../../templates/auth/AuthTemplate';
 import { validatePassword, validateTeamName } from '../../utils/StringUtils';
 

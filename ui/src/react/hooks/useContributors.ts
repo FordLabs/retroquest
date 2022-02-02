@@ -16,7 +16,7 @@
  */
 import { useEffect, useState } from 'react';
 
-import ContributorsService from '../services/ContributorsService';
+import ContributorsService from '../services/api/ContributorsService';
 import { Contributor } from '../types/Contributor';
 
 export default function useContributors(): Contributor[] {

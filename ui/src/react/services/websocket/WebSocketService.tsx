@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-import { WebsocketMessageHandlerType } from '../hooks/useWebSocketMessageHandler';
-import CookieService from '../services/CookieService';
-import saveCheckerService from '../services/SaveCheckerService';
+import { WebsocketMessageHandlerType } from '../../hooks/useWebSocketMessageHandler';
+import CookieService from '../CookieService';
+import saveCheckerService from '../SaveCheckerService';
 
 import WebSocketController from './WebSocketController';
 

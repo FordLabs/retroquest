@@ -20,7 +20,8 @@ import { Fragment, ReactElement, useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import useWebSocketMessageHandler from '../../hooks/useWebSocketMessageHandler';
-import ColumnsService from '../../services/ColumnsService';
+import ColumnsService from '../../services/api/ColumnsService';
+import WebSocketService from '../../services/websocket/WebSocketService';
 import { ActionItemState } from '../../state/ActionItemState';
 import { ColumnTitleState } from '../../state/ColumnTitleState';
 import { TeamState } from '../../state/TeamState';
@@ -30,7 +31,6 @@ import { ColumnTitle } from '../../types/ColumnTitle';
 import ColumnTopic from '../../types/ColumnTopic';
 import Team from '../../types/Team';
 import Thought, { ThoughtTopic } from '../../types/Thought';
-import WebSocketService from '../../websocket/WebSocketService';
 
 import RetroColumn from './retro-column/RetroColumn';
 import RetroSubHeader from './retro-sub-header/RetroSubHeader';

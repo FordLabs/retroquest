@@ -23,7 +23,7 @@ import ColumnHeader from '../../../components/column-header/ColumnHeader';
 import { CountSeparator } from '../../../components/count-separator/CountSeparator';
 import RetroItem from '../../../components/retro-item/RetroItem';
 import TextField from '../../../components/text-field/TextField';
-import ThoughtService, { getCreateThoughtResponse } from '../../../services/ThoughtService';
+import ThoughtService, { getCreateThoughtResponse } from '../../../services/api/ThoughtService';
 import { ColumnTitleByTopicState } from '../../../state/ColumnTitleState';
 import { TeamState } from '../../../state/TeamState';
 import { ActiveThoughtsByTopicState, DiscussedThoughtsState, ThoughtTopic } from '../../../state/ThoughtsState';
