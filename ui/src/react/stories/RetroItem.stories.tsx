@@ -19,7 +19,7 @@ import * as React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import RetroItem from '../components/retro-item/RetroItem';
-import ColumnTopic from '../types/ColumnTopic';
+import Topic from '../types/Topic';
 
 export default {
   title: 'components/RetroItem',
@@ -63,7 +63,7 @@ const Template: ComponentStory<typeof RetroItem> = () => {
       <div style={{ width: '400px', marginBottom: '20px' }}>
         <RetroItem
           thought={thought}
-          type={ColumnTopic.HAPPY}
+          type={Topic.HAPPY}
           onUpvote={onUpvote}
           onEdit={onEdit}
           onDelete={onDelete}
@@ -75,7 +75,7 @@ const Template: ComponentStory<typeof RetroItem> = () => {
         <RetroItem
           readOnly={true}
           thought={{ ...testThought, discussed: true }}
-          type={ColumnTopic.UNHAPPY}
+          type={Topic.UNHAPPY}
           onUpvote={onUpvote}
           onEdit={onEdit}
           onDelete={onDelete}

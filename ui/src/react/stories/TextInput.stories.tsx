@@ -19,7 +19,7 @@ import * as React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import TextField from '../components/text-field/TextField';
-import ColumnTopic from '../types/ColumnTopic';
+import Topic from '../types/Topic';
 
 export default {
   title: 'components/TextField',
@@ -35,10 +35,10 @@ const props = {
 
 const Template: ComponentStory<typeof TextField> = () => (
   <span style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', maxWidth: '800px' }}>
-    <TextField {...props} type={ColumnTopic.HAPPY} />
-    <TextField {...props} type={ColumnTopic.CONFUSED} />
-    <TextField {...props} type={ColumnTopic.UNHAPPY} />
-    <TextField {...props} type={ColumnTopic.ACTION} />
+    <TextField {...props} type={Topic.HAPPY} />
+    <TextField {...props} type={Topic.CONFUSED} />
+    <TextField {...props} type={Topic.UNHAPPY} />
+    <TextField {...props} type={Topic.ACTION} />
   </span>
 );
 

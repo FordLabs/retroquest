@@ -14,9 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import ColumnTopic from './ColumnTopic';
 
-export type ThoughtTopic = ColumnTopic.HAPPY | ColumnTopic.CONFUSED | ColumnTopic.UNHAPPY;
+import { ThoughtTopic } from './Topic';
 
 interface Thought {
   id: number;

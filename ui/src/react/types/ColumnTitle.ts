@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-import ColumnTopic from './ColumnTopic';
+import Topic from './Topic';
 
 export interface ColumnTitle {
   id: number;
-  topic: ColumnTopic;
+  topic: Topic;
   title: string;
   teamId: string;
 }

@@ -19,7 +19,7 @@ import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 
-import ColumnTopic from '../../types/ColumnTopic';
+import Topic from '../../types/Topic';
 import {
   CheckboxButton,
   ColumnItemButtonGroup,
@@ -35,7 +35,7 @@ import './ColumnItem.scss';
 const NO_OP = () => undefined;
 
 type ColumnItemProps = React.ComponentPropsWithoutRef<'div'> & {
-  type: ColumnTopic;
+  type: Topic;
   text: string;
   checked?: boolean;
   readOnly?: boolean;
@@ -171,7 +171,7 @@ export default function ColumnItem(props: ColumnItemProps) {
 
       {deleting && (
         <DeletionOverlay onCancel={onDeleteCanceled} onConfirm={onDeleteConfirmed}>
-          Delete this {type === ColumnTopic.ACTION ? 'Action Item' : 'Thought'}?
+          Delete this {type === Topic.ACTION ? 'Action Item' : 'Thought'}?
         </DeletionOverlay>
       )}
     </div>

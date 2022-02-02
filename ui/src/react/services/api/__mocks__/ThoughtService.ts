@@ -16,7 +16,8 @@
  */
 
 import CreateThoughtRequest from '../../../types/CreateThoughtRequest';
-import Thought, { ThoughtTopic } from '../../../types/Thought';
+import Thought from '../../../types/Thought';
+import { ThoughtTopic } from '../../../types/Topic';
 
 export const getMockThought = (topic: ThoughtTopic, isDiscussed): Thought => ({
   id: Math.random(),

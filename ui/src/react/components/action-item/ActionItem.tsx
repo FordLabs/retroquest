@@ -18,7 +18,7 @@
 import * as React from 'react';
 
 import ActionItem from '../../types/Action';
-import ColumnTopic from '../../types/ColumnTopic';
+import Topic from '../../types/Topic';
 import ColumnItem from '../column-item/ColumnItem';
 
 import Assignee from './assignee/Assignee';
@@ -53,7 +53,7 @@ export default function ActionItem(props: ActionItemProps) {
     <ColumnItem
       data-testid="actionItem"
       className="action-item"
-      type={ColumnTopic.ACTION}
+      type={Topic.ACTION}
       text={action.task}
       checked={action.completed}
       readOnly={readOnly}

@@ -20,7 +20,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 
-import ColumnTopic from '../../types/ColumnTopic';
+import Topic from '../../types/Topic';
 
 import TextField from './TextField';
 
@@ -34,12 +34,7 @@ describe('TextField', () => {
 
   it('should render without axe errors', async () => {
     const { container } = render(
-      <TextField
-        data-testid="happy"
-        type={ColumnTopic.HAPPY}
-        placeholder={placeholder}
-        handleSubmission={mockHandleSubmit}
-      />
+      <TextField data-testid="happy" type={Topic.HAPPY} placeholder={placeholder} handleSubmission={mockHandleSubmit} />
     );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
@@ -47,19 +42,14 @@ describe('TextField', () => {
 
   it('should style based on type', () => {
     const { rerender } = render(
-      <TextField
-        data-testid="happy"
-        type={ColumnTopic.HAPPY}
-        placeholder={placeholder}
-        handleSubmission={mockHandleSubmit}
-      />
+      <TextField data-testid="happy" type={Topic.HAPPY} placeholder={placeholder} handleSubmission={mockHandleSubmit} />
     );
     expect(screen.getByTestId('happy').className).toContain('happy');
 
     rerender(
       <TextField
         data-testid="confused"
-        type={ColumnTopic.CONFUSED}
+        type={Topic.CONFUSED}
         placeholder={placeholder}
         handleSubmission={mockHandleSubmit}
       />
@@ -69,7 +59,7 @@ describe('TextField', () => {
     rerender(
       <TextField
         data-testid="unhappy"
-        type={ColumnTopic.UNHAPPY}
+        type={Topic.UNHAPPY}
         placeholder={placeholder}
         handleSubmission={mockHandleSubmit}
       />
@@ -78,7 +68,7 @@ describe('TextField', () => {
   });
 
   it('should submit on enter', () => {
-    render(<TextField type={ColumnTopic.HAPPY} placeholder={placeholder} handleSubmission={mockHandleSubmit} />);
+    render(<TextField type={Topic.HAPPY} placeholder={placeholder} handleSubmission={mockHandleSubmit} />);
     const textField = screen.getByPlaceholderText(placeholder);
 
     userEvent.type(textField, 'Submission Text{enter}');

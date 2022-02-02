@@ -15,11 +15,14 @@
  * limitations under the License.
  */
 
-enum ColumnTopic {
+export type ThoughtTopic = Topic.HAPPY | Topic.CONFUSED | Topic.UNHAPPY;
+export type ActionTopic = Topic.ACTION;
+
+enum Topic {
   HAPPY = 'happy',
   CONFUSED = 'confused',
   UNHAPPY = 'unhappy',
   ACTION = 'action',
 }
 
-export default ColumnTopic;
+export default Topic;
