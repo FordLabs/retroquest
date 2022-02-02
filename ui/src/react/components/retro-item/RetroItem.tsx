@@ -17,8 +17,7 @@
 
 import * as React from 'react';
 
-import ColumnTopic from '../../types/ColumnTopic';
-import Thought from '../../types/Thought';
+import Thought, { ThoughtTopic } from '../../types/Thought';
 import ColumnItem from '../column-item/ColumnItem';
 
 import UpvoteButton from './upvote-button/UpvoteButton';
@@ -26,8 +25,6 @@ import UpvoteButton from './upvote-button/UpvoteButton';
 import './RetroItem.scss';
 
 const NO_OP = () => undefined;
-
-export type ThoughtTopic = ColumnTopic.HAPPY | ColumnTopic.CONFUSED | ColumnTopic.UNHAPPY;
 
 type RetroItemProps = {
   thought: Thought;

@@ -15,11 +15,10 @@
  * limitations under the License.
  */
 
-import { ThoughtTopic } from '../../components/retro-item/RetroItem';
-import Action from '../../types/Action';
+import ActionItem from '../../types/Action';
 import { Column } from '../../types/Column';
 import ColumnTopic from '../../types/ColumnTopic';
-import Thought from '../../types/Thought';
+import Thought, { ThoughtTopic } from '../../types/Thought';
 
 export const getMockThought = (topic: ThoughtTopic, isDiscussed): Thought => ({
   id: Math.random(),
@@ -29,7 +28,7 @@ export const getMockThought = (topic: ThoughtTopic, isDiscussed): Thought => ({
   discussed: isDiscussed,
 });
 
-export const getMockActionItem = (isCompleted): Action => ({
+export const getMockActionItem = (isCompleted): ActionItem => ({
   id: Math.random(),
   task: 'This is an action we can take',
   completed: isCompleted,

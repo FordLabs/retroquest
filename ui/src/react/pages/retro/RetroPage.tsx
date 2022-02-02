@@ -17,14 +17,19 @@
 
 import * as React from 'react';
 import { Fragment, ReactElement, useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import useWebSocketMessageHandler from '../../hooks/useWebSocketMessageHandler';
 import ColumnsService from '../../services/ColumnsService';
-import { ColumnState } from '../../state/ColumnState';
+import { ActionItemState } from '../../state/ActionItemState';
+import { ColumnTitleState } from '../../state/ColumnTitleState';
 import { TeamState } from '../../state/TeamState';
-import { Column } from '../../types/Column';
+import { ThoughtsState } from '../../state/ThoughtsState';
+import Action from '../../types/Action';
+import { ColumnTitle } from '../../types/ColumnTitle';
+import ColumnTopic from '../../types/ColumnTopic';
 import Team from '../../types/Team';
+import Thought, { ThoughtTopic } from '../../types/Thought';
 import WebSocketService from '../../websocket/WebSocketService';
 
 import RetroColumn from './retro-column/RetroColumn';
@@ -38,7 +43,9 @@ function RetroPage(props: Props): ReactElement {
   const { teamId } = props;
 
   const [team, setTeam] = useRecoilState<Team>(TeamState);
-  const [columns, setColumns] = useRecoilState<Column[]>(ColumnState);
+  const [columnTitles, setColumnTitles] = useRecoilState<ColumnTitle[]>(ColumnTitleState);
+  const setActionItems = useSetRecoilState<Action[]>(ActionItemState);
+  const setThoughts = useSetRecoilState<Thought[]>(ThoughtsState);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const { thoughtMessageHandler } = useWebSocketMessageHandler();
@@ -46,11 +53,29 @@ function RetroPage(props: Props): ReactElement {
   useEffect(() => {
     setTeam({ ...team, id: teamId });
 
-    ColumnsService.getColumns(teamId).then((newColumns) => {
-      setColumns(newColumns);
+    ColumnsService.getColumns(teamId).then((aggregatedColumns) => {
+      setColumnTitles(
+        aggregatedColumns.map((aggregatedColumn) => ({
+          id: aggregatedColumn.id,
+          topic: aggregatedColumn.topic,
+          title: aggregatedColumn.title,
+          teamId,
+        }))
+      );
+
+      const allItems = flatten(aggregatedColumns.map((aggregatedColumn) => aggregatedColumn.items));
+      setThoughts([...allItems.filter((item) => item.topic !== ColumnTopic.ACTION)]);
+      setActionItems([...allItems.filter((item) => item.topic === ColumnTopic.ACTION)]);
+
       setIsLoading(false);
     });
   }, []);
+
+  function flatten(arr) {
+    return arr.reduce(function (flat, toFlatten) {
+      return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
+    }, []);
+  }
 
   useEffect(() => {
     if (!isLoading) {
@@ -71,11 +96,11 @@ function RetroPage(props: Props): ReactElement {
       <RetroSubHeader />
       <div className="retro-page-content">
         {!isLoading &&
-          !!columns.length &&
-          columns.map((column: Column, index) => {
+          !!columnTitles.length &&
+          columnTitles.map(({ topic }: ColumnTitle, index) => {
             return (
               <Fragment key={`column-${index}`}>
-                <RetroColumn column={column} />
+                <RetroColumn topic={topic as ThoughtTopic} />
               </Fragment>
             );
           })}

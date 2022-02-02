@@ -17,7 +17,7 @@
 
 import * as React from 'react';
 
-import Action from '../../types/Action';
+import ActionItem from '../../types/Action';
 import ColumnTopic from '../../types/ColumnTopic';
 import ColumnItem from '../column-item/ColumnItem';
 
@@ -29,7 +29,7 @@ import './ActionItem.scss';
 const NO_OP = () => undefined;
 
 type ActionItemProps = {
-  action: Action;
+  action: ActionItem;
   readOnly?: boolean;
   onSelect?: () => void;
   onEdit?: (message: string) => void;

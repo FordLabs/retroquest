@@ -21,8 +21,9 @@ import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 
 import ColumnTopic from '../../types/ColumnTopic';
+import { ThoughtTopic } from '../../types/Thought';
 
-import RetroItem, { ThoughtTopic } from './RetroItem';
+import RetroItem from './RetroItem';
 
 describe('RetroItem', () => {
   const mockSelect = jest.fn();

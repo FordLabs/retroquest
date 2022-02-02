@@ -19,32 +19,34 @@ import { Fragment } from 'react';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 
-import ActionItem from '../../../components/action-item/ActionItem';
 import ColumnHeader from '../../../components/column-header/ColumnHeader';
 import { CountSeparator } from '../../../components/count-separator/CountSeparator';
 import RetroItem from '../../../components/retro-item/RetroItem';
 import TextField from '../../../components/text-field/TextField';
 import ThoughtService, { getCreateThoughtResponse } from '../../../services/ThoughtService';
+import { ColumnTitleByTopicState } from '../../../state/ColumnTitleState';
 import { TeamState } from '../../../state/TeamState';
-import Action from '../../../types/Action';
-import { Column } from '../../../types/Column';
-import ColumnTopic from '../../../types/ColumnTopic';
+import { ActiveThoughtsByTopicState, DiscussedThoughtsState, ThoughtTopic } from '../../../state/ThoughtsState';
 import Thought from '../../../types/Thought';
 
 import './RetroColumn.scss';
 
 type Props = {
-  column: Column;
+  topic: ThoughtTopic;
 };
 
 function RetroColumn(props: Props) {
-  const { topic, title, items } = props.column;
-  const { active: activeItems, completed: completeItems } = items;
+  const { topic } = props;
 
   const team = useRecoilValue(TeamState);
+  const columnTitle = useRecoilValue(ColumnTitleByTopicState(topic));
+  const { title } = columnTitle;
 
-  const isActionItemsColumn = topic === ColumnTopic.ACTION;
-  const placeholder = isActionItemsColumn ? 'Enter an Action Item' : 'Enter a Thought';
+  const activeThoughts = useRecoilValue<Thought[]>(ActiveThoughtsByTopicState(topic));
+  const discussedThoughts = useRecoilValue<Thought[]>(DiscussedThoughtsState(topic));
+
+  // const isActionItemsColumn = topic === ColumnTopic.ACTION;
+  // const placeholder = isActionItemsColumn ? 'Enter an Action Item' : 'Enter a Thought';
 
   const onSubmit = (text: string) => {
     addThought(text);
@@ -54,31 +56,21 @@ function RetroColumn(props: Props) {
     ThoughtService.addThought(team.id, getCreateThoughtResponse(team.id, topic, text)).then().catch(console.error);
   };
 
-  const renderItems = (item: Action) => {
+  const renderThought = (thought: Thought) => {
     return (
-      <Fragment key={item.id}>
-        {isActionItemsColumn ? (
-          <ActionItem action={item as Action} />
-        ) : (
-          <RetroItem thought={item as unknown as Thought} type={topic} />
-        )}
+      <Fragment key={thought.id}>
+        <RetroItem thought={thought as unknown as Thought} type={thought.topic} />
       </Fragment>
     );
   };
 
   return (
     <div className="retro-column" data-testid={`retroColumn__${topic}`}>
-      <ColumnHeader
-        initialTitle={title}
-        type={topic}
-        readOnly={isActionItemsColumn}
-        sortedChanged={() => undefined}
-        titleChanged={() => undefined}
-      />
-      <TextField type={topic} placeholder={placeholder} handleSubmission={onSubmit} />
-      <CountSeparator count={activeItems.length} />
-      {activeItems.map(renderItems)}
-      {completeItems.map(renderItems)}
+      <ColumnHeader initialTitle={title} type={topic} sortedChanged={() => undefined} titleChanged={() => undefined} />
+      <TextField type={topic} placeholder="Enter a Thought" handleSubmission={onSubmit} />
+      <CountSeparator count={activeThoughts.length} />
+      {activeThoughts.map(renderThought)}
+      {discussedThoughts.map(renderThought)}
     </div>
   );
 }
