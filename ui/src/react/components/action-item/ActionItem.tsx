@@ -18,6 +18,7 @@
 import * as React from 'react';
 
 import ActionItem from '../../types/Action';
+import Action from '../../types/Action';
 import Topic from '../../types/Topic';
 import ColumnItem from '../column-item/ColumnItem';
 
@@ -34,7 +35,7 @@ type ActionItemProps = {
   onSelect?: () => void;
   onEdit?: (message: string) => void;
   onAssign?: (assignee: string) => void;
-  onDelete?: () => void;
+  onDelete?: (action: Action) => void;
   onComplete?: () => void;
 };
 
@@ -59,7 +60,7 @@ export default function ActionItem(props: ActionItemProps) {
       readOnly={readOnly}
       onSelect={onSelect}
       onEdit={onEdit}
-      onDelete={onDelete}
+      onDelete={() => onDelete(action)}
       onCheck={onComplete}
       customButtons={({ editing, deleting }) => (
         <DateCreated date={action.dateCreated} disabled={(action.completed || editing || deleting) && !readOnly} />

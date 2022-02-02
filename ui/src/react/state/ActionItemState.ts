@@ -15,11 +15,21 @@
  * limitations under the License.
  */
 
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
 
 import Action from '../types/Action';
 
 export const ActionItemState = atom<Action[]>({
   key: 'ActionItemState',
   default: [],
+});
+
+export const ActiveActionItemsState = selector<Action[]>({
+  key: 'ActiveActionItemsState',
+  get: ({ get }) => get(ActionItemState).filter((action) => !action.completed),
+});
+
+export const CompletedActionItemsState = selector<Action[]>({
+  key: 'CompletedActionItemsState',
+  get: ({ get }) => get(ActionItemState).filter((action) => action.completed),
 });

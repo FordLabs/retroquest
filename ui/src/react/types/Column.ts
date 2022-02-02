@@ -21,14 +21,9 @@ import Topic from './Topic';
 
 export type ColumnItem = Thought | Action;
 
-export interface ColumnItems {
-  active: ColumnItem[];
-  completed: ColumnItem[];
-}
-
 export interface Column {
   id: number;
-  items: ColumnItems;
+  items: ColumnItem[];
   title: string;
   topic: Topic;
 }

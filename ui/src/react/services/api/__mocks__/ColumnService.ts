@@ -15,52 +15,35 @@
  * limitations under the License.
  */
 
-import ActionItem from '../../../types/Action';
 import { Column } from '../../../types/Column';
 import Topic from '../../../types/Topic';
 
+import { getMockActionItem } from './ActionItemService';
 import { getMockThought } from './ThoughtService';
-
-export const getMockActionItem = (isCompleted): ActionItem => ({
-  id: Math.random(),
-  task: 'This is an action we can take',
-  completed: isCompleted,
-  assignee: 'Bob',
-  dateCreated: '2022-01-20',
-});
 
 export const mockColumns: Column[] = [
   {
     id: 1,
-    items: {
-      active: [getMockThought(Topic.HAPPY, false)],
-      completed: [getMockThought(Topic.HAPPY, true)],
-    },
+    items: [getMockThought(Topic.HAPPY, false), getMockThought(Topic.HAPPY, true)],
     title: 'Happy',
     topic: Topic.HAPPY,
   },
   {
     id: 1,
-    items: {
-      active: [getMockThought(Topic.CONFUSED, false)],
-      completed: [getMockThought(Topic.CONFUSED, true)],
-    },
+    items: [getMockThought(Topic.CONFUSED, false), getMockThought(Topic.CONFUSED, true)],
     title: 'Confused',
     topic: Topic.CONFUSED,
   },
   {
     id: 1,
-    items: {
-      active: [getMockThought(Topic.UNHAPPY, true)],
-      completed: [getMockThought(Topic.UNHAPPY, false)],
-    },
+    items: [getMockThought(Topic.UNHAPPY, false), getMockThought(Topic.UNHAPPY, true)],
     title: 'Sad',
     topic: Topic.UNHAPPY,
   },
   {
     id: 1,
-    items: { active: [getMockActionItem(false)], completed: [getMockActionItem(true)] },
-    title: 'Action Item',
+    items: [getMockActionItem(false), getMockActionItem(true)],
+    title: 'Action Items',
     topic: Topic.ACTION,
   },
 ];
