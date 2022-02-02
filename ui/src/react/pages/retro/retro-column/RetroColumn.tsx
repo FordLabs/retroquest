@@ -48,18 +48,18 @@ function RetroColumn(props: Props) {
   // const isActionItemsColumn = topic === ColumnTopic.ACTION;
   // const placeholder = isActionItemsColumn ? 'Enter an Action Item' : 'Enter a Thought';
 
-  const onSubmit = (text: string) => {
-    addThought(text);
+  const createThought = (text: string) => {
+    ThoughtService.create(team.id, getCreateThoughtResponse(team.id, topic, text)).catch(console.error);
   };
 
-  const addThought = (text: string) => {
-    ThoughtService.createThought(team.id, getCreateThoughtResponse(team.id, topic, text)).then().catch(console.error);
+  const deleteThought = (thought: Thought) => {
+    ThoughtService.delete(team.id, thought.id).catch(console.error);
   };
 
   const renderThought = (thought: Thought) => {
     return (
       <Fragment key={thought.id}>
-        <RetroItem thought={thought as unknown as Thought} type={thought.topic} />
+        <RetroItem onDelete={deleteThought} thought={thought as unknown as Thought} type={thought.topic} />
       </Fragment>
     );
   };
@@ -67,7 +67,7 @@ function RetroColumn(props: Props) {
   return (
     <div className="retro-column" data-testid={`retroColumn__${topic}`}>
       <ColumnHeader initialTitle={title} type={topic} sortedChanged={() => undefined} titleChanged={() => undefined} />
-      <TextField type={topic} placeholder="Enter a Thought" handleSubmission={onSubmit} />
+      <TextField type={topic} placeholder="Enter a Thought" handleSubmission={createThought} />
       <CountSeparator count={activeThoughts.length} />
       {activeThoughts.map(renderThought)}
       {discussedThoughts.map(renderThought)}

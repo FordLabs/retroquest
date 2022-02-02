@@ -18,6 +18,9 @@
 import axios from 'axios';
 
 import CreateThoughtRequest from '../../types/CreateThoughtRequest';
+import Thought from '../../types/Thought';
+
+import { getCreateThoughtApiPath, getDeleteThoughtApiPath } from './ApiConstants';
 
 function getCreateThoughtResponse(teamId: string, topic: string, message: string): CreateThoughtRequest {
   return {
@@ -31,9 +34,14 @@ function getCreateThoughtResponse(teamId: string, topic: string, message: string
 }
 
 const ThoughtService = {
-  createThought: (teamId: string, createThoughtRequest: CreateThoughtRequest) => {
-    const url = `/api/team/${teamId}/thought`;
+  create: (teamId: string, createThoughtRequest: CreateThoughtRequest): Promise<Thought> => {
+    const url = getCreateThoughtApiPath(teamId);
     return axios.post(url, createThoughtRequest).then((response) => response.data);
+  },
+
+  delete(teamId: string, thoughtId: number): Promise<void> {
+    const url = getDeleteThoughtApiPath(teamId, thoughtId);
+    return axios.delete(url);
   },
 };
 

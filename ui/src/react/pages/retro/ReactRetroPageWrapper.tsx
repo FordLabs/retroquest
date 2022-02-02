@@ -45,6 +45,7 @@ const containerElementName = 'reactRetroPageWrapper';
     '../../components/text-field/TextField.scss',
     '../../components/action-item/ActionItem.scss',
     '../../components/retro-item/RetroItem.scss',
+    '../../components/deletion-overlay/DeletionOverlay.scss',
     '../../components/count-separator/CountSeparator.scss',
     '../../components/floating-character-countdown/FloatingCharacterCountdown.scss',
     '../../components/retro-item/upvote-button/UpvoteButton.scss',

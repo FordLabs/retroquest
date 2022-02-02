@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import React, { useEffect, useRef } from 'react';
 
-import { CancelButton, ConfirmButton, ColumnItemButtonGroup } from '../column-item-buttons/ColumnItemButtons';
 import { onKeys } from '../../utils/EventUtils';
+import { CancelButton, ColumnItemButtonGroup, ConfirmButton } from '../column-item-buttons/ColumnItemButtons';
 
 import './DeletionOverlay.scss';
 
@@ -30,7 +30,7 @@ type DeletionOverlayProps = React.PropsWithChildren<{
 export default function DeletionOverlay(props: DeletionOverlayProps) {
   const { onConfirm, onCancel, children } = props;
 
-  React.useEffect(() => {
+  useEffect(() => {
     cancelButtonRef.current?.focus();
     const escapeListener = onKeys('Escape', onCancel);
     document.addEventListener('keydown', escapeListener);
@@ -40,7 +40,7 @@ export default function DeletionOverlay(props: DeletionOverlayProps) {
     };
   }, [onCancel]);
 
-  const cancelButtonRef = React.useRef<HTMLButtonElement>();
+  const cancelButtonRef = useRef<HTMLButtonElement>();
 
   return (
     <div className="deletion-overlay">
