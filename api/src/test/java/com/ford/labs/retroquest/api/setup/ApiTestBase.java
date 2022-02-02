@@ -21,9 +21,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ford.labs.retroquest.contributors.ContributorController;
 import com.ford.labs.retroquest.security.JwtBuilder;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.impl.TextCodec;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -52,7 +49,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeoutException;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -105,16 +102,18 @@ public abstract class ApiTestBase {
         return bearerAuthToken;
     }
 
-    public StompSession getAuthorizedSession() throws InterruptedException, ExecutionException, TimeoutException {
+    public StompSession getAuthorizedSession() throws InterruptedException, ExecutionException {
 
         StompHeaders headers = new StompHeaders();
         headers.add("Authorization", bearerAuthToken);
 
         return stompClient
-                .connect(websocketUrl, new WebSocketHttpHeaders() {
-                }, headers, new StompSessionHandlerAdapter() {
-                })
-                .get(10, SECONDS);
+                .connect(
+                        websocketUrl,
+                        new WebSocketHttpHeaders() {},
+                        headers,
+                        new StompSessionHandlerAdapter() {}
+                ).get();
     }
 
     private class DefaultStompFrameHandler implements StompFrameHandler {
@@ -130,7 +129,8 @@ public abstract class ApiTestBase {
     }
 
     public <T> T takeObjectInSocket(Class<T> clazz) throws InterruptedException, IOException {
-        String obj = blockingQueue.poll(10, SECONDS);
+        assertThat(blockingQueue.peek()).isNotNull();
+        String obj = blockingQueue.take();
         try {
             return objectMapper.treeToValue(objectMapper.readValue(obj, ObjectNode.class).get("payload"), clazz);
         } catch (NullPointerException | IllegalArgumentException exp) {
