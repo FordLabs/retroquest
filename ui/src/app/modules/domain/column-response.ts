@@ -38,12 +38,8 @@ export function emptyColumnResponse(): ColumnResponse {
   };
 }
 
-export function removeItemFromColumn(columnItem: ColumnItem, items: ColumnItems): void {
-  removeItemFromList(items, columnItem);
-}
-
-function removeItemFromList(items: ColumnItem[], itemToFind: ColumnItem): void {
-  const removeIndex = items.findIndex((item) => item.id === itemToFind.id);
+export function removeItemFromColumn(itemToRemove: ColumnItem, items: ColumnItems): void {
+  const removeIndex = items.findIndex((item) => item.id === itemToRemove.id);
   if (removeIndex > -1) {
     items.splice(removeIndex, 1);
   }
