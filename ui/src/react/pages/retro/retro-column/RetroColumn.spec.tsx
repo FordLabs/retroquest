@@ -17,10 +17,12 @@
 
 import React from 'react';
 import { act, render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
 
-import { getMockThought } from '../../../services/api/__mocks__/ColumnsService';
+import { getMockThought } from '../../../services/api/__mocks__/ThoughtService';
+import ThoughtService from '../../../services/api/ThoughtService';
 import { ColumnTitleByTopicState } from '../../../state/ColumnTitleState';
 import { TeamState } from '../../../state/TeamState';
 import { ActiveThoughtsByTopicState, DiscussedThoughtsState } from '../../../state/ThoughtsState';
@@ -53,6 +55,8 @@ const actionItemColumnTitle: ColumnTitle = {
   title: 'Action',
   teamId: 'team-id',
 };
+
+jest.mock('../../../services/api/ThoughtService');
 
 describe('RetroColumn.spec.tsx', () => {
   let container: HTMLElement;
@@ -96,6 +100,23 @@ describe('RetroColumn.spec.tsx', () => {
     expect(retroItems.length).toBe(3);
     const actionItems = screen.queryByTestId('actionItem');
     expect(actionItems).toBeNull();
+  });
+
+  it('should make call to add thought when user types and submits a new thought', () => {
+    const placeholderText = 'Enter a Thought';
+    const textField = screen.getByPlaceholderText(placeholderText);
+
+    const thoughtMessage = 'I had a new thought...';
+    userEvent.type(textField, `${thoughtMessage}{enter}`);
+
+    expect(ThoughtService.createThought).toHaveBeenCalledWith(team.id, {
+      id: -1,
+      teamId: team.id,
+      topic: thoughtColumnTitle.topic,
+      message: thoughtMessage,
+      hearts: 0,
+      discussed: false,
+    });
   });
 
   xit('should render action items if column is a actions column', async () => {

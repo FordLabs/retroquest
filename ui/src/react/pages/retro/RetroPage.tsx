@@ -20,7 +20,7 @@ import { Fragment, ReactElement, useEffect, useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import useWebSocketMessageHandler from '../../hooks/useWebSocketMessageHandler';
-import ColumnsService from '../../services/api/ColumnsService';
+import ColumnService from '../../services/api/ColumnService';
 import WebSocketService from '../../services/websocket/WebSocketService';
 import { ActionItemState } from '../../state/ActionItemState';
 import { ColumnTitleState } from '../../state/ColumnTitleState';
@@ -53,7 +53,7 @@ function RetroPage(props: Props): ReactElement {
   useEffect(() => {
     setTeam({ ...team, id: teamId });
 
-    ColumnsService.getColumns(teamId).then((aggregatedColumns) => {
+    ColumnService.getColumns(teamId).then((aggregatedColumns) => {
       setColumnTitles(
         aggregatedColumns.map((aggregatedColumn) => ({
           id: aggregatedColumn.id,

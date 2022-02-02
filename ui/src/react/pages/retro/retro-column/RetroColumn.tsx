@@ -53,7 +53,7 @@ function RetroColumn(props: Props) {
   };
 
   const addThought = (text: string) => {
-    ThoughtService.addThought(team.id, getCreateThoughtResponse(team.id, topic, text)).then().catch(console.error);
+    ThoughtService.createThought(team.id, getCreateThoughtResponse(team.id, topic, text)).then().catch(console.error);
   };
 
   const renderThought = (thought: Thought) => {

@@ -46,7 +46,7 @@ describe('TextField', () => {
   });
 
   it('should style based on type', () => {
-    const result = render(
+    const { rerender } = render(
       <TextField
         data-testid="happy"
         type={ColumnTopic.HAPPY}
@@ -56,7 +56,7 @@ describe('TextField', () => {
     );
     expect(screen.getByTestId('happy').className).toContain('happy');
 
-    result.rerender(
+    rerender(
       <TextField
         data-testid="confused"
         type={ColumnTopic.CONFUSED}
@@ -66,7 +66,7 @@ describe('TextField', () => {
     );
     expect(screen.getByTestId('confused').className).toContain('confused');
 
-    result.rerender(
+    rerender(
       <TextField
         data-testid="unhappy"
         type={ColumnTopic.UNHAPPY}
