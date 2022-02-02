@@ -21,15 +21,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ford.labs.retroquest.contributors.ContributorController;
 import com.ford.labs.retroquest.security.JwtBuilder;
+import com.ford.labs.retroquest.websocket.WebsocketService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -50,6 +53,9 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeoutException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.clearInvocations;
+import static org.mockito.Mockito.verify;
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -70,6 +76,9 @@ public abstract class ApiTestBase {
 
     @MockBean
     public ContributorController contributorController;
+
+    @SpyBean
+    public WebsocketService mockWebsocketService;
 
     @Value("${local.server.port}")
     private int port;
@@ -92,6 +101,7 @@ public abstract class ApiTestBase {
 
         blockingQueue = new LinkedBlockingDeque<>();
         frameCount = EMPTY_QUEUE_SIZE;
+        clearInvocations(mockWebsocketService);
 
         stompClient = new WebSocketStompClient(new SockJsClient(
                 Collections.singletonList(new WebSocketTransport(new StandardWebSocketClient()))));
@@ -134,6 +144,7 @@ public abstract class ApiTestBase {
     }
 
     public <T> T takeObjectInSocket(Class<T> clazz) throws InterruptedException, IOException {
+        verify(mockWebsocketService).publishEvent(any());
         assertThat(frameCount).isGreaterThan(EMPTY_QUEUE_SIZE);
         assertThat(blockingQueue.peek()).isNotNull();
         String obj = blockingQueue.take();
