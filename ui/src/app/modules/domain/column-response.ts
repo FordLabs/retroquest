@@ -44,8 +44,3 @@ export function removeItemFromColumn(itemToRemove: ColumnItem, items: ColumnItem
     items.splice(removeIndex, 1);
   }
 }
-
-export function findThought({ items }: ColumnResponse, thoughtId: Thought['id']): Thought | undefined {
-  const allThoughts: Thought[] = [...items] as Thought[]; // these arrays aren't typed properly
-  return allThoughts.find((t) => t.id === thoughtId);
-}
