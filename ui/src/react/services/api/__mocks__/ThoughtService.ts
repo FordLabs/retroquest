@@ -15,11 +15,24 @@
  * limitations under the License.
  */
 
-import axios from 'axios';
+import CreateThoughtRequest from '../../../types/CreateThoughtRequest';
+import Thought, { ThoughtTopic } from '../../../types/Thought';
 
-import CreateThoughtRequest from '../../types/CreateThoughtRequest';
+export const getMockThought = (topic: ThoughtTopic, isDiscussed): Thought => ({
+  id: Math.random(),
+  message: `This is a ${topic} thought`,
+  topic,
+  hearts: 0,
+  discussed: isDiscussed,
+});
 
-function getCreateThoughtResponse(teamId: string, topic: string, message: string): CreateThoughtRequest {
+const ThoughtService = {
+  createThought: jest.fn().mockResolvedValue((thought) => thought),
+};
+
+export default ThoughtService;
+
+export function getCreateThoughtResponse(teamId: string, topic: string, message: string): CreateThoughtRequest {
   return {
     id: -1,
     teamId,
@@ -29,14 +42,3 @@ function getCreateThoughtResponse(teamId: string, topic: string, message: string
     discussed: false,
   };
 }
-
-const ThoughtService = {
-  createThought: (teamId: string, createThoughtRequest: CreateThoughtRequest) => {
-    const url = `/api/team/${teamId}/thought`;
-    return axios.post(url, createThoughtRequest).then((response) => response.data);
-  },
-};
-
-export default ThoughtService;
-
-export { getCreateThoughtResponse };

@@ -19,11 +19,11 @@ import axios from 'axios';
 
 import { Column } from '../../types/Column';
 
-const ColumnsService = {
+const ColumnService = {
   getColumns: (teamId: string): Promise<Column[]> => {
     const url = `/api/v2/team/${teamId}/columns`;
     return axios.get(url).then((response) => response.data.columns);
   },
 };
 
-export default ColumnsService;
+export default ColumnService;

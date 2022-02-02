@@ -18,15 +18,8 @@
 import ActionItem from '../../../types/Action';
 import { Column } from '../../../types/Column';
 import ColumnTopic from '../../../types/ColumnTopic';
-import Thought, { ThoughtTopic } from '../../../types/Thought';
 
-export const getMockThought = (topic: ThoughtTopic, isDiscussed): Thought => ({
-  id: Math.random(),
-  message: `This is a ${topic} thought`,
-  topic,
-  hearts: 0,
-  discussed: isDiscussed,
-});
+import { getMockThought } from './ThoughtService';
 
 export const getMockActionItem = (isCompleted): ActionItem => ({
   id: Math.random(),
@@ -72,8 +65,8 @@ export const mockColumns: Column[] = [
   },
 ];
 
-const ColumnsService = {
+const ColumnService = {
   getColumns: jest.fn().mockResolvedValue(mockColumns),
 };
 
-export default ColumnsService;
+export default ColumnService;

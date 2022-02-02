@@ -19,12 +19,12 @@ import { act, render, screen, within } from '@testing-library/react';
 import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
 
-import { mockColumns } from '../../services/api/__mocks__/ColumnsService';
-import ColumnsService from '../../services/api/ColumnsService';
+import { mockColumns } from '../../services/api/__mocks__/ColumnService';
+import ColumnService from '../../services/api/ColumnService';
 
 import RetroPage from './RetroPage';
 
-jest.mock('../../services/api/ColumnsService');
+jest.mock('../../services/api/ColumnService');
 jest.mock('../../services/websocket/WebSocketService');
 
 jest.setTimeout(60000);
@@ -42,7 +42,7 @@ describe('RetroPage.spec.tsx', () => {
       ));
     });
 
-    expect(ColumnsService.getColumns).toHaveBeenCalledWith(teamId);
+    expect(ColumnService.getColumns).toHaveBeenCalledWith(teamId);
   });
 
   it('should render without axe errors', async () => {
