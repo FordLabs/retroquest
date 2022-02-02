@@ -17,9 +17,9 @@
 
 import { atom } from 'recoil';
 
-import { Column } from '../types/Column';
+import Action from '../types/Action';
 
-export const ColumnState = atom<Column[]>({
-  key: 'columnState',
+export const ActionItemState = atom<Action[]>({
+  key: 'ActionItemState',
   default: [],
 });

@@ -20,9 +20,9 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { PrimaryButton } from '../components/button/Button';
 import { ModalMethods } from '../components/modal/Modal';
-import { ThoughtTopic } from '../components/retro-item/RetroItem';
 import RetroItemModal from '../components/retro-item-modal/RetroItemModal';
 import ColumnTopic from '../types/ColumnTopic';
+import { ThoughtTopic } from '../types/Thought';
 
 export default {
   title: 'components/RetroItemModal',

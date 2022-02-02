@@ -25,6 +25,7 @@ import ColumnsService from '../../services/ColumnsService';
 import RetroPage from './RetroPage';
 
 jest.mock('../../services/ColumnsService');
+jest.mock('../../websocket/WebSocketService');
 
 jest.setTimeout(60000);
 

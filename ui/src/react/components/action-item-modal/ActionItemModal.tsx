@@ -17,9 +17,9 @@
 
 import * as React from 'react';
 
+import Action from '../../types/Action';
 import ActionItem from '../action-item/ActionItem';
 import Modal, { ModalMethods } from '../modal/Modal';
-import Action from '../../types/Action';
 
 import './ActionItemModal.scss';
 

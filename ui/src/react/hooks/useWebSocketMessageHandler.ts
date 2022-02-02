@@ -16,6 +16,10 @@
  */
 
 import { IMessage } from '@stomp/stompjs';
+import { useSetRecoilState } from 'recoil';
+
+import { ThoughtsState } from '../state/ThoughtsState';
+import Thought from '../types/Thought';
 
 export type WebsocketMessageHandlerType = ({ body }: IMessage) => void;
 
@@ -31,13 +35,15 @@ interface WebsocketCallback {
 }
 
 function useWebSocketMessageHandler(): WebsocketCallback {
+  const setThoughts = useSetRecoilState(ThoughtsState);
+
   const thoughtMessageHandler = ({ body }: IMessage) => {
     const incomingMessage: IncomingMessage = JSON.parse(body);
 
     switch (incomingMessage.type) {
       case 'put': {
-        // const createdOrUpdatedThought: Thought = incomingMessage.payload as Thought;
-        // @todo save thought
+        const createdOrUpdatedThought: Thought = incomingMessage.payload as Thought;
+        setThoughts((currentState) => [...currentState, createdOrUpdatedThought]);
       }
     }
   };
