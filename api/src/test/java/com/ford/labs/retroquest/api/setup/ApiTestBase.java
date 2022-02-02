@@ -57,6 +57,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Tag("api")
 public abstract class ApiTestBase {
 
+    public static final int EMPTY_QUEUE_SIZE = 0;
+
     @Autowired
     public ObjectMapper objectMapper;
 
@@ -80,6 +82,7 @@ public abstract class ApiTestBase {
 
     private WebSocketStompClient stompClient;
     private BlockingQueue<String> blockingQueue;
+    private int frameCount;
 
     @BeforeEach
     public void __setup() {
@@ -88,6 +91,7 @@ public abstract class ApiTestBase {
         bearerAuthToken = "Bearer " + jwtBuilder.buildJwt(teamId);
 
         blockingQueue = new LinkedBlockingDeque<>();
+        frameCount = EMPTY_QUEUE_SIZE;
 
         stompClient = new WebSocketStompClient(new SockJsClient(
                 Collections.singletonList(new WebSocketTransport(new StandardWebSocketClient()))));
@@ -125,12 +129,15 @@ public abstract class ApiTestBase {
         @Override
         public void handleFrame(StompHeaders stompHeaders, Object object) {
             blockingQueue.add(new String((byte[]) object));
+            frameCount += 1;
         }
     }
 
     public <T> T takeObjectInSocket(Class<T> clazz) throws InterruptedException, IOException {
+        assertThat(frameCount).isGreaterThan(EMPTY_QUEUE_SIZE);
         assertThat(blockingQueue.peek()).isNotNull();
         String obj = blockingQueue.take();
+        frameCount -= 1;
         try {
             return objectMapper.treeToValue(objectMapper.readValue(obj, ObjectNode.class).get("payload"), clazz);
         } catch (NullPointerException | IllegalArgumentException exp) {
