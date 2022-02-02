@@ -28,12 +28,13 @@ import { TeamState } from '../../state/TeamState';
 import { ThoughtsState } from '../../state/ThoughtsState';
 import Action from '../../types/Action';
 import { ColumnTitle } from '../../types/ColumnTitle';
-import ColumnTopic from '../../types/ColumnTopic';
 import Team from '../../types/Team';
-import Thought, { ThoughtTopic } from '../../types/Thought';
+import Thought from '../../types/Thought';
+import Topic, { ThoughtTopic } from '../../types/Topic';
 
-import RetroColumn from './retro-column/RetroColumn';
+import ActionItemsColumn from './action-items-column/ActionItemsColumn';
 import RetroSubHeader from './retro-sub-header/RetroSubHeader';
+import ThoughtColumn from './thought-column/ThoughtColumn';
 
 type Props = {
   teamId?: string;
@@ -64,8 +65,8 @@ function RetroPage(props: Props): ReactElement {
       );
 
       const allItems = flatten(aggregatedColumns.map((aggregatedColumn) => aggregatedColumn.items));
-      setThoughts([...allItems.filter((item) => item.topic !== ColumnTopic.ACTION)]);
-      setActionItems([...allItems.filter((item) => item.topic === ColumnTopic.ACTION)]);
+      setThoughts([...allItems.filter((item) => item.topic !== Topic.ACTION)]);
+      setActionItems([...allItems.filter((item) => item.topic === Topic.ACTION)]);
 
       setIsLoading(false);
     });
@@ -98,9 +99,11 @@ function RetroPage(props: Props): ReactElement {
         {!isLoading &&
           !!columnTitles.length &&
           columnTitles.map(({ topic }: ColumnTitle, index) => {
+            const isActionItemsColumn = topic === Topic.ACTION;
+
             return (
               <Fragment key={`column-${index}`}>
-                <RetroColumn topic={topic as ThoughtTopic} />
+                {isActionItemsColumn ? <ActionItemsColumn /> : <ThoughtColumn topic={topic as ThoughtTopic} />}
               </Fragment>
             );
           })}

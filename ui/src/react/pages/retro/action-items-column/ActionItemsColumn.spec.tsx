@@ -21,68 +21,59 @@ import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
 
-import { getMockThought } from '../../../services/api/__mocks__/ThoughtService';
+import { getMockActionItem } from '../../../services/api/__mocks__/ActionItemService';
 import ThoughtService from '../../../services/api/ThoughtService';
+import { ActionItemState } from '../../../state/ActionItemState';
 import { ColumnTitleByTopicState } from '../../../state/ColumnTitleState';
 import { TeamState } from '../../../state/TeamState';
-import { ActiveThoughtsByTopicState, DiscussedThoughtsState } from '../../../state/ThoughtsState';
+import Action from '../../../types/Action';
 import { ColumnTitle } from '../../../types/ColumnTitle';
-import ColumnTopic from '../../../types/ColumnTopic';
 import Team from '../../../types/Team';
-import Thought, { ThoughtTopic } from '../../../types/Thought';
+import Topic, { ThoughtTopic } from '../../../types/Topic';
 
-import RetroColumn from './RetroColumn';
+import ActionItemsColumn from './ActionItemsColumn';
 
 const team: Team = {
   name: 'My Team',
   id: 'my-team',
 };
 
-const activeThought1: Thought = getMockThought(ColumnTopic.HAPPY, false);
-activeThought1.id = 943;
-const activeThought2: Thought = getMockThought(ColumnTopic.HAPPY, false);
-const discussedThought1: Thought = getMockThought(ColumnTopic.HAPPY, true);
+const activeActionItem1: Action = getMockActionItem(false);
+activeActionItem1.id = 943;
+const activeActionItem2: Action = getMockActionItem(false);
+const completedActionItem1: Action = getMockActionItem(true);
 
-const thoughtColumnTitle: ColumnTitle = {
-  id: 123456,
-  topic: ColumnTopic.HAPPY,
-  title: 'Happy',
-  teamId: 'team-id',
-};
-
-const actionItemColumnTitle: ColumnTitle = {
+const actionItemsColumnTitle: ColumnTitle = {
   id: 465657,
-  topic: ColumnTopic.ACTION,
+  topic: Topic.ACTION,
   title: 'Action',
   teamId: 'team-id',
 };
 
 jest.mock('../../../services/api/ThoughtService');
 
-describe('RetroColumn.spec.tsx', () => {
+describe('ActionItemsColumn.spec.tsx', () => {
   let container: HTMLElement;
-  let rerender;
 
   beforeEach(async () => {
-    const topic = thoughtColumnTitle.topic as ThoughtTopic;
+    const topic = actionItemsColumnTitle.topic as ThoughtTopic;
     await act(async () => {
-      ({ container, rerender } = render(
+      ({ container } = render(
         <RecoilRoot
           initializeState={({ set }) => {
-            set(ActiveThoughtsByTopicState(topic), [activeThought1, activeThought2]);
-            set(DiscussedThoughtsState(topic), [discussedThought1]);
-            set(ColumnTitleByTopicState(topic), thoughtColumnTitle);
+            set(ActionItemState, [activeActionItem1, activeActionItem2, completedActionItem1]);
+            set(ColumnTitleByTopicState(topic), actionItemsColumnTitle);
             set(TeamState, team);
           }}
         >
-          <RetroColumn topic={topic} />
+          <ActionItemsColumn />
         </RecoilRoot>
       ));
     });
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   it('should render without axe errors', async () => {
@@ -91,7 +82,7 @@ describe('RetroColumn.spec.tsx', () => {
   });
 
   it('should show column title', () => {
-    expect(screen.getByText(thoughtColumnTitle.title)).toBeDefined();
+    expect(screen.getByText(actionItemsColumnTitle.title)).toBeDefined();
   });
 
   it('should show count of active items', () => {
@@ -100,16 +91,14 @@ describe('RetroColumn.spec.tsx', () => {
     expect(activeItemCount).toBeDefined();
   });
 
-  it('should render retro items if column is a thought column', () => {
-    const retroItems = screen.getAllByTestId('retroItem');
-    expect(retroItems.length).toBe(3);
-    const actionItems = screen.queryByTestId('actionItem');
-    expect(actionItems).toBeNull();
+  it('should render action items', () => {
+    const actionItems = screen.getAllByTestId('actionItem');
+    expect(actionItems.length).toBe(3);
   });
 
-  describe('Create Thought', () => {
-    it('should make call to add thought when user types and submits a new thought', () => {
-      const placeholderText = 'Enter a Thought';
+  xdescribe('Create Action Item', () => {
+    it('should make call to add action item when user types and submits a new action', () => {
+      const placeholderText = 'Enter an Action Item';
       const textField = screen.getByPlaceholderText(placeholderText);
 
       const thoughtMessage = 'I had a new thought...';
@@ -118,7 +107,7 @@ describe('RetroColumn.spec.tsx', () => {
       expect(ThoughtService.create).toHaveBeenCalledWith(team.id, {
         id: -1,
         teamId: team.id,
-        topic: thoughtColumnTitle.topic,
+        topic: actionItemsColumnTitle.topic,
         message: thoughtMessage,
         hearts: 0,
         discussed: false,
@@ -126,35 +115,25 @@ describe('RetroColumn.spec.tsx', () => {
     });
   });
 
-  describe('Delete Thought', () => {
-    it('should delete thought when user clicks delete and confirms with "Yes"', () => {
+  xdescribe('Delete Action Item', () => {
+    it('should delete action item when user clicks delete and confirms with "Yes"', () => {
       const retroItems = screen.getAllByTestId('retroItem');
       const firstThoughtsDeleteIcon = within(retroItems[0]).getByTestId('columnItem-delete');
       userEvent.click(firstThoughtsDeleteIcon);
 
       const confirmDeletionButton = screen.queryByText('Yes');
       userEvent.click(confirmDeletionButton);
-      expect(ThoughtService.delete).toHaveBeenCalledWith(team.id, activeThought1.id);
+      expect(ThoughtService.delete).toHaveBeenCalledWith(team.id, activeActionItem1.id);
     });
 
-    it('should NOT delete thought when user clicks delete and confirms with "No"', () => {
+    it('should NOT delete action item when user clicks delete and confirms with "No"', () => {
       const retroItems = screen.getAllByTestId('retroItem');
       const firstThoughtsDeleteIcon = within(retroItems[0]).getByTestId('columnItem-delete');
       userEvent.click(firstThoughtsDeleteIcon);
 
       const confirmDeletionButton = screen.queryByText('No');
       userEvent.click(confirmDeletionButton);
-      expect(ThoughtService.delete).not.toHaveBeenCalledWith(team.id, activeThought1.id);
+      expect(ThoughtService.delete).not.toHaveBeenCalledWith(team.id, activeActionItem1.id);
     });
-  });
-
-  xit('should render action items if column is a actions column', async () => {
-    await act(async () => {
-      rerender(<RetroColumn topic={actionItemColumnTitle.topic as ThoughtTopic} />);
-    });
-    const actionItems = screen.getAllByTestId('actionItem');
-    expect(actionItems.length).toBe(3);
-    const retroItem = screen.queryByTestId('retroItem');
-    expect(retroItem).toBeNull();
   });
 });

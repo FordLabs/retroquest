@@ -29,13 +29,11 @@ import { TeamState } from '../../../state/TeamState';
 import { ActiveThoughtsByTopicState, DiscussedThoughtsState, ThoughtTopic } from '../../../state/ThoughtsState';
 import Thought from '../../../types/Thought';
 
-import './RetroColumn.scss';
-
 type Props = {
   topic: ThoughtTopic;
 };
 
-function RetroColumn(props: Props) {
+function ThoughtColumn(props: Props) {
   const { topic } = props;
 
   const team = useRecoilValue(TeamState);
@@ -44,9 +42,6 @@ function RetroColumn(props: Props) {
 
   const activeThoughts = useRecoilValue<Thought[]>(ActiveThoughtsByTopicState(topic));
   const discussedThoughts = useRecoilValue<Thought[]>(DiscussedThoughtsState(topic));
-
-  // const isActionItemsColumn = topic === ColumnTopic.ACTION;
-  // const placeholder = isActionItemsColumn ? 'Enter an Action Item' : 'Enter a Thought';
 
   const createThought = (text: string) => {
     ThoughtService.create(team.id, getCreateThoughtResponse(team.id, topic, text)).catch(console.error);
@@ -59,7 +54,7 @@ function RetroColumn(props: Props) {
   const renderThought = (thought: Thought) => {
     return (
       <Fragment key={thought.id}>
-        <RetroItem onDelete={deleteThought} thought={thought as unknown as Thought} type={thought.topic} />
+        <RetroItem onDelete={deleteThought} thought={thought} type={thought.topic} />
       </Fragment>
     );
   };
@@ -75,4 +70,4 @@ function RetroColumn(props: Props) {
   );
 }
 
-export default RetroColumn;
+export default ThoughtColumn;
