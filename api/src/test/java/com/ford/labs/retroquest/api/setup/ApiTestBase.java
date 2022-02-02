@@ -75,9 +75,6 @@ public abstract class ApiTestBase {
     @Value("${local.server.port}")
     private int port;
 
-    @Value("${jwt.signing.secret}")
-    private String jwtSigningSecret;
-
     private String bearerAuthToken;
 
     public String teamId;
@@ -117,7 +114,7 @@ public abstract class ApiTestBase {
                 .connect(websocketUrl, new WebSocketHttpHeaders() {
                 }, headers, new StompSessionHandlerAdapter() {
                 })
-                .get(1, SECONDS);
+                .get(10, SECONDS);
     }
 
     private class DefaultStompFrameHandler implements StompFrameHandler {
@@ -133,7 +130,7 @@ public abstract class ApiTestBase {
     }
 
     public <T> T takeObjectInSocket(Class<T> clazz) throws InterruptedException, IOException {
-        String obj = blockingQueue.poll(30, SECONDS);
+        String obj = blockingQueue.poll(10, SECONDS);
         try {
             return objectMapper.treeToValue(objectMapper.readValue(obj, ObjectNode.class).get("payload"), clazz);
         } catch (NullPointerException | IllegalArgumentException exp) {
