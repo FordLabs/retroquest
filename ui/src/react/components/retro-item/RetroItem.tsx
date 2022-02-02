@@ -33,7 +33,7 @@ type RetroItemProps = {
   onSelect?: () => void;
   onUpvote?: () => void;
   onEdit?: (message: string) => void;
-  onDelete?: () => void;
+  onDelete?: (thought: Thought) => void;
   onDiscuss?: () => void;
 };
 
@@ -59,7 +59,7 @@ export default function RetroItem(props: RetroItemProps) {
       readOnly={readOnly}
       onSelect={onSelect}
       onEdit={onEdit}
-      onDelete={onDelete}
+      onDelete={() => onDelete(thought)}
       onCheck={onDiscuss}
       customButtons={({ editing, deleting }) => (
         <UpvoteButton

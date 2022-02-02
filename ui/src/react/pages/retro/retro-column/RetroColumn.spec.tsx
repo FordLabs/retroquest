@@ -39,6 +39,7 @@ const team: Team = {
 };
 
 const activeThought1: Thought = getMockThought(ColumnTopic.HAPPY, false);
+activeThought1.id = 943;
 const activeThought2: Thought = getMockThought(ColumnTopic.HAPPY, false);
 const discussedThought1: Thought = getMockThought(ColumnTopic.HAPPY, true);
 
@@ -80,6 +81,10 @@ describe('RetroColumn.spec.tsx', () => {
     });
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should render without axe errors', async () => {
     const results = await axe(container);
     expect(results).toHaveNoViolations();
@@ -102,20 +107,44 @@ describe('RetroColumn.spec.tsx', () => {
     expect(actionItems).toBeNull();
   });
 
-  it('should make call to add thought when user types and submits a new thought', () => {
-    const placeholderText = 'Enter a Thought';
-    const textField = screen.getByPlaceholderText(placeholderText);
+  describe('Create Thought', () => {
+    it('should make call to add thought when user types and submits a new thought', () => {
+      const placeholderText = 'Enter a Thought';
+      const textField = screen.getByPlaceholderText(placeholderText);
 
-    const thoughtMessage = 'I had a new thought...';
-    userEvent.type(textField, `${thoughtMessage}{enter}`);
+      const thoughtMessage = 'I had a new thought...';
+      userEvent.type(textField, `${thoughtMessage}{enter}`);
 
-    expect(ThoughtService.createThought).toHaveBeenCalledWith(team.id, {
-      id: -1,
-      teamId: team.id,
-      topic: thoughtColumnTitle.topic,
-      message: thoughtMessage,
-      hearts: 0,
-      discussed: false,
+      expect(ThoughtService.create).toHaveBeenCalledWith(team.id, {
+        id: -1,
+        teamId: team.id,
+        topic: thoughtColumnTitle.topic,
+        message: thoughtMessage,
+        hearts: 0,
+        discussed: false,
+      });
+    });
+  });
+
+  describe('Delete Thought', () => {
+    it('should delete thought when user clicks delete and confirms with "Yes"', () => {
+      const retroItems = screen.getAllByTestId('retroItem');
+      const firstThoughtsDeleteIcon = within(retroItems[0]).getByTestId('columnItem-delete');
+      userEvent.click(firstThoughtsDeleteIcon);
+
+      const confirmDeletionButton = screen.queryByText('Yes');
+      userEvent.click(confirmDeletionButton);
+      expect(ThoughtService.delete).toHaveBeenCalledWith(team.id, activeThought1.id);
+    });
+
+    it('should NOT delete thought when user clicks delete and confirms with "No"', () => {
+      const retroItems = screen.getAllByTestId('retroItem');
+      const firstThoughtsDeleteIcon = within(retroItems[0]).getByTestId('columnItem-delete');
+      userEvent.click(firstThoughtsDeleteIcon);
+
+      const confirmDeletionButton = screen.queryByText('No');
+      userEvent.click(confirmDeletionButton);
+      expect(ThoughtService.delete).not.toHaveBeenCalledWith(team.id, activeThought1.id);
     });
   });
 

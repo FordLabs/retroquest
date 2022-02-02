@@ -20,3 +20,8 @@ export const LOGIN_API_PATH = `${CREATE_TEAM_API_PATH}/login`;
 export const getTeamNameApiPath = (teamId: string) => `${CREATE_TEAM_API_PATH}/${teamId}/name`;
 
 export const CONTRIBUTORS_API_PATH = '/api/contributors';
+
+const getThoughtApiPath = (teamId: string) => `/api/team/${teamId}/thought`;
+export const getCreateThoughtApiPath = getThoughtApiPath;
+export const getDeleteThoughtApiPath = (teamId: string, thoughtId: number) =>
+  `${getThoughtApiPath(teamId)}/${thoughtId}`;

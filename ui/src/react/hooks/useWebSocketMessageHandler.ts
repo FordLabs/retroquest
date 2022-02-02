@@ -23,7 +23,7 @@ import Thought from '../types/Thought';
 
 export type WebsocketMessageHandlerType = ({ body }: IMessage) => void;
 
-type MessageType = 'put';
+type MessageType = 'put' | 'delete';
 
 interface IncomingMessage {
   type: MessageType;
@@ -39,11 +39,15 @@ function useWebSocketMessageHandler(): WebsocketCallback {
 
   const thoughtMessageHandler = ({ body }: IMessage) => {
     const incomingMessage: IncomingMessage = JSON.parse(body);
+    const thought: Thought = incomingMessage.payload as Thought;
 
     switch (incomingMessage.type) {
       case 'put': {
-        const createdOrUpdatedThought: Thought = incomingMessage.payload as Thought;
-        setThoughts((currentState) => [...currentState, createdOrUpdatedThought]);
+        setThoughts((currentState) => [...currentState, thought]);
+        break;
+      }
+      case 'delete': {
+        setThoughts((currentState) => currentState.filter((t) => t.id !== thought.id));
       }
     }
   };
