@@ -17,10 +17,10 @@
 
 import { atom, atomFamily, selectorFamily } from 'recoil';
 
-import ColumnTopic from '../types/ColumnTopic';
 import Thought from '../types/Thought';
+import Topic from '../types/Topic';
 
-export type ThoughtTopic = ColumnTopic.HAPPY | ColumnTopic.CONFUSED | ColumnTopic.UNHAPPY;
+export type ThoughtTopic = Topic.HAPPY | Topic.CONFUSED | Topic.UNHAPPY;
 
 export const ThoughtsState = atom<Thought[]>({
   key: 'ThoughtsState',

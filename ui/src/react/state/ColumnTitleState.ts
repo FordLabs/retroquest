@@ -18,7 +18,7 @@
 import { atom, atomFamily, selectorFamily } from 'recoil';
 
 import { ColumnTitle } from '../types/ColumnTitle';
-import ColumnTopic from '../types/ColumnTopic';
+import Topic from '../types/Topic';
 
 import { ThoughtTopic } from './ThoughtsState';
 
@@ -27,7 +27,7 @@ export const ColumnTitleState = atom<ColumnTitle[]>({
   default: [],
 });
 
-export const ColumnTitleByTopicState = atomFamily<ColumnTitle, ColumnTopic>({
+export const ColumnTitleByTopicState = atomFamily<ColumnTitle, Topic>({
   key: 'ColumnTitleByTopicState',
   default: selectorFamily({
     key: 'ColumnTitleByTopicState/Default',

@@ -16,8 +16,8 @@
  */
 
 import Action from './Action';
-import ColumnTopic from './ColumnTopic';
 import Thought from './Thought';
+import Topic from './Topic';
 
 export type ColumnItem = Thought | Action;
 
@@ -30,5 +30,5 @@ export interface Column {
   id: number;
   items: ColumnItems;
   title: string;
-  topic: ColumnTopic;
+  topic: Topic;
 }

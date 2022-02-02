@@ -17,7 +17,7 @@
 
 import ActionItem from '../../../types/Action';
 import { Column } from '../../../types/Column';
-import ColumnTopic from '../../../types/ColumnTopic';
+import Topic from '../../../types/Topic';
 
 import { getMockThought } from './ThoughtService';
 
@@ -33,35 +33,35 @@ export const mockColumns: Column[] = [
   {
     id: 1,
     items: {
-      active: [getMockThought(ColumnTopic.HAPPY, false)],
-      completed: [getMockThought(ColumnTopic.HAPPY, true)],
+      active: [getMockThought(Topic.HAPPY, false)],
+      completed: [getMockThought(Topic.HAPPY, true)],
     },
     title: 'Happy',
-    topic: ColumnTopic.HAPPY,
+    topic: Topic.HAPPY,
   },
   {
     id: 1,
     items: {
-      active: [getMockThought(ColumnTopic.CONFUSED, false)],
-      completed: [getMockThought(ColumnTopic.CONFUSED, true)],
+      active: [getMockThought(Topic.CONFUSED, false)],
+      completed: [getMockThought(Topic.CONFUSED, true)],
     },
     title: 'Confused',
-    topic: ColumnTopic.CONFUSED,
+    topic: Topic.CONFUSED,
   },
   {
     id: 1,
     items: {
-      active: [getMockThought(ColumnTopic.UNHAPPY, true)],
-      completed: [getMockThought(ColumnTopic.UNHAPPY, false)],
+      active: [getMockThought(Topic.UNHAPPY, true)],
+      completed: [getMockThought(Topic.UNHAPPY, false)],
     },
     title: 'Sad',
-    topic: ColumnTopic.UNHAPPY,
+    topic: Topic.UNHAPPY,
   },
   {
     id: 1,
     items: { active: [getMockActionItem(false)], completed: [getMockActionItem(true)] },
     title: 'Action Item',
-    topic: ColumnTopic.ACTION,
+    topic: Topic.ACTION,
   },
 ];
 

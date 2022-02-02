@@ -17,7 +17,7 @@
 
 /// <reference types="cypress" />
 
-import ColumnTopic from '../../src/react/types/ColumnTopic';
+import Topic from '../../src/react/types/Topic';
 import { getTeamCredentials } from '../support/helpers';
 
 describe('Retro Page', () => {
@@ -62,20 +62,20 @@ describe('Retro Page', () => {
 
     cy.intercept('PUT', `/api/team/${teamCredentials.teamId}/thought/**/discuss`).as('putMarkThoughtAsDiscussed');
 
-    cy.enterThought(ColumnTopic.HAPPY, happyThoughts[0]);
-    confirmNumberOfThoughtsInColumn(ColumnTopic.HAPPY, 1);
+    cy.enterThought(Topic.HAPPY, happyThoughts[0]);
+    confirmNumberOfThoughtsInColumn(Topic.HAPPY, 1);
 
-    cy.enterThought(ColumnTopic.HAPPY, happyThoughts[1]);
-    confirmNumberOfThoughtsInColumn(ColumnTopic.HAPPY, 2);
+    cy.enterThought(Topic.HAPPY, happyThoughts[1]);
+    confirmNumberOfThoughtsInColumn(Topic.HAPPY, 2);
 
-    cy.enterThought(ColumnTopic.HAPPY, happyThoughts[2]);
-    confirmNumberOfThoughtsInColumn(ColumnTopic.HAPPY, 3);
+    cy.enterThought(Topic.HAPPY, happyThoughts[2]);
+    confirmNumberOfThoughtsInColumn(Topic.HAPPY, 3);
 
-    cy.enterThought(ColumnTopic.CONFUSED, confusedThought);
-    confirmNumberOfThoughtsInColumn(ColumnTopic.CONFUSED, 1);
+    cy.enterThought(Topic.CONFUSED, confusedThought);
+    confirmNumberOfThoughtsInColumn(Topic.CONFUSED, 1);
 
-    cy.enterThought(ColumnTopic.UNHAPPY, unhappyThought);
-    confirmNumberOfThoughtsInColumn(ColumnTopic.UNHAPPY, 1);
+    cy.enterThought(Topic.UNHAPPY, unhappyThought);
+    confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 1);
 
     enterActionItem(actionItems[0]);
     confirmNumberOfActionItemsInColumn(1);
@@ -91,7 +91,7 @@ describe('Retro Page', () => {
 
     deleteHappyThought(1);
 
-    confirmNumberOfThoughtsInColumn(ColumnTopic.HAPPY, 3);
+    confirmNumberOfThoughtsInColumn(Topic.HAPPY, 3);
   });
 });
 
@@ -133,7 +133,7 @@ function deleteHappyThought(thoughtIndex: number) {
   cy.get('[data-testid=deletionOverlay]').contains('yes').click();
 }
 
-function confirmNumberOfThoughtsInColumn(topic: ColumnTopic, expectedCount: number): void {
+function confirmNumberOfThoughtsInColumn(topic: Topic, expectedCount: number): void {
   cy.log(`**There should be ${expectedCount} thoughts in ${topic} column**`);
   cy.get(`[data-testid=retroColumn__${topic}]`).find('[data-testid=retroItem]').should('have.length', expectedCount);
 }

@@ -19,7 +19,7 @@ import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import ColumnTopic from '../../types/ColumnTopic';
+import Topic from '../../types/Topic';
 import * as Modal from '../modal/Modal';
 
 import ColumnItem from './ColumnItem';
@@ -45,20 +45,17 @@ describe('ColumnItem', () => {
     jest.clearAllMocks();
   });
 
-  it.each([[ColumnTopic.HAPPY], [ColumnTopic.CONFUSED], [ColumnTopic.UNHAPPY], [ColumnTopic.ACTION]])(
-    'should render %s type',
-    (type) => {
-      render(<ColumnItem text={startingText} type={type} />);
+  it.each([[Topic.HAPPY], [Topic.CONFUSED], [Topic.UNHAPPY], [Topic.ACTION]])('should render %s type', (type) => {
+    render(<ColumnItem text={startingText} type={type} />);
 
-      expect(screen.getByTestId('columnItem').className).toContain(type);
-    }
-  );
+    expect(screen.getByTestId('columnItem').className).toContain(type);
+  });
 
   describe('when not checked and not readonly', () => {
     beforeEach(() => {
       render(
         <ColumnItem
-          type={ColumnTopic.HAPPY}
+          type={Topic.HAPPY}
           text={startingText}
           onSelect={mockSelect}
           onEdit={mockEdit}
@@ -171,7 +168,7 @@ describe('ColumnItem', () => {
     beforeEach(() => {
       render(
         <ColumnItem
-          type={ColumnTopic.HAPPY}
+          type={Topic.HAPPY}
           text={startingText}
           checked={true}
           onSelect={mockSelect}
@@ -208,7 +205,7 @@ describe('ColumnItem', () => {
     beforeEach(() => {
       render(
         <ColumnItem
-          type={ColumnTopic.HAPPY}
+          type={Topic.HAPPY}
           text={startingText}
           readOnly={true}
           checked={true}
@@ -239,7 +236,7 @@ describe('ColumnItem', () => {
 
   describe('without default buttons', () => {
     beforeEach(() => {
-      render(<ColumnItem type={ColumnTopic.HAPPY} text={startingText} defaultButtons={false} />);
+      render(<ColumnItem type={Topic.HAPPY} text={startingText} defaultButtons={false} />);
     });
 
     it('should not render the edit, delete, and checkbox buttons', () => {
@@ -253,7 +250,7 @@ describe('ColumnItem', () => {
     beforeEach(() => {
       render(
         <ColumnItem
-          type={ColumnTopic.HAPPY}
+          type={Topic.HAPPY}
           text={startingText}
           customButtons={() => <button data-testid="columnItem-upvote" />}
         />
@@ -268,7 +265,7 @@ describe('ColumnItem', () => {
   describe('with children', () => {
     beforeEach(() => {
       render(
-        <ColumnItem type={ColumnTopic.HAPPY} text={startingText}>
+        <ColumnItem type={Topic.HAPPY} text={startingText}>
           {() => "I'm a child"}
         </ColumnItem>
       );

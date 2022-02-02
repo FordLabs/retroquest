@@ -19,7 +19,7 @@ import React, { HTMLAttributes, useState } from 'react';
 import classNames from 'classnames';
 
 import { emojify } from '../../../app/modules/utils/EmojiGenerator';
-import ColumnTopic from '../../types/ColumnTopic';
+import Topic from '../../types/Topic';
 import { onChange, onEachKey } from '../../utils/EventUtils';
 import FloatingCharacterCountdown from '../floating-character-countdown/FloatingCharacterCountdown';
 import Tooltip from '../tooltip/Tooltip';
@@ -31,7 +31,7 @@ const almostOutOfCharactersThreshold = 5;
 
 interface ColumnHeaderProps extends HTMLAttributes<HTMLDivElement> {
   initialTitle?: string;
-  type?: ColumnTopic;
+  type?: Topic;
   readOnly?: boolean;
   sortedChanged: (changed: boolean) => void;
   titleChanged: (title: string) => void;

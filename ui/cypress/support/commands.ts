@@ -30,7 +30,7 @@ import '@testing-library/cypress/add-commands';
 
 import { getRetroPagePathWithTeamId } from '../../src/react/routes/RouteConstants';
 import { CREATE_TEAM_API_PATH, LOGIN_API_PATH } from '../../src/react/services/api/ApiConstants';
-import ColumnTopic from '../../src/react/types/ColumnTopic';
+import Topic from '../../src/react/types/Topic';
 
 import TeamCredentials from './types/teamCredentials';
 
@@ -74,7 +74,7 @@ Cypress.Commands.add('createTeamAndLogin', (teamCredentials: TeamCredentials) =>
   });
 });
 
-Cypress.Commands.add('enterThought', (topic: ColumnTopic, thought: string) => {
+Cypress.Commands.add('enterThought', (topic: Topic, thought: string) => {
   cy.log(`**Entering a ${topic} thought**`);
   cy.get(`[data-testid=retroColumn__${topic}]`)
     .as('column')

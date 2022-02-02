@@ -19,7 +19,7 @@ import * as React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import ColumnItem from '../components/column-item/ColumnItem';
-import ColumnTopic from '../types/ColumnTopic';
+import Topic from '../types/Topic';
 
 export default {
   title: 'components/ColumnItem',
@@ -62,7 +62,7 @@ const Template: ComponentStory<typeof ColumnItem> = () => {
     <>
       <div style={{ width: '400px', marginBottom: '20px' }}>
         <ColumnItem
-          type={ColumnTopic.HAPPY}
+          type={Topic.HAPPY}
           text={text}
           checked={checked}
           onEdit={onEdit}
@@ -72,9 +72,9 @@ const Template: ComponentStory<typeof ColumnItem> = () => {
         />
       </div>
       <div style={{ width: '400px', display: 'flex', flexDirection: 'column' }}>
-        <ColumnItem type={ColumnTopic.CONFUSED} {...props} />
-        <ColumnItem type={ColumnTopic.UNHAPPY} {...props} />
-        <ColumnItem type={ColumnTopic.ACTION} {...props} />
+        <ColumnItem type={Topic.CONFUSED} {...props} />
+        <ColumnItem type={Topic.UNHAPPY} {...props} />
+        <ColumnItem type={Topic.ACTION} {...props} />
       </div>
     </>
   );

@@ -19,7 +19,8 @@ import * as React from 'react';
 import { forwardRef, Ref, useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 
-import Thought, { ThoughtTopic } from '../../types/Thought';
+import Thought from '../../types/Thought';
+import { ThoughtTopic } from '../../types/Topic';
 import AddActionItem from '../action-item/add-action-item/AddActionItem';
 import Modal, { ModalMethods } from '../modal/Modal';
 import RetroItem from '../retro-item/RetroItem';

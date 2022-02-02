@@ -18,14 +18,14 @@
 import React, { HTMLAttributes, useState } from 'react';
 import classnames from 'classnames';
 
-import ColumnTopic from '../../types/ColumnTopic';
+import Topic from '../../types/Topic';
 import { onChange, onKeys } from '../../utils/EventUtils';
 import FloatingCharacterCountdown from '../floating-character-countdown/FloatingCharacterCountdown';
 
 import './TextField.scss';
 
 export interface TextFieldProps extends HTMLAttributes<HTMLSpanElement> {
-  type: ColumnTopic;
+  type: Topic;
   placeholder: string;
   handleSubmission: (string) => void;
 }

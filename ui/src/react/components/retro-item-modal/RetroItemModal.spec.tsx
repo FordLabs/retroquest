@@ -19,7 +19,7 @@ import * as React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import ColumnTopic from '../../types/ColumnTopic';
+import Topic from '../../types/Topic';
 import { ModalMethods } from '../modal/Modal';
 
 import RetroItemModal from './RetroItemModal';
@@ -40,7 +40,7 @@ describe('RetroItemModal', () => {
 
   it('should render as a retro item in a modal', () => {
     const ref = React.createRef<ModalMethods>();
-    render(<RetroItemModal type={ColumnTopic.HAPPY} thought={fakeThought} ref={ref} />);
+    render(<RetroItemModal type={Topic.HAPPY} thought={fakeThought} ref={ref} />);
 
     act(() => {
       ref.current.show();
@@ -54,7 +54,7 @@ describe('RetroItemModal', () => {
   describe('not readonly', () => {
     beforeEach(() => {
       const ref = React.createRef<ModalMethods>();
-      render(<RetroItemModal type={ColumnTopic.HAPPY} thought={fakeThought} ref={ref} onAction={mockOnAction} />);
+      render(<RetroItemModal type={Topic.HAPPY} thought={fakeThought} ref={ref} onAction={mockOnAction} />);
 
       act(() => {
         ref.current.show();
@@ -90,7 +90,7 @@ describe('RetroItemModal', () => {
   describe('readonly', () => {
     beforeEach(() => {
       const ref = React.createRef<ModalMethods>();
-      render(<RetroItemModal type={ColumnTopic.HAPPY} thought={fakeThought} ref={ref} readOnly={true} />);
+      render(<RetroItemModal type={Topic.HAPPY} thought={fakeThought} ref={ref} readOnly={true} />);
 
       act(() => {
         ref.current.show();

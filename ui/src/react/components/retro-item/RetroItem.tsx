@@ -16,8 +16,9 @@
  */
 
 import * as React from 'react';
+import { ThoughtTopic } from 'src/react/types/Topic';
 
-import Thought, { ThoughtTopic } from '../../types/Thought';
+import Thought from '../../types/Thought';
 import ColumnItem from '../column-item/ColumnItem';
 
 import UpvoteButton from './upvote-button/UpvoteButton';

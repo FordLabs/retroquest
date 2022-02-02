@@ -21,8 +21,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { PrimaryButton } from '../components/button/Button';
 import { ModalMethods } from '../components/modal/Modal';
 import RetroItemModal from '../components/retro-item-modal/RetroItemModal';
-import ColumnTopic from '../types/ColumnTopic';
-import { ThoughtTopic } from '../types/Thought';
+import Topic, { ThoughtTopic } from '../types/Topic';
 
 export default {
   title: 'components/RetroItemModal',
@@ -40,7 +39,7 @@ const testThought = {
 
 const Template: ComponentStory<typeof RetroItemModal> = () => {
   const [thought, setThought] = useState(testThought);
-  const [type, setType] = useState<ThoughtTopic>(ColumnTopic.HAPPY);
+  const [type, setType] = useState<ThoughtTopic>(Topic.HAPPY);
 
   const modalRef = useRef<ModalMethods>();
   const readOnlyModalRef = useRef<ModalMethods>();
@@ -67,7 +66,7 @@ const Template: ComponentStory<typeof RetroItemModal> = () => {
         Show Modal
       </PrimaryButton>
       <RetroItemModal
-        type={ColumnTopic.HAPPY}
+        type={Topic.HAPPY}
         thought={thought}
         onAction={(task, assignee) => alert(`${task} @${assignee}`)}
         onUpvote={onUpvote}
@@ -81,12 +80,12 @@ const Template: ComponentStory<typeof RetroItemModal> = () => {
         onClick={() => {
           setType((currentType) => {
             switch (currentType) {
-              case ColumnTopic.HAPPY:
-                return ColumnTopic.CONFUSED;
-              case ColumnTopic.CONFUSED:
-                return ColumnTopic.UNHAPPY;
+              case Topic.HAPPY:
+                return Topic.CONFUSED;
+              case Topic.CONFUSED:
+                return Topic.UNHAPPY;
               default:
-                return ColumnTopic.HAPPY;
+                return Topic.HAPPY;
             }
           });
           readOnlyModalRef.current?.show();

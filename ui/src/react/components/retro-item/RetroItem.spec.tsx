@@ -20,8 +20,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 
-import ColumnTopic from '../../types/ColumnTopic';
-import { ThoughtTopic } from '../../types/Thought';
+import Topic, { ThoughtTopic } from '../../types/Topic';
 
 import RetroItem from './RetroItem';
 
@@ -44,22 +43,19 @@ describe('RetroItem', () => {
   });
 
   it('should render without axe errors', async () => {
-    const { container } = render(<RetroItem thought={fakeThought} type={ColumnTopic.HAPPY} />);
+    const { container } = render(<RetroItem thought={fakeThought} type={Topic.HAPPY} />);
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
 
-  it.each([[ColumnTopic.HAPPY], [ColumnTopic.CONFUSED], [ColumnTopic.UNHAPPY]])(
-    'should render %s type',
-    (type: ThoughtTopic) => {
-      render(<RetroItem thought={fakeThought} type={type} />);
+  it.each([[Topic.HAPPY], [Topic.CONFUSED], [Topic.UNHAPPY]])('should render %s type', (type: ThoughtTopic) => {
+    render(<RetroItem thought={fakeThought} type={type} />);
 
-      expect(screen.getByTestId('retroItem').className).toContain(type);
-    }
-  );
+    expect(screen.getByTestId('retroItem').className).toContain(type);
+  });
 
   it('should render thought message and upvotes', () => {
-    render(<RetroItem thought={fakeThought} type={ColumnTopic.HAPPY} />);
+    render(<RetroItem thought={fakeThought} type={Topic.HAPPY} />);
 
     screen.getByText(fakeThought.message);
     screen.getByText(fakeThought.hearts);
@@ -70,7 +66,7 @@ describe('RetroItem', () => {
     beforeEach(() => {
       render(
         <RetroItem
-          type={ColumnTopic.HAPPY}
+          type={Topic.HAPPY}
           thought={fakeThought}
           onSelect={mockSelect}
           onUpvote={mockUpvote}
@@ -169,7 +165,7 @@ describe('RetroItem', () => {
     beforeEach(() => {
       render(
         <RetroItem
-          type={ColumnTopic.HAPPY}
+          type={Topic.HAPPY}
           thought={{ ...fakeThought, discussed: true }}
           onSelect={mockSelect}
           onUpvote={mockUpvote}
@@ -211,7 +207,7 @@ describe('RetroItem', () => {
       render(
         <RetroItem
           readOnly={true}
-          type={ColumnTopic.HAPPY}
+          type={Topic.HAPPY}
           thought={fakeThought}
           onSelect={mockSelect}
           onUpvote={mockUpvote}
