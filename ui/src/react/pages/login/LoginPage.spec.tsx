@@ -20,14 +20,14 @@ import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
 
-import { mockContributors } from '../../services/__mocks__/ContributorsService';
-import ContributorsService from '../../services/ContributorsService';
-import TeamService from '../../services/TeamService';
+import { mockContributors } from '../../services/api/__mocks__/ContributorsService';
+import ContributorsService from '../../services/api/ContributorsService';
+import TeamService from '../../services/api/TeamService';
 
 import { LoginPage } from './LoginPage';
 
-jest.mock('../../services/ContributorsService');
-jest.mock('../../services/TeamService');
+jest.mock('../../services/api/ContributorsService');
+jest.mock('../../services/api/TeamService');
 
 describe('LoginPage.spec.tsx', () => {
   let container: HTMLElement;

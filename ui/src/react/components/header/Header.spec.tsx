@@ -19,7 +19,7 @@ import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
 
-import TeamService from '../../services/TeamService';
+import TeamService from '../../services/api/TeamService';
 
 import Header from './Header';
 

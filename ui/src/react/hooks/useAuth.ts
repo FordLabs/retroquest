@@ -18,8 +18,8 @@ import { useRecoilValue } from 'recoil';
 
 import { AuthService } from '../../app/modules/auth/auth.service';
 import { getLoginPagePathWithTeamId, getRetroPagePathWithTeamId } from '../routes/RouteConstants';
+import { AuthResponse } from '../services/api/TeamService';
 import CookieService from '../services/CookieService';
-import { AuthResponse } from '../services/TeamService';
 import { TeamState } from '../state/TeamState';
 
 interface UseAuth {

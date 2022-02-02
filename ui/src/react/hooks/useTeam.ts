@@ -18,7 +18,7 @@
 import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 
-import TeamService from '../services/TeamService';
+import TeamService from '../services/api/TeamService';
 import { TeamState } from '../state/TeamState';
 
 interface UseTeam {

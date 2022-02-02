@@ -17,7 +17,7 @@
 
 import { Client } from '@stomp/stompjs';
 
-import CookieService from '../services/CookieService';
+import CookieService from '../CookieService';
 
 const url = window.location.hostname.includes('localhost')
   ? 'ws://localhost:8080/websocket/websocket'

@@ -29,7 +29,7 @@
 import '@testing-library/cypress/add-commands';
 
 import { getRetroPagePathWithTeamId } from '../../src/react/routes/RouteConstants';
-import { CREATE_TEAM_API_PATH, LOGIN_API_PATH } from '../../src/react/services/ApiConstants';
+import { CREATE_TEAM_API_PATH, LOGIN_API_PATH } from '../../src/react/services/api/ApiConstants';
 import ColumnTopic from '../../src/react/types/ColumnTopic';
 
 import TeamCredentials from './types/teamCredentials';

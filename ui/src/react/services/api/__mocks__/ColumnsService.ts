@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-import ActionItem from '../../types/Action';
-import { Column } from '../../types/Column';
-import ColumnTopic from '../../types/ColumnTopic';
-import Thought, { ThoughtTopic } from '../../types/Thought';
+import ActionItem from '../../../types/Action';
+import { Column } from '../../../types/Column';
+import ColumnTopic from '../../../types/ColumnTopic';
+import Thought, { ThoughtTopic } from '../../../types/Thought';
 
 export const getMockThought = (topic: ThoughtTopic, isDiscussed): Thought => ({
   id: Math.random(),

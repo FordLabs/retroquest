@@ -14,21 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Contributor } from '../../types/Contributor';
 
-export const mockContributors: Contributor[] = [
-  {
-    accountUrl: 'https://github.com/aaa',
-    image: 'aaa.jpg',
-  },
-  {
-    accountUrl: 'https://github.com/bbb',
-    image: 'bbb.jpg',
-  },
-];
+import axios from 'axios';
 
-const ContributorsService = {
-  getContributors: jest.fn(),
+import CreateThoughtRequest from '../../types/CreateThoughtRequest';
+
+const ThoughtService = {
+  addThought: (teamId: string, createThoughtRequest: CreateThoughtRequest) => {
+    const url = `/api/team/${teamId}/thought`;
+    return axios.post(url, createThoughtRequest).then((response) => response.data);
+  },
 };
 
-export default ContributorsService;
+export default ThoughtService;
+
+export function getCreateThoughtResponse(teamId: string, topic: string, message: string): CreateThoughtRequest {
+  return {
+    id: -1,
+    teamId,
+    topic,
+    message,
+    hearts: 0,
+    discussed: false,
+  };
+}
