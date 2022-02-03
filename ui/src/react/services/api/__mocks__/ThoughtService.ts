@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-import CreateThoughtRequest from '../../../types/CreateThoughtRequest';
 import Thought from '../../../types/Thought';
 import { ThoughtTopic } from '../../../types/Topic';
 
@@ -33,14 +32,3 @@ const ThoughtService = {
 };
 
 export default ThoughtService;
-
-export function getCreateThoughtResponse(teamId: string, topic: string, message: string): CreateThoughtRequest {
-  return {
-    id: -1,
-    teamId,
-    topic,
-    message,
-    hearts: 0,
-    discussed: false,
-  };
-}

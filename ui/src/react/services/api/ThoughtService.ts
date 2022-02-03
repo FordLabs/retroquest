@@ -22,17 +22,6 @@ import Thought from '../../types/Thought';
 
 import { getCreateThoughtApiPath, getDeleteThoughtApiPath } from './ApiConstants';
 
-function getCreateThoughtResponse(teamId: string, topic: string, message: string): CreateThoughtRequest {
-  return {
-    id: -1,
-    teamId,
-    topic,
-    message,
-    hearts: 0,
-    discussed: false,
-  };
-}
-
 const ThoughtService = {
   create: (teamId: string, createThoughtRequest: CreateThoughtRequest): Promise<Thought> => {
     const url = getCreateThoughtApiPath(teamId);
@@ -46,5 +35,3 @@ const ThoughtService = {
 };
 
 export default ThoughtService;
-
-export { getCreateThoughtResponse };

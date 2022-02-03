@@ -106,8 +106,16 @@ describe('ThoughtColumn.spec.tsx', () => {
   });
 
   describe('Create Thought', () => {
-    it('should make call to add thought when user types and submits a new thought', () => {
-      const placeholderText = 'Enter a Thought';
+    const placeholderText = 'Enter a Thought';
+
+    it('should not make call to create thought until user types a thought', () => {
+      const textField = screen.getByPlaceholderText(placeholderText);
+      userEvent.type(textField, `{enter}`);
+
+      expect(ThoughtService.create).not.toHaveBeenCalled();
+    });
+
+    it('should make call to create thought when user types and submits a new thought', () => {
       const textField = screen.getByPlaceholderText(placeholderText);
 
       const thoughtMessage = 'I had a new thought...';
