@@ -30,7 +30,7 @@ interface IncomingMessage {
   payload: unknown;
 }
 
-export type WebsocketMessageHandlerType = ({ body }: IMessage) => void;
+export type WebsocketMessageHandlerType = ({ body }: Partial<IMessage>) => void;
 
 interface WebsocketCallback {
   thoughtMessageHandler: WebsocketMessageHandlerType;
@@ -41,31 +41,30 @@ function useWebSocketMessageHandler(): WebsocketCallback {
   const setThoughts = useSetRecoilState(ThoughtsState);
   const setActionItems = useSetRecoilState(ActionItemState);
 
-  const thoughtMessageHandler = ({ body }: IMessage) => {
+  const recoilStateUpdater = (recoilStateSetter: Function, item: Thought | Action, messageType: MessageType) => {
+    recoilStateSetter((currentState) => {
+      const deleteItem = messageType === 'delete';
+      if (deleteItem) return currentState.filter((i) => i.id !== item.id);
+
+      const updateItem = currentState.findIndex((i) => i.id === item.id) > -1;
+      if (updateItem) return currentState.map((i) => (i.id === item.id ? item : i));
+
+      return [...currentState, item];
+    });
+  };
+
+  const thoughtMessageHandler = ({ body }: Partial<IMessage>) => {
     const incomingMessage: IncomingMessage = JSON.parse(body);
     const thought = incomingMessage.payload as Thought;
 
-    switch (incomingMessage.type) {
-      case 'put': {
-        setThoughts((currentState) => [...currentState, thought]);
-        break;
-      }
-      case 'delete': {
-        setThoughts((currentState) => currentState.filter((t) => t.id !== thought.id));
-      }
-    }
+    recoilStateUpdater(setThoughts, thought, incomingMessage.type);
   };
 
-  const actionItemMessageHandler = ({ body }: IMessage) => {
+  const actionItemMessageHandler = ({ body }: Partial<IMessage>) => {
     const incomingMessage: IncomingMessage = JSON.parse(body);
     const action = incomingMessage.payload as Action;
 
-    switch (incomingMessage.type) {
-      case 'put': {
-        setActionItems((currentState) => [...currentState, action]);
-        break;
-      }
-    }
+    recoilStateUpdater(setActionItems, action, incomingMessage.type);
   };
 
   return { thoughtMessageHandler, actionItemMessageHandler };
