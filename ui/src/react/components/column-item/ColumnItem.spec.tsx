@@ -240,9 +240,9 @@ describe('ColumnItem', () => {
     });
 
     it('should not render the edit, delete, and checkbox buttons', () => {
-      expect(screen.queryByTestId('columnItem-edit')).toBeFalsy();
-      expect(screen.queryByTestId('columnItem-delete')).toBeFalsy();
-      expect(screen.queryByTestId('columnItem-checkbox')).toBeFalsy();
+      expect(screen.queryByTestId('columnItem-editButton')).toBeFalsy();
+      expect(screen.queryByTestId('columnItem-deleteButton')).toBeFalsy();
+      expect(screen.queryByTestId('columnItem-checkboxButton')).toBeFalsy();
     });
   });
 
@@ -288,15 +288,15 @@ function clickText() {
 }
 
 function clickEdit() {
-  userEvent.click(screen.getByTestId('columnItem-edit'));
+  userEvent.click(screen.getByTestId('columnItem-editButton'));
 }
 
 function clickDelete() {
-  userEvent.click(screen.getByTestId('columnItem-delete'));
+  userEvent.click(screen.getByTestId('columnItem-deleteButton'));
 }
 
 function clickCheckbox() {
-  userEvent.click(screen.getByTestId('columnItem-checkbox'));
+  userEvent.click(screen.getByTestId('columnItem-checkboxButton'));
 }
 
 function clickCancelDelete() {

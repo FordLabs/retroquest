@@ -134,7 +134,7 @@
 
     <div
         class="container delete-container"
-        [attr.data-testid]="'deleteButton'"
+        [attr.data-testid]="'columnItem-deleteButton'"
         [ngClass]="{
             'dark-theme': darkThemeIsEnabled,
             disable: readOnly || taskEditModeEnabled
@@ -148,7 +148,7 @@
 
     <div
         class="complete-container"
-        [attr.data-testid]="'completeButton'"
+        [attr.data-testid]="'columnItem-checkboxButton'"
         [ngClass]="{
             opacify: taskEditModeEnabled || readOnly,
             'dark-theme': darkThemeIsEnabled,

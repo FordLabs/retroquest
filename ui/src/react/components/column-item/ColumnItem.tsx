@@ -152,21 +152,21 @@ export default function ColumnItem(props: ColumnItemProps) {
               onClick={onEditToggle}
               disabled={checked || readOnly || deleting}
               ref={editButtonRef}
-              data-testid="columnItem-edit"
+              data-testid="columnItem-editButton"
             />
             <DeleteButton
               aria-label="Delete"
               onClick={onDeleteStarted}
               disabled={readOnly || editing || deleting}
               ref={deleteButtonRef}
-              data-testid="columnItem-delete"
+              data-testid="columnItem-deleteButton"
             />
             <CheckboxButton
-              aria-label="Checked"
+              aria-label="Mark as complete"
               checked={checked}
               onClick={onCheck}
               disabled={readOnly || editing || deleting}
-              data-testid="columnItem-checkbox"
+              data-testid="columnItem-checkboxButton"
             />
           </>
         )}

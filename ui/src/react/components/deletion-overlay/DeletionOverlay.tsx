@@ -43,7 +43,7 @@ export default function DeletionOverlay(props: DeletionOverlayProps) {
   const cancelButtonRef = useRef<HTMLButtonElement>();
 
   return (
-    <div className="deletion-overlay">
+    <div className="deletion-overlay" data-testid="deletionOverlay">
       <div className="delete-message">{children}</div>
       <ColumnItemButtonGroup>
         <CancelButton onClick={onCancel} ref={cancelButtonRef}>
