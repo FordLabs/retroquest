@@ -23,10 +23,11 @@ import ColumnHeader from '../../../components/column-header/ColumnHeader';
 import { CountSeparator } from '../../../components/count-separator/CountSeparator';
 import RetroItem from '../../../components/retro-item/RetroItem';
 import TextField from '../../../components/text-field/TextField';
-import ThoughtService, { getCreateThoughtResponse } from '../../../services/api/ThoughtService';
+import ThoughtService from '../../../services/api/ThoughtService';
 import { ColumnTitleByTopicState } from '../../../state/ColumnTitleState';
 import { TeamState } from '../../../state/TeamState';
 import { ActiveThoughtsByTopicState, DiscussedThoughtsState, ThoughtTopic } from '../../../state/ThoughtsState';
+import { getCreateThoughtRequest } from '../../../types/CreateThoughtRequest';
 import Thought from '../../../types/Thought';
 
 type Props = {
@@ -44,7 +45,9 @@ function ThoughtColumn(props: Props) {
   const discussedThoughts = useRecoilValue<Thought[]>(DiscussedThoughtsState(topic));
 
   const createThought = (text: string) => {
-    ThoughtService.create(team.id, getCreateThoughtResponse(team.id, topic, text)).catch(console.error);
+    if (text && text.length) {
+      ThoughtService.create(team.id, getCreateThoughtRequest(team.id, topic, text)).catch(console.error);
+    }
   };
 
   const deleteThought = (thought: Thought) => {

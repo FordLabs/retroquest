@@ -15,6 +15,17 @@
  * limitations under the License.
  */
 
+export function getCreateThoughtRequest(teamId: string, topic: string, message: string): CreateThoughtRequest {
+  return {
+    id: -1,
+    teamId,
+    topic,
+    message,
+    hearts: 0,
+    discussed: false,
+  };
+}
+
 interface CreateThoughtRequest {
   id: number;
   message: string;
