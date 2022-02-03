@@ -68,7 +68,7 @@ function ActionItemsColumn() {
   };
 
   const deleteActionItem = (action: Action) => {
-    console.log('Delete Action', action);
+    ActionItemService.delete(team.id, action.id).catch(console.error);
   };
 
   const renderActionItem = (action: Action) => {
