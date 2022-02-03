@@ -23,7 +23,4 @@ export const CONTRIBUTORS_API_PATH = '/api/contributors';
 
 export const getThoughtApiPath = (teamId: string) => `/api/team/${teamId}/thought`;
 
-const getActionItemApiPath = (teamId: string) => `/api/team/${teamId}/action-item`;
-export const getCreateActionItemApiPath = getActionItemApiPath;
-export const getDeleteActionItemApiPath = (teamId: string, actionItemId: number) =>
-  `${getActionItemApiPath(teamId)}/${actionItemId}`;
+export const getActionItemApiPath = (teamId: string) => `/api/team/${teamId}/action-item`;

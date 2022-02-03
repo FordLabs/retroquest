@@ -20,16 +20,16 @@ import axios from 'axios';
 import Action from '../../types/Action';
 import CreateActionItemRequest from '../../types/CreateActionItemRequest';
 
-import { getCreateActionItemApiPath, getDeleteActionItemApiPath } from './ApiConstants';
+import { getActionItemApiPath } from './ApiConstants';
 
 const ActionItemService = {
   create: (teamId: string, createActionItemRequest: CreateActionItemRequest): Promise<Action> => {
-    const url = getCreateActionItemApiPath(teamId);
+    const url = getActionItemApiPath(teamId);
     return axios.post(url, createActionItemRequest).then((response) => response.data);
   },
 
   delete(teamId: string, actionItemId: number): Promise<void> {
-    const url = getDeleteActionItemApiPath(teamId, actionItemId);
+    const url = `${getActionItemApiPath(teamId)}/${actionItemId}`;
     return axios.delete(url);
   },
 };
