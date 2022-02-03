@@ -17,12 +17,36 @@
 
 import axios from 'axios';
 
+import { CREATE_TEAM_PAGE_PATH, LOGIN_PAGE_PATH } from '../../routes/RouteConstants';
+import CookieService from '../CookieService';
+
 import { CREATE_TEAM_API_PATH, getTeamNameApiPath, LOGIN_API_PATH } from './ApiConstants';
 
 export interface AuthResponse {
   token: string;
   teamId: string;
 }
+
+const UNAUTHORIZED_STATUS = 401;
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const { status } = error?.response;
+
+    if (status === UNAUTHORIZED_STATUS) {
+      CookieService.clearToken();
+
+      const { pathname } = window.location;
+      const isLoginPage = pathname.includes(LOGIN_PAGE_PATH);
+      const isCreateNewTeamPage = pathname === CREATE_TEAM_PAGE_PATH;
+
+      if (!isLoginPage && !isCreateNewTeamPage) {
+        window.location.pathname = LOGIN_PAGE_PATH;
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 const returnTokenAndTeamId = (response): AuthResponse => ({ token: response.data, teamId: response.headers.location });
 
