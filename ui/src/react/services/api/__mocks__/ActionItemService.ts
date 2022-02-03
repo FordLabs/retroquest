@@ -17,7 +17,7 @@
 
 import ActionItem from '../../../types/Action';
 
-export const getMockActionItem = (isCompleted): ActionItem => ({
+export const getMockActionItem = (isCompleted = false): ActionItem => ({
   id: Math.random(),
   task: 'This is an action we can take',
   completed: isCompleted,
