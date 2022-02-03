@@ -55,4 +55,15 @@ describe('WebSocketService', () => {
       Authorization: `Bearer ` + mockAccessToken,
     });
   });
+
+  it('should subscribe to action items', async () => {
+    const teamId = 'Idddddd';
+    const webSocketMessageHandler = jest.fn();
+    WebSocketService.subscribeToActionItems(teamId, webSocketMessageHandler);
+
+    const expectedDestination = `/topic/${teamId}/action-items`;
+    expect(mockClient.subscribe).toHaveBeenCalledWith(expectedDestination, expect.any(Function), {
+      Authorization: `Bearer ` + mockAccessToken,
+    });
+  });
 });
