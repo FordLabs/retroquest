@@ -102,9 +102,10 @@ function enterActionItem(actionItem: string) {
 
 function shouldStarFirstItemInHappyColumn(expectedStarCount: number) {
   cy.log(`**Starring first happy thought**`);
-  cy.get(`@happyColumnItems`).first().find('[data-testid=starCount]').click();
+  const starCountSelector = '[data-testid=retroItem-upvote]';
+  cy.get(`@happyColumnItems`).first().find(starCountSelector).click();
   cy.log('**The first thought in the happy column should have two stars**');
-  cy.get('@happyColumnItems').first().find('[data-testid=starCount]').should('have.contain', expectedStarCount);
+  cy.get('@happyColumnItems').first().find(starCountSelector).should('have.contain', expectedStarCount);
 }
 
 function shouldMarkThoughtAsDiscussed(thoughtIndex: number) {
