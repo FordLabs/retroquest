@@ -125,7 +125,7 @@ describe('ThoughtColumn.spec.tsx', () => {
   });
 
   describe('Delete Thought', () => {
-    const deleteButtonTestId = 'columnItem-delete';
+    const deleteButtonTestId = 'columnItem-deleteButton';
 
     it('should delete thought when user clicks delete and confirms with "Yes"', () => {
       const thoughtItems = screen.getAllByTestId('retroItem');
@@ -159,7 +159,7 @@ describe('ThoughtColumn.spec.tsx', () => {
 
   it('should update discussion status of a thought', () => {
     const thoughtItems = screen.getAllByTestId('retroItem');
-    const discussedButtonTestid = 'columnItem-checkbox';
+    const discussedButtonTestid = 'columnItem-checkboxButton';
     const firstThoughtsDiscussedButton = within(thoughtItems[0]).getByTestId(discussedButtonTestid);
     expect(within(thoughtItems[0]).getByText('0'));
     userEvent.click(firstThoughtsDiscussedButton);

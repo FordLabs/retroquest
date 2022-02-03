@@ -91,7 +91,7 @@ describe('Retro Page', () => {
 
     deleteHappyThought(1);
 
-    confirmNumberOfThoughtsInColumn(Topic.HAPPY, 3);
+    confirmNumberOfThoughtsInColumn(Topic.HAPPY, 2);
   });
 });
 
@@ -112,7 +112,7 @@ function shouldMarkThoughtAsDiscussed(thoughtIndex: number) {
   cy.get('@happyColumnItems').last().should('not.have.class', 'completed');
 
   cy.log(`**Marking happy thought at index ${thoughtIndex} as discussed**`);
-  cy.get(`@happyColumnItems`).eq(thoughtIndex).find('[data-testid=completeButton]').click();
+  cy.get(`@happyColumnItems`).eq(thoughtIndex).find('[data-testid=columnItem-checkboxButton]').click();
 
   cy.wait('@putMarkThoughtAsDiscussed');
 
@@ -130,8 +130,8 @@ function shouldConfirmDiscussedThoughtMovedToBottomOfList() {
 
 function deleteHappyThought(thoughtIndex: number) {
   cy.log(`**Deleting happy thought at index ${thoughtIndex}**`);
-  cy.get(`@happyColumnItems`).eq(thoughtIndex).find(`[data-testid=deleteButton]`).click();
-  cy.get('[data-testid=deletionOverlay]').contains('yes').click();
+  cy.get(`@happyColumnItems`).eq(thoughtIndex).find(`[data-testid=columnItem-deleteButton]`).click();
+  cy.get('[data-testid=deletionOverlay]').contains('Yes').click();
 }
 
 function confirmNumberOfThoughtsInColumn(topic: Topic, expectedCount: number): void {

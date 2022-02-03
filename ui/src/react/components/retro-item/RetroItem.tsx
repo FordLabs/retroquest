@@ -16,6 +16,7 @@
  */
 
 import * as React from 'react';
+import classnames from 'classnames';
 import { ThoughtTopic } from 'src/react/types/Topic';
 
 import Thought from '../../types/Thought';
@@ -53,7 +54,7 @@ export default function RetroItem(props: RetroItemProps) {
 
   return (
     <ColumnItem
-      className="retro-item"
+      className={classnames('retro-item', { completed: thought.discussed })}
       data-testid="retroItem"
       type={type}
       text={thought.message}

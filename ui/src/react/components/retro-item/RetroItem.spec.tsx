@@ -254,15 +254,15 @@ function clickUpvote() {
 }
 
 function clickEdit() {
-  userEvent.click(screen.getByTestId('columnItem-edit'));
+  userEvent.click(screen.getByTestId('columnItem-editButton'));
 }
 
 function clickDelete() {
-  userEvent.click(screen.getByTestId('columnItem-delete'));
+  userEvent.click(screen.getByTestId('columnItem-deleteButton'));
 }
 
 function clickCheckbox() {
-  userEvent.click(screen.getByTestId('columnItem-checkbox'));
+  userEvent.click(screen.getByTestId('columnItem-checkboxButton'));
 }
 
 function clickCancelDelete() {

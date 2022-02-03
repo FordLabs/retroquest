@@ -33,13 +33,13 @@
             'dark-mode': darkThemeIsEnabled
         }"
         type="secondary"
-        text="no"
+        text="No"
         (click)="emitDeclineButtonClicked()"
     ></rq-button>
     <rq-button
         class="delete-accept-button"
         type="primary"
-        text="yes"
+        text="Yes"
         (mousedown)="$event.preventDefault()"
         (click)="emitAcceptButtonClicked(); hiddenDeleteInput.blur()"
     ></rq-button>
