@@ -19,15 +19,17 @@ import React from 'react';
 import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
+import moment from 'moment';
 import { RecoilRoot } from 'recoil';
 
 import { getMockActionItem } from '../../../services/api/__mocks__/ActionItemService';
-import ThoughtService from '../../../services/api/ThoughtService';
+import ActionItemService from '../../../services/api/ActionItemService';
 import { ActionItemState } from '../../../state/ActionItemState';
 import { ColumnTitleByTopicState } from '../../../state/ColumnTitleState';
 import { TeamState } from '../../../state/TeamState';
 import Action from '../../../types/Action';
 import { ColumnTitle } from '../../../types/ColumnTitle';
+import CreateActionItemRequest from '../../../types/CreateActionItemRequest';
 import Team from '../../../types/Team';
 import Topic, { ThoughtTopic } from '../../../types/Topic';
 
@@ -50,7 +52,7 @@ const actionItemsColumnTitle: ColumnTitle = {
   teamId: 'team-id',
 };
 
-jest.mock('../../../services/api/ThoughtService');
+jest.mock('../../../services/api/ActionItemService');
 
 describe('ActionItemsColumn.spec.tsx', () => {
   let container: HTMLElement;
@@ -73,7 +75,7 @@ describe('ActionItemsColumn.spec.tsx', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
   it('should render without axe errors', async () => {
@@ -96,22 +98,86 @@ describe('ActionItemsColumn.spec.tsx', () => {
     expect(actionItems.length).toBe(3);
   });
 
-  xdescribe('Create Action Item', () => {
+  describe('Create Action Item', () => {
+    const placeholderText = 'Enter an Action Item';
+    let actionItemTextField;
+
+    beforeEach(() => {
+      actionItemTextField = screen.getByPlaceholderText(placeholderText);
+    });
+
+    it('should not make call to create action item until user types an action item', () => {
+      userEvent.type(actionItemTextField, `{enter}`);
+      expect(ActionItemService.create).not.toHaveBeenCalled();
+    });
+
     it('should make call to add action item when user types and submits a new action', () => {
-      const placeholderText = 'Enter an Action Item';
-      const textField = screen.getByPlaceholderText(placeholderText);
+      const taskMessage = 'Do the things';
+      userEvent.type(actionItemTextField, `${taskMessage} @me{enter}`);
 
-      const thoughtMessage = 'I had a new thought...';
-      userEvent.type(textField, `${thoughtMessage}{enter}`);
-
-      expect(ThoughtService.create).toHaveBeenCalledWith(team.id, {
-        id: -1,
+      const expectedCreateActionItemRequest: CreateActionItemRequest = {
+        id: null,
         teamId: team.id,
-        topic: actionItemsColumnTitle.topic,
-        message: thoughtMessage,
-        hearts: 0,
-        discussed: false,
-      });
+        task: taskMessage,
+        completed: false,
+        assignee: 'me',
+        dateCreated: moment().format(),
+        archived: false,
+      };
+      expect(ActionItemService.create).toHaveBeenCalledWith(team.id, expectedCreateActionItemRequest);
+    });
+
+    it('should parse out the assignees from the new message and add it to the action item', () => {
+      const newUnformattedTask = `a new actionItem @ben12 @frank @jeana`;
+      const expectedFormattedTask = 'a new actionItem';
+
+      userEvent.type(actionItemTextField, `${newUnformattedTask}{enter}`);
+
+      const expectedCreateActionItemRequest: CreateActionItemRequest = {
+        id: null,
+        teamId: team.id,
+        task: expectedFormattedTask,
+        completed: false,
+        assignee: 'ben12, frank, jeana',
+        dateCreated: moment().format(),
+        archived: false,
+      };
+      expect(ActionItemService.create).toHaveBeenCalledWith(team.id, expectedCreateActionItemRequest);
+    });
+
+    it('should set the assignees in the action item to null if none could be parsed out of the message', () => {
+      const newTask = `a new actionItem`;
+      userEvent.type(actionItemTextField, `${newTask}{enter}`);
+
+      const expectedCreateActionItemRequest: CreateActionItemRequest = {
+        id: null,
+        teamId: team.id,
+        task: newTask,
+        completed: false,
+        assignee: null,
+        dateCreated: moment().format(),
+        archived: false,
+      };
+      expect(ActionItemService.create).toHaveBeenCalledWith(team.id, expectedCreateActionItemRequest);
+    });
+
+    it('should not let the user submit a assignee string greater than the max limit', () => {
+      const expectedAssignee = 'llllllllllllllllllllllllllllllllllllllllllllllllll';
+      const newTask = `a new actionItem @${expectedAssignee}thisGetsCutOff`;
+      const expectedFormattedMessage = 'a new actionItem';
+
+      userEvent.type(actionItemTextField, `${newTask}{enter}`);
+
+      const expectedCreateActionItemRequest: CreateActionItemRequest = {
+        id: null,
+        teamId: team.id,
+        task: expectedFormattedMessage,
+        completed: false,
+        assignee: expectedAssignee,
+        dateCreated: moment().format(),
+        archived: false,
+      };
+      expect(ActionItemService.create).toHaveBeenCalledWith(team.id, expectedCreateActionItemRequest);
     });
   });
 
@@ -123,7 +189,7 @@ describe('ActionItemsColumn.spec.tsx', () => {
 
       const confirmDeletionButton = screen.queryByText('Yes');
       userEvent.click(confirmDeletionButton);
-      expect(ThoughtService.delete).toHaveBeenCalledWith(team.id, activeActionItem1.id);
+      expect(ActionItemService.delete).toHaveBeenCalledWith(team.id, activeActionItem1.id);
     });
 
     it('should NOT delete action item when user clicks delete and confirms with "No"', () => {
@@ -133,7 +199,7 @@ describe('ActionItemsColumn.spec.tsx', () => {
 
       const confirmDeletionButton = screen.queryByText('No');
       userEvent.click(confirmDeletionButton);
-      expect(ThoughtService.delete).not.toHaveBeenCalledWith(team.id, activeActionItem1.id);
+      expect(ActionItemService.delete).not.toHaveBeenCalledWith(team.id, activeActionItem1.id);
     });
   });
 });

@@ -23,22 +23,48 @@ import ActionItem from '../../../components/action-item/ActionItem';
 import ColumnHeader from '../../../components/column-header/ColumnHeader';
 import { CountSeparator } from '../../../components/count-separator/CountSeparator';
 import TextField from '../../../components/text-field/TextField';
+import ActionItemService from '../../../services/api/ActionItemService';
 import { ActiveActionItemsState, CompletedActionItemsState } from '../../../state/ActionItemState';
 import { ColumnTitleByTopicState } from '../../../state/ColumnTitleState';
+import { TeamState } from '../../../state/TeamState';
 import Action from '../../../types/Action';
+import { getCreateActionItemRequest } from '../../../types/CreateActionItemRequest';
 import Topic from '../../../types/Topic';
+
+const ASSIGNEE_PARSE_SYMBOL = '@';
+const ASSIGNEE_PARSE_REGEX = /(\@[a-zA-Z0-9]+\b)/g;
 
 function ActionItemsColumn() {
   const topic = Topic.ACTION;
-  // const team = useRecoilValue(TeamState);
+  const team = useRecoilValue(TeamState);
   const columnTitle = useRecoilValue(ColumnTitleByTopicState(topic));
   const { title } = columnTitle;
 
   const activeActionItems = useRecoilValue<Action[]>(ActiveActionItemsState);
   const completedActionItems = useRecoilValue<Action[]>(CompletedActionItemsState);
 
-  const createActionItem = (text: string) => {
-    console.log('Create Action', text);
+  const removeAssigneesFromTask = (newMessage: string, assignees: string[]): string => {
+    if (!assignees) return newMessage;
+    return newMessage.replace(ASSIGNEE_PARSE_REGEX, '').replace(/\s+/g, ' ').trim();
+  };
+
+  const parseAssignees = (newMessage: string): string[] => {
+    const matches = newMessage.match(ASSIGNEE_PARSE_REGEX);
+    if (matches) return matches.map((assignee) => assignee.replace(ASSIGNEE_PARSE_SYMBOL, ''));
+    return null;
+  };
+
+  const createActionItem = (task: string) => {
+    if (task && task.length) {
+      const assignees: string[] = parseAssignees(task);
+      const updatedTask: string = removeAssigneesFromTask(task, assignees);
+
+      if (updatedTask && updatedTask.length) {
+        ActionItemService.create(team.id, getCreateActionItemRequest(team.id, updatedTask, assignees)).catch(
+          console.error
+        );
+      }
+    }
   };
 
   const deleteActionItem = (action: Action) => {

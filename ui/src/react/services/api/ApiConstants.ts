@@ -25,3 +25,8 @@ const getThoughtApiPath = (teamId: string) => `/api/team/${teamId}/thought`;
 export const getCreateThoughtApiPath = getThoughtApiPath;
 export const getDeleteThoughtApiPath = (teamId: string, thoughtId: number) =>
   `${getThoughtApiPath(teamId)}/${thoughtId}`;
+
+const getActionItemApiPath = (teamId: string) => `/api/team/${teamId}/action-item`;
+export const getCreateActionItemApiPath = getActionItemApiPath;
+export const getDeleteActionItemApiPath = (teamId: string, actionItemId: number) =>
+  `${getActionItemApiPath(teamId)}/${actionItemId}`;
