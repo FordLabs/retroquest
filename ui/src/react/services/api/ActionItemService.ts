@@ -15,19 +15,23 @@
  * limitations under the License.
  */
 
-import ActionItem from '../../../types/Action';
+import axios from 'axios';
 
-export const getMockActionItem = (isCompleted): ActionItem => ({
-  id: Math.random(),
-  task: 'This is an action we can take',
-  completed: isCompleted,
-  assignee: 'Bob',
-  dateCreated: '2022-01-20',
-});
+import Action from '../../types/Action';
+import CreateActionItemRequest from '../../types/CreateActionItemRequest';
+
+import { getCreateActionItemApiPath, getDeleteActionItemApiPath } from './ApiConstants';
 
 const ActionItemService = {
-  create: jest.fn().mockResolvedValue((action) => action),
-  delete: jest.fn().mockResolvedValue(null),
+  create: (teamId: string, createActionItemRequest: CreateActionItemRequest): Promise<Action> => {
+    const url = getCreateActionItemApiPath(teamId);
+    return axios.post(url, createActionItemRequest).then((response) => response.data);
+  },
+
+  delete(teamId: string, actionItemId: number): Promise<void> {
+    const url = getDeleteActionItemApiPath(teamId, actionItemId);
+    return axios.delete(url);
+  },
 };
 
 export default ActionItemService;
