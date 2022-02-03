@@ -54,10 +54,14 @@ function ThoughtColumn(props: Props) {
     ThoughtService.delete(team.id, thought.id).catch(console.error);
   };
 
+  const upvoteThought = (thought: Thought) => {
+    ThoughtService.upvoteThought(team.id, thought.id).catch(console.error);
+  };
+
   const renderThought = (thought: Thought) => {
     return (
       <Fragment key={thought.id}>
-        <RetroItem onDelete={deleteThought} thought={thought} type={thought.topic} />
+        <RetroItem thought={thought} type={thought.topic} onDelete={deleteThought} onUpvote={upvoteThought} />
       </Fragment>
     );
   };

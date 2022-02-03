@@ -32,7 +32,7 @@ type RetroItemProps = {
   type: ThoughtTopic;
   readOnly?: boolean;
   onSelect?: () => void;
-  onUpvote?: () => void;
+  onUpvote?: (thought: Thought) => void;
   onEdit?: (message: string) => void;
   onDelete?: (thought: Thought) => void;
   onDiscuss?: () => void;
@@ -65,7 +65,7 @@ export default function RetroItem(props: RetroItemProps) {
       customButtons={({ editing, deleting }) => (
         <UpvoteButton
           votes={thought.hearts}
-          onClick={onUpvote}
+          onClick={() => onUpvote(thought)}
           disabled={thought.discussed || editing || deleting}
           readOnly={readOnly}
           data-testid="retroItem-upvote"
