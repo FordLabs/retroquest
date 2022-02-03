@@ -147,6 +147,7 @@ export default function ColumnItem(props: ColumnItemProps) {
         {defaultButtons && (
           <>
             <EditButton
+              aria-label="Edit"
               editing={editing}
               onClick={onEditToggle}
               disabled={checked || readOnly || deleting}
@@ -154,12 +155,14 @@ export default function ColumnItem(props: ColumnItemProps) {
               data-testid="columnItem-edit"
             />
             <DeleteButton
+              aria-label="Delete"
               onClick={onDeleteStarted}
               disabled={readOnly || editing || deleting}
               ref={deleteButtonRef}
               data-testid="columnItem-delete"
             />
             <CheckboxButton
+              aria-label="Checked"
               checked={checked}
               onClick={onCheck}
               disabled={readOnly || editing || deleting}

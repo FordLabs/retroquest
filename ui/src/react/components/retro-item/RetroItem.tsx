@@ -26,16 +26,17 @@ import UpvoteButton from './upvote-button/UpvoteButton';
 import './RetroItem.scss';
 
 const NO_OP = () => undefined;
+type AcceptThoughtFunction = (thought: Thought) => void;
 
 type RetroItemProps = {
   thought: Thought;
   type: ThoughtTopic;
   readOnly?: boolean;
   onSelect?: () => void;
-  onUpvote?: (thought: Thought) => void;
+  onUpvote?: AcceptThoughtFunction;
   onEdit?: (message: string) => void;
-  onDelete?: (thought: Thought) => void;
-  onDiscuss?: () => void;
+  onDelete?: AcceptThoughtFunction;
+  onDiscuss?: AcceptThoughtFunction;
 };
 
 export default function RetroItem(props: RetroItemProps) {
@@ -61,13 +62,14 @@ export default function RetroItem(props: RetroItemProps) {
       onSelect={onSelect}
       onEdit={onEdit}
       onDelete={() => onDelete(thought)}
-      onCheck={onDiscuss}
+      onCheck={() => onDiscuss(thought)}
       customButtons={({ editing, deleting }) => (
         <UpvoteButton
           votes={thought.hearts}
           onClick={() => onUpvote(thought)}
           disabled={thought.discussed || editing || deleting}
           readOnly={readOnly}
+          aria-label={`Upvote (${thought.hearts})`}
           data-testid="retroItem-upvote"
         />
       )}

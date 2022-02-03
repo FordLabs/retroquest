@@ -181,10 +181,10 @@ describe('ActionItemsColumn.spec.tsx', () => {
     });
   });
 
-  xdescribe('Delete Action Item', () => {
+  describe('Delete Action Item', () => {
     it('should delete action item when user clicks delete and confirms with "Yes"', () => {
-      const retroItems = screen.getAllByTestId('retroItem');
-      const firstThoughtsDeleteIcon = within(retroItems[0]).getByTestId('columnItem-delete');
+      const actionItems = screen.getAllByTestId('actionItem');
+      const firstThoughtsDeleteIcon = within(actionItems[0]).getByTestId('columnItem-delete');
       userEvent.click(firstThoughtsDeleteIcon);
 
       const confirmDeletionButton = screen.queryByText('Yes');
@@ -193,8 +193,8 @@ describe('ActionItemsColumn.spec.tsx', () => {
     });
 
     it('should NOT delete action item when user clicks delete and confirms with "No"', () => {
-      const retroItems = screen.getAllByTestId('retroItem');
-      const firstThoughtsDeleteIcon = within(retroItems[0]).getByTestId('columnItem-delete');
+      const actionItems = screen.getAllByTestId('actionItem');
+      const firstThoughtsDeleteIcon = within(actionItems[0]).getByTestId('columnItem-delete');
       userEvent.click(firstThoughtsDeleteIcon);
 
       const confirmDeletionButton = screen.queryByText('No');

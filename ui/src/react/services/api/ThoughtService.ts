@@ -37,6 +37,11 @@ const ThoughtService = {
     const url = `${getThoughtApiPath(teamId)}/${thoughtId}/heart`;
     return axios.put(url);
   },
+
+  updateDiscussionStatus(teamId: string, thoughtId: number, discussed: boolean) {
+    const url = `${getThoughtApiPath(teamId)}/${thoughtId}/discuss`;
+    return axios.put(url, { discussed });
+  },
 };
 
 export default ThoughtService;

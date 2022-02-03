@@ -50,23 +50,15 @@ const thoughtColumnTitle: ColumnTitle = {
   teamId: 'team-id',
 };
 
-const actionItemColumnTitle: ColumnTitle = {
-  id: 465657,
-  topic: Topic.ACTION,
-  title: 'Action',
-  teamId: 'team-id',
-};
-
 jest.mock('../../../services/api/ThoughtService');
 
 describe('ThoughtColumn.spec.tsx', () => {
   let container: HTMLElement;
-  let rerender;
 
   beforeEach(async () => {
     const topic = thoughtColumnTitle.topic as ThoughtTopic;
     await act(async () => {
-      ({ container, rerender } = render(
+      ({ container } = render(
         <RecoilRoot
           initializeState={({ set }) => {
             set(ActiveThoughtsByTopicState(topic), [activeThought1, activeThought2]);
@@ -133,9 +125,11 @@ describe('ThoughtColumn.spec.tsx', () => {
   });
 
   describe('Delete Thought', () => {
+    const deleteButtonTestId = 'columnItem-delete';
+
     it('should delete thought when user clicks delete and confirms with "Yes"', () => {
-      const retroItems = screen.getAllByTestId('retroItem');
-      const firstThoughtsDeleteIcon = within(retroItems[0]).getByTestId('columnItem-delete');
+      const thoughtItems = screen.getAllByTestId('retroItem');
+      const firstThoughtsDeleteIcon = within(thoughtItems[0]).getByTestId(deleteButtonTestId);
       userEvent.click(firstThoughtsDeleteIcon);
 
       const confirmDeletionButton = screen.queryByText('Yes');
@@ -144,8 +138,8 @@ describe('ThoughtColumn.spec.tsx', () => {
     });
 
     it('should NOT delete thought when user clicks delete and confirms with "No"', () => {
-      const retroItems = screen.getAllByTestId('retroItem');
-      const firstThoughtsDeleteIcon = within(retroItems[0]).getByTestId('columnItem-delete');
+      const thoughtItems = screen.getAllByTestId('retroItem');
+      const firstThoughtsDeleteIcon = within(thoughtItems[0]).getByTestId(deleteButtonTestId);
       userEvent.click(firstThoughtsDeleteIcon);
 
       const confirmDeletionButton = screen.queryByText('No');
@@ -154,13 +148,26 @@ describe('ThoughtColumn.spec.tsx', () => {
     });
   });
 
-  xit('should render action items if column is a actions column', async () => {
-    await act(async () => {
-      rerender(<ThoughtColumn topic={actionItemColumnTitle.topic as ThoughtTopic} />);
-    });
-    const actionItems = screen.getAllByTestId('actionItem');
-    expect(actionItems.length).toBe(3);
-    const retroItem = screen.queryByTestId('retroItem');
-    expect(retroItem).toBeNull();
+  it('should upvote a thought', () => {
+    const thoughtItems = screen.getAllByTestId('retroItem');
+    const firstThoughtItemsUpvoteButton = within(thoughtItems[0]).getByTestId('retroItem-upvote');
+    expect(within(thoughtItems[0]).getByText('0'));
+    userEvent.click(firstThoughtItemsUpvoteButton);
+
+    expect(ThoughtService.upvoteThought).toHaveBeenCalledWith(team.id, activeThought1.id);
+  });
+
+  it('should update discussion status of a thought', () => {
+    const thoughtItems = screen.getAllByTestId('retroItem');
+    const discussedButtonTestid = 'columnItem-checkbox';
+    const firstThoughtsDiscussedButton = within(thoughtItems[0]).getByTestId(discussedButtonTestid);
+    expect(within(thoughtItems[0]).getByText('0'));
+    userEvent.click(firstThoughtsDiscussedButton);
+
+    expect(ThoughtService.updateDiscussionStatus).toHaveBeenCalledWith(
+      team.id,
+      activeThought1.id,
+      !activeThought1.discussed
+    );
   });
 });
