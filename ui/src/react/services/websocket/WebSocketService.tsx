@@ -35,9 +35,8 @@ const WebSocketService = {
       console.log('Deactivation successful!');
     });
   },
-  subscribeToThoughts: (teamId: string, webSocketMessageHandler: WebsocketMessageHandlerType): void => {
+  subscribe: (destination: string, webSocketMessageHandler: WebsocketMessageHandlerType): void => {
     const token = CookieService.getToken();
-    const destination = `/topic/${teamId}/thoughts`;
     client.subscribe(
       destination,
       (event) => {
@@ -48,6 +47,14 @@ const WebSocketService = {
         Authorization: `Bearer ` + token,
       }
     );
+  },
+  subscribeToThoughts: (teamId: string, webSocketMessageHandler: WebsocketMessageHandlerType): void => {
+    const destination = `/topic/${teamId}/thoughts`;
+    WebSocketService.subscribe(destination, webSocketMessageHandler);
+  },
+  subscribeToActionItems: (teamId: string, webSocketMessageHandler: WebsocketMessageHandlerType): void => {
+    const destination = `/topic/${teamId}/action-items`;
+    WebSocketService.subscribe(destination, webSocketMessageHandler);
   },
 };
 

@@ -18,10 +18,10 @@
 import { IMessage } from '@stomp/stompjs';
 import { useSetRecoilState } from 'recoil';
 
+import { ActionItemState } from '../state/ActionItemState';
 import { ThoughtsState } from '../state/ThoughtsState';
+import Action from '../types/Action';
 import Thought from '../types/Thought';
-
-export type WebsocketMessageHandlerType = ({ body }: IMessage) => void;
 
 type MessageType = 'put' | 'delete';
 
@@ -30,16 +30,20 @@ interface IncomingMessage {
   payload: unknown;
 }
 
+export type WebsocketMessageHandlerType = ({ body }: IMessage) => void;
+
 interface WebsocketCallback {
   thoughtMessageHandler: WebsocketMessageHandlerType;
+  actionItemMessageHandler: WebsocketMessageHandlerType;
 }
 
 function useWebSocketMessageHandler(): WebsocketCallback {
   const setThoughts = useSetRecoilState(ThoughtsState);
+  const setActionItems = useSetRecoilState(ActionItemState);
 
   const thoughtMessageHandler = ({ body }: IMessage) => {
     const incomingMessage: IncomingMessage = JSON.parse(body);
-    const thought: Thought = incomingMessage.payload as Thought;
+    const thought = incomingMessage.payload as Thought;
 
     switch (incomingMessage.type) {
       case 'put': {
@@ -52,7 +56,19 @@ function useWebSocketMessageHandler(): WebsocketCallback {
     }
   };
 
-  return { thoughtMessageHandler };
+  const actionItemMessageHandler = ({ body }: IMessage) => {
+    const incomingMessage: IncomingMessage = JSON.parse(body);
+    const action = incomingMessage.payload as Action;
+
+    switch (incomingMessage.type) {
+      case 'put': {
+        setActionItems((currentState) => [...currentState, action]);
+        break;
+      }
+    }
+  };
+
+  return { thoughtMessageHandler, actionItemMessageHandler };
 }
 
 export default useWebSocketMessageHandler;
