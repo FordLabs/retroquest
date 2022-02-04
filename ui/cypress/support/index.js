@@ -34,7 +34,7 @@
 import './commands';
 
 Cypress.Cookies.defaults({
-  preserve: 'token',
+  preserve: ['JSESSIONID', 'token'],
 });
 
 // Alternatively you can use CommonJS syntax:
