@@ -21,79 +21,99 @@ import Topic from '../../src/react/types/Topic';
 import { getTeamCredentials } from '../support/helpers';
 
 describe('Retro Page', () => {
+  const green = 'rgb(46, 204, 113)';
+  const red = 'rgb(231, 76, 60)';
+  const blue = 'rgb(52, 152, 219)';
+  const yellow = 'rgb(241, 196, 15)';
+
   const teamCredentials = getTeamCredentials();
 
   before(() => {
     cy.createTeamAndLogin(teamCredentials);
+  });
 
-    cy.get('[data-testid=retroColumn__action]').as('actionsColumn');
-    cy.get('[data-testid=retroColumn__confused]').as('confusedColumn');
-    cy.get('[data-testid=retroColumn__unhappy]').as('sadColumn');
+  it('Happy Column', () => {
+    cy.log('**Should have "Happy" column header in green**');
+    cy.findByText('Happy').should('exist').parent().should('have.css', 'background-color', green);
 
     cy.get('[data-testid=retroColumn__happy]').as('happyColumn');
-  });
 
-  describe('Retro Board Defaults', () => {
-    const green = 'rgb(46, 204, 113)';
-    const red = 'rgb(231, 76, 60)';
-    const blue = 'rgb(52, 152, 219)';
-    const yellow = 'rgb(241, 196, 15)';
-
-    it('Confirm default heading text and colors', () => {
-      cy.log('**Should have "Happy" column header in green**');
-      cy.findByText('Happy').should('exist').parent().should('have.css', 'background-color', green);
-
-      cy.log('**Should have "Confused" column header in blue**');
-      cy.findByText('Confused').should('exist').parent().should('have.css', 'background-color', blue);
-
-      cy.log('**Should have "Sad" column header in red**');
-      cy.findByText('Sad').should('exist').parent().should('have.css', 'background-color', red);
-
-      cy.log('**Should have "Action Items" column header in yellow**');
-      cy.findByText('Action Items').should('exist').parent().should('have.css', 'background-color', yellow);
-    });
-  });
-
-  it('Conduct a Retro', () => {
     const happyThoughts = ['Good flow to our work this week', 'Loved our communication', 'Great team dynamic'];
+    shouldCreateHappyThoughts(happyThoughts);
+
+    const updatedThought = `${happyThoughts[0]} - updated`;
+    shouldEditAThought(happyThoughts[0], updatedThought);
+    happyThoughts[0] = updatedThought;
+
+    shouldStarHappyThought();
+
+    shouldMarkAndUnmarkThoughtAsDiscussed(happyThoughts[0]);
+
+    shouldDeleteHappyThought(1, 2);
+  });
+
+  it('Confused Column', () => {
+    cy.log('*Should have "Confused" column header in blue*');
+    cy.findByText('Confused').should('exist').parent().should('have.css', 'background-color', blue);
+
+    cy.get('[data-testid=retroColumn__confused]').as('confusedColumn');
+
     const confusedThought = "What's going on with zyx";
-    const unhappyThought = "I don't like how many meetings we have";
-    const actionItems = ['Increase Code Coverage', 'Make our meetings shorter'];
-
-    cy.intercept('PUT', `/api/team/${teamCredentials.teamId}/thought/**/discuss`).as('putMarkThoughtAsDiscussed');
-
-    cy.enterThought(Topic.HAPPY, happyThoughts[0]);
-    confirmNumberOfThoughtsInColumn(Topic.HAPPY, 1);
-
-    cy.enterThought(Topic.HAPPY, happyThoughts[1]);
-    confirmNumberOfThoughtsInColumn(Topic.HAPPY, 2);
-
-    cy.enterThought(Topic.HAPPY, happyThoughts[2]);
-    confirmNumberOfThoughtsInColumn(Topic.HAPPY, 3);
-
     cy.enterThought(Topic.CONFUSED, confusedThought);
     confirmNumberOfThoughtsInColumn(Topic.CONFUSED, 1);
+  });
 
+  it('Sad Column', () => {
+    cy.log('*Should have "Sad" column header in red*');
+    cy.findByText('Sad').should('exist').parent().should('have.css', 'background-color', red);
+
+    cy.get('[data-testid=retroColumn__unhappy]').as('sadColumn');
+
+    const unhappyThought = "I don't like how many meetings we have";
     cy.enterThought(Topic.UNHAPPY, unhappyThought);
     confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 1);
+  });
+
+  it('Action Item Column', () => {
+    cy.log('**Should have "Action Items" column header in yellow**');
+    cy.findByText('Action Items').should('exist').parent().should('have.css', 'background-color', yellow);
+
+    const actionItems = ['Increase Code Coverage', 'Make our meetings shorter'];
+    cy.get('[data-testid=retroColumn__action]').as('actionsColumn');
 
     enterActionItem(actionItems[0]);
     confirmNumberOfActionItemsInColumn(1);
     enterActionItem(actionItems[1]);
     confirmNumberOfActionItemsInColumn(2);
-
-    cy.get('@happyColumn').find(`[data-testid=retroItem]`).as('happyColumnItems');
-
-    shouldStarFirstItemInHappyColumn(1);
-    shouldStarFirstItemInHappyColumn(2);
-
-    shouldMarkThoughtAsDiscussed(1);
-
-    deleteHappyThought(1);
-
-    confirmNumberOfThoughtsInColumn(Topic.HAPPY, 2);
   });
 });
+
+function shouldCreateHappyThoughts(happyThoughts: string[]) {
+  happyThoughts.forEach((happyThought, index) => {
+    cy.enterThought(Topic.HAPPY, happyThought);
+    cy.findByDisplayValue(happyThought);
+    confirmNumberOfThoughtsInColumn(Topic.HAPPY, index + 1);
+  });
+}
+
+function shouldEditAThought(currentThought: string, updatedThought: string) {
+  getRetroItemByMessage(currentThought).find('[data-testid=columnItem-editButton]').type(`${updatedThought}{enter}`);
+  cy.findByDisplayValue(updatedThought);
+}
+
+function shouldStarHappyThought() {
+  cy.log('**Test staring thoughts**');
+  shouldStarFirstItemInHappyColumn(1);
+  shouldStarFirstItemInHappyColumn(2);
+}
+
+function shouldDeleteHappyThought(thoughtIndex: number, expectedThoughtsRemaining) {
+  cy.log(`**Deleting happy thought at index ${thoughtIndex}**`);
+  getHappyColumnItems().eq(thoughtIndex).find(`[data-testid=columnItem-deleteButton]`).click();
+  cy.get('[data-testid=deletionOverlay]').contains('Yes').click();
+
+  confirmNumberOfThoughtsInColumn(Topic.HAPPY, expectedThoughtsRemaining);
+}
 
 function enterActionItem(actionItem: string) {
   cy.log('**Entering an action item**');
@@ -103,35 +123,27 @@ function enterActionItem(actionItem: string) {
 function shouldStarFirstItemInHappyColumn(expectedStarCount: number) {
   cy.log(`**Starring first happy thought**`);
   const starCountSelector = '[data-testid=retroItem-upvote]';
-  cy.get(`@happyColumnItems`).first().find(starCountSelector).click();
+  getHappyColumnItems().first().find(starCountSelector).click();
   cy.log('**The first thought in the happy column should have two stars**');
-  cy.get('@happyColumnItems').first().find(starCountSelector).should('have.contain', expectedStarCount);
+  getHappyColumnItems().first().find(starCountSelector).should('have.contain', expectedStarCount);
 }
 
-function shouldMarkThoughtAsDiscussed(thoughtIndex: number) {
-  cy.get('@happyColumnItems').last().should('not.have.class', 'completed');
+function shouldMarkAndUnmarkThoughtAsDiscussed(thoughtMessage: string) {
+  cy.log('**Test marking thoughts as discussed**');
+  getHappyColumnItems().last().should('not.have.class', 'completed');
 
-  cy.log(`**Marking happy thought at index ${thoughtIndex} as discussed**`);
-  cy.get(`@happyColumnItems`).eq(thoughtIndex).find('[data-testid=columnItem-checkboxButton]').click();
+  cy.log(`**Marking happy thought "${thoughtMessage}" as discussed**`);
+  getRetroItemByMessage(thoughtMessage).find('[data-testid=columnItem-checkboxButton]').as('discussedButton');
 
-  cy.wait('@putMarkThoughtAsDiscussed');
+  cy.get(`@discussedButton`).click();
 
-  shouldConfirmDiscussedThoughtMovedToBottomOfList();
-}
+  cy.log('**Should mark thought as discussed and move to bottom of the list**');
+  getHappyColumnItems().should('have.length', 3).last().should('have.class', 'completed');
 
-function shouldConfirmDiscussedThoughtMovedToBottomOfList() {
-  cy.log('**The last thought in the happy column should be discussed**');
-  cy.get('[data-testid=retroColumn__happy]')
-    .find(`[data-testid=retroItem]`)
-    .should('have.length', 3)
-    .last()
-    .should('have.class', 'completed');
-}
+  cy.get(`@discussedButton`).click();
 
-function deleteHappyThought(thoughtIndex: number) {
-  cy.log(`**Deleting happy thought at index ${thoughtIndex}**`);
-  cy.get(`@happyColumnItems`).eq(thoughtIndex).find(`[data-testid=columnItem-deleteButton]`).click();
-  cy.get('[data-testid=deletionOverlay]').contains('Yes').click();
+  cy.log('**Should unmark thought as discussed and move have up the list**');
+  getHappyColumnItems().should('have.length', 3).last().should('not.have.class', 'completed');
 }
 
 function confirmNumberOfThoughtsInColumn(topic: Topic, expectedCount: number): void {
@@ -143,3 +155,6 @@ function confirmNumberOfActionItemsInColumn(expectedCount: number): void {
   cy.log(`**There should be ${expectedCount} action items**`);
   cy.get('[data-testid=retroColumn__action]').find('[data-testid=actionItem]').should('have.length', expectedCount);
 }
+
+const getHappyColumnItems = () => cy.get('[data-testid=retroColumn__happy]').find(`[data-testid=retroItem]`);
+const getRetroItemByMessage = (message: string) => cy.findByDisplayValue(message).closest(`[data-testid=retroItem]`);

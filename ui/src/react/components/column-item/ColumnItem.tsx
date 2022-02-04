@@ -137,7 +137,7 @@ export default function ColumnItem(props: ColumnItemProps) {
         onCancel={onEditCanceled}
         onSelect={onTextSelect}
         className="text-container"
-        data-testid="columnItem-text"
+        data-testid="columnItem-textarea"
       />
 
       {children && children({ editing, deleting })}

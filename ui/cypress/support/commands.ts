@@ -76,10 +76,7 @@ Cypress.Commands.add('createTeamAndLogin', (teamCredentials: TeamCredentials) =>
 
 Cypress.Commands.add('enterThought', (topic: Topic, thought: string) => {
   cy.log(`**Entering a ${topic} thought**`);
-  cy.get(`[data-testid=retroColumn__${topic}]`)
-    .as('column')
-    .find('input[placeholder="Enter a Thought"]')
-    .type(`${thought}{enter}`);
+  cy.get(`[data-testid=retroColumn__${topic}]`).findByPlaceholderText('Enter a Thought').type(`${thought}{enter}`);
 });
 
 Cypress.Commands.add('shouldBeOnRetroPage', (teamId: string) => {

@@ -32,6 +32,7 @@
     <textarea
         #content_value
         [(ngModel)]="taskMessage"
+        data-testid="columnItem-textarea"
         class="content-message edit-input"
         [ngClass]="{
             disable: task.discussed,
@@ -100,6 +101,7 @@
 
     <div
         class="container edit-container"
+        data-testid="columnItem-editButton"
         (click)="toggleEditMode()"
         *ngIf="!taskEditModeEnabled; else exit_edit_mode_icon"
         [ngClass]="{
@@ -134,7 +136,7 @@
 
     <div
         class="container delete-container"
-        [attr.data-testid]="'columnItem-deleteButton'"
+        data-testid="columnItem-deleteButton"
         [ngClass]="{
             'dark-theme': darkThemeIsEnabled,
             disable: readOnly || taskEditModeEnabled
@@ -148,7 +150,7 @@
 
     <div
         class="complete-container"
-        [attr.data-testid]="'columnItem-checkboxButton'"
+        data-testid="columnItem-checkboxButton"
         [ngClass]="{
             opacify: taskEditModeEnabled || readOnly,
             'dark-theme': darkThemeIsEnabled,
