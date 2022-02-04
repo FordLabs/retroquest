@@ -62,6 +62,10 @@ function ThoughtColumn(props: Props) {
     ThoughtService.updateDiscussionStatus(team.id, thought.id, !thought.discussed).catch(console.error);
   };
 
+  const onEdit = (thought: Thought, updatedThoughtMessage: string) => {
+    ThoughtService.updateMessage(team.id, thought.id, updatedThoughtMessage).catch(console.error);
+  };
+
   const renderThought = (thought: Thought) => {
     return (
       <Fragment key={thought.id}>
@@ -71,6 +75,7 @@ function ThoughtColumn(props: Props) {
           onDelete={deleteThought}
           onUpvote={upvoteThought}
           onDiscuss={updateThoughtDiscussionStatus}
+          onEdit={onEdit}
         />
       </Fragment>
     );

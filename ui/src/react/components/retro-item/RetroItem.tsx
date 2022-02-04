@@ -35,7 +35,7 @@ type RetroItemProps = {
   readOnly?: boolean;
   onSelect?: () => void;
   onUpvote?: AcceptThoughtFunction;
-  onEdit?: (message: string) => void;
+  onEdit?: (thought: Thought, updatedThoughtMessage) => void;
   onDelete?: AcceptThoughtFunction;
   onDiscuss?: AcceptThoughtFunction;
 };
@@ -61,7 +61,7 @@ export default function RetroItem(props: RetroItemProps) {
       checked={thought.discussed}
       readOnly={readOnly}
       onSelect={onSelect}
-      onEdit={onEdit}
+      onEdit={(updatedThoughtMessage) => onEdit(thought, updatedThoughtMessage)}
       onDelete={() => onDelete(thought)}
       onCheck={() => onDiscuss(thought)}
       customButtons={({ editing, deleting }) => (

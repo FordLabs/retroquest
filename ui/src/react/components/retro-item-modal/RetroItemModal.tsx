@@ -32,7 +32,7 @@ type RetroItemModalProps = {
   thought: Thought;
   readOnly?: boolean;
   onUpvote?: () => void;
-  onEdit?: (message: string) => void;
+  onEdit?: (thought: Thought, updatedThoughtMessage) => void;
   onDelete?: () => void;
   onDiscuss?: () => void;
   onAction?: (task: string, assignee: string) => void;
@@ -70,7 +70,7 @@ function RetroItemModal(props: RetroItemModalProps, ref: Ref<ModalMethods>) {
         thought={thought}
         readOnly={readOnly}
         onUpvote={onUpvote}
-        onEdit={onEdit}
+        onEdit={(updatedThoughtMessage) => onEdit(thought, updatedThoughtMessage)}
         onDelete={onDelete}
         onDiscuss={onDiscuss}
         type={type}

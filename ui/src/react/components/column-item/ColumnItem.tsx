@@ -15,8 +15,7 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 
 import Topic from '../../types/Topic';
@@ -44,8 +43,8 @@ type ColumnItemProps = React.ComponentPropsWithoutRef<'div'> & {
   onDelete?: () => void;
   onCheck?: () => void;
   defaultButtons?: boolean;
-  customButtons?: (state?: { editing: boolean; deleting: boolean }) => React.ReactNode;
-  children?: (state?: { editing: boolean; deleting: boolean }) => React.ReactNode;
+  customButtons?: (state?: { editing: boolean; deleting: boolean }) => ReactNode;
+  children?: (state?: { editing: boolean; deleting: boolean }) => ReactNode;
 };
 
 export default function ColumnItem(props: ColumnItemProps) {
