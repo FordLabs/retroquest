@@ -19,18 +19,23 @@ package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.actionitem.*;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
+import com.ford.labs.retroquest.websocket.WebsocketActionItemEvent;
+import com.ford.labs.retroquest.websocket.WebsocketService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.messaging.simp.stomp.StompSession;
 
 import java.util.Arrays;
 
+import static com.ford.labs.retroquest.websocket.WebsocketEventType.DELETE;
+import static com.ford.labs.retroquest.websocket.WebsocketEventType.UPDATE;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -39,15 +44,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Tag("api")
 class ActionItemApiTest extends ApiTestBase {
 
-    private String BASE_API_URL = "/api/team/BeachBums/action-item";
-    private String ACTION_ITEMS_SUBSCRIPTION_URL;
+    private String BASE_API_URL;
 
     @Autowired
     private ActionItemRepository actionItemRepository;
 
+    @MockBean
+    private WebsocketService websocketService;
+
     @BeforeEach
     void setup() {
-        ACTION_ITEMS_SUBSCRIPTION_URL = format("/topic/%s/action-items", teamId);
         BASE_API_URL = format("/api/team/%s/action-item", teamId);
     }
 
@@ -58,9 +64,6 @@ class ActionItemApiTest extends ApiTestBase {
 
     @Test
     public void should_create_action_item() throws Exception {
-        StompSession session = getAuthorizedSession();
-        subscribe(session, ACTION_ITEMS_SUBSCRIPTION_URL);
-
         ActionItem sentActionItem = ActionItem.builder()
                 .task("do the thing")
                 .build();
@@ -71,12 +74,12 @@ class ActionItemApiTest extends ApiTestBase {
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isCreated());
 
-        ActionItem returnedActionItem = takeObjectInSocket(ActionItem.class);
 
         assertThat(actionItemRepository.count()).isEqualTo(1);
-        assertThat(actionItemRepository.findAll().get(0)).isEqualTo(returnedActionItem);
+        var actual = actionItemRepository.findAll().get(0);
 
-        assertThat(sentActionItem.getTask()).isEqualTo(returnedActionItem.getTask());
+        assertThat(sentActionItem.getTask()).isEqualTo(actual.getTask());
+        verify(websocketService).publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, actual));
     }
 
     @Test
@@ -106,8 +109,6 @@ class ActionItemApiTest extends ApiTestBase {
 
     @Test
     void should_set_action_item_as_completed() throws Exception {
-        StompSession session = getAuthorizedSession();
-        subscribe(session, ACTION_ITEMS_SUBSCRIPTION_URL);
         ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder().teamId(teamId).completed(true).build());
 
         var request = new UpdateActionItemCompletedRequest(false);
@@ -117,18 +118,16 @@ class ActionItemApiTest extends ApiTestBase {
             .contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isOk());
-        ActionItem emittedActionItem = takeObjectInSocket(ActionItem.class);
 
         assertThat(actionItemRepository.count()).isEqualTo(1);
-        ActionItem updatedActionItem = actionItemRepository.findAll().get(0);
-        assertThat(updatedActionItem.isCompleted()).isFalse();
-        assertThat(emittedActionItem).usingRecursiveComparison().isEqualTo(updatedActionItem);
+        var actual = actionItemRepository.findAll().get(0);
+        assertThat(actual.getTask()).isEqualTo(actual.getTask());
+        assertThat(actual.isCompleted()).isFalse();
+        verify(websocketService).publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, actual));
     }
 
     @Test
     void should_delete_action_items_for_team_in_token() throws Exception {
-        StompSession session = getAuthorizedSession();
-        subscribe(session, ACTION_ITEMS_SUBSCRIPTION_URL);
         var actionItem1 = actionItemRepository.save(ActionItem.builder().teamId(teamId).build());
         var actionItem2 = actionItemRepository.save(ActionItem.builder()
             .teamId(teamId)
@@ -138,19 +137,16 @@ class ActionItemApiTest extends ApiTestBase {
         mockMvc.perform(delete(format(BASE_API_URL + "/%d", actionItem1.getId()))
             .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isOk());
-        var emittedEvent = takeObjectInSocket(ActionItem.class);
 
         var expectedItem = ActionItem.builder().id(actionItem1.getId()).build();
         var savedActionItems = actionItemRepository.findAll();
         assertThat(savedActionItems).hasSize(1);
         assertThat(savedActionItems.get(0)).usingRecursiveComparison().isEqualTo(actionItem2);
-        assertThat(emittedEvent).usingRecursiveComparison().isEqualTo(expectedItem);
+        verify(websocketService).publishEvent(new WebsocketActionItemEvent(teamId, DELETE, expectedItem));
     }
 
     @Test
     void should_edit_action_item_task() throws Exception {
-        StompSession session = getAuthorizedSession();
-        subscribe(session, ACTION_ITEMS_SUBSCRIPTION_URL);
         ActionItem expectedActionItem = actionItemRepository.save(ActionItem.builder()
             .task("I AM A TEMPORARY TASK")
             .teamId(teamId)
@@ -165,18 +161,15 @@ class ActionItemApiTest extends ApiTestBase {
             .contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isOk());
-        ActionItem emittedActionItem = takeObjectInSocket(ActionItem.class);
 
         assertThat(actionItemRepository.count()).isEqualTo(1);
-        ActionItem updatedActionItem = actionItemRepository.findAll().get(0);
-        assertThat(updatedActionItem).isEqualTo(expectedActionItem);
-        assertThat(emittedActionItem).usingRecursiveComparison().isEqualTo(updatedActionItem);
+        var actual = actionItemRepository.findAll().get(0);
+        assertThat(actual).usingRecursiveComparison().isEqualTo(expectedActionItem);
+        verify(websocketService).publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, actual));
     }
 
     @Test
     void should_add_assignee_to_action_item() throws Exception {
-        StompSession session = getAuthorizedSession();
-        subscribe(session, ACTION_ITEMS_SUBSCRIPTION_URL);
         ActionItem actionItem = actionItemRepository.save(ActionItem.builder()
             .task(teamId)
             .teamId("suchateam")
@@ -190,18 +183,15 @@ class ActionItemApiTest extends ApiTestBase {
             .contentType(MediaType.APPLICATION_JSON)
             .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isOk());
-        ActionItem emittedActionItem = takeObjectInSocket(ActionItem.class);
 
         assertThat(actionItemRepository.count()).isEqualTo(1);
-        ActionItem updatedActionItem = actionItemRepository.findAll().get(0);
-        assertThat(updatedActionItem.getAssignee()).isEqualTo("heyo!");
-        assertThat(emittedActionItem).usingRecursiveComparison().isEqualTo(updatedActionItem);
+        var actual = actionItemRepository.findAll().get(0);
+        assertThat(actual.getAssignee()).isEqualTo("heyo!");
+        verify(websocketService).publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, actual));
     }
 
     @Test
     public void should_archive_action_item() throws Exception{
-        StompSession session = getAuthorizedSession();
-        subscribe(session, ACTION_ITEMS_SUBSCRIPTION_URL);
         var request = new UpdateActionItemArchivedRequest(true);
         ActionItem actionItem = actionItemRepository.save(ActionItem.builder()
                 .task(teamId)
@@ -214,12 +204,11 @@ class ActionItemApiTest extends ApiTestBase {
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk());
-        ActionItem emittedActionItem = takeObjectInSocket(ActionItem.class);
 
         assertThat(actionItemRepository.count()).isEqualTo(1);
-        ActionItem updatedActionItem = actionItemRepository.findAll().get(0);
-        assertThat(updatedActionItem.isArchived()).isTrue();
-        assertThat(emittedActionItem).usingRecursiveComparison().isEqualTo(updatedActionItem);
+        var actual = actionItemRepository.findAll().get(0);
+        assertThat(actual.isArchived()).isTrue();
+        verify(websocketService).publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, actual));
     }
 
     @Test

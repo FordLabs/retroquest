@@ -49,12 +49,10 @@ class ThoughtApiTest extends ApiTestBase {
     @Autowired
     private ColumnTitleRepository columnTitleRepository;
 
-    private String BASE_SUB_URL;
     private String BASE_API_URL;
 
     @BeforeEach
     void setup() {
-        BASE_SUB_URL = "/topic/" + teamId + "/thoughts";
         BASE_API_URL = "/api/team/" + teamId;
     }
 
@@ -66,18 +64,14 @@ class ThoughtApiTest extends ApiTestBase {
 
     @Test
     void should_like_thought_on_upvote() throws Exception {
-        StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
         Thought originalThought = thoughtRepository.save(Thought.builder().teamId(teamId).hearts(1).build());
 
         mockMvc.perform(put("/api/team/" + teamId + "/thought/" + originalThought.getId() + "/heart")
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk());
-        var emittedThought = takeObjectInSocket(Thought.class);
 
         Thought savedThought = thoughtRepository.findById(originalThought.getId()).orElseThrow();
         assertThat(savedThought.getHearts()).isEqualTo(2);
-        assertThat(emittedThought).usingRecursiveComparison().isEqualTo(savedThought);
     }
 
     @Test
@@ -85,14 +79,10 @@ class ThoughtApiTest extends ApiTestBase {
         mockMvc.perform(put("/api/team/" + teamId + "/thought/" + 1 + "/heart")
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
                 .andExpect(status().isForbidden());
-
-
     }
 
     @Test
     void should_update_thought_discussion() throws Exception {
-        StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
         Thought originalThought = thoughtRepository.save(Thought.builder().teamId(teamId).discussed(false).build());
 
         mockMvc.perform(put("/api/team/" + teamId + "/thought/" + originalThought.getId() + "/discuss")
@@ -100,11 +90,9 @@ class ThoughtApiTest extends ApiTestBase {
                 .content(objectMapper.writeValueAsString(new UpdateThoughtDiscussedRequest(true)))
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk());
-        var emittedThought = takeObjectInSocket(Thought.class);
 
         Thought savedThought = thoughtRepository.findById(originalThought.getId()).orElseThrow();
         assertThat(savedThought.isDiscussed()).isTrue();
-        assertThat(emittedThought).usingRecursiveComparison().isEqualTo(savedThought);
     }
 
     @Test
@@ -118,8 +106,6 @@ class ThoughtApiTest extends ApiTestBase {
 
     @Test
     void should_update_thought_message() throws Exception {
-        StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
         var originalThought = thoughtRepository.save(Thought.builder().teamId(teamId).message("hello").build());
         var updatedMessage = "goodbye";
 
@@ -128,11 +114,9 @@ class ThoughtApiTest extends ApiTestBase {
                 .content(objectMapper.writeValueAsString(new UpdateThoughtMessageRequest(updatedMessage)))
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk());
-        var emittedThought = takeObjectInSocket(Thought.class);
 
         var updatedThought = thoughtRepository.findById(originalThought.getId()).orElseThrow();
         assertThat(updatedThought.getMessage()).isEqualTo(updatedMessage);
-        assertThat(emittedThought).usingRecursiveComparison().isEqualTo(updatedThought);
     }
 
     @Test
@@ -159,8 +143,6 @@ class ThoughtApiTest extends ApiTestBase {
 
     @Test
     public void should_move_thought_column() throws Exception {
-        StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
         MoveThoughtRequest changeRequest = new MoveThoughtRequest("cheeseburgers");
         Thought savedThought = thoughtRepository.save(
                 Thought.builder()
@@ -178,18 +160,11 @@ class ThoughtApiTest extends ApiTestBase {
                 .header("Authorization", getBearerAuthToken())
         ).andExpect(status().isOk());
 
-
-        Thought emittedThought = takeObjectInSocket(Thought.class);
-
         Thought updatedThought = thoughtRepository.findById(savedThought.getId()).orElseThrow(Exception::new);
 
         assertThat(updatedThought.getId()).isEqualTo(savedThought.getId());
         assertThat(updatedThought.getMessage()).isEqualTo(savedThought.getMessage());
         assertThat(updatedThought.getTopic()).isEqualTo(changeRequest.getTopic());
-
-        assertThat(updatedThought)
-                .usingRecursiveComparison()
-                .isEqualTo(emittedThought);
     }
 
     @Test
@@ -216,9 +191,6 @@ class ThoughtApiTest extends ApiTestBase {
 
     @Test
     void should_delete_thoughts_by_thought_id() throws Exception {
-        StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
-
         List<Thought> thoughtsToSave = Arrays.asList(
                 Thought.builder().teamId(teamId).message("hello").build(),
                 Thought.builder().teamId(teamId).message("goodbye").build());
@@ -236,11 +208,8 @@ class ThoughtApiTest extends ApiTestBase {
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk());
 
-        var emittedThought = takeObjectInSocket(Thought.class);
-
         assertThat(thoughtRepository.exists(Example.of(thoughtToDelete))).isFalse();
         assertThat(thoughtRepository.exists(Example.of(thoughToKeep))).isTrue();
-        assertThat(emittedThought.getId()).isEqualTo(thoughtToDelete.getId());
     }
 
     @Test
@@ -253,9 +222,6 @@ class ThoughtApiTest extends ApiTestBase {
 
     @Test
     void should_create_thought() throws Exception {
-        StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
-
         var createThoughtRequest = new CreateThoughtRequest(
                 null,
                 "Hello",
@@ -271,14 +237,12 @@ class ThoughtApiTest extends ApiTestBase {
                 .content(objectMapper.writeValueAsString(createThoughtRequest))
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isCreated());
-        var emittedThought = takeObjectInSocket(Thought.class);
 
         var savedThoughts = thoughtRepository.findAllByTeamId(teamId);
         assertThat(savedThoughts).hasSize(1);
         var savedThought = savedThoughts.get(0);
         assertThat(savedThought.getMessage()).isEqualTo("Hello");
         assertThat(savedThought.getTopic()).isEqualTo("happy");
-        assertThat(emittedThought).usingRecursiveComparison().isEqualTo(savedThought);
     }
 
     @Test

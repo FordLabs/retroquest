@@ -1,6 +1,5 @@
 package com.ford.labs.retroquest.websocket;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -15,7 +14,7 @@ class WebsocketServiceTest {
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Test
-    public void publishEvent_WithWebsocketEvent_ShouldConvertAndSendToCorrectRoute() throws JsonProcessingException {
+    public void publishEvent_WithWebsocketEvent_ShouldConvertAndSendToCorrectRoute() {
         var service = new WebsocketService(mockMessageTemplate, mapper);
         service.publishEvent(new FakeEvent(WebsocketEventType.DELETE, "Thing to Delete"));
         verify(mockMessageTemplate).convertAndSend(eq("send/to/route"), eq("{\"type\":\"delete\",\"payload\":\"Thing to Delete\"}"));
