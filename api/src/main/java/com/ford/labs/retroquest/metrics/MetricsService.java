@@ -22,16 +22,17 @@ import com.ford.labs.retroquest.team.TeamRepository;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedResource;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Period;
 
-@Component
-public class Metrics {
+@Service
+public class MetricsService {
     private final TeamRepository teamRepository;
     private final FeedbackRepository feedbackRepository;
 
-    public Metrics(TeamRepository teamRepository, FeedbackRepository feedbackRepository) {
+    public MetricsService(TeamRepository teamRepository, FeedbackRepository feedbackRepository) {
         this.teamRepository = teamRepository;
         this.feedbackRepository = feedbackRepository;
     }

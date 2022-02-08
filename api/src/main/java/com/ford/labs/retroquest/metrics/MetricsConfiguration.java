@@ -25,29 +25,29 @@ import javax.annotation.PostConstruct;
 
 @Configuration
 public class MetricsConfiguration {
-    private final Metrics metrics;
+    private final MetricsService metricsService;
     private final MeterRegistry meterRegistry;
 
-    public MetricsConfiguration(Metrics metrics, MeterRegistry meterRegistry) {
-        this.metrics = metrics;
+    public MetricsConfiguration(MetricsService metricsService, MeterRegistry meterRegistry) {
+        this.metricsService = metricsService;
         this.meterRegistry = meterRegistry;
     }
 
     @PostConstruct
     void registerMetrics() {
-        Gauge.builder("retroquest.teams.count", this.metrics, Metrics::getTeamCount)
+        Gauge.builder("retroquest.teams.count", this.metricsService, MetricsService::getTeamCount)
             .strongReference(true)
             .register(this.meterRegistry);
 
-        Gauge.builder("retroquest.feedback.count", this.metrics, Metrics::getFeedbackCount)
+        Gauge.builder("retroquest.feedback.count", this.metricsService, MetricsService::getFeedbackCount)
             .strongReference(true)
             .register(this.meterRegistry);
 
-        Gauge.builder("retroquest.feedback.averageRating", this.metrics, Metrics::getAverageRating)
+        Gauge.builder("retroquest.feedback.averageRating", this.metricsService, MetricsService::getAverageRating)
             .strongReference(true)
             .register(this.meterRegistry);
 
-        Gauge.builder("retroquest.teams.activeTeams.count", this.metrics, Metrics::getActiveTeams)
+        Gauge.builder("retroquest.teams.activeTeams.count", this.metricsService, MetricsService::getActiveTeams)
             .strongReference(true)
             .register(this.meterRegistry);
     }
