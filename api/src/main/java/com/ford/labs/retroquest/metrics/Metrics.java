@@ -21,6 +21,7 @@ import com.ford.labs.retroquest.feedback.FeedbackRepository;
 import com.ford.labs.retroquest.team.TeamRepository;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedResource;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -36,60 +37,24 @@ public class Metrics {
     }
 
     @ManagedAttribute
-    public int getTeamCount() {
-        return getTeamCount(null, null);
-    }
-
-    public int getTeamCount(LocalDate startDate, LocalDate endDate) {
-        var dateRange = DateTimeRange.fromStartAndEnd(startDate, endDate);
-
-        return (int) teamRepository
-            .countAllByDateCreatedBetweenAndDateCreatedNotNull(
-                dateRange.getStartDate(),
-                dateRange.getEndDate()
-            );
+    public long getTeamCount() {
+        return teamRepository.count();
     }
 
     @ManagedAttribute
-    public int getFeedbackCount() {
-        return getFeedbackCount(null, null);
-    }
-
-    public int getFeedbackCount(LocalDate startDate, LocalDate endDate) {
-        var dateRange = DateTimeRange.fromStartAndEnd(startDate, endDate);
-
-        return (int) feedbackRepository
-            .countByDateCreatedGreaterThanEqualAndDateCreatedLessThanEqual(
-                dateRange.getStartDateTime(),
-                dateRange.getEndDateTime()
-            );
+    public long getFeedbackCount() {
+        return feedbackRepository.count();
     }
 
     @ManagedAttribute
     public double getAverageRating() {
-        return getAverageRating(null, null);
+        return feedbackRepository.getAverageRating();
     }
 
-    public double getAverageRating(LocalDate startDate, LocalDate endDate) {
-        var dateRange = DateTimeRange.fromStartAndEnd(startDate, endDate);
-
-        return feedbackRepository
-            .getAverageRating(
-                dateRange.getStartDateTime(),
-                dateRange.getEndDateTime()
-            );
-    }
-
-    public int getActiveTeams() {
-        return getActiveTeams(LocalDate.now().minus(Period.ofMonths(3)), LocalDate.now());
-    }
-
-    public int getActiveTeams(LocalDate startDate, LocalDate endDate) {
-        var dateRange = DateTimeRange.fromStartAndEnd(startDate, endDate);
-
-        return (int) teamRepository.countByLastLoginDateBetween(
-            dateRange.getStartDate(),
-            dateRange.getEndDate()
+    public long getActiveTeams() {
+        return teamRepository.countByLastLoginDateBetween(
+            LocalDate.now().minus(Period.ofMonths(3)),
+            LocalDate.now()
         );
     }
 }

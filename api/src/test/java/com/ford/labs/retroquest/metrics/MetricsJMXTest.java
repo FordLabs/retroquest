@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.api;
+package com.ford.labs.retroquest.metrics;
 
 import com.ford.labs.retroquest.feedback.Feedback;
 import com.ford.labs.retroquest.feedback.FeedbackRepository;
@@ -59,7 +59,7 @@ class MetricsJMXTest {
     void should_return_total_count_of_all_teams() throws Exception {
         teamRepository.save(Team.builder().uri("uri").build());
 
-        Integer teamCount = (Integer) mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metrics,type=Metrics"), "TeamCount");
+        Long teamCount = (Long) mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metrics,type=Metrics"), "TeamCount");
         assertThat(teamCount).isEqualTo(1);
     }
 
@@ -67,7 +67,7 @@ class MetricsJMXTest {
     void should_return_total_count_of_feedback() throws Exception {
         feedbackRepository.save(Feedback.builder().build());
 
-        Integer feedbackCount = (Integer) mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metrics,type=Metrics"), "FeedbackCount");
+        Long feedbackCount = (Long) mBeanServer.getAttribute(ObjectName.getInstance("com.ford.labs.retroquest.metrics:name=metrics,type=Metrics"), "FeedbackCount");
         assertThat(feedbackCount).isEqualTo(1);
     }
 
