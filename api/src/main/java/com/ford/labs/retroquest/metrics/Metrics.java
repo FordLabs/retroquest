@@ -27,7 +27,6 @@ import java.time.LocalDate;
 import java.time.Period;
 
 @Component
-@ManagedResource
 public class Metrics {
     private final TeamRepository teamRepository;
     private final FeedbackRepository feedbackRepository;
@@ -37,17 +36,14 @@ public class Metrics {
         this.feedbackRepository = feedbackRepository;
     }
 
-    @ManagedAttribute
     public long getTeamCount() {
         return teamRepository.count();
     }
 
-    @ManagedAttribute
     public long getFeedbackCount() {
         return feedbackRepository.count();
     }
 
-    @ManagedAttribute
     public double getAverageRating() {
         return feedbackRepository.getAverageRating();
     }
