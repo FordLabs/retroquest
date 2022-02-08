@@ -26,6 +26,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.Period;
 
+@Component
 @ManagedResource
 public class Metrics {
     private final TeamRepository teamRepository;
