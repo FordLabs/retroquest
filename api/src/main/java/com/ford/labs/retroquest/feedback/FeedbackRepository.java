@@ -27,13 +27,10 @@ import java.util.Optional;
 
 @Repository
 public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
-
-    List<Feedback> findAllByStarsIsGreaterThanEqual(int minimumValue);
-
     List<Feedback> findAllByTeamId(String teamId);
 
     long countByDateCreatedGreaterThanEqualAndDateCreatedLessThanEqual(LocalDateTime startTime, LocalDateTime endTime);
 
-    @Query("select avg(f.stars) from Feedback f where f.stars > 0 and f.dateCreated >= ?1 and f.dateCreated <= ?2")
-    Optional<Double> getAverageRating(LocalDateTime startTime, LocalDateTime endTime);
+    @Query("select coalesce(avg(f.stars), 0.0) from Feedback f where f.stars > 0 and f.dateCreated >= ?1 and f.dateCreated <= ?2")
+    double getAverageRating(LocalDateTime startTime, LocalDateTime endTime);
 }

@@ -21,10 +21,6 @@ import com.ford.labs.retroquest.feedback.FeedbackRepository;
 import com.ford.labs.retroquest.metrics.Metrics;
 import com.ford.labs.retroquest.team.TeamRepository;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -33,18 +29,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
 
-@ExtendWith(MockitoExtension.class)
 class MetricsTest {
 
-    @Mock
-    private FeedbackRepository mockFeedbackRepository;
+    private final TeamRepository mockTeamRepository = mock(TeamRepository.class);
+    private final FeedbackRepository mockFeedbackRepository = mock(FeedbackRepository.class);
 
-    @Mock
-    private TeamRepository mockTeamRepository;
-
-    @InjectMocks
-    private Metrics metrics;
+    private final Metrics metrics = new Metrics(mockTeamRepository, mockFeedbackRepository);
 
     @Test
     void getTeamCount_whenCalledWithNoArguments_returnsTheTotalNumberOfTeamsCreated() {
@@ -89,13 +81,13 @@ class MetricsTest {
 
     @Test
     public void getAverageRating_whenNoFeedback_returnsZero() {
-        given(mockFeedbackRepository.getAverageRating(any(), any())).willReturn(Optional.empty());
+        given(mockFeedbackRepository.getAverageRating(any(), any())).willReturn(0.0);
         assertEquals(0, metrics.getAverageRating(), 0);
     }
 
     @Test
     void getAverageRating_whenCalledWithNoArguments_returnsTheAverageOfAllFeedback() {
-        given(mockFeedbackRepository.getAverageRating(any(), any())).willReturn(Optional.of(2.5));
+        given(mockFeedbackRepository.getAverageRating(any(), any())).willReturn(2.5);
         assertEquals(2.5, metrics.getAverageRating(), 0);
     }
 
@@ -104,7 +96,7 @@ class MetricsTest {
         LocalDate startDate = LocalDate.of(2018, 2, 2);
         LocalDate endDate = LocalDate.of(2018, 4, 4);
 
-        given(mockFeedbackRepository.getAverageRating(any(), any())).willReturn(Optional.of(2.5));
+        given(mockFeedbackRepository.getAverageRating(any(), any())).willReturn(2.5);
 
         metrics.getAverageRating(startDate, endDate);
 
