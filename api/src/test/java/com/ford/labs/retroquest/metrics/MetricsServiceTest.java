@@ -16,7 +16,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class MetricsTest {
+public class MetricsServiceTest {
 
     @Autowired
     TeamRepository teamRepository;
@@ -25,7 +25,7 @@ public class MetricsTest {
     FeedbackRepository feedbackRepository;
 
     @Autowired
-    Metrics metrics;
+    MetricsService metricsService;
 
     @BeforeEach
     void setup() {
@@ -38,7 +38,7 @@ public class MetricsTest {
         var teamBuilder = new Team().toBuilder();
         teamRepository.save(teamBuilder.lastLoginDate(LocalDate.now()).uri("something").build());
         teamRepository.save(teamBuilder.lastLoginDate(LocalDate.now().minus(Period.ofMonths(4))).uri("somethingelse").build());
-        assertThat(metrics.getTeamCount()).isEqualTo(2);
+        assertThat(metricsService.getTeamCount()).isEqualTo(2);
     }
 
     @Test
@@ -46,7 +46,7 @@ public class MetricsTest {
         var teamBuilder = new Team().toBuilder();
         teamRepository.save(teamBuilder.lastLoginDate(LocalDate.now()).uri("something").build());
         teamRepository.save(teamBuilder.lastLoginDate(LocalDate.now().minus(Period.ofMonths(4))).uri("somethingelse").build());
-        assertThat(metrics.getActiveTeams()).isEqualTo(1);
+        assertThat(metricsService.getActiveTeams()).isEqualTo(1);
     }
 
     @Test
@@ -55,7 +55,7 @@ public class MetricsTest {
             Feedback.builder().stars(5).build(),
             Feedback.builder().stars(5).build()
         ));
-        assertThat(metrics.getFeedbackCount()).isEqualTo(2);
+        assertThat(metricsService.getFeedbackCount()).isEqualTo(2);
     }
 
     @Test
@@ -64,11 +64,11 @@ public class MetricsTest {
                 Feedback.builder().stars(2).build(),
                 Feedback.builder().stars(4).build()
         ));
-        assertThat(metrics.getAverageRating()).isEqualTo(3.0);
+        assertThat(metricsService.getAverageRating()).isEqualTo(3.0);
     }
 
     @Test
     public void getAverageRating_WithNoFeedback_ReturnsZero() {
-        assertThat(metrics.getAverageRating()).isEqualTo(0.0);
+        assertThat(metricsService.getAverageRating()).isEqualTo(0.0);
     }
 }
