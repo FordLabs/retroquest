@@ -77,7 +77,7 @@ public class Metrics {
             .getAverageRating(
                 dateRange.getStartDateTime(),
                 dateRange.getEndDateTime()
-            );
+            ).orElse(0.0);
     }
 
     public int getActiveTeams() {

@@ -27,6 +27,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
@@ -87,8 +88,14 @@ class MetricsTest {
     }
 
     @Test
+    public void getAverageRating_whenNoFeedback_returnsZero() {
+        given(mockFeedbackRepository.getAverageRating(any(), any())).willReturn(Optional.empty());
+        assertEquals(0, metrics.getAverageRating(), 0);
+    }
+
+    @Test
     void getAverageRating_whenCalledWithNoArguments_returnsTheAverageOfAllFeedback() {
-        given(mockFeedbackRepository.getAverageRating(any(), any())).willReturn(2.5);
+        given(mockFeedbackRepository.getAverageRating(any(), any())).willReturn(Optional.of(2.5));
         assertEquals(2.5, metrics.getAverageRating(), 0);
     }
 
@@ -97,7 +104,7 @@ class MetricsTest {
         LocalDate startDate = LocalDate.of(2018, 2, 2);
         LocalDate endDate = LocalDate.of(2018, 4, 4);
 
-        given(mockFeedbackRepository.getAverageRating(any(), any())).willReturn(2.5);
+        given(mockFeedbackRepository.getAverageRating(any(), any())).willReturn(Optional.of(2.5));
 
         metrics.getAverageRating(startDate, endDate);
 

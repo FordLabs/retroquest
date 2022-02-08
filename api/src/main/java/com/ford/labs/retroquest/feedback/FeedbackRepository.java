@@ -23,6 +23,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
@@ -34,5 +35,5 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
     long countByDateCreatedGreaterThanEqualAndDateCreatedLessThanEqual(LocalDateTime startTime, LocalDateTime endTime);
 
     @Query("select avg(f.stars) from Feedback f where f.stars > 0 and f.dateCreated >= ?1 and f.dateCreated <= ?2")
-    double getAverageRating(LocalDateTime startTime, LocalDateTime endTime);
+    Optional<Double> getAverageRating(LocalDateTime startTime, LocalDateTime endTime);
 }
