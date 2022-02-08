@@ -29,5 +29,4 @@ public interface TeamRepository extends JpaRepository<Team, String> {
     Optional<Team> findTeamByUri(String uri);
 
     long countByLastLoginDateBetween(LocalDate start, LocalDate end);
-    long countAllByDateCreatedBetweenAndDateCreatedNotNull(LocalDate start, LocalDate end);
 }
