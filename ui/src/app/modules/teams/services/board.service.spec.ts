@@ -79,14 +79,8 @@ describe('BoardService', () => {
 
   describe('createBoard', () => {
     it('should call the create board endpoint', () => {
-      const thoughts = [emptyThoughtWithColumn()];
-
-      service.createBoard(teamId, thoughts).subscribe();
-
-      expect(mockHttpClient.post).toHaveBeenCalledWith(`/api/team/${teamId}/board`, {
-        teamId,
-        thoughts,
-      });
+      service.createBoard(teamId);
+      expect(mockHttpClient.post).toHaveBeenCalledWith(`/api/team/${teamId}/board`, {});
     });
   });
 

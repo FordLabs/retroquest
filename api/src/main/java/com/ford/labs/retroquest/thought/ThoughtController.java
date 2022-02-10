@@ -80,7 +80,7 @@ public class ThoughtController {
     @Operation(summary = "Returns all thoughts given a team id", description = "getThoughtsForTeam")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public List<Thought> getThoughtsForTeam(@PathVariable("teamId") String teamId) {
-        return thoughtService.fetchAllThoughts(teamId);
+        return thoughtService.fetchAllActiveThoughts(teamId);
     }
 
     @Transactional

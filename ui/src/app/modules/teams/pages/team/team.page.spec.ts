@@ -31,6 +31,7 @@ import { SubscriptionService } from '../../services/subscription.service';
 import { TeamService } from '../../services/team.service';
 
 import { TeamPageComponent } from './team.page';
+import any = jasmine.any;
 
 describe('TeamPageComponent', () => {
   let component: TeamPageComponent;
@@ -145,8 +146,6 @@ describe('TeamPageComponent', () => {
 
       expectedThoughts[1].discussed = true;
       expectedThoughts[1].id = 1;
-
-      when(boardService.createBoard(anything(), anything())).thenReturn(of(null));
     });
 
     it('should create a board if there are thoughts to archive', () => {
@@ -154,14 +153,14 @@ describe('TeamPageComponent', () => {
       component.columnsAggregation[0].items = [expectedThoughts[0], expectedThoughts[1]];
 
       component.onEndRetro();
-      verify(boardService.createBoard(anything(), anything())).called();
+      verify(boardService.createBoard(anything())).called();
     });
 
     it('should not create a board if there are no thoughts to archive', () => {
       component.columnsAggregation = [emptyColumnResponse()];
 
       component.onEndRetro();
-      verify(boardService.createBoard(anything(), anything())).never();
+      verify(boardService.createBoard(anything())).never();
     });
 
     it('should emit the end retro event to the websocket', () => {
@@ -170,7 +169,7 @@ describe('TeamPageComponent', () => {
 
       component.onEndRetro();
 
-      verify(endRetroService.endRetro()).called();
+      verify(boardService.createBoard(anything())).called();
     });
   });
 });

@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -34,6 +35,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
@@ -61,9 +64,11 @@ public class BoardController {
     @PostMapping("/team/{teamId}/board")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Saves a board given a team id", description = "saveBoard")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public Board saveBoard(@PathVariable("teamId") String teamId, @RequestBody @Valid CreateBoardRequest request) {
-        return this.boardService.createBoard(request);
+    @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Created")})
+    public ResponseEntity<Void> createBoard(@PathVariable("teamId") String teamId) throws URISyntaxException {
+        var board = this.boardService.createBoard(teamId);
+        var uri = new URI(String.format("/api/team/%s/board/%s", board.getTeamId(), board.getId()));
+        return ResponseEntity.created(uri).build();
     }
 
     @Transactional

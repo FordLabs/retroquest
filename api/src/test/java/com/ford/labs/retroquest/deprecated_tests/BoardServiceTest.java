@@ -20,15 +20,9 @@ package com.ford.labs.retroquest.deprecated_tests;
 import com.ford.labs.retroquest.board.Board;
 import com.ford.labs.retroquest.board.BoardRepository;
 import com.ford.labs.retroquest.board.BoardService;
-import com.ford.labs.retroquest.board.CreateBoardRequest;
-import com.ford.labs.retroquest.thought.CreateThoughtRequest;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
@@ -38,25 +32,16 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 class BoardServiceTest {
-    @Mock
-    private BoardRepository boardRepository;
+    private final BoardRepository boardRepository = mock(BoardRepository.class);
+    private final ThoughtService thoughtService = mock(ThoughtService.class);
+    private final int pageSize = 2;
 
-    @Mock
-    private ThoughtService thoughtService;
-
-    private BoardService boardService;
-
-    @BeforeEach
-    void setUp() {
-        var pageSize = 2;
-        boardService = new BoardService(boardRepository, thoughtService, pageSize);
-    }
+    private final BoardService boardService = new BoardService(boardRepository, thoughtService, pageSize);
 
     @Test
     void getBoardsForTeamId() {
@@ -91,7 +76,7 @@ class BoardServiceTest {
     @Test
     void getBoardsForTeamId_shouldReturnAPagedResult() {
         var pageSize = 5;
-        boardService = new BoardService(boardRepository, thoughtService, pageSize);
+        var subject = new BoardService(boardRepository, thoughtService, pageSize);
 
         final PageRequest pageRequest = PageRequest.of(
             0,
@@ -99,7 +84,7 @@ class BoardServiceTest {
             Sort.by(Sort.Order.desc("dateCreated"))
         );
 
-        boardService.getBoardsForTeamId("team1", 0);
+        subject.getBoardsForTeamId("team1", 0);
 
         verify(boardRepository).findAllByTeamIdOrderByDateCreatedDesc("team1", pageRequest);
     }
@@ -107,16 +92,18 @@ class BoardServiceTest {
     @Test
     void saveBoard() {
         var expectedTeamId = "team1";
+        long expectedBoardId = 1234L;
         var expectedMessage = "hello";
-        var boardToSave = new CreateBoardRequest(
-            expectedTeamId,
+
+        when(thoughtService.fetchAllActiveThoughts(eq("team1"))).thenReturn(
             List.of(
-                new CreateThoughtRequest(
-                        0L,
+                new Thought(
+                    4321L,
                     expectedMessage,
                     0,
                     null,
                     false,
+                    expectedTeamId,
                     null,
                     null
                 )
@@ -125,31 +112,16 @@ class BoardServiceTest {
 
         when(boardRepository.save(any(Board.class))).thenAnswer(a -> {
             var board = a.<Board>getArgument(0);
-            board.setId(1234L);
+            board.setId(expectedBoardId);
             return board;
         });
-        when(thoughtService.createThought(anyString(), anyLong(), any(CreateThoughtRequest.class)))
-            .thenAnswer(a -> {
-                var teamId = a.<String>getArgument(0);
-                var boardId = a.<Long>getArgument(1);
-                var request = a.<CreateThoughtRequest>getArgument(2);
-                return new Thought(
-                    4321L,
-                    request.getMessage(),
-                    request.getHearts(),
-                    request.getTopic(),
-                    request.isDiscussed(),
-                    teamId,
-                    null,
-                    boardId
-                );
-            });
 
-        var returnedBoard = boardService.createBoard(boardToSave);
+        var returnedBoard = boardService.createBoard(expectedTeamId);
 
-        assertThat(returnedBoard.getId()).isEqualTo(1234L);
+        assertThat(returnedBoard.getId()).isEqualTo(expectedBoardId);
         assertThat(returnedBoard.getTeamId()).isEqualTo(expectedTeamId);
+        assertThat(returnedBoard.getDateCreated()).isEqualTo(LocalDate.now());
         assertThat(returnedBoard.getThoughts()).hasSize(1);
-        assertThat(returnedBoard.getThoughts().get(0).getBoardId()).isEqualTo(1234L);
+        assertThat(returnedBoard.getThoughts().get(0).getBoardId()).isEqualTo(expectedBoardId);
     }
 }

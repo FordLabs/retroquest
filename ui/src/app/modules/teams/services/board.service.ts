@@ -15,13 +15,12 @@
  * limitations under the License.
  */
 
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import moment from 'moment';
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
 
-import { Board } from '../../domain/board';
-import { Thought } from '../../domain/thought';
+import {Board} from '../../domain/board';
 
 @Injectable({
   providedIn: 'root',
@@ -44,12 +43,8 @@ export class BoardService {
     });
   }
 
-  createBoard(teamId: string, thoughts: Array<Thought>): Observable<Board> {
-    return new Observable((subscriber) => {
-      this.http.post(`/api/team/${teamId}/board`, { teamId, thoughts }).subscribe((data) => {
-        subscriber.next(data as Board);
-      });
-    });
+  createBoard(teamId: string): void {
+      this.http.post(`/api/team/${teamId}/board`, {}).subscribe();
   }
 
   deleteBoard(teamId: string, boardId: number): Observable<any> {
