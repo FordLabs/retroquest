@@ -145,7 +145,7 @@ class ThoughtServiceTest {
         List<Thought> listOfThoughts = new ArrayList<>();
         listOfThoughts.add(thought);
         given(this.thoughtRepository.findAllByTeamIdAndBoardIdIsNull("the-team")).willReturn(listOfThoughts);
-        thoughtService.fetchAllThoughts("the-team");
+        thoughtService.fetchAllActiveThoughts("the-team");
         then(thoughtRepository).should().findAllByTeamIdAndBoardIdIsNull("the-team");
     }
 

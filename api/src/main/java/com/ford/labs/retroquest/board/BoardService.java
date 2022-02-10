@@ -25,7 +25,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,7 +44,6 @@ public class BoardService {
         this.pageSize = pageSize;
     }
 
-
     public List<Board> getBoardsForTeamId(String teamId, Integer pageIndex) {
         return this.boardRepository.findAllByTeamIdOrderByDateCreatedDesc(teamId,
                 PageRequest.of(
@@ -56,18 +54,17 @@ public class BoardService {
         );
     }
 
-    public Board createBoard(CreateBoardRequest request) {
+    public Board createBoard(String teamId) {
         var board = new Board();
-        board.setTeamId(request.getTeamId());
-        board.setThoughts(new ArrayList<>());
+        board.setTeamId(teamId);
         board.setDateCreated(LocalDate.now());
-        board = this.boardRepository.save(board);
-        for (var thoughtRequest : request.getThoughts()) {
-            var thought = thoughtService.createThought(request.getTeamId(), board.getId(), thoughtRequest);
-            board.getThoughts().add(thought);
-        }
-        board = this.boardRepository.save(board);
-        return board;
+        var savedBoard = this.boardRepository.save(board);
+
+        var thoughts = this.thoughtService.fetchAllActiveThoughts(teamId);
+        thoughts.forEach(thought -> thought.setBoardId(savedBoard.getId()));
+        savedBoard.setThoughts(thoughts);
+
+        return this.boardRepository.save(savedBoard);
     }
 
     public void deleteBoard(String teamId, Long boardId) {

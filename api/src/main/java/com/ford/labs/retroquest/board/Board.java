@@ -44,6 +44,6 @@ public class Board {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "YYYY-MM-dd")
     private LocalDate dateCreated;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "boardId", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "boardId", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Thought> thoughts;
 }

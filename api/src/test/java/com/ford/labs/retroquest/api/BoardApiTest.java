@@ -36,6 +36,7 @@ import org.springframework.http.MediaType;
 import java.time.LocalDate;
 import java.util.Collections;
 
+import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -89,59 +90,25 @@ class BoardApiTest extends ApiTestBase {
 
     @Test
     void should_save_a_board_with_thoughts() throws Exception {
+        Thought savedThought = thoughtService.createThought(teamId, new CreateThoughtRequest(null, "TEST_MESSAGE", 0, "happy", false, teamId, null));
 
-        Thought savedThought = thoughtService.createThought(teamId, new CreateThoughtRequest(-1L, "TEST_MESSAGE", 0, "happy", false, teamId, -1L));
-        CreateBoardRequest request = new CreateBoardRequest(teamId, Lists.emptyList());
-
-        mockMvc.perform(post("/api/team/" + teamId + "/board")
-                .content(objectMapper.writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(post(format("/api/team/%s/board", teamId))
                 .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         assertThat(boardRepository.count()).isEqualTo(1);
-        assertThat(thoughtService.fetchAllThoughts(teamId)).containsExactly(savedThought);
+        assertThat(boardRepository.findAllByTeamId(teamId).get(0).getThoughts().get(0).getId()).isEqualTo(savedThought.getId());
     }
 
     @Test
-    void should_save_a_board_with_thoughts_and_clear_away_the_thoughts_without_a_board_id() throws Exception {
+    void createBoard_ShouldRemoveThoughtsWithoutABoardId() throws Exception {
+        thoughtService.createThought(teamId, new CreateThoughtRequest(-1L, "TEST_MESSAGE", 0, "happy", false, teamId, -1L));
 
-        Thought savedThought = thoughtService.createThought(teamId, new CreateThoughtRequest(
-                -1L,
-                "TEST_MESSAGE",
-                0,
-                "happy",
-                false,
-                teamId,
-                -1L)
-        );
-
-        CreateBoardRequest request = new CreateBoardRequest(teamId, Collections.singletonList(
-                new CreateThoughtRequest(
-                        savedThought.getId(),
-                        savedThought.getMessage(),
-                        savedThought.getHearts(),
-                        savedThought.getTopic(),
-                        savedThought.isDiscussed(),
-                        savedThought.getTeamId(),
-                        -1L
-                )
-        ));
-
-        mockMvc.perform(post("/api/team/" + teamId + "/board")
-                .content(objectMapper.writeValueAsString(request))
-                .contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(post(format("/api/team/%s/board", teamId))
                 .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.thoughts[0].id", Matchers.notNullValue()))
-                .andExpect(jsonPath("$.thoughts[0].message", Matchers.is(savedThought.getMessage())))
-                .andExpect(jsonPath("$.thoughts[0].hearts", Matchers.is(savedThought.getHearts())))
-                .andExpect(jsonPath("$.thoughts[0].discussed", Matchers.is(savedThought.isDiscussed())))
-                .andExpect(jsonPath("$.thoughts[0].teamId", Matchers.is(savedThought.getTeamId())))
-                .andExpect(jsonPath("$.thoughts[0].boardId", Matchers.notNullValue()));
+                .andExpect(status().isCreated());
 
-
-        assertThat(boardRepository.count()).isEqualTo(1);
-        assertThat(thoughtService.fetchAllThoughts(teamId)).isEmpty();
+        assertThat(thoughtRepository.count()).isEqualTo(1);
+        assertThat(thoughtService.fetchAllActiveThoughts(teamId)).isEmpty();
     }
 }

@@ -48,7 +48,7 @@ public class ThoughtService {
         return thoughtRepository.findById(thoughtId).orElseThrow(() -> new ThoughtNotFoundException(thoughtId));
     }
 
-    public List<Thought> fetchAllThoughts(String teamId) {
+    public List<Thought> fetchAllActiveThoughts(String teamId) {
         return thoughtRepository.findAllByTeamIdAndBoardIdIsNull(teamId);
     }
 

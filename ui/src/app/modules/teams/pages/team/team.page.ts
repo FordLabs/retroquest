@@ -113,7 +113,7 @@ export class TeamPageComponent implements OnInit, OnDestroy {
 
     if (thoughts.length > 0 || archivedActionItems.length > 0) {
       if (thoughts.length > 0) {
-        this.boardService.createBoard(this.teamId, thoughts).subscribe();
+        this.boardService.createBoard(this.teamId);
       }
       if (archivedActionItems.length > 0) {
         this.actionItemService.archiveActionItems(archivedActionItems);
