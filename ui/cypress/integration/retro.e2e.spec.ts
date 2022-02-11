@@ -98,7 +98,7 @@ describe('Retro Page', () => {
     const actionItemsToInput = [`${task} @${assignee}`, 'Make our meetings shorter @Larry'];
     shouldCreateActionItems(actionItemsToInput);
 
-    shouldEditActionItem(task, 'by 10%', assignee, ', Larry');
+    shouldEditActionItemTaskAndAssignee(task, 'by 10%', assignee, ', Larry');
 
     cy.log('**On page reload all Action Items should still be there**');
     cy.reload();
@@ -121,7 +121,7 @@ function shouldCreateActionItems(actionItems: string[]) {
   });
 }
 
-function shouldEditActionItem(
+function shouldEditActionItemTaskAndAssignee(
   currentTask: string,
   appendToTask: string,
   currentAssignee: string,

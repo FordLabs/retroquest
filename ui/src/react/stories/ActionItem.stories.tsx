@@ -61,8 +61,8 @@ const Template: ComponentStory<typeof ActionItem> = () => {
       <div style={{ width: '400px', marginBottom: '20px' }}>
         <ActionItem
           action={action}
-          onEdit={onEdit}
-          onAssign={onAssign}
+          onEditTask={onEdit}
+          onEditAssignee={onAssign}
           onDelete={onDelete}
           onComplete={onComplete}
           onSelect={onSelect}
@@ -72,8 +72,8 @@ const Template: ComponentStory<typeof ActionItem> = () => {
         <ActionItem
           readOnly={true}
           action={testAction}
-          onEdit={onEdit}
-          onAssign={onAssign}
+          onEditTask={onEdit}
+          onEditAssignee={onAssign}
           onDelete={onDelete}
           onComplete={onComplete}
           onSelect={onSelect}

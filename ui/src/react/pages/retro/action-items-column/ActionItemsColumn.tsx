@@ -71,14 +71,23 @@ function ActionItemsColumn() {
     ActionItemService.delete(team.id, action.id).catch(console.error);
   };
 
-  const editActionItem = (action: Action, updatedTask: string) => {
+  const editActionItemTask = (action: Action, updatedTask: string) => {
     ActionItemService.updateTask(team.id, action.id, updatedTask).catch(console.error);
+  };
+
+  const editActionItemAssignee = (action: Action, updatedAssignee: string) => {
+    ActionItemService.updateAssignee(team.id, action.id, updatedAssignee).catch(console.error);
   };
 
   const renderActionItem = (action: Action) => {
     return (
       <Fragment key={action.id}>
-        <ActionItem action={action} onEdit={editActionItem} onDelete={deleteActionItem} />
+        <ActionItem
+          action={action}
+          onEditAssignee={editActionItemAssignee}
+          onEditTask={editActionItemTask}
+          onDelete={deleteActionItem}
+        />
       </Fragment>
     );
   };
