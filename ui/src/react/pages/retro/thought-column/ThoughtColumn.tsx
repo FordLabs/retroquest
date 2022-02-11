@@ -62,7 +62,7 @@ function ThoughtColumn(props: Props) {
     ThoughtService.updateDiscussionStatus(team.id, thought.id, !thought.discussed).catch(console.error);
   };
 
-  const onEdit = (thought: Thought, updatedThoughtMessage: string) => {
+  const editThought = (thought: Thought, updatedThoughtMessage: string) => {
     ThoughtService.updateMessage(team.id, thought.id, updatedThoughtMessage).catch(console.error);
   };
 
@@ -75,7 +75,7 @@ function ThoughtColumn(props: Props) {
           onDelete={deleteThought}
           onUpvote={upvoteThought}
           onDiscuss={updateThoughtDiscussionStatus}
-          onEdit={onEdit}
+          onEdit={editThought}
         />
       </Fragment>
     );

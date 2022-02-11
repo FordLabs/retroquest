@@ -148,6 +148,20 @@ describe('ThoughtColumn.spec.tsx', () => {
     });
   });
 
+  describe('Edit Thought', () => {
+    const editButtonTestId = 'columnItem-editButton';
+
+    it('should make call to edit thought when user types and submits an edited thought', () => {
+      const thoughtItems = screen.getAllByTestId('retroItem');
+      const firstThoughtsEditIcon = within(thoughtItems[0]).getByTestId(editButtonTestId);
+      userEvent.click(firstThoughtsEditIcon);
+
+      userEvent.type(screen.getAllByTestId('editableText')[0], `New thought{enter}`);
+
+      expect(ThoughtService.updateMessage).toHaveBeenCalledWith(team.id, activeThought1.id, 'New thought');
+    });
+  });
+
   it('should upvote a thought', () => {
     const thoughtItems = screen.getAllByTestId('retroItem');
     const firstThoughtItemsUpvoteButton = within(thoughtItems[0]).getByTestId('retroItem-upvote');

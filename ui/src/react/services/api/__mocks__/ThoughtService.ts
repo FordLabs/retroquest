@@ -29,6 +29,7 @@ export const getMockThought = (topic: ThoughtTopic, isDiscussed): Thought => ({
 const ThoughtService = {
   create: jest.fn().mockResolvedValue((thought) => thought),
   delete: jest.fn().mockResolvedValue(null),
+  updateMessage: jest.fn().mockResolvedValue(null),
   upvoteThought: jest.fn().mockResolvedValue(null),
   updateDiscussionStatus: jest.fn().mockResolvedValue(null),
 };
