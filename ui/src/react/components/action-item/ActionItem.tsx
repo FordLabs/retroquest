@@ -33,8 +33,8 @@ type ActionItemProps = {
   action: ActionItem;
   readOnly?: boolean;
   onSelect?: () => void;
-  onEdit?: (action: Action, updatedTask: string) => void;
-  onAssign?: (assignee: string) => void;
+  onEditTask?: (action: Action, updatedTask: string) => void;
+  onEditAssignee?: (action: Action, assignee: string) => void;
   onDelete?: (action: Action) => void;
   onComplete?: () => void;
 };
@@ -44,8 +44,8 @@ export default function ActionItem(props: ActionItemProps) {
     action,
     readOnly = false,
     onSelect,
-    onEdit = NO_OP,
-    onAssign = NO_OP,
+    onEditTask = NO_OP,
+    onEditAssignee = NO_OP,
     onDelete = NO_OP,
     onComplete = NO_OP,
   } = props;
@@ -59,7 +59,7 @@ export default function ActionItem(props: ActionItemProps) {
       checked={action.completed}
       readOnly={readOnly}
       onSelect={onSelect}
-      onEdit={(updatedTask) => onEdit(action, updatedTask)}
+      onEdit={(updatedTask) => onEditTask(action, updatedTask)}
       onDelete={() => onDelete(action)}
       onCheck={onComplete}
       customButtons={({ editing, deleting }) => (
@@ -69,7 +69,7 @@ export default function ActionItem(props: ActionItemProps) {
       {({ editing, deleting }) => (
         <Assignee
           assignee={action.assignee}
-          onAssign={onAssign}
+          onAssign={(updatedTask) => onEditAssignee(action, updatedTask)}
           readOnly={readOnly || action.completed}
           editing={editing}
           deleting={deleting}

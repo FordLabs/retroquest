@@ -205,17 +205,25 @@ describe('ActionItemsColumn.spec.tsx', () => {
   });
 
   describe('Edit Action Item', () => {
-    const editButtonTestId = 'columnItem-editButton';
-
     it('should make call to update task', () => {
       const actionItems = screen.getAllByTestId('actionItem');
-      const firstThoughtsEditIcon = within(actionItems[0]).getByTestId(editButtonTestId);
+      const firstThoughtsEditIcon = within(actionItems[0]).getByTestId('columnItem-editButton');
       userEvent.click(firstThoughtsEditIcon);
 
       const updatedTask = 'New Task';
       userEvent.type(screen.getAllByTestId('editableText')[0], `${updatedTask}{enter}`);
 
       expect(ActionItemService.updateTask).toHaveBeenCalledWith(team.id, activeActionItem1.id, updatedTask);
+    });
+
+    it('should make call to update assignee', () => {
+      const actionItems = screen.getAllByTestId('actionItem');
+      const firstThoughtsAssigneeInput = within(actionItems[0]).getByTestId('actionItem-assignee');
+
+      const newAssignee = ', SomeoneElse';
+      userEvent.type(firstThoughtsAssigneeInput, `${newAssignee}{enter}`);
+
+      expect(ActionItemService.updateAssignee).toHaveBeenCalledWith(team.id, activeActionItem1.id, 'Bob, SomeoneElse');
     });
   });
 });

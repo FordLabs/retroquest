@@ -34,11 +34,11 @@ export const mockUseModalValue = {
 jest.spyOn(Modal, 'useModal').mockReturnValue(mockUseModalValue);
 
 describe('ActionItem', () => {
-  const mockSelect = jest.fn();
-  const mockEdit = jest.fn();
-  const mockDelete = jest.fn();
-  const mockComplete = jest.fn();
-  const mockAssign = jest.fn();
+  const mockOnSelect = jest.fn();
+  const mockOnEditTask = jest.fn();
+  const mockOnDelete = jest.fn();
+  const mockOnComplete = jest.fn();
+  const mockOnEditAssignee = jest.fn();
 
   const fakeAction = {
     id: 0,
@@ -70,11 +70,11 @@ describe('ActionItem', () => {
       render(
         <ActionItem
           action={fakeAction}
-          onSelect={mockSelect}
-          onEdit={mockEdit}
-          onDelete={mockDelete}
-          onComplete={mockComplete}
-          onAssign={mockAssign}
+          onSelect={mockOnSelect}
+          onEditTask={mockOnEditTask}
+          onDelete={mockOnDelete}
+          onComplete={mockOnComplete}
+          onEditAssignee={mockOnEditAssignee}
         />
       );
     });
@@ -82,7 +82,7 @@ describe('ActionItem', () => {
     it('can select', () => {
       clickTask();
 
-      expect(mockSelect).toHaveBeenCalledTimes(1);
+      expect(mockOnSelect).toHaveBeenCalledTimes(1);
     });
 
     it('can start and cancel edit', () => {
@@ -119,14 +119,14 @@ describe('ActionItem', () => {
       expect(deleteMessage()).toBeFalsy();
 
       clickCheckbox();
-      expect(mockComplete).not.toHaveBeenCalled();
+      expect(mockOnComplete).not.toHaveBeenCalled();
     });
 
     it('can complete edit', () => {
       clickEdit();
       editTask('New Fake Task{Enter}');
 
-      expect(mockEdit).toHaveBeenCalledWith(fakeAction, 'New Fake Task');
+      expect(mockOnEditTask).toHaveBeenCalledWith(fakeAction, 'New Fake Task');
     });
 
     it('can start and cancel delete', () => {
@@ -149,24 +149,24 @@ describe('ActionItem', () => {
       clickDelete();
       clickConfirmDelete();
 
-      expect(mockDelete).toHaveBeenCalledTimes(1);
+      expect(mockOnDelete).toHaveBeenCalledTimes(1);
     });
 
     it('can be completed', () => {
       clickCheckbox();
 
-      expect(mockComplete).toHaveBeenCalledTimes(1);
+      expect(mockOnComplete).toHaveBeenCalledTimes(1);
     });
 
     it('can edit assignee', () => {
       typeAssignee('FordLabs{enter}');
 
-      expect(mockAssign).toHaveBeenCalledWith('FordLabs');
+      expect(mockOnEditAssignee).toHaveBeenCalledWith(fakeAction, 'FordLabs');
 
       typeAssignee(' Team');
       clickTask();
 
-      expect(mockAssign).toHaveBeenCalledWith('FordLabs Team');
+      expect(mockOnEditAssignee).toHaveBeenCalledWith(fakeAction, 'FordLabs Team');
     });
   });
 
@@ -175,11 +175,11 @@ describe('ActionItem', () => {
       render(
         <ActionItem
           action={{ ...fakeAction, completed: true }}
-          onSelect={mockSelect}
-          onEdit={mockEdit}
-          onDelete={mockDelete}
-          onComplete={mockComplete}
-          onAssign={mockAssign}
+          onSelect={mockOnSelect}
+          onEditTask={mockOnEditTask}
+          onDelete={mockOnDelete}
+          onComplete={mockOnComplete}
+          onEditAssignee={mockOnEditAssignee}
         />
       );
     });
@@ -191,7 +191,7 @@ describe('ActionItem', () => {
 
     it('should disable select', () => {
       clickTask();
-      expect(mockSelect).not.toHaveBeenCalled();
+      expect(mockOnSelect).not.toHaveBeenCalled();
     });
 
     it('should not disable delete button', () => {
@@ -201,7 +201,7 @@ describe('ActionItem', () => {
 
     it('should not disable checkbox button', () => {
       clickCheckbox();
-      expect(mockComplete).toHaveBeenCalledTimes(1);
+      expect(mockOnComplete).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -211,11 +211,11 @@ describe('ActionItem', () => {
         <ActionItem
           action={fakeAction}
           readOnly={true}
-          onSelect={mockSelect}
-          onEdit={mockEdit}
-          onDelete={mockDelete}
-          onComplete={mockComplete}
-          onAssign={mockAssign}
+          onSelect={mockOnSelect}
+          onEditTask={mockOnEditTask}
+          onDelete={mockOnDelete}
+          onComplete={mockOnComplete}
+          onEditAssignee={mockOnEditAssignee}
         />
       );
     });
@@ -228,17 +228,17 @@ describe('ActionItem', () => {
       expect(deleteMessage()).toBeFalsy();
 
       clickCheckbox();
-      expect(mockComplete).not.toHaveBeenCalled();
+      expect(mockOnComplete).not.toHaveBeenCalled();
     });
 
     it('should disable assignee', () => {
       typeAssignee('new assignee{Enter}');
-      expect(mockAssign).not.toHaveBeenCalled();
+      expect(mockOnEditAssignee).not.toHaveBeenCalled();
     });
 
     it('should not disable select', () => {
       clickTask();
-      expect(mockSelect).toHaveBeenCalledTimes(1);
+      expect(mockOnSelect).toHaveBeenCalledTimes(1);
     });
   });
 });

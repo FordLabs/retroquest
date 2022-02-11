@@ -64,19 +64,18 @@ const Template: ComponentStory<typeof ActionItemModal> = () => {
       </PrimaryButton>
       <ActionItemModal
         action={action}
-        onEdit={onEdit}
-        onAssign={onAssign}
+        onEditTask={onEdit}
+        onEditAssignee={onAssign}
         onDelete={onDelete}
         onComplete={onComplete}
         ref={modalRef}
       />
-
       <PrimaryButton onClick={() => readOnlyModalRef.current?.show()}>Show Readonly Modal</PrimaryButton>
       <ActionItemModal
         readOnly={true}
         action={action}
-        onEdit={onEdit}
-        onAssign={onAssign}
+        onEditTask={onEdit}
+        onEditAssignee={onAssign}
         onDelete={onDelete}
         onComplete={onComplete}
         ref={readOnlyModalRef}
