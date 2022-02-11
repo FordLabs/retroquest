@@ -32,6 +32,11 @@ const ActionItemService = {
     const url = `${getActionItemApiPath(teamId)}/${actionItemId}`;
     return axios.delete(url);
   },
+
+  updateTask(teamId: string, actionItemId: number, updatedTask: string) {
+    const url = `${getActionItemApiPath(teamId)}/${actionItemId}/task`;
+    return axios.put(url, { task: updatedTask });
+  },
 };
 
 export default ActionItemService;

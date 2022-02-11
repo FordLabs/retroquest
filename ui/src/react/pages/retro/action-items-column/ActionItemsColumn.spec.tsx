@@ -16,7 +16,7 @@
  */
 
 import React from 'react';
-import { act, render, screen, within } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import moment from 'moment';
@@ -59,19 +59,20 @@ describe('ActionItemsColumn.spec.tsx', () => {
 
   beforeEach(async () => {
     const topic = actionItemsColumnTitle.topic as ThoughtTopic;
-    await act(async () => {
-      ({ container } = render(
-        <RecoilRoot
-          initializeState={({ set }) => {
-            set(ActionItemState, [activeActionItem1, activeActionItem2, completedActionItem1]);
-            set(ColumnTitleByTopicState(topic), actionItemsColumnTitle);
-            set(TeamState, team);
-          }}
-        >
-          <ActionItemsColumn />
-        </RecoilRoot>
-      ));
-    });
+
+    ({ container } = render(
+      <RecoilRoot
+        initializeState={({ set }) => {
+          set(ActionItemState, [activeActionItem1, activeActionItem2, completedActionItem1]);
+          set(ColumnTitleByTopicState(topic), actionItemsColumnTitle);
+          set(TeamState, team);
+        }}
+      >
+        <ActionItemsColumn />
+      </RecoilRoot>
+    ));
+
+    expect(screen.getAllByTestId('actionItem')).toBeDefined();
   });
 
   afterEach(() => {
@@ -200,6 +201,21 @@ describe('ActionItemsColumn.spec.tsx', () => {
       const confirmDeletionButton = screen.queryByText('No');
       userEvent.click(confirmDeletionButton);
       expect(ActionItemService.delete).not.toHaveBeenCalledWith(team.id, activeActionItem1.id);
+    });
+  });
+
+  describe('Edit Action Item', () => {
+    const editButtonTestId = 'columnItem-editButton';
+
+    it('should make call to update task', () => {
+      const actionItems = screen.getAllByTestId('actionItem');
+      const firstThoughtsEditIcon = within(actionItems[0]).getByTestId(editButtonTestId);
+      userEvent.click(firstThoughtsEditIcon);
+
+      const updatedTask = 'New Task';
+      userEvent.type(screen.getAllByTestId('editableText')[0], `${updatedTask}{enter}`);
+
+      expect(ActionItemService.updateTask).toHaveBeenCalledWith(team.id, activeActionItem1.id, updatedTask);
     });
   });
 });

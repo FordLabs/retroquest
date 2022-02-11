@@ -19,6 +19,7 @@
 
 import Topic from '../../src/react/types/Topic';
 import { getTeamCredentials } from '../support/helpers';
+import Chainable = Cypress.Chainable;
 
 describe('Retro Page', () => {
   const green = 'rgb(46, 204, 113)';
@@ -50,6 +51,10 @@ describe('Retro Page', () => {
     shouldMarkAndUnmarkThoughtAsDiscussed(happyThoughts[0]);
 
     shouldDeleteHappyThought(1, 2);
+
+    cy.log('**On page reload all Happy thoughts should still be there**');
+    cy.reload();
+    confirmNumberOfThoughtsInColumn(Topic.HAPPY, 2);
   });
 
   it('Confused Column', () => {
@@ -60,6 +65,10 @@ describe('Retro Page', () => {
 
     const confusedThought = "What's going on with zyx";
     cy.enterThought(Topic.CONFUSED, confusedThought);
+    confirmNumberOfThoughtsInColumn(Topic.CONFUSED, 1);
+
+    cy.log('**On page reload all Confused thoughts should still be there**');
+    cy.reload();
     confirmNumberOfThoughtsInColumn(Topic.CONFUSED, 1);
   });
 
@@ -72,21 +81,61 @@ describe('Retro Page', () => {
     const unhappyThought = "I don't like how many meetings we have";
     cy.enterThought(Topic.UNHAPPY, unhappyThought);
     confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 1);
+
+    cy.log('**On page reload all Sad thoughts should still be there**');
+    cy.reload();
+    confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 1);
   });
 
   it('Action Item Column', () => {
     cy.log('**Should have "Action Items" column header in yellow**');
     cy.findByText('Action Items').should('exist').parent().should('have.css', 'background-color', yellow);
 
-    const actionItems = ['Increase Code Coverage', 'Make our meetings shorter'];
     cy.get('[data-testid=retroColumn__action]').as('actionsColumn');
 
-    enterActionItem(actionItems[0]);
-    confirmNumberOfActionItemsInColumn(1);
-    enterActionItem(actionItems[1]);
+    const task = 'Increase Code Coverage';
+    const assignee = 'Bob';
+    const actionItemsToInput = [`${task} @${assignee}`, 'Make our meetings shorter @Larry'];
+    shouldCreateActionItems(actionItemsToInput);
+
+    shouldEditActionItem(task, 'by 10%', assignee, ', Larry');
+
+    cy.log('**On page reload all Action Items should still be there**');
+    cy.reload();
     confirmNumberOfActionItemsInColumn(2);
   });
 });
+
+function shouldCreateActionItems(actionItems: string[]) {
+  actionItems.forEach((actionString, index) => {
+    enterActionItem(actionString);
+
+    confirmNumberOfActionItemsInColumn(index + 1);
+
+    const splitActionString = actionString.split('@');
+    const action = splitActionString[0].trim();
+    const assignedTo = splitActionString[1];
+
+    cy.findByDisplayValue(action);
+    cy.findByDisplayValue(assignedTo);
+  });
+}
+
+function shouldEditActionItem(
+  currentTask: string,
+  appendToTask: string,
+  currentAssignee: string,
+  appendToAssignee: string
+) {
+  cy.log(`**Edit Action Item: ${currentTask}**`);
+  getActionItemByMessage(currentTask).as('actionItemToEdit');
+
+  cy.get('@actionItemToEdit').find('[data-testid=columnItem-editButton]').type(`{rightarrow} ${appendToTask}{enter}`);
+  cy.get('@actionItemToEdit').findByDisplayValue(`${currentTask} ${appendToTask}`);
+
+  cy.get('@actionItemToEdit').find('[data-testid=actionItem-assignee]').type(`${appendToAssignee}{enter}`);
+  cy.get('@actionItemToEdit').findByDisplayValue(`${currentAssignee}${appendToAssignee}`);
+}
 
 function shouldCreateHappyThoughts(happyThoughts: string[]) {
   happyThoughts.forEach((happyThought, index) => {
@@ -97,12 +146,12 @@ function shouldCreateHappyThoughts(happyThoughts: string[]) {
 }
 
 function shouldEditAThought(currentThought: string, updatedThought: string) {
+  cy.log(`**Edit thought: ${currentThought}**`);
   getRetroItemByMessage(currentThought).find('[data-testid=columnItem-editButton]').type(`${updatedThought}{enter}`);
   cy.findByDisplayValue(updatedThought);
 }
 
 function shouldStarHappyThought() {
-  cy.log('**Test staring thoughts**');
   shouldStarFirstItemInHappyColumn(1);
   shouldStarFirstItemInHappyColumn(2);
 }
@@ -157,4 +206,7 @@ function confirmNumberOfActionItemsInColumn(expectedCount: number): void {
 }
 
 const getHappyColumnItems = () => cy.get('[data-testid=retroColumn__happy]').find(`[data-testid=retroItem]`);
-const getRetroItemByMessage = (message: string) => cy.findByDisplayValue(message).closest(`[data-testid=retroItem]`);
+const getRetroItemByMessage = (message: string): Chainable =>
+  cy.findByDisplayValue(message).closest(`[data-testid=retroItem]`);
+const getActionItemByMessage = (message: string): Chainable =>
+  cy.findByDisplayValue(message).closest(`[data-testid=actionItem]`);

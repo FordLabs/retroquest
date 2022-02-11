@@ -33,7 +33,7 @@ type ActionItemProps = {
   action: ActionItem;
   readOnly?: boolean;
   onSelect?: () => void;
-  onEdit?: (message: string) => void;
+  onEdit?: (action: Action, updatedTask: string) => void;
   onAssign?: (assignee: string) => void;
   onDelete?: (action: Action) => void;
   onComplete?: () => void;
@@ -59,7 +59,7 @@ export default function ActionItem(props: ActionItemProps) {
       checked={action.completed}
       readOnly={readOnly}
       onSelect={onSelect}
-      onEdit={onEdit}
+      onEdit={(updatedTask) => onEdit(action, updatedTask)}
       onDelete={() => onDelete(action)}
       onCheck={onComplete}
       customButtons={({ editing, deleting }) => (

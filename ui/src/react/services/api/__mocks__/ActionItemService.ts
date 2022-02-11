@@ -28,6 +28,7 @@ export const getMockActionItem = (isCompleted = false): ActionItem => ({
 const ActionItemService = {
   create: jest.fn().mockResolvedValue((action) => action),
   delete: jest.fn().mockResolvedValue(null),
+  updateTask: jest.fn().mockResolvedValue(null),
 };
 
 export default ActionItemService;

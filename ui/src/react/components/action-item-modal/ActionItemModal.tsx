@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import React, { forwardRef } from 'react';
 
 import Action from '../../types/Action';
 import ActionItem from '../action-item/ActionItem';
@@ -26,7 +26,7 @@ import './ActionItemModal.scss';
 type ActionItemModalProps = {
   action: Action;
   readOnly?: boolean;
-  onEdit?: (message: string) => void;
+  onEdit?: (action: Action, updatedTask: string) => void;
   onAssign?: (assignee: string) => void;
   onDelete?: () => void;
   onComplete?: () => void;
@@ -49,4 +49,4 @@ function ActionItemModal(props: ActionItemModalProps, ref: React.Ref<ModalMethod
   );
 }
 
-export default React.forwardRef<ModalMethods, ActionItemModalProps>(ActionItemModal);
+export default forwardRef<ModalMethods, ActionItemModalProps>(ActionItemModal);
