@@ -15,22 +15,21 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import * as Hammer from 'hammerjs';
 
-import { ActionsRadiatorViewComponent } from '../../../components/actions-radiator-view/actions-radiator-view.component';
-import { DataService } from '../../../data.service';
-import { ActionItem } from '../../../domain/action-item';
-import { Column } from '../../../domain/column';
-import { ColumnResponse } from '../../../domain/column-response';
-import { Themes } from '../../../domain/Theme';
-import { WebsocketActionItemResponse, WebsocketThoughtResponse } from '../../../domain/websocket-response';
-import { ActionItemService } from '../../services/action.service';
-import { BoardService } from '../../services/board.service';
-import { ColumnAggregationService } from '../../services/column-aggregation.service';
-import { EndRetroService } from '../../services/end-retro.service';
-import { SubscriptionService } from '../../services/subscription.service';
-import { TeamService } from '../../services/team.service';
+import {ActionsRadiatorViewComponent} from '../../../components/actions-radiator-view/actions-radiator-view.component';
+import {DataService} from '../../../data.service';
+import {Column} from '../../../domain/column';
+import {ColumnResponse} from '../../../domain/column-response';
+import {Themes} from '../../../domain/Theme';
+import {WebsocketActionItemResponse, WebsocketThoughtResponse} from '../../../domain/websocket-response';
+import {ActionItemService} from '../../services/action.service';
+import {BoardService} from '../../services/board.service';
+import {ColumnAggregationService} from '../../services/column-aggregation.service';
+import {EndRetroService} from '../../services/end-retro.service';
+import {SubscriptionService} from '../../services/subscription.service';
+import {TeamService} from '../../services/team.service';
 
 @Component({
   selector: 'rq-team',
@@ -98,27 +97,8 @@ export class TeamPageComponent implements OnInit, OnDestroy {
   }
 
   public onEndRetro(): void {
-    const archivedActionItems: Array<ActionItem> = [];
-
-    this.columnsAggregation.forEach((column) => {
-      if (column.topic === 'action') {
-        const completedActionItems = this.getCompletedActionItems(column.items as ActionItem[]);
-        archivedActionItems.push(...completedActionItems);
-        archivedActionItems.forEach((actionItem: ActionItem) => {
-          actionItem.archived = true;
-        });
-      }
-    });
-
     this.teamService.endRetro(this.teamId);
-    if (archivedActionItems.length > 0) {
-      this.actionItemService.archiveActionItems(archivedActionItems);
-    }
     this.endRetroService.endRetro();
-  }
-
-  private getCompletedActionItems(items: ActionItem[]): ActionItem[] {
-    return items.filter((item) => item.completed);
   }
 
   public isSelectedIndex(index: number): boolean {

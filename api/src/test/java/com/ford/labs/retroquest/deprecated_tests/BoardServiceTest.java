@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.deprecated_tests;
 
+import com.ford.labs.retroquest.actionitem.ActionItemService;
 import com.ford.labs.retroquest.board.Board;
 import com.ford.labs.retroquest.board.BoardRepository;
 import com.ford.labs.retroquest.board.BoardService;
@@ -41,9 +42,10 @@ import static org.mockito.Mockito.*;
 class BoardServiceTest {
     private final BoardRepository boardRepository = mock(BoardRepository.class);
     private final ThoughtService thoughtService = mock(ThoughtService.class);
+    private final ActionItemService actionItemService = mock(ActionItemService.class);
     private final int pageSize = 2;
 
-    private final BoardService boardService = new BoardService(boardRepository, thoughtService, pageSize);
+    private final BoardService boardService = new BoardService(boardRepository, thoughtService, actionItemService, pageSize);
 
     @Test
     void getBoardsForTeamId() {
@@ -78,7 +80,7 @@ class BoardServiceTest {
     @Test
     void getBoardsForTeamId_shouldReturnAPagedResult() {
         var pageSize = 5;
-        var subject = new BoardService(boardRepository, thoughtService, pageSize);
+        var subject = new BoardService(boardRepository, thoughtService, actionItemService, pageSize);
 
         final PageRequest pageRequest = PageRequest.of(
             0,
@@ -187,5 +189,15 @@ class BoardServiceTest {
         boardService.endRetro(expectedTeamId);
 
         verify(boardRepository, times(0)).save(any());
+    }
+
+    @Test
+    public void endRetro_ArchivesCompletedActionItems() {
+        var expectedTeamId = "team1";
+        when(thoughtService.fetchAllActiveThoughts(eq(expectedTeamId))).thenReturn(new ArrayList<>());
+
+        boardService.endRetro(expectedTeamId);
+
+        verify(actionItemService).archiveCompletedActionItems(expectedTeamId);
     }
 }
