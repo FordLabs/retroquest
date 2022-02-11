@@ -41,7 +41,6 @@ import { ArchivesPageComponent } from './pages/archives/archives.page';
 import { TeamPageComponent } from './pages/team/team.page';
 import { ActionItemService } from './services/action.service';
 import { ColumnService } from './services/column.service';
-import { EndRetroService } from './services/end-retro.service';
 import { FeedbackService } from './services/feedback.service';
 import { SaveCheckerService } from './services/save-checker.service';
 import { TeamService } from './services/team.service';
@@ -130,7 +129,6 @@ function routes() {
     ColumnService,
     FeedbackService,
     SaveCheckerService,
-    EndRetroService,
   ],
   declarations: [
     TeamPageComponent,

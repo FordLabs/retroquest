@@ -15,21 +15,20 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as Hammer from 'hammerjs';
 
-import {ActionsRadiatorViewComponent} from '../../../components/actions-radiator-view/actions-radiator-view.component';
-import {DataService} from '../../../data.service';
-import {Column} from '../../../domain/column';
-import {ColumnResponse} from '../../../domain/column-response';
-import {Themes} from '../../../domain/Theme';
-import {WebsocketActionItemResponse, WebsocketThoughtResponse} from '../../../domain/websocket-response';
-import {ActionItemService} from '../../services/action.service';
-import {BoardService} from '../../services/board.service';
-import {ColumnAggregationService} from '../../services/column-aggregation.service';
-import {EndRetroService} from '../../services/end-retro.service';
-import {SubscriptionService} from '../../services/subscription.service';
-import {TeamService} from '../../services/team.service';
+import { ActionsRadiatorViewComponent } from '../../../components/actions-radiator-view/actions-radiator-view.component';
+import { DataService } from '../../../data.service';
+import { Column } from '../../../domain/column';
+import { ColumnResponse } from '../../../domain/column-response';
+import { Themes } from '../../../domain/Theme';
+import { WebsocketActionItemResponse, WebsocketThoughtResponse } from '../../../domain/websocket-response';
+import { ActionItemService } from '../../services/action.service';
+import { BoardService } from '../../services/board.service';
+import { ColumnAggregationService } from '../../services/column-aggregation.service';
+import { SubscriptionService } from '../../services/subscription.service';
+import { TeamService } from '../../services/team.service';
 
 @Component({
   selector: 'rq-team',
@@ -44,7 +43,6 @@ export class TeamPageComponent implements OnInit, OnDestroy {
     private boardService: BoardService,
     private columnAggregationService: ColumnAggregationService,
     private actionItemService: ActionItemService,
-    private endRetroService: EndRetroService,
     private subscriptionService: SubscriptionService,
     private teamService: TeamService
   ) {}
@@ -98,7 +96,6 @@ export class TeamPageComponent implements OnInit, OnDestroy {
 
   public onEndRetro(): void {
     this.teamService.endRetro(this.teamId);
-    this.endRetroService.endRetro();
   }
 
   public isSelectedIndex(index: number): boolean {
