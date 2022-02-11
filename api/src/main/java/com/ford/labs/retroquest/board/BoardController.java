@@ -34,7 +34,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -86,6 +85,14 @@ public class BoardController {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public List<Thought> getThoughtsForBoard(@PathVariable("teamId") String teamId, @PathVariable("boardId") Long boardId) {
         return this.boardService.getThoughtsForTeamIdAndBoardId(teamId, boardId);
+    }
+
+    @PutMapping("/team/{teamId}/end-retro")
+    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @Operation(summary = "Ends a retro for a given team", description = "endTeamRetro")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
+    public void endRetro(@PathVariable("teamId") String teamId) {
+        this.boardService.endRetro(teamId);
     }
 
     @MessageMapping("/{teamId}/end-retro")

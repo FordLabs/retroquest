@@ -23,13 +23,17 @@ import { TeamService } from './team.service';
 describe('TeamService', () => {
   let service;
   let fakeHttpClient: HttpClient;
+  let mockedPutObservable;
 
   beforeEach(() => {
+    mockedPutObservable = {subscribe: jest.fn()} as unknown as Observable<Object>;
     const mockGet = jest.fn().mockReturnValue(new Observable());
     const mockPost = jest.fn().mockReturnValue(new Observable());
+    const mockPut = jest.fn().mockReturnValue(mockedPutObservable);
     fakeHttpClient = {
       get: mockGet,
       post: mockPost,
+      put: mockPut,
     } as unknown as HttpClient;
 
     service = new TeamService(fakeHttpClient);
@@ -127,5 +131,12 @@ describe('TeamService', () => {
       });
       expect(returnObj instanceof Observable).toBe(true);
     });
+  });
+
+  it('should request to end team retro', () => {
+    const teamId = 'team-name';
+    service.endRetro(teamId);
+    expect(fakeHttpClient.put).toHaveBeenCalledWith(`/api/team/${teamId}/end-retro`, {}, {observe: 'response'});
+    expect(mockedPutObservable.subscribe).toHaveBeenCalled();
   });
 });

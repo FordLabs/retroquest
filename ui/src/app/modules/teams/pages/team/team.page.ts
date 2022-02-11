@@ -30,6 +30,7 @@ import { BoardService } from '../../services/board.service';
 import { ColumnAggregationService } from '../../services/column-aggregation.service';
 import { EndRetroService } from '../../services/end-retro.service';
 import { SubscriptionService } from '../../services/subscription.service';
+import { TeamService } from '../../services/team.service';
 
 @Component({
   selector: 'rq-team',
@@ -45,7 +46,8 @@ export class TeamPageComponent implements OnInit, OnDestroy {
     private columnAggregationService: ColumnAggregationService,
     private actionItemService: ActionItemService,
     private endRetroService: EndRetroService,
-    private subscriptionService: SubscriptionService
+    private subscriptionService: SubscriptionService,
+    private teamService: TeamService
   ) {}
 
   teamId: string;
@@ -96,13 +98,10 @@ export class TeamPageComponent implements OnInit, OnDestroy {
   }
 
   public onEndRetro(): void {
-    const thoughts = [];
     const archivedActionItems: Array<ActionItem> = [];
 
     this.columnsAggregation.forEach((column) => {
-      if (column.topic !== 'action') {
-        thoughts.push(...column.items);
-      } else {
+      if (column.topic === 'action') {
         const completedActionItems = this.getCompletedActionItems(column.items as ActionItem[]);
         archivedActionItems.push(...completedActionItems);
         archivedActionItems.forEach((actionItem: ActionItem) => {
@@ -111,15 +110,11 @@ export class TeamPageComponent implements OnInit, OnDestroy {
       }
     });
 
-    if (thoughts.length > 0 || archivedActionItems.length > 0) {
-      if (thoughts.length > 0) {
-        this.boardService.createBoard(this.teamId);
-      }
-      if (archivedActionItems.length > 0) {
-        this.actionItemService.archiveActionItems(archivedActionItems);
-      }
-      this.endRetroService.endRetro();
+    this.teamService.endRetro(this.teamId);
+    if (archivedActionItems.length > 0) {
+      this.actionItemService.archiveActionItems(archivedActionItems);
     }
+    this.endRetroService.endRetro();
   }
 
   private getCompletedActionItems(items: ActionItem[]): ActionItem[] {

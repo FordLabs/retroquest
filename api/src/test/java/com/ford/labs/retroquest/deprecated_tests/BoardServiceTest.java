@@ -23,10 +23,12 @@ import com.ford.labs.retroquest.board.BoardService;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtService;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -95,7 +97,7 @@ class BoardServiceTest {
         long expectedBoardId = 1234L;
         var expectedMessage = "hello";
 
-        when(thoughtService.fetchAllActiveThoughts(eq("team1"))).thenReturn(
+        when(thoughtService.fetchAllActiveThoughts(eq(expectedTeamId))).thenReturn(
             List.of(
                 new Thought(
                     4321L,
@@ -123,5 +125,67 @@ class BoardServiceTest {
         assertThat(returnedBoard.getDateCreated()).isEqualTo(LocalDate.now());
         assertThat(returnedBoard.getThoughts()).hasSize(1);
         assertThat(returnedBoard.getThoughts().get(0).getBoardId()).isEqualTo(expectedBoardId);
+    }
+
+
+    @Test
+    public void endRetro_ShouldSaveAllUnboardedThoughtsOnBoard() {
+        var expectedTeamId = "team1";
+        var expectedBoardId = 1234L;
+        var expectedMessage = "hello";
+        var expectedBoard = new Board(
+            expectedBoardId,
+            expectedTeamId,
+            LocalDate.now(),
+            List.of(
+                new Thought(
+                    4321L,
+                    expectedMessage,
+                    0,
+                    null,
+                    false,
+                    expectedTeamId,
+                    null,
+                    expectedBoardId
+                )
+            )
+        );
+
+        when(thoughtService.fetchAllActiveThoughts(eq(expectedTeamId))).thenReturn(
+                List.of(
+                        new Thought(
+                                4321L,
+                                expectedMessage,
+                                0,
+                                null,
+                                false,
+                                expectedTeamId,
+                                null,
+                                null
+                        )
+                )
+        );
+
+        when(boardRepository.save(any(Board.class))).thenAnswer(a -> {
+            var board = a.<Board>getArgument(0);
+            board.setId(expectedBoardId);
+            return board;
+        });
+
+        boardService.endRetro(expectedTeamId);
+
+        var boardCaptor = ArgumentCaptor.forClass(Board.class);
+        verify(boardRepository, times(2)).save(boardCaptor.capture());
+        assertThat(boardCaptor.getValue()).usingRecursiveComparison().isEqualTo(expectedBoard);
+    }
+
+    @Test
+    public void endRetro_DoesNotCreateBoardIfNoUnboardedThoughts() {
+        var expectedTeamId = "team1";
+        when(thoughtService.fetchAllActiveThoughts(eq(expectedTeamId))).thenReturn(new ArrayList<>());
+
+        boardService.endRetro(expectedTeamId);
+
+        verify(boardRepository, times(0)).save(any());
     }
 }

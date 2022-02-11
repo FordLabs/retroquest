@@ -16,11 +16,10 @@
  */
 
 import { of } from 'rxjs';
-import { anything, instance, mock, verify, when } from 'ts-mockito';
+import { instance, mock, verify, when } from 'ts-mockito';
 
 import { DataService } from '../../../data.service';
 import { ColumnCombinerResponse } from '../../../domain/column-combiner-response';
-import { emptyColumnResponse } from '../../../domain/column-response';
 import { emptyThought } from '../../../domain/thought';
 import { createMockRxStompService } from '../../../utils/testutils';
 import { BoardService } from '../../services/board.service';
@@ -31,7 +30,6 @@ import { SubscriptionService } from '../../services/subscription.service';
 import { TeamService } from '../../services/team.service';
 
 import { TeamPageComponent } from './team.page';
-import any = jasmine.any;
 
 describe('TeamPageComponent', () => {
   let component: TeamPageComponent;
@@ -61,7 +59,8 @@ describe('TeamPageComponent', () => {
       instance(columnAggregationService),
       null,
       instance(endRetroService),
-      subscriptionService
+      subscriptionService,
+      instance(teamService)
     );
   });
 
@@ -148,28 +147,9 @@ describe('TeamPageComponent', () => {
       expectedThoughts[1].id = 1;
     });
 
-    it('should create a board if there are thoughts to archive', () => {
-      component.columnsAggregation = [emptyColumnResponse()];
-      component.columnsAggregation[0].items = [expectedThoughts[0], expectedThoughts[1]];
-
+    it('should call end retro on team service', () => {
       component.onEndRetro();
-      verify(boardService.createBoard(anything())).called();
-    });
-
-    it('should not create a board if there are no thoughts to archive', () => {
-      component.columnsAggregation = [emptyColumnResponse()];
-
-      component.onEndRetro();
-      verify(boardService.createBoard(anything())).never();
-    });
-
-    it('should emit the end retro event to the websocket', () => {
-      component.columnsAggregation = [emptyColumnResponse()];
-      component.columnsAggregation[0].items = [expectedThoughts[0]];
-
-      component.onEndRetro();
-
-      verify(boardService.createBoard(anything())).called();
+      verify(teamService.endRetro(fakeTeamId)).called();
     });
   });
 });

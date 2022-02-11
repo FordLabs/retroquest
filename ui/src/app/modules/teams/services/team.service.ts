@@ -69,6 +69,10 @@ export class TeamService {
     });
   }
 
+  endRetro(teamId: string): void {
+    this.http.put(`/api/team/${teamId}/end-retro`, {},{observe: 'response',}).subscribe();
+  }
+
   private doPostRequest(endpoint: string, name: string, password: string, captchaResponse?: string) {
     const payload = captchaResponse ? { name, password, captchaResponse } : { name, password };
     return this.http.post(endpoint, payload, {
