@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.board;
 
+import com.ford.labs.retroquest.actionitem.ActionItemService;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtService;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,16 +32,18 @@ import java.util.List;
 public class BoardService {
     private final BoardRepository boardRepository;
     private final ThoughtService thoughtService;
-
+    private final ActionItemService actionItemService;
     private final int pageSize;
 
     public BoardService(
         BoardRepository boardRepository,
         ThoughtService thoughtService,
+        ActionItemService actionItemService,
         @Value("${app.archive.thought.pageSize}") int pageSize
     ) {
         this.boardRepository = boardRepository;
         this.thoughtService = thoughtService;
+        this.actionItemService = actionItemService;
         this.pageSize = pageSize;
     }
 
@@ -79,5 +82,6 @@ public class BoardService {
         if(this.thoughtService.fetchAllActiveThoughts(teamId).size() > 0) {
             createBoard(teamId);
         }
+        actionItemService.archiveCompletedActionItems(teamId);
     }
 }
