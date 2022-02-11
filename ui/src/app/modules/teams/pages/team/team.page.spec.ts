@@ -24,7 +24,6 @@ import { emptyThought } from '../../../domain/thought';
 import { createMockRxStompService } from '../../../utils/testutils';
 import { BoardService } from '../../services/board.service';
 import { ColumnAggregationService } from '../../services/column-aggregation.service';
-import { EndRetroService } from '../../services/end-retro.service';
 import { SaveCheckerService } from '../../services/save-checker.service';
 import { SubscriptionService } from '../../services/subscription.service';
 import { TeamService } from '../../services/team.service';
@@ -39,7 +38,6 @@ describe('TeamPageComponent', () => {
   let boardService: BoardService;
   let columnAggregationService: ColumnAggregationService;
   let teamService: TeamService;
-  let endRetroService: EndRetroService;
   let subscriptionService: SubscriptionService;
 
   const fakeTeamId = 'team-id';
@@ -50,7 +48,6 @@ describe('TeamPageComponent', () => {
     teamService = mock(TeamService);
     boardService = mock(BoardService);
     saveCheckerService = mock(SaveCheckerService);
-    endRetroService = mock(EndRetroService);
     subscriptionService = new SubscriptionService(dataService, saveCheckerService, createMockRxStompService());
 
     component = new TeamPageComponent(
@@ -58,7 +55,6 @@ describe('TeamPageComponent', () => {
       instance(boardService),
       instance(columnAggregationService),
       null,
-      instance(endRetroService),
       subscriptionService,
       instance(teamService)
     );

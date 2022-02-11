@@ -23,6 +23,8 @@ import com.ford.labs.retroquest.board.BoardRepository;
 import com.ford.labs.retroquest.board.BoardService;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtService;
+import com.ford.labs.retroquest.websocket.WebsocketEndRetroEvent;
+import com.ford.labs.retroquest.websocket.WebsocketService;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.data.domain.PageRequest;
@@ -43,9 +45,10 @@ class BoardServiceTest {
     private final BoardRepository boardRepository = mock(BoardRepository.class);
     private final ThoughtService thoughtService = mock(ThoughtService.class);
     private final ActionItemService actionItemService = mock(ActionItemService.class);
+    private final WebsocketService websocketService = mock(WebsocketService.class);
     private final int pageSize = 2;
 
-    private final BoardService boardService = new BoardService(boardRepository, thoughtService, actionItemService, pageSize);
+    private final BoardService boardService = new BoardService(boardRepository, thoughtService, actionItemService, websocketService, pageSize);
 
     @Test
     void getBoardsForTeamId() {
@@ -80,7 +83,7 @@ class BoardServiceTest {
     @Test
     void getBoardsForTeamId_shouldReturnAPagedResult() {
         var pageSize = 5;
-        var subject = new BoardService(boardRepository, thoughtService, actionItemService, pageSize);
+        var subject = new BoardService(boardRepository, thoughtService, actionItemService, websocketService, pageSize);
 
         final PageRequest pageRequest = PageRequest.of(
             0,
@@ -97,22 +100,6 @@ class BoardServiceTest {
     void saveBoard() {
         var expectedTeamId = "team1";
         long expectedBoardId = 1234L;
-        var expectedMessage = "hello";
-
-        when(thoughtService.fetchAllActiveThoughts(eq(expectedTeamId))).thenReturn(
-            List.of(
-                new Thought(
-                    4321L,
-                    expectedMessage,
-                    0,
-                    null,
-                    false,
-                    expectedTeamId,
-                    null,
-                    null
-                )
-            )
-        );
 
         when(boardRepository.save(any(Board.class))).thenAnswer(a -> {
             var board = a.<Board>getArgument(0);
@@ -125,8 +112,6 @@ class BoardServiceTest {
         assertThat(returnedBoard.getId()).isEqualTo(expectedBoardId);
         assertThat(returnedBoard.getTeamId()).isEqualTo(expectedTeamId);
         assertThat(returnedBoard.getDateCreated()).isEqualTo(LocalDate.now());
-        assertThat(returnedBoard.getThoughts()).hasSize(1);
-        assertThat(returnedBoard.getThoughts().get(0).getBoardId()).isEqualTo(expectedBoardId);
     }
 
 
@@ -199,5 +184,16 @@ class BoardServiceTest {
         boardService.endRetro(expectedTeamId);
 
         verify(actionItemService).archiveCompletedActionItems(expectedTeamId);
+    }
+
+    @Test
+    public void endRetro_EmitsEndRetroEvent() {
+        var expectedTeamId = "team1";
+        var expectedEvent = new WebsocketEndRetroEvent(expectedTeamId);
+        when(thoughtService.fetchAllActiveThoughts(eq(expectedTeamId))).thenReturn(new ArrayList<>());
+
+        boardService.endRetro(expectedTeamId);
+
+        verify(websocketService).publishEvent(expectedEvent);
     }
 }

@@ -85,18 +85,6 @@ class BoardApiTest extends ApiTestBase {
     }
 
     @Test
-    void createBoard_ShouldSaveABoardWithThoughts() throws Exception {
-        Thought savedThought = thoughtService.createThought(teamId, new CreateThoughtRequest(null, "TEST_MESSAGE", 0, "happy", false, teamId, null));
-
-        mockMvc.perform(post(format("/api/team/%s/board", teamId))
-                .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isCreated());
-
-        assertThat(boardRepository.count()).isEqualTo(1);
-        assertThat(boardRepository.findAllByTeamId(teamId).get(0).getThoughts().get(0).getId()).isEqualTo(savedThought.getId());
-    }
-
-    @Test
     void createBoard_ShouldRemoveThoughtsWithoutABoardId() throws Exception {
         thoughtService.createThought(teamId, new CreateThoughtRequest(-1L, "TEST_MESSAGE", 0, "happy", false, teamId, -1L));
 
@@ -104,8 +92,11 @@ class BoardApiTest extends ApiTestBase {
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isCreated());
 
-        assertThat(thoughtRepository.count()).isEqualTo(1);
-        assertThat(thoughtService.fetchAllActiveThoughts(teamId)).isEmpty();
+        assertThat(boardRepository.count()).isEqualTo(1);
+        var savedBoard = boardRepository.findAll().get(0);
+        assertThat(savedBoard.getId()).isNotNull();
+        assertThat(savedBoard.getTeamId()).isEqualTo(teamId);
+        assertThat(savedBoard.getDateCreated()).isEqualTo(LocalDate.now());
     }
 
     @Test
