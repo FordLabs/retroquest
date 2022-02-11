@@ -74,4 +74,10 @@ public class BoardService {
     public List<Thought> getThoughtsForTeamIdAndBoardId(String teamID, Long boardId) {
         return this.boardRepository.findByTeamIdAndId(teamID, boardId).getThoughts();
     }
+
+    public void endRetro(String teamId) {
+        if(this.thoughtService.fetchAllActiveThoughts(teamId).size() > 0) {
+            createBoard(teamId);
+        }
+    }
 }

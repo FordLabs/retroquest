@@ -20,26 +20,22 @@ package com.ford.labs.retroquest.api;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.board.Board;
 import com.ford.labs.retroquest.board.BoardRepository;
-import com.ford.labs.retroquest.board.CreateBoardRequest;
 import com.ford.labs.retroquest.thought.CreateThoughtRequest;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
 import com.ford.labs.retroquest.thought.ThoughtService;
-import org.assertj.core.util.Lists;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 
 import java.time.LocalDate;
 import java.util.Collections;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -89,7 +85,7 @@ class BoardApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_save_a_board_with_thoughts() throws Exception {
+    void createBoard_ShouldSaveABoardWithThoughts() throws Exception {
         Thought savedThought = thoughtService.createThought(teamId, new CreateThoughtRequest(null, "TEST_MESSAGE", 0, "happy", false, teamId, null));
 
         mockMvc.perform(post(format("/api/team/%s/board", teamId))
@@ -110,5 +106,36 @@ class BoardApiTest extends ApiTestBase {
 
         assertThat(thoughtRepository.count()).isEqualTo(1);
         assertThat(thoughtService.fetchAllActiveThoughts(teamId)).isEmpty();
+    }
+
+    @Test
+    public void endRetro_ShouldSaveABoardWithThoughts() throws Exception {
+        Thought savedThought = thoughtService.createThought(teamId, new CreateThoughtRequest(null, "TEST_MESSAGE", 0, "happy", false, teamId, null));
+
+        mockMvc.perform(put(format("/api/team/%s/end-retro", teamId))
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk());
+
+        assertThat(boardRepository.count()).isEqualTo(1);
+        assertThat(boardRepository.findAllByTeamId(teamId).get(0).getThoughts().get(0).getId()).isEqualTo(savedThought.getId());
+    }
+
+    @Test
+    public void endRetro_ShouldRemoveThoughtsWithoutABoard() throws Exception {
+        Thought savedThought = thoughtService.createThought(teamId, new CreateThoughtRequest(null, "TEST_MESSAGE", 0, "happy", false, teamId, null));
+
+        mockMvc.perform(put(format("/api/team/%s/end-retro", teamId))
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk());
+
+        assertThat(boardRepository.count()).isEqualTo(1);
+        assertThat(boardRepository.findAllByTeamId(teamId).get(0).getThoughts().get(0).getId()).isEqualTo(savedThought.getId());
+    }
+
+    @Test
+    public void endRetro_WithUnauthorizedUser_Returns403() throws Exception {
+        mockMvc.perform(put(format("/api/team/%s/end-retro", teamId))
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .andExpect(status().isForbidden());
     }
 }
