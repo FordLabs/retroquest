@@ -71,10 +71,14 @@ function ActionItemsColumn() {
     ActionItemService.delete(team.id, action.id).catch(console.error);
   };
 
+  const editActionItem = (action: Action, updatedTask: string) => {
+    ActionItemService.updateTask(team.id, action.id, updatedTask).catch(console.error);
+  };
+
   const renderActionItem = (action: Action) => {
     return (
       <Fragment key={action.id}>
-        <ActionItem onDelete={deleteActionItem} action={action} />
+        <ActionItem action={action} onEdit={editActionItem} onDelete={deleteActionItem} />
       </Fragment>
     );
   };

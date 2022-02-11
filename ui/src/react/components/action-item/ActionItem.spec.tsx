@@ -126,7 +126,7 @@ describe('ActionItem', () => {
       clickEdit();
       editTask('New Fake Task{Enter}');
 
-      expect(mockEdit).toHaveBeenCalledWith('New Fake Task');
+      expect(mockEdit).toHaveBeenCalledWith(fakeAction, 'New Fake Task');
     });
 
     it('can start and cancel delete', () => {

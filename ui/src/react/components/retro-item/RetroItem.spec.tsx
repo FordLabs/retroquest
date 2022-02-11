@@ -130,7 +130,7 @@ describe('RetroItem', () => {
     it('can complete edit', () => {
       clickEdit();
       editText('New Fake Text{Enter}');
-      expect(mockEdit).toHaveBeenCalledWith('New Fake Text');
+      expect(mockEdit).toHaveBeenCalledWith(fakeThought, 'New Fake Text');
     });
 
     it('can start and cancel delete', () => {

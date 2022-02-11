@@ -66,7 +66,7 @@ function RetroPage(props: Props): ReactElement {
 
       const allItems = flatten(aggregatedColumns.map((aggregatedColumn) => aggregatedColumn.items));
       setThoughts([...allItems.filter((item) => item.topic !== Topic.ACTION)]);
-      setActionItems([...allItems.filter((item) => item.topic === Topic.ACTION)]);
+      setActionItems([...allItems.filter((item) => !item.topic)]);
 
       setIsLoading(false);
     });

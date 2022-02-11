@@ -50,10 +50,11 @@ describe('RetroPage.spec.tsx', () => {
     expect(results).toHaveNoViolations();
   });
 
-  it('should show all columns returned from backend', (done) => {
+  it('should show all columns and column items returned from backend', (done) => {
     mockColumns.forEach((column) => {
       const retroColumn = screen.getByTestId(`retroColumn__${column.topic}`);
       expect(within(retroColumn).getByText(column.title)).toBeDefined();
+      expect(within(retroColumn).getAllByTestId(/(retro|action)Item$/)).toHaveLength(column.items.length);
     });
     done();
   });
