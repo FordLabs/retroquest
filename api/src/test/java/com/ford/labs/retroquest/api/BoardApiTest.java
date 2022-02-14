@@ -85,9 +85,7 @@ class BoardApiTest extends ApiTestBase {
     }
 
     @Test
-    void createBoard_ShouldRemoveThoughtsWithoutABoardId() throws Exception {
-        thoughtService.createThought(teamId, new CreateThoughtRequest(-1L, "TEST_MESSAGE", 0, "happy", false, teamId, -1L));
-
+    void createBoard_ShouldCreateBoard() throws Exception {
         mockMvc.perform(post(format("/api/team/%s/board", teamId))
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isCreated());
@@ -97,6 +95,13 @@ class BoardApiTest extends ApiTestBase {
         assertThat(savedBoard.getId()).isNotNull();
         assertThat(savedBoard.getTeamId()).isEqualTo(teamId);
         assertThat(savedBoard.getDateCreated()).isEqualTo(LocalDate.now());
+    }
+
+    @Test
+    public void createBoard_WithUnauthorizedUser_Returns403() throws Exception {
+        mockMvc.perform(post(format("/api/team/%s/board", teamId))
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .andExpect(status().isForbidden());
     }
 
     @Test

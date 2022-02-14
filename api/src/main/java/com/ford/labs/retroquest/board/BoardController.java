@@ -94,13 +94,4 @@ public class BoardController {
     public void endRetro(@PathVariable("teamId") String teamId) {
         this.boardService.endRetro(teamId);
     }
-
-    @MessageMapping("/{teamId}/end-retro")
-    @SendTo("/topic/{teamId}/end-retro")
-    public WebsocketPutResponse<Object> endRetroWebsocket(@DestinationVariable("teamId") String teamId, Authentication authentication) {
-        if (!apiAuthorization.requestIsAuthorized(authentication, teamId)) {
-            return null;
-        }
-        return new WebsocketPutResponse<>(null);
-    }
 }
