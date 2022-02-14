@@ -23,21 +23,12 @@
         }"
     >
         <div class="header-bottom-content">
-            <rq-button
-                id="giveFeedback"
-                (click)="feedbackDialog.show()"
-                type="secondary"
-                [theme]="theme"
-            >
+            <rq-button id="giveFeedback" (click)="feedbackDialog.show()" type="secondary" [theme]="theme">
                 <span class="button-text">Give Feedback</span>
                 <i class="far fa-comments button-icon" aria-hidden="true"></i>
             </rq-button>
 
-            <rq-button
-                type="secondary"
-                class="rq-button-secondary download-button"
-                (click)="giveZipDownloadToUser()"
-            >
+            <rq-button type="secondary" class="rq-button-secondary download-button" (click)="giveZipDownloadToUser()">
                 <span id="downloadCsv" class="button-text">Download CSV</span>
                 <i class="fas fa-download button-icon" aria-hidden="true"></i>
             </rq-button>
@@ -50,7 +41,7 @@
                     hide: actionsRadiatorViewEnabled
                 }"
                 [theme]="theme"
-                text="archive retro"
+                text="Archive Retro"
                 type="primary"
             >
             </rq-button>
@@ -58,14 +49,6 @@
     </div>
 </header>
 
-<rq-feedback-dialog
-    #feedbackDialog
-    (submitted)="onFeedbackSubmitted($event)"
-    [theme]="theme"
-></rq-feedback-dialog>
+<rq-feedback-dialog #feedbackDialog (submitted)="onFeedbackSubmitted($event)" [theme]="theme"></rq-feedback-dialog>
 
-<rq-end-retro-dialog
-    #endRetroModal
-    [theme]="theme"
-    (submitted)="onEndRetroDialogSubmitted()"
-></rq-end-retro-dialog>
+<rq-end-retro-dialog #endRetroModal [theme]="theme" (submitted)="onEndRetroDialogSubmitted()"></rq-end-retro-dialog>

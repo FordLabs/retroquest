@@ -24,7 +24,7 @@ import Chainable = Cypress.Chainable;
 // @ts-ignore
 import * as path from 'path';
 
-import { FEEDBACK_API_PATH } from '../../src/react/services/api/ApiConstants';
+import { FEEDBACK_API_PATH, getArchiveRetroApiPath } from '../../src/react/services/api/ApiConstants';
 
 describe('Retro Page', () => {
   const green = 'rgb(46, 204, 113)';
@@ -32,20 +32,20 @@ describe('Retro Page', () => {
   const blue = 'rgb(52, 152, 219)';
   const yellow = 'rgb(241, 196, 15)';
 
-  const teamCredentials = getTeamCredentials();
-
-  before(() => {
-    cy.createTeamAndLogin(teamCredentials);
-  });
-
   context('Subnav', () => {
+    const teamCredentials = getTeamCredentials();
+
+    before(() => {
+      cy.createTeamAndLogin(teamCredentials);
+    });
+
     it('Feedback Button', () => {
       const modalText = 'How can we improve RetroQuest?';
       cy.intercept('POST', FEEDBACK_API_PATH).as('postFeedbackEndpoint');
 
       cy.findByText('Give Feedback').as('giveFeedbackButton').click();
 
-      cy.get('[data-testid=feedback-dialog]').as('modal').should('contain', modalText);
+      cy.get('[data-testid=feedbackDialog]').as('modal').should('contain', modalText);
 
       cy.get('@modal').findByText('Cancel').click();
       cy.get('@modal').should('not.be.visible');
@@ -72,9 +72,46 @@ describe('Retro Page', () => {
         .should((buffer) => expect(buffer.length).to.be.gt(40))
         .should('eq', 'Column,Message,Likes,Completed,Assigned To\r\n');
     });
+
+    it('Archive Retro Button', () => {
+      cy.intercept('PUT', getArchiveRetroApiPath(teamCredentials.teamId)).as('putArchiveRetro');
+      cy.get('[data-testid=retroColumn__action]').as('actionsColumn');
+
+      cy.enterThought(Topic.UNHAPPY, 'Unhappy Thought');
+      const activeActionItemTask = 'Active Action Item';
+      const completedActionItemTask = 'Action item we completed';
+      enterActionItem(activeActionItemTask);
+      enterActionItem(completedActionItemTask);
+      markActionItemAsCompleted(completedActionItemTask);
+
+      cy.findByText('Archive Retro').as('archiveRetroButton').click();
+
+      cy.get('[data-testid=archiveRetroDialog]').as('modal');
+      cy.get('@modal').findByText('Nope').click();
+      cy.get('@modal').should('not.be.visible');
+      cy.get('@putArchiveRetro').its('response.statusCode').should('eq', null);
+
+      confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 1);
+      confirmNumberOfActionItemsInColumn(2);
+
+      cy.get('@archiveRetroButton').click();
+      cy.get('@modal').findByText('Yes!').click();
+      cy.get('@putArchiveRetro').its('response.statusCode').should('eq', 200);
+
+      cy.findByDisplayValue(activeActionItemTask).should('exist');
+      cy.findByDisplayValue(completedActionItemTask).should('not.exist');
+      confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 0);
+      confirmNumberOfActionItemsInColumn(1);
+    });
   });
 
   context('Columns', () => {
+    const teamCredentials = getTeamCredentials();
+
+    before(() => {
+      cy.createTeamAndLogin(teamCredentials);
+    });
+
     it('Happy', () => {
       cy.log('**Should have "Happy" column header in green**');
       cy.findByText('Happy').should('exist').parent().should('have.css', 'background-color', green);
@@ -142,6 +179,10 @@ describe('Retro Page', () => {
 
       shouldEditActionItemTaskAndAssignee(task, 'by 10%', assignee, ', Larry');
 
+      // @todo test deleting action item
+
+      // @todo test marking action item as done
+
       cy.log('**On page reload all Action Items should still be there**');
       cy.reload();
       confirmNumberOfActionItemsInColumn(2);
@@ -207,11 +248,6 @@ function shouldDeleteHappyThought(thoughtIndex: number, expectedThoughtsRemainin
   confirmNumberOfThoughtsInColumn(Topic.HAPPY, expectedThoughtsRemaining);
 }
 
-function enterActionItem(actionItem: string) {
-  cy.log('**Entering an action item**');
-  cy.get('@actionsColumn').find('input[placeholder="Enter an Action Item"]').type(`${actionItem}{enter}`);
-}
-
 function shouldStarFirstItemInHappyColumn(expectedStarCount: number) {
   cy.log(`**Starring first happy thought**`);
   const starCountSelector = '[data-testid=retroItem-upvote]';
@@ -241,6 +277,16 @@ function shouldMarkAndUnmarkThoughtAsDiscussed(thoughtMessage: string) {
 function confirmNumberOfThoughtsInColumn(topic: Topic, expectedCount: number): void {
   cy.log(`**There should be ${expectedCount} thoughts in ${topic} column**`);
   cy.get(`[data-testid=retroColumn__${topic}]`).find('[data-testid=retroItem]').should('have.length', expectedCount);
+}
+
+function enterActionItem(actionItem: string) {
+  cy.log('**Entering an action item**');
+  cy.get('@actionsColumn').find('input[placeholder="Enter an Action Item"]').type(`${actionItem}{enter}`);
+}
+
+function markActionItemAsCompleted(task: string) {
+  cy.log(`**Marking action item task "${task}" as completed**`);
+  getActionItemByMessage(task).find('[data-testid=columnItem-checkboxButton]').click();
 }
 
 function confirmNumberOfActionItemsInColumn(expectedCount: number): void {
