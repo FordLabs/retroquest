@@ -1,4 +1,5 @@
 {
   "baseUrl": "http://localhost:4200",
+  "downloadsFolder": "cypress/downloads",
   "chromeWebSecurity": false
 }

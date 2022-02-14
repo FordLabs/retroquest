@@ -20,6 +20,10 @@
 import Topic from '../../src/react/types/Topic';
 import { getTeamCredentials } from '../support/helpers';
 import Chainable = Cypress.Chainable;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import * as path from 'path';
+
 import { FEEDBACK_API_PATH } from '../../src/react/services/api/ApiConstants';
 
 describe('Retro Page', () => {
@@ -34,99 +38,114 @@ describe('Retro Page', () => {
     cy.createTeamAndLogin(teamCredentials);
   });
 
-  it('Feedback Link', () => {
-    const modalText = 'How can we improve RetroQuest?';
-    cy.intercept('POST', FEEDBACK_API_PATH).as('postFeedbackEndpoint');
+  context('Subnav', () => {
+    it('Feedback Button', () => {
+      const modalText = 'How can we improve RetroQuest?';
+      cy.intercept('POST', FEEDBACK_API_PATH).as('postFeedbackEndpoint');
 
-    cy.findByText('Give Feedback').as('giveFeedbackButton').click();
+      cy.findByText('Give Feedback').as('giveFeedbackButton').click();
 
-    cy.get('[data-testid=feedback-dialog]').as('modal').should('contain', modalText);
+      cy.get('[data-testid=feedback-dialog]').as('modal').should('contain', modalText);
 
-    cy.get('@modal').findByText('Cancel').click();
-    cy.get('@modal').should('not.be.visible');
-    cy.get('@postFeedbackEndpoint').its('response.statusCode').should('eq', null);
+      cy.get('@modal').findByText('Cancel').click();
+      cy.get('@modal').should('not.be.visible');
+      cy.get('@postFeedbackEndpoint').its('response.statusCode').should('eq', null);
 
-    cy.get('@giveFeedbackButton').click();
+      cy.get('@giveFeedbackButton').click();
 
-    cy.get('@modal').find('[data-testid=feedback-star-5]').click();
-    cy.get('@modal').findByLabelText('Comments*').type('Doing great!');
-    cy.get('@modal').findByLabelText('Feedback Email').type('a@b.c');
+      cy.get('@modal').find('[data-testid=feedback-star-5]').click();
+      cy.get('@modal').findByLabelText('Comments*').type('Doing great!');
+      cy.get('@modal').findByLabelText('Feedback Email').type('a@b.c');
 
-    cy.findByText('Send!').click();
-    cy.get('@modal').should('not.be.visible');
-    cy.get('@postFeedbackEndpoint').its('response.statusCode').should('eq', 201);
+      cy.findByText('Send!').click();
+      cy.get('@modal').should('not.be.visible');
+      cy.get('@postFeedbackEndpoint').its('response.statusCode').should('eq', 201);
+    });
+
+    it('Download CSV Button', () => {
+      cy.findByText('Download CSV').as('downloadCSVButton').click();
+
+      const downloadsFolder = Cypress.config('downloadsFolder');
+      const downloadedFilename = path.join(downloadsFolder, `${teamCredentials.teamId}-board.csv`);
+
+      cy.readFile(downloadedFilename, 'binary', { timeout: 5000 })
+        .should((buffer) => expect(buffer.length).to.be.gt(40))
+        .should('eq', 'Column,Message,Likes,Completed,Assigned To\r\n');
+    });
   });
 
-  it('Happy Column', () => {
-    cy.log('**Should have "Happy" column header in green**');
-    cy.findByText('Happy').should('exist').parent().should('have.css', 'background-color', green);
+  context('Columns', () => {
+    it('Happy', () => {
+      cy.log('**Should have "Happy" column header in green**');
+      cy.findByText('Happy').should('exist').parent().should('have.css', 'background-color', green);
 
-    cy.get('[data-testid=retroColumn__happy]').as('happyColumn');
+      cy.get('[data-testid=retroColumn__happy]').as('happyColumn');
 
-    const happyThoughts = ['Good flow to our work this week', 'Loved our communication', 'Great team dynamic'];
-    shouldCreateHappyThoughts(happyThoughts);
+      const happyThoughts = ['Good flow to our work this week', 'Loved our communication', 'Great team dynamic'];
+      shouldCreateHappyThoughts(happyThoughts);
 
-    const updatedThought = `${happyThoughts[0]} - updated`;
-    shouldEditAThought(happyThoughts[0], updatedThought);
-    happyThoughts[0] = updatedThought;
+      const updatedThought = `${happyThoughts[0]} - updated`;
+      shouldEditAThought(happyThoughts[0], updatedThought);
+      happyThoughts[0] = updatedThought;
 
-    shouldStarHappyThought();
+      shouldStarHappyThought();
 
-    shouldMarkAndUnmarkThoughtAsDiscussed(happyThoughts[0]);
+      shouldMarkAndUnmarkThoughtAsDiscussed(happyThoughts[0]);
 
-    shouldDeleteHappyThought(1, 2);
+      shouldDeleteHappyThought(1, 2);
 
-    cy.log('**On page reload all Happy thoughts should still be there**');
-    cy.reload();
-    confirmNumberOfThoughtsInColumn(Topic.HAPPY, 2);
-  });
+      cy.log('**On page reload all Happy thoughts should still be there**');
+      cy.reload();
+      confirmNumberOfThoughtsInColumn(Topic.HAPPY, 2);
+    });
 
-  it('Confused Column', () => {
-    cy.log('*Should have "Confused" column header in blue*');
-    cy.findByText('Confused').should('exist').parent().should('have.css', 'background-color', blue);
+    it('Confused', () => {
+      cy.log('*Should have "Confused" column header in blue*');
+      cy.findByText('Confused').should('exist').parent().should('have.css', 'background-color', blue);
 
-    cy.get('[data-testid=retroColumn__confused]').as('confusedColumn');
+      cy.get('[data-testid=retroColumn__confused]').as('confusedColumn');
 
-    const confusedThought = "What's going on with zyx";
-    cy.enterThought(Topic.CONFUSED, confusedThought);
-    confirmNumberOfThoughtsInColumn(Topic.CONFUSED, 1);
+      const confusedThought = "What's going on with zyx";
+      cy.enterThought(Topic.CONFUSED, confusedThought);
+      confirmNumberOfThoughtsInColumn(Topic.CONFUSED, 1);
 
-    cy.log('**On page reload all Confused thoughts should still be there**');
-    cy.reload();
-    confirmNumberOfThoughtsInColumn(Topic.CONFUSED, 1);
-  });
+      cy.log('**On page reload all Confused thoughts should still be there**');
+      cy.reload();
+      confirmNumberOfThoughtsInColumn(Topic.CONFUSED, 1);
+    });
 
-  it('Sad Column', () => {
-    cy.log('*Should have "Sad" column header in red*');
-    cy.findByText('Sad').should('exist').parent().should('have.css', 'background-color', red);
+    it('Sad', () => {
+      cy.log('*Should have "Sad" column header in red*');
+      cy.findByText('Sad').should('exist').parent().should('have.css', 'background-color', red);
 
-    cy.get('[data-testid=retroColumn__unhappy]').as('sadColumn');
+      cy.get('[data-testid=retroColumn__unhappy]').as('sadColumn');
 
-    const unhappyThought = "I don't like how many meetings we have";
-    cy.enterThought(Topic.UNHAPPY, unhappyThought);
-    confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 1);
+      const unhappyThought = "I don't like how many meetings we have";
+      cy.enterThought(Topic.UNHAPPY, unhappyThought);
+      confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 1);
 
-    cy.log('**On page reload all Sad thoughts should still be there**');
-    cy.reload();
-    confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 1);
-  });
+      cy.log('**On page reload all Sad thoughts should still be there**');
+      cy.reload();
+      confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 1);
+    });
 
-  it('Action Item Column', () => {
-    cy.log('**Should have "Action Items" column header in yellow**');
-    cy.findByText('Action Items').should('exist').parent().should('have.css', 'background-color', yellow);
+    it('Action Items', () => {
+      cy.log('**Should have "Action Items" column header in yellow**');
+      cy.findByText('Action Items').should('exist').parent().should('have.css', 'background-color', yellow);
 
-    cy.get('[data-testid=retroColumn__action]').as('actionsColumn');
+      cy.get('[data-testid=retroColumn__action]').as('actionsColumn');
 
-    const task = 'Increase Code Coverage';
-    const assignee = 'Bob';
-    const actionItemsToInput = [`${task} @${assignee}`, 'Make our meetings shorter @Larry'];
-    shouldCreateActionItems(actionItemsToInput);
+      const task = 'Increase Code Coverage';
+      const assignee = 'Bob';
+      const actionItemsToInput = [`${task} @${assignee}`, 'Make our meetings shorter @Larry'];
+      shouldCreateActionItems(actionItemsToInput);
 
-    shouldEditActionItemTaskAndAssignee(task, 'by 10%', assignee, ', Larry');
+      shouldEditActionItemTaskAndAssignee(task, 'by 10%', assignee, ', Larry');
 
-    cy.log('**On page reload all Action Items should still be there**');
-    cy.reload();
-    confirmNumberOfActionItemsInColumn(2);
+      cy.log('**On page reload all Action Items should still be there**');
+      cy.reload();
+      confirmNumberOfActionItemsInColumn(2);
+    });
   });
 });
 
