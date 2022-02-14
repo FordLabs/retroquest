@@ -16,6 +16,7 @@
  */
 
 import * as React from 'react';
+import classnames from 'classnames';
 
 import ActionItem from '../../types/Action';
 import Action from '../../types/Action';
@@ -36,7 +37,7 @@ type ActionItemProps = {
   onEditTask?: (action: Action, updatedTask: string) => void;
   onEditAssignee?: (action: Action, assignee: string) => void;
   onDelete?: (action: Action) => void;
-  onComplete?: () => void;
+  onComplete?: (action: Action) => void;
 };
 
 export default function ActionItem(props: ActionItemProps) {
@@ -53,7 +54,7 @@ export default function ActionItem(props: ActionItemProps) {
   return (
     <ColumnItem
       data-testid="actionItem"
-      className="action-item"
+      className={classnames('action-item', { completed: action.completed })}
       type={Topic.ACTION}
       text={action.task}
       checked={action.completed}
@@ -61,7 +62,7 @@ export default function ActionItem(props: ActionItemProps) {
       onSelect={onSelect}
       onEdit={(updatedTask) => onEditTask(action, updatedTask)}
       onDelete={() => onDelete(action)}
-      onCheck={onComplete}
+      onCheck={() => onComplete(action)}
       customButtons={({ editing, deleting }) => (
         <DateCreated date={action.dateCreated} disabled={(action.completed || editing || deleting) && !readOnly} />
       )}

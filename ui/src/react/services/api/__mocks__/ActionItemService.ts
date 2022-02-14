@@ -30,6 +30,7 @@ const ActionItemService = {
   delete: jest.fn().mockResolvedValue(null),
   updateTask: jest.fn().mockResolvedValue(null),
   updateAssignee: jest.fn().mockResolvedValue(null),
+  updateCompletionStatus: jest.fn().mockResolvedValue(null),
 };
 
 export default ActionItemService;

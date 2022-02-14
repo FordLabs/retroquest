@@ -167,7 +167,7 @@ describe('Retro Page', () => {
       confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 1);
     });
 
-    it('Action Items', () => {
+    it.only('Action Items', () => {
       cy.log('**Should have "Action Items" column header in yellow**');
       cy.findByText('Action Items').should('exist').parent().should('have.css', 'background-color', yellow);
 

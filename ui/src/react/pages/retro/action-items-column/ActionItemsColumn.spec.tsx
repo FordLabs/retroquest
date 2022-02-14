@@ -226,4 +226,16 @@ describe('ActionItemsColumn.spec.tsx', () => {
       expect(ActionItemService.updateAssignee).toHaveBeenCalledWith(team.id, activeActionItem1.id, 'Bob, SomeoneElse');
     });
   });
+
+  it('should update completed status of an action item', () => {
+    const actionItems = screen.getAllByTestId('actionItem');
+    const firstActionItemCompletedButton = within(actionItems[0]).getByTestId('columnItem-checkboxButton');
+    userEvent.click(firstActionItemCompletedButton);
+
+    expect(ActionItemService.updateCompletionStatus).toHaveBeenCalledWith(
+      team.id,
+      activeActionItem1.id,
+      !activeActionItem1.completed
+    );
+  });
 });
