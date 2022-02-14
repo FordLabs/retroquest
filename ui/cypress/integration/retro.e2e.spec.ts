@@ -82,7 +82,8 @@ describe('Retro Page', () => {
       const completedActionItemTask = 'Action item we completed';
       enterActionItem(activeActionItemTask);
       enterActionItem(completedActionItemTask);
-      markActionItemAsCompleted(completedActionItemTask);
+      cy.log(`**Marking action item task "${completedActionItemTask}" as completed**`);
+      getActionItemByMessage(completedActionItemTask).find('[data-testid=columnItem-checkboxButton]').click();
 
       cy.findByText('Archive Retro').as('archiveRetroButton').click();
 
@@ -172,20 +173,22 @@ describe('Retro Page', () => {
 
       cy.get('[data-testid=retroColumn__action]').as('actionsColumn');
 
-      const task = 'Increase Code Coverage';
-      const assignee = 'Bob';
-      const actionItemsToInput = [`${task} @${assignee}`, 'Make our meetings shorter @Larry'];
+      let task1 = 'Increase Code Coverage';
+      const assignee1 = 'Bob';
+      const task2 = 'Make our meetings shorter';
+      const actionItemsToInput = [`${task1} @${assignee1}`, `${task2} @Larry`];
       shouldCreateActionItems(actionItemsToInput);
 
-      shouldEditActionItemTaskAndAssignee(task, 'by 10%', assignee, ', Larry');
+      shouldEditActionItemTaskAndAssignee(task1, 'by 10%', assignee1, ', Larry');
 
-      // @todo test deleting action item
+      task1 += ' by 10%';
+      shouldMarkAndUnmarkActionItemAsCompleted(task1);
 
-      // @todo test marking action item as done
+      shouldDeleteActionItem(task2);
 
       cy.log('**On page reload all Action Items should still be there**');
       cy.reload();
-      confirmNumberOfActionItemsInColumn(2);
+      confirmNumberOfActionItemsInColumn(1);
     });
   });
 });
@@ -240,7 +243,7 @@ function shouldStarHappyThought() {
   shouldStarFirstItemInHappyColumn(2);
 }
 
-function shouldDeleteHappyThought(thoughtIndex: number, expectedThoughtsRemaining) {
+function shouldDeleteHappyThought(thoughtIndex: number, expectedThoughtsRemaining: number) {
   cy.log(`**Deleting happy thought at index ${thoughtIndex}**`);
   getHappyColumnItems().eq(thoughtIndex).find(`[data-testid=columnItem-deleteButton]`).click();
   cy.get('[data-testid=deletionOverlay]').contains('Yes').click();
@@ -257,20 +260,19 @@ function shouldStarFirstItemInHappyColumn(expectedStarCount: number) {
 }
 
 function shouldMarkAndUnmarkThoughtAsDiscussed(thoughtMessage: string) {
-  cy.log('**Test marking thoughts as discussed**');
   getHappyColumnItems().last().should('not.have.class', 'completed');
 
-  cy.log(`**Marking happy thought "${thoughtMessage}" as discussed**`);
   getRetroItemByMessage(thoughtMessage).find('[data-testid=columnItem-checkboxButton]').as('discussedButton');
 
+  cy.log(`**Mark happy thought "${thoughtMessage}" as discussed**`);
   cy.get(`@discussedButton`).click();
 
-  cy.log('**Should mark thought as discussed and move to bottom of the list**');
+  cy.log('**Thought marked as discussed should move to bottom of the list**');
   getHappyColumnItems().should('have.length', 3).last().should('have.class', 'completed');
 
   cy.get(`@discussedButton`).click();
 
-  cy.log('**Should unmark thought as discussed and move have up the list**');
+  cy.log(`**Unmark happy thought as discussed and move up the list**`);
   getHappyColumnItems().should('have.length', 3).last().should('not.have.class', 'completed');
 }
 
@@ -284,9 +286,27 @@ function enterActionItem(actionItem: string) {
   cy.get('@actionsColumn').find('input[placeholder="Enter an Action Item"]').type(`${actionItem}{enter}`);
 }
 
-function markActionItemAsCompleted(task: string) {
-  cy.log(`**Marking action item task "${task}" as completed**`);
-  getActionItemByMessage(task).find('[data-testid=columnItem-checkboxButton]').click();
+function shouldMarkAndUnmarkActionItemAsCompleted(actionItemTask: string) {
+  getActionColumnItems().last().should('not.have.class', 'completed');
+
+  getActionItemByMessage(actionItemTask).find('[data-testid=columnItem-checkboxButton]').as('completedButton');
+
+  cy.log(`**Mark action item task "${actionItemTask}" as completed**`);
+  cy.get(`@completedButton`).click();
+
+  cy.log('**Completed action item should move to bottom of the list**');
+  getActionColumnItems().should('have.length', 2).last().should('have.class', 'completed');
+
+  cy.get(`@completedButton`).click();
+
+  cy.log('**Unmark action item as completed and move up the list**');
+  getActionColumnItems().should('have.length', 2).last().should('not.have.class', 'completed');
+}
+
+function shouldDeleteActionItem(actionItemTask: string) {
+  cy.log(`**Deleting action item ${actionItemTask}**`);
+  getActionItemByMessage(actionItemTask).find(`[data-testid=columnItem-deleteButton]`).click();
+  cy.get('[data-testid=deletionOverlay]').contains('Yes').click();
 }
 
 function confirmNumberOfActionItemsInColumn(expectedCount: number): void {
@@ -295,6 +315,7 @@ function confirmNumberOfActionItemsInColumn(expectedCount: number): void {
 }
 
 const getHappyColumnItems = () => cy.get('[data-testid=retroColumn__happy]').find(`[data-testid=retroItem]`);
+const getActionColumnItems = () => cy.get('[data-testid=retroColumn__action]').find(`[data-testid=actionItem]`);
 const getRetroItemByMessage = (message: string): Chainable =>
   cy.findByDisplayValue(message).closest(`[data-testid=retroItem]`);
 const getActionItemByMessage = (message: string): Chainable =>
