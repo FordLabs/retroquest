@@ -16,6 +16,7 @@
   -->
 
 <div
+    data-testid="archiveRetroDialog"
     class="dialog"
     [ngClass]="{
         'dark-theme': darkThemeIsEnabled
@@ -49,19 +50,10 @@
                 'dark-theme': darkThemeIsEnabled
             }"
         >
-            <rq-button
-                type="secondary"
-                text="nope"
-                [theme]="theme"
-                (click)="hide()"
-            ></rq-button>
+            <rq-button type="secondary" text="Nope" [theme]="theme" (click)="hide()"></rq-button>
         </div>
         <div class="container" id="end-button-container">
-            <rq-button
-                type="primary"
-                text="yes!"
-                (click)="submit()"
-            ></rq-button>
+            <rq-button type="primary" text="Yes!" (click)="submit()"></rq-button>
         </div>
     </div>
 </div>

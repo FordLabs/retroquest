@@ -25,3 +25,5 @@ export const FEEDBACK_API_PATH = '/api/feedback/';
 export const getThoughtApiPath = (teamId: string) => `/api/team/${teamId}/thought`;
 
 export const getActionItemApiPath = (teamId: string) => `/api/team/${teamId}/action-item`;
+
+export const getArchiveRetroApiPath = (teamId: string) => `/api/team/${teamId}/end-retro`;
