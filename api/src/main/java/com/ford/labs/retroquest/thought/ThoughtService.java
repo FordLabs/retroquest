@@ -107,6 +107,5 @@ public class ThoughtService {
         var columnTitle = columnTitleRepository.findByTeamIdAndAndTopic(teamId, thought.getTopic());
         thought.setColumnTitle(columnTitle);
         return thoughtRepository.save(thought);
-
     }
 }

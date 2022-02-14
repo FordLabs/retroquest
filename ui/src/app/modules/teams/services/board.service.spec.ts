@@ -20,7 +20,6 @@ import moment from 'moment';
 import { Subject } from 'rxjs';
 
 import { Board } from '../../domain/board';
-import { emptyThoughtWithColumn } from '../../domain/thought';
 
 import { BoardService } from './board.service';
 
