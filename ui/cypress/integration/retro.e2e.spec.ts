@@ -20,6 +20,7 @@
 import Topic from '../../src/react/types/Topic';
 import { getTeamCredentials } from '../support/helpers';
 import Chainable = Cypress.Chainable;
+import { FEEDBACK_API_PATH } from '../../src/react/services/api/ApiConstants';
 
 describe('Retro Page', () => {
   const green = 'rgb(46, 204, 113)';
@@ -31,6 +32,29 @@ describe('Retro Page', () => {
 
   before(() => {
     cy.createTeamAndLogin(teamCredentials);
+  });
+
+  it('Feedback Link', () => {
+    const modalText = 'How can we improve RetroQuest?';
+    cy.intercept('POST', FEEDBACK_API_PATH).as('postFeedbackEndpoint');
+
+    cy.findByText('Give Feedback').as('giveFeedbackButton').click();
+
+    cy.get('[data-testid=feedback-dialog]').as('modal').should('contain', modalText);
+
+    cy.get('@modal').findByText('Cancel').click();
+    cy.get('@modal').should('not.be.visible');
+    cy.get('@postFeedbackEndpoint').its('response.statusCode').should('eq', null);
+
+    cy.get('@giveFeedbackButton').click();
+
+    cy.get('@modal').find('[data-testid=feedback-star-5]').click();
+    cy.get('@modal').findByLabelText('Comments*').type('Doing great!');
+    cy.get('@modal').findByLabelText('Feedback Email').type('a@b.c');
+
+    cy.findByText('Send!').click();
+    cy.get('@modal').should('not.be.visible');
+    cy.get('@postFeedbackEndpoint').its('response.statusCode').should('eq', 201);
   });
 
   it('Happy Column', () => {
