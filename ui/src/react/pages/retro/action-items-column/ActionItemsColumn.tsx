@@ -79,6 +79,10 @@ function ActionItemsColumn() {
     ActionItemService.updateAssignee(team.id, action.id, updatedAssignee).catch(console.error);
   };
 
+  const updateActionItemCompletionStatus = (action: Action) => {
+    ActionItemService.updateCompletionStatus(team.id, action.id, !action.completed).catch(console.error);
+  };
+
   const renderActionItem = (action: Action) => {
     return (
       <Fragment key={action.id}>
@@ -87,6 +91,7 @@ function ActionItemsColumn() {
           onEditAssignee={editActionItemAssignee}
           onEditTask={editActionItemTask}
           onDelete={deleteActionItem}
+          onComplete={updateActionItemCompletionStatus}
         />
       </Fragment>
     );

@@ -42,6 +42,11 @@ const ActionItemService = {
     const url = `${getActionItemApiPath(teamId)}/${actionItemId}/assignee`;
     return axios.put(url, { assignee: updatedAssignee });
   },
+
+  updateCompletionStatus(teamId: string, actionItemId: number, completed: boolean) {
+    const url = `${getActionItemApiPath(teamId)}/${actionItemId}/completed`;
+    return axios.put(url, { completed });
+  },
 };
 
 export default ActionItemService;

@@ -173,9 +173,7 @@ describe('ThoughtColumn.spec.tsx', () => {
 
   it('should update discussion status of a thought', () => {
     const thoughtItems = screen.getAllByTestId('retroItem');
-    const discussedButtonTestid = 'columnItem-checkboxButton';
-    const firstThoughtsDiscussedButton = within(thoughtItems[0]).getByTestId(discussedButtonTestid);
-    expect(within(thoughtItems[0]).getByText('0'));
+    const firstThoughtsDiscussedButton = within(thoughtItems[0]).getByTestId('columnItem-checkboxButton');
     userEvent.click(firstThoughtsDiscussedButton);
 
     expect(ThoughtService.updateDiscussionStatus).toHaveBeenCalledWith(
