@@ -16,6 +16,7 @@
   -->
 
 <div
+    data-testid="feedback-dialog"
     class="dialog"
     [ngClass]="{
         'dark-theme': darkThemeIsEnabled
@@ -49,21 +50,24 @@
                     fas: starState,
                     far: !starState
                 }"
+                attr.data-testid="feedback-star-{{ i + 1 }}"
                 (mouseenter)="onStarHovered(i)"
                 (click)="onStarClicked(i)"
             ></div>
         </div>
 
         <div class="section comments-section">
-            <div
+            <label
+                id="comments-field"
                 class="label"
                 [ngClass]="{
                     'dark-theme': darkThemeIsEnabled
                 }"
             >
-                comments<span class="required-field">*</span>
-            </div>
+                Comments<span class="required-field">*</span>
+            </label>
             <textarea
+                aria-labelledby="comments-field"
                 [(ngModel)]="feedback.comment"
                 [ngClass]="{
                     'dark-theme': darkThemeIsEnabled
@@ -72,16 +76,18 @@
         </div>
 
         <div class="section feedback-email-section">
-            <div
+            <label
+                id="feedback-email"
                 class="label"
                 [ngClass]="{
                     'dark-theme': darkThemeIsEnabled
                 }"
             >
-                feedback email
-            </div>
+                Feedback Email
+            </label>
             <input
-                [type]="'text'"
+                aria-labelledby="feedback-email"
+                type="text"
                 [(ngModel)]="feedback.userEmail"
                 [ngClass]="{
                     'dark-theme': darkThemeIsEnabled
@@ -91,19 +97,10 @@
     </div>
     <div class="footer">
         <div class="container">
-            <rq-button
-                type="secondary"
-                text="cancel"
-                (click)="hide()"
-                [theme]="theme"
-            ></rq-button>
+            <rq-button type="secondary" text="Cancel" (click)="hide()" [theme]="theme"></rq-button>
         </div>
         <div class="container">
-            <rq-button
-                type="primary"
-                text="send!"
-                (click)="onSendButtonClicked()"
-            ></rq-button>
+            <rq-button type="primary" text="Send!" (click)="onSendButtonClicked()"></rq-button>
         </div>
     </div>
 </div>

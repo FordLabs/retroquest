@@ -20,6 +20,7 @@ export const LOGIN_API_PATH = `${CREATE_TEAM_API_PATH}/login`;
 export const getTeamNameApiPath = (teamId: string) => `${CREATE_TEAM_API_PATH}/${teamId}/name`;
 
 export const CONTRIBUTORS_API_PATH = '/api/contributors';
+export const FEEDBACK_API_PATH = '/api/feedback/';
 
 export const getThoughtApiPath = (teamId: string) => `/api/team/${teamId}/thought`;
 
