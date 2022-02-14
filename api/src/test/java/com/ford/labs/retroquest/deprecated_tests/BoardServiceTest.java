@@ -97,7 +97,7 @@ class BoardServiceTest {
     }
 
     @Test
-    void saveBoard() {
+    void createBoard() {
         var expectedTeamId = "team1";
         long expectedBoardId = 1234L;
 
