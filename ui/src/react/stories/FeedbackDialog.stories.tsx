@@ -16,7 +16,8 @@
  */
 
 import * as React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { RecoilRoot } from 'recoil';
 
 import { PrimaryButton } from '../components/button/Button';
 import FeedbackDialog from '../components/feedback-dialog/FeedbackDialog';
@@ -31,10 +32,10 @@ const Template: ComponentStory<typeof FeedbackDialog> = () => {
   const ref = React.createRef<ModalMethods>();
 
   return (
-    <>
+    <RecoilRoot>
       <PrimaryButton onClick={() => ref.current.show()}>Give Feedback</PrimaryButton>
       <FeedbackDialog ref={ref} />
-    </>
+    </RecoilRoot>
   );
 };
 

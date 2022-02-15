@@ -16,16 +16,20 @@
  */
 
 import * as React from 'react';
+import { createRef } from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
 
+import FeedbackService from '../../services/api/FeedbackService';
 import { ModalMethods } from '../modal/Modal';
 
 import FeedbackDialog, { FeedbackDialogRenderer } from './FeedbackDialog';
 
+jest.mock('../../services/api/FeedbackService');
+
 describe('FeedbackDialog', () => {
-  const ref = React.createRef<ModalMethods>();
+  const ref = createRef<ModalMethods>();
 
   beforeEach(() => {
     render(
@@ -40,19 +44,19 @@ describe('FeedbackDialog', () => {
   });
 
   it('should show and hide from ref methods', () => {
-    screen.getByText('feedback');
+    const modalTitle = 'Feedback';
+    screen.getByText(modalTitle);
     screen.getByText('How can we improve RetroQuest?');
 
     act(() => {
       ref.current.hide();
     });
 
-    expect(screen.queryByText('feedback')).toBeFalsy();
+    expect(screen.queryByText(modalTitle)).toBeFalsy();
   });
 });
 
 describe('FeedbackDialogRenderer', () => {
-  const mockOnSubmit = jest.fn();
   const mockOnCancel = jest.fn();
   const fakeTeamId = 'fake-team-id';
   const fakeComment = 'This is a fake comment';
@@ -61,34 +65,35 @@ describe('FeedbackDialogRenderer', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    render(<FeedbackDialogRenderer teamId={fakeTeamId} onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
+    render(<FeedbackDialogRenderer teamId={fakeTeamId} closeModal={mockOnCancel} />);
   });
 
   it('should submit feedback', () => {
-    userEvent.click(screen.getByTestId('star4'));
-    userEvent.type(screen.getByLabelText('feedback email'), fakeEmail);
-    userEvent.type(screen.getByLabelText('comments*'), fakeComment);
-    userEvent.click(screen.getByText('send!'));
+    userEvent.click(screen.getByTestId('feedback-star-4'));
+    userEvent.type(screen.getByLabelText('Feedback Email'), fakeEmail);
+    userEvent.type(screen.getByLabelText('Comments*'), fakeComment);
+    userEvent.click(screen.getByText('Send!'));
 
-    expect(mockOnSubmit).toHaveBeenCalledWith({
+    expect(FeedbackService.addFeedback).toHaveBeenCalledWith({
       teamId: fakeTeamId,
-      stars: 5,
+      stars: 4,
       comment: fakeComment,
       userEmail: fakeEmail,
     });
   });
 
   it('should not submit with empty comments', () => {
-    userEvent.click(screen.getByTestId('star4'));
-    userEvent.type(screen.getByLabelText('feedback email'), fakeEmail);
-    userEvent.click(screen.getByText('send!'));
+    userEvent.click(screen.getByTestId('feedback-star-4'));
+    userEvent.type(screen.getByLabelText('Feedback Email'), fakeEmail);
+    userEvent.click(screen.getByText('Send!'));
 
-    expect(mockOnSubmit).not.toHaveBeenCalled();
+    expect(FeedbackService.addFeedback).not.toHaveBeenCalled();
   });
 
   it('should cancel', () => {
-    userEvent.click(screen.getByText('cancel'));
+    userEvent.click(screen.getByText('Cancel'));
 
     expect(mockOnCancel).toHaveBeenCalled();
+    expect(FeedbackService.addFeedback).not.toHaveBeenCalled();
   });
 });

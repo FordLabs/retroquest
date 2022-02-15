@@ -99,7 +99,7 @@
     "ajv": "^6.12.4",
     "babel-loader": "^8.2.2",
     "css-loader": "^6.2.0",
-    "cypress": "^9.2.0",
+    "cypress": "9.5.0",
     "cypress-angular-unit-test": "^3.6.1",
     "eslint": "^8.2.0",
     "eslint-config-prettier": "^8.1.0",

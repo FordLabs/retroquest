@@ -48,17 +48,19 @@ describe('Retro Page', () => {
       cy.get('[data-testid=feedbackDialog]').as('modal').should('contain', modalText);
 
       cy.get('@modal').findByText('Cancel').click();
-      cy.get('@modal').should('not.be.visible');
+      // cy.get('@modal').should('not.be.visible'); // works for angular instance
+      cy.get('@modal').should('not.exist'); // works for react instance
       cy.get('@postFeedbackEndpoint').its('response.statusCode').should('eq', null);
 
       cy.get('@giveFeedbackButton').click();
 
       cy.get('@modal').find('[data-testid=feedback-star-5]').click();
       cy.get('@modal').findByLabelText('Comments*').type('Doing great!');
-      cy.get('@modal').findByLabelText('Feedback Email').type('a@b.c');
+      cy.get('@modal').findByLabelText('Feedback Email').focus().type('a@b.c');
 
       cy.findByText('Send!').click();
-      cy.get('@modal').should('not.be.visible');
+      // cy.get('@modal').should('not.be.visible'); // works for angular instance
+      cy.get('@modal').should('not.exist'); // works for react instance
       cy.get('@postFeedbackEndpoint').its('response.statusCode').should('eq', 201);
     });
 
@@ -167,7 +169,7 @@ describe('Retro Page', () => {
       confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 1);
     });
 
-    it.only('Action Items', () => {
+    it('Action Items', () => {
       cy.log('**Should have "Action Items" column header in yellow**');
       cy.findByText('Action Items').should('exist').parent().should('have.css', 'background-color', yellow);
 

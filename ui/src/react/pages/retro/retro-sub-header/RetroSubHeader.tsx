@@ -16,24 +16,35 @@
  */
 
 import * as React from 'react';
+import { useRef } from 'react';
+
+import FeedbackDialog from '../../../components/feedback-dialog/FeedbackDialog';
+import { ModalMethods } from '../../../components/modal/Modal';
 
 import './RetroSubheader.scss';
 
 function RetroSubheader() {
+  const modalRef = useRef<ModalMethods>();
+
   return (
-    <div className="sub-header">
-      <ul className="sub-header-links">
-        <li>
-          <button className="button button-secondary">Give Feedback</button>
-        </li>
-        <li>
-          <button className="button button-secondary">Download CSV</button>
-        </li>
-        <li>
-          <button className="button button-primary">Archive Retro</button>
-        </li>
-      </ul>
-    </div>
+    <>
+      <div className="sub-header">
+        <ul className="sub-header-links">
+          <li>
+            <button className="button button-secondary" onClick={() => modalRef.current?.show()}>
+              Give Feedback
+            </button>
+          </li>
+          <li>
+            <button className="button button-secondary">Download CSV</button>
+          </li>
+          <li>
+            <button className="button button-primary">Archive Retro</button>
+          </li>
+        </ul>
+      </div>
+      <FeedbackDialog ref={modalRef} />
+    </>
   );
 }
 
