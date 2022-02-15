@@ -423,17 +423,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/pwa@npm:~13.1.1":
-  version: 13.1.4
-  resolution: "@angular/pwa@npm:13.1.4"
-  dependencies:
-    "@angular-devkit/schematics": 13.1.4
-    "@schematics/angular": 13.1.4
-    parse5-html-rewriting-stream: 6.0.1
-  checksum: 93d7eb24084df4dba1c9d82d9ec096db01c13f63805adeac647690c95aeab1152102c83c8c7d8fbf59c3ac0ca855ad7edac48210103cbb4f96f7cbbb6ea608ca
-  languageName: node
-  linkType: hard
-
 "@angular/router@npm:~13.1.1":
   version: 13.1.3
   resolution: "@angular/router@npm:13.1.3"
@@ -18619,7 +18608,6 @@ resolve@^2.0.0-next.3:
     "@angular/language-service": ~13.1.1
     "@angular/platform-browser": ~13.1.1
     "@angular/platform-browser-dynamic": ~13.1.1
-    "@angular/pwa": ~13.1.1
     "@angular/router": ~13.1.1
     "@angular/service-worker": ~13.1.1
     "@babel/core": ^7.14.8
