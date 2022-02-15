@@ -15,7 +15,18 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import React, {
+  createContext,
+  forwardRef,
+  PropsWithChildren,
+  Ref,
+  useCallback,
+  useContext,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from 'react';
 import classnames from 'classnames';
 
 import { onKeys } from '../../utils/EventUtils';
@@ -31,14 +42,14 @@ export interface ModalMethods {
   setHideOnBackdropClick: (enabled: boolean) => void;
 }
 
-const ModalContext = React.createContext<ModalMethods>({
+const ModalContext = createContext<ModalMethods>({
   show: NO_OP,
   hide: NO_OP,
   setHideOnEscape: NO_OP,
   setHideOnBackdropClick: NO_OP,
 });
 
-type ModalProps = React.PropsWithChildren<{
+type ModalProps = PropsWithChildren<{
   show?: boolean;
   hideOnEscape?: boolean;
   hideOnBackdropClick?: boolean;
@@ -46,7 +57,7 @@ type ModalProps = React.PropsWithChildren<{
   className?: string;
 }>;
 
-function Modal(props: ModalProps, ref: React.Ref<ModalMethods>) {
+function Modal(props: ModalProps, ref: Ref<ModalMethods>) {
   const {
     show: showProp,
     hideOnEscape: hideOnEscapeProp,
@@ -56,22 +67,22 @@ function Modal(props: ModalProps, ref: React.Ref<ModalMethods>) {
     children,
   } = props;
 
-  const [showState, setShowState] = React.useState(false);
-  const [hideOnEscapeState, setHideOnEscapeState] = React.useState(true);
-  const [hideOnBackdropClickState, setHideOnBackdropClickState] = React.useState(true);
+  const [showState, setShowState] = useState(false);
+  const [hideOnEscapeState, setHideOnEscapeState] = useState(true);
+  const [hideOnBackdropClickState, setHideOnBackdropClickState] = useState(true);
 
   const show = showProp ?? showState;
   const hideOnEscape = hideOnEscapeProp ?? hideOnEscapeState;
   const hideOnBackdropClick = hideOnBackdropClickProp ?? hideOnBackdropClickState;
 
-  const hide = React.useCallback(() => {
+  const hide = useCallback(() => {
     if (showProp === undefined) {
       setShowState(false);
     }
     if (onHide) onHide();
   }, [showProp, onHide]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (show && hideOnEscape) {
       const escapeListener = onKeys('Escape', hide);
       document.addEventListener('keydown', escapeListener);
@@ -80,7 +91,7 @@ function Modal(props: ModalProps, ref: React.Ref<ModalMethods>) {
     }
   }, [show, hide, hideOnEscape]);
 
-  const modalMethods = React.useMemo(
+  const modalMethods = useMemo(
     () => ({
       show: () => setShowState(true),
       hide: () => setShowState(false),
@@ -90,7 +101,7 @@ function Modal(props: ModalProps, ref: React.Ref<ModalMethods>) {
     []
   );
 
-  React.useImperativeHandle(ref, () => modalMethods, [modalMethods]);
+  useImperativeHandle(ref, () => modalMethods, [modalMethods]);
 
   return (
     <ModalContext.Provider value={modalMethods}>
@@ -105,8 +116,8 @@ function Modal(props: ModalProps, ref: React.Ref<ModalMethods>) {
   );
 }
 
-export default React.forwardRef<ModalMethods, ModalProps>(Modal);
+export default forwardRef<ModalMethods, ModalProps>(Modal);
 
 export function useModal() {
-  return React.useContext(ModalContext);
+  return useContext(ModalContext);
 }

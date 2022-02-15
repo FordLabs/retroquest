@@ -16,13 +16,15 @@
  */
 
 import * as React from 'react';
+import { PropsWithChildren } from 'react';
 import classnames from 'classnames';
 
 import { PrimaryButton, SecondaryButton } from '../button/Button';
 
 import './Dialog.scss';
 
-type DialogProps = React.PropsWithChildren<{
+type DialogProps = PropsWithChildren<{
+  testId?: string;
   className?: string;
   header: string;
   subHeader?: string;
@@ -39,10 +41,16 @@ type DialogProps = React.PropsWithChildren<{
 }>;
 
 export default function Dialog(props: DialogProps) {
-  const { header, subHeader, buttons, className, children } = props;
+  const { header, subHeader, buttons, className, children, testId } = props;
+  const DialogElement = !!buttons ? 'form' : 'div';
+
+  const onSubmit = (event) => {
+    buttons?.confirm?.onClick();
+    event.preventDefault();
+  };
 
   return (
-    <div className={classnames('dialog', className)}>
+    <DialogElement className={classnames('dialog', className)} data-testid={testId} onSubmit={onSubmit}>
       <div className="dialog-body">
         <div className="dialog-heading">{header}</div>
         {subHeader && <div className="dialog-sub-heading">{subHeader}</div>}
@@ -51,13 +59,13 @@ export default function Dialog(props: DialogProps) {
       {buttons && (
         <div className="dialog-footer">
           {buttons.cancel && (
-            <SecondaryButton onClick={buttons.cancel.onClick}>{buttons.cancel.text || 'cancel'}</SecondaryButton>
+            <SecondaryButton type="button" onClick={buttons.cancel.onClick}>
+              {buttons.cancel.text || 'cancel'}
+            </SecondaryButton>
           )}
-          {buttons.confirm && (
-            <PrimaryButton onClick={buttons.confirm.onClick}>{buttons.confirm.text || 'confirm'}</PrimaryButton>
-          )}
+          {buttons.confirm && <PrimaryButton type="submit">{buttons.confirm.text || 'confirm'}</PrimaryButton>}
         </div>
       )}
-    </div>
+    </DialogElement>
   );
 }

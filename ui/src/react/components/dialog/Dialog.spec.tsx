@@ -35,28 +35,36 @@ describe('Dialog', () => {
       );
     });
 
-    it('should render', () => {
+    it('should render header, subheader, and content', () => {
       screen.getByText('Dialog Header');
       screen.getByText('Dialog Sub Header');
       screen.getByText('Dialog Content');
     });
+
+    it('should not be a form element if button props are not provided', () => {
+      const dialog = screen.queryByRole('form');
+      expect(dialog).toBeNull();
+    });
   });
 
-  describe('custom dialog', () => {
-    const mockConfirm = jest.fn();
-    const mockCancel = jest.fn();
-    const buttons = {
-      cancel: {
-        text: 'Custom Cancel',
-        onClick: mockCancel,
-      },
-      confirm: {
-        text: 'Custom Confirm',
-        onClick: mockConfirm,
-      },
-    };
+  describe('dialog with buttons', () => {
+    let mockConfirmCallback;
+    let mockCancelCallback;
 
     beforeEach(() => {
+      mockConfirmCallback = jest.fn();
+      mockCancelCallback = jest.fn();
+      const buttons = {
+        cancel: {
+          text: 'Custom Cancel',
+          onClick: mockCancelCallback,
+        },
+        confirm: {
+          text: 'Custom Confirm',
+          onClick: mockConfirmCallback,
+        },
+      };
+
       render(
         <Dialog header="Dialog Header" subHeader="Dialog Sub Header" buttons={buttons}>
           Dialog Content
@@ -64,12 +72,21 @@ describe('Dialog', () => {
       );
     });
 
-    it('should render footer buttons', () => {
-      userEvent.click(screen.getByText('Custom Confirm'));
+    it('should call cancel method when cancel button is clicked', () => {
       userEvent.click(screen.getByText('Custom Cancel'));
+      expect(mockCancelCallback).toHaveBeenCalledTimes(1);
+      expect(mockConfirmCallback).not.toHaveBeenCalled();
+    });
 
-      expect(mockConfirm).toHaveBeenCalledTimes(1);
-      expect(mockCancel).toHaveBeenCalledTimes(1);
+    it('should call confirm method when confirm button is clicked', () => {
+      userEvent.click(screen.getByText('Custom Confirm'));
+      expect(mockConfirmCallback).toHaveBeenCalledTimes(1);
+      expect(mockCancelCallback).not.toHaveBeenCalled();
+    });
+
+    it('should be a form element if button props are provided', () => {
+      const dialog = screen.findByRole('form');
+      expect(dialog).toBeDefined();
     });
   });
 });

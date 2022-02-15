@@ -18,7 +18,6 @@
 import * as React from 'react';
 import classnames from 'classnames';
 
-import ActionItem from '../../types/Action';
 import Action from '../../types/Action';
 import Topic from '../../types/Topic';
 import ColumnItem from '../column-item/ColumnItem';
@@ -31,7 +30,7 @@ import './ActionItem.scss';
 const NO_OP = () => undefined;
 
 type ActionItemProps = {
-  action: ActionItem;
+  action: Action;
   readOnly?: boolean;
   onSelect?: () => void;
   onEditTask?: (action: Action, updatedTask: string) => void;
@@ -40,7 +39,7 @@ type ActionItemProps = {
   onComplete?: (action: Action) => void;
 };
 
-export default function ActionItem(props: ActionItemProps) {
+function ActionItem(props: ActionItemProps) {
   const {
     action,
     readOnly = false,
@@ -79,3 +78,5 @@ export default function ActionItem(props: ActionItemProps) {
     </ColumnItem>
   );
 }
+
+export default ActionItem;

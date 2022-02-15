@@ -38,6 +38,10 @@ const containerElementName = 'reactRetroPageWrapper';
   styleUrls: [
     './RetroPage.scss',
     './retro-sub-header/RetroSubheader.scss',
+    '../../components/dialog/Dialog.scss',
+    '../../components/modal/Modal.scss',
+    '../../components/feedback-dialog/FeedbackDialog.scss',
+    '../../components/feedback-stars/FeedbackStars.scss',
     '../../components/column-header/ColumnHeader.scss',
     '../../components/column-item/ColumnItem.scss',
     '../../components/column-item-buttons/ColumnItemButtons.scss',

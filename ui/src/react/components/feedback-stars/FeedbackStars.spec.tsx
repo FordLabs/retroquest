@@ -69,12 +69,16 @@ function FeedbackStarTestRenderer() {
   );
 }
 
+function getStarTestId(starIndex: number) {
+  return `feedback-star-${starIndex}`;
+}
+
 function clickStar(count: number) {
-  userEvent.click(screen.getByTestId(`star${count - 1}`));
+  userEvent.click(screen.getByTestId(getStarTestId(count)));
 }
 
 function hoverStar(count: number) {
-  userEvent.hover(screen.getByTestId(`star${count - 1}`));
+  userEvent.hover(screen.getByTestId(getStarTestId(count)));
 }
 
 function resetStars() {
@@ -83,10 +87,10 @@ function resetStars() {
 
 function expectActiveStars(count: number) {
   for (let i = 0; i < count; i++) {
-    expect(screen.getByTestId(`star${i}`).className).toContain('active');
+    expect(screen.getByTestId(getStarTestId(i + 1)).className).toContain('active');
   }
   for (let i = count; i < 5; i++) {
-    expect(screen.getByTestId(`star${i}`).className).not.toContain('active');
+    expect(screen.getByTestId(getStarTestId(i + 1)).className).not.toContain('active');
   }
 }
 

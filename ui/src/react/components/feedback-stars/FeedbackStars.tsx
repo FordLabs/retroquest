@@ -46,15 +46,18 @@ export default function FeedbackStars(props: FeedbackStarsProps) {
 
   return (
     <div className={classnames('feedback-stars', className)} onMouseLeave={() => setHoverStars(starsWith(5, false))}>
-      {activeStars.map((star, index) => (
-        <div
-          key={index}
-          data-testid={`star${index}`}
-          className={classnames('fa-star', star ? 'active fas' : 'far')}
-          onMouseEnter={() => setHoverStars(starsWith(index + 1, true))}
-          onClick={() => onChange(index + 1)}
-        />
-      ))}
+      {activeStars.map((star, index) => {
+        const starIndex = index + 1;
+        return (
+          <div
+            key={starIndex}
+            data-testid={`feedback-star-${starIndex}`}
+            className={classnames('fa-star', star ? 'active fas' : 'far')}
+            onMouseEnter={() => setHoverStars(starsWith(starIndex, true))}
+            onClick={() => onChange(starIndex)}
+          />
+        );
+      })}
     </div>
   );
 }

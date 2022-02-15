@@ -16,9 +16,11 @@
  */
 
 import * as React from 'react';
+import { forwardRef, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 
-import useTeam from '../../hooks/useTeam';
-import Feedback from '../../types/Feedback';
+import FeedbackService from '../../services/api/FeedbackService';
+import { TeamState } from '../../state/TeamState';
 import { onChange } from '../../utils/EventUtils';
 import Dialog from '../dialog/Dialog';
 import FeedbackStars from '../feedback-stars/FeedbackStars';
@@ -27,7 +29,7 @@ import Modal, { ModalMethods } from '../modal/Modal';
 import './FeedbackDialog.scss';
 
 function FeedbackDialog(props, ref) {
-  const { teamId } = useTeam('fake-team-name');
+  const team = useRecoilValue(TeamState);
 
   function hide() {
     ref.current?.hide();
@@ -35,57 +37,60 @@ function FeedbackDialog(props, ref) {
 
   return (
     <Modal ref={ref}>
-      <FeedbackDialogRenderer teamId={teamId} onSubmit={hide} onCancel={hide} />
+      <FeedbackDialogRenderer teamId={team.id} closeModal={hide} />
     </Modal>
   );
 }
 
 type FeedbackDialogRendererProps = {
   teamId: string;
-  onSubmit: (feedback: Feedback) => void;
-  onCancel: () => void;
+  closeModal: () => void;
 };
 
 export function FeedbackDialogRenderer(props: FeedbackDialogRendererProps) {
-  const { teamId, onSubmit, onCancel } = props;
+  const { teamId, closeModal } = props;
 
-  const [stars, setStars] = React.useState(0);
-  const [comment, setComment] = React.useState<string>('');
-  const [userEmail, setUserEmail] = React.useState<string>('');
+  const [stars, setStars] = useState(0);
+  const [comment, setComment] = useState<string>('');
+  const [userEmail, setUserEmail] = useState<string>('');
 
   function handleSubmit() {
     if (comment) {
-      onSubmit({
+      const feedback = {
         teamId,
         stars,
         comment,
         userEmail,
-      });
+      };
+      FeedbackService.addFeedback(feedback)
+        .then(() => {
+          closeModal();
+        })
+        .catch(console.error);
     }
   }
 
   return (
     <Dialog
+      testId="feedbackDialog"
       className="feedback-dialog"
-      header="feedback"
+      header="Feedback"
       subHeader="How can we improve RetroQuest?"
       buttons={{
-        cancel: { text: 'cancel', onClick: onCancel },
-        confirm: { text: 'send!', onClick: handleSubmit },
+        cancel: { text: 'Cancel', onClick: closeModal },
+        confirm: { text: 'Send!', onClick: handleSubmit },
       }}
     >
       <FeedbackStars className="section" value={stars} onChange={setStars} />
-
       <div className="section comments-section">
         <label className="label" htmlFor="comments">
-          comments<span className="required-field">*</span>
+          Comments<span className="required-field">*</span>
         </label>
         <textarea id="comments" value={comment} onChange={onChange(setComment)} />
       </div>
-
       <div className="section feedback-email-section">
         <label className="label" htmlFor="email">
-          feedback email
+          Feedback Email
         </label>
         <input id="email" type="text" value={userEmail} onChange={onChange(setUserEmail)} />
       </div>
@@ -93,4 +98,4 @@ export function FeedbackDialogRenderer(props: FeedbackDialogRendererProps) {
   );
 }
 
-export default React.forwardRef<ModalMethods>(FeedbackDialog);
+export default forwardRef<ModalMethods>(FeedbackDialog);
