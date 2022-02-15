@@ -19,7 +19,7 @@
 @import '../../../../styles/mixins';
 
 .account-tab-body {
-  .primary.logout-button {
+  .button-primary.logout-button {
     width: 75%;
     height: 50px;
     margin: 32px auto;
@@ -30,17 +30,19 @@
 
     background-color: opacity($yellow, 0.7);
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background-color: opacity($yellow, 0.7);
     }
   }
 }
 
 @include dark-theme {
-  .primary.logout-button {
+  .button-primary.logout-button {
     background-color: opacity($yellow, 0.7);
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background-color: opacity($yellow, 0.7);
     }
   }

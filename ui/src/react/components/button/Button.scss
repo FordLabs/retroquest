@@ -42,40 +42,43 @@
   }
 }
 
-.primary {
+.button-primary {
   color: $gray;
 
   background-color: $asphalt;
   outline: none;
   box-shadow: 0 4px 15px opacity($black, 0.25);
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background-color: $purple;
     cursor: pointer;
   }
 }
 
-.secondary {
+.button-secondary {
   color: inherit;
   background: transparent;
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     color: $purple;
     cursor: pointer;
   }
 }
 
 @include dark-theme {
-  .primary {
+  .button-primary {
     color: $asphalt;
     background-color: $gray;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       color: $gray;
     }
   }
 
-  .secondary {
+  .button-secondary {
     color: opacity($gray, 0.8);
   }
 }

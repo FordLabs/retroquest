@@ -33,7 +33,7 @@ import Thought from '../../types/Thought';
 import Topic, { ThoughtTopic } from '../../types/Topic';
 
 import ActionItemsColumn from './action-items-column/ActionItemsColumn';
-import RetroSubHeader from './retro-sub-header/RetroSubHeader';
+import RetroSubheader from './retro-sub-header/RetroSubheader';
 import ThoughtColumn from './thought-column/ThoughtColumn';
 
 type Props = {
@@ -95,7 +95,7 @@ function RetroPage(props: Props): ReactElement {
 
   return (
     <div className="retro-page">
-      <RetroSubHeader />
+      <RetroSubheader />
       <div className="retro-page-content">
         {!isLoading &&
           !!columnTitles.length &&

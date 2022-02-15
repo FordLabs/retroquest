@@ -17,22 +17,24 @@
 
 import * as React from 'react';
 
-function RetroSubHeader() {
+import './RetroSubheader.scss';
+
+function RetroSubheader() {
   return (
     <div className="sub-header">
       <ul className="sub-header-links">
         <li>
-          <button>Give Feedback</button>
+          <button className="button button-secondary">Give Feedback</button>
         </li>
         <li>
-          <button>Download CSV</button>
+          <button className="button button-secondary">Download CSV</button>
         </li>
         <li>
-          <button>Archive Retro</button>
+          <button className="button button-primary">Archive Retro</button>
         </li>
       </ul>
     </div>
   );
 }
 
-export default RetroSubHeader;
+export default RetroSubheader;

@@ -37,7 +37,7 @@ function Button(props: ButtonProps) {
 export function PrimaryButton(props: ButtonProps) {
   const { className, ...buttonProps } = props;
 
-  const classNames = classnames('primary', className);
+  const classNames = classnames('button-primary', className);
 
   return <Button className={classNames} {...buttonProps} />;
 }
@@ -45,7 +45,7 @@ export function PrimaryButton(props: ButtonProps) {
 export function SecondaryButton(props: ButtonProps) {
   const { className, ...buttonProps } = props;
 
-  const classNames = classnames('secondary', className);
+  const classNames = classnames('button-secondary', className);
 
   return <Button className={classNames} {...buttonProps} />;
 }
