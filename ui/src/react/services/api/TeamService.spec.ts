@@ -15,11 +15,24 @@
  * limitations under the License.
  */
 
-const TeamService = {
-  login: jest.fn().mockResolvedValue(''),
-  create: jest.fn().mockResolvedValue(''),
-  getTeamName: jest.fn(),
-  getCSV: jest.fn().mockResolvedValue('column 1, column 2'),
-};
+import axios from 'axios';
 
-export default TeamService;
+import TeamService from './TeamService';
+
+describe('Team Service', () => {
+  const teamId = 'team-id';
+
+  it('should get CSV', async () => {
+    const expectedCSVData = 'column 1, column 2';
+    axios.get = jest.fn().mockResolvedValue({ data: expectedCSVData });
+
+    const actualResponse = await TeamService.getCSV(teamId);
+
+    const expectedUrl = `/api/team/${teamId}/csv`;
+    expect(axios.get).toHaveBeenCalledWith(expectedUrl, {
+      responseType: 'blob',
+      timeout: 30000,
+    });
+    expect(actualResponse).toBe(expectedCSVData);
+  });
+});

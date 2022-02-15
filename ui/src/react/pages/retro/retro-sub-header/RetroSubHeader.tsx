@@ -17,14 +17,26 @@
 
 import * as React from 'react';
 import { useRef } from 'react';
+import fileSaver from 'file-saver';
+import { useRecoilValue } from 'recoil';
 
 import FeedbackDialog from '../../../components/feedback-dialog/FeedbackDialog';
 import { ModalMethods } from '../../../components/modal/Modal';
+import TeamService from '../../../services/api/TeamService';
+import { TeamState } from '../../../state/TeamState';
 
 import './RetroSubheader.scss';
 
 function RetroSubheader() {
   const modalRef = useRef<ModalMethods>();
+
+  const team = useRecoilValue(TeamState);
+
+  const downloadCSV = () => {
+    TeamService.getCSV(team.id)
+      .then((csvData) => fileSaver.saveAs(csvData, `${team.id}-board.csv`))
+      .catch(console.error);
+  };
 
   return (
     <>
@@ -36,7 +48,9 @@ function RetroSubheader() {
             </button>
           </li>
           <li>
-            <button className="button button-secondary">Download CSV</button>
+            <button className="button button-secondary" onClick={downloadCSV}>
+              Download CSV
+            </button>
           </li>
           <li>
             <button className="button button-primary">Archive Retro</button>

@@ -22,6 +22,8 @@ export const getTeamNameApiPath = (teamId: string) => `${CREATE_TEAM_API_PATH}/$
 export const CONTRIBUTORS_API_PATH = '/api/contributors';
 export const FEEDBACK_API_PATH = '/api/feedback/';
 
+export const getCSVApiPath = (teamId: string) => `/api/team/${teamId}/csv`;
+
 export const getThoughtApiPath = (teamId: string) => `/api/team/${teamId}/thought`;
 
 export const getActionItemApiPath = (teamId: string) => `/api/team/${teamId}/action-item`;

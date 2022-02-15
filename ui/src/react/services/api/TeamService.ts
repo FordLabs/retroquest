@@ -20,7 +20,7 @@ import axios from 'axios';
 import { CREATE_TEAM_PAGE_PATH, LOGIN_PAGE_PATH } from '../../routes/RouteConstants';
 import CookieService from '../CookieService';
 
-import { CREATE_TEAM_API_PATH, getTeamNameApiPath, LOGIN_API_PATH } from './ApiConstants';
+import { CREATE_TEAM_API_PATH, getCSVApiPath, getTeamNameApiPath, LOGIN_API_PATH } from './ApiConstants';
 
 export interface AuthResponse {
   token: string;
@@ -62,6 +62,16 @@ const TeamService = {
   getTeamName(teamId: string): Promise<string> {
     const TEAM_NAME_API_PATH = getTeamNameApiPath(teamId);
     return axios.get(TEAM_NAME_API_PATH).then((res) => res.data);
+  },
+
+  getCSV(teamId: string): Promise<Blob> {
+    const url = getCSVApiPath(teamId);
+    return axios
+      .get(url, {
+        responseType: 'blob',
+        timeout: 30000,
+      })
+      .then((response) => response.data);
   },
 };
 
