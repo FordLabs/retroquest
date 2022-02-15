@@ -32,7 +32,6 @@
 
 // Import commands.js using ES2015 syntax:
 import './commands';
-import 'cypress-jest-adapter';
 
 Cypress.Cookies.defaults({
   preserve: 'token',

@@ -71,7 +71,7 @@ describe('Retro Page', () => {
       it('The first thought has two stars', () => {
         cy.get(`rq-thoughts-column rq-task.happy`).each((input) => {
           if ('Good flow to our work this week' === input.find('textarea').val()) {
-            expect(input.find('div.star-count')[0].innerText.trim()).toEqual('2');
+            expect(input.find('div.star-count')[0].innerText.trim()).equal('2');
           }
         });
       });
@@ -79,7 +79,7 @@ describe('Retro Page', () => {
       it('The second thought was discussed', () => {
         cy.get(`rq-thoughts-column rq-task.happy`).each((input) => {
           if ('Switching to e2e was a good idea' === input.find('textarea').val()) {
-            expect(input.find('div.complete-container div.checkbox.completed-task').length).toEqual(1);
+            expect(input.find('div.complete-container div.checkbox.completed-task').length).equal(1);
           }
         });
       });
