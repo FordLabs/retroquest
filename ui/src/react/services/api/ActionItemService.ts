@@ -23,7 +23,7 @@ import CreateActionItemRequest from '../../types/CreateActionItemRequest';
 import { getActionItemApiPath } from './ApiConstants';
 
 const ActionItemService = {
-  create: (teamId: string, createActionItemRequest: CreateActionItemRequest): Promise<Action> => {
+  create(teamId: string, createActionItemRequest: CreateActionItemRequest): Promise<Action> {
     const url = getActionItemApiPath(teamId);
     return axios.post(url, createActionItemRequest).then((response) => response.data);
   },
