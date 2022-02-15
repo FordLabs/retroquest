@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,19 +16,20 @@
  */
 
 import * as React from 'react';
+import { ComponentPropsWithoutRef, forwardRef, LegacyRef, PropsWithChildren } from 'react';
 import classnames from 'classnames';
 
 import Tooltip from '../tooltip/Tooltip';
 
 import './ColumnItemButtons.scss';
 
-type ButtonProps = React.ComponentPropsWithoutRef<'button'>;
+type ButtonProps = ComponentPropsWithoutRef<'button'>;
 
 type EditButtonProps = ButtonProps & {
   editing: boolean;
 };
 
-export const EditButton = React.forwardRef((props: EditButtonProps, ref: React.LegacyRef<HTMLButtonElement>) => {
+export const EditButton = forwardRef((props: EditButtonProps, ref: LegacyRef<HTMLButtonElement>) => {
   const { editing, className, ...buttonProps } = props;
 
   return (
@@ -43,8 +44,8 @@ export const EditButton = React.forwardRef((props: EditButtonProps, ref: React.L
   );
 });
 
-export const DeleteButton = React.forwardRef((props: ButtonProps, ref: React.LegacyRef<HTMLButtonElement>) => {
-  const { className, ...buttonProps } = props;
+export const DeleteButton = forwardRef((props: ButtonProps, ref: LegacyRef<HTMLButtonElement>) => {
+  const { ...buttonProps } = props;
 
   return (
     <button className="column-item-button" {...buttonProps} ref={ref}>
@@ -58,43 +59,41 @@ type CheckmarkButtonProps = ButtonProps & {
   checked: boolean;
 };
 
-export const CheckboxButton = React.forwardRef(
-  (props: CheckmarkButtonProps, ref: React.LegacyRef<HTMLButtonElement>) => {
-    const { checked, className, ...buttonProps } = props;
+export const CheckboxButton = forwardRef((props: CheckmarkButtonProps, ref: LegacyRef<HTMLButtonElement>) => {
+  const { checked, className, ...buttonProps } = props;
 
-    return (
-      <button className={classnames('column-item-button', className)} {...buttonProps} ref={ref}>
-        <div className={classnames('checkbox', { checked })}>
-          <div className="checkbox-border" data-testid="checkbox" />
-          {checked && <i className="fas fa-check" aria-hidden="true" data-testid="checkmark" />}
-        </div>
-        <Tooltip>{checked ? 'Open' : 'Close'}</Tooltip>
-      </button>
-    );
-  }
-);
+  return (
+    <button className={classnames('column-item-button', className)} {...buttonProps} ref={ref}>
+      <div className={classnames('checkbox', { checked })}>
+        <div className="checkbox-border" data-testid="checkbox" />
+        {checked && <i className="fas fa-check" aria-hidden="true" data-testid="checkmark" />}
+      </div>
+      <Tooltip>{checked ? 'Open' : 'Close'}</Tooltip>
+    </button>
+  );
+});
 
-export const ConfirmButton = React.forwardRef((props: ButtonProps, ref: React.LegacyRef<HTMLButtonElement>) => {
+export const ConfirmButton = forwardRef((props: ButtonProps, ref: LegacyRef<HTMLButtonElement>) => {
   const { className, children, ...buttonProps } = props;
 
   return (
-    <button className={classnames('column-item-button primary', className)} {...buttonProps} ref={ref}>
+    <button className={classnames('column-item-button button-primary', className)} {...buttonProps} ref={ref}>
       <span>{children}</span>
     </button>
   );
 });
 
-export const CancelButton = React.forwardRef((props: ButtonProps, ref: React.LegacyRef<HTMLButtonElement>) => {
+export const CancelButton = forwardRef((props: ButtonProps, ref: LegacyRef<HTMLButtonElement>) => {
   const { className, children, ...buttonProps } = props;
 
   return (
-    <button className={classnames('column-item-button secondary', className)} {...buttonProps} ref={ref}>
+    <button className={classnames('column-item-button button-secondary', className)} {...buttonProps} ref={ref}>
       <span>{children}</span>
     </button>
   );
 });
 
-type ColumnItemButtonGroupProps = React.PropsWithChildren<{}>;
+type ColumnItemButtonGroupProps = PropsWithChildren<unknown>;
 
 export function ColumnItemButtonGroup(props: ColumnItemButtonGroupProps) {
   const { children } = props;

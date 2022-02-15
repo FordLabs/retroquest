@@ -37,6 +37,7 @@ const containerElementName = 'reactRetroPageWrapper';
   template: `<span #${containerElementName}></span>`,
   styleUrls: [
     './RetroPage.scss',
+    './retro-sub-header/RetroSubheader.scss',
     '../../components/column-header/ColumnHeader.scss',
     '../../components/column-item/ColumnItem.scss',
     '../../components/column-item-buttons/ColumnItemButtons.scss',
