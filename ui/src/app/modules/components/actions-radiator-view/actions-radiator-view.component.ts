@@ -16,7 +16,6 @@
  */
 
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import * as $ from 'jquery';
 
 import { DataService } from '../../data.service';
 import { ActionItem } from '../../domain/action-item';
@@ -71,7 +70,7 @@ export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
   }
 
   private getRootPage() {
-    return $('rq-sub-app') || $('react-header-component-wrapper');
+    return document.querySelector('rq-sub-app') || document.querySelector('react-header-component-wrapper');
   }
 
   private scrollToTopOfPage() {
@@ -119,7 +118,7 @@ export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
     } else {
       if (this.scrollingIntervalId) {
         const rootPage = this.getRootPage();
-        rootPage.stop(true);
+        rootPage.getAnimations().forEach((animation) => animation.cancel());
         window.clearInterval(this.scrollingIntervalId);
         this.scrollingIntervalId = null;
       }
@@ -130,7 +129,7 @@ export class ActionsRadiatorViewComponent implements OnInit, OnDestroy {
     this.pageIsAutoScrolling = false;
 
     const rootPage = this.getRootPage();
-    rootPage.stop(true);
+    rootPage.getAnimations().forEach((animation) => animation.cancel());
 
     window.clearInterval(this.scrollingIntervalId);
 
