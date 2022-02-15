@@ -20,7 +20,7 @@ import axios from 'axios';
 import { Column } from '../../types/Column';
 
 const ColumnService = {
-  getColumns: (teamId: string): Promise<Column[]> => {
+  getColumns(teamId: string): Promise<Column[]> {
     const url = `/api/v2/team/${teamId}/columns`;
     return axios.get(url).then((response) => response.data.columns);
   },

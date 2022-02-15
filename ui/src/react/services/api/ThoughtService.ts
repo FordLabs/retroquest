@@ -23,7 +23,7 @@ import Thought from '../../types/Thought';
 import { getThoughtApiPath } from './ApiConstants';
 
 const ThoughtService = {
-  create: (teamId: string, createThoughtRequest: CreateThoughtRequest): Promise<Thought> => {
+  create(teamId: string, createThoughtRequest: CreateThoughtRequest): Promise<Thought> {
     const url = getThoughtApiPath(teamId);
     return axios.post(url, createThoughtRequest).then((response) => response.data);
   },

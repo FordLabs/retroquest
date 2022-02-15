@@ -51,15 +51,15 @@ axios.interceptors.response.use(
 const returnTokenAndTeamId = (response): AuthResponse => ({ token: response.data, teamId: response.headers.location });
 
 const TeamService = {
-  login: (name: string, password: string): Promise<AuthResponse> => {
+  login(name: string, password: string): Promise<AuthResponse> {
     return axios.post(LOGIN_API_PATH, { name, password }).then(returnTokenAndTeamId);
   },
 
-  create: (name: string, password: string): Promise<AuthResponse> => {
+  create(name: string, password: string): Promise<AuthResponse> {
     return axios.post(CREATE_TEAM_API_PATH, { name, password }).then(returnTokenAndTeamId);
   },
 
-  getTeamName: (teamId: string): Promise<string> => {
+  getTeamName(teamId: string): Promise<string> {
     const TEAM_NAME_API_PATH = getTeamNameApiPath(teamId);
     return axios.get(TEAM_NAME_API_PATH).then((res) => res.data);
   },

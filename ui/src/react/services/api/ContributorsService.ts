@@ -21,7 +21,7 @@ import { Contributor } from '../../types/Contributor';
 import { CONTRIBUTORS_API_PATH } from './ApiConstants';
 
 const ContributorsService = {
-  getContributors: (): Promise<Contributor[]> => {
+  getContributors(): Promise<Contributor[]> {
     return axios.get(CONTRIBUTORS_API_PATH).then((res) => res.data);
   },
 };
