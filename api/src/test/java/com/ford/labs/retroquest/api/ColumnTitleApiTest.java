@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Arrays;
@@ -85,8 +84,6 @@ class ColumnTitleApiTest extends ApiTestBase {
 
     @Test
     void should_update_column_title() throws Exception {
-        StompSession session = getAuthorizedSession();
-        subscribe(session, BASE_SUB_URL);
         var savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder()
                 .teamId("BeachBums")
                 .title("old title")
@@ -101,10 +98,7 @@ class ColumnTitleApiTest extends ApiTestBase {
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk());
 
-        var emittedEvent = takeObjectInSocket(ColumnTitle.class);
-
         assertThat(columnTitleRepository.findAll()).containsExactly(expectedColumnTitle);
-        assertThat(emittedEvent).usingRecursiveComparison().isEqualTo(expectedColumnTitle);
     }
 
     @Test
