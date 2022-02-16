@@ -16,7 +16,7 @@
  */
 
 import * as React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import fileSaver from 'file-saver';
 import { RecoilRoot } from 'recoil';
 
@@ -49,6 +49,17 @@ describe('Retro Subheader', () => {
         <RetroSubheader />
       </RecoilRoot>
     );
+  });
+
+  describe('Feedback Button', () => {
+    it('should open give feedback modal', async () => {
+      const modalText = 'How can we improve RetroQuest?';
+      expect(screen.queryByText(modalText)).toBeNull();
+
+      const feedbackButton = screen.getByText('Give Feedback');
+      feedbackButton.click();
+      await act(async () => expect(screen.getByText(modalText)).toBeDefined());
+    });
   });
 
   describe('Download CSV Button', () => {
