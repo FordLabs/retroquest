@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 
@@ -26,7 +26,7 @@ import TextField from '../../../components/text-field/TextField';
 import ThoughtService from '../../../services/api/ThoughtService';
 import { ColumnTitleByTopicState } from '../../../state/ColumnTitleState';
 import { TeamState } from '../../../state/TeamState';
-import { ActiveThoughtsByTopicState, DiscussedThoughtsState, ThoughtTopic } from '../../../state/ThoughtsState';
+import { ActiveThoughtsByTopicState, DiscussedThoughtsByTopicState, ThoughtTopic } from '../../../state/ThoughtsState';
 import { getCreateThoughtRequest } from '../../../types/CreateThoughtRequest';
 import Thought from '../../../types/Thought';
 
@@ -40,9 +40,9 @@ function ThoughtColumn(props: Props) {
   const team = useRecoilValue(TeamState);
   const columnTitle = useRecoilValue(ColumnTitleByTopicState(topic));
   const { title } = columnTitle;
-
-  const activeThoughts = useRecoilValue<Thought[]>(ActiveThoughtsByTopicState(topic));
-  const discussedThoughts = useRecoilValue<Thought[]>(DiscussedThoughtsState(topic));
+  const [sorted, setSorted] = useState(false);
+  const activeThoughts = useRecoilValue<Thought[]>(ActiveThoughtsByTopicState({ topic, sorted }));
+  const discussedThoughts = useRecoilValue<Thought[]>(DiscussedThoughtsByTopicState({ topic, sorted }));
 
   const createThought = (text: string) => {
     if (text && text.length) {
@@ -83,7 +83,7 @@ function ThoughtColumn(props: Props) {
 
   return (
     <div className="retro-column" data-testid={`retroColumn__${topic}`}>
-      <ColumnHeader initialTitle={title} type={topic} sortedChanged={() => undefined} titleChanged={() => undefined} />
+      <ColumnHeader initialTitle={title} type={topic} sortedChanged={setSorted} titleChanged={() => undefined} />
       <TextField type={topic} placeholder="Enter a Thought" handleSubmission={createThought} />
       <CountSeparator count={activeThoughts.length} />
       {activeThoughts.map(renderThought)}

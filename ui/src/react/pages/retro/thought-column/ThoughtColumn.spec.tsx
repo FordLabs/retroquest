@@ -25,7 +25,7 @@ import { getMockThought } from '../../../services/api/__mocks__/ThoughtService';
 import ThoughtService from '../../../services/api/ThoughtService';
 import { ColumnTitleByTopicState } from '../../../state/ColumnTitleState';
 import { TeamState } from '../../../state/TeamState';
-import { ActiveThoughtsByTopicState, DiscussedThoughtsState } from '../../../state/ThoughtsState';
+import { ThoughtsState } from '../../../state/ThoughtsState';
 import { ColumnTitle } from '../../../types/ColumnTitle';
 import Team from '../../../types/Team';
 import Thought from '../../../types/Thought';
@@ -38,10 +38,11 @@ const team: Team = {
   id: 'my-team',
 };
 
-const activeThought1: Thought = getMockThought(Topic.HAPPY, false);
+const activeThought1: Thought = getMockThought(Topic.HAPPY, false, 1);
 activeThought1.id = 943;
-const activeThought2: Thought = getMockThought(Topic.HAPPY, false);
-const discussedThought1: Thought = getMockThought(Topic.HAPPY, true);
+const activeThought2: Thought = getMockThought(Topic.HAPPY, false, 2);
+const discussedThought1: Thought = getMockThought(Topic.HAPPY, true, 3);
+const discussedThought2: Thought = getMockThought(Topic.HAPPY, true, 4);
 
 const thoughtColumnTitle: ColumnTitle = {
   id: 123456,
@@ -61,9 +62,8 @@ describe('ThoughtColumn.spec.tsx', () => {
       ({ container } = render(
         <RecoilRoot
           initializeState={({ set }) => {
-            set(ActiveThoughtsByTopicState(topic), [activeThought1, activeThought2]);
-            set(DiscussedThoughtsState(topic), [discussedThought1]);
             set(ColumnTitleByTopicState(topic), thoughtColumnTitle);
+            set(ThoughtsState, [activeThought1, activeThought2, discussedThought1, discussedThought2]);
             set(TeamState, team);
           }}
         >
@@ -94,7 +94,7 @@ describe('ThoughtColumn.spec.tsx', () => {
 
   it('should render retro items', () => {
     const retroItems = screen.getAllByTestId('retroItem');
-    expect(retroItems.length).toBe(3);
+    expect(retroItems.length).toBe(4);
   });
 
   describe('Create Thought', () => {
@@ -165,7 +165,7 @@ describe('ThoughtColumn.spec.tsx', () => {
   it('should upvote a thought', () => {
     const thoughtItems = screen.getAllByTestId('retroItem');
     const firstThoughtItemsUpvoteButton = within(thoughtItems[0]).getByTestId('retroItem-upvote');
-    expect(within(thoughtItems[0]).getByText('0'));
+    expect(within(thoughtItems[0]).getByText('1'));
     userEvent.click(firstThoughtItemsUpvoteButton);
 
     expect(ThoughtService.upvoteThought).toHaveBeenCalledWith(team.id, activeThought1.id);
@@ -181,5 +181,28 @@ describe('ThoughtColumn.spec.tsx', () => {
       activeThought1.id,
       !activeThought1.discussed
     );
+  });
+
+  describe('sort', () => {
+    it('should return thoughts in descending order based on heart count after activity when sort clicked', () => {
+      userEvent.click(screen.getByTestId('sort-button'));
+      const thoughtItems = screen.getAllByTestId('retroItem');
+      expect(thoughtItems).toHaveLength(4);
+      expect(within(thoughtItems[0]).queryByText('2')).not.toBeNull();
+      expect(within(thoughtItems[1]).queryByText('1')).not.toBeNull();
+      expect(within(thoughtItems[2]).queryByText('4')).not.toBeNull();
+      expect(within(thoughtItems[3]).queryByText('3')).not.toBeNull();
+    });
+
+    it('should return thoughts in unedited order after activity sorting when sort clicked twice', () => {
+      userEvent.click(screen.getByTestId('sort-button'));
+      userEvent.click(screen.getByTestId('sort-button'));
+      const thoughtItems = screen.getAllByTestId('retroItem');
+      expect(thoughtItems).toHaveLength(4);
+      expect(within(thoughtItems[0]).queryByText('1')).not.toBeNull();
+      expect(within(thoughtItems[1]).queryByText('2')).not.toBeNull();
+      expect(within(thoughtItems[2]).queryByText('3')).not.toBeNull();
+      expect(within(thoughtItems[3]).queryByText('4')).not.toBeNull();
+    });
   });
 });
