@@ -18,7 +18,7 @@
 import Thought from '../../../types/Thought';
 import { ThoughtTopic } from '../../../types/Topic';
 
-export const getMockThought = (topic: ThoughtTopic, isDiscussed): Thought => ({
+export const getMockThought = (topic: ThoughtTopic, isDiscussed = false): Thought => ({
   id: Math.random(),
   message: `This is a ${topic} thought`,
   topic,

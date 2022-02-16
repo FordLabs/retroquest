@@ -35,6 +35,7 @@ export type WebsocketMessageHandlerType = ({ body }: Partial<IMessage>) => void;
 interface WebsocketCallback {
   thoughtMessageHandler: WebsocketMessageHandlerType;
   actionItemMessageHandler: WebsocketMessageHandlerType;
+  endRetroMessageHandler: WebsocketMessageHandlerType;
 }
 
 function useWebSocketMessageHandler(): WebsocketCallback {
@@ -67,7 +68,12 @@ function useWebSocketMessageHandler(): WebsocketCallback {
     recoilStateUpdater(setActionItems, action, incomingMessage.type);
   };
 
-  return { thoughtMessageHandler, actionItemMessageHandler };
+  const endRetroMessageHandler = () => {
+    setThoughts([]);
+    setActionItems((actionItems) => actionItems.filter((actionItem) => !actionItem.completed));
+  };
+
+  return { thoughtMessageHandler, actionItemMessageHandler, endRetroMessageHandler };
 }
 
 export default useWebSocketMessageHandler;

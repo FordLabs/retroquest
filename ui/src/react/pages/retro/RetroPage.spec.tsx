@@ -32,11 +32,13 @@ jest.setTimeout(60000);
 
 const mockThoughtMessageHandler = jest.fn();
 const mockActionItemMessageHandler = jest.fn();
+const mockEndRetroMessageHandler = jest.fn();
 
 jest.mock('../../hooks/useWebSocketMessageHandler', () => {
   return jest.fn(() => ({
     thoughtMessageHandler: mockThoughtMessageHandler,
     actionItemMessageHandler: mockActionItemMessageHandler,
+    endRetroMessageHandler: mockEndRetroMessageHandler,
   }));
 });
 
@@ -44,7 +46,7 @@ describe('RetroPage.spec.tsx', () => {
   let container: HTMLElement;
   const teamId = 'some-team-id';
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     await act(async () => {
       ({ container } = render(
         <RecoilRoot>
@@ -81,6 +83,10 @@ describe('RetroPage.spec.tsx', () => {
 
     it('should subscribe to action items', () => {
       expect(WebSocketService.subscribeToActionItems).toHaveBeenCalledWith(teamId, mockActionItemMessageHandler);
+    });
+
+    it('should subscribe to end retro', () => {
+      expect(WebSocketService.subscribeToEndRetro).toHaveBeenCalledWith(teamId, mockEndRetroMessageHandler);
     });
   });
 });
