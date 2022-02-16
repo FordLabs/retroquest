@@ -70,8 +70,8 @@ export function FeedbackDialogRenderer(props: FeedbackDialogRendererProps) {
     <Dialog
       testId="feedbackDialog"
       className="feedback-dialog"
-      header="Feedback"
-      subHeader="How can we improve RetroQuest?"
+      title="Feedback"
+      subtitle="How can we improve RetroQuest?"
       buttons={{
         cancel: { text: 'Cancel', onClick: closeModal },
         confirm: { text: 'Send!', onClick: handleSubmit },
