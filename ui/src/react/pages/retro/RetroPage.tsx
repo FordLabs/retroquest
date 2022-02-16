@@ -49,7 +49,7 @@ function RetroPage(props: Props): ReactElement {
   const setThoughts = useSetRecoilState<Thought[]>(ThoughtsState);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const { thoughtMessageHandler, actionItemMessageHandler } = useWebSocketMessageHandler();
+  const { thoughtMessageHandler, actionItemMessageHandler, endRetroMessageHandler } = useWebSocketMessageHandler();
 
   useEffect(() => {
     setTeam({ ...team, id: teamId });
@@ -84,6 +84,7 @@ function RetroPage(props: Props): ReactElement {
         if (teamId) {
           WebSocketService.subscribeToThoughts(teamId, thoughtMessageHandler);
           WebSocketService.subscribeToActionItems(teamId, actionItemMessageHandler);
+          WebSocketService.subscribeToEndRetro(teamId, endRetroMessageHandler);
         }
       });
     }

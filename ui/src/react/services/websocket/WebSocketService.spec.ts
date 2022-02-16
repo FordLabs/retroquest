@@ -66,4 +66,15 @@ describe('WebSocketService', () => {
       Authorization: `Bearer ` + mockAccessToken,
     });
   });
+
+  it('should subscribe to end retro', async () => {
+    const teamId = 'Idddddd';
+    const webSocketMessageHandler = jest.fn();
+    WebSocketService.subscribeToEndRetro(teamId, webSocketMessageHandler);
+
+    const expectedDestination = `/topic/${teamId}/end-retro`;
+    expect(mockClient.subscribe).toHaveBeenCalledWith(expectedDestination, expect.any(Function), {
+      Authorization: `Bearer ` + mockAccessToken,
+    });
+  });
 });

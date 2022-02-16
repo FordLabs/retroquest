@@ -181,4 +181,50 @@ describe('useWebsocketMessageHandler', () => {
       expect(screen.getByText(JSON.stringify([actionItemNotToDelete]))).toBeDefined();
     });
   });
+
+  describe('endRetroMessageHandler', () => {
+    const EndRetroTestComponent = ({ websocketMessageBody }: TestComponentProps): ReactElement => {
+      const actionItems = useRecoilValue(ActionItemState);
+      const thoughts = useRecoilValue(ThoughtsState);
+
+      const { endRetroMessageHandler } = useWebSocketMessageHandler();
+
+      useEffect(() => {
+        const imessage = formatWebsocketMessage(websocketMessageBody);
+        endRetroMessageHandler(imessage);
+      }, [websocketMessageBody]);
+
+      return (
+        <>
+          <div data-testid="action-items">{JSON.stringify(actionItems)}</div>
+          <div data-testid="thoughts">{JSON.stringify(thoughts)}</div>
+        </>
+      );
+    };
+
+    it('should clear all thoughts and all completed action items from state', async () => {
+      const activeActionItem = getMockActionItem();
+      const completeActionItem = getMockActionItem(true);
+      const actionItems = [activeActionItem, completeActionItem];
+      const thoughts = [getMockThought(Topic.HAPPY), getMockThought(Topic.CONFUSED), getMockThought(Topic.UNHAPPY)];
+      await act(async () => {
+        render(
+          <RecoilRoot
+            initializeState={({ set }) => {
+              set(ActionItemState, actionItems);
+              set(ThoughtsState, thoughts);
+            }}
+          >
+            <EndRetroTestComponent websocketMessageBody={{ type: 'put', payload: null }} />
+          </RecoilRoot>
+        );
+      });
+
+      const thoughtsColumn = screen.getByTestId('thoughts');
+      expect(thoughtsColumn.innerHTML).toBe(JSON.stringify([]));
+
+      const actionItemsColumn = screen.getByTestId('action-items');
+      expect(actionItemsColumn.innerHTML).toBe(JSON.stringify([activeActionItem]));
+    });
+  });
 });

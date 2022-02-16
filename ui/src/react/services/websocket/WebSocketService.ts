@@ -56,6 +56,10 @@ const WebSocketService = {
     const destination = `/topic/${teamId}/action-items`;
     WebSocketService.subscribe(destination, webSocketMessageHandler);
   },
+  subscribeToEndRetro(teamId: string, webSocketMessageHandler: WebsocketMessageHandlerType) {
+    const destination = `/topic/${teamId}/end-retro`;
+    WebSocketService.subscribe(destination, webSocketMessageHandler);
+  },
 };
 
 export default WebSocketService;

@@ -14,9 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import path from 'path';
+import { join } from 'path';
 
 import { FEEDBACK_API_PATH, getArchiveRetroApiPath } from '../../src/react/services/api/ApiConstants';
 import Topic from '../../src/react/types/Topic';
@@ -42,13 +40,14 @@ describe('Retro Page Subheader', () => {
     cy.get('@postFeedbackEndpoint').its('response.statusCode').should('eq', null);
 
     cy.get('@giveFeedbackButton').click();
+    ensureModalIsOpen();
 
     cy.get('@modal').find('[data-testid=feedback-star-5]').click();
     cy.get('@modal').findByLabelText('Comments*').type('Doing great!');
     cy.get('@modal').findByLabelText('Feedback Email').focus().type('a@b.c');
 
     cy.findByText('Send!').click();
-    ensureModalIsOpen();
+    ensureModalIsClosed();
     cy.get('@postFeedbackEndpoint').its('response.statusCode').should('eq', 201);
   });
 
@@ -56,14 +55,14 @@ describe('Retro Page Subheader', () => {
     cy.findByText('Download CSV').as('downloadCSVButton').click();
 
     const downloadsFolder = Cypress.config('downloadsFolder');
-    const downloadedFilename = path.join(downloadsFolder, `${teamCredentials.teamId}-board.csv`);
+    const downloadedFilename = join(downloadsFolder, `${teamCredentials.teamId}-board.csv`);
 
     cy.readFile(downloadedFilename, 'binary', { timeout: 5000 })
       .should((buffer) => expect(buffer.length).to.be.gt(40))
       .should('eq', 'Column,Message,Likes,Completed,Assigned To\r\n');
   });
 
-  it.only('Archive Retro Button', () => {
+  it('Archive Retro Button', () => {
     cy.intercept('PUT', getArchiveRetroApiPath(teamCredentials.teamId)).as('putArchiveRetro');
     cy.get('[data-testid=retroColumn__action]').as('actionsColumn');
 

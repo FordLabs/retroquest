@@ -52,6 +52,7 @@ export function ArchiveRetroDialogRenderer(props: ArchiveRetroDialogRendererProp
 
   return (
     <Dialog
+      testId="archiveRetroDialog"
       className="archive-retro-dialog"
       title="Do you want to end the retro for everybody?"
       subtitle="This will permanently archive all thoughts!"

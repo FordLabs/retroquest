@@ -120,6 +120,7 @@
     "jest-preset-angular": "^11.0.1",
     "lint-staged": "^10.5.4",
     "mockdate": "^3.0.5",
+    "path": "^0.12.7",
     "prettier": "^2.2.1",
     "puppeteer": "^1.5.0",
     "resolve-url-loader": "^4.0.0",
