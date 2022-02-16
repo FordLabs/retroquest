@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-export const mockClient = {
-  activate: jest.fn(),
-  deactivate: jest.fn().mockResolvedValue({}),
+const WebsocketService = {
+  connect: jest.fn((callback) => {
+    callback();
+  }),
+  disconnect: jest.fn(),
   subscribe: jest.fn(),
+  subscribeToThoughts: jest.fn(),
+  subscribeToActionItems: jest.fn(),
 };
 
-const WebSocketController = {
-  getClient: () => mockClient,
-};
-
-export default WebSocketController;
+export default WebsocketService;

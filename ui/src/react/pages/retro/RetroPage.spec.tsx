@@ -21,6 +21,7 @@ import { RecoilRoot } from 'recoil';
 
 import { mockColumns } from '../../services/api/__mocks__/ColumnService';
 import ColumnService from '../../services/api/ColumnService';
+import WebSocketService from '../../services/websocket/WebSocketService';
 
 import RetroPage from './RetroPage';
 
@@ -29,11 +30,21 @@ jest.mock('../../services/websocket/WebSocketService');
 
 jest.setTimeout(60000);
 
+const mockThoughtMessageHandler = jest.fn();
+const mockActionItemMessageHandler = jest.fn();
+
+jest.mock('../../hooks/useWebSocketMessageHandler', () => {
+  return jest.fn(() => ({
+    thoughtMessageHandler: mockThoughtMessageHandler,
+    actionItemMessageHandler: mockActionItemMessageHandler,
+  }));
+});
+
 describe('RetroPage.spec.tsx', () => {
   let container: HTMLElement;
   const teamId = 'some-team-id';
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     await act(async () => {
       ({ container } = render(
         <RecoilRoot>
@@ -57,5 +68,19 @@ describe('RetroPage.spec.tsx', () => {
       expect(within(retroColumn).getAllByTestId(/(retro|action)Item$/)).toHaveLength(column.items.length);
     });
     done();
+  });
+
+  describe('Websockets', () => {
+    it('should connect to websockets', () => {
+      expect(WebSocketService.connect).toHaveBeenCalledWith(expect.any(Function));
+    });
+
+    it('should subscribe to thoughts', () => {
+      expect(WebSocketService.subscribeToThoughts).toHaveBeenCalledWith(teamId, mockThoughtMessageHandler);
+    });
+
+    it('should subscribe to action items', () => {
+      expect(WebSocketService.subscribeToActionItems).toHaveBeenCalledWith(teamId, mockActionItemMessageHandler);
+    });
   });
 });
