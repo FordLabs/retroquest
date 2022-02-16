@@ -43,7 +43,7 @@ const Template: ComponentStory<typeof ColumnHeader> = () => (
     <ColumnHeader {...props} type={Topic.HAPPY} style={{ marginBottom: '5rem' }} />
     <ColumnHeader {...props} type={Topic.CONFUSED} style={{ marginBottom: '5rem' }} />
     <ColumnHeader {...props} type={Topic.UNHAPPY} style={{ marginBottom: '5rem' }} />
-    <ColumnHeader {...props} readOnly={true} type={Topic.ACTION} />
+    <ColumnHeader initialTitle={'Change This'} type={Topic.ACTION}/>
   </span>
 );
 

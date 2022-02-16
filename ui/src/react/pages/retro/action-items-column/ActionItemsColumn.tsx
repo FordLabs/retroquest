@@ -99,7 +99,7 @@ function ActionItemsColumn() {
 
   return (
     <div className="retro-column" data-testid={`retroColumn__${topic}`}>
-      <ColumnHeader initialTitle={title} type={topic} sortedChanged={() => undefined} titleChanged={() => undefined} />
+      <ColumnHeader initialTitle={title} type={topic}/>
       <TextField type={topic} placeholder="Enter an Action Item" handleSubmission={createActionItem} />
       <CountSeparator count={activeActionItems.length} />
       {activeActionItems.map(renderActionItem)}
