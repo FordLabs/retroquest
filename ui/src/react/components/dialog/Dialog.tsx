@@ -26,8 +26,8 @@ import './Dialog.scss';
 type DialogProps = PropsWithChildren<{
   testId?: string;
   className?: string;
-  header: string;
-  subHeader?: string;
+  title: string;
+  subtitle?: string;
   buttons?: {
     cancel?: {
       text: string;
@@ -41,7 +41,7 @@ type DialogProps = PropsWithChildren<{
 }>;
 
 export default function Dialog(props: DialogProps) {
-  const { header, subHeader, buttons, className, children, testId } = props;
+  const { title, subtitle, buttons, className, children, testId } = props;
   const DialogElement = !!buttons ? 'form' : 'div';
 
   const onSubmit = (event) => {
@@ -52,8 +52,8 @@ export default function Dialog(props: DialogProps) {
   return (
     <DialogElement className={classnames('dialog', className)} data-testid={testId} onSubmit={onSubmit}>
       <div className="dialog-body">
-        <div className="dialog-heading">{header}</div>
-        {subHeader && <div className="dialog-sub-heading">{subHeader}</div>}
+        <div className="dialog-title">{title}</div>
+        {subtitle && <div className="dialog-subtitle">{subtitle}</div>}
         {children}
       </div>
       {buttons && (

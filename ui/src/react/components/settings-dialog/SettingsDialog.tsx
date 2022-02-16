@@ -50,7 +50,7 @@ export function SettingsDialogContent() {
   const infoTabIsActive = () => tab === Tabs.INFO;
 
   return (
-    <Dialog className="settings-dialog" header="Settings" subHeader="choose your preferences">
+    <Dialog className="settings-dialog" title="Settings" subtitle="choose your preferences">
       <div className="tab-container">
         <div className="tab-heading">
           <div className={classnames('tab', { selected: stylesTabIsActive() })} onClick={() => setTab(Tabs.STYLES)}>

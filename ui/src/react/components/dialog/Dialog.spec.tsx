@@ -29,7 +29,7 @@ describe('Dialog', () => {
   describe('default dialog', () => {
     beforeEach(() => {
       render(
-        <Dialog header="Dialog Header" subHeader="Dialog Sub Header">
+        <Dialog title="Dialog Header" subtitle="Dialog Sub Header">
           Dialog Content
         </Dialog>
       );
@@ -66,7 +66,7 @@ describe('Dialog', () => {
       };
 
       render(
-        <Dialog header="Dialog Header" subHeader="Dialog Sub Header" buttons={buttons}>
+        <Dialog title="Dialog Header" subtitle="Dialog Sub Header" buttons={buttons}>
           Dialog Content
         </Dialog>
       );

@@ -28,8 +28,8 @@ export default {
 const Template: ComponentStory<typeof Dialog> = () => {
   return (
     <Dialog
-      header="I am a dialog"
-      subHeader="This is the question?"
+      title="I am a dialog"
+      subtitle="This is the question?"
       buttons={{
         confirm: { text: 'To be', onClick: () => alert('Be') },
         cancel: { text: 'Not to be', onClick: () => alert('Not Be') },

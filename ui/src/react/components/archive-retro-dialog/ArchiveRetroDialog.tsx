@@ -53,8 +53,8 @@ export function ArchiveRetroDialogRenderer(props: ArchiveRetroDialogRendererProp
   return (
     <Dialog
       className="archive-retro-dialog"
-      header="Do you want to end the retro for everybody?"
-      subHeader="This will permanently archive all thoughts!"
+      title="Do you want to end the retro for everybody?"
+      subtitle="This will permanently archive all thoughts!"
       buttons={{
         cancel: { text: 'Nope', onClick: closeModal },
         confirm: { text: 'Yes!', onClick: handleSubmit },
