@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,46 +29,42 @@ import Modal, { ModalMethods } from '../modal/Modal';
 import './FeedbackDialog.scss';
 
 function FeedbackDialog(props, ref) {
-  const team = useRecoilValue(TeamState);
-
   function hide() {
     ref.current?.hide();
   }
 
   return (
     <Modal ref={ref}>
-      <FeedbackDialogRenderer teamId={team.id} closeModal={hide} />
+      <FeedbackDialogRenderer closeModal={hide} />
     </Modal>
   );
 }
 
 type FeedbackDialogRendererProps = {
-  teamId: string;
   closeModal: () => void;
 };
 
 export function FeedbackDialogRenderer(props: FeedbackDialogRendererProps) {
-  const { teamId, closeModal } = props;
+  const { closeModal } = props;
 
+  const team = useRecoilValue(TeamState);
   const [stars, setStars] = useState(0);
   const [comment, setComment] = useState<string>('');
   const [userEmail, setUserEmail] = useState<string>('');
 
-  function handleSubmit() {
+  const handleSubmit = () => {
     if (comment) {
       const feedback = {
-        teamId,
+        teamId: team.id,
         stars,
         comment,
         userEmail,
       };
       FeedbackService.addFeedback(feedback)
-        .then(() => {
-          closeModal();
-        })
+        .then(() => closeModal())
         .catch(console.error);
     }
-  }
+  };
 
   return (
     <Dialog

@@ -22,6 +22,8 @@ import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
 
 import FeedbackService from '../../services/api/FeedbackService';
+import { TeamState } from '../../state/TeamState';
+import Team from '../../types/Team';
 import { ModalMethods } from '../modal/Modal';
 
 import FeedbackDialog, { FeedbackDialogRenderer } from './FeedbackDialog';
@@ -57,15 +59,26 @@ describe('FeedbackDialog', () => {
 });
 
 describe('FeedbackDialogRenderer', () => {
-  const mockOnCancel = jest.fn();
-  const fakeTeamId = 'fake-team-id';
+  const mockCloseModalCallback = jest.fn();
   const fakeComment = 'This is a fake comment';
   const fakeEmail = 'user@ford.com';
+  const team: Team = {
+    name: 'My Team',
+    id: 'fake-team-id',
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    render(<FeedbackDialogRenderer teamId={fakeTeamId} closeModal={mockOnCancel} />);
+    render(
+      <RecoilRoot
+        initializeState={({ set }) => {
+          set(TeamState, team);
+        }}
+      >
+        <FeedbackDialogRenderer closeModal={mockCloseModalCallback} />
+      </RecoilRoot>
+    );
   });
 
   it('should submit feedback', () => {
@@ -75,7 +88,7 @@ describe('FeedbackDialogRenderer', () => {
     userEvent.click(screen.getByText('Send!'));
 
     expect(FeedbackService.addFeedback).toHaveBeenCalledWith({
-      teamId: fakeTeamId,
+      teamId: team.id,
       stars: 4,
       comment: fakeComment,
       userEmail: fakeEmail,
@@ -90,10 +103,10 @@ describe('FeedbackDialogRenderer', () => {
     expect(FeedbackService.addFeedback).not.toHaveBeenCalled();
   });
 
-  it('should cancel', () => {
+  it('should cancel submitting feedback', () => {
     userEvent.click(screen.getByText('Cancel'));
 
-    expect(mockOnCancel).toHaveBeenCalled();
+    expect(mockCloseModalCallback).toHaveBeenCalled();
     expect(FeedbackService.addFeedback).not.toHaveBeenCalled();
   });
 });
