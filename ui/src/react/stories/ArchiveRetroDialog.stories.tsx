@@ -16,24 +16,24 @@
  */
 
 import * as React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import EndRetroDialog from '../components/end-retro-dialog/EndRetroDialog';
+import ArchiveRetroDialog from '../components/archive-retro-dialog/ArchiveRetroDialog';
 import { PrimaryButton } from '../components/button/Button';
 import { ModalMethods } from '../components/modal/Modal';
 
 export default {
-  title: 'components/EndRetroDialog',
-  component: EndRetroDialog,
-} as ComponentMeta<typeof EndRetroDialog>;
+  title: 'components/ArchiveRetroDialog',
+  component: ArchiveRetroDialog,
+} as ComponentMeta<typeof ArchiveRetroDialog>;
 
-const Template: ComponentStory<typeof EndRetroDialog> = () => {
+const Template: ComponentStory<typeof ArchiveRetroDialog> = () => {
   const ref = React.createRef<ModalMethods>();
 
   return (
     <>
       <PrimaryButton onClick={() => ref.current.show()}>End Retro</PrimaryButton>
-      <EndRetroDialog ref={ref} />
+      <ArchiveRetroDialog ref={ref} />
     </>
   );
 };

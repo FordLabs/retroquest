@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,37 +14,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import React, { forwardRef } from 'react';
 
-import * as React from 'react';
-
-import Modal, { ModalMethods } from '../modal/Modal';
 import Dialog from '../dialog/Dialog';
+import Modal, { ModalMethods } from '../modal/Modal';
 
-import './EndRetroDialog.scss';
+import './ArchiveRetroDialog.scss';
 
-function EndRetroDialog(props, ref) {
+function ArchiveRetroDialog(props, ref) {
   function hide() {
     ref.current?.hide();
   }
 
   return (
     <Modal ref={ref}>
-      <EndRetroDialogRenderer onSubmit={hide} onCancel={hide} />
+      <ArchiveRetroDialogRenderer onSubmit={hide} onCancel={hide} />
     </Modal>
   );
 }
 
-type EndRetroDialogRendererProps = {
+type ArchiveRetroDialogRendererProps = {
   onSubmit: () => void;
   onCancel: () => void;
 };
 
-export function EndRetroDialogRenderer(props: EndRetroDialogRendererProps) {
+export function ArchiveRetroDialogRenderer(props: ArchiveRetroDialogRendererProps) {
   const { onSubmit, onCancel } = props;
 
   return (
     <Dialog
-      className="end-retro-dialog"
+      className="archive-retro-dialog"
       header="End the retro?"
       subHeader="This will archive all thoughts!"
       buttons={{
@@ -55,4 +54,4 @@ export function EndRetroDialogRenderer(props: EndRetroDialogRendererProps) {
   );
 }
 
-export default React.forwardRef<ModalMethods>(EndRetroDialog);
+export default forwardRef<ModalMethods>(ArchiveRetroDialog);

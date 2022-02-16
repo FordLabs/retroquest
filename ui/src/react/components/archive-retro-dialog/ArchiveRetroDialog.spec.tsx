@@ -20,13 +20,14 @@ import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { ModalMethods } from '../modal/Modal';
-import EndRetroDialog, { EndRetroDialogRenderer } from './EndRetroDialog';
 
-describe('EndRetroDialog', () => {
+import ArchiveRetroDialog, { ArchiveRetroDialogRenderer } from './ArchiveRetroDialog';
+
+describe('ArchiveRetroDialog', () => {
   const ref = React.createRef<ModalMethods>();
 
   beforeEach(() => {
-    render(<EndRetroDialog ref={ref} />);
+    render(<ArchiveRetroDialog ref={ref} />);
 
     act(() => {
       ref.current.show();
@@ -45,14 +46,14 @@ describe('EndRetroDialog', () => {
   });
 });
 
-describe('EndRetroDialogRenderer', () => {
+describe('ArchiveRetroDialogRenderer', () => {
   const mockOnSubmit = jest.fn();
   const mockOnCancel = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    render(<EndRetroDialogRenderer onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
+    render(<ArchiveRetroDialogRenderer onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
   });
 
   it('should submit', () => {
