@@ -21,6 +21,10 @@ import Thought from '../types/Thought';
 import Topic from '../types/Topic';
 
 export type ThoughtTopic = Topic.HAPPY | Topic.CONFUSED | Topic.UNHAPPY;
+export type ThoughtFilterParams = {
+  topic: ThoughtTopic;
+  sorted: boolean;
+}
 
 export const ThoughtsState = atom<Thought[]>({
   key: 'ThoughtsState',
@@ -39,26 +43,28 @@ export const ThoughtsByTopicState = atomFamily<Thought[], ThoughtTopic>({
   }),
 });
 
-export const ActiveThoughtsByTopicState = atomFamily<Thought[], ThoughtTopic>({
+export const ActiveThoughtsByTopicState = atomFamily<Thought[], ThoughtFilterParams>({
   key: 'ActiveThoughtsByTopicState',
   default: selectorFamily({
     key: 'ActiveThoughtsByTopicState/Default',
     get:
-      (topic: ThoughtTopic) =>
+      (params: ThoughtFilterParams) =>
       ({ get }) => {
-        return get(ThoughtsByTopicState(topic)).filter((thought) => !thought.discussed);
+        const filteredThoughts = get(ThoughtsByTopicState(params.topic)).filter((thought) => !thought.discussed);
+        return params.sorted ? filteredThoughts.sort((a, b) => b.hearts - a.hearts) : filteredThoughts;
       },
   }),
 });
 
-export const DiscussedThoughtsState = atomFamily<Thought[], ThoughtTopic>({
-  key: 'DiscussedThoughtsState',
+export const DiscussedThoughtsByTopicState = atomFamily<Thought[], ThoughtFilterParams>({
+  key: 'DiscussedThoughtsByTopicState',
   default: selectorFamily({
     key: 'DiscussedThoughtsState/Default',
     get:
-      (topic: ThoughtTopic) =>
+      (params: ThoughtFilterParams) =>
       ({ get }) => {
-        return get(ThoughtsByTopicState(topic)).filter((thought) => thought.discussed);
+        const filteredThoughts = get(ThoughtsByTopicState(params.topic)).filter((thought) => thought.discussed);
+        return params.sorted ? filteredThoughts.sort((a, b) => b.hearts - a.hearts) : filteredThoughts;
       },
   }),
 });
