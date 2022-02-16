@@ -31,6 +31,14 @@ declare global {
 
       enterThought(topic: Topic, thought: string): Chainable<void>;
 
+      enterActionItem(actionItemTask: string): Chainable<void>;
+
+      getActionItemByTask(actionItemTask: string): Chainable<void>;
+
+      confirmNumberOfThoughtsInColumn(topic: Topic, expectedCount: number): Chainable<void>;
+
+      confirmNumberOfActionItemsInColumn(expectedCount: number): Chainable<void>;
+
       shouldBeOnRetroPage(teamId: string): Chainable<void>;
     }
   }

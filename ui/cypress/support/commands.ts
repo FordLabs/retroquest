@@ -79,6 +79,27 @@ Cypress.Commands.add('enterThought', (topic: Topic, thought: string) => {
   cy.get(`[data-testid=retroColumn__${topic}]`).findByPlaceholderText('Enter a Thought').type(`${thought}{enter}`);
 });
 
+Cypress.Commands.add('enterActionItem', (actionItemTask: string) => {
+  cy.log('**Entering an action item**');
+  cy.get(`[data-testid=retroColumn__action]`)
+    .findByPlaceholderText('Enter an Action Item')
+    .type(`${actionItemTask}{enter}`);
+});
+
+Cypress.Commands.add('getActionItemByTask', (actionItemTask: string) => {
+  cy.findByDisplayValue(actionItemTask).closest(`[data-testid=actionItem]`);
+});
+
+Cypress.Commands.add('confirmNumberOfThoughtsInColumn', (topic: Topic, expectedCount: number) => {
+  cy.log(`**There should be ${expectedCount} thoughts in ${topic} column**`);
+  cy.get(`[data-testid=retroColumn__${topic}]`).find('[data-testid=retroItem]').should('have.length', expectedCount);
+});
+
+Cypress.Commands.add('confirmNumberOfActionItemsInColumn', (expectedCount: number) => {
+  cy.log(`**There should be ${expectedCount} action items**`);
+  cy.get('[data-testid=retroColumn__action]').find('[data-testid=actionItem]').should('have.length', expectedCount);
+});
+
 Cypress.Commands.add('shouldBeOnRetroPage', (teamId: string) => {
   cy.log('**Should be on retro page**');
   cy.url().should('eq', Cypress.config().baseUrl + getRetroPagePathWithTeamId(teamId));
