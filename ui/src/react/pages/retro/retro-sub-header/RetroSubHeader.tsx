@@ -20,6 +20,7 @@ import { useRef } from 'react';
 import fileSaver from 'file-saver';
 import { useRecoilValue } from 'recoil';
 
+import ArchiveRetroDialog from '../../../components/archive-retro-dialog/ArchiveRetroDialog';
 import FeedbackDialog from '../../../components/feedback-dialog/FeedbackDialog';
 import { ModalMethods } from '../../../components/modal/Modal';
 import TeamService from '../../../services/api/TeamService';
@@ -28,7 +29,8 @@ import { TeamState } from '../../../state/TeamState';
 import './RetroSubheader.scss';
 
 function RetroSubheader() {
-  const modalRef = useRef<ModalMethods>();
+  const feedbackModalRef = useRef<ModalMethods>();
+  const archiveRetroModalRef = useRef<ModalMethods>();
 
   const team = useRecoilValue(TeamState);
 
@@ -43,7 +45,7 @@ function RetroSubheader() {
       <div className="sub-header">
         <ul className="sub-header-links">
           <li>
-            <button className="button button-secondary" onClick={() => modalRef.current?.show()}>
+            <button className="button button-secondary" onClick={() => feedbackModalRef.current?.show()}>
               Give Feedback
             </button>
           </li>
@@ -53,11 +55,14 @@ function RetroSubheader() {
             </button>
           </li>
           <li>
-            <button className="button button-primary">Archive Retro</button>
+            <button className="button button-primary" onClick={() => archiveRetroModalRef.current?.show()}>
+              Archive Retro
+            </button>
           </li>
         </ul>
       </div>
-      <FeedbackDialog ref={modalRef} />
+      <FeedbackDialog ref={feedbackModalRef} />
+      <ArchiveRetroDialog ref={archiveRetroModalRef} />
     </>
   );
 }

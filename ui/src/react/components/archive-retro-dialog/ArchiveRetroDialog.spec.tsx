@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,16 +18,26 @@
 import * as React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { RecoilRoot } from 'recoil';
 
+import BoardService from '../../services/api/BoardService';
+import { TeamState } from '../../state/TeamState';
+import Team from '../../types/Team';
 import { ModalMethods } from '../modal/Modal';
 
 import ArchiveRetroDialog, { ArchiveRetroDialogRenderer } from './ArchiveRetroDialog';
+
+jest.mock('../../services/api/BoardService');
 
 describe('ArchiveRetroDialog', () => {
   const ref = React.createRef<ModalMethods>();
 
   beforeEach(() => {
-    render(<ArchiveRetroDialog ref={ref} />);
+    render(
+      <RecoilRoot>
+        <ArchiveRetroDialog ref={ref} />
+      </RecoilRoot>
+    );
 
     act(() => {
       ref.current.show();
@@ -35,36 +45,51 @@ describe('ArchiveRetroDialog', () => {
   });
 
   it('should show and hide from ref methods', () => {
-    screen.getByText('End the retro?');
-    screen.getByText('This will archive all thoughts!');
+    const archiveRetroModalTitle = 'Do you want to end the retro for everybody?';
+    const archiveRetroModalSubtitle = 'This will permanently archive all thoughts!';
+    screen.getByText(archiveRetroModalTitle);
+    screen.getByText(archiveRetroModalSubtitle);
 
     act(() => {
       ref.current.hide();
     });
 
-    expect(screen.queryByText('End the retro?')).toBeFalsy();
+    expect(screen.queryByText(archiveRetroModalTitle)).toBeFalsy();
   });
 });
 
 describe('ArchiveRetroDialogRenderer', () => {
-  const mockOnSubmit = jest.fn();
-  const mockOnCancel = jest.fn();
+  const mockCloseModalCallback = jest.fn();
+  const team: Team = {
+    name: 'My Team',
+    id: 'fake-team-id',
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    render(<ArchiveRetroDialogRenderer onSubmit={mockOnSubmit} onCancel={mockOnCancel} />);
+    render(
+      <RecoilRoot
+        initializeState={({ set }) => {
+          set(TeamState, team);
+        }}
+      >
+        <ArchiveRetroDialogRenderer closeModal={mockCloseModalCallback} />
+      </RecoilRoot>
+    );
   });
 
-  it('should submit', () => {
-    userEvent.click(screen.getByText('yes!'));
+  it('should archive retro', async () => {
+    userEvent.click(screen.getByText('Yes!'));
 
-    expect(mockOnSubmit).toHaveBeenCalledTimes(1);
+    await act(async () => expect(BoardService.archiveRetro).toHaveBeenCalledWith(team.id));
+    expect(mockCloseModalCallback).toHaveBeenCalledTimes(1);
   });
 
-  it('should cancel', () => {
-    userEvent.click(screen.getByText('nope'));
+  it('should cancel archiving retro', () => {
+    userEvent.click(screen.getByText('Nope'));
 
-    expect(mockOnCancel).toHaveBeenCalledTimes(1);
+    expect(mockCloseModalCallback).toHaveBeenCalledTimes(1);
+    expect(BoardService.archiveRetro).not.toHaveBeenCalled();
   });
 });
