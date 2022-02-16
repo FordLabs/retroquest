@@ -32,7 +32,7 @@ const Template: ComponentStory<typeof ArchiveRetroDialog> = () => {
 
   return (
     <>
-      <PrimaryButton onClick={() => ref.current.show()}>End Retro</PrimaryButton>
+      <PrimaryButton onClick={() => ref.current.show()}>Archive Retro</PrimaryButton>
       <ArchiveRetroDialog ref={ref} />
     </>
   );

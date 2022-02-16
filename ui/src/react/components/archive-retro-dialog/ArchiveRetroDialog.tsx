@@ -15,7 +15,10 @@
  * limitations under the License.
  */
 import React, { forwardRef } from 'react';
+import { useRecoilValue } from 'recoil';
 
+import BoardService from '../../services/api/BoardService';
+import { TeamState } from '../../state/TeamState';
 import Dialog from '../dialog/Dialog';
 import Modal, { ModalMethods } from '../modal/Modal';
 
@@ -28,27 +31,33 @@ function ArchiveRetroDialog(props, ref) {
 
   return (
     <Modal ref={ref}>
-      <ArchiveRetroDialogRenderer onSubmit={hide} onCancel={hide} />
+      <ArchiveRetroDialogRenderer closeModal={hide} />
     </Modal>
   );
 }
 
 type ArchiveRetroDialogRendererProps = {
-  onSubmit: () => void;
-  onCancel: () => void;
+  closeModal: () => void;
 };
 
 export function ArchiveRetroDialogRenderer(props: ArchiveRetroDialogRendererProps) {
-  const { onSubmit, onCancel } = props;
+  const { closeModal } = props;
+  const team = useRecoilValue(TeamState);
+
+  const handleSubmit = () => {
+    BoardService.archiveRetro(team.id)
+      .then(() => closeModal())
+      .catch(console.error);
+  };
 
   return (
     <Dialog
       className="archive-retro-dialog"
-      header="End the retro?"
-      subHeader="This will archive all thoughts!"
+      header="Do you want to end the retro for everybody?"
+      subHeader="This will permanently archive all thoughts!"
       buttons={{
-        cancel: { text: 'nope', onClick: onCancel },
-        confirm: { text: 'yes!', onClick: onSubmit },
+        cancel: { text: 'Nope', onClick: closeModal },
+        confirm: { text: 'Yes!', onClick: handleSubmit },
       }}
     />
   );
