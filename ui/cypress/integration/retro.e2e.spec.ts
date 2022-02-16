@@ -20,93 +20,12 @@
 import Topic from '../../src/react/types/Topic';
 import { getTeamCredentials } from '../support/helpers';
 import Chainable = Cypress.Chainable;
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import * as path from 'path';
-
-import { FEEDBACK_API_PATH, getArchiveRetroApiPath } from '../../src/react/services/api/ApiConstants';
 
 describe('Retro Page', () => {
   const green = 'rgb(46, 204, 113)';
   const red = 'rgb(231, 76, 60)';
   const blue = 'rgb(52, 152, 219)';
   const yellow = 'rgb(241, 196, 15)';
-
-  context('Subnav', () => {
-    const teamCredentials = getTeamCredentials();
-
-    before(() => {
-      cy.createTeamAndLogin(teamCredentials);
-    });
-
-    it('Feedback Button', () => {
-      const modalText = 'How can we improve RetroQuest?';
-      cy.intercept('POST', FEEDBACK_API_PATH).as('postFeedbackEndpoint');
-
-      cy.findByText('Give Feedback').as('giveFeedbackButton').click();
-
-      cy.get('[data-testid=feedbackDialog]').as('modal').should('contain', modalText);
-
-      cy.get('@modal').findByText('Cancel').click();
-      // cy.get('@modal').should('not.be.visible'); // works for angular instance
-      cy.get('@modal').should('not.exist'); // works for react instance
-      cy.get('@postFeedbackEndpoint').its('response.statusCode').should('eq', null);
-
-      cy.get('@giveFeedbackButton').click();
-
-      cy.get('@modal').find('[data-testid=feedback-star-5]').click();
-      cy.get('@modal').findByLabelText('Comments*').type('Doing great!');
-      cy.get('@modal').findByLabelText('Feedback Email').focus().type('a@b.c');
-
-      cy.findByText('Send!').click();
-      // cy.get('@modal').should('not.be.visible'); // works for angular instance
-      cy.get('@modal').should('not.exist'); // works for react instance
-      cy.get('@postFeedbackEndpoint').its('response.statusCode').should('eq', 201);
-    });
-
-    it('Download CSV Button', () => {
-      cy.findByText('Download CSV').as('downloadCSVButton').click();
-
-      const downloadsFolder = Cypress.config('downloadsFolder');
-      const downloadedFilename = path.join(downloadsFolder, `${teamCredentials.teamId}-board.csv`);
-
-      cy.readFile(downloadedFilename, 'binary', { timeout: 5000 })
-        .should((buffer) => expect(buffer.length).to.be.gt(40))
-        .should('eq', 'Column,Message,Likes,Completed,Assigned To\r\n');
-    });
-
-    it('Archive Retro Button', () => {
-      cy.intercept('PUT', getArchiveRetroApiPath(teamCredentials.teamId)).as('putArchiveRetro');
-      cy.get('[data-testid=retroColumn__action]').as('actionsColumn');
-
-      cy.enterThought(Topic.UNHAPPY, 'Unhappy Thought');
-      const activeActionItemTask = 'Active Action Item';
-      const completedActionItemTask = 'Action item we completed';
-      enterActionItem(activeActionItemTask);
-      enterActionItem(completedActionItemTask);
-      cy.log(`**Marking action item task "${completedActionItemTask}" as completed**`);
-      getActionItemByMessage(completedActionItemTask).find('[data-testid=columnItem-checkboxButton]').click();
-
-      cy.findByText('Archive Retro').as('archiveRetroButton').click();
-
-      cy.get('[data-testid=archiveRetroDialog]').as('modal');
-      cy.get('@modal').findByText('Nope').click();
-      cy.get('@modal').should('not.be.visible');
-      cy.get('@putArchiveRetro').its('response.statusCode').should('eq', null);
-
-      confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 1);
-      confirmNumberOfActionItemsInColumn(2);
-
-      cy.get('@archiveRetroButton').click();
-      cy.get('@modal').findByText('Yes!').click();
-      cy.get('@putArchiveRetro').its('response.statusCode').should('eq', 200);
-
-      cy.findByDisplayValue(activeActionItemTask).should('exist');
-      cy.findByDisplayValue(completedActionItemTask).should('not.exist');
-      confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 0);
-      confirmNumberOfActionItemsInColumn(1);
-    });
-  });
 
   context('Columns', () => {
     const teamCredentials = getTeamCredentials();
@@ -136,7 +55,7 @@ describe('Retro Page', () => {
 
       cy.log('**On page reload all Happy thoughts should still be there**');
       cy.reload();
-      confirmNumberOfThoughtsInColumn(Topic.HAPPY, 2);
+      cy.confirmNumberOfThoughtsInColumn(Topic.HAPPY, 2);
     });
 
     it('Confused', () => {
@@ -147,11 +66,11 @@ describe('Retro Page', () => {
 
       const confusedThought = "What's going on with zyx";
       cy.enterThought(Topic.CONFUSED, confusedThought);
-      confirmNumberOfThoughtsInColumn(Topic.CONFUSED, 1);
+      cy.confirmNumberOfThoughtsInColumn(Topic.CONFUSED, 1);
 
       cy.log('**On page reload all Confused thoughts should still be there**');
       cy.reload();
-      confirmNumberOfThoughtsInColumn(Topic.CONFUSED, 1);
+      cy.confirmNumberOfThoughtsInColumn(Topic.CONFUSED, 1);
     });
 
     it('Sad', () => {
@@ -162,11 +81,11 @@ describe('Retro Page', () => {
 
       const unhappyThought = "I don't like how many meetings we have";
       cy.enterThought(Topic.UNHAPPY, unhappyThought);
-      confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 1);
+      cy.confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 1);
 
       cy.log('**On page reload all Sad thoughts should still be there**');
       cy.reload();
-      confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 1);
+      cy.confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 1);
     });
 
     it('Action Items', () => {
@@ -190,16 +109,16 @@ describe('Retro Page', () => {
 
       cy.log('**On page reload all Action Items should still be there**');
       cy.reload();
-      confirmNumberOfActionItemsInColumn(1);
+      cy.confirmNumberOfActionItemsInColumn(1);
     });
   });
 });
 
 function shouldCreateActionItems(actionItems: string[]) {
   actionItems.forEach((actionString, index) => {
-    enterActionItem(actionString);
+    cy.enterActionItem(actionString);
 
-    confirmNumberOfActionItemsInColumn(index + 1);
+    cy.confirmNumberOfActionItemsInColumn(index + 1);
 
     const splitActionString = actionString.split('@');
     const action = splitActionString[0].trim();
@@ -217,7 +136,7 @@ function shouldEditActionItemTaskAndAssignee(
   appendToAssignee: string
 ) {
   cy.log(`**Edit Action Item: ${currentTask}**`);
-  getActionItemByMessage(currentTask).as('actionItemToEdit');
+  cy.getActionItemByTask(currentTask).as('actionItemToEdit');
 
   cy.get('@actionItemToEdit').find('[data-testid=columnItem-editButton]').type(`{rightarrow} ${appendToTask}{enter}`);
   cy.get('@actionItemToEdit').findByDisplayValue(`${currentTask} ${appendToTask}`);
@@ -230,7 +149,7 @@ function shouldCreateHappyThoughts(happyThoughts: string[]) {
   happyThoughts.forEach((happyThought, index) => {
     cy.enterThought(Topic.HAPPY, happyThought);
     cy.findByDisplayValue(happyThought);
-    confirmNumberOfThoughtsInColumn(Topic.HAPPY, index + 1);
+    cy.confirmNumberOfThoughtsInColumn(Topic.HAPPY, index + 1);
   });
 }
 
@@ -250,7 +169,7 @@ function shouldDeleteHappyThought(thoughtIndex: number, expectedThoughtsRemainin
   getHappyColumnItems().eq(thoughtIndex).find(`[data-testid=columnItem-deleteButton]`).click();
   cy.get('[data-testid=deletionOverlay]').contains('Yes').click();
 
-  confirmNumberOfThoughtsInColumn(Topic.HAPPY, expectedThoughtsRemaining);
+  cy.confirmNumberOfThoughtsInColumn(Topic.HAPPY, expectedThoughtsRemaining);
 }
 
 function shouldStarFirstItemInHappyColumn(expectedStarCount: number) {
@@ -278,20 +197,10 @@ function shouldMarkAndUnmarkThoughtAsDiscussed(thoughtMessage: string) {
   getHappyColumnItems().should('have.length', 3).last().should('not.have.class', 'completed');
 }
 
-function confirmNumberOfThoughtsInColumn(topic: Topic, expectedCount: number): void {
-  cy.log(`**There should be ${expectedCount} thoughts in ${topic} column**`);
-  cy.get(`[data-testid=retroColumn__${topic}]`).find('[data-testid=retroItem]').should('have.length', expectedCount);
-}
-
-function enterActionItem(actionItem: string) {
-  cy.log('**Entering an action item**');
-  cy.get('@actionsColumn').find('input[placeholder="Enter an Action Item"]').type(`${actionItem}{enter}`);
-}
-
 function shouldMarkAndUnmarkActionItemAsCompleted(actionItemTask: string) {
   getActionColumnItems().last().should('not.have.class', 'completed');
 
-  getActionItemByMessage(actionItemTask).find('[data-testid=columnItem-checkboxButton]').as('completedButton');
+  cy.getActionItemByTask(actionItemTask).find('[data-testid=columnItem-checkboxButton]').as('completedButton');
 
   cy.log(`**Mark action item task "${actionItemTask}" as completed**`);
   cy.get(`@completedButton`).click();
@@ -307,18 +216,11 @@ function shouldMarkAndUnmarkActionItemAsCompleted(actionItemTask: string) {
 
 function shouldDeleteActionItem(actionItemTask: string) {
   cy.log(`**Deleting action item ${actionItemTask}**`);
-  getActionItemByMessage(actionItemTask).find(`[data-testid=columnItem-deleteButton]`).click();
+  cy.getActionItemByTask(actionItemTask).find(`[data-testid=columnItem-deleteButton]`).click();
   cy.get('[data-testid=deletionOverlay]').contains('Yes').click();
-}
-
-function confirmNumberOfActionItemsInColumn(expectedCount: number): void {
-  cy.log(`**There should be ${expectedCount} action items**`);
-  cy.get('[data-testid=retroColumn__action]').find('[data-testid=actionItem]').should('have.length', expectedCount);
 }
 
 const getHappyColumnItems = () => cy.get('[data-testid=retroColumn__happy]').find(`[data-testid=retroItem]`);
 const getActionColumnItems = () => cy.get('[data-testid=retroColumn__action]').find(`[data-testid=actionItem]`);
 const getRetroItemByMessage = (message: string): Chainable =>
   cy.findByDisplayValue(message).closest(`[data-testid=retroItem]`);
-const getActionItemByMessage = (message: string): Chainable =>
-  cy.findByDisplayValue(message).closest(`[data-testid=actionItem]`);
