@@ -116,6 +116,8 @@ describe('ActionItemsColumn.spec.tsx', () => {
       const taskMessage = 'Do the things';
       userEvent.type(actionItemTextField, `${taskMessage} @me{enter}`);
 
+      jest.useFakeTimers();
+
       const expectedCreateActionItemRequest: CreateActionItemRequest = {
         id: null,
         teamId: team.id,
