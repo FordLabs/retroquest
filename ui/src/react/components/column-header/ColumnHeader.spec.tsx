@@ -34,13 +34,33 @@ describe('ColumnHeader', () => {
     const { container } = render(
       <ColumnHeader
         initialTitle="Some title"
-        readOnly={false}
         sortedChanged={mockHandleSortChange}
         titleChanged={mockHandleTitleChange}
       />
     );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
+  });
+
+  it('should not display sort button when header is not sortable', () => {
+    render(
+      <ColumnHeader
+        initialTitle="Not Sortable"
+        titleChanged={mockHandleTitleChange}
+      />
+    )
+    expect(screen.queryByTestId('sort-button')).toBeNull();
+  });
+
+  it('should display sort button when header is sortable', () => {
+    render(
+      <ColumnHeader
+        initialTitle="Sortable"
+        sortedChanged={mockHandleSortChange}
+        titleChanged={mockHandleTitleChange}
+      />
+    )
+    expect(screen.queryByTestId('sort-button')).not.toBeNull();
   });
 
   it('should toggle and emit sort state when the sort is toggled', () => {
@@ -57,9 +77,7 @@ describe('ColumnHeader', () => {
     render(
       <ColumnHeader
         initialTitle="Read Only"
-        readOnly={true}
         sortedChanged={mockHandleSortChange}
-        titleChanged={mockHandleTitleChange}
       />
     );
     expect(screen.queryByTestId('edit-button')).toBeNull();
@@ -69,7 +87,6 @@ describe('ColumnHeader', () => {
     render(
       <ColumnHeader
         initialTitle="Not Read Only"
-        readOnly={false}
         sortedChanged={mockHandleSortChange}
         titleChanged={mockHandleTitleChange}
       />
@@ -92,7 +109,6 @@ describe('ColumnHeader', () => {
     render(
       <ColumnHeader
         initialTitle="Change This"
-        readOnly={false}
         sortedChanged={mockHandleSortChange}
         titleChanged={mockHandleTitleChange}
       />

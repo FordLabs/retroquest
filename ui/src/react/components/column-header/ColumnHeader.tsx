@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import React, { HTMLAttributes, useState } from 'react';
+import React, { HTMLAttributes, useMemo, useState } from 'react';
 import classNames from 'classnames';
 
 import { emojify } from '../../../app/modules/utils/EmojiGenerator';
@@ -32,14 +32,15 @@ const almostOutOfCharactersThreshold = 5;
 interface ColumnHeaderProps extends HTMLAttributes<HTMLDivElement> {
   initialTitle?: string;
   type?: Topic;
-  readOnly?: boolean;
-  sortedChanged: (changed: boolean) => void;
-  titleChanged: (title: string) => void;
+  sortedChanged?: (changed: boolean) => void;
+  titleChanged?: (title: string) => void;
 }
 function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
-  const { initialTitle = '', type = '', readOnly = false, titleChanged, sortedChanged, ...divProps } = props;
+  const { initialTitle = '', type = '', titleChanged, sortedChanged, ...divProps } = props;
   const [title, setTitle] = useState(initialTitle);
   const [editedTitle, setEditedTitle] = useState(initialTitle);
+  const sortable = useMemo(() => sortedChanged !== undefined, [sortedChanged]);
+  const editable = useMemo(() => titleChanged !== undefined, [titleChanged]);
   const [editing, setEditing] = useState(false);
   const [sorted, setSorted] = useState(false);
 
@@ -95,15 +96,17 @@ function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
       ) : (
         <>
           <p className="display-text">{emojify(title)}</p>
-          <div className="sort-container">
-            <div
-              data-testid="sort-button"
-              className={classNames(['fas', 'fa-sort-down', 'sort'], { 'sort-icon-translucent': !sorted })}
-              onClick={toggleSort}
-            />
-            <Tooltip>{sorted ? 'Unsort' : 'Sort'}</Tooltip>
-          </div>
-          {!readOnly && (
+          {sortable &&
+            <div className="sort-container">
+              <div
+                data-testid="sort-button"
+                className={classNames(['fas', 'fa-sort-down', 'sort'], { 'sort-icon-translucent': !sorted })}
+                onClick={toggleSort}
+              />
+              <Tooltip>{sorted ? 'Unsort' : 'Sort'}</Tooltip>
+            </div>
+          }
+          {editable && (
             <span className={classNames(['edit-button'])}>
               <i data-testid="edit-button" className="fas fa-pencil-alt" onClick={enableEditing} aria-hidden="true" />
               <Tooltip>Edit</Tooltip>
