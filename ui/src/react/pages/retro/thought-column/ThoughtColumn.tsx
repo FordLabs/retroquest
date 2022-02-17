@@ -29,6 +29,7 @@ import { TeamState } from '../../../state/TeamState';
 import { ActiveThoughtsByTopicState, DiscussedThoughtsByTopicState, ThoughtTopic } from '../../../state/ThoughtsState';
 import { getCreateThoughtRequest } from '../../../types/CreateThoughtRequest';
 import Thought from '../../../types/Thought';
+import ColumnService from '../../../services/api/ColumnService';
 
 type Props = {
   topic: ThoughtTopic;
@@ -43,6 +44,10 @@ function ThoughtColumn(props: Props) {
   const [sorted, setSorted] = useState(false);
   const activeThoughts = useRecoilValue<Thought[]>(ActiveThoughtsByTopicState({ topic, sorted }));
   const discussedThoughts = useRecoilValue<Thought[]>(DiscussedThoughtsByTopicState({ topic, sorted }));
+
+  const changeTitle = (title: string) => {
+    ColumnService.updateColumnTitle(team.id, columnTitle.id, title).catch(console.error);
+  };
 
   const createThought = (text: string) => {
     if (text && text.length) {
@@ -83,7 +88,7 @@ function ThoughtColumn(props: Props) {
 
   return (
     <div className="retro-column" data-testid={`retroColumn__${topic}`}>
-      <ColumnHeader initialTitle={title} type={topic} sortedChanged={setSorted} titleChanged={() => undefined} />
+      <ColumnHeader initialTitle={title} type={topic} sortedChanged={setSorted} titleChanged={changeTitle} />
       <TextField type={topic} placeholder="Enter a Thought" handleSubmission={createThought} />
       <CountSeparator count={activeThoughts.length} />
       {activeThoughts.map(renderThought)}

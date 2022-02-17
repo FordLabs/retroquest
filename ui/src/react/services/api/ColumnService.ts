@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 import { Column } from '../../types/Column';
 
@@ -23,6 +23,11 @@ const ColumnService = {
   getColumns(teamId: string): Promise<Column[]> {
     const url = `/api/v2/team/${teamId}/columns`;
     return axios.get(url).then((response) => response.data.columns);
+  },
+
+  updateColumnTitle(teamId: string, columnId: number, title: string): Promise<AxiosResponse<void>> {
+    const url = `/api/team/${teamId}/column/${columnId}/title`;
+    return axios.put(url, { title });
   },
 };
 
