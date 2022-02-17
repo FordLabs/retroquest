@@ -32,6 +32,7 @@ import Thought from '../../../types/Thought';
 import Topic, { ThoughtTopic } from '../../../types/Topic';
 
 import ThoughtColumn from './ThoughtColumn';
+import ColumnService from '../../../services/api/ColumnService';
 
 const team: Team = {
   name: 'My Team',
@@ -52,6 +53,7 @@ const thoughtColumnTitle: ColumnTitle = {
 };
 
 jest.mock('../../../services/api/ThoughtService');
+jest.mock('../../../services/api/ColumnService');
 
 describe('ThoughtColumn.spec.tsx', () => {
   let container: HTMLElement;
@@ -204,5 +206,11 @@ describe('ThoughtColumn.spec.tsx', () => {
       expect(within(thoughtItems[2]).queryByText('3')).not.toBeNull();
       expect(within(thoughtItems[3]).queryByText('4')).not.toBeNull();
     });
+  });
+
+  it('should send update event to API when header title changed', () => {
+    userEvent.click(screen.getByTestId('edit-button'));
+    userEvent.type(screen.getByTestId('column-input'), 'Something Else{enter}');
+    expect(ColumnService.updateColumnTitle).toHaveBeenCalledWith('my-team', 123456, 'Something Else');
   });
 });
