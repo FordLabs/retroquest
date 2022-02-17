@@ -17,6 +17,7 @@
 
 import * as React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { RecoilRoot } from 'recoil';
 
 import ArchiveRetroDialog from '../components/archive-retro-dialog/ArchiveRetroDialog';
 import { PrimaryButton } from '../components/button/Button';
@@ -31,10 +32,10 @@ const Template: ComponentStory<typeof ArchiveRetroDialog> = () => {
   const ref = React.createRef<ModalMethods>();
 
   return (
-    <>
+    <RecoilRoot>
       <PrimaryButton onClick={() => ref.current.show()}>Archive Retro</PrimaryButton>
       <ArchiveRetroDialog ref={ref} />
-    </>
+    </RecoilRoot>
   );
 };
 
