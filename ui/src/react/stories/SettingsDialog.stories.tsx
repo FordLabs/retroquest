@@ -14,13 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import * as React from 'react';
+import React, { createRef } from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { RecoilRoot } from 'recoil';
 
-import SettingsDialog from '../components/settings-dialog/SettingsDialog';
 import { PrimaryButton } from '../components/button/Button';
 import { ModalMethods } from '../components/modal/Modal';
+import SettingsDialog from '../components/settings-dialog/SettingsDialog';
+import { ThemeState } from '../state/ThemeState';
+import Theme from '../types/Theme';
 
 export default {
   title: 'components/SettingsDialog',
@@ -28,13 +30,17 @@ export default {
 } as ComponentMeta<typeof SettingsDialog>;
 
 const Template: ComponentStory<typeof SettingsDialog> = () => {
-  const ref = React.createRef<ModalMethods>();
+  const ref = createRef<ModalMethods>();
 
   return (
-    <>
+    <RecoilRoot
+      initializeState={({ set }) => {
+        set(ThemeState, Theme.LIGHT);
+      }}
+    >
       <PrimaryButton onClick={() => ref.current.show()}>Change Settings</PrimaryButton>
       <SettingsDialog ref={ref} />
-    </>
+    </RecoilRoot>
   );
 };
 
