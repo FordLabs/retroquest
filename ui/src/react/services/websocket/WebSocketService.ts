@@ -48,6 +48,11 @@ const WebSocketService = {
       }
     );
   },
+
+  subscribeToColumnTitle: (teamId: string, webSocketMessageHandler: WebsocketMessageHandlerType): void => {
+    const destination = `/topic/${teamId}/column-titles`;
+    WebSocketService.subscribe(destination, webSocketMessageHandler);
+  },
   subscribeToThoughts: (teamId: string, webSocketMessageHandler: WebsocketMessageHandlerType): void => {
     const destination = `/topic/${teamId}/thoughts`;
     WebSocketService.subscribe(destination, webSocketMessageHandler);
