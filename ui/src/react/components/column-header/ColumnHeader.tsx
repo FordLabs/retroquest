@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import React, { HTMLAttributes, useMemo, useState } from 'react';
+import React, { HTMLAttributes, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 
 import { emojify } from '../../../app/modules/utils/EmojiGenerator';
@@ -43,6 +43,8 @@ function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
   const editable = useMemo(() => titleChanged !== undefined, [titleChanged]);
   const [editing, setEditing] = useState(false);
   const [sorted, setSorted] = useState(false);
+
+  useEffect(() => setTitle(initialTitle), [initialTitle]);
 
   const updateTitle = (newTitle: string) => {
     setTitle(newTitle);
@@ -96,7 +98,7 @@ function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
       ) : (
         <>
           <p className="display-text">{emojify(title)}</p>
-          {sortable &&
+          {sortable && (
             <div className="sort-container">
               <div
                 data-testid="sort-button"
@@ -105,7 +107,7 @@ function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
               />
               <Tooltip>{sorted ? 'Unsort' : 'Sort'}</Tooltip>
             </div>
-          }
+          )}
           {editable && (
             <span className={classNames(['edit-button'])}>
               <i data-testid="edit-button" className="fas fa-pencil-alt" onClick={enableEditing} aria-hidden="true" />

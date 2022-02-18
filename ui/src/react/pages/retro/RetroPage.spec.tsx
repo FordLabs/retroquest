@@ -30,12 +30,14 @@ jest.mock('../../services/websocket/WebSocketService');
 
 jest.setTimeout(60000);
 
+const mockColumnTitleMessageHandler = jest.fn();
 const mockThoughtMessageHandler = jest.fn();
 const mockActionItemMessageHandler = jest.fn();
 const mockEndRetroMessageHandler = jest.fn();
 
 jest.mock('../../hooks/useWebSocketMessageHandler', () => {
   return jest.fn(() => ({
+    columnTitleMessageHandler: mockColumnTitleMessageHandler,
     thoughtMessageHandler: mockThoughtMessageHandler,
     actionItemMessageHandler: mockActionItemMessageHandler,
     endRetroMessageHandler: mockEndRetroMessageHandler,
@@ -75,6 +77,10 @@ describe('RetroPage.spec.tsx', () => {
   describe('Websockets', () => {
     it('should connect to websockets', () => {
       expect(WebSocketService.connect).toHaveBeenCalledWith(expect.any(Function));
+    });
+
+    it('should subscribe to column title events', () => {
+      expect(WebSocketService.subscribeToColumnTitle).toHaveBeenCalledWith(teamId, mockColumnTitleMessageHandler);
     });
 
     it('should subscribe to thoughts', () => {

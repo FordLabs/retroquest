@@ -22,6 +22,8 @@ import { ActionItemState } from '../state/ActionItemState';
 import { ThoughtsState } from '../state/ThoughtsState';
 import Action from '../types/Action';
 import Thought from '../types/Thought';
+import { ColumnTitle } from '../types/ColumnTitle';
+import { ColumnTitleState } from '../state/ColumnTitleState';
 
 type MessageType = 'put' | 'delete';
 
@@ -33,6 +35,7 @@ interface IncomingMessage {
 export type WebsocketMessageHandlerType = ({ body }: Partial<IMessage>) => void;
 
 interface WebsocketCallback {
+  columnTitleMessageHandler: WebsocketMessageHandlerType;
   thoughtMessageHandler: WebsocketMessageHandlerType;
   actionItemMessageHandler: WebsocketMessageHandlerType;
   endRetroMessageHandler: WebsocketMessageHandlerType;
@@ -41,6 +44,7 @@ interface WebsocketCallback {
 function useWebSocketMessageHandler(): WebsocketCallback {
   const setThoughts = useSetRecoilState(ThoughtsState);
   const setActionItems = useSetRecoilState(ActionItemState);
+  const setColumnTitle = useSetRecoilState(ColumnTitleState);
 
   const recoilStateUpdater = (recoilStateSetter: Function, item: Thought | Action, messageType: MessageType) => {
     recoilStateSetter((currentState) => {
@@ -51,6 +55,15 @@ function useWebSocketMessageHandler(): WebsocketCallback {
       if (updateItem) return currentState.map((i) => (i.id === item.id ? item : i));
 
       return [...currentState, item];
+    });
+  };
+
+  const columnTitleMessageHandler = ({ body }: Partial<IMessage>) => {
+    const incomingMessage: IncomingMessage = JSON.parse(body);
+    const columnTitle = incomingMessage.payload as ColumnTitle;
+    setColumnTitle((currentState) => {
+      const updateItem = currentState.findIndex((i) => i.id === columnTitle.id) > -1;
+      if (updateItem) return currentState.map((i) => (i.id === columnTitle.id ? columnTitle : i));
     });
   };
 
@@ -73,7 +86,7 @@ function useWebSocketMessageHandler(): WebsocketCallback {
     setActionItems((actionItems) => actionItems.filter((actionItem) => !actionItem.completed));
   };
 
-  return { thoughtMessageHandler, actionItemMessageHandler, endRetroMessageHandler };
+  return { columnTitleMessageHandler, thoughtMessageHandler, actionItemMessageHandler, endRetroMessageHandler };
 }
 
 export default useWebSocketMessageHandler;

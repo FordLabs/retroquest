@@ -45,6 +45,17 @@ describe('WebSocketService', () => {
     await waitFor(() => expect(console.log).toHaveBeenCalledWith('Deactivation successful!'));
   });
 
+  it('should subscribe to column title', async () => {
+    const teamId = 'Idddddd';
+    const webSocketMessageHandler = jest.fn();
+    WebSocketService.subscribeToColumnTitle(teamId, webSocketMessageHandler);
+
+    const expectedDestination = `/topic/${teamId}/column-titles`;
+    expect(mockClient.subscribe).toHaveBeenCalledWith(expectedDestination, expect.any(Function), {
+      Authorization: `Bearer ` + mockAccessToken,
+    });
+  });
+
   it('should subscribe to thoughts', async () => {
     const teamId = 'Idddddd';
     const webSocketMessageHandler = jest.fn();
