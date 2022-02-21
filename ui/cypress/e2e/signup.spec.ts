@@ -18,7 +18,7 @@ import { CREATE_TEAM_PAGE_PATH } from '../../src/react/routes/RouteConstants';
 import { getTeamCredentials } from '../support/helpers';
 import TeamCredentials from '../support/types/teamCredentials';
 
-describe('Create Page', () => {
+describe('Signup', () => {
   const teamCredentials = getTeamCredentials();
 
   beforeEach(() => {

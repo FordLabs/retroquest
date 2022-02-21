@@ -20,7 +20,7 @@ import Topic from '../../src/react/types/Topic';
 import { getTeamCredentials } from '../support/helpers';
 import TeamCredentials from '../support/types/teamCredentials';
 
-describe('Login Page', () => {
+describe('Login', () => {
   const loginFailedMessage = 'Incorrect team name or password. Please try again.';
   const teamCredentials = getTeamCredentials();
   const LOGIN_PATH_WITH_TEAM_ID = getLoginPagePathWithTeamId(teamCredentials.teamId);
