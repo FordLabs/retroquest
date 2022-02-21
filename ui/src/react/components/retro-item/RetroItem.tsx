@@ -16,11 +16,14 @@
  */
 
 import * as React from 'react';
+import { useRef } from 'react';
 import classnames from 'classnames';
 import { ThoughtTopic } from 'src/react/types/Topic';
 
 import Thought from '../../types/Thought';
 import ColumnItem from '../column-item/ColumnItem';
+import { ModalMethods } from '../modal/Modal';
+import RetroItemModal from '../retro-item-modal/RetroItemModal';
 
 import UpvoteButton from './upvote-button/UpvoteButton';
 
@@ -33,7 +36,6 @@ type RetroItemProps = {
   thought: Thought;
   type: ThoughtTopic;
   readOnly?: boolean;
-  onSelect?: () => void;
   onUpvote?: AcceptThoughtFunction;
   onEdit?: (thought: Thought, updatedThoughtMessage) => void;
   onDelete?: AcceptThoughtFunction;
@@ -45,35 +47,48 @@ export default function RetroItem(props: RetroItemProps) {
     thought,
     type,
     readOnly = false,
-    onSelect = NO_OP,
     onUpvote = NO_OP,
     onEdit = NO_OP,
     onDelete = NO_OP,
     onDiscuss = NO_OP,
   } = props;
 
+  const retroItemModalRef = useRef<ModalMethods>();
+
   return (
-    <ColumnItem
-      className={classnames('retro-item', { completed: thought.discussed })}
-      data-testid="retroItem"
-      type={type}
-      text={thought.message}
-      checked={thought.discussed}
-      readOnly={readOnly}
-      onSelect={onSelect}
-      onEdit={(updatedThoughtMessage) => onEdit(thought, updatedThoughtMessage)}
-      onDelete={() => onDelete(thought)}
-      onCheck={() => onDiscuss(thought)}
-      customButtons={({ editing, deleting }) => (
-        <UpvoteButton
-          votes={thought.hearts}
-          onClick={() => onUpvote(thought)}
-          disabled={thought.discussed || editing || deleting}
-          readOnly={readOnly}
-          aria-label={`Upvote (${thought.hearts})`}
-          data-testid="retroItem-upvote"
-        />
-      )}
-    />
+    <>
+      <ColumnItem
+        className={classnames('retro-item', { completed: thought.discussed })}
+        data-testid="retroItem"
+        type={type}
+        text={thought.message}
+        checked={thought.discussed}
+        readOnly={readOnly}
+        onSelect={() => retroItemModalRef.current?.show()}
+        onEdit={(updatedThoughtMessage) => onEdit(thought, updatedThoughtMessage)}
+        onDelete={() => onDelete(thought)}
+        onCheck={() => onDiscuss(thought)}
+        customButtons={({ editing, deleting }) => (
+          <UpvoteButton
+            votes={thought.hearts}
+            onClick={() => onUpvote(thought)}
+            disabled={thought.discussed || editing || deleting}
+            readOnly={readOnly}
+            aria-label={`Upvote (${thought.hearts})`}
+            data-testid="retroItem-upvote"
+          />
+        )}
+      />
+      <RetroItemModal
+        ref={retroItemModalRef}
+        thought={thought}
+        type={thought.topic}
+        onDelete={() => onDelete(thought)}
+        onUpvote={() => onUpvote(thought)}
+        onDiscuss={() => onDiscuss(thought)}
+        onEdit={(updatedThoughtMessage) => onEdit(thought, updatedThoughtMessage)}
+        onAction={() => undefined}
+      />
+    </>
   );
 }

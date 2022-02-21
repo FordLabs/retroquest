@@ -32,7 +32,13 @@ describe('Retro Facilitator Journey', () => {
 
   xit('Sort thoughts', () => {});
 
-  xit('Display thought in expanded mode', () => {});
+  it('Display thought in expanded mode', () => {
+    const thought = 'This is a good week';
+    cy.enterThought(Topic.HAPPY, thought);
+    cy.log(`**Expand thought: ${thought}**`);
+    getRetroItemByMessage(thought).click();
+    cy.get('[data-testid=retroItemModal]').should('exist');
+  });
 
   xit('Add action item from expanded mode', () => {});
 
