@@ -27,14 +27,16 @@ import RetroItem from '../retro-item/RetroItem';
 
 import './RetroItemModal.scss';
 
+type AcceptThoughtFunction = (thought: Thought) => void;
+
 type RetroItemModalProps = {
   type: ThoughtTopic;
   thought: Thought;
   readOnly?: boolean;
-  onUpvote?: () => void;
-  onEdit?: (thought: Thought, updatedThoughtMessage) => void;
-  onDelete?: () => void;
-  onDiscuss?: () => void;
+  onUpvote: AcceptThoughtFunction;
+  onEdit: (thought: Thought, updatedThoughtMessage) => void;
+  onDelete: AcceptThoughtFunction;
+  onDiscuss: AcceptThoughtFunction;
   onAction?: (task: string, assignee: string) => void;
 };
 
@@ -62,6 +64,7 @@ function RetroItemModal(props: RetroItemModalProps, ref: Ref<ModalMethods>) {
 
   return (
     <Modal
+      testId="retroItemModal"
       className={classnames('retro-item-modal', { 'creating-action': creatingActionItem })}
       onHide={() => setCreatingActionItem(false)}
       ref={ref}

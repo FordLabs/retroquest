@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import React, { createRef } from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -39,8 +39,19 @@ describe('RetroItemModal', () => {
   });
 
   it('should render as a retro item in a modal', () => {
-    const ref = React.createRef<ModalMethods>();
-    render(<RetroItemModal type={Topic.HAPPY} thought={fakeThought} ref={ref} />);
+    const ref = createRef<ModalMethods>();
+    render(
+      <RetroItemModal
+        type={Topic.HAPPY}
+        thought={fakeThought}
+        ref={ref}
+        onAction={() => undefined}
+        onEdit={() => undefined}
+        onDiscuss={() => undefined}
+        onDelete={() => undefined}
+        onUpvote={() => undefined}
+      />
+    );
 
     act(() => {
       ref.current.show();
@@ -54,7 +65,18 @@ describe('RetroItemModal', () => {
   describe('not readonly', () => {
     beforeEach(() => {
       const ref = React.createRef<ModalMethods>();
-      render(<RetroItemModal type={Topic.HAPPY} thought={fakeThought} ref={ref} onAction={mockOnAction} />);
+      render(
+        <RetroItemModal
+          type={Topic.HAPPY}
+          thought={fakeThought}
+          ref={ref}
+          onAction={mockOnAction}
+          onEdit={() => undefined}
+          onDiscuss={() => undefined}
+          onDelete={() => undefined}
+          onUpvote={() => undefined}
+        />
+      );
 
       act(() => {
         ref.current.show();
@@ -90,7 +112,19 @@ describe('RetroItemModal', () => {
   describe('readonly', () => {
     beforeEach(() => {
       const ref = React.createRef<ModalMethods>();
-      render(<RetroItemModal type={Topic.HAPPY} thought={fakeThought} ref={ref} readOnly={true} />);
+      render(
+        <RetroItemModal
+          type={Topic.HAPPY}
+          thought={fakeThought}
+          ref={ref}
+          readOnly={true}
+          onAction={() => undefined}
+          onEdit={() => undefined}
+          onDiscuss={() => undefined}
+          onDelete={() => undefined}
+          onUpvote={() => undefined}
+        />
+      );
 
       act(() => {
         ref.current.show();

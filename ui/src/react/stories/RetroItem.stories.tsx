@@ -54,10 +54,6 @@ const Template: ComponentStory<typeof RetroItem> = () => {
     alert('thought deleted');
   }
 
-  function onSelect() {
-    alert('thought selected');
-  }
-
   return (
     <>
       <div style={{ width: '400px', marginBottom: '20px' }}>
@@ -68,7 +64,6 @@ const Template: ComponentStory<typeof RetroItem> = () => {
           onEdit={onEdit}
           onDelete={onDelete}
           onDiscuss={onDiscussed}
-          onSelect={onSelect}
         />
       </div>
       <div style={{ width: '400px' }}>
@@ -80,7 +75,6 @@ const Template: ComponentStory<typeof RetroItem> = () => {
           onEdit={onEdit}
           onDelete={onDelete}
           onDiscuss={onDiscussed}
-          onSelect={onSelect}
         />
       </div>
     </>

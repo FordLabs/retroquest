@@ -50,6 +50,7 @@ const ModalContext = createContext<ModalMethods>({
 });
 
 type ModalProps = PropsWithChildren<{
+  testId?: string;
   show?: boolean;
   hideOnEscape?: boolean;
   hideOnBackdropClick?: boolean;
@@ -59,6 +60,7 @@ type ModalProps = PropsWithChildren<{
 
 function Modal(props: ModalProps, ref: Ref<ModalMethods>) {
   const {
+    testId,
     show: showProp,
     hideOnEscape: hideOnEscapeProp,
     hideOnBackdropClick: hideOnBackdropClickProp,
@@ -107,7 +109,11 @@ function Modal(props: ModalProps, ref: Ref<ModalMethods>) {
     <ModalContext.Provider value={modalMethods}>
       {show && (
         <div className="modal-backdrop" onClick={hideOnBackdropClick ? hide : undefined} data-testid="modalBackdrop">
-          <div className={classnames('modal', className)} onClick={(event) => event.stopPropagation()}>
+          <div
+            data-testid={testId}
+            className={classnames('modal', className)}
+            onClick={(event) => event.stopPropagation()}
+          >
             {children}
           </div>
         </div>

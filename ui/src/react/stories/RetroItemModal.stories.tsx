@@ -100,6 +100,7 @@ const Template: ComponentStory<typeof RetroItemModal> = () => {
         onEdit={onEdit}
         onDelete={onDelete}
         onDiscuss={onDiscuss}
+        onUpvote={() => undefined}
         ref={readOnlyModalRef}
       />
     </>

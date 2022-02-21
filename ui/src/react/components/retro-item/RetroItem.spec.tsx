@@ -16,7 +16,7 @@
  */
 
 import * as React from 'react';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 
@@ -25,7 +25,6 @@ import Topic, { ThoughtTopic } from '../../types/Topic';
 import RetroItem from './RetroItem';
 
 describe('RetroItem', () => {
-  const mockSelect = jest.fn();
   const mockEdit = jest.fn();
   const mockDelete = jest.fn();
   const mockDiscuss = jest.fn();
@@ -68,7 +67,6 @@ describe('RetroItem', () => {
         <RetroItem
           type={Topic.HAPPY}
           thought={fakeThought}
-          onSelect={mockSelect}
           onUpvote={mockUpvote}
           onEdit={mockEdit}
           onDelete={mockDelete}
@@ -77,10 +75,10 @@ describe('RetroItem', () => {
       );
     });
 
-    it('can select', () => {
+    it('can open retro item modal', () => {
       clickText();
 
-      expect(mockSelect).toHaveBeenCalledTimes(1);
+      expect(screen.getByTestId('retroItemModal')).toBeDefined();
     });
 
     it('can upvote', () => {
@@ -167,7 +165,6 @@ describe('RetroItem', () => {
         <RetroItem
           type={Topic.HAPPY}
           thought={{ ...fakeThought, discussed: true }}
-          onSelect={mockSelect}
           onUpvote={mockUpvote}
           onEdit={mockEdit}
           onDelete={mockDelete}
@@ -186,9 +183,9 @@ describe('RetroItem', () => {
       expect(textReadonly()).toBeTruthy();
     });
 
-    it('should disable select', () => {
+    it('should not open modal', () => {
       clickText();
-      expect(mockSelect).not.toHaveBeenCalled();
+      expect(screen.queryByTestId('retroItemModal')).toBeNull();
     });
 
     it('should not disable delete button', () => {
@@ -209,7 +206,6 @@ describe('RetroItem', () => {
           readOnly={true}
           type={Topic.HAPPY}
           thought={fakeThought}
-          onSelect={mockSelect}
           onUpvote={mockUpvote}
           onEdit={mockEdit}
           onDelete={mockDelete}
@@ -232,9 +228,9 @@ describe('RetroItem', () => {
       expect(mockDiscuss).not.toHaveBeenCalled();
     });
 
-    it('should not disable select', () => {
+    it('should open retro item modal', () => {
       clickText();
-      expect(mockSelect).toHaveBeenCalledTimes(1);
+      expect(screen.getByTestId('retroItemModal')).toBeDefined();
     });
   });
 });

@@ -16,20 +16,22 @@
  */
 
 import * as React from 'react';
-import { Fragment, useState } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import ColumnHeader from '../../../components/column-header/ColumnHeader';
 import { CountSeparator } from '../../../components/count-separator/CountSeparator';
+import { ModalMethods } from '../../../components/modal/Modal';
 import RetroItem from '../../../components/retro-item/RetroItem';
+import RetroItemModal from '../../../components/retro-item-modal/RetroItemModal';
 import TextField from '../../../components/text-field/TextField';
+import ColumnService from '../../../services/api/ColumnService';
 import ThoughtService from '../../../services/api/ThoughtService';
 import { ColumnTitleByTopicState } from '../../../state/ColumnTitleState';
 import { TeamState } from '../../../state/TeamState';
 import { ActiveThoughtsByTopicState, DiscussedThoughtsByTopicState, ThoughtTopic } from '../../../state/ThoughtsState';
 import { getCreateThoughtRequest } from '../../../types/CreateThoughtRequest';
 import Thought from '../../../types/Thought';
-import ColumnService from '../../../services/api/ColumnService';
 
 type Props = {
   topic: ThoughtTopic;

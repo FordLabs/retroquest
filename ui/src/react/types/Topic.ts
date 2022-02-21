@@ -16,7 +16,6 @@
  */
 
 export type ThoughtTopic = Topic.HAPPY | Topic.CONFUSED | Topic.UNHAPPY;
-export type ActionTopic = Topic.ACTION;
 
 enum Topic {
   HAPPY = 'happy',
