@@ -1,5 +1,6 @@
 {
   "baseUrl": "http://localhost:4200",
+  "integrationFolder": "cypress/e2e",
   "downloadsFolder": "cypress/downloads",
   "chromeWebSecurity": false
 }
