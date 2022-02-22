@@ -15,11 +15,13 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import React, { createRef } from 'react';
 import { act, render, screen } from '@testing-library/react';
+import { RecoilRoot } from 'recoil';
+
+import { ModalMethods } from '../modal/Modal';
 
 import ActionItemModal from './ActionItemModal';
-import { ModalMethods } from '../modal/Modal';
 
 describe('ActionItemModal', () => {
   const fakeAction = {
@@ -35,8 +37,12 @@ describe('ActionItemModal', () => {
   });
 
   it('should render as an action item in a modal', () => {
-    const ref = React.createRef<ModalMethods>();
-    render(<ActionItemModal action={fakeAction} ref={ref} />);
+    const ref = createRef<ModalMethods>();
+    render(
+      <RecoilRoot>
+        <ActionItemModal action={fakeAction} ref={ref} />
+      </RecoilRoot>
+    );
 
     act(() => {
       ref.current.show();

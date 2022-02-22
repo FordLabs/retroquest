@@ -36,10 +36,6 @@ const testAction = {
 const Template: ComponentStory<typeof ActionItem> = () => {
   const [action, setAction] = React.useState(testAction);
 
-  function onEdit(task) {
-    setAction((oldAction) => ({ ...oldAction, task }));
-  }
-
   function onAssign(assignee) {
     setAction((oldAction) => ({ ...oldAction, assignee }));
   }
@@ -55,19 +51,12 @@ const Template: ComponentStory<typeof ActionItem> = () => {
   return (
     <>
       <div style={{ width: '400px', marginBottom: '20px' }}>
-        <ActionItem
-          action={action}
-          onEditTask={onEdit}
-          onEditAssignee={onAssign}
-          onComplete={onComplete}
-          onSelect={onSelect}
-        />
+        <ActionItem action={action} onEditAssignee={onAssign} onComplete={onComplete} onSelect={onSelect} />
       </div>
       <div style={{ width: '400px' }}>
         <ActionItem
           readOnly={true}
           action={testAction}
-          onEditTask={onEdit}
           onEditAssignee={onAssign}
           onComplete={onComplete}
           onSelect={onSelect}

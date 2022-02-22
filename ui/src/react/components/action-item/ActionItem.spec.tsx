@@ -41,7 +41,6 @@ jest.mock('../../services/api/ActionItemService');
 
 describe('ActionItem', () => {
   const mockOnSelect = jest.fn();
-  const mockOnEditTask = jest.fn();
   const mockOnComplete = jest.fn();
   const mockOnEditAssignee = jest.fn();
 
@@ -94,7 +93,6 @@ describe('ActionItem', () => {
           <ActionItem
             action={fakeAction}
             onSelect={mockOnSelect}
-            onEditTask={mockOnEditTask}
             onComplete={mockOnComplete}
             onEditAssignee={mockOnEditAssignee}
           />
@@ -147,9 +145,10 @@ describe('ActionItem', () => {
 
     it('should edit action item', () => {
       clickEdit();
-      editTask('New Fake Task{Enter}');
+      const updatedTask = 'New Fake Task';
+      editTask(`${updatedTask}{Enter}`);
 
-      expect(mockOnEditTask).toHaveBeenCalledWith(fakeAction, 'New Fake Task');
+      expect(ActionItemService.updateTask).toHaveBeenCalledWith(team.id, fakeAction.id, updatedTask);
     });
 
     it('should close delete confirmation overlay if user clicks escape', () => {
@@ -206,7 +205,6 @@ describe('ActionItem', () => {
           <ActionItem
             action={{ ...fakeAction, completed: true }}
             onSelect={mockOnSelect}
-            onEditTask={mockOnEditTask}
             onComplete={mockOnComplete}
             onEditAssignee={mockOnEditAssignee}
           />
@@ -247,7 +245,6 @@ describe('ActionItem', () => {
             action={fakeAction}
             readOnly={true}
             onSelect={mockOnSelect}
-            onEditTask={mockOnEditTask}
             onComplete={mockOnComplete}
             onEditAssignee={mockOnEditAssignee}
           />

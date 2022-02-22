@@ -160,40 +160,7 @@ describe('ActionItemsColumn.spec.tsx', () => {
     });
   });
 
-  describe('Delete Action Item', () => {
-    it('should delete action item when user clicks delete and confirms with "Yes"', () => {
-      const actionItems = screen.getAllByTestId('actionItem');
-      const firstThoughtsDeleteIcon = within(actionItems[0]).getByTestId('columnItem-deleteButton');
-      userEvent.click(firstThoughtsDeleteIcon);
-
-      const confirmDeletionButton = screen.queryByText('Yes');
-      userEvent.click(confirmDeletionButton);
-      expect(ActionItemService.delete).toHaveBeenCalledWith(team.id, activeActionItem1.id);
-    });
-
-    it('should NOT delete action item when user clicks delete and confirms with "No"', () => {
-      const actionItems = screen.getAllByTestId('actionItem');
-      const firstThoughtsDeleteIcon = within(actionItems[0]).getByTestId('columnItem-deleteButton');
-      userEvent.click(firstThoughtsDeleteIcon);
-
-      const confirmDeletionButton = screen.queryByText('No');
-      userEvent.click(confirmDeletionButton);
-      expect(ActionItemService.delete).not.toHaveBeenCalledWith(team.id, activeActionItem1.id);
-    });
-  });
-
   describe('Edit Action Item', () => {
-    it('should make call to update task', () => {
-      const actionItems = screen.getAllByTestId('actionItem');
-      const firstThoughtsEditIcon = within(actionItems[0]).getByTestId('columnItem-editButton');
-      userEvent.click(firstThoughtsEditIcon);
-
-      const updatedTask = 'New Task';
-      userEvent.type(screen.getAllByTestId('editableText')[0], `${updatedTask}{enter}`);
-
-      expect(ActionItemService.updateTask).toHaveBeenCalledWith(team.id, activeActionItem1.id, updatedTask);
-    });
-
     it('should make call to update assignee', () => {
       const actionItems = screen.getAllByTestId('actionItem');
       const firstThoughtsAssigneeInput = within(actionItems[0]).getByTestId('actionItem-assignee');
