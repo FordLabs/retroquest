@@ -52,10 +52,6 @@ function ActionItemsColumn() {
     }
   };
 
-  const deleteActionItem = (action: Action) => {
-    ActionItemService.delete(team.id, action.id).catch(console.error);
-  };
-
   const editActionItemTask = (action: Action, updatedTask: string) => {
     ActionItemService.updateTask(team.id, action.id, updatedTask).catch(console.error);
   };
@@ -75,7 +71,6 @@ function ActionItemsColumn() {
           action={action}
           onEditAssignee={editActionItemAssignee}
           onEditTask={editActionItemTask}
-          onDelete={deleteActionItem}
           onComplete={updateActionItemCompletionStatus}
         />
       </Fragment>

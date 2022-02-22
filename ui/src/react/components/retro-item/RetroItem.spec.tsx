@@ -29,7 +29,6 @@ import Topic, { ThoughtTopic } from '../../types/Topic';
 import RetroItem from './RetroItem';
 
 jest.mock('../../services/api/ThoughtService');
-jest.mock('../../services/api/ColumnService');
 
 describe('RetroItem', () => {
   const team: Team = {
@@ -105,7 +104,7 @@ describe('RetroItem', () => {
       expect(ThoughtService.upvoteThought).toHaveBeenCalledWith(team.id, fakeThought.id);
     });
 
-    it('should start and cancel edit', () => {
+    it('should start and cancel editing of thought', () => {
       const newText = 'New Fake Text';
 
       screen.getByText(fakeThought.message);

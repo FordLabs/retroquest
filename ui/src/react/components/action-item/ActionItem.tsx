@@ -17,7 +17,10 @@
 
 import * as React from 'react';
 import classnames from 'classnames';
+import { useRecoilValue } from 'recoil';
 
+import ActionItemService from '../../services/api/ActionItemService';
+import { TeamState } from '../../state/TeamState';
 import Action from '../../types/Action';
 import Topic from '../../types/Topic';
 import ColumnItem from '../column-item/ColumnItem';
@@ -35,20 +38,17 @@ type ActionItemProps = {
   onSelect?: () => void;
   onEditTask?: (action: Action, updatedTask: string) => void;
   onEditAssignee?: (action: Action, assignee: string) => void;
-  onDelete?: (action: Action) => void;
   onComplete?: (action: Action) => void;
 };
 
 function ActionItem(props: ActionItemProps) {
-  const {
-    action,
-    readOnly = false,
-    onSelect,
-    onEditTask = NO_OP,
-    onEditAssignee = NO_OP,
-    onDelete = NO_OP,
-    onComplete = NO_OP,
-  } = props;
+  const { action, readOnly = false, onSelect, onEditTask = NO_OP, onEditAssignee = NO_OP, onComplete = NO_OP } = props;
+
+  const team = useRecoilValue(TeamState);
+
+  const deleteActionItem = () => {
+    ActionItemService.delete(team.id, action.id).catch(console.error);
+  };
 
   return (
     <ColumnItem
@@ -60,7 +60,7 @@ function ActionItem(props: ActionItemProps) {
       readOnly={readOnly}
       onSelect={onSelect}
       onEdit={(updatedTask) => onEditTask(action, updatedTask)}
-      onDelete={() => onDelete(action)}
+      onDelete={deleteActionItem}
       onCheck={() => onComplete(action)}
       customButtons={({ editing, deleting }) => (
         <DateCreated date={action.dateCreated} disabled={(action.completed || editing || deleting) && !readOnly} />
