@@ -16,9 +16,10 @@
  */
 
 import * as React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
+import { RecoilRoot } from 'recoil';
 
 import Topic, { ThoughtTopic } from '../../types/Topic';
 
@@ -42,36 +43,50 @@ describe('RetroItem', () => {
   });
 
   it('should render without axe errors', async () => {
-    const { container } = render(<RetroItem thought={fakeThought} type={Topic.HAPPY} />);
+    const { container } = render(
+      <RecoilRoot>
+        <RetroItem thought={fakeThought} type={Topic.HAPPY} />
+      </RecoilRoot>
+    );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
 
   it.each([[Topic.HAPPY], [Topic.CONFUSED], [Topic.UNHAPPY]])('should render %s type', (type: ThoughtTopic) => {
-    render(<RetroItem thought={fakeThought} type={type} />);
+    render(
+      <RecoilRoot>
+        <RetroItem thought={fakeThought} type={type} />
+      </RecoilRoot>
+    );
 
     expect(screen.getByTestId('retroItem').className).toContain(type);
   });
 
   it('should render thought message and upvotes', () => {
-    render(<RetroItem thought={fakeThought} type={Topic.HAPPY} />);
+    render(
+      <RecoilRoot>
+        <RetroItem thought={fakeThought} type={Topic.HAPPY} />
+      </RecoilRoot>
+    );
 
     screen.getByText(fakeThought.message);
     screen.getByText(fakeThought.hearts);
     screen.getByText('Upvote');
   });
 
-  describe('when not discussed and not readonly', () => {
+  describe('When not discussed and not readonly', () => {
     beforeEach(() => {
       render(
-        <RetroItem
-          type={Topic.HAPPY}
-          thought={fakeThought}
-          onUpvote={mockUpvote}
-          onEdit={mockEdit}
-          onDelete={mockDelete}
-          onDiscuss={mockDiscuss}
-        />
+        <RecoilRoot>
+          <RetroItem
+            type={Topic.HAPPY}
+            thought={fakeThought}
+            onUpvote={mockUpvote}
+            onEdit={mockEdit}
+            onDelete={mockDelete}
+            onDiscuss={mockDiscuss}
+          />
+        </RecoilRoot>
       );
     });
 
@@ -159,17 +174,19 @@ describe('RetroItem', () => {
     });
   });
 
-  describe('when discussed', () => {
+  describe('When discussed', () => {
     beforeEach(() => {
       render(
-        <RetroItem
-          type={Topic.HAPPY}
-          thought={{ ...fakeThought, discussed: true }}
-          onUpvote={mockUpvote}
-          onEdit={mockEdit}
-          onDelete={mockDelete}
-          onDiscuss={mockDiscuss}
-        />
+        <RecoilRoot>
+          <RetroItem
+            type={Topic.HAPPY}
+            thought={{ ...fakeThought, discussed: true }}
+            onUpvote={mockUpvote}
+            onEdit={mockEdit}
+            onDelete={mockDelete}
+            onDiscuss={mockDiscuss}
+          />
+        </RecoilRoot>
       );
     });
 
@@ -199,18 +216,20 @@ describe('RetroItem', () => {
     });
   });
 
-  describe('when readonly', () => {
+  describe('When readonly', () => {
     beforeEach(() => {
       render(
-        <RetroItem
-          readOnly={true}
-          type={Topic.HAPPY}
-          thought={fakeThought}
-          onUpvote={mockUpvote}
-          onEdit={mockEdit}
-          onDelete={mockDelete}
-          onDiscuss={mockDiscuss}
-        />
+        <RecoilRoot>
+          <RetroItem
+            readOnly={true}
+            type={Topic.HAPPY}
+            thought={fakeThought}
+            onUpvote={mockUpvote}
+            onEdit={mockEdit}
+            onDelete={mockDelete}
+            onDiscuss={mockDiscuss}
+          />
+        </RecoilRoot>
       );
     });
 

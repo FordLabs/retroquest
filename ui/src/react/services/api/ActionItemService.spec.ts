@@ -37,19 +37,22 @@ describe('Action Item Service', () => {
   it('should create an action item', async () => {
     const expectedResult: Action = getMockActionItem();
     axios.post = jest.fn().mockResolvedValue({ data: expectedResult });
-    const createActionItemRequest: CreateActionItemRequest = {
+
+    const task = 'Action to do';
+    const assignees = 'me, you';
+
+    const actualResult = await ActionItemService.create(teamId, task, assignees);
+    expect(actualResult).toBe(expectedResult);
+    const expectedCreateActionItemRequest: CreateActionItemRequest = {
       id: null,
       teamId,
-      task: 'Action to do',
+      task,
       completed: false,
       assignee: 'me, you',
       dateCreated: moment().format(),
       archived: false,
     };
-
-    const actualResult = await ActionItemService.create(teamId, createActionItemRequest);
-    expect(actualResult).toBe(expectedResult);
-    expect(axios.post).toHaveBeenCalledWith(allActionItemsUrl, createActionItemRequest);
+    expect(axios.post).toHaveBeenCalledWith(allActionItemsUrl, expectedCreateActionItemRequest);
   });
 
   it('should delete an action item', async () => {

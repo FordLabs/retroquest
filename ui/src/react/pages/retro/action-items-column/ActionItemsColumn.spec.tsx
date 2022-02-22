@@ -19,7 +19,6 @@ import React from 'react';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
-import moment from 'moment';
 import { RecoilRoot } from 'recoil';
 
 import { getMockActionItem } from '../../../services/api/__mocks__/ActionItemService';
@@ -29,7 +28,6 @@ import { ColumnTitleByTopicState } from '../../../state/ColumnTitleState';
 import { TeamState } from '../../../state/TeamState';
 import Action from '../../../types/Action';
 import { ColumnTitle } from '../../../types/ColumnTitle';
-import CreateActionItemRequest from '../../../types/CreateActionItemRequest';
 import Team from '../../../types/Team';
 import Topic, { ThoughtTopic } from '../../../types/Topic';
 
@@ -102,9 +100,14 @@ describe('ActionItemsColumn.spec.tsx', () => {
   describe('Create Action Item', () => {
     const placeholderText = 'Enter an Action Item';
     let actionItemTextField;
+    let parseAssigneesSpy;
+    let removeAssigneesFromTaskSpy;
 
     beforeEach(() => {
       actionItemTextField = screen.getByPlaceholderText(placeholderText);
+
+      parseAssigneesSpy = jest.spyOn(ActionItemService, 'parseAssignees');
+      removeAssigneesFromTaskSpy = jest.spyOn(ActionItemService, 'removeAssigneesFromTask');
     });
 
     it('should not make call to create action item until user types an action item', () => {
@@ -113,74 +116,47 @@ describe('ActionItemsColumn.spec.tsx', () => {
     });
 
     it('should make call to add action item when user types and submits a new action', () => {
-      const taskMessage = 'Do the things';
-      userEvent.type(actionItemTextField, `${taskMessage} @me{enter}`);
+      const parsedAssignees = 'me';
+      const taskWithoutAssignees = 'Do the things';
+      ActionItemService.parseAssignees = jest.fn().mockReturnValue([parsedAssignees]);
+      ActionItemService.removeAssigneesFromTask = jest.fn().mockReturnValue(taskWithoutAssignees);
 
-      jest.useFakeTimers();
+      userEvent.type(actionItemTextField, `${taskWithoutAssignees} @me{enter}`);
 
-      const expectedCreateActionItemRequest: CreateActionItemRequest = {
-        id: null,
-        teamId: team.id,
-        task: taskMessage,
-        completed: false,
-        assignee: 'me',
-        dateCreated: moment().format(),
-        archived: false,
-      };
-      expect(ActionItemService.create).toHaveBeenCalledWith(team.id, expectedCreateActionItemRequest);
+      expect(ActionItemService.create).toHaveBeenCalledWith(team.id, taskWithoutAssignees, parsedAssignees);
     });
 
     it('should parse out the assignees from the new message and add it to the action item', () => {
-      const newUnformattedTask = `a new actionItem @ben12 @frank @jeana`;
+      parseAssigneesSpy.mockReturnValue(['ben12', 'frank', 'jeana']);
       const expectedFormattedTask = 'a new actionItem';
+      removeAssigneesFromTaskSpy.mockReturnValue(expectedFormattedTask);
 
+      const newUnformattedTask = `a new actionItem @ben12 @frank @jeana`;
       userEvent.type(actionItemTextField, `${newUnformattedTask}{enter}`);
 
-      const expectedCreateActionItemRequest: CreateActionItemRequest = {
-        id: null,
-        teamId: team.id,
-        task: expectedFormattedTask,
-        completed: false,
-        assignee: 'ben12, frank, jeana',
-        dateCreated: moment().format(),
-        archived: false,
-      };
-      expect(ActionItemService.create).toHaveBeenCalledWith(team.id, expectedCreateActionItemRequest);
+      const expectedAssignee = 'ben12, frank, jeana';
+      expect(ActionItemService.create).toHaveBeenCalledWith(team.id, expectedFormattedTask, expectedAssignee);
     });
 
     it('should set the assignees in the action item to null if none could be parsed out of the message', () => {
       const newTask = `a new actionItem`;
+      parseAssigneesSpy.mockReturnValue(null);
+      removeAssigneesFromTaskSpy.mockReturnValue(newTask);
       userEvent.type(actionItemTextField, `${newTask}{enter}`);
-
-      const expectedCreateActionItemRequest: CreateActionItemRequest = {
-        id: null,
-        teamId: team.id,
-        task: newTask,
-        completed: false,
-        assignee: null,
-        dateCreated: moment().format(),
-        archived: false,
-      };
-      expect(ActionItemService.create).toHaveBeenCalledWith(team.id, expectedCreateActionItemRequest);
+      expect(ActionItemService.create).toHaveBeenCalledWith(team.id, newTask, null);
     });
 
     it('should not let the user submit a assignee string greater than the max limit', () => {
       const expectedAssignee = 'llllllllllllllllllllllllllllllllllllllllllllllllll';
       const newTask = `a new actionItem @${expectedAssignee}thisGetsCutOff`;
-      const expectedFormattedMessage = 'a new actionItem';
+      const expectedFormattedTask = 'a new actionItem';
+
+      parseAssigneesSpy.mockReturnValue([expectedAssignee]);
+      removeAssigneesFromTaskSpy.mockReturnValue(expectedFormattedTask);
 
       userEvent.type(actionItemTextField, `${newTask}{enter}`);
 
-      const expectedCreateActionItemRequest: CreateActionItemRequest = {
-        id: null,
-        teamId: team.id,
-        task: expectedFormattedMessage,
-        completed: false,
-        assignee: expectedAssignee,
-        dateCreated: moment().format(),
-        archived: false,
-      };
-      expect(ActionItemService.create).toHaveBeenCalledWith(team.id, expectedCreateActionItemRequest);
+      expect(ActionItemService.create).toHaveBeenCalledWith(team.id, expectedFormattedTask, expectedAssignee);
     });
   });
 

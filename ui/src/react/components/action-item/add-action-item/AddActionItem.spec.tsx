@@ -16,43 +16,65 @@
  */
 
 import * as React from 'react';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { RecoilRoot } from 'recoil';
 
+import ActionItemService from '../../../services/api/ActionItemService';
+import { TeamState } from '../../../state/TeamState';
+import Team from '../../../types/Team';
 import { editTask, escapeKey, mockUseModalValue, typeAssignee } from '../ActionItem.spec';
 
 import AddActionItem from './AddActionItem';
 
+jest.mock('../../../services/api/ActionItemService');
+
 describe('AddActionItem', () => {
-  const mockConfirm = jest.fn();
-  const mockCancel = jest.fn();
+  const hideComponentCallback = jest.fn();
+  const team: Team = {
+    name: 'My Team',
+    id: 'my-team',
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    render(<AddActionItem onConfirm={mockConfirm} onCancel={mockCancel} />);
+    render(
+      <RecoilRoot
+        initializeState={({ set }) => {
+          set(TeamState, team);
+        }}
+      >
+        <AddActionItem hideComponentCallback={hideComponentCallback} />
+      </RecoilRoot>
+    );
   });
 
   it('should cancel on escape and discard', () => {
     escapeKey();
     clickDiscard();
 
-    expect(mockCancel).toHaveBeenCalledTimes(2);
+    expect(hideComponentCallback).toHaveBeenCalledTimes(2);
+    expect(ActionItemService.create).not.toHaveBeenCalled();
   });
 
-  it('should call onConfirm with task and assignee', () => {
-    editTask('Run this test');
-    typeAssignee('jest');
+  it('should call onConfirm with task and assignee', async () => {
+    const task = 'Run this test';
+    const assignee = 'jest';
+    editTask(task);
+    typeAssignee(assignee);
     clickCreate();
 
-    expect(mockConfirm).toHaveBeenCalledWith('Run this test', 'jest');
+    await act(async () => expect(ActionItemService.create).toHaveBeenCalledWith(team.id, task, assignee));
+    expect(hideComponentCallback).toHaveBeenCalled();
   });
 
   it('should shake and not call onConfirm when task is empty', () => {
     typeAssignee('jest');
     clickCreate();
 
-    expect(mockConfirm).not.toHaveBeenCalled();
+    expect(hideComponentCallback).not.toHaveBeenCalled();
+    expect(ActionItemService.create).not.toHaveBeenCalled();
     expect(screen.getByTestId('addActionItem').className).toContain('shake');
   });
 
