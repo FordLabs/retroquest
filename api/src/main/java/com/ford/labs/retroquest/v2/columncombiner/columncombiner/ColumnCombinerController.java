@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.v2.columns;
+package com.ford.labs.retroquest.v2.columncombiner.columncombiner;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -30,12 +30,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/v2/team")
-@Tag(name = "Column Controller", description = "The controller that aggregates all of the items given a team id")
-public class ColumnController {
+@Tag(name = "Column Combiner Controller", description = "The controller that aggregates all of the items given a team id")
+public class ColumnCombinerController {
 
     private final ColumnCombinerService columnCombinerService;
 
-    ColumnController(ColumnCombinerService columnCombinerService) {
+    ColumnCombinerController(ColumnCombinerService columnCombinerService) {
         this.columnCombinerService = columnCombinerService;
     }
 
@@ -43,7 +43,7 @@ public class ColumnController {
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Gets all thoughts for a given team id", description = "getThoughtsForTeam")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "All the thoughts for a team id")})
-    public ColumnCombinerResponse getThoughtsForTeam(@PathVariable("teamId") String teamId, Authentication authentication) {
+    public ColumnCombinerResponse getColumnsForTeam(@PathVariable("teamId") String teamId, Authentication authentication) {
         return columnCombinerService.aggregateResponse(teamId);
     }
 }

@@ -26,7 +26,6 @@ import com.ford.labs.retroquest.team.LoginRequest;
 import com.ford.labs.retroquest.team.TeamRepository;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -65,10 +64,6 @@ class DownloadTeamBoardApiTest extends ApiTestBase {
     @BeforeEach
     void setup() {
         loginRequest = LoginRequest.builder().name(teamId).password("password").build();
-    }
-
-    @AfterEach
-    void teardown() {
         teamRepository.deleteAllInBatch();
         actionItemRepository.deleteAllInBatch();
         thoughtRepository.deleteAllInBatch();

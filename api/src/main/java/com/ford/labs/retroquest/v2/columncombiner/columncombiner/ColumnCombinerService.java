@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.v2.columns;
+package com.ford.labs.retroquest.v2.columncombiner.columncombiner;
 
 import com.ford.labs.retroquest.actionitem.ActionItemRepository;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
