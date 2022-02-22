@@ -48,10 +48,6 @@ const Template: ComponentStory<typeof ActionItem> = () => {
     setAction(({ completed, ...rest }) => ({ ...rest, completed: !completed }));
   }
 
-  function onDelete() {
-    alert('action deleted');
-  }
-
   function onSelect() {
     alert('action selected');
   }
@@ -63,7 +59,6 @@ const Template: ComponentStory<typeof ActionItem> = () => {
           action={action}
           onEditTask={onEdit}
           onEditAssignee={onAssign}
-          onDelete={onDelete}
           onComplete={onComplete}
           onSelect={onSelect}
         />
@@ -74,7 +69,6 @@ const Template: ComponentStory<typeof ActionItem> = () => {
           action={testAction}
           onEditTask={onEdit}
           onEditAssignee={onAssign}
-          onDelete={onDelete}
           onComplete={onComplete}
           onSelect={onSelect}
         />

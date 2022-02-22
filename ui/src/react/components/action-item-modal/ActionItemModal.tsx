@@ -28,12 +28,11 @@ type ActionItemModalProps = {
   readOnly?: boolean;
   onEditTask?: (action: Action, updatedTask: string) => void;
   onEditAssignee?: (action: Action, updatedAssignee: string) => void;
-  onDelete?: () => void;
   onComplete?: () => void;
 };
 
 function ActionItemModal(props: ActionItemModalProps, ref: React.Ref<ModalMethods>) {
-  const { action, readOnly, onEditTask, onEditAssignee, onDelete, onComplete } = props;
+  const { action, readOnly, onEditTask, onEditAssignee, onComplete } = props;
 
   return (
     <Modal ref={ref} className="action-item-modal">
@@ -42,7 +41,6 @@ function ActionItemModal(props: ActionItemModalProps, ref: React.Ref<ModalMethod
         readOnly={readOnly}
         onEditTask={onEditTask}
         onEditAssignee={onEditAssignee}
-        onDelete={onDelete}
         onComplete={onComplete}
       />
     </Modal>

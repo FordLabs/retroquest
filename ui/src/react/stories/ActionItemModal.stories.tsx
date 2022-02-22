@@ -53,10 +53,6 @@ const Template: ComponentStory<typeof ActionItemModal> = () => {
     setAction(({ completed, ...rest }) => ({ ...rest, completed: !completed }));
   }
 
-  function onDelete() {
-    alert('action deleted');
-  }
-
   return (
     <>
       <PrimaryButton onClick={() => modalRef.current?.show()} style={{ marginBottom: '20px' }}>
@@ -66,7 +62,6 @@ const Template: ComponentStory<typeof ActionItemModal> = () => {
         action={action}
         onEditTask={onEdit}
         onEditAssignee={onAssign}
-        onDelete={onDelete}
         onComplete={onComplete}
         ref={modalRef}
       />
@@ -76,7 +71,6 @@ const Template: ComponentStory<typeof ActionItemModal> = () => {
         action={action}
         onEditTask={onEdit}
         onEditAssignee={onAssign}
-        onDelete={onDelete}
         onComplete={onComplete}
         ref={readOnlyModalRef}
       />

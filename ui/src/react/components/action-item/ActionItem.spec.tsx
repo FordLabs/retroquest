@@ -19,7 +19,11 @@ import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
+import { RecoilRoot } from 'recoil';
 
+import ActionItemService from '../../services/api/ActionItemService';
+import { TeamState } from '../../state/TeamState';
+import Team from '../../types/Team';
 import * as Modal from '../modal/Modal';
 
 import ActionItem from './ActionItem';
@@ -33,12 +37,18 @@ export const mockUseModalValue = {
 
 jest.spyOn(Modal, 'useModal').mockReturnValue(mockUseModalValue);
 
+jest.mock('../../services/api/ActionItemService');
+
 describe('ActionItem', () => {
   const mockOnSelect = jest.fn();
   const mockOnEditTask = jest.fn();
-  const mockOnDelete = jest.fn();
   const mockOnComplete = jest.fn();
   const mockOnEditAssignee = jest.fn();
+
+  const team: Team = {
+    name: 'My Team',
+    id: 'my-team',
+  };
 
   const fakeAction = {
     id: 0,
@@ -53,29 +63,42 @@ describe('ActionItem', () => {
   });
 
   it('should render without axe errors', async () => {
-    const { container } = render(<ActionItem action={fakeAction} />);
+    const { container } = render(
+      <RecoilRoot>
+        <ActionItem action={fakeAction} />
+      </RecoilRoot>
+    );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
 
   it('should render as an action column item with created date', () => {
-    render(<ActionItem action={fakeAction} />);
+    render(
+      <RecoilRoot>
+        <ActionItem action={fakeAction} />
+      </RecoilRoot>
+    );
 
     expect(screen.getByTestId('actionItem').className).toContain('action');
     screen.getByText('Aug 12th');
   });
 
-  describe('when not completed and not readonly', () => {
+  describe('When not completed and not readonly', () => {
     beforeEach(() => {
       render(
-        <ActionItem
-          action={fakeAction}
-          onSelect={mockOnSelect}
-          onEditTask={mockOnEditTask}
-          onDelete={mockOnDelete}
-          onComplete={mockOnComplete}
-          onEditAssignee={mockOnEditAssignee}
-        />
+        <RecoilRoot
+          initializeState={({ set }) => {
+            set(TeamState, team);
+          }}
+        >
+          <ActionItem
+            action={fakeAction}
+            onSelect={mockOnSelect}
+            onEditTask={mockOnEditTask}
+            onComplete={mockOnComplete}
+            onEditAssignee={mockOnEditAssignee}
+          />
+        </RecoilRoot>
       );
     });
 
@@ -85,7 +108,7 @@ describe('ActionItem', () => {
       expect(mockOnSelect).toHaveBeenCalledTimes(1);
     });
 
-    it('can start and cancel edit', () => {
+    it('should start and cancel editing of action item', () => {
       const newTask = 'New Fake Task';
 
       screen.getByText(fakeAction.task);
@@ -122,34 +145,36 @@ describe('ActionItem', () => {
       expect(mockOnComplete).not.toHaveBeenCalled();
     });
 
-    it('can complete edit', () => {
+    it('should edit action item', () => {
       clickEdit();
       editTask('New Fake Task{Enter}');
 
       expect(mockOnEditTask).toHaveBeenCalledWith(fakeAction, 'New Fake Task');
     });
 
-    it('can start and cancel delete', () => {
-      expect(deleteMessage()).toBeFalsy();
-
+    it('should close delete confirmation overlay if user clicks escape', () => {
       clickDelete();
       expect(deleteMessage()).toBeTruthy();
 
       escapeKey();
       expect(deleteMessage()).toBeFalsy();
+    });
 
+    it('should not delete thought user cancels deletion', () => {
+      expect(deleteMessage()).toBeFalsy();
       clickDelete();
       expect(deleteMessage()).toBeTruthy();
 
       clickCancelDelete();
       expect(deleteMessage()).toBeFalsy();
+      expect(ActionItemService.delete).not.toHaveBeenCalled();
     });
 
-    it('can complete delete', () => {
+    it('should delete action item when user confirms deletion', () => {
       clickDelete();
       clickConfirmDelete();
 
-      expect(mockOnDelete).toHaveBeenCalledTimes(1);
+      expect(ActionItemService.delete).toHaveBeenCalledWith(team.id, fakeAction.id);
     });
 
     it('can be completed', () => {
@@ -173,14 +198,19 @@ describe('ActionItem', () => {
   describe('when completed', () => {
     beforeEach(() => {
       render(
-        <ActionItem
-          action={{ ...fakeAction, completed: true }}
-          onSelect={mockOnSelect}
-          onEditTask={mockOnEditTask}
-          onDelete={mockOnDelete}
-          onComplete={mockOnComplete}
-          onEditAssignee={mockOnEditAssignee}
-        />
+        <RecoilRoot
+          initializeState={({ set }) => {
+            set(TeamState, team);
+          }}
+        >
+          <ActionItem
+            action={{ ...fakeAction, completed: true }}
+            onSelect={mockOnSelect}
+            onEditTask={mockOnEditTask}
+            onComplete={mockOnComplete}
+            onEditAssignee={mockOnEditAssignee}
+          />
+        </RecoilRoot>
       );
     });
 
@@ -208,15 +238,20 @@ describe('ActionItem', () => {
   describe('when readonly', () => {
     beforeEach(() => {
       render(
-        <ActionItem
-          action={fakeAction}
-          readOnly={true}
-          onSelect={mockOnSelect}
-          onEditTask={mockOnEditTask}
-          onDelete={mockOnDelete}
-          onComplete={mockOnComplete}
-          onEditAssignee={mockOnEditAssignee}
-        />
+        <RecoilRoot
+          initializeState={({ set }) => {
+            set(TeamState, team);
+          }}
+        >
+          <ActionItem
+            action={fakeAction}
+            readOnly={true}
+            onSelect={mockOnSelect}
+            onEditTask={mockOnEditTask}
+            onComplete={mockOnComplete}
+            onEditAssignee={mockOnEditAssignee}
+          />
+        </RecoilRoot>
       );
     });
 
