@@ -32,7 +32,6 @@ jest.mock('../../services/api/ThoughtService');
 jest.mock('../../services/api/ColumnService');
 
 describe('RetroItem', () => {
-  const mockUpvote = jest.fn();
   const team: Team = {
     name: 'My Team',
     id: 'my-team',
@@ -89,7 +88,7 @@ describe('RetroItem', () => {
             set(TeamState, team);
           }}
         >
-          <RetroItem type={Topic.HAPPY} thought={fakeThought} onUpvote={mockUpvote} />
+          <RetroItem type={Topic.HAPPY} thought={fakeThought} />
         </RecoilRoot>
       );
     });
@@ -103,7 +102,7 @@ describe('RetroItem', () => {
     it('should upvote thought', () => {
       clickUpvote();
 
-      expect(mockUpvote).toHaveBeenCalledTimes(1);
+      expect(ThoughtService.upvoteThought).toHaveBeenCalledWith(team.id, fakeThought.id);
     });
 
     it('should start and cancel edit', () => {
@@ -135,7 +134,7 @@ describe('RetroItem', () => {
       expect(textReadonly()).toBeFalsy();
 
       clickUpvote();
-      expect(mockUpvote).not.toHaveBeenCalled();
+      expect(ThoughtService.upvoteThought).not.toHaveBeenCalled();
 
       clickDelete();
       expect(deleteMessage()).toBeFalsy();
@@ -189,14 +188,14 @@ describe('RetroItem', () => {
             set(TeamState, team);
           }}
         >
-          <RetroItem type={Topic.HAPPY} thought={{ ...fakeThought, discussed: true }} onUpvote={mockUpvote} />
+          <RetroItem type={Topic.HAPPY} thought={{ ...fakeThought, discussed: true }} />
         </RecoilRoot>
       );
     });
 
     it('should disable upvote button', () => {
       clickUpvote();
-      expect(mockUpvote).not.toHaveBeenCalled();
+      expect(ThoughtService.upvoteThought).not.toHaveBeenCalled();
     });
 
     it('should disable edit button', () => {
@@ -224,14 +223,14 @@ describe('RetroItem', () => {
     beforeEach(() => {
       render(
         <RecoilRoot>
-          <RetroItem readOnly={true} type={Topic.HAPPY} thought={fakeThought} onUpvote={mockUpvote} />
+          <RetroItem readOnly={true} type={Topic.HAPPY} thought={fakeThought} />
         </RecoilRoot>
       );
     });
 
     it('should disable all buttons', () => {
       clickUpvote();
-      expect(mockUpvote).not.toHaveBeenCalled();
+      expect(ThoughtService.upvoteThought).not.toHaveBeenCalled();
 
       clickEdit();
       expect(textReadonly()).toBeTruthy();

@@ -32,18 +32,14 @@ import UpvoteButton from './upvote-button/UpvoteButton';
 
 import './RetroItem.scss';
 
-const NO_OP = () => undefined;
-type AcceptThoughtFunction = (thought: Thought) => void;
-
 type RetroItemProps = {
   thought: Thought;
   type: ThoughtTopic;
   readOnly?: boolean;
-  onUpvote?: AcceptThoughtFunction;
 };
 
 export default function RetroItem(props: RetroItemProps) {
-  const { thought, type, readOnly = false, onUpvote = NO_OP } = props;
+  const { thought, type, readOnly = false } = props;
 
   const team = useRecoilValue(TeamState);
 
@@ -59,6 +55,10 @@ export default function RetroItem(props: RetroItemProps) {
 
   const deleteThought = () => {
     ThoughtService.delete(team.id, thought.id).catch(console.error);
+  };
+
+  const upvoteThought = () => {
+    ThoughtService.upvoteThought(team.id, thought.id).catch(console.error);
   };
 
   return (
@@ -77,7 +77,7 @@ export default function RetroItem(props: RetroItemProps) {
         customButtons={({ editing, deleting }) => (
           <UpvoteButton
             votes={thought.hearts}
-            onClick={() => onUpvote(thought)}
+            onClick={upvoteThought}
             disabled={thought.discussed || editing || deleting}
             readOnly={readOnly}
             aria-label={`Upvote (${thought.hearts})`}
@@ -85,13 +85,7 @@ export default function RetroItem(props: RetroItemProps) {
           />
         )}
       />
-      <RetroItemModal
-        ref={retroItemModalRef}
-        thought={thought}
-        type={thought.topic}
-        onUpvote={() => onUpvote(thought)}
-        onEdit={editThought}
-      />
+      <RetroItemModal ref={retroItemModalRef} thought={thought} type={thought.topic} />
     </>
   );
 }

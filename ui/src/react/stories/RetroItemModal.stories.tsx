@@ -38,26 +38,18 @@ const testThought = {
 };
 
 const Template: ComponentStory<typeof RetroItemModal> = () => {
-  const [thought, setThought] = useState(testThought);
+  const [thought] = useState(testThought);
   const [type, setType] = useState<ThoughtTopic>(Topic.HAPPY);
 
   const modalRef = useRef<ModalMethods>();
   const readOnlyModalRef = useRef<ModalMethods>();
-
-  function onUpvote() {
-    setThought(({ hearts, ...rest }) => ({ ...rest, hearts: hearts + 1 }));
-  }
-
-  function onEdit(task) {
-    setThought((oldAction) => ({ ...oldAction, task }));
-  }
 
   return (
     <>
       <PrimaryButton onClick={() => modalRef.current?.show()} style={{ marginBottom: '20px' }}>
         Show Modal
       </PrimaryButton>
-      <RetroItemModal type={Topic.HAPPY} thought={thought} onUpvote={onUpvote} onEdit={onEdit} ref={modalRef} />
+      <RetroItemModal type={Topic.HAPPY} thought={thought} ref={modalRef} />
       <PrimaryButton
         onClick={() => {
           setType((currentType) => {
@@ -75,14 +67,7 @@ const Template: ComponentStory<typeof RetroItemModal> = () => {
       >
         Show Readonly Modal
       </PrimaryButton>
-      <RetroItemModal
-        readOnly={true}
-        type={type}
-        thought={thought}
-        onEdit={onEdit}
-        onUpvote={() => undefined}
-        ref={readOnlyModalRef}
-      />
+      <RetroItemModal readOnly={true} type={type} thought={thought} ref={readOnlyModalRef} />
     </>
   );
 };
