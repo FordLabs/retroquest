@@ -42,10 +42,6 @@ const Template: ComponentStory<typeof ActionItemModal> = () => {
   const modalRef = useRef<ModalMethods>();
   const readOnlyModalRef = useRef<ModalMethods>();
 
-  function onAssign(assignee) {
-    setAction((oldAction) => ({ ...oldAction, assignee }));
-  }
-
   function onComplete() {
     setAction(({ completed, ...rest }) => ({ ...rest, completed: !completed }));
   }
@@ -55,15 +51,9 @@ const Template: ComponentStory<typeof ActionItemModal> = () => {
       <PrimaryButton onClick={() => modalRef.current?.show()} style={{ marginBottom: '20px' }}>
         Show Modal
       </PrimaryButton>
-      <ActionItemModal action={action} onEditAssignee={onAssign} onComplete={onComplete} ref={modalRef} />
+      <ActionItemModal action={action} onComplete={onComplete} ref={modalRef} />
       <PrimaryButton onClick={() => readOnlyModalRef.current?.show()}>Show Readonly Modal</PrimaryButton>
-      <ActionItemModal
-        readOnly={true}
-        action={action}
-        onEditAssignee={onAssign}
-        onComplete={onComplete}
-        ref={readOnlyModalRef}
-      />
+      <ActionItemModal readOnly={true} action={action} onComplete={onComplete} ref={readOnlyModalRef} />
     </>
   );
 };
