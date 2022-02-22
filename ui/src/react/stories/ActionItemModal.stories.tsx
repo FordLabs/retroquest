@@ -37,23 +37,19 @@ const testAction = {
 };
 
 const Template: ComponentStory<typeof ActionItemModal> = () => {
-  const [action, setAction] = useState(testAction);
+  const [action] = useState(testAction);
 
   const modalRef = useRef<ModalMethods>();
   const readOnlyModalRef = useRef<ModalMethods>();
-
-  function onComplete() {
-    setAction(({ completed, ...rest }) => ({ ...rest, completed: !completed }));
-  }
 
   return (
     <>
       <PrimaryButton onClick={() => modalRef.current?.show()} style={{ marginBottom: '20px' }}>
         Show Modal
       </PrimaryButton>
-      <ActionItemModal action={action} onComplete={onComplete} ref={modalRef} />
+      <ActionItemModal action={action} ref={modalRef} />
       <PrimaryButton onClick={() => readOnlyModalRef.current?.show()}>Show Readonly Modal</PrimaryButton>
-      <ActionItemModal readOnly={true} action={action} onComplete={onComplete} ref={readOnlyModalRef} />
+      <ActionItemModal readOnly={true} action={action} ref={readOnlyModalRef} />
     </>
   );
 };

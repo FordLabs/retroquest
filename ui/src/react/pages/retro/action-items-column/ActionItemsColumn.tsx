@@ -52,14 +52,10 @@ function ActionItemsColumn() {
     }
   };
 
-  const updateActionItemCompletionStatus = (action: Action) => {
-    ActionItemService.updateCompletionStatus(team.id, action.id, !action.completed).catch(console.error);
-  };
-
   const renderActionItem = (action: Action) => {
     return (
       <Fragment key={action.id}>
-        <ActionItem action={action} onComplete={updateActionItemCompletionStatus} />
+        <ActionItem action={action} />
       </Fragment>
     );
   };

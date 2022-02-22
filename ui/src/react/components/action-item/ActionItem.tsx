@@ -30,17 +30,14 @@ import { DateCreated } from './date-created/DateCreated';
 
 import './ActionItem.scss';
 
-const NO_OP = () => undefined;
-
 type ActionItemProps = {
   action: Action;
   readOnly?: boolean;
   onSelect?: () => void;
-  onComplete?: (action: Action) => void;
 };
 
 function ActionItem(props: ActionItemProps) {
-  const { action, readOnly = false, onSelect, onComplete = NO_OP } = props;
+  const { action, readOnly = false, onSelect } = props;
 
   const team = useRecoilValue(TeamState);
 
@@ -56,6 +53,10 @@ function ActionItem(props: ActionItemProps) {
     ActionItemService.updateAssignee(team.id, action.id, updatedAssignee).catch(console.error);
   };
 
+  const updateActionItemCompletionStatus = () => {
+    ActionItemService.updateCompletionStatus(team.id, action.id, !action.completed).catch(console.error);
+  };
+
   return (
     <ColumnItem
       data-testid="actionItem"
@@ -67,7 +68,7 @@ function ActionItem(props: ActionItemProps) {
       onSelect={onSelect}
       onEdit={editActionItemTask}
       onDelete={deleteActionItem}
-      onCheck={() => onComplete(action)}
+      onCheck={updateActionItemCompletionStatus}
       customButtons={({ editing, deleting }) => (
         <DateCreated date={action.dateCreated} disabled={(action.completed || editing || deleting) && !readOnly} />
       )}

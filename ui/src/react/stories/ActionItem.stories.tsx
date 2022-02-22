@@ -34,11 +34,7 @@ const testAction = {
 };
 
 const Template: ComponentStory<typeof ActionItem> = () => {
-  const [action, setAction] = React.useState(testAction);
-
-  function onComplete() {
-    setAction(({ completed, ...rest }) => ({ ...rest, completed: !completed }));
-  }
+  const [action] = React.useState(testAction);
 
   function onSelect() {
     alert('action selected');
@@ -47,10 +43,10 @@ const Template: ComponentStory<typeof ActionItem> = () => {
   return (
     <>
       <div style={{ width: '400px', marginBottom: '20px' }}>
-        <ActionItem action={action} onComplete={onComplete} onSelect={onSelect} />
+        <ActionItem action={action} onSelect={onSelect} />
       </div>
       <div style={{ width: '400px' }}>
-        <ActionItem readOnly={true} action={testAction} onComplete={onComplete} onSelect={onSelect} />
+        <ActionItem readOnly={true} action={testAction} onSelect={onSelect} />
       </div>
     </>
   );

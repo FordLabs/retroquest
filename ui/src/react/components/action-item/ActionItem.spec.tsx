@@ -41,7 +41,6 @@ jest.mock('../../services/api/ActionItemService');
 
 describe('ActionItem', () => {
   const mockOnSelect = jest.fn();
-  const mockOnComplete = jest.fn();
 
   const team: Team = {
     name: 'My Team',
@@ -89,7 +88,7 @@ describe('ActionItem', () => {
             set(TeamState, team);
           }}
         >
-          <ActionItem action={fakeAction} onSelect={mockOnSelect} onComplete={mockOnComplete} />
+          <ActionItem action={fakeAction} onSelect={mockOnSelect} />
         </RecoilRoot>
       );
     });
@@ -134,7 +133,7 @@ describe('ActionItem', () => {
       expect(deleteMessage()).toBeFalsy();
 
       clickCheckbox();
-      expect(mockOnComplete).not.toHaveBeenCalled();
+      expect(ActionItemService.updateCompletionStatus).not.toHaveBeenCalled();
     });
 
     it('should edit action item', () => {
@@ -170,10 +169,10 @@ describe('ActionItem', () => {
       expect(ActionItemService.delete).toHaveBeenCalledWith(team.id, fakeAction.id);
     });
 
-    it('can be completed', () => {
+    it('should mark action item as completed', () => {
       clickCheckbox();
 
-      expect(mockOnComplete).toHaveBeenCalledTimes(1);
+      expect(ActionItemService.updateCompletionStatus).toHaveBeenCalledWith(team.id, fakeAction.id, true);
     });
 
     it('should edit assignee', () => {
@@ -196,7 +195,7 @@ describe('ActionItem', () => {
             set(TeamState, team);
           }}
         >
-          <ActionItem action={{ ...fakeAction, completed: true }} onSelect={mockOnSelect} onComplete={mockOnComplete} />
+          <ActionItem action={{ ...fakeAction, completed: true }} onSelect={mockOnSelect} />
         </RecoilRoot>
       );
     });
@@ -218,7 +217,7 @@ describe('ActionItem', () => {
 
     it('should not disable checkbox button', () => {
       clickCheckbox();
-      expect(mockOnComplete).toHaveBeenCalledTimes(1);
+      expect(ActionItemService.updateCompletionStatus).toHaveBeenCalledWith(team.id, fakeAction.id, false);
     });
   });
 
@@ -230,7 +229,7 @@ describe('ActionItem', () => {
             set(TeamState, team);
           }}
         >
-          <ActionItem action={fakeAction} readOnly={true} onSelect={mockOnSelect} onComplete={mockOnComplete} />
+          <ActionItem action={fakeAction} readOnly={true} onSelect={mockOnSelect} />
         </RecoilRoot>
       );
     });
@@ -243,7 +242,7 @@ describe('ActionItem', () => {
       expect(deleteMessage()).toBeFalsy();
 
       clickCheckbox();
-      expect(mockOnComplete).not.toHaveBeenCalled();
+      expect(ActionItemService.updateCompletionStatus).not.toHaveBeenCalled();
     });
 
     it('should disable assignee', () => {
