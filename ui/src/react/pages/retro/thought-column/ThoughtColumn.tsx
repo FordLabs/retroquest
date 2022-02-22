@@ -16,14 +16,12 @@
  */
 
 import * as React from 'react';
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import ColumnHeader from '../../../components/column-header/ColumnHeader';
 import { CountSeparator } from '../../../components/count-separator/CountSeparator';
-import { ModalMethods } from '../../../components/modal/Modal';
 import RetroItem from '../../../components/retro-item/RetroItem';
-import RetroItemModal from '../../../components/retro-item-modal/RetroItemModal';
 import TextField from '../../../components/text-field/TextField';
 import ColumnService from '../../../services/api/ColumnService';
 import ThoughtService from '../../../services/api/ThoughtService';
@@ -69,10 +67,6 @@ function ThoughtColumn(props: Props) {
     ThoughtService.updateDiscussionStatus(team.id, thought.id, !thought.discussed).catch(console.error);
   };
 
-  const editThought = (thought: Thought, updatedThoughtMessage: string) => {
-    ThoughtService.updateMessage(team.id, thought.id, updatedThoughtMessage).catch(console.error);
-  };
-
   const renderThought = (thought: Thought) => {
     return (
       <Fragment key={thought.id}>
@@ -82,7 +76,6 @@ function ThoughtColumn(props: Props) {
           onDelete={deleteThought}
           onUpvote={upvoteThought}
           onDiscuss={updateThoughtDiscussionStatus}
-          onEdit={editThought}
         />
       </Fragment>
     );

@@ -18,8 +18,11 @@
 import * as React from 'react';
 import { useRef } from 'react';
 import classnames from 'classnames';
+import { useRecoilValue } from 'recoil';
 import { ThoughtTopic } from 'src/react/types/Topic';
 
+import ThoughtService from '../../services/api/ThoughtService';
+import { TeamState } from '../../state/TeamState';
 import Thought from '../../types/Thought';
 import ColumnItem from '../column-item/ColumnItem';
 import { ModalMethods } from '../modal/Modal';
@@ -37,23 +40,20 @@ type RetroItemProps = {
   type: ThoughtTopic;
   readOnly?: boolean;
   onUpvote?: AcceptThoughtFunction;
-  onEdit?: (thought: Thought, updatedThoughtMessage) => void;
   onDelete?: AcceptThoughtFunction;
   onDiscuss?: AcceptThoughtFunction;
 };
 
 export default function RetroItem(props: RetroItemProps) {
-  const {
-    thought,
-    type,
-    readOnly = false,
-    onUpvote = NO_OP,
-    onEdit = NO_OP,
-    onDelete = NO_OP,
-    onDiscuss = NO_OP,
-  } = props;
+  const { thought, type, readOnly = false, onUpvote = NO_OP, onDelete = NO_OP, onDiscuss = NO_OP } = props;
+
+  const team = useRecoilValue(TeamState);
 
   const retroItemModalRef = useRef<ModalMethods>();
+
+  const editThought = (updatedThoughtMessage: string) => {
+    ThoughtService.updateMessage(team.id, thought.id, updatedThoughtMessage).catch(console.error);
+  };
 
   return (
     <>
@@ -65,7 +65,7 @@ export default function RetroItem(props: RetroItemProps) {
         checked={thought.discussed}
         readOnly={readOnly}
         onSelect={() => retroItemModalRef.current?.show()}
-        onEdit={(updatedThoughtMessage) => onEdit(thought, updatedThoughtMessage)}
+        onEdit={editThought}
         onDelete={() => onDelete(thought)}
         onCheck={() => onDiscuss(thought)}
         customButtons={({ editing, deleting }) => (
@@ -86,7 +86,7 @@ export default function RetroItem(props: RetroItemProps) {
         onDelete={() => onDelete(thought)}
         onUpvote={() => onUpvote(thought)}
         onDiscuss={() => onDiscuss(thought)}
-        onEdit={(updatedThoughtMessage) => onEdit(thought, updatedThoughtMessage)}
+        onEdit={editThought}
       />
     </>
   );

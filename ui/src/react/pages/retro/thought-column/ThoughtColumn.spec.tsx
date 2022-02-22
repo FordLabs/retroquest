@@ -22,6 +22,7 @@ import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
 
 import { getMockThought } from '../../../services/api/__mocks__/ThoughtService';
+import ColumnService from '../../../services/api/ColumnService';
 import ThoughtService from '../../../services/api/ThoughtService';
 import { ColumnTitleByTopicState } from '../../../state/ColumnTitleState';
 import { TeamState } from '../../../state/TeamState';
@@ -32,7 +33,6 @@ import Thought from '../../../types/Thought';
 import Topic, { ThoughtTopic } from '../../../types/Topic';
 
 import ThoughtColumn from './ThoughtColumn';
-import ColumnService from '../../../services/api/ColumnService';
 
 const team: Team = {
   name: 'My Team',
