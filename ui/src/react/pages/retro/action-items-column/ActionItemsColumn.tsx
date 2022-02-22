@@ -52,10 +52,6 @@ function ActionItemsColumn() {
     }
   };
 
-  const editActionItemAssignee = (action: Action, updatedAssignee: string) => {
-    ActionItemService.updateAssignee(team.id, action.id, updatedAssignee).catch(console.error);
-  };
-
   const updateActionItemCompletionStatus = (action: Action) => {
     ActionItemService.updateCompletionStatus(team.id, action.id, !action.completed).catch(console.error);
   };
@@ -63,11 +59,7 @@ function ActionItemsColumn() {
   const renderActionItem = (action: Action) => {
     return (
       <Fragment key={action.id}>
-        <ActionItem
-          action={action}
-          onEditAssignee={editActionItemAssignee}
-          onComplete={updateActionItemCompletionStatus}
-        />
+        <ActionItem action={action} onComplete={updateActionItemCompletionStatus} />
       </Fragment>
     );
   };

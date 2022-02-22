@@ -42,7 +42,6 @@ jest.mock('../../services/api/ActionItemService');
 describe('ActionItem', () => {
   const mockOnSelect = jest.fn();
   const mockOnComplete = jest.fn();
-  const mockOnEditAssignee = jest.fn();
 
   const team: Team = {
     name: 'My Team',
@@ -90,12 +89,7 @@ describe('ActionItem', () => {
             set(TeamState, team);
           }}
         >
-          <ActionItem
-            action={fakeAction}
-            onSelect={mockOnSelect}
-            onComplete={mockOnComplete}
-            onEditAssignee={mockOnEditAssignee}
-          />
+          <ActionItem action={fakeAction} onSelect={mockOnSelect} onComplete={mockOnComplete} />
         </RecoilRoot>
       );
     });
@@ -182,19 +176,19 @@ describe('ActionItem', () => {
       expect(mockOnComplete).toHaveBeenCalledTimes(1);
     });
 
-    it('can edit assignee', () => {
+    it('should edit assignee', () => {
       typeAssignee('FordLabs{enter}');
 
-      expect(mockOnEditAssignee).toHaveBeenCalledWith(fakeAction, 'FordLabs');
+      expect(ActionItemService.updateAssignee).toHaveBeenCalledWith(team.id, fakeAction.id, 'FordLabs');
 
       typeAssignee(' Team');
       clickTask();
 
-      expect(mockOnEditAssignee).toHaveBeenCalledWith(fakeAction, 'FordLabs Team');
+      expect(ActionItemService.updateAssignee).toHaveBeenCalledWith(team.id, fakeAction.id, 'FordLabs Team');
     });
   });
 
-  describe('when completed', () => {
+  describe('When completed', () => {
     beforeEach(() => {
       render(
         <RecoilRoot
@@ -202,12 +196,7 @@ describe('ActionItem', () => {
             set(TeamState, team);
           }}
         >
-          <ActionItem
-            action={{ ...fakeAction, completed: true }}
-            onSelect={mockOnSelect}
-            onComplete={mockOnComplete}
-            onEditAssignee={mockOnEditAssignee}
-          />
+          <ActionItem action={{ ...fakeAction, completed: true }} onSelect={mockOnSelect} onComplete={mockOnComplete} />
         </RecoilRoot>
       );
     });
@@ -233,7 +222,7 @@ describe('ActionItem', () => {
     });
   });
 
-  describe('when readonly', () => {
+  describe('When readonly', () => {
     beforeEach(() => {
       render(
         <RecoilRoot
@@ -241,13 +230,7 @@ describe('ActionItem', () => {
             set(TeamState, team);
           }}
         >
-          <ActionItem
-            action={fakeAction}
-            readOnly={true}
-            onSelect={mockOnSelect}
-            onComplete={mockOnComplete}
-            onEditAssignee={mockOnEditAssignee}
-          />
+          <ActionItem action={fakeAction} readOnly={true} onSelect={mockOnSelect} onComplete={mockOnComplete} />
         </RecoilRoot>
       );
     });
@@ -265,7 +248,7 @@ describe('ActionItem', () => {
 
     it('should disable assignee', () => {
       typeAssignee('new assignee{Enter}');
-      expect(mockOnEditAssignee).not.toHaveBeenCalled();
+      expect(ActionItemService.updateAssignee).not.toHaveBeenCalled();
     });
 
     it('should not disable select', () => {
