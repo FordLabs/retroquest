@@ -44,13 +44,7 @@ describe('RetroItemModal', () => {
     const ref = createRef<ModalMethods>();
     render(
       <RecoilRoot>
-        <RetroItemModal
-          type={Topic.HAPPY}
-          thought={fakeThought}
-          ref={ref}
-          onEdit={() => undefined}
-          onUpvote={() => undefined}
-        />
+        <RetroItemModal type={Topic.HAPPY} thought={fakeThought} ref={ref} />
       </RecoilRoot>
     );
 
@@ -68,13 +62,7 @@ describe('RetroItemModal', () => {
       const ref = createRef<ModalMethods>();
       render(
         <RecoilRoot>
-          <RetroItemModal
-            type={Topic.HAPPY}
-            thought={fakeThought}
-            ref={ref}
-            onEdit={() => undefined}
-            onUpvote={() => undefined}
-          />
+          <RetroItemModal type={Topic.HAPPY} thought={fakeThought} ref={ref} />
         </RecoilRoot>
       );
 
@@ -116,14 +104,7 @@ describe('RetroItemModal', () => {
       const ref = createRef<ModalMethods>();
       render(
         <RecoilRoot>
-          <RetroItemModal
-            type={Topic.HAPPY}
-            thought={fakeThought}
-            ref={ref}
-            readOnly={true}
-            onEdit={() => undefined}
-            onUpvote={() => undefined}
-          />
+          <RetroItemModal type={Topic.HAPPY} thought={fakeThought} ref={ref} readOnly={true} />
         </RecoilRoot>
       );
 

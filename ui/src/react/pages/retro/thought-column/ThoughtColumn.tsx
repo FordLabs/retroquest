@@ -55,14 +55,10 @@ function ThoughtColumn(props: Props) {
     }
   };
 
-  const upvoteThought = (thought: Thought) => {
-    ThoughtService.upvoteThought(team.id, thought.id).catch(console.error);
-  };
-
   const renderThought = (thought: Thought) => {
     return (
       <Fragment key={thought.id}>
-        <RetroItem thought={thought} type={thought.topic} onUpvote={upvoteThought} />
+        <RetroItem thought={thought} type={thought.topic} />
       </Fragment>
     );
   };

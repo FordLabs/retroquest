@@ -38,24 +38,15 @@ const testThought = {
 };
 
 const Template: ComponentStory<typeof RetroItem> = () => {
-  const [thought, setThought] = useState(testThought);
-
-  function onUpvote() {
-    setThought(({ hearts, ...rest }) => ({ ...rest, hearts: hearts + 1 }));
-  }
+  const [thought] = useState(testThought);
 
   return (
     <RecoilRoot>
       <div style={{ width: '400px', marginBottom: '20px' }}>
-        <RetroItem thought={thought} type={Topic.HAPPY} onUpvote={onUpvote} />
+        <RetroItem thought={thought} type={Topic.HAPPY} />
       </div>
       <div style={{ width: '400px' }}>
-        <RetroItem
-          readOnly={true}
-          thought={{ ...testThought, discussed: true }}
-          type={Topic.UNHAPPY}
-          onUpvote={onUpvote}
-        />
+        <RetroItem readOnly={true} thought={{ ...testThought, discussed: true }} type={Topic.UNHAPPY} />
       </div>
     </RecoilRoot>
   );

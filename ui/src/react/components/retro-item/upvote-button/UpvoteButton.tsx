@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import React, { ComponentPropsWithoutRef } from 'react';
 import classnames from 'classnames';
 
 import Tooltip from '../../tooltip/Tooltip';
 
 import './UpvoteButton.scss';
 
-type UpvoteButtonProps = React.ComponentPropsWithoutRef<'button'> & {
+type UpvoteButtonProps = ComponentPropsWithoutRef<'button'> & {
   votes: number;
   readOnly?: boolean;
 };

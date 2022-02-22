@@ -27,18 +27,14 @@ import RetroItem from '../retro-item/RetroItem';
 
 import './RetroItemModal.scss';
 
-type AcceptThoughtFunction = (thought: Thought) => void;
-
 type RetroItemModalProps = {
   type: ThoughtTopic;
   thought: Thought;
   readOnly?: boolean;
-  onUpvote: AcceptThoughtFunction;
-  onEdit: (updatedThoughtMessage) => void;
 };
 
 function RetroItemModal(props: RetroItemModalProps, ref: Ref<ModalMethods>) {
-  const { type, thought, readOnly, onUpvote } = props;
+  const { type, thought, readOnly } = props;
 
   const [showAddActionItemCard, setShowAddActionItemCard] = useState(false);
 
@@ -55,7 +51,7 @@ function RetroItemModal(props: RetroItemModalProps, ref: Ref<ModalMethods>) {
       onHide={() => setShowAddActionItemCard(false)}
       ref={ref}
     >
-      <RetroItem thought={thought} readOnly={readOnly} onUpvote={onUpvote} type={type} />
+      <RetroItem thought={thought} readOnly={readOnly} type={type} />
       {!readOnly && !showAddActionItemCard && (
         <button
           className="add-action-item-button"

@@ -126,15 +126,6 @@ describe('ThoughtColumn.spec.tsx', () => {
     });
   });
 
-  it('should upvote a thought', () => {
-    const thoughtItems = screen.getAllByTestId('retroItem');
-    const firstThoughtItemsUpvoteButton = within(thoughtItems[0]).getByTestId('retroItem-upvote');
-    expect(within(thoughtItems[0]).getByText('1'));
-    userEvent.click(firstThoughtItemsUpvoteButton);
-
-    expect(ThoughtService.upvoteThought).toHaveBeenCalledWith(team.id, activeThought1.id);
-  });
-
   describe('sort', () => {
     it('should return thoughts in descending order based on heart count after activity when sort clicked', () => {
       userEvent.click(screen.getByTestId('sort-button'));
