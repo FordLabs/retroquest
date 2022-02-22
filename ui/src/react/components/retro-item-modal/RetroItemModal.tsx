@@ -37,36 +37,24 @@ type RetroItemModalProps = {
   onEdit: (thought: Thought, updatedThoughtMessage) => void;
   onDelete: AcceptThoughtFunction;
   onDiscuss: AcceptThoughtFunction;
-  onAction?: (task: string, assignee: string) => void;
 };
 
 function RetroItemModal(props: RetroItemModalProps, ref: Ref<ModalMethods>) {
-  const { type, thought, readOnly, onUpvote, onEdit, onDelete, onDiscuss, onAction } = props;
+  const { type, thought, readOnly, onUpvote, onEdit, onDelete, onDiscuss } = props;
 
-  const [creatingActionItem, setCreatingActionItem] = useState(false);
+  const [showAddActionItemCard, setShowAddActionItemCard] = useState(false);
 
   const addActionItemButtonRef = useRef<HTMLButtonElement>();
 
   useEffect(() => {
-    if (!creatingActionItem) {
-      addActionItemButtonRef.current?.focus();
-    }
-  }, [creatingActionItem]);
-
-  function onCancel() {
-    setCreatingActionItem(false);
-  }
-
-  function onConfirm(task, assignee) {
-    setCreatingActionItem(false);
-    onAction(task, assignee);
-  }
+    if (!showAddActionItemCard) addActionItemButtonRef.current?.focus();
+  }, [showAddActionItemCard]);
 
   return (
     <Modal
       testId="retroItemModal"
-      className={classnames('retro-item-modal', { 'creating-action': creatingActionItem })}
-      onHide={() => setCreatingActionItem(false)}
+      className={classnames('retro-item-modal', { 'creating-action': showAddActionItemCard })}
+      onHide={() => setShowAddActionItemCard(false)}
       ref={ref}
     >
       <RetroItem
@@ -78,17 +66,17 @@ function RetroItemModal(props: RetroItemModalProps, ref: Ref<ModalMethods>) {
         onDiscuss={onDiscuss}
         type={type}
       />
-      {!readOnly && !creatingActionItem && (
+      {!readOnly && !showAddActionItemCard && (
         <button
           className="add-action-item-button"
-          onClick={() => setCreatingActionItem(true)}
+          onClick={() => setShowAddActionItemCard(true)}
           ref={addActionItemButtonRef}
         >
           <i className="fas fa-plus plus-icon" />
           Add Action Item
         </button>
       )}
-      {creatingActionItem && <AddActionItem onConfirm={onConfirm} onCancel={onCancel} />}
+      {showAddActionItemCard && <AddActionItem hideComponentCallback={() => setShowAddActionItemCard(false)} />}
     </Modal>
   );
 }

@@ -16,14 +16,28 @@
  */
 
 import axios from 'axios';
+import moment from 'moment';
 
 import Action from '../../types/Action';
 import CreateActionItemRequest from '../../types/CreateActionItemRequest';
 
 import { getActionItemApiPath } from './ApiConstants';
 
+const ASSIGNEE_PARSE_SYMBOL = '@';
+export const ASSIGNEE_PARSE_REGEX = /(\@[a-zA-Z0-9]+\b)/g;
+
 const ActionItemService = {
-  create(teamId: string, createActionItemRequest: CreateActionItemRequest): Promise<Action> {
+  create(teamId: string, task: string, assignee: string): Promise<Action> {
+    const todaysDate = moment().format();
+    const createActionItemRequest: CreateActionItemRequest = {
+      id: null,
+      teamId,
+      task,
+      completed: false,
+      assignee,
+      dateCreated: todaysDate,
+      archived: false,
+    };
     const url = getActionItemApiPath(teamId);
     return axios.post(url, createActionItemRequest).then((response) => response.data);
   },
@@ -33,7 +47,7 @@ const ActionItemService = {
     return axios.delete(url);
   },
 
-  updateTask(teamId: string, actionItemId: number, updatedTask: string) {
+  updateTask(teamId: string, actionItemId: number, updatedTask: string): Promise<void> {
     const url = `${getActionItemApiPath(teamId)}/${actionItemId}/task`;
     return axios.put(url, { task: updatedTask });
   },
@@ -46,6 +60,17 @@ const ActionItemService = {
   updateCompletionStatus(teamId: string, actionItemId: number, completed: boolean) {
     const url = `${getActionItemApiPath(teamId)}/${actionItemId}/completed`;
     return axios.put(url, { completed });
+  },
+
+  parseAssignees(newMessage: string): string[] {
+    const matches = newMessage.match(ASSIGNEE_PARSE_REGEX);
+    if (matches) return matches.map((assignee) => assignee.replace(ASSIGNEE_PARSE_SYMBOL, ''));
+    return null;
+  },
+
+  removeAssigneesFromTask(newMessage: string, assignees: string[]): string {
+    if (!assignees) return newMessage;
+    return newMessage.replace(ASSIGNEE_PARSE_REGEX, '').replace(/\s+/g, ' ').trim();
   },
 };
 

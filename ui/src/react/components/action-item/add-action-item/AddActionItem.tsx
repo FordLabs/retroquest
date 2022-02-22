@@ -18,7 +18,10 @@
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
+import { useRecoilValue } from 'recoil';
 
+import ActionItemService from '../../../services/api/ActionItemService';
+import { TeamState } from '../../../state/TeamState';
 import { onChange, onKeys } from '../../../utils/EventUtils';
 import { CancelButton, ColumnItemButtonGroup, ConfirmButton } from '../../column-item-buttons/ColumnItemButtons';
 import FloatingCharacterCountdown from '../../floating-character-countdown/FloatingCharacterCountdown';
@@ -28,12 +31,13 @@ import Assignee from '../assignee/Assignee';
 const MAX_LENGTH_TASK = 255;
 
 type AddActionItemProps = {
-  onConfirm: (task: string, assignee: string) => void;
-  onCancel: () => void;
+  hideComponentCallback: () => void;
 };
 
 function AddActionItem(props: AddActionItemProps) {
-  const { onConfirm, onCancel } = props;
+  const { hideComponentCallback } = props;
+
+  const team = useRecoilValue(TeamState);
 
   const textAreaRef = useRef<HTMLTextAreaElement>();
   const [task, setTask] = useState('');
@@ -43,7 +47,7 @@ function AddActionItem(props: AddActionItemProps) {
   const { setHideOnEscape, setHideOnBackdropClick } = useModal();
 
   useEffect(() => {
-    const escapeListener = onKeys('Escape', onCancel);
+    const escapeListener = onKeys('Escape', hideComponentCallback);
     document.addEventListener('keydown', escapeListener);
 
     setHideOnEscape(false);
@@ -54,7 +58,7 @@ function AddActionItem(props: AddActionItemProps) {
       setHideOnEscape(true);
       setHideOnBackdropClick(true);
     };
-  }, [setHideOnEscape, setHideOnBackdropClick, onCancel]);
+  }, [setHideOnEscape, setHideOnBackdropClick, hideComponentCallback]);
 
   function triggerShakeAnimation() {
     setShake(true);
@@ -69,7 +73,9 @@ function AddActionItem(props: AddActionItemProps) {
     if (!task) {
       triggerShakeAnimation();
     } else {
-      onConfirm(task, assignee);
+      ActionItemService.create(team.id, task, assignee)
+        .then(() => hideComponentCallback())
+        .catch(console.error);
     }
   }
 
@@ -97,7 +103,7 @@ function AddActionItem(props: AddActionItemProps) {
       </div>
       <Assignee assignee={assignee} onAssign={setAssignee} />
       <ColumnItemButtonGroup>
-        <CancelButton onClick={onCancel}>Discard</CancelButton>
+        <CancelButton onClick={hideComponentCallback}>Discard</CancelButton>
         <ConfirmButton onClick={onCreate}>
           <i className="fas fa-link icon" aria-hidden="true" style={{ marginRight: '6px' }} />
           Create!

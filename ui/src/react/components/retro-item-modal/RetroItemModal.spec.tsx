@@ -18,15 +18,17 @@
 import React, { createRef } from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { RecoilRoot } from 'recoil';
 
+import ActionItemService from '../../services/api/ActionItemService';
 import Topic from '../../types/Topic';
 import { ModalMethods } from '../modal/Modal';
 
 import RetroItemModal from './RetroItemModal';
 
-describe('RetroItemModal', () => {
-  const mockOnAction = jest.fn();
+jest.mock('axios');
 
+describe('RetroItemModal', () => {
   const fakeThought = {
     id: 0,
     message: 'fake thought',
@@ -45,7 +47,6 @@ describe('RetroItemModal', () => {
         type={Topic.HAPPY}
         thought={fakeThought}
         ref={ref}
-        onAction={() => undefined}
         onEdit={() => undefined}
         onDiscuss={() => undefined}
         onDelete={() => undefined}
@@ -64,18 +65,19 @@ describe('RetroItemModal', () => {
 
   describe('not readonly', () => {
     beforeEach(() => {
-      const ref = React.createRef<ModalMethods>();
+      const ref = createRef<ModalMethods>();
       render(
-        <RetroItemModal
-          type={Topic.HAPPY}
-          thought={fakeThought}
-          ref={ref}
-          onAction={mockOnAction}
-          onEdit={() => undefined}
-          onDiscuss={() => undefined}
-          onDelete={() => undefined}
-          onUpvote={() => undefined}
-        />
+        <RecoilRoot>
+          <RetroItemModal
+            type={Topic.HAPPY}
+            thought={fakeThought}
+            ref={ref}
+            onEdit={() => undefined}
+            onDiscuss={() => undefined}
+            onDelete={() => undefined}
+            onUpvote={() => undefined}
+          />
+        </RecoilRoot>
       );
 
       act(() => {
@@ -97,7 +99,8 @@ describe('RetroItemModal', () => {
       expect(screen.queryByTestId('addActionItem')).toBeFalsy();
     });
 
-    it('should add action item when form is filled out and create button is clicked', () => {
+    it('should hide action item when form is filled out and create button is clicked', async () => {
+      ActionItemService.create = jest.fn().mockResolvedValue(null);
       clickAddActionItem();
 
       typeTask('Run this test');
@@ -105,25 +108,27 @@ describe('RetroItemModal', () => {
 
       clickCreate();
 
-      expect(mockOnAction).toHaveBeenCalledWith('Run this test', 'jest');
+      await act(async () => expect(ActionItemService.create).toHaveBeenCalled());
+      expect(screen.queryByTestId('addActionItem')).toBeFalsy();
     });
   });
 
   describe('readonly', () => {
     beforeEach(() => {
-      const ref = React.createRef<ModalMethods>();
+      const ref = createRef<ModalMethods>();
       render(
-        <RetroItemModal
-          type={Topic.HAPPY}
-          thought={fakeThought}
-          ref={ref}
-          readOnly={true}
-          onAction={() => undefined}
-          onEdit={() => undefined}
-          onDiscuss={() => undefined}
-          onDelete={() => undefined}
-          onUpvote={() => undefined}
-        />
+        <RecoilRoot>
+          <RetroItemModal
+            type={Topic.HAPPY}
+            thought={fakeThought}
+            ref={ref}
+            readOnly={true}
+            onEdit={() => undefined}
+            onDiscuss={() => undefined}
+            onDelete={() => undefined}
+            onUpvote={() => undefined}
+          />
+        </RecoilRoot>
       );
 
       act(() => {

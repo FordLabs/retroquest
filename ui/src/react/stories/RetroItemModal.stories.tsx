@@ -68,7 +68,6 @@ const Template: ComponentStory<typeof RetroItemModal> = () => {
       <RetroItemModal
         type={Topic.HAPPY}
         thought={thought}
-        onAction={(task, assignee) => alert(`${task} @${assignee}`)}
         onUpvote={onUpvote}
         onEdit={onEdit}
         onDelete={onDelete}

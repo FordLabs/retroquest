@@ -87,7 +87,6 @@ export default function RetroItem(props: RetroItemProps) {
         onUpvote={() => onUpvote(thought)}
         onDiscuss={() => onDiscuss(thought)}
         onEdit={(updatedThoughtMessage) => onEdit(thought, updatedThoughtMessage)}
-        onAction={() => undefined}
       />
     </>
   );

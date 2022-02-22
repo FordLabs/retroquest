@@ -15,22 +15,6 @@
  * limitations under the License.
  */
 
-import moment from 'moment';
-
-export function getCreateActionItemRequest(teamId: string, task: string, assignees: string[]): CreateActionItemRequest {
-  const todaysDate = moment().format();
-  const maxAssigneeLength = 50;
-  return {
-    id: null,
-    teamId,
-    task,
-    completed: false,
-    assignee: assignees ? assignees.join(', ').substring(0, maxAssigneeLength) : null,
-    dateCreated: todaysDate,
-    archived: false,
-  };
-}
-
 interface CreateActionItemRequest {
   id: number;
   task: string;
