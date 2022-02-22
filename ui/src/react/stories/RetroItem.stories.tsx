@@ -17,6 +17,7 @@
 
 import * as React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { RecoilRoot } from 'recoil';
 
 import RetroItem from '../components/retro-item/RetroItem';
 import Topic from '../types/Topic';
@@ -38,10 +39,6 @@ const testThought = {
 const Template: ComponentStory<typeof RetroItem> = () => {
   const [thought, setThought] = React.useState(testThought);
 
-  function onEdit(message) {
-    setThought((oldThought) => ({ ...oldThought, message }));
-  }
-
   function onUpvote() {
     setThought(({ hearts, ...rest }) => ({ ...rest, hearts: hearts + 1 }));
   }
@@ -55,13 +52,12 @@ const Template: ComponentStory<typeof RetroItem> = () => {
   }
 
   return (
-    <>
+    <RecoilRoot>
       <div style={{ width: '400px', marginBottom: '20px' }}>
         <RetroItem
           thought={thought}
           type={Topic.HAPPY}
           onUpvote={onUpvote}
-          onEdit={onEdit}
           onDelete={onDelete}
           onDiscuss={onDiscussed}
         />
@@ -72,12 +68,11 @@ const Template: ComponentStory<typeof RetroItem> = () => {
           thought={{ ...testThought, discussed: true }}
           type={Topic.UNHAPPY}
           onUpvote={onUpvote}
-          onEdit={onEdit}
           onDelete={onDelete}
           onDiscuss={onDiscussed}
         />
       </div>
-    </>
+    </RecoilRoot>
   );
 };
 

@@ -21,18 +21,27 @@ import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
 
+import ThoughtService from '../../services/api/ThoughtService';
+import { TeamState } from '../../state/TeamState';
+import Team from '../../types/Team';
 import Topic, { ThoughtTopic } from '../../types/Topic';
 
 import RetroItem from './RetroItem';
 
+jest.mock('../../services/api/ThoughtService');
+jest.mock('../../services/api/ColumnService');
+
 describe('RetroItem', () => {
-  const mockEdit = jest.fn();
   const mockDelete = jest.fn();
   const mockDiscuss = jest.fn();
   const mockUpvote = jest.fn();
+  const team: Team = {
+    name: 'My Team',
+    id: 'my-team',
+  };
 
   const fakeThought = {
-    id: 0,
+    id: 12,
     message: 'fake message',
     hearts: 3,
     discussed: false,
@@ -77,12 +86,15 @@ describe('RetroItem', () => {
   describe('When not discussed and not readonly', () => {
     beforeEach(() => {
       render(
-        <RecoilRoot>
+        <RecoilRoot
+          initializeState={({ set }) => {
+            set(TeamState, team);
+          }}
+        >
           <RetroItem
             type={Topic.HAPPY}
             thought={fakeThought}
             onUpvote={mockUpvote}
-            onEdit={mockEdit}
             onDelete={mockDelete}
             onDiscuss={mockDiscuss}
           />
@@ -140,10 +152,11 @@ describe('RetroItem', () => {
       expect(mockDiscuss).not.toHaveBeenCalled();
     });
 
-    it('can complete edit', () => {
+    it('can edit item', () => {
       clickEdit();
-      editText('New Fake Text{Enter}');
-      expect(mockEdit).toHaveBeenCalledWith(fakeThought, 'New Fake Text');
+      const updatedText = 'New Fake Text';
+      editText(`${updatedText}{Enter}`);
+      expect(ThoughtService.updateMessage).toHaveBeenCalledWith(team.id, fakeThought.id, updatedText);
     });
 
     it('can start and cancel delete', () => {
@@ -182,7 +195,6 @@ describe('RetroItem', () => {
             type={Topic.HAPPY}
             thought={{ ...fakeThought, discussed: true }}
             onUpvote={mockUpvote}
-            onEdit={mockEdit}
             onDelete={mockDelete}
             onDiscuss={mockDiscuss}
           />
@@ -225,7 +237,6 @@ describe('RetroItem', () => {
             type={Topic.HAPPY}
             thought={fakeThought}
             onUpvote={mockUpvote}
-            onEdit={mockEdit}
             onDelete={mockDelete}
             onDiscuss={mockDiscuss}
           />
