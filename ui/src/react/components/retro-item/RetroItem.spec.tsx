@@ -32,7 +32,6 @@ jest.mock('../../services/api/ThoughtService');
 jest.mock('../../services/api/ColumnService');
 
 describe('RetroItem', () => {
-  const mockDelete = jest.fn();
   const mockUpvote = jest.fn();
   const team: Team = {
     name: 'My Team',
@@ -90,7 +89,7 @@ describe('RetroItem', () => {
             set(TeamState, team);
           }}
         >
-          <RetroItem type={Topic.HAPPY} thought={fakeThought} onUpvote={mockUpvote} onDelete={mockDelete} />
+          <RetroItem type={Topic.HAPPY} thought={fakeThought} onUpvote={mockUpvote} />
         </RecoilRoot>
       );
     });
@@ -152,26 +151,28 @@ describe('RetroItem', () => {
       expect(ThoughtService.updateMessage).toHaveBeenCalledWith(team.id, fakeThought.id, updatedText);
     });
 
-    it('should start and cancel deletion of thought', () => {
-      expect(deleteMessage()).toBeFalsy();
-
+    it('should close delete confirmation overlay if user clicks escape', () => {
       clickDelete();
       expect(deleteMessage()).toBeTruthy();
 
       escapeKey();
       expect(deleteMessage()).toBeFalsy();
+    });
 
+    it('should not delete thought user cancels deletion', () => {
+      expect(deleteMessage()).toBeFalsy();
       clickDelete();
       expect(deleteMessage()).toBeTruthy();
 
       clickCancelDelete();
       expect(deleteMessage()).toBeFalsy();
+      expect(ThoughtService.delete).not.toHaveBeenCalled();
     });
 
-    it('should delete thought', () => {
+    it('should delete thought when user confirms deletion', () => {
       clickDelete();
       clickConfirmDelete();
-      expect(mockDelete).toHaveBeenCalledTimes(1);
+      expect(ThoughtService.delete).toHaveBeenCalledWith(team.id, fakeThought.id);
     });
 
     it('should mark as discussed', () => {
@@ -188,12 +189,7 @@ describe('RetroItem', () => {
             set(TeamState, team);
           }}
         >
-          <RetroItem
-            type={Topic.HAPPY}
-            thought={{ ...fakeThought, discussed: true }}
-            onUpvote={mockUpvote}
-            onDelete={mockDelete}
-          />
+          <RetroItem type={Topic.HAPPY} thought={{ ...fakeThought, discussed: true }} onUpvote={mockUpvote} />
         </RecoilRoot>
       );
     });
@@ -228,13 +224,7 @@ describe('RetroItem', () => {
     beforeEach(() => {
       render(
         <RecoilRoot>
-          <RetroItem
-            readOnly={true}
-            type={Topic.HAPPY}
-            thought={fakeThought}
-            onUpvote={mockUpvote}
-            onDelete={mockDelete}
-          />
+          <RetroItem readOnly={true} type={Topic.HAPPY} thought={fakeThought} onUpvote={mockUpvote} />
         </RecoilRoot>
       );
     });

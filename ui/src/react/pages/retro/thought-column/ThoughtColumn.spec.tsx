@@ -126,44 +126,6 @@ describe('ThoughtColumn.spec.tsx', () => {
     });
   });
 
-  describe('Delete Thought', () => {
-    const deleteButtonTestId = 'columnItem-deleteButton';
-
-    it('should delete thought when user clicks delete and confirms with "Yes"', () => {
-      const thoughtItems = screen.getAllByTestId('retroItem');
-      const firstThoughtsDeleteIcon = within(thoughtItems[0]).getByTestId(deleteButtonTestId);
-      userEvent.click(firstThoughtsDeleteIcon);
-
-      const confirmDeletionButton = screen.queryByText('Yes');
-      userEvent.click(confirmDeletionButton);
-      expect(ThoughtService.delete).toHaveBeenCalledWith(team.id, activeThought1.id);
-    });
-
-    it('should NOT delete thought when user clicks delete and confirms with "No"', () => {
-      const thoughtItems = screen.getAllByTestId('retroItem');
-      const firstThoughtsDeleteIcon = within(thoughtItems[0]).getByTestId(deleteButtonTestId);
-      userEvent.click(firstThoughtsDeleteIcon);
-
-      const confirmDeletionButton = screen.queryByText('No');
-      userEvent.click(confirmDeletionButton);
-      expect(ThoughtService.delete).not.toHaveBeenCalledWith(team.id, activeThought1.id);
-    });
-  });
-
-  describe('Edit Thought', () => {
-    const editButtonTestId = 'columnItem-editButton';
-
-    it('should make call to edit thought when user types and submits an edited thought', () => {
-      const thoughtItems = screen.getAllByTestId('retroItem');
-      const firstThoughtsEditIcon = within(thoughtItems[0]).getByTestId(editButtonTestId);
-      userEvent.click(firstThoughtsEditIcon);
-
-      userEvent.type(screen.getAllByTestId('editableText')[0], `New thought{enter}`);
-
-      expect(ThoughtService.updateMessage).toHaveBeenCalledWith(team.id, activeThought1.id, 'New thought');
-    });
-  });
-
   it('should upvote a thought', () => {
     const thoughtItems = screen.getAllByTestId('retroItem');
     const firstThoughtItemsUpvoteButton = within(thoughtItems[0]).getByTestId('retroItem-upvote');
@@ -171,18 +133,6 @@ describe('ThoughtColumn.spec.tsx', () => {
     userEvent.click(firstThoughtItemsUpvoteButton);
 
     expect(ThoughtService.upvoteThought).toHaveBeenCalledWith(team.id, activeThought1.id);
-  });
-
-  it('should update discussion status of a thought', () => {
-    const thoughtItems = screen.getAllByTestId('retroItem');
-    const firstThoughtsDiscussedButton = within(thoughtItems[0]).getByTestId('columnItem-checkboxButton');
-    userEvent.click(firstThoughtsDiscussedButton);
-
-    expect(ThoughtService.updateDiscussionStatus).toHaveBeenCalledWith(
-      team.id,
-      activeThought1.id,
-      !activeThought1.discussed
-    );
   });
 
   describe('sort', () => {

@@ -49,7 +49,6 @@ describe('RetroItemModal', () => {
           thought={fakeThought}
           ref={ref}
           onEdit={() => undefined}
-          onDelete={() => undefined}
           onUpvote={() => undefined}
         />
       </RecoilRoot>
@@ -74,7 +73,6 @@ describe('RetroItemModal', () => {
             thought={fakeThought}
             ref={ref}
             onEdit={() => undefined}
-            onDelete={() => undefined}
             onUpvote={() => undefined}
           />
         </RecoilRoot>
@@ -124,7 +122,6 @@ describe('RetroItemModal', () => {
             ref={ref}
             readOnly={true}
             onEdit={() => undefined}
-            onDelete={() => undefined}
             onUpvote={() => undefined}
           />
         </RecoilRoot>
