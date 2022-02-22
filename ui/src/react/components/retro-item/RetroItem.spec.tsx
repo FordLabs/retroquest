@@ -33,7 +33,6 @@ jest.mock('../../services/api/ColumnService');
 
 describe('RetroItem', () => {
   const mockDelete = jest.fn();
-  const mockDiscuss = jest.fn();
   const mockUpvote = jest.fn();
   const team: Team = {
     name: 'My Team',
@@ -91,30 +90,24 @@ describe('RetroItem', () => {
             set(TeamState, team);
           }}
         >
-          <RetroItem
-            type={Topic.HAPPY}
-            thought={fakeThought}
-            onUpvote={mockUpvote}
-            onDelete={mockDelete}
-            onDiscuss={mockDiscuss}
-          />
+          <RetroItem type={Topic.HAPPY} thought={fakeThought} onUpvote={mockUpvote} onDelete={mockDelete} />
         </RecoilRoot>
       );
     });
 
-    it('can open retro item modal', () => {
+    it('should open retro item modal', () => {
       clickText();
 
       expect(screen.getByTestId('retroItemModal')).toBeDefined();
     });
 
-    it('can upvote', () => {
+    it('should upvote thought', () => {
       clickUpvote();
 
       expect(mockUpvote).toHaveBeenCalledTimes(1);
     });
 
-    it('can start and cancel edit', () => {
+    it('should start and cancel edit', () => {
       const newText = 'New Fake Text';
 
       screen.getByText(fakeThought.message);
@@ -149,17 +142,17 @@ describe('RetroItem', () => {
       expect(deleteMessage()).toBeFalsy();
 
       clickCheckbox();
-      expect(mockDiscuss).not.toHaveBeenCalled();
+      expect(ThoughtService.updateDiscussionStatus).not.toHaveBeenCalled();
     });
 
-    it('can edit item', () => {
+    it('should edit thought', () => {
       clickEdit();
       const updatedText = 'New Fake Text';
       editText(`${updatedText}{Enter}`);
       expect(ThoughtService.updateMessage).toHaveBeenCalledWith(team.id, fakeThought.id, updatedText);
     });
 
-    it('can start and cancel delete', () => {
+    it('should start and cancel deletion of thought', () => {
       expect(deleteMessage()).toBeFalsy();
 
       clickDelete();
@@ -175,28 +168,31 @@ describe('RetroItem', () => {
       expect(deleteMessage()).toBeFalsy();
     });
 
-    it('can complete delete', () => {
+    it('should delete thought', () => {
       clickDelete();
       clickConfirmDelete();
       expect(mockDelete).toHaveBeenCalledTimes(1);
     });
 
-    it('can discuss', () => {
+    it('should mark as discussed', () => {
       clickCheckbox();
-      expect(mockDiscuss).toHaveBeenCalledTimes(1);
+      expect(ThoughtService.updateDiscussionStatus).toHaveBeenCalledWith(team.id, fakeThought.id, true);
     });
   });
 
   describe('When discussed', () => {
     beforeEach(() => {
       render(
-        <RecoilRoot>
+        <RecoilRoot
+          initializeState={({ set }) => {
+            set(TeamState, team);
+          }}
+        >
           <RetroItem
             type={Topic.HAPPY}
             thought={{ ...fakeThought, discussed: true }}
             onUpvote={mockUpvote}
             onDelete={mockDelete}
-            onDiscuss={mockDiscuss}
           />
         </RecoilRoot>
       );
@@ -224,7 +220,7 @@ describe('RetroItem', () => {
 
     it('should not disable checkbox button', () => {
       clickCheckbox();
-      expect(mockDiscuss).toHaveBeenCalledTimes(1);
+      expect(ThoughtService.updateDiscussionStatus).toHaveBeenCalledWith(team.id, fakeThought.id, false);
     });
   });
 
@@ -238,7 +234,6 @@ describe('RetroItem', () => {
             thought={fakeThought}
             onUpvote={mockUpvote}
             onDelete={mockDelete}
-            onDiscuss={mockDiscuss}
           />
         </RecoilRoot>
       );
@@ -255,7 +250,7 @@ describe('RetroItem', () => {
       expect(deleteMessage()).toBeFalsy();
 
       clickCheckbox();
-      expect(mockDiscuss).not.toHaveBeenCalled();
+      expect(ThoughtService.updateDiscussionStatus).not.toHaveBeenCalled();
     });
 
     it('should open retro item modal', () => {
