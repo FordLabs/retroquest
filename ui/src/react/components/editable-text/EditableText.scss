@@ -15,6 +15,16 @@
  * limitations under the License.
  */
 
+.completed {
+  .editable-text-container {
+    opacity: 0.2;
+
+    user-select: none;
+    user-select: none;
+    pointer-events: none;
+  }
+}
+
 .editable-text-container {
   &.disabled {
     opacity: 0.2;
