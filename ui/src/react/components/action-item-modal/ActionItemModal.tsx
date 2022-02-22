@@ -26,23 +26,16 @@ import './ActionItemModal.scss';
 type ActionItemModalProps = {
   action: Action;
   readOnly?: boolean;
-  onEditTask?: (action: Action, updatedTask: string) => void;
   onEditAssignee?: (action: Action, updatedAssignee: string) => void;
   onComplete?: () => void;
 };
 
 function ActionItemModal(props: ActionItemModalProps, ref: React.Ref<ModalMethods>) {
-  const { action, readOnly, onEditTask, onEditAssignee, onComplete } = props;
+  const { action, readOnly, onEditAssignee, onComplete } = props;
 
   return (
     <Modal ref={ref} className="action-item-modal">
-      <ActionItem
-        action={action}
-        readOnly={readOnly}
-        onEditTask={onEditTask}
-        onEditAssignee={onEditAssignee}
-        onComplete={onComplete}
-      />
+      <ActionItem action={action} readOnly={readOnly} onEditAssignee={onEditAssignee} onComplete={onComplete} />
     </Modal>
   );
 }

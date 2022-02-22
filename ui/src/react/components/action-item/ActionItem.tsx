@@ -36,18 +36,21 @@ type ActionItemProps = {
   action: Action;
   readOnly?: boolean;
   onSelect?: () => void;
-  onEditTask?: (action: Action, updatedTask: string) => void;
   onEditAssignee?: (action: Action, assignee: string) => void;
   onComplete?: (action: Action) => void;
 };
 
 function ActionItem(props: ActionItemProps) {
-  const { action, readOnly = false, onSelect, onEditTask = NO_OP, onEditAssignee = NO_OP, onComplete = NO_OP } = props;
+  const { action, readOnly = false, onSelect, onEditAssignee = NO_OP, onComplete = NO_OP } = props;
 
   const team = useRecoilValue(TeamState);
 
   const deleteActionItem = () => {
     ActionItemService.delete(team.id, action.id).catch(console.error);
+  };
+
+  const editActionItemTask = (updatedTask: string) => {
+    ActionItemService.updateTask(team.id, action.id, updatedTask).catch(console.error);
   };
 
   return (
@@ -59,7 +62,7 @@ function ActionItem(props: ActionItemProps) {
       checked={action.completed}
       readOnly={readOnly}
       onSelect={onSelect}
-      onEdit={(updatedTask) => onEditTask(action, updatedTask)}
+      onEdit={editActionItemTask}
       onDelete={deleteActionItem}
       onCheck={() => onComplete(action)}
       customButtons={({ editing, deleting }) => (

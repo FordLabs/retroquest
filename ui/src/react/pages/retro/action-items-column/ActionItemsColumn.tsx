@@ -52,10 +52,6 @@ function ActionItemsColumn() {
     }
   };
 
-  const editActionItemTask = (action: Action, updatedTask: string) => {
-    ActionItemService.updateTask(team.id, action.id, updatedTask).catch(console.error);
-  };
-
   const editActionItemAssignee = (action: Action, updatedAssignee: string) => {
     ActionItemService.updateAssignee(team.id, action.id, updatedAssignee).catch(console.error);
   };
@@ -70,7 +66,6 @@ function ActionItemsColumn() {
         <ActionItem
           action={action}
           onEditAssignee={editActionItemAssignee}
-          onEditTask={editActionItemTask}
           onComplete={updateActionItemCompletionStatus}
         />
       </Fragment>

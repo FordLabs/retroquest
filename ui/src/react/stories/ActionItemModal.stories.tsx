@@ -16,6 +16,7 @@
  */
 
 import * as React from 'react';
+import { useRef, useState } from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import ActionItemModal from '../components/action-item-modal/ActionItemModal';
@@ -36,14 +37,10 @@ const testAction = {
 };
 
 const Template: ComponentStory<typeof ActionItemModal> = () => {
-  const [action, setAction] = React.useState(testAction);
+  const [action, setAction] = useState(testAction);
 
-  const modalRef = React.useRef<ModalMethods>();
-  const readOnlyModalRef = React.useRef<ModalMethods>();
-
-  function onEdit(task) {
-    setAction((oldAction) => ({ ...oldAction, task }));
-  }
+  const modalRef = useRef<ModalMethods>();
+  const readOnlyModalRef = useRef<ModalMethods>();
 
   function onAssign(assignee) {
     setAction((oldAction) => ({ ...oldAction, assignee }));
@@ -58,18 +55,11 @@ const Template: ComponentStory<typeof ActionItemModal> = () => {
       <PrimaryButton onClick={() => modalRef.current?.show()} style={{ marginBottom: '20px' }}>
         Show Modal
       </PrimaryButton>
-      <ActionItemModal
-        action={action}
-        onEditTask={onEdit}
-        onEditAssignee={onAssign}
-        onComplete={onComplete}
-        ref={modalRef}
-      />
+      <ActionItemModal action={action} onEditAssignee={onAssign} onComplete={onComplete} ref={modalRef} />
       <PrimaryButton onClick={() => readOnlyModalRef.current?.show()}>Show Readonly Modal</PrimaryButton>
       <ActionItemModal
         readOnly={true}
         action={action}
-        onEditTask={onEdit}
         onEditAssignee={onAssign}
         onComplete={onComplete}
         ref={readOnlyModalRef}
