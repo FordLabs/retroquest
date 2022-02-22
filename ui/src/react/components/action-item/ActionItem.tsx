@@ -16,6 +16,7 @@
  */
 
 import * as React from 'react';
+import { useRef } from 'react';
 import classnames from 'classnames';
 import { useRecoilValue } from 'recoil';
 
@@ -23,7 +24,9 @@ import ActionItemService from '../../services/api/ActionItemService';
 import { TeamState } from '../../state/TeamState';
 import Action from '../../types/Action';
 import Topic from '../../types/Topic';
+import ActionItemModal from '../action-item-modal/ActionItemModal';
 import ColumnItem from '../column-item/ColumnItem';
+import { ModalMethods } from '../modal/Modal';
 
 import Assignee from './assignee/Assignee';
 import { DateCreated } from './date-created/DateCreated';
@@ -33,11 +36,11 @@ import './ActionItem.scss';
 type ActionItemProps = {
   action: Action;
   readOnly?: boolean;
-  onSelect?: () => void;
 };
 
 function ActionItem(props: ActionItemProps) {
-  const { action, readOnly = false, onSelect } = props;
+  const { action, readOnly = false } = props;
+  const actionItemModalRef = useRef<ModalMethods>();
 
   const team = useRecoilValue(TeamState);
 
@@ -58,31 +61,34 @@ function ActionItem(props: ActionItemProps) {
   };
 
   return (
-    <ColumnItem
-      data-testid="actionItem"
-      className={classnames('action-item', { completed: action.completed })}
-      type={Topic.ACTION}
-      text={action.task}
-      checked={action.completed}
-      readOnly={readOnly}
-      onSelect={onSelect}
-      onEdit={editActionItemTask}
-      onDelete={deleteActionItem}
-      onCheck={updateActionItemCompletionStatus}
-      customButtons={({ editing, deleting }) => (
-        <DateCreated date={action.dateCreated} disabled={(action.completed || editing || deleting) && !readOnly} />
-      )}
-    >
-      {({ editing, deleting }) => (
-        <Assignee
-          assignee={action.assignee}
-          onAssign={editActionItemAssignee}
-          readOnly={readOnly || action.completed}
-          editing={editing}
-          deleting={deleting}
-        />
-      )}
-    </ColumnItem>
+    <>
+      <ColumnItem
+        data-testid="actionItem"
+        className={classnames('action-item', { completed: action.completed })}
+        type={Topic.ACTION}
+        text={action.task}
+        checked={action.completed}
+        readOnly={readOnly}
+        onSelect={() => actionItemModalRef.current?.show()}
+        onEdit={editActionItemTask}
+        onDelete={deleteActionItem}
+        onCheck={updateActionItemCompletionStatus}
+        customButtons={({ editing, deleting }) => (
+          <DateCreated date={action.dateCreated} disabled={(action.completed || editing || deleting) && !readOnly} />
+        )}
+      >
+        {({ editing, deleting }) => (
+          <Assignee
+            assignee={action.assignee}
+            onAssign={editActionItemAssignee}
+            readOnly={readOnly || action.completed}
+            editing={editing}
+            deleting={deleting}
+          />
+        )}
+      </ColumnItem>
+      <ActionItemModal ref={actionItemModalRef} action={action} />
+    </>
   );
 }
 

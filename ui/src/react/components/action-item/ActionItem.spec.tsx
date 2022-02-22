@@ -40,8 +40,6 @@ jest.spyOn(Modal, 'useModal').mockReturnValue(mockUseModalValue);
 jest.mock('../../services/api/ActionItemService');
 
 describe('ActionItem', () => {
-  const mockOnSelect = jest.fn();
-
   const team: Team = {
     name: 'My Team',
     id: 'my-team',
@@ -88,15 +86,15 @@ describe('ActionItem', () => {
             set(TeamState, team);
           }}
         >
-          <ActionItem action={fakeAction} onSelect={mockOnSelect} />
+          <ActionItem action={fakeAction} />
         </RecoilRoot>
       );
     });
 
-    it('can select', () => {
+    it('should open retro item modal', () => {
       clickTask();
 
-      expect(mockOnSelect).toHaveBeenCalledTimes(1);
+      expect(screen.getByTestId('actionItemModal')).toBeDefined();
     });
 
     it('should start and cancel editing of action item', () => {
@@ -195,7 +193,7 @@ describe('ActionItem', () => {
             set(TeamState, team);
           }}
         >
-          <ActionItem action={{ ...fakeAction, completed: true }} onSelect={mockOnSelect} />
+          <ActionItem action={{ ...fakeAction, completed: true }} />
         </RecoilRoot>
       );
     });
@@ -205,9 +203,9 @@ describe('ActionItem', () => {
       expect(taskReadonly()).toBeTruthy();
     });
 
-    it('should disable select', () => {
+    it('should not open modal', () => {
       clickTask();
-      expect(mockOnSelect).not.toHaveBeenCalled();
+      expect(screen.queryByTestId('actionItemModal')).toBeNull();
     });
 
     it('should not disable delete button', () => {
@@ -229,7 +227,7 @@ describe('ActionItem', () => {
             set(TeamState, team);
           }}
         >
-          <ActionItem action={fakeAction} readOnly={true} onSelect={mockOnSelect} />
+          <ActionItem action={fakeAction} readOnly={true} />
         </RecoilRoot>
       );
     });
@@ -250,9 +248,9 @@ describe('ActionItem', () => {
       expect(ActionItemService.updateAssignee).not.toHaveBeenCalled();
     });
 
-    it('should not disable select', () => {
+    it('should open retro item modal', () => {
       clickTask();
-      expect(mockOnSelect).toHaveBeenCalledTimes(1);
+      expect(screen.getByTestId('actionItemModal')).toBeDefined();
     });
   });
 });

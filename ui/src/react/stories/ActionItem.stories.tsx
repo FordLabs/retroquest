@@ -14,8 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import * as React from 'react';
+import React, { useState } from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import ActionItem from '../components/action-item/ActionItem';
@@ -34,19 +33,15 @@ const testAction = {
 };
 
 const Template: ComponentStory<typeof ActionItem> = () => {
-  const [action] = React.useState(testAction);
-
-  function onSelect() {
-    alert('action selected');
-  }
+  const [action] = useState(testAction);
 
   return (
     <>
       <div style={{ width: '400px', marginBottom: '20px' }}>
-        <ActionItem action={action} onSelect={onSelect} />
+        <ActionItem action={action} />
       </div>
       <div style={{ width: '400px' }}>
-        <ActionItem readOnly={true} action={testAction} onSelect={onSelect} />
+        <ActionItem readOnly={true} action={testAction} />
       </div>
     </>
   );
