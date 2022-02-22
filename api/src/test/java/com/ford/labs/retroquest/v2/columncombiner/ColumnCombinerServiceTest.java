@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.deprecated_tests;
+package com.ford.labs.retroquest.v2.columncombiner;
 
 import com.ford.labs.retroquest.actionitem.ActionItem;
 import com.ford.labs.retroquest.actionitem.ActionItemRepository;
@@ -23,8 +23,8 @@ import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
-import com.ford.labs.retroquest.v2.columns.ColumnCombinerResponse;
-import com.ford.labs.retroquest.v2.columns.ColumnCombinerService;
+import com.ford.labs.retroquest.v2.columncombiner.columncombiner.ColumnCombinerResponse;
+import com.ford.labs.retroquest.v2.columncombiner.columncombiner.ColumnCombinerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

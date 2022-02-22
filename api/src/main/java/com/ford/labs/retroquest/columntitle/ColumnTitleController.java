@@ -25,7 +25,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @RestController
 @Tag(name = "Column Title Controller", description = "The controller that manages the titles of each column on a retro board")
@@ -36,14 +35,6 @@ public class ColumnTitleController {
 
     public ColumnTitleController(ColumnTitleService columnTitleService) {
         this.columnTitleService = columnTitleService;
-    }
-
-    @GetMapping("/api/team/{teamId}/columns")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
-    @Operation(summary = "Gets a the column titles on a retro board for a given team id", description = "getColumnTitlesForTeam")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public List<ColumnTitle> getColumnTitlesForTeam(@PathVariable("teamId") String teamId) {
-        return columnTitleService.getColumnTitlesByTeamId(teamId);
     }
 
     @Transactional
