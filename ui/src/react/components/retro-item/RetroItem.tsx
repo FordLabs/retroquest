@@ -40,11 +40,10 @@ type RetroItemProps = {
   type: ThoughtTopic;
   readOnly?: boolean;
   onUpvote?: AcceptThoughtFunction;
-  onDelete?: AcceptThoughtFunction;
 };
 
 export default function RetroItem(props: RetroItemProps) {
-  const { thought, type, readOnly = false, onUpvote = NO_OP, onDelete = NO_OP } = props;
+  const { thought, type, readOnly = false, onUpvote = NO_OP } = props;
 
   const team = useRecoilValue(TeamState);
 
@@ -58,6 +57,10 @@ export default function RetroItem(props: RetroItemProps) {
     ThoughtService.updateDiscussionStatus(team.id, thought.id, !thought.discussed).catch(console.error);
   };
 
+  const deleteThought = () => {
+    ThoughtService.delete(team.id, thought.id).catch(console.error);
+  };
+
   return (
     <>
       <ColumnItem
@@ -69,7 +72,7 @@ export default function RetroItem(props: RetroItemProps) {
         readOnly={readOnly}
         onSelect={() => retroItemModalRef.current?.show()}
         onEdit={editThought}
-        onDelete={() => onDelete(thought)}
+        onDelete={deleteThought}
         onCheck={updateThoughtDiscussionStatus}
         customButtons={({ editing, deleting }) => (
           <UpvoteButton
@@ -86,7 +89,6 @@ export default function RetroItem(props: RetroItemProps) {
         ref={retroItemModalRef}
         thought={thought}
         type={thought.topic}
-        onDelete={() => onDelete(thought)}
         onUpvote={() => onUpvote(thought)}
         onEdit={editThought}
       />

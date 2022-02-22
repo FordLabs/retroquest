@@ -52,24 +52,12 @@ const Template: ComponentStory<typeof RetroItemModal> = () => {
     setThought((oldAction) => ({ ...oldAction, task }));
   }
 
-  function onDelete() {
-    alert('action deleted');
-  }
-
   return (
     <>
       <PrimaryButton onClick={() => modalRef.current?.show()} style={{ marginBottom: '20px' }}>
         Show Modal
       </PrimaryButton>
-      <RetroItemModal
-        type={Topic.HAPPY}
-        thought={thought}
-        onUpvote={onUpvote}
-        onEdit={onEdit}
-        onDelete={onDelete}
-        ref={modalRef}
-      />
-
+      <RetroItemModal type={Topic.HAPPY} thought={thought} onUpvote={onUpvote} onEdit={onEdit} ref={modalRef} />
       <PrimaryButton
         onClick={() => {
           setType((currentType) => {
@@ -92,7 +80,6 @@ const Template: ComponentStory<typeof RetroItemModal> = () => {
         type={type}
         thought={thought}
         onEdit={onEdit}
-        onDelete={onDelete}
         onUpvote={() => undefined}
         ref={readOnlyModalRef}
       />

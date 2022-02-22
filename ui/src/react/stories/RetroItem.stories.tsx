@@ -16,6 +16,7 @@
  */
 
 import * as React from 'react';
+import { useState } from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { RecoilRoot } from 'recoil';
 
@@ -37,20 +38,16 @@ const testThought = {
 };
 
 const Template: ComponentStory<typeof RetroItem> = () => {
-  const [thought, setThought] = React.useState(testThought);
+  const [thought, setThought] = useState(testThought);
 
   function onUpvote() {
     setThought(({ hearts, ...rest }) => ({ ...rest, hearts: hearts + 1 }));
   }
 
-  function onDelete() {
-    alert('thought deleted');
-  }
-
   return (
     <RecoilRoot>
       <div style={{ width: '400px', marginBottom: '20px' }}>
-        <RetroItem thought={thought} type={Topic.HAPPY} onUpvote={onUpvote} onDelete={onDelete} />
+        <RetroItem thought={thought} type={Topic.HAPPY} onUpvote={onUpvote} />
       </div>
       <div style={{ width: '400px' }}>
         <RetroItem
@@ -58,7 +55,6 @@ const Template: ComponentStory<typeof RetroItem> = () => {
           thought={{ ...testThought, discussed: true }}
           type={Topic.UNHAPPY}
           onUpvote={onUpvote}
-          onDelete={onDelete}
         />
       </div>
     </RecoilRoot>

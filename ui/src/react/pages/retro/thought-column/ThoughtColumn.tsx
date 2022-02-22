@@ -55,10 +55,6 @@ function ThoughtColumn(props: Props) {
     }
   };
 
-  const deleteThought = (thought: Thought) => {
-    ThoughtService.delete(team.id, thought.id).catch(console.error);
-  };
-
   const upvoteThought = (thought: Thought) => {
     ThoughtService.upvoteThought(team.id, thought.id).catch(console.error);
   };
@@ -66,7 +62,7 @@ function ThoughtColumn(props: Props) {
   const renderThought = (thought: Thought) => {
     return (
       <Fragment key={thought.id}>
-        <RetroItem thought={thought} type={thought.topic} onDelete={deleteThought} onUpvote={upvoteThought} />
+        <RetroItem thought={thought} type={thought.topic} onUpvote={upvoteThought} />
       </Fragment>
     );
   };
