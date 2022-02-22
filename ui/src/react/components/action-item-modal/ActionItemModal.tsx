@@ -26,15 +26,14 @@ import './ActionItemModal.scss';
 type ActionItemModalProps = {
   action: Action;
   readOnly?: boolean;
-  onComplete?: () => void;
 };
 
 function ActionItemModal(props: ActionItemModalProps, ref: React.Ref<ModalMethods>) {
-  const { action, readOnly, onComplete } = props;
+  const { action, readOnly } = props;
 
   return (
     <Modal ref={ref} className="action-item-modal">
-      <ActionItem action={action} readOnly={readOnly} onComplete={onComplete} />
+      <ActionItem action={action} readOnly={readOnly} />
     </Modal>
   );
 }
