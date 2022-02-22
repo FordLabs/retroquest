@@ -63,20 +63,10 @@ function ThoughtColumn(props: Props) {
     ThoughtService.upvoteThought(team.id, thought.id).catch(console.error);
   };
 
-  const updateThoughtDiscussionStatus = (thought: Thought) => {
-    ThoughtService.updateDiscussionStatus(team.id, thought.id, !thought.discussed).catch(console.error);
-  };
-
   const renderThought = (thought: Thought) => {
     return (
       <Fragment key={thought.id}>
-        <RetroItem
-          thought={thought}
-          type={thought.topic}
-          onDelete={deleteThought}
-          onUpvote={upvoteThought}
-          onDiscuss={updateThoughtDiscussionStatus}
-        />
+        <RetroItem thought={thought} type={thought.topic} onDelete={deleteThought} onUpvote={upvoteThought} />
       </Fragment>
     );
   };

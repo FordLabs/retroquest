@@ -52,10 +52,6 @@ const Template: ComponentStory<typeof RetroItemModal> = () => {
     setThought((oldAction) => ({ ...oldAction, task }));
   }
 
-  function onDiscuss() {
-    setThought(({ discussed, ...rest }) => ({ ...rest, discussed: !discussed }));
-  }
-
   function onDelete() {
     alert('action deleted');
   }
@@ -71,7 +67,6 @@ const Template: ComponentStory<typeof RetroItemModal> = () => {
         onUpvote={onUpvote}
         onEdit={onEdit}
         onDelete={onDelete}
-        onDiscuss={onDiscuss}
         ref={modalRef}
       />
 
@@ -98,7 +93,6 @@ const Template: ComponentStory<typeof RetroItemModal> = () => {
         thought={thought}
         onEdit={onEdit}
         onDelete={onDelete}
-        onDiscuss={onDiscuss}
         onUpvote={() => undefined}
         ref={readOnlyModalRef}
       />

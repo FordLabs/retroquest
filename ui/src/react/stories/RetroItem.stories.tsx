@@ -43,10 +43,6 @@ const Template: ComponentStory<typeof RetroItem> = () => {
     setThought(({ hearts, ...rest }) => ({ ...rest, hearts: hearts + 1 }));
   }
 
-  function onDiscussed() {
-    setThought(({ discussed, ...rest }) => ({ ...rest, discussed: !discussed }));
-  }
-
   function onDelete() {
     alert('thought deleted');
   }
@@ -54,13 +50,7 @@ const Template: ComponentStory<typeof RetroItem> = () => {
   return (
     <RecoilRoot>
       <div style={{ width: '400px', marginBottom: '20px' }}>
-        <RetroItem
-          thought={thought}
-          type={Topic.HAPPY}
-          onUpvote={onUpvote}
-          onDelete={onDelete}
-          onDiscuss={onDiscussed}
-        />
+        <RetroItem thought={thought} type={Topic.HAPPY} onUpvote={onUpvote} onDelete={onDelete} />
       </div>
       <div style={{ width: '400px' }}>
         <RetroItem
@@ -69,7 +59,6 @@ const Template: ComponentStory<typeof RetroItem> = () => {
           type={Topic.UNHAPPY}
           onUpvote={onUpvote}
           onDelete={onDelete}
-          onDiscuss={onDiscussed}
         />
       </div>
     </RecoilRoot>

@@ -43,15 +43,16 @@ describe('RetroItemModal', () => {
   it('should render as a retro item in a modal', () => {
     const ref = createRef<ModalMethods>();
     render(
-      <RetroItemModal
-        type={Topic.HAPPY}
-        thought={fakeThought}
-        ref={ref}
-        onEdit={() => undefined}
-        onDiscuss={() => undefined}
-        onDelete={() => undefined}
-        onUpvote={() => undefined}
-      />
+      <RecoilRoot>
+        <RetroItemModal
+          type={Topic.HAPPY}
+          thought={fakeThought}
+          ref={ref}
+          onEdit={() => undefined}
+          onDelete={() => undefined}
+          onUpvote={() => undefined}
+        />
+      </RecoilRoot>
     );
 
     act(() => {
@@ -73,7 +74,6 @@ describe('RetroItemModal', () => {
             thought={fakeThought}
             ref={ref}
             onEdit={() => undefined}
-            onDiscuss={() => undefined}
             onDelete={() => undefined}
             onUpvote={() => undefined}
           />
@@ -124,7 +124,6 @@ describe('RetroItemModal', () => {
             ref={ref}
             readOnly={true}
             onEdit={() => undefined}
-            onDiscuss={() => undefined}
             onDelete={() => undefined}
             onUpvote={() => undefined}
           />
