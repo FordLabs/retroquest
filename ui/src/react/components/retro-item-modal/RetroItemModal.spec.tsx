@@ -20,7 +20,6 @@ import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
 
-import ActionItemService from '../../services/api/ActionItemService';
 import Topic from '../../types/Topic';
 import { ModalMethods } from '../modal/Modal';
 
@@ -84,19 +83,6 @@ describe('RetroItemModal', () => {
 
       expect(screen.queryByTestId('addActionItem')).toBeFalsy();
     });
-
-    it('should hide action item when form is filled out and create button is clicked', async () => {
-      ActionItemService.create = jest.fn().mockResolvedValue(null);
-      clickAddActionItem();
-
-      typeTask('Run this test');
-      typeAssignee('jest');
-
-      clickCreate();
-
-      await act(async () => expect(ActionItemService.create).toHaveBeenCalled());
-      expect(screen.queryByTestId('addActionItem')).toBeFalsy();
-    });
   });
 
   describe('readonly', () => {
@@ -129,16 +115,4 @@ function clickAddActionItem() {
 
 function clickDiscard() {
   userEvent.click(screen.getByText('Discard'));
-}
-
-function clickCreate() {
-  userEvent.click(screen.getByText('Create!', { exact: false }));
-}
-
-function typeTask(text) {
-  userEvent.type(screen.getByTestId('addActionItem-task'), text);
-}
-
-function typeAssignee(text) {
-  return userEvent.type(screen.getByTestId('actionItem-assignee'), text);
 }
