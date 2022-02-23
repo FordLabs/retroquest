@@ -22,14 +22,18 @@ import { RecoilRoot } from 'recoil';
 
 import { getMockThought } from '../../../services/api/__mocks__/ThoughtService';
 import ActionItemService from '../../../services/api/ActionItemService';
+import ThoughtService from '../../../services/api/ThoughtService';
 import { TeamState } from '../../../state/TeamState';
 import Team from '../../../types/Team';
 import Topic from '../../../types/Topic';
+import * as Modal from '../../modal/Modal';
 import { editTask, escapeKey, mockUseModalValue, typeAssignee } from '../ActionItem.spec';
 
 import AddActionItem from './AddActionItem';
 
+jest.spyOn(Modal, 'useModal').mockReturnValue(mockUseModalValue);
 jest.mock('../../../services/api/ActionItemService');
+jest.mock('../../../services/api/ThoughtService');
 
 describe('AddActionItem', () => {
   const hideComponentCallback = jest.fn();
@@ -61,7 +65,7 @@ describe('AddActionItem', () => {
     expect(ActionItemService.create).not.toHaveBeenCalled();
   });
 
-  it('should call onConfirm with task and assignee', async () => {
+  it('should create action item, mark associated thought as discussed, and close modal', async () => {
     const task = 'Run this test';
     const assignee = 'jest';
     editTask(task);
@@ -69,7 +73,8 @@ describe('AddActionItem', () => {
     clickCreate();
 
     await act(async () => expect(ActionItemService.create).toHaveBeenCalledWith(team.id, task, assignee));
-    expect(hideComponentCallback).toHaveBeenCalled();
+    expect(ThoughtService.updateDiscussionStatus).toHaveBeenCalledWith(team.id, thought.id, true);
+    expect(mockUseModalValue.hide).toHaveBeenCalled();
   });
 
   it('should shake and not call onConfirm when task is empty', () => {
