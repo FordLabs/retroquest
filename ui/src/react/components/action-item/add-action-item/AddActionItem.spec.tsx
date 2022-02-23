@@ -20,9 +20,11 @@ import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
 
+import { getMockThought } from '../../../services/api/__mocks__/ThoughtService';
 import ActionItemService from '../../../services/api/ActionItemService';
 import { TeamState } from '../../../state/TeamState';
 import Team from '../../../types/Team';
+import Topic from '../../../types/Topic';
 import { editTask, escapeKey, mockUseModalValue, typeAssignee } from '../ActionItem.spec';
 
 import AddActionItem from './AddActionItem';
@@ -35,6 +37,7 @@ describe('AddActionItem', () => {
     name: 'My Team',
     id: 'my-team',
   };
+  const thought = getMockThought(Topic.HAPPY);
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -45,7 +48,7 @@ describe('AddActionItem', () => {
           set(TeamState, team);
         }}
       >
-        <AddActionItem hideComponentCallback={hideComponentCallback} />
+        <AddActionItem hideComponentCallback={hideComponentCallback} thought={thought} />
       </RecoilRoot>
     );
   });

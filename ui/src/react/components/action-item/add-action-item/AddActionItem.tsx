@@ -21,7 +21,9 @@ import classnames from 'classnames';
 import { useRecoilValue } from 'recoil';
 
 import ActionItemService from '../../../services/api/ActionItemService';
+import ThoughtService from '../../../services/api/ThoughtService';
 import { TeamState } from '../../../state/TeamState';
+import Thought from '../../../types/Thought';
 import { onChange, onKeys } from '../../../utils/EventUtils';
 import { CancelButton, ColumnItemButtonGroup, ConfirmButton } from '../../column-item-buttons/ColumnItemButtons';
 import FloatingCharacterCountdown from '../../floating-character-countdown/FloatingCharacterCountdown';
@@ -31,11 +33,12 @@ import Assignee from '../assignee/Assignee';
 const MAX_LENGTH_TASK = 255;
 
 type AddActionItemProps = {
+  thought: Thought;
   hideComponentCallback: () => void;
 };
 
 function AddActionItem(props: AddActionItemProps) {
-  const { hideComponentCallback } = props;
+  const { hideComponentCallback, thought } = props;
 
   const team = useRecoilValue(TeamState);
 
@@ -43,6 +46,7 @@ function AddActionItem(props: AddActionItemProps) {
   const [task, setTask] = useState('');
   const [assignee, setAssignee] = useState('');
   const [shake, setShake] = useState(false);
+  const { hide } = useModal();
 
   const { setHideOnEscape, setHideOnBackdropClick } = useModal();
 
@@ -69,12 +73,19 @@ function AddActionItem(props: AddActionItemProps) {
     }, 1000);
   }
 
+  const updateThoughtDiscussionStatus = () => {
+    ThoughtService.updateDiscussionStatus(team.id, thought.id, !thought.discussed).catch(console.error);
+  };
+
   function onCreate() {
     if (!task) {
       triggerShakeAnimation();
     } else {
       ActionItemService.create(team.id, task, assignee)
-        .then(() => hideComponentCallback())
+        .then(() => {
+          updateThoughtDiscussionStatus();
+          hide();
+        })
         .catch(console.error);
     }
   }
