@@ -101,7 +101,7 @@ function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
           {sortable && (
             <div className="sort-container">
               <div
-                data-testid="sort-button"
+                data-testid="columnHeader-sortButton"
                 className={classNames(['fas', 'fa-sort-down', 'sort'], { 'sort-icon-translucent': !sorted })}
                 onClick={toggleSort}
               />

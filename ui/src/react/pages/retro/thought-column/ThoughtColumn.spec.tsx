@@ -127,8 +127,10 @@ describe('ThoughtColumn.spec.tsx', () => {
   });
 
   describe('sort', () => {
+    const getSortButton = () => screen.getByTestId('columnHeader-sortButton');
+
     it('should return thoughts in descending order based on heart count after activity when sort clicked', () => {
-      userEvent.click(screen.getByTestId('sort-button'));
+      userEvent.click(getSortButton());
       const thoughtItems = screen.getAllByTestId('retroItem');
       expect(thoughtItems).toHaveLength(4);
       expect(within(thoughtItems[0]).queryByText('2')).not.toBeNull();
@@ -138,8 +140,9 @@ describe('ThoughtColumn.spec.tsx', () => {
     });
 
     it('should return thoughts in unedited order after activity sorting when sort clicked twice', () => {
-      userEvent.click(screen.getByTestId('sort-button'));
-      userEvent.click(screen.getByTestId('sort-button'));
+      const sortButton = getSortButton();
+      userEvent.click(sortButton);
+      userEvent.click(sortButton);
       const thoughtItems = screen.getAllByTestId('retroItem');
       expect(thoughtItems).toHaveLength(4);
       expect(within(thoughtItems[0]).queryByText('1')).not.toBeNull();
