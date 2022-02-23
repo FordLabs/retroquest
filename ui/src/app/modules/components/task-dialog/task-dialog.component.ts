@@ -33,6 +33,7 @@ const ESC_KEY = 27;
   styleUrls: ['./task-dialog.component.scss'],
   host: {
     '(click)': 'hide()',
+    '[attr.data-testid]': 'visible ? "retroItemModal": ""',
     '[style.display]': 'visible ? "flex": "none"',
     '[class.edit-mode]': 'taskEditModeEnabled',
     '[class.dark-theme]': 'darkThemeIsEnabled',

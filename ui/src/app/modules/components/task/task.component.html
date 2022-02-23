@@ -27,6 +27,7 @@
 <div
     class="content-area"
     (click)="emitTaskContentClicked()"
+    data-testid="editableText-select"
     [ngClass]="{ disable: !archived && (task.discussed || readOnly) }"
 >
     <textarea
@@ -162,6 +163,11 @@
 
         <div class="checkbox" [ngClass]="{ 'completed-task': task.discussed }"></div>
 
-        <i class="fas fa-check checkmark" [ngClass]="{ 'show-checkmark': task.discussed }" aria-hidden="true"></i>
+        <i
+            class="fas fa-check checkmark"
+            [ngClass]="{ 'show-checkmark': task.discussed }"
+            data-testid="checkmark"
+            aria-hidden="true"
+        ></i>
     </div>
 </div>

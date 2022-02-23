@@ -22,10 +22,16 @@ import Chainable = Cypress.Chainable;
 
 describe('Retro Facilitator Journey', () => {
   let teamCredentials;
+  let isReact;
 
   beforeEach(() => {
     teamCredentials = getTeamCredentials();
     cy.createTeamAndLogin(teamCredentials);
+
+    // @todo remove once angular is yeeted
+    cy.window().then((win) => {
+      isReact = win['Cypress']['isReact'];
+    });
   });
 
   xit('Rename columns', () => {});
@@ -46,23 +52,25 @@ describe('Retro Facilitator Journey', () => {
 
     clickOnFirstThought();
 
-    getRetroActionModal().as('retroItemModal').should('contain', happyThought).findByText('Add Action Item').click();
+    getRetroActionModal().as('retroItemModal');
+    cy.get('@retroItemModal').findByDisplayValue(happyThought).should('exist');
+    cy.get('@retroItemModal').findByText('Add Action Item').click();
 
     const actionItemTask = 'Handle by Friday';
-    cy.get('[data-testid="addActionItem-task"]').type(actionItemTask);
+    cy.get('@retroItemModal').find('[data-testid="addActionItem-task"]').type(actionItemTask);
     const actionItemAssignee = 'Harry, and Corey';
-    cy.get('[data-testid="actionItem-assignee"]').type(actionItemAssignee);
+    cy.get('@retroItemModal').find('[data-testid="actionItem-assignee"]').type(actionItemAssignee, { force: true });
 
     cy.findByText('Create!').click();
 
-    cy.get('@retroItemModal').should('not.exist');
+    cy.get('@retroItemModal').should(isReact ? 'not.exist' : 'be.hidden');
 
     cy.log('**Thought should be marked as discussed**');
     getHappyColumnItems().should('have.length', 1);
-    getDiscussedThought().should('have.class', 'completed').should('contain.text', happyThought);
+    getDiscussedThought().should('have.class', 'completed').findByDisplayValue(happyThought).should('exist');
 
     cy.log('**Action Item should exist in action items column**');
-    getActionColumnItems().findByText(actionItemTask).should('exist');
+    getActionColumnItems().findByDisplayValue(actionItemTask).should('exist');
     getActionColumnItems().findByDisplayValue(actionItemAssignee).should('exist');
   });
 
@@ -79,6 +87,7 @@ describe('Retro Facilitator Journey', () => {
 
     cy.log('**Thought marked as discussed should move to bottom of the list**');
     getHappyColumnItems().should('have.length', 2);
+    getDiscussedThought().should('have.class', 'completed');
     getHappyColumnItems().last().should('have.class', 'completed');
 
     cy.get(`@discussedButton`).click();
@@ -89,7 +98,7 @@ describe('Retro Facilitator Journey', () => {
 
     cy.log(`**Mark happy thought as discussed from the thought modal**`);
     clickOnFirstThought();
-    getRetroActionModal().find('[data-testid=columnItem-checkboxButton]').click();
+    getRetroActionModal().find('[data-testid=columnItem-checkboxButton]').first().click();
 
     cy.log('**Thought marked as discussed from modal should move to bottom of the list**');
     getHappyColumnItems().should('have.length', 2);
@@ -156,17 +165,15 @@ describe('Retro Facilitator Journey', () => {
     cy.confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 0);
     cy.confirmNumberOfActionItemsInColumn(1);
   });
+
+  const ensureModalIsOpen = () => {
+    cy.get('@modal').should(isReact ? 'exist' : 'be.visible');
+  };
+
+  const ensureModalIsClosed = () => {
+    cy.get('@modal').should(isReact ? 'not.exist' : 'not.be.visible');
+  };
 });
-
-const ensureModalIsOpen = () => {
-  // cy.get('@modal').should('be.visible'); // works for angular instance
-  cy.get('@modal').should('exist'); // works for react instance
-};
-
-const ensureModalIsClosed = () => {
-  // cy.get('@modal').should('not.be.visible'); // works for angular instance
-  cy.get('@modal').should('not.exist'); // works for react instance
-};
 
 function shouldCreateActionItems(actionItems: string[]) {
   actionItems.forEach((actionString, index) => {
@@ -178,8 +185,8 @@ function shouldCreateActionItems(actionItems: string[]) {
     const action = splitActionString[0].trim();
     const assignedTo = splitActionString[1];
 
-    cy.findByDisplayValue(action);
-    cy.findByDisplayValue(assignedTo);
+    cy.findByDisplayValue(action).should('exist');
+    cy.findByDisplayValue(assignedTo).should('exist');
   });
 }
 
@@ -195,10 +202,10 @@ function shouldEditActionItemTaskAndAssignee(
   cy.getActionItemByTask(currentTask).as('actionItemToEdit');
 
   cy.get('@actionItemToEdit').find('[data-testid=columnItem-editButton]').type(`{rightarrow} ${appendToTask}{enter}`);
-  cy.get('@actionItemToEdit').findByDisplayValue(`${currentTask} ${appendToTask}`);
+  cy.get('@actionItemToEdit').findByDisplayValue(`${currentTask} ${appendToTask}`).should('exist');
 
   cy.get('@actionItemToEdit').find('[data-testid=actionItem-assignee]').type(`${appendToAssignee}{enter}`);
-  cy.get('@actionItemToEdit').findByDisplayValue(`${currentAssignee}${appendToAssignee}`);
+  cy.get('@actionItemToEdit').findByDisplayValue(`${currentAssignee}${appendToAssignee}`).should('exist');
 }
 
 function shouldMarkAndUnmarkActionItemAsCompleted(actionItemTask: string) {

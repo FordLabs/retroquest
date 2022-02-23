@@ -35,7 +35,7 @@
         <textarea
             #content_value
             [(ngModel)]="actionItemMessage"
-            data-testid="columnItem-textarea"
+            [attr.data-testid]="displayAsLinkable ? 'addActionItem-task' : 'columnItem-textarea'"
             class="content-message edit-input"
             (blur)="editModeOff()"
             (keydown.enter)="forceBlur(); $event.preventDefault()"
@@ -114,11 +114,11 @@
                 'dark-theme': darkThemeIsEnabled
             }"
         >
-            discard
+            Discard
         </div>
         <div class="button create-button" (click)="dialogConfirmed.emit()">
             <i class="fas fa-link icon" aria-hidden="true"></i>
-            create!
+            Create!
         </div>
     </div>
 
