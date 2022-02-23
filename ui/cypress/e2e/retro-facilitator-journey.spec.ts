@@ -34,7 +34,45 @@ describe('Retro Facilitator Journey', () => {
     });
   });
 
-  xit('Rename columns', () => {});
+  it('Rename columns titles', () => {
+    cy.intercept('PUT', `/api/team/${teamCredentials.teamId}/column/*/title`).as('columnTitleChangeApiCall');
+
+    cy.get('[data-testid=columnHeader-happy]')
+      .as('happyColumnHeader')
+      .find('[data-testid=columnHeader-editTitleButton]')
+      .click();
+
+    const newHappyTitle = 'Super Happy!';
+    cy.get('@happyColumnHeader').findByDisplayValue('Happy').type(`${newHappyTitle}`);
+    cy.get('body').click();
+    cy.wait('@columnTitleChangeApiCall');
+    cy.findByText(newHappyTitle);
+
+    cy.get('[data-testid=columnHeader-confused]')
+      .as('confusedColumnHeader')
+      .find('[data-testid=columnHeader-editTitleButton]')
+      .click();
+
+    const newConfusedTitle = 'Very Confused';
+    cy.get('@confusedColumnHeader').findByDisplayValue('Confused').type(`${newConfusedTitle}`);
+    cy.get('body').click();
+    cy.wait('@columnTitleChangeApiCall');
+    cy.findByText(newConfusedTitle);
+
+    cy.get('[data-testid=columnHeader-unhappy]')
+      .as('sadColumnHeader')
+      .find('[data-testid=columnHeader-editTitleButton]')
+      .click();
+
+    const newSadTitle = 'Sadness';
+    cy.get('@sadColumnHeader').findByDisplayValue('Sad').type(`${newSadTitle} :({enter}`);
+    cy.wait('@columnTitleChangeApiCall');
+    cy.findByText(newSadTitle + ' 😥');
+
+    cy.get('[data-testid=columnHeader-action]')
+      .find('[data-testid=columnHeader-editTitleButton]')
+      .should(isReact ? 'not.exist' : 'not.be.visible');
+  });
 
   xit('Sort thoughts', () => {});
 

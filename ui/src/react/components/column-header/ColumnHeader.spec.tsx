@@ -43,23 +43,14 @@ describe('ColumnHeader', () => {
   });
 
   it('should not display sort button when header is not sortable', () => {
-    render(
-      <ColumnHeader
-        initialTitle="Not Sortable"
-        titleChanged={mockHandleTitleChange}
-      />
-    )
+    render(<ColumnHeader initialTitle="Not Sortable" titleChanged={mockHandleTitleChange} />);
     expect(screen.queryByTestId('sort-button')).toBeNull();
   });
 
   it('should display sort button when header is sortable', () => {
     render(
-      <ColumnHeader
-        initialTitle="Sortable"
-        sortedChanged={mockHandleSortChange}
-        titleChanged={mockHandleTitleChange}
-      />
-    )
+      <ColumnHeader initialTitle="Sortable" sortedChanged={mockHandleSortChange} titleChanged={mockHandleTitleChange} />
+    );
     expect(screen.queryByTestId('sort-button')).not.toBeNull();
   });
 
@@ -74,13 +65,8 @@ describe('ColumnHeader', () => {
   });
 
   it('should not display edit button when header is read only', () => {
-    render(
-      <ColumnHeader
-        initialTitle="Read Only"
-        sortedChanged={mockHandleSortChange}
-      />
-    );
-    expect(screen.queryByTestId('edit-button')).toBeNull();
+    render(<ColumnHeader initialTitle="Read Only" sortedChanged={mockHandleSortChange} />);
+    expect(screen.queryByTestId('columnHeader-editTitleButton')).toBeNull();
   });
 
   it('should display edit button when header is not read only', () => {
@@ -91,7 +77,7 @@ describe('ColumnHeader', () => {
         titleChanged={mockHandleTitleChange}
       />
     );
-    expect(screen.queryByTestId('edit-button')).not.toBeNull();
+    expect(screen.queryByTestId('columnHeader-editTitleButton')).not.toBeNull();
   });
 
   it('should not display character counter when not editing', () => {
@@ -113,7 +99,7 @@ describe('ColumnHeader', () => {
         titleChanged={mockHandleTitleChange}
       />
     );
-    userEvent.click(screen.getByTestId('edit-button'));
+    userEvent.click(screen.getByTestId('columnHeader-editTitleButton'));
     expect(screen.queryByText('5')).not.toBeNull();
   });
 
@@ -126,7 +112,7 @@ describe('ColumnHeader', () => {
       />
     );
 
-    userEvent.click(screen.getByTestId('edit-button'));
+    userEvent.click(screen.getByTestId('columnHeader-editTitleButton'));
     userEvent.type(screen.getByTestId('column-input'), 'Something Else{enter}');
 
     expect(mockHandleTitleChange).toHaveBeenCalledWith('Something Else');
@@ -141,7 +127,7 @@ describe('ColumnHeader', () => {
       />
     );
 
-    userEvent.click(screen.getByTestId('edit-button'));
+    userEvent.click(screen.getByTestId('columnHeader-editTitleButton'));
     userEvent.type(screen.getByTestId('column-input'), 'Something Else');
     fireEvent.blur(screen.getByTestId('column-input'));
 
@@ -159,7 +145,7 @@ describe('ColumnHeader', () => {
       />
     );
 
-    userEvent.click(screen.getByTestId('edit-button'));
+    userEvent.click(screen.getByTestId('columnHeader-editTitleButton'));
     userEvent.type(screen.getByTestId('column-input'), 'Something Else{enter}');
 
     expect(screen.queryByTestId('column-input')).toBeNull();
@@ -176,7 +162,7 @@ describe('ColumnHeader', () => {
       />
     );
 
-    userEvent.click(screen.getByTestId('edit-button'));
+    userEvent.click(screen.getByTestId('columnHeader-editTitleButton'));
     userEvent.type(screen.getByTestId('column-input'), 'Something Else{esc}');
 
     expect(screen.queryByTestId('column-input')).toBeNull();
