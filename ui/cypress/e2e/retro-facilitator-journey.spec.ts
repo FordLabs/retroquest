@@ -37,7 +37,7 @@ describe('Retro Facilitator Journey', () => {
   it('Rename columns titles', () => {
     cy.intercept('PUT', `/api/team/${teamCredentials.teamId}/column/*/title`).as('columnTitleChangeApiCall');
 
-    cy.get('[data-testid=columnHeader-happy]')
+    getColumnHeaderByTopic(Topic.HAPPY)
       .as('happyColumnHeader')
       .find('[data-testid=columnHeader-editTitleButton]')
       .click();
@@ -48,7 +48,7 @@ describe('Retro Facilitator Journey', () => {
     cy.wait('@columnTitleChangeApiCall');
     cy.findByText(newHappyTitle);
 
-    cy.get('[data-testid=columnHeader-confused]')
+    getColumnHeaderByTopic(Topic.CONFUSED)
       .as('confusedColumnHeader')
       .find('[data-testid=columnHeader-editTitleButton]')
       .click();
@@ -59,7 +59,7 @@ describe('Retro Facilitator Journey', () => {
     cy.wait('@columnTitleChangeApiCall');
     cy.findByText(newConfusedTitle);
 
-    cy.get('[data-testid=columnHeader-unhappy]')
+    getColumnHeaderByTopic(Topic.UNHAPPY)
       .as('sadColumnHeader')
       .find('[data-testid=columnHeader-editTitleButton]')
       .click();
@@ -69,18 +69,44 @@ describe('Retro Facilitator Journey', () => {
     cy.wait('@columnTitleChangeApiCall');
     cy.findByText(newSadTitle + ' 😥');
 
-    cy.get('[data-testid=columnHeader-action]')
+    getColumnHeaderByTopic(Topic.ACTION)
       .find('[data-testid=columnHeader-editTitleButton]')
       .should(isReact ? 'not.exist' : 'not.be.visible');
   });
 
-  xit('Sort thoughts', () => {});
+  it('Sort thoughts', () => {
+    const thought2 = 'Thought Two';
+    cy.enterThought(Topic.HAPPY, 'Thought One');
+    cy.enterThought(Topic.HAPPY, thought2);
+    cy.enterThought(Topic.HAPPY, 'Thought Three');
+    getRetroItemByText(thought2).find('[data-testid=retroItem-upvote]').click();
+
+    getHappyColumnItems().as('happyColumnItems').should('have.length', 3);
+
+    cy.get('@happyColumnItems').eq(0).should('contain', '0');
+    cy.get('@happyColumnItems').eq(1).should('contain', '1');
+    cy.get('@happyColumnItems').eq(2).should('contain', '0');
+
+    cy.log('**Sort: Highest voted thoughts at the top of the list**');
+    getColumnHeaderByTopic(Topic.HAPPY).find('[data-testid=columnHeader-sortButton]').click();
+
+    getHappyColumnItems().as('happyColumnItems').eq(0).should('contain', '1');
+    cy.get('@happyColumnItems').eq(1).should('contain', '0');
+    cy.get('@happyColumnItems').eq(2).should('contain', '0');
+
+    cy.log('**Unsort: Thoughts return to original positions**');
+    getColumnHeaderByTopic(Topic.HAPPY).find('[data-testid=columnHeader-sortButton]').click();
+
+    getHappyColumnItems().as('happyColumnItems').eq(0).should('contain', '0');
+    cy.get('@happyColumnItems').eq(1).should('contain', '1');
+    cy.get('@happyColumnItems').eq(2).should('contain', '0');
+  });
 
   it('Display thought in expanded mode', () => {
     const thought = 'This is a good week';
     cy.enterThought(Topic.HAPPY, thought);
     cy.log(`**Expand thought: ${thought}**`);
-    getRetroItemByMessage(thought).click();
+    getRetroItemByText(thought).click();
     getRetroActionModal().should('exist');
   });
 
@@ -118,7 +144,7 @@ describe('Retro Facilitator Journey', () => {
     cy.enterThought(Topic.HAPPY, 'Another positive note');
     getHappyColumnItems().last().should('not.have.class', 'completed');
 
-    getRetroItemByMessage(happyThought).find('[data-testid=columnItem-checkboxButton]').as('discussedButton');
+    getRetroItemByText(happyThought).find('[data-testid=columnItem-checkboxButton]').as('discussedButton');
 
     cy.log(`**Mark happy thought "${happyThought}" as discussed**`);
     cy.get(`@discussedButton`).click();
@@ -270,9 +296,9 @@ function shouldDeleteActionItem(actionItemTask: string) {
 }
 
 const getActionColumnItems = () => cy.get('[data-testid=retroColumn__action]').find(`[data-testid=actionItem]`);
-const getRetroItemByMessage = (message: string): Chainable =>
-  cy.findByDisplayValue(message).closest(`[data-testid=retroItem]`);
+const getRetroItemByText = (text: string): Chainable => cy.findByDisplayValue(text).closest(`[data-testid=retroItem]`);
 
 const getDiscussedThought = () => cy.get('[data-testid=checkmark]').closest('[data-testid="retroItem"]');
 const clickOnFirstThought = () => cy.get('[data-testid="editableText-select"]').first().click();
 const getRetroActionModal = () => cy.get('[data-testid=retroItemModal]');
+const getColumnHeaderByTopic = (topic: Topic) => cy.get(`[data-testid=columnHeader-${topic}]`);

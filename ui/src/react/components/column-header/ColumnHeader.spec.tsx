@@ -44,23 +44,23 @@ describe('ColumnHeader', () => {
 
   it('should not display sort button when header is not sortable', () => {
     render(<ColumnHeader initialTitle="Not Sortable" titleChanged={mockHandleTitleChange} />);
-    expect(screen.queryByTestId('sort-button')).toBeNull();
+    expect(screen.queryByTestId('columnHeader-sortButton')).toBeNull();
   });
 
   it('should display sort button when header is sortable', () => {
     render(
       <ColumnHeader initialTitle="Sortable" sortedChanged={mockHandleSortChange} titleChanged={mockHandleTitleChange} />
     );
-    expect(screen.queryByTestId('sort-button')).not.toBeNull();
+    expect(screen.queryByTestId('columnHeader-sortButton')).not.toBeNull();
   });
 
   it('should toggle and emit sort state when the sort is toggled', () => {
     render(<ColumnHeader sortedChanged={mockHandleSortChange} titleChanged={mockHandleTitleChange} />);
 
-    userEvent.click(screen.getByTestId('sort-button'));
+    userEvent.click(screen.getByTestId('columnHeader-sortButton'));
     expect(mockHandleSortChange).toHaveBeenCalledWith(true);
 
-    userEvent.click(screen.getByTestId('sort-button'));
+    userEvent.click(screen.getByTestId('columnHeader-sortButton'));
     expect(mockHandleSortChange).toHaveBeenCalledWith(false);
   });
 
