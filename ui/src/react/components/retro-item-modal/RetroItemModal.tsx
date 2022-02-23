@@ -62,7 +62,9 @@ function RetroItemModal(props: RetroItemModalProps, ref: Ref<ModalMethods>) {
           Add Action Item
         </button>
       )}
-      {showAddActionItemCard && <AddActionItem hideComponentCallback={() => setShowAddActionItemCard(false)} />}
+      {showAddActionItemCard && (
+        <AddActionItem thought={thought} hideComponentCallback={() => setShowAddActionItemCard(false)} />
+      )}
     </Modal>
   );
 }

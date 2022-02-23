@@ -40,7 +40,38 @@ describe('Retro Facilitator Journey', () => {
     cy.get('[data-testid=retroItemModal]').should('exist');
   });
 
-  xit('Add action item from expanded mode', () => {});
+  it('Add action item from expanded mode', () => {
+    const happyThought = 'This is a good week';
+    cy.enterThought(Topic.HAPPY, happyThought);
+
+    cy.get('[data-testid="editableText-select"]').click();
+
+    cy.get('[data-testid=retroItemModal]')
+      .as('retroItemModal')
+      .should('contain', happyThought)
+      .findByText('Add Action Item')
+      .click();
+
+    const actionItemTask = 'Handle by Friday';
+    cy.get('[data-testid="addActionItem-task"]').type(actionItemTask);
+    const actionItemAssignee = 'Harry, and Corey';
+    cy.get('[data-testid="actionItem-assignee"]').type(actionItemAssignee);
+
+    cy.findByText('Create!').click();
+
+    cy.get('@retroItemModal').should('not.exist');
+
+    cy.log('**Thought should be marked as discussed**');
+    getHappyColumnItems().should('have.length', 1);
+    cy.get('[data-testid=checkmark]')
+      .closest('[data-testid="retroItem"]')
+      .should('have.class', 'completed')
+      .should('contain.text', happyThought);
+
+    cy.log('**Action Item should exist in action items column**');
+    getActionColumnItems().findByText(actionItemTask).should('exist');
+    getActionColumnItems().findByDisplayValue(actionItemAssignee).should('exist');
+  });
 
   it('Mark thought as discussed (default and expanded)', () => {
     const happyThought = 'This is a good week';
