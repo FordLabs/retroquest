@@ -37,20 +37,16 @@ describe('Retro Facilitator Journey', () => {
     cy.enterThought(Topic.HAPPY, thought);
     cy.log(`**Expand thought: ${thought}**`);
     getRetroItemByMessage(thought).click();
-    cy.get('[data-testid=retroItemModal]').should('exist');
+    getRetroActionModal().should('exist');
   });
 
   it('Add action item from expanded mode', () => {
     const happyThought = 'This is a good week';
     cy.enterThought(Topic.HAPPY, happyThought);
 
-    cy.get('[data-testid="editableText-select"]').click();
+    clickOnFirstThought();
 
-    cy.get('[data-testid=retroItemModal]')
-      .as('retroItemModal')
-      .should('contain', happyThought)
-      .findByText('Add Action Item')
-      .click();
+    getRetroActionModal().as('retroItemModal').should('contain', happyThought).findByText('Add Action Item').click();
 
     const actionItemTask = 'Handle by Friday';
     cy.get('[data-testid="addActionItem-task"]').type(actionItemTask);
@@ -63,10 +59,7 @@ describe('Retro Facilitator Journey', () => {
 
     cy.log('**Thought should be marked as discussed**');
     getHappyColumnItems().should('have.length', 1);
-    cy.get('[data-testid=checkmark]')
-      .closest('[data-testid="retroItem"]')
-      .should('have.class', 'completed')
-      .should('contain.text', happyThought);
+    getDiscussedThought().should('have.class', 'completed').should('contain.text', happyThought);
 
     cy.log('**Action Item should exist in action items column**');
     getActionColumnItems().findByText(actionItemTask).should('exist');
@@ -85,14 +78,22 @@ describe('Retro Facilitator Journey', () => {
     cy.get(`@discussedButton`).click();
 
     cy.log('**Thought marked as discussed should move to bottom of the list**');
-    getHappyColumnItems().should('have.length', 2).last().should('have.class', 'completed');
+    getHappyColumnItems().should('have.length', 2);
+    getHappyColumnItems().last().should('have.class', 'completed');
 
     cy.get(`@discussedButton`).click();
 
     cy.log(`**Unmark happy thought as discussed and move up the list**`);
-    getHappyColumnItems().should('have.length', 2).last().should('not.have.class', 'completed');
+    getHappyColumnItems().should('have.length', 2);
+    getHappyColumnItems().last().should('not.have.class', 'completed');
 
-    // @todo test in expanded view
+    cy.log(`**Mark happy thought as discussed from the thought modal**`);
+    clickOnFirstThought();
+    getRetroActionModal().find('[data-testid=columnItem-checkboxButton]').click();
+
+    cy.log('**Thought marked as discussed from modal should move to bottom of the list**');
+    getHappyColumnItems().should('have.length', 2);
+    getHappyColumnItems().last().should('have.class', 'completed');
   });
 
   it('Action item actions (create, edit, delete, mark as complete)', () => {
@@ -226,3 +227,7 @@ function shouldDeleteActionItem(actionItemTask: string) {
 const getActionColumnItems = () => cy.get('[data-testid=retroColumn__action]').find(`[data-testid=actionItem]`);
 const getRetroItemByMessage = (message: string): Chainable =>
   cy.findByDisplayValue(message).closest(`[data-testid=retroItem]`);
+
+const getDiscussedThought = () => cy.get('[data-testid=checkmark]').closest('[data-testid="retroItem"]');
+const clickOnFirstThought = () => cy.get('[data-testid="editableText-select"]').first().click();
+const getRetroActionModal = () => cy.get('[data-testid=retroItemModal]');
