@@ -15,19 +15,25 @@
  * limitations under the License.
  */
 
-import Topic from '../../src/react/types/Topic';
-import { getTeamCredentials } from '../support/helpers';
-import Chainable = Cypress.Chainable;
 import { getLoginPagePathWithTeamId } from '../../src/react/routes/RouteConstants';
 import { FEEDBACK_API_PATH } from '../../src/react/services/api/ApiConstants';
 import { TOKEN_KEY } from '../../src/react/services/CookieService';
+import Topic from '../../src/react/types/Topic';
+import { getTeamCredentials } from '../support/helpers';
+import Chainable = Cypress.Chainable;
 
 describe('Retro Member Journey', () => {
   let teamCredentials;
+  let isReact;
 
   beforeEach(() => {
     teamCredentials = getTeamCredentials();
     cy.createTeamAndLogin(teamCredentials);
+
+    // @todo remove once angular is yeeted
+    cy.window().then((win) => {
+      isReact = win['Cypress']['isReact'];
+    });
   });
 
   it('Add thoughts to each column', () => {
@@ -167,6 +173,14 @@ describe('Retro Member Journey', () => {
       cy.getCookie(TOKEN_KEY).should('have.property', 'value', '');
     });
   });
+
+  const ensureModalIsOpen = () => {
+    cy.get('@modal').should(isReact ? 'exist' : 'be.visible');
+  };
+
+  const ensureModalIsClosed = () => {
+    cy.get('@modal').should(isReact ? 'not.exist' : 'not.be.visible');
+  };
 });
 
 const getRetroItemByMessage = (message: string): Chainable =>
@@ -188,13 +202,3 @@ function shouldAddHappyThoughts(happyThoughts: string[]) {
     cy.confirmNumberOfThoughtsInColumn(Topic.HAPPY, index + 1);
   });
 }
-
-const ensureModalIsOpen = () => {
-  // cy.get('@modal').should('be.visible'); // works for angular instance
-  cy.get('@modal').should('exist'); // works for react instance
-};
-
-const ensureModalIsClosed = () => {
-  // cy.get('@modal').should('not.be.visible'); // works for angular instance
-  cy.get('@modal').should('not.exist'); // works for react instance
-};

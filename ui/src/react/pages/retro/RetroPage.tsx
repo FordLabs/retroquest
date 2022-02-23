@@ -53,6 +53,9 @@ function RetroPage(props: Props): ReactElement {
     useWebSocketMessageHandler();
 
   useEffect(() => {
+    // @todo remove once angular is yeeted
+    window['Cypress'].isReact = true;
+
     setTeam({ ...team, id: teamId });
 
     ColumnService.getColumns(teamId).then((aggregatedColumns) => {
