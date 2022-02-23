@@ -29,7 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
-import java.util.Arrays;
+import java.util.List;
 
 import static com.ford.labs.retroquest.websocket.WebsocketEventType.DELETE;
 import static com.ford.labs.retroquest.websocket.WebsocketEventType.UPDATE;
@@ -83,28 +83,54 @@ class ActionItemApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_get_action_items_only_for_team_in_token() throws Exception {
-        String jwt = jwtBuilder.buildJwt("beach-bums2");
-
-        ActionItem actionItem1 = ActionItem.builder()
-            .task("Some Action")
-            .teamId("beach-bums2")
-            .build();
-
-        ActionItem actionItem2 = ActionItem.builder()
-            .task("Another Action")
-            .teamId("beach-bums2")
-            .build();
-
-        actionItemRepository.saveAll(Arrays.asList(actionItem1, actionItem2));
+    void getActionItems_WithoutQueryParameter_ReturnsAllActionItems() throws Exception {
+        String teamId = "beach-bums2";
+        String jwt = jwtBuilder.buildJwt(teamId);
+        var createdActionItems = createThreeActionItems(teamId);
+        actionItemRepository.saveAll(createdActionItems);
 
         mockMvc.perform(get("/api/team/beach-bums2/action-items")
             .header("Authorization", "Bearer " + jwt))
             .andExpect(status().isOk())
+            .andExpect(jsonPath("$.length()").value(3))
             .andExpect(jsonPath("$.[0].task").value("Some Action"))
-            .andExpect(jsonPath("$.[0].teamId").value("beach-bums2"))
+            .andExpect(jsonPath("$.[0].teamId").value(teamId))
             .andExpect(jsonPath("$.[1].task").value("Another Action"))
-            .andExpect(jsonPath("$.[1].teamId").value("beach-bums2"));
+            .andExpect(jsonPath("$.[1].teamId").value(teamId))
+            .andExpect(jsonPath("$.[2].task").value("A Third Action"))
+            .andExpect(jsonPath("$.[2].teamId").value(teamId));
+    }
+
+    @Test
+    public void getActionItems_WithArchivedTrue_ReturnsOnlyArchivedActionItems() throws Exception {
+        String teamId = "beach-bums2";
+        String jwt = jwtBuilder.buildJwt(teamId);
+        var createdActionItems = createThreeActionItems(teamId);
+        actionItemRepository.saveAll(createdActionItems);
+
+        mockMvc.perform(get("/api/team/beach-bums2/action-items?archived=true")
+                .header("Authorization", "Bearer " + jwt))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$.[0].task").value("A Third Action"))
+                .andExpect(jsonPath("$.[0].teamId").value("beach-bums2"));
+    }
+
+    @Test
+    public void getActionItems_WithArchivedFalse_ReturnsOnlyUnarchivedActionItems() throws Exception {
+        String teamId = "beach-bums2";
+        String jwt = jwtBuilder.buildJwt(teamId);
+        var createdActionItems = createThreeActionItems(teamId);
+        actionItemRepository.saveAll(createdActionItems);
+
+        mockMvc.perform(get("/api/team/beach-bums2/action-items?archived=false")
+                .header("Authorization", "Bearer " + jwt))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$.[0].task").value("Some Action"))
+                .andExpect(jsonPath("$.[0].teamId").value(teamId))
+                .andExpect(jsonPath("$.[1].task").value("Another Action"))
+                .andExpect(jsonPath("$.[1].teamId").value(teamId));
     }
 
     @Test
@@ -261,6 +287,28 @@ class ActionItemApiTest extends ApiTestBase {
 
         assertThat(actionItemRepository.count()).isEqualTo(1);
         assertThat(savedActionItem).isEqualTo(actionItemRepository.findAll().get(0));
+    }
+
+    private List<ActionItem> createThreeActionItems(String teamId) {
+        ActionItem activeItem = ActionItem.builder()
+                .task("Some Action")
+                .teamId(teamId)
+                .build();
+
+        ActionItem completedItem = ActionItem.builder()
+                .task("Another Action")
+                .teamId(teamId)
+                .completed(true)
+                .build();
+
+        ActionItem archivedItem = ActionItem.builder()
+                .task("A Third Action")
+                .teamId(teamId)
+                .completed(true)
+                .archived(true)
+                .build();
+
+        return List.of(activeItem, completedItem, archivedItem);
     }
 
 }

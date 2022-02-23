@@ -21,6 +21,7 @@ package com.ford.labs.retroquest.actionitem;
 import com.ford.labs.retroquest.websocket.WebsocketActionItemEvent;
 import com.ford.labs.retroquest.websocket.WebsocketService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,6 +40,10 @@ import static java.lang.String.format;
 
 @RestController
 @Tag(name = "Action Item Controller", description = "The controller that manages action items to a board given a team id")
+@ApiResponses(value = {
+        @ApiResponse(responseCode = "403", description = "Forbidden"),
+        @ApiResponse(responseCode = "401", description = "Unauthorized")
+})
 public class ActionItemController {
 
     private final ActionItemRepository actionItemRepository;
@@ -111,18 +116,13 @@ public class ActionItemController {
 
     @GetMapping("/api/team/{teamId}/action-items")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
-    @Operation(summary = "Retrieves all action items given a team id", description = "getActionItemsForTeam")
+    @Operation(summary = "Retrieves all action items given a team id", description = "getActionItemsForTeam", parameters = {
+        @Parameter(name = "archived", description = "The archived status of the action items")
+    })
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public List<ActionItem> getActionItemsForTeam(@PathVariable("teamId") String teamId) {
-        return actionItemRepository.findAllByTeamId(teamId);
-    }
-
-    @GetMapping("/api/team/{teamId}/action-items/archived")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
-    @Operation(summary = "Retrieves all archived action items given a team id", description = "getArchivedActionItemsForTeam")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public List<ActionItem> getArchivedActionItemsForTeam(@PathVariable("teamId") String teamId) {
-        return actionItemRepository.findAllByTeamIdAndArchivedIsTrue(teamId);
+    public List<ActionItem> getActionItemsForTeam(@PathVariable("teamId") String teamId, @RequestParam(required = false) Boolean archived) {
+        if(archived != null) return actionItemRepository.findAllByTeamIdAndArchived(teamId, archived);
+        else return actionItemRepository.findAllByTeamId(teamId);
     }
 
     @PostMapping("/api/team/{teamId}/action-item")
@@ -142,6 +142,8 @@ public class ActionItemController {
     @Transactional
     @DeleteMapping("/api/team/{teamId}/action-item/{id}")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @Operation(summary = "Deletes an action item given a team id and action item id", description = "deleteActionItem")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public void deleteActionItemByTeamIdAndId(@PathVariable("teamId") String teamId, @PathVariable("id") Long id) {
         actionItemRepository.deleteActionItemByTeamIdAndId(teamId, id);
         websocketService.publishEvent(new WebsocketActionItemEvent(teamId, DELETE, ActionItem.builder().id(id).build()));
