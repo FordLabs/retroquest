@@ -150,7 +150,7 @@ describe('ThoughtColumn.spec.tsx', () => {
   });
 
   it('should send update event to API when header title changed', () => {
-    userEvent.click(screen.getByTestId('edit-button'));
+    userEvent.click(screen.getByTestId('columnHeader-editTitleButton'));
     userEvent.type(screen.getByTestId('column-input'), 'Something Else{enter}');
     expect(ColumnService.updateColumnTitle).toHaveBeenCalledWith('my-team', 123456, 'Something Else');
   });

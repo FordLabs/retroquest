@@ -26,6 +26,7 @@ import { emojify } from '../../utils/EmojiGenerator';
   templateUrl: './column-header.component.html',
   styleUrls: ['./column-header.component.scss'],
   host: {
+    '[attr.data-testid]': '"columnHeader-" + type',
     '[class.happy]': "type === 'happy'",
     '[class.confused]': "type === 'confused'",
     '[class.sad]': "type === 'unhappy'",

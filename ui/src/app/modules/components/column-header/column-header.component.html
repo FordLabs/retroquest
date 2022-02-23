@@ -17,6 +17,7 @@
 
 <input
     #inputField
+    data-testid="columnHeader-titleInput"
     [readonly]="readOnlyEnabled"
     [maxlength]="maxTextLength"
     [(ngModel)]="titleCopy"
@@ -39,10 +40,7 @@
         }"
         (click)="toggleSort()"
     ></div>
-    <rq-tooltip
-        [theme]="theme"
-        [text]="sorted ? 'Unsort' : 'Sort'"
-    ></rq-tooltip>
+    <rq-tooltip [theme]="theme" [text]="sorted ? 'Unsort' : 'Sort'"></rq-tooltip>
 </div>
 
 <span
@@ -52,7 +50,12 @@
     }"
     *ngIf="!readOnly"
 >
-    <i class="fas fa-pencil-alt" (click)="toggleEdit()" aria-hidden="true"></i>
+    <i
+        class="fas fa-pencil-alt"
+        (click)="toggleEdit()"
+        data-testid="columnHeader-editTitleButton"
+        aria-hidden="true"
+    ></i>
 
     <rq-tooltip [theme]="theme" text="Edit"></rq-tooltip>
 </span>

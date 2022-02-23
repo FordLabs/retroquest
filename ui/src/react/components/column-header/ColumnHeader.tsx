@@ -75,7 +75,7 @@ function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
   const handleInputFocus = (event) => event.target.select();
 
   return (
-    <div {...divProps} className={classNames('column-header', type)}>
+    <div {...divProps} className={classNames('column-header', type)} data-testid={`columnHeader-${type}`}>
       {editing ? (
         <>
           <input
@@ -110,7 +110,12 @@ function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
           )}
           {editable && (
             <span className={classNames(['edit-button'])}>
-              <i data-testid="edit-button" className="fas fa-pencil-alt" onClick={enableEditing} aria-hidden="true" />
+              <i
+                className="fas fa-pencil-alt"
+                onClick={enableEditing}
+                aria-hidden="true"
+                data-testid="columnHeader-editTitleButton"
+              />
               <Tooltip>Edit</Tooltip>
             </span>
           )}
