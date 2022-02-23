@@ -70,7 +70,7 @@ class ColumnCombinerServiceTest {
                 )
         );
 
-        when(actionItemRepository.findAllByTeamIdAndArchivedIsFalse(fakeTeamId)).thenReturn(
+        when(actionItemRepository.findAllByTeamIdAndArchived(fakeTeamId, false)).thenReturn(
                 Arrays.asList(
                         expectedActiveActionItems,
                         expectedCompletedActionItems

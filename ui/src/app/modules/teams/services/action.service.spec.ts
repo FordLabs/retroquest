@@ -112,7 +112,7 @@ describe('ActionItemService', () => {
 
     it('should call the backend api with the correct url', () => {
       service.fetchArchivedActionItems(fakeTeamId);
-      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${fakeTeamId}/action-items/archived`);
+      expect(mockHttpClient.get).toHaveBeenCalledWith(`/api/team/${fakeTeamId}/action-items?archived=true`);
     });
   });
 
