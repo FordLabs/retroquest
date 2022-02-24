@@ -15,6 +15,9 @@
  * limitations under the License.
  */
 
+@import '../../../../styles/colors';
+@import '../../../../styles/mixins';
+
 .sub-header {
   .sub-header-links {
     display: flex;
@@ -22,6 +25,23 @@
 
     li {
       height: 100%;
+    }
+
+    .archive-button {
+      margin-left: 24px;
+    }
+  }
+}
+
+@include dark-theme {
+  .sub-header {
+    background-color: $header-background-color-dark;
+
+    .archive-button {
+      &:focus,
+      &:hover {
+        background-color: $purple;
+      }
     }
   }
 }
