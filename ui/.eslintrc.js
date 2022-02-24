@@ -28,6 +28,7 @@ module.exports = {
   },
   rules: {
     semi: 2,
+    '@typescript-eslint/consistent-type-definitions': ['warn', 'type'],
     'max-len': ['error', { code: 120 }],
     'simple-import-sort/imports': [
       'error',
