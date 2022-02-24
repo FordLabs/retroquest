@@ -19,6 +19,7 @@ package com.ford.labs.retroquest.api;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
+import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
 import com.ford.labs.retroquest.thought.*;
 import org.junit.jupiter.api.AfterEach;
@@ -27,7 +28,6 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Arrays;
@@ -132,7 +132,7 @@ class ThoughtApiTest extends ApiTestBase {
 
     @Test
     public void should_not_move_thought_column_unauthorized() throws Exception {
-        MoveThoughtRequest changeRequest = new MoveThoughtRequest("cheeseburgers");
+        MoveThoughtRequest changeRequest = new MoveThoughtRequest(6789L);
 
         mockMvc.perform(put(format("%s/thought/%d/topic", BASE_API_URL, 1))
                 .contentType(APPLICATION_JSON)
@@ -143,7 +143,8 @@ class ThoughtApiTest extends ApiTestBase {
 
     @Test
     public void should_move_thought_column() throws Exception {
-        MoveThoughtRequest changeRequest = new MoveThoughtRequest("cheeseburgers");
+        ColumnTitle savedColumnTitle = columnTitleRepository.save(new ColumnTitle(null, "cheeseburgers", "CheeseBurgers", teamId));
+        MoveThoughtRequest changeRequest = new MoveThoughtRequest(savedColumnTitle.getId());
         Thought savedThought = thoughtRepository.save(
                 Thought.builder()
                         .teamId(teamId)
@@ -164,7 +165,8 @@ class ThoughtApiTest extends ApiTestBase {
 
         assertThat(updatedThought.getId()).isEqualTo(savedThought.getId());
         assertThat(updatedThought.getMessage()).isEqualTo(savedThought.getMessage());
-        assertThat(updatedThought.getTopic()).isEqualTo(changeRequest.getTopic());
+        assertThat(updatedThought.getTopic()).isEqualTo(savedColumnTitle.getTopic());
+        assertThat(updatedThought.getColumnTitle()).isEqualTo(savedColumnTitle);
     }
 
     @Test
