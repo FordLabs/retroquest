@@ -20,15 +20,15 @@
 @import '../../../styles/sizes';
 
 .auth-template {
-  display: flex;
+  display: block;
   height: 100%;
 
   font-family: 'Open Sans', sans-serif;
 
   background-color: $white;
 
-  @include tablet {
-    display: block;
+  @include breakpoint-medium {
+    display: flex;
   }
 
   @include dark-theme {
@@ -72,10 +72,10 @@
     margin: 0;
 
     font-weight: bold;
-    font-size: 2.5rem;
+    font-size: 1.3rem;
 
-    @include mobile {
-      font-size: 1.3rem;
+    @include breakpoint-medium {
+      font-size: 2.5rem;
     }
   }
 

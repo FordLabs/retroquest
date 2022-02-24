@@ -1,13 +1,13 @@
 @import 'sizes';
 
-@mixin tablet {
-  @media only screen and (max-width: $max-width-tablet) {
+@mixin breakpoint-medium {
+  @media (min-width: 768px) {
     @content;
   }
 }
 
-@mixin mobile {
-  @media only screen and (max-width: $max-width-mobile) {
+@mixin breakpoint-large {
+  @media (min-width: 992px) {
     @content;
   }
 }
@@ -21,11 +21,11 @@
 @mixin site-max-width() {
   max-width: $max-width;
   margin: 0 auto;
-  padding-right: $global-side-padding;
-  padding-left: $global-side-padding;
+  padding-right: $global-side-padding-mobile;
+  padding-left: $global-side-padding-mobile;
 
-  @include mobile {
-    padding-right: $global-side-padding-mobile;
-    padding-left: $global-side-padding-mobile;
+  @include breakpoint-medium {
+    padding-right: $global-side-padding;
+    padding-left: $global-side-padding;
   }
 }

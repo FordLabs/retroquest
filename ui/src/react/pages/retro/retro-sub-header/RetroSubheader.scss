@@ -19,17 +19,46 @@
 @import '../../../../styles/mixins';
 
 .sub-header {
-  .sub-header-links {
-    display: flex;
-    justify-content: flex-end;
+  height: 32px;
 
-    li {
-      height: 100%;
+  @include breakpoint-medium {
+    height: 45px;
+  }
+}
+
+.sub-header-links {
+  display: flex;
+  justify-content: flex-end;
+
+  li {
+    width: auto;
+    height: 100%;
+  }
+
+  .feedback-button,
+  .download-csv-button {
+    min-width: auto;
+    padding: 0 1.7rem;
+
+    .button-icon {
+      display: block;
+
+      @include breakpoint-medium {
+        display: none;
+      }
     }
 
-    .archive-button {
-      margin-left: 24px;
+    .button-text {
+      display: none;
+
+      @include breakpoint-medium {
+        display: initial;
+      }
     }
+  }
+
+  .archive-button {
+    margin-left: 24px;
   }
 }
 

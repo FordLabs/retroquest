@@ -18,16 +18,37 @@
 @import '../styles/mixins';
 
 .retro-page {
+  $mobile-column-nav-height: 35px;
+  margin-bottom: $mobile-column-nav-height;
+
   .retro-page-content {
     @include site-max-width;
 
     display: flex;
     gap: 1rem;
-    justify-content: space-between;
+    justify-content: center;
     margin-top: 24px;
 
-    .retro-column {
-      width: 324px;
+    @include breakpoint-medium {
+      justify-content: space-between;
+    }
+
+    .column-container {
+      width: 100%;
+
+      @include breakpoint-medium {
+        width: 324px;
+      }
+
+      &:not(.selected) {
+        display: none;
+        visibility: hidden;
+
+        @include breakpoint-medium {
+          display: initial;
+          visibility: initial;
+        }
+      }
     }
   }
 }
