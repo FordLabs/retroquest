@@ -16,7 +16,9 @@
  */
 
 .date-created {
+  flex: 25%;
   flex-direction: column;
+
   cursor: default;
 
   .date-created-header {
@@ -27,7 +29,10 @@
   }
 
   .date-created-value {
+    padding: 0 0.5rem;
+
     font-weight: bold;
     font-size: 0.75rem;
+    white-space: nowrap;
   }
 }
