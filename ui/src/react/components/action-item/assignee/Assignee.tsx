@@ -67,12 +67,12 @@ function Assignee(props: AssigneeProps) {
           data-testid="actionItem-assignee"
           ref={assigneeInputRef}
         />
+        <FloatingCharacterCountdown
+          characterCount={editAssignee.length}
+          charsAreRunningOutThreshold={MAX_ASSIGNEE_LENGTH / 2}
+          maxCharacterCount={MAX_ASSIGNEE_LENGTH}
+        />
       </label>
-      <FloatingCharacterCountdown
-        characterCount={editAssignee.length}
-        charsAreRunningOutThreshold={MAX_ASSIGNEE_LENGTH / 2}
-        maxCharacterCount={MAX_ASSIGNEE_LENGTH}
-      />
     </div>
   );
 }
