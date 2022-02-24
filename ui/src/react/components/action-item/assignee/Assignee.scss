@@ -16,6 +16,7 @@
  */
 
 @import '../../../../styles/colors';
+@import '../../../../styles/mixins';
 
 $opacity: 0.2;
 
@@ -63,10 +64,6 @@ $opacity: 0.2;
 
     transition: border-bottom-color 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
 
-    .dark-theme & {
-      border-bottom-color: $dark-yellow;
-    }
-
     + .floating-character-countdown {
       visibility: hidden;
 
@@ -80,10 +77,6 @@ $opacity: 0.2;
       + .floating-character-countdown {
         visibility: visible;
       }
-
-      &.dark-theme {
-        border-bottom-color: $dark-purple;
-      }
     }
 
     @media only screen and (max-width: 610px) {
@@ -92,6 +85,18 @@ $opacity: 0.2;
 
     @media screen and (prefers-reduced-motion: reduce) {
       transition: none;
+    }
+  }
+}
+
+@include dark-theme {
+  .assignee-container {
+    .assignee {
+      border-bottom-color: $dark-yellow;
+
+      &:focus {
+        border-bottom-color: $dark-purple;
+      }
     }
   }
 }
