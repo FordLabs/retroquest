@@ -1,5 +1,5 @@
-/*!
- * Copyright (c) 2021 Ford Motor Company
+/*
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,65 +16,71 @@
  */
 
 @import '../../../styles/colors';
+@import '../../../styles/mixins';
 
 .tooltip {
   $arrow-size: 12px;
 
   display: inline-block;
   padding: 6px 18px;
-  background-color: $asphalt;
-  box-shadow: 0 1px 2px opacity($black, 0.25);
 
   color: $white;
   font-size: 1rem;
   text-align: center;
 
+  background-color: $asphalt;
+
   border-radius: 6px;
+  box-shadow: 0 1px 2px opacity($black, 0.25);
+  transform: translate(-50%, $arrow-size);
+  visibility: hidden;
+
+  opacity: 0;
+
+  transition: opacity 0.7s;
 
   position: absolute;
   top: 100%;
   left: 50%;
-  transform: translate(-50%, $arrow-size);
-
-  opacity: 0;
-  visibility: hidden;
   z-index: 1000;
-
-  transition: opacity 0.7s;
 
   @media only screen and (max-width: 610px) {
     display: none;
   }
 
   &::before {
-    content: '';
     display: block;
     width: 0;
     height: 0;
 
+    border-right: $arrow-size solid transparent;
+
     border-bottom: $arrow-size solid $asphalt;
     border-left: $arrow-size solid transparent;
-    border-right: $arrow-size solid transparent;
+    transform: translateX(-50%);
+
+    content: '';
 
     position: absolute;
     left: 50%;
     top: -$arrow-size;
-    transform: translateX(-50%);
 
     z-index: 999;
+  }
 
-    .dark-theme & {
+  *:hover > &, *:focus > & {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+@include dark-theme {
+  .tooltip {
+    color: $dark-asphalt;
+    background-color: $gray;
+
+    &::before {
       border-bottom-color: $gray;
     }
-  }
-
-  .dark-theme & {
-    background-color: $gray;
-    color: $dark-asphalt;
-  }
-
-  *:hover > & {
-    opacity: 1;
-    visibility: visible;
   }
 }

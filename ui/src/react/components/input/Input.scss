@@ -47,13 +47,6 @@
     outline: none;
     box-shadow: 0 0 0 1px $asphalt;
 
-    @include dark-theme {
-      color: $gray;
-
-      background-color: $asphalt;
-      box-shadow: 0 0 0 1px $dark-gray;
-    }
-
     @include mobile {
       font-size: 1rem;
     }
@@ -64,10 +57,6 @@
 
     &:focus {
       box-shadow: 0 0 0 2px $dark-turquoise;
-
-      @include dark-theme {
-        box-shadow: 0 0 0 2px $turquoise;
-      }
     }
   }
 
@@ -79,8 +68,25 @@
   &.invalid {
     .input-text {
       box-shadow: 0 0 0 2px $dark-red;
+    }
+  }
+}
 
-      @include dark-theme {
+@include dark-theme {
+  .input-group {
+    .input-text {
+      color: $gray;
+
+      background-color: $asphalt;
+      box-shadow: 0 0 0 1px $dark-gray;
+
+      &:focus {
+        box-shadow: 0 0 0 2px $turquoise;
+      }
+    }
+
+    &.invalid {
+      .input-text {
         box-shadow: 0 0 0 2px $red;
       }
     }
