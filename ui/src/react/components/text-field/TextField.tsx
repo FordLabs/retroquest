@@ -41,6 +41,7 @@ export default function TextField(props: TextFieldProps): JSX.Element {
     <label {...labelProps} className={classnames('text-field', type)}>
       <input
         type="text"
+        className="text-input"
         placeholder={placeholder}
         maxLength={maxCharacterCount}
         value={text}

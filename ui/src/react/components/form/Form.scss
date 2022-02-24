@@ -22,10 +22,6 @@
   .error-message {
     margin-top: 1rem;
     color: $dark-red;
-
-    @include dark-theme {
-      color: $red;
-    }
   }
 
   .submit-button {
@@ -35,15 +31,25 @@
 
     background-color: $dark-turquoise;
 
-    @include dark-theme {
-      color: $asphalt;
+    &:hover,
+    &:focus {
       background-color: $turquoise;
     }
+  }
+}
 
-    &:hover, &:focus {
+@include dark-theme {
+  .form {
+    .error-message {
+      color: $red;
+    }
+
+    .submit-button {
+      color: $asphalt;
       background-color: $turquoise;
 
-      @include dark-theme {
+      &:hover,
+      &:focus {
         background-color: $dark-turquoise;
       }
     }

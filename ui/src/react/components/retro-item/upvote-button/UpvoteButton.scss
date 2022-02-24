@@ -16,6 +16,7 @@
  */
 
 @import '../../../../styles/colors';
+@import '../../../../styles/mixins';
 
 .upvote-button {
   .star-icon {
@@ -30,10 +31,6 @@
 
   .fa-star {
     z-index: 2;
-
-    .dark-theme & {
-      color: $yellow;
-    }
   }
 
   .star-shadow {
@@ -43,8 +40,16 @@
 
     background-color: $yellow;
     border-radius: 12px / 6px;
+  }
+}
 
-    .dark-theme & {
+@include dark-theme {
+  .upvote-button {
+    .fa-star {
+      color: $yellow;
+    }
+
+    .star-shadow {
       background-color: $dark-asphalt;
     }
   }

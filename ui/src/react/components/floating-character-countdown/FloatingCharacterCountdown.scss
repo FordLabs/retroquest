@@ -16,6 +16,7 @@
  */
 
 @import '../../../styles/colors';
+@import '../../../styles/mixins';
 
 .floating-character-countdown {
   width: auto;
@@ -33,10 +34,6 @@
   position: absolute;
   right: 0;
 
-  .dark-theme & {
-    color: $gray;
-  }
-
   &.display-warning-text {
     color: $yellow;
   }
@@ -47,5 +44,11 @@
 
   &.visible {
     visibility: visible;
+  }
+}
+
+@include dark-theme {
+  .floating-character-countdown {
+    color: $gray;
   }
 }
