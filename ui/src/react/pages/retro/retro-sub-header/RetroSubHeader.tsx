@@ -55,7 +55,10 @@ function RetroSubheader() {
             </button>
           </li>
           <li>
-            <button className="button button-primary" onClick={() => archiveRetroModalRef.current?.show()}>
+            <button
+              className="archive-button button button-primary"
+              onClick={() => archiveRetroModalRef.current?.show()}
+            >
               Archive Retro
             </button>
           </li>
