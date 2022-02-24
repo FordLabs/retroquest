@@ -40,6 +40,7 @@ const containerElementName = 'reactRetroPageWrapper';
     './retro-sub-header/RetroSubheader.scss',
     '../../components/dialog/Dialog.scss',
     '../../components/modal/Modal.scss',
+    '../../components/mobile-column-nav/MobileColumnNav.scss',
     '../../components/editable-text/EditableText.scss',
     '../../components/retro-item-modal/RetroItemModal.scss',
     '../../components/archive-retro-dialog/ArchiveRetroDialog.scss',

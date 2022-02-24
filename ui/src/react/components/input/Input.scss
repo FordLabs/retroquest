@@ -39,7 +39,7 @@
 
     color: $asphalt;
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 1rem;
 
     background-color: $white;
     border: 0;
@@ -47,8 +47,8 @@
     outline: none;
     box-shadow: 0 0 0 1px $asphalt;
 
-    @include mobile {
-      font-size: 1rem;
+    @include breakpoint-medium {
+      font-size: 0.9rem;
     }
 
     &::placeholder {

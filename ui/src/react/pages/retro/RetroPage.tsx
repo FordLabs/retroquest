@@ -16,10 +16,13 @@
  */
 
 import * as React from 'react';
-import { Fragment, ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
+import classNames from 'classnames';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
+import MobileColumnNav from '../../components/mobile-column-nav/MobileColumnNav';
 import useWebSocketMessageHandler from '../../hooks/useWebSocketMessageHandler';
+import ActionItemService from '../../services/api/ActionItemService';
 import ColumnService from '../../services/api/ColumnService';
 import WebSocketService from '../../services/websocket/WebSocketService';
 import { ActionItemState } from '../../state/ActionItemState';
@@ -35,7 +38,6 @@ import Topic, { ThoughtTopic } from '../../types/Topic';
 import ActionItemsColumn from './action-items-column/ActionItemsColumn';
 import RetroSubheader from './retro-sub-header/RetroSubheader';
 import ThoughtColumn from './thought-column/ThoughtColumn';
-import ActionItemService from '../../services/api/ActionItemService';
 
 type Props = {
   teamId?: string;
@@ -49,6 +51,7 @@ function RetroPage(props: Props): ReactElement {
   const setActionItems = useSetRecoilState<Action[]>(ActionItemState);
   const setThoughts = useSetRecoilState<Thought[]>(ThoughtsState);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [selectedMobileColumnIndex, setSelectedMobileColumnIndex] = useState(0);
 
   const { columnTitleMessageHandler, thoughtMessageHandler, actionItemMessageHandler, endRetroMessageHandler } =
     useWebSocketMessageHandler();
@@ -61,9 +64,11 @@ function RetroPage(props: Props): ReactElement {
 
     setTeam({ ...team, id: teamId });
 
-    Promise.all([ColumnService.getColumns(teamId), ActionItemService.get(teamId, false)]).then((results) => {
+    const getColumnsResult = ColumnService.getColumns(teamId);
+    const getActionItemsResult = ActionItemService.get(teamId, false);
+
+    Promise.all([getColumnsResult, getActionItemsResult]).then((results) => {
       const columns = results[0];
-      const actionItems = results[1];
       setColumnTitles(
         columns.map((aggregatedColumn) => ({
           id: aggregatedColumn.id,
@@ -73,9 +78,12 @@ function RetroPage(props: Props): ReactElement {
         }))
       );
 
+      const actionItems = results[1];
+      setActionItems(actionItems);
+
       const allItems = flatten(columns.map((aggregatedColumn) => aggregatedColumn.thoughts));
       setThoughts([...allItems.filter((item) => item.topic !== Topic.ACTION)]);
-      setActionItems(actionItems);
+
       setIsLoading(false);
     });
   }, []);
@@ -110,13 +118,25 @@ function RetroPage(props: Props): ReactElement {
         {!isLoading &&
           columnTitles.map(({ topic }: ColumnTitle, index) => {
             return (
-              <Fragment key={`column-${index}`}>
+              <div
+                key={`column-${index}`}
+                className={classNames('column-container', { selected: index === selectedMobileColumnIndex })}
+              >
                 <ThoughtColumn topic={topic as ThoughtTopic} />
-              </Fragment>
+              </div>
             );
           })}
-        {!isLoading && <ActionItemsColumn />}
+        {!isLoading && (
+          <div className={classNames('column-container', { selected: 3 === selectedMobileColumnIndex })}>
+            <ActionItemsColumn />
+          </div>
+        )}
       </div>
+      <MobileColumnNav
+        columnTitles={columnTitles}
+        selectedIndex={selectedMobileColumnIndex}
+        setSelectedIndex={setSelectedMobileColumnIndex}
+      />
     </div>
   );
 }

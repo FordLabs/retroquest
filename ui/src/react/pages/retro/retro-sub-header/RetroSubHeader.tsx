@@ -45,13 +45,18 @@ function RetroSubheader() {
       <div className="sub-header">
         <ul className="sub-header-links">
           <li>
-            <button className="button button-secondary" onClick={() => feedbackModalRef.current?.show()}>
-              Give Feedback
+            <button
+              className="feedback-button button button-secondary"
+              onClick={() => feedbackModalRef.current?.show()}
+            >
+              <span className="button-text">Give Feedback</span>
+              <i className="far fa-comments button-icon" aria-hidden="true" />
             </button>
           </li>
           <li>
-            <button className="button button-secondary" onClick={downloadCSV}>
-              Download CSV
+            <button className="download-csv-button button button-secondary" onClick={downloadCSV}>
+              <span className="button-text">Download CSV</span>
+              <i className="fas fa-download button-icon" aria-hidden="true" />
             </button>
           </li>
           <li>

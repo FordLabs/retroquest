@@ -1,5 +1,5 @@
-/*!
- * Copyright (c) 2021 Ford Motor Company
+/*
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,12 +25,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 64px;
+  height: 42px;
 
   position: relative;
 
-  @include mobile {
-    height: 42px;
+  @include breakpoint-medium {
+    height: 64px;
   }
 
   .left-content {
@@ -39,32 +39,32 @@
     align-items: center;
     overflow: hidden;
 
-    font-size: 1.5rem;
+    font-size: 1rem;
 
-    @include mobile {
-      font-size: 1rem;
+    @include breakpoint-medium {
+      font-size: 1.5rem;
     }
   }
 
   .center-content {
-    display: flex;
+    display: none;
     flex: 1;
     align-items: center;
     justify-content: center;
 
-    @include mobile {
-      display: none;
+    @include breakpoint-medium {
+      display: flex;
     }
   }
 
   .right-content {
     display: flex;
-    flex: 1;
+    flex: initial;
     align-items: center;
     justify-content: flex-end;
 
-    @include mobile {
-      flex: initial;
+    @include breakpoint-medium {
+      flex: 1;
     }
   }
 
@@ -73,15 +73,16 @@
   }
 
   .logo {
-    height: 36px;
+    height: 24px;
     border-radius: 6px;
 
-    @include mobile {
-      height: 24px;
+    @include breakpoint-medium {
+      height: 36px;
     }
   }
 
   .horizontal-separator {
+    display: none;
     width: 3px;
     height: 24px;
     margin: 0 24px;
@@ -90,25 +91,28 @@
     border-radius: 6px;
     opacity: 0.1;
 
-    @include mobile {
-      display: none;
+    @include breakpoint-medium {
+      display: initial;
     }
   }
 
   .team-name {
+    flex: 1;
+    padding: 0 6px;
     overflow: hidden;
 
     color: inherit;
     font-weight: bold;
     font-size: inherit;
     white-space: nowrap;
+    text-align: center;
     text-overflow: ellipsis;
 
-    @include mobile {
-      flex: 1;
-      padding: 0 6px;
+    @include breakpoint-medium {
+      flex: initial;
+      padding: initial;
 
-      text-align: center;
+      text-align: initial;
     }
   }
 
@@ -128,6 +132,7 @@
   }
 
   .last-saved-text {
+    display: none;
     margin-right: 18px;
 
     font-weight: 500;
@@ -137,15 +142,16 @@
 
     opacity: 0.5;
 
-    @include mobile {
-      display: none;
+    @include breakpoint-medium {
+      display: initial;
     }
   }
 
   .settings-button {
     font-size: 1.3rem;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       color: $purple;
     }
   }
