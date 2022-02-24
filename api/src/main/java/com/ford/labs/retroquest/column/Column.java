@@ -11,5 +11,6 @@ import java.util.List;
 public class Column {
     private Long id;
     private String title;
+    private String topic;
     private List<Thought> thoughts;
 }
