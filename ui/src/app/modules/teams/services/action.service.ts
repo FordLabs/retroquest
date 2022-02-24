@@ -27,11 +27,11 @@ export class ActionItemService {
   constructor(private http: HttpClient, private dataService: DataService) {}
 
   fetchActionItems(teamId): Observable<Array<ActionItem>> {
-    return this.http.get<Array<ActionItem>>(`/api/team/${teamId}/action-items?archived=false`);
+    return this.http.get<Array<ActionItem>>(`/api/team/${teamId}/action-item?archived=false`);
   }
 
   fetchArchivedActionItems(teamId): Observable<Array<ActionItem>> {
-    return this.http.get<Array<ActionItem>>(`/api/team/${teamId}/action-items?archived=true`);
+    return this.http.get<Array<ActionItem>>(`/api/team/${teamId}/action-item?archived=true`);
   }
 
   addActionItem(actionItem: ActionItem): void {
