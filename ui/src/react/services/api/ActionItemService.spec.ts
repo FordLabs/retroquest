@@ -34,6 +34,22 @@ describe('Action Item Service', () => {
   const allActionItemsUrl = `/api/team/${teamId}/action-item`;
   const actionItemByIdUrl = `${allActionItemsUrl}/${actionItemId}`;
 
+  it('should retrieve unarchived action items', async () => {
+    const expected = [getMockActionItem(), getMockActionItem()];
+    axios.get = jest.fn().mockResolvedValue({ data: expected });
+    const actual = await ActionItemService.get(teamId, false);
+    expect(actual).toEqual(expected);
+    expect(axios.get).toHaveBeenCalledWith(allActionItemsUrl + '?archived=false');
+  });
+
+  it('should retrieve archived action items', async () => {
+    const expected = [getMockActionItem()];
+    axios.get = jest.fn().mockResolvedValue({ data: expected });
+    const actual = await ActionItemService.get(teamId, true);
+    expect(actual).toEqual(expected);
+    expect(axios.get).toHaveBeenCalledWith(allActionItemsUrl + '?archived=true');
+  });
+
   it('should create an action item', async () => {
     const expectedResult: Action = getMockActionItem();
     axios.post = jest.fn().mockResolvedValue({ data: expectedResult });

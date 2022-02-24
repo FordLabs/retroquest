@@ -18,33 +18,26 @@
 import { Column } from '../../../types/Column';
 import Topic from '../../../types/Topic';
 
-import { getMockActionItem } from './ActionItemService';
 import { getMockThought } from './ThoughtService';
 
 export const mockColumns: Column[] = [
   {
     id: 1,
-    items: [getMockThought(Topic.HAPPY, false), getMockThought(Topic.HAPPY, true)],
+    thoughts: [getMockThought(Topic.HAPPY, false), getMockThought(Topic.HAPPY, true)],
     title: 'Happy',
     topic: Topic.HAPPY,
   },
   {
     id: 1,
-    items: [getMockThought(Topic.CONFUSED, false), getMockThought(Topic.CONFUSED, true)],
+    thoughts: [getMockThought(Topic.CONFUSED, false), getMockThought(Topic.CONFUSED, true)],
     title: 'Confused',
     topic: Topic.CONFUSED,
   },
   {
     id: 1,
-    items: [getMockThought(Topic.UNHAPPY, false), getMockThought(Topic.UNHAPPY, true)],
+    thoughts: [getMockThought(Topic.UNHAPPY, false), getMockThought(Topic.UNHAPPY, true)],
     title: 'Sad',
     topic: Topic.UNHAPPY,
-  },
-  {
-    id: 1,
-    items: [getMockActionItem(false), getMockActionItem(true)],
-    title: 'Action Items',
-    topic: Topic.ACTION,
   },
 ];
 

@@ -35,6 +35,7 @@ import Topic, { ThoughtTopic } from '../../types/Topic';
 import ActionItemsColumn from './action-items-column/ActionItemsColumn';
 import RetroSubheader from './retro-sub-header/RetroSubheader';
 import ThoughtColumn from './thought-column/ThoughtColumn';
+import ActionItemService from '../../services/api/ActionItemService';
 
 type Props = {
   teamId?: string;
@@ -60,9 +61,11 @@ function RetroPage(props: Props): ReactElement {
 
     setTeam({ ...team, id: teamId });
 
-    ColumnService.getColumns(teamId).then((aggregatedColumns) => {
+    Promise.all([ColumnService.getColumns(teamId), ActionItemService.get(teamId, false)]).then((results) => {
+      const columns = results[0];
+      const actionItems = results[1];
       setColumnTitles(
-        aggregatedColumns.map((aggregatedColumn) => ({
+        columns.map((aggregatedColumn) => ({
           id: aggregatedColumn.id,
           topic: aggregatedColumn.topic,
           title: aggregatedColumn.title,
@@ -70,10 +73,9 @@ function RetroPage(props: Props): ReactElement {
         }))
       );
 
-      const allItems = flatten(aggregatedColumns.map((aggregatedColumn) => aggregatedColumn.items));
+      const allItems = flatten(columns.map((aggregatedColumn) => aggregatedColumn.thoughts));
       setThoughts([...allItems.filter((item) => item.topic !== Topic.ACTION)]);
-      setActionItems([...allItems.filter((item) => !item.topic)]);
-
+      setActionItems(actionItems);
       setIsLoading(false);
     });
   }, []);
@@ -106,16 +108,14 @@ function RetroPage(props: Props): ReactElement {
       <RetroSubheader />
       <div className="retro-page-content">
         {!isLoading &&
-          !!columnTitles.length &&
           columnTitles.map(({ topic }: ColumnTitle, index) => {
-            const isActionItemsColumn = topic === Topic.ACTION;
-
             return (
               <Fragment key={`column-${index}`}>
-                {isActionItemsColumn ? <ActionItemsColumn /> : <ThoughtColumn topic={topic as ThoughtTopic} />}
+                <ThoughtColumn topic={topic as ThoughtTopic} />
               </Fragment>
             );
           })}
+        {!isLoading && <ActionItemsColumn />}
       </div>
     </div>
   );
