@@ -119,10 +119,19 @@ $opacity: 0.25;
 @include dark-theme {
   .column-item-button-group {
     border-top-color: $task-footer-separator-dark;
-  }
 
-  .column-item-button {
-    color: $gray;
-    border-color: $task-footer-separator-dark;
+    .column-item-button {
+      color: $gray;
+
+      background-color: inherit;
+      border-color: $task-footer-separator-dark;
+
+      &.button-primary {
+        &:hover,
+        &:focus {
+          background-color: $dark-purple;
+        }
+      }
+    }
   }
 }
