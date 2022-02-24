@@ -26,6 +26,7 @@ import WebSocketService from '../../services/websocket/WebSocketService';
 import RetroPage from './RetroPage';
 
 jest.mock('../../services/api/ColumnService');
+jest.mock('../../services/api/ActionItemService');
 jest.mock('../../services/websocket/WebSocketService');
 
 jest.setTimeout(60000);
@@ -69,7 +70,7 @@ describe('RetroPage.spec.tsx', () => {
     mockColumns.forEach((column) => {
       const retroColumn = screen.getByTestId(`retroColumn__${column.topic}`);
       expect(within(retroColumn).getByText(column.title)).toBeDefined();
-      expect(within(retroColumn).getAllByTestId(/(retro|action)Item$/)).toHaveLength(column.items.length);
+      expect(within(retroColumn).getAllByTestId(/retroItem$/)).toHaveLength(column.thoughts.length);
     });
     done();
   });

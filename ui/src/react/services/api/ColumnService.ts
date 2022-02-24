@@ -21,8 +21,8 @@ import { Column } from '../../types/Column';
 
 const ColumnService = {
   getColumns(teamId: string): Promise<Column[]> {
-    const url = `/api/v2/team/${teamId}/columns`;
-    return axios.get(url).then((response) => response.data.columns);
+    const url = `/api/team/${teamId}/columns`;
+    return axios.get(url).then((response) => response.data);
   },
 
   updateColumnTitle(teamId: string, columnId: number, title: string): Promise<AxiosResponse<void>> {

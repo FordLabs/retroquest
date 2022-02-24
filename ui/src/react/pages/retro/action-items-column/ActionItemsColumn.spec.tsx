@@ -46,7 +46,7 @@ const completedActionItem1: Action = getMockActionItem(true);
 const actionItemsColumnTitle: ColumnTitle = {
   id: 465657,
   topic: Topic.ACTION,
-  title: 'Action',
+  title: 'Action Items',
   teamId: 'team-id',
 };
 

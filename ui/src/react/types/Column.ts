@@ -15,15 +15,12 @@
  * limitations under the License.
  */
 
-import Action from './Action';
 import Thought from './Thought';
 import Topic from './Topic';
 
-export type ColumnItem = Thought | Action;
-
 export interface Column {
   id: number;
-  items: ColumnItem[];
   title: string;
   topic: Topic;
+  thoughts: Thought[];
 }

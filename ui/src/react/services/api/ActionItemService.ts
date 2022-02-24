@@ -27,6 +27,11 @@ const ASSIGNEE_PARSE_SYMBOL = '@';
 export const ASSIGNEE_PARSE_REGEX = /(\@[a-zA-Z0-9]+\b)/g;
 
 const ActionItemService = {
+  get(teamId: string, archived: boolean): Promise<Action[]> {
+    const url = `${getActionItemApiPath(teamId)}?archived=${archived}`;
+    return axios.get(url).then((response) => response.data);
+  },
+
   create(teamId: string, task: string, assignee: string): Promise<Action> {
     const todaysDate = moment().format();
     const createActionItemRequest: CreateActionItemRequest = {

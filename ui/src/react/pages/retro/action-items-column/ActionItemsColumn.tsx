@@ -25,7 +25,6 @@ import { CountSeparator } from '../../../components/count-separator/CountSeparat
 import TextField from '../../../components/text-field/TextField';
 import ActionItemService from '../../../services/api/ActionItemService';
 import { ActiveActionItemsState, CompletedActionItemsState } from '../../../state/ActionItemState';
-import { ColumnTitleByTopicState } from '../../../state/ColumnTitleState';
 import { TeamState } from '../../../state/TeamState';
 import Action from '../../../types/Action';
 import Topic from '../../../types/Topic';
@@ -33,9 +32,6 @@ import Topic from '../../../types/Topic';
 function ActionItemsColumn() {
   const topic = Topic.ACTION;
   const team = useRecoilValue(TeamState);
-  const columnTitle = useRecoilValue(ColumnTitleByTopicState(topic));
-  const { title } = columnTitle;
-
   const activeActionItems = useRecoilValue<Action[]>(ActiveActionItemsState);
   const completedActionItems = useRecoilValue<Action[]>(CompletedActionItemsState);
 
@@ -62,7 +58,7 @@ function ActionItemsColumn() {
 
   return (
     <div className="retro-column" data-testid={`retroColumn__${topic}`}>
-      <ColumnHeader initialTitle={title} type={topic} />
+      <ColumnHeader initialTitle={'Action Items'} type={topic} />
       <TextField type={topic} placeholder="Enter an Action Item" handleSubmission={createActionItem} />
       <CountSeparator count={activeActionItems.length} />
       {activeActionItems.map(renderActionItem)}
