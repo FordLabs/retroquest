@@ -16,10 +16,13 @@
  */
 
 @import '../../../styles/colors';
+@import '../../../styles/mixins';
+
+$border-width: 2px;
+$in-modal-border-width: 8px;
+$base-drop-shadow: 0 19px 38px opacity($black, 0.3);
 
 .column-item {
-  $border-width: 2px;
-
   color: inherit;
   font-weight: bold;
   font-size: 1rem;
@@ -32,55 +35,36 @@
 
   position: relative;
 
-  .dark-theme & {
-    color: $gray;
-
-    background-color: $task-background-dark;
-    box-shadow: 0 1px 2px opacity($black, 0.35);
-  }
-
   &.happy {
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       box-shadow: 0 0 0 $border-width $green;
-
-      .dark-theme & {
-        box-shadow: 0 0 0 $border-width $dark-green;
-      }
     }
   }
 
   &.confused {
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       box-shadow: 0 0 0 $border-width $blue;
-
-      .dark-theme & {
-        box-shadow: 0 0 0 $border-width $belize-hole;
-      }
     }
   }
 
   &.unhappy {
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       box-shadow: 0 0 0 $border-width $red;
-
-      .dark-theme & {
-        box-shadow: 0 0 0 $border-width $dark-red;
-      }
     }
   }
 
   &.action {
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       box-shadow: 0 0 0 $border-width $yellow;
     }
   }
 
   &.editing {
     box-shadow: 0 0 0 4px $purple !important;
-
-    .dark-theme & {
-      box-shadow: 0 0 0 4px $dark-purple !important;;
-    }
   }
 
   &.deleting {
@@ -136,7 +120,8 @@
     &.unhappy,
     &.confused,
     &.happy {
-      &:hover, &:focus {
+      &:hover,
+      &:focus {
         box-shadow: 0 1px 2px opacity($black, 0.25);
       }
     }
@@ -144,23 +129,11 @@
 }
 
 .modal {
-  $border-width: 8px;
-  $base-drop-shadow: 0 19px 38px opacity($black, 0.3);
-
-  $happy-shadow: 0 0 0 $border-width $green, $base-drop-shadow;
-  $happy-shadow-dark: 0 0 0 $border-width $dark-green, $base-drop-shadow;
-
-  $confused-shadow: 0 0 0 $border-width $blue, $base-drop-shadow;
-  $confused-shadow-dark: 0 0 0 $border-width $belize-hole, $base-drop-shadow;
-
-  $unhappy-shadow: 0 0 0 $border-width $red, $base-drop-shadow;
-  $unhappy-shadow-dark: 0 0 0 $border-width $dark-red, $base-drop-shadow;
-
+  $happy-shadow: 0 0 0 $in-modal-border-width $green, $base-drop-shadow;
+  $confused-shadow: 0 0 0 $in-modal-border-width $blue, $base-drop-shadow;
+  $unhappy-shadow: 0 0 0 $in-modal-border-width $red, $base-drop-shadow;
   $edit-mode-shadow: 0 0 0 8px $purple, $base-drop-shadow;
-  $edit-mode-shadow-dark: 0 0 0 8px $dark-purple, $base-drop-shadow;
-
-  $action-shadow: 0 0 0 $border-width $yellow, $base-drop-shadow;
-  $action-shadow-dark: 0 0 0 $border-width $dark-yellow, $base-drop-shadow;
+  $action-shadow: 0 0 0 $in-modal-border-width $yellow, $base-drop-shadow;
 
   .column-item {
     width: 450px;
@@ -176,57 +149,33 @@
       width: calc(100% - 16px);
       height: 280px;
       max-height: 280px;
-      margin: $border-width;
+      margin: $in-modal-border-width;
 
       transform: none;
     }
 
     &.happy {
       box-shadow: $happy-shadow;
-
-      .dark-theme & {
-        box-shadow: $happy-shadow-dark;
-      }
     }
 
     &.confused {
       box-shadow: $confused-shadow;
-
-      .dark-theme & {
-        box-shadow: $confused-shadow-dark;
-      }
     }
 
     &.unhappy {
       box-shadow: $unhappy-shadow;
-
-      .dark-theme & {
-        box-shadow: $unhappy-shadow-dark;
-      }
     }
 
     &.action {
       box-shadow: $action-shadow;
-
-      .dark-theme & {
-        box-shadow: $action-shadow-dark;
-      }
     }
 
     &.deleting {
       box-shadow: $unhappy-shadow !important;
-
-      .dark-theme & {
-        box-shadow: $unhappy-shadow-dark !important;
-      }
     }
 
     &.editing {
       box-shadow: $edit-mode-shadow !important;
-
-      .dark-theme & {
-        box-shadow: $edit-mode-shadow-dark !important;
-      }
     }
 
     &:not(.editing) .text-container {
@@ -276,6 +225,74 @@
     60% {
       box-shadow: $unhappy-shadow;
       transform: translate3d(6px, 0, 0);
+    }
+  }
+}
+
+@include dark-theme {
+  .column-item {
+    color: $gray;
+
+    background-color: $task-background-dark;
+    box-shadow: 0 1px 2px opacity($black, 0.35);
+
+    &.happy {
+      &:hover,
+      &:focus {
+        box-shadow: 0 0 0 $border-width $dark-green;
+      }
+    }
+
+    &.confused {
+      &:hover,
+      &:focus {
+        box-shadow: 0 0 0 $border-width $belize-hole;
+      }
+    }
+
+    &.unhappy {
+      &:hover,
+      &:focus {
+        box-shadow: 0 0 0 $border-width $dark-red;
+      }
+    }
+
+    &.editing {
+      box-shadow: 0 0 0 4px $dark-purple !important;
+    }
+  }
+
+  .modal {
+    $happy-shadow-dark: 0 0 0 $in-modal-border-width $dark-green, $base-drop-shadow;
+    $confused-shadow-dark: 0 0 0 $in-modal-border-width $belize-hole, $base-drop-shadow;
+    $unhappy-shadow-dark: 0 0 0 $in-modal-border-width $dark-red, $base-drop-shadow;
+    $edit-mode-shadow-dark: 0 0 0 8px $dark-purple, $base-drop-shadow;
+    $action-shadow-dark: 0 0 0 $in-modal-border-width $dark-yellow, $base-drop-shadow;
+
+    .column-item {
+      &.happy {
+        box-shadow: $happy-shadow-dark;
+      }
+
+      &.confused {
+        box-shadow: $confused-shadow-dark;
+      }
+
+      &.unhappy {
+        box-shadow: $unhappy-shadow-dark;
+      }
+
+      &.action {
+        box-shadow: $action-shadow-dark;
+      }
+
+      &.deleting {
+        box-shadow: $unhappy-shadow-dark !important;
+      }
+
+      &.editing {
+        box-shadow: $edit-mode-shadow-dark !important;
+      }
     }
   }
 }

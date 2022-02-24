@@ -35,6 +35,7 @@ interface ColumnHeaderProps extends HTMLAttributes<HTMLDivElement> {
   sortedChanged?: (changed: boolean) => void;
   titleChanged?: (title: string) => void;
 }
+
 function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
   const { initialTitle = '', type = '', titleChanged, sortedChanged, ...divProps } = props;
   const [title, setTitle] = useState(initialTitle);
@@ -80,6 +81,7 @@ function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
         <>
           <input
             type="text"
+            className="column-input"
             data-testid="column-input"
             maxLength={maxTitleLength}
             value={editedTitle}

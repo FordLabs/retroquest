@@ -1,5 +1,5 @@
-/*!
- * Copyright (c) 2021 Ford Motor Company
+/*
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,11 +16,12 @@
  */
 
 @import '../../../styles/colors';
+@import '../../../styles/mixins';
 
 .feedback-dialog {
   .section {
-    margin-top: 12px;
     width: 100%;
+    margin-top: 12px;
   }
 
   .label {
@@ -30,81 +31,107 @@
 
   .required-field {
     color: $red;
-    font-size: 1.5rem;
     font-weight: bold;
+    font-size: 1.5rem;
   }
 
   .comments-section {
-    cursor: default;
     padding: 0 12px;
+    cursor: default;
 
-    .label {
-      .dark-theme & {
-        color: $gray;
-      }
-    }
+    .comments-textarea {
+      width: 100%;
+      height: 125px;
+      margin: 12px 0 0;
+      padding: 12px;
 
-    textarea {
+      color: inherit;
+      font-family: inherit;
+      font-weight: bold;
+      font-size: 0.9rem;
+
       background-color: inherit;
       border: 5px $blue solid;
       border-radius: 6px;
-      color: inherit;
-      font-family: inherit;
-      font-size: 0.9rem;
-      font-weight: bold;
-      height: 125px;
-      margin: 12px 0 0;
       outline: none;
-      padding: 12px;
-      resize: none;
-      width: 100%;
 
-      .dark-theme & {
-        color: $gray;
-      }
+      resize: none;
 
       @media only screen and (max-width: 610px) {
-        font-size: 1rem;
         height: 85px;
         margin-top: 6px;
+
+        font-size: 1rem;
       }
     }
   }
 
   .feedback-email-section {
-    cursor: default;
     margin-top: 24px;
     padding: 0 12px;
 
+    cursor: default;
+
     .label {
       color: opacity($asphalt, 0.4);
-
-      .dark-theme & {
-        color: opacity($gray, 0.4);
-      }
     }
 
-    input {
+    .email-input {
+      width: 100%;
+      margin: 12px 0 0;
+      padding: 0 0 3px;
+
+      color: inherit;
+      font-family: inherit;
+      font-weight: bold;
+      font-size: 0.9rem;
+
       background-color: inherit;
       border: 0;
       border-bottom: 4px opacity($asphalt, 0.15) solid;
-      color: inherit;
-      font-family: inherit;
-      font-size: 0.9rem;
-      font-weight: bold;
-      margin: 12px 0 0;
       outline: none;
-      padding: 0 0 3px;
-      width: 100%;
 
-      .dark-theme & {
-        border-bottom-color: opacity($gray, 0.15);
+      @media only screen and (max-width: 610px) {
+        margin-top: 6px;
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+@include dark-theme {
+  .feedback-dialog {
+    .comments-section {
+      .label {
         color: $gray;
       }
 
-      @media only screen and (max-width: 610px) {
-        font-size: 1rem;
-        margin-top: 6px;
+      .comments-textarea {
+        color: $gray;
+      }
+    }
+
+    .feedback-email-section {
+      .label {
+        color: opacity($gray, 0.4);
+      }
+
+      .email-input {
+        color: $gray;
+        border-bottom-color: opacity($gray, 0.15);
+      }
+    }
+
+    .button-secondary {
+      border-top: 0;
+    }
+
+    .button-primary {
+      color: $white;
+      background-color: $blue;
+
+      &:hover, &:focus {
+        background-color: $purple;
       }
     }
   }
