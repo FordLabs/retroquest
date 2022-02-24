@@ -28,7 +28,7 @@ module.exports = {
   },
   rules: {
     semi: 2,
-    '@typescript-eslint/consistent-type-definitions': ['warn', 'type'],
+    '@typescript-eslint/consistent-type-definitions': 'off',
     'max-len': ['error', { code: 120 }],
     'simple-import-sort/imports': [
       'error',
@@ -79,7 +79,7 @@ module.exports = {
         ],
         '@angular-eslint/no-host-metadata-property': 'off',
         '@typescript-eslint/ban-types': 'off',
-        '@typescript-eslint/consistent-type-definitions': 'error',
+        '@typescript-eslint/consistent-type-definitions': 'off',
         '@typescript-eslint/dot-notation': 'off',
         '@typescript-eslint/explicit-member-accessibility': [
           'off',

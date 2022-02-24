@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-@import '../../../styles/mixins';
 @import '../../../styles/colors';
 
 .contributors {
@@ -24,11 +23,6 @@
   color: $white;
 
   background-color: $dark-asphalt;
-
-  @include dark-theme {
-    color: $dark-asphalt;
-    background-color: $background-color-light;
-  }
 
   .contributors-title-container {
     margin: 3rem 0;
@@ -48,7 +42,7 @@
     flex-wrap: wrap;
 
     > * {
-      flex: 0 0 20%
+      flex: 0 0 20%;
     }
 
     a {

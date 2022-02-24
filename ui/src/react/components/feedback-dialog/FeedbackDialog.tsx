@@ -82,13 +82,13 @@ export function FeedbackDialogRenderer(props: FeedbackDialogRendererProps) {
         <label className="label" htmlFor="comments">
           Comments<span className="required-field">*</span>
         </label>
-        <textarea id="comments" value={comment} onChange={onChange(setComment)} />
+        <textarea className="comments-textarea" id="comments" value={comment} onChange={onChange(setComment)} />
       </div>
       <div className="section feedback-email-section">
         <label className="label" htmlFor="email">
           Feedback Email
         </label>
-        <input id="email" type="text" value={userEmail} onChange={onChange(setUserEmail)} />
+        <input className="email-input" id="email" type="text" value={userEmail} onChange={onChange(setUserEmail)} />
       </div>
     </Dialog>
   );

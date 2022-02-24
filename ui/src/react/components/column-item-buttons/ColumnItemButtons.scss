@@ -16,6 +16,7 @@
  */
 
 @import '../../../styles/colors';
+@import '../../../styles/mixins';
 
 $opacity: 0.25;
 
@@ -39,10 +40,6 @@ $opacity: 0.25;
     &:last-child {
       border-bottom-right-radius: inherit;
     }
-  }
-
-  .dark-theme & {
-    border-top-color: $task-footer-separator-dark;
   }
 }
 
@@ -85,11 +82,6 @@ $opacity: 0.25;
     pointer-events: none;
   }
 
-  .dark-theme & {
-    color: $gray;
-    border-color: $task-footer-separator-dark;
-  }
-
   .checkbox {
     position: relative;
 
@@ -121,5 +113,16 @@ $opacity: 0.25;
   &.button-primary,
   &.button-secondary {
     font-size: 1rem;
+  }
+}
+
+@include dark-theme {
+  .column-item-button-group {
+    border-top-color: $task-footer-separator-dark;
+  }
+
+  .column-item-button {
+    color: $gray;
+    border-color: $task-footer-separator-dark;
   }
 }

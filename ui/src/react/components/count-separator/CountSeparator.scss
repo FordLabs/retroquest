@@ -1,5 +1,5 @@
-/*!
- * Copyright (c) 2021 Ford Motor Company
+/*
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +16,7 @@
  */
 
 @import '../../../styles/colors';
+@import '../../../styles/mixins';
 
 .count-separator {
   display: flex;
@@ -23,19 +24,11 @@
   justify-content: center;
   margin: 24px 0;
 
-  .dark-theme & {
-    color: $gray;
-  }
-
   .separator {
     width: 50%;
     height: 2px;
 
     border-radius: 3px;
-
-    .dark-theme & {
-      background: $count-separator-background-dark none;
-    }
   }
 
   .left-count-separator {
@@ -54,5 +47,15 @@
     text-align: center;
 
     cursor: default;
+  }
+}
+
+@include dark-theme {
+  .count-separator {
+    color: $gray;
+
+    .separator {
+      background: $count-separator-background-dark none;
+    }
   }
 }

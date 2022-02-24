@@ -16,6 +16,7 @@
  */
 
 @import '../../../styles/colors';
+@import '../../../styles/mixins';
 
 .column-header {
   display: flex;
@@ -38,10 +39,6 @@
 
   position: relative;
 
-  &.dark-theme {
-    color: $gray;
-  }
-
   .input-container {
     display: flex;
     align-items: center;
@@ -51,12 +48,12 @@
   }
 
   @media only screen and (max-width: 610px) {
-    rq-floating-character-countdown {
+    .floating-character-countdown {
       bottom: -18px;
     }
   }
 
-  input {
+  .column-input {
     display: inline-block;
     width: 100%;
     padding: 0;
@@ -127,8 +124,9 @@
     right: 5px;
     top: 5px;
 
-    &:hover, &:focus {
-      rq-tooltip {
+    &:hover,
+    &:focus {
+      .tooltip {
         visibility: visible;
         opacity: 1;
 
@@ -139,32 +137,38 @@
 
   &.happy {
     background-color: $green;
-
-    .dark-theme & {
-      background-color: $dark-green;
-    }
   }
 
   &.confused {
     background-color: $blue;
-
-    .dark-theme & {
-      background-color: $belize-hole;
-    }
   }
 
   &.unhappy {
     background-color: $red;
-
-    .dark-theme & {
-      background-color: $dark-red;
-    }
   }
 
   &.action {
     background-color: $yellow;
+  }
+}
 
-    .dark-theme & {
+@include dark-theme {
+  .column-header {
+    color: $gray;
+
+    &.happy {
+      background-color: $dark-green;
+    }
+
+    &.confused {
+      background-color: $belize-hole;
+    }
+
+    &.unhappy {
+      background-color: $dark-red;
+    }
+
+    &.action {
       background-color: $dark-yellow;
     }
   }
