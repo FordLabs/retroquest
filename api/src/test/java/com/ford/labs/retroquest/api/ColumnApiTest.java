@@ -47,9 +47,11 @@ public class ColumnApiTest extends ApiTestBase {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.[0].id").value(happyColumn.getId()))
                 .andExpect(jsonPath("$.[0].title").value(happyColumn.getTitle()))
+                .andExpect(jsonPath("$.[0].topic").value(happyColumn.getTopic()))
                 .andExpect(jsonPath("$.[0].thoughts.[0].message").value("something1"))
                 .andExpect(jsonPath("$.[1].id").value(sadColumn.getId()))
                 .andExpect(jsonPath("$.[1].title").value(sadColumn.getTitle()))
+                .andExpect(jsonPath("$.[1].topic").value(sadColumn.getTopic()))
                 .andExpect(jsonPath("$.[1].thoughts.[0].message").value("something2"));
     }
 

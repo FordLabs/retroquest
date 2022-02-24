@@ -1,6 +1,5 @@
 package com.ford.labs.retroquest.column;
 
-import com.ford.labs.retroquest.column.Column;
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleService;
 import com.ford.labs.retroquest.thought.Thought;
@@ -41,7 +40,7 @@ public class ColumnService {
                                 .collect(toList())));
 
         return columnTitles.stream()
-                .map(title -> new Column(title.getId(), title.getTitle(), thoughtsMap.get(title)))
+                .map(title -> new Column(title.getId(), title.getTitle(), title.getTopic(), thoughtsMap.get(title)))
                 .sorted((o1, o2) -> {
                     long difference = o1.getId() - o2.getId();
                     if(difference > 0) return 1;

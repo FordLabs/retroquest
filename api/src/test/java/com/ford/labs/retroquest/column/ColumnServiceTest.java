@@ -41,9 +41,9 @@ class ColumnServiceTest {
 
         var actual = service.getColumns(teamId);
 
-        var expectedHappyColumn = new Column(10L, "Happy", asList(happyThought1, happyThought2));
-        var expectedConfusedColumn = new Column(11L, "Confused", asList(confusedThought1, confusedThought2));
-        var expectedSadColumn = new Column(12L, "Sad", asList(sadThought1, sadThought2));
+        var expectedHappyColumn = new Column(10L, "Happy", "happy", asList(happyThought1, happyThought2));
+        var expectedConfusedColumn = new Column(11L, "Confused", "confused", asList(confusedThought1, confusedThought2));
+        var expectedSadColumn = new Column(12L, "Sad", "sad", asList(sadThought1, sadThought2));
         assertThat(actual).containsExactly(expectedHappyColumn, expectedConfusedColumn, expectedSadColumn);
     }
 
