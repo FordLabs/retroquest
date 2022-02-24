@@ -19,6 +19,7 @@ package com.ford.labs.retroquest.thought;
 
 import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
+import com.ford.labs.retroquest.exception.ColumnTitleNotFoundException;
 import com.ford.labs.retroquest.exception.ThoughtNotFoundException;
 import com.ford.labs.retroquest.websocket.WebsocketEvent;
 import com.ford.labs.retroquest.websocket.WebsocketService;
@@ -34,6 +35,7 @@ import java.util.Optional;
 import static com.ford.labs.retroquest.websocket.WebsocketEventType.DELETE;
 import static com.ford.labs.retroquest.websocket.WebsocketEventType.UPDATE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -98,31 +100,42 @@ class ThoughtServiceTest {
     }
 
     @Test
-    public void updateTopic_WithNewTopic_ReturnsUpdatedThought() {
+    public void updateColumn_WithNewColumn_ReturnsUpdatedThought() {
         String newTopic = "right-column";
         Thought thought = Thought.builder().id(1234L).topic("wrong-column").build();
+        ColumnTitle expectedColumnTitle = new ColumnTitle(6789L, newTopic, "TITLE", "the-team");
         Thought expectedThought = Thought.builder().id(1234L).topic(newTopic).build();
         given(this.thoughtRepository.findById(1234L)).willReturn(Optional.of(thought));
         given(this.thoughtRepository.save(expectedThought)).willReturn(expectedThought);
+        given(this.columnTitleRepository.findById(6789L)).willReturn(Optional.of(expectedColumnTitle));
 
-        Thought actualThought = thoughtService.updateTopic(1234L, newTopic);
+        Thought actualThought = thoughtService.updateColumn(1234L, 6789L);
 
         assertThat(actualThought).isEqualTo(expectedThought);
     }
 
     @Test
-    public void updateTopic_WithNewTopic_EmitsUpdatedThought() {
+    public void updateColumn_WithNewColumn_EmitsUpdatedThought() {
         String newTopic = "right-column";
-        Thought thought = Thought.builder().id(1234L).topic("wrong-column").teamId("the-team").build();
-        Thought expectedThought = Thought.builder().id(1234L).topic(newTopic).teamId("the-team").build();
+        Thought thought = Thought.builder().id(1234L).topic("wrong-column").build();
+        ColumnTitle expectedColumnTitle = new ColumnTitle(6789L, newTopic, "TITLE", "the-team");
+        Thought expectedThought = Thought.builder().id(1234L).topic(newTopic).build();
         given(this.thoughtRepository.findById(1234L)).willReturn(Optional.of(thought));
         given(this.thoughtRepository.save(expectedThought)).willReturn(expectedThought);
+        given(this.columnTitleRepository.findById(6789L)).willReturn(Optional.of(expectedColumnTitle));
 
-        thoughtService.updateTopic(1234L, newTopic);
+        thoughtService.updateColumn(1234L, 6789L);
 
         WebsocketEvent expectedEvent = new WebsocketThoughtEvent("the-team", UPDATE, expectedThought);
         verify(websocketService).publishEvent(eq(expectedEvent));
 
+    }
+
+    @Test
+    public void updateColumn_WithColumnThatDoesNotExist_ThrowsColumnTitleNotFoundException() {
+        given(this.columnTitleRepository.findById(6789L)).willReturn(Optional.empty());
+        assertThatThrownBy(() -> thoughtService.updateColumn(1234L, 6789L))
+                .isInstanceOf(ColumnTitleNotFoundException.class);
     }
 
     @Test

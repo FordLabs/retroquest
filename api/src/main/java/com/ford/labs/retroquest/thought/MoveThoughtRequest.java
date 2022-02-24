@@ -23,5 +23,5 @@ import lombok.Value;
 @Value
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MoveThoughtRequest {
-    String topic;
+    long columnId;
 }

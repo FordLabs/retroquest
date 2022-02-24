@@ -95,12 +95,12 @@ describe('ThoughtService', () => {
 
     it('should update a thought topic', () => {
       const testThought = createTestThought(teamId, 1);
-      const newTopic = 'move';
+      const columnId = 2;
 
-      service.moveThought(testThought.id, newTopic);
+      service.moveThought(testThought.id, columnId);
 
       const expectedBody = {
-        topic: newTopic,
+        columnId,
       };
 
       expect(mockHttpClient.put).toHaveBeenCalledWith(

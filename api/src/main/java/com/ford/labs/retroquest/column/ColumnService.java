@@ -31,7 +31,7 @@ public class ColumnService {
                 Collectors.toMap(
                         columnTitle -> columnTitle,
                         columnTitle -> thoughts.stream()
-                                .filter(thought -> thought.getColumnTitle().equals(columnTitle))
+                                .filter(thought -> thought.getTopic().equals(columnTitle.getTopic()))
                                 .sorted((o1, o2) -> {
                                     long difference = o1.getId() - o2.getId();
                                     if(difference > 0) return 1;

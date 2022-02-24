@@ -21,6 +21,7 @@ import { Observable } from 'rxjs';
 
 import { DataService } from '../../data.service';
 import { Thought } from '../../domain/thought';
+import { ColumnTitle } from '../../../../react/types/ColumnTitle';
 
 @Injectable()
 export class ThoughtService {
@@ -60,12 +61,12 @@ export class ThoughtService {
       .subscribe();
   }
 
-  moveThought(thoughtId: Thought['id'], newTopic: Thought['topic']): void {
+  moveThought(thoughtId: Thought['id'], columnId: ColumnTitle['id']): void {
     this.http
       .put(
         `/api/team/${this.dataService.team.id}/thought/${thoughtId}/topic`,
         JSON.stringify({
-          topic: newTopic,
+          columnId,
         }),
         {
           headers: {

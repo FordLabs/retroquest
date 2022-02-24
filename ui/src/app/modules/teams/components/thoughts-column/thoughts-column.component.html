@@ -27,7 +27,7 @@
 <div
     class="rq-thought-list {{ thoughtAggregation.topic }}"
     cdkDropList
-    [cdkDropListData]="thoughtAggregation.topic"
+    [cdkDropListData]="thoughtAggregation.id"
     (cdkDropListDropped)="onThoughtDrop($event)"
 >
     <rq-task

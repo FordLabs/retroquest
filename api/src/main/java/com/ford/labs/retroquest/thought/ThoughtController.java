@@ -63,7 +63,7 @@ public class ThoughtController {
     @Operation(summary = "Updates the topic of a thought given a thought and team id", description = "moveThought")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public void moveThought(@PathVariable String teamId, @PathVariable Long thoughtId, @RequestBody MoveThoughtRequest request) {
-        thoughtService.updateTopic(thoughtId, request.getTopic());
+        thoughtService.updateColumn(thoughtId, request.getColumnId());
     }
 
     @Transactional

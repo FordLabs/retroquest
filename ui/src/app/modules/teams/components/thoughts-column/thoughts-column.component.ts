@@ -139,8 +139,8 @@ export class ThoughtsColumnComponent implements OnInit {
 
   onThoughtDrop(event: CdkDragSortEvent) {
     const thoughtId = event.item.data;
-    const newTopic = event.container.data; // expected to equal this.thoughtAggregation.topic
-    this.thoughtService.moveThought(thoughtId, newTopic);
+    const columnId = event.container.data; // expected to equal this.thoughtAggregation.id
+    this.thoughtService.moveThought(thoughtId, columnId);
   }
 
   updateThought(updatedThought: Thought) {
