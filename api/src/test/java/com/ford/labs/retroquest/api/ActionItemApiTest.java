@@ -21,7 +21,6 @@ import com.ford.labs.retroquest.actionitem.*;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.websocket.WebsocketActionItemEvent;
 import com.ford.labs.retroquest.websocket.WebsocketService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -55,10 +54,6 @@ class ActionItemApiTest extends ApiTestBase {
     @BeforeEach
     void setup() {
         BASE_API_URL = format("/api/team/%s/action-item", teamId);
-    }
-
-    @AfterEach
-    void teardown() {
         actionItemRepository.deleteAllInBatch();
     }
 
@@ -84,13 +79,11 @@ class ActionItemApiTest extends ApiTestBase {
 
     @Test
     void getActionItems_WithoutQueryParameter_ReturnsAllActionItems() throws Exception {
-        String teamId = "beach-bums2";
-        String jwt = jwtBuilder.buildJwt(teamId);
         var createdActionItems = createThreeActionItems(teamId);
         actionItemRepository.saveAll(createdActionItems);
 
-        mockMvc.perform(get("/api/team/beach-bums2/action-items")
-            .header("Authorization", "Bearer " + jwt))
+        mockMvc.perform(get(BASE_API_URL)
+            .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.length()").value(3))
             .andExpect(jsonPath("$.[0].task").value("Some Action"))
@@ -103,28 +96,24 @@ class ActionItemApiTest extends ApiTestBase {
 
     @Test
     public void getActionItems_WithArchivedTrue_ReturnsOnlyArchivedActionItems() throws Exception {
-        String teamId = "beach-bums2";
-        String jwt = jwtBuilder.buildJwt(teamId);
         var createdActionItems = createThreeActionItems(teamId);
         actionItemRepository.saveAll(createdActionItems);
 
-        mockMvc.perform(get("/api/team/beach-bums2/action-items?archived=true")
-                .header("Authorization", "Bearer " + jwt))
+        mockMvc.perform(get(BASE_API_URL + "?archived=true")
+                .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$.[0].task").value("A Third Action"))
-                .andExpect(jsonPath("$.[0].teamId").value("beach-bums2"));
+                .andExpect(jsonPath("$.[0].teamId").value(teamId));
     }
 
     @Test
     public void getActionItems_WithArchivedFalse_ReturnsOnlyUnarchivedActionItems() throws Exception {
-        String teamId = "beach-bums2";
-        String jwt = jwtBuilder.buildJwt(teamId);
         var createdActionItems = createThreeActionItems(teamId);
         actionItemRepository.saveAll(createdActionItems);
 
-        mockMvc.perform(get("/api/team/beach-bums2/action-items?archived=false")
-                .header("Authorization", "Bearer " + jwt))
+        mockMvc.perform(get(BASE_API_URL + "?archived=false")
+                .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$.[0].task").value("Some Action"))
@@ -247,7 +236,7 @@ class ActionItemApiTest extends ApiTestBase {
             .teamId("beach-bums")
             .build());
 
-        mockMvc.perform(get("/api/team/beach-bums/action-items")
+        mockMvc.perform(get("/api/team/beach-bums/action-item")
             .header("Authorization", authorizationHeader))
             .andExpect(status().isForbidden());
 

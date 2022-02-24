@@ -114,7 +114,7 @@ public class ActionItemController {
         websocketService.publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, updatedActionItem));
     }
 
-    @GetMapping("/api/team/{teamId}/action-items")
+    @GetMapping("/api/team/{teamId}/action-item")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Retrieves all action items given a team id", description = "getActionItemsForTeam", parameters = {
         @Parameter(name = "archived", description = "The archived status of the action items")
