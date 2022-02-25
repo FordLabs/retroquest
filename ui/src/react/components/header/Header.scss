@@ -70,6 +70,13 @@
 
   .logo-link {
     font-size: 0;
+    border: 2px solid transparent;
+
+    &:hover,
+    &:focus {
+      border: 2px solid $blue;
+      border-radius: 7px;
+    }
   }
 
   .logo {
