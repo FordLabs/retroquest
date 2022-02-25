@@ -98,7 +98,7 @@ export default function Header(props: Props) {
             const isActive = activeLinkIndex === index;
 
             return (
-              <a //  @todo change to navlink once app is fully react
+              <button //  @todo change to navlink once app is fully react
                 onClick={() => {
                   setActiveLinkIndex(index);
                   routeTo(path);
@@ -109,7 +109,7 @@ export default function Header(props: Props) {
                 // end
               >
                 {link.label}
-              </a>
+              </button>
             );
           })}
         </nav>
