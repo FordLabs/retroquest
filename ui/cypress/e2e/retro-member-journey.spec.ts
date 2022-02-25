@@ -132,6 +132,48 @@ describe('Retro Member Journey', () => {
     cy.get('@postFeedbackEndpoint').its('response.statusCode').should('eq', 201);
   });
 
+  it('Navigate between columns on mobile', () => {
+    cy.viewport(414, 736);
+
+    const happyColumnTitle = 'Happy';
+    const confusedColumnTitle = 'Confused';
+    const sadColumnTitle = 'Sad';
+    const actionItemsColumnTitle = 'Action Items';
+
+    cy.findByText(happyColumnTitle).should('be.visible');
+    cy.findByText(confusedColumnTitle).should('not.be.visible');
+    cy.findByText(sadColumnTitle).should('not.be.visible');
+    cy.findByText(actionItemsColumnTitle).should('not.be.visible');
+
+    cy.get('[data-testid=mobileColumnNav-3]').click();
+
+    cy.findByText(happyColumnTitle).should('not.be.visible');
+    cy.findByText(confusedColumnTitle).should('not.be.visible');
+    cy.findByText(sadColumnTitle).should('not.be.visible');
+    cy.findByText(actionItemsColumnTitle).should('be.visible');
+
+    cy.get('[data-testid=mobileColumnNav-2]').click();
+
+    cy.findByText(happyColumnTitle).should('not.be.visible');
+    cy.findByText(confusedColumnTitle).should('not.be.visible');
+    cy.findByText(sadColumnTitle).should('be.visible');
+    cy.findByText(actionItemsColumnTitle).should('not.be.visible');
+
+    cy.get('[data-testid=mobileColumnNav-1]').click();
+
+    cy.findByText(happyColumnTitle).should('not.be.visible');
+    cy.findByText(confusedColumnTitle).should('be.visible');
+    cy.findByText(sadColumnTitle).should('not.be.visible');
+    cy.findByText(actionItemsColumnTitle).should('not.be.visible');
+
+    cy.get('[data-testid=mobileColumnNav-0]').click();
+
+    cy.findByText(happyColumnTitle).should('be.visible');
+    cy.findByText(confusedColumnTitle).should('not.be.visible');
+    cy.findByText(sadColumnTitle).should('not.be.visible');
+    cy.findByText(actionItemsColumnTitle).should('not.be.visible');
+  });
+
   describe('Settings', () => {
     beforeEach(() => {
       cy.get('[data-testid=settingsButton]').click();

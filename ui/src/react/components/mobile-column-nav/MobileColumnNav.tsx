@@ -40,6 +40,7 @@ function MobileColumnNav(props: Props): JSX.Element {
       {columnTitles.map(({ title, topic }: ColumnTitle, index) => {
         return (
           <button
+            data-testid={`mobileColumnNav-${index}`}
             key={`mobile-column-nav-item-${index}`}
             className={classNames(`nav-button ${topic}-nav-button`, { selected: isSelectedIndex(index) })}
             onClick={() => setSelectedIndex(index)}
@@ -49,6 +50,7 @@ function MobileColumnNav(props: Props): JSX.Element {
         );
       })}
       <button
+        data-testid={`mobileColumnNav-${columnTitles.length}`}
         className={classNames('nav-button action-nav-button', { selected: isSelectedIndex(actionItemIndex) })}
         onClick={() => setSelectedIndex(actionItemIndex)}
       >

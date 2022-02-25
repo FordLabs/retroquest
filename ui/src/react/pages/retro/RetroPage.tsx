@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
-import { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
+import Hammer from 'hammerjs';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import MobileColumnNav from '../../components/mobile-column-nav/MobileColumnNav';
@@ -52,6 +52,9 @@ function RetroPage(props: Props): ReactElement {
   const setThoughts = useSetRecoilState<Thought[]>(ThoughtsState);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedMobileColumnIndex, setSelectedMobileColumnIndex] = useState(0);
+
+  const retroPageContentRef = useRef(null);
+  const isMobileView = (): boolean => window.innerWidth <= 610;
 
   const { columnTitleMessageHandler, thoughtMessageHandler, actionItemMessageHandler, endRetroMessageHandler } =
     useWebSocketMessageHandler();
@@ -96,6 +99,8 @@ function RetroPage(props: Props): ReactElement {
 
   useEffect(() => {
     if (!isLoading) {
+      if (isMobileView()) addTouchListeners();
+
       WebSocketService.connect(() => {
         if (teamId) {
           WebSocketService.subscribeToColumnTitle(teamId, columnTitleMessageHandler);
@@ -111,10 +116,27 @@ function RetroPage(props: Props): ReactElement {
     };
   }, [isLoading]);
 
+  const addTouchListeners = () => {
+    const pageGestures = new Hammer(retroPageContentRef.current);
+
+    pageGestures.on('swipeleft', () => {
+      setSelectedMobileColumnIndex((currentIndex) => {
+        if (currentIndex < columnTitles.length) return currentIndex + 1;
+        return currentIndex;
+      });
+    });
+    pageGestures.on('swiperight', () => {
+      setSelectedMobileColumnIndex((currentIndex) => {
+        if (currentIndex > 0) return currentIndex - 1;
+        return currentIndex;
+      });
+    });
+  };
+
   return (
     <div className="retro-page">
       <RetroSubheader />
-      <div className="retro-page-content">
+      <div className="retro-page-content" ref={retroPageContentRef}>
         {!isLoading &&
           columnTitles.map(({ topic }: ColumnTitle, index) => {
             return (
