@@ -17,18 +17,11 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 
-import { getMockColumnTitle } from '../../services/api/__mocks__/ColumnService';
-import Topic from '../../types/Topic';
+import { mockColumns } from '../../services/api/__mocks__/ColumnService';
 
 import MobileColumnNav from './MobileColumnNav';
 
 const selectedClass = 'selected';
-
-const columnTitles = [
-  getMockColumnTitle(Topic.HAPPY, 'Happy'),
-  getMockColumnTitle(Topic.CONFUSED, 'Confused'),
-  getMockColumnTitle(Topic.UNHAPPY, 'Sad'),
-];
 
 describe.each([
   ['Happy', 0],
@@ -38,14 +31,14 @@ describe.each([
 ])('Mobile Column Nav', (columnTitle: string, index: number) => {
   it(`should make the "${columnTitle}" column the active column`, () => {
     const setSelectedIndex = jest.fn();
-    render(<MobileColumnNav columnTitles={columnTitles} selectedIndex={null} setSelectedIndex={setSelectedIndex} />);
+    render(<MobileColumnNav columns={mockColumns} selectedIndex={null} setSelectedIndex={setSelectedIndex} />);
     const columnButton = screen.getByText(columnTitle + ' Column');
     columnButton.click();
     expect(setSelectedIndex).toHaveBeenCalledWith(index);
   });
 
   it(`should add "selected" class to the ${columnTitle} column button`, () => {
-    render(<MobileColumnNav columnTitles={columnTitles} selectedIndex={index} setSelectedIndex={jest.fn()} />);
+    render(<MobileColumnNav columns={mockColumns} selectedIndex={index} setSelectedIndex={jest.fn()} />);
     const buttons = screen.getAllByRole('button');
     expect(buttons).toHaveLength(4);
     buttons.forEach((button, buttonIndex) => {

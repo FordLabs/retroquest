@@ -18,26 +18,26 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import { ColumnTitle } from '../../types/ColumnTitle';
+import { Column } from '../../types/Column';
 
 import './MobileColumnNav.scss';
 
 interface Props {
-  columnTitles: ColumnTitle[];
+  columns: Column[];
   selectedIndex: number;
   setSelectedIndex(index: number): void;
 }
 
 function MobileColumnNav(props: Props): JSX.Element {
-  const { columnTitles, selectedIndex, setSelectedIndex } = props;
+  const { columns, selectedIndex, setSelectedIndex } = props;
 
   const isSelectedIndex = (index: number): boolean => index === selectedIndex;
 
-  const actionItemIndex = columnTitles.length;
+  const actionItemIndex = columns.length;
 
   return (
     <div className="mobile-column-nav">
-      {columnTitles.map(({ title, topic }: ColumnTitle, index) => {
+      {columns.map(({ title, topic }: Column, index) => {
         return (
           <button
             data-testid={`mobileColumnNav-${index}`}
@@ -50,7 +50,7 @@ function MobileColumnNav(props: Props): JSX.Element {
         );
       })}
       <button
-        data-testid={`mobileColumnNav-${columnTitles.length}`}
+        data-testid={`mobileColumnNav-${columns.length}`}
         className={classNames('nav-button action-nav-button', { selected: isSelectedIndex(actionItemIndex) })}
         onClick={() => setSelectedIndex(actionItemIndex)}
       >

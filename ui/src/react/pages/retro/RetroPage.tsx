@@ -26,14 +26,14 @@ import ActionItemService from '../../services/api/ActionItemService';
 import ColumnService from '../../services/api/ColumnService';
 import WebSocketService from '../../services/websocket/WebSocketService';
 import { ActionItemState } from '../../state/ActionItemState';
-import { ColumnTitleState } from '../../state/ColumnTitleState';
+import { ColumnsState } from '../../state/ColumnsState';
 import { TeamState } from '../../state/TeamState';
 import { ThoughtsState } from '../../state/ThoughtsState';
 import Action from '../../types/Action';
-import { ColumnTitle } from '../../types/ColumnTitle';
+import { Column } from '../../types/Column';
 import Team from '../../types/Team';
 import Thought from '../../types/Thought';
-import Topic, { ThoughtTopic } from '../../types/Topic';
+import Topic from '../../types/Topic';
 
 import ActionItemsColumn from './action-items-column/ActionItemsColumn';
 import RetroSubheader from './retro-sub-header/RetroSubheader';
@@ -47,8 +47,8 @@ function RetroPage(props: Props): ReactElement {
   const { teamId } = props;
 
   const [team, setTeam] = useRecoilState<Team>(TeamState);
-  const [columnTitles, setColumnTitles] = useRecoilState<ColumnTitle[]>(ColumnTitleState);
   const setActionItems = useSetRecoilState<Action[]>(ActionItemState);
+  const [columns, setColumns] = useRecoilState<Column[]>(ColumnsState);
   const setThoughts = useSetRecoilState<Thought[]>(ThoughtsState);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedMobileColumnIndex, setSelectedMobileColumnIndex] = useState(0);
@@ -72,14 +72,7 @@ function RetroPage(props: Props): ReactElement {
 
     Promise.all([getColumnsResult, getActionItemsResult]).then((results) => {
       const columns = results[0];
-      setColumnTitles(
-        columns.map((aggregatedColumn) => ({
-          id: aggregatedColumn.id,
-          topic: aggregatedColumn.topic,
-          title: aggregatedColumn.title,
-          teamId,
-        }))
-      );
+      setColumns(columns);
 
       const actionItems = results[1];
       setActionItems(actionItems);
@@ -121,7 +114,7 @@ function RetroPage(props: Props): ReactElement {
 
     pageGestures.on('swipeleft', () => {
       setSelectedMobileColumnIndex((currentIndex) => {
-        if (currentIndex < columnTitles.length) return currentIndex + 1;
+        if (currentIndex < columns.length) return currentIndex + 1;
         return currentIndex;
       });
     });
@@ -138,13 +131,13 @@ function RetroPage(props: Props): ReactElement {
       <RetroSubheader />
       <div className="retro-page-content" ref={retroPageContentRef}>
         {!isLoading &&
-          columnTitles.map(({ topic }: ColumnTitle, index) => {
+          columns.map((column, index) => {
             return (
               <div
                 key={`column-${index}`}
                 className={classNames('column-container', { selected: index === selectedMobileColumnIndex })}
               >
-                <ThoughtColumn topic={topic as ThoughtTopic} />
+                <ThoughtColumn column={column} />
               </div>
             );
           })}
@@ -155,7 +148,7 @@ function RetroPage(props: Props): ReactElement {
         )}
       </div>
       <MobileColumnNav
-        columnTitles={columnTitles}
+        columns={columns}
         selectedIndex={selectedMobileColumnIndex}
         setSelectedIndex={setSelectedMobileColumnIndex}
       />
