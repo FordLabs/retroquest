@@ -16,20 +16,19 @@
  */
 
 import React from 'react';
-import { render, screen, within } from '@testing-library/react';
+import {render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { axe } from 'jest-axe';
-import { RecoilRoot } from 'recoil';
+import {axe} from 'jest-axe';
+import {RecoilRoot} from 'recoil';
 
-import { getMockActionItem } from '../../../services/api/__mocks__/ActionItemService';
+import {getMockActionItem} from '../../../services/api/__mocks__/ActionItemService';
 import ActionItemService from '../../../services/api/ActionItemService';
-import { ActionItemState } from '../../../state/ActionItemState';
-import { ColumnTitleByTopicState } from '../../../state/ColumnTitleState';
-import { TeamState } from '../../../state/TeamState';
+import {ActionItemState} from '../../../state/ActionItemState';
+import {TeamState} from '../../../state/TeamState';
 import Action from '../../../types/Action';
-import { ColumnTitle } from '../../../types/ColumnTitle';
+import {ColumnTitle} from '../../../types/ColumnTitle';
 import Team from '../../../types/Team';
-import Topic, { ThoughtTopic } from '../../../types/Topic';
+import Topic from '../../../types/Topic';
 
 import ActionItemsColumn from './ActionItemsColumn';
 
@@ -56,13 +55,10 @@ describe('ActionItemsColumn.spec.tsx', () => {
   let container: HTMLElement;
 
   beforeEach(async () => {
-    const topic = actionItemsColumnTitle.topic as ThoughtTopic;
-
     ({ container } = render(
       <RecoilRoot
         initializeState={({ set }) => {
           set(ActionItemState, [activeActionItem1, activeActionItem2, completedActionItem1]);
-          set(ColumnTitleByTopicState(topic), actionItemsColumnTitle);
           set(TeamState, team);
         }}
       >

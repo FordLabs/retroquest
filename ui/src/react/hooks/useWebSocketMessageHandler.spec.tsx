@@ -17,13 +17,15 @@
 
 import React, { ReactElement, useEffect } from 'react';
 import { act } from 'react-dom/test-utils';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { RecoilRoot, useRecoilValue } from 'recoil';
 
 import { getMockActionItem } from '../services/api/__mocks__/ActionItemService';
 import { getMockThought } from '../services/api/__mocks__/ThoughtService';
 import { ActionItemState } from '../state/ActionItemState';
+import { ColumnsState } from '../state/ColumnsState';
 import { ThoughtsState } from '../state/ThoughtsState';
+import { Column } from '../types/Column';
 import Topic from '../types/Topic';
 
 import useWebSocketMessageHandler from './useWebSocketMessageHandler';
@@ -225,6 +227,73 @@ describe('useWebsocketMessageHandler', () => {
 
       const actionItemsColumn = screen.getByTestId('action-items');
       expect(actionItemsColumn.innerHTML).toBe(JSON.stringify([activeActionItem]));
+    });
+  });
+
+  describe('columnTitleMessageHandler', () => {
+    const ColumnTestComponent = ({ websocketMessageBody }: TestComponentProps): ReactElement => {
+      const columns = useRecoilValue(ColumnsState);
+
+      const { columnTitleMessageHandler } = useWebSocketMessageHandler();
+
+      useEffect(() => {
+        const imessage = formatWebsocketMessage(websocketMessageBody);
+        columnTitleMessageHandler(imessage);
+      }, [websocketMessageBody]);
+
+      return <div data-testid="columns">{JSON.stringify(columns)}</div>;
+    };
+
+    it('should replace the column title in the column state', async () => {
+      const expectedColumns: Column[] = [
+        {
+          id: 1,
+          title: 'Happy',
+          topic: Topic.HAPPY,
+          thoughts: [],
+        },
+        {
+          id: 2,
+          title: 'Confused',
+          topic: Topic.CONFUSED,
+          thoughts: [],
+        },
+        {
+          id: 3,
+          title: 'Sad',
+          topic: Topic.UNHAPPY,
+          thoughts: [],
+        },
+      ];
+
+      await act(async () => {
+        render(
+          <RecoilRoot
+            initializeState={({ set }) => {
+              set(ColumnsState, [...expectedColumns]);
+            }}
+          >
+            <ColumnTestComponent
+              websocketMessageBody={{
+                type: 'put',
+                payload: { id: 2, topic: Topic.CONFUSED, title: 'Updated Confused' },
+              }}
+            />
+          </RecoilRoot>
+        );
+
+        await waitFor(async () =>
+          expect(
+            screen.getByText(
+              JSON.stringify([
+                expectedColumns[0],
+                { ...expectedColumns[1], title: 'Updated Confused' },
+                expectedColumns[2],
+              ])
+            )
+          ).toBeDefined()
+        );
+      });
     });
   });
 });

@@ -33,21 +33,21 @@ export const getMockColumnTitle = (topic: Topic, title: string): ColumnTitle => 
 export const mockColumns: Column[] = [
   {
     id: 1,
-    thoughts: [getMockThought(Topic.HAPPY, false), getMockThought(Topic.HAPPY, true)],
     title: 'Happy',
     topic: Topic.HAPPY,
+    thoughts: [getMockThought(Topic.HAPPY, false), getMockThought(Topic.HAPPY, true)],
   },
   {
-    id: 1,
-    thoughts: [getMockThought(Topic.CONFUSED, false), getMockThought(Topic.CONFUSED, true)],
+    id: 2,
     title: 'Confused',
     topic: Topic.CONFUSED,
+    thoughts: [getMockThought(Topic.CONFUSED, false), getMockThought(Topic.CONFUSED, true)],
   },
   {
-    id: 1,
-    thoughts: [getMockThought(Topic.UNHAPPY, false), getMockThought(Topic.UNHAPPY, true)],
+    id: 3,
     title: 'Sad',
     topic: Topic.UNHAPPY,
+    thoughts: [getMockThought(Topic.UNHAPPY, false), getMockThought(Topic.UNHAPPY, true)],
   },
 ];
 

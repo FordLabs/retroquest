@@ -19,11 +19,11 @@ import { IMessage } from '@stomp/stompjs';
 import { useSetRecoilState } from 'recoil';
 
 import { ActionItemState } from '../state/ActionItemState';
+import { ColumnsState } from '../state/ColumnsState';
 import { ThoughtsState } from '../state/ThoughtsState';
 import Action from '../types/Action';
-import Thought from '../types/Thought';
 import { ColumnTitle } from '../types/ColumnTitle';
-import { ColumnTitleState } from '../state/ColumnTitleState';
+import Thought from '../types/Thought';
 
 type MessageType = 'put' | 'delete';
 
@@ -44,7 +44,7 @@ interface WebsocketCallback {
 function useWebSocketMessageHandler(): WebsocketCallback {
   const setThoughts = useSetRecoilState(ThoughtsState);
   const setActionItems = useSetRecoilState(ActionItemState);
-  const setColumnTitle = useSetRecoilState(ColumnTitleState);
+  const setColumns = useSetRecoilState(ColumnsState);
 
   const recoilStateUpdater = (recoilStateSetter: Function, item: Thought | Action, messageType: MessageType) => {
     recoilStateSetter((currentState) => {
@@ -61,9 +61,14 @@ function useWebSocketMessageHandler(): WebsocketCallback {
   const columnTitleMessageHandler = ({ body }: Partial<IMessage>) => {
     const incomingMessage: IncomingMessage = JSON.parse(body);
     const columnTitle = incomingMessage.payload as ColumnTitle;
-    setColumnTitle((currentState) => {
+    setColumns((currentState) => {
       const updateItem = currentState.findIndex((i) => i.id === columnTitle.id) > -1;
-      if (updateItem) return currentState.map((i) => (i.id === columnTitle.id ? columnTitle : i));
+      if (updateItem)
+        return currentState.map((column) =>
+          column.id === columnTitle.id ? { ...column, title: columnTitle.title } : column
+        );
+
+      return [...currentState];
     });
   };
 

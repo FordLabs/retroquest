@@ -25,33 +25,31 @@ import RetroItem from '../../../components/retro-item/RetroItem';
 import TextField from '../../../components/text-field/TextField';
 import ColumnService from '../../../services/api/ColumnService';
 import ThoughtService from '../../../services/api/ThoughtService';
-import { ColumnTitleByTopicState } from '../../../state/ColumnTitleState';
 import { TeamState } from '../../../state/TeamState';
-import { ActiveThoughtsByTopicState, DiscussedThoughtsByTopicState, ThoughtTopic } from '../../../state/ThoughtsState';
+import { ActiveThoughtsByTopicState, DiscussedThoughtsByTopicState } from '../../../state/ThoughtsState';
 import { getCreateThoughtRequest } from '../../../types/CreateThoughtRequest';
 import Thought from '../../../types/Thought';
+import { Column } from '../../../types/Column';
 
 type Props = {
-  topic: ThoughtTopic;
+  column: Column;
 };
 
 function ThoughtColumn(props: Props) {
-  const { topic } = props;
+  const { column } = props;
 
   const team = useRecoilValue(TeamState);
-  const columnTitle = useRecoilValue(ColumnTitleByTopicState(topic));
-  const { title } = columnTitle;
   const [sorted, setSorted] = useState(false);
-  const activeThoughts = useRecoilValue<Thought[]>(ActiveThoughtsByTopicState({ topic, sorted }));
-  const discussedThoughts = useRecoilValue<Thought[]>(DiscussedThoughtsByTopicState({ topic, sorted }));
+  const activeThoughts = useRecoilValue<Thought[]>(ActiveThoughtsByTopicState({ topic: column.topic, sorted }));
+  const discussedThoughts = useRecoilValue<Thought[]>(DiscussedThoughtsByTopicState({ topic: column.topic, sorted }));
 
   const changeTitle = (title: string) => {
-    ColumnService.updateColumnTitle(team.id, columnTitle.id, title).catch(console.error);
+    ColumnService.updateColumnTitle(team.id, column.id, title).catch(console.error);
   };
 
   const createThought = (text: string) => {
     if (text && text.length) {
-      ThoughtService.create(team.id, getCreateThoughtRequest(team.id, topic, text)).catch(console.error);
+      ThoughtService.create(team.id, getCreateThoughtRequest(team.id, column.topic, text)).catch(console.error);
     }
   };
 
@@ -64,9 +62,14 @@ function ThoughtColumn(props: Props) {
   };
 
   return (
-    <div className="retro-column" data-testid={`retroColumn__${topic}`}>
-      <ColumnHeader initialTitle={title} type={topic} sortedChanged={setSorted} titleChanged={changeTitle} />
-      <TextField type={topic} placeholder="Enter a Thought" handleSubmission={createThought} />
+    <div className="retro-column" data-testid={`retroColumn__${column.topic}`}>
+      <ColumnHeader
+        initialTitle={column.title}
+        type={column.topic}
+        sortedChanged={setSorted}
+        titleChanged={changeTitle}
+      />
+      <TextField type={column.topic} placeholder="Enter a Thought" handleSubmission={createThought} />
       <CountSeparator count={activeThoughts.length} />
       {activeThoughts.map(renderThought)}
       {discussedThoughts.map(renderThought)}

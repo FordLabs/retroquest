@@ -16,11 +16,11 @@
  */
 
 import Thought from './Thought';
-import Topic from './Topic';
+import { ThoughtTopic } from './Topic';
 
 export interface Column {
   id: number;
   title: string;
-  topic: Topic;
+  topic: ThoughtTopic;
   thoughts: Thought[];
 }

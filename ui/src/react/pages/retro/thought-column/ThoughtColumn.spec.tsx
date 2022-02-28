@@ -16,23 +16,22 @@
  */
 
 import React from 'react';
-import { act, render, screen, within } from '@testing-library/react';
+import {act, render, screen, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { axe } from 'jest-axe';
-import { RecoilRoot } from 'recoil';
+import {axe} from 'jest-axe';
+import {RecoilRoot} from 'recoil';
 
-import { getMockThought } from '../../../services/api/__mocks__/ThoughtService';
+import {getMockThought} from '../../../services/api/__mocks__/ThoughtService';
 import ColumnService from '../../../services/api/ColumnService';
 import ThoughtService from '../../../services/api/ThoughtService';
-import { ColumnTitleByTopicState } from '../../../state/ColumnTitleState';
-import { TeamState } from '../../../state/TeamState';
-import { ThoughtsState } from '../../../state/ThoughtsState';
-import { ColumnTitle } from '../../../types/ColumnTitle';
+import {TeamState} from '../../../state/TeamState';
+import {ThoughtsState} from '../../../state/ThoughtsState';
 import Team from '../../../types/Team';
 import Thought from '../../../types/Thought';
-import Topic, { ThoughtTopic } from '../../../types/Topic';
+import Topic from '../../../types/Topic';
 
 import ThoughtColumn from './ThoughtColumn';
+import {Column} from '../../../types/Column';
 
 const team: Team = {
   name: 'My Team',
@@ -45,11 +44,11 @@ const activeThought2: Thought = getMockThought(Topic.HAPPY, false, 2);
 const discussedThought1: Thought = getMockThought(Topic.HAPPY, true, 3);
 const discussedThought2: Thought = getMockThought(Topic.HAPPY, true, 4);
 
-const thoughtColumnTitle: ColumnTitle = {
+const column: Column = {
   id: 123456,
   topic: Topic.HAPPY,
   title: 'Happy',
-  teamId: 'team-id',
+  thoughts: [activeThought1, activeThought2, discussedThought1, discussedThought2],
 };
 
 jest.mock('../../../services/api/ThoughtService');
@@ -59,17 +58,15 @@ describe('ThoughtColumn.spec.tsx', () => {
   let container: HTMLElement;
 
   beforeEach(async () => {
-    const topic = thoughtColumnTitle.topic as ThoughtTopic;
     await act(async () => {
       ({ container } = render(
         <RecoilRoot
           initializeState={({ set }) => {
-            set(ColumnTitleByTopicState(topic), thoughtColumnTitle);
-            set(ThoughtsState, [activeThought1, activeThought2, discussedThought1, discussedThought2]);
+            set(ThoughtsState, column.thoughts);
             set(TeamState, team);
           }}
         >
-          <ThoughtColumn topic={topic} />
+          <ThoughtColumn column={column} />
         </RecoilRoot>
       ));
     });
@@ -85,7 +82,7 @@ describe('ThoughtColumn.spec.tsx', () => {
   });
 
   it('should show column title', () => {
-    expect(screen.getByText(thoughtColumnTitle.title)).toBeDefined();
+    expect(screen.getByText(column.title)).toBeDefined();
   });
 
   it('should show count of active thoughts', () => {
@@ -118,7 +115,7 @@ describe('ThoughtColumn.spec.tsx', () => {
       expect(ThoughtService.create).toHaveBeenCalledWith(team.id, {
         id: -1,
         teamId: team.id,
-        topic: thoughtColumnTitle.topic,
+        topic: column.topic,
         message: thoughtMessage,
         hearts: 0,
         discussed: false,
