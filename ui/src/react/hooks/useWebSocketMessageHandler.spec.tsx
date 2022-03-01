@@ -250,19 +250,16 @@ describe('useWebsocketMessageHandler', () => {
           id: 1,
           title: 'Happy',
           topic: Topic.HAPPY,
-          thoughts: [],
         },
         {
           id: 2,
           title: 'Confused',
           topic: Topic.CONFUSED,
-          thoughts: [],
         },
         {
           id: 3,
           title: 'Sad',
           topic: Topic.UNHAPPY,
-          thoughts: [],
         },
       ];
 

@@ -20,12 +20,15 @@ import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
 
 import { mockColumns } from '../../services/api/__mocks__/ColumnService';
+import ActionItemService from '../../services/api/ActionItemService';
 import ColumnService from '../../services/api/ColumnService';
+import ThoughtService from '../../services/api/ThoughtService';
 import WebSocketService from '../../services/websocket/WebSocketService';
 
 import RetroPage from './RetroPage';
 
 jest.mock('../../services/api/ColumnService');
+jest.mock('../../services/api/ThoughtService');
 jest.mock('../../services/api/ActionItemService');
 jest.mock('../../services/websocket/WebSocketService');
 
@@ -59,6 +62,8 @@ describe('RetroPage.spec.tsx', () => {
     });
 
     expect(ColumnService.getColumns).toHaveBeenCalledWith(teamId);
+    expect(ThoughtService.getThoughts).toHaveBeenCalledWith(teamId);
+    expect(ActionItemService.get).toHaveBeenCalledWith(teamId, false);
   });
 
   it('should render without axe errors', async () => {
@@ -70,7 +75,7 @@ describe('RetroPage.spec.tsx', () => {
     mockColumns.forEach((column) => {
       const retroColumn = screen.getByTestId(`retroColumn__${column.topic}`);
       expect(within(retroColumn).getByText(column.title)).toBeDefined();
-      expect(within(retroColumn).getAllByTestId(/retroItem$/)).toHaveLength(column.thoughts.length);
+      expect(within(retroColumn).getAllByTestId(/retroItem$/)).toHaveLength(2);
     });
     done();
   });
