@@ -28,6 +28,11 @@ const ThoughtService = {
     return axios.post(url, createThoughtRequest).then((response) => response.data);
   },
 
+  getThoughts(teamId: string): Promise<Thought[]> {
+    const url = `/api/team/${teamId}/thoughts`;
+    return axios.get(url).then((response) => response.data);
+  },
+
   delete(teamId: string, thoughtId: number): Promise<void> {
     const url = `${getThoughtApiPath(teamId)}/${thoughtId}`;
     return axios.delete(url);

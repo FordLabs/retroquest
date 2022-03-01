@@ -15,12 +15,10 @@
  * limitations under the License.
  */
 
-import Thought from './Thought';
 import { ThoughtTopic } from './Topic';
 
 export interface Column {
   id: number;
   title: string;
   topic: ThoughtTopic;
-  thoughts: Thought[];
 }

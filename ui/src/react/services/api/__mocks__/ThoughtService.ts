@@ -16,7 +16,7 @@
  */
 
 import Thought from '../../../types/Thought';
-import { ThoughtTopic } from '../../../types/Topic';
+import Topic, { ThoughtTopic } from '../../../types/Topic';
 
 export const getMockThought = (topic: ThoughtTopic, isDiscussed = false, hearts = 0): Thought => ({
   id: Math.random(),
@@ -27,6 +27,16 @@ export const getMockThought = (topic: ThoughtTopic, isDiscussed = false, hearts 
 });
 
 const ThoughtService = {
+  getThoughts: jest
+    .fn()
+    .mockResolvedValue([
+      getMockThought(Topic.HAPPY, false),
+      getMockThought(Topic.HAPPY, true),
+      getMockThought(Topic.CONFUSED, false),
+      getMockThought(Topic.CONFUSED, true),
+      getMockThought(Topic.UNHAPPY, false),
+      getMockThought(Topic.UNHAPPY, true),
+    ]),
   create: jest.fn().mockResolvedValue((thought) => thought),
   delete: jest.fn().mockResolvedValue(null),
   updateMessage: jest.fn().mockResolvedValue(null),

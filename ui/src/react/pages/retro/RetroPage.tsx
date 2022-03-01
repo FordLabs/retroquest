@@ -24,6 +24,7 @@ import MobileColumnNav from '../../components/mobile-column-nav/MobileColumnNav'
 import useWebSocketMessageHandler from '../../hooks/useWebSocketMessageHandler';
 import ActionItemService from '../../services/api/ActionItemService';
 import ColumnService from '../../services/api/ColumnService';
+import ThoughtService from '../../services/api/ThoughtService';
 import WebSocketService from '../../services/websocket/WebSocketService';
 import { ActionItemState } from '../../state/ActionItemState';
 import { ColumnsState } from '../../state/ColumnsState';
@@ -33,7 +34,6 @@ import Action from '../../types/Action';
 import { Column } from '../../types/Column';
 import Team from '../../types/Team';
 import Thought from '../../types/Thought';
-import Topic from '../../types/Topic';
 
 import ActionItemsColumn from './action-items-column/ActionItemsColumn';
 import RetroSubheader from './retro-sub-header/RetroSubheader';
@@ -68,27 +68,16 @@ function RetroPage(props: Props): ReactElement {
     setTeam({ ...team, id: teamId });
 
     const getColumnsResult = ColumnService.getColumns(teamId);
+    const getThoughtsResult = ThoughtService.getThoughts(teamId);
     const getActionItemsResult = ActionItemService.get(teamId, false);
 
-    Promise.all([getColumnsResult, getActionItemsResult]).then((results) => {
-      const columns = results[0];
-      setColumns(columns);
-
-      const actionItems = results[1];
-      setActionItems(actionItems);
-
-      const allItems = flatten(columns.map((aggregatedColumn) => aggregatedColumn.thoughts));
-      setThoughts([...allItems.filter((item) => item.topic !== Topic.ACTION)]);
-
+    Promise.all([getColumnsResult, getThoughtsResult, getActionItemsResult]).then((results) => {
+      setColumns(results[0]);
+      setThoughts(results[1]);
+      setActionItems(results[2]);
       setIsLoading(false);
     });
   }, []);
-
-  function flatten(arr) {
-    return arr.reduce(function (flat, toFlatten) {
-      return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
-    }, []);
-  }
 
   useEffect(() => {
     if (!isLoading) {

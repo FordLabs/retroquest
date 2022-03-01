@@ -16,22 +16,22 @@
  */
 
 import React from 'react';
-import {act, render, screen, within} from '@testing-library/react';
+import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {axe} from 'jest-axe';
-import {RecoilRoot} from 'recoil';
+import { axe } from 'jest-axe';
+import { RecoilRoot } from 'recoil';
 
-import {getMockThought} from '../../../services/api/__mocks__/ThoughtService';
+import { getMockThought } from '../../../services/api/__mocks__/ThoughtService';
 import ColumnService from '../../../services/api/ColumnService';
 import ThoughtService from '../../../services/api/ThoughtService';
-import {TeamState} from '../../../state/TeamState';
-import {ThoughtsState} from '../../../state/ThoughtsState';
+import { TeamState } from '../../../state/TeamState';
+import { ThoughtsState } from '../../../state/ThoughtsState';
+import { Column } from '../../../types/Column';
 import Team from '../../../types/Team';
 import Thought from '../../../types/Thought';
 import Topic from '../../../types/Topic';
 
 import ThoughtColumn from './ThoughtColumn';
-import {Column} from '../../../types/Column';
 
 const team: Team = {
   name: 'My Team',
@@ -48,7 +48,6 @@ const column: Column = {
   id: 123456,
   topic: Topic.HAPPY,
   title: 'Happy',
-  thoughts: [activeThought1, activeThought2, discussedThought1, discussedThought2],
 };
 
 jest.mock('../../../services/api/ThoughtService');
@@ -62,7 +61,7 @@ describe('ThoughtColumn.spec.tsx', () => {
       ({ container } = render(
         <RecoilRoot
           initializeState={({ set }) => {
-            set(ThoughtsState, column.thoughts);
+            set(ThoughtsState, [activeThought1, activeThought2, discussedThought1, discussedThought2]);
             set(TeamState, team);
           }}
         >

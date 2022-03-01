@@ -27,9 +27,9 @@ import ColumnService from '../../../services/api/ColumnService';
 import ThoughtService from '../../../services/api/ThoughtService';
 import { TeamState } from '../../../state/TeamState';
 import { ActiveThoughtsByTopicState, DiscussedThoughtsByTopicState } from '../../../state/ThoughtsState';
+import { Column } from '../../../types/Column';
 import { getCreateThoughtRequest } from '../../../types/CreateThoughtRequest';
 import Thought from '../../../types/Thought';
-import { Column } from '../../../types/Column';
 
 type Props = {
   column: Column;

@@ -19,8 +19,6 @@ import { Column } from '../../../types/Column';
 import { ColumnTitle } from '../../../types/ColumnTitle';
 import Topic from '../../../types/Topic';
 
-import { getMockThought } from './ThoughtService';
-
 export const getMockColumnTitle = (topic: Topic, title: string): ColumnTitle => {
   return {
     id: 1,
@@ -35,19 +33,16 @@ export const mockColumns: Column[] = [
     id: 1,
     title: 'Happy',
     topic: Topic.HAPPY,
-    thoughts: [getMockThought(Topic.HAPPY, false), getMockThought(Topic.HAPPY, true)],
   },
   {
     id: 2,
     title: 'Confused',
     topic: Topic.CONFUSED,
-    thoughts: [getMockThought(Topic.CONFUSED, false), getMockThought(Topic.CONFUSED, true)],
   },
   {
     id: 3,
     title: 'Sad',
     topic: Topic.UNHAPPY,
-    thoughts: [getMockThought(Topic.UNHAPPY, false), getMockThought(Topic.UNHAPPY, true)],
   },
 ];
 
