@@ -43,8 +43,11 @@ function Assignee(props: AssigneeProps) {
     setEditAssignee(assignee || '');
   }, [assignee]);
 
-  function onAssigneeConfirmed() {
+  function handleEnter() {
     assigneeInputRef.current?.blur();
+  }
+
+  function onAssigneeConfirmed() {
     if (editAssignee !== assignee) {
       onAssign(editAssignee);
     }
@@ -60,7 +63,7 @@ function Assignee(props: AssigneeProps) {
           value={editAssignee}
           onChange={onChange(setEditAssignee)}
           onBlur={onAssigneeConfirmed}
-          onKeyDown={onKeys('Enter', onAssigneeConfirmed)}
+          onKeyDown={onKeys('Enter', handleEnter)}
           maxLength={MAX_ASSIGNEE_LENGTH}
           disabled={readOnly || editing || deleting}
           readOnly={readOnly || editing || deleting}

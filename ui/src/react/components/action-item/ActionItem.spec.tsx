@@ -180,11 +180,13 @@ describe('ActionItem', () => {
       typeAssignee('FordLabs{enter}');
 
       expect(ActionItemService.updateAssignee).toHaveBeenCalledWith(team.id, fakeAction.id, 'FordLabs');
+      expect(ActionItemService.updateAssignee).toBeCalledTimes(1);
 
       typeAssignee(' Team');
       clickTask();
 
       expect(ActionItemService.updateAssignee).toHaveBeenCalledWith(team.id, fakeAction.id, 'FordLabs Team');
+      expect(ActionItemService.updateAssignee).toBeCalledTimes(2);
     });
   });
 
