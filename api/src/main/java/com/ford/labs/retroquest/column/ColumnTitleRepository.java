@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.columntitle;
+package com.ford.labs.retroquest.column;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -24,6 +24,6 @@ import java.util.List;
 
 @Repository
 public interface ColumnTitleRepository extends JpaRepository<ColumnTitle, Long> {
-    ColumnTitle findByTeamIdAndAndTopic(String teamId, String topic);
+    ColumnTitle findByTeamIdAndTopic(String teamId, String topic);
     List<ColumnTitle> findAllByTeamId(String teamId);
 }

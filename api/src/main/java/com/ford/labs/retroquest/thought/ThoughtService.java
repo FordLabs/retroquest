@@ -17,7 +17,7 @@
 
 package com.ford.labs.retroquest.thought;
 
-import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
+import com.ford.labs.retroquest.column.ColumnTitleRepository;
 import com.ford.labs.retroquest.exception.ColumnTitleNotFoundException;
 import com.ford.labs.retroquest.exception.ThoughtNotFoundException;
 import com.ford.labs.retroquest.websocket.WebsocketService;
@@ -106,7 +106,7 @@ public class ThoughtService {
         thought.setTeamId(teamId);
         thought.setBoardId(boardId);
 
-        var columnTitle = columnTitleRepository.findByTeamIdAndAndTopic(teamId, thought.getTopic());
+        var columnTitle = columnTitleRepository.findByTeamIdAndTopic(teamId, thought.getTopic());
         thought.setColumnTitle(columnTitle);
         return thoughtRepository.save(thought);
     }

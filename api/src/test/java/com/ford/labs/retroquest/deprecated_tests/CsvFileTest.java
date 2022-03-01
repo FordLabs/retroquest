@@ -18,7 +18,7 @@
 package com.ford.labs.retroquest.deprecated_tests;
 
 import com.ford.labs.retroquest.actionitem.ActionItem;
-import com.ford.labs.retroquest.columntitle.ColumnTitle;
+import com.ford.labs.retroquest.column.ColumnTitle;
 import com.ford.labs.retroquest.team.CsvFile;
 import com.ford.labs.retroquest.thought.Thought;
 import org.apache.commons.io.FileUtils;

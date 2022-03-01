@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.columntitle;
+package com.ford.labs.retroquest.column;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

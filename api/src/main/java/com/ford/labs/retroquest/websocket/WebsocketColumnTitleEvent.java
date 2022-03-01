@@ -1,6 +1,6 @@
 package com.ford.labs.retroquest.websocket;
 
-import com.ford.labs.retroquest.columntitle.ColumnTitle;
+import com.ford.labs.retroquest.column.ColumnTitle;
 
 public class WebsocketColumnTitleEvent extends WebsocketEvent{
 
