@@ -1,6 +1,6 @@
 package com.ford.labs.retroquest.websocket;
 
-import com.ford.labs.retroquest.columntitle.ColumnTitle;
+import com.ford.labs.retroquest.column.ColumnTitle;
 import org.junit.jupiter.api.Test;
 
 import static com.ford.labs.retroquest.websocket.WebsocketEventType.UPDATE;

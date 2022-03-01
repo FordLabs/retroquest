@@ -17,8 +17,8 @@
 
 package com.ford.labs.retroquest.thought;
 
-import com.ford.labs.retroquest.columntitle.ColumnTitle;
-import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
+import com.ford.labs.retroquest.column.ColumnTitle;
+import com.ford.labs.retroquest.column.ColumnTitleRepository;
 import com.ford.labs.retroquest.exception.ColumnTitleNotFoundException;
 import com.ford.labs.retroquest.exception.ThoughtNotFoundException;
 import com.ford.labs.retroquest.websocket.WebsocketEvent;
@@ -197,7 +197,7 @@ class ThoughtServiceTest {
         );
         var expectedEvent = new WebsocketThoughtEvent("the-team", UPDATE, expectedThought);
 
-        given(columnTitleRepository.findByTeamIdAndAndTopic("the-team", topic)).willReturn(columnTitle);
+        given(columnTitleRepository.findByTeamIdAndTopic("the-team", topic)).willReturn(columnTitle);
         given(thoughtRepository.save(any(Thought.class))).willAnswer(a -> {
             var thought = a.<Thought>getArgument(0);
             thought.setId(1234L);

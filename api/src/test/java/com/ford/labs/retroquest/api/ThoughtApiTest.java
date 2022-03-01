@@ -19,8 +19,8 @@ package com.ford.labs.retroquest.api;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
-import com.ford.labs.retroquest.columntitle.ColumnTitle;
-import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
+import com.ford.labs.retroquest.column.ColumnTitle;
+import com.ford.labs.retroquest.column.ColumnTitleRepository;
 import com.ford.labs.retroquest.thought.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,16 +1,20 @@
 package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
-import com.ford.labs.retroquest.columntitle.ColumnTitle;
-import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
+import com.ford.labs.retroquest.column.ColumnTitle;
+import com.ford.labs.retroquest.column.ColumnTitleRepository;
+import com.ford.labs.retroquest.column.UpdateColumnTitleRequest;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 
 import static java.lang.String.format;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -52,5 +56,45 @@ public class ColumnApiTest extends ApiTestBase {
         mockMvc.perform(get(format("/api/team/%s/columns", teamId))
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("not-beach-bums")))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void updateColumnTitle() throws Exception {
+        var savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder()
+                .teamId("BeachBums")
+                .title("old title")
+                .build());
+        var expectedColumnTitle = new ColumnTitle(savedColumnTitle.getId(), null, "new title", "BeachBums");
+
+        var request = new UpdateColumnTitleRequest("new title");
+
+        mockMvc.perform(put("/api/team/BeachBums/column/" + savedColumnTitle.getId() + "/title")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(request))
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk());
+
+        assertThat(columnTitleRepository.findAll()).containsExactly(expectedColumnTitle);
+    }
+
+    @Test
+    public void updateColumnTitle_WithUnauthorizedUser_ReturnsForbidden() throws Exception{
+        var request = new UpdateColumnTitleRequest("new title");
+        mockMvc.perform(put("/api/team/BeachBums/column/1/title")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(request))
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void updateColumnTitle_WithFakeColumnId_ReturnsNotFound() throws Exception {
+        var request = new UpdateColumnTitleRequest("new title");
+
+        mockMvc.perform(put("/api/team/BeachBums/column/42/title")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(request))
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isNotFound());
     }
 }

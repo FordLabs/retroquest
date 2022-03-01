@@ -1,6 +1,5 @@
 package com.ford.labs.retroquest.column;
 
-import com.ford.labs.retroquest.columntitle.ColumnTitle;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

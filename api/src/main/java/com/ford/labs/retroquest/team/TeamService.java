@@ -18,8 +18,8 @@
 package com.ford.labs.retroquest.team;
 
 import com.ford.labs.retroquest.actionitem.ActionItemRepository;
-import com.ford.labs.retroquest.columntitle.ColumnTitle;
-import com.ford.labs.retroquest.columntitle.ColumnTitleRepository;
+import com.ford.labs.retroquest.column.ColumnTitle;
+import com.ford.labs.retroquest.column.ColumnTitleRepository;
 import com.ford.labs.retroquest.exception.BoardDoesNotExistException;
 import com.ford.labs.retroquest.exception.PasswordInvalidException;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
