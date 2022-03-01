@@ -78,7 +78,7 @@ describe('RetroPage.spec.tsx', () => {
     const retroPageContent = screen.getByTestId('retroPageContent');
     expect(retroPageContent.className).toContain('stop-animations');
 
-    jest.advanceTimersByTime(1000);
+    jest.advanceTimersByTime(2000);
     expect(retroPageContent.className).not.toContain('stop-animations');
   });
 
