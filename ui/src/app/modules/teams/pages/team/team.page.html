@@ -67,6 +67,7 @@
     >
         <div
             class="guide-button happy-guide-button"
+            data-testid="mobileColumnNav-0"
             (click)="setSelectedIndex(0)"
             [ngClass]="{
         'selected': isSelectedIndex(0),
@@ -75,6 +76,7 @@
         ></div>
         <div
             class="guide-button confused-guide-button"
+            data-testid="mobileColumnNav-1"
             (click)="setSelectedIndex(1)"
             [ngClass]="{
         'selected': isSelectedIndex(1),
@@ -83,6 +85,7 @@
         ></div>
         <div
             class="guide-button sad-guide-button"
+            data-testid="mobileColumnNav-2"
             (click)="setSelectedIndex(2)"
             [ngClass]="{
         'selected': isSelectedIndex(2),
@@ -91,6 +94,7 @@
         ></div>
         <div
             class="guide-button action-guide-button"
+            data-testid="mobileColumnNav-3"
             (click)="setSelectedIndex(3)"
             [ngClass]="{
         'selected': isSelectedIndex(3),
