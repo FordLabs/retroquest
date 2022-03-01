@@ -16,7 +16,7 @@
  */
 
 import * as React from 'react';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import classnames from 'classnames';
 import { useRecoilValue } from 'recoil';
 import { ThoughtTopic } from 'src/react/types/Topic';
@@ -41,6 +41,8 @@ type RetroItemProps = {
 export default function RetroItem(props: RetroItemProps) {
   const { thought, type, readOnly = false } = props;
 
+  const [animateFadeOut, setAnimateFadeOut] = useState<boolean>(false);
+
   const team = useRecoilValue(TeamState);
 
   const retroItemModalRef = useRef<ModalMethods>();
@@ -50,6 +52,7 @@ export default function RetroItem(props: RetroItemProps) {
   };
 
   const updateThoughtDiscussionStatus = () => {
+    setAnimateFadeOut(true);
     ThoughtService.updateDiscussionStatus(team.id, thought.id, !thought.discussed).catch(console.error);
   };
 
@@ -64,7 +67,11 @@ export default function RetroItem(props: RetroItemProps) {
   return (
     <>
       <ColumnItem
-        className={classnames('retro-item', { completed: thought.discussed })}
+        className={classnames('retro-item', {
+          completed: thought.discussed,
+          'fade-in': !animateFadeOut,
+          'fade-out': animateFadeOut,
+        })}
         data-testid="retroItem"
         type={type}
         text={thought.message}

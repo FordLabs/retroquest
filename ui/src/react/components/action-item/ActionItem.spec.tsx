@@ -167,10 +167,13 @@ describe('ActionItem', () => {
       expect(ActionItemService.delete).toHaveBeenCalledWith(team.id, fakeAction.id);
     });
 
-    it('should mark action item as completed', () => {
+    it('should mark action item as completed and switch animation class', () => {
+      const actionItem = screen.getByTestId('actionItem');
+      expect(actionItem.className).toContain('fade-in');
       clickCheckbox();
 
       expect(ActionItemService.updateCompletionStatus).toHaveBeenCalledWith(team.id, fakeAction.id, true);
+      expect(actionItem.className).toContain('fade-out');
     });
 
     it('should edit assignee', () => {

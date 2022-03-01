@@ -12,6 +12,12 @@
   }
 }
 
+@mixin prefers-animations {
+  @media (prefers-reduced-motion: no-preference) {
+    @content;
+  }
+}
+
 @mixin dark-theme {
   .dark-theme {
     @content;

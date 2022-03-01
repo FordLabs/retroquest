@@ -52,7 +52,7 @@ describe('RetroPage.spec.tsx', () => {
   let container: HTMLElement;
   const teamId = 'some-team-id';
 
-  beforeEach(async () => {
+  const setupComponent = async () => {
     await act(async () => {
       ({ container } = render(
         <RecoilRoot>
@@ -64,23 +64,38 @@ describe('RetroPage.spec.tsx', () => {
     expect(ColumnService.getColumns).toHaveBeenCalledWith(teamId);
     expect(ThoughtService.getThoughts).toHaveBeenCalledWith(teamId);
     expect(ActionItemService.get).toHaveBeenCalledWith(teamId, false);
-  });
+  };
 
   it('should render without axe errors', async () => {
+    await setupComponent();
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
 
-  it('should show all columns and column items returned from backend', (done) => {
+  it('should allow column item animations after 1 second', async () => {
+    jest.useFakeTimers();
+    await setupComponent();
+    const retroPageContent = screen.getByTestId('retroPageContent');
+    expect(retroPageContent.className).toContain('stop-animations');
+
+    jest.advanceTimersByTime(1000);
+    expect(retroPageContent.className).not.toContain('stop-animations');
+  });
+
+  it('should show all columns and column items returned from backend', async () => {
+    await setupComponent();
     mockColumns.forEach((column) => {
       const retroColumn = screen.getByTestId(`retroColumn__${column.topic}`);
       expect(within(retroColumn).getByText(column.title)).toBeDefined();
       expect(within(retroColumn).getAllByTestId(/retroItem$/)).toHaveLength(2);
     });
-    done();
   });
 
   describe('Websockets', () => {
+    beforeEach(async () => {
+      await setupComponent();
+    });
+
     it('should connect to websockets', () => {
       expect(WebSocketService.connect).toHaveBeenCalledWith(expect.any(Function));
     });
