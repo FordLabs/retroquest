@@ -16,7 +16,7 @@
  */
 
 import * as React from 'react';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import classnames from 'classnames';
 import { useRecoilValue } from 'recoil';
 
@@ -44,6 +44,8 @@ function ActionItem(props: ActionItemProps) {
 
   const team = useRecoilValue(TeamState);
 
+  const [animateFadeOut, setAnimateFadeOut] = useState<boolean>(false);
+
   const deleteActionItem = () => {
     ActionItemService.delete(team.id, action.id).catch(console.error);
   };
@@ -57,6 +59,7 @@ function ActionItem(props: ActionItemProps) {
   };
 
   const updateActionItemCompletionStatus = () => {
+    setAnimateFadeOut(true);
     ActionItemService.updateCompletionStatus(team.id, action.id, !action.completed).catch(console.error);
   };
 
@@ -64,7 +67,11 @@ function ActionItem(props: ActionItemProps) {
     <>
       <ColumnItem
         data-testid="actionItem"
-        className={classnames('action-item', { completed: action.completed })}
+        className={classnames('action-item', {
+          completed: action.completed,
+          'fade-in': !animateFadeOut,
+          'fade-out': animateFadeOut,
+        })}
         type={Topic.ACTION}
         text={action.task}
         checked={action.completed}

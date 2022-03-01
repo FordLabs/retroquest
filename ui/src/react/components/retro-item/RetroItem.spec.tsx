@@ -173,9 +173,12 @@ describe('RetroItem', () => {
       expect(ThoughtService.delete).toHaveBeenCalledWith(team.id, fakeThought.id);
     });
 
-    it('should mark as discussed', () => {
+    it('should mark as discussed and switch animation class', () => {
+      const retroItem = screen.getByTestId('retroItem');
+      expect(retroItem.className).toContain('fade-in');
       clickCheckbox();
       expect(ThoughtService.updateDiscussionStatus).toHaveBeenCalledWith(team.id, fakeThought.id, true);
+      expect(retroItem.className).toContain('fade-out');
     });
   });
 

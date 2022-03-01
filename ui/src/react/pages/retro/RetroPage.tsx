@@ -115,10 +115,16 @@ function RetroPage(props: Props): ReactElement {
     });
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      retroPageContentRef.current.classList.remove('stop-animations');
+    }, 1000);
+  }, []);
+
   return (
     <div className="retro-page">
       <RetroSubheader />
-      <div className="retro-page-content" ref={retroPageContentRef}>
+      <div className="retro-page-content stop-animations" ref={retroPageContentRef} data-testid="retroPageContent">
         {!isLoading &&
           columns.map((column, index) => {
             return (
