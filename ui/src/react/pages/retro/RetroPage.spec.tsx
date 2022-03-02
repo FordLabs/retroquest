@@ -23,7 +23,6 @@ import { mockColumns } from '../../services/api/__mocks__/ColumnService';
 import ActionItemService from '../../services/api/ActionItemService';
 import ColumnService from '../../services/api/ColumnService';
 import ThoughtService from '../../services/api/ThoughtService';
-import WebSocketService from '../../services/websocket/WebSocketService';
 
 import RetroPage from './RetroPage';
 
@@ -92,41 +91,6 @@ describe('RetroPage.spec.tsx', () => {
       const retroColumn = screen.getByTestId(`retroColumn__${column.topic}`);
       expect(within(retroColumn).getByText(column.title)).toBeDefined();
       expect(within(retroColumn).getAllByTestId(/retroItem$/)).toHaveLength(2);
-    });
-  });
-
-  describe('Websockets', () => {
-    beforeEach(async () => {
-      await setupComponent();
-      screen.getByText('Happy');
-    });
-
-    it('should connect to websockets', () => {
-      expect(WebSocketService.connect).toHaveBeenCalledWith(expect.any(Function));
-    });
-
-    it('should subscribe to column title events', async () => {
-      await act(async () =>
-        expect(WebSocketService.subscribeToColumnTitle).toHaveBeenCalledWith(teamId, mockColumnTitleMessageHandler)
-      );
-    });
-
-    it('should subscribe to thoughts', async () => {
-      await act(async () =>
-        expect(WebSocketService.subscribeToThoughts).toHaveBeenCalledWith(teamId, mockThoughtMessageHandler)
-      );
-    });
-
-    it('should subscribe to action items', async () => {
-      await act(async () =>
-        expect(WebSocketService.subscribeToActionItems).toHaveBeenCalledWith(teamId, mockActionItemMessageHandler)
-      );
-    });
-
-    it('should subscribe to end retro', async () => {
-      await act(async () =>
-        expect(WebSocketService.subscribeToEndRetro).toHaveBeenCalledWith(teamId, mockEndRetroMessageHandler)
-      );
     });
   });
 });
