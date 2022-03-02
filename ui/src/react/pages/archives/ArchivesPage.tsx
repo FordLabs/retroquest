@@ -32,10 +32,7 @@ function ArchivesPage(props: Props): JSX.Element {
 
   return (
     <div className="archives-page">
-      <ArchivesSubheader
-        onActionItemButtonClick={() => setShowActionItems(true)}
-        onThoughtButtonClick={() => setShowActionItems(false)}
-      />
+      <ArchivesSubheader showActionItems={showActionItems} setShowActionItems={setShowActionItems} />
       <div className="archives-page-content">{showActionItems ? <ActionItemArchives /> : <ThoughtArchives />}</div>
     </div>
   );
