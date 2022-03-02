@@ -52,6 +52,10 @@ describe('RetroPage.spec.tsx', () => {
   let container: HTMLElement;
   const teamId = 'some-team-id';
 
+  beforeEach(() => {
+    jest.useRealTimers();
+  });
+
   const setupComponent = async () => {
     await act(async () => {
       ({ container } = render(
