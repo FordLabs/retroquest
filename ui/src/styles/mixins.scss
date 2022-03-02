@@ -1,4 +1,5 @@
 @import 'sizes';
+@import 'colors';
 
 @mixin breakpoint-medium {
   @media (min-width: 768px) {
@@ -15,6 +16,27 @@
 @mixin prefers-animations {
   @media (prefers-reduced-motion: no-preference) {
     @content;
+  }
+}
+
+@mixin subheader {
+  height: 32px;
+  background-color: $white;
+
+  @include breakpoint-medium {
+    height: 45px;
+  }
+
+  :only-child {
+    @include site-max-width;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100%;
+  }
+
+  .dark-theme & {
+    background-color: $header-background-color-dark;
   }
 }
 

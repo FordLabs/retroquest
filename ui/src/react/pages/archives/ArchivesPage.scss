@@ -15,20 +15,16 @@
  * limitations under the License.
  */
 
-@import '../styles/colors';
 @import '../styles/mixins';
-@import '../styles/sizes';
 
-/* stylelint-disable selector-no-qualifying-type */
-body.dark-theme {
-  background-color: $background-color-dark;
-}
+.archives-page {
+  .archives-page-content {
+    @include site-max-width;
+    text-align: center;
 
-li,
-ol,
-ul {
-  margin: 0;
-  padding: 0;
-
-  list-style: none;
+    .title {
+      font-weight: 500;
+      font-size: 1.5rem;
+    }
+  }
 }

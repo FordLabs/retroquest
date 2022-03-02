@@ -14,21 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import React from 'react';
 
-@import '../styles/colors';
-@import '../styles/mixins';
-@import '../styles/sizes';
+import './ThoughtArchives.scss';
 
-/* stylelint-disable selector-no-qualifying-type */
-body.dark-theme {
-  background-color: $background-color-dark;
+function ThoughtArchives(): JSX.Element {
+  return (
+    <div className="thought-archives">
+      <h1 className="title">Thought Archives</h1>
+    </div>
+  );
 }
 
-li,
-ol,
-ul {
-  margin: 0;
-  padding: 0;
-
-  list-style: none;
-}
+export default ThoughtArchives;

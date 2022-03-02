@@ -15,20 +15,16 @@
  * limitations under the License.
  */
 
-@import '../styles/colors';
-@import '../styles/mixins';
-@import '../styles/sizes';
+import React from 'react';
 
-/* stylelint-disable selector-no-qualifying-type */
-body.dark-theme {
-  background-color: $background-color-dark;
+import './ActionItemArchives.scss';
+
+function ActionItemArchives() {
+  return (
+    <div className="action-item-archives">
+      <h1 className="title">Action Item Archives</h1>
+    </div>
+  );
 }
 
-li,
-ol,
-ul {
-  margin: 0;
-  padding: 0;
-
-  list-style: none;
-}
+export default ActionItemArchives;

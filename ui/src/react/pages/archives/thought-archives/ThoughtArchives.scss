@@ -14,21 +14,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-@import '../styles/colors';
-@import '../styles/mixins';
-@import '../styles/sizes';
-
-/* stylelint-disable selector-no-qualifying-type */
-body.dark-theme {
-  background-color: $background-color-dark;
-}
-
-li,
-ol,
-ul {
-  margin: 0;
-  padding: 0;
-
-  list-style: none;
-}
