@@ -29,9 +29,6 @@ const getClient = () =>
     connectHeaders: {
       Authorization: `Bearer ` + CookieService.getToken(),
     },
-    onDisconnect: () => {},
-    onWebSocketError: () => {},
-    onStompError: () => {},
     reconnectDelay: 3000,
     heartbeatIncoming: 4000,
     heartbeatOutgoing: 4000,
