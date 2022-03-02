@@ -98,6 +98,7 @@ describe('RetroPage.spec.tsx', () => {
   describe('Websockets', () => {
     beforeEach(async () => {
       await setupComponent();
+      screen.getByText('Happy');
     });
 
     it('should connect to websockets', () => {
