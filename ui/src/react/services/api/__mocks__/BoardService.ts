@@ -15,8 +15,37 @@
  * limitations under the License.
  */
 
+import moment from 'moment';
+
+import Board from '../../../types/Board';
+import Topic from '../../../types/Topic';
+
+const boards: Board[] = [
+  {
+    id: 1,
+    dateCreated: moment(new Date(402292800000)),
+    teamId: 'teamId',
+    thoughts: [
+      {
+        id: 100,
+        message: 'I am a message',
+        hearts: 0,
+        discussed: false,
+        topic: Topic.HAPPY,
+      },
+    ],
+  },
+  {
+    id: 2,
+    dateCreated: moment(new Date(893217600000)),
+    teamId: 'teamId',
+    thoughts: [],
+  },
+];
+
 const BoardService = {
   archiveRetro: jest.fn().mockResolvedValue(null),
+  getBoards: jest.fn().mockResolvedValue(boards),
 };
 
 export default BoardService;
