@@ -16,6 +16,7 @@
  */
 
 @import '../styles/mixins';
+@import '../styles/colors';
 
 .archives-page {
   .archives-page-content {
@@ -25,6 +26,14 @@
     .title {
       font-weight: 500;
       font-size: 1.5rem;
+    }
+  }
+}
+
+@include dark-theme {
+  .archives-page-content {
+    .title {
+      color: $gray;
     }
   }
 }

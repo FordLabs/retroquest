@@ -16,34 +16,39 @@
  */
 
 import * as React from 'react';
+import classNames from 'classnames';
 
 import './ArchivesSubheader.scss';
 
 interface Props {
-  onThoughtButtonClick(): void;
-  onActionItemButtonClick(): void;
+  showActionItems: boolean;
+  setShowActionItems(showActionItems: boolean): void;
 }
 
 function ArchivesSubheader(props: Props): JSX.Element {
-  const { onThoughtButtonClick, onActionItemButtonClick } = props;
+  const { showActionItems, setShowActionItems } = props;
 
   return (
-    <>
-      <div className="archives-subheader subheader">
-        <ul className="archives-subheader-links">
-          <li>
-            <button className="button button-secondary" onClick={onThoughtButtonClick}>
-              Thoughts
-            </button>
-          </li>
-          <li>
-            <button className="button button-secondary" onClick={onActionItemButtonClick}>
-              Action Items
-            </button>
-          </li>
-        </ul>
-      </div>
-    </>
+    <div className="archives-subheader subheader">
+      <ul className="archives-subheader-links">
+        <li>
+          <button
+            className={classNames('button button-secondary', { active: !showActionItems })}
+            onClick={() => setShowActionItems(false)}
+          >
+            Thoughts
+          </button>
+        </li>
+        <li>
+          <button
+            className={classNames('button button-secondary', { active: !!showActionItems })}
+            onClick={() => setShowActionItems(true)}
+          >
+            Action Items
+          </button>
+        </li>
+      </ul>
+    </div>
   );
 }
 
