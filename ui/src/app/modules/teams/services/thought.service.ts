@@ -19,9 +19,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { ColumnTitle } from '../../../../react/types/ColumnTitle';
 import { DataService } from '../../data.service';
 import { Thought } from '../../domain/thought';
-import { ColumnTitle } from '../../../../react/types/ColumnTitle';
 
 @Injectable()
 export class ThoughtService {
