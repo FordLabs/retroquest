@@ -15,14 +15,45 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+
+import ActionItemService from '../../../services/api/ActionItemService';
+import { ActionItemState } from '../../../state/ActionItemState';
+import { TeamState } from '../../../state/TeamState';
 
 import './ActionItemArchives.scss';
 
 function ActionItemArchives() {
+  const team = useRecoilValue(TeamState);
+  const [actionItems, setActionItems] = useRecoilState(ActionItemState);
+
+  useEffect(() => {
+    if (team.id) {
+      ActionItemService.get(team.id, false)
+        .then((items) => {
+          setActionItems(items);
+        })
+        .catch(console.error);
+    }
+  }, [team.id]);
+
   return (
     <div className="action-item-archives">
       <h1 className="title">Action Item Archives</h1>
+      <p>Examine completed action items from times gone by</p>
+      <ul>
+        {actionItems.map((actionItem) => {
+          return (
+            <li>
+              <div>
+                {actionItem.task}
+                {actionItem.assignee}
+              </div>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

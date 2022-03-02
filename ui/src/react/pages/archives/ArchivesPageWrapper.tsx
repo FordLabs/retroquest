@@ -28,6 +28,8 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { RecoilRoot } from 'recoil';
 
+import { TeamState } from '../../state/TeamState';
+
 import ArchivesPage from './ArchivesPage';
 
 const containerElementName = 'archivesPageWrapper';
@@ -58,8 +60,12 @@ export class ArchivesPageWrapper implements OnChanges, OnDestroy, AfterViewInit 
   private render() {
     ReactDOM.render(
       <React.StrictMode>
-        <RecoilRoot>
-          <ArchivesPage teamId={this.angularRoute.snapshot.params['teamId'] as string} />
+        <RecoilRoot
+          initializeState={({ set }) => {
+            set(TeamState, { name: '', id: this.angularRoute.parent.snapshot.params['teamId'] as string });
+          }}
+        >
+          <ArchivesPage />
         </RecoilRoot>
       </React.StrictMode>,
       this.containerRef.nativeElement
