@@ -28,6 +28,8 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { RecoilRoot } from 'recoil';
 
+import { TeamState } from '../../state/TeamState';
+
 import RetroPage from './RetroPage';
 
 const containerElementName = 'reactRetroPageWrapper';
@@ -82,8 +84,12 @@ export class ReactRetroPageWrapper implements OnChanges, OnDestroy, AfterViewIni
   private render() {
     ReactDOM.render(
       <React.StrictMode>
-        <RecoilRoot>
-          <RetroPage teamId={this.angularRoute.snapshot.params['teamId'] as string} />
+        <RecoilRoot
+          initializeState={({ set }) => {
+            set(TeamState, { name: '', id: this.angularRoute.snapshot.params['teamId'] as string });
+          }}
+        >
+          <RetroPage />
         </RecoilRoot>
       </React.StrictMode>,
       this.containerRef.nativeElement

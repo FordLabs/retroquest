@@ -23,6 +23,7 @@ import { mockColumns } from '../../services/api/__mocks__/ColumnService';
 import ActionItemService from '../../services/api/ActionItemService';
 import ColumnService from '../../services/api/ColumnService';
 import ThoughtService from '../../services/api/ThoughtService';
+import { TeamState } from '../../state/TeamState';
 
 import RetroPage from './RetroPage';
 
@@ -58,8 +59,12 @@ describe('RetroPage.spec.tsx', () => {
   const setupComponent = async () => {
     await act(async () => {
       ({ container } = render(
-        <RecoilRoot>
-          <RetroPage teamId={teamId} />
+        <RecoilRoot
+          initializeState={({ set }) => {
+            set(TeamState, { name: '', id: teamId });
+          }}
+        >
+          <RetroPage />
         </RecoilRoot>
       ));
     });
