@@ -28,7 +28,7 @@ import { TeamState } from '../../../state/TeamState';
 
 import './RetroSubheader.scss';
 
-function RetroSubheader() {
+function RetroSubheader(): JSX.Element {
   const feedbackModalRef = useRef<ModalMethods>();
   const archiveRetroModalRef = useRef<ModalMethods>();
 
