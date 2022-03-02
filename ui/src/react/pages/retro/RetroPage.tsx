@@ -36,7 +36,7 @@ import Team from '../../types/Team';
 import Thought from '../../types/Thought';
 
 import ActionItemsColumn from './action-items-column/ActionItemsColumn';
-import RetroSubheader from './retro-sub-header/RetroSubheader';
+import RetroSubheader from './retro-subheader/RetroSubheader';
 import ThoughtColumn from './thought-column/ThoughtColumn';
 
 type Props = {
