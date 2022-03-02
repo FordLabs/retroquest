@@ -17,12 +17,19 @@
 
 import axios from 'axios';
 
+import { Board } from '../../../app/modules/domain/board';
+
 import { getArchiveRetroApiPath } from './ApiConstants';
 
 const BoardService = {
   archiveRetro(teamId: string): Promise<void> {
     const url = `${getArchiveRetroApiPath(teamId)}`;
     return axios.put(url);
+  },
+
+  getBoards(teamId: string, pageIndex: number): Promise<Board[]> {
+    const url = `/api/${teamId}/boards?pageIndex=${pageIndex}`;
+    return axios.get(url).then((response) => response.data);
   },
 };
 
