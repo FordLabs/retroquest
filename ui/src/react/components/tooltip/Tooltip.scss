@@ -68,7 +68,7 @@
     z-index: 999;
   }
 
-  *:hover > &, *:focus > & {
+  *:hover > & {
     visibility: visible;
     opacity: 1;
   }
