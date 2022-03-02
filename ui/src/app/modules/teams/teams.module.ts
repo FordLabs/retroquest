@@ -24,6 +24,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { environment } from '../../../environments/environment';
 import { ReactHeaderComponentWrapper } from '../../../react/components/header/ReactHeaderComponentWrapper';
+import { ArchivesPageWrapper } from '../../../react/pages/archives/ArchivesPageWrapper';
 import { ReactRetroPageWrapper } from '../../../react/pages/retro/ReactRetroPageWrapper';
 import { AuthGuard } from '../auth/auth-guard/auth.guard';
 import { ActionsRadiatorViewComponent } from '../components/actions-radiator-view/actions-radiator-view.component';
@@ -69,7 +70,7 @@ function routes() {
             },
             {
               path: 'archives',
-              component: ArchivesPageComponent,
+              component: ArchivesPageWrapper,
               data: { teamId: ':teamId' },
               canActivate: [AuthGuard],
             },
@@ -123,14 +124,7 @@ function routes() {
     InfiniteScrollModule,
     DragDropModule,
   ],
-  providers: [
-    ThoughtService,
-    TeamService,
-    ActionItemService,
-    ColumnService,
-    FeedbackService,
-    SaveCheckerService,
-  ],
+  providers: [ThoughtService, TeamService, ActionItemService, ColumnService, FeedbackService, SaveCheckerService],
   declarations: [
     ReactRetroPageWrapper,
     TeamPageComponent,
@@ -139,6 +133,7 @@ function routes() {
     ThoughtsHeaderComponent,
     ActionsHeaderComponent,
     ActionsColumnComponent,
+    ArchivesPageWrapper,
     ArchivesPageComponent,
     BoardSummaryComponent,
     ArchivedBoardPageComponent,

@@ -18,53 +18,16 @@
 @import '../../../../styles/colors';
 @import '../../../../styles/mixins';
 
-.retro-subheader {
+.archives-subheader {
   @include subheader;
-}
 
-.retro-subheader-links {
-  display: flex;
-  justify-content: flex-end;
+  .archives-subheader-links {
+    display: flex;
+    justify-content: center;
 
-  li {
-    width: auto;
-    height: 100%;
-  }
-
-  .feedback-button,
-  .download-csv-button {
-    min-width: auto;
-    padding: 0 1.7rem;
-
-    .button-icon {
-      display: block;
-
-      @include breakpoint-medium {
-        display: none;
-      }
-    }
-
-    .button-text {
-      display: none;
-
-      @include breakpoint-medium {
-        display: initial;
-      }
-    }
-  }
-
-  .archive-button {
-    margin-left: 24px;
-  }
-}
-
-@include dark-theme {
-  .retro-subheader {
-    .archive-button {
-      &:focus,
-      &:hover {
-        background-color: $purple;
-      }
+    li {
+      width: auto;
+      height: 100%;
     }
   }
 }
