@@ -21,13 +21,7 @@ import ActionItemArchives from './action-item-archives/ActionItemArchives';
 import ArchivesSubheader from './archives-subheader/ArchivesSubheader';
 import ThoughtArchives from './thought-archives/ThoughtArchives';
 
-type Props = {
-  teamId?: string;
-};
-
-function ArchivesPage(props: Props): JSX.Element {
-  const { teamId } = props;
-
+function ArchivesPage(): JSX.Element {
   const [showActionItems, setShowActionItems] = useState<boolean>(false);
 
   return (
