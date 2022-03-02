@@ -16,17 +16,7 @@
  */
 
 import { Column } from '../../../types/Column';
-import { ColumnTitle } from '../../../types/ColumnTitle';
 import Topic from '../../../types/Topic';
-
-export const getMockColumnTitle = (topic: Topic, title: string): ColumnTitle => {
-  return {
-    id: 1,
-    topic,
-    title,
-    teamId: 'team-od',
-  };
-};
 
 export const mockColumns: Column[] = [
   {
