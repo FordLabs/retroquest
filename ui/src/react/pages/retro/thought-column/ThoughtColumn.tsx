@@ -16,7 +16,7 @@
  */
 
 import * as React from 'react';
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import ColumnHeader from '../../../components/column-header/ColumnHeader';
@@ -55,9 +55,9 @@ function ThoughtColumn(props: Props) {
 
   const renderThought = (thought: Thought) => {
     return (
-      <Fragment key={thought.id}>
+      <li key={thought.id}>
         <RetroItem thought={thought} type={thought.topic} />
-      </Fragment>
+      </li>
     );
   };
 
@@ -71,8 +71,10 @@ function ThoughtColumn(props: Props) {
       />
       <TextField type={column.topic} placeholder="Enter a Thought" handleSubmission={createThought} />
       <CountSeparator count={activeThoughts.length} />
-      {activeThoughts.map(renderThought)}
-      {discussedThoughts.map(renderThought)}
+      <ul>
+        {activeThoughts.map(renderThought)}
+        {discussedThoughts.map(renderThought)}
+      </ul>
     </div>
   );
 }
