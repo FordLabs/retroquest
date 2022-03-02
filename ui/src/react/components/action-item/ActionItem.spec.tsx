@@ -40,6 +40,9 @@ jest.spyOn(Modal, 'useModal').mockReturnValue(mockUseModalValue);
 jest.mock('../../services/api/ActionItemService');
 
 describe('ActionItem', () => {
+  const fadeInAnimationClass = 'fade-in';
+  const fadeOutAnimationClass = 'fade-out';
+
   const team: Team = {
     name: 'My Team',
     id: 'my-team',
@@ -169,11 +172,13 @@ describe('ActionItem', () => {
 
     it('should mark action item as completed and switch animation class', () => {
       const actionItem = screen.getByTestId('actionItem');
-      expect(actionItem.className).toContain('fade-in');
+      expect(actionItem.className).toContain(fadeInAnimationClass);
+      expect(actionItem.className).not.toContain(fadeOutAnimationClass);
       clickCheckbox();
 
       expect(ActionItemService.updateCompletionStatus).toHaveBeenCalledWith(team.id, fakeAction.id, true);
-      expect(actionItem.className).toContain('fade-out');
+      expect(actionItem.className).not.toContain(fadeInAnimationClass);
+      expect(actionItem.className).toContain(fadeOutAnimationClass);
     });
 
     it('should edit assignee', () => {
