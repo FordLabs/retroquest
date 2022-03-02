@@ -36,10 +36,11 @@ import './ActionItem.scss';
 type ActionItemProps = {
   action: Action;
   readOnly?: boolean;
+  disableAnimations?: boolean;
 };
 
 function ActionItem(props: ActionItemProps) {
-  const { action, readOnly = false } = props;
+  const { action, readOnly = false, disableAnimations = false } = props;
   const actionItemModalRef = useRef<ModalMethods>();
 
   const team = useRecoilValue(TeamState);
@@ -63,15 +64,20 @@ function ActionItem(props: ActionItemProps) {
     ActionItemService.updateCompletionStatus(team.id, action.id, !action.completed).catch(console.error);
   };
 
+  const getAnimationClasses = () => {
+    if (disableAnimations === false) {
+      return {
+        'fade-in': !disableAnimations && !animateFadeOut,
+        'fade-out': !disableAnimations && animateFadeOut,
+      };
+    }
+  };
+
   return (
     <>
       <ColumnItem
         data-testid="actionItem"
-        className={classnames('action-item', {
-          completed: action.completed,
-          'fade-in': !animateFadeOut,
-          'fade-out': animateFadeOut,
-        })}
+        className={classnames('action-item', { completed: action.completed }, getAnimationClasses())}
         type={Topic.ACTION}
         text={action.task}
         checked={action.completed}

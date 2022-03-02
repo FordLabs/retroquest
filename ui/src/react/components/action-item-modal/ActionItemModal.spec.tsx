@@ -19,6 +19,7 @@ import React, { createRef } from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { RecoilRoot } from 'recoil';
 
+import Action from '../../types/Action';
 import { ModalMethods } from '../modal/Modal';
 
 import ActionItemModal from './ActionItemModal';
@@ -37,20 +38,31 @@ describe('ActionItemModal', () => {
   });
 
   it('should render as an action item in a modal', () => {
-    const ref = createRef<ModalMethods>();
-    render(
-      <RecoilRoot>
-        <ActionItemModal action={fakeAction} ref={ref} />
-      </RecoilRoot>
-    );
-
-    act(() => {
-      ref.current.show();
-    });
+    renderAndOpenModal(fakeAction);
 
     screen.getByText('fake task');
     screen.getByText('Aug 12th');
     screen.getByTestId('actionItem');
     screen.getByTestId('modalBackdrop');
   });
+
+  it('should not animate action item card', () => {
+    renderAndOpenModal(fakeAction);
+    const actionItem = screen.getByTestId('actionItem');
+    expect(actionItem.className).not.toContain('fade-in');
+    expect(actionItem.className).not.toContain('fade-out');
+  });
 });
+
+const renderAndOpenModal = (fakeAction: Action) => {
+  const ref = createRef<ModalMethods>();
+  render(
+    <RecoilRoot>
+      <ActionItemModal action={fakeAction} ref={ref} />
+    </RecoilRoot>
+  );
+
+  act(() => {
+    ref.current.show();
+  });
+};
