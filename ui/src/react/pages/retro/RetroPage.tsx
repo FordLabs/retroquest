@@ -84,12 +84,10 @@ function RetroPage(props: Props): ReactElement {
       if (isMobileView()) addTouchListeners();
 
       WebSocketService.connect(() => {
-        if (teamId) {
-          WebSocketService.subscribeToColumnTitle(teamId, columnTitleMessageHandler);
-          WebSocketService.subscribeToThoughts(teamId, thoughtMessageHandler);
-          WebSocketService.subscribeToActionItems(teamId, actionItemMessageHandler);
-          WebSocketService.subscribeToEndRetro(teamId, endRetroMessageHandler);
-        }
+        WebSocketService.subscribeToColumnTitle(teamId, columnTitleMessageHandler);
+        WebSocketService.subscribeToThoughts(teamId, thoughtMessageHandler);
+        WebSocketService.subscribeToActionItems(teamId, actionItemMessageHandler);
+        WebSocketService.subscribeToEndRetro(teamId, endRetroMessageHandler);
       });
     }
 

@@ -100,20 +100,28 @@ describe('RetroPage.spec.tsx', () => {
       expect(WebSocketService.connect).toHaveBeenCalledWith(expect.any(Function));
     });
 
-    it('should subscribe to column title events', () => {
-      expect(WebSocketService.subscribeToColumnTitle).toHaveBeenCalledWith(teamId, mockColumnTitleMessageHandler);
+    it('should subscribe to column title events', async () => {
+      await act(async () =>
+        expect(WebSocketService.subscribeToColumnTitle).toHaveBeenCalledWith(teamId, mockColumnTitleMessageHandler)
+      );
     });
 
-    it('should subscribe to thoughts', () => {
-      expect(WebSocketService.subscribeToThoughts).toHaveBeenCalledWith(teamId, mockThoughtMessageHandler);
+    it('should subscribe to thoughts', async () => {
+      await act(async () =>
+        expect(WebSocketService.subscribeToThoughts).toHaveBeenCalledWith(teamId, mockThoughtMessageHandler)
+      );
     });
 
-    it('should subscribe to action items', () => {
-      expect(WebSocketService.subscribeToActionItems).toHaveBeenCalledWith(teamId, mockActionItemMessageHandler);
+    it('should subscribe to action items', async () => {
+      await act(async () =>
+        expect(WebSocketService.subscribeToActionItems).toHaveBeenCalledWith(teamId, mockActionItemMessageHandler)
+      );
     });
 
-    it('should subscribe to end retro', () => {
-      expect(WebSocketService.subscribeToEndRetro).toHaveBeenCalledWith(teamId, mockEndRetroMessageHandler);
+    it('should subscribe to end retro', async () => {
+      await act(async () =>
+        expect(WebSocketService.subscribeToEndRetro).toHaveBeenCalledWith(teamId, mockEndRetroMessageHandler)
+      );
     });
   });
 });
