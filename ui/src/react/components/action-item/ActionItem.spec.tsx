@@ -81,6 +81,18 @@ describe('ActionItem', () => {
     screen.getByText('Aug 12th');
   });
 
+  it('should disable animations', () => {
+    render(
+      <RecoilRoot>
+        <ActionItem action={fakeAction} disableAnimations={true} />
+      </RecoilRoot>
+    );
+
+    const actionItem = screen.getByTestId('actionItem');
+    expect(actionItem.className).not.toContain(fadeInAnimationClass);
+    expect(actionItem.className).not.toContain(fadeOutAnimationClass);
+  });
+
   describe('When not completed and not readonly', () => {
     beforeEach(() => {
       render(

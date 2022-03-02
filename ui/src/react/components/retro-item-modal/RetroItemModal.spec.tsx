@@ -20,6 +20,7 @@ import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
 
+import Thought from '../../types/Thought';
 import Topic from '../../types/Topic';
 import { ModalMethods } from '../modal/Modal';
 
@@ -40,34 +41,23 @@ describe('RetroItemModal', () => {
   });
 
   it('should render as a retro item in a modal', () => {
-    const ref = createRef<ModalMethods>();
-    render(
-      <RecoilRoot>
-        <RetroItemModal type={Topic.HAPPY} thought={fakeThought} ref={ref} />
-      </RecoilRoot>
-    );
-
-    act(() => {
-      ref.current.show();
-    });
+    renderAndOpenModal(fakeThought);
 
     screen.getByText('fake thought');
     screen.getByTestId('retroItem');
     screen.getByTestId('modalBackdrop');
   });
 
-  describe('not readonly', () => {
-    beforeEach(() => {
-      const ref = createRef<ModalMethods>();
-      render(
-        <RecoilRoot>
-          <RetroItemModal type={Topic.HAPPY} thought={fakeThought} ref={ref} />
-        </RecoilRoot>
-      );
+  it('should not animate action item card', () => {
+    renderAndOpenModal(fakeThought);
+    const retroItem = screen.getByTestId('retroItem');
+    expect(retroItem.className).not.toContain('fade-in');
+    expect(retroItem.className).not.toContain('fade-out');
+  });
 
-      act(() => {
-        ref.current.show();
-      });
+  describe('Not readonly', () => {
+    beforeEach(() => {
+      renderAndOpenModal(fakeThought);
     });
 
     it('should show action item form when add action item button is clicked', () => {
@@ -85,18 +75,9 @@ describe('RetroItemModal', () => {
     });
   });
 
-  describe('readonly', () => {
+  describe('Readonly', () => {
     beforeEach(() => {
-      const ref = createRef<ModalMethods>();
-      render(
-        <RecoilRoot>
-          <RetroItemModal type={Topic.HAPPY} thought={fakeThought} ref={ref} readOnly={true} />
-        </RecoilRoot>
-      );
-
-      act(() => {
-        ref.current.show();
-      });
+      renderAndOpenModal(fakeThought, true);
     });
 
     it('should not show add action button', () => {
@@ -116,3 +97,16 @@ function clickAddActionItem() {
 function clickDiscard() {
   userEvent.click(screen.getByText('Discard'));
 }
+
+const renderAndOpenModal = (fakeThought: Thought, readOnly?: boolean) => {
+  const ref = createRef<ModalMethods>();
+  render(
+    <RecoilRoot>
+      <RetroItemModal type={Topic.HAPPY} thought={fakeThought} ref={ref} readOnly={readOnly} />
+    </RecoilRoot>
+  );
+
+  act(() => {
+    ref.current.show();
+  });
+};

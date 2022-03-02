@@ -51,7 +51,7 @@ function RetroItemModal(props: RetroItemModalProps, ref: Ref<ModalMethods>) {
       onHide={() => setShowAddActionItemCard(false)}
       ref={ref}
     >
-      <RetroItem thought={thought} readOnly={readOnly} type={type} />
+      <RetroItem thought={thought} readOnly={readOnly} type={type} disableAnimations />
       {!readOnly && !showAddActionItemCard && (
         <button
           className="add-action-item-button"
