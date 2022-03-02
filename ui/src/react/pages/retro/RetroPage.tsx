@@ -18,7 +18,7 @@
 import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import Hammer from 'hammerjs';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import MobileColumnNav from '../../components/mobile-column-nav/MobileColumnNav';
 import useWebSocketMessageHandler from '../../hooks/useWebSocketMessageHandler';
@@ -39,14 +39,8 @@ import ActionItemsColumn from './action-items-column/ActionItemsColumn';
 import RetroSubheader from './retro-subheader/RetroSubheader';
 import ThoughtColumn from './thought-column/ThoughtColumn';
 
-type Props = {
-  teamId?: string;
-};
-
-function RetroPage(props: Props): ReactElement {
-  const { teamId } = props;
-
-  const [team, setTeam] = useRecoilState<Team>(TeamState);
+function RetroPage(): ReactElement {
+  const team = useRecoilValue<Team>(TeamState);
   const setActionItems = useSetRecoilState<Action[]>(ActionItemState);
   const [columns, setColumns] = useRecoilState<Column[]>(ColumnsState);
   const setThoughts = useSetRecoilState<Thought[]>(ThoughtsState);
@@ -65,11 +59,9 @@ function RetroPage(props: Props): ReactElement {
       window['Cypress'].isReact = true;
     }
 
-    setTeam({ ...team, id: teamId });
-
-    const getColumnsResult = ColumnService.getColumns(teamId);
-    const getThoughtsResult = ThoughtService.getThoughts(teamId);
-    const getActionItemsResult = ActionItemService.get(teamId, false);
+    const getColumnsResult = ColumnService.getColumns(team.id);
+    const getThoughtsResult = ThoughtService.getThoughts(team.id);
+    const getActionItemsResult = ActionItemService.get(team.id, false);
 
     Promise.all([getColumnsResult, getThoughtsResult, getActionItemsResult]).then((results) => {
       setColumns(results[0]);
@@ -84,10 +76,10 @@ function RetroPage(props: Props): ReactElement {
       if (isMobileView()) addTouchListeners();
 
       WebSocketService.connect(() => {
-        WebSocketService.subscribeToColumnTitle(teamId, columnTitleMessageHandler);
-        WebSocketService.subscribeToThoughts(teamId, thoughtMessageHandler);
-        WebSocketService.subscribeToActionItems(teamId, actionItemMessageHandler);
-        WebSocketService.subscribeToEndRetro(teamId, endRetroMessageHandler);
+        WebSocketService.subscribeToColumnTitle(team.id, columnTitleMessageHandler);
+        WebSocketService.subscribeToThoughts(team.id, thoughtMessageHandler);
+        WebSocketService.subscribeToActionItems(team.id, actionItemMessageHandler);
+        WebSocketService.subscribeToEndRetro(team.id, endRetroMessageHandler);
       });
     }
 
