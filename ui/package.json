@@ -1,6 +1,7 @@
 {
   "name": "retroquest-ui",
   "version": "0.0.0",
+  "private": true,
   "scripts": {
     "ng": "ng",
     "start": "ng serve --configuration local",
@@ -26,7 +27,18 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
-  "private": true,
+  "lint-staged": {
+    "*.{js,ts,tsx,html}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{css,scss,sass}": "stylelint --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "cd ui && npx lint-staged"
+    }
+  },
   "dependencies": {
     "@angular/animations": "~13.1.1",
     "@angular/cdk": "~13.1.1",
@@ -137,17 +149,5 @@
     "ts-node": "~8.5.0",
     "typescript": "~4.5.4",
     "webpack": "^5.20.0"
-  },
-  "lint-staged": {
-    "*.{js,ts,tsx,html}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.{css,scss,sass}": "stylelint --fix"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "cd ui && npx lint-staged"
-    }
   }
 }
