@@ -24,7 +24,7 @@ import TeamService from '../../../services/api/TeamService';
 import { TeamState } from '../../../state/TeamState';
 import Team from '../../../types/Team';
 
-import RetroSubheader from './RetroSubHeader';
+import RetroSubheader from './RetroSubheader';
 
 jest.mock('../../../services/api/TeamService');
 jest.mock('file-saver');
