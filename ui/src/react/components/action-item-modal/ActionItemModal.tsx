@@ -33,7 +33,7 @@ function ActionItemModal(props: ActionItemModalProps, ref: React.Ref<ModalMethod
 
   return (
     <Modal ref={ref} className="action-item-modal" testId="actionItemModal">
-      <ActionItem action={action} readOnly={readOnly} disableAnimations={true} />
+      <ActionItem action={action} readOnly={readOnly} disableAnimations />
     </Modal>
   );
 }

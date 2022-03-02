@@ -36,10 +36,11 @@ type RetroItemProps = {
   thought: Thought;
   type: ThoughtTopic;
   readOnly?: boolean;
+  disableAnimations?: boolean;
 };
 
 export default function RetroItem(props: RetroItemProps) {
-  const { thought, type, readOnly = false } = props;
+  const { thought, type, readOnly = false, disableAnimations = false } = props;
 
   const [animateFadeOut, setAnimateFadeOut] = useState<boolean>(false);
 
@@ -64,14 +65,19 @@ export default function RetroItem(props: RetroItemProps) {
     ThoughtService.upvoteThought(team.id, thought.id).catch(console.error);
   };
 
+  const getAnimationClasses = () => {
+    if (disableAnimations === false) {
+      return {
+        'fade-in': !disableAnimations && !animateFadeOut,
+        'fade-out': !disableAnimations && animateFadeOut,
+      };
+    }
+  };
+
   return (
     <>
       <ColumnItem
-        className={classnames('retro-item', {
-          completed: thought.discussed,
-          'fade-in': !animateFadeOut,
-          'fade-out': animateFadeOut,
-        })}
+        className={classnames('retro-item', { completed: thought.discussed }, getAnimationClasses())}
         data-testid="retroItem"
         type={type}
         text={thought.message}

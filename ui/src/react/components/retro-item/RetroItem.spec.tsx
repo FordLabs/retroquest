@@ -31,6 +31,8 @@ import RetroItem from './RetroItem';
 jest.mock('../../services/api/ThoughtService');
 
 describe('RetroItem', () => {
+  const fadeInAnimationClass = 'fade-in';
+  const fadeOutAnimationClass = 'fade-out';
   const team: Team = {
     name: 'My Team',
     id: 'my-team',
@@ -77,6 +79,18 @@ describe('RetroItem', () => {
     screen.getByText(fakeThought.message);
     screen.getByText(fakeThought.hearts);
     screen.getByText('Upvote');
+  });
+
+  it('should disable animations', () => {
+    render(
+      <RecoilRoot>
+        <RetroItem thought={fakeThought} type={Topic.HAPPY} disableAnimations={true} />
+      </RecoilRoot>
+    );
+
+    const retroItem = screen.getByTestId('retroItem');
+    expect(retroItem.className).not.toContain(fadeInAnimationClass);
+    expect(retroItem.className).not.toContain(fadeOutAnimationClass);
   });
 
   describe('When not discussed and not readonly', () => {
@@ -175,10 +189,12 @@ describe('RetroItem', () => {
 
     it('should mark as discussed and switch animation class', () => {
       const retroItem = screen.getByTestId('retroItem');
-      expect(retroItem.className).toContain('fade-in');
+      expect(retroItem.className).toContain(fadeInAnimationClass);
+      expect(retroItem.className).not.toContain(fadeOutAnimationClass);
       clickCheckbox();
       expect(ThoughtService.updateDiscussionStatus).toHaveBeenCalledWith(team.id, fakeThought.id, true);
-      expect(retroItem.className).toContain('fade-out');
+      expect(retroItem.className).toContain(fadeOutAnimationClass);
+      expect(retroItem.className).not.toContain(fadeInAnimationClass);
     });
   });
 
