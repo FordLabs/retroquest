@@ -16,7 +16,6 @@
  */
 
 import * as React from 'react';
-import { Fragment } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import ActionItem from '../../../components/action-item/ActionItem';
@@ -50,9 +49,9 @@ function ActionItemsColumn() {
 
   const renderActionItem = (action: Action) => {
     return (
-      <Fragment key={action.id}>
+      <li key={action.id}>
         <ActionItem action={action} />
-      </Fragment>
+      </li>
     );
   };
 
@@ -61,8 +60,10 @@ function ActionItemsColumn() {
       <ColumnHeader initialTitle={'Action Items'} type={topic} />
       <TextField type={topic} placeholder="Enter an Action Item" handleSubmission={createActionItem} />
       <CountSeparator count={activeActionItems.length} />
-      {activeActionItems.map(renderActionItem)}
-      {completedActionItems.map(renderActionItem)}
+      <ul>
+        {activeActionItems.map(renderActionItem)}
+        {completedActionItems.map(renderActionItem)}
+      </ul>
     </div>
   );
 }
