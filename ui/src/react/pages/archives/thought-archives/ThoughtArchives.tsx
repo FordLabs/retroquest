@@ -15,13 +15,27 @@
  * limitations under the License.
  */
 import React from 'react';
+import { useRecoilState } from 'recoil';
+
+import { ThoughtsState } from '../../../state/ThoughtsState';
+import NoArchivesFoundSection from '../no-archives-found-section/NoArchivesFoundSection';
 
 import './ThoughtArchives.scss';
 
 function ThoughtArchives(): JSX.Element {
+  const [thoughts] = useRecoilState(ThoughtsState);
+
   return (
     <div className="thought-archives">
-      <h1 className="title">Thought Archives</h1>
+      {thoughts.length ? (
+        <h1 className="text-thin">Thought Archives</h1>
+      ) : (
+        <NoArchivesFoundSection>
+          <>
+            Boards will appear when retros are ended with <b>thoughts</b>.
+          </>
+        </NoArchivesFoundSection>
+      )}
     </div>
   );
 }

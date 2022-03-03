@@ -15,23 +15,22 @@
  * limitations under the License.
  */
 
-@import '../styles/mixins';
-@import '../styles/colors';
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { RecoilRoot } from 'recoil';
 
-.archives-page {
-  .archives-page-content {
-    @include site-max-width;
-    text-align: center;
-  }
+import ThoughtArchives from './ThoughtArchives';
 
-  .text-thin {
-    font-weight: 500;
-    font-size: 1.5rem;
-  }
-}
+describe('Thought Archives', () => {
+  it('should show "No Archives" message when no archived thoughts are present', () => {
+    render(
+      <RecoilRoot>
+        <ThoughtArchives />
+      </RecoilRoot>
+    );
 
-@include dark-theme {
-  .text-thin {
-    color: $gray;
-  }
-}
+    screen.getByText('No archives were found.');
+    const description = screen.getByTestId('noArchivesFoundSectionDescription');
+    expect(description.innerHTML).toBe('Boards will appear when retros are ended with <b>thoughts</b>.');
+  });
+});

@@ -37,7 +37,11 @@ const containerElementName = 'archivesPageWrapper';
 @Component({
   selector: 'archives-page-wrapper',
   template: `<span #${containerElementName}></span>`,
-  styleUrls: ['./ArchivesPage.scss', './archives-subheader/ArchivesSubheader.scss'],
+  styleUrls: [
+    './ArchivesPage.scss',
+    './archives-subheader/ArchivesSubheader.scss',
+    './no-archives-found-section/NoArchivesFoundSection.scss',
+  ],
   encapsulation: ViewEncapsulation.None,
 })
 export class ArchivesPageWrapper implements OnChanges, OnDestroy, AfterViewInit {

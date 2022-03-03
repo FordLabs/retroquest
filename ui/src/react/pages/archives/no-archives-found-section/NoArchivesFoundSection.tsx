@@ -14,24 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import React, { ReactElement } from 'react';
 
-@import '../styles/mixins';
-@import '../styles/colors';
+import './NoArchivesFoundSection.scss';
 
-.archives-page {
-  .archives-page-content {
-    @include site-max-width;
-    text-align: center;
-  }
-
-  .text-thin {
-    font-weight: 500;
-    font-size: 1.5rem;
-  }
+interface Props {
+  children: ReactElement;
 }
 
-@include dark-theme {
-  .text-thin {
-    color: $gray;
-  }
+function NoArchivesFoundSection(props: Props): JSX.Element {
+  const { children } = props;
+
+  return (
+    <div className="no-archives-found-section">
+      <h1 className="title">Looks Like A New Team!</h1>
+      <h2 className="text-thin">No archives were found.</h2>
+      <p className="description" data-testid="noArchivesFoundSectionDescription">
+        {children}
+      </p>
+    </div>
+  );
 }
+
+export default NoArchivesFoundSection;

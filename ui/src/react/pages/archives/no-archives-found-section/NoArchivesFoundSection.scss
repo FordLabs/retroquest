@@ -15,23 +15,20 @@
  * limitations under the License.
  */
 
-@import '../styles/mixins';
 @import '../styles/colors';
 
-.archives-page {
-  .archives-page-content {
-    @include site-max-width;
-    text-align: center;
+.no-archives-found-section {
+  .title {
+    margin-bottom: 0.5rem;
   }
 
   .text-thin {
-    font-weight: 500;
-    font-size: 1.5rem;
+    margin-top: 0.5rem;
+    font-weight: 400;
   }
-}
 
-@include dark-theme {
-  .text-thin {
-    color: $gray;
+  .description {
+    color: $dark-gray;
+    font-size: 1.25rem;
   }
 }

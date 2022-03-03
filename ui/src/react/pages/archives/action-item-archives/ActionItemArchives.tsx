@@ -21,6 +21,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import ActionItemService from '../../../services/api/ActionItemService';
 import { ActionItemState } from '../../../state/ActionItemState';
 import { TeamState } from '../../../state/TeamState';
+import NoArchivesFoundSection from '../no-archives-found-section/NoArchivesFoundSection';
 
 import './ActionItemArchives.scss';
 
@@ -30,7 +31,7 @@ function ActionItemArchives() {
 
   useEffect(() => {
     if (team.id) {
-      ActionItemService.get(team.id, false)
+      ActionItemService.get(team.id, true)
         .then((items) => {
           setActionItems(items);
         })
@@ -40,20 +41,30 @@ function ActionItemArchives() {
 
   return (
     <div className="action-item-archives">
-      <h1 className="title">Action Item Archives</h1>
-      <p>Examine completed action items from times gone by</p>
-      <ul>
-        {actionItems.map((actionItem) => {
-          return (
-            <li>
-              <div>
-                {actionItem.task}
-                {actionItem.assignee}
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+      {actionItems.length ? (
+        <>
+          <h1 className="text-thin">Action Item Archives</h1>
+          <p>Examine completed action items from times gone by</p>
+          <ul>
+            {actionItems.map((actionItem, index) => {
+              return (
+                <li key={`archived-action-${index}`}>
+                  <div>
+                    <span>{actionItem.task}</span>
+                    <span>{actionItem.assignee}</span>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </>
+      ) : (
+        <NoArchivesFoundSection>
+          <>
+            Archives will appear when retros are ended with <b>completed action items</b>.
+          </>
+        </NoArchivesFoundSection>
+      )}
     </div>
   );
 }
