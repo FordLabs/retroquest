@@ -14,3 +14,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+@import '../styles/mixins';
+@import '../styles/colors';
+
+.thought-archives {
+  text-align: center;
+  max-width: 21.875rem;
+  margin: auto;
+  .list-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    border-radius: 6px;
+
+    background: $lighter-asphalt;
+    padding: 0.5rem;
+
+    .sort-button {
+      font-weight: bold;
+      color: $light-asphalt;
+
+      &.selectedAsc {
+        color: $asphalt;
+      }
+
+      &.selectedAsc::after {
+        display: inline-block;
+        transform: rotate(180deg) translateX(-3px) translateY(-3px);
+        content: "▾";
+      }
+
+      &.selectedDesc {
+        color: $asphalt;
+      }
+
+      &.selectedDesc::after {
+        display: inline-block;
+        transform: translateX(3px);
+        content: "▾";
+      }
+    }
+
+    .spacer {
+      padding: .75rem;
+    }
+  }
+}

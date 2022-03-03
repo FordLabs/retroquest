@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 import React, { useCallback, useEffect, useState } from 'react';
+import classnames from 'classnames';
 import moment from 'moment';
 import { useRecoilValue } from 'recoil';
 
@@ -89,9 +90,26 @@ function ThoughtArchives(): JSX.Element {
       {boards.length ? (
         <>
           <h1 className="text-thin">Thought Archives</h1>
-          <div>
-            <button onClick={handleCountSort}>#</button>
-            <button onClick={handleDateSort}>Date</button>
+          <div className="list-header">
+            <button
+              className={classnames('sort-button', {
+                selectedAsc: sortState === SortState.CountAscending,
+                selectedDesc: sortState === SortState.CountDescending,
+              })}
+              onClick={handleCountSort}
+            >
+              #
+            </button>
+            <button
+              className={classnames('sort-button', {
+                selectedAsc: sortState === SortState.DateAscending,
+                selectedDesc: sortState === SortState.DateDescending,
+              })}
+              onClick={handleDateSort}
+            >
+              Date
+            </button>
+            <div className="spacer" />
           </div>
           <ol>
             {boards.map(function (board: Board) {
