@@ -17,7 +17,7 @@
 
 import axios from 'axios';
 
-import { Board } from '../../../app/modules/domain/board';
+import Board from '../../types/Board';
 
 import { getArchiveRetroApiPath } from './ApiConstants';
 
