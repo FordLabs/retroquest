@@ -14,3 +14,87 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+@import '../styles/colors';
+@import '../styles/mixins';
+
+.action-item-archives {
+  max-width: 1162px;
+  margin: 0 auto;
+
+  text-align: center;
+
+  @include breakpoint-large {
+    text-align: left;
+  }
+
+  .text-thin {
+    margin-bottom: 0;
+  }
+
+  .description {
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
+
+    color: $dark-gray;
+    font-size: 1.1rem;
+  }
+
+  .archived-action-items {
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-columns: repeat(auto-fill, 80%);
+    justify-content: center;
+
+    @include breakpoint-medium {
+      grid-template-columns: repeat(auto-fill, 350px);
+    }
+
+    @include breakpoint-large {
+      grid-gap: 3rem;
+      grid-template-columns: repeat(auto-fill, 350px);
+      justify-content: left;
+    }
+  }
+}
+
+.archived-action-item {
+  width: 100%;
+
+  font-weight: bold;
+  font-size: 1rem;
+  text-align: left;
+
+  background-color: $white;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px opacity($black, 0.25);
+
+  .archived-action-item-task {
+    padding: 18px;
+  }
+
+  .archived-action-item-bottom {
+    display: flex;
+  }
+
+  .assignee-container {
+    margin-bottom: 0;
+    margin-left: 0.5rem;
+  }
+
+  .date-created {
+    display: flex;
+    flex: unset;
+    margin: 0.5rem 0 1rem 18px;
+    padding-right: 18px;
+
+    text-align: left;
+
+    border-right: 2px solid $gray;
+
+    .date-created-value {
+      margin: 0.5rem 0 0;
+      padding: 0;
+    }
+  }
+}

@@ -18,6 +18,8 @@
 import React, { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
+import Assignee from '../../../components/action-item/assignee/Assignee';
+import { DateCreated } from '../../../components/action-item/date-created/DateCreated';
 import ActionItemService from '../../../services/api/ActionItemService';
 import { ActionItemState } from '../../../state/ActionItemState';
 import { TeamState } from '../../../state/TeamState';
@@ -44,14 +46,17 @@ function ActionItemArchives() {
       {actionItems.length ? (
         <>
           <h1 className="text-thin">Action Item Archives</h1>
-          <p>Examine completed action items from times gone by</p>
-          <ul>
+          <p className="description">Examine completed action items from times gone by</p>
+          <ul className="archived-action-items">
             {actionItems.map((actionItem, index) => {
               return (
                 <li key={`archived-action-${index}`}>
-                  <div>
-                    <span>{actionItem.task}</span>
-                    <span>{actionItem.assignee}</span>
+                  <div className="archived-action-item">
+                    <div className="archived-action-item-task">{actionItem.task}</div>
+                    <div className="archived-action-item-bottom">
+                      <DateCreated date={actionItem.dateCreated} disabled />
+                      <Assignee assignee={actionItem.assignee} readOnly />
+                    </div>
                   </div>
                 </li>
               );
