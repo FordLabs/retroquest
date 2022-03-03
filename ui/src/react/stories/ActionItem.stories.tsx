@@ -30,6 +30,7 @@ const testAction = {
   assignee: 'FordLabs',
   completed: false,
   dateCreated: '2021-08-12',
+  archived: false,
 };
 
 const Template: ComponentStory<typeof ActionItem> = () => {
