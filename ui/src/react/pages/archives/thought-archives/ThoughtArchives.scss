@@ -62,3 +62,24 @@
     }
   }
 }
+
+@include dark-theme {
+  .thought-archives {
+    .list-header {
+      background: $light-gray;
+
+      .sort-button {
+        font-weight: bold;
+        color: $lighter-gray;
+
+        &.selectedAsc {
+          color: $gray;
+        }
+
+        &.selectedDesc {
+          color: $gray;
+        }
+      }
+    }
+  }
+}

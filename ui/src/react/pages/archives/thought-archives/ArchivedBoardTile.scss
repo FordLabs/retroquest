@@ -46,3 +46,22 @@
     }
   }
 }
+
+@include dark-theme {
+  .archived-board-tile {
+    background: $task-background-dark;
+    color: $gray;
+
+    .thought-count {
+      background: $light-gray;
+    }
+
+    .view-button {
+      color: $lighter-gray;
+
+      &:hover {
+        color: $turquoise;
+      }
+    }
+  }
+}
