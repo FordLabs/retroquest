@@ -17,6 +17,7 @@
 
 import React from 'react';
 import { act, render, screen } from '@testing-library/react';
+import moment from 'moment';
 import { RecoilRoot } from 'recoil';
 
 import ActionItemService from '../../../services/api/ActionItemService';
@@ -64,12 +65,17 @@ describe('Action Item Archives', () => {
     });
 
     expect(ActionItemService.get).toHaveBeenCalledWith(teamId, true);
-
     expect(screen.getByText('Action Item Archives')).toBeDefined();
-    expect(screen.getByText(archivedActionItems[0].task)).toBeDefined();
-    expect(screen.getByText(archivedActionItems[0].assignee)).toBeDefined();
-    expect(screen.getByText(archivedActionItems[1].task)).toBeDefined();
-    expect(screen.getByText(archivedActionItems[1].assignee)).toBeDefined();
+
+    const expectedFirstActionItem = archivedActionItems[0];
+    expect(screen.getByText(expectedFirstActionItem.task)).toBeDefined();
+    expect(screen.getByDisplayValue(expectedFirstActionItem.assignee)).toBeDefined();
+    expect(screen.getByText(moment(expectedFirstActionItem.dateCreated).format('MMM Do'))).toBeDefined();
+
+    const expectedSecondActionItem = archivedActionItems[1];
+    expect(screen.getByText(expectedSecondActionItem.task)).toBeDefined();
+    expect(screen.getByDisplayValue(expectedSecondActionItem.assignee)).toBeDefined();
+    expect(screen.getByText(moment(expectedSecondActionItem.dateCreated).format('MMM Do'))).toBeDefined();
   });
 
   it('should show "No Archives" message when no archived action items are present', () => {
