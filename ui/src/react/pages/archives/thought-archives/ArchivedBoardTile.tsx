@@ -1,4 +1,5 @@
 import * as React from 'react';
+import moment from 'moment';
 
 import Board from '../../../types/Board';
 
@@ -10,7 +11,7 @@ function ArchivedBoardTile({ board }: Props): JSX.Element {
   return (
     <li>
       <span>{board.thoughts.length}</span>
-      <span>{board.dateCreated.format('MMMM Do, yyyy')}</span>
+      <span>{moment(board.dateCreated).format('MMMM Do, yyyy')}</span>
       <button>View</button>
     </li>
   );

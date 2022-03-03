@@ -15,15 +15,13 @@
  * limitations under the License.
  */
 
-import moment from 'moment';
-
 import Board from '../../../types/Board';
 import Topic from '../../../types/Topic';
 
 export const mockBoards: Board[] = [
   {
     id: 1,
-    dateCreated: moment(new Date(1982, 9, 1)),
+    dateCreated: new Date(1982, 9, 1),
     teamId: 'teamId',
     thoughts: [
       {
@@ -37,7 +35,7 @@ export const mockBoards: Board[] = [
   },
   {
     id: 2,
-    dateCreated: moment(new Date(1998, 3, 22)),
+    dateCreated: new Date(1998, 3, 22),
     teamId: 'teamId',
     thoughts: [],
   },
