@@ -27,7 +27,7 @@ const MAX_ASSIGNEE_LENGTH = 50;
 
 type AssigneeProps = {
   assignee: string;
-  onAssign: (assignee: string) => void;
+  onAssign?: (assignee: string) => void;
   editing?: boolean;
   deleting?: boolean;
   readOnly?: boolean;

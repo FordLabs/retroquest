@@ -40,7 +40,10 @@ const containerElementName = 'archivesPageWrapper';
   styleUrls: [
     './ArchivesPage.scss',
     './archives-subheader/ArchivesSubheader.scss',
+    './action-item-archives/ActionItemArchives.scss',
+    '../../components/action-item/date-created/DateCreated.scss',
     './no-archives-found-section/NoArchivesFoundSection.scss',
+    '../../components/action-item/assignee/Assignee.scss',
   ],
   encapsulation: ViewEncapsulation.None,
 })
