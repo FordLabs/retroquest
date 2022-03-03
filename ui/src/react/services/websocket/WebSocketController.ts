@@ -21,7 +21,7 @@ import CookieService from '../CookieService';
 
 const url = window.location.hostname.includes('localhost')
   ? 'ws://localhost:8080/websocket/websocket'
-  : 'ws://' + window.location.hostname + '/websocket/websocket';
+  : 'wss://' + window.location.hostname + '/websocket/websocket';
 
 const getClient = () =>
   new Client({
