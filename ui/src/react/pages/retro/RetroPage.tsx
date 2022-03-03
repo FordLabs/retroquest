@@ -115,7 +115,7 @@ function RetroPage(props: Props): ReactElement {
 
   useEffect(() => {
     setTimeout(() => {
-      retroPageContentRef.current.classList.remove('stop-animations');
+      retroPageContentRef.current?.classList.remove('stop-animations');
     }, 1000);
   }, []);
 
