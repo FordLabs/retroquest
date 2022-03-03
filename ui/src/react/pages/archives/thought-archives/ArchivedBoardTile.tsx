@@ -13,7 +13,7 @@ function ArchivedBoardTile({ board }: Props): JSX.Element {
   return (
     <li data-testid="boardArchive" className="archived-board-tile">
       <span className="thought-count">{board.thoughts.length}</span>
-      <span>{moment(board.dateCreated).format('MMMM Do, yyyy')}</span>
+      <span className="date">{moment(board.dateCreated).format('MMMM Do, yyyy')}</span>
       <button className="view-button">View</button>
     </li>
   );

@@ -29,18 +29,24 @@
   font-weight: bold;
   line-height: 2rem;
 
-  padding: 1rem;
   margin-bottom: 2rem;
   box-shadow: rgba(0, 0, 0, 0.12) 0 0.25rem 1.25rem 0;
 
   .thought-count {
     width: 2rem;
     height: 2rem;
+    margin: 1rem;
     border-radius: 20px;
     background: $lighter-asphalt;
   }
 
+  .date {
+    padding: 1rem;
+  }
+
   .view-button {
+    padding: 1rem 1.5rem;
+    border-left: 1px solid $gray;
     &:hover {
       color: $turquoise;
     }
@@ -58,6 +64,7 @@
 
     .view-button {
       color: $lighter-gray;
+      border-left: 1px solid $asphalt;
 
       &:hover {
         color: $turquoise;
