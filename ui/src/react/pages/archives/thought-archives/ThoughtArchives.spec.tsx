@@ -41,6 +41,23 @@ describe('Thought Archives', () => {
     expect(within(tiles[1]).queryByText('October 1st, 1982')).not.toBeNull();
   });
 
+  it('should be sorted by thought count descending when # clicked', async () => {
+    await setUpThoughtArchives();
+    fireEvent.click(screen.getByText('#'));
+    const tiles = screen.getAllByTestId('boardArchive');
+    expect(within(tiles[0]).queryByText('1')).not.toBeNull();
+    expect(within(tiles[1]).queryByText('0')).not.toBeNull();
+  });
+
+  it('should be sorted by thought count ascending when # clicked and already sorted by descending', async () => {
+    await setUpThoughtArchives();
+    fireEvent.click(screen.getByText('#'));
+    fireEvent.click(screen.getByText('#'));
+    const tiles = screen.getAllByTestId('boardArchive');
+    expect(within(tiles[0]).queryByText('0')).not.toBeNull();
+    expect(within(tiles[1]).queryByText('1')).not.toBeNull();
+  });
+
   it('should show "No Archives" message when no archived thoughts are present', async () => {
     BoardService.getBoards = jest.fn().mockResolvedValue([]);
 
