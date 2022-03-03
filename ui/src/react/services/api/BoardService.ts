@@ -28,7 +28,7 @@ const BoardService = {
   },
 
   getBoards(teamId: string, pageIndex: number): Promise<Board[]> {
-    const url = `/api/${teamId}/boards?pageIndex=${pageIndex}`;
+    const url = `/api/team/${teamId}/boards?pageIndex=${pageIndex}`;
     return axios.get(url).then((response) => response.data);
   },
 };

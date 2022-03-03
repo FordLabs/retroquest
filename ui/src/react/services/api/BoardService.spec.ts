@@ -11,6 +11,6 @@ describe('Board Service', () => {
     const actual = await BoardService.getBoards(teamId, 0);
 
     expect(actual).toEqual(expectedBoards);
-    expect(axios.get).toHaveBeenCalledWith('/api/teamId/boards?pageIndex=0');
+    expect(axios.get).toHaveBeenCalledWith('/api/team/teamId/boards?pageIndex=0');
   });
 });
