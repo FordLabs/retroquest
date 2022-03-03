@@ -54,6 +54,7 @@ describe('ActionItem', () => {
     assignee: '',
     completed: false,
     dateCreated: '2021-08-12',
+    archived: false,
   };
 
   beforeEach(() => {

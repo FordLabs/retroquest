@@ -17,12 +17,13 @@
 
 import ActionItem from '../../../types/Action';
 
-export const getMockActionItem = (isCompleted = false): ActionItem => ({
+export const getMockActionItem = (isCompleted = false, archived: boolean = false): ActionItem => ({
   id: Math.random(),
   task: 'This is an action we can take',
   completed: isCompleted,
   assignee: 'Bob',
   dateCreated: '2022-01-20',
+  archived,
 });
 
 const ActionItemService = {
