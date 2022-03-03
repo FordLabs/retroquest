@@ -9,7 +9,7 @@ interface Props {
 
 function ArchivedBoardTile({ board }: Props): JSX.Element {
   return (
-    <li>
+    <li data-testid="boardArchive">
       <span>{board.thoughts.length}</span>
       <span>{moment(board.dateCreated).format('MMMM Do, yyyy')}</span>
       <button>View</button>
