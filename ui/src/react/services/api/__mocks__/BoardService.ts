@@ -20,10 +20,10 @@ import moment from 'moment';
 import Board from '../../../types/Board';
 import Topic from '../../../types/Topic';
 
-const boards: Board[] = [
+export const mockBoards: Board[] = [
   {
     id: 1,
-    dateCreated: moment(new Date(402292800000)),
+    dateCreated: moment(new Date(1982, 9, 1)),
     teamId: 'teamId',
     thoughts: [
       {
@@ -37,7 +37,7 @@ const boards: Board[] = [
   },
   {
     id: 2,
-    dateCreated: moment(new Date(893217600000)),
+    dateCreated: moment(new Date(1998, 3, 22)),
     teamId: 'teamId',
     thoughts: [],
   },
@@ -45,7 +45,7 @@ const boards: Board[] = [
 
 const BoardService = {
   archiveRetro: jest.fn().mockResolvedValue(null),
-  getBoards: jest.fn().mockResolvedValue(boards),
+  getBoards: jest.fn().mockResolvedValue(mockBoards),
 };
 
 export default BoardService;
