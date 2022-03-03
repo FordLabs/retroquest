@@ -30,6 +30,8 @@ import './ThoughtArchives.scss';
 enum SortState {
   DateDescending,
   DateAscending,
+  CountDescending,
+  CountAscending,
 }
 
 function ThoughtArchives(): JSX.Element {
@@ -55,6 +57,16 @@ function ThoughtArchives(): JSX.Element {
     }
   }
 
+  function handleCountSort() {
+    if (sortState === SortState.CountDescending) {
+      setBoards(boards.sort(sortByCountAscending));
+      setSortState(SortState.CountAscending);
+    } else {
+      setBoards(boards.sort(sortByCountDescending));
+      setSortState(SortState.CountDescending);
+    }
+  }
+
   function sortByDateDescending(a: Board, b: Board) {
     return moment(b.dateCreated).valueOf() - moment(a.dateCreated).valueOf();
   }
@@ -63,13 +75,22 @@ function ThoughtArchives(): JSX.Element {
     return moment(a.dateCreated).valueOf() - moment(b.dateCreated).valueOf();
   }
 
+  function sortByCountDescending(a: Board, b: Board) {
+    return b.thoughts.length - a.thoughts.length;
+  }
+
+  function sortByCountAscending(a: Board, b: Board) {
+    return a.thoughts.length - b.thoughts.length;
+  }
+
   return (
     <div className="thought-archives">
       {boards.length ? (
         <>
           <h1 className="title">Thought Archives</h1>
           <div>
-            <button onClick={() => handleDateSort()}>Date</button>
+            <button onClick={handleCountSort}>#</button>
+            <button onClick={handleDateSort}>Date</button>
           </div>
           <ol>{boards.map(boardTile)}</ol>
         </>
