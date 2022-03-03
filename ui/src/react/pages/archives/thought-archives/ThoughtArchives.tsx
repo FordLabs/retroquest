@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import moment from 'moment';
 import { useRecoilValue } from 'recoil';
 
@@ -43,29 +43,22 @@ function ThoughtArchives(): JSX.Element {
     BoardService.getBoards(team.id, 0).then((boards) => setBoards(boards.sort(sortByDateDescending)));
   }, [team.id]);
 
-  function boardTile(board: Board) {
-    return <ArchivedBoardTile key={board.teamId + board.dateCreated} board={board} />;
-  }
+  useEffect(() => {
+    setBoards([...boards].sort(getSortFunction(sortState)));
+  }, [sortState]);
 
-  function handleDateSort() {
-    if (sortState === SortState.DateDescending) {
-      setBoards(boards.sort(sortByDateAscending));
-      setSortState(SortState.DateAscending);
-    } else {
-      setBoards(boards.sort(sortByDateDescending));
-      setSortState(SortState.DateDescending);
+  const getSortFunction = useCallback((sortState) => {
+    switch (sortState) {
+      case SortState.CountAscending:
+        return sortByCountAscending;
+      case SortState.CountDescending:
+        return sortByCountDescending;
+      case SortState.DateAscending:
+        return sortByDateAscending;
+      default:
+        return sortByDateDescending;
     }
-  }
-
-  function handleCountSort() {
-    if (sortState === SortState.CountDescending) {
-      setBoards(boards.sort(sortByCountAscending));
-      setSortState(SortState.CountAscending);
-    } else {
-      setBoards(boards.sort(sortByCountDescending));
-      setSortState(SortState.CountDescending);
-    }
-  }
+  }, []);
 
   function sortByDateDescending(a: Board, b: Board) {
     return moment(b.dateCreated).valueOf() - moment(a.dateCreated).valueOf();
@@ -83,16 +76,28 @@ function ThoughtArchives(): JSX.Element {
     return a.thoughts.length - b.thoughts.length;
   }
 
+  function handleCountSort() {
+    setSortState(sortState === SortState.CountDescending ? SortState.CountAscending : SortState.CountDescending);
+  }
+
+  function handleDateSort() {
+    setSortState(sortState === SortState.DateDescending ? SortState.DateAscending : SortState.DateDescending);
+  }
+
   return (
     <div className="thought-archives">
       {boards.length ? (
         <>
-          <h1 className="title">Thought Archives</h1>
+          <h1 className="text-thin">Thought Archives</h1>
           <div>
             <button onClick={handleCountSort}>#</button>
             <button onClick={handleDateSort}>Date</button>
           </div>
-          <ol>{boards.map(boardTile)}</ol>
+          <ol>
+            {boards.map(function (board: Board) {
+              return <ArchivedBoardTile key={board.teamId + board.dateCreated} board={board} />;
+            })}
+          </ol>
         </>
       ) : (
         <NoArchivesFoundSection>
