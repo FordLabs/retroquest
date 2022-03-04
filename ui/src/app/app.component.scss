@@ -18,7 +18,7 @@
 @import '../styles/colors';
 @import '../styles/mixins';
 
-.thought-archives {
+.archived-boards-list {
   .thought-archives-title {
     margin-bottom: 0;
 
@@ -28,7 +28,7 @@
 }
 
 @include dark-theme {
-  .thought-archives {
+  .archived-boards-list {
     .thought-archives-title {
       color: $gray;
     }

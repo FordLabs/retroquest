@@ -90,7 +90,7 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
   }
 
   return (
-    <div className="thought-archives">
+    <div className="archived-boards-list">
       {boards.length ? (
         <>
           <h1 className="text-thin">Thought Archives</h1>
@@ -115,7 +115,7 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
             </button>
             <div className="spacer" />
           </div>
-          <ol>
+          <ol className="list">
             {boards.map(function (board: Board) {
               return (
                 <ArchivedBoardTile

@@ -18,17 +18,16 @@
 @import '../styles/mixins';
 @import '../styles/colors';
 
-.thought-archives {
+.archived-boards-list {
   text-align: center;
-  max-width: 21.875rem;
-  margin: auto;
   .list-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-bottom: 1rem;
+    margin: 0 auto 1rem auto;
     border-radius: 6px;
 
+    max-width: 21.875rem;
     background: $lighter-asphalt;
     padding: 0.5rem;
 
@@ -61,10 +60,15 @@
       padding: .75rem;
     }
   }
+
+  .list {
+    max-width: 21.875rem;
+    margin: 0 auto 1rem auto;
+  }
 }
 
 @include dark-theme {
-  .thought-archives {
+  .archived-boards-list {
     .list-header {
       background: $light-gray;
 
