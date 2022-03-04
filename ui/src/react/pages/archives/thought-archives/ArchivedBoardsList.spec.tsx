@@ -64,7 +64,7 @@ describe('Archived Boards List', () => {
     await act(async () => {
       render(
         <RecoilRoot>
-          <ArchivedBoardsList />
+          <ArchivedBoardsList onBoardSelection={jest.fn()} />
         </RecoilRoot>
       );
     });
@@ -85,7 +85,7 @@ const setUpThoughtArchives = async () => {
           set(TeamState, { id: 'teamId' } as unknown as Team);
         }}
       >
-        <ArchivedBoardsList />
+        <ArchivedBoardsList onBoardSelection={jest.fn()} />
       </RecoilRoot>
     );
   });
