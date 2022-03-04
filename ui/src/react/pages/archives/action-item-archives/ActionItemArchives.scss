@@ -28,11 +28,14 @@
     text-align: left;
   }
 
-  .text-thin {
+  .action-item-archives-title {
     margin-bottom: 0;
+
+    font-weight: 500;
+    font-size: 1.5rem;
   }
 
-  .description {
+  .action-item-archives-description {
     margin-top: 0.5rem;
     margin-bottom: 2rem;
 
@@ -100,6 +103,10 @@
 }
 
 @include dark-theme {
+  .action-item-archives-title {
+    color: $gray;
+  }
+
   .archived-action-item {
     color: $gray;
 

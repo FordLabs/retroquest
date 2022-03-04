@@ -20,10 +20,10 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 
 import Assignee from '../../../components/action-item/assignee/Assignee';
 import { DateCreated } from '../../../components/action-item/date-created/DateCreated';
+import NotFoundSection from '../../../components/not-found-section/NotFoundSection';
 import ActionItemService from '../../../services/api/ActionItemService';
 import { ActionItemState } from '../../../state/ActionItemState';
 import { TeamState } from '../../../state/TeamState';
-import NoArchivesFoundSection from '../no-archives-found-section/NoArchivesFoundSection';
 
 import './ActionItemArchives.scss';
 
@@ -45,8 +45,8 @@ function ActionItemArchives() {
     <div className="action-item-archives">
       {actionItems.length ? (
         <>
-          <h1 className="text-thin">Action Item Archives</h1>
-          <p className="description">Examine completed action items from times gone by</p>
+          <h1 className="action-item-archives-title">Action Item Archives</h1>
+          <p className="action-item-archives-description">Examine completed action items from times gone by</p>
           <ul className="archived-action-items">
             {actionItems.map((actionItem, index) => {
               return (
@@ -64,11 +64,14 @@ function ActionItemArchives() {
           </ul>
         </>
       ) : (
-        <NoArchivesFoundSection>
-          <>
-            Archives will appear when retros are ended with <b>completed action items</b>.
-          </>
-        </NoArchivesFoundSection>
+        <NotFoundSection
+          subHeader="No archives were found."
+          paragraph={
+            <>
+              Archives will appear when retros are ended with <span className="bold">completed action items</span>.
+            </>
+          }
+        />
       )}
     </div>
   );

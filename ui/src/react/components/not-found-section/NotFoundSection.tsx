@@ -16,24 +16,25 @@
  */
 import React, { ReactElement } from 'react';
 
-import './NoArchivesFoundSection.scss';
+import './NotFoundSection.scss';
 
 interface Props {
-  children: ReactElement;
+  subHeader: string;
+  paragraph: ReactElement;
 }
 
-function NoArchivesFoundSection(props: Props): JSX.Element {
-  const { children } = props;
+function NotFoundSection(props: Props): JSX.Element {
+  const { paragraph, subHeader } = props;
 
   return (
-    <div className="no-archives-found-section">
-      <h1 className="title">Looks Like A New Team!</h1>
-      <h2 className="text-thin">No archives were found.</h2>
-      <p className="description" data-testid="noArchivesFoundSectionDescription">
-        {children}
+    <div className="not-found-section">
+      <h1 className="not-found-section-title">Looks Like A New Team!</h1>
+      <h2 className="not-found-section-subtitle">{subHeader}</h2>
+      <p className="not-found-section-description" data-testid="notFoundSectionDescription">
+        {paragraph}
       </p>
     </div>
   );
 }
 
-export default NoArchivesFoundSection;
+export default NotFoundSection;

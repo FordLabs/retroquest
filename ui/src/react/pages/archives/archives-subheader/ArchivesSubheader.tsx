@@ -29,7 +29,7 @@ function ArchivesSubheader(props: Props): JSX.Element {
   const { showActionItems, setShowActionItems } = props;
 
   return (
-    <div className="archives-subheader subheader">
+    <div className="archives-subheader">
       <ul className="archives-subheader-links">
         <li>
           <button
