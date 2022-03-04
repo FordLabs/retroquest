@@ -21,6 +21,7 @@ import com.ford.labs.retroquest.actionitem.ActionItemService;
 import com.ford.labs.retroquest.board.Board;
 import com.ford.labs.retroquest.board.BoardRepository;
 import com.ford.labs.retroquest.board.BoardService;
+import com.ford.labs.retroquest.board.Retro;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtService;
 import com.ford.labs.retroquest.websocket.WebsocketEndRetroEvent;
@@ -36,7 +37,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -56,13 +56,17 @@ class BoardServiceTest {
             .teamId("team1")
             .dateCreated(LocalDate.of(2012, 12, 12))
             .id(1L)
+            .thoughts(List.of())
             .build();
 
         Board savedBoard = Board.builder()
             .teamId("team1")
             .dateCreated(LocalDate.of(2012, 12, 12))
             .id(1L)
+            .thoughts(List.of())
             .build();
+
+        Retro expectedRetro = Retro.fromBoard(expectedBoard);
 
         final PageRequest pageRequest = PageRequest.of(
             0,
@@ -74,9 +78,9 @@ class BoardServiceTest {
         when(boardRepository.findAllByTeamIdOrderByDateCreatedDesc("team1", pageRequest))
             .thenReturn(Collections.singletonList(savedBoard));
 
-        List<Board> actualBoards = boardService.getBoardsForTeamId("team1", 0);
+        List<Retro> actualRetros = boardService.getBoardsForTeamId("team1", 0);
 
-        assertEquals(Collections.singletonList(expectedBoard), actualBoards);
+        assertThat(actualRetros).containsExactly(expectedRetro);
     }
 
 
