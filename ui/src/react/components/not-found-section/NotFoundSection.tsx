@@ -19,12 +19,12 @@ import React, { ReactElement } from 'react';
 import './NotFoundSection.scss';
 
 interface Props {
-  subHeader: string;
+  subHeader?: string;
   paragraph: ReactElement;
 }
 
 function NotFoundSection(props: Props): JSX.Element {
-  const { paragraph, subHeader } = props;
+  const { paragraph, subHeader = 'No archives were found.' } = props;
 
   return (
     <div className="not-found-section">
