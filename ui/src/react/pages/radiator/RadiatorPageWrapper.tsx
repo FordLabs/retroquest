@@ -30,32 +30,23 @@ import { RecoilRoot } from 'recoil';
 
 import { TeamState } from '../../state/TeamState';
 
-import ArchivesPage from './ArchivesPage';
+import RadiatorPage from './RadiatorPage';
 
-const containerElementName = 'archivesPageWrapper';
+const containerElementName = 'radiatorPageWrapper';
 
 @Component({
-  selector: 'archives-page-wrapper',
+  selector: 'radiator-page-wrapper',
   template: `<span #${containerElementName}></span>`,
   styleUrls: [
-    './ArchivesPage.scss',
-    './thought-archives/archived-boards-list/ArchivedBoardsList.scss',
-    './thought-archives/archived-boards-list/archived-board-tile/ArchivedBoardTile.scss',
-    './thought-archives/archived-board/ArchivedBoard.scss',
-    './thought-archives/archived-board/archived-board-column/ArchivedBoardColumn.scss',
-    './archives-subheader/ArchivesSubheader.scss',
-    './action-item-archives/ActionItemArchives.scss',
-    '../../components/column-header/ColumnHeader.scss',
-    '../../components/count-separator/CountSeparator.scss',
-    '../../components/upvote-count/UpvoteCount.scss',
+    './RadiatorPage.scss',
+    '../../components/not-found-section/NotFoundSection.scss',
     '../../components/action-item-display-only/ActionItemDisplayOnly.scss',
     '../../components/action-item/date-created/DateCreated.scss',
-    '../../components/not-found-section/NotFoundSection.scss',
     '../../components/action-item/assignee/Assignee.scss',
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class ArchivesPageWrapper implements OnChanges, OnDestroy, AfterViewInit {
+export class RadiatorPageWrapper implements OnChanges, OnDestroy, AfterViewInit {
   @ViewChild(containerElementName, { static: false }) containerRef: ElementRef;
 
   constructor(private angularRoute: ActivatedRoute) {}
@@ -80,7 +71,7 @@ export class ArchivesPageWrapper implements OnChanges, OnDestroy, AfterViewInit 
             set(TeamState, { name: '', id: this.angularRoute.parent.snapshot.params['teamId'] as string });
           }}
         >
-          <ArchivesPage />
+          <RadiatorPage />
         </RecoilRoot>
       </React.StrictMode>,
       this.containerRef.nativeElement

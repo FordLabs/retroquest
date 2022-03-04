@@ -18,21 +18,19 @@
 import React, { useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
-import ActionItemDisplayOnly from '../../../components/action-item-display-only/ActionItemDisplayOnly';
-import NotFoundSection from '../../../components/not-found-section/NotFoundSection';
-import ActionItemService from '../../../services/api/ActionItemService';
-import { ActionItemState } from '../../../state/ActionItemState';
-import { TeamState } from '../../../state/TeamState';
+import ActionItemDisplayOnly from '../../components/action-item-display-only/ActionItemDisplayOnly';
+import NotFoundSection from '../../components/not-found-section/NotFoundSection';
+import ActionItemService from '../../services/api/ActionItemService';
+import { ActionItemState } from '../../state/ActionItemState';
+import { TeamState } from '../../state/TeamState';
 
-import './ActionItemArchives.scss';
-
-function ActionItemArchives() {
+function RadiatorPage(): JSX.Element {
   const team = useRecoilValue(TeamState);
   const [actionItems, setActionItems] = useRecoilState(ActionItemState);
 
   useEffect(() => {
     if (team.id) {
-      ActionItemService.get(team.id, true)
+      ActionItemService.get(team.id, false)
         .then((items) => {
           setActionItems(items);
         })
@@ -41,32 +39,32 @@ function ActionItemArchives() {
   }, [team.id]);
 
   return (
-    <div className="action-item-archives">
-      {actionItems.length ? (
-        <>
-          <h1 className="action-item-archives-title">Action Item Archives</h1>
-          <p className="action-item-archives-description">Examine completed action items from times gone by</p>
-          <ul className="archived-action-items">
+    <div className="radiator-page">
+      <div className="radiator-subheader" />
+      <div className="radiator-page-content">
+        {actionItems.length ? (
+          <ul className="radiator-page-action-items">
             {actionItems.map((actionItem, index) => {
               return (
-                <li key={`archived-action-${index}`}>
+                <li key={`radiator-action-item-${index}`}>
                   <ActionItemDisplayOnly actionItem={actionItem} />
                 </li>
               );
             })}
           </ul>
-        </>
-      ) : (
-        <NotFoundSection
-          paragraph={
-            <>
-              Archives will appear when retros are ended with <span className="bold">completed action items</span>.
-            </>
-          }
-        />
-      )}
+        ) : (
+          <NotFoundSection
+            subHeader="No active action items were found."
+            paragraph={
+              <>
+                You can create new action items on the <span className="bold">retro page</span>.
+              </>
+            }
+          />
+        )}
+      </div>
     </div>
   );
 }
 
-export default ActionItemArchives;
+export default RadiatorPage;

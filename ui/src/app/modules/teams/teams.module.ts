@@ -25,6 +25,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { environment } from '../../../environments/environment';
 import { ReactHeaderComponentWrapper } from '../../../react/components/header/ReactHeaderComponentWrapper';
 import { ArchivesPageWrapper } from '../../../react/pages/archives/ArchivesPageWrapper';
+import { RadiatorPageWrapper } from '../../../react/pages/radiator/RadiatorPageWrapper';
 import { ReactRetroPageWrapper } from '../../../react/pages/retro/ReactRetroPageWrapper';
 import { AuthGuard } from '../auth/auth-guard/auth.guard';
 import { ActionsRadiatorViewComponent } from '../components/actions-radiator-view/actions-radiator-view.component';
@@ -65,7 +66,7 @@ function routes() {
             },
             {
               path: 'radiator',
-              component: ActionsRadiatorViewComponent,
+              component: RadiatorPageWrapper,
               canActivate: [AuthGuard],
             },
             {
@@ -126,6 +127,7 @@ function routes() {
   ],
   providers: [ThoughtService, TeamService, ActionItemService, ColumnService, FeedbackService, SaveCheckerService],
   declarations: [
+    RadiatorPageWrapper,
     ReactRetroPageWrapper,
     TeamPageComponent,
     HeaderComponent,
