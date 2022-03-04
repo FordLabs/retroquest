@@ -43,7 +43,6 @@ const containerElementName = 'archivesPageWrapper';
     './thought-archives/ArchivedBoardTile.scss',
     './archives-subheader/ArchivesSubheader.scss',
     './action-item-archives/ActionItemArchives.scss',
-    './thought-archives/ThoughtArchives.scss',
     '../../components/action-item/date-created/DateCreated.scss',
     '../../components/not-found-section/NotFoundSection.scss',
     '../../components/action-item/assignee/Assignee.scss',
