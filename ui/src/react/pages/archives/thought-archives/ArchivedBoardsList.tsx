@@ -35,7 +35,11 @@ enum SortState {
   CountAscending,
 }
 
-function ArchivedBoardsList(): JSX.Element {
+interface Props {
+  onBoardSelection(board: Board): void;
+}
+
+function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
   const [boards, setBoards] = useState<Board[]>([]);
   const [sortState, setSortState] = useState<SortState>(SortState.DateDescending);
   const team = useRecoilValue(TeamState);
@@ -113,7 +117,13 @@ function ArchivedBoardsList(): JSX.Element {
           </div>
           <ol>
             {boards.map(function (board: Board) {
-              return <ArchivedBoardTile key={board.teamId + board.dateCreated} board={board} />;
+              return (
+                <ArchivedBoardTile
+                  key={board.teamId + board.dateCreated + board.id}
+                  board={board}
+                  onTileClicked={onBoardSelection}
+                />
+              );
             })}
           </ol>
         </>
