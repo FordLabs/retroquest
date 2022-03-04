@@ -31,7 +31,7 @@ const archivedActionItems = [
   {
     id: 1,
     task: 'Make it better',
-    completed: true,
+    completed: false,
     assignee: 'Ginnie',
     dateCreated: '2022-01-20',
     archived: true,
@@ -68,15 +68,15 @@ describe('Radiator Page', () => {
     expect(screen.getByText('Radiator')).toBeDefined();
     expect(screen.getByText("Take a look at all your team's active action items")).toBeDefined();
 
-    const expectedFirstActionItem = archivedActionItems[0];
-    expect(screen.getByText(expectedFirstActionItem.task)).toBeDefined();
-    expect(screen.getByDisplayValue(expectedFirstActionItem.assignee)).toBeDefined();
-    expect(screen.getByText(moment(expectedFirstActionItem.dateCreated).format('MMM Do'))).toBeDefined();
+    const activeActionItem = archivedActionItems[0];
+    expect(screen.getByText(activeActionItem.task)).toBeDefined();
+    expect(screen.getByDisplayValue(activeActionItem.assignee)).toBeDefined();
+    expect(screen.getByText(moment(activeActionItem.dateCreated).format('MMM Do'))).toBeDefined();
 
-    const expectedSecondActionItem = archivedActionItems[1];
-    expect(screen.getByText(expectedSecondActionItem.task)).toBeDefined();
-    expect(screen.getByDisplayValue(expectedSecondActionItem.assignee)).toBeDefined();
-    expect(screen.getByText(moment(expectedSecondActionItem.dateCreated).format('MMM Do'))).toBeDefined();
+    const completedActionItem = archivedActionItems[1];
+    expect(screen.queryByText(completedActionItem.task)).toBeNull();
+    expect(screen.queryByDisplayValue(completedActionItem.assignee)).toBeNull();
+    expect(screen.queryByText(moment(completedActionItem.dateCreated).format('MMM Do'))).toBeNull();
   });
 
   it('should show "No active action items" message when no active action items are present', () => {

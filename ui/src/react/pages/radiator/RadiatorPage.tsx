@@ -16,17 +16,18 @@
  */
 
 import React, { useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import ActionItemDisplayOnly from '../../components/action-item-display-only/ActionItemDisplayOnly';
 import NotFoundSection from '../../components/not-found-section/NotFoundSection';
 import ActionItemService from '../../services/api/ActionItemService';
-import { ActionItemState } from '../../state/ActionItemState';
+import { ActionItemState, ActiveActionItemsState } from '../../state/ActionItemState';
 import { TeamState } from '../../state/TeamState';
 
 function RadiatorPage(): JSX.Element {
   const team = useRecoilValue(TeamState);
-  const [actionItems, setActionItems] = useRecoilState(ActionItemState);
+  const setActionItems = useSetRecoilState(ActionItemState);
+  const activeActionItems = useRecoilValue(ActiveActionItemsState);
 
   useEffect(() => {
     if (team.id) {
@@ -38,12 +39,12 @@ function RadiatorPage(): JSX.Element {
     <div className="radiator-page">
       <div className="radiator-subheader" />
       <div className="radiator-page-content">
-        {actionItems.length ? (
+        {activeActionItems.length ? (
           <>
             <h1 className="radiator-page-title">Radiator</h1>
             <p className="radiator-page-description">Take a look at all your team's active action items</p>
             <ul className="radiator-page-action-items">
-              {actionItems.map((actionItem, index) => {
+              {activeActionItems.map((actionItem, index) => {
                 return (
                   <li key={`radiator-action-item-${index}`}>
                     <ActionItemDisplayOnly actionItem={actionItem} />
