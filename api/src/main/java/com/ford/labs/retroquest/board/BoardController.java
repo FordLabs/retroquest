@@ -18,19 +18,13 @@
 package com.ford.labs.retroquest.board;
 
 
-import com.ford.labs.retroquest.security.ApiAuthorization;
 import com.ford.labs.retroquest.thought.Thought;
-import com.ford.labs.retroquest.websocket.WebsocketPutResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -44,18 +38,16 @@ import java.util.List;
 public class BoardController {
 
     private final BoardService boardService;
-    private final ApiAuthorization apiAuthorization;
 
-    public BoardController(BoardService boardService, ApiAuthorization apiAuthorization) {
+    public BoardController(BoardService boardService) {
         this.boardService = boardService;
-        this.apiAuthorization = apiAuthorization;
     }
 
     @GetMapping("/team/{teamId}/boards")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Gets a retro board given a team id and page index", description = "getBoardsForTeamId")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public List<Board> getBoardsForTeamId(@PathVariable("teamId") String teamId,
+    public List<Retro> getBoardsForTeamId(@PathVariable("teamId") String teamId,
                                           @RequestParam(value = "pageIndex", defaultValue = "0") Integer pageIndex) {
         return this.boardService.getBoardsForTeamId(teamId, pageIndex);
     }

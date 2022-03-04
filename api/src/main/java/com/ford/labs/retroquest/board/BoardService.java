@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BoardService {
@@ -52,14 +53,14 @@ public class BoardService {
         this.pageSize = pageSize;
     }
 
-    public List<Board> getBoardsForTeamId(String teamId, Integer pageIndex) {
+    public List<Retro> getBoardsForTeamId(String teamId, Integer pageIndex) {
         return this.boardRepository.findAllByTeamIdOrderByDateCreatedDesc(teamId,
                 PageRequest.of(
                         pageIndex,
                         pageSize,
                         Sort.by(Sort.Order.desc("dateCreated"))
                 )
-        );
+        ).stream().map(Retro::fromBoard).collect(Collectors.toList());
     }
 
     public Board createBoard(String teamId) {

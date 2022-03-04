@@ -3,6 +3,7 @@ package com.ford.labs.retroquest.board;
 import com.ford.labs.retroquest.column.Column;
 import com.ford.labs.retroquest.thought.Thought;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
+@EqualsAndHashCode
 public class Retro {
     private final Long id;
     private final String teamId;
