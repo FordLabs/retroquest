@@ -39,7 +39,7 @@ const containerElementName = 'archivesPageWrapper';
   template: `<span #${containerElementName}></span>`,
   styleUrls: [
     './ArchivesPage.scss',
-    './thought-archives/ThoughtArchives.scss',
+    './thought-archives/ArchivedBoardsList.scss',
     './thought-archives/ArchivedBoardTile.scss',
     './archives-subheader/ArchivesSubheader.scss',
     './action-item-archives/ActionItemArchives.scss',
