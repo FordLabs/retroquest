@@ -65,7 +65,6 @@ function ActionItemArchives() {
         </>
       ) : (
         <NotFoundSection
-          subHeader="No archives were found."
           paragraph={
             <>
               Archives will appear when retros are ended with <span className="bold">completed action items</span>.

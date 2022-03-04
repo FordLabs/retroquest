@@ -19,10 +19,10 @@ import classnames from 'classnames';
 import moment from 'moment';
 import { useRecoilValue } from 'recoil';
 
+import NotFoundSection from '../../../components/not-found-section/NotFoundSection';
 import BoardService from '../../../services/api/BoardService';
 import { TeamState } from '../../../state/TeamState';
 import Board from '../../../types/Board';
-import NoArchivesFoundSection from '../no-archives-found-section/NoArchivesFoundSection';
 
 import ArchivedBoardTile from './ArchivedBoardTile';
 
@@ -118,11 +118,13 @@ function ArchivedBoardsList(): JSX.Element {
           </ol>
         </>
       ) : (
-        <NoArchivesFoundSection>
-          <>
-            Boards will appear when retros are ended with <b>thoughts</b>.
-          </>
-        </NoArchivesFoundSection>
+        <NotFoundSection
+          paragraph={
+            <>
+              Boards will appear when retros are ended with <span className="bold">thoughts</span>.
+            </>
+          }
+        />
       )}
     </div>
   );

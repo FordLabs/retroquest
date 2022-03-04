@@ -101,7 +101,6 @@ function ThoughtArchives(): JSX.Element {
         </>
       ) : (
         <NotFoundSection
-          subHeader="No archives were found."
           paragraph={
             <>
               Boards will appear when retros are ended with <span className="bold">thoughts</span>.

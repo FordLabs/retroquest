@@ -70,8 +70,10 @@ describe('Archived Boards List', () => {
     });
 
     screen.getByText('No archives were found.');
-    const description = screen.getByTestId('noArchivesFoundSectionDescription');
-    expect(description.innerHTML).toBe('Boards will appear when retros are ended with <b>thoughts</b>.');
+    const description = screen.getByTestId('notFoundSectionDescription');
+    expect(description.innerHTML).toBe(
+      'Boards will appear when retros are ended with <span class="bold">thoughts</span>.'
+    );
   });
 });
 
