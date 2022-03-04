@@ -42,7 +42,7 @@ function RetroSubheader(): JSX.Element {
 
   return (
     <>
-      <div className="retro-subheader subheader">
+      <div className="retro-subheader">
         <ul className="retro-subheader-links">
           <li>
             <button

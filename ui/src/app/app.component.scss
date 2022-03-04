@@ -14,3 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+@import '../styles/colors';
+@import '../styles/mixins';
+
+.thought-archives {
+  .thought-archives-title {
+    margin-bottom: 0;
+
+    font-weight: 500;
+    font-size: 1.5rem;
+  }
+}
+
+@include dark-theme {
+  .thought-archives {
+    .thought-archives-title {
+      color: $gray;
+    }
+  }
+}

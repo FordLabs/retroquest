@@ -88,9 +88,9 @@ describe('Action Item Archives', () => {
     );
 
     screen.getByText('No archives were found.');
-    const description = screen.getByTestId('noArchivesFoundSectionDescription');
+    const description = screen.getByTestId('notFoundSectionDescription');
     expect(description.innerHTML).toBe(
-      'Archives will appear when retros are ended with <b>completed action items</b>.'
+      'Archives will appear when retros are ended with <span class="bold">completed action items</span>.'
     );
   });
 });
