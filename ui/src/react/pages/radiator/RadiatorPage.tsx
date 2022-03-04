@@ -30,11 +30,7 @@ function RadiatorPage(): JSX.Element {
 
   useEffect(() => {
     if (team.id) {
-      ActionItemService.get(team.id, false)
-        .then((items) => {
-          setActionItems(items);
-        })
-        .catch(console.error);
+      ActionItemService.get(team.id, false).then(setActionItems).catch(console.error);
     }
   }, [team.id]);
 
@@ -43,15 +39,19 @@ function RadiatorPage(): JSX.Element {
       <div className="radiator-subheader" />
       <div className="radiator-page-content">
         {actionItems.length ? (
-          <ul className="radiator-page-action-items">
-            {actionItems.map((actionItem, index) => {
-              return (
-                <li key={`radiator-action-item-${index}`}>
-                  <ActionItemDisplayOnly actionItem={actionItem} />
-                </li>
-              );
-            })}
-          </ul>
+          <>
+            <h1 className="radiator-page-title">Radiator</h1>
+            <p className="radiator-page-description">Take a look at all your team's active action items</p>
+            <ul className="radiator-page-action-items">
+              {actionItems.map((actionItem, index) => {
+                return (
+                  <li key={`radiator-action-item-${index}`}>
+                    <ActionItemDisplayOnly actionItem={actionItem} />
+                  </li>
+                );
+              })}
+            </ul>
+          </>
         ) : (
           <NotFoundSection
             subHeader="No active action items were found."

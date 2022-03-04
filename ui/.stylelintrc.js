@@ -287,5 +287,6 @@ module.exports = {
         emptyLineMinimumPropertyThreshold: 3,
       },
     ],
+    'order/order': null,
   },
 };

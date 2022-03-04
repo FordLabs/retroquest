@@ -49,7 +49,7 @@ const archivedActionItems = [
 describe('Radiator Page', () => {
   const teamId = 'team-id';
 
-  xit('should get active action items and display them on page', async () => {
+  it('should get active action items and display them on page', async () => {
     ActionItemService.get = jest.fn().mockResolvedValue(archivedActionItems);
 
     await act(async () => {
@@ -65,7 +65,8 @@ describe('Radiator Page', () => {
     });
 
     expect(ActionItemService.get).toHaveBeenCalledWith(teamId, false);
-    expect(screen.getByText('Action Item Archives')).toBeDefined();
+    expect(screen.getByText('Radiator')).toBeDefined();
+    expect(screen.getByText("Take a look at all your team's active action items")).toBeDefined();
 
     const expectedFirstActionItem = archivedActionItems[0];
     expect(screen.getByText(expectedFirstActionItem.task)).toBeDefined();
@@ -90,5 +91,7 @@ describe('Radiator Page', () => {
     screen.getByText('No active action items were found.');
     const description = screen.getByTestId('notFoundSectionDescription');
     expect(description.innerHTML).toBe('You can create new action items on the <span class="bold">retro page</span>.');
+
+    expect(screen.queryByText('Radiator')).toBeNull();
   });
 });
