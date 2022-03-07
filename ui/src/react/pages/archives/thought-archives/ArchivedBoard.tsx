@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import Board from '../../../types/Board';
 
+import ArchivedBoardColumn from './ArchivedBoardColumn';
+
 interface Props {
   board: Board;
 }
@@ -9,8 +11,14 @@ interface Props {
 function ArchivedBoard({ board }: Props): JSX.Element {
   return (
     <div>
-      {board.thoughts.map((board) => {
-        return <p key={board.id}>{board.message}</p>;
+      {board.columns.map((column) => {
+        return (
+          <ArchivedBoardColumn
+            key={column.id}
+            column={column}
+            thoughts={board.thoughts.filter((thought) => thought.topic === column.topic)}
+          />
+        );
       })}
     </div>
   );

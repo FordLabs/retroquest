@@ -32,12 +32,20 @@ export const mockBoards: Board[] = [
         topic: Topic.HAPPY,
       },
     ],
+    columns: [
+      {
+        id: 10,
+        title: 'Happy',
+        topic: Topic.HAPPY,
+      },
+    ],
   },
   {
     id: 2,
     dateCreated: new Date(1998, 3, 22),
     teamId: 'teamId',
     thoughts: [],
+    columns: [],
   },
 ];
 

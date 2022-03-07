@@ -1,3 +1,4 @@
+import { Column } from './Column';
 import Thought from './Thought';
 
 interface Board {
@@ -5,6 +6,7 @@ interface Board {
   teamId: string;
   dateCreated: Date;
   thoughts: Thought[];
+  columns: Column[];
 }
 
 export default Board;
