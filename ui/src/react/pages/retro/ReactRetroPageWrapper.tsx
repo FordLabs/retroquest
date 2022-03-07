@@ -58,9 +58,9 @@ const containerElementName = 'reactRetroPageWrapper';
     '../../components/deletion-overlay/DeletionOverlay.scss',
     '../../components/count-separator/CountSeparator.scss',
     '../../components/floating-character-countdown/FloatingCharacterCountdown.scss',
-    '../../components/retro-item/upvote-button/UpvoteButton.scss',
     '../../components/action-item/date-created/DateCreated.scss',
     '../../components/action-item/assignee/Assignee.scss',
+    '../../components/upvote-count/UpvoteCount.scss',
   ],
   encapsulation: ViewEncapsulation.None,
 })

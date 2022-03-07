@@ -1,0 +1,45 @@
+@import '../../../styles/colors';
+@import '../../../styles/mixins';
+
+.upvote-count {
+  display: flex;
+
+  .star-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 4px;
+
+    font-size: 0.9rem;
+  }
+
+  .fa-star {
+    z-index: 2;
+  }
+
+  .star-shadow {
+    width: 25px;
+    height: 10px;
+    margin-top: -0.35rem;
+
+    background-color: $yellow;
+    border-radius: 12px / 6px;
+  }
+
+  .star-count {
+    font-weight: bold;
+  }
+}
+
+@include dark-theme {
+  .upvote-count {
+    .fa-star {
+      color: $yellow;
+    }
+
+    .star-shadow {
+      background-color: $dark-asphalt;
+    }
+  }
+}

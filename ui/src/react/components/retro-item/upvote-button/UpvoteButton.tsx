@@ -19,8 +19,7 @@ import React, { ComponentPropsWithoutRef } from 'react';
 import classnames from 'classnames';
 
 import Tooltip from '../../tooltip/Tooltip';
-
-import './UpvoteButton.scss';
+import UpvoteCount from '../../upvote-count/UpvoteCount';
 
 type UpvoteButtonProps = ComponentPropsWithoutRef<'button'> & {
   votes: number;
@@ -33,14 +32,10 @@ function UpvoteButton(props: UpvoteButtonProps) {
   return (
     <button
       {...buttonProps}
-      className={classnames('column-item-button upvote-button', className, { readonly: readOnly })}
+      className={classnames('column-item-button', className, { readonly: readOnly })}
       disabled={disabled || readOnly}
     >
-      <div className="star-icon">
-        <i className="fas fa-star" aria-hidden="true" />
-        <div className="star-shadow" />
-      </div>
-      <div className="star-count">{votes}</div>
+      <UpvoteCount votes={votes} />
       <Tooltip>Upvote</Tooltip>
     </button>
   );
