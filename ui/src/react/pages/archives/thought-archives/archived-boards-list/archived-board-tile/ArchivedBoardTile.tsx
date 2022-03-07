@@ -1,7 +1,7 @@
 import * as React from 'react';
 import moment from 'moment';
 
-import Board from '../../../types/Board';
+import Board from '../../../../../types/Board';
 
 import './ArchivedBoardTile.scss';
 

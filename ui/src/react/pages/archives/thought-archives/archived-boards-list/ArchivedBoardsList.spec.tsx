@@ -2,13 +2,13 @@ import * as React from 'react';
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { RecoilRoot } from 'recoil';
 
-import BoardService from '../../../services/api/BoardService';
-import { TeamState } from '../../../state/TeamState';
-import Team from '../../../types/Team';
+import BoardService from '../../../../services/api/BoardService';
+import { TeamState } from '../../../../state/TeamState';
+import Team from '../../../../types/Team';
 
 import ArchivedBoardsList from './ArchivedBoardsList';
 
-jest.mock('../../../services/api/BoardService');
+jest.mock('../../../../services/api/BoardService');
 
 describe('Archived Boards List', () => {
   it('should display a list of completed retros', async () => {

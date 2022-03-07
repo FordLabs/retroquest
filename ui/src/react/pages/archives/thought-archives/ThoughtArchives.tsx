@@ -3,8 +3,8 @@ import { useRecoilState } from 'recoil';
 
 import { ArchivedBoardState } from '../../../state/ArchivedBoardState';
 
-import ArchivedBoard from './ArchivedBoard';
-import ArchivedBoardsList from './ArchivedBoardsList';
+import ArchivedBoard from './archived-board/ArchivedBoard';
+import ArchivedBoardsList from './archived-boards-list/ArchivedBoardsList';
 
 function ThoughtArchives(): JSX.Element {
   const [selectedArchivedBoard, setSelectedArchivedBoard] = useRecoilState(ArchivedBoardState);

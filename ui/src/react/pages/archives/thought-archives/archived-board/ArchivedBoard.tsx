@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import Board from '../../../types/Board';
-import { Column } from '../../../types/Column';
-import Thought from '../../../types/Thought';
+import Board from '../../../../types/Board';
+import { Column } from '../../../../types/Column';
+import Thought from '../../../../types/Thought';
 
-import ArchivedBoardColumn from './ArchivedBoardColumn';
+import ArchivedBoardColumn from './archived-board-column/ArchivedBoardColumn';
 
 import './ArchivedBoard.scss';
 
