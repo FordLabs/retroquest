@@ -93,7 +93,7 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
     <div className="archived-boards-list">
       {boards.length ? (
         <>
-          <h1 className="text-thin">Thought Archives</h1>
+          <h1 className="thoughts-archive-title">Thought Archives</h1>
           <div className="list-header">
             <button
               className={classnames('sort-button', {
