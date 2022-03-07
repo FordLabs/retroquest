@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { render, screen, within } from '@testing-library/react';
 
-import Board from '../../../types/Board';
-import Topic from '../../../types/Topic';
+import Board from '../../../../types/Board';
+import Topic from '../../../../types/Topic';
 
 import ArchivedBoard from './ArchivedBoard';
 

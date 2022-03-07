@@ -19,12 +19,12 @@ import classnames from 'classnames';
 import moment from 'moment';
 import { useRecoilValue } from 'recoil';
 
-import NotFoundSection from '../../../components/not-found-section/NotFoundSection';
-import BoardService from '../../../services/api/BoardService';
-import { TeamState } from '../../../state/TeamState';
-import Board from '../../../types/Board';
+import NotFoundSection from '../../../../components/not-found-section/NotFoundSection';
+import BoardService from '../../../../services/api/BoardService';
+import { TeamState } from '../../../../state/TeamState';
+import Board from '../../../../types/Board';
 
-import ArchivedBoardTile from './ArchivedBoardTile';
+import ArchivedBoardTile from './archived-board-tile/ArchivedBoardTile';
 
 import './ArchivedBoardsList.scss';
 

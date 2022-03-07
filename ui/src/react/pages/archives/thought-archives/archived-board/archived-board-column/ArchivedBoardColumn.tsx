@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import ColumnHeader from '../../../components/column-header/ColumnHeader';
-import { CountSeparator } from '../../../components/count-separator/CountSeparator';
-import UpvoteCount from '../../../components/upvote-count/UpvoteCount';
-import { Column } from '../../../types/Column';
-import Thought from '../../../types/Thought';
+import ColumnHeader from '../../../../../components/column-header/ColumnHeader';
+import { CountSeparator } from '../../../../../components/count-separator/CountSeparator';
+import UpvoteCount from '../../../../../components/upvote-count/UpvoteCount';
+import { Column } from '../../../../../types/Column';
+import Thought from '../../../../../types/Thought';
 
 import './ArchivedBoardColumn.scss';
 

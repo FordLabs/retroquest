@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import { mockBoards } from '../../../services/api/__mocks__/BoardService';
+import { mockBoards } from '../../../../../services/api/__mocks__/BoardService';
 
 import ArchivedBoardTile from './ArchivedBoardTile';
 
