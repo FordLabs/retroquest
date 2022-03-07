@@ -20,6 +20,11 @@
 
 .archived-boards-list {
   text-align: center;
+
+  .thoughts-archive-title {
+    font-weight: normal;
+  }
+
   .list-header {
     display: flex;
     flex-direction: row;
@@ -69,6 +74,10 @@
 
 @include dark-theme {
   .archived-boards-list {
+    .thoughts-archive-title {
+      color: $gray;
+    }
+
     .list-header {
       background: $light-gray;
 
