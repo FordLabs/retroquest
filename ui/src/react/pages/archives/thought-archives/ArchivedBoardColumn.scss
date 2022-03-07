@@ -39,3 +39,17 @@
     }
   }
 }
+
+@include dark-theme {
+  .archived-column {
+
+    .archived-thought {
+      color: $gray;
+      background-color: $task-background-dark;
+
+      .footer {
+        border-top: 1px solid rgba(0, 0, 0, 0.15);
+      }
+    }
+  }
+}
