@@ -13,8 +13,8 @@ interface Props {
 }
 
 function ArchivedBoard({ board }: Props): JSX.Element {
-  function getThoughts(board: Board, column: Column): Thought[] {
-    const columnSpecificThoughts = board.thoughts.filter((thought) => thought.topic === column.topic);
+  function getThoughts(initialBoard: Board, column: Column): Thought[] {
+    const columnSpecificThoughts = initialBoard.thoughts.filter((thought) => thought.topic === column.topic);
     const discussedThoughts = columnSpecificThoughts
       .filter((thought) => thought.discussed)
       .sort((a, b) => b.hearts - a.hearts);
