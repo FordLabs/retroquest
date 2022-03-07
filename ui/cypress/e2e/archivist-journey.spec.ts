@@ -18,6 +18,7 @@
 import { join } from 'path';
 
 import { getArchivesPagePathWithTeamId } from '../../src/react/routes/RouteConstants';
+import Topic, { ThoughtTopic } from '../../src/react/types/Topic';
 import { getTeamCredentials } from '../support/helpers';
 
 describe('Archivist Journey', () => {
@@ -25,12 +26,32 @@ describe('Archivist Journey', () => {
 
   before(() => {
     cy.createTeamAndLogin(teamCredentials);
+  });
+
+  it('Archives page functionality', () => {
+    addThoughtToTeam(teamCredentials.teamId, 'message1', 0, false, Topic.HAPPY);
+    addThoughtToTeam(teamCredentials.teamId, 'message2', 1, false, Topic.HAPPY);
+    addThoughtToTeam(teamCredentials.teamId, 'message3', 2, true, Topic.HAPPY);
+    addThoughtToTeam(teamCredentials.teamId, 'message4', 0, false, Topic.UNHAPPY);
+    addCompletedActionItemToTeam(teamCredentials.teamId, 'action to take', 'me');
+    archiveBoard(teamCredentials.teamId);
 
     cy.findByText('Archives').click();
     shouldBeOnArchivesPage(teamCredentials.teamId);
-  });
 
-  xit('Archives page functionality', () => {});
+    cy.findByText('View').click();
+    cy.findByText('message1').should('exist');
+    cy.findByText('message2').should('exist');
+    cy.findByText('message3').should('exist');
+    cy.findByText('message4').should('exist');
+
+    cy.findByText('Thoughts').click();
+    shouldBeOnArchivesPage(teamCredentials.teamId);
+
+    cy.findByText('Action Items').click();
+    cy.findByText('Action Item Archives').should('exist');
+    cy.findByText('action to take').should('exist');
+  });
 
   it('Download CSV Button', () => {
     cy.findByText('Retro').click();
@@ -53,5 +74,41 @@ function shouldBeOnArchivesPage(teamId: string) {
   const archivesPageUrl = Cypress.config().baseUrl + getArchivesPagePathWithTeamId(teamId);
   cy.url().should('eq', archivesPageUrl);
 
-  cy.findByText('Looks Like A New Team!').should('exist');
+  cy.findByText('Thought Archives').should('exist');
+}
+
+function addThoughtToTeam(teamId: String, message: String, hearts: number, discussed: boolean, topic: ThoughtTopic) {
+  cy.request({
+    url: `/api/team/${teamId}/thought`,
+    failOnStatusCode: false,
+    method: 'POST',
+    body: {
+      message,
+      hearts,
+      discussed,
+      topic,
+    },
+  });
+}
+
+function addCompletedActionItemToTeam(teamId: String, task: String, assignee: String) {
+  cy.request({
+    url: `/api/team/${teamId}/action-item/`,
+    method: 'POST',
+    body: {
+      task,
+      completed: true,
+      assignee,
+      dateCreated: new Date(),
+      archived: true,
+    },
+  });
+}
+
+function archiveBoard(teamId: string) {
+  cy.request({
+    url: `/api/team/${teamId}/end-retro`,
+    method: 'PUT',
+    body: {},
+  });
 }
