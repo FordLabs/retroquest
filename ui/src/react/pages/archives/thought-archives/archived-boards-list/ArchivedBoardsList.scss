@@ -22,53 +22,59 @@
   text-align: center;
 
   .thoughts-archive-title {
-    font-weight: normal;
+    font-weight: 500;
+    font-size: 1.5rem;
   }
 
   .list-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 0 auto 1rem auto;
-    border-radius: 6px;
 
     max-width: 21.875rem;
-    background: $lighter-asphalt;
+    margin: 0 auto 1rem;
     padding: 0.5rem;
 
+    background: $lighter-asphalt;
+    border-radius: 6px;
+
     .sort-button {
-      font-weight: bold;
       color: $light-asphalt;
+      font-weight: bold;
 
-      &.selectedAsc {
+      &.selected-asc {
         color: $asphalt;
       }
 
-      &.selectedAsc::after {
+      &.selected-asc::after {
         display: inline-block;
+
         transform: rotate(180deg) translateX(-3px) translateY(-3px);
-        content: "▾";
+
+        content: '▾';
       }
 
-      &.selectedDesc {
+      &.selected-desc {
         color: $asphalt;
       }
 
-      &.selectedDesc::after {
+      &.selected-desc::after {
         display: inline-block;
+
         transform: translateX(3px);
-        content: "▾";
+
+        content: '▾';
       }
     }
 
     .spacer {
-      padding: .75rem;
+      padding: 0.75rem;
     }
   }
 
   .list {
     max-width: 21.875rem;
-    margin: 0 auto 1rem auto;
+    margin: 0 auto 1rem;
   }
 }
 
@@ -82,14 +88,14 @@
       background: $light-gray;
 
       .sort-button {
-        font-weight: bold;
         color: $lighter-gray;
+        font-weight: bold;
 
-        &.selectedAsc {
+        &.selected-asc {
           color: $gray;
         }
 
-        &.selectedDesc {
+        &.selected-desc {
           color: $gray;
         }
       }
