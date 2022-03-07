@@ -1,5 +1,8 @@
 import * as React from 'react';
 
+import ColumnHeader from '../../../components/column-header/ColumnHeader';
+import { CountSeparator } from '../../../components/count-separator/CountSeparator';
+import UpvoteCount from '../../../components/upvote-count/UpvoteCount';
 import { Column } from '../../../types/Column';
 import Thought from '../../../types/Thought';
 
@@ -19,7 +22,7 @@ function ArchivedBoardThought({ thought }: ThoughtProps): JSX.Element {
     <li data-testid={'thought' + thought.id} className="archived-thought">
       <p className="message">{thought.message}</p>
       <div className="footer">
-        <p className="hearts">{thought.hearts}</p>
+        <UpvoteCount votes={thought.hearts} />
         <p className="is-discussed">{thought.discussed ? 'Discussed' : 'Not Discussed'}</p>
       </div>
     </li>
@@ -29,8 +32,8 @@ function ArchivedBoardThought({ thought }: ThoughtProps): JSX.Element {
 function ArchivedBoardColumn({ column, thoughts }: ColumnProps): JSX.Element {
   return (
     <div data-testid="archived-column" className="archived-column">
-      <h2>{column.title}</h2>
-      <p>{thoughts.length}</p>
+      <ColumnHeader initialTitle={column.title} type={column.topic} />
+      <CountSeparator count={thoughts.length} />
       <ol>
         {thoughts.map((thought) => {
           return <ArchivedBoardThought key={'thought' + thought.id} thought={thought} />;

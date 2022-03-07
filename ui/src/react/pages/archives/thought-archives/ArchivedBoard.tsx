@@ -4,13 +4,15 @@ import Board from '../../../types/Board';
 
 import ArchivedBoardColumn from './ArchivedBoardColumn';
 
+import './ArchivedBoard.scss';
+
 interface Props {
   board: Board;
 }
 
 function ArchivedBoard({ board }: Props): JSX.Element {
   return (
-    <div>
+    <div className="archived-board">
       {board.columns.map((column) => {
         return (
           <ArchivedBoardColumn
