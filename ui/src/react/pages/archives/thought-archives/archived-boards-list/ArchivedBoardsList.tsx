@@ -100,8 +100,8 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
           <div className="list-header">
             <button
               className={classnames('sort-button', {
-                selectedAsc: sortState === SortState.CountAscending,
-                selectedDesc: sortState === SortState.CountDescending,
+                'selected-asc': sortState === SortState.CountAscending,
+                'selected-desc': sortState === SortState.CountDescending,
               })}
               onClick={handleCountSort}
             >
@@ -109,8 +109,8 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
             </button>
             <button
               className={classnames('sort-button', {
-                selectedAsc: sortState === SortState.DateAscending,
-                selectedDesc: sortState === SortState.DateDescending,
+                'selected-asc': sortState === SortState.DateAscending,
+                'selected-desc': sortState === SortState.DateDescending,
               })}
               onClick={handleDateSort}
             >
