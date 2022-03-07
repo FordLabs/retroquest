@@ -45,15 +45,17 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
   const team = useRecoilValue(TeamState);
 
   useEffect(() => {
-    BoardService.getBoards(team.id, 0).then((boards) => setBoards(boards.sort(sortByDateDescending)));
+    BoardService.getBoards(team.id, 0).then((retrievedBoards) =>
+      setBoards([...retrievedBoards].sort(sortByDateDescending))
+    );
   }, [team.id]);
 
   useEffect(() => {
     setBoards([...boards].sort(getSortFunction(sortState)));
   }, [sortState]);
 
-  const getSortFunction = useCallback((sortState) => {
-    switch (sortState) {
+  const getSortFunction = useCallback((currentSortState) => {
+    switch (currentSortState) {
       case SortState.CountAscending:
         return sortByCountAscending;
       case SortState.CountDescending:
