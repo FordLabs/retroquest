@@ -47,8 +47,10 @@ public class BoardController {
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Gets a retro board given a team id and page index", description = "getBoardsForTeamId")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public List<Retro> getBoardsForTeamId(@PathVariable("teamId") String teamId,
-                                          @RequestParam(value = "pageIndex", defaultValue = "0") Integer pageIndex) {
+    public List<Retro> getBoardsForTeamId(
+            @PathVariable("teamId") String teamId,
+            @RequestParam(value = "pageIndex", defaultValue = "0") Integer pageIndex
+    ) {
         return this.boardService.getBoardsForTeamId(teamId, pageIndex);
     }
 
