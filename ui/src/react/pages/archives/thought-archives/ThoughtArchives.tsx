@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useRecoilState } from 'recoil';
 
-import Board from '../../../types/Board';
+import { ArchivedBoardState } from '../../../state/ArchivedBoardState';
 
 import ArchivedBoard from './ArchivedBoard';
 import ArchivedBoardsList from './ArchivedBoardsList';
 
 function ThoughtArchives(): JSX.Element {
-  const [selectedArchivedBoard, setSelectedArchivedBoard] = useState<Board>();
+  const [selectedArchivedBoard, setSelectedArchivedBoard] = useRecoilState(ArchivedBoardState);
 
   return selectedArchivedBoard ? (
     <ArchivedBoard board={selectedArchivedBoard} />

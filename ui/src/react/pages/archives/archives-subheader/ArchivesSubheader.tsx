@@ -17,6 +17,9 @@
 
 import * as React from 'react';
 import classNames from 'classnames';
+import { useSetRecoilState } from 'recoil';
+
+import { ArchivedBoardState } from '../../../state/ArchivedBoardState';
 
 import './ArchivesSubheader.scss';
 
@@ -27,6 +30,12 @@ interface Props {
 
 function ArchivesSubheader(props: Props): JSX.Element {
   const { showActionItems, setShowActionItems } = props;
+  const setArchivedBoardState = useSetRecoilState(ArchivedBoardState);
+
+  function handleThoughtsClick(): void {
+    setArchivedBoardState(undefined);
+    setShowActionItems(false);
+  }
 
   return (
     <div className="archives-subheader">
@@ -34,7 +43,7 @@ function ArchivesSubheader(props: Props): JSX.Element {
         <li>
           <button
             className={classNames('button button-secondary', { active: !showActionItems })}
-            onClick={() => setShowActionItems(false)}
+            onClick={handleThoughtsClick}
           >
             Thoughts
           </button>
