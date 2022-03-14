@@ -16,23 +16,23 @@
  */
 
 import * as React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import { Toast, ToastLevel } from './Toast';
 
 describe('Toast', () => {
   it('should display content passed to Toast', () => {
-    render(<Toast title={'That is Unfortunate'}>Something appears to have gone wrong.</Toast>);
+    createToast();
     screen.getByText('Something appears to have gone wrong.');
   });
 
   it('should display title passed to Toast', () => {
-    render(<Toast title={'Uh Oh'}>Something appears to have gone wrong.</Toast>);
+    createToast();
     screen.getByText('Uh Oh');
   });
 
   it('should default toast level to error', () => {
-    render(<Toast title={'Uh Oh'}>Something appears to have gone wrong.</Toast>);
+    createToast();
     expect(document.getElementsByClassName('error')).toHaveLength(1);
   });
 
@@ -46,11 +46,30 @@ describe('Toast', () => {
     createToastWithLevel(ToastLevel.INFO);
     expect(document.getElementsByClassName('info')).toHaveLength(1);
   });
+
+  it('should close handler when close button clicked', () => {
+    const mockCloseHandler = jest.fn();
+    render(
+      <Toast title={'Uh Oh'} handleClose={mockCloseHandler}>
+        Something appears to have gone wrong.
+      </Toast>
+    );
+    fireEvent.click(screen.getByText('Close'));
+    expect(mockCloseHandler).toHaveBeenCalled();
+  });
 });
+
+function createToast() {
+  render(
+    <Toast title={'Uh Oh'} handleClose={() => null}>
+      Something appears to have gone wrong.
+    </Toast>
+  );
+}
 
 function createToastWithLevel(level: ToastLevel) {
   render(
-    <Toast title={'Uh Oh'} toastLevel={level}>
+    <Toast title={'Uh Oh'} toastLevel={level} handleClose={() => null}>
       Something appears to have gone wrong.
     </Toast>
   );
