@@ -18,7 +18,7 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 
-import { Toast } from './Toast';
+import { Toast, ToastLevel } from './Toast';
 
 describe('Toast', () => {
   it('should display content passed to Toast', () => {
@@ -30,4 +30,28 @@ describe('Toast', () => {
     render(<Toast title={'Uh Oh'}>Something appears to have gone wrong.</Toast>);
     screen.getByText('Uh Oh');
   });
+
+  it('should default toast level to error', () => {
+    render(<Toast title={'Uh Oh'}>Something appears to have gone wrong.</Toast>);
+    expect(document.getElementsByClassName('error')).toHaveLength(1);
+  });
+
+  it('should add toast level class', () => {
+    createToastWithLevel(ToastLevel.ERROR);
+    expect(document.getElementsByClassName('error')).toHaveLength(1);
+
+    createToastWithLevel(ToastLevel.WARNING);
+    expect(document.getElementsByClassName('warning')).toHaveLength(1);
+
+    createToastWithLevel(ToastLevel.INFO);
+    expect(document.getElementsByClassName('info')).toHaveLength(1);
+  });
 });
+
+function createToastWithLevel(level: ToastLevel) {
+  render(
+    <Toast title={'Uh Oh'} toastLevel={level}>
+      Something appears to have gone wrong.
+    </Toast>
+  );
+}
