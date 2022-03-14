@@ -17,17 +17,24 @@
 
 import * as React from 'react';
 
-interface Props {
-  title: string;
+enum ToastLevel {
+  ERROR = 'error',
+  WARNING = 'warning',
+  INFO = 'info',
 }
 
-function Toast({ title, children }: React.PropsWithChildren<Props>): JSX.Element {
+interface Props {
+  title: string;
+  toastLevel?: ToastLevel;
+}
+
+function Toast({ title, children, toastLevel = ToastLevel.ERROR }: React.PropsWithChildren<Props>): JSX.Element {
   return (
-    <div>
-      <p>{title}</p>
+    <div className={toastLevel}>
+      <p className="title">{title}</p>
       {children}
     </div>
   );
 }
 
-export { Toast };
+export { Toast, ToastLevel };
