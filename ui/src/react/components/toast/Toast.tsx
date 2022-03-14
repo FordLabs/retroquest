@@ -26,13 +26,20 @@ enum ToastLevel {
 interface Props {
   title: string;
   toastLevel?: ToastLevel;
+  handleClose: () => void;
 }
 
-function Toast({ title, children, toastLevel = ToastLevel.ERROR }: React.PropsWithChildren<Props>): JSX.Element {
+function Toast({
+  title,
+  children,
+  handleClose,
+  toastLevel = ToastLevel.ERROR,
+}: React.PropsWithChildren<Props>): JSX.Element {
   return (
     <div className={toastLevel}>
       <p className="title">{title}</p>
       {children}
+      <button onClick={handleClose}>Close</button>
     </div>
   );
 }
