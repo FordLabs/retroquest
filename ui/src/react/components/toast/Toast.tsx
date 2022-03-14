@@ -16,6 +16,9 @@
  */
 
 import * as React from 'react';
+import classNames from 'classnames';
+
+import './Toast.scss';
 
 enum ToastLevel {
   ERROR = 'error',
@@ -36,10 +39,14 @@ function Toast({
   toastLevel = ToastLevel.ERROR,
 }: React.PropsWithChildren<Props>): JSX.Element {
   return (
-    <div className={toastLevel}>
-      <p className="title">{title}</p>
-      {children}
-      <button onClick={handleClose}>Close</button>
+    <div className={classNames('toast', toastLevel)}>
+      <div>
+        <p className="title">{title}</p>
+        <div className="content">{children}</div>
+      </div>
+      <button className="close-button" onClick={handleClose}>
+        Close
+      </button>
     </div>
   );
 }
