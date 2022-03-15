@@ -1,0 +1,59 @@
+@use 'sizes';
+@use 'colors';
+
+@mixin breakpoint-medium {
+	@media (min-width: 768px) {
+		@content;
+	}
+}
+
+@mixin breakpoint-large {
+	@media (min-width: 992px) {
+		@content;
+	}
+}
+
+@mixin prefers-animations {
+	@media (prefers-reduced-motion: no-preference) {
+		@content;
+	}
+}
+
+@mixin subheader {
+	height: 32px;
+	background-color: colors.$white;
+
+	@include breakpoint-medium {
+		height: 45px;
+	}
+
+	:only-child {
+		@include site-max-width;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		height: 100%;
+	}
+
+	.dark-theme & {
+		background-color: colors.$header-background-color-dark;
+	}
+}
+
+@mixin dark-theme {
+	.dark-theme {
+		@content;
+	}
+}
+
+@mixin site-max-width() {
+	max-width: sizes.$max-width;
+	margin: 0 auto;
+	padding-right: sizes.$global-side-padding-mobile;
+	padding-left: sizes.$global-side-padding-mobile;
+
+	@include breakpoint-medium {
+		padding-right: sizes.$global-side-padding;
+		padding-left: sizes.$global-side-padding;
+	}
+}

@@ -16,10 +16,10 @@
  */
 
 interface TeamCredentials {
-  teamName: string;
-  teamId: string;
-  password: string;
-  jwt: string;
+	teamName: string;
+	teamId: string;
+	password: string;
+	jwt: string;
 }
 
 export default TeamCredentials;

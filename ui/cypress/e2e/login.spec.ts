@@ -15,88 +15,106 @@
  * limitations under the License.
  */
 
-import { getLoginPagePathWithTeamId, LOGIN_PAGE_PATH } from '../../src/react/routes/RouteConstants';
-import Topic from '../../src/react/types/Topic';
+import {
+	getLoginPagePathWithTeamId,
+	LOGIN_PAGE_PATH,
+} from '../../src/RouteConstants';
+import Topic from '../../src/types/Topic';
 import { getTeamCredentials } from '../support/helpers';
 import TeamCredentials from '../support/types/teamCredentials';
 
 describe('Login', () => {
-  const loginFailedMessage = 'Incorrect team name or password. Please try again.';
-  const teamCredentials = getTeamCredentials();
-  const LOGIN_PATH_WITH_TEAM_ID = getLoginPagePathWithTeamId(teamCredentials.teamId);
+	const loginFailedMessage =
+		'Incorrect team name or password. Please try again.';
+	const teamCredentials = getTeamCredentials();
+	const LOGIN_PATH_WITH_TEAM_ID = getLoginPagePathWithTeamId(
+		teamCredentials.teamId
+	);
 
-  before(() => {
-    cy.createTeam(teamCredentials);
-  });
+	before(() => {
+		cy.createTeam(teamCredentials);
+	});
 
-  beforeEach(() => {
-    cy.intercept('POST', '/api/team/login').as('postTeamLogin');
+	beforeEach(() => {
+		cy.intercept('POST', '/api/team/login').as('postTeamLogin');
 
-    cy.visit(LOGIN_PAGE_PATH);
-    cy.contains('Sign in to your Team!').should('exist');
+		cy.visit(LOGIN_PAGE_PATH);
+		cy.contains('Sign in to your Team!').should('exist');
 
-    cy.get('[data-testid=teamNameInput]').as('teamNameInput');
-    cy.get('[data-testid=passwordInput]').as('passwordInput');
-    cy.get('[data-testid=formSubmitButton]').as('loginButton');
-  });
+		cy.get('[data-testid=teamNameInput]').as('teamNameInput');
+		cy.get('[data-testid=passwordInput]').as('passwordInput');
+		cy.get('[data-testid=formSubmitButton]').as('loginButton');
+	});
 
-  it('Navigates to team board after successful login', () => {
-    fillOutAndSubmitLoginForm(teamCredentials);
-    cy.url().should('eq', `${Cypress.config().baseUrl}/team/${teamCredentials.teamId}`);
-  });
+	it('Navigates to team board after successful login', () => {
+		fillOutAndSubmitLoginForm(teamCredentials);
+		cy.url().should(
+			'eq',
+			`${Cypress.config().baseUrl}/team/${teamCredentials.teamId}`
+		);
+	});
 
-  it('Pre-populates team name', () => {
-    cy.get('[data-testid=teamNameInput]').as('teamNameInput');
-    cy.get('@teamNameInput').should('have.value', '');
+	it('Pre-populates team name', () => {
+		cy.get('[data-testid=teamNameInput]').as('teamNameInput');
+		cy.get('@teamNameInput').should('have.value', '');
 
-    cy.visit(LOGIN_PATH_WITH_TEAM_ID);
-    cy.get('@teamNameInput').should('have.value', teamCredentials.teamName);
-  });
+		cy.visit(LOGIN_PATH_WITH_TEAM_ID);
+		cy.get('@teamNameInput').should('have.value', teamCredentials.teamName);
+	});
 
-  describe('Form Errors', () => {
-    it('Displays invalid team name when logging in with bad team', () => {
-      fillOutAndSubmitLoginForm(
-        {
-          teamName: 'Something not correct',
-          teamId: 'Something not correct',
-          password: 'Something else wrong 1',
-          jwt: '',
-        },
-        403
-      );
-      cy.get('[data-testid=formErrorMessage]').should('contain', loginFailedMessage);
-    });
+	describe('Form Errors', () => {
+		it('Displays invalid team name when logging in with bad team', () => {
+			fillOutAndSubmitLoginForm(
+				{
+					teamName: 'Something not correct',
+					teamId: 'Something not correct',
+					password: 'Something else wrong 1',
+					jwt: '',
+				},
+				403
+			);
+			cy.get('[data-testid=formErrorMessage]').should(
+				'contain',
+				loginFailedMessage
+			);
+		});
 
-    it('Displays invalid team name/password when using bad password', () => {
-      fillOutAndSubmitLoginForm(
-        {
-          ...teamCredentials,
-          password: 'Something else wrong 1',
-        },
-        403
-      );
-      cy.get('[data-testid=formErrorMessage]').should('contain', loginFailedMessage);
-    });
-  });
+		it('Displays invalid team name/password when using bad password', () => {
+			fillOutAndSubmitLoginForm(
+				{
+					...teamCredentials,
+					password: 'Something else wrong 1',
+				},
+				403
+			);
+			cy.get('[data-testid=formErrorMessage]').should(
+				'contain',
+				loginFailedMessage
+			);
+		});
+	});
 
-  describe('Authorization Redirects', () => {
-    it('Redirects to login page when action comes back unauthorized', () => {
-      cy.createTeamAndLogin(teamCredentials);
-      cy.document().setCookie('token', '');
-      cy.document().setCookie('JSESSIONID', '');
-      cy.enterThought(Topic.HAPPY, 'I have a thought');
-      cy.url().should('eq', Cypress.config().baseUrl + '/login');
-    });
-  });
+	describe('Authorization Redirects', () => {
+		it('Redirects to login page when action comes back unauthorized', () => {
+			cy.createTeamAndLogin(teamCredentials);
+			cy.document().setCookie('token', '');
+			cy.document().setCookie('JSESSIONID', '');
+			cy.enterThought(Topic.HAPPY, 'I have a thought');
+			cy.url().should('eq', Cypress.config().baseUrl + '/login');
+		});
+	});
 });
 
-function fillOutAndSubmitLoginForm({ teamName, password }: TeamCredentials, expectedStatusCode = 200) {
-  cy.log('**Log in using the login form**');
-  cy.get('@teamNameInput').type(teamName);
-  cy.get('@passwordInput').type(password);
-  cy.get('@loginButton').click();
+function fillOutAndSubmitLoginForm(
+	{ teamName, password }: TeamCredentials,
+	expectedStatusCode = 200
+) {
+	cy.log('**Log in using the login form**');
+	cy.get('@teamNameInput').type(teamName);
+	cy.get('@passwordInput').type(password);
+	cy.get('@loginButton').click();
 
-  cy.wait('@postTeamLogin').then(({ response }) => {
-    expect(response.statusCode).to.equal(expectedStatusCode);
-  });
+	cy.wait('@postTeamLogin').then(({ response }) => {
+		expect(response.statusCode).to.equal(expectedStatusCode);
+	});
 }

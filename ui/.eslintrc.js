@@ -15,96 +15,43 @@
  * limitations under the License.
  */
 module.exports = {
-  root: true,
-  ignorePatterns: ['projects/**/*', 'jest.config.js'],
-  extends: ['prettier', 'plugin:@typescript-eslint/recommended', 'plugin:storybook/recommended'],
-  plugins: ['unused-imports', 'cypress', 'simple-import-sort'],
-  parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
-    },
-    ecmaVersion: 2018,
-    sourceType: 'module',
-  },
-  rules: {
-    semi: 2,
-    '@typescript-eslint/consistent-type-definitions': 'off',
-    'max-len': ['error', { code: 120 }],
-    'simple-import-sort/imports': [
-      'error',
-      {
-        groups: [
-          // Node.js builtins. You could also generate this regex if you use a `.js` config.
-          // For example: `^(${require("module").builtinModules.join("|")})(/|$)`
-          [
-            // eslint-disable-next-line max-len
-            '^(assert|buffer|child_process|cluster|console|constants|crypto|dgram|dns|domain|events|fs|http|https|module|net|os|path|punycode|querystring|readline|repl|stream|string_decoder|sys|timers|tls|tty|url|util|vm|zlib|freelist|v8|process|async_hooks|http2|perf_hooks)(/.*|$)',
-          ], // Packages. `react` related packages come first.
-          ['^react', '^@?\\w'], // Internal packages.
-          ['^(@|@company|@ui|components|utils|config|vendored-lib)(/.*|$)'], // Side effect imports.
-          ['^\\u0000'], // Parent imports. Put `..` last.
-          ['^\\.\\.(?!/?$)', '^\\.\\./?$'], // Other relative imports. Put same-folder imports and `.` last.
-          ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'], // Style imports.
-          ['^.+\\.s?css$'],
-        ],
-      },
-    ],
-    'simple-import-sort/exports': 'error',
-  },
-  overrides: [
-    {
-      files: ['*.ts'],
-      parserOptions: {
-        tsconfigRootDir: __dirname,
-        project: ['tsconfig.app.json', 'tsconfig.spec.json'],
-        createDefaultProgram: true,
-      },
-      extends: ['plugin:@angular-eslint/ng-cli-compat', 'plugin:@angular-eslint/template/process-inline-templates'],
-      rules: {
-        '@angular-eslint/directive-selector': [
-          'error',
-          {
-            type: 'attribute',
-            prefix: 'rq',
-            style: 'camelCase',
-          },
-        ],
-        '@angular-eslint/component-selector': [
-          'error',
-          {
-            type: 'element',
-            prefix: 'rq',
-            style: 'kebab-case',
-          },
-        ],
-        '@angular-eslint/no-host-metadata-property': 'off',
-        '@typescript-eslint/ban-types': 'off',
-        '@typescript-eslint/consistent-type-definitions': 'off',
-        '@typescript-eslint/dot-notation': 'off',
-        '@typescript-eslint/explicit-member-accessibility': [
-          'off',
-          {
-            accessibility: 'explicit',
-          },
-        ],
-        '@typescript-eslint/member-ordering': 'off',
-        '@typescript-eslint/naming-convention': 'off',
-        'id-blacklist': 'off',
-        'id-match': 'off',
-        'no-underscore-dangle': 'off',
-        'prefer-arrow/prefer-arrow-functions': 'off',
-        'no-unused-vars': 'off',
-        'unused-imports/no-unused-imports': 'error',
-        'max-len': 'off',
-      },
-    },
-    {
-      files: ['*.html'],
-      extends: ['plugin:@angular-eslint/template/recommended'],
-      rules: {
-        'simple-import-sort/imports': 'off',
-        'simple-import-sort/exports': 'off',
-      },
-    },
-  ],
+	extends: ['react-app', 'react-app/jest', 'plugin:jsx-a11y/recommended'],
+	ignorePatterns: ['./.prettierrc.js', './.stylelintrc.js'],
+	plugins: ['jsx-a11y', 'cypress', 'simple-import-sort'],
+	env: {
+		'cypress/globals': true,
+	},
+	rules: {
+		'jsx-a11y/click-events-have-key-events': 'warn', // @todo resolve and set back to error
+		'jsx-a11y/no-static-element-interactions': 'warn', // @todo resolve and set back to error
+		'jest/no-mocks-import': 'off',
+		'testing-library/prefer-presence-queries': 'off',
+		'testing-library/no-render-in-setup': 'off',
+		'@typescript-eslint/consistent-type-definitions': 'off',
+		'simple-import-sort/imports': [
+			'error',
+			{
+				groups: [
+					// Node.js builtins. You could also generate this regex if you use a `.js` config.
+					// For example: `^(${require("module").builtinModules.join("|")})(/|$)`
+					[
+						'^(assert|buffer|child_process|cluster|console|constants|crypto|dgram|dns|domain|events|fs|http|https|module|net|os|path|punycode|querystring|readline|repl|stream|string_decoder|sys|timers|tls|tty|url|util|vm|zlib|freelist|v8|process|async_hooks|http2|perf_hooks)(/.*|$)',
+					],
+					// Packages. `react` related packages come first.
+					['^react', '^@?\\w'],
+					// Internal packages.
+					['^(@|@company|@ui|components|utils|config|vendored-lib)(/.*|$)'],
+					// Side effect imports.
+					['^\\u0000'],
+					// Parent imports. Put `..` last.
+					['^\\.\\.(?!/?$)', '^\\.\\./?$'],
+					// Other relative imports. Put same-folder imports and `.` last.
+					['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
+					// Style imports.
+					['^.+\\.s?css$'],
+				],
+			},
+		],
+		'simple-import-sort/exports': 'error',
+	},
 };

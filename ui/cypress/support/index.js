@@ -29,13 +29,8 @@
 // You can read more here:
 // https://on.cypress.io/configuration
 // ***********************************************************
-
-// Import commands.js using ES2015 syntax:
 import './commands';
 
 Cypress.Cookies.defaults({
-  preserve: ['JSESSIONID', 'token'],
+	preserve: ['JSESSIONID', 'token'],
 });
-
-// Alternatively you can use CommonJS syntax:
-// require('./commands')

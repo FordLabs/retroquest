@@ -1,0 +1,79 @@
+/*
+ * Copyright (c) 2022 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@use '../../../../Styles/main';
+
+.dialog.settings-dialog {
+	height: 450px;
+
+	.tab-container {
+		flex: 1;
+		width: 100%;
+	}
+}
+
+.tab-heading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 235px;
+	margin: 6px auto 36px;
+	overflow: hidden;
+
+	font-size: 1.2rem;
+	text-align: center;
+
+	border-radius: 6px;
+
+	.tab {
+		width: 50%;
+		padding: 9px;
+
+		font-weight: bold;
+		white-space: nowrap;
+		text-transform: capitalize;
+
+		background-color: main.$gray;
+		cursor: pointer;
+
+		&.selected {
+			color: main.$white;
+			background-color: main.$purple;
+		}
+
+		&:not(:last-child) {
+			border-right: 2px solid rgba(main.$asphalt, 0.08);
+		}
+	}
+
+	.tab-body {
+		margin-top: 36px;
+		padding: 0 48px;
+
+		position: relative;
+	}
+}
+
+@include main.dark-theme {
+	.tab-container {
+		color: main.$white;
+	}
+
+	.tab {
+		background-color: main.$header-background-color-dark;
+	}
+}

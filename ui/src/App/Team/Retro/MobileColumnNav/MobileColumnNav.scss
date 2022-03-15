@@ -1,0 +1,127 @@
+/*
+ * Copyright (c) 2022 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@use '../../../../Styles/main';
+
+$dark-theme-accent-color: main.$gray;
+
+.mobile-column-nav {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 35px;
+
+	background-color: main.$white;
+	box-shadow: 1px 0 2px rgba(main.$black, 0.1);
+
+	bottom: 0;
+	left: 0;
+	position: fixed;
+	right: 0;
+	z-index: 3;
+
+	@include main.breakpoint-medium {
+		display: none;
+	}
+
+	.nav-button {
+		box-sizing: border-box;
+		width: 25%;
+		height: 100%;
+
+		color: transparent;
+
+		background-color: main.$green;
+		opacity: 0.35;
+
+		&.happy-nav-button {
+			background-color: main.$green;
+
+			&.selected {
+				border-top: 6px solid main.$asphalt;
+				opacity: 1;
+			}
+		}
+
+		&.confused-nav-button {
+			background-color: main.$blue;
+
+			&.selected {
+				border-top: 6px solid main.$asphalt;
+				opacity: 1;
+			}
+		}
+
+		&.unhappy-nav-button {
+			background-color: main.$red;
+
+			&.selected {
+				border-top: 6px solid main.$asphalt;
+				opacity: 1;
+			}
+		}
+
+		&.action-nav-button {
+			background-color: main.$yellow;
+
+			&.selected {
+				border-top: 6px solid main.$asphalt;
+				opacity: 1;
+			}
+		}
+	}
+}
+
+@include main.dark-theme {
+	.mobile-column-nav {
+		background-color: main.$black;
+
+		.nav-button {
+			opacity: 0.65;
+
+			&.happy-nav-button {
+				background-color: main.$dark-green;
+
+				&.selected {
+					border-top-color: $dark-theme-accent-color;
+				}
+			}
+
+			&.confused-nav-button {
+				background-color: main.$belize-hole;
+
+				&.selected {
+					border-top-color: $dark-theme-accent-color;
+				}
+			}
+
+			&.sad-nav-button {
+				&.selected {
+					background-color: main.$dark-red;
+					border-top-color: $dark-theme-accent-color;
+				}
+			}
+
+			&.action-nav-button {
+				&.selected {
+					background-color: main.$dark-yellow;
+					border-top-color: $dark-theme-accent-color;
+				}
+			}
+		}
+	}
+}

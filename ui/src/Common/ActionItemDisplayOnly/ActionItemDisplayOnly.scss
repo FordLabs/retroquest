@@ -1,0 +1,68 @@
+/*
+ * Copyright (c) 2022 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@use '../../Styles/main';
+
+.action-item-display-only {
+	width: 100%;
+
+	font-weight: bold;
+	font-size: 1rem;
+	text-align: left;
+
+	background-color: main.$white;
+	border-radius: 6px;
+	box-shadow: 0 1px 2px rgba(main.$black, 0.25);
+
+	.action-item-display-only-task {
+		padding: 18px;
+	}
+
+	.action-item-display-only-bottom {
+		display: flex;
+	}
+
+	.assignee-container {
+		margin-bottom: 0;
+		margin-left: 0.5rem;
+	}
+
+	.date-created {
+		display: flex;
+		flex: unset;
+		margin: 0.5rem 0 1rem 18px;
+		padding-right: 18px;
+
+		text-align: left;
+
+		border-right: 2px solid main.$gray;
+
+		.date-created-value {
+			margin: 0.5rem 0 0;
+			padding: 0;
+		}
+	}
+}
+
+@include main.dark-theme {
+	.action-item-display-only {
+		color: main.$gray;
+
+		background-color: main.$task-background-dark;
+		box-shadow: 0 1px 2px rgba(main.$black, 0.35);
+	}
+}
