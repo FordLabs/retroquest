@@ -28,13 +28,13 @@
     "prettier": "prettier --check '**/*.{scss,tsx,ts,js}'",
     "stylelint": "stylelint '**/*.?(s)css'",
     "stylelint:fix": "stylelint --fix '**/*.?(s)css'",
-	"prepare": "cd .. && husky install ui/.husky",
-    "pre-commit": "lint-staged",
-    "pre-push": "npm run tests:pre-commit"
+    "prepare": "cd .. && husky install ui/.husky"
   },
   "lint-staged": {
+    "**/*.+(spec.tsx|test.tsx)": [
+      "npm run tests:pre-commit"
+    ],
     "**/*.+(js|ts|tsx|spec.tsx|test.tsx)": [
-      "npm run tests:pre-commit",
       "npm run lint:fix",
       "npm run prettier:fix"
     ],

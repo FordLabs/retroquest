@@ -18,4 +18,5 @@
 
 . "$(dirname "$0")/_/husky.sh"
 
+.git/hooks/pre-commit
 cd ui && npx lint-staged
