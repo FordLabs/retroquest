@@ -29,7 +29,7 @@ function ThoughtArchives(): JSX.Element {
 
 	useEffect(() => {
 		return () => setSelectedArchivedBoard(null);
-	}, []);
+	}, [setSelectedArchivedBoard]);
 
 	return selectedArchivedBoard ? (
 		<ArchivedBoard board={selectedArchivedBoard} />
