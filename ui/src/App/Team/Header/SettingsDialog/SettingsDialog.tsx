@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, Ref, useState } from 'react';
 import classnames from 'classnames';
 
 import Dialog from '../../../../Common/Dialog/Dialog';
@@ -27,7 +27,7 @@ import StylesTab from './StylesTab/StylesTab';
 
 import './SettingsDialog.scss';
 
-function SettingsDialog(props: unknown, ref: React.Ref<ModalMethods>) {
+function SettingsDialog(props: unknown, ref: Ref<ModalMethods>) {
 	return (
 		<Modal ref={ref}>
 			<SettingsDialogContent />
@@ -56,24 +56,24 @@ export function SettingsDialogContent() {
 		>
 			<div className="tab-container">
 				<div className="tab-heading">
-					<div
+					<button
 						className={classnames('tab', { selected: stylesTabIsActive() })}
 						onClick={() => setTab(Tabs.STYLES)}
 					>
 						Styles
-					</div>
-					<div
+					</button>
+					<button
 						className={classnames('tab', { selected: accountTabIsActive() })}
 						onClick={() => setTab(Tabs.ACCOUNT)}
 					>
 						Account
-					</div>
-					<div
+					</button>
+					<button
 						className={classnames('tab', { selected: infoTabIsActive() })}
 						onClick={() => setTab(Tabs.INFO)}
 					>
 						Info
-					</div>
+					</button>
 				</div>
 				{stylesTabIsActive() && <StylesTab />}
 				{accountTabIsActive() && <AccountTab />}
