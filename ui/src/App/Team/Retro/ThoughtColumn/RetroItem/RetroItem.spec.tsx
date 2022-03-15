@@ -112,7 +112,7 @@ describe('RetroItem', () => {
 		});
 
 		it('should open retro item modal', () => {
-			clickText();
+			clickRetroItem();
 
 			expect(screen.getByTestId('retroItemModal')).toBeDefined();
 		});
@@ -244,7 +244,8 @@ describe('RetroItem', () => {
 		});
 
 		it('should not open modal', () => {
-			clickText();
+			const retroItemButton = screen.queryByTestId('editableText-select');
+			expect(retroItemButton).toBeNull();
 			expect(screen.queryByTestId('retroItemModal')).toBeNull();
 		});
 
@@ -287,7 +288,7 @@ describe('RetroItem', () => {
 		});
 
 		it('should open retro item modal', () => {
-			clickText();
+			clickRetroItem();
 			expect(screen.getByTestId('retroItemModal')).toBeDefined();
 		});
 	});
@@ -299,8 +300,8 @@ function editText(text: string) {
 	userEvent.type(textArea, text);
 }
 
-function clickText() {
-	userEvent.click(screen.getByTestId('editableText-container'));
+function clickRetroItem() {
+	userEvent.click(screen.getByTestId('editableText-select'));
 }
 
 function clickUpvote() {

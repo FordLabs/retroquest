@@ -54,7 +54,7 @@ describe('ColumnItem', () => {
 		}
 	);
 
-	describe('when not checked and not readonly', () => {
+	describe('When not checked and not readonly', () => {
 		beforeEach(() => {
 			render(
 				<ColumnItem
@@ -69,8 +69,7 @@ describe('ColumnItem', () => {
 		});
 
 		it('can select', () => {
-			clickText();
-
+			userEvent.click(screen.getByTestId('editableText-select'));
 			expect(mockSelect).toHaveBeenCalledTimes(1);
 		});
 
@@ -175,7 +174,7 @@ describe('ColumnItem', () => {
 		});
 	});
 
-	describe('when checked', () => {
+	describe('When checked', () => {
 		beforeEach(() => {
 			render(
 				<ColumnItem
@@ -196,8 +195,8 @@ describe('ColumnItem', () => {
 		});
 
 		it('should disable select', () => {
-			clickText();
-
+			const select = screen.queryByTestId('editableText-select');
+			expect(select).toBeNull();
 			expect(mockSelect).not.toHaveBeenCalled();
 		});
 
@@ -212,7 +211,7 @@ describe('ColumnItem', () => {
 		});
 	});
 
-	describe('when readonly', () => {
+	describe('When readonly', () => {
 		beforeEach(() => {
 			render(
 				<ColumnItem
@@ -240,12 +239,13 @@ describe('ColumnItem', () => {
 		});
 
 		it('should not disable select', () => {
-			clickText();
+			userEvent.click(screen.getByTestId('editableText-select'));
+
 			expect(mockSelect).toHaveBeenCalledTimes(1);
 		});
 	});
 
-	describe('without default buttons', () => {
+	describe('Without default buttons', () => {
 		beforeEach(() => {
 			render(
 				<ColumnItem
@@ -263,7 +263,7 @@ describe('ColumnItem', () => {
 		});
 	});
 
-	describe('with custom buttons', () => {
+	describe('With custom buttons', () => {
 		beforeEach(() => {
 			render(
 				<ColumnItem
@@ -279,7 +279,7 @@ describe('ColumnItem', () => {
 		});
 	});
 
-	describe('with children', () => {
+	describe('With children', () => {
 		beforeEach(() => {
 			render(
 				<ColumnItem type={Topic.HAPPY} text={startingText}>
@@ -298,10 +298,6 @@ function editText(text: string) {
 	const textArea = screen.getByTestId('editableText') as HTMLTextAreaElement;
 	textArea.select();
 	userEvent.type(textArea, text);
-}
-
-function clickText() {
-	userEvent.click(screen.getByTestId('editableText-container'));
 }
 
 function clickEdit() {
