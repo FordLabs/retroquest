@@ -30,7 +30,7 @@ describe('EditableText', () => {
 		jest.clearAllMocks();
 	});
 
-	describe('when editing and selectable', () => {
+	describe('When editing and selectable', () => {
 		beforeEach(() => {
 			render(
 				<EditableText
@@ -44,9 +44,8 @@ describe('EditableText', () => {
 		});
 
 		it('should not select', () => {
-			clickContainer();
-			clickSelectButton();
-
+			const select = screen.queryByTestId('editableText-select');
+			expect(select).toBeNull();
 			expect(mockSelect).not.toHaveBeenCalled();
 		});
 
@@ -75,11 +74,11 @@ describe('EditableText', () => {
 		});
 	});
 
-	describe('when not editing and selectable', () => {
+	describe('When not editing and selectable', () => {
 		beforeEach(() => {
 			render(
 				<EditableText
-					value={'sample text'}
+					value="sample text"
 					editing={false}
 					selectable={true}
 					onSelect={mockSelect}
@@ -92,49 +91,44 @@ describe('EditableText', () => {
 		});
 
 		it('can select', () => {
-			clickContainer();
-			clickSelectButton();
+			const select = screen.getByTestId('editableText-select');
+			userEvent.click(select);
 
-			expect(mockSelect).toHaveBeenCalledTimes(2);
+			expect(mockSelect).toHaveBeenCalledTimes(1);
 		});
 	});
 
 	describe('when disabled', () => {
 		beforeEach(() => {
 			render(
-				<EditableText value={'sample text'} editing={false} disabled={true} />
+				<EditableText value="sample text" editing={false} disabled={true} />
 			);
 		});
 
 		it('can not select', () => {
-			clickContainer();
-			clickSelectButton();
-
+			const select = screen.queryByTestId('editableText-select');
+			expect(select).toBeNull();
 			expect(mockSelect).not.toHaveBeenCalled();
 		});
 
-		it('is is translucent', () => {
+		it('is translucent', () => {
 			expect(screen.getByTestId('editableText-container').className).toContain(
 				'disabled'
 			);
 		});
 	});
 
-	describe('when not selectable', () => {
+	describe('When not selectable', () => {
 		beforeEach(() => {
 			render(
-				<EditableText
-					value={'sample text'}
-					editing={false}
-					selectable={false}
-				/>
+				<EditableText value="sample text" editing={false} selectable={false} />
 			);
 		});
 
 		it('can not select', () => {
-			clickContainer();
-			clickSelectButton();
+			const select = screen.queryByTestId('editableText-select');
 
+			expect(select).toBeNull();
 			expect(mockSelect).not.toHaveBeenCalled();
 		});
 	});
@@ -152,15 +146,6 @@ function textIsReadonlyAndDisabled(readonlyAndDisabled: boolean) {
 
 function editText(text: string) {
 	userEvent.type(screen.getByTestId('editableText'), text);
-}
-
-function clickContainer() {
-	userEvent.click(screen.getByTestId('editableText-container'));
-}
-
-function clickSelectButton() {
-	const select = screen.queryByTestId('editableText-select');
-	select && userEvent.click(select);
 }
 
 function escapeKey() {
