@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
-import { act, fireEvent, render, screen, within } from '@testing-library/react';
+import React from 'react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import { RecoilRoot } from 'recoil';
 
 import BoardService from '../../../../../Services/Api/BoardService';

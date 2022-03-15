@@ -92,7 +92,7 @@ export default function ColumnItem(props: ColumnItemProps) {
 				setHideOnBackdropClick(true);
 			};
 		}
-	}, [setHideOnEscape, editing, deleting]);
+	}, [setHideOnEscape, setHideOnBackdropClick, editing, deleting]);
 
 	function onEditToggle() {
 		return setEditing((editing) => !editing);

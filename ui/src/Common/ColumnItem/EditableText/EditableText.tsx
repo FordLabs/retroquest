@@ -78,7 +78,7 @@ export default function EditableText(props: EditableTextProps) {
 				document.removeEventListener('keydown', escapeListener);
 			};
 		}
-	}, [editing, onCancel]);
+	}, [editing, onCancel, value]);
 
 	function resizeTextArea() {
 		const textArea = textAreaRef.current;

@@ -59,7 +59,7 @@ const Template: ComponentStory<typeof DeletionOverlay> = () => {
 						Delete item?
 					</DeletionOverlay>
 				) : (
-					<div onClick={() => setShow(true)}>Click to delete</div>
+					<button onClick={() => setShow(true)}>Click to delete</button>
 				)}
 			</span>
 		</span>
