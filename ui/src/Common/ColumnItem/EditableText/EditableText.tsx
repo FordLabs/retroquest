@@ -67,14 +67,15 @@ export default function EditableText(props: EditableTextProps) {
 	useEffect(() => {
 		if (editing) {
 			setEditValue(value);
-			textAreaRef.current?.focus();
-			textAreaRef.current?.select();
+			const currentTextArea = textAreaRef.current;
+			currentTextArea?.focus();
+			currentTextArea?.select();
 
 			const escapeListener = onKeys<KeyboardEvent>('Escape', onCancel);
 			document.addEventListener('keydown', escapeListener);
 
 			return () => {
-				textAreaRef.current?.setSelectionRange(0, 0);
+				currentTextArea?.setSelectionRange(0, 0);
 				document.removeEventListener('keydown', escapeListener);
 			};
 		}
