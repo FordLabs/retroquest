@@ -1,5 +1,5 @@
-/*!
- * Copyright (c) 2021 Ford Motor Company
+/*
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -97,11 +97,14 @@
 		cursor: inherit;
 	}
 
-	.sort-container {
+	.sort-button {
+		padding: 0;
+
 		text-align: center;
+
 		position: relative;
 
-		.sort {
+		.sort-icon {
 			display: block;
 
 			font-size: 1.5rem;
@@ -115,6 +118,8 @@
 	}
 
 	.edit-button {
+		padding: 0;
+
 		color: $white;
 		font-size: 1rem;
 

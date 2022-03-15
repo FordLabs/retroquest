@@ -113,27 +113,35 @@ function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
 				<>
 					<p className="display-text">{emojify(title)}</p>
 					{sortable && (
-						<div className="sort-container">
-							<div
+						<button
+							className="sort-button"
+							onClick={toggleSort}
+							aria-label={sorted ? 'Unsort' : 'Sort'}
+						>
+							<span
+								aria-hidden
 								data-testid="columnHeader-sortButton"
-								className={classNames(['fas', 'fa-sort-down', 'sort'], {
+								className={classNames('fas fa-sort-down sort-icon', {
 									'sort-icon-translucent': !sorted,
 								})}
-								onClick={toggleSort}
 							/>
 							<Tooltip>{sorted ? 'Unsort' : 'Sort'}</Tooltip>
-						</div>
+						</button>
 					)}
 					{editable && (
-						<span className={classNames(['edit-button'])}>
+						<button
+							className="edit-button"
+							onClick={enableEditing}
+							aria-label="Edit"
+						>
 							<i
+								role="presentation"
 								className="fas fa-pencil-alt"
-								onClick={enableEditing}
 								aria-hidden="true"
 								data-testid="columnHeader-editTitleButton"
 							/>
 							<Tooltip>Edit</Tooltip>
-						</span>
+						</button>
 					)}
 				</>
 			)}
