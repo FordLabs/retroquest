@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import React, { useState } from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import FeedbackStars from './FeedbackStars';
 
-describe('Tooltip', () => {
+describe('Feedback Stars', () => {
 	it('should hover stars', () => {
 		render(<FeedbackStarTestRenderer />);
 
@@ -58,12 +58,12 @@ describe('Tooltip', () => {
 });
 
 function FeedbackStarTestRenderer() {
-	const [stars, setStars] = React.useState(0);
+	const [stars, setStars] = useState(0);
 
 	return (
 		<>
 			<div>selected:{stars}</div>
-			<div onClick={() => setStars(0)}>reset</div>
+			<button onClick={() => setStars(0)}>reset</button>
 			<FeedbackStars value={stars} onChange={setStars} />
 		</>
 	);
