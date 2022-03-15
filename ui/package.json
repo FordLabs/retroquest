@@ -1,5 +1,5 @@
 {
-  "name": "retroquest-react-2",
+  "name": "retroquest-ui",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:8080",
