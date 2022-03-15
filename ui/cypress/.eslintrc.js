@@ -15,5 +15,14 @@
  * limitations under the License.
  */
 module.exports = {
-  extends: ['plugin:cypress/recommended'],
+	extends: ['plugin:cypress/recommended', 'plugin:chai-friendly/recommended'],
+	rules: {
+		'testing-library/await-async-utils': 'off',
+		'testing-library/await-async-query': 'off',
+		'testing-library/prefer-screen-queries': 'off',
+		'testing-library/prefer-explicit-assert': 'off',
+		'jest/valid-expect': 'off',
+		'jest/valid-expect-in-promise': 'off',
+		'jest/no-conditional-expect': 'off',
+	},
 };

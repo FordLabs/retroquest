@@ -28,82 +28,110 @@
 //
 import '@testing-library/cypress/add-commands';
 
-import { getRetroPagePathWithTeamId } from '../../src/react/routes/RouteConstants';
-import { CREATE_TEAM_API_PATH, LOGIN_API_PATH } from '../../src/react/services/api/ApiConstants';
-import Topic from '../../src/react/types/Topic';
+import { getRetroPagePathWithTeamId } from '../../src/RouteConstants';
+import {
+	CREATE_TEAM_API_PATH,
+	LOGIN_API_PATH,
+} from '../../src/services/api/ApiConstants';
+import Topic from '../../src/types/Topic';
 
 import TeamCredentials from './types/teamCredentials';
 
-Cypress.Commands.add('createTeam', ({ teamName, password }: TeamCredentials) => {
-  cy.log('**Creating Team via api**');
-  cy.request({
-    url: CREATE_TEAM_API_PATH,
-    failOnStatusCode: false,
-    method: 'POST',
-    body: {
-      name: teamName,
-      password,
-    },
-  });
-});
+Cypress.Commands.add(
+	'createTeam',
+	({ teamName, password }: TeamCredentials) => {
+		cy.log('**Creating Team via api**');
+		cy.request({
+			url: CREATE_TEAM_API_PATH,
+			failOnStatusCode: false,
+			method: 'POST',
+			body: {
+				name: teamName,
+				password,
+			},
+		});
+	}
+);
 
-Cypress.Commands.add('createTeamAndLogin', (teamCredentials: TeamCredentials) => {
-  cy.createTeam(teamCredentials).then(() => {
-    cy.log('**Logging in via api**');
-    cy.request({
-      url: LOGIN_API_PATH,
-      failOnStatusCode: false,
-      method: 'POST',
-      body: {
-        name: teamCredentials.teamName,
-        password: teamCredentials.password,
-        captchaResponse: null,
-      },
-    }).then((response) => {
-      if (response.status === 200) {
-        const token = response.body as string;
-        cy.setCookie('token', token);
-        const retroPagePath = getRetroPagePathWithTeamId(teamCredentials.teamId);
-        cy.visit(retroPagePath);
-        cy.contains(teamCredentials.teamName).should('exist');
-        cy.title().should('eq', `${teamCredentials.teamName} | RetroQuest`);
-      } else {
-        cy.log('**Login via api failed with status code: **' + response.status);
-      }
-    });
-  });
-});
+Cypress.Commands.add(
+	'createTeamAndLogin',
+	(teamCredentials: TeamCredentials) => {
+		cy.createTeam(teamCredentials).then(() => {
+			cy.log('**Logging in via api**');
+			cy.request({
+				url: LOGIN_API_PATH,
+				failOnStatusCode: false,
+				method: 'POST',
+				body: {
+					name: teamCredentials.teamName,
+					password: teamCredentials.password,
+					captchaResponse: null,
+				},
+			}).then((response) => {
+				if (response.status === 200) {
+					const token = response.body as string;
+					cy.setCookie('token', token);
+					const retroPagePath = getRetroPagePathWithTeamId(
+						teamCredentials.teamId
+					);
+					cy.visit(retroPagePath);
+					cy.contains(teamCredentials.teamName).should('exist');
+					cy.title().should('eq', `${teamCredentials.teamName} | RetroQuest`);
+				} else {
+					cy.log(
+						'**Login via api failed with status code: **' + response.status
+					);
+				}
+			});
+		});
+	}
+);
 
 Cypress.Commands.add('enterThought', (topic: Topic, thought: string) => {
-  cy.log(`**Entering a ${topic} thought**`);
-  cy.get(`[data-testid=retroColumn__${topic}]`).findByPlaceholderText('Enter a Thought').type(`${thought}{enter}`);
+	cy.log(`**Entering a ${topic} thought**`);
+	cy.get(`[data-testid=retroColumn__${topic}]`)
+		.findByPlaceholderText('Enter a Thought')
+		.type(`${thought}{enter}`);
 });
 
 Cypress.Commands.add('enterActionItem', (actionItemTask: string) => {
-  cy.log('**Entering an action item**');
-  cy.get(`[data-testid=retroColumn__action]`)
-    .findByPlaceholderText('Enter an Action Item')
-    .type(`${actionItemTask}{enter}`);
+	cy.log('**Entering an action item**');
+	cy.get(`[data-testid=retroColumn__action]`)
+		.findByPlaceholderText('Enter an Action Item')
+		.type(`${actionItemTask}{enter}`);
 });
 
 Cypress.Commands.add('getActionItemByTask', (actionItemTask: string) => {
-  cy.findByDisplayValue(actionItemTask).closest(`[data-testid=actionItem]`);
+	cy.findByDisplayValue(actionItemTask).closest(`[data-testid=actionItem]`);
 });
 
-Cypress.Commands.add('confirmNumberOfThoughtsInColumn', (topic: Topic, expectedCount: number) => {
-  cy.log(`**There should be ${expectedCount} thoughts in ${topic} column**`);
-  cy.get(`[data-testid=retroColumn__${topic}]`).find('[data-testid=retroItem]').should('have.length', expectedCount);
-});
+Cypress.Commands.add(
+	'confirmNumberOfThoughtsInColumn',
+	(topic: Topic, expectedCount: number) => {
+		cy.log(`**There should be ${expectedCount} thoughts in ${topic} column**`);
+		cy.get(`[data-testid=retroColumn__${topic}]`)
+			.find('[data-testid=retroItem]')
+			.should('have.length', expectedCount);
+	}
+);
 
-Cypress.Commands.add('confirmNumberOfActionItemsInColumn', (expectedCount: number) => {
-  cy.log(`**There should be ${expectedCount} action items**`);
-  cy.get('[data-testid=retroColumn__action]').find('[data-testid=actionItem]').should('have.length', expectedCount);
-});
+Cypress.Commands.add(
+	'confirmNumberOfActionItemsInColumn',
+	(expectedCount: number) => {
+		cy.log(`**There should be ${expectedCount} action items**`);
+		cy.get('[data-testid=retroColumn__action]')
+			.find('[data-testid=actionItem]')
+			.should('have.length', expectedCount);
+	}
+);
 
 Cypress.Commands.add('shouldBeOnRetroPage', (teamId: string) => {
-  cy.log('**Should be on retro page**');
-  cy.url().should('eq', Cypress.config().baseUrl + getRetroPagePathWithTeamId(teamId));
-  cy.findByText('Happy').should('exist');
-  cy.findByText('Confused').should('exist');
-  cy.findByText('Sad').should('exist');
+	cy.log('**Should be on retro page**');
+	cy.url().should(
+		'eq',
+		Cypress.config().baseUrl + getRetroPagePathWithTeamId(teamId)
+	);
+	cy.findByText('Happy').should('exist');
+	cy.findByText('Confused').should('exist');
+	cy.findByText('Sad').should('exist');
 });

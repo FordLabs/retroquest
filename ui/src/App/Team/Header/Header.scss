@@ -1,0 +1,189 @@
+/*
+ * Copyright (c) 2022 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@use '../../../Styles/main';
+
+.header {
+	@include main.site-max-width;
+
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 42px;
+
+	position: relative;
+
+	@include main.breakpoint-medium {
+		height: 64px;
+	}
+
+	.left-content {
+		display: flex;
+		flex: 1;
+		align-items: center;
+		overflow: hidden;
+
+		font-size: 1rem;
+
+		@include main.breakpoint-medium {
+			font-size: 1.5rem;
+		}
+	}
+
+	.center-content {
+		display: none;
+		flex: 1;
+		align-items: center;
+		justify-content: center;
+
+		@include main.breakpoint-medium {
+			display: flex;
+		}
+	}
+
+	.right-content {
+		display: flex;
+		flex: initial;
+		align-items: center;
+		justify-content: flex-end;
+
+		@include main.breakpoint-medium {
+			flex: 1;
+		}
+	}
+
+	.logo-link {
+		font-size: 0;
+		border: 2px solid transparent;
+
+		&:hover,
+		&:focus {
+			border: 2px solid main.$blue;
+			border-radius: 7px;
+		}
+	}
+
+	.logo {
+		height: 24px;
+		border-radius: 6px;
+
+		@include main.breakpoint-medium {
+			height: 36px;
+		}
+	}
+
+	.horizontal-separator {
+		display: none;
+		width: 3px;
+		height: 24px;
+		margin: 0 24px;
+
+		background-color: main.$asphalt;
+		border-radius: 6px;
+		opacity: 0.1;
+
+		@include main.breakpoint-medium {
+			display: initial;
+		}
+	}
+
+	.team-name {
+		flex: 1;
+		padding: 0 6px;
+		overflow: hidden;
+
+		color: inherit;
+		font-weight: bold;
+		font-size: inherit;
+		white-space: nowrap;
+		text-align: center;
+		text-overflow: ellipsis;
+
+		@include main.breakpoint-medium {
+			flex: initial;
+			padding: initial;
+
+			text-align: initial;
+		}
+	}
+
+	.nav-link {
+		height: 28px;
+
+		color: rgba(main.$asphalt, 0.4);
+		font-size: 1.1rem;
+		text-decoration: none;
+
+		border-radius: 32px;
+
+		&.selected {
+			color: main.$asphalt;
+			background-color: rgba(main.$asphalt, 0.2);
+		}
+	}
+
+	.last-saved-text {
+		display: none;
+		margin-right: 18px;
+
+		font-weight: 500;
+		font-size: 0.8rem;
+		white-space: nowrap;
+		text-align: right;
+
+		opacity: 0.5;
+
+		@include main.breakpoint-medium {
+			display: initial;
+		}
+	}
+
+	.settings-button {
+		font-size: 1.3rem;
+
+		&:hover,
+		&:focus {
+			color: main.$purple;
+		}
+	}
+}
+
+@include main.dark-theme {
+	.header {
+		.right-content {
+			color: main.$gray;
+		}
+
+		.horizontal-separator {
+			background-color: main.$count-separator-background-dark;
+			opacity: 1;
+		}
+
+		.team-name {
+			color: rgba(main.$gray, 0.75);
+		}
+
+		.nav-link {
+			color: rgba(main.$gray, 0.4);
+
+			&.selected {
+				color: main.$gray;
+				background-color: rgba(main.$gray, 0.2);
+			}
+		}
+	}
+}

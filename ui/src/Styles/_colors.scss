@@ -1,0 +1,97 @@
+/*
+ * Copyright (c) 2022 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+$white: #fff;
+$black: #000;
+
+$lighter-gray: #ecf0f1ad;
+$light-gray: #ecf0f120;
+$gray: #ecf0f1;
+$dark-gray: #95a5a6;
+
+$green: #2ecc71;
+$dark-green: #27ae60;
+
+$blue: #3498db;
+$dark-blue: #1b89ef;
+
+$red: #e74c3c;
+$dark-red: #c0392b;
+
+$yellow: #f1c40f;
+$dark-yellow: #f39c12;
+
+$lighter-asphalt: #34495e12;
+$light-asphalt: #34495e66;
+$asphalt: #34495e;
+$dark-asphalt: #2c3e50;
+
+$turquoise: #1abc9c;
+$dark-turquoise: #16a085;
+
+$purple: #a56de2;
+$dark-purple: #8e44ad;
+
+$belize-hole: #2980b9;
+
+$happy-hover-green: #d6f9d6;
+$confused-hover-blue: #d1f0f8;
+$unhappy-hover-red: #ffdfde;
+$end-retro-button-red: #ff7365;
+
+$guide-link-text-color: #333;
+
+$text-gray: #a5a5a5;
+$text-error: #d22e36;
+$text-off-white: #f2f2f2;
+
+$border-gray: #6b6b6b;
+
+$button-green: #6a9f19;
+$button-blue: #056ccb;
+$button-hover-blue: #058ceb;
+$button-active-blue: #0550a0;
+
+$background-blue: #34495e;
+$background-gray: #ecf0f1;
+$background-hover-gray: #dbdbdb;
+
+$header-background: #f3f3f3;
+
+$app-header: #f5f5f5;
+
+$icon-gray: #555;
+
+$modal-blur: #333;
+
+$positive-action: #65d68a;
+$negative-action: #f16a6a;
+
+@function opacity($color, $level) {
+	@return rgba($color, $level);
+}
+
+$background-color-light: #ecf0f1;
+$background-color-dark: #2c3e50;
+
+$temp-count-separator-color: #111;
+
+$task-background-dark: #3c566f;
+$task-footer-separator-dark: opacity($black, 0.08);
+$count-separator-background-dark: opacity($temp-count-separator-color, 0.25);
+$text-field-background-color: #364d64;
+$header-background-color-dark: opacity($black, 0.22);

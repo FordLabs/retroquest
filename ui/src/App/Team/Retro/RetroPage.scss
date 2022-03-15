@@ -1,0 +1,112 @@
+/*
+ * Copyright (c) 2022 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@use '../../../Styles/main';
+
+.retro-page {
+	$mobile-column-nav-height: 35px;
+	margin-bottom: $mobile-column-nav-height;
+
+	@include main.prefers-animations {
+		.fade-in {
+			height: unset;
+			overflow: visible;
+
+			opacity: 1;
+
+			transition: y 2s cubic-bezier(0.25, 0.8, 0.25, 1);
+			animation: fadeIn 0.3s ease;
+		}
+
+		.fade-out {
+			height: 0;
+
+			transform: translateY(20px);
+			opacity: 0;
+
+			transition: y 2s cubic-bezier(0.25, 0.8, 0.25, 1);
+			animation: fadeOut 0.3s ease;
+		}
+
+		@keyframes fadeIn {
+			0% {
+				height: 0;
+				margin-bottom: 0;
+
+				transform: translateY(0);
+
+				animation: 0.4s ease;
+			}
+			50% {
+				transform: translateY(20px);
+				opacity: 0;
+
+				animation: 0.3s ease;
+			}
+		}
+
+		@keyframes fadeOut {
+			0% {
+				height: unset;
+				animation: 0.3s ease;
+			}
+			50% {
+				transform: translateY(0);
+				opacity: 1;
+
+				animation: 0.4s ease;
+			}
+		}
+	}
+
+	.retro-page-content {
+		@include main.site-max-width;
+
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		margin-top: 24px;
+
+		@include main.breakpoint-medium {
+			justify-content: space-between;
+		}
+
+		.column-container {
+			width: 100%;
+
+			@include main.breakpoint-medium {
+				width: 324px;
+			}
+
+			&:not(.selected) {
+				display: none;
+				visibility: hidden;
+
+				@include main.breakpoint-medium {
+					display: initial;
+					visibility: initial;
+				}
+			}
+		}
+	}
+
+	.stop-animations * {
+		transition: background-color 0s, opacity 0s, color 0s, width 0s, height 0s,
+			padding 0s, margin 0s !important;
+		animation-duration: 0s !important;
+	}
+}

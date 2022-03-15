@@ -1,0 +1,86 @@
+/*
+ * Copyright (c) 2021 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import React, { forwardRef, useState } from 'react';
+import classnames from 'classnames';
+
+import Dialog from '../../../../Common/Dialog/Dialog';
+import Modal, { ModalMethods } from '../../../../Common/Modal/Modal';
+
+import AccountTab from './AccountTab/AccountTab';
+import InfoTab from './InfoTab/InfoTab';
+import StylesTab from './StylesTab/StylesTab';
+
+import './SettingsDialog.scss';
+
+function SettingsDialog(props: unknown, ref: React.Ref<ModalMethods>) {
+	return (
+		<Modal ref={ref}>
+			<SettingsDialogContent />
+		</Modal>
+	);
+}
+
+enum Tabs {
+	STYLES = 'styles',
+	ACCOUNT = 'account',
+	INFO = 'info',
+}
+
+export function SettingsDialogContent() {
+	const [tab, setTab] = useState<Tabs>(Tabs.STYLES);
+
+	const stylesTabIsActive = () => tab === Tabs.STYLES;
+	const accountTabIsActive = () => tab === Tabs.ACCOUNT;
+	const infoTabIsActive = () => tab === Tabs.INFO;
+
+	return (
+		<Dialog
+			className="settings-dialog"
+			title="Settings"
+			subtitle="choose your preferences"
+		>
+			<div className="tab-container">
+				<div className="tab-heading">
+					<div
+						className={classnames('tab', { selected: stylesTabIsActive() })}
+						onClick={() => setTab(Tabs.STYLES)}
+					>
+						Styles
+					</div>
+					<div
+						className={classnames('tab', { selected: accountTabIsActive() })}
+						onClick={() => setTab(Tabs.ACCOUNT)}
+					>
+						Account
+					</div>
+					<div
+						className={classnames('tab', { selected: infoTabIsActive() })}
+						onClick={() => setTab(Tabs.INFO)}
+					>
+						Info
+					</div>
+				</div>
+				{stylesTabIsActive() && <StylesTab />}
+				{accountTabIsActive() && <AccountTab />}
+				{infoTabIsActive() && <InfoTab />}
+			</div>
+		</Dialog>
+	);
+}
+
+export default forwardRef<ModalMethods>(SettingsDialog);

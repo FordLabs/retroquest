@@ -15,290 +15,343 @@
  * limitations under the License.
  */
 
-import { getArchiveRetroApiPath } from '../../src/react/services/api/ApiConstants';
-import Topic from '../../src/react/types/Topic';
+import { getArchiveRetroApiPath } from '../../src/services/api/ApiConstants';
+import Topic from '../../src/types/Topic';
 import { getTeamCredentials } from '../support/helpers';
 import Chainable = Cypress.Chainable;
 
 describe('Retro Facilitator Journey', () => {
-  let teamCredentials;
-  let isReact;
+	let teamCredentials;
 
-  beforeEach(() => {
-    teamCredentials = getTeamCredentials();
-    cy.createTeamAndLogin(teamCredentials);
+	beforeEach(() => {
+		teamCredentials = getTeamCredentials();
+		cy.createTeamAndLogin(teamCredentials);
+	});
 
-    // @todo remove once angular is yeeted
-    cy.window().then((win) => {
-      isReact = win['Cypress']['isReact'];
-    });
-  });
+	it('Rename columns titles', () => {
+		cy.intercept(
+			'PUT',
+			`/api/team/${teamCredentials.teamId}/column/*/title`
+		).as('columnTitleChangeApiCall');
 
-  it('Rename columns titles', () => {
-    cy.intercept('PUT', `/api/team/${teamCredentials.teamId}/column/*/title`).as('columnTitleChangeApiCall');
+		getColumnHeaderByTopic(Topic.HAPPY)
+			.as('happyColumnHeader')
+			.find('[data-testid=columnHeader-editTitleButton]')
+			.click();
 
-    getColumnHeaderByTopic(Topic.HAPPY)
-      .as('happyColumnHeader')
-      .find('[data-testid=columnHeader-editTitleButton]')
-      .click();
+		const newHappyTitle = 'Super Happy!';
+		cy.get('@happyColumnHeader')
+			.findByDisplayValue('Happy')
+			.type(`${newHappyTitle}`);
+		cy.get('body').click();
+		cy.wait('@columnTitleChangeApiCall');
+		cy.findByText(newHappyTitle);
 
-    const newHappyTitle = 'Super Happy!';
-    cy.get('@happyColumnHeader').findByDisplayValue('Happy').type(`${newHappyTitle}`);
-    cy.get('body').click();
-    cy.wait('@columnTitleChangeApiCall');
-    cy.findByText(newHappyTitle);
+		getColumnHeaderByTopic(Topic.CONFUSED)
+			.as('confusedColumnHeader')
+			.find('[data-testid=columnHeader-editTitleButton]')
+			.click();
 
-    getColumnHeaderByTopic(Topic.CONFUSED)
-      .as('confusedColumnHeader')
-      .find('[data-testid=columnHeader-editTitleButton]')
-      .click();
+		const newConfusedTitle = 'Very Confused';
+		cy.get('@confusedColumnHeader')
+			.findByDisplayValue('Confused')
+			.type(`${newConfusedTitle}`);
+		cy.get('body').click();
+		cy.wait('@columnTitleChangeApiCall');
+		cy.findByText(newConfusedTitle);
 
-    const newConfusedTitle = 'Very Confused';
-    cy.get('@confusedColumnHeader').findByDisplayValue('Confused').type(`${newConfusedTitle}`);
-    cy.get('body').click();
-    cy.wait('@columnTitleChangeApiCall');
-    cy.findByText(newConfusedTitle);
+		getColumnHeaderByTopic(Topic.UNHAPPY)
+			.as('sadColumnHeader')
+			.find('[data-testid=columnHeader-editTitleButton]')
+			.click();
 
-    getColumnHeaderByTopic(Topic.UNHAPPY)
-      .as('sadColumnHeader')
-      .find('[data-testid=columnHeader-editTitleButton]')
-      .click();
+		const newSadTitle = 'Sadness';
+		cy.get('@sadColumnHeader')
+			.findByDisplayValue('Sad')
+			.type(`${newSadTitle} :({enter}`);
+		cy.wait('@columnTitleChangeApiCall');
+		cy.findByText(newSadTitle + ' 😥');
 
-    const newSadTitle = 'Sadness';
-    cy.get('@sadColumnHeader').findByDisplayValue('Sad').type(`${newSadTitle} :({enter}`);
-    cy.wait('@columnTitleChangeApiCall');
-    cy.findByText(newSadTitle + ' 😥');
+		getColumnHeaderByTopic(Topic.ACTION)
+			.find('[data-testid=columnHeader-editTitleButton]')
+			.should('not.exist');
+	});
 
-    getColumnHeaderByTopic(Topic.ACTION)
-      .find('[data-testid=columnHeader-editTitleButton]')
-      .should(isReact ? 'not.exist' : 'not.be.visible');
-  });
+	it('Sort thoughts', () => {
+		const thought2 = 'Thought Two';
+		cy.enterThought(Topic.HAPPY, 'Thought One');
+		cy.enterThought(Topic.HAPPY, thought2);
+		cy.enterThought(Topic.HAPPY, 'Thought Three');
+		getRetroItemByText(thought2).find('[data-testid=retroItem-upvote]').click();
 
-  it('Sort thoughts', () => {
-    const thought2 = 'Thought Two';
-    cy.enterThought(Topic.HAPPY, 'Thought One');
-    cy.enterThought(Topic.HAPPY, thought2);
-    cy.enterThought(Topic.HAPPY, 'Thought Three');
-    getRetroItemByText(thought2).find('[data-testid=retroItem-upvote]').click();
+		getHappyColumnItems().as('happyColumnItems').should('have.length', 3);
 
-    getHappyColumnItems().as('happyColumnItems').should('have.length', 3);
+		cy.get('@happyColumnItems').eq(0).should('contain', '0');
+		cy.get('@happyColumnItems').eq(1).should('contain', '1');
+		cy.get('@happyColumnItems').eq(2).should('contain', '0');
 
-    cy.get('@happyColumnItems').eq(0).should('contain', '0');
-    cy.get('@happyColumnItems').eq(1).should('contain', '1');
-    cy.get('@happyColumnItems').eq(2).should('contain', '0');
+		cy.log('**Sort: Highest voted thoughts at the top of the list**');
+		getColumnHeaderByTopic(Topic.HAPPY)
+			.find('[data-testid=columnHeader-sortButton]')
+			.click();
 
-    cy.log('**Sort: Highest voted thoughts at the top of the list**');
-    getColumnHeaderByTopic(Topic.HAPPY).find('[data-testid=columnHeader-sortButton]').click();
+		getHappyColumnItems().as('happyColumnItems').eq(0).should('contain', '1');
+		cy.get('@happyColumnItems').eq(1).should('contain', '0');
+		cy.get('@happyColumnItems').eq(2).should('contain', '0');
 
-    getHappyColumnItems().as('happyColumnItems').eq(0).should('contain', '1');
-    cy.get('@happyColumnItems').eq(1).should('contain', '0');
-    cy.get('@happyColumnItems').eq(2).should('contain', '0');
+		cy.log('**Unsort: Thoughts return to original positions**');
+		getColumnHeaderByTopic(Topic.HAPPY)
+			.find('[data-testid=columnHeader-sortButton]')
+			.click();
 
-    cy.log('**Unsort: Thoughts return to original positions**');
-    getColumnHeaderByTopic(Topic.HAPPY).find('[data-testid=columnHeader-sortButton]').click();
+		getHappyColumnItems().as('happyColumnItems').eq(0).should('contain', '0');
+		cy.get('@happyColumnItems').eq(1).should('contain', '1');
+		cy.get('@happyColumnItems').eq(2).should('contain', '0');
+	});
 
-    getHappyColumnItems().as('happyColumnItems').eq(0).should('contain', '0');
-    cy.get('@happyColumnItems').eq(1).should('contain', '1');
-    cy.get('@happyColumnItems').eq(2).should('contain', '0');
-  });
+	it('Display thought in expanded mode', () => {
+		const thought = 'This is a good week';
+		cy.enterThought(Topic.HAPPY, thought);
+		cy.log(`**Expand thought: ${thought}**`);
+		getRetroItemByText(thought).click();
+		getRetroActionModal().should('exist');
+	});
 
-  it('Display thought in expanded mode', () => {
-    const thought = 'This is a good week';
-    cy.enterThought(Topic.HAPPY, thought);
-    cy.log(`**Expand thought: ${thought}**`);
-    getRetroItemByText(thought).click();
-    getRetroActionModal().should('exist');
-  });
+	it('Add action item from expanded mode', () => {
+		const happyThought = 'This is a good week';
+		cy.enterThought(Topic.HAPPY, happyThought);
 
-  it('Add action item from expanded mode', () => {
-    const happyThought = 'This is a good week';
-    cy.enterThought(Topic.HAPPY, happyThought);
+		clickOnFirstThought();
 
-    clickOnFirstThought();
+		getRetroActionModal().as('retroItemModal');
+		cy.get('@retroItemModal').findByDisplayValue(happyThought).should('exist');
+		cy.get('@retroItemModal').findByText('Add Action Item').click();
 
-    getRetroActionModal().as('retroItemModal');
-    cy.get('@retroItemModal').findByDisplayValue(happyThought).should('exist');
-    cy.get('@retroItemModal').findByText('Add Action Item').click();
+		const actionItemTask = 'Handle by Friday';
+		cy.get('@retroItemModal')
+			.find('[data-testid="addActionItem-task"]')
+			.type(actionItemTask);
+		const actionItemAssignee = 'Harry, and Corey';
+		cy.get('@retroItemModal')
+			.find('[data-testid="actionItem-assignee"]')
+			.type(actionItemAssignee, { force: true });
 
-    const actionItemTask = 'Handle by Friday';
-    cy.get('@retroItemModal').find('[data-testid="addActionItem-task"]').type(actionItemTask);
-    const actionItemAssignee = 'Harry, and Corey';
-    cy.get('@retroItemModal').find('[data-testid="actionItem-assignee"]').type(actionItemAssignee, { force: true });
+		cy.findByText('Create!').click();
 
-    cy.findByText('Create!').click();
+		cy.get('@retroItemModal').should('not.exist');
 
-    cy.get('@retroItemModal').should(isReact ? 'not.exist' : 'be.hidden');
+		cy.log('**Thought should be marked as discussed**');
+		getHappyColumnItems().should('have.length', 1);
+		getDiscussedThought()
+			.should('have.class', 'completed')
+			.findByDisplayValue(happyThought)
+			.should('exist');
 
-    cy.log('**Thought should be marked as discussed**');
-    getHappyColumnItems().should('have.length', 1);
-    getDiscussedThought().should('have.class', 'completed').findByDisplayValue(happyThought).should('exist');
+		cy.log('**Action Item should exist in action items column**');
+		getActionColumnItems().findByDisplayValue(actionItemTask).should('exist');
+		getActionColumnItems()
+			.findByDisplayValue(actionItemAssignee)
+			.should('exist');
+	});
 
-    cy.log('**Action Item should exist in action items column**');
-    getActionColumnItems().findByDisplayValue(actionItemTask).should('exist');
-    getActionColumnItems().findByDisplayValue(actionItemAssignee).should('exist');
-  });
+	it('Mark thought as discussed (default and expanded)', () => {
+		const happyThought = 'This is a good week';
+		cy.enterThought(Topic.HAPPY, happyThought);
+		cy.enterThought(Topic.HAPPY, 'Another positive note');
+		getHappyColumnItems().last().should('not.have.class', 'completed');
 
-  it('Mark thought as discussed (default and expanded)', () => {
-    const happyThought = 'This is a good week';
-    cy.enterThought(Topic.HAPPY, happyThought);
-    cy.enterThought(Topic.HAPPY, 'Another positive note');
-    getHappyColumnItems().last().should('not.have.class', 'completed');
+		getRetroItemByText(happyThought)
+			.find('[data-testid=checkboxButton]')
+			.as('discussedButton');
 
-    getRetroItemByText(happyThought).find('[data-testid=columnItem-checkboxButton]').as('discussedButton');
+		cy.log(`**Mark happy thought "${happyThought}" as discussed**`);
+		cy.get(`@discussedButton`).click();
 
-    cy.log(`**Mark happy thought "${happyThought}" as discussed**`);
-    cy.get(`@discussedButton`).click();
+		cy.log('**Thought marked as discussed should move to bottom of the list**');
+		getHappyColumnItems().should('have.length', 2);
+		getDiscussedThought().should('have.class', 'completed');
+		getHappyColumnItems().last().should('have.class', 'completed');
 
-    cy.log('**Thought marked as discussed should move to bottom of the list**');
-    getHappyColumnItems().should('have.length', 2);
-    getDiscussedThought().should('have.class', 'completed');
-    getHappyColumnItems().last().should('have.class', 'completed');
+		cy.get(`@discussedButton`).click();
 
-    cy.get(`@discussedButton`).click();
+		cy.log(`**Unmark happy thought as discussed and move up the list**`);
+		getHappyColumnItems().should('have.length', 2);
+		getHappyColumnItems().last().should('not.have.class', 'completed');
 
-    cy.log(`**Unmark happy thought as discussed and move up the list**`);
-    getHappyColumnItems().should('have.length', 2);
-    getHappyColumnItems().last().should('not.have.class', 'completed');
+		cy.log(`**Mark happy thought as discussed from the thought modal**`);
+		clickOnFirstThought();
+		getRetroActionModal().find('[data-testid=checkboxButton]').first().click();
 
-    cy.log(`**Mark happy thought as discussed from the thought modal**`);
-    clickOnFirstThought();
-    getRetroActionModal().find('[data-testid=columnItem-checkboxButton]').first().click();
+		cy.log(
+			'**Thought marked as discussed from modal should move to bottom of the list**'
+		);
+		getHappyColumnItems().should('have.length', 2);
+		getHappyColumnItems().last().should('have.class', 'completed');
+	});
 
-    cy.log('**Thought marked as discussed from modal should move to bottom of the list**');
-    getHappyColumnItems().should('have.length', 2);
-    getHappyColumnItems().last().should('have.class', 'completed');
-  });
+	it('Action item actions (create, edit, delete, mark as complete)', () => {
+		cy.log('**Should have "Action Items" column header in yellow**');
+		const yellow = 'rgb(241, 196, 15)';
+		cy.findByText('Action Items')
+			.should('exist')
+			.parent()
+			.should('have.css', 'background-color', yellow);
 
-  it('Action item actions (create, edit, delete, mark as complete)', () => {
-    cy.log('**Should have "Action Items" column header in yellow**');
-    const yellow = 'rgb(241, 196, 15)';
-    cy.findByText('Action Items').should('exist').parent().should('have.css', 'background-color', yellow);
+		cy.get('[data-testid=retroColumn__action]').as('actionsColumn');
 
-    cy.get('[data-testid=retroColumn__action]').as('actionsColumn');
+		let task1 = 'Increase Code Coverage';
+		const assignee1 = 'Bob';
+		const task2 = 'Make our meetings shorter';
+		const actionItemsToInput = [`${task1} @${assignee1}`, `${task2} @Larry`];
+		shouldCreateActionItems(actionItemsToInput);
 
-    let task1 = 'Increase Code Coverage';
-    const assignee1 = 'Bob';
-    const task2 = 'Make our meetings shorter';
-    const actionItemsToInput = [`${task1} @${assignee1}`, `${task2} @Larry`];
-    shouldCreateActionItems(actionItemsToInput);
+		shouldEditActionItemTaskAndAssignee(task1, 'by 10%', assignee1, ', Larry');
 
-    shouldEditActionItemTaskAndAssignee(task1, 'by 10%', assignee1, ', Larry');
+		task1 += ' by 10%';
+		shouldMarkAndUnmarkActionItemAsCompleted(task1);
 
-    task1 += ' by 10%';
-    shouldMarkAndUnmarkActionItemAsCompleted(task1);
+		shouldDeleteActionItem(task2);
 
-    shouldDeleteActionItem(task2);
+		cy.log('**On page reload all Action Items should still be there**');
+		cy.reload();
+		cy.confirmNumberOfActionItemsInColumn(1);
+	});
 
-    cy.log('**On page reload all Action Items should still be there**');
-    cy.reload();
-    cy.confirmNumberOfActionItemsInColumn(1);
-  });
+	it('Archive retro', () => {
+		cy.intercept('PUT', getArchiveRetroApiPath(teamCredentials.teamId)).as(
+			'putArchiveRetro'
+		);
+		cy.get('[data-testid=retroColumn__action]').as('actionsColumn');
 
-  it('Archive retro', () => {
-    cy.intercept('PUT', getArchiveRetroApiPath(teamCredentials.teamId)).as('putArchiveRetro');
-    cy.get('[data-testid=retroColumn__action]').as('actionsColumn');
+		cy.enterThought(Topic.UNHAPPY, 'Unhappy Thought');
+		const activeActionItemTask = 'Active Action Item';
+		const completedActionItemTask = 'Action item we completed';
+		cy.enterActionItem(activeActionItemTask);
+		cy.enterActionItem(completedActionItemTask);
+		cy.log(
+			`**Marking action item task "${completedActionItemTask}" as completed**`
+		);
+		cy.getActionItemByTask(completedActionItemTask)
+			.find('[data-testid=checkboxButton]')
+			.click();
 
-    cy.enterThought(Topic.UNHAPPY, 'Unhappy Thought');
-    const activeActionItemTask = 'Active Action Item';
-    const completedActionItemTask = 'Action item we completed';
-    cy.enterActionItem(activeActionItemTask);
-    cy.enterActionItem(completedActionItemTask);
-    cy.log(`**Marking action item task "${completedActionItemTask}" as completed**`);
-    cy.getActionItemByTask(completedActionItemTask).find('[data-testid=columnItem-checkboxButton]').click();
+		cy.findByText('Archive Retro').as('archiveRetroButton').click();
+		cy.get('[data-testid=archiveRetroDialog]').as('modal');
 
-    cy.findByText('Archive Retro').as('archiveRetroButton').click();
-    cy.get('[data-testid=archiveRetroDialog]').as('modal');
+		ensureModalIsOpen();
 
-    ensureModalIsOpen();
+		cy.get('@modal').findByText('Nope').click();
+		ensureModalIsClosed();
+		cy.get('@putArchiveRetro').its('response.statusCode').should('eq', null);
 
-    cy.get('@modal').findByText('Nope').click();
-    ensureModalIsClosed();
-    cy.get('@putArchiveRetro').its('response.statusCode').should('eq', null);
+		cy.confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 1);
+		cy.confirmNumberOfActionItemsInColumn(2);
 
-    cy.confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 1);
-    cy.confirmNumberOfActionItemsInColumn(2);
+		cy.get('@archiveRetroButton').click();
+		ensureModalIsOpen();
+		cy.get('@modal').findByText('Yes!').click();
+		ensureModalIsClosed();
+		cy.get('@putArchiveRetro').its('response.statusCode').should('eq', 200);
 
-    cy.get('@archiveRetroButton').click();
-    ensureModalIsOpen();
-    cy.get('@modal').findByText('Yes!').click();
-    ensureModalIsClosed();
-    cy.get('@putArchiveRetro').its('response.statusCode').should('eq', 200);
+		cy.findByDisplayValue(activeActionItemTask).should('exist');
+		cy.findByDisplayValue(completedActionItemTask).should('not.exist');
+		cy.confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 0);
+		cy.confirmNumberOfActionItemsInColumn(1);
+	});
 
-    cy.findByDisplayValue(activeActionItemTask).should('exist');
-    cy.findByDisplayValue(completedActionItemTask).should('not.exist');
-    cy.confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 0);
-    cy.confirmNumberOfActionItemsInColumn(1);
-  });
+	const ensureModalIsOpen = () => {
+		cy.get('@modal').should('exist');
+	};
 
-  const ensureModalIsOpen = () => {
-    cy.get('@modal').should(isReact ? 'exist' : 'be.visible');
-  };
-
-  const ensureModalIsClosed = () => {
-    cy.get('@modal').should(isReact ? 'not.exist' : 'not.be.visible');
-  };
+	const ensureModalIsClosed = () => {
+		cy.get('@modal').should('not.exist');
+	};
 });
 
 function shouldCreateActionItems(actionItems: string[]) {
-  actionItems.forEach((actionString, index) => {
-    cy.enterActionItem(actionString);
+	actionItems.forEach((actionString, index) => {
+		cy.enterActionItem(actionString);
 
-    cy.confirmNumberOfActionItemsInColumn(index + 1);
+		cy.confirmNumberOfActionItemsInColumn(index + 1);
 
-    const splitActionString = actionString.split('@');
-    const action = splitActionString[0].trim();
-    const assignedTo = splitActionString[1];
+		const splitActionString = actionString.split('@');
+		const action = splitActionString[0].trim();
+		const assignedTo = splitActionString[1];
 
-    cy.findByDisplayValue(action).should('exist');
-    cy.findByDisplayValue(assignedTo).should('exist');
-  });
+		cy.findByDisplayValue(action).should('exist');
+		cy.findByDisplayValue(assignedTo).should('exist');
+	});
 }
 
-const getHappyColumnItems = () => cy.get('[data-testid=retroColumn__happy]').find(`[data-testid=retroItem]`);
+const getHappyColumnItems = () =>
+	cy.get('[data-testid=retroColumn__happy]').find(`[data-testid=retroItem]`);
 
 function shouldEditActionItemTaskAndAssignee(
-  currentTask: string,
-  appendToTask: string,
-  currentAssignee: string,
-  appendToAssignee: string
+	currentTask: string,
+	appendToTask: string,
+	currentAssignee: string,
+	appendToAssignee: string
 ) {
-  cy.log(`**Edit Action Item: ${currentTask}**`);
-  cy.getActionItemByTask(currentTask).as('actionItemToEdit');
+	cy.log(`**Edit Action Item: ${currentTask}**`);
+	cy.getActionItemByTask(currentTask).as('actionItemToEdit');
 
-  cy.get('@actionItemToEdit').find('[data-testid=columnItem-editButton]').type(`{rightarrow} ${appendToTask}{enter}`);
-  cy.get('@actionItemToEdit').findByDisplayValue(`${currentTask} ${appendToTask}`).should('exist');
+	cy.get('@actionItemToEdit')
+		.find('[data-testid=editButton]')
+		.type(`{rightarrow} ${appendToTask}{enter}`);
+	cy.get('@actionItemToEdit')
+		.findByDisplayValue(`${currentTask} ${appendToTask}`)
+		.should('exist');
 
-  cy.get('@actionItemToEdit').find('[data-testid=actionItem-assignee]').type(`${appendToAssignee}{enter}`);
-  cy.get('@actionItemToEdit').findByDisplayValue(`${currentAssignee}${appendToAssignee}`).should('exist');
+	cy.get('@actionItemToEdit')
+		.find('[data-testid=actionItem-assignee]')
+		.type(`${appendToAssignee}{enter}`);
+	cy.get('@actionItemToEdit')
+		.findByDisplayValue(`${currentAssignee}${appendToAssignee}`)
+		.should('exist');
 }
 
 function shouldMarkAndUnmarkActionItemAsCompleted(actionItemTask: string) {
-  getActionColumnItems().last().should('not.have.class', 'completed');
+	getActionColumnItems().last().should('not.have.class', 'completed');
 
-  cy.getActionItemByTask(actionItemTask).find('[data-testid=columnItem-checkboxButton]').as('completedButton');
+	cy.getActionItemByTask(actionItemTask)
+		.find('[data-testid=checkboxButton]')
+		.as('completedButton');
 
-  cy.log(`**Mark action item task "${actionItemTask}" as completed**`);
-  cy.get(`@completedButton`).click();
+	cy.log(`**Mark action item task "${actionItemTask}" as completed**`);
+	cy.get(`@completedButton`).click();
 
-  cy.log('**Completed action item should move to bottom of the list**');
-  getActionColumnItems().should('have.length', 2).last().should('have.class', 'completed');
+	cy.log('**Completed action item should move to bottom of the list**');
+	getActionColumnItems()
+		.should('have.length', 2)
+		.last()
+		.should('have.class', 'completed');
 
-  cy.get(`@completedButton`).click();
+	cy.get(`@completedButton`).click();
 
-  cy.log('**Unmark action item as completed and move up the list**');
-  getActionColumnItems().should('have.length', 2).last().should('not.have.class', 'completed');
+	cy.log('**Unmark action item as completed and move up the list**');
+	getActionColumnItems()
+		.should('have.length', 2)
+		.last()
+		.should('not.have.class', 'completed');
 }
 
 function shouldDeleteActionItem(actionItemTask: string) {
-  cy.log(`**Deleting action item ${actionItemTask}**`);
-  cy.getActionItemByTask(actionItemTask).find(`[data-testid=columnItem-deleteButton]`).click();
-  cy.get('[data-testid=deletionOverlay]').contains('Yes').click();
+	cy.log(`**Deleting action item ${actionItemTask}**`);
+	cy.getActionItemByTask(actionItemTask)
+		.find(`[data-testid=deleteButton]`)
+		.click();
+	cy.get('[data-testid=deletionOverlay]').contains('Yes').click();
 }
 
-const getActionColumnItems = () => cy.get('[data-testid=retroColumn__action]').find(`[data-testid=actionItem]`);
-const getRetroItemByText = (text: string): Chainable => cy.findByDisplayValue(text).closest(`[data-testid=retroItem]`);
+const getActionColumnItems = () =>
+	cy.get('[data-testid=retroColumn__action]').find(`[data-testid=actionItem]`);
+const getRetroItemByText = (text: string): Chainable =>
+	cy.findByDisplayValue(text).closest(`[data-testid=retroItem]`);
 
-const getDiscussedThought = () => cy.get('[data-testid=checkmark]').closest('[data-testid="retroItem"]');
-const clickOnFirstThought = () => cy.get('[data-testid="editableText-select"]').first().click();
+const getDiscussedThought = () =>
+	cy.get('[data-testid=checkmark]').closest('[data-testid="retroItem"]');
+const clickOnFirstThought = () =>
+	cy.get('[data-testid="editableText-select"]').first().click();
 const getRetroActionModal = () => cy.get('[data-testid=retroItemModal]');
-const getColumnHeaderByTopic = (topic: Topic) => cy.get(`[data-testid=columnHeader-${topic}]`);
+const getColumnHeaderByTopic = (topic: Topic) =>
+	cy.get(`[data-testid=columnHeader-${topic}]`);

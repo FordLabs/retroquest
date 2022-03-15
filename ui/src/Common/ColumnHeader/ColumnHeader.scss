@@ -1,0 +1,175 @@
+/*!
+ * Copyright (c) 2021 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import '../../styles/colors';
+@import '../../styles/mixins';
+
+.column-header {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 60px;
+	margin-bottom: 30px;
+	padding: 24px;
+
+	color: $white;
+	font-weight: bold;
+	font-size: 1.7rem;
+	text-align: center;
+
+	background-color: $black;
+	border-radius: 6px;
+	box-shadow: 0 2px 20px opacity($black, 0.25);
+	cursor: default;
+
+	position: relative;
+
+	.input-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		position: relative;
+	}
+
+	@media only screen and (max-width: 610px) {
+		.floating-character-countdown {
+			bottom: -18px;
+		}
+	}
+
+	.column-input {
+		display: inline-block;
+		width: 100%;
+		padding: 0;
+
+		color: $text-off-white;
+		font-family: inherit;
+		font-weight: inherit;
+		font-size: inherit;
+		text-align: center;
+
+		background-color: transparent;
+		border: 0;
+		outline: none;
+		cursor: inherit;
+
+		/* stylelint-disable selector-no-qualifying-type */
+		&[readonly] {
+			cursor: default;
+		}
+	}
+
+	.display-text {
+		display: inline-block;
+		width: auto;
+		height: auto;
+		margin-right: 8px;
+		padding: 0;
+		overflow: hidden;
+
+		color: inherit;
+		font-family: inherit;
+		font-weight: inherit;
+		font-size: inherit;
+		white-space: nowrap;
+		text-align: center;
+		text-overflow: ellipsis;
+
+		background-color: transparent;
+		border: 0;
+		outline: none;
+		cursor: inherit;
+	}
+
+	.sort-container {
+		text-align: center;
+		position: relative;
+
+		.sort {
+			display: block;
+
+			font-size: 1.5rem;
+
+			cursor: pointer;
+
+			&.sort-icon-translucent {
+				opacity: 0.45;
+			}
+		}
+	}
+
+	.edit-button {
+		color: $white;
+		font-size: 1rem;
+
+		cursor: pointer;
+
+		position: absolute;
+		right: 5px;
+		top: 5px;
+
+		&:hover,
+		&:focus {
+			.tooltip {
+				visibility: visible;
+				opacity: 1;
+
+				top: 30px;
+			}
+		}
+	}
+
+	&.happy {
+		background-color: $green;
+	}
+
+	&.confused {
+		background-color: $blue;
+	}
+
+	&.unhappy {
+		background-color: $red;
+	}
+
+	&.action {
+		background-color: $yellow;
+	}
+}
+
+@include dark-theme {
+	.column-header {
+		color: $gray;
+
+		&.happy {
+			background-color: $dark-green;
+		}
+
+		&.confused {
+			background-color: $belize-hole;
+		}
+
+		&.unhappy {
+			background-color: $dark-red;
+		}
+
+		&.action {
+			background-color: $dark-yellow;
+		}
+	}
+}

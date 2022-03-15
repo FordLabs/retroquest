@@ -1,5 +1,5 @@
 const fileSaver = {
-  saveAs: jest.fn(),
+	saveAs: jest.fn(),
 };
 
 export default fileSaver;

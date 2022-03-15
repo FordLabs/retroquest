@@ -1,0 +1,103 @@
+/*
+ * Copyright (c) 2022 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@use './../../../../../Styles/main';
+
+.archived-boards-list {
+	text-align: center;
+
+	.thoughts-archive-title {
+		font-weight: 500;
+		font-size: 1.5rem;
+	}
+
+	.list-header {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+
+		max-width: 21.875rem;
+		margin: 0 auto 1rem;
+		padding: 0.5rem;
+
+		background: main.$lighter-asphalt;
+		border-radius: 6px;
+
+		.sort-button {
+			color: main.$light-asphalt;
+			font-weight: bold;
+
+			&.selected-asc {
+				color: main.$asphalt;
+			}
+
+			&.selected-asc::after {
+				display: inline-block;
+
+				transform: rotate(180deg) translateX(-3px) translateY(-3px);
+
+				content: '▾';
+			}
+
+			&.selected-desc {
+				color: main.$asphalt;
+			}
+
+			&.selected-desc::after {
+				display: inline-block;
+
+				transform: translateX(3px);
+
+				content: '▾';
+			}
+		}
+
+		.spacer {
+			padding: 0.75rem;
+		}
+	}
+
+	.list {
+		max-width: 21.875rem;
+		margin: 0 auto 1rem;
+	}
+}
+
+@include main.dark-theme {
+	.archived-boards-list {
+		.thoughts-archive-title {
+			color: main.$gray;
+		}
+
+		.list-header {
+			background: main.$light-gray;
+
+			.sort-button {
+				color: main.$lighter-gray;
+				font-weight: bold;
+
+				&.selected-asc {
+					color: main.$gray;
+				}
+
+				&.selected-desc {
+					color: main.$gray;
+				}
+			}
+		}
+	}
+}

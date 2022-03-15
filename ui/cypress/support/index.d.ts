@@ -16,30 +16,35 @@
  */
 import 'cypress-jest-adapter';
 
-import Topic from '../../src/react/types/Topic';
+import Topic from '../../src/types/Topic';
 
 import TeamCredentials from './types/teamCredentials';
 
 declare global {
-  namespace Cypress {
-    interface Chainable {
-      login(teamCredentials: TeamCredentials): Chainable<Response<unknown>>;
+	namespace Cypress {
+		interface Chainable {
+			login(teamCredentials: TeamCredentials): Chainable<Response<unknown>>;
 
-      createTeam(teamCredentials: TeamCredentials): Chainable<void>;
+			createTeam(teamCredentials: TeamCredentials): Chainable<void>;
 
-      createTeamAndLogin(teamCredentials: TeamCredentials): Chainable<void>;
+			createTeamAndLogin(teamCredentials: TeamCredentials): Chainable<void>;
 
-      enterThought(topic: Topic, thought: string): Chainable<void>;
+			enterThought(topic: Topic, thought: string): Chainable<void>;
 
-      enterActionItem(actionItemTask: string): Chainable<void>;
+			enterActionItem(actionItemTask: string): Chainable<void>;
 
-      getActionItemByTask(actionItemTask: string): Chainable<void>;
+			getActionItemByTask(actionItemTask: string): Chainable<void>;
 
-      confirmNumberOfThoughtsInColumn(topic: Topic, expectedCount: number): Chainable<void>;
+			confirmNumberOfThoughtsInColumn(
+				topic: Topic,
+				expectedCount: number
+			): Chainable<void>;
 
-      confirmNumberOfActionItemsInColumn(expectedCount: number): Chainable<void>;
+			confirmNumberOfActionItemsInColumn(
+				expectedCount: number
+			): Chainable<void>;
 
-      shouldBeOnRetroPage(teamId: string): Chainable<void>;
-    }
-  }
+			shouldBeOnRetroPage(teamId: string): Chainable<void>;
+		}
+	}
 }

@@ -1,0 +1,75 @@
+/*
+ * Copyright (c) 2022 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@use '../../../../../../Styles/main';
+
+.archived-board-tile {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin-bottom: 2rem;
+
+	font-weight: bold;
+	font-size: 1rem;
+	line-height: 2rem;
+
+	background: main.$white;
+	border-radius: 6px;
+	box-shadow: rgba(0, 0, 0, 0.12) 0 0.25rem 1.25rem 0;
+
+	.thought-count {
+		width: 2rem;
+		height: 2rem;
+		margin: 1rem;
+
+		background: main.$lighter-asphalt;
+		border-radius: 20px;
+	}
+
+	.date {
+		padding: 1rem;
+	}
+
+	.view-button {
+		padding: 1rem 1.5rem;
+		border-left: 1px solid main.$gray;
+
+		&:hover {
+			color: main.$turquoise;
+		}
+	}
+}
+
+@include main.dark-theme {
+	.archived-board-tile {
+		color: main.$gray;
+		background: main.$task-background-dark;
+
+		.thought-count {
+			background: main.$light-gray;
+		}
+
+		.view-button {
+			color: main.$lighter-gray;
+			border-left: 1px solid main.$asphalt;
+
+			&:hover {
+				color: main.$turquoise;
+			}
+		}
+	}
+}
