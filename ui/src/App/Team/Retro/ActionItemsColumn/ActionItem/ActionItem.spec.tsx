@@ -247,7 +247,8 @@ describe('ActionItem', () => {
 		});
 
 		it('should not open modal', () => {
-			clickTask();
+			const actionItemTaskButton = screen.queryByTestId('editableText-select');
+			expect(actionItemTaskButton).toBeNull();
 			expect(screen.queryByTestId('actionItemModal')).toBeNull();
 		});
 
@@ -318,7 +319,7 @@ export function editTask(text: string) {
 }
 
 function clickTask() {
-	userEvent.click(screen.getByTestId('editableText-container'));
+	userEvent.click(screen.getByTestId('editableText-select'));
 }
 
 export function typeAssignee(text: string) {
