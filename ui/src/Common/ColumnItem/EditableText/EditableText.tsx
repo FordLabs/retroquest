@@ -97,7 +97,6 @@ export default function EditableText(props: EditableTextProps) {
 			{...divProps}
 			data-testid="editableText-container"
 			className={classnames('editable-text-container', className, { disabled })}
-			onClick={canSelect ? onSelect : undefined}
 		>
 			<textarea
 				aria-label="Text Area"
@@ -122,6 +121,7 @@ export default function EditableText(props: EditableTextProps) {
 				<button
 					className="editable-text-select"
 					data-testid="editableText-select"
+					onClick={canSelect ? onSelect : undefined}
 					aria-label={value}
 				/>
 			)}
