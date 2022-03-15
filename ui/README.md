@@ -1,70 +1,93 @@
-# Getting Started with Create React App
+# RetroQuest UI
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The RetroQuest UI is developed using the [React Framework](https://reactjs.org/)
 
-## Available Scripts
+## Running Package Scripts
 
-In the project directory, you can run:
+For the purpose of this documentation, we will assume you are using [Node Package manager](https://www.npmjs.com/), but
+the commands are very similar using [Yarn Package Manager](https://yarnpkg.com/).
 
-### `npm start`
+### Starting the Development Server
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```
+npm run start
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+This command will start the server. Navigate to http://localhost:4200/ to begin interacting on your desktop with the
+app. The app will automatically reload if you change any of the source files.
 
-### `npm test`
+### Testing Strategy
+While not perfect, this site makes heavy use of automated testing.  Engineers are encouraged to follow a "test-first" or test driven development approach
+to ensure confidence that the application works after a code change is made.  This code base incorporates the following types of testing:
+- Unit - confirms that an isolated block of code works properly
+- End to End - Simulates a user executing common tasks in a browser
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Unit Testing
 
-### `npm run build`
+This code base uses [Jest](https://jestjs.io/) for its unit testing framework.  Unit test cases are placed alongside src
+files and follow the naming convention *.spec.ts.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+npm run test:unit:ci
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+This command will execute the unit tests once and then terminate.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+npm run test:unit:ui
+```
 
-### `npm run eject`
+This command will execute all the unit tests and then enter "watch mode" in which case it will execute any tests again where the code has changed.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### End to End Testing
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+This code base uses [Cypress](https://www.cypress.io/) to execute end to end tests as well as UI tests that require a browser to fully simulate.  Cypress tests take much
+longer to run than Jest tests so it is recommended to use them sparingly.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Before starting your cypress tests, you must start the [springboot and react servers](../README.md#Running-the-Application).
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+To run end to end tests in headless mode:
+```
+npm run cy:run
+```
 
-## Learn More
+To run end to end tests in supervised mode:
+```
+npm run cy:open
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Note: Some operating systems will require additional libraries to be installed before Cypress can run.  See [Cypress System Requirements](https://docs.cypress.io/guides/getting-started/installing-cypress#System-requirements)
+for more information
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Linting the Code base
 
-### Code Splitting
+```
+npm run lint && npm run prettier && npm run stylelint
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+This command will lint the typescript codebase and report violations
 
-### Analyzing the Bundle Size
+```
+npm run lint:fix && npm run prettier:fix && npm run stylelint:fix
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+This command will lint the typescript codebase and attempt to fix violations
 
-### Making a Progressive Web App
+## React Components
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+The UI makes use of React components to separate application UI logic. The image below shows a breakdown of the main components in the application.
 
-### Advanced Configuration
+![react_components](./docs/retroquest-components.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## React Routing
 
-### Deployment
+Navigation through RetroQuest is managed by [React Router](https://reactrouter.com/).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+| Path                           | Component    |
+| ------------------------------ |--------------|
+| create                         | CreatePage   |
+| login                          | LoginPage    |
+| login/:teamId                  | LoginPage    |
+| team/:teamId                   | RetroPage    |
+| team/:teamId/radiator          | RadiatorPage |
+| team/:teamId/archives          | ArchivesPage |
