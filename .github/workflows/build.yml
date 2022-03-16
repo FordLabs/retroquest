@@ -1,4 +1,4 @@
-name: Build React
+name: Build
 on:
   workflow_dispatch:
   push:
