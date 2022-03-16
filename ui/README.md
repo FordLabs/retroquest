@@ -73,12 +73,6 @@ npm run lint:fix && npm run prettier:fix && npm run stylelint:fix
 
 This command will lint the typescript codebase and attempt to fix violations
 
-## React Components
-
-The UI makes use of React components to separate application UI logic. The image below shows a breakdown of the main components in the application.
-
-![react_components](./docs/retroquest-components.png)
-
 ## React Routing
 
 Navigation through RetroQuest is managed by [React Router](https://reactrouter.com/).
