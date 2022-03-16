@@ -81,6 +81,10 @@ function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
 
 	const handleInputFocus = (event: any) => event.target.select();
 
+	const getSortedButtonText = (): string => {
+		return sorted ? 'Unsort' : 'Sort';
+	};
+
 	return (
 		<div
 			{...divProps}
@@ -116,7 +120,7 @@ function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
 						<button
 							className="sort-button"
 							onClick={toggleSort}
-							aria-label={sorted ? 'Unsort' : 'Sort'}
+							aria-label={getSortedButtonText()}
 						>
 							<span
 								aria-hidden
@@ -125,7 +129,7 @@ function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
 									'sort-icon-translucent': !sorted,
 								})}
 							/>
-							<Tooltip>{sorted ? 'Unsort' : 'Sort'}</Tooltip>
+							<Tooltip>{getSortedButtonText()}</Tooltip>
 						</button>
 					)}
 					{editable && (
