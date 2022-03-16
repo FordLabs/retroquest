@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-import { FEEDBACK_API_PATH } from '../../src/services/api/ApiConstants';
-import { TOKEN_KEY } from '../../src/services/CookieService';
+import { getLoginPagePathWithTeamId } from '../../src/RouteConstants';
+import { FEEDBACK_API_PATH } from '../../src/Services/Api/ApiConstants';
+import { TOKEN_KEY } from '../../src/Services/CookieService';
 import Topic from '../../src/types/Topic';
 import { getTeamCredentials } from '../support/helpers';
 import Chainable = Cypress.Chainable;
-import { getLoginPagePathWithTeamId } from '../../src/RouteConstants';
 
 describe('Retro Member Journey', () => {
 	let teamCredentials;

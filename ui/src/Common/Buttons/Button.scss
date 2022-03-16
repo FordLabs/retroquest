@@ -15,9 +15,7 @@
  * limitations under the License.
  */
 
-@import '../../styles/colors';
-@import '../../styles/sizes';
-@import '../../styles/mixins';
+@use '../../Styles/main';
 
 .button {
 	display: flex;
@@ -43,15 +41,15 @@
 }
 
 .button-primary {
-	color: $gray;
+	color: main.$gray;
 
-	background-color: $asphalt;
+	background-color: main.$asphalt;
 	outline: none;
-	box-shadow: 0 4px 15px opacity($black, 0.25);
+	box-shadow: 0 4px 15px rgba(main.$black, 0.25);
 
 	&:hover,
 	&:focus {
-		background-color: $purple;
+		background-color: main.$purple;
 		cursor: pointer;
 	}
 }
@@ -62,23 +60,23 @@
 
 	&:hover,
 	&:focus {
-		color: $purple;
+		color: main.$purple;
 		cursor: pointer;
 	}
 }
 
-@include dark-theme {
+@include main.dark-theme {
 	.button-primary {
-		color: $asphalt;
-		background-color: $gray;
+		color: main.$asphalt;
+		background-color: main.$gray;
 
 		&:hover,
 		&:focus {
-			color: $gray;
+			color: main.$gray;
 		}
 	}
 
 	.button-secondary {
-		color: opacity($gray, 0.8);
+		color: rgba(main.$gray, 0.8);
 	}
 }

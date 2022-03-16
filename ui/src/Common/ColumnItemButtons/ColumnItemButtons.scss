@@ -14,9 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-@import '../../styles/colors';
-@import '../../styles/mixins';
+@use '../../Styles/main';
 
 $opacity: 0.25;
 
@@ -26,7 +24,7 @@ $opacity: 0.25;
 	height: 40px;
 
 	background-color: inherit;
-	border-top: 2px solid opacity($asphalt, 0.06);
+	border-top: 2px solid rgba(main.$asphalt, 0.06);
 	border-bottom-right-radius: inherit;
 	border-bottom-left-radius: inherit;
 
@@ -62,7 +60,7 @@ $opacity: 0.25;
 	position: relative;
 
 	&:not(:last-child) {
-		border-right: 2px solid opacity($asphalt, 0.06);
+		border-right: 2px solid rgba(main.$asphalt, 0.06);
 	}
 
 	&:not(.readonly) {
@@ -116,20 +114,20 @@ $opacity: 0.25;
 	}
 }
 
-@include dark-theme {
+@include main.dark-theme {
 	.column-item-button-group {
-		border-top-color: $task-footer-separator-dark;
+		border-top-color: main.$task-footer-separator-dark;
 
 		.column-item-button {
-			color: $gray;
+			color: main.$gray;
 
 			background-color: inherit;
-			border-color: $task-footer-separator-dark;
+			border-color: main.$task-footer-separator-dark;
 
 			&.button-primary {
 				&:hover,
 				&:focus {
-					background-color: $dark-purple;
+					background-color: main.$dark-purple;
 				}
 			}
 		}

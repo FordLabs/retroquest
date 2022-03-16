@@ -15,8 +15,7 @@
  * limitations under the License.
  */
 
-@import '../../styles/colors';
-@import '../../styles/mixins';
+@use '../../Styles/main';
 
 .text-field {
 	display: block;
@@ -48,58 +47,58 @@
 		font-size: inherit;
 		text-transform: initial;
 
-		border: 4px solid $black;
+		border: 4px solid main.$black;
 		border-radius: 6px;
 		outline: 0;
-		box-shadow: 0 2px 15px opacity($black, 0.15);
+		box-shadow: 0 2px 15px rgba(main.$black, 0.15);
 
 		&::placeholder {
-			color: opacity($asphalt, 0.4);
+			color: rgba(main.$asphalt, 0.4);
 		}
 	}
 
 	&.happy input {
-		border-color: $green;
+		border-color: main.$green;
 	}
 
 	&.confused input {
-		border-color: $blue;
+		border-color: main.$blue;
 	}
 
 	&.unhappy input {
-		border-color: $red;
+		border-color: main.$red;
 	}
 
 	&.action input {
-		border-color: $yellow;
+		border-color: main.$yellow;
 	}
 }
 
-@include dark-theme {
+@include main.dark-theme {
 	.text-field {
 		.text-input {
-			color: $gray;
-			background-color: $text-field-background-color;
+			color: main.$gray;
+			background-color: main.$text-field-background-color;
 
 			&::placeholder {
-				color: opacity($gray, 0.4);
+				color: rgba(main.$gray, 0.4);
 			}
 		}
 
 		&.happy .text-input {
-			border-color: $dark-green;
+			border-color: main.$dark-green;
 		}
 
 		&.confused .text-input {
-			border-color: $belize-hole;
+			border-color: main.$belize-hole;
 		}
 
 		&.unhappy .text-input {
-			border-color: $dark-red;
+			border-color: main.$dark-red;
 		}
 
 		&.action .text-input {
-			border-color: $dark-yellow;
+			border-color: main.$dark-yellow;
 		}
 	}
 }

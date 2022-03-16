@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-@import '../../styles/colors';
+@use '../../Styles/main';
 
 .modal-backdrop {
 	display: flex;
@@ -25,7 +25,7 @@
 	height: 100%;
 	overflow: auto;
 
-	background-color: opacity($black, 0.5);
+	background-color: rgba(main.$black, 0.5);
 
 	bottom: 0;
 	left: 0;

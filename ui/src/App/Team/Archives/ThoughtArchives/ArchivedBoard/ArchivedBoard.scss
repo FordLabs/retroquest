@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-@import '../../../../../styles/mixins';
+@use '../../../../../Styles/main';
 
 .archived-board {
 	display: flex;
@@ -25,7 +25,7 @@
 	align-items: center;
 	margin-top: 1.5rem;
 
-	@include breakpoint-medium {
+	@include main.breakpoint-medium {
 		flex-direction: row;
 		align-items: unset;
 		justify-content: center;

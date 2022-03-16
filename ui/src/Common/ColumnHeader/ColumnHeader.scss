@@ -14,9 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-@import '../../styles/colors';
-@import '../../styles/mixins';
+@use '../../Styles/main';
 
 .column-header {
 	display: flex;
@@ -27,14 +25,14 @@
 	margin-bottom: 30px;
 	padding: 24px;
 
-	color: $white;
+	color: main.$white;
 	font-weight: bold;
 	font-size: 1.7rem;
 	text-align: center;
 
-	background-color: $black;
+	background-color: main.$black;
 	border-radius: 6px;
-	box-shadow: 0 2px 20px opacity($black, 0.25);
+	box-shadow: 0 2px 20px rgba(main.$black, 0.25);
 	cursor: default;
 
 	position: relative;
@@ -58,7 +56,7 @@
 		width: 100%;
 		padding: 0;
 
-		color: $text-off-white;
+		color: main.$text-off-white;
 		font-family: inherit;
 		font-weight: inherit;
 		font-size: inherit;
@@ -120,7 +118,7 @@
 	.edit-button {
 		padding: 0;
 
-		color: $white;
+		color: main.$white;
 		font-size: 1rem;
 
 		cursor: pointer;
@@ -141,40 +139,40 @@
 	}
 
 	&.happy {
-		background-color: $green;
+		background-color: main.$green;
 	}
 
 	&.confused {
-		background-color: $blue;
+		background-color: main.$blue;
 	}
 
 	&.unhappy {
-		background-color: $red;
+		background-color: main.$red;
 	}
 
 	&.action {
-		background-color: $yellow;
+		background-color: main.$yellow;
 	}
 }
 
-@include dark-theme {
+@include main.dark-theme {
 	.column-header {
-		color: $gray;
+		color: main.$gray;
 
 		&.happy {
-			background-color: $dark-green;
+			background-color: main.$dark-green;
 		}
 
 		&.confused {
-			background-color: $belize-hole;
+			background-color: main.$belize-hole;
 		}
 
 		&.unhappy {
-			background-color: $dark-red;
+			background-color: main.$dark-red;
 		}
 
 		&.action {
-			background-color: $dark-yellow;
+			background-color: main.$dark-yellow;
 		}
 	}
 }

@@ -15,8 +15,7 @@
  * limitations under the License.
  */
 
-@import '../../styles/colors';
-@import '../../styles/mixins';
+@use '../../Styles/main';
 
 .count-separator {
 	display: flex;
@@ -35,16 +34,16 @@
 		background: linear-gradient(
 			to right,
 			transparent,
-			opacity($asphalt, 0.1) 15%,
-			opacity($asphalt, 0.15)
+			rgba(main.$asphalt, 0.1) 15%,
+			rgba(main.$asphalt, 0.15)
 		);
 	}
 
 	.right-count-separator {
 		background: linear-gradient(
 			to right,
-			opacity($asphalt, 0.15) 0%,
-			opacity($asphalt, 0.1) 85%,
+			rgba(main.$asphalt, 0.15) 0%,
+			rgba(main.$asphalt, 0.1) 85%,
 			transparent
 		);
 	}
@@ -60,12 +59,12 @@
 	}
 }
 
-@include dark-theme {
+@include main.dark-theme {
 	.count-separator {
-		color: $gray;
+		color: main.$gray;
 
 		.separator {
-			background: $count-separator-background-dark none;
+			background: main.$count-separator-background-dark none;
 		}
 	}
 }

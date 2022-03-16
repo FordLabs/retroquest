@@ -15,14 +15,13 @@
  * limitations under the License.
  */
 
-@import '../../styles/colors';
-@import '../../styles/mixins';
+@use '../../Styles/main';
 
 .floating-character-countdown {
 	width: auto;
 	height: auto;
 
-	color: $asphalt;
+	color: main.$asphalt;
 	font-weight: bold;
 	font-size: 0.8rem;
 
@@ -35,11 +34,11 @@
 	right: 0;
 
 	&.display-warning-text {
-		color: $yellow;
+		color: main.$yellow;
 	}
 
 	&.display-error-text {
-		color: $red;
+		color: main.$red;
 	}
 
 	&.visible {
@@ -47,8 +46,8 @@
 	}
 }
 
-@include dark-theme {
+@include main.dark-theme {
 	.floating-character-countdown {
-		color: $gray;
+		color: main.$gray;
 	}
 }
