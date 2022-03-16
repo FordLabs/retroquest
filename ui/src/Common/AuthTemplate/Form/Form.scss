@@ -15,42 +15,41 @@
  * limitations under the License.
  */
 
-@import '../../../Styles/colors';
-@import '../../../Styles/mixins';
+@use '../../../Styles/main';
 
 .form {
 	.error-message {
 		margin-top: 1rem;
-		color: $dark-red;
+		color: main.$dark-red;
 	}
 
 	.submit-button {
 		width: 100%;
 
-		color: $gray;
+		color: main.$gray;
 
-		background-color: $dark-turquoise;
+		background-color: main.$dark-turquoise;
 
 		&:hover,
 		&:focus {
-			background-color: $turquoise;
+			background-color: main.$turquoise;
 		}
 	}
 }
 
-@include dark-theme {
+@include main.dark-theme {
 	.form {
 		.error-message {
-			color: $red;
+			color: main.$red;
 		}
 
 		.submit-button {
-			color: $asphalt;
-			background-color: $turquoise;
+			color: main.$asphalt;
+			background-color: main.$turquoise;
 
 			&:hover,
 			&:focus {
-				background-color: $dark-turquoise;
+				background-color: main.$dark-turquoise;
 			}
 		}
 	}

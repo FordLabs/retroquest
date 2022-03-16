@@ -15,11 +15,10 @@
  * limitations under the License.
  */
 
-@import '../../styles/colors';
-@import '../../styles/mixins';
+@use '../../Styles/main';
 
 .dialog {
-	$base-drop-shadow: 0 19px 38px opacity($black, 0.3);
+	$base-drop-shadow: 0 19px 38px rgba(main.$black, 0.3);
 	$border-width: 8px;
 
 	display: flex;
@@ -30,7 +29,7 @@
 
 	font-size: 1rem;
 
-	background-color: $white;
+	background-color: main.$white;
 	border-radius: 6px;
 	box-shadow: $base-drop-shadow;
 
@@ -81,7 +80,7 @@
 		width: 100%;
 		margin-bottom: 1rem;
 
-		color: opacity($asphalt, 0.5);
+		color: rgba(main.$asphalt, 0.5);
 		font-weight: bold;
 		font-size: 1.2rem;
 		text-align: center;
@@ -122,16 +121,16 @@
 	}
 }
 
-@include dark-theme {
+@include main.dark-theme {
 	.dialog {
-		background-color: $task-background-dark;
+		background-color: main.$task-background-dark;
 
 		.dialog-title {
-			color: $gray;
+			color: main.$gray;
 		}
 
 		.dialog-subtitle {
-			color: opacity($gray, 0.5);
+			color: rgba(main.$gray, 0.5);
 		}
 	}
 }

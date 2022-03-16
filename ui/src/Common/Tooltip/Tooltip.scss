@@ -15,8 +15,7 @@
  * limitations under the License.
  */
 
-@import '../../styles/colors';
-@import '../../styles/mixins';
+@use '../../Styles/main';
 
 .tooltip {
 	$arrow-size: 12px;
@@ -24,14 +23,14 @@
 	display: inline-block;
 	padding: 6px 18px;
 
-	color: $white;
+	color: main.$white;
 	font-size: 1rem;
 	text-align: center;
 
-	background-color: $asphalt;
+	background-color: main.$asphalt;
 
 	border-radius: 6px;
-	box-shadow: 0 1px 2px opacity($black, 0.25);
+	box-shadow: 0 1px 2px rgba(main.$black, 0.25);
 	transform: translate(-50%, $arrow-size);
 	visibility: hidden;
 
@@ -55,7 +54,7 @@
 
 		border-right: $arrow-size solid transparent;
 
-		border-bottom: $arrow-size solid $asphalt;
+		border-bottom: $arrow-size solid main.$asphalt;
 		border-left: $arrow-size solid transparent;
 		transform: translateX(-50%);
 
@@ -74,13 +73,13 @@
 	}
 }
 
-@include dark-theme {
+@include main.dark-theme {
 	.tooltip {
-		color: $dark-asphalt;
-		background-color: $gray;
+		color: main.$dark-asphalt;
+		background-color: main.$gray;
 
 		&::before {
-			border-bottom-color: $gray;
+			border-bottom-color: main.$gray;
 		}
 	}
 }

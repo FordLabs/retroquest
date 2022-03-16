@@ -14,9 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-@import '../../styles/colors';
-@import '../../styles/mixins';
+@use '../../Styles/main';
 
 .input-group {
 	display: flex;
@@ -37,17 +35,17 @@
 		margin: 12px 0 0;
 		padding: 12px 36px 12px 12px;
 
-		color: $asphalt;
+		color: main.$asphalt;
 		font-weight: bold;
 		font-size: 1rem;
 
-		background-color: $white;
+		background-color: main.$white;
 		border: 0;
 		border-radius: 3px;
 		outline: none;
-		box-shadow: 0 0 0 1px $asphalt;
+		box-shadow: 0 0 0 1px main.$asphalt;
 
-		@include breakpoint-medium {
+		@include main.breakpoint-medium {
 			font-size: 0.9rem;
 		}
 
@@ -56,7 +54,7 @@
 		}
 
 		&:focus {
-			box-shadow: 0 0 0 2px $dark-turquoise;
+			box-shadow: 0 0 0 2px main.$dark-turquoise;
 		}
 	}
 
@@ -67,27 +65,27 @@
 
 	&.invalid {
 		.input-text {
-			box-shadow: 0 0 0 2px $dark-red;
+			box-shadow: 0 0 0 2px main.$dark-red;
 		}
 	}
 }
 
-@include dark-theme {
+@include main.dark-theme {
 	.input-group {
 		.input-text {
-			color: $gray;
+			color: main.$gray;
 
-			background-color: $asphalt;
-			box-shadow: 0 0 0 1px $dark-gray;
+			background-color: main.$asphalt;
+			box-shadow: 0 0 0 1px main.$dark-gray;
 
 			&:focus {
-				box-shadow: 0 0 0 2px $turquoise;
+				box-shadow: 0 0 0 2px main.$turquoise;
 			}
 		}
 
 		&.invalid {
 			.input-text {
-				box-shadow: 0 0 0 2px $red;
+				box-shadow: 0 0 0 2px main.$red;
 			}
 		}
 	}

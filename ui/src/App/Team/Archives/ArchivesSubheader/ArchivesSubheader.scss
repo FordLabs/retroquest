@@ -14,12 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-@import '../../../../styles/colors';
-@import '../../../../styles/mixins';
+@use '../../../../Styles/main';
 
 .archives-subheader {
-	@include subheader;
+	@include main.subheader;
 
 	.archives-subheader-links {
 		display: flex;
@@ -31,7 +29,7 @@
 		}
 
 		.active {
-			color: $purple;
+			color: main.$purple;
 		}
 	}
 }

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { getArchiveRetroApiPath } from '../../src/services/api/ApiConstants';
+import { getArchiveRetroApiPath } from '../../src/Services/Api/ApiConstants';
 import Topic from '../../src/types/Topic';
 import { getTeamCredentials } from '../support/helpers';
 import Chainable = Cypress.Chainable;

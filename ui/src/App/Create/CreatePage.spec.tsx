@@ -27,8 +27,8 @@ import TeamService from '../../Services/Api/TeamService';
 
 import CreatePage from './CreatePage';
 
-jest.mock('../../services/api/ContributorsService');
-jest.mock('../../services/api/TeamService');
+jest.mock('../../Services/Api/ContributorsService');
+jest.mock('../../Services/Api/TeamService');
 
 const mockLogin = jest.fn();
 

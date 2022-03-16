@@ -15,8 +15,7 @@
  * limitations under the License.
  */
 
-@import '../../styles/colors';
-@import '../../styles/mixins';
+@use '../../Styles/main';
 
 .upvote-count {
 	display: flex;
@@ -40,7 +39,7 @@
 		height: 10px;
 		margin-top: -0.35rem;
 
-		background-color: $yellow;
+		background-color: main.$yellow;
 		border-radius: 12px / 6px;
 	}
 
@@ -49,14 +48,14 @@
 	}
 }
 
-@include dark-theme {
+@include main.dark-theme {
 	.upvote-count {
 		.fa-star {
-			color: $yellow;
+			color: main.$yellow;
 		}
 
 		.star-shadow {
-			background-color: $dark-asphalt;
+			background-color: main.$dark-asphalt;
 		}
 	}
 }
