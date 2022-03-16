@@ -22,12 +22,17 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Column {
+public class Column implements Comparable<Column>{
     private Long id;
     private String title;
     private String topic;
 
     public static Column fromColumnTitle(ColumnTitle columnTitle) {
         return new Column(columnTitle.getId(), columnTitle.getTitle(), columnTitle.getTopic());
+    }
+
+    @Override
+    public int compareTo(Column o) {
+        return Long.compare(this.id, o.getId());
     }
 }
