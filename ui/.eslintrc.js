@@ -22,8 +22,8 @@ module.exports = {
 		'cypress/globals': true,
 	},
 	rules: {
-		'jsx-a11y/click-events-have-key-events': 'warn', // @todo resolve and set back to error
-		'jsx-a11y/no-static-element-interactions': 'warn', // @todo resolve and set back to error
+		'jsx-a11y/click-events-have-key-events': 'off', // @todo resolve and set back to error
+		'jsx-a11y/no-static-element-interactions': 'off', // @todo resolve and set back to error
 		'jest/no-mocks-import': 'off',
 		'testing-library/prefer-presence-queries': 'off',
 		'testing-library/no-render-in-setup': 'off',
