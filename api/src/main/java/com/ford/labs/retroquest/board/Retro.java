@@ -42,6 +42,7 @@ public class Retro {
                 .map(Thought::getColumnTitle)
                 .distinct()
                 .map(Column::fromColumnTitle)
+                .sorted()
                 .collect(Collectors.toList());
         return new Retro(
                 board.getId(),
