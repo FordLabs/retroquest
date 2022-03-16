@@ -31,8 +31,6 @@ export const ThemeState = atom<Theme>({
 
 				const isDarkMode = newTheme === Theme.DARK;
 				if (isDarkMode) {
-					// @todo replace adding and removing classes with react useEffect on top level
-					// once app is fully react
 					document.body.classList.add(Theme.DARK);
 					localStorage.setItem(ITEM_KEY, Theme.DARK);
 				} else {
