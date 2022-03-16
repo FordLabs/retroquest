@@ -14,17 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as React from 'react';
+import React from 'react';
 import { useRecoilValue } from 'recoil';
 
+import darkLogoPath from '../../Assets/icons/icon-72x72.png';
+import lightLogoPath from '../../Assets/icons/icon-light-72x72.png';
 import { ThemeState } from '../../State/ThemeState';
 import Theme from '../../Types/Theme';
 
 import './RetroQuestLogo.scss';
-
-// @todo import images in react way when app is fully react
-const darkLogoPath = '/assets/icons/icon-72x72.png';
-const lightLogoPath = '/assets/icons/icon-light-72x72.png';
 
 function RetroQuestLogo() {
 	const theme = useRecoilValue(ThemeState);
