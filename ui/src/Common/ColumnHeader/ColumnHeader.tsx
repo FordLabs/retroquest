@@ -102,7 +102,6 @@ function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
 						onChange={(event) => setEditedTitle(event.target.value)}
 						onBlur={handleBlur}
 						onKeyDown={handleKeyDown}
-						/* @todo fix this */
 						/* eslint-disable-next-line jsx-a11y/no-autofocus */
 						autoFocus={true}
 						onFocus={handleInputFocus}
@@ -120,11 +119,12 @@ function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
 						<button
 							className="sort-button"
 							onClick={toggleSort}
-							aria-label={getSortedButtonText()}
+							aria-label={`${getSortedButtonText()} the ${title} column.`}
+							data-testid="columnHeader-sortButton"
 						>
-							<span
+							<i
 								aria-hidden
-								data-testid="columnHeader-sortButton"
+								role="presentation"
 								className={classNames('fas fa-sort-down sort-icon', {
 									'sort-icon-translucent': !sorted,
 								})}
@@ -136,13 +136,13 @@ function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
 						<button
 							className="edit-button"
 							onClick={enableEditing}
-							aria-label="Edit"
+							aria-label={`Edit the "${title}" column title.`}
+							data-testid="columnHeader-editTitleButton"
 						>
 							<i
 								role="presentation"
 								className="fas fa-pencil-alt"
-								aria-hidden="true"
-								data-testid="columnHeader-editTitleButton"
+								aria-hidden
 							/>
 							<Tooltip>Edit</Tooltip>
 						</button>
