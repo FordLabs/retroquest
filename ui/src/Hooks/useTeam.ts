@@ -33,15 +33,17 @@ function useTeam(teamId: string): UseTeam {
 
 	useEffect(() => {
 		if (teamId) {
-			TeamService.getTeamName(teamId).then((activeTeamName) => {
-				document.title = `${activeTeamName} | RetroQuest`;
+			TeamService.getTeamName(teamId)
+				.then((activeTeamName) => {
+					document.title = `${activeTeamName} | RetroQuest`;
 
-				setTeamName(activeTeamName);
-				setTeam({
-					name: activeTeamName,
-					id: teamId,
-				});
-			});
+					setTeamName(activeTeamName);
+					setTeam({
+						name: activeTeamName,
+						id: teamId,
+					});
+				})
+				.catch(console.error);
 		}
 	}, [teamId, setTeam]);
 
