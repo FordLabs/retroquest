@@ -40,18 +40,15 @@
 	.contributor-list {
 		display: flex;
 		flex-wrap: wrap;
+		gap: 0.5rem;
 
-		> * {
-			flex: 0 0 20%;
-		}
-
-		a {
+		.contributor-link {
+			flex: 0 0 15%;
 			padding: 0;
 		}
 
-		img {
+		.contributor-image {
 			width: 100%;
-			padding: 3px;
 			object-fit: cover;
 		}
 	}
