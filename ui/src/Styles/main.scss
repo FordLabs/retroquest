@@ -38,6 +38,13 @@ body {
 	height: 100%;
 	overflow: auto;
 
+	background-color: colors.$background-color-light;
+
+	/* stylelint-disable selector-no-qualifying-type */
+	&.dark-theme {
+		background-color: colors.$background-color-dark;
+	}
+
 	.root {
 		height: inherit;
 
