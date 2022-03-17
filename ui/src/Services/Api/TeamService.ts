@@ -33,12 +33,13 @@ export interface AuthResponse {
 }
 
 const UNAUTHORIZED_STATUS = 401;
+const FORBIDDEN_STATUS = 403;
 axios.interceptors.response.use(
 	(response) => response,
 	(error) => {
 		const { status } = error?.response;
 
-		if (status === UNAUTHORIZED_STATUS) {
+		if (status === UNAUTHORIZED_STATUS || status === FORBIDDEN_STATUS) {
 			CookieService.clearToken();
 
 			const { pathname } = window.location;

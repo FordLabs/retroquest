@@ -102,6 +102,19 @@ describe('Login', () => {
 			cy.enterThought(Topic.HAPPY, 'I have a thought');
 			cy.url().should('eq', Cypress.config().baseUrl + '/login');
 		});
+
+		it('Redirects to login page when team name back forbidden', () => {
+			cy.intercept('GET', '/api/team/teamNameThatDoesNotExist/name').as(
+				'getTeamName'
+			);
+
+			cy.createTeamAndLogin(teamCredentials);
+			cy.visit('/team/teamNameThatDoesNotExist');
+
+			cy.wait('@getTeamName');
+
+			cy.url().should('eq', Cypress.config().baseUrl + '/login');
+		});
 	});
 });
 
