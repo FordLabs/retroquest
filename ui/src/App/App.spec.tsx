@@ -17,7 +17,7 @@
 
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { RecoilRoot } from 'recoil';
 
 import { ThemeState } from '../State/ThemeState';
@@ -39,8 +39,7 @@ describe('App', () => {
 			</MemoryRouter>
 		);
 
-		const app = screen.getByTestId('retroquest-app');
-		expect(app.getAttribute('class')).toContain('light-theme');
+		expect(document.body.classList).not.toContain('dark-theme');
 	});
 
 	it('should set theme to dark mode', () => {
@@ -56,7 +55,6 @@ describe('App', () => {
 			</MemoryRouter>
 		);
 
-		const app = screen.getByTestId('retroquest-app');
-		expect(app.getAttribute('class')).toContain('dark-theme');
+		expect(document.body.classList).toContain('dark-theme');
 	});
 });

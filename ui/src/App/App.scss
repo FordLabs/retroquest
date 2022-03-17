@@ -19,10 +19,4 @@
 
 .retroquest-app {
 	height: 100%;
-	background-color: main.$background-color-light;
-
-	/* stylelint-disable selector-no-qualifying-type */
-	&.dark-theme {
-		background-color: main.$background-color-dark;
-	}
 }

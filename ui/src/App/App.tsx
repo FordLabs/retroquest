@@ -15,11 +15,12 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
 import { ThemeState } from '../State/ThemeState';
+import Theme from '../Types/Theme';
 
 import CreatePage from './Create/CreatePage';
 import LoginPage from './Login/LoginPage';
@@ -35,8 +36,17 @@ import './App.scss';
 function App() {
 	const theme = useRecoilValue(ThemeState);
 
+	useEffect(() => {
+		const isDarkMode = theme === Theme.DARK;
+		if (isDarkMode) {
+			document.body.classList.add(Theme.DARK);
+		} else {
+			document.body.classList.remove(Theme.DARK);
+		}
+	}, [theme]);
+
 	return (
-		<div className={`retroquest-app ${theme}`} data-testid="retroquest-app">
+		<div className="retroquest-app" data-testid="retroquest-app">
 			<Routes>
 				<Route path="/" element={<Navigate replace to="/login" />} />
 				<Route path="/login" element={<LoginPage />} />
