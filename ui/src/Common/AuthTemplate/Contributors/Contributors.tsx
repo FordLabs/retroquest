@@ -54,8 +54,13 @@ export default function Contributors() {
 						rel="noopener noreferrer"
 						key={contributor.accountUrl}
 						data-testid={`rq-contributor-${index}`}
+						className="contributor-link"
 					>
-						<img src={contributor.image} alt={contributor.accountUrl} />
+						<img
+							className="contributor-image"
+							src={contributor.image}
+							alt={contributor.accountUrl}
+						/>
 					</a>
 				))}
 			</div>

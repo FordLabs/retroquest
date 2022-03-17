@@ -19,7 +19,8 @@
 
 .auth-template {
 	display: block;
-	height: 100%;
+	height: auto;
+	min-height: 100%;
 
 	background-color: main.$white;
 
