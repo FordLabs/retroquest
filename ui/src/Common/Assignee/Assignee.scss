@@ -26,7 +26,8 @@ $opacity: 0.2;
 	position: relative;
 
 	.discussed:not(.readonly) &,
-	.editing & {
+	.editing &,
+	.completed & {
 		opacity: $opacity;
 	}
 
@@ -35,11 +36,11 @@ $opacity: 0.2;
 	}
 
 	.label {
+		color: main.$asphalt-semi-light;
 		font-size: 0.7rem;
 		text-transform: lowercase;
 
 		cursor: default;
-		opacity: 0.6;
 	}
 
 	.assignee {
@@ -48,7 +49,7 @@ $opacity: 0.2;
 		padding-right: 25px;
 		padding-left: 0;
 
-		color: inherit;
+		color: main.$black;
 		font-weight: bold;
 		font-size: 0.8rem;
 
@@ -89,7 +90,12 @@ $opacity: 0.2;
 
 @include main.dark-theme {
 	.assignee-container {
+		.label {
+			color: main.$lighter-gray;
+		}
+
 		.assignee {
+			color: main.$background-gray;
 			border-bottom-color: main.$dark-yellow;
 
 			&:focus {
