@@ -95,7 +95,7 @@ export default function ColumnItem(props: ColumnItemProps) {
 	}, [setHideOnEscape, setHideOnBackdropClick, editing, deleting]);
 
 	function onEditToggle() {
-		return setEditing((editing) => !editing);
+		return setEditing((editingState) => !editingState);
 	}
 
 	function onEditCanceled() {
@@ -103,8 +103,8 @@ export default function ColumnItem(props: ColumnItemProps) {
 		editButtonRef.current?.focus();
 	}
 
-	function onEditConfirmed(text: string) {
-		onEdit(text);
+	function onEditConfirmed(updatedText: string) {
+		onEdit(updatedText);
 		setEditing(false);
 	}
 

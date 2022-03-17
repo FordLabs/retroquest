@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { PrimaryButton } from '../Common/Buttons/Button';
@@ -30,8 +30,8 @@ const testText =
 	"If elevators hadn't been invented, all the CEOs and important people would have their offices on the first floor as a sign of status.";
 
 const Template: ComponentStory<typeof EditableText> = () => {
-	const [text, setText] = React.useState(testText);
-	const [editing, setEditing] = React.useState(false);
+	const [text, setText] = useState(testText);
+	const [editing, setEditing] = useState(false);
 
 	function onConfirm(message: string) {
 		setText(message);
@@ -49,7 +49,11 @@ const Template: ComponentStory<typeof EditableText> = () => {
 
 	return (
 		<>
-			<PrimaryButton onClick={() => setEditing((editing) => !editing)}>
+			<PrimaryButton
+				onClick={() =>
+					setEditing((currentEditingState) => !currentEditingState)
+				}
+			>
 				{editing ? 'Cancel Edit' : 'Edit'}
 			</PrimaryButton>
 			<div style={{ width: '400px', marginBottom: '20px' }}>
