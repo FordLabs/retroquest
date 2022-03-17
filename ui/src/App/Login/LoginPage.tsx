@@ -27,7 +27,7 @@ import { CREATE_TEAM_PAGE_PATH } from '../../RouteConstants';
 import TeamService from '../../Services/Api/TeamService';
 import { validatePassword, validateTeamName } from '../../Utils/StringUtils';
 
-export function LoginPage(): JSX.Element {
+function LoginPage(): JSX.Element {
 	const params = useParams();
 
 	const { login } = useAuth();
@@ -103,3 +103,5 @@ export function LoginPage(): JSX.Element {
 		</AuthTemplate>
 	);
 }
+
+export default LoginPage;

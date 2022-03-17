@@ -28,10 +28,6 @@
 		display: flex;
 	}
 
-	@include main.dark-theme {
-		background-color: main.$background-color-dark;
-	}
-
 	.auth-template-container {
 		display: flex;
 		flex-basis: 60%;
@@ -100,5 +96,12 @@
 
 	button {
 		margin-top: 48px;
+	}
+}
+
+@include main.dark-theme {
+	.auth-template {
+		color: main.$background-gray;
+		background-color: main.$background-color-dark;
 	}
 }

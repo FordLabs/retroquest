@@ -25,7 +25,7 @@ import { mockContributors } from '../../Services/Api/__mocks__/ContributorsServi
 import ContributorsService from '../../Services/Api/ContributorsService';
 import TeamService from '../../Services/Api/TeamService';
 
-import { LoginPage } from './LoginPage';
+import LoginPage from './LoginPage';
 
 jest.mock('../../Services/Api/ContributorsService');
 jest.mock('../../Services/Api/TeamService');

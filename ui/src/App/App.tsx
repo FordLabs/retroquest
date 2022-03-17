@@ -17,9 +17,12 @@
 
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+
+import { ThemeState } from '../State/ThemeState';
 
 import CreatePage from './Create/CreatePage';
-import { LoginPage } from './Login/LoginPage';
+import LoginPage from './Login/LoginPage';
 import ArchivesPage from './Team/Archives/ArchivesPage';
 import RadiatorPage from './Team/Radiator/RadiatorPage';
 import RetroPage from './Team/Retro/RetroPage';
@@ -27,20 +30,25 @@ import TeamPages from './Team/TeamPages';
 
 import '@fortawesome/fontawesome-free/css/all.css';
 import '../Styles/main.scss';
+import './App.scss';
 
 function App() {
+	const theme = useRecoilValue(ThemeState);
+
 	return (
-		<Routes>
-			<Route path="/" element={<Navigate replace to="/login" />} />
-			<Route path="/login" element={<LoginPage />} />
-			<Route path="/login/:teamId" element={<LoginPage />} />
-			<Route path="/create" element={<CreatePage />} />
-			<Route path="/team/:teamId" element={<TeamPages />}>
-				<Route path="" element={<RetroPage />} />
-				<Route path="archives" element={<ArchivesPage />} />
-				<Route path="radiator" element={<RadiatorPage />} />
-			</Route>
-		</Routes>
+		<div className={`retroquest-app ${theme}`} data-testid="retroquest-app">
+			<Routes>
+				<Route path="/" element={<Navigate replace to="/login" />} />
+				<Route path="/login" element={<LoginPage />} />
+				<Route path="/login/:teamId" element={<LoginPage />} />
+				<Route path="/create" element={<CreatePage />} />
+				<Route path="/team/:teamId" element={<TeamPages />}>
+					<Route path="" element={<RetroPage />} />
+					<Route path="archives" element={<ArchivesPage />} />
+					<Route path="radiator" element={<RadiatorPage />} />
+				</Route>
+			</Routes>
+		</div>
 	);
 }
 

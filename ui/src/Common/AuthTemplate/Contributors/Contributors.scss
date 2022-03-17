@@ -53,3 +53,9 @@
 		}
 	}
 }
+
+@include main.dark-theme {
+	.contributors {
+		background-color: main.$header-background-color-dark;
+	}
+}
