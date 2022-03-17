@@ -85,7 +85,7 @@ $negative-action: #f16a6a;
 	@return rgba($color, $level);
 }
 
-$background-color-light: #ecf0f1;
+$background-color-light: $background-gray;
 $background-color-dark: #2c3e50;
 
 $temp-count-separator-color: #111;

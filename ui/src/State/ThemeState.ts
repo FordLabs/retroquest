@@ -16,7 +16,6 @@
  */
 import { atom } from 'recoil';
 
-import { TEAM_PAGE_ROOT } from '../RouteConstants';
 import Theme from '../Types/Theme';
 
 const ITEM_KEY = 'theme';
@@ -27,14 +26,10 @@ export const ThemeState = atom<Theme>({
 	effects_UNSTABLE: [
 		({ onSet }) => {
 			onSet((newTheme) => {
-				if (isNotLoggedIn()) return Theme.LIGHT;
-
 				const isDarkMode = newTheme === Theme.DARK;
 				if (isDarkMode) {
-					document.body.classList.add(Theme.DARK);
 					localStorage.setItem(ITEM_KEY, Theme.DARK);
 				} else {
-					document.body.classList.remove(Theme.DARK);
 					localStorage.setItem(ITEM_KEY, Theme.LIGHT);
 				}
 			});
@@ -43,16 +38,6 @@ export const ThemeState = atom<Theme>({
 });
 
 function getThemeUserSettings() {
-	if (isNotLoggedIn()) return Theme.LIGHT;
-
 	const activeTheme = localStorage.getItem(ITEM_KEY) as Theme;
-	if (activeTheme === Theme.DARK) {
-		document.body.classList.add(Theme.DARK);
-	}
 	return activeTheme || Theme.LIGHT;
-}
-
-function isNotLoggedIn() {
-	const { pathname } = window.location;
-	return !pathname.includes(TEAM_PAGE_ROOT);
 }
