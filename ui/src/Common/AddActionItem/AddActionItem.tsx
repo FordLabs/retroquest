@@ -108,9 +108,6 @@ function AddActionItem(props: AddActionItemProps) {
 				<textarea
 					data-testid="addActionItem-task"
 					className="text-area"
-					/* @todo fix this */
-					/* eslint-disable-next-line jsx-a11y/no-autofocus */
-					autoFocus={true}
 					value={task}
 					onChange={(event) => setTask(event.target.value)}
 					onKeyDown={onKeys('Enter', (e) => e.currentTarget.blur())}
