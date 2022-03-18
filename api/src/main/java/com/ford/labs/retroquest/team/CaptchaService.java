@@ -21,12 +21,10 @@ import com.ford.labs.retroquest.exception.BoardDoesNotExistException;
 import com.ford.labs.retroquest.validation.CaptchaProperties;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class CaptchaService {
-    private TeamRepository teamRepository;
-    private CaptchaProperties captchaProperties;
+    private final TeamRepository teamRepository;
+    private final CaptchaProperties captchaProperties;
 
     public CaptchaService(TeamRepository teamRepository, CaptchaProperties captchaProperties) {
         this.teamRepository = teamRepository;
@@ -34,19 +32,18 @@ public class CaptchaService {
     }
 
     public boolean isCaptchaEnabledForTeam(String teamName) {
-        if(!isCaptchaEnabled()) {
+        if (!isCaptchaEnabled()) {
             return false;
         }
 
-        Optional<Team> team = teamRepository.findTeamByNameIgnoreCase(teamName.trim());
-        if(team.isPresent()) {
-            Integer failedAttempts = team.get().getFailedAttempts() != null ? team.get().getFailedAttempts() : 0;
-            return failedAttempts > captchaProperties.getFailedLoginThreshold();
-        }
-        throw new BoardDoesNotExistException();
+        var team = teamRepository.findTeamByNameIgnoreCase(teamName.trim())
+            .orElseThrow(BoardDoesNotExistException::new);
+
+        var failedAttempts = team.getFailedAttempts() != null ? team.getFailedAttempts() : 0;
+        return failedAttempts > captchaProperties.failedLoginThreshold();
     }
 
     public boolean isCaptchaEnabled() {
-        return captchaProperties.isEnabled();
+        return captchaProperties.enabled();
     }
 }
