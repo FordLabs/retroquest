@@ -146,27 +146,28 @@ function RetroPage(): ReactElement {
 				ref={retroPageContentRef}
 				data-testid="retroPageContent"
 			>
-				{!isLoading &&
-					columns.map((column, index) => {
-						return (
-							<div
-								key={`column-${index}`}
-								className={classNames('column-container', {
-									selected: index === selectedMobileColumnIndex,
-								})}
-							>
-								<ThoughtColumn column={column} />
-							</div>
-						);
-					})}
 				{!isLoading && (
-					<div
-						className={classNames('column-container', {
-							selected: 3 === selectedMobileColumnIndex,
+					<>
+						{columns.map((column, index) => {
+							return (
+								<div
+									key={`column-${index}`}
+									className={classNames('column-container', {
+										selected: index === selectedMobileColumnIndex,
+									})}
+								>
+									<ThoughtColumn column={column} />
+								</div>
+							);
 						})}
-					>
-						<ActionItemsColumn />
-					</div>
+						<div
+							className={classNames('column-container', {
+								selected: 3 === selectedMobileColumnIndex,
+							})}
+						>
+							<ActionItemsColumn />
+						</div>
+					</>
 				)}
 			</div>
 			<MobileColumnNav
