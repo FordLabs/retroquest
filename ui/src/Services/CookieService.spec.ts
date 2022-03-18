@@ -23,6 +23,10 @@ describe('Cookie Service', () => {
 	const cookies = new Cookies();
 	const tokenKey = 'token';
 
+	beforeEach(() => {
+		jest.useFakeTimers();
+	});
+
 	it('should set token cookie', () => {
 		const token = 'fake-jwt-token';
 		CookieService.setToken(token);
