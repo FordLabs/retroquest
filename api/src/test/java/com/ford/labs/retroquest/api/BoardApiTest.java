@@ -31,11 +31,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
-import java.util.Collections;
+import java.util.List;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -63,32 +65,32 @@ class BoardApiTest extends ApiTestBase {
     @Test
     void should_get_boards_assigned_to_requested_team_with_newest_boards_first() throws Exception {
         Board oldBoard = Board.builder()
-                .dateCreated(LocalDate.of(2018, 1, 1))
-                .teamId(teamId)
-                .thoughts(Collections.emptyList())
-                .build();
+            .dateCreated(LocalDate.of(2018, 1, 1))
+            .teamId(teamId)
+            .thoughts(List.of())
+            .build();
 
         Board newBoard = Board.builder()
-                .dateCreated(LocalDate.of(2018, 2, 2))
-                .teamId(teamId)
-                .thoughts(Collections.emptyList())
-                .build();
+            .dateCreated(LocalDate.of(2018, 2, 2))
+            .teamId(teamId)
+            .thoughts(List.of())
+            .build();
 
         boardRepository.save(oldBoard);
         boardRepository.save(newBoard);
 
         mockMvc.perform(get("/api/team/" + teamId + "/boards")
                 .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].dateCreated", Matchers.is("2018-02-02")))
-                .andExpect(jsonPath("$[1].dateCreated", Matchers.is("2018-01-01")));
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].dateCreated", Matchers.is("2018-02-02")))
+            .andExpect(jsonPath("$[1].dateCreated", Matchers.is("2018-01-01")));
     }
 
     @Test
     void createBoard_ShouldCreateBoard() throws Exception {
         mockMvc.perform(post(format("/api/team/%s/board", teamId))
                 .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isCreated());
+            .andExpect(status().isCreated());
 
         assertThat(boardRepository.count()).isEqualTo(1);
         var savedBoard = boardRepository.findAll().get(0);
@@ -101,16 +103,17 @@ class BoardApiTest extends ApiTestBase {
     public void createBoard_WithUnauthorizedUser_Returns403() throws Exception {
         mockMvc.perform(post(format("/api/team/%s/board", teamId))
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
-                .andExpect(status().isForbidden());
+            .andExpect(status().isForbidden());
     }
 
     @Test
     public void endRetro_ShouldSaveABoardWithThoughts() throws Exception {
-        Thought savedThought = thoughtService.createThought(teamId, new CreateThoughtRequest(null, "TEST_MESSAGE", 0, "happy", false, teamId, null));
+        Thought savedThought = thoughtService.createThought(teamId, new CreateThoughtRequest(null, "TEST_MESSAGE", 0,
+            "happy", false, teamId, null));
 
         mockMvc.perform(put(format("/api/team/%s/end-retro", teamId))
                 .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isOk());
+            .andExpect(status().isOk());
 
         assertThat(boardRepository.count()).isEqualTo(1);
         assertThat(boardRepository.findAllByTeamId(teamId).get(0).getThoughts().get(0).getId()).isEqualTo(savedThought.getId());
@@ -118,11 +121,12 @@ class BoardApiTest extends ApiTestBase {
 
     @Test
     public void endRetro_ShouldRemoveThoughtsWithoutABoard() throws Exception {
-        Thought savedThought = thoughtService.createThought(teamId, new CreateThoughtRequest(null, "TEST_MESSAGE", 0, "happy", false, teamId, null));
+        Thought savedThought = thoughtService.createThought(teamId, new CreateThoughtRequest(null, "TEST_MESSAGE", 0,
+            "happy", false, teamId, null));
 
         mockMvc.perform(put(format("/api/team/%s/end-retro", teamId))
                 .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isOk());
+            .andExpect(status().isOk());
 
         assertThat(boardRepository.count()).isEqualTo(1);
         assertThat(boardRepository.findAllByTeamId(teamId).get(0).getThoughts().get(0).getId()).isEqualTo(savedThought.getId());
@@ -132,6 +136,6 @@ class BoardApiTest extends ApiTestBase {
     public void endRetro_WithUnauthorizedUser_Returns403() throws Exception {
         mockMvc.perform(put(format("/api/team/%s/end-retro", teamId))
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
-                .andExpect(status().isForbidden());
+            .andExpect(status().isForbidden());
     }
 }

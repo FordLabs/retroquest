@@ -27,7 +27,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -85,7 +84,7 @@ class ColumnCombinerServiceTest {
     @BeforeEach
     void init() {
         when(mockThoughtRepository.findAllByTeamIdAndBoardIdIsNull(fakeTeamId)).thenReturn(
-            Arrays.asList(
+            List.of(
                 expectedActiveHappyThoughts,
                 expectedCompletedHappyThoughts,
 
@@ -98,14 +97,14 @@ class ColumnCombinerServiceTest {
         );
 
         when(mockActionItemRepository.findAllByTeamIdAndArchived(fakeTeamId, false)).thenReturn(
-            Arrays.asList(
+            List.of(
                 expectedActiveActionItems,
                 expectedCompletedActionItems
             )
         );
 
         when(mockColumnTitleRepository.findAllByTeamId(fakeTeamId)).thenReturn(
-            Arrays.asList(
+            List.of(
                 expectedActiveHappyThoughts.getColumnTitle(),
                 expectedActiveConfusedThoughts.getColumnTitle(),
                 expectedActiveSadThoughts.getColumnTitle()

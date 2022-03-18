@@ -27,8 +27,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,21 +53,21 @@ class ContributorServiceTest {
         contributor1 = new Contributor(avatarUrl1.getBytes(), accountUrl1);
         contributor2 = new Contributor(avatarUrl2.getBytes(), accountUrl2);
         given(restTemplate.getForObject(anyString(), eq(byte[].class)))
-                .willAnswer(invocation -> invocation.getArgument(0, String.class).getBytes());
+            .willAnswer(invocation -> invocation.getArgument(0, String.class).getBytes());
     }
 
     @Test
     void given_a_list_of_two_contributors_when_fetching_return_the_contributors() {
         GithubContributor[] githubContributors = {
-                new GithubContributor(avatarUrl1, accountUrl1),
-                new GithubContributor(avatarUrl2, accountUrl2),
+            new GithubContributor(avatarUrl1, accountUrl1),
+            new GithubContributor(avatarUrl2, accountUrl2),
         };
 
-        List<Contributor> contributors = Arrays.asList(contributor1, contributor2);
+        List<Contributor> contributors = List.of(contributor1, contributor2);
 
         given(restTemplate.getForObject(
-                githubContributorsUrl,
-                GithubContributor[].class
+            githubContributorsUrl,
+            GithubContributor[].class
         )).willReturn(githubContributors);
 
         List<Contributor> result = contributorService.getContributors();
@@ -81,25 +79,25 @@ class ContributorServiceTest {
     void given_a_list_of_two_contributors_with_one_invalid_email_address_when_fetching_return_one_valid_contributor() {
 
         GithubContributor[] githubContributors = {
-                new GithubContributor(avatarUrl1, accountUrl1),
-                new GithubContributor(avatarUrl2, accountUrl2 + "/invalid-email-address"),
+            new GithubContributor(avatarUrl1, accountUrl1),
+            new GithubContributor(avatarUrl2, accountUrl2 + "/invalid-email-address"),
         };
 
         given(restTemplate.getForObject(
-                githubContributorsUrl,
-                GithubContributor[].class
+            githubContributorsUrl,
+            GithubContributor[].class
         )).willReturn(githubContributors);
 
         List<Contributor> result = contributorService.getContributors();
-        assertThat(result).isEqualTo(Collections.singletonList(contributor1));
+        assertThat(result).containsExactly(contributor1);
     }
 
     @Test
     void given_a_call_to_github_contributors_returns_null_when_fetching_contributors_return_empty_list() {
         given(restTemplate.getForObject(
-                githubContributorsUrl,
-                GithubContributor[].class))
-                .willReturn(null);
+            githubContributorsUrl,
+            GithubContributor[].class))
+            .willReturn(null);
 
         assertThat(contributorService.getContributors()).isEmpty();
     }
