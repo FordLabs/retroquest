@@ -101,4 +101,6 @@ const setUpThoughtArchives = async () => {
 			<ArchivedBoardsList onBoardSelection={jest.fn()} />
 		</RecoilRoot>
 	);
+
+	await screen.findByText('Thought Archives');
 };
