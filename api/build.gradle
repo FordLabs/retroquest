@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,7 @@
 
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.5.1'
+    id 'org.springframework.boot' version '2.6.4'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'jacoco'
     id 'org.gradle.test-retry' version '1.2.1'
@@ -31,7 +31,7 @@ archivesBaseName = 'retroquest'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(11)
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
@@ -39,9 +39,13 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    set('springCloudVersion', "2021.0.1")
+}
+
 dependencyManagement {
     imports {
-        mavenBom "org.springframework.cloud:spring-cloud-dependencies:2020.0.2"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
 
@@ -179,7 +183,7 @@ dockerCompose {
 }
 
 jacoco {
-    toolVersion = '0.8.3'
+    toolVersion = '0.8.7'
 }
 
 jacocoTestReport {
