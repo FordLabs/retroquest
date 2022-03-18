@@ -36,10 +36,10 @@ public class RetroTest {
         var board = new Board(1L, "teamId", LocalDate.now(), List.of(thought));
         var retro = Retro.fromBoard(board);
 
-        assertThat(retro.getId()).isEqualTo(board.getId());
-        assertThat(retro.getTeamId()).isEqualTo(board.getTeamId());
-        assertThat(retro.getDateCreated()).isEqualTo(board.getDateCreated());
-        assertThat(retro.getThoughts()).isEqualTo(board.getThoughts());
+        assertThat(retro.id()).isEqualTo(board.getId());
+        assertThat(retro.teamId()).isEqualTo(board.getTeamId());
+        assertThat(retro.dateCreated()).isEqualTo(board.getDateCreated());
+        assertThat(retro.thoughts()).isEqualTo(board.getThoughts());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class RetroTest {
         var board = new Board(1L, "teamId", LocalDate.now(), List.of(thought1, thought2));
         var retro = Retro.fromBoard(board);
 
-        assertThat(retro.getColumns()).isEqualTo(List.of(fromColumnTitle(columnTitle1)));
+        assertThat(retro.columns()).isEqualTo(List.of(fromColumnTitle(columnTitle1)));
     }
 
     @Test
@@ -62,7 +62,7 @@ public class RetroTest {
         var board = new Board(1L, "teamId", LocalDate.now(), List.of(thought1, thought2));
         var retro = Retro.fromBoard(board);
 
-        assertThat(retro.getColumns()).isEqualTo(List.of(fromColumnTitle(columnTitle1), fromColumnTitle(columnTitle2)));
+        assertThat(retro.columns()).isEqualTo(List.of(fromColumnTitle(columnTitle1), fromColumnTitle(columnTitle2)));
     }
 
 }
