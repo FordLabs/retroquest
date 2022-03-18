@@ -17,28 +17,14 @@
 
 import React from 'react';
 import { render, screen, within } from '@testing-library/react';
-import mockAxios from 'axios';
 
-import { Contributor } from '../../../Types/Contributor';
+import { mockContributors } from '../../../Services/Api/__mocks__/ContributorsService';
 
 import Contributors from './Contributors';
 
-const mockContributors: Contributor[] = [
-	{
-		accountUrl: 'https://github.com/contributor-1',
-		image: '/9j/2wCEAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw',
-	},
-	{
-		accountUrl: 'https://github.com/contributor-2',
-		image: '/8j/2wCEAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw',
-	},
-];
+jest.mock('../../../Services/Api/ContributorsService');
 
 describe('Contributors', () => {
-	beforeEach(() => {
-		mockAxios.get = jest.fn().mockResolvedValue({ data: mockContributors });
-	});
-
 	it('should render contributor images with links to profiles', async () => {
 		render(<Contributors />);
 
@@ -51,7 +37,7 @@ describe('Contributors', () => {
 		);
 		expect(contributorImage1).toBeDefined();
 		expect(contributorImage1.getAttribute('src')).toBe(
-			'data:image/png;base64,' + mockContributors[0].image
+			mockContributors[0].image
 		);
 
 		const contributorLink2 = await screen.findByTestId('rq-contributor-1');
@@ -63,7 +49,7 @@ describe('Contributors', () => {
 		);
 		expect(contributorImage2).toBeDefined();
 		expect(contributorImage2.getAttribute('src')).toBe(
-			'data:image/png;base64,' + mockContributors[1].image
+			mockContributors[1].image
 		);
 	});
 });
