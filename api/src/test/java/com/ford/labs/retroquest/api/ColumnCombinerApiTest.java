@@ -17,18 +17,19 @@
 
 package com.ford.labs.retroquest.api;
 
-import com.ford.labs.retroquest.security.ApiAuthorization;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
-import com.ford.labs.retroquest.v2.columncombiner.columncombiner.ColumnCombinerResponse;
-import com.ford.labs.retroquest.v2.columncombiner.columncombiner.ColumnCombinerService;
-import com.ford.labs.retroquest.v2.columncombiner.columncombiner.ColumnResponse;
+import com.ford.labs.retroquest.security.ApiAuthorization;
+import com.ford.labs.retroquest.thought.Thought;
+import com.ford.labs.retroquest.v2.columncombiner.ColumnCombinerResponse;
+import com.ford.labs.retroquest.v2.columncombiner.ColumnCombinerService;
+import com.ford.labs.retroquest.v2.columncombiner.ColumnResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -36,6 +37,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
+@Deprecated
 class ColumnCombinerApiTest extends ApiTestBase {
 
     @Autowired
@@ -48,34 +50,35 @@ class ColumnCombinerApiTest extends ApiTestBase {
 
     @BeforeEach
     void setup() {
-        expectedBody = ColumnCombinerResponse.builder()
-                .columns(
-                        Collections.singletonList(ColumnResponse.builder().topic("happy").build())
-                ).build();
+        expectedBody = new ColumnCombinerResponse(
+            List.of(new ColumnResponse<Thought>(null, "happy", null, List.of()))
+        );
 
         when(columnCombinerService.aggregateResponse(teamId)).thenReturn(expectedBody);
     }
 
     @Test
     void should_return_unauthorized_if_no_bearer_token_is_sent() throws Exception {
-        mockMvc.perform(get("/api/v2/team/" + teamId + "/columns"))
-                .andExpect(status().isUnauthorized());
+        mockMvc.perform(get("/api/v2/team/{teamId}/columns", teamId))
+            .andExpect(status().isUnauthorized());
     }
 
     @Test
     void should_return_ok_since_user_is_authorized() throws Exception {
-        mockMvc.perform(get("/api/v2/team/" + teamId + "/columns")
+        mockMvc.perform(get("/api/v2/team/{teamId}/columns", teamId)
                 .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isOk());
+            .andExpect(status().isOk());
     }
 
     @Test
     void should_get_a_filled_out_aggregated_response_with_a_200() throws Exception {
-        String body = mockMvc.perform(get("/api/v2/team/" + teamId + "/columns")
+        String body = mockMvc.perform(get("/api/v2/team/{teamId}/columns", teamId)
                 .header("Authorization", getBearerAuthToken()))
-                .andReturn().getResponse().getContentAsString();
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
 
         assertThat(objectMapper.readValue(body, ColumnCombinerResponse.class))
-                .usingRecursiveComparison().isEqualTo(expectedBody);
+            .usingRecursiveComparison().isEqualTo(expectedBody);
     }
 }

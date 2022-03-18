@@ -15,19 +15,9 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.v2.columncombiner.columncombiner;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+package com.ford.labs.retroquest.v2.columncombiner;
 
 import java.util.List;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class ColumnCombinerResponse {
-    private List<ColumnResponse<?>> columns;
-}
+@Deprecated
+public record ColumnCombinerResponse(List<ColumnResponse<?>> columns) { }
