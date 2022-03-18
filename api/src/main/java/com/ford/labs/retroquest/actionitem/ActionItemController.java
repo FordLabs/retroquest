@@ -64,7 +64,7 @@ public class ActionItemController {
             @RequestBody UpdateActionItemCompletedRequest request
     ) {
         var actionItem = actionItemRepository.findById(id).orElseThrow();
-        actionItem.setCompleted(request.isCompleted());
+        actionItem.setCompleted(request.completed());
         var updatedActionItem = actionItemRepository.save(actionItem);
         websocketService.publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, updatedActionItem));
     }
@@ -79,7 +79,7 @@ public class ActionItemController {
         @RequestBody UpdateActionItemTaskRequest request
     ) {
         var savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
-        savedActionItem.setTask(request.getTask());
+        savedActionItem.setTask(request.task());
         var updatedActionItem = actionItemRepository.save(savedActionItem);
         websocketService.publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, updatedActionItem));
     }
@@ -94,7 +94,7 @@ public class ActionItemController {
         @RequestBody UpdateActionItemAssigneeRequest request
     ) {
         var savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
-        savedActionItem.setAssignee(request.getAssignee());
+        savedActionItem.setAssignee(request.assignee());
         var updatedActionItem = actionItemRepository.save(savedActionItem);
         websocketService.publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, updatedActionItem));
     }
@@ -109,7 +109,7 @@ public class ActionItemController {
             @RequestBody UpdateActionItemArchivedRequest request
     ) {
         var savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
-        savedActionItem.setArchived(request.isArchived());
+        savedActionItem.setArchived(request.archived());
         var updatedActionItem = actionItemRepository.save(savedActionItem);
         websocketService.publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, updatedActionItem));
     }

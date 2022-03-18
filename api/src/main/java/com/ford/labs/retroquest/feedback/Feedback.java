@@ -48,10 +48,10 @@ public class Feedback {
     static Feedback fromDto(FeedbackDto dto) {
         return new Feedback(
             null,
-            dto.getStars(),
-            dto.getComment(),
-            dto.getUserEmail(),
-            dto.getTeamId(),
+            dto.stars(),
+            dto.comment(),
+            dto.userEmail(),
+            dto.teamId(),
             LocalDateTime.now()
         );
     }
