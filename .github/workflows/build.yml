@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - yeet-angular
 
 jobs:
   build:
