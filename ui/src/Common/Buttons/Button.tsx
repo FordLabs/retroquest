@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,37 +15,40 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import React, { ButtonHTMLAttributes } from 'react';
 import classnames from 'classnames';
 
 import './Button.scss';
 
-type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
 function Button(props: ButtonProps) {
 	const { className, children, ...buttonProps } = props;
 
-	const classNames = classnames('button', className);
-
 	return (
-		<button className={classNames} {...buttonProps}>
-			<span className="button-text">{children}</span>
+		<button className={classnames('button', className)} {...buttonProps}>
+			{children}
 		</button>
 	);
 }
 
 export function PrimaryButton(props: ButtonProps) {
 	const { className, ...buttonProps } = props;
-
-	const classNames = classnames('button-primary', className);
-
-	return <Button className={classNames} {...buttonProps} />;
+	return (
+		<Button
+			className={classnames('button-primary', className)}
+			{...buttonProps}
+		/>
+	);
 }
 
 export function SecondaryButton(props: ButtonProps) {
 	const { className, ...buttonProps } = props;
 
-	const classNames = classnames('button-secondary', className);
-
-	return <Button className={classNames} {...buttonProps} />;
+	return (
+		<Button
+			className={classnames('button-secondary', className)}
+			{...buttonProps}
+		/>
+	);
 }

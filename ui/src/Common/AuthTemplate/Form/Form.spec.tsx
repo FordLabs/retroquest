@@ -22,24 +22,73 @@ import userEvent from '@testing-library/user-event';
 import Form from './Form';
 
 describe('Form', () => {
-	it('should display children, error messages, and a submit button', () => {
-		const mockSubmit = jest.fn();
+	let mockSubmit = jest.fn();
 
+	it('should display children', () => {
 		render(
 			<Form
-				submitButtonText="custom submit"
+				submitButtonText="Submit"
 				onSubmit={mockSubmit}
-				errorMessages={['error message1', 'error message2']}
+				errorMessages={[]}
+				isLoading={false}
 			>
-				children
+				Child Elements
 			</Form>
 		);
 
-		userEvent.click(screen.getByText('custom submit'));
-		screen.getByText('children');
+		expect(screen.getByText('Child Elements')).toBeDefined();
+	});
+
+	it('should display error messages', () => {
+		render(
+			<Form
+				submitButtonText="Submit"
+				onSubmit={mockSubmit}
+				errorMessages={['error message1', 'error message2']}
+				isLoading={false}
+			>
+				Child Elements
+			</Form>
+		);
+
 		screen.getByText('error message1');
 		screen.getByText('error message2');
+	});
 
+	it('should submit form when submit button is enabled', () => {
+		const submitButtonText = 'Submit Form';
+		render(
+			<Form
+				submitButtonText={submitButtonText}
+				onSubmit={mockSubmit}
+				errorMessages={['error message1', 'error message2']}
+				isLoading={false}
+			>
+				Child Elements
+			</Form>
+		);
+
+		const submitButton = screen.getByText(submitButtonText);
+		userEvent.click(submitButton);
 		expect(mockSubmit).toHaveBeenCalled();
+	});
+
+	it('should not be able to submit form when submit button is disabled', () => {
+		const submitButtonText = 'Submit Form';
+		render(
+			<Form
+				submitButtonText={submitButtonText}
+				onSubmit={mockSubmit}
+				errorMessages={['error message1', 'error message2']}
+				isLoading={true}
+			>
+				Child Elements
+			</Form>
+		);
+
+		const submitButton = screen.getByText(submitButtonText);
+		expect(submitButton).toBeDisabled();
+		userEvent.click(submitButton);
+		expect(mockSubmit).not.toHaveBeenCalled();
 	});
 });

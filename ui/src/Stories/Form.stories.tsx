@@ -31,14 +31,14 @@ const Template: ComponentStory<typeof Form> = () => {
 	const [teamName, setTeamName] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
 
-	const [validate, setValidate] = useState<boolean>(false);
+	const [isValid, setIsValid] = useState<boolean>(false);
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
 	const teamNameErrorMessage = validateTeamName(teamName);
 	const passwordErrorMessage = validatePassword(password);
 
-	function submit(): Promise<void> {
-		setValidate(true);
+	function onSubmit(): Promise<void> {
+		setIsValid(true);
 
 		if (teamNameErrorMessage || passwordErrorMessage) {
 			const errors = [];
@@ -50,7 +50,7 @@ const Template: ComponentStory<typeof Form> = () => {
 		} else {
 			return new Promise((resolve) => {
 				setTimeout(() => {
-					setValidate(false);
+					setIsValid(false);
 					setTeamName('');
 					setPassword('');
 					setErrorMessages([]);
@@ -62,9 +62,10 @@ const Template: ComponentStory<typeof Form> = () => {
 
 	return (
 		<Form
-			onSubmit={submit}
+			onSubmit={onSubmit}
 			errorMessages={errorMessages}
 			style={{ maxWidth: '600px' }}
+			isLoading={false}
 		>
 			<Input
 				id="teamName"
@@ -72,7 +73,7 @@ const Template: ComponentStory<typeof Form> = () => {
 				value={teamName}
 				onChange={(event) => setTeamName(event.target.value)}
 				validationMessage="Names must not contain special characters."
-				invalid={validate && !!teamNameErrorMessage}
+				invalid={isValid && !!teamNameErrorMessage}
 			/>
 			<Input
 				id="password"
@@ -81,7 +82,7 @@ const Template: ComponentStory<typeof Form> = () => {
 				value={password}
 				onChange={(event) => setPassword(event.target.value)}
 				validationMessage="8 or more characters with a mix of numbers and letters"
-				invalid={validate && !!passwordErrorMessage}
+				invalid={isValid && !!passwordErrorMessage}
 			/>
 		</Form>
 	);

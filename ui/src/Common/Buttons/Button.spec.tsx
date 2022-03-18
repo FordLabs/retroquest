@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -37,8 +37,7 @@ describe('Buttons', () => {
 
 			userEvent.click(buttonText);
 
-			// eslint-disable-next-line testing-library/no-node-access
-			expect(buttonText.parentElement?.className).toContain('primary');
+			expect(buttonText.className).toContain('primary');
 			expect(mockOnClick).toHaveBeenCalledTimes(1);
 		});
 	});
@@ -51,9 +50,7 @@ describe('Buttons', () => {
 			const buttonText = screen.getByText('SecondaryButton');
 
 			userEvent.click(buttonText);
-
-			// eslint-disable-next-line testing-library/no-node-access
-			expect(buttonText.parentElement?.className).toContain('secondary');
+			expect(buttonText.className).toContain('secondary');
 			expect(mockOnClick).toHaveBeenCalledTimes(1);
 		});
 	});

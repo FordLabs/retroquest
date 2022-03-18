@@ -28,16 +28,13 @@
 	font-family: inherit;
 	font-weight: 700;
 	font-size: 1rem;
+	white-space: nowrap;
 	text-transform: capitalize;
 
 	border: 0;
 	border-radius: 6px;
 	box-shadow: none;
 	cursor: pointer;
-
-	.button-text {
-		white-space: nowrap;
-	}
 }
 
 .button-primary {

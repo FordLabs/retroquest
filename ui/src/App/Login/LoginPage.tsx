@@ -34,8 +34,8 @@ function LoginPage(): JSX.Element {
 	const { teamName, setTeamName } = useTeam(params.teamId || '');
 	const [password, setPassword] = useState('');
 
-	const [validate, setValidate] = useState(false);
-	const [loading, setLoading] = useState(false);
+	const [isValid, setIsValid] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
 	const teamNameErrorMessage = validateTeamName(teamName);
@@ -49,6 +49,7 @@ function LoginPage(): JSX.Element {
 	};
 
 	const loginTeam = () => {
+		setIsLoading(true);
 		TeamService.login(teamName, password)
 			.then(login)
 			.catch(() => {
@@ -56,17 +57,16 @@ function LoginPage(): JSX.Element {
 					'Incorrect team name or password. Please try again.',
 				]);
 			})
-			.finally(() => setLoading(false));
+			.finally(() => setIsLoading(false));
 	};
 
-	function submit() {
-		setValidate(true);
+	function onLoginFormSubmit() {
+		setIsValid(true);
 		setErrorMessages([]);
 
 		if (teamNameErrorMessage || passwordErrorMessage) {
 			captureErrors();
 		} else {
-			setLoading(true);
 			loginTeam();
 		}
 	}
@@ -77,9 +77,10 @@ function LoginPage(): JSX.Element {
 			subHeader={<Link to={CREATE_TEAM_PAGE_PATH}>or create a new team</Link>}
 		>
 			<Form
-				onSubmit={submit}
+				onSubmit={onLoginFormSubmit}
 				errorMessages={errorMessages}
 				submitButtonText="Sign in"
+				isLoading={isLoading}
 			>
 				<InputTeamName
 					teamName={teamName}
@@ -87,8 +88,8 @@ function LoginPage(): JSX.Element {
 						setTeamName(updatedTeamName);
 						setErrorMessages([]);
 					}}
-					invalid={validate && !!teamNameErrorMessage}
-					readOnly={loading}
+					invalid={isValid && !!teamNameErrorMessage}
+					readOnly={isLoading}
 				/>
 				<InputPassword
 					password={password}
@@ -96,8 +97,8 @@ function LoginPage(): JSX.Element {
 						setPassword(updatedPassword);
 						setErrorMessages([]);
 					}}
-					invalid={validate && !!passwordErrorMessage}
-					readOnly={loading}
+					invalid={isValid && !!passwordErrorMessage}
+					readOnly={isLoading}
 				/>
 			</Form>
 		</AuthTemplate>

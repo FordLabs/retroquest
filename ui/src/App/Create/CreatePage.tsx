@@ -38,8 +38,8 @@ export default function CreatePage(): JSX.Element {
 	const [password, setPassword] = useState<string>('');
 	const [confirmationPassword, setConfirmationPassword] = useState<string>('');
 
-	const [validate, setValidate] = useState<boolean>(false);
-	const [loading, setLoading] = useState<boolean>(false);
+	const [isValid, setIsValid] = useState<boolean>(false);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
 	const teamNameErrorMessage = validateTeamName(teamName);
@@ -58,6 +58,7 @@ export default function CreatePage(): JSX.Element {
 	};
 
 	function createTeam() {
+		setIsLoading(true);
 		TeamService.create(teamName, password)
 			.then(login)
 			.catch((error) => {
@@ -71,11 +72,11 @@ export default function CreatePage(): JSX.Element {
 				}
 				setErrorMessages([errorMsg]);
 			})
-			.finally(() => setLoading(false));
+			.finally(() => setIsLoading(false));
 	}
 
 	function onSubmit() {
-		setValidate(true);
+		setIsValid(true);
 		setErrorMessages([]);
 
 		if (
@@ -85,7 +86,6 @@ export default function CreatePage(): JSX.Element {
 		) {
 			captureErrors();
 		} else {
-			setLoading(true);
 			createTeam();
 		}
 	}
@@ -103,6 +103,7 @@ export default function CreatePage(): JSX.Element {
 				onSubmit={onSubmit}
 				errorMessages={errorMessages}
 				submitButtonText="Create Team"
+				isLoading={isLoading}
 			>
 				<InputTeamName
 					teamName={teamName}
@@ -110,8 +111,8 @@ export default function CreatePage(): JSX.Element {
 						setTeamName(updatedTeamName);
 						setErrorMessages([]);
 					}}
-					invalid={validate && !!teamNameErrorMessage}
-					readOnly={loading}
+					invalid={isValid && !!teamNameErrorMessage}
+					readOnly={isLoading}
 				/>
 				<InputPassword
 					password={password}
@@ -119,8 +120,8 @@ export default function CreatePage(): JSX.Element {
 						setPassword(updatedPassword);
 						setErrorMessages([]);
 					}}
-					invalid={validate && !!passwordErrorMessage}
-					readOnly={loading}
+					invalid={isValid && !!passwordErrorMessage}
+					readOnly={isLoading}
 				/>
 				<Input
 					id="confirmPasswordInput"
@@ -131,8 +132,8 @@ export default function CreatePage(): JSX.Element {
 						setConfirmationPassword(event.target.value);
 						setErrorMessages([]);
 					}}
-					invalid={validate && !!confirmPasswordErrorMessage}
-					readOnly={loading}
+					invalid={isValid && !!confirmPasswordErrorMessage}
+					readOnly={isLoading}
 				/>
 			</Form>
 		</AuthTemplate>
