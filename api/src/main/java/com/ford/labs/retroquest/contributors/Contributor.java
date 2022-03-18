@@ -17,14 +17,4 @@
 
 package com.ford.labs.retroquest.contributors;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class Contributor {
-    private byte[] image;
-    private String accountUrl;
-}
+public record Contributor(byte[] image, String accountUrl) { }

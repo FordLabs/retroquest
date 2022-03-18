@@ -24,9 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.Optional;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 public class ContributorsService {
@@ -39,18 +36,29 @@ public class ContributorsService {
 
     @Cacheable("contributors")
     public List<Contributor> getContributors() {
-        GithubContributor[] response = Optional.ofNullable(restTemplate.getForObject(
-            "https://api.github.com/repos/FordLabs/retroquest/contributors",
-            GithubContributor[].class
-        )).orElse(new GithubContributor[0]);
+        GithubContributor[] response = getContributorsFromGitHub();
 
         List<GithubContributor> githubContributors = List.of(response);
 
         return githubContributors.stream()
-            .filter(githubContributor -> !githubContributor.getAccountUrl().endsWith("/invalid-email-address"))
-            .map(githubContributor -> new Contributor(
-                restTemplate.getForObject(githubContributor.getAvatarUrl(), byte[].class), githubContributor.getAccountUrl()
-            )).collect(toList());
+            .filter(githubContributor -> !githubContributor.accountUrl().endsWith("/invalid-email-address"))
+            .map(githubContributor ->
+                new Contributor(
+                    restTemplate.getForObject(githubContributor.avatarUrl(), byte[].class),
+                    githubContributor.accountUrl()
+                )
+            ).toList();
+    }
+
+    private GithubContributor[] getContributorsFromGitHub() {
+        var contributors = restTemplate.getForObject(
+            "https://api.github.com/repos/FordLabs/retroquest/contributors",
+            GithubContributor[].class
+        );
+        if (contributors == null) {
+            return new GithubContributor[0];
+        }
+        return contributors;
     }
 
     @CacheEvict(allEntries = true, value = "contributors")
