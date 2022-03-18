@@ -7,7 +7,7 @@
     "resetMocks": false
   },
   "scripts": {
-	"update-version": "node getApplicationVersion.js",
+    "update-version": "node getApplicationVersion.js",
     "start": "PORT=4200 react-scripts start",
     "build": "BUILD_PATH='../api/src/main/resources/static' react-scripts build",
     "test": "react-scripts test",
@@ -60,6 +60,7 @@
     "recoil": "^0.6.1",
     "sass": "^1.49.9",
     "typescript": "^4.6.2",
+    "universal-cookie": "^4.0.4",
     "web-vitals": "^1.1.2"
   },
   "devDependencies": {

@@ -17,32 +17,40 @@
 
 import Cookies from 'universal-cookie';
 
-export const TOKEN_KEY = 'token';
-const cookies = new Cookies();
+import CookieService from './CookieService';
 
-const CookieService = {
-	setToken: (accessToken: string): void => {
+describe('Cookie Service', () => {
+	const cookies = new Cookies();
+	const tokenKey = 'token';
+
+	it('should set token cookie', () => {
+		const token = 'fake-jwt-token';
+		CookieService.setToken(token);
+
 		const expirationDate = new Date();
 		expirationDate.setDate(expirationDate.getDate() + 2);
-
-		cookies.set(TOKEN_KEY, accessToken, {
+		expect(cookies.set).toHaveBeenCalledWith(tokenKey, token, {
 			path: '/',
 			secure: true,
 			sameSite: 'lax',
 			expires: expirationDate,
 		});
-	},
+	});
 
-	getToken: (): string => cookies.get(TOKEN_KEY),
+	it('should get token cookie', () => {
+		const actualToken = CookieService.getToken();
+		expect(actualToken).toBe('mock-jwt-token');
+		expect(cookies.get).toHaveBeenCalledWith(tokenKey);
+	});
 
-	clearToken: (): void => {
+	it('should clear token cookie', () => {
+		CookieService.clearToken();
+
 		const expirationDate = new Date();
 		expirationDate.setDate(expirationDate.getDate() - 2);
-		cookies.remove(TOKEN_KEY, {
+		expect(cookies.remove).toHaveBeenCalledWith(tokenKey, {
 			path: '/',
 			expires: expirationDate,
 		});
-	},
-};
-
-export default CookieService;
+	});
+});

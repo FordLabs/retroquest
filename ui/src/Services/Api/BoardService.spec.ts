@@ -17,16 +17,19 @@
 
 import axios from 'axios';
 
+import { mockGetCookie } from '../../__mocks__/universal-cookie';
 import Board from '../../Types/Board';
 import CookieService from '../CookieService';
 
 import BoardService from './BoardService';
 
 describe('Board Service', () => {
-	const mockConfig = { headers: { Authorization: 'Bearer fake-token' } };
+	const fakeToken = 'fake-token';
+	const mockConfig = { headers: { Authorization: `Bearer ${fakeToken}` } };
 
 	beforeAll(() => {
 		CookieService.setToken('fake-token');
+		mockGetCookie.mockReturnValue(fakeToken);
 	});
 
 	it('should return list of boards by page index', async () => {
