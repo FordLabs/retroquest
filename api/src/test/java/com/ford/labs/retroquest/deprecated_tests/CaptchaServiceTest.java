@@ -39,16 +39,13 @@ class CaptchaServiceTest {
     @Mock
     private TeamRepository teamRepository;
 
-    private CaptchaProperties captchaProperties = new CaptchaProperties();
-
     @Test
     void returnsTrueWhenFailedLoginAttemptsIsAboveThreshold() {
         Team team = new Team();
         team.setFailedAttempts(5);
 
-        captchaProperties.setEnabled(true);
-        captchaProperties.setFailedLoginThreshold(4);
-        CaptchaService captchaService = new CaptchaService(teamRepository, captchaProperties);
+        var captchaProperties = new CaptchaProperties(null, null, true, 4);
+        var captchaService = new CaptchaService(teamRepository, captchaProperties);
 
         when(teamRepository.findTeamByNameIgnoreCase("some team")).thenReturn(Optional.of(team));
 
@@ -60,9 +57,8 @@ class CaptchaServiceTest {
         Team team = new Team();
         team.setFailedAttempts(5);
 
-        captchaProperties.setEnabled(true);
-        captchaProperties.setFailedLoginThreshold(10);
-        CaptchaService captchaService = new CaptchaService(teamRepository, captchaProperties);
+        var captchaProperties = new CaptchaProperties(null, null, true, 10);
+        var captchaService = new CaptchaService(teamRepository, captchaProperties);
 
         when(teamRepository.findTeamByNameIgnoreCase("some team")).thenReturn(Optional.of(team));
 
@@ -74,8 +70,8 @@ class CaptchaServiceTest {
         Team team = new Team();
         team.setFailedAttempts(5);
 
-        captchaProperties.setEnabled(false);
-        CaptchaService captchaService = new CaptchaService(teamRepository, captchaProperties);
+        var captchaProperties = new CaptchaProperties(null, null, false, 0);
+        var captchaService = new CaptchaService(teamRepository, captchaProperties);
 
         assertFalse(captchaService.isCaptchaEnabledForTeam("some team"));
     }
@@ -85,9 +81,8 @@ class CaptchaServiceTest {
         Team team = new Team();
         team.setFailedAttempts(5);
 
-        captchaProperties.setEnabled(true);
-        captchaProperties.setFailedLoginThreshold(4);
-        CaptchaService captchaService = new CaptchaService(teamRepository, captchaProperties);
+        var captchaProperties = new CaptchaProperties(null, null, true, 4);
+        var captchaService = new CaptchaService(teamRepository, captchaProperties);
 
         when(teamRepository.findTeamByNameIgnoreCase("some team")).thenReturn(Optional.of(team));
 
@@ -97,11 +92,11 @@ class CaptchaServiceTest {
     @Test
     void handlesNullFailedAttempts() {
         Team team = new Team();
-        captchaProperties.setEnabled(true);
-        captchaProperties.setFailedLoginThreshold(1);
-        when(teamRepository.findTeamByNameIgnoreCase("some team")).thenReturn(Optional.of(team));
 
-        CaptchaService captchaService = new CaptchaService(teamRepository, captchaProperties);
+        when(teamRepository.findTeamByNameIgnoreCase("some team")).thenReturn(Optional.of(team));
+        var captchaProperties = new CaptchaProperties(null, null, true, 1);
+
+        var captchaService = new CaptchaService(teamRepository, captchaProperties);
 
         assertFalse(captchaService.isCaptchaEnabledForTeam("some team"));
     }

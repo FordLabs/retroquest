@@ -57,7 +57,7 @@ public class CaptchaValidator implements ConstraintValidator<CaptchaConstraint, 
     }
 
     private boolean captchaIsDisabled() {
-        return !captchaProperties.isEnabled();
+        return !captchaProperties.enabled();
     }
 
     private boolean requestIsForLoginAndTeamHasCaptchaDisabled(TeamRequest teamRequest) {
@@ -71,12 +71,12 @@ public class CaptchaValidator implements ConstraintValidator<CaptchaConstraint, 
         }
 
         var response = restTemplate.getForObject(
-            String.format("%s?secret={secret}&response={response}", captchaProperties.getUrl()),
+            "%s?secret={secret}&response={response}".formatted(captchaProperties.url()),
             ReCaptchaResponse.class,
-            captchaProperties.getSecret(),
+            captchaProperties.secret(),
             teamRequest.getCaptchaResponse()
         );
 
-        return response != null && response.isSuccess();
+        return response != null && response.success();
     }
 }
