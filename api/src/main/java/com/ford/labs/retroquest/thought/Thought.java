@@ -24,8 +24,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.util.Arrays;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.util.List;
 
 @Data
@@ -64,7 +69,7 @@ public class Thought {
 
     @JsonIgnore
     public List<String> getCSVFields() {
-        return Arrays.asList(columnTitle.getTitle(), message, String.valueOf(hearts), getDiscussedString());
+        return List.of(columnTitle.getTitle(), message, String.valueOf(hearts), getDiscussedString());
     }
 
     private String getDiscussedString() {

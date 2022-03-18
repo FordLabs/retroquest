@@ -18,7 +18,11 @@
 package com.ford.labs.retroquest.validation;
 
 import com.ford.labs.retroquest.exception.CaptchaInvalidException;
-import com.ford.labs.retroquest.team.*;
+import com.ford.labs.retroquest.team.CaptchaService;
+import com.ford.labs.retroquest.team.CreateTeamRequest;
+import com.ford.labs.retroquest.team.LoginRequest;
+import com.ford.labs.retroquest.team.Team;
+import com.ford.labs.retroquest.team.TeamService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +30,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -88,8 +92,8 @@ class CaptchaValidatorTest {
         loginRequest.setName("a-team");
 
         assertThrows(
-                CaptchaInvalidException.class,
-                () -> validator.isValid(loginRequest, null)
+            CaptchaInvalidException.class,
+            () -> validator.isValid(loginRequest, null)
         );
     }
 
@@ -105,20 +109,27 @@ class CaptchaValidatorTest {
 
     @Test
     void whenTeamIsNull_AndCaptchaIsInvalid_throwsCaptchaInvalidException() {
-        when(restTemplate.getForObject("http://myUrl?secret={secret}&response={response}", ReCaptchaResponse.class, "secret", "InvalidCaptcha"))
-                .thenReturn(new ReCaptchaResponse(false, Collections.emptyList()));
+        when(restTemplate.getForObject("http://myUrl?secret={secret}&response={response}", ReCaptchaResponse.class,
+            "secret", "InvalidCaptcha"))
+            .thenReturn(new ReCaptchaResponse(false, List.of()));
         CreateTeamRequest createTeamRequest = new CreateTeamRequest("name", "password", "InvalidCaptcha");
 
         assertThrows(
-                CaptchaInvalidException.class,
-                () -> validator.isValid(createTeamRequest, null)
+            CaptchaInvalidException.class,
+            () -> validator.isValid(createTeamRequest, null)
         );
     }
 
     @Test
     void whenTeamIsNull_AndCaptchaIsValid_returnsTrue() {
-        when(restTemplate.getForObject("http://myUrl?secret={secret}&response={response}", ReCaptchaResponse.class, "secret", "ValidCaptcha"))
-                .thenReturn(new ReCaptchaResponse(true, Collections.emptyList()));
+        when(
+            restTemplate.getForObject(
+                "http://myUrl?secret={secret}&response={response}",
+                ReCaptchaResponse.class,
+                "secret",
+                "ValidCaptcha"
+            )
+        ).thenReturn(new ReCaptchaResponse(true, List.of()));
         CreateTeamRequest createTeamRequest = new CreateTeamRequest("name", "password", "ValidCaptcha");
 
         assertThat(validator.isValid(createTeamRequest, null)).isTrue();

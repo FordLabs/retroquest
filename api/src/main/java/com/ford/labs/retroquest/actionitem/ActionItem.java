@@ -18,14 +18,17 @@
 package com.ford.labs.retroquest.actionitem;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.sql.Date;
-import java.util.Arrays;
 import java.util.List;
 
 @Data
@@ -52,6 +55,6 @@ public class ActionItem {
 
     @JsonIgnore
     public List<String> getCSVFields() {
-        return Arrays.asList("action item", task, "", getCompletedString(), assignee);
+        return List.of("action item", task, "", getCompletedString(), assignee);
     }
 }

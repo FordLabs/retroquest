@@ -27,8 +27,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -40,40 +39,45 @@ class CsvFileTest {
     void shouldConvertThoughtsAndActionItemsToACSV() throws IOException {
 
         Thought firstThought = Thought.builder()
-                .topic("confused")
-                .message("stuff \"goes here\"")
-                .hearts(5)
-                .discussed(false)
-                .columnTitle(ColumnTitle.builder().title("CONFUSED").build())
-                .build();
+            .topic("confused")
+            .message("stuff \"goes here\"")
+            .hearts(5)
+            .discussed(false)
+            .columnTitle(ColumnTitle.builder().title("CONFUSED").build())
+            .build();
 
         Thought secondThoght = Thought.builder()
-                .topic("happy")
-                .message("a thought, with a comma")
-                .hearts(2)
-                .columnTitle(ColumnTitle.builder().title("HAPPY").build())
-                .discussed(true)
-                .build();
+            .topic("happy")
+            .message("a thought, with a comma")
+            .hearts(2)
+            .columnTitle(ColumnTitle.builder().title("HAPPY").build())
+            .discussed(true)
+            .build();
 
         Thought thirdThought = Thought.builder()
-                .topic("unhappy")
-                .message("sad")
-                .hearts(0)
-                .discussed(false)
-                .columnTitle(ColumnTitle.builder().title("SAD").build())
-                .build();
+            .topic("unhappy")
+            .message("sad")
+            .hearts(0)
+            .discussed(false)
+            .columnTitle(ColumnTitle.builder().title("SAD").build())
+            .build();
 
         ActionItem actionItem = ActionItem.builder()
-                .task("tasks and \"stuff, yo\"")
-                .completed(false)
-                .assignee("test user")
-                .build();
+            .task("tasks and \"stuff, yo\"")
+            .completed(false)
+            .assignee("test user")
+            .build();
 
-        String actual = new CsvFile("teamName",
-                Arrays.asList(firstThought, secondThoght, thirdThought),
-                Collections.singletonList(actionItem) ).getCSVString();
+        String actual = new CsvFile(
+            "teamName",
+            List.of(firstThought, secondThoght, thirdThought),
+            List.of(actionItem)
+        ).getCSVString();
 
-        String expected = FileUtils.readFileToString(new File("src/test/resources/sampleOutput.csv"), Charset.defaultCharset());
+        String expected = FileUtils.readFileToString(
+            new File("src/test/resources/sampleOutput.csv"),
+            Charset.defaultCharset()
+        );
 
         assertThat(actual, is(equalTo(expected)));
     }
