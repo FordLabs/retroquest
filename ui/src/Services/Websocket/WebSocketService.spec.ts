@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import CookieService from '../CookieService';
+import { mockGetCookie } from '../../__mocks__/universal-cookie';
 
 import WebSocketController from './WebSocketController';
 import WebSocketService from './WebSocketService';
@@ -27,7 +27,7 @@ describe('webSocketService', () => {
 	let webSocketService: WebSocketService;
 
 	beforeEach(() => {
-		CookieService.setToken(mockAccessToken);
+		mockGetCookie.mockReturnValue(mockAccessToken);
 		webSocketService = new WebSocketService(mockClient);
 	});
 

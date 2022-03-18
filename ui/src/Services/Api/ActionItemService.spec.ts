@@ -18,9 +18,9 @@
 import axios from 'axios';
 import moment from 'moment';
 
+import { mockGetCookie } from '../../__mocks__/universal-cookie';
 import Action from '../../Types/Action';
 import CreateActionItemRequest from '../../Types/CreateActionItemRequest';
-import CookieService from '../CookieService';
 
 import { getMockActionItem } from './__mocks__/ActionItemService';
 import ActionItemService from './ActionItemService';
@@ -34,10 +34,11 @@ describe('Action Item Service', () => {
 	const actionItemId = 123;
 	const allActionItemsUrl = `/api/team/${teamId}/action-item`;
 	const actionItemByIdUrl = `${allActionItemsUrl}/${actionItemId}`;
-	const mockConfig = { headers: { Authorization: 'Bearer fake-token' } };
+	const fakeToken = 'fake-token';
+	const mockConfig = { headers: { Authorization: `Bearer ${fakeToken}` } };
 
 	beforeAll(() => {
-		CookieService.setToken('fake-token');
+		mockGetCookie.mockReturnValue(fakeToken);
 	});
 
 	it('should retrieve unarchived action items', async () => {

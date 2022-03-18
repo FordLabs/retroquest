@@ -225,9 +225,7 @@ describe('Retro Member Journey', () => {
 
 			cy.contains('Sign in to your Team!').should('exist');
 
-			// @todo update auth service so cookie actually gets deleted not just the value emptied
-			// cy.getCookie(TOKEN_KEY).should('not.exist');
-			cy.getCookie(TOKEN_KEY).should('have.property', 'value', '');
+			cy.getCookie(TOKEN_KEY).should('not.exist');
 		});
 	});
 
