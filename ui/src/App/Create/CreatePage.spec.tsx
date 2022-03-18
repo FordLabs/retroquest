@@ -44,9 +44,7 @@ describe('CreatePage.spec.tsx', () => {
 	const validPassword = 'Password1';
 
 	beforeEach(async () => {
-		ContributorsService.getContributors = jest
-			.fn()
-			.mockResolvedValue(mockContributors);
+		ContributorsService.get = jest.fn().mockResolvedValue(mockContributors);
 		TeamService.create = jest.fn().mockResolvedValue(validTeamName);
 
 		({ container } = render(
@@ -57,9 +55,7 @@ describe('CreatePage.spec.tsx', () => {
 			</MemoryRouter>
 		));
 
-		await waitFor(() =>
-			expect(ContributorsService.getContributors).toHaveBeenCalled()
-		);
+		await waitFor(() => expect(ContributorsService.get).toHaveBeenCalled());
 	});
 
 	it('should render without axe errors', async () => {
@@ -80,7 +76,7 @@ describe('CreatePage.spec.tsx', () => {
 
 	it('should show contributors list', async () => {
 		await waitFor(() =>
-			expect(ContributorsService.getContributors).toHaveBeenCalledTimes(1)
+			expect(ContributorsService.get).toHaveBeenCalledTimes(1)
 		);
 		expect(screen.getByTestId('rq-contributor-0')).toBeDefined();
 		expect(screen.getByTestId('rq-contributor-1')).toBeDefined();

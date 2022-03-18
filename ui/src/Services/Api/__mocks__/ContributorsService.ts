@@ -19,17 +19,17 @@ import { Contributor } from '../../../Types/Contributor';
 
 export const mockContributors: Contributor[] = [
 	{
-		accountUrl: 'https://github.com/aaa',
-		image: 'aaa.jpg',
+		accountUrl: 'https://github.com/contributor-1',
+		image: 'data:image/png;base64,/a/contributor-1.jpg',
 	},
 	{
-		accountUrl: 'https://github.com/bbb',
-		image: 'bbb.jpg',
+		accountUrl: 'https://github.com/contributor-2',
+		image: 'data:image/png;base64,/b/contributor-2.jpg',
 	},
 ];
 
 const ContributorsService = {
-	getContributors: jest.fn(),
+	get: jest.fn().mockResolvedValue(mockContributors),
 };
 
 export default ContributorsService;

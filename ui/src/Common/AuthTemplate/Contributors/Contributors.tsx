@@ -15,26 +15,18 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import ContributorsService from '../../../Services/Api/ContributorsService';
 import { Contributor } from '../../../Types/Contributor';
 
 import './Contributors.scss';
 
-export default function Contributors() {
+function Contributors() {
 	const [contributors, setContributors] = useState<Contributor[]>([]);
 
 	useEffect(() => {
-		ContributorsService.getContributors().then((contributorArray) => {
-			setContributors(
-				contributorArray.map((contributor) => ({
-					accountUrl: contributor.accountUrl,
-					image: `data:image/png;base64,${contributor.image}`,
-				}))
-			);
-		});
+		ContributorsService.get().then(setContributors).catch(console.error);
 	}, []);
 
 	return (
@@ -67,3 +59,5 @@ export default function Contributors() {
 		</div>
 	);
 }
+
+export default Contributors;

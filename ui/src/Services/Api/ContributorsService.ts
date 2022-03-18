@@ -21,8 +21,16 @@ import { Contributor } from '../../Types/Contributor';
 import { CONTRIBUTORS_API_PATH } from './ApiConstants';
 
 const ContributorsService = {
-	getContributors(): Promise<Contributor[]> {
-		return axios.get(CONTRIBUTORS_API_PATH).then((res) => res.data);
+	get(): Promise<Contributor[]> {
+		return axios.get(CONTRIBUTORS_API_PATH).then((res) => {
+			const contributors: Contributor[] = [...res.data].map(
+				(contributor: Contributor) => ({
+					accountUrl: contributor.accountUrl,
+					image: `data:image/png;base64,${contributor.image}`,
+				})
+			);
+			return contributors;
+		});
 	},
 };
 
