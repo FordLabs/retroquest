@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.v2.columncombiner.columncombiner;
+package com.ford.labs.retroquest.v2.columncombiner;
 
 import com.ford.labs.retroquest.actionitem.ActionItemRepository;
 import com.ford.labs.retroquest.column.ColumnTitle;
@@ -24,11 +24,15 @@ import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
+@Deprecated
 public class ColumnCombinerService {
 
     private final ThoughtRepository thoughtRepository;
@@ -48,52 +52,53 @@ public class ColumnCombinerService {
         var columnTitles = columnTitleRepository.findAllByTeamId(teamId);
 
         Map<ColumnTitle, List<Thought>> columnTitleListMap = columnTitles.stream().collect(
-                Collectors.toMap(title -> title, title -> new ArrayList<>()));
+            Collectors.toMap(title -> title, title -> new ArrayList<>()));
         var groupedThoughts = thoughts.stream()
-                .collect(Collectors.groupingBy(Thought::getColumnTitle));
+            .collect(Collectors.groupingBy(Thought::getColumnTitle));
 
         var mergedThoughts = mergeMaps(columnTitleListMap, groupedThoughts);
 
         var unorderedColumnResponses = buildColumnResponses(mergedThoughts);
 
-        var actionItemColumnResponse = ColumnResponse.builder()
-                .title("Action Items")
-                .topic("action")
-                .items(new ArrayList<>(actionItems))
-                .build();
+        var actionItemColumnResponse = new ColumnResponse<>(
+            null,
+            "action",
+            "Action Items",
+            new ArrayList<>(actionItems)
+        );
 
         var orderedColumns = unorderedColumnResponses.stream()
-                .sorted(Comparator.comparing(ColumnResponse::getId))
-                .collect(Collectors.toList());
+            .sorted(Comparator.comparing(ColumnResponse::id))
+            .collect(Collectors.toList());
 
         orderedColumns.add(actionItemColumnResponse);
 
-        return ColumnCombinerResponse.builder()
-                .columns(orderedColumns)
-                .build();
+        return new ColumnCombinerResponse(orderedColumns);
     }
 
     private List<ColumnResponse<?>> buildColumnResponses(final Map<ColumnTitle, List<Thought>> mergedThoughts) {
         return mergedThoughts.entrySet().stream()
-                    .map(iter -> ColumnResponse.builder()
-                            .id(iter.getKey().getId())
-                            .topic(iter.getKey().getTopic())
-                            .title(iter.getKey().getTitle())
-                            .items(new ArrayList<>(iter.getValue()))
-                            .build())
-                    .collect(Collectors.toList());
+            .map(iter -> new ColumnResponse<>(
+                iter.getKey().getId(),
+                iter.getKey().getTopic(),
+                iter.getKey().getTitle(),
+                new ArrayList<>(iter.getValue())
+            ))
+            .collect(Collectors.toList());
     }
 
-    private Map<ColumnTitle, List<Thought>> mergeMaps(final Map<ColumnTitle, List<Thought>> columnTitleListMap,
-                                                      final Map<ColumnTitle, List<Thought>> groupedThoughts) {
+    private Map<ColumnTitle, List<Thought>> mergeMaps(
+        final Map<ColumnTitle, List<Thought>> columnTitleListMap,
+        final Map<ColumnTitle, List<Thought>> groupedThoughts
+    ) {
         return Stream.of(columnTitleListMap, groupedThoughts)
-                    .flatMap(map -> map.entrySet().stream())
-                    .collect(
-                            Collectors.toMap(
-                                    Map.Entry::getKey,
-                                    Map.Entry::getValue,
-                                    (v1, v2) -> {v1.addAll(v2); return v1;}
-                            )
-                    );
+            .flatMap(map -> map.entrySet().stream())
+            .collect(
+                Collectors.toMap(
+                    Map.Entry::getKey,
+                    Map.Entry::getValue,
+                    (v1, v2) -> { v1.addAll(v2); return v1; }
+                )
+            );
     }
 }

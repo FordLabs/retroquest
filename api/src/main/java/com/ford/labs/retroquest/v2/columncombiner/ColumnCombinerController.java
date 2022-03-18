@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.v2.columncombiner.columncombiner;
+package com.ford.labs.retroquest.v2.columncombiner;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/api/v2/team")
 @Tag(name = "Column Combiner Controller", description = "The controller that aggregates all of the items given a team id")
+@Deprecated
 public class ColumnCombinerController {
 
     private final ColumnCombinerService columnCombinerService;
