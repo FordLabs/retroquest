@@ -32,10 +32,10 @@ What you need to install before building our project.  This guide will assume yo
 
 Note: If you are using a different database, then choose the appropriate [withDB](https://github.com/rkennel/withDb) syntax
 
-### Build the Frontend with yarn
+### Build the Frontend with npm
 1. Open a terminal in the ui directory (location of package.json)
-2. Run `yarn install` to install the dependencies
-3. Build the project with the following command: `yarn build-prod`
+2. Run `npm install` to install the dependencies
+3. Build the project with the following command: `npm run build`
   - This will place the compiled output into the `api/src/main/resources/static` and will be bundled in the next backend build
 
 ## Running the Application
@@ -69,11 +69,11 @@ or
 SPRING_PROFILES_ACTIVE=dockerdb ./gradlew bootRun withPostgres
 ```
 ### Frontend
-If you are only working on the backend, a static build will be accessible from [localhost:8080](http://localhost:8080) after running `yarn build-prod`
+If you are only working on the backend, a static build will be accessible from [localhost:8080](http://localhost:8080) after running `npm run build`
 
-From the ```./ui``` directory, start the frontend with yarn for live development:  
+From the ```./ui``` directory, start the frontend with npm for live development:  
 ```
-yarn start
+npm run start
 ```
 
 This will start the frontend with a proxy to direct all requests to localhost:8080 where the api is running. The application will start at [localhost:4200](http://localhost:4200)
@@ -82,35 +82,26 @@ This will start the frontend with a proxy to direct all requests to localhost:80
 
 This project includes unit tests, API tests, and Cypress tests.
 
-To run both the backend api and unit tests at once:
-
-```
-./gradlew runAllTests
-```
-
-To run both the backend api and unit tests at once against a production representative database:
-
-```
-./gradlew runAllTestsDockerDb
-```
-
-
 ### API Tests
 
 The following Gradle targets will run the various test suites:
 
-```
-./gradlew test -- Java Unit Tests
-./gradlew apiTest -- API Level integration tests with and H2 database
-./gradlew apiTestDockerDb -- API Level integration tests with and production representative database
+```bash
+# Java Unit Tests
+./gradlew test
+# API Level integration tests with and H2 database
+./gradlew apiTest
+# API Level integration tests with and production representative database
+./gradlew apiTestDockerDb
 ```
 ### UI Tests
 Navigate to the `ui` folder, making sure you've already followed the build steps for the frontend and run any of the following commands:
 
-```
-yarn unit -- Runs all tests and closes
-yarn unit-watch -- Runs all tests.  Reruns tests if changes are made.
-yarn unit-coverage -- Runs all tests, collects unit test coverage and closes
+```bash
+# Runs all tests and closes
+npm run test:unit:ci
+# Runs all tests.  Reruns tests if changes are made.
+npm run test:unit
 ```
 
 ### E2E Tests
@@ -122,15 +113,17 @@ Start the backend application
 ```
 ./gradlew bootRunDockerDb
 ```
+Start the frontend application
+```
+cd ./ui && npm run start
+```
 Run the end to end tests
 ```
-cd ./ui
-yarn cypress
+cd ./ui && npm run cy:run
 ```
 ...Or to run the tests visually from the cypress tool (good for troubleshooting)
 ```
-cd ./ui
-yarn cypress-supervise
+cd ./ui && npm run cy:open
 ```
 
 
@@ -141,8 +134,8 @@ The application uses a Postgresql instance. The connection properties can be fou
 Please read [CONTRIBUTING.md](/docs/CONTRIBUTING.md) for details on our code of conduct, and the process for contributing, including how to fork and submit pull requests.
 
 ## Built With
-* [Angular](https://angular.io/) - Frontend Javascript framework
-* [node.js](https://nodejs.org/en/) - JavaScript runtime engine
+* [React](https://reactjs.org/) - Frontend Javascript framework
+* [Node.js](https://nodejs.org/en/) - JavaScript runtime engine
 * [Gradle](https://gradle.org/) - Dependency management
 * [Spring](https://spring.io/) - Development framework
 
