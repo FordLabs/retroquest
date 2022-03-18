@@ -21,13 +21,13 @@ import CookieService from '../CookieService';
 
 const url = window.location.hostname.includes('localhost')
 	? 'ws://localhost:8080/websocket/websocket'
-	: 'wss://' + window.location.hostname + '/websocket/websocket';
+	: `wss://${window.location.hostname}/websocket/websocket`;
 
 const getClient = () =>
 	new Client({
 		brokerURL: url,
 		connectHeaders: {
-			Authorization: `Bearer ` + CookieService.getToken(),
+			Authorization: `Bearer ${CookieService.getToken()}`,
 		},
 		reconnectDelay: 3000,
 		heartbeatIncoming: 4000,

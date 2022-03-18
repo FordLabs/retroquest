@@ -15,16 +15,16 @@
  * limitations under the License.
  */
 
-const WebsocketService = {
-	connect: jest.fn((callback) => {
+class WebsocketService {
+	connect = jest.fn((callback) => {
 		callback();
-	}),
-	disconnect: jest.fn(),
-	subscribe: jest.fn(),
-	subscribeToColumnTitle: jest.fn(),
-	subscribeToThoughts: jest.fn(),
-	subscribeToActionItems: jest.fn(),
-	subscribeToEndRetro: jest.fn(),
-};
+	});
+	disconnect = jest.fn();
+	subscribe = jest.fn();
+	subscribeToColumnTitle = jest.fn();
+	subscribeToThoughts = jest.fn();
+	subscribeToActionItems = jest.fn();
+	subscribeToEndRetro = jest.fn();
+}
 
 export default WebsocketService;

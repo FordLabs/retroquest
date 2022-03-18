@@ -14,43 +14,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { waitFor } from '@testing-library/react';
-
 import CookieService from '../CookieService';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { mockClient } from './WebSocketController';
+import WebSocketController from './WebSocketController';
 import WebSocketService from './WebSocketService';
 
 jest.mock('./WebSocketController');
 
-describe('WebSocketService', () => {
+describe('webSocketService', () => {
 	const mockAccessToken = 'access-token-12345';
+	const mockClient = WebSocketController.getClient();
+	let webSocketService: WebSocketService;
 
 	beforeEach(() => {
-		mockClient.deactivate = jest.fn().mockResolvedValue({});
 		CookieService.setToken(mockAccessToken);
+		webSocketService = new WebSocketService(mockClient);
 	});
 
 	it('should activate websocket connection', async () => {
-		WebSocketService.connect(() => undefined);
+		webSocketService.connect(() => undefined);
 		expect(mockClient.activate).toHaveBeenCalled();
 	});
 
 	it('should deactivate websocket connection', async () => {
-		console.log = jest.fn();
-		WebSocketService.disconnect();
+		webSocketService.disconnect();
 		expect(mockClient.deactivate).toHaveBeenCalled();
-		await waitFor(() =>
-			expect(console.log).toHaveBeenCalledWith('Deactivation successful!')
-		);
 	});
 
 	it('should subscribe to column title', async () => {
 		const teamId = 'Idddddd';
 		const webSocketMessageHandler = jest.fn();
-		WebSocketService.subscribeToColumnTitle(teamId, webSocketMessageHandler);
+		webSocketService.subscribeToColumnTitle(teamId, webSocketMessageHandler);
 
 		const expectedDestination = `/topic/${teamId}/column-titles`;
 		expect(mockClient.subscribe).toHaveBeenCalledWith(
@@ -65,7 +59,7 @@ describe('WebSocketService', () => {
 	it('should subscribe to thoughts', async () => {
 		const teamId = 'Idddddd';
 		const webSocketMessageHandler = jest.fn();
-		WebSocketService.subscribeToThoughts(teamId, webSocketMessageHandler);
+		webSocketService.subscribeToThoughts(teamId, webSocketMessageHandler);
 
 		const expectedDestination = `/topic/${teamId}/thoughts`;
 		expect(mockClient.subscribe).toHaveBeenCalledWith(
@@ -80,7 +74,7 @@ describe('WebSocketService', () => {
 	it('should subscribe to action items', async () => {
 		const teamId = 'Idddddd';
 		const webSocketMessageHandler = jest.fn();
-		WebSocketService.subscribeToActionItems(teamId, webSocketMessageHandler);
+		webSocketService.subscribeToActionItems(teamId, webSocketMessageHandler);
 
 		const expectedDestination = `/topic/${teamId}/action-items`;
 		expect(mockClient.subscribe).toHaveBeenCalledWith(
@@ -95,7 +89,7 @@ describe('WebSocketService', () => {
 	it('should subscribe to end retro', async () => {
 		const teamId = 'Idddddd';
 		const webSocketMessageHandler = jest.fn();
-		WebSocketService.subscribeToEndRetro(teamId, webSocketMessageHandler);
+		webSocketService.subscribeToEndRetro(teamId, webSocketMessageHandler);
 
 		const expectedDestination = `/topic/${teamId}/end-retro`;
 		expect(mockClient.subscribe).toHaveBeenCalledWith(
