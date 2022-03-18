@@ -98,11 +98,11 @@ public class ThoughtService {
 
     public Thought createThought(String teamId, Long boardId, CreateThoughtRequest request) {
         var thought = new Thought();
-        thought.setId(request.getId());
-        thought.setMessage(request.getMessage());
-        thought.setHearts(request.getHearts());
-        thought.setTopic(request.getTopic());
-        thought.setDiscussed(request.isDiscussed());
+        thought.setId(request.id());
+        thought.setMessage(request.message());
+        thought.setHearts(request.hearts());
+        thought.setTopic(request.topic());
+        thought.setDiscussed(request.discussed());
         thought.setTeamId(teamId);
         thought.setBoardId(boardId);
 

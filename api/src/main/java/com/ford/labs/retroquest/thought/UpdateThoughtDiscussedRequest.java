@@ -17,9 +17,4 @@
 
 package com.ford.labs.retroquest.thought;
 
-import lombok.Value;
-
-@Value
-public class UpdateThoughtDiscussedRequest {
-    boolean discussed;
-}
+public record UpdateThoughtDiscussedRequest(boolean discussed) { }
