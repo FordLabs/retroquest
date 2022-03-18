@@ -15,42 +15,36 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
-import { ComponentPropsWithoutRef, FormEvent } from 'react';
-import classnames from 'classnames';
+import React, { ComponentPropsWithoutRef } from 'react';
 
 import { PrimaryButton } from '../../Buttons/Button';
 
 import './Form.scss';
 
 interface FormProps extends ComponentPropsWithoutRef<'form'> {
+	onSubmit: () => void;
 	errorMessages?: string[];
 	submitButtonText?: string;
+	isLoading: boolean;
 }
 
-export default function Form(props: FormProps): JSX.Element {
+function Form(props: FormProps): JSX.Element {
 	const {
-		submitButtonText = 'submit',
-		errorMessages = [],
 		onSubmit,
-		className,
+		errorMessages = [],
+		submitButtonText = 'Submit',
+		isLoading,
 		children,
 		...formProps
 	} = props;
-	const [loading, setLoading] = React.useState(false);
-
-	function handleSubmit(event: FormEvent<HTMLFormElement>) {
-		event.preventDefault();
-		setLoading(true);
-		if (onSubmit) {
-			Promise.resolve(onSubmit(event)).finally(() => setLoading(false));
-		}
-	}
 
 	return (
 		<form
-			className={classnames('form', className)}
-			onSubmit={handleSubmit}
+			className="form"
+			onSubmit={(event) => {
+				event.preventDefault();
+				onSubmit();
+			}}
 			{...formProps}
 		>
 			{children}
@@ -65,7 +59,7 @@ export default function Form(props: FormProps): JSX.Element {
 			))}
 			<PrimaryButton
 				className="submit-button"
-				disabled={loading}
+				disabled={isLoading}
 				data-testid="formSubmitButton"
 			>
 				{submitButtonText}
@@ -73,3 +67,5 @@ export default function Form(props: FormProps): JSX.Element {
 		</form>
 	);
 }
+
+export default Form;
