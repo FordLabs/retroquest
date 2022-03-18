@@ -67,9 +67,7 @@ describe('RetroPage.spec.tsx', () => {
 			</RecoilRoot>
 		));
 
-		expect(ColumnService.getColumns).toHaveBeenCalledWith(teamId);
-		expect(ActionItemService.get).toHaveBeenCalledWith(teamId, false);
-		expect(ThoughtService.getThoughts).toHaveBeenCalledWith(teamId);
+		await screen.findByTestId('retroColumn__happy');
 	};
 
 	it('should render without axe errors', async () => {
@@ -78,9 +76,9 @@ describe('RetroPage.spec.tsx', () => {
 		expect(results).toHaveNoViolations();
 	});
 
-	it('should allow column item animations after 1 second', () => {
+	it('should allow column item animations after 1 second', async () => {
 		jest.useFakeTimers();
-		setupComponent();
+		await setupComponent();
 		const retroPageContent = screen.getByTestId('retroPageContent');
 		expect(retroPageContent.className).toContain('stop-animations');
 
@@ -90,6 +88,11 @@ describe('RetroPage.spec.tsx', () => {
 
 	it('should show all columns and column items returned from backend', async () => {
 		await setupComponent();
+
+		expect(ColumnService.getColumns).toHaveBeenCalledWith(teamId);
+		expect(ActionItemService.get).toHaveBeenCalledWith(teamId, false);
+		expect(ThoughtService.getThoughts).toHaveBeenCalledWith(teamId);
+
 		for (const column of mockColumns) {
 			const retroColumn = await screen.findByTestId(
 				`retroColumn__${column.topic}`
