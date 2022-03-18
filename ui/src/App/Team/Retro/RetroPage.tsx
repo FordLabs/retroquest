@@ -30,6 +30,7 @@ import useWebSocketMessageHandler from '../../../Hooks/useWebSocketMessageHandle
 import ActionItemService from '../../../Services/Api/ActionItemService';
 import ColumnService from '../../../Services/Api/ColumnService';
 import ThoughtService from '../../../Services/Api/ThoughtService';
+import WebSocketController from '../../../Services/Websocket/WebSocketController';
 import WebSocketService from '../../../Services/Websocket/WebSocketService';
 import { ActionItemState } from '../../../State/ActionItemState';
 import { ColumnsState } from '../../../State/ColumnsState';
@@ -49,6 +50,9 @@ import './RetroPage.scss';
 
 function RetroPage(): ReactElement {
 	const team = useRecoilValue<Team>(TeamState);
+	const [webSocket] = useState<WebSocketService>(
+		new WebSocketService(WebSocketController.getClient())
+	);
 	const setActionItems = useSetRecoilState<Action[]>(ActionItemState);
 	const [columns, setColumns] = useRecoilState<Column[]>(ColumnsState);
 	const setThoughts = useSetRecoilState<Thought[]>(ThoughtsState);
@@ -104,24 +108,17 @@ function RetroPage(): ReactElement {
 	useEffect(() => {
 		if (!isLoading) {
 			if (isMobileView()) addTouchListeners();
-
-			WebSocketService.connect(() => {
-				WebSocketService.subscribeToColumnTitle(
-					team.id,
-					columnTitleMessageHandler
-				);
-				WebSocketService.subscribeToThoughts(team.id, thoughtMessageHandler);
-				WebSocketService.subscribeToActionItems(
-					team.id,
-					actionItemMessageHandler
-				);
-				WebSocketService.subscribeToEndRetro(team.id, endRetroMessageHandler);
+			webSocket.connect(() => {
+				webSocket.subscribeToColumnTitle(team.id, columnTitleMessageHandler);
+				webSocket.subscribeToThoughts(team.id, thoughtMessageHandler);
+				webSocket.subscribeToActionItems(team.id, actionItemMessageHandler);
+				webSocket.subscribeToEndRetro(team.id, endRetroMessageHandler);
 			});
-		}
 
-		return () => {
-			WebSocketService.disconnect();
-		};
+			return () => {
+				webSocket.disconnect();
+			};
+		}
 	}, [
 		isLoading,
 		team.id,
@@ -130,6 +127,7 @@ function RetroPage(): ReactElement {
 		actionItemMessageHandler,
 		endRetroMessageHandler,
 		addTouchListeners,
+		webSocket,
 	]);
 
 	useEffect(() => {

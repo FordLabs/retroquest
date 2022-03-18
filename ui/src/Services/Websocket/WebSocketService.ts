@@ -15,31 +15,31 @@
  * limitations under the License.
  */
 
+import { Client } from '@stomp/stompjs';
+
 import { WebsocketMessageHandlerType } from '../../Hooks/useWebSocketMessageHandler';
 import CookieService from '../CookieService';
 
-import WebSocketController from './WebSocketController';
+class WebSocketService {
+	constructor(private client: Client) {}
 
-const client = WebSocketController.getClient();
-
-const WebSocketService = {
-	connect: (onConnect: () => void): void => {
-		client.onConnect = () => {
+	connect(onConnect: () => void): void {
+		this.client.onConnect = () => {
 			onConnect();
 		};
-		client.activate();
-	},
-	disconnect: (): void => {
-		client.deactivate().then(() => {
-			console.log('Deactivation successful!');
-		});
-	},
-	subscribe: (
+		this.client.activate();
+	}
+
+	disconnect(): void {
+		this.client.deactivate().catch();
+	}
+
+	subscribe(
 		destination: string,
 		webSocketMessageHandler: WebsocketMessageHandlerType
-	): void => {
+	): void {
 		const token = CookieService.getToken();
-		client.subscribe(
+		this.client.subscribe(
 			destination,
 			(event) => {
 				webSocketMessageHandler(event);
@@ -48,36 +48,39 @@ const WebSocketService = {
 				Authorization: `Bearer ` + token,
 			}
 		);
-	},
+	}
 
-	subscribeToColumnTitle: (
+	subscribeToColumnTitle(
 		teamId: string,
 		webSocketMessageHandler: WebsocketMessageHandlerType
-	): void => {
+	): void {
 		const destination = `/topic/${teamId}/column-titles`;
-		WebSocketService.subscribe(destination, webSocketMessageHandler);
-	},
-	subscribeToThoughts: (
+		this.subscribe(destination, webSocketMessageHandler);
+	}
+
+	subscribeToThoughts(
 		teamId: string,
 		webSocketMessageHandler: WebsocketMessageHandlerType
-	): void => {
+	): void {
 		const destination = `/topic/${teamId}/thoughts`;
-		WebSocketService.subscribe(destination, webSocketMessageHandler);
-	},
-	subscribeToActionItems: (
+		this.subscribe(destination, webSocketMessageHandler);
+	}
+
+	subscribeToActionItems(
 		teamId: string,
 		webSocketMessageHandler: WebsocketMessageHandlerType
-	): void => {
+	): void {
 		const destination = `/topic/${teamId}/action-items`;
-		WebSocketService.subscribe(destination, webSocketMessageHandler);
-	},
+		this.subscribe(destination, webSocketMessageHandler);
+	}
+
 	subscribeToEndRetro(
 		teamId: string,
 		webSocketMessageHandler: WebsocketMessageHandlerType
 	) {
 		const destination = `/topic/${teamId}/end-retro`;
-		WebSocketService.subscribe(destination, webSocketMessageHandler);
-	},
-};
+		this.subscribe(destination, webSocketMessageHandler);
+	}
+}
 
 export default WebSocketService;

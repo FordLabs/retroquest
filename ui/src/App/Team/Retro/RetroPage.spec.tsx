@@ -30,6 +30,7 @@ jest.mock('../../../Services/Api/ColumnService');
 jest.mock('../../../Services/Api/ThoughtService');
 jest.mock('../../../Services/Api/ActionItemService');
 jest.mock('../../../Services/Websocket/WebSocketService');
+jest.mock('../../../Services/Websocket/WebSocketController');
 
 jest.setTimeout(60000);
 

@@ -15,11 +15,13 @@
  * limitations under the License.
  */
 
-export const mockClient = {
+import { Client } from '@stomp/stompjs';
+
+export const mockClient: Client = {
 	activate: jest.fn(),
 	deactivate: jest.fn().mockResolvedValue({}),
 	subscribe: jest.fn(),
-};
+} as unknown as Client;
 
 const WebSocketController = {
 	getClient: () => mockClient,
