@@ -92,7 +92,7 @@ jobs:
           npm run update-version
           npm run build
       - name: Build Application JAR
-        run: ./gradlew bootRun withH2
+        run: SPRING_PROFILES_ACTIVE=local ./gradlew bootRun withH2
       - name: Run Cypress Tests
         run: npm run test:e2e:ci
         working-directory: ./ui
