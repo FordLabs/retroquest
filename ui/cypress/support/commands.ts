@@ -33,9 +33,9 @@ import {
 	CREATE_TEAM_API_PATH,
 	LOGIN_API_PATH,
 } from '../../src/Services/Api/ApiConstants';
-import Topic from '../../src/types/Topic';
 
 import TeamCredentials from './types/teamCredentials';
+import Topic from './types/Topic';
 
 Cypress.Commands.add(
 	'createTeam',

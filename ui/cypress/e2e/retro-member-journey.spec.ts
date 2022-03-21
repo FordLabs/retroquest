@@ -18,8 +18,8 @@
 import { getLoginPagePathWithTeamId } from '../../src/RouteConstants';
 import { FEEDBACK_API_PATH } from '../../src/Services/Api/ApiConstants';
 import { TOKEN_KEY } from '../../src/Services/CookieService';
-import Topic from '../../src/types/Topic';
 import { getTeamCredentials } from '../support/helpers';
+import Topic from '../support/types/Topic';
 import Chainable = Cypress.Chainable;
 
 describe('Retro Member Journey', () => {

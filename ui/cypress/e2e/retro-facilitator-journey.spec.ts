@@ -16,8 +16,8 @@
  */
 
 import { getArchiveRetroApiPath } from '../../src/Services/Api/ApiConstants';
-import Topic from '../../src/types/Topic';
 import { getTeamCredentials } from '../support/helpers';
+import Topic from '../support/types/Topic';
 import Chainable = Cypress.Chainable;
 
 describe('Retro Facilitator Journey', () => {
