@@ -1,4 +1,3 @@
-
 ## Welcome to RetroQuest!
 
 ![Build Status](https://github.com/fordlabs/retroquest/actions/workflows/build.yml/badge.svg?branch=main)
@@ -38,21 +37,24 @@ The following tools are necessary in order to work with RetroQuest's codebase:
 
 ### Build the Backend with Gradle
 
-1. Open a terminal in the api directory (location of gradle.build)
-2. Build the project with the following command: `./gradlew clean build withPostgres` This will trigger the backend
+1. Open a terminal in the root directory
+2. Build the project with the following command: `./gradlew api:clean api:build api:withPostgres` This will trigger the backend
    tests to run.
 
 - If you do not wish to run the tests and only want to build the application,
-  use `./gradlew clean assemble withPostgres`
+  use `./gradlew api:clean api:assemble api:withPostgres`
 
 Note: If you are using a different database, then choose the appropriate [withDB](https://github.com/rkennel/withDb)
 syntax
 
 ### Build the Frontend with npm
+
 1. Open a terminal in the ui directory (location of package.json)
 2. Run `npm install` to install the dependencies
 3. Build the project with the following command: `npm run build`
-  - This will place the compiled output into the `api/src/main/resources/static` and will be bundled in the next backend build
+
+- This will place the compiled output into the `api/src/main/resources/static` and will be bundled in the next backend
+  build
 
 ## Running the Application
 
