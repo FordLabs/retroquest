@@ -22,7 +22,7 @@
 	"start:backend": "cd .. && SPRING_PROFILES_ACTIVE=local ./gradlew bRu withH2",
 	"cy:setup": "BROWSER=none start-server-and-test start:backend 8080 start 4200",
     "test:e2e": "npm run cy:setup cy:open",
-    "test:e2e:ci": "npm run cy:setup cy:run",
+    "test:e2e:ci": "CYPRESS_BASE_URL=http://localhost:8080 npm run cy:run",
     "lint": "eslint 'src/**/*.+(js|ts|tsx|test.tsx)'",
     "lint:fix": "eslint --fix 'src/**/*.+(js|ts|tsx|test.tsx)'",
     "prettier:fix": "prettier --write '**/*.{scss,tsx,ts,js}'",
