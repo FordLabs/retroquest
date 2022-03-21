@@ -66,6 +66,15 @@ const ThoughtService = {
 		const url = `${getThoughtApiPath(teamId)}/${thoughtId}/message`;
 		return axios.put(url, { message: updatedThoughtMessage }, getAuthConfig());
 	},
+
+	updateColumn(
+		teamId: string,
+		thoughtId: number,
+		columnId: number
+	): Promise<void> {
+		const url = `${getThoughtApiPath(teamId)}/${thoughtId}/topic`;
+		return axios.put(url, { columnId }, getAuthConfig());
+	},
 };
 
 export default ThoughtService;
