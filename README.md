@@ -34,12 +34,13 @@ The following tools are necessary in order to work with RetroQuest's codebase:
 - The ability to run a local database for development
   - We include a docker-compose.yml file in the `api/` subfolder to run a local Postgres database. You may use this file
     with your containerization tool of choice (docker, podman) or run a local database through any other means.
+  - You may also use H2 (in-memory), eliminating the need for any external tool to run your database. 
 
 ### Build the Backend with Gradle
 
 1. Open a terminal in the root directory
-2. Build the project with the following command: `./gradlew api:clean api:build api:withPostgres` This will trigger the backend
-   tests to run.
+2. Build the project with the following command: `./gradlew api:clean api:build api:withPostgres` This will trigger the
+   backend tests to run.
 
 - If you do not wish to run the tests and only want to build the application,
   use `./gradlew api:clean api:assemble api:withPostgres`
@@ -61,7 +62,9 @@ syntax
 Running the application locally can be done with either an H2 in-memory database or with a docker container of
 Postgresql.
 
-### In-Memory
+### Database
+
+#### In-Memory
 
 The simplest way to get the application spun up is by using the in-memory database via Gradle:
 
@@ -77,7 +80,7 @@ SPRING_PROFILES_ACTIVE=local ./gradlew bootRun withH2
 
 The schema produced for H2 may not conform exactly to the Postgresql schema used in production.
 
-### Docker
+#### Postgres
 
 Running the application locally with Postgresql requires a running instance of the Docker Postgresql container, which
 can be started from the ```./api``` directory:
@@ -98,10 +101,16 @@ or
 SPRING_PROFILES_ACTIVE=dockerdb ./gradlew bootRun withPostgres
 ```
 
-### Frontend
-If you are only working on the backend, a static build will be accessible from [localhost:8080](http://localhost:8080) after running `npm run build`
+If you would prefer not to use Docker or alternatives, you can run a Postgres database through any other means. Ensure
+your database's login credentials match what is defined in `api/src/main/resources/application-dockerdb.properties`.
 
-From the ```./ui``` directory, start the frontend with npm for live development:  
+### Frontend
+
+If you are only working on the backend, a static build will be accessible from [localhost:8080](http://localhost:8080)
+after running `npm run build`
+
+From the ```./ui``` directory, start the frontend with npm for live development:
+
 ```
 npm run start
 ```
@@ -151,7 +160,9 @@ Start the backend application
 ```
 ./gradlew bootRunDockerDb
 ```
+
 Start the frontend application
+
 ```
 cd ./ui && npm run start
 ```
@@ -178,6 +189,7 @@ Please read [CONTRIBUTING.md](/docs/CONTRIBUTING.md) for details on our code of 
 contributing, including how to fork and submit pull requests.
 
 ## Built With
+
 * [React](https://reactjs.org/) - Frontend Javascript framework
 * [Node.js](https://nodejs.org/en/) - JavaScript runtime engine
 * [Gradle](https://gradle.org/) - Dependency management
