@@ -75,7 +75,7 @@ jobs:
       - name: Setup Java JDK
         uses: actions/setup-java@v2
         with:
-          node-version: '16.x'
+          node-version: 16.x
       - name: Test
         run: npm run test:e2e:ci
         working-directory: ./ui
