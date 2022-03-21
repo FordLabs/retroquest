@@ -140,7 +140,7 @@ class ThoughtApiTest extends ApiTestBase {
     public void should_not_move_thought_column_unauthorized() throws Exception {
         MoveThoughtRequest changeRequest = new MoveThoughtRequest(6789L);
 
-        mockMvc.perform(put(format("%s/thought/%d/topic", BASE_API_URL, 1))
+        mockMvc.perform(put(format("%s/thought/%d/column-id", BASE_API_URL, 1))
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(changeRequest))
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
@@ -163,7 +163,7 @@ class ThoughtApiTest extends ApiTestBase {
                 .build()
         );
 
-        mockMvc.perform(put(format("%s/thought/%d/topic", BASE_API_URL, savedThought.getId()))
+        mockMvc.perform(put(format("%s/thought/%d/column-id", BASE_API_URL, savedThought.getId()))
             .contentType(APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(changeRequest))
             .header("Authorization", getBearerAuthToken())

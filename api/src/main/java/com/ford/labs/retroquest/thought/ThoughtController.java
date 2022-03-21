@@ -68,7 +68,7 @@ public class ThoughtController {
     }
 
     @Transactional
-    @PutMapping("/api/team/{teamId}/thought/{thoughtId}/topic")
+    @PutMapping("/api/team/{teamId}/thought/{thoughtId}/column-id")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Updates the topic of a thought given a thought and team id", description = "moveThought")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
