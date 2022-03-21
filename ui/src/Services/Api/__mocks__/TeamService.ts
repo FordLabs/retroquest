@@ -18,7 +18,7 @@
 const TeamService = {
 	login: jest.fn().mockResolvedValue(''),
 	create: jest.fn().mockResolvedValue(''),
-	getTeamName: jest.fn(),
+	getTeamName: jest.fn().mockResolvedValue('Active Team Name'),
 	getCSV: jest.fn().mockResolvedValue('column 1, column 2'),
 };
 

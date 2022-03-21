@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,13 +16,13 @@
  */
 
 import React, { useRef } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
 import darkLogoPath from '../../../Assets/icons/icon-72x72.png';
 import lightLogoPath from '../../../Assets/icons/icon-light-72x72.png';
 import { ModalMethods } from '../../../Common/Modal/Modal';
-import useTeam from '../../../Hooks/useTeam';
+import useGetTeamName from '../../../Hooks/useGetTeamName';
 import { ThemeState } from '../../../State/ThemeState';
 import Theme from '../../../Types/Theme';
 
@@ -42,8 +42,7 @@ const LINKS: RqLink[] = [
 ];
 
 function Header() {
-	const { teamId = '' } = useParams();
-	const { teamName } = useTeam(teamId);
+	const team = useGetTeamName();
 	const [theme] = useRecoilState<Theme>(ThemeState);
 
 	const modalRef = useRef<ModalMethods>(null);
@@ -61,12 +60,12 @@ function Header() {
 						/>
 					</a>
 					<div className="horizontal-separator" />
-					<div className="team-name">{teamName}</div>
+					<div className="team-name">{team.name}</div>
 				</div>
 				<nav className="center-content">
 					{LINKS.map((link, index) => (
 						<NavLink
-							to={`/team/${teamId}${link.path}`}
+							to={`/team/${team.id}${link.path}`}
 							key={link.path}
 							className={({ isActive }) =>
 								'nav-link button' + (isActive ? ' selected' : '')
