@@ -14,11 +14,11 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '16'
-      - name: Set up JDK 11
+      - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: '11'
-          distribution: 'adopt'
+          java-version: '17'
+          distribution: 'temurin'
       - name: cache gradle packages
         uses: actions/cache@v2
         with:
