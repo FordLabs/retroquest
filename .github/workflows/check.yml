@@ -94,7 +94,7 @@ jobs:
       - name: Build Application JAR
         run: ./gradlew bootRun withH2
       - name: Run Cypress Tests
-        run: npm run cy:run
+        run: npm run test:e2e:ci
         working-directory: ./ui
       - name: Upload Screenshots
         if: ${{ failure() }}
