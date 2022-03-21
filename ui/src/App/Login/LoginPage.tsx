@@ -14,29 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import AuthTemplate from '../../Common/AuthTemplate/AuthTemplate';
 import Form from '../../Common/AuthTemplate/Form/Form';
 import InputPassword from '../../Common/AuthTemplate/InputPassword/InputPassword';
 import InputTeamName from '../../Common/AuthTemplate/InputTeamName/InputTeamName';
 import useAuth from '../../Hooks/useAuth';
-import useTeam from '../../Hooks/useTeam';
+import useGetTeamName from '../../Hooks/useGetTeamName';
 import { CREATE_TEAM_PAGE_PATH } from '../../RouteConstants';
 import TeamService from '../../Services/Api/TeamService';
 import { validatePassword, validateTeamName } from '../../Utils/StringUtils';
 
 function LoginPage(): JSX.Element {
-	const params = useParams();
-
 	const { login } = useAuth();
-	const { teamName, setTeamName } = useTeam(params.teamId || '');
-	const [password, setPassword] = useState('');
+	const team = useGetTeamName();
+
+	const [teamName, setTeamName] = useState<string>('');
+	const [password, setPassword] = useState<string>('');
 
 	const [isValidated, setIsValidated] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
+
+	useEffect(() => setTeamName(team.name), [team.name]);
 
 	const teamNameErrorMessage = validateTeamName(teamName);
 	const passwordErrorMessage = validatePassword(password);

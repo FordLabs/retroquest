@@ -14,20 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as React from 'react';
+import React from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
+
+import Team from '../../../Types/Team';
 
 import Header from './Header';
 
 const teamName = 'Lucille Ball';
 const teamId = 'lucille-ball';
 
-jest.mock('../../../Hooks/useTeam', () => {
-	return () => ({
-		teamName: teamName,
+jest.mock('../../../Hooks/useGetTeamName', () => {
+	return (): Team => ({
+		name: teamName,
+		id: teamId,
 	});
 });
 

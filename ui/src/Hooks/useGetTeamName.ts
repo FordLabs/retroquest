@@ -15,21 +15,17 @@
  * limitations under the License.
  */
 
-import { useEffect, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 
 import TeamService from '../Services/Api/TeamService';
 import { TeamState } from '../State/TeamState';
+import Team from '../Types/Team';
 
-interface UseTeam {
-	teamId: string;
-	teamName: string;
-	setTeamName: Function;
-}
-
-function useTeam(teamId: string): UseTeam {
-	const setTeam = useSetRecoilState(TeamState);
-	const [teamName, setTeamName] = useState('');
+function useGetTeamName(): Team {
+	const { teamId = '' } = useParams();
+	const [team, setTeam] = useRecoilState(TeamState);
 
 	useEffect(() => {
 		if (teamId) {
@@ -37,7 +33,6 @@ function useTeam(teamId: string): UseTeam {
 				.then((activeTeamName) => {
 					document.title = `${activeTeamName} | RetroQuest`;
 
-					setTeamName(activeTeamName);
 					setTeam({
 						name: activeTeamName,
 						id: teamId,
@@ -47,7 +42,7 @@ function useTeam(teamId: string): UseTeam {
 		}
 	}, [teamId, setTeam]);
 
-	return { teamId, teamName, setTeamName };
+	return team;
 }
 
-export default useTeam;
+export default useGetTeamName;
