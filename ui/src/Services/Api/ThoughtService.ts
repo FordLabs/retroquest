@@ -72,7 +72,7 @@ const ThoughtService = {
 		thoughtId: number,
 		columnId: number
 	): Promise<void> {
-		const url = `${getThoughtApiPath(teamId)}/${thoughtId}/topic`;
+		const url = `${getThoughtApiPath(teamId)}/${thoughtId}/column-id`;
 		return axios.put(url, { columnId }, getAuthConfig());
 	},
 };
