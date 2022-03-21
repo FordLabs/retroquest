@@ -149,8 +149,9 @@ class ThoughtApiTest extends ApiTestBase {
 
     @Test
     public void should_move_thought_column() throws Exception {
-        ColumnTitle savedColumnTitle = columnTitleRepository.save(new ColumnTitle(null, "cheeseburgers", "CheeseBurgers",
-            teamId));
+        ColumnTitle savedColumnTitle = columnTitleRepository.save(
+            new ColumnTitle(null, "cheeseburgers", "CheeseBurgers", teamId)
+        );
         MoveThoughtRequest changeRequest = new MoveThoughtRequest(savedColumnTitle.getId());
         Thought savedThought = thoughtRepository.save(
             Thought.builder()
@@ -190,9 +191,10 @@ class ThoughtApiTest extends ApiTestBase {
             .andExpect(status().isOk())
             .andReturn();
 
-        List<Thought> actualThoughts = objectMapper.readValue(result.getResponse().getContentAsByteArray(),
-            new TypeReference<>() {
-            });
+        List<Thought> actualThoughts = objectMapper.readValue(
+            result.getResponse().getContentAsByteArray(),
+            new TypeReference<>() { }
+        );
 
         assertThat(actualThoughts)
             .usingRecursiveComparison()
