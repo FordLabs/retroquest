@@ -65,10 +65,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Node
+      - name: Use node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 13.x
+          node-version: '16.x'
       - name: NPM Install
         run: npm ci
         working-directory: ./ui
@@ -77,6 +77,15 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
+      - name: cache gradle packages
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
       - name: Test
         run: npm run test:e2e:ci
         working-directory: ./ui
