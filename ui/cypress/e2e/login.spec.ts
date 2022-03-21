@@ -19,9 +19,9 @@ import {
 	getLoginPagePathWithTeamId,
 	LOGIN_PAGE_PATH,
 } from '../../src/RouteConstants';
-import Topic from '../../src/types/Topic';
 import { getTeamCredentials } from '../support/helpers';
 import TeamCredentials from '../support/types/teamCredentials';
+import Topic from '../support/types/Topic';
 
 describe('Login', () => {
 	const loginFailedMessage =

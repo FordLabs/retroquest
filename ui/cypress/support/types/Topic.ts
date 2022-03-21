@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Ford Motor Company
+ * Copyright (c) 2021 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,15 +15,13 @@
  * limitations under the License.
  */
 
-import TeamCredentials from './types/teamCredentials';
+export type ThoughtTopic = Topic.HAPPY | Topic.CONFUSED | Topic.UNHAPPY;
 
-export function getTeamCredentials(): TeamCredentials {
-	const teamName = 'Test Login ' + Math.random().toString().replace('.', '');
-	const teamId = teamName.toLowerCase().replace(/ /g, '-');
-	return {
-		teamName,
-		teamId,
-		password: 'Login1234',
-		jwt: '',
-	};
+enum Topic {
+	HAPPY = 'happy',
+	CONFUSED = 'confused',
+	UNHAPPY = 'unhappy',
+	ACTION = 'action',
 }
+
+export default Topic;

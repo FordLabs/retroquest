@@ -18,8 +18,8 @@
 import { join } from 'path';
 
 import { getArchivesPagePathWithTeamId } from '../../src/RouteConstants';
-import Topic, { ThoughtTopic } from '../../src/types/Topic';
 import { getTeamCredentials } from '../support/helpers';
+import Topic, { ThoughtTopic } from '../support/types/Topic';
 
 describe('Archivist Journey', () => {
 	const teamCredentials = getTeamCredentials();
