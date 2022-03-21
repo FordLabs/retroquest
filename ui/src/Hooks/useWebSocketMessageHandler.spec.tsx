@@ -39,7 +39,7 @@ const formatWebsocketMessage = (body: WebsocketMessageBody) => ({
 	body: JSON.stringify(body),
 });
 
-describe('useWebsocketMessageHandler', () => {
+describe('useWebsocketMessageHandler Hook', () => {
 	describe('thoughtMessageHandler', () => {
 		const ThoughtsTestComponent = ({
 			websocketMessageBody,
