@@ -34,7 +34,7 @@ function LoginPage(): JSX.Element {
 	const { teamName, setTeamName } = useTeam(params.teamId || '');
 	const [password, setPassword] = useState('');
 
-	const [isValid, setIsValid] = useState(false);
+	const [isValidated, setIsValidated] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
@@ -61,7 +61,7 @@ function LoginPage(): JSX.Element {
 	};
 
 	function onLoginFormSubmit() {
-		setIsValid(true);
+		setIsValidated(true);
 		setErrorMessages([]);
 
 		if (teamNameErrorMessage || passwordErrorMessage) {
@@ -88,7 +88,7 @@ function LoginPage(): JSX.Element {
 						setTeamName(updatedTeamName);
 						setErrorMessages([]);
 					}}
-					invalid={isValid && !!teamNameErrorMessage}
+					invalid={isValidated && !!teamNameErrorMessage}
 					readOnly={isLoading}
 				/>
 				<InputPassword
@@ -97,7 +97,7 @@ function LoginPage(): JSX.Element {
 						setPassword(updatedPassword);
 						setErrorMessages([]);
 					}}
-					invalid={isValid && !!passwordErrorMessage}
+					invalid={isValidated && !!passwordErrorMessage}
 					readOnly={isLoading}
 				/>
 			</Form>
