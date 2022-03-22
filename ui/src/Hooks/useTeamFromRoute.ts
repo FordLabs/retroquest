@@ -23,7 +23,7 @@ import TeamService from '../Services/Api/TeamService';
 import { TeamState } from '../State/TeamState';
 import Team from '../Types/Team';
 
-function useGetTeamName(): Team {
+function useTeamFromRoute(): Team {
 	const { teamId = '' } = useParams();
 	const [team, setTeam] = useRecoilState(TeamState);
 
@@ -45,4 +45,4 @@ function useGetTeamName(): Team {
 	return team;
 }
 
-export default useGetTeamName;
+export default useTeamFromRoute;
