@@ -26,7 +26,10 @@ import Action from '../Types/Action';
 import { ColumnTitle } from '../Types/ColumnTitle';
 import Thought from '../Types/Thought';
 
-type MessageType = 'put' | 'delete';
+enum MessageType {
+	PUT = 'put',
+	DELETE = 'delete',
+}
 
 interface IncomingMessage {
 	type: MessageType;
@@ -53,7 +56,7 @@ function useWebSocketMessageHandler(): WebsocketCallback {
 		messageType: MessageType
 	) => {
 		recoilStateSetter((currentState: any) => {
-			const deleteItem = messageType === 'delete';
+			const deleteItem = messageType === MessageType.DELETE;
 			if (deleteItem)
 				return currentState.filter((i: { id: number }) => i.id !== item.id);
 
