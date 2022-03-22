@@ -15,15 +15,7 @@
  * limitations under the License.
  */
 
-import { ChangeEventHandler, KeyboardEvent as ReactKeyboardEvent } from 'react';
-
-export function onChange<T = Element>(
-	callback: (value: unknown) => void
-): ChangeEventHandler<T> {
-	return (event) => {
-		callback((event.target as unknown as { value: unknown }).value);
-	};
-}
+import { KeyboardEvent as ReactKeyboardEvent } from 'react';
 
 type KeyEvent = KeyboardEvent | ReactKeyboardEvent;
 
