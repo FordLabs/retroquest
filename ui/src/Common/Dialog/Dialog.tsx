@@ -18,8 +18,6 @@
 import React, { FormEvent, PropsWithChildren } from 'react';
 import classnames from 'classnames';
 
-import { PrimaryButton, SecondaryButton } from '../Buttons/Button';
-
 import './Dialog.scss';
 
 type DialogProps = PropsWithChildren<{
@@ -62,14 +60,18 @@ export default function Dialog(props: DialogProps) {
 			{buttons && (
 				<div className="dialog-footer">
 					{buttons.cancel && (
-						<SecondaryButton type="button" onClick={buttons.cancel.onClick}>
+						<button
+							type="button"
+							onClick={buttons.cancel.onClick}
+							className="dialog-button button-secondary"
+						>
 							{buttons.cancel.text || 'cancel'}
-						</SecondaryButton>
+						</button>
 					)}
 					{buttons.confirm && (
-						<PrimaryButton type="submit">
+						<button type="submit" className="dialog-button button-primary">
 							{buttons.confirm.text || 'confirm'}
-						</PrimaryButton>
+						</button>
 					)}
 				</div>
 			)}

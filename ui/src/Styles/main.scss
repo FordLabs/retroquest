@@ -18,6 +18,7 @@
 @forward 'fonts';
 @forward 'mixins';
 @forward 'sizes';
+@forward 'buttons';
 
 @use 'colors';
 
@@ -62,15 +63,4 @@ ul {
 	padding: 0;
 
 	list-style: none;
-}
-
-button {
-	color: inherit;
-	font: inherit;
-
-	background-color: unset;
-	border-style: solid;
-	border-width: 0;
-
-	cursor: pointer;
 }

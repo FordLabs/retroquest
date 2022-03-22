@@ -17,8 +17,6 @@
 
 import React, { ComponentPropsWithoutRef } from 'react';
 
-import { PrimaryButton } from '../../Buttons/Button';
-
 import './Form.scss';
 
 interface FormProps extends ComponentPropsWithoutRef<'form'> {
@@ -57,13 +55,13 @@ function Form(props: FormProps): JSX.Element {
 					{errorMessage}
 				</div>
 			))}
-			<PrimaryButton
-				className="submit-button"
+			<button
+				className="submit-button button-primary"
 				disabled={isLoading}
 				data-testid="formSubmitButton"
 			>
 				{submitButtonText}
-			</PrimaryButton>
+			</button>
 		</form>
 	);
 }

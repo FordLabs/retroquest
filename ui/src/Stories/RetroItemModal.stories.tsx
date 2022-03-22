@@ -19,7 +19,6 @@ import React, { useRef, useState } from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import RetroItemModal from '../App/Team/Retro/ThoughtColumn/RetroItemModal/RetroItemModal';
-import { PrimaryButton } from '../Common/Buttons/Button';
 import { ModalMethods } from '../Common/Modal/Modal';
 import Thought from '../Types/Thought';
 import Topic, { ThoughtTopic } from '../Types/Topic';
@@ -48,14 +47,16 @@ const Template: ComponentStory<typeof RetroItemModal> = () => {
 
 	return (
 		<>
-			<PrimaryButton
+			<button
+				className="button-primary"
 				onClick={() => modalRef.current?.show()}
 				style={{ marginBottom: '20px' }}
 			>
 				Show Modal
-			</PrimaryButton>
+			</button>
 			<RetroItemModal type={Topic.HAPPY} thought={thought} ref={modalRef} />
-			<PrimaryButton
+			<button
+				className="button-primary"
 				onClick={() => {
 					setType((currentType) => {
 						switch (currentType) {
@@ -71,7 +72,7 @@ const Template: ComponentStory<typeof RetroItemModal> = () => {
 				}}
 			>
 				Show Readonly Modal
-			</PrimaryButton>
+			</button>
 			<RetroItemModal
 				readOnly={true}
 				type={type}

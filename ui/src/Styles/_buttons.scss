@@ -1,5 +1,5 @@
-/*!
- * Copyright (c) 2021 Ford Motor Company
+/*
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +15,10 @@
  * limitations under the License.
  */
 
-@use '../../Styles/main';
+@use 'colors';
+@use 'mixins';
 
-.button {
+@mixin styled-button-defaults {
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -37,43 +38,68 @@
 	cursor: pointer;
 }
 
-.button-primary {
-	color: main.$gray;
+button {
+	color: inherit;
+	font: inherit;
 
-	background-color: main.$asphalt;
+	background-color: unset;
+	border-style: solid;
+	border-width: 0;
+
+	cursor: pointer;
+}
+
+.button {
+	@include styled-button-defaults;
+}
+
+.button-primary {
+	@include styled-button-defaults;
+
+	color: colors.$gray;
+
+	background-color: colors.$asphalt;
 	outline: none;
-	box-shadow: 0 4px 15px rgba(main.$black, 0.25);
+	box-shadow: 0 4px 15px rgba(colors.$black, 0.25);
 
 	&:hover,
 	&:focus {
-		background-color: main.$purple;
+		background-color: colors.$purple;
 		cursor: pointer;
 	}
 }
 
 .button-secondary {
+	@include styled-button-defaults;
+
 	color: inherit;
 	background: transparent;
 
 	&:hover,
 	&:focus {
-		color: main.$purple;
+		color: colors.$purple;
 		cursor: pointer;
 	}
 }
 
-@include main.dark-theme {
+@include mixins.dark-theme {
 	.button-primary {
-		color: main.$asphalt;
-		background-color: main.$gray;
+		color: colors.$asphalt;
+		background-color: colors.$gray;
 
 		&:hover,
 		&:focus {
-			color: main.$gray;
+			color: colors.$gray;
 		}
 	}
 
 	.button-secondary {
-		color: rgba(main.$gray, 0.8);
+		color: rgba(colors.$gray, 0.8);
+
+		&:hover,
+		&:focus {
+			color: colors.$purple;
+			cursor: pointer;
+		}
 	}
 }

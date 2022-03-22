@@ -20,7 +20,6 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { RecoilRoot } from 'recoil';
 
 import FeedbackDialog from '../App/Team/Retro/RetroSubheader/FeedbackDialog/FeedbackDialog';
-import { PrimaryButton } from '../Common/Buttons/Button';
 import { ModalMethods } from '../Common/Modal/Modal';
 
 export default {
@@ -33,9 +32,9 @@ const Template: ComponentStory<typeof FeedbackDialog> = () => {
 
 	return (
 		<RecoilRoot>
-			<PrimaryButton onClick={() => ref.current?.show()}>
+			<button className="button-primary" onClick={() => ref.current?.show()}>
 				Give Feedback
-			</PrimaryButton>
+			</button>
 			<FeedbackDialog ref={ref} />
 		</RecoilRoot>
 	);

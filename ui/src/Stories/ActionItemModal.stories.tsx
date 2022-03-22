@@ -19,7 +19,6 @@ import React, { useRef, useState } from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import ActionItemModal from '../App/Team/Retro/ActionItemsColumn/ActionItemModal/ActionItemModal';
-import { PrimaryButton } from '../Common/Buttons/Button';
 import { ModalMethods } from '../Common/Modal/Modal';
 import Action from '../Types/Action';
 
@@ -45,16 +44,20 @@ const Template: ComponentStory<typeof ActionItemModal> = () => {
 
 	return (
 		<>
-			<PrimaryButton
+			<button
+				className="button-primary"
 				onClick={() => modalRef.current?.show()}
 				style={{ marginBottom: '20px' }}
 			>
 				Show Modal
-			</PrimaryButton>
+			</button>
 			<ActionItemModal action={action} ref={modalRef} />
-			<PrimaryButton onClick={() => readOnlyModalRef.current?.show()}>
+			<button
+				onClick={() => readOnlyModalRef.current?.show()}
+				className="button-primary"
+			>
 				Show Readonly Modal
-			</PrimaryButton>
+			</button>
 			<ActionItemModal readOnly={true} action={action} ref={readOnlyModalRef} />
 		</>
 	);

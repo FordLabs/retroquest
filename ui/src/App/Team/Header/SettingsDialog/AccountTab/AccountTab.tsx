@@ -17,7 +17,6 @@
 
 import * as React from 'react';
 
-import { PrimaryButton } from '../../../../../Common/Buttons/Button';
 import useAuth from '../../../../../Hooks/useAuth';
 
 import './AccountTab.scss';
@@ -27,9 +26,9 @@ function AccountTab(): JSX.Element {
 
 	return (
 		<div className="tab-body account-tab-body">
-			<PrimaryButton onClick={logout} className="logout-button">
+			<button onClick={logout} className="logout-button button-primary">
 				Logout
-			</PrimaryButton>
+			</button>
 		</div>
 	);
 }

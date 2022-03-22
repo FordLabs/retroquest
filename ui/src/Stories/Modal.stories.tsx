@@ -18,7 +18,6 @@
 import React, { createRef } from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { PrimaryButton } from '../Common/Buttons/Button';
 import Modal, { ModalMethods } from '../Common/Modal/Modal';
 
 export default {
@@ -41,15 +40,24 @@ const Template: ComponentStory<typeof Modal> = () => {
 					height: '180px',
 				}}
 			>
-				<PrimaryButton onClick={() => modalRef.current?.show()}>
+				<button
+					className="button-primary"
+					onClick={() => modalRef.current?.show()}
+				>
 					Show Modal
-				</PrimaryButton>
-				<PrimaryButton onClick={() => noEscapeRef.current?.show()}>
+				</button>
+				<button
+					className="button-primary"
+					onClick={() => noEscapeRef.current?.show()}
+				>
 					Show No Escape Modal
-				</PrimaryButton>
-				<PrimaryButton onClick={() => noBackdropRef.current?.show()}>
+				</button>
+				<button
+					className="button-primary"
+					onClick={() => noBackdropRef.current?.show()}
+				>
 					Show No Backdrop Modal
-				</PrimaryButton>
+				</button>
 			</div>
 
 			<Modal ref={modalRef}>

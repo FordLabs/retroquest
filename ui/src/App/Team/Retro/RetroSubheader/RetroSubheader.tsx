@@ -46,7 +46,7 @@ function RetroSubheader(): JSX.Element {
 				<ul className="retro-subheader-links">
 					<li>
 						<button
-							className="feedback-button button button-secondary"
+							className="feedback-button button-secondary"
 							onClick={() => feedbackModalRef.current?.show()}
 						>
 							<span className="button-text">Give Feedback</span>
@@ -55,7 +55,7 @@ function RetroSubheader(): JSX.Element {
 					</li>
 					<li>
 						<button
-							className="download-csv-button button button-secondary"
+							className="download-csv-button button-secondary"
 							onClick={downloadCSV}
 						>
 							<span className="button-text">Download CSV</span>
@@ -64,7 +64,7 @@ function RetroSubheader(): JSX.Element {
 					</li>
 					<li>
 						<button
-							className="archive-button button button-primary"
+							className="archive-button button-primary"
 							onClick={() => archiveRetroModalRef.current?.show()}
 						>
 							Archive Retro

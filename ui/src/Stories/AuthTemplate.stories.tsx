@@ -20,7 +20,6 @@ import { Link, MemoryRouter } from 'react-router-dom';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import AuthTemplate from '../Common/AuthTemplate/AuthTemplate';
-import { PrimaryButton } from '../Common/Buttons/Button';
 
 export default {
 	title: 'templates/AuthTemplate',
@@ -34,7 +33,7 @@ const Template: ComponentStory<typeof AuthTemplate> = () => {
 				header="Sign in to your Team!"
 				subHeader={<Link to="/create">or create a new Team</Link>}
 			>
-				<PrimaryButton>Sign in</PrimaryButton>
+				<button className="button-primary">Sign in</button>
 			</AuthTemplate>
 		</MemoryRouter>
 	);

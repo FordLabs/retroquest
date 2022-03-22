@@ -18,7 +18,6 @@
 import React, { useState } from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { PrimaryButton } from '../Common/Buttons/Button';
 import EditableText from '../Common/ColumnItem/EditableText/EditableText';
 
 export default {
@@ -49,13 +48,14 @@ const Template: ComponentStory<typeof EditableText> = () => {
 
 	return (
 		<>
-			<PrimaryButton
+			<button
+				className="button-primary"
 				onClick={() =>
 					setEditing((currentEditingState) => !currentEditingState)
 				}
 			>
 				{editing ? 'Cancel Edit' : 'Edit'}
-			</PrimaryButton>
+			</button>
 			<div style={{ width: '400px', marginBottom: '20px' }}>
 				<EditableText
 					value={text}

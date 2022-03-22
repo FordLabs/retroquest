@@ -20,7 +20,6 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { RecoilRoot } from 'recoil';
 
 import ArchiveRetroDialog from '../App/Team/Retro/RetroSubheader/ArchiveRetroDialog/ArchiveRetroDialog';
-import { PrimaryButton } from '../Common/Buttons/Button';
 import { ModalMethods } from '../Common/Modal/Modal';
 
 export default {
@@ -33,9 +32,9 @@ const Template: ComponentStory<typeof ArchiveRetroDialog> = () => {
 
 	return (
 		<RecoilRoot>
-			<PrimaryButton onClick={() => ref.current?.show()}>
+			<button onClick={() => ref.current?.show()} className="button-primary">
 				Archive Retro
-			</PrimaryButton>
+			</button>
 			<ArchiveRetroDialog ref={ref} />
 		</RecoilRoot>
 	);

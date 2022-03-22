@@ -19,7 +19,6 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { RecoilRoot } from 'recoil';
 
 import SettingsDialog from '../App/Team/Header/SettingsDialog/SettingsDialog';
-import { PrimaryButton } from '../Common/Buttons/Button';
 import { ModalMethods } from '../Common/Modal/Modal';
 import { ThemeState } from '../State/ThemeState';
 import Theme from '../Types/Theme';
@@ -38,9 +37,9 @@ const Template: ComponentStory<typeof SettingsDialog> = () => {
 				set(ThemeState, Theme.LIGHT);
 			}}
 		>
-			<PrimaryButton onClick={() => ref.current?.show()}>
+			<button onClick={() => ref.current?.show()} className="button-primary">
 				Change Settings
-			</PrimaryButton>
+			</button>
 			<SettingsDialog ref={ref} />
 		</RecoilRoot>
 	);
