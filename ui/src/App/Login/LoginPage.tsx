@@ -34,7 +34,7 @@ function LoginPage(): JSX.Element {
 	const [teamName, setTeamName] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
 
-	const [isValidated, setIsValidated] = useState(false);
+	const [isValidated, setIsValidated] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
