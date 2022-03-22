@@ -38,7 +38,7 @@ export default function CreatePage(): JSX.Element {
 	const [password, setPassword] = useState<string>('');
 	const [confirmationPassword, setConfirmationPassword] = useState<string>('');
 
-	const [isValid, setIsValid] = useState<boolean>(false);
+	const [isValidated, setIsValidated] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
@@ -76,7 +76,7 @@ export default function CreatePage(): JSX.Element {
 	}
 
 	function onSubmit() {
-		setIsValid(true);
+		setIsValidated(true);
 		setErrorMessages([]);
 
 		if (
@@ -111,7 +111,7 @@ export default function CreatePage(): JSX.Element {
 						setTeamName(updatedTeamName);
 						setErrorMessages([]);
 					}}
-					invalid={isValid && !!teamNameErrorMessage}
+					invalid={isValidated && !!teamNameErrorMessage}
 					readOnly={isLoading}
 				/>
 				<InputPassword
@@ -120,7 +120,7 @@ export default function CreatePage(): JSX.Element {
 						setPassword(updatedPassword);
 						setErrorMessages([]);
 					}}
-					invalid={isValid && !!passwordErrorMessage}
+					invalid={isValidated && !!passwordErrorMessage}
 					readOnly={isLoading}
 				/>
 				<Input
@@ -132,7 +132,7 @@ export default function CreatePage(): JSX.Element {
 						setConfirmationPassword(event.target.value);
 						setErrorMessages([]);
 					}}
-					invalid={isValid && !!confirmPasswordErrorMessage}
+					invalid={isValidated && !!confirmPasswordErrorMessage}
 					readOnly={isLoading}
 				/>
 			</Form>
