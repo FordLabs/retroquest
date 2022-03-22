@@ -27,7 +27,7 @@ import Header from './Header';
 const teamName = 'Lucille Ball';
 const teamId = 'lucille-ball';
 
-jest.mock('../../../Hooks/useGetTeamName', () => {
+jest.mock('../../../Hooks/useTeamFromRoute', () => {
 	return (): Team => ({
 		name: teamName,
 		id: teamId,

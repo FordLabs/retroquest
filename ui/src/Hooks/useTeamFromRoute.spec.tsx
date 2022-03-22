@@ -23,18 +23,18 @@ import { RecoilRoot } from 'recoil';
 
 import TeamService from '../Services/Api/TeamService';
 
-import useGetTeamName from './useGetTeamName';
+import useTeamFromRoute from './useTeamFromRoute';
 
 jest.mock('../Services/Api/TeamService');
 
 const teamId = 'active-team-name';
-describe('useTeam Hook', () => {
+describe('useTeamFromRoute Hook', () => {
 	let result: { current: { name: any; id: any } };
 
 	beforeEach(async () => {
 		document.title = '';
 
-		({ result } = renderHook(() => useGetTeamName(), { wrapper }));
+		({ result } = renderHook(() => useTeamFromRoute(), { wrapper }));
 
 		await waitFor(() =>
 			expect(TeamService.getTeamName).toHaveBeenCalledWith(teamId)

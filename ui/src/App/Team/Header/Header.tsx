@@ -22,7 +22,7 @@ import { useRecoilState } from 'recoil';
 import darkLogoPath from '../../../Assets/icons/icon-72x72.png';
 import lightLogoPath from '../../../Assets/icons/icon-light-72x72.png';
 import { ModalMethods } from '../../../Common/Modal/Modal';
-import useGetTeamName from '../../../Hooks/useGetTeamName';
+import useTeamFromRoute from '../../../Hooks/useTeamFromRoute';
 import { ThemeState } from '../../../State/ThemeState';
 import Theme from '../../../Types/Theme';
 
@@ -42,7 +42,7 @@ const LINKS: RqLink[] = [
 ];
 
 function Header() {
-	const team = useGetTeamName();
+	const team = useTeamFromRoute();
 	const [theme] = useRecoilState<Theme>(ThemeState);
 
 	const modalRef = useRef<ModalMethods>(null);

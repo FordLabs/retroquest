@@ -22,14 +22,14 @@ import Form from '../../Common/AuthTemplate/Form/Form';
 import InputPassword from '../../Common/AuthTemplate/InputPassword/InputPassword';
 import InputTeamName from '../../Common/AuthTemplate/InputTeamName/InputTeamName';
 import useAuth from '../../Hooks/useAuth';
-import useGetTeamName from '../../Hooks/useGetTeamName';
+import useTeamFromRoute from '../../Hooks/useTeamFromRoute';
 import { CREATE_TEAM_PAGE_PATH } from '../../RouteConstants';
 import TeamService from '../../Services/Api/TeamService';
 import { validatePassword, validateTeamName } from '../../Utils/StringUtils';
 
 function LoginPage(): JSX.Element {
 	const { login } = useAuth();
-	const team = useGetTeamName();
+	const team = useTeamFromRoute();
 
 	const [teamName, setTeamName] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
