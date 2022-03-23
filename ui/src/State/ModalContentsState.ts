@@ -18,8 +18,8 @@
 import { atom } from 'recoil';
 
 export interface ModalContents {
-	form: JSX.Element;
 	title: string;
+	component: JSX.Element;
 }
 
 export const ModalContentsState = atom<ModalContents | null>({

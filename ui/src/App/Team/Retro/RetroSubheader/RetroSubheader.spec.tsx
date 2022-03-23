@@ -29,7 +29,7 @@ import { TeamState } from '../../../../State/TeamState';
 import Team from '../../../../Types/Team';
 import { RecoilObserver } from '../../../../Utils/RecoilObserver';
 
-import FeedbackDialog from './FeedbackDialog/FeedbackDialog';
+import FeedbackForm from './FeedbackForm/FeedbackForm';
 import RetroSubheader from './RetroSubheader';
 
 jest.mock('../../../../Services/Api/TeamService');
@@ -75,7 +75,7 @@ describe('Retro Subheader', () => {
 			feedbackButton.click();
 			await waitFor(() =>
 				expect(modalContent).toEqual({
-					form: <FeedbackDialog />,
+					component: <FeedbackForm />,
 					title: 'Feedback',
 				})
 			);

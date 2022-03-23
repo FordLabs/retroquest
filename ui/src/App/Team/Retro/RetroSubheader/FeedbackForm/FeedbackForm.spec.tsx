@@ -29,11 +29,11 @@ import { TeamState } from '../../../../../State/TeamState';
 import Team from '../../../../../Types/Team';
 import { RecoilObserver } from '../../../../../Utils/RecoilObserver';
 
-import FeedbackDialog from './FeedbackDialog';
+import FeedbackForm from './FeedbackForm';
 
 jest.mock('../../../../../Services/Api/FeedbackService');
 
-describe('FeedbackDialog', () => {
+describe('FeedbackForm', () => {
 	const fakeComment = 'This is a fake comment';
 	const fakeEmail = 'user@ford.com';
 	const team: Team = {
@@ -53,7 +53,7 @@ describe('FeedbackDialog', () => {
 					set(TeamState, team);
 					set(ModalContentsState, {
 						title: 'Feedback',
-						form: <FeedbackDialog />,
+						component: <FeedbackForm />,
 					});
 				}}
 			>
@@ -63,7 +63,7 @@ describe('FeedbackDialog', () => {
 						modalContent = value;
 					}}
 				/>
-				<FeedbackDialog />
+				<FeedbackForm />
 			</RecoilRoot>
 		);
 	});

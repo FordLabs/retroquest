@@ -18,7 +18,7 @@
 import React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import FeedbackStars from '../App/Team/Retro/RetroSubheader/FeedbackDialog/FeedbackStars/FeedbackStars';
+import FeedbackStars from '../App/Team/Retro/RetroSubheader/FeedbackForm/FeedbackStars/FeedbackStars';
 
 export default {
 	title: 'components/FeedbackStars',

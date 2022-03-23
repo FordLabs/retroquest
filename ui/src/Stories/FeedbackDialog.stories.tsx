@@ -19,18 +19,18 @@ import React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { RecoilRoot } from 'recoil';
 
-import FeedbackDialog from '../App/Team/Retro/RetroSubheader/FeedbackDialog/FeedbackDialog';
+import FeedbackForm from '../App/Team/Retro/RetroSubheader/FeedbackForm/FeedbackForm';
 
 export default {
-	title: 'components/FeedbackDialog',
-	component: FeedbackDialog,
-} as ComponentMeta<typeof FeedbackDialog>;
+	title: 'components/FeedbackForm',
+	component: FeedbackForm,
+} as ComponentMeta<typeof FeedbackForm>;
 
-const Template: ComponentStory<typeof FeedbackDialog> = () => {
+const Template: ComponentStory<typeof FeedbackForm> = () => {
 	return (
 		<RecoilRoot>
 			<div style={{ backgroundColor: 'white', width: '450px' }}>
-				<FeedbackDialog />
+				<FeedbackForm />
 			</div>
 		</RecoilRoot>
 	);

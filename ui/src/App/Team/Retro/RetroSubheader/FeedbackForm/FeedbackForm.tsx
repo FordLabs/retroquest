@@ -25,9 +25,9 @@ import { TeamState } from '../../../../../State/TeamState';
 
 import FeedbackStars from './FeedbackStars/FeedbackStars';
 
-import './FeedbackDialog.scss';
+import './FeedbackForm.scss';
 
-function FeedbackDialog() {
+function FeedbackForm() {
 	const setModalContents = useSetRecoilState(ModalContentsState);
 	const team = useRecoilValue(TeamState);
 	const [stars, setStars] = useState(0);
@@ -89,4 +89,4 @@ function FeedbackDialog() {
 	);
 }
 
-export default FeedbackDialog;
+export default FeedbackForm;
