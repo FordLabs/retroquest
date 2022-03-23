@@ -14,35 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { createRef } from 'react';
+import React from 'react';
+import { MemoryRouter } from 'react-router-dom';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { RecoilRoot } from 'recoil';
 
-import SettingsDialog from '../App/Team/Header/SettingsDialog/SettingsDialog';
-import { PrimaryButton } from '../Common/Buttons/Button';
-import { ModalMethods } from '../Common/Modal/Modal';
+import Settings from '../App/Team/Header/Settings/Settings';
 import { ThemeState } from '../State/ThemeState';
 import Theme from '../Types/Theme';
 
 export default {
-	title: 'components/SettingsDialog',
-	component: SettingsDialog,
-} as ComponentMeta<typeof SettingsDialog>;
+	title: 'components/Settings',
+	component: Settings,
+} as ComponentMeta<typeof Settings>;
 
-const Template: ComponentStory<typeof SettingsDialog> = () => {
-	const ref = createRef<ModalMethods>();
-
+const Template: ComponentStory<typeof Settings> = () => {
 	return (
-		<RecoilRoot
-			initializeState={({ set }) => {
-				set(ThemeState, Theme.LIGHT);
-			}}
-		>
-			<PrimaryButton onClick={() => ref.current?.show()}>
-				Change Settings
-			</PrimaryButton>
-			<SettingsDialog ref={ref} />
-		</RecoilRoot>
+		<MemoryRouter>
+			<RecoilRoot
+				initializeState={({ set }) => {
+					set(ThemeState, Theme.LIGHT);
+				}}
+			>
+				<div style={{ backgroundColor: 'white', width: '450px' }}>
+					<Settings />
+				</div>
+			</RecoilRoot>
+		</MemoryRouter>
 	);
 };
 

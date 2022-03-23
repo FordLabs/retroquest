@@ -15,18 +15,18 @@
  * limitations under the License.
  */
 
-import React, { useRef } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import darkLogoPath from '../../../Assets/icons/icon-72x72.png';
 import lightLogoPath from '../../../Assets/icons/icon-light-72x72.png';
-import { ModalMethods } from '../../../Common/Modal/Modal';
 import useTeamFromRoute from '../../../Hooks/useTeamFromRoute';
+import { ModalContentsState } from '../../../State/ModalContentsState';
 import { ThemeState } from '../../../State/ThemeState';
 import Theme from '../../../Types/Theme';
 
-import SettingsDialog from './SettingsDialog/SettingsDialog';
+import Settings from './Settings/Settings';
 
 import './Header.scss';
 
@@ -44,8 +44,7 @@ const LINKS: RqLink[] = [
 function Header() {
 	const team = useTeamFromRoute();
 	const [theme] = useRecoilState<Theme>(ThemeState);
-
-	const modalRef = useRef<ModalMethods>(null);
+	const setModalContents = useSetRecoilState(ModalContentsState);
 
 	return (
 		<>
@@ -63,7 +62,7 @@ function Header() {
 					<div className="team-name">{team.name}</div>
 				</div>
 				<nav className="center-content">
-					{LINKS.map((link, index) => (
+					{LINKS.map((link) => (
 						<NavLink
 							to={`/team/${team.id}${link.path}`}
 							key={link.path}
@@ -79,12 +78,17 @@ function Header() {
 				<div className="right-content">
 					<button
 						className="settings-button fas fa-cog"
-						onClick={() => modalRef.current?.show()}
+						onClick={() =>
+							setModalContents({
+								title: 'Settings',
+								component: <Settings />,
+							})
+						}
+						aria-label="Settings"
 						data-testid="settingsButton"
 					/>
 				</div>
 			</header>
-			<SettingsDialog ref={modalRef} />
 		</>
 	);
 }

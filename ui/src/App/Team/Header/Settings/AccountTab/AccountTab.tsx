@@ -16,18 +16,27 @@
  */
 
 import * as React from 'react';
+import { useSetRecoilState } from 'recoil';
 
 import { PrimaryButton } from '../../../../../Common/Buttons/Button';
 import useAuth from '../../../../../Hooks/useAuth';
+import { ModalContentsState } from '../../../../../State/ModalContentsState';
 
 import './AccountTab.scss';
 
 function AccountTab(): JSX.Element {
 	const { logout } = useAuth();
+	const setModalContents = useSetRecoilState(ModalContentsState);
 
 	return (
 		<div className="tab-body account-tab-body">
-			<PrimaryButton onClick={logout} className="logout-button">
+			<PrimaryButton
+				onClick={() => {
+					logout();
+					setModalContents(null);
+				}}
+				className="logout-button"
+			>
 				Logout
 			</PrimaryButton>
 		</div>

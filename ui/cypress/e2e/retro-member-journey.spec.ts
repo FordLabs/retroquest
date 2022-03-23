@@ -190,7 +190,7 @@ describe('Retro Member Journey', () => {
 	describe('Settings', () => {
 		beforeEach(() => {
 			cy.get('[data-testid=settingsButton]').click();
-			cy.findByText('Settings').should('exist');
+			cy.findAllByText('Settings').eq(1).should('exist');
 
 			cy.findByText('Styles').as('stylesTab');
 			cy.findByText('Account').as('accountTab');

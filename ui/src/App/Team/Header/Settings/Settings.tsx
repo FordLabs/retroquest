@@ -15,25 +15,16 @@
  * limitations under the License.
  */
 
-import React, { forwardRef, Ref, useState } from 'react';
+import React, { useState } from 'react';
 import classnames from 'classnames';
 
 import Dialog from '../../../../Common/Dialog/Dialog';
-import Modal, { ModalMethods } from '../../../../Common/Modal/Modal';
 
 import AccountTab from './AccountTab/AccountTab';
 import InfoTab from './InfoTab/InfoTab';
 import StylesTab from './StylesTab/StylesTab';
 
-import './SettingsDialog.scss';
-
-function SettingsDialog(props: unknown, ref: Ref<ModalMethods>) {
-	return (
-		<Modal ref={ref}>
-			<SettingsDialogContent />
-		</Modal>
-	);
-}
+import './Settings.scss';
 
 enum Tabs {
 	STYLES = 'styles',
@@ -41,7 +32,7 @@ enum Tabs {
 	INFO = 'info',
 }
 
-export function SettingsDialogContent() {
+export function Settings() {
 	const [tab, setTab] = useState<Tabs>(Tabs.STYLES);
 
 	const stylesTabIsActive = () => tab === Tabs.STYLES;
@@ -83,4 +74,4 @@ export function SettingsDialogContent() {
 	);
 }
 
-export default forwardRef<ModalMethods>(SettingsDialog);
+export default Settings;

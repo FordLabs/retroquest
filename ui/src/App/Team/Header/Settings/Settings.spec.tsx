@@ -14,14 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { createRef } from 'react';
-import { act, render, screen } from '@testing-library/react';
+import React from 'react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
 
-import { ModalMethods } from '../../../../Common/Modal/Modal';
+import {
+	ModalContents,
+	ModalContentsState,
+} from '../../../../State/ModalContentsState';
+import { RecoilObserver } from '../../../../Utils/RecoilObserver';
 
-import SettingsDialog, { SettingsDialogContent } from './SettingsDialog';
+import Settings from './Settings';
 
 const mockLogout = jest.fn();
 
@@ -31,40 +35,28 @@ jest.mock('../../../../Hooks/useAuth', () => {
 	}));
 });
 
-describe('SettingsDialog', () => {
-	const ref = createRef<ModalMethods>();
+describe('Settings', () => {
+	let modalContent: ModalContents | null;
 
-	beforeEach(() => {
-		render(
-			<RecoilRoot>
-				<SettingsDialog ref={ref} />
-			</RecoilRoot>
-		);
-
-		act(() => {
-			ref.current?.show();
-		});
-	});
-
-	it('should show and hide from ref methods', () => {
-		screen.getByText('Settings');
-		screen.getByText('choose your preferences');
-
-		act(() => {
-			ref.current?.hide();
-		});
-
-		expect(screen.queryByText('Settings')).toBeFalsy();
-	});
-});
-
-describe('SettingsDialogRenderer', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 
 		render(
-			<RecoilRoot>
-				<SettingsDialogContent />
+			<RecoilRoot
+				initializeState={({ set }) => {
+					set(ModalContentsState, {
+						title: 'Settings',
+						component: <Settings />,
+					});
+				}}
+			>
+				<RecoilObserver
+					recoilState={ModalContentsState}
+					onChange={(value: ModalContents) => {
+						modalContent = value;
+					}}
+				/>
+				<Settings />
 			</RecoilRoot>
 		);
 	});
@@ -93,10 +85,12 @@ describe('SettingsDialogRenderer', () => {
 
 	describe('Account Tab', () => {
 		it('should logout', () => {
+			expect(modalContent).not.toBeNull();
 			userEvent.click(screen.getByText('Account'));
 			userEvent.click(screen.getByText('Logout'));
 
 			expect(mockLogout).toHaveBeenCalledTimes(1);
+			expect(modalContent).toBeNull();
 		});
 	});
 
