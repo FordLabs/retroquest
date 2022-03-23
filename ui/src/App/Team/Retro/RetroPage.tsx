@@ -30,6 +30,7 @@ import useWebSocketMessageHandler from '../../../Hooks/useWebSocketMessageHandle
 import ActionItemService from '../../../Services/Api/ActionItemService';
 import ColumnService from '../../../Services/Api/ColumnService';
 import ThoughtService from '../../../Services/Api/ThoughtService';
+import DragAndDrop from '../../../Services/DragAndDrop/DragAndDrop';
 import WebSocketController from '../../../Services/Websocket/WebSocketController';
 import WebSocketService from '../../../Services/Websocket/WebSocketService';
 import { ActionItemState } from '../../../State/ActionItemState';
@@ -148,18 +149,20 @@ function RetroPage(): ReactElement {
 			>
 				{!isLoading && (
 					<>
-						{columns.map((column, index) => {
-							return (
-								<div
-									key={`column-${index}`}
-									className={classNames('column-container', {
-										selected: index === selectedMobileColumnIndex,
-									})}
-								>
-									<ThoughtColumn column={column} />
-								</div>
-							);
-						})}
+						<DragAndDrop>
+							{columns.map((column, index) => {
+								return (
+									<div
+										key={`column-${index}`}
+										className={classNames('column-container', {
+											selected: index === selectedMobileColumnIndex,
+										})}
+									>
+										<ThoughtColumn column={column} />
+									</div>
+								);
+							})}
+						</DragAndDrop>
 						<div
 							className={classNames('column-container', {
 								selected: 3 === selectedMobileColumnIndex,

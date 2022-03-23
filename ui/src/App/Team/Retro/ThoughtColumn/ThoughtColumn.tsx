@@ -17,6 +17,7 @@
 
 import * as React from 'react';
 import { useState } from 'react';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { useRecoilValue } from 'recoil';
 
 import ColumnHeader from '../../../../Common/ColumnHeader/ColumnHeader';
@@ -34,6 +35,8 @@ import { getCreateThoughtRequest } from '../../../../Types/CreateThoughtRequest'
 import Thought from '../../../../Types/Thought';
 
 import RetroItem from './RetroItem/RetroItem';
+
+import './ThoughtColumn.scss';
 
 interface Props {
 	column: Column;
@@ -66,11 +69,24 @@ function ThoughtColumn(props: Props) {
 		}
 	};
 
-	const renderThought = (thought: Thought) => {
+	const renderThought = (thought: Thought, index: number) => {
 		return (
-			<li key={thought.id}>
-				<RetroItem thoughtId={thought.id} type={thought.topic} />
-			</li>
+			<Draggable
+				key={thought.id}
+				draggableId={`${thought.id}`}
+				index={index}
+				disableInteractiveElementBlocking={true}
+			>
+				{(provided, snapshot) => (
+					<li
+						ref={provided.innerRef}
+						{...provided.draggableProps}
+						{...provided.dragHandleProps}
+					>
+						<RetroItem thoughtId={thought.id} type={thought.topic} />
+					</li>
+				)}
+			</Draggable>
 		);
 	};
 
@@ -88,10 +104,19 @@ function ThoughtColumn(props: Props) {
 				handleSubmission={createThought}
 			/>
 			<CountSeparator count={activeThoughts.length} />
-			<ul>
-				{activeThoughts.map(renderThought)}
-				{discussedThoughts.map(renderThought)}
-			</ul>
+			<Droppable droppableId={`${column.id}`} type="THOUGHT">
+				{(provided, snapshot) => (
+					<ul className="thought-list">
+						<div ref={provided.innerRef} {...provided.droppableProps}>
+							{activeThoughts.map(renderThought)}
+							{discussedThoughts.map((thought, index) =>
+								renderThought(thought, activeThoughts.length + index)
+							)}
+							{provided.placeholder}
+						</div>
+					</ul>
+				)}
+			</Droppable>
 		</div>
 	);
 }
