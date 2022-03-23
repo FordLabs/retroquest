@@ -50,7 +50,7 @@ function ModalDialog() {
 				title: 'modal-title',
 				closeButton: 'modal-close-button',
 			}}
-			title={modalContents?.title}
+			title={modalContents?.title || ''}
 			titleId="modal-title"
 			dialogRef={(dialog) => (dialogRef.current = dialog)}
 		>

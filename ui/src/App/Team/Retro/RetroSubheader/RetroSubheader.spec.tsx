@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import fileSaver from 'file-saver';
 import { RecoilRoot } from 'recoil';
@@ -29,6 +29,7 @@ import { TeamState } from '../../../../State/TeamState';
 import Team from '../../../../Types/Team';
 import { RecoilObserver } from '../../../../Utils/RecoilObserver';
 
+import ArchiveRetroConfirmation from './ArchiveRetroConfirmation/ArchiveRetroConfirmation';
 import FeedbackForm from './FeedbackForm/FeedbackForm';
 import RetroSubheader from './RetroSubheader';
 
@@ -92,6 +93,19 @@ describe('Retro Subheader', () => {
 					mockCSVString,
 					'my-team-board.csv'
 				)
+			);
+		});
+	});
+
+	describe('Archive Retro Button', () => {
+		it('should archive retro', async () => {
+			const archiveRetro = screen.getByText('Archive Retro');
+			archiveRetro.click();
+			await waitFor(() =>
+				expect(modalContent).toEqual({
+					component: <ArchiveRetroConfirmation />,
+					title: 'Archive Retro',
+				})
 			);
 		});
 	});
