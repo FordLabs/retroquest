@@ -13,7 +13,7 @@ the commands are very similar using [Yarn Package Manager](https://yarnpkg.com/)
 npm run start
 ```
 
-This command will start the server. Navigate to http://localhost:4200/ to begin interacting on your desktop with the
+This command will start the server. Navigate to http://localhost:3000/ to begin interacting on your desktop with the
 app. The app will automatically reload if you change any of the source files.
 
 ### Testing Strategy

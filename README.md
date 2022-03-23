@@ -116,7 +116,7 @@ npm run start
 ```
 
 This will start the frontend with a proxy to direct all requests to localhost:8080 where the api is running. The
-application will start at [localhost:4200](http://localhost:4200)
+application will start at [localhost:3000](http://localhost:3000)
 
 ## Tests
 
