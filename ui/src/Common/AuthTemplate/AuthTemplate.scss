@@ -22,6 +22,8 @@
 	height: auto;
 	min-height: 100%;
 
+	font-family: "Open Sans", sans-serif;
+
 	background-color: main.$white;
 
 	@include main.breakpoint-medium {
