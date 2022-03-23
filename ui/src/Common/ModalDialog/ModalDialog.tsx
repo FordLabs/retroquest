@@ -54,7 +54,7 @@ function ModalDialog() {
 			titleId="modal-title"
 			dialogRef={(dialog) => (dialogRef.current = dialog)}
 		>
-			{modalContents?.form}
+			{modalContents?.component}
 		</A11yDialog>
 	);
 }

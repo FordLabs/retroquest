@@ -25,7 +25,7 @@ import { ModalContentsState } from '../../../../State/ModalContentsState';
 import { TeamState } from '../../../../State/TeamState';
 
 import ArchiveRetroDialog from './ArchiveRetroDialog/ArchiveRetroDialog';
-import FeedbackDialog from './FeedbackDialog/FeedbackDialog';
+import FeedbackForm from './FeedbackForm/FeedbackForm';
 
 import './RetroSubheader.scss';
 
@@ -50,7 +50,7 @@ function RetroSubheader(): JSX.Element {
 							className="feedback-button button button-secondary"
 							onClick={() =>
 								setModalContents({
-									form: <FeedbackDialog />,
+									component: <FeedbackForm />,
 									title: 'Feedback',
 								})
 							}
