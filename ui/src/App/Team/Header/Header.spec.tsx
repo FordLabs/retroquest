@@ -18,10 +18,17 @@ import React from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
 
+import {
+	ModalContents,
+	ModalContentsState,
+} from '../../../State/ModalContentsState';
 import Team from '../../../Types/Team';
+import { RecoilObserver } from '../../../Utils/RecoilObserver';
 
+import Settings from './Settings/Settings';
 import Header from './Header';
 
 const teamName = 'Lucille Ball';
@@ -35,16 +42,32 @@ jest.mock('../../../Hooks/useTeamFromRoute', () => {
 });
 
 describe('Header', () => {
+	let container: Element;
+	let modalContent: ModalContents | null;
+
 	beforeEach(() => {
-		render(
+		modalContent = null;
+
+		({ container } = render(
 			<MemoryRouter initialEntries={[`/team/${teamId}`]}>
 				<RecoilRoot>
+					<RecoilObserver
+						recoilState={ModalContentsState}
+						onChange={(value: ModalContents) => {
+							modalContent = value;
+						}}
+					/>
 					<Routes>
 						<Route path="/team/:teamId" element={<Header />} />
 					</Routes>
 				</RecoilRoot>
 			</MemoryRouter>
-		);
+		));
+	});
+
+	it('should render without axe errors', async () => {
+		const results = await axe(container);
+		expect(results).toHaveNoViolations();
 	});
 
 	it('should render logo link and team name', async () => {
@@ -66,9 +89,11 @@ describe('Header', () => {
 		expect(retroLink.getAttribute('href')).toBe(`/team/${teamId}`);
 	});
 
-	it('should render the settings button and setting dialog', () => {
+	it('should open settings modal', () => {
 		userEvent.click(screen.getByTestId('settingsButton'));
-		screen.getByText('Settings');
-		screen.getByText('choose your preferences');
+		expect(modalContent).toEqual({
+			title: 'Settings',
+			component: <Settings />,
+		});
 	});
 });

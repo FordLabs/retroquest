@@ -18,6 +18,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { RecoilRoot } from 'recoil';
 
 import Header from '../App/Team/Header/Header';
 
@@ -29,7 +30,9 @@ export default {
 const Template: ComponentStory<typeof Header> = () => {
 	return (
 		<MemoryRouter initialEntries={['/team/team-id/']}>
-			<Header />
+			<RecoilRoot>
+				<Header />
+			</RecoilRoot>
 		</MemoryRouter>
 	);
 };
