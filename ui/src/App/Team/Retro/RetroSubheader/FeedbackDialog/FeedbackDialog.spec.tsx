@@ -15,84 +15,73 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
-import { createRef } from 'react';
-import { act, render, screen } from '@testing-library/react';
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
 
-import { ModalMethods } from '../../../../../Common/Modal/Modal';
 import FeedbackService from '../../../../../Services/Api/FeedbackService';
+import {
+	ModalContents,
+	ModalContentsState,
+} from '../../../../../State/ModalContentsState';
 import { TeamState } from '../../../../../State/TeamState';
 import Team from '../../../../../Types/Team';
+import { RecoilObserver } from '../../../../../Utils/RecoilObserver';
 
-import FeedbackDialog, { FeedbackDialogRenderer } from './FeedbackDialog';
+import FeedbackDialog from './FeedbackDialog';
 
 jest.mock('../../../../../Services/Api/FeedbackService');
 
 describe('FeedbackDialog', () => {
-	const ref = createRef<ModalMethods>();
-
-	beforeEach(() => {
-		render(
-			<RecoilRoot>
-				<FeedbackDialog ref={ref} />
-			</RecoilRoot>
-		);
-
-		act(() => {
-			ref.current?.show();
-		});
-	});
-
-	it('should show and hide from ref methods', () => {
-		const modalTitle = 'Feedback';
-		screen.getByText(modalTitle);
-		screen.getByText('How can we improve RetroQuest?');
-
-		act(() => {
-			ref.current?.hide();
-		});
-
-		expect(screen.queryByText(modalTitle)).toBeFalsy();
-	});
-});
-
-describe('FeedbackDialogRenderer', () => {
-	const mockCloseModalCallback = jest.fn();
 	const fakeComment = 'This is a fake comment';
 	const fakeEmail = 'user@ford.com';
 	const team: Team = {
 		name: 'My Team',
 		id: 'fake-team-id',
 	};
+	let modalContent: ModalContents | null;
 
 	beforeEach(() => {
 		jest.clearAllMocks();
+
+		modalContent = null;
 
 		render(
 			<RecoilRoot
 				initializeState={({ set }) => {
 					set(TeamState, team);
+					set(ModalContentsState, {
+						title: 'Feedback',
+						form: <FeedbackDialog />,
+					});
 				}}
 			>
-				<FeedbackDialogRenderer closeModal={mockCloseModalCallback} />
+				<RecoilObserver
+					recoilState={ModalContentsState}
+					onChange={(value: ModalContents) => {
+						modalContent = value;
+					}}
+				/>
+				<FeedbackDialog />
 			</RecoilRoot>
 		);
 	});
 
-	it('should submit feedback', () => {
+	it('should submit feedback', async () => {
 		userEvent.click(screen.getByTestId('feedback-star-4'));
 		userEvent.type(screen.getByLabelText('Feedback Email'), fakeEmail);
 		userEvent.type(screen.getByLabelText('Comments*'), fakeComment);
 		userEvent.click(screen.getByText('Send!'));
 
-		expect(FeedbackService.addFeedback).toHaveBeenCalledWith({
-			teamId: team.id,
-			stars: 4,
-			comment: fakeComment,
-			userEmail: fakeEmail,
-		});
+		await waitFor(() =>
+			expect(FeedbackService.addFeedback).toHaveBeenCalledWith({
+				teamId: team.id,
+				stars: 4,
+				comment: fakeComment,
+				userEmail: fakeEmail,
+			})
+		);
 	});
 
 	it('should not submit with empty comments', () => {
@@ -106,7 +95,7 @@ describe('FeedbackDialogRenderer', () => {
 	it('should cancel submitting feedback', () => {
 		userEvent.click(screen.getByText('Cancel'));
 
-		expect(mockCloseModalCallback).toHaveBeenCalled();
+		expect(modalContent).toBeNull();
 		expect(FeedbackService.addFeedback).not.toHaveBeenCalled();
 	});
 });

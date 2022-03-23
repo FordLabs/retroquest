@@ -17,10 +17,11 @@
 
 import React, { useRef } from 'react';
 import fileSaver from 'file-saver';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { ModalMethods } from '../../../../Common/Modal/Modal';
 import TeamService from '../../../../Services/Api/TeamService';
+import { ModalContentsState } from '../../../../State/ModalContentsState';
 import { TeamState } from '../../../../State/TeamState';
 
 import ArchiveRetroDialog from './ArchiveRetroDialog/ArchiveRetroDialog';
@@ -29,8 +30,8 @@ import FeedbackDialog from './FeedbackDialog/FeedbackDialog';
 import './RetroSubheader.scss';
 
 function RetroSubheader(): JSX.Element {
-	const feedbackModalRef = useRef<ModalMethods>(null);
 	const archiveRetroModalRef = useRef<ModalMethods>(null);
+	const setModalContents = useSetRecoilState(ModalContentsState);
 
 	const team = useRecoilValue(TeamState);
 
@@ -47,7 +48,12 @@ function RetroSubheader(): JSX.Element {
 					<li>
 						<button
 							className="feedback-button button button-secondary"
-							onClick={() => feedbackModalRef.current?.show()}
+							onClick={() =>
+								setModalContents({
+									form: <FeedbackDialog />,
+									title: 'Feedback',
+								})
+							}
 						>
 							<span className="button-text">Give Feedback</span>
 							<i className="far fa-comments button-icon" aria-hidden="true" />
@@ -72,7 +78,6 @@ function RetroSubheader(): JSX.Element {
 					</li>
 				</ul>
 			</div>
-			<FeedbackDialog ref={feedbackModalRef} />
 			<ArchiveRetroDialog ref={archiveRetroModalRef} />
 		</>
 	);

@@ -15,43 +15,26 @@
  * limitations under the License.
  */
 
-import React, { forwardRef, Ref, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import React, { useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Dialog from '../../../../../Common/Dialog/Dialog';
-import Modal, { ModalMethods } from '../../../../../Common/Modal/Modal';
 import FeedbackService from '../../../../../Services/Api/FeedbackService';
+import { ModalContentsState } from '../../../../../State/ModalContentsState';
 import { TeamState } from '../../../../../State/TeamState';
 
 import FeedbackStars from './FeedbackStars/FeedbackStars';
 
 import './FeedbackDialog.scss';
 
-function FeedbackDialog(props: unknown, ref: Ref<ModalMethods>) {
-	function hide() {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		ref.current?.hide();
-	}
-
-	return (
-		<Modal ref={ref}>
-			<FeedbackDialogRenderer closeModal={hide} />
-		</Modal>
-	);
-}
-
-type FeedbackDialogRendererProps = {
-	closeModal: () => void;
-};
-
-export function FeedbackDialogRenderer(props: FeedbackDialogRendererProps) {
-	const { closeModal } = props;
-
+function FeedbackDialog() {
+	const setModalContents = useSetRecoilState(ModalContentsState);
 	const team = useRecoilValue(TeamState);
 	const [stars, setStars] = useState(0);
 	const [comment, setComment] = useState<string>('');
 	const [userEmail, setUserEmail] = useState<string>('');
+
+	const closeModal = () => setModalContents(null);
 
 	const handleSubmit = () => {
 		if (comment) {
@@ -106,4 +89,4 @@ export function FeedbackDialogRenderer(props: FeedbackDialogRendererProps) {
 	);
 }
 
-export default forwardRef<ModalMethods>(FeedbackDialog);
+export default FeedbackDialog;

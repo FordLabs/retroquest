@@ -39,7 +39,7 @@ type DialogProps = PropsWithChildren<{
 	};
 }>;
 
-export default function Dialog(props: DialogProps) {
+function Dialog(props: DialogProps) {
 	const { title, subtitle, buttons, className, children, testId } = props;
 	const DialogElement = !!buttons ? 'form' : 'div';
 
@@ -76,3 +76,5 @@ export default function Dialog(props: DialogProps) {
 		</DialogElement>
 	);
 }
+
+export default Dialog;

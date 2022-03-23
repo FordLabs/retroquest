@@ -16,14 +16,20 @@
  */
 
 import * as React from 'react';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import fileSaver from 'file-saver';
 import { RecoilRoot } from 'recoil';
 
 import TeamService from '../../../../Services/Api/TeamService';
+import {
+	ModalContents,
+	ModalContentsState,
+} from '../../../../State/ModalContentsState';
 import { TeamState } from '../../../../State/TeamState';
 import Team from '../../../../Types/Team';
+import { RecoilObserver } from '../../../../Utils/RecoilObserver';
 
+import FeedbackDialog from './FeedbackDialog/FeedbackDialog';
 import RetroSubheader from './RetroSubheader';
 
 jest.mock('../../../../Services/Api/TeamService');
@@ -36,8 +42,11 @@ const team: Team = {
 
 describe('Retro Subheader', () => {
 	const mockCSVString = 'column 1, column 2';
+	let modalContent: ModalContents | null;
 
 	beforeEach(() => {
+		modalContent = null;
+
 		TeamService.getCSV = jest.fn().mockResolvedValue(mockCSVString);
 
 		render(
@@ -46,6 +55,12 @@ describe('Retro Subheader', () => {
 					set(TeamState, team);
 				}}
 			>
+				<RecoilObserver
+					recoilState={ModalContentsState}
+					onChange={(value: ModalContents) => {
+						modalContent = value;
+					}}
+				/>
 				<RetroSubheader />
 			</RecoilRoot>
 		);
@@ -58,7 +73,12 @@ describe('Retro Subheader', () => {
 
 			const feedbackButton = screen.getByText('Give Feedback');
 			feedbackButton.click();
-			await act(async () => expect(screen.getByText(modalText)).toBeDefined());
+			await waitFor(() =>
+				expect(modalContent).toEqual({
+					form: <FeedbackDialog />,
+					title: 'Feedback',
+				})
+			);
 		});
 	});
 
