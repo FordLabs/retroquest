@@ -15,25 +15,14 @@
  * limitations under the License.
  */
 
-import React from 'react';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { RecoilRoot } from 'recoil';
+import { atom } from 'recoil';
 
-import FeedbackDialog from '../App/Team/Retro/RetroSubheader/FeedbackDialog/FeedbackDialog';
+export interface ModalContents {
+	form: JSX.Element;
+	title: string;
+}
 
-export default {
-	title: 'components/FeedbackDialog',
-	component: FeedbackDialog,
-} as ComponentMeta<typeof FeedbackDialog>;
-
-const Template: ComponentStory<typeof FeedbackDialog> = () => {
-	return (
-		<RecoilRoot>
-			<div style={{ backgroundColor: 'white', width: '450px' }}>
-				<FeedbackDialog />
-			</div>
-		</RecoilRoot>
-	);
-};
-
-export const Example = Template.bind({});
+export const ModalContentsState = atom<ModalContents | null>({
+	key: 'modalContentsState',
+	default: null,
+});
