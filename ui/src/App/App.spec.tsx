@@ -17,7 +17,7 @@
 
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { RecoilRoot } from 'recoil';
 
 import { ThemeState } from '../State/ThemeState';
@@ -26,7 +26,11 @@ import Theme from '../Types/Theme';
 import App from './App';
 
 jest.mock('./Login/LoginPage', () => {
-	return () => <>Login Page</>;
+	return () => <div>Login Page</div>;
+});
+
+jest.mock('../Common/ModalDialog/ModalDialog', () => {
+	return () => <div>Root Modal</div>;
 });
 
 describe('App', () => {
@@ -56,5 +60,16 @@ describe('App', () => {
 		);
 
 		expect(document.body.classList).toContain('dark-theme');
+	});
+
+	it('should include root modal', () => {
+		render(
+			<MemoryRouter>
+				<RecoilRoot>
+					<App />
+				</RecoilRoot>
+			</MemoryRouter>
+		);
+		screen.getByText('Root Modal');
 	});
 });

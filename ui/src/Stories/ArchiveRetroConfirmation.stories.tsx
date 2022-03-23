@@ -15,28 +15,23 @@
  * limitations under the License.
  */
 
-import React, { createRef } from 'react';
+import React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { RecoilRoot } from 'recoil';
 
-import ArchiveRetroDialog from '../App/Team/Retro/RetroSubheader/ArchiveRetroDialog/ArchiveRetroDialog';
-import { PrimaryButton } from '../Common/Buttons/Button';
-import { ModalMethods } from '../Common/Modal/Modal';
+import ArchiveRetroDialog from '../App/Team/Retro/RetroSubheader/ArchiveRetroConfirmation/ArchiveRetroConfirmation';
 
 export default {
-	title: 'components/ArchiveRetroDialog',
+	title: 'components/ArchiveRetroConfirmation',
 	component: ArchiveRetroDialog,
 } as ComponentMeta<typeof ArchiveRetroDialog>;
 
 const Template: ComponentStory<typeof ArchiveRetroDialog> = () => {
-	const ref = createRef<ModalMethods>();
-
 	return (
 		<RecoilRoot>
-			<PrimaryButton onClick={() => ref.current?.show()}>
-				Archive Retro
-			</PrimaryButton>
-			<ArchiveRetroDialog ref={ref} />
+			<div style={{ backgroundColor: 'white', width: '500px' }}>
+				<ArchiveRetroDialog />
+			</div>
 		</RecoilRoot>
 	);
 };

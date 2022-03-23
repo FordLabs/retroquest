@@ -15,24 +15,21 @@
  * limitations under the License.
  */
 
-import React, { useRef } from 'react';
+import React from 'react';
 import fileSaver from 'file-saver';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { ModalMethods } from '../../../../Common/Modal/Modal';
 import TeamService from '../../../../Services/Api/TeamService';
 import { ModalContentsState } from '../../../../State/ModalContentsState';
 import { TeamState } from '../../../../State/TeamState';
 
-import ArchiveRetroDialog from './ArchiveRetroDialog/ArchiveRetroDialog';
+import ArchiveRetroDialog from './ArchiveRetroConfirmation/ArchiveRetroConfirmation';
 import FeedbackForm from './FeedbackForm/FeedbackForm';
 
 import './RetroSubheader.scss';
 
 function RetroSubheader(): JSX.Element {
-	const archiveRetroModalRef = useRef<ModalMethods>(null);
 	const setModalContents = useSetRecoilState(ModalContentsState);
-
 	const team = useRecoilValue(TeamState);
 
 	const downloadCSV = () => {
@@ -71,14 +68,18 @@ function RetroSubheader(): JSX.Element {
 					<li>
 						<button
 							className="archive-button button button-primary"
-							onClick={() => archiveRetroModalRef.current?.show()}
+							onClick={() =>
+								setModalContents({
+									title: 'Archive Retro',
+									component: <ArchiveRetroDialog />,
+								})
+							}
 						>
 							Archive Retro
 						</button>
 					</li>
 				</ul>
 			</div>
-			<ArchiveRetroDialog ref={archiveRetroModalRef} />
 		</>
 	);
 }

@@ -14,39 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { forwardRef, Ref } from 'react';
-import { useRecoilValue } from 'recoil';
+import React from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Dialog from '../../../../../Common/Dialog/Dialog';
-import Modal, { ModalMethods } from '../../../../../Common/Modal/Modal';
 import BoardService from '../../../../../Services/Api/BoardService';
+import { ModalContentsState } from '../../../../../State/ModalContentsState';
 import { TeamState } from '../../../../../State/TeamState';
 
-import './ArchiveRetroDialog.scss';
+import './ArchiveRetroConfirmation.scss';
 
-function ArchiveRetroDialog(props: unknown, ref: Ref<ModalMethods>) {
-	function hide() {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		ref.current?.hide();
-	}
-
-	return (
-		<Modal ref={ref}>
-			<ArchiveRetroDialogRenderer closeModal={hide} />
-		</Modal>
-	);
-}
-
-type ArchiveRetroDialogRendererProps = {
-	closeModal: () => void;
-};
-
-export function ArchiveRetroDialogRenderer(
-	props: ArchiveRetroDialogRendererProps
-) {
-	const { closeModal } = props;
+function ArchiveRetroConfirmation() {
 	const team = useRecoilValue(TeamState);
+	const setModalContents = useSetRecoilState(ModalContentsState);
+
+	const closeModal = () => setModalContents(null);
 
 	const handleSubmit = () => {
 		BoardService.archiveRetro(team.id)
@@ -68,4 +50,4 @@ export function ArchiveRetroDialogRenderer(
 	);
 }
 
-export default forwardRef<ModalMethods>(ArchiveRetroDialog);
+export default ArchiveRetroConfirmation;
