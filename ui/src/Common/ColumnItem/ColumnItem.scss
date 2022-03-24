@@ -127,7 +127,7 @@ $base-drop-shadow: 0 19px 38px rgba(main.$black, 0.3);
 	}
 }
 
-.modal {
+.modal-container {
 	$happy-shadow: 0 0 0 $in-modal-border-width main.$green, $base-drop-shadow;
 	$confused-shadow: 0 0 0 $in-modal-border-width main.$blue, $base-drop-shadow;
 	$unhappy-shadow: 0 0 0 $in-modal-border-width main.$red, $base-drop-shadow;
@@ -135,22 +135,20 @@ $base-drop-shadow: 0 19px 38px rgba(main.$black, 0.3);
 	$action-shadow: 0 0 0 $in-modal-border-width main.$yellow, $base-drop-shadow;
 
 	.column-item {
-		width: 450px;
-		max-width: 650px;
-		height: auto;
-		max-height: 50%;
-
-		font-size: 1rem;
+		width: calc(100% - 16px);
+		margin: $in-modal-border-width;
 
 		border-radius: 6px;
 
-		@media only screen and (max-width: 610px) {
-			width: calc(100% - 16px);
-			height: 280px;
-			max-height: 280px;
-			margin: $in-modal-border-width;
+		transform: none;
 
-			transform: none;
+		@include main.breakpoint-medium {
+			width: 450px;
+			max-width: 650px;
+			height: auto;
+			max-height: 50%;
+
+			font-size: 1rem;
 		}
 
 		&.happy {

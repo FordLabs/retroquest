@@ -53,6 +53,18 @@
 		z-index: 2;
 		position: relative;
 
+		&.super-size {
+			border-radius: 15px;
+
+			@include main.breakpoint-medium {
+				transform: scale(1.5);
+			}
+
+			@include main.breakpoint-large {
+				transform: scale(1.65);
+			}
+		}
+
 		.modal-title {
 			display: none;
 		}

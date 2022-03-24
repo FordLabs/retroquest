@@ -15,21 +15,18 @@
  * limitations under the License.
  */
 
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import classnames from 'classnames';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import Assignee from '../../../../../Common/Assignee/Assignee';
 import ColumnItem from '../../../../../Common/ColumnItem/ColumnItem';
 import { DateCreated } from '../../../../../Common/DateCreated/DateCreated';
-import { ModalMethods } from '../../../../../Common/Modal/Modal';
 import ActionItemService from '../../../../../Services/Api/ActionItemService';
+import { ModalContentsState } from '../../../../../State/ModalContentsState';
 import { TeamState } from '../../../../../State/TeamState';
 import Action from '../../../../../Types/Action';
 import Topic from '../../../../../Types/Topic';
-import ActionItemModal from '../ActionItemModal/ActionItemModal';
-
-import './ActionItem.scss';
 
 type ActionItemProps = {
 	action: Action;
@@ -39,14 +36,16 @@ type ActionItemProps = {
 
 function ActionItem(props: ActionItemProps) {
 	const { action, readOnly = false, disableAnimations = false } = props;
-	const actionItemModalRef = useRef<ModalMethods>(null);
 
 	const team = useRecoilValue(TeamState);
+	const setModalContents = useSetRecoilState(ModalContentsState);
 
 	const [animateFadeOut, setAnimateFadeOut] = useState<boolean>(false);
 
 	const deleteActionItem = () => {
-		ActionItemService.delete(team.id, action.id).catch(console.error);
+		ActionItemService.delete(team.id, action.id)
+			.then(closeModal)
+			.catch(console.error);
 	};
 
 	const editActionItemTask = (updatedTask: string) => {
@@ -67,7 +66,9 @@ function ActionItem(props: ActionItemProps) {
 			team.id,
 			action.id,
 			!action.completed
-		).catch(console.error);
+		)
+			.then(closeModal)
+			.catch(console.error);
 	};
 
 	const getAnimationClasses = () => {
@@ -78,6 +79,17 @@ function ActionItem(props: ActionItemProps) {
 			};
 		}
 	};
+
+	const openActionItemModal = () =>
+		setModalContents({
+			title: 'Action Item',
+			component: (
+				<ActionItem action={action} readOnly={readOnly} disableAnimations />
+			),
+			superSize: true,
+		});
+
+	const closeModal = () => setModalContents(null);
 
 	return (
 		<>
@@ -92,7 +104,7 @@ function ActionItem(props: ActionItemProps) {
 				text={action.task}
 				checked={action.completed}
 				readOnly={readOnly}
-				onSelect={() => actionItemModalRef.current?.show()}
+				onSelect={openActionItemModal}
 				onEdit={editActionItemTask}
 				onDelete={deleteActionItem}
 				onCheck={updateActionItemCompletionStatus}
@@ -113,7 +125,6 @@ function ActionItem(props: ActionItemProps) {
 					/>
 				)}
 			</ColumnItem>
-			<ActionItemModal ref={actionItemModalRef} action={action} />
 		</>
 	);
 }

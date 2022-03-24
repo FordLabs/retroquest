@@ -32,6 +32,8 @@ import Topic from '../../../../Types/Topic';
 
 import ActionItem from './ActionItem/ActionItem';
 
+import './ActionItemsColumn.scss';
+
 function ActionItemsColumn() {
 	const topic = Topic.ACTION;
 	const team = useRecoilValue(TeamState);
@@ -70,8 +72,8 @@ function ActionItemsColumn() {
 	};
 
 	return (
-		<div className="retro-column" data-testid={`retroColumn__${topic}`}>
-			<ColumnHeader initialTitle={'Action Items'} type={topic} />
+		<div className="action-items-column" data-testid={`retroColumn__${topic}`}>
+			<ColumnHeader initialTitle="Action Items" type={topic} />
 			<TextField
 				type={topic}
 				placeholder="Enter an Action Item"

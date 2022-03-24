@@ -20,6 +20,7 @@ import { atom } from 'recoil';
 export interface ModalContents {
 	title: string;
 	component: JSX.Element;
+	superSize?: boolean;
 }
 
 export const ModalContentsState = atom<ModalContents | null>({
