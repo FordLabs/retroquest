@@ -16,16 +16,21 @@
  */
 
 import * as React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
 
 import * as Modal from '../../../../../Common/Modal/Modal';
 import ActionItemService from '../../../../../Services/Api/ActionItemService';
+import {
+	ModalContents,
+	ModalContentsState,
+} from '../../../../../State/ModalContentsState';
 import { TeamState } from '../../../../../State/TeamState';
 import Action from '../../../../../Types/Action';
 import Team from '../../../../../Types/Team';
+import { RecoilObserver } from '../../../../../Utils/RecoilObserver';
 
 import ActionItem from './ActionItem';
 
@@ -41,6 +46,7 @@ jest.spyOn(Modal, 'useModal').mockReturnValue(mockUseModalValue);
 jest.mock('../../../../../Services/Api/ActionItemService');
 
 describe('ActionItem', () => {
+	let modalContent: ModalContents | null;
 	const fadeInAnimationClass = 'fade-in';
 	const fadeOutAnimationClass = 'fade-out';
 
@@ -60,6 +66,8 @@ describe('ActionItem', () => {
 
 	beforeEach(() => {
 		jest.clearAllMocks();
+
+		modalContent = null;
 	});
 
 	it('should render without axe errors', async () => {
@@ -103,15 +111,26 @@ describe('ActionItem', () => {
 						set(TeamState, team);
 					}}
 				>
+					<RecoilObserver
+						recoilState={ModalContentsState}
+						onChange={(value: ModalContents) => {
+							modalContent = value;
+						}}
+					/>
 					<ActionItem action={fakeAction} />
 				</RecoilRoot>
 			);
 		});
 
 		it('should open retro item modal', () => {
-			clickTask();
-
-			expect(screen.getByTestId('actionItemModal')).toBeDefined();
+			openActionItemModal();
+			expect(modalContent).toEqual({
+				title: 'Action Item',
+				component: (
+					<ActionItem action={fakeAction} readOnly={false} disableAnimations />
+				),
+				superSize: true,
+			});
 		});
 
 		it('should start and cancel editing of action item', () => {
@@ -191,6 +210,17 @@ describe('ActionItem', () => {
 			);
 		});
 
+		it('should close modal on delete if deleting from action item modal', async () => {
+			openActionItemModal();
+
+			await waitFor(() => expect(modalContent).not.toBeNull());
+
+			clickDelete();
+			clickConfirmDelete();
+
+			await waitFor(() => expect(modalContent).toBeNull());
+		});
+
 		it('should mark action item as completed and switch animation class', () => {
 			const actionItem = screen.getByTestId('actionItem');
 			expect(actionItem.className).toContain(fadeInAnimationClass);
@@ -206,6 +236,16 @@ describe('ActionItem', () => {
 			expect(actionItem.className).toContain(fadeOutAnimationClass);
 		});
 
+		it('should close modal after marking item complete from action item modal', async () => {
+			openActionItemModal();
+
+			await waitFor(() => expect(modalContent).not.toBeNull());
+
+			clickCheckbox();
+
+			await waitFor(() => expect(modalContent).toBeNull());
+		});
+
 		it('should edit Assignee', () => {
 			typeAssignee('FordLabs{enter}');
 
@@ -217,7 +257,7 @@ describe('ActionItem', () => {
 			expect(ActionItemService.updateAssignee).toBeCalledTimes(1);
 
 			typeAssignee(' Team');
-			clickTask();
+			openActionItemModal();
 
 			expect(ActionItemService.updateAssignee).toHaveBeenCalledWith(
 				team.id,
@@ -249,7 +289,7 @@ describe('ActionItem', () => {
 		it('should not open modal', () => {
 			const actionItemTaskButton = screen.queryByTestId('editableText-select');
 			expect(actionItemTaskButton).toBeNull();
-			expect(screen.queryByTestId('actionItemModal')).toBeNull();
+			expect(modalContent).toBeNull();
 		});
 
 		it('should not disable delete button', () => {
@@ -275,6 +315,12 @@ describe('ActionItem', () => {
 						set(TeamState, team);
 					}}
 				>
+					<RecoilObserver
+						recoilState={ModalContentsState}
+						onChange={(value: ModalContents) => {
+							modalContent = value;
+						}}
+					/>
 					<ActionItem action={fakeAction} readOnly={true} />
 				</RecoilRoot>
 			);
@@ -296,9 +342,15 @@ describe('ActionItem', () => {
 			expect(ActionItemService.updateAssignee).not.toHaveBeenCalled();
 		});
 
-		it('should open retro item modal', () => {
-			clickTask();
-			expect(screen.getByTestId('actionItemModal')).toBeDefined();
+		it('should open action item modal', () => {
+			openActionItemModal();
+			expect(modalContent).toEqual({
+				title: 'Action Item',
+				component: (
+					<ActionItem action={fakeAction} readOnly={true} disableAnimations />
+				),
+				superSize: true,
+			});
 		});
 	});
 });
@@ -318,7 +370,7 @@ export function editTask(text: string) {
 	userEvent.type(textArea, text);
 }
 
-function clickTask() {
+function openActionItemModal() {
 	userEvent.click(screen.getByTestId('editableText-select'));
 }
 

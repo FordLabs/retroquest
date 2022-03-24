@@ -46,7 +46,7 @@ function ModalDialog() {
 			classNames={{
 				container: 'modal-container',
 				overlay: 'modal-overlay',
-				dialog: 'modal-content',
+				dialog: `modal-content ${modalContents?.superSize ? 'super-size' : ''}`,
 				title: 'modal-title',
 				closeButton: 'modal-close-button',
 			}}
