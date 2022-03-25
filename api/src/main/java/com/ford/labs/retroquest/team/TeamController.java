@@ -96,7 +96,7 @@ public class TeamController {
         return ResponseEntity.ok()
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFileName())
             .contentType(MediaType.parseMediaType("text/csv"))
-            .body(file.getCSVString().getBytes());
+            .body(file.getCsvString().getBytes());
     }
 
     @GetMapping(value = "team/{teamId}/validate")
