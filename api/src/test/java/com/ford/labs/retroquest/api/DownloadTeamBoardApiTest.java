@@ -35,6 +35,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.sql.Date;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -77,7 +78,7 @@ class DownloadTeamBoardApiTest extends ApiTestBase {
 
     @Test
     void should_get_csv_with_thoughts_and_action_items() throws Exception {
-        ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder()
+        actionItemRepository.save(ActionItem.builder()
                 .task("task")
                 .teamId(teamId)
                 .archived(false)
@@ -92,7 +93,7 @@ class DownloadTeamBoardApiTest extends ApiTestBase {
                 .topic("happy")
                 .build());
 
-        Thought savedThought = thoughtRepository.save(
+        thoughtRepository.save(
                 Thought.builder()
                         .message("task")
                         .columnTitle(savedColumnTitle)
@@ -112,8 +113,8 @@ class DownloadTeamBoardApiTest extends ApiTestBase {
 
         String[] csvContentsList = result.getResponse().getContentAsString().split("\n");
         assertThat(csvContentsList[0].trim()).isEqualTo("Column,Message,Likes,Completed,Assigned To");
-        assertThat(csvContentsList[1].trim()).isEqualTo(String.join(",", savedThought.getCSVFields()));
-        assertThat(csvContentsList[2].trim()).isEqualTo(String.join(",", savedActionItem.getCsvFields()));
+        assertThat(csvContentsList[1].trim()).isEqualTo("Happy,task,5,no");
+        assertThat(csvContentsList[2].trim()).isEqualTo("action item,task,,no,assignee");
     }
 
     @Test
