@@ -46,7 +46,7 @@ public class CsvFile {
         return String.format("\"%s-retro-%d-%d-%d.csv\"", teamName, today.getMonthValue(), today.getDayOfMonth(), today.getYear());
     }
 
-    public String getCSVString() throws IOException {
+    public String getCsvString() throws IOException {
         var out = new ByteArrayOutputStream();
         var writer = new BufferedWriter(new OutputStreamWriter(out));
 
@@ -57,7 +57,7 @@ public class CsvFile {
         }
 
         for (var actionItem : actionItems) {
-            csvPrinter.printRecord(actionItem.getCSVFields());
+            csvPrinter.printRecord(actionItem.getCsvFields());
         }
 
         csvPrinter.flush();

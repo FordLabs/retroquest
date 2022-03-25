@@ -113,7 +113,7 @@ class DownloadTeamBoardApiTest extends ApiTestBase {
         String[] csvContentsList = result.getResponse().getContentAsString().split("\n");
         assertThat(csvContentsList[0].trim()).isEqualTo("Column,Message,Likes,Completed,Assigned To");
         assertThat(csvContentsList[1].trim()).isEqualTo(String.join(",", savedThought.getCSVFields()));
-        assertThat(csvContentsList[2].trim()).isEqualTo(String.join(",", savedActionItem.getCSVFields()));
+        assertThat(csvContentsList[2].trim()).isEqualTo(String.join(",", savedActionItem.getCsvFields()));
     }
 
     @Test

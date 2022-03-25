@@ -72,7 +72,7 @@ class CsvFileTest {
             "teamName",
             List.of(firstThought, secondThoght, thirdThought),
             List.of(actionItem)
-        ).getCSVString();
+        ).getCsvString();
 
         String expected = FileUtils.readFileToString(
             new File("src/test/resources/sampleOutput.csv"),
@@ -81,5 +81,4 @@ class CsvFileTest {
 
         assertThat(actual, is(equalTo(expected)));
     }
-
 }

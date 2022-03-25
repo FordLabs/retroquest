@@ -18,11 +18,8 @@
 package com.ford.labs.retroquest.actionitem;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,8 +27,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.sql.Date;
 import java.util.List;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -53,8 +53,25 @@ public class ActionItem {
         return completed ? "yes" : "no";
     }
 
+    private String getNullSafeAssignee() {
+        return Objects.toString(assignee, "");
+    }
+
     @JsonIgnore
-    public List<String> getCSVFields() {
-        return List.of("action item", task, "", getCompletedString(), assignee);
+    public List<String> getCsvFields() {
+        return List.of("action item", task, "", getCompletedString(), getNullSafeAssignee());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        ActionItem that = (ActionItem) o;
+        return id != null && Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
