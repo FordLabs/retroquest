@@ -22,6 +22,7 @@ import com.ford.labs.retroquest.column.ColumnTitle;
 import com.ford.labs.retroquest.team.CsvFile;
 import com.ford.labs.retroquest.thought.Thought;
 import org.apache.commons.io.FileUtils;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -80,5 +81,38 @@ class CsvFileTest {
         );
 
         assertThat(actual, is(equalTo(expected)));
+    }
+
+    @Test
+    public void getCsvString_WithCompletedActionItem_ReturnsYes() throws IOException {
+        var actionItem = new ActionItem(null, "task", true, "teamId", "assignee", null, true);
+        String actual = new CsvFile(
+                "teamName",
+                List.of(),
+                List.of(actionItem)
+        ).getCsvString();
+        Assertions.assertThat(actual).contains("action item,task,,yes,assignee");
+    }
+
+    @Test
+    public void getCsvString_WithIncompleteActionItem_ReturnsNo() throws IOException {
+        var actionItem = new ActionItem(null, "task", false, "teamId", "assignee", null, true);
+        String actual = new CsvFile(
+                "teamName",
+                List.of(),
+                List.of(actionItem)
+        ).getCsvString();
+        Assertions.assertThat(actual).contains("action item,task,,no,assignee");
+    }
+
+    @Test
+    public void getCsvString_WithNullAssignee_ReturnsEmptyString() throws IOException {
+        var actionItem = new ActionItem(null, "task", false, "teamId", null, null, true);
+        String actual = new CsvFile(
+                "teamName",
+                List.of(),
+                List.of(actionItem)
+        ).getCsvString();
+        Assertions.assertThat(actual).contains("action item,task,,no,");
     }
 }

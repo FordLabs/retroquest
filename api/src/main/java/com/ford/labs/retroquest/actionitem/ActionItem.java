@@ -17,7 +17,6 @@
 
 package com.ford.labs.retroquest.actionitem;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -26,7 +25,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.sql.Date;
-import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -48,19 +46,6 @@ public class ActionItem {
     @EqualsAndHashCode.Exclude
     private Date dateCreated;
     private boolean archived;
-
-    private String getCompletedString() {
-        return completed ? "yes" : "no";
-    }
-
-    private String getNullSafeAssignee() {
-        return Objects.toString(assignee, "");
-    }
-
-    @JsonIgnore
-    public List<String> getCsvFields() {
-        return List.of("action item", task, "", getCompletedString(), getNullSafeAssignee());
-    }
 
     @Override
     public boolean equals(Object o) {

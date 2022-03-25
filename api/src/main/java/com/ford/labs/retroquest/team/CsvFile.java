@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @AllArgsConstructor
@@ -52,16 +53,43 @@ public class CsvFile {
 
         var csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT
                 .withHeader("Column", "Message", "Likes", "Completed", "Assigned To"));
-        for (var thought: thoughts) {
-            csvPrinter.printRecord(thought.getCSVFields());
+        for (var thought : thoughts) {
+            csvPrinter.printRecord(getFieldsFrom(thought));
         }
 
         for (var actionItem : actionItems) {
-            csvPrinter.printRecord(actionItem.getCsvFields());
+            csvPrinter.printRecord(getFieldsFrom(actionItem));
         }
 
         csvPrinter.flush();
         return out.toString();
+    }
+
+    private List<String> getFieldsFrom(Thought thought) {
+        return List.of(
+                thought.getColumnTitle().getTitle(),
+                thought.getMessage(),
+                String.valueOf(thought.getHearts()),
+                getBooleanString(thought.isDiscussed())
+        );
+    }
+
+    private List<String> getFieldsFrom(ActionItem actionItem) {
+        return List.of(
+                "action item",
+                actionItem.getTask(),
+                "",
+                getBooleanString(actionItem.isCompleted()),
+                getNullSafeString(actionItem.getAssignee())
+        );
+    }
+
+    private String getBooleanString(boolean booleanToConvert) {
+        return booleanToConvert ? "yes" : "no";
+    }
+
+    private String getNullSafeString(String stringToConvert) {
+        return Objects.toString(stringToConvert, "");
     }
 
 }

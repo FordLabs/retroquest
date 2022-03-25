@@ -17,23 +17,16 @@
 
 package com.ford.labs.retroquest.thought;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ford.labs.retroquest.column.ColumnTitle;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import java.util.List;
+import javax.persistence.*;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
+@ToString
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -67,13 +60,16 @@ public class Thought {
     private ColumnTitle columnTitle;
     private Long boardId;
 
-    @JsonIgnore
-    public List<String> getCSVFields() {
-        return List.of(columnTitle.getTitle(), message, String.valueOf(hearts), getDiscussedString());
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Thought thought = (Thought) o;
+        return id != null && Objects.equals(id, thought.id);
     }
 
-    private String getDiscussedString() {
-        return discussed ? "yes" : "no";
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
-
 }
