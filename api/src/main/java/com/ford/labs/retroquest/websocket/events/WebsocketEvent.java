@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022. Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,32 +15,27 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.websocket;
+package com.ford.labs.retroquest.websocket.events;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class WebsocketResponse<T> {
-    private String type = "";
-    private T payload = null;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 
-    WebsocketResponse() {
+@Getter
+@AllArgsConstructor
+@EqualsAndHashCode
+@ToString
+@JsonAutoDetect(fieldVisibility = NONE, getterVisibility = NONE)
+public abstract class WebsocketEvent {
+    @JsonProperty
+    private final WebsocketEventType type;
+    @JsonProperty
+    private final Object payload;
 
-    }
-
-    WebsocketResponse(String type, @JsonProperty("payload") T payload) {
-        super();
-        this.type = type;
-        this.payload = payload;
-    }
-
-    String getType() {
-        return this.type;
-    }
-
-    T getPayload() {
-        return this.payload;
-    }
-
+    public abstract String getRoute();
 }

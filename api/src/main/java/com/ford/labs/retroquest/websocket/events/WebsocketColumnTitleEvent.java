@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022. Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,16 +15,22 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.websocket;
+package com.ford.labs.retroquest.websocket.events;
 
-public class WebsocketPutResponse<T> extends WebsocketResponse<T>{
+import com.ford.labs.retroquest.column.ColumnTitle;
 
-    WebsocketPutResponse() {
-        super();
+public class WebsocketColumnTitleEvent extends WebsocketEvent{
+
+    private static final String ROUTE_STRING = "/topic/%s/column-titles";
+    private final String teamId;
+
+    public WebsocketColumnTitleEvent(String teamId, WebsocketEventType type, ColumnTitle payload) {
+        super(type, payload);
+        this.teamId = teamId;
     }
 
-    public WebsocketPutResponse(T payload) {
-        super("put", payload);
+    @Override
+    public String getRoute() {
+        return String.format(ROUTE_STRING, teamId);
     }
-
 }

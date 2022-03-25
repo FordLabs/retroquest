@@ -18,8 +18,8 @@
 package com.ford.labs.retroquest.column;
 
 import com.ford.labs.retroquest.exception.ColumnTitleNotFoundException;
-import com.ford.labs.retroquest.websocket.WebsocketColumnTitleEvent;
-import com.ford.labs.retroquest.websocket.WebsocketEventType;
+import com.ford.labs.retroquest.websocket.events.WebsocketColumnTitleEvent;
+import com.ford.labs.retroquest.websocket.events.WebsocketEventType;
 import com.ford.labs.retroquest.websocket.WebsocketService;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.stereotype.Service;

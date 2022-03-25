@@ -19,7 +19,7 @@ package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.actionitem.*;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
-import com.ford.labs.retroquest.websocket.WebsocketActionItemEvent;
+import com.ford.labs.retroquest.websocket.events.WebsocketActionItemEvent;
 import com.ford.labs.retroquest.websocket.WebsocketService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -30,8 +30,8 @@ import org.springframework.http.MediaType;
 
 import java.util.List;
 
-import static com.ford.labs.retroquest.websocket.WebsocketEventType.DELETE;
-import static com.ford.labs.retroquest.websocket.WebsocketEventType.UPDATE;
+import static com.ford.labs.retroquest.websocket.events.WebsocketEventType.DELETE;
+import static com.ford.labs.retroquest.websocket.events.WebsocketEventType.UPDATE;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
