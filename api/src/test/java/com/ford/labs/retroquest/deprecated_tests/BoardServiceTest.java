@@ -24,7 +24,7 @@ import com.ford.labs.retroquest.board.BoardService;
 import com.ford.labs.retroquest.board.Retro;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtService;
-import com.ford.labs.retroquest.websocket.WebsocketEndRetroEvent;
+import com.ford.labs.retroquest.websocket.events.WebsocketEndRetroEvent;
 import com.ford.labs.retroquest.websocket.WebsocketService;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

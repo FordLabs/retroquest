@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Ford Motor Company
+ * Copyright (c) 2022. Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +15,12 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.websocket;
+package com.ford.labs.retroquest.websocket.events;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ford.labs.retroquest.websocket.events.WebsocketEvent;
+import com.ford.labs.retroquest.websocket.events.WebsocketEventType;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

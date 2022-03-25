@@ -21,13 +21,13 @@ import com.ford.labs.retroquest.column.ColumnTitleRepository;
 import com.ford.labs.retroquest.exception.ColumnTitleNotFoundException;
 import com.ford.labs.retroquest.exception.ThoughtNotFoundException;
 import com.ford.labs.retroquest.websocket.WebsocketService;
-import com.ford.labs.retroquest.websocket.WebsocketThoughtEvent;
+import com.ford.labs.retroquest.websocket.events.WebsocketThoughtEvent;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.ford.labs.retroquest.websocket.WebsocketEventType.DELETE;
-import static com.ford.labs.retroquest.websocket.WebsocketEventType.UPDATE;
+import static com.ford.labs.retroquest.websocket.events.WebsocketEventType.DELETE;
+import static com.ford.labs.retroquest.websocket.events.WebsocketEventType.UPDATE;
 
 @Service
 public class ThoughtService {

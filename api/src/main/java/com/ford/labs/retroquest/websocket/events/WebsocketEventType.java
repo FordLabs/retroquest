@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Ford Motor Company
+ * Copyright (c) 2022. Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,22 +15,13 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.websocket;
+package com.ford.labs.retroquest.websocket.events;
 
-import com.ford.labs.retroquest.actionitem.ActionItem;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class WebsocketActionItemEvent extends WebsocketEvent{
-
-    private static final String ROUTE_STRING = "/topic/%s/action-items";
-    private final String teamId;
-
-    public WebsocketActionItemEvent(String teamId, WebsocketEventType type, ActionItem payload) {
-        super(type, payload);
-        this.teamId = teamId;
-    }
-
-    @Override
-    public String getRoute() {
-        return String.format(ROUTE_STRING, teamId);
-    }
+public enum WebsocketEventType {
+    @JsonProperty("put")
+    UPDATE,
+    @JsonProperty("delete")
+    DELETE
 }

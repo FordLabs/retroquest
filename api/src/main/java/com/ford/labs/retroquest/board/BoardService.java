@@ -20,7 +20,7 @@ package com.ford.labs.retroquest.board;
 import com.ford.labs.retroquest.actionitem.ActionItemService;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtService;
-import com.ford.labs.retroquest.websocket.WebsocketEndRetroEvent;
+import com.ford.labs.retroquest.websocket.events.WebsocketEndRetroEvent;
 import com.ford.labs.retroquest.websocket.WebsocketService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;

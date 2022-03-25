@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Ford Motor Company
+ * Copyright (c) 2022. Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,22 +15,21 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.websocket;
+package com.ford.labs.retroquest.websocket.events;
 
 import com.ford.labs.retroquest.column.ColumnTitle;
+import com.ford.labs.retroquest.websocket.events.WebsocketColumnTitleEvent;
+import org.junit.jupiter.api.Test;
 
-public class WebsocketColumnTitleEvent extends WebsocketEvent{
+import static com.ford.labs.retroquest.websocket.events.WebsocketEventType.UPDATE;
+import static org.assertj.core.api.Assertions.assertThat;
 
-    private static final String ROUTE_STRING = "/topic/%s/column-titles";
-    private final String teamId;
+class WebsocketColumnTitleEventTest {
 
-    public WebsocketColumnTitleEvent(String teamId, WebsocketEventType type, ColumnTitle payload) {
-        super(type, payload);
-        this.teamId = teamId;
+    @Test
+    public void getRoute_returnsTeamSpecificTopic() {
+        var event = new WebsocketColumnTitleEvent("team-id", UPDATE, new ColumnTitle());
+        assertThat(event.getRoute()).isEqualTo("/topic/team-id/column-titles");
     }
 
-    @Override
-    public String getRoute() {
-        return String.format(ROUTE_STRING, teamId);
-    }
 }

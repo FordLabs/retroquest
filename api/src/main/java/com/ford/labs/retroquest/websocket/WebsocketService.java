@@ -19,6 +19,7 @@ package com.ford.labs.retroquest.websocket;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ford.labs.retroquest.websocket.events.WebsocketEvent;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 

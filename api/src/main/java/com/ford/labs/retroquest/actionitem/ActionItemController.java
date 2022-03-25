@@ -18,7 +18,7 @@
 package com.ford.labs.retroquest.actionitem;
 
 
-import com.ford.labs.retroquest.websocket.WebsocketActionItemEvent;
+import com.ford.labs.retroquest.websocket.events.WebsocketActionItemEvent;
 import com.ford.labs.retroquest.websocket.WebsocketService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,8 +34,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import static com.ford.labs.retroquest.websocket.WebsocketEventType.DELETE;
-import static com.ford.labs.retroquest.websocket.WebsocketEventType.UPDATE;
+import static com.ford.labs.retroquest.websocket.events.WebsocketEventType.DELETE;
+import static com.ford.labs.retroquest.websocket.events.WebsocketEventType.UPDATE;
 import static java.lang.String.format;
 
 @RestController
