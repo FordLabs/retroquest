@@ -26,10 +26,5 @@ import java.util.List;
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findAllByTeamIdOrderByDateCreatedDesc(String teamId, Pageable pageable);
-
     List<Board> findAllByTeamId(String teamId);
-
-    void deleteBoardByTeamIdAndId(String teamId, Long id);
-
-    Board findByTeamIdAndId(String teamId, Long id);
 }
