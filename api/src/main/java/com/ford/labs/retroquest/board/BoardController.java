@@ -64,23 +64,6 @@ public class BoardController {
         return ResponseEntity.created(uri).build();
     }
 
-    @Transactional
-    @DeleteMapping("/team/{teamId}/board/{boardId}")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
-    @Operation(summary = "deletes a board for a team id", description = "deleteBoard")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public void deleteBoard(@PathVariable("teamId") String teamId, @PathVariable("boardId") Long boardId) {
-        this.boardService.deleteBoard(teamId, boardId);
-    }
-
-    @GetMapping("/team/{teamId}/board/{boardId}/thoughts")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
-    @Operation(summary = "Gets all thoughts for a team id and board id", description = "getThoughtsForBoard")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public List<Thought> getThoughtsForBoard(@PathVariable("teamId") String teamId, @PathVariable("boardId") Long boardId) {
-        return this.boardService.getThoughtsForTeamIdAndBoardId(teamId, boardId);
-    }
-
     @PutMapping("/team/{teamId}/end-retro")
     @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Ends a retro for a given team", description = "endTeamRetro")

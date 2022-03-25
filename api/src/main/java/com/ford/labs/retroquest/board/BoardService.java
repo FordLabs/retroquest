@@ -70,14 +70,6 @@ public class BoardService {
         return this.boardRepository.save(board);
     }
 
-    public void deleteBoard(String teamId, Long boardId) {
-        this.boardRepository.deleteBoardByTeamIdAndId(teamId, boardId);
-    }
-
-    public List<Thought> getThoughtsForTeamIdAndBoardId(String teamID, Long boardId) {
-        return this.boardRepository.findByTeamIdAndId(teamID, boardId).getThoughts();
-    }
-
     public void endRetro(String teamId) {
         if(this.thoughtService.fetchAllActiveThoughts(teamId).size() > 0) {
             var createdBoard = createBoard(teamId);
