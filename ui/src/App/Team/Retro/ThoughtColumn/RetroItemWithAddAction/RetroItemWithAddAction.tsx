@@ -27,11 +27,10 @@ import './RetroItemWithAddAction.scss';
 interface RetroItemModalProps {
 	type: ThoughtTopic;
 	thought: Thought;
-	readOnly?: boolean;
 }
 
 function RetroItemWithAddAction(props: RetroItemModalProps) {
-	const { type, thought, readOnly } = props;
+	const { type, thought } = props;
 
 	const [showAddActionItemCard, setShowAddActionItemCard] = useState(false);
 
@@ -49,11 +48,11 @@ function RetroItemWithAddAction(props: RetroItemModalProps) {
 		>
 			<RetroItem
 				thought={thought}
-				readOnly={readOnly}
+				disableButtons={showAddActionItemCard}
 				type={type}
 				disableAnimations
 			/>
-			{!readOnly && !showAddActionItemCard && (
+			{!showAddActionItemCard && (
 				<button
 					className="add-action-item-button"
 					onClick={() => setShowAddActionItemCard(true)}

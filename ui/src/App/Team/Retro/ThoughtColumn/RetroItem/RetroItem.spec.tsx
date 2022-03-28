@@ -326,7 +326,11 @@ describe('RetroItem', () => {
 							modalContent = value;
 						}}
 					/>
-					<RetroItem readOnly={true} type={Topic.HAPPY} thought={fakeThought} />
+					<RetroItem
+						disableButtons={true}
+						type={Topic.HAPPY}
+						thought={fakeThought}
+					/>
 				</RecoilRoot>
 			);
 		});

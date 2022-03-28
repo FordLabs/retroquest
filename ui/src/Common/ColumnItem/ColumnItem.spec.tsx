@@ -217,7 +217,7 @@ describe('ColumnItem', () => {
 				<ColumnItem
 					type={Topic.HAPPY}
 					text={startingText}
-					readOnly={true}
+					disableButtons={true}
 					checked={true}
 					onSelect={mockSelect}
 					onEdit={mockEdit}

@@ -44,7 +44,7 @@ type ColumnItemProps = ComponentPropsWithoutRef<'div'> & {
 	type: Topic;
 	text: string;
 	checked?: boolean;
-	readOnly?: boolean;
+	disableButtons?: boolean;
 	onSelect?: () => void;
 	onEdit?: (message: string) => void;
 	onDelete?: () => void;
@@ -59,7 +59,7 @@ export default function ColumnItem(props: ColumnItemProps) {
 		type,
 		text,
 		checked = false,
-		readOnly = false,
+		disableButtons = false,
 		onSelect,
 		onEdit = NO_OP,
 		onDelete = NO_OP,
@@ -80,7 +80,7 @@ export default function ColumnItem(props: ColumnItemProps) {
 	const [deleting, setDeleting] = useState<boolean>(false);
 
 	const canSelect =
-		((!editing && !deleting && !checked) || readOnly) && !!onSelect;
+		((!editing && !deleting && !checked) || disableButtons) && !!onSelect;
 
 	useEffect(() => {
 		if (editing || deleting) {
@@ -157,20 +157,20 @@ export default function ColumnItem(props: ColumnItemProps) {
 							aria-label="Edit"
 							editing={editing}
 							onClick={onEditToggle}
-							disabled={checked || readOnly || deleting}
+							disabled={checked || disableButtons || deleting}
 							ref={editButtonRef}
 						/>
 						<DeleteButton
 							aria-label="Delete"
 							onClick={onDeleteStarted}
-							disabled={readOnly || editing || deleting}
+							disabled={disableButtons || editing || deleting}
 							ref={deleteButtonRef}
 						/>
 						<CheckboxButton
 							aria-label="Mark as complete"
 							checked={checked}
 							onClick={onCheck}
-							disabled={readOnly || editing || deleting}
+							disabled={disableButtons || editing || deleting}
 						/>
 					</>
 				)}
