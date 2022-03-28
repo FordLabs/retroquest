@@ -14,26 +14,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import * as React from 'react';
-import { forwardRef, Ref, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 
 import AddActionItem from '../../../../../Common/AddActionItem/AddActionItem';
-import Modal, { ModalMethods } from '../../../../../Common/Modal/Modal';
 import Thought from '../../../../../Types/Thought';
 import { ThoughtTopic } from '../../../../../Types/Topic';
 import RetroItem from '../RetroItem/RetroItem';
 
-import './RetroItemModal.scss';
+import './RetroItemWithAddAction.scss';
 
-type RetroItemModalProps = {
+interface RetroItemModalProps {
 	type: ThoughtTopic;
 	thought: Thought;
 	readOnly?: boolean;
-};
+}
 
-function RetroItemModal(props: RetroItemModalProps, ref: Ref<ModalMethods>) {
+function RetroItemWithAddAction(props: RetroItemModalProps) {
 	const { type, thought, readOnly } = props;
 
 	const [showAddActionItemCard, setShowAddActionItemCard] = useState(false);
@@ -45,13 +42,10 @@ function RetroItemModal(props: RetroItemModalProps, ref: Ref<ModalMethods>) {
 	}, [showAddActionItemCard]);
 
 	return (
-		<Modal
-			testId="retroItemModal"
-			className={classnames('retro-item-modal', {
+		<div
+			className={classnames('retro-item-with-add-action', {
 				'creating-action': showAddActionItemCard,
 			})}
-			onHide={() => setShowAddActionItemCard(false)}
-			ref={ref}
 		>
 			<RetroItem
 				thought={thought}
@@ -65,7 +59,7 @@ function RetroItemModal(props: RetroItemModalProps, ref: Ref<ModalMethods>) {
 					onClick={() => setShowAddActionItemCard(true)}
 					ref={addActionItemButtonRef}
 				>
-					<i className="fas fa-plus plus-icon" />
+					<i className="fas fa-plus plus-icon" aria-hidden />
 					Add Action Item
 				</button>
 			)}
@@ -75,8 +69,8 @@ function RetroItemModal(props: RetroItemModalProps, ref: Ref<ModalMethods>) {
 					hideComponentCallback={() => setShowAddActionItemCard(false)}
 				/>
 			)}
-		</Modal>
+		</div>
 	);
 }
 
-export default forwardRef<ModalMethods, RetroItemModalProps>(RetroItemModal);
+export default RetroItemWithAddAction;

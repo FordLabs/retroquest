@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useRef } from 'react';
-import { A11yDialog } from 'react-a11y-dialog';
-import { useRecoilValue } from 'recoil';
+import React, { useCallback, useEffect } from 'react';
+import { useA11yDialog } from 'react-a11y-dialog';
+import { useRecoilState } from 'recoil';
 
 import {
 	ModalContents,
@@ -27,35 +27,56 @@ import {
 import './ModalDialog.scss';
 
 function ModalDialog() {
-	const modalContents = useRecoilValue<ModalContents | null>(
-		ModalContentsState
+	const [modalContents, setModalContents] =
+		useRecoilState<ModalContents | null>(ModalContentsState);
+
+	const [modalInstance, attr] = useA11yDialog({
+		id: 'modal-container',
+		title: modalContents?.title,
+	});
+
+	const clearModalContents = useCallback(
+		() => setModalContents(null),
+		[setModalContents]
 	);
-	const dialogRef = useRef<{ show: Function; hide: Function }>();
 
 	useEffect(() => {
 		if (modalContents) {
-			dialogRef.current?.show();
+			modalInstance?.show();
 		} else {
-			dialogRef.current?.hide();
+			modalInstance?.hide();
+			clearModalContents();
 		}
-	}, [modalContents]);
+	}, [clearModalContents, modalContents, modalInstance]);
 
 	return (
-		<A11yDialog
-			id="modal-container"
-			classNames={{
-				container: 'modal-container',
-				overlay: 'modal-overlay',
-				dialog: `modal-content ${modalContents?.superSize ? 'super-size' : ''}`,
-				title: 'modal-title',
-				closeButton: 'modal-close-button',
-			}}
-			title={modalContents?.title || ''}
-			titleId="modal-title"
-			dialogRef={(dialog) => (dialogRef.current = dialog)}
-		>
-			{modalContents?.component}
-		</A11yDialog>
+		<div {...attr.container} className="modal-container">
+			<div
+				{...attr.overlay}
+				className="modal-overlay"
+				data-testid="modalOverlay"
+				onClick={clearModalContents}
+			/>
+			<div
+				{...attr.dialog}
+				className={`modal-content ${
+					modalContents?.superSize ? 'super-size' : ''
+				}`}
+			>
+				<p {...attr.title} className="modal-title">
+					{modalContents?.title}
+				</p>
+				{modalContents?.component}
+				<button
+					{...attr.closeButton}
+					className="modal-close-button"
+					aria-label="Close Modal"
+					onClick={clearModalContents}
+				>
+					<i className="fas fa-close close-icon" aria-hidden />
+				</button>
+			</div>
+		</div>
 	);
 }
 

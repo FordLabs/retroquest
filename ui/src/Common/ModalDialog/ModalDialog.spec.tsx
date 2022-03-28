@@ -15,15 +15,26 @@
  * limitations under the License.
  */
 
-import { render, screen } from '@testing-library/react';
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { RecoilRoot } from 'recoil';
 
-import { ModalContentsState } from '../../State/ModalContentsState';
+import {
+	ModalContents,
+	ModalContentsState,
+} from '../../State/ModalContentsState';
+import { RecoilObserver } from '../../Utils/RecoilObserver';
 
 import ModalDialog from './ModalDialog';
 
 describe('Modal Dialog', () => {
-	it('should show modal when modal contents exist', () => {
+	let modalContent: ModalContents | null;
+
+	beforeEach(() => {
+		modalContent = null;
+	});
+
+	const setupComponentWithModalContents = () => {
 		render(
 			<RecoilRoot
 				initializeState={({ set }) => {
@@ -33,9 +44,19 @@ describe('Modal Dialog', () => {
 					});
 				}}
 			>
+				<RecoilObserver
+					recoilState={ModalContentsState}
+					onChange={(value: ModalContents) => {
+						modalContent = value;
+					}}
+				/>
 				<ModalDialog />
 			</RecoilRoot>
 		);
+	};
+
+	it('should show modal when modal contents exist', () => {
+		setupComponentWithModalContents();
 
 		expect(screen.getByText('A Title')).toBeDefined();
 		expect(screen.getByText('Some Component')).toBeDefined();
@@ -54,5 +75,23 @@ describe('Modal Dialog', () => {
 
 		expect(screen.queryByText('A Title')).toBeNull();
 		expect(screen.queryByText('Some Component')).toBeNull();
+	});
+
+	it('should clear modal contents when close button is clicked', async () => {
+		setupComponentWithModalContents();
+
+		const closeModalButton = screen.getByLabelText('Close Modal');
+		closeModalButton.click();
+
+		await waitFor(() => expect(modalContent).toBeNull());
+	});
+
+	it('should clear modal contents when overlay is clicked', async () => {
+		setupComponentWithModalContents();
+
+		const modalOverlay = screen.getByTestId('modalOverlay');
+		modalOverlay.click();
+
+		await waitFor(() => expect(modalContent).toBeNull());
 	});
 });
