@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,15 +30,9 @@ import { TeamState } from '../../../../../State/TeamState';
 import Action from '../../../../../Types/Action';
 import Team from '../../../../../Types/Team';
 import { RecoilObserver } from '../../../../../Utils/RecoilObserver';
+import ActionItemModal from '../ActionItemModal/ActionItemModal';
 
 import ActionItem from './ActionItem';
-
-export const mockUseModalValue = {
-	hide: jest.fn(),
-	show: jest.fn(),
-	setHideOnEscape: jest.fn(),
-	setHideOnBackdropClick: jest.fn(),
-};
 
 jest.mock('../../../../../Services/Api/ActionItemService');
 
@@ -124,7 +118,7 @@ describe('ActionItem', () => {
 			await waitFor(() =>
 				expect(modalContent).toEqual({
 					title: 'Action Item',
-					component: <ActionItem action={fakeAction} disableAnimations />,
+					component: <ActionItemModal actionItemId={fakeAction.id} />,
 					superSize: true,
 				})
 			);

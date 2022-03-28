@@ -27,6 +27,7 @@ import { ModalContentsState } from '../../../../../State/ModalContentsState';
 import { TeamState } from '../../../../../State/TeamState';
 import Action from '../../../../../Types/Action';
 import Topic from '../../../../../Types/Topic';
+import ActionItemModal from '../ActionItemModal/ActionItemModal';
 
 type ActionItemProps = {
 	action: Action;
@@ -82,7 +83,7 @@ function ActionItem(props: ActionItemProps) {
 	const openActionItemModal = () =>
 		setModalContents({
 			title: 'Action Item',
-			component: <ActionItem action={action} disableAnimations />,
+			component: <ActionItemModal actionItemId={action.id} />,
 			superSize: true,
 		});
 
