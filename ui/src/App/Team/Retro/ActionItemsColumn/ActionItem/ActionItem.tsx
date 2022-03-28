@@ -30,12 +30,11 @@ import Topic from '../../../../../Types/Topic';
 
 type ActionItemProps = {
 	action: Action;
-	readOnly?: boolean;
 	disableAnimations?: boolean;
 };
 
 function ActionItem(props: ActionItemProps) {
-	const { action, readOnly = false, disableAnimations = false } = props;
+	const { action, disableAnimations = false } = props;
 
 	const team = useRecoilValue(TeamState);
 	const setModalContents = useSetRecoilState(ModalContentsState);
@@ -83,9 +82,7 @@ function ActionItem(props: ActionItemProps) {
 	const openActionItemModal = () =>
 		setModalContents({
 			title: 'Action Item',
-			component: (
-				<ActionItem action={action} readOnly={readOnly} disableAnimations />
-			),
+			component: <ActionItem action={action} disableAnimations />,
 			superSize: true,
 		});
 
@@ -103,7 +100,6 @@ function ActionItem(props: ActionItemProps) {
 				type={Topic.ACTION}
 				text={action.task}
 				checked={action.completed}
-				readOnly={readOnly}
 				onSelect={openActionItemModal}
 				onEdit={editActionItemTask}
 				onDelete={deleteActionItem}
@@ -111,7 +107,7 @@ function ActionItem(props: ActionItemProps) {
 				customButtons={({ editing, deleting }) => (
 					<DateCreated
 						date={action.dateCreated}
-						disabled={(action.completed || editing || deleting) && !readOnly}
+						disabled={action.completed || editing || deleting}
 					/>
 				)}
 			>
@@ -119,7 +115,7 @@ function ActionItem(props: ActionItemProps) {
 					<Assignee
 						assignee={action.assignee}
 						onAssign={editActionItemAssignee}
-						readOnly={readOnly || action.completed}
+						readOnly={action.completed}
 						editing={editing}
 						deleting={deleting}
 					/>

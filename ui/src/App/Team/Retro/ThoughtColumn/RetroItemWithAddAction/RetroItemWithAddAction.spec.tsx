@@ -73,16 +73,6 @@ describe('RetroItemWithAddAction', () => {
 			expect(screen.queryByTestId('addActionItem')).toBeFalsy();
 		});
 	});
-
-	describe('Readonly', () => {
-		beforeEach(() => {
-			renderComponent(fakeThought, true);
-		});
-
-		it('should not show add action button', () => {
-			expect(screen.queryByText('Add Action Item')).toBeFalsy();
-		});
-	});
 });
 
 function clickAddActionItem() {
@@ -93,14 +83,10 @@ function clickDiscard() {
 	userEvent.click(screen.getByText('Discard'));
 }
 
-const renderComponent = (fakeThought: Thought, readOnly?: boolean) => {
+const renderComponent = (fakeThought: Thought) => {
 	render(
 		<RecoilRoot>
-			<RetroItemWithAddAction
-				type={Topic.HAPPY}
-				thought={fakeThought}
-				readOnly={readOnly}
-			/>
+			<RetroItemWithAddAction type={Topic.HAPPY} thought={fakeThought} />
 		</RecoilRoot>
 	);
 };

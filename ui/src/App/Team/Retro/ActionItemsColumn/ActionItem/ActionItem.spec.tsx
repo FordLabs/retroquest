@@ -21,7 +21,6 @@ import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
 
-import * as Modal from '../../../../../Common/Modal/Modal';
 import ActionItemService from '../../../../../Services/Api/ActionItemService';
 import {
 	ModalContents,
@@ -40,8 +39,6 @@ export const mockUseModalValue = {
 	setHideOnEscape: jest.fn(),
 	setHideOnBackdropClick: jest.fn(),
 };
-
-jest.spyOn(Modal, 'useModal').mockReturnValue(mockUseModalValue);
 
 jest.mock('../../../../../Services/Api/ActionItemService');
 
@@ -103,7 +100,7 @@ describe('ActionItem', () => {
 		expect(actionItem.className).not.toContain(fadeOutAnimationClass);
 	});
 
-	describe('When not completed and not readonly', () => {
+	describe('When not completed', () => {
 		beforeEach(() => {
 			render(
 				<RecoilRoot
@@ -127,13 +124,7 @@ describe('ActionItem', () => {
 			await waitFor(() =>
 				expect(modalContent).toEqual({
 					title: 'Action Item',
-					component: (
-						<ActionItem
-							action={fakeAction}
-							readOnly={false}
-							disableAnimations
-						/>
-					),
+					component: <ActionItem action={fakeAction} disableAnimations />,
 					superSize: true,
 				})
 			);
@@ -165,9 +156,13 @@ describe('ActionItem', () => {
 
 		it('should disable other items while editing', () => {
 			clickEdit();
-			expect(taskReadonly()).toBeFalsy();
+			expect(
+				screen.getByTestId('editableText').getAttribute('readonly') === ''
+			).toBeFalsy();
 
-			expect(assigneeDisable()).not.toBeNull();
+			expect(
+				screen.getByTestId('actionItem-assignee').getAttribute('disabled')
+			).not.toBeNull();
 
 			clickDelete();
 			expect(deleteMessage()).toBeFalsy();
@@ -293,7 +288,9 @@ describe('ActionItem', () => {
 
 		it('should disable edit button', () => {
 			clickEdit();
-			expect(taskReadonly()).toBeTruthy();
+			expect(screen.getByTestId('editableText').getAttribute('readonly')).toBe(
+				''
+			);
 		});
 
 		it('should not open modal', () => {
@@ -318,64 +315,7 @@ describe('ActionItem', () => {
 			);
 		});
 	});
-
-	describe('When readonly', () => {
-		beforeEach(() => {
-			render(
-				<RecoilRoot
-					initializeState={({ set }) => {
-						set(TeamState, team);
-					}}
-				>
-					<RecoilObserver
-						recoilState={ModalContentsState}
-						onChange={(value: ModalContents) => {
-							modalContent = value;
-						}}
-					/>
-					<ActionItem action={fakeAction} readOnly={true} />
-				</RecoilRoot>
-			);
-		});
-
-		it('should disable all buttons', () => {
-			clickEdit();
-			expect(taskReadonly()).toBeTruthy();
-
-			clickDelete();
-			expect(deleteMessage()).toBeFalsy();
-
-			clickCheckbox();
-			expect(ActionItemService.updateCompletionStatus).not.toHaveBeenCalled();
-		});
-
-		it('should disable Assignee', () => {
-			typeAssignee('new Assignee{Enter}');
-			expect(ActionItemService.updateAssignee).not.toHaveBeenCalled();
-		});
-
-		it('should open action item modal', async () => {
-			openActionItemModal();
-			await waitFor(() =>
-				expect(modalContent).toEqual({
-					title: 'Action Item',
-					component: (
-						<ActionItem action={fakeAction} readOnly={true} disableAnimations />
-					),
-					superSize: true,
-				})
-			);
-		});
-	});
 });
-
-function taskReadonly() {
-	return screen.getByTestId('editableText').getAttribute('readonly') === '';
-}
-
-function assigneeDisable() {
-	return screen.getByTestId('actionItem-assignee').getAttribute('disabled');
-}
 
 export function editTask(text: string) {
 	const textArea = (screen.queryByTestId('editableText') ||

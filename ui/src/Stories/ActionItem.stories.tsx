@@ -42,9 +42,6 @@ const Template: ComponentStory<typeof ActionItem> = () => {
 			<div style={{ width: '400px', marginBottom: '20px' }}>
 				<ActionItem action={action} />
 			</div>
-			<div style={{ width: '400px' }}>
-				<ActionItem readOnly={true} action={testAction} />
-			</div>
 		</RecoilRoot>
 	);
 };

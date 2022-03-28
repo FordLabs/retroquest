@@ -33,12 +33,17 @@ import './RetroItem.scss';
 type RetroItemProps = {
 	thought: Thought;
 	type: ThoughtTopic;
-	readOnly?: boolean;
+	disableButtons?: boolean;
 	disableAnimations?: boolean;
 };
 
 function RetroItem(props: RetroItemProps) {
-	const { thought, type, readOnly = false, disableAnimations = false } = props;
+	const {
+		thought,
+		type,
+		disableButtons = false,
+		disableAnimations = false,
+	} = props;
 
 	const [animateFadeOut, setAnimateFadeOut] = useState<boolean>(false);
 
@@ -104,7 +109,7 @@ function RetroItem(props: RetroItemProps) {
 				type={type}
 				text={thought.message}
 				checked={thought.discussed}
-				readOnly={readOnly}
+				disableButtons={disableButtons}
 				onSelect={openRetroItemModal}
 				onEdit={editThought}
 				onDelete={deleteThought}
@@ -114,7 +119,7 @@ function RetroItem(props: RetroItemProps) {
 						votes={thought.hearts}
 						onClick={upvoteThought}
 						disabled={thought.discussed || editing || deleting}
-						readOnly={readOnly}
+						readOnly={disableButtons}
 						aria-label={`Upvote (${thought.hearts})`}
 						data-testid="retroItem-upvote"
 					/>

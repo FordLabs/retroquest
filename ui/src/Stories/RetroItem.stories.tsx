@@ -48,7 +48,7 @@ const Template: ComponentStory<typeof RetroItem> = () => {
 			</div>
 			<div style={{ width: '400px' }}>
 				<RetroItem
-					readOnly={true}
+					disableButtons={true}
 					thought={{ ...testThought, discussed: true }}
 					type={Topic.UNHAPPY}
 				/>

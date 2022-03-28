@@ -44,14 +44,6 @@ const Template: ComponentStory<typeof RetroItemWithAddAction> = () => {
 			<div style={{ backgroundColor: 'white', width: '450px' }}>
 				<RetroItemWithAddAction type={Topic.HAPPY} thought={thought} />
 			</div>
-			<div style={{ backgroundColor: 'white', width: '450px' }}>
-				<p>Read Only</p>
-				<RetroItemWithAddAction
-					readOnly={true}
-					type={Topic.HAPPY}
-					thought={thought}
-				/>
-			</div>
 		</RecoilRoot>
 	);
 };
