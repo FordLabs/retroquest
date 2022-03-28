@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,22 +16,29 @@
  */
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
 
 import ThoughtService from '../../../../../Services/Api/ThoughtService';
+import {
+	ModalContents,
+	ModalContentsState,
+} from '../../../../../State/ModalContentsState';
 import { TeamState } from '../../../../../State/TeamState';
 import Team from '../../../../../Types/Team';
 import Thought from '../../../../../Types/Thought';
 import Topic, { ThoughtTopic } from '../../../../../Types/Topic';
+import { RecoilObserver } from '../../../../../Utils/RecoilObserver';
+import RetroItemWithAddAction from '../RetroItemWithAddAction/RetroItemWithAddAction';
 
 import RetroItem from './RetroItem';
 
 jest.mock('../../../../../Services/Api/ThoughtService');
 
 describe('RetroItem', () => {
+	let modalContent: ModalContents | null;
 	const fadeInAnimationClass = 'fade-in';
 	const fadeOutAnimationClass = 'fade-out';
 	const team: Team = {
@@ -46,6 +53,10 @@ describe('RetroItem', () => {
 		discussed: false,
 		topic: Topic.HAPPY,
 	};
+
+	beforeEach(() => {
+		modalContent = null;
+	});
 
 	it('should render without axe errors', async () => {
 		const { container } = render(
@@ -106,15 +117,29 @@ describe('RetroItem', () => {
 						set(TeamState, team);
 					}}
 				>
+					<RecoilObserver
+						recoilState={ModalContentsState}
+						onChange={(value: ModalContents) => {
+							modalContent = value;
+						}}
+					/>
 					<RetroItem type={Topic.HAPPY} thought={fakeThought} />
 				</RecoilRoot>
 			);
 		});
 
-		it('should open retro item modal', () => {
-			clickRetroItem();
+		it('should open retro item modal', async () => {
+			openRetroItemModal();
 
-			expect(screen.getByTestId('retroItemModal')).toBeDefined();
+			await waitFor(() =>
+				expect(modalContent).toEqual({
+					title: 'Retro Item',
+					component: (
+						<RetroItemWithAddAction type={Topic.HAPPY} thought={fakeThought} />
+					),
+					superSize: true,
+				})
+			);
 		});
 
 		it('should upvote thought', () => {
@@ -160,7 +185,7 @@ describe('RetroItem', () => {
 			clickDelete();
 			expect(deleteMessage()).toBeFalsy();
 
-			clickCheckbox();
+			clickCheckboxToMarkItemAsDiscussed();
 			expect(ThoughtService.updateDiscussionStatus).not.toHaveBeenCalled();
 		});
 
@@ -193,27 +218,52 @@ describe('RetroItem', () => {
 			expect(ThoughtService.delete).not.toHaveBeenCalled();
 		});
 
-		it('should delete thought when user confirms deletion', () => {
+		it('should delete thought when user confirms deletion', async () => {
 			clickDelete();
 			clickConfirmDelete();
-			expect(ThoughtService.delete).toHaveBeenCalledWith(
-				team.id,
-				fakeThought.id
+			await waitFor(() =>
+				expect(ThoughtService.delete).toHaveBeenCalledWith(
+					team.id,
+					fakeThought.id
+				)
 			);
 		});
 
-		it('should mark as discussed and switch animation class', () => {
+		it('should close modal when deleting item from retro item modal', async () => {
+			openRetroItemModal();
+
+			await waitFor(() => expect(modalContent).not.toBeNull());
+
+			clickDelete();
+			clickConfirmDelete();
+
+			await waitFor(() => expect(modalContent).toBeNull());
+		});
+
+		it('should mark as discussed and switch animation class', async () => {
 			const retroItem = screen.getByTestId('retroItem');
 			expect(retroItem.className).toContain(fadeInAnimationClass);
 			expect(retroItem.className).not.toContain(fadeOutAnimationClass);
-			clickCheckbox();
-			expect(ThoughtService.updateDiscussionStatus).toHaveBeenCalledWith(
-				team.id,
-				fakeThought.id,
-				true
+			clickCheckboxToMarkItemAsDiscussed();
+			await waitFor(() =>
+				expect(ThoughtService.updateDiscussionStatus).toHaveBeenCalledWith(
+					team.id,
+					fakeThought.id,
+					true
+				)
 			);
 			expect(retroItem.className).toContain(fadeOutAnimationClass);
 			expect(retroItem.className).not.toContain(fadeInAnimationClass);
+		});
+
+		it('should close modal when marked as discussed retro item modal', async () => {
+			openRetroItemModal();
+
+			await waitFor(() => expect(modalContent).not.toBeNull());
+
+			clickCheckboxToMarkItemAsDiscussed();
+
+			await waitFor(() => expect(modalContent).toBeNull());
 		});
 	});
 
@@ -246,7 +296,7 @@ describe('RetroItem', () => {
 		it('should not open modal', () => {
 			const retroItemButton = screen.queryByTestId('editableText-select');
 			expect(retroItemButton).toBeNull();
-			expect(screen.queryByTestId('retroItemModal')).toBeNull();
+			expect(modalContent).toBeNull();
 		});
 
 		it('should not disable delete button', () => {
@@ -254,12 +304,14 @@ describe('RetroItem', () => {
 			expect(deleteMessage()).toBeTruthy();
 		});
 
-		it('should not disable checkbox button', () => {
-			clickCheckbox();
-			expect(ThoughtService.updateDiscussionStatus).toHaveBeenCalledWith(
-				team.id,
-				fakeThought.id,
-				false
+		it('should not disable checkbox button', async () => {
+			clickCheckboxToMarkItemAsDiscussed();
+			await waitFor(() =>
+				expect(ThoughtService.updateDiscussionStatus).toHaveBeenCalledWith(
+					team.id,
+					fakeThought.id,
+					false
+				)
 			);
 		});
 	});
@@ -268,6 +320,12 @@ describe('RetroItem', () => {
 		beforeEach(() => {
 			render(
 				<RecoilRoot>
+					<RecoilObserver
+						recoilState={ModalContentsState}
+						onChange={(value: ModalContents) => {
+							modalContent = value;
+						}}
+					/>
 					<RetroItem readOnly={true} type={Topic.HAPPY} thought={fakeThought} />
 				</RecoilRoot>
 			);
@@ -283,13 +341,21 @@ describe('RetroItem', () => {
 			clickDelete();
 			expect(deleteMessage()).toBeFalsy();
 
-			clickCheckbox();
+			clickCheckboxToMarkItemAsDiscussed();
 			expect(ThoughtService.updateDiscussionStatus).not.toHaveBeenCalled();
 		});
 
-		it('should open retro item modal', () => {
-			clickRetroItem();
-			expect(screen.getByTestId('retroItemModal')).toBeDefined();
+		it('should open retro item modal', async () => {
+			openRetroItemModal();
+			await waitFor(() =>
+				expect(modalContent).toEqual({
+					title: 'Retro Item',
+					component: (
+						<RetroItemWithAddAction thought={fakeThought} type={Topic.HAPPY} />
+					),
+					superSize: true,
+				})
+			);
 		});
 	});
 });
@@ -300,7 +366,7 @@ function editText(text: string) {
 	userEvent.type(textArea, text);
 }
 
-function clickRetroItem() {
+function openRetroItemModal() {
 	userEvent.click(screen.getByTestId('editableText-select'));
 }
 
@@ -316,7 +382,7 @@ function clickDelete() {
 	userEvent.click(screen.getByTestId('deleteButton'));
 }
 
-function clickCheckbox() {
+function clickCheckboxToMarkItemAsDiscussed() {
 	userEvent.click(screen.getByTestId('checkboxButton'));
 }
 

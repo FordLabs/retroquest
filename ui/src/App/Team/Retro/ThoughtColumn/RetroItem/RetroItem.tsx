@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import classnames from 'classnames';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import ColumnItem from '../../../../../Common/ColumnItem/ColumnItem';
-import { ModalMethods } from '../../../../../Common/Modal/Modal';
 import ThoughtService from '../../../../../Services/Api/ThoughtService';
+import { ModalContentsState } from '../../../../../State/ModalContentsState';
 import { TeamState } from '../../../../../State/TeamState';
 import Thought from '../../../../../Types/Thought';
 import { ThoughtTopic } from '../../../../../Types/Topic';
-import RetroItemModal from '../RetroItemModal/RetroItemModal';
+import RetroItemWithAddAction from '../RetroItemWithAddAction/RetroItemWithAddAction';
 
 import UpvoteButton from './UpvoteButton/UpvoteButton';
 
@@ -37,14 +37,15 @@ type RetroItemProps = {
 	disableAnimations?: boolean;
 };
 
-export default function RetroItem(props: RetroItemProps) {
+function RetroItem(props: RetroItemProps) {
 	const { thought, type, readOnly = false, disableAnimations = false } = props;
 
 	const [animateFadeOut, setAnimateFadeOut] = useState<boolean>(false);
 
 	const team = useRecoilValue(TeamState);
+	const setModalContents = useSetRecoilState(ModalContentsState);
 
-	const retroItemModalRef = useRef<ModalMethods>(null);
+	const closeModal = () => setModalContents(null);
 
 	const editThought = (updatedThoughtMessage: string) => {
 		ThoughtService.updateMessage(
@@ -60,11 +61,15 @@ export default function RetroItem(props: RetroItemProps) {
 			team.id,
 			thought.id,
 			!thought.discussed
-		).catch(console.error);
+		)
+			.then(closeModal)
+			.catch(console.error);
 	};
 
 	const deleteThought = () => {
-		ThoughtService.delete(team.id, thought.id).catch(console.error);
+		ThoughtService.delete(team.id, thought.id)
+			.then(closeModal)
+			.catch(console.error);
 	};
 
 	const upvoteThought = () => {
@@ -80,6 +85,13 @@ export default function RetroItem(props: RetroItemProps) {
 		}
 	};
 
+	const openRetroItemModal = () =>
+		setModalContents({
+			title: 'Retro Item',
+			component: <RetroItemWithAddAction thought={thought} type={type} />,
+			superSize: true,
+		});
+
 	return (
 		<>
 			<ColumnItem
@@ -93,7 +105,7 @@ export default function RetroItem(props: RetroItemProps) {
 				text={thought.message}
 				checked={thought.discussed}
 				readOnly={readOnly}
-				onSelect={() => retroItemModalRef.current?.show()}
+				onSelect={openRetroItemModal}
 				onEdit={editThought}
 				onDelete={deleteThought}
 				onCheck={updateThoughtDiscussionStatus}
@@ -108,11 +120,8 @@ export default function RetroItem(props: RetroItemProps) {
 					/>
 				)}
 			/>
-			<RetroItemModal
-				ref={retroItemModalRef}
-				thought={thought}
-				type={thought.topic}
-			/>
 		</>
 	);
 }
+
+export default RetroItem;

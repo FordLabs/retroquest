@@ -15,20 +15,19 @@
  * limitations under the License.
  */
 
-import React, { createRef } from 'react';
-import { act, render, screen } from '@testing-library/react';
+import React from 'react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
 
-import { ModalMethods } from '../../../../../Common/Modal/Modal';
 import Thought from '../../../../../Types/Thought';
 import Topic from '../../../../../Types/Topic';
 
-import RetroItemModal from './RetroItemModal';
+import RetroItemWithAddAction from './RetroItemWithAddAction';
 
 jest.mock('axios');
 
-describe('RetroItemModal', () => {
+describe('RetroItemWithAddAction', () => {
 	const fakeThought: Thought = {
 		id: 0,
 		message: 'fake thought',
@@ -41,16 +40,15 @@ describe('RetroItemModal', () => {
 		jest.clearAllMocks();
 	});
 
-	it('should render as a retro item in a modal', () => {
-		renderAndOpenModal(fakeThought);
+	it('should render active retro item', () => {
+		renderComponent(fakeThought);
 
-		screen.getByText('fake thought');
+		screen.getByText(fakeThought.message);
 		screen.getByTestId('retroItem');
-		screen.getByTestId('modalBackdrop');
 	});
 
 	it('should not animate action item card', () => {
-		renderAndOpenModal(fakeThought);
+		renderComponent(fakeThought);
 		const retroItem = screen.getByTestId('retroItem');
 		expect(retroItem.className).not.toContain('fade-in');
 		expect(retroItem.className).not.toContain('fade-out');
@@ -58,7 +56,7 @@ describe('RetroItemModal', () => {
 
 	describe('Not readonly', () => {
 		beforeEach(() => {
-			renderAndOpenModal(fakeThought);
+			renderComponent(fakeThought);
 		});
 
 		it('should show action item form when add action item button is clicked', () => {
@@ -78,7 +76,7 @@ describe('RetroItemModal', () => {
 
 	describe('Readonly', () => {
 		beforeEach(() => {
-			renderAndOpenModal(fakeThought, true);
+			renderComponent(fakeThought, true);
 		});
 
 		it('should not show add action button', () => {
@@ -95,20 +93,14 @@ function clickDiscard() {
 	userEvent.click(screen.getByText('Discard'));
 }
 
-const renderAndOpenModal = (fakeThought: Thought, readOnly?: boolean) => {
-	const ref = createRef<ModalMethods>();
+const renderComponent = (fakeThought: Thought, readOnly?: boolean) => {
 	render(
 		<RecoilRoot>
-			<RetroItemModal
+			<RetroItemWithAddAction
 				type={Topic.HAPPY}
 				thought={fakeThought}
-				ref={ref}
 				readOnly={readOnly}
 			/>
 		</RecoilRoot>
 	);
-
-	act(() => {
-		ref.current?.show();
-	});
 };

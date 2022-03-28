@@ -29,6 +29,10 @@
 
 	font-size: 1rem;
 
+	background-color: main.$white;
+	border-radius: 6px;
+	box-shadow: 0 19px 38px rgba(main.$black, 0.3);
+
 	position: relative;
 
 	@media only screen and (max-width: 610px) {

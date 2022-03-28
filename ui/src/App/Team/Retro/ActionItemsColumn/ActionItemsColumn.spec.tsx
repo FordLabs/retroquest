@@ -16,7 +16,7 @@
  */
 
 import React from 'react';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
@@ -215,10 +215,12 @@ describe('ActionItemsColumn.spec.tsx', () => {
 		);
 		userEvent.click(firstActionItemCompletedButton);
 
-		expect(ActionItemService.updateCompletionStatus).toHaveBeenCalledWith(
-			team.id,
-			activeActionItem1.id,
-			!activeActionItem1.completed
+		await waitFor(() =>
+			expect(ActionItemService.updateCompletionStatus).toHaveBeenCalledWith(
+				team.id,
+				activeActionItem1.id,
+				!activeActionItem1.completed
+			)
 		);
 	});
 });

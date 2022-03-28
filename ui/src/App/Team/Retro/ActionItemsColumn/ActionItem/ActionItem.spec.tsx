@@ -122,15 +122,21 @@ describe('ActionItem', () => {
 			);
 		});
 
-		it('should open retro item modal', () => {
+		it('should open retro item modal', async () => {
 			openActionItemModal();
-			expect(modalContent).toEqual({
-				title: 'Action Item',
-				component: (
-					<ActionItem action={fakeAction} readOnly={false} disableAnimations />
-				),
-				superSize: true,
-			});
+			await waitFor(() =>
+				expect(modalContent).toEqual({
+					title: 'Action Item',
+					component: (
+						<ActionItem
+							action={fakeAction}
+							readOnly={false}
+							disableAnimations
+						/>
+					),
+					superSize: true,
+				})
+			);
 		});
 
 		it('should start and cancel editing of action item', () => {
@@ -200,13 +206,15 @@ describe('ActionItem', () => {
 			expect(ActionItemService.delete).not.toHaveBeenCalled();
 		});
 
-		it('should delete action item when user confirms deletion', () => {
+		it('should delete action item when user confirms deletion', async () => {
 			clickDelete();
 			clickConfirmDelete();
 
-			expect(ActionItemService.delete).toHaveBeenCalledWith(
-				team.id,
-				fakeAction.id
+			await waitFor(() =>
+				expect(ActionItemService.delete).toHaveBeenCalledWith(
+					team.id,
+					fakeAction.id
+				)
 			);
 		});
 
@@ -221,16 +229,18 @@ describe('ActionItem', () => {
 			await waitFor(() => expect(modalContent).toBeNull());
 		});
 
-		it('should mark action item as completed and switch animation class', () => {
+		it('should mark action item as completed and switch animation class', async () => {
 			const actionItem = screen.getByTestId('actionItem');
 			expect(actionItem.className).toContain(fadeInAnimationClass);
 			expect(actionItem.className).not.toContain(fadeOutAnimationClass);
 			clickCheckbox();
 
-			expect(ActionItemService.updateCompletionStatus).toHaveBeenCalledWith(
-				team.id,
-				fakeAction.id,
-				true
+			await waitFor(() =>
+				expect(ActionItemService.updateCompletionStatus).toHaveBeenCalledWith(
+					team.id,
+					fakeAction.id,
+					true
+				)
 			);
 			expect(actionItem.className).not.toContain(fadeInAnimationClass);
 			expect(actionItem.className).toContain(fadeOutAnimationClass);
@@ -297,12 +307,14 @@ describe('ActionItem', () => {
 			expect(deleteMessage()).toBeTruthy();
 		});
 
-		it('should not disable checkbox button', () => {
+		it('should not disable checkbox button', async () => {
 			clickCheckbox();
-			expect(ActionItemService.updateCompletionStatus).toHaveBeenCalledWith(
-				team.id,
-				fakeAction.id,
-				false
+			await waitFor(() =>
+				expect(ActionItemService.updateCompletionStatus).toHaveBeenCalledWith(
+					team.id,
+					fakeAction.id,
+					false
+				)
 			);
 		});
 	});
@@ -342,15 +354,17 @@ describe('ActionItem', () => {
 			expect(ActionItemService.updateAssignee).not.toHaveBeenCalled();
 		});
 
-		it('should open action item modal', () => {
+		it('should open action item modal', async () => {
 			openActionItemModal();
-			expect(modalContent).toEqual({
-				title: 'Action Item',
-				component: (
-					<ActionItem action={fakeAction} readOnly={true} disableAnimations />
-				),
-				superSize: true,
-			});
+			await waitFor(() =>
+				expect(modalContent).toEqual({
+					title: 'Action Item',
+					component: (
+						<ActionItem action={fakeAction} readOnly={true} disableAnimations />
+					),
+					superSize: true,
+				})
+			);
 		});
 	});
 });
