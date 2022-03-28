@@ -17,10 +17,11 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import ActionItemService from '../../Services/Api/ActionItemService';
 import ThoughtService from '../../Services/Api/ThoughtService';
+import { ModalContentsState } from '../../State/ModalContentsState';
 import { TeamState } from '../../State/TeamState';
 import Thought from '../../Types/Thought';
 import { onKeys } from '../../Utils/EventUtils';
@@ -31,7 +32,6 @@ import {
 	ConfirmButton,
 } from '../ColumnItemButtons/ColumnItemButtons';
 import FloatingCharacterCountdown from '../FloatingCharacterCountdown/FloatingCharacterCountdown';
-import { useModal } from '../Modal/Modal';
 
 const MAX_LENGTH_TASK = 255;
 
@@ -49,23 +49,19 @@ function AddActionItem(props: AddActionItemProps) {
 	const [task, setTask] = useState<string>('');
 	const [assignee, setAssignee] = useState<string>('');
 	const [shake, setShake] = useState<boolean>(false);
-	const { hide } = useModal();
 
-	const { setHideOnEscape, setHideOnBackdropClick } = useModal();
+	const setModalContent = useSetRecoilState(ModalContentsState);
+
+	const closeModal = () => setModalContent(null);
 
 	useEffect(() => {
 		const escapeListener = onKeys('Escape', hideComponentCallback);
 		document.addEventListener('keydown', escapeListener);
 
-		setHideOnEscape(false);
-		setHideOnBackdropClick(false);
-
 		return () => {
 			document.removeEventListener('keydown', escapeListener);
-			setHideOnEscape(true);
-			setHideOnBackdropClick(true);
 		};
-	}, [setHideOnEscape, setHideOnBackdropClick, hideComponentCallback]);
+	}, [hideComponentCallback]);
 
 	function triggerShakeAnimation() {
 		setShake(true);
@@ -81,7 +77,9 @@ function AddActionItem(props: AddActionItemProps) {
 			team.id,
 			thought.id,
 			!thought.discussed
-		).catch(console.error);
+		)
+			.then(closeModal)
+			.catch(console.error);
 	};
 
 	function onCreate() {
@@ -89,10 +87,7 @@ function AddActionItem(props: AddActionItemProps) {
 			triggerShakeAnimation();
 		} else {
 			ActionItemService.create(team.id, task, assignee)
-				.then(() => {
-					updateThoughtDiscussionStatus();
-					hide();
-				})
+				.then(updateThoughtDiscussionStatus)
 				.catch(console.error);
 		}
 	}
@@ -109,6 +104,8 @@ function AddActionItem(props: AddActionItemProps) {
 					data-testid="addActionItem-task"
 					className="text-area"
 					value={task}
+					// eslint-disable-next-line jsx-a11y/no-autofocus
+					autoFocus
 					onChange={(event) => setTask(event.target.value)}
 					onKeyDown={onKeys('Enter', (e) => e.currentTarget.blur())}
 					maxLength={MAX_LENGTH_TASK}

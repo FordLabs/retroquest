@@ -138,7 +138,7 @@ describe('Retro Facilitator Journey', () => {
 
 		cy.findByText('Create!').click();
 
-		cy.get('@retroItemModal').should('not.exist');
+		cy.get('@retroItemModal').should('not.be.visible');
 
 		cy.log('**Thought should be marked as discussed**');
 		getHappyColumnItems().should('have.length', 1);
@@ -352,6 +352,6 @@ const getDiscussedThought = () =>
 	cy.get('[data-testid=checkmark]').closest('[data-testid="retroItem"]');
 const clickOnFirstThought = () =>
 	cy.get('[data-testid="editableText-select"]').first().click();
-const getRetroActionModal = () => cy.get('[data-testid=retroItemModal]');
+const getRetroActionModal = () => cy.get('[data-testid=retro-item-modal]');
 const getColumnHeaderByTopic = (topic: Topic) =>
 	cy.get(`[data-testid=columnHeader-${topic}]`);
