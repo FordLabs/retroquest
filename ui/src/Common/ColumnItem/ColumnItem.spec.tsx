@@ -20,16 +20,8 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import Topic from '../../Types/Topic';
-import * as Modal from '../Modal/Modal';
 
 import ColumnItem from './ColumnItem';
-
-const mockUseModalValue = {
-	hide: jest.fn(),
-	show: jest.fn(),
-	setHideOnEscape: jest.fn(),
-	setHideOnBackdropClick: jest.fn(),
-};
 
 describe('ColumnItem', () => {
 	const mockSelect = jest.fn();
@@ -41,8 +33,6 @@ describe('ColumnItem', () => {
 
 	beforeEach(() => {
 		jest.clearAllMocks();
-
-		jest.spyOn(Modal, 'useModal').mockReturnValue(mockUseModalValue);
 	});
 
 	it.each([[Topic.HAPPY], [Topic.CONFUSED], [Topic.UNHAPPY], [Topic.ACTION]])(
@@ -108,22 +98,6 @@ describe('ColumnItem', () => {
 			expect(mockCheck).not.toHaveBeenCalled();
 		});
 
-		it('should disable modal closing while editing', () => {
-			clickEdit();
-
-			expect(mockUseModalValue.setHideOnEscape).toHaveBeenCalledWith(false);
-			expect(mockUseModalValue.setHideOnBackdropClick).toHaveBeenCalledWith(
-				false
-			);
-
-			clickEdit();
-
-			expect(mockUseModalValue.setHideOnEscape).toHaveBeenCalledWith(true);
-			expect(mockUseModalValue.setHideOnBackdropClick).toHaveBeenCalledWith(
-				true
-			);
-		});
-
 		it('can complete edit', () => {
 			clickEdit();
 			editText('New Fake Text{Enter}');
@@ -144,22 +118,6 @@ describe('ColumnItem', () => {
 
 			clickCancelDelete();
 			expect(deleteMessage()).toBeFalsy();
-		});
-
-		it('should disable modal closing while deleting', () => {
-			clickDelete();
-
-			expect(mockUseModalValue.setHideOnEscape).toHaveBeenCalledWith(false);
-			expect(mockUseModalValue.setHideOnBackdropClick).toHaveBeenCalledWith(
-				false
-			);
-
-			escapeKey();
-
-			expect(mockUseModalValue.setHideOnEscape).toHaveBeenCalledWith(true);
-			expect(mockUseModalValue.setHideOnBackdropClick).toHaveBeenCalledWith(
-				true
-			);
 		});
 
 		it('can complete delete', () => {
