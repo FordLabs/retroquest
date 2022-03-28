@@ -15,13 +15,26 @@
  * limitations under the License.
  */
 
-import { atom, selector } from 'recoil';
+import { atom, selector, selectorFamily } from 'recoil';
 
 import Action from '../Types/Action';
 
 export const ActionItemState = atom<Action[]>({
 	key: 'ActionItemState',
 	default: [],
+});
+
+export const ActionItemByIdState = selectorFamily({
+	key: 'ActionItemByIdState',
+	get:
+		(actionItemId: number) =>
+		({ get }): Action | null => {
+			return (
+				get(ActionItemState).find(
+					(actionItem) => actionItem.id === actionItemId
+				) || null
+			);
+		},
 });
 
 export const ActiveActionItemsState = selector<Action[]>({
