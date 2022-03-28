@@ -24,9 +24,9 @@ import {
 	ModalContentsState,
 } from '../../State/ModalContentsState';
 
-import './ModalDialog.scss';
+import './Modal.scss';
 
-function ModalDialog() {
+function Modal() {
 	const [modalContents, setModalContents] =
 		useRecoilState<ModalContents | null>(ModalContentsState);
 
@@ -88,4 +88,4 @@ function ModalDialog() {
 	);
 }
 
-export default ModalDialog;
+export default Modal;
