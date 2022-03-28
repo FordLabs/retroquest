@@ -31,6 +31,17 @@ export const ThoughtsState = atom<Thought[]>({
 	default: [],
 });
 
+export const ThoughtByIdState = selectorFamily({
+	key: 'ThoughtByIdState',
+	get:
+		(thoughtId: number) =>
+		({ get }): Thought | null => {
+			return (
+				get(ThoughtsState).find((thought) => thought.id === thoughtId) || null
+			);
+		},
+});
+
 export const ThoughtsByTopicState = atomFamily<Thought[], ThoughtTopic>({
 	key: 'ThoughtsByTopicState',
 	default: selectorFamily({

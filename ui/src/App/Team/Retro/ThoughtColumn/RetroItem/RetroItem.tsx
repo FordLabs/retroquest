@@ -93,7 +93,7 @@ function RetroItem(props: RetroItemProps) {
 	const openRetroItemModal = () =>
 		setModalContents({
 			title: 'Retro Item',
-			component: <RetroItemWithAddAction thought={thought} type={type} />,
+			component: <RetroItemWithAddAction thoughtId={thought.id} type={type} />,
 			superSize: true,
 		});
 
