@@ -29,7 +29,7 @@ jest.mock('./Login/LoginPage', () => {
 	return () => <div>Login Page</div>;
 });
 
-jest.mock('../Common/ModalDialog/ModalDialog', () => {
+jest.mock('../Common/Modal/Modal', () => {
 	return () => <div>Root Modal</div>;
 });
 

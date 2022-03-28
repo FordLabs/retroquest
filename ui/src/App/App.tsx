@@ -19,7 +19,7 @@ import React, { useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
-import ModalDialog from '../Common/ModalDialog/ModalDialog';
+import Modal from '../Common/Modal/Modal';
 import { ThemeState } from '../State/ThemeState';
 import Theme from '../Types/Theme';
 
@@ -59,7 +59,7 @@ function App() {
 					<Route path="radiator" element={<RadiatorPage />} />
 				</Route>
 			</Routes>
-			<ModalDialog />
+			<Modal />
 		</div>
 	);
 }

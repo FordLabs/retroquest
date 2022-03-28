@@ -25,7 +25,7 @@ import {
 } from '../../State/ModalContentsState';
 import { RecoilObserver } from '../../Utils/RecoilObserver';
 
-import ModalDialog from './ModalDialog';
+import Modal from './Modal';
 
 describe('Modal Dialog', () => {
 	let modalContent: ModalContents | null;
@@ -50,7 +50,7 @@ describe('Modal Dialog', () => {
 						modalContent = value;
 					}}
 				/>
-				<ModalDialog />
+				<Modal />
 			</RecoilRoot>
 		);
 	};
@@ -69,7 +69,7 @@ describe('Modal Dialog', () => {
 					set(ModalContentsState, null);
 				}}
 			>
-				<ModalDialog />
+				<Modal />
 			</RecoilRoot>
 		);
 
