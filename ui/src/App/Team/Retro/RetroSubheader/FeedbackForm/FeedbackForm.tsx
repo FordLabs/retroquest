@@ -18,7 +18,7 @@
 import React, { useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import Dialog from '../../../../../Common/Dialog/Dialog';
+import ModalContentsWrapper from '../../../../../Common/ModalContentsWrapper/ModalContentsWrapper';
 import FeedbackService from '../../../../../Services/Api/FeedbackService';
 import { ModalContentsState } from '../../../../../State/ModalContentsState';
 import { TeamState } from '../../../../../State/TeamState';
@@ -51,7 +51,7 @@ function FeedbackForm() {
 	};
 
 	return (
-		<Dialog
+		<ModalContentsWrapper
 			testId="feedbackDialog"
 			className="feedback-dialog"
 			title="Feedback"
@@ -85,7 +85,7 @@ function FeedbackForm() {
 					onChange={(event) => setUserEmail(event.target.value)}
 				/>
 			</div>
-		</Dialog>
+		</ModalContentsWrapper>
 	);
 }
 

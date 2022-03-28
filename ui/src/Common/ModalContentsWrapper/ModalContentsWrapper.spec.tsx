@@ -19,9 +19,9 @@ import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import Dialog from './Dialog';
+import ModalContentsWrapper from './ModalContentsWrapper';
 
-describe('Dialog', () => {
+describe('ModalContentsWrapper', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 	});
@@ -29,16 +29,19 @@ describe('Dialog', () => {
 	describe('default dialog', () => {
 		beforeEach(() => {
 			render(
-				<Dialog title="Dialog Header" subtitle="Dialog Sub Header">
-					Dialog Content
-				</Dialog>
+				<ModalContentsWrapper
+					title="ModalContentsWrapper Header"
+					subtitle="ModalContentsWrapper Sub Header"
+				>
+					ModalContentsWrapper Content
+				</ModalContentsWrapper>
 			);
 		});
 
 		it('should render header, subheader, and content', () => {
-			screen.getByText('Dialog Header');
-			screen.getByText('Dialog Sub Header');
-			screen.getByText('Dialog Content');
+			screen.getByText('ModalContentsWrapper Header');
+			screen.getByText('ModalContentsWrapper Sub Header');
+			screen.getByText('ModalContentsWrapper Content');
 		});
 
 		it('should not be a form element if button props are not provided', () => {
@@ -66,14 +69,14 @@ describe('Dialog', () => {
 			};
 
 			render(
-				<Dialog
-					title="Dialog Header"
-					subtitle="Dialog Sub Header"
+				<ModalContentsWrapper
+					title="ModalContentsWrapper Header"
+					subtitle="ModalContentsWrapper Sub Header"
 					buttons={buttons}
 					testId="dialog"
 				>
-					Dialog Content
-				</Dialog>
+					ModalContentsWrapper Content
+				</ModalContentsWrapper>
 			);
 		});
 
