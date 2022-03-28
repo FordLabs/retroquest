@@ -35,6 +35,10 @@ function ModalDialog() {
 		title: modalContents?.title,
 	});
 
+	const dataTestId = `${modalContents?.title
+		.toLowerCase()
+		.replace(' ', '-')}-modal`;
+
 	const clearModalContents = useCallback(
 		() => setModalContents(null),
 		[setModalContents]
@@ -50,7 +54,11 @@ function ModalDialog() {
 	}, [clearModalContents, modalContents, modalInstance]);
 
 	return (
-		<div {...attr.container} className="modal-container">
+		<div
+			{...attr.container}
+			className="modal-container"
+			data-testid={dataTestId}
+		>
 			<div
 				{...attr.overlay}
 				className="modal-overlay"

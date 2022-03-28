@@ -16,27 +16,30 @@
  */
 
 import * as React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
 
 import {
 	editTask,
 	hitEscapeKey,
-	mockUseModalValue,
 	typeAssignee,
 } from '../../App/Team/Retro/ActionItemsColumn/ActionItem/ActionItem.spec';
+import RetroItemWithAddAction from '../../App/Team/Retro/ThoughtColumn/RetroItemWithAddAction/RetroItemWithAddAction';
 import { getMockThought } from '../../Services/Api/__mocks__/ThoughtService';
 import ActionItemService from '../../Services/Api/ActionItemService';
 import ThoughtService from '../../Services/Api/ThoughtService';
+import {
+	ModalContents,
+	ModalContentsState,
+} from '../../State/ModalContentsState';
 import { TeamState } from '../../State/TeamState';
 import Team from '../../Types/Team';
 import Topic from '../../Types/Topic';
-import * as Modal from '../Modal/Modal';
+import { RecoilObserver } from '../../Utils/RecoilObserver';
 
 import AddActionItem from './AddActionItem';
 
-jest.spyOn(Modal, 'useModal').mockReturnValue(mockUseModalValue);
 jest.mock('../../Services/Api/ActionItemService');
 jest.mock('../../Services/Api/ThoughtService');
 
@@ -46,17 +49,32 @@ describe('AddActionItem', () => {
 		name: 'My Team',
 		id: 'my-team',
 	};
+	let modalContent: ModalContents | null;
 	const thought = getMockThought(Topic.HAPPY);
 
 	beforeEach(() => {
 		jest.clearAllMocks();
 
+		modalContent = null;
+
 		render(
 			<RecoilRoot
 				initializeState={({ set }) => {
 					set(TeamState, team);
+					set(ModalContentsState, {
+						title: 'Action Item',
+						component: (
+							<RetroItemWithAddAction thought={thought} type={thought.topic} />
+						),
+					});
 				}}
 			>
+				<RecoilObserver
+					recoilState={ModalContentsState}
+					onChange={(value: ModalContents) => {
+						modalContent = value;
+					}}
+				/>
 				<AddActionItem
 					hideComponentCallback={hideComponentCallback}
 					thought={thought}
@@ -92,7 +110,7 @@ describe('AddActionItem', () => {
 			thought.id,
 			true
 		);
-		expect(mockUseModalValue.hide).toHaveBeenCalled();
+		await waitFor(() => expect(modalContent).toBeNull());
 	});
 
 	it('should shake and not call onConfirm when task is empty', () => {
@@ -102,13 +120,6 @@ describe('AddActionItem', () => {
 		expect(hideComponentCallback).not.toHaveBeenCalled();
 		expect(ActionItemService.create).not.toHaveBeenCalled();
 		expect(screen.getByTestId('addActionItem').className).toContain('shake');
-	});
-
-	it('should stop modal from closing', () => {
-		expect(mockUseModalValue.setHideOnEscape).toHaveBeenCalledWith(false);
-		expect(mockUseModalValue.setHideOnBackdropClick).toHaveBeenCalledWith(
-			false
-		);
 	});
 });
 
