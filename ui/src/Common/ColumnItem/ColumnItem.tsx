@@ -18,7 +18,6 @@
 import React, {
 	ComponentPropsWithoutRef,
 	ReactNode,
-	useEffect,
 	useRef,
 	useState,
 } from 'react';
@@ -31,7 +30,6 @@ import {
 	DeleteButton,
 	EditButton,
 } from '../ColumnItemButtons/ColumnItemButtons';
-import { useModal } from '../Modal/Modal';
 
 import DeletionOverlay from './DeletionOverlay/DeletionOverlay';
 import EditableText from './EditableText/EditableText';
@@ -71,8 +69,6 @@ export default function ColumnItem(props: ColumnItemProps) {
 		...divProps
 	} = props;
 
-	const { setHideOnEscape, setHideOnBackdropClick } = useModal();
-
 	const editButtonRef = useRef<HTMLButtonElement>(null);
 	const deleteButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -81,18 +77,6 @@ export default function ColumnItem(props: ColumnItemProps) {
 
 	const canSelect =
 		((!editing && !deleting && !checked) || disableButtons) && !!onSelect;
-
-	useEffect(() => {
-		if (editing || deleting) {
-			setHideOnEscape(false);
-			setHideOnBackdropClick(false);
-
-			return () => {
-				setHideOnEscape(true);
-				setHideOnBackdropClick(true);
-			};
-		}
-	}, [setHideOnEscape, setHideOnBackdropClick, editing, deleting]);
 
 	function onEditToggle() {
 		return setEditing((editingState) => !editingState);
