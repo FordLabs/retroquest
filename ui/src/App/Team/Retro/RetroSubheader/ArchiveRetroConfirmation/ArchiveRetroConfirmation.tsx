@@ -17,7 +17,7 @@
 import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import Dialog from '../../../../../Common/Dialog/Dialog';
+import ModalContentsWrapper from '../../../../../Common/ModalContentsWrapper/ModalContentsWrapper';
 import BoardService from '../../../../../Services/Api/BoardService';
 import { ModalContentsState } from '../../../../../State/ModalContentsState';
 import { TeamState } from '../../../../../State/TeamState';
@@ -37,7 +37,7 @@ function ArchiveRetroConfirmation() {
 	};
 
 	return (
-		<Dialog
+		<ModalContentsWrapper
 			testId="archiveRetroDialog"
 			className="archive-retro-dialog"
 			title="Do you want to end the retro for everybody?"

@@ -18,16 +18,16 @@
 import React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import Dialog from '../Common/Dialog/Dialog';
+import ModalContentsWrapper from '../Common/ModalContentsWrapper/ModalContentsWrapper';
 
 export default {
-	title: 'components/Dialog',
-	component: Dialog,
-} as ComponentMeta<typeof Dialog>;
+	title: 'components/ModalContentsWrapper',
+	component: ModalContentsWrapper,
+} as ComponentMeta<typeof ModalContentsWrapper>;
 
-const Template: ComponentStory<typeof Dialog> = () => {
+const Template: ComponentStory<typeof ModalContentsWrapper> = () => {
 	return (
-		<Dialog
+		<ModalContentsWrapper
 			title="I am a dialog"
 			subtitle="This is the question?"
 			buttons={{

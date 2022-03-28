@@ -27,7 +27,7 @@ import { RecoilObserver } from '../../Utils/RecoilObserver';
 
 import Modal from './Modal';
 
-describe('Modal Dialog', () => {
+describe('ModalContentsWrapper', () => {
 	let modalContent: ModalContents | null;
 
 	beforeEach(() => {

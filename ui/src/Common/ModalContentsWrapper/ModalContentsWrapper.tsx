@@ -20,7 +20,7 @@ import classnames from 'classnames';
 
 import { PrimaryButton, SecondaryButton } from '../Buttons/Button';
 
-import './Dialog.scss';
+import './ModalContentsWrapper.scss';
 
 type DialogProps = PropsWithChildren<{
 	testId?: string;
@@ -39,9 +39,9 @@ type DialogProps = PropsWithChildren<{
 	};
 }>;
 
-function Dialog(props: DialogProps) {
+function ModalContentsWrapper(props: DialogProps) {
 	const { title, subtitle, buttons, className, children, testId } = props;
-	const DialogElement = !!buttons ? 'form' : 'div';
+	const ModalContentsWrapperElement = !!buttons ? 'form' : 'div';
 
 	const onSubmit = (event: FormEvent<HTMLFormElement | HTMLDivElement>) => {
 		buttons?.confirm?.onClick();
@@ -49,18 +49,20 @@ function Dialog(props: DialogProps) {
 	};
 
 	return (
-		<DialogElement
-			className={classnames('dialog', className)}
+		<ModalContentsWrapperElement
+			className={classnames('modal-contents-wrapper', className)}
 			data-testid={testId}
 			onSubmit={onSubmit}
 		>
-			<div className="dialog-body">
-				<div className="dialog-title">{title}</div>
-				{subtitle && <div className="dialog-subtitle">{subtitle}</div>}
+			<div className="modal-contents-wrapper-body">
+				<div className="modal-contents-wrapper-title">{title}</div>
+				{subtitle && (
+					<div className="modal-contents-wrapper-subtitle">{subtitle}</div>
+				)}
 				{children}
 			</div>
 			{buttons && (
-				<div className="dialog-footer">
+				<div className="modal-contents-wrapper-footer">
 					{buttons.cancel && (
 						<SecondaryButton type="button" onClick={buttons.cancel.onClick}>
 							{buttons.cancel.text || 'cancel'}
@@ -73,8 +75,8 @@ function Dialog(props: DialogProps) {
 					)}
 				</div>
 			)}
-		</DialogElement>
+		</ModalContentsWrapperElement>
 	);
 }
 
-export default Dialog;
+export default ModalContentsWrapper;

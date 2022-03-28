@@ -34,20 +34,20 @@
 	border-radius: 6px;
 	box-shadow: 0 0 0 8px main.$asphalt, 0 19px 38px #0000004d;
 
-	.dialog-body {
+	.modal-contents-wrapper-body {
 		padding: 0 3rem;
 
-		.dialog-title {
+		.modal-contents-wrapper-title {
 			font-weight: inherit;
 			font-size: inherit;
 		}
 
-		.dialog-subtitle {
+		.modal-contents-wrapper-subtitle {
 			font-size: 1rem;
 		}
 	}
 
-	.dialog-footer {
+	.modal-contents-wrapper-footer {
 		height: 4rem;
 		padding: 0;
 
@@ -76,7 +76,7 @@
 }
 
 @include main.dark-theme {
-	.dialog-footer {
+	.modal-contents-wrapper-footer {
 		.button-secondary {
 			color: #ecf0f180;
 			border-top: 2px solid rgba(52, 73, 94, 0.6);

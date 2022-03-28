@@ -17,7 +17,7 @@
 
 @use '../../Styles/main';
 
-.dialog {
+.modal-contents-wrapper {
 	$base-drop-shadow: 0 19px 38px rgba(main.$black, 0.3);
 	$border-width: 8px;
 
@@ -43,7 +43,7 @@
 		transform: none;
 	}
 
-	.dialog-body {
+	.modal-contents-wrapper-body {
 		$content-area-padding: 12px;
 		display: block;
 		flex: 1 1 auto;
@@ -60,7 +60,7 @@
 		position: relative;
 	}
 
-	.dialog-title {
+	.modal-contents-wrapper-title {
 		width: 100%;
 		margin-bottom: 0.5rem;
 
@@ -76,7 +76,7 @@
 		}
 	}
 
-	.dialog-subtitle {
+	.modal-contents-wrapper-subtitle {
 		width: 100%;
 		margin-bottom: 1rem;
 
@@ -93,7 +93,7 @@
 		}
 	}
 
-	.dialog-footer {
+	.modal-contents-wrapper-footer {
 		display: flex;
 		justify-content: space-around;
 		width: 100%;
@@ -122,14 +122,14 @@
 }
 
 @include main.dark-theme {
-	.dialog {
+	.modal-contents-wrapper {
 		background-color: main.$task-background-dark;
 
-		.dialog-title {
+		.modal-contents-wrapper-title {
 			color: main.$gray;
 		}
 
-		.dialog-subtitle {
+		.modal-contents-wrapper-subtitle {
 			color: rgba(main.$gray, 0.5);
 		}
 	}

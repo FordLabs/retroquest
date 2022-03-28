@@ -18,7 +18,7 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
 
-import Dialog from '../../../../Common/Dialog/Dialog';
+import ModalContentsWrapper from '../../../../Common/ModalContentsWrapper/ModalContentsWrapper';
 
 import AccountTab from './AccountTab/AccountTab';
 import InfoTab from './InfoTab/InfoTab';
@@ -40,7 +40,7 @@ export function Settings() {
 	const infoTabIsActive = () => tab === Tabs.INFO;
 
 	return (
-		<Dialog
+		<ModalContentsWrapper
 			className="settings-dialog"
 			title="Settings"
 			subtitle="choose your preferences"
@@ -70,7 +70,7 @@ export function Settings() {
 				{accountTabIsActive() && <AccountTab />}
 				{infoTabIsActive() && <InfoTab />}
 			</div>
-		</Dialog>
+		</ModalContentsWrapper>
 	);
 }
 
