@@ -20,6 +20,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { RecoilRoot } from 'recoil';
 
 import RetroItemWithAddAction from '../App/Team/Retro/ThoughtColumn/RetroItemWithAddAction/RetroItemWithAddAction';
+import { ThoughtsState } from '../State/ThoughtsState';
 import Thought from '../Types/Thought';
 import Topic from '../Types/Topic';
 
@@ -40,9 +41,13 @@ const thought: Thought = {
 
 const Template: ComponentStory<typeof RetroItemWithAddAction> = () => {
 	return (
-		<RecoilRoot>
+		<RecoilRoot
+			initializeState={({ set }) => {
+				set(ThoughtsState, [thought]);
+			}}
+		>
 			<div style={{ backgroundColor: 'white', width: '450px' }}>
-				<RetroItemWithAddAction type={Topic.HAPPY} thought={thought} />
+				<RetroItemWithAddAction type={Topic.HAPPY} thoughtId={thought.id} />
 			</div>
 		</RecoilRoot>
 	);

@@ -135,7 +135,10 @@ describe('RetroItem', () => {
 				expect(modalContent).toEqual({
 					title: 'Retro Item',
 					component: (
-						<RetroItemWithAddAction type={Topic.HAPPY} thought={fakeThought} />
+						<RetroItemWithAddAction
+							type={Topic.HAPPY}
+							thoughtId={fakeThought.id}
+						/>
 					),
 					superSize: true,
 				})
@@ -355,7 +358,10 @@ describe('RetroItem', () => {
 				expect(modalContent).toEqual({
 					title: 'Retro Item',
 					component: (
-						<RetroItemWithAddAction thought={fakeThought} type={Topic.HAPPY} />
+						<RetroItemWithAddAction
+							thoughtId={fakeThought.id}
+							type={Topic.HAPPY}
+						/>
 					),
 					superSize: true,
 				})

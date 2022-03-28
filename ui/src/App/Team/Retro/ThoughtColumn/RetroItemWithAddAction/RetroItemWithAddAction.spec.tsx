@@ -20,6 +20,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
 
+import { ThoughtsState } from '../../../../../State/ThoughtsState';
 import Thought from '../../../../../Types/Thought';
 import Topic from '../../../../../Types/Topic';
 
@@ -85,8 +86,12 @@ function clickDiscard() {
 
 const renderComponent = (fakeThought: Thought) => {
 	render(
-		<RecoilRoot>
-			<RetroItemWithAddAction type={Topic.HAPPY} thought={fakeThought} />
+		<RecoilRoot
+			initializeState={({ set }) => {
+				set(ThoughtsState, [fakeThought]);
+			}}
+		>
+			<RetroItemWithAddAction type={Topic.HAPPY} thoughtId={fakeThought.id} />
 		</RecoilRoot>
 	);
 };

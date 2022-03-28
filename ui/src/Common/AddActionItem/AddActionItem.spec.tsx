@@ -64,7 +64,10 @@ describe('AddActionItem', () => {
 					set(ModalContentsState, {
 						title: 'Action Item',
 						component: (
-							<RetroItemWithAddAction thought={thought} type={thought.topic} />
+							<RetroItemWithAddAction
+								thoughtId={thought.id}
+								type={thought.topic}
+							/>
 						),
 					});
 				}}
