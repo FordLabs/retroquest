@@ -67,8 +67,10 @@
 			}
 
 			.modal-close-button {
-				margin: 0.8rem 0.8rem 0 0;
-				font-size: 0.7rem;
+				@include main.breakpoint-medium {
+					margin: 0.8rem 1.5rem 0 0;
+					font-size: 0.7rem;
+				}
 			}
 		}
 
@@ -77,8 +79,7 @@
 		}
 
 		.modal-close-button {
-			margin: 0.5rem 0.5rem 0 0;
-			padding-right: 1.5rem;
+			margin: 0.8rem 1.5rem 0 0;
 
 			font-size: 1rem;
 
@@ -88,7 +89,7 @@
 			z-index: 1;
 
 			@include main.breakpoint-medium {
-				margin-right: 0.5rem;
+				margin: 0.5rem 1.2rem 0 0;
 			}
 		}
 	}
