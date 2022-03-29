@@ -28,7 +28,7 @@ import java.util.Date;
 @Component
 public class JwtBuilder {
 
-    private String jwtSecret;
+    private final String jwtSecret;
 
     public JwtBuilder(@Value("${jwt.signing.secret}") String jwtSecret){
         this.jwtSecret = jwtSecret;
