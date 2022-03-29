@@ -43,16 +43,10 @@ public class TeamController {
 
     private final TeamService teamService;
     private final JwtBuilder jwtBuilder;
-    private final CaptchaService captchaService;
 
-    public TeamController(
-        TeamService teamService,
-        JwtBuilder jwtBuilder,
-        CaptchaService captchaService
-    ) {
+    public TeamController(TeamService teamService, JwtBuilder jwtBuilder) {
         this.teamService = teamService;
         this.jwtBuilder = jwtBuilder;
-        this.captchaService = captchaService;
     }
 
     @PostMapping("/team")
@@ -119,19 +113,5 @@ public class TeamController {
         headers.add(HttpHeaders.LOCATION, teamId);
 
         return new ResponseEntity<>(jwt, headers, OK);
-    }
-
-    @GetMapping("/team/{teamName}/captcha")
-    @Operation(summary = "returns whether captcha is enabled given a team name", description = "isCaptchaEnabledForTeam")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public CaptchaResponse isCaptchaEnabledForTeam(@PathVariable("teamName") String teamName) {
-        return new CaptchaResponse(captchaService.isCaptchaEnabledForTeam(teamName));
-    }
-
-    @GetMapping("/captcha")
-    @Operation(summary = "Determines whether captcha is enabled globally for Retroquest", description = "isCaptchaEnabled")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public CaptchaResponse isCaptchaEnabled() {
-        return new CaptchaResponse(captchaService.isCaptchaEnabled());
     }
 }

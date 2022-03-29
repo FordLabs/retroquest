@@ -27,12 +27,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-    @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Incorrect team name or password. Please try again.")
-    @ExceptionHandler(CaptchaInvalidException.class)
-    public void invalidCaptchaExceptionHandler() {
-        // Used by Spring for Controller Advice
-    }
-    
     @ResponseStatus(value = HttpStatus.CONFLICT, reason = "This team name is already in use. Please try another one.")
     @ExceptionHandler(DataIntegrityViolationException.class)
     public void duplicateUriConflict() {

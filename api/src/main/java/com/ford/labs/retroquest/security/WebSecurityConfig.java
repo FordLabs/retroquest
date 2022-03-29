@@ -79,11 +79,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(jwtAuthenticationProvider);
     }
 
-    @Override
-    public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/api/team/**/captcha");
-    }
-
     private void displayH2ConsoleToDevs(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.headers().frameOptions().sameOrigin();
     }

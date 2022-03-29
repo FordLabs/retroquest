@@ -139,7 +139,7 @@ class TeamServiceTest {
 
     @Test
     void returnsSavedTeamOnSuccessfulLogin() {
-        LoginRequest loginRequest = new LoginRequest("beach-bums", "password", "captcha");
+        LoginRequest loginRequest = new LoginRequest("beach-bums", "password");
         Team expectedTeam = new Team();
         expectedTeam.setPassword("encryptedPassword");
 
@@ -152,7 +152,7 @@ class TeamServiceTest {
 
     @Test
     void trimsTeamNameWhenLoggingIn() {
-        LoginRequest loginRequest = new LoginRequest("  beach-bums    ", "password", "captcha");
+        LoginRequest loginRequest = new LoginRequest("  beach-bums    ", "password");
         Team expectedTeam = new Team();
         expectedTeam.setPassword("encryptedPassword");
 
@@ -165,7 +165,7 @@ class TeamServiceTest {
 
     @Test
     void login_throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
-        LoginRequest loginRequest = new LoginRequest("beach-bums", "password", "captcha");
+        LoginRequest loginRequest = new LoginRequest("beach-bums", "password");
 
         when(teamRepository.findTeamByNameIgnoreCase("beach-bums")).thenReturn(Optional.empty());
         assertThrows(
@@ -176,7 +176,7 @@ class TeamServiceTest {
 
     @Test
     void throwsPasswordInvalidExceptionWhenNoPasswordGiven() {
-        LoginRequest loginRequest = new LoginRequest("beach-bums", null, "captcha");
+        LoginRequest loginRequest = new LoginRequest("beach-bums", null);
         when(teamRepository.findTeamByNameIgnoreCase("beach-bums")).thenReturn(Optional.of(new Team()));
 
         assertThrows(
@@ -187,7 +187,7 @@ class TeamServiceTest {
 
     @Test
     void throwsPasswordInvalidExceptionWhenPasswordsDoNotMatch() {
-        LoginRequest loginRequest = new LoginRequest("beach-bums", "notPassword", "captcha");
+        LoginRequest loginRequest = new LoginRequest("beach-bums", "notPassword");
         Team expectedTeam = new Team();
 
         expectedTeam.setPassword("encryptedPassword");
@@ -207,7 +207,7 @@ class TeamServiceTest {
         String teamName = "beach-bums";
         String teamPassword = "encryptedPassword";
 
-        LoginRequest loginRequest = new LoginRequest(teamName, "notPassword", "captcha");
+        LoginRequest loginRequest = new LoginRequest(teamName, "notPassword");
 
         Team team = new Team("", teamName, teamPassword);
         Team teamAfterFailedAttempt = new Team("", teamName, teamPassword);
@@ -228,7 +228,7 @@ class TeamServiceTest {
         String teamName = "beach-bums";
         String teamPassword = "encryptedPassword";
 
-        LoginRequest loginRequest = new LoginRequest(teamName, teamPassword, "captcha");
+        LoginRequest loginRequest = new LoginRequest(teamName, teamPassword);
 
         Team team = new Team("", teamName, teamPassword);
         team.setFailedAttempts(1);
@@ -246,7 +246,7 @@ class TeamServiceTest {
         when(teamRepository.save(any(Team.class))).then(returnsFirstArg());
         when(teamRepository.findTeamByUri("beach-bums")).thenReturn(Optional.empty());
 
-        CreateTeamRequest requestedTeam = new CreateTeamRequest("beach-bums", "password", "captcha");
+        CreateTeamRequest requestedTeam = new CreateTeamRequest("beach-bums", "password");
         teamService.createNewTeam(requestedTeam);
 
         ColumnTitle happyColumnTitle = ColumnTitle.builder().teamId("beach-bums").topic("happy").title("Happy").build();
