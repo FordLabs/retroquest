@@ -69,7 +69,7 @@ function ThoughtColumn(props: Props) {
 	const renderThought = (thought: Thought) => {
 		return (
 			<li key={thought.id}>
-				<RetroItem thought={thought} type={thought.topic} />
+				<RetroItem thoughtId={thought.id} type={thought.topic} />
 			</li>
 		);
 	};

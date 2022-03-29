@@ -22,7 +22,7 @@ import ColumnItem from '../../../../../Common/ColumnItem/ColumnItem';
 import ThoughtService from '../../../../../Services/Api/ThoughtService';
 import { ModalContentsState } from '../../../../../State/ModalContentsState';
 import { TeamState } from '../../../../../State/TeamState';
-import Thought from '../../../../../Types/Thought';
+import { ThoughtByIdState } from '../../../../../State/ThoughtsState';
 import { ThoughtTopic } from '../../../../../Types/Topic';
 import RetroItemWithAddAction from '../RetroItemWithAddAction/RetroItemWithAddAction';
 
@@ -31,7 +31,7 @@ import UpvoteButton from './UpvoteButton/UpvoteButton';
 import './RetroItem.scss';
 
 type RetroItemProps = {
-	thought: Thought;
+	thoughtId: number;
 	type: ThoughtTopic;
 	disableButtons?: boolean;
 	disableAnimations?: boolean;
@@ -39,8 +39,8 @@ type RetroItemProps = {
 
 function RetroItem(props: RetroItemProps) {
 	const {
-		thought,
 		type,
+		thoughtId,
 		disableButtons = false,
 		disableAnimations = false,
 	} = props;
@@ -48,6 +48,7 @@ function RetroItem(props: RetroItemProps) {
 	const [animateFadeOut, setAnimateFadeOut] = useState<boolean>(false);
 
 	const team = useRecoilValue(TeamState);
+	const thought = useRecoilValue(ThoughtByIdState(thoughtId));
 	const setModalContents = useSetRecoilState(ModalContentsState);
 
 	const closeModal = () => setModalContents(null);
@@ -55,30 +56,32 @@ function RetroItem(props: RetroItemProps) {
 	const editThought = (updatedThoughtMessage: string) => {
 		ThoughtService.updateMessage(
 			team.id,
-			thought.id,
+			thoughtId,
 			updatedThoughtMessage
 		).catch(console.error);
 	};
 
 	const updateThoughtDiscussionStatus = () => {
-		setAnimateFadeOut(true);
-		ThoughtService.updateDiscussionStatus(
-			team.id,
-			thought.id,
-			!thought.discussed
-		)
-			.then(closeModal)
-			.catch(console.error);
+		if (thought) {
+			setAnimateFadeOut(true);
+			ThoughtService.updateDiscussionStatus(
+				team.id,
+				thoughtId,
+				!thought.discussed
+			)
+				.then(closeModal)
+				.catch(console.error);
+		}
 	};
 
 	const deleteThought = () => {
-		ThoughtService.delete(team.id, thought.id)
+		ThoughtService.delete(team.id, thoughtId)
 			.then(closeModal)
 			.catch(console.error);
 	};
 
 	const upvoteThought = () => {
-		ThoughtService.upvoteThought(team.id, thought.id).catch(console.error);
+		ThoughtService.upvoteThought(team.id, thoughtId).catch(console.error);
 	};
 
 	const getAnimationClasses = () => {
@@ -93,38 +96,40 @@ function RetroItem(props: RetroItemProps) {
 	const openRetroItemModal = () =>
 		setModalContents({
 			title: 'Retro Item',
-			component: <RetroItemWithAddAction thoughtId={thought.id} type={type} />,
+			component: <RetroItemWithAddAction thoughtId={thoughtId} type={type} />,
 			superSize: true,
 		});
 
 	return (
 		<>
-			<ColumnItem
-				className={classnames(
-					'retro-item',
-					{ completed: thought.discussed },
-					getAnimationClasses()
-				)}
-				data-testid="retroItem"
-				type={type}
-				text={thought.message}
-				checked={thought.discussed}
-				disableButtons={disableButtons}
-				onSelect={openRetroItemModal}
-				onEdit={editThought}
-				onDelete={deleteThought}
-				onCheck={updateThoughtDiscussionStatus}
-				customButtons={({ editing, deleting }) => (
-					<UpvoteButton
-						votes={thought.hearts}
-						onClick={upvoteThought}
-						disabled={thought.discussed || editing || deleting}
-						readOnly={disableButtons}
-						aria-label={`Upvote (${thought.hearts})`}
-						data-testid="retroItem-upvote"
-					/>
-				)}
-			/>
+			{thought && (
+				<ColumnItem
+					className={classnames(
+						'retro-item',
+						{ completed: thought.discussed },
+						getAnimationClasses()
+					)}
+					data-testid="retroItem"
+					type={type}
+					text={thought.message}
+					checked={thought.discussed}
+					disableButtons={disableButtons}
+					onSelect={openRetroItemModal}
+					onEdit={editThought}
+					onDelete={deleteThought}
+					onCheck={updateThoughtDiscussionStatus}
+					customButtons={({ editing, deleting }) => (
+						<UpvoteButton
+							votes={thought.hearts}
+							onClick={upvoteThought}
+							disabled={thought.discussed || editing || deleting}
+							readOnly={disableButtons}
+							aria-label={`Upvote (${thought.hearts})`}
+							data-testid="retroItem-upvote"
+						/>
+					)}
+				/>
+			)}
 		</>
 	);
 }

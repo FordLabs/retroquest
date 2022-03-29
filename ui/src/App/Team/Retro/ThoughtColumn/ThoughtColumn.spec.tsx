@@ -73,10 +73,6 @@ describe('ThoughtColumn.spec.tsx', () => {
 		));
 	});
 
-	afterEach(() => {
-		// jest.clearAllMocks();
-	});
-
 	it('should render without axe errors', async () => {
 		const results = await axe(container);
 		expect(results).toHaveNoViolations();

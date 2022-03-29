@@ -15,11 +15,12 @@
  * limitations under the License.
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { RecoilRoot } from 'recoil';
 
 import RetroItem from '../App/Team/Retro/ThoughtColumn/RetroItem/RetroItem';
+import { ThoughtsState } from '../State/ThoughtsState';
 import Thought from '../Types/Thought';
 import Topic from '../Types/Topic';
 
@@ -28,8 +29,8 @@ export default {
 	component: RetroItem,
 } as ComponentMeta<typeof RetroItem>;
 
-const testThought: Thought = {
-	id: 0,
+const thought1: Thought = {
+	id: 1,
 	discussed: false,
 	hearts: 0,
 	message:
@@ -38,18 +39,30 @@ const testThought: Thought = {
 	topic: Topic.HAPPY,
 };
 
-const Template: ComponentStory<typeof RetroItem> = () => {
-	const [thought] = useState(testThought);
+const thought2: Thought = {
+	id: 2,
+	discussed: true,
+	hearts: 0,
+	message:
+		"If elevators hadn't been invented, all the CEOs and" +
+		'important people would have their offices on the first floor as a sign of status.',
+	topic: Topic.HAPPY,
+};
 
+const Template: ComponentStory<typeof RetroItem> = () => {
 	return (
-		<RecoilRoot>
+		<RecoilRoot
+			initializeState={({ set }) => {
+				set(ThoughtsState, [thought1, thought2]);
+			}}
+		>
 			<div style={{ width: '400px', marginBottom: '20px' }}>
-				<RetroItem thought={thought} type={Topic.HAPPY} />
+				<RetroItem thoughtId={thought1.id} type={Topic.HAPPY} />
 			</div>
 			<div style={{ width: '400px' }}>
 				<RetroItem
 					disableButtons={true}
-					thought={{ ...testThought, discussed: true }}
+					thoughtId={thought2.id}
 					type={Topic.UNHAPPY}
 				/>
 			</div>

@@ -34,6 +34,7 @@ import {
 	ModalContentsState,
 } from '../../State/ModalContentsState';
 import { TeamState } from '../../State/TeamState';
+import { ThoughtsState } from '../../State/ThoughtsState';
 import Team from '../../Types/Team';
 import Topic from '../../Types/Topic';
 import { RecoilObserver } from '../../Utils/RecoilObserver';
@@ -61,6 +62,7 @@ describe('AddActionItem', () => {
 			<RecoilRoot
 				initializeState={({ set }) => {
 					set(TeamState, team);
+					set(ThoughtsState, [thought]);
 					set(ModalContentsState, {
 						title: 'Action Item',
 						component: (
@@ -80,7 +82,7 @@ describe('AddActionItem', () => {
 				/>
 				<AddActionItem
 					hideComponentCallback={hideComponentCallback}
-					thought={thought}
+					thoughtId={thought.id}
 				/>
 			</RecoilRoot>
 		);

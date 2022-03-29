@@ -23,7 +23,7 @@ import ActionItemService from '../../Services/Api/ActionItemService';
 import ThoughtService from '../../Services/Api/ThoughtService';
 import { ModalContentsState } from '../../State/ModalContentsState';
 import { TeamState } from '../../State/TeamState';
-import Thought from '../../Types/Thought';
+import { ThoughtByIdState } from '../../State/ThoughtsState';
 import { onKeys } from '../../Utils/EventUtils';
 import Assignee from '../Assignee/Assignee';
 import {
@@ -36,14 +36,15 @@ import FloatingCharacterCountdown from '../FloatingCharacterCountdown/FloatingCh
 const MAX_LENGTH_TASK = 255;
 
 type AddActionItemProps = {
-	thought: Thought;
+	thoughtId: number;
 	hideComponentCallback: () => void;
 };
 
 function AddActionItem(props: AddActionItemProps) {
-	const { hideComponentCallback, thought } = props;
+	const { hideComponentCallback, thoughtId } = props;
 
 	const team = useRecoilValue(TeamState);
+	const thought = useRecoilValue(ThoughtByIdState(thoughtId));
 
 	const textAreaRef = useRef<HTMLTextAreaElement>(null);
 	const [task, setTask] = useState<string>('');
@@ -73,13 +74,15 @@ function AddActionItem(props: AddActionItemProps) {
 	}
 
 	const updateThoughtDiscussionStatus = () => {
-		ThoughtService.updateDiscussionStatus(
-			team.id,
-			thought.id,
-			!thought.discussed
-		)
-			.then(closeModal)
-			.catch(console.error);
+		if (thought) {
+			ThoughtService.updateDiscussionStatus(
+				team.id,
+				thought.id,
+				!thought.discussed
+			)
+				.then(closeModal)
+				.catch(console.error);
+		}
 	};
 
 	function onCreate() {
