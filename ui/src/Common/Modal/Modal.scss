@@ -41,7 +41,7 @@
 	.modal-content {
 		width: 100%;
 		margin: auto;
-		padding: 0 1.5rem;
+		padding: 0 0.8rem;
 
 		color: main.$asphalt;
 		font-family: 'Quicksand', sans-serif;
@@ -77,8 +77,8 @@
 		}
 
 		.modal-close-button {
-			padding-right: 1.5rem;
 			margin: 0.5rem 0.5rem 0 0;
+			padding-right: 1.5rem;
 
 			font-size: 1rem;
 
