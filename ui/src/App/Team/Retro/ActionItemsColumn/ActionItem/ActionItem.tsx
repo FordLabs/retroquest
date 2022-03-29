@@ -23,52 +23,56 @@ import Assignee from '../../../../../Common/Assignee/Assignee';
 import ColumnItem from '../../../../../Common/ColumnItem/ColumnItem';
 import { DateCreated } from '../../../../../Common/DateCreated/DateCreated';
 import ActionItemService from '../../../../../Services/Api/ActionItemService';
+import { ActionItemByIdState } from '../../../../../State/ActionItemState';
 import { ModalContentsState } from '../../../../../State/ModalContentsState';
 import { TeamState } from '../../../../../State/TeamState';
-import Action from '../../../../../Types/Action';
 import Topic from '../../../../../Types/Topic';
-import ActionItemModal from '../ActionItemModal/ActionItemModal';
 
 type ActionItemProps = {
-	action: Action;
+	actionItemId: number;
 	disableAnimations?: boolean;
 };
 
 function ActionItem(props: ActionItemProps) {
-	const { action, disableAnimations = false } = props;
+	const { disableAnimations = false, actionItemId } = props;
 
 	const team = useRecoilValue(TeamState);
+	const actionItem = useRecoilValue(ActionItemByIdState(actionItemId));
 	const setModalContents = useSetRecoilState(ModalContentsState);
 
 	const [animateFadeOut, setAnimateFadeOut] = useState<boolean>(false);
 
 	const deleteActionItem = () => {
-		ActionItemService.delete(team.id, action.id)
+		ActionItemService.delete(team.id, actionItemId)
 			.then(closeModal)
 			.catch(console.error);
 	};
 
 	const editActionItemTask = (updatedTask: string) => {
-		ActionItemService.updateTask(team.id, action.id, updatedTask).catch(
+		ActionItemService.updateTask(team.id, actionItemId, updatedTask).catch(
 			console.error
 		);
 	};
 
 	const editActionItemAssignee = (updatedAssignee: string) => {
-		ActionItemService.updateAssignee(team.id, action.id, updatedAssignee).catch(
-			console.error
-		);
+		ActionItemService.updateAssignee(
+			team.id,
+			actionItemId,
+			updatedAssignee
+		).catch(console.error);
 	};
 
 	const updateActionItemCompletionStatus = () => {
-		setAnimateFadeOut(true);
-		ActionItemService.updateCompletionStatus(
-			team.id,
-			action.id,
-			!action.completed
-		)
-			.then(closeModal)
-			.catch(console.error);
+		if (actionItem) {
+			setAnimateFadeOut(true);
+			ActionItemService.updateCompletionStatus(
+				team.id,
+				actionItem.id,
+				!actionItem.completed
+			)
+				.then(closeModal)
+				.catch(console.error);
+		}
 	};
 
 	const getAnimationClasses = () => {
@@ -83,7 +87,7 @@ function ActionItem(props: ActionItemProps) {
 	const openActionItemModal = () =>
 		setModalContents({
 			title: 'Action Item',
-			component: <ActionItemModal actionItemId={action.id} />,
+			component: <ActionItem actionItemId={actionItemId} disableAnimations />,
 			superSize: true,
 		});
 
@@ -91,37 +95,39 @@ function ActionItem(props: ActionItemProps) {
 
 	return (
 		<>
-			<ColumnItem
-				data-testid="actionItem"
-				className={classnames(
-					'action-item',
-					{ completed: action.completed },
-					getAnimationClasses()
-				)}
-				type={Topic.ACTION}
-				text={action.task}
-				checked={action.completed}
-				onSelect={openActionItemModal}
-				onEdit={editActionItemTask}
-				onDelete={deleteActionItem}
-				onCheck={updateActionItemCompletionStatus}
-				customButtons={({ editing, deleting }) => (
-					<DateCreated
-						date={action.dateCreated}
-						disabled={action.completed || editing || deleting}
-					/>
-				)}
-			>
-				{({ editing, deleting }) => (
-					<Assignee
-						assignee={action.assignee}
-						onAssign={editActionItemAssignee}
-						readOnly={action.completed}
-						editing={editing}
-						deleting={deleting}
-					/>
-				)}
-			</ColumnItem>
+			{actionItem && (
+				<ColumnItem
+					data-testid="actionItem"
+					className={classnames(
+						'action-item',
+						{ completed: actionItem.completed },
+						getAnimationClasses()
+					)}
+					type={Topic.ACTION}
+					text={actionItem.task}
+					checked={actionItem.completed}
+					onSelect={openActionItemModal}
+					onEdit={editActionItemTask}
+					onDelete={deleteActionItem}
+					onCheck={updateActionItemCompletionStatus}
+					customButtons={({ editing, deleting }) => (
+						<DateCreated
+							date={actionItem.dateCreated}
+							disabled={actionItem.completed || editing || deleting}
+						/>
+					)}
+				>
+					{({ editing, deleting }) => (
+						<Assignee
+							assignee={actionItem.assignee}
+							onAssign={editActionItemAssignee}
+							readOnly={actionItem.completed}
+							editing={editing}
+							deleting={deleting}
+						/>
+					)}
+				</ColumnItem>
+			)}
 		</>
 	);
 }
