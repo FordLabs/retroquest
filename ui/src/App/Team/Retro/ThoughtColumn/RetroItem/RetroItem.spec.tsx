@@ -27,6 +27,7 @@ import {
 	ModalContentsState,
 } from '../../../../../State/ModalContentsState';
 import { TeamState } from '../../../../../State/TeamState';
+import { ThoughtsState } from '../../../../../State/ThoughtsState';
 import Team from '../../../../../Types/Team';
 import Thought from '../../../../../Types/Thought';
 import Topic, { ThoughtTopic } from '../../../../../Types/Topic';
@@ -37,7 +38,7 @@ import RetroItem from './RetroItem';
 
 jest.mock('../../../../../Services/Api/ThoughtService');
 
-describe('RetroItem', () => {
+describe('Retro Item', () => {
 	let modalContent: ModalContents | null;
 	const fadeInAnimationClass = 'fade-in';
 	const fadeOutAnimationClass = 'fade-out';
@@ -60,8 +61,12 @@ describe('RetroItem', () => {
 
 	it('should render without axe errors', async () => {
 		const { container } = render(
-			<RecoilRoot>
-				<RetroItem thought={fakeThought} type={Topic.HAPPY} />
+			<RecoilRoot
+				initializeState={({ set }) => {
+					set(ThoughtsState, [fakeThought]);
+				}}
+			>
+				<RetroItem thoughtId={fakeThought.id} type={Topic.HAPPY} />
 			</RecoilRoot>
 		);
 		const results = await axe(container);
@@ -72,8 +77,12 @@ describe('RetroItem', () => {
 		'should render %s type',
 		(type: Topic) => {
 			render(
-				<RecoilRoot>
-					<RetroItem thought={fakeThought} type={type as ThoughtTopic} />
+				<RecoilRoot
+					initializeState={({ set }) => {
+						set(ThoughtsState, [fakeThought]);
+					}}
+				>
+					<RetroItem thoughtId={fakeThought.id} type={type as ThoughtTopic} />
 				</RecoilRoot>
 			);
 
@@ -83,8 +92,12 @@ describe('RetroItem', () => {
 
 	it('should render thought message and upvotes', () => {
 		render(
-			<RecoilRoot>
-				<RetroItem thought={fakeThought} type={Topic.HAPPY} />
+			<RecoilRoot
+				initializeState={({ set }) => {
+					set(ThoughtsState, [fakeThought]);
+				}}
+			>
+				<RetroItem thoughtId={fakeThought.id} type={Topic.HAPPY} />
 			</RecoilRoot>
 		);
 
@@ -95,9 +108,13 @@ describe('RetroItem', () => {
 
 	it('should disable animations', () => {
 		render(
-			<RecoilRoot>
+			<RecoilRoot
+				initializeState={({ set }) => {
+					set(ThoughtsState, [fakeThought]);
+				}}
+			>
 				<RetroItem
-					thought={fakeThought}
+					thoughtId={fakeThought.id}
 					type={Topic.HAPPY}
 					disableAnimations={true}
 				/>
@@ -115,6 +132,7 @@ describe('RetroItem', () => {
 				<RecoilRoot
 					initializeState={({ set }) => {
 						set(TeamState, team);
+						set(ThoughtsState, [fakeThought]);
 					}}
 				>
 					<RecoilObserver
@@ -123,7 +141,7 @@ describe('RetroItem', () => {
 							modalContent = value;
 						}}
 					/>
-					<RetroItem type={Topic.HAPPY} thought={fakeThought} />
+					<RetroItem type={Topic.HAPPY} thoughtId={fakeThought.id} />
 				</RecoilRoot>
 			);
 		});
@@ -276,12 +294,10 @@ describe('RetroItem', () => {
 				<RecoilRoot
 					initializeState={({ set }) => {
 						set(TeamState, team);
+						set(ThoughtsState, [{ ...fakeThought, discussed: true }]);
 					}}
 				>
-					<RetroItem
-						type={Topic.HAPPY}
-						thought={{ ...fakeThought, discussed: true }}
-					/>
+					<RetroItem type={Topic.HAPPY} thoughtId={fakeThought.id} />
 				</RecoilRoot>
 			);
 		});
@@ -322,7 +338,11 @@ describe('RetroItem', () => {
 	describe('When readonly', () => {
 		beforeEach(() => {
 			render(
-				<RecoilRoot>
+				<RecoilRoot
+					initializeState={({ set }) => {
+						set(ThoughtsState, [fakeThought]);
+					}}
+				>
 					<RecoilObserver
 						recoilState={ModalContentsState}
 						onChange={(value: ModalContents) => {
@@ -332,7 +352,7 @@ describe('RetroItem', () => {
 					<RetroItem
 						disableButtons={true}
 						type={Topic.HAPPY}
-						thought={fakeThought}
+						thoughtId={fakeThought.id}
 					/>
 				</RecoilRoot>
 			);

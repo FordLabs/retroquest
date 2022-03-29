@@ -16,10 +16,8 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
-import { useRecoilValue } from 'recoil';
 
 import AddActionItem from '../../../../../Common/AddActionItem/AddActionItem';
-import { ThoughtByIdState } from '../../../../../State/ThoughtsState';
 import { ThoughtTopic } from '../../../../../Types/Topic';
 import RetroItem from '../RetroItem/RetroItem';
 
@@ -33,7 +31,6 @@ interface RetroItemModalProps {
 function RetroItemWithAddAction(props: RetroItemModalProps) {
 	const { type, thoughtId } = props;
 
-	const thought = useRecoilValue(ThoughtByIdState(thoughtId));
 	const [showAddActionItemCard, setShowAddActionItemCard] = useState(false);
 
 	const addActionItemButtonRef = useRef<HTMLButtonElement>(null);
@@ -48,31 +45,27 @@ function RetroItemWithAddAction(props: RetroItemModalProps) {
 				'creating-action': showAddActionItemCard,
 			})}
 		>
-			{thought && (
-				<>
-					<RetroItem
-						thought={thought}
-						disableButtons={showAddActionItemCard}
-						type={type}
-						disableAnimations
-					/>
-					{!showAddActionItemCard && (
-						<button
-							className="add-action-item-button"
-							onClick={() => setShowAddActionItemCard(true)}
-							ref={addActionItemButtonRef}
-						>
-							<i className="fas fa-plus plus-icon" aria-hidden />
-							Add Action Item
-						</button>
-					)}
-					{showAddActionItemCard && (
-						<AddActionItem
-							thought={thought}
-							hideComponentCallback={() => setShowAddActionItemCard(false)}
-						/>
-					)}
-				</>
+			<RetroItem
+				thoughtId={thoughtId}
+				disableButtons={showAddActionItemCard}
+				type={type}
+				disableAnimations
+			/>
+			{!showAddActionItemCard && (
+				<button
+					className="add-action-item-button"
+					onClick={() => setShowAddActionItemCard(true)}
+					ref={addActionItemButtonRef}
+				>
+					<i className="fas fa-plus plus-icon" aria-hidden />
+					Add Action Item
+				</button>
+			)}
+			{showAddActionItemCard && (
+				<AddActionItem
+					thoughtId={thoughtId}
+					hideComponentCallback={() => setShowAddActionItemCard(false)}
+				/>
 			)}
 		</div>
 	);
