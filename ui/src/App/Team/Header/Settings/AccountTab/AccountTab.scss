@@ -18,6 +18,10 @@
 @use '../../../../../Styles/main';
 
 .account-tab-body {
+	@include main.breakpoint-medium {
+		padding-top: 1.5rem;
+	}
+
 	.button-primary.logout-button {
 		width: 75%;
 		height: 50px;

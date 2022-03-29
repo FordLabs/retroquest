@@ -18,7 +18,7 @@
 import React, { useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import ModalContentsWrapper from '../../../../../Common/ModalContentsWrapper/ModalContentsWrapper';
+import FormTemplate from '../../../../../Common/FormTemplate/FormTemplate';
 import FeedbackService from '../../../../../Services/Api/FeedbackService';
 import { ModalContentsState } from '../../../../../State/ModalContentsState';
 import { TeamState } from '../../../../../State/TeamState';
@@ -36,7 +36,7 @@ function FeedbackForm() {
 
 	const closeModal = () => setModalContents(null);
 
-	const handleSubmit = () => {
+	const onSubmit = () => {
 		if (comment) {
 			const feedback = {
 				teamId: team.id,
@@ -51,15 +51,15 @@ function FeedbackForm() {
 	};
 
 	return (
-		<ModalContentsWrapper
+		<FormTemplate
 			testId="feedbackDialog"
-			className="feedback-dialog"
+			className="feedback-form"
+			onSubmit={onSubmit}
+			onCancel={closeModal}
 			title="Feedback"
 			subtitle="How can we improve RetroQuest?"
-			buttons={{
-				cancel: { text: 'Cancel', onClick: closeModal },
-				confirm: { text: 'Send!', onClick: handleSubmit },
-			}}
+			cancelButtonText="Cancel"
+			submitButtonText="Send!"
 		>
 			<FeedbackStars className="section" value={stars} onChange={setStars} />
 			<div className="section comments-section">
@@ -85,7 +85,7 @@ function FeedbackForm() {
 					onChange={(event) => setUserEmail(event.target.value)}
 				/>
 			</div>
-		</ModalContentsWrapper>
+		</FormTemplate>
 	);
 }
 

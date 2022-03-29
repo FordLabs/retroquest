@@ -17,7 +17,11 @@
 
 @use '../../../../../Styles/main';
 
-.feedback-dialog {
+.feedback-form {
+	@include main.breakpoint-medium {
+		width: 450px;
+	}
+
 	.section {
 		width: 100%;
 		margin-top: 12px;
@@ -99,7 +103,7 @@
 }
 
 @include main.dark-theme {
-	.feedback-dialog {
+	.feedback-form {
 		.comments-section {
 			.label {
 				color: main.$gray;

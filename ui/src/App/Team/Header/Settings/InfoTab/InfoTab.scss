@@ -15,7 +15,13 @@
  * limitations under the License.
  */
 
+@use '../../../../../Styles/main';
+
 .info-tab-body {
+	@include main.breakpoint-medium {
+		padding-top: 2.5rem;
+	}
+
 	.version-label {
 		display: inline-block;
 		width: 100%;

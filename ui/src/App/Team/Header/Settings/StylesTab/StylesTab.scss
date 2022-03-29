@@ -26,11 +26,11 @@
 
 	.label {
 		font-weight: bold;
-		font-size: 1.2rem;
+		font-size: 1.1rem;
 		text-transform: capitalize;
 
-		@media only screen and (max-width: 610px) {
-			font-size: 1.1rem;
+		@include main.breakpoint-medium {
+			font-size: 1.2rem;
 		}
 	}
 }
@@ -47,16 +47,19 @@
 		}
 
 		.theme-image {
+			width: 96px;
+			height: 96px;
+
 			border-radius: 12px;
 			cursor: pointer;
 
-			&.selected {
-				box-shadow: 0 0 0 8px main.$purple;
+			@include main.breakpoint-medium {
+				width: unset;
+				height: unset;
 			}
 
-			@media only screen and (max-width: 610px) {
-				width: 96px;
-				height: 96px;
+			&.selected {
+				box-shadow: 0 0 0 8px main.$purple;
 			}
 		}
 
