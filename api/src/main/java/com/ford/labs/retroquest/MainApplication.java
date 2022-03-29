@@ -17,7 +17,6 @@
 
 package com.ford.labs.retroquest;
 
-import com.ford.labs.retroquest.validation.CaptchaProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -26,9 +25,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableCaching
 @EnableScheduling
-@EnableConfigurationProperties({
-    CaptchaProperties.class
-})
+@EnableConfigurationProperties
 @SpringBootApplication
 public class MainApplication {
     public static void main(String[] args) {

@@ -57,9 +57,6 @@ class TeamApiTest extends ApiTestBase {
     private TestRestTemplate testRestTemplate;
 
     @Autowired
-    private RestTemplate restTemplate;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -79,12 +76,9 @@ class TeamApiTest extends ApiTestBase {
     @Test
     void should_create_team_and_update_metric() throws Exception {
         meterRegistry.gauge("retroquest.teams.count", 0);
-
-        installSuccessCaptcha();
         var sentCreateTeamRequest = CreateTeamRequest.builder()
             .name(teamId)
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         var mvcResult = mockMvc.perform(post("/api/team")
@@ -105,12 +99,9 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_create_team_with_valid_name_and_password() throws Exception {
-        installSuccessCaptcha();
-
         var sentCreateTeamRequest = CreateTeamRequest.builder()
             .name(teamId)
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         var mvcResult = mockMvc.perform(post("/api/team")
@@ -129,11 +120,8 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_create_team_with_empty_password() throws Exception {
-        installSuccessCaptcha();
-
         var sentCreateTeamRequest = CreateTeamRequest.builder()
             .name(teamId)
-            .captchaResponse("some captcha")
             .build();
 
         mockMvc.perform(post("/api/team")
@@ -144,29 +132,9 @@ class TeamApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_not_create_team_with_invalid_captcha() throws Exception {
-        installInvalidCaptcha();
-
-        var sentCreateTeamRequest = CreateTeamRequest.builder()
-            .name(teamId)
-            .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
-            .build();
-
-        mockMvc.perform(post("/api/team")
-            .contentType(APPLICATION_JSON)
-            .content(objectMapper.writeValueAsBytes(sentCreateTeamRequest)))
-            .andExpect(status().isForbidden())
-            .andExpect(status().reason(containsString("Incorrect team name or password. Please try again.")));
-    }
-
-    @Test
     void should_not_create_team_with_empty_name() throws Exception {
-        installSuccessCaptcha();
-
         var sentCreateTeamRequest = CreateTeamRequest.builder()
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         mockMvc.perform(post("/api/team")
@@ -179,12 +147,9 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_create_team_with_special_characters_in_name() throws Exception {
-        installSuccessCaptcha();
-
         var sentCreateTeamRequest = CreateTeamRequest.builder()
             .name("The@Mild$Ones")
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         mockMvc.perform(post("/api/team")
@@ -196,12 +161,9 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_create_team_with_duplicate_name() throws Exception {
-        installSuccessCaptcha();
-
         var sentCreateTeamRequest = CreateTeamRequest.builder()
             .name("someTeam")
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         teamRepository.save(Team.builder()
@@ -219,12 +181,9 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_create_team_with_duplicate_lower_case_name() throws Exception {
-        installSuccessCaptcha();
-
         var upperCaseCreateTeamRequest = CreateTeamRequest.builder()
             .name("someTeam".toUpperCase())
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         var lowerCaseCreateTeamRequest = upperCaseCreateTeamRequest.toBuilder().name(upperCaseCreateTeamRequest.getName().toLowerCase()).build();
@@ -244,12 +203,9 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_create_team_with_duplicate_upper_case_name() throws Exception {
-        installSuccessCaptcha();
-
         var upperCaseCreateTeamRequest = CreateTeamRequest.builder()
             .name("someTeam".toUpperCase())
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         var lowerCaseCreateTeamRequest = upperCaseCreateTeamRequest.toBuilder().name(upperCaseCreateTeamRequest.getName().toLowerCase()).build();
@@ -269,12 +225,9 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_create_team_with_duplicate_with_leading_spaces() throws Exception {
-        installSuccessCaptcha();
-
         var createTeamRequest = CreateTeamRequest.builder()
             .name("someTeam")
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         var leadingSpacesRequest = createTeamRequest.toBuilder().name("    " + createTeamRequest.getName()).build();
@@ -294,12 +247,9 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_create_team_with_duplicate_with_trailing_spaces() throws Exception {
-        installSuccessCaptcha();
-
         var createTeamRequest = CreateTeamRequest.builder()
             .name("someTeam")
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         var trailingSpacesRequest = createTeamRequest.toBuilder().name(createTeamRequest.getName() + "    ").build();
@@ -319,12 +269,9 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_create_team_with_leading_spaces_dropped_from_team_name_and_uri() throws Exception {
-        installSuccessCaptcha();
-
         var sentCreateTeamRequest = CreateTeamRequest.builder()
             .name("    " + teamId)
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         var mvcResult = mockMvc.perform(post("/api/team")
@@ -343,12 +290,9 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_create_team_with_trailing_spaces_dropped_from_team_name_and_uri() throws Exception {
-        installSuccessCaptcha();
-
         var sentCreateTeamRequest = CreateTeamRequest.builder()
             .name(teamId + "    ")
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         var mvcResult = mockMvc.perform(post("/api/team")
@@ -367,12 +311,9 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_update_password() throws Exception {
-        installSuccessCaptcha();
-
         var createTeamRequest = CreateTeamRequest.builder()
             .name("Beachity Bums")
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
@@ -398,12 +339,9 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_update_password_with_incorrect_previous_password() throws Exception {
-        installSuccessCaptcha();
-
         var createTeamRequest = CreateTeamRequest.builder()
             .name("Beachity Bums")
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
@@ -423,12 +361,9 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_update_password_with_an_invalid_new_password() throws Exception {
-        installSuccessCaptcha();
-
         var createTeamRequest = CreateTeamRequest.builder()
             .name("Beachity Bums")
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
@@ -448,14 +383,11 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_get_team_name() throws Exception {
-        installSuccessCaptcha();
-
         var expectedName = "Beachity Bums";
 
         var createTeamRequest = CreateTeamRequest.builder()
             .name(expectedName)
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
@@ -484,12 +416,9 @@ class TeamApiTest extends ApiTestBase {
         "    PEACHY BEACHY  "
     })
     void should_log_in(String attemptedLoginTeamName) throws Exception {
-        installSuccessCaptcha();
-
         var createTeamRequest = CreateTeamRequest.builder()
             .name("PEACHY BEACHY")
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
@@ -497,7 +426,6 @@ class TeamApiTest extends ApiTestBase {
         var loginRequest = LoginRequest.builder()
             .name(attemptedLoginTeamName)
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         var mvcResult = mockMvc.perform(post("/api/team/login")
@@ -515,12 +443,9 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_login_with_wrong_team_name() throws Exception {
-        installSuccessCaptcha();
-
         var loginRequest = LoginRequest.builder()
             .name("not a team")
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         mockMvc.perform(post("/api/team/login")
@@ -532,12 +457,9 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_login_with_incorrect_password() throws Exception {
-        installInvalidCaptchaTwice();
-
         var createTeamRequest = CreateTeamRequest.builder()
             .name("PEACHY BEACHY")
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
@@ -545,7 +467,6 @@ class TeamApiTest extends ApiTestBase {
         var loginRequest = LoginRequest.builder()
             .name("PEACHY BEACHY")
             .password("wr0ngPassw0rd")
-            .captchaResponse("some captcha")
             .build();
 
         mockMvc.perform(post("/api/team/login")
@@ -557,12 +478,9 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_login_with_team_name_with_middle_spaces_in_request() throws Exception {
-        installSuccessCaptcha();
-
         var createTeamRequest = CreateTeamRequest.builder()
             .name("PEACHY BEACHY")
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
@@ -570,7 +488,6 @@ class TeamApiTest extends ApiTestBase {
         var loginRequest = LoginRequest.builder()
             .name("PEACHY     BEACHY")
             .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
             .build();
 
         mockMvc.perform(post("/api/team/login")
@@ -592,48 +509,5 @@ class TeamApiTest extends ApiTestBase {
         mockMvc.perform(get("/api/team/wrongTeamId/validate")
             .header("Authorization", "Bearer " + jwtBuilder.buildJwt("teamId")))
             .andExpect(status().isForbidden());
-    }
-
-    @Test
-    void shouldAllowCaptchaRequestWithInvalidToken() throws Exception {
-        installSuccessCaptcha();
-
-        var createTeamRequest = CreateTeamRequest.builder()
-            .name("ateam")
-            .password(VALID_PASSWORD)
-            .captchaResponse("some captcha")
-            .build();
-
-        testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
-
-        mockMvc.perform(get("/api/team/ateam/captcha")
-            .header("Authorization", "Bearer invalidToken")
-        ).andExpect(status().isOk());
-    }
-
-    @Test
-    void shouldReturnIsCaptchaEnabledWithCaptchaRequest() throws Exception {
-        mockMvc.perform(get("/api/captcha")
-            .header("Authorization", "Bearer " + jwtBuilder.buildJwt("teamId"))
-        ).andExpect(status().isOk());
-    }
-
-    private void installSuccessCaptcha() {
-        var server = MockRestServiceServer.bindTo(restTemplate).build();
-        server.expect(requestTo(containsString("http://captcha.url")))
-            .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
-    }
-
-    private void installInvalidCaptcha() {
-        var server = MockRestServiceServer.bindTo(restTemplate).build();
-        server.expect(requestTo(containsString("http://captcha.url")))
-            .andRespond(withSuccess("{\"success\":false}", APPLICATION_JSON));
-    }
-
-    private void installInvalidCaptchaTwice() {
-        var server = MockRestServiceServer.bindTo(restTemplate).build();
-
-        server.expect(times(2), requestTo(containsString("http://captcha.url")))
-            .andRespond(withSuccess("{\"success\":true}", APPLICATION_JSON));
     }
 }

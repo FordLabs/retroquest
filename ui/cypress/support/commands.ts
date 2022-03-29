@@ -65,7 +65,6 @@ Cypress.Commands.add(
 				body: {
 					name: teamCredentials.teamName,
 					password: teamCredentials.password,
-					captchaResponse: null,
 				},
 			}).then((response) => {
 				if (response.status === 200) {

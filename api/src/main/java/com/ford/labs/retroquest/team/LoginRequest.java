@@ -29,5 +29,4 @@ import lombok.NoArgsConstructor;
 public class LoginRequest implements TeamRequest {
     private String name;
     private String password;
-    private String captchaResponse;
 }
