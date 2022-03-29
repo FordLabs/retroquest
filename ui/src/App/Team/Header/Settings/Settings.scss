@@ -17,8 +17,60 @@
 
 @use '../../../../Styles/main';
 
-.modal-contents-wrapper.settings-dialog {
-	height: 450px;
+.settings {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: auto;
+	padding: 24px;
+
+	font-size: 1rem;
+
+	background-color: main.$white;
+	border-radius: 6px;
+	box-shadow: 0 19px 38px rgba(main.$black, 0.3);
+
+	position: relative;
+
+	@include main.breakpoint-medium {
+		width: 450px;
+		height: 450px;
+	}
+
+	.settings-title {
+		width: 100%;
+		margin-bottom: 0.5rem;
+
+		font-weight: bold;
+
+		font-size: 2rem;
+		text-align: center;
+		text-transform: capitalize;
+
+		cursor: default;
+
+		@include main.breakpoint-medium {
+			font-size: 2.5rem;
+		}
+	}
+
+	.settings-subtitle {
+		width: 100%;
+		margin-bottom: 1rem;
+
+		color: rgba(main.$asphalt, 0.5);
+		font-weight: bold;
+
+		font-size: 0.9rem;
+		text-align: center;
+		text-transform: capitalize;
+
+		cursor: default;
+
+		@include main.breakpoint-medium {
+			font-size: 1.2rem;
+		}
+	}
 
 	.tab-container {
 		flex: 1;
@@ -69,6 +121,18 @@
 }
 
 @include main.dark-theme {
+	.settings {
+		background-color: main.$task-background-dark;
+
+		.settings-title {
+			color: main.$gray;
+		}
+
+		.settings-subtitle {
+			color: rgba(main.$gray, 0.5);
+		}
+	}
+
 	.tab-container {
 		color: main.$white;
 	}

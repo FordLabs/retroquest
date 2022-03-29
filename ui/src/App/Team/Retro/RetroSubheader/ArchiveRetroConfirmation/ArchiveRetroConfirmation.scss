@@ -17,74 +17,17 @@
 
 @use '../../../../../Styles/main';
 
-.archive-retro-dialog {
-	display: flex;
-	flex-direction: column;
-	box-sizing: border-box;
-	width: auto;
-	height: auto;
-	padding-right: 0;
-	padding-bottom: 0;
-	padding-left: 0;
+.archive-retro-confirmation {
+	.form-template-body {
+		margin: 2rem 2.5rem 0.5rem;
 
-	font-weight: 700;
-	font-size: 1.3rem;
-
-	background-color: main.$white;
-	border-radius: 6px;
-	box-shadow: 0 0 0 8px main.$asphalt, 0 19px 38px #0000004d;
-
-	.modal-contents-wrapper-body {
-		padding: 0 3rem;
-
-		.modal-contents-wrapper-title {
+		.form-template-title {
 			font-weight: inherit;
 			font-size: inherit;
 		}
 
-		.modal-contents-wrapper-subtitle {
+		.form-template-subtitle {
 			font-size: 1rem;
-		}
-	}
-
-	.modal-contents-wrapper-footer {
-		height: 4rem;
-		padding: 0;
-
-		.button {
-			margin: 0;
-			border-radius: 0 0 6px;
-
-			&:hover,
-			&:focus {
-				color: main.$background-blue;
-			}
-		}
-
-		.button-secondary {
-			color: rgba(main.$asphalt, 0.5);
-			border-top: 1px solid main.$gray;
-		}
-
-		.button-primary {
-			color: main.$white;
-
-			background-color: main.$purple;
-			box-shadow: none;
-		}
-	}
-}
-
-@include main.dark-theme {
-	.modal-contents-wrapper-footer {
-		.button-secondary {
-			color: #ecf0f180;
-			border-top: 2px solid rgba(52, 73, 94, 0.6);
-
-			&:hover,
-			&:focus {
-				color: main.$white;
-			}
 		}
 	}
 }

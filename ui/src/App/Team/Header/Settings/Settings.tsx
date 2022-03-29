@@ -18,8 +18,6 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
 
-import ModalContentsWrapper from '../../../../Common/ModalContentsWrapper/ModalContentsWrapper';
-
 import AccountTab from './AccountTab/AccountTab';
 import InfoTab from './InfoTab/InfoTab';
 import StylesTab from './StylesTab/StylesTab';
@@ -40,11 +38,9 @@ export function Settings() {
 	const infoTabIsActive = () => tab === Tabs.INFO;
 
 	return (
-		<ModalContentsWrapper
-			className="settings-dialog"
-			title="Settings"
-			subtitle="choose your preferences"
-		>
+		<div className="settings">
+			<div className="settings-title">Settings</div>
+			<div className="settings-subtitle">Choose your preferences</div>
 			<div className="tab-container">
 				<div className="tab-heading">
 					<button
@@ -70,7 +66,7 @@ export function Settings() {
 				{accountTabIsActive() && <AccountTab />}
 				{infoTabIsActive() && <InfoTab />}
 			</div>
-		</ModalContentsWrapper>
+		</div>
 	);
 }
 

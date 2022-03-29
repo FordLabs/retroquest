@@ -18,23 +18,25 @@
 import React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import ModalContentsWrapper from '../Common/ModalContentsWrapper/ModalContentsWrapper';
+import FormTemplate from '../Common/FormTemplate/FormTemplate';
 
 export default {
-	title: 'components/ModalContentsWrapper',
-	component: ModalContentsWrapper,
-} as ComponentMeta<typeof ModalContentsWrapper>;
+	title: 'components/FormTemplate',
+	component: FormTemplate,
+} as ComponentMeta<typeof FormTemplate>;
 
-const Template: ComponentStory<typeof ModalContentsWrapper> = () => {
+const Template: ComponentStory<typeof FormTemplate> = () => {
 	return (
-		<ModalContentsWrapper
-			title="I am a dialog"
-			subtitle="This is the question?"
-			buttons={{
-				confirm: { text: 'To be', onClick: () => alert('Be') },
-				cancel: { text: 'Not to be', onClick: () => alert('Not Be') },
-			}}
-		/>
+		<div style={{ width: '450px' }}>
+			<FormTemplate
+				title="I am a form for a modal"
+				subtitle="What do you think?"
+				onSubmit={() => alert('Submit')}
+				onCancel={() => alert('Cancel')}
+				submitButtonText="Submit!"
+				cancelButtonText="Cancel"
+			/>
+		</div>
 	);
 };
 

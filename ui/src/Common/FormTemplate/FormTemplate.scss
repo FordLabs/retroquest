@@ -17,120 +17,133 @@
 
 @use '../../Styles/main';
 
-.modal-contents-wrapper {
+.form-template {
 	$base-drop-shadow: 0 19px 38px rgba(main.$black, 0.3);
 	$border-width: 8px;
 
 	display: flex;
 	flex-direction: column;
-	width: 450px;
-	height: auto;
-	padding: 24px;
 
-	font-size: 1rem;
+	box-sizing: border-box;
+	width: auto;
+	margin: 0 auto;
+
+	font-weight: 700;
+	font-size: 1.3rem;
 
 	background-color: main.$white;
 	border-radius: 6px;
-	box-shadow: 0 19px 38px rgba(main.$black, 0.3);
+
+	box-shadow: 0 0 0 8px main.$asphalt, 0 19px 38px #0000004d;
+	transform: none;
 
 	position: relative;
 
-	@media only screen and (max-width: 610px) {
-		width: calc(100% - 16px);
-		margin: $border-width;
-		padding: 12px 6px;
-
-		transform: none;
+	.form-template-body {
+		margin: 1rem;
 	}
 
-	.modal-contents-wrapper-body {
-		$content-area-padding: 12px;
-		display: block;
-		flex: 1 1 auto;
-
-		font-size: inherit;
-		word-wrap: break-word;
-		word-break: break-word;
-
-		background-color: inherit;
-
-		border-top-left-radius: inherit;
-		border-top-right-radius: inherit;
-
-		position: relative;
-	}
-
-	.modal-contents-wrapper-title {
+	.form-template-title {
 		width: 100%;
 		margin-bottom: 0.5rem;
 
 		font-weight: bold;
-		font-size: 2.5rem;
+
+		font-size: 2rem;
 		text-align: center;
 		text-transform: capitalize;
 
 		cursor: default;
 
-		@media only screen and (max-width: 610px) {
-			font-size: 2rem;
+		@include main.breakpoint-medium {
+			font-size: 2.5rem;
 		}
 	}
 
-	.modal-contents-wrapper-subtitle {
+	.form-template-subtitle {
 		width: 100%;
 		margin-bottom: 1rem;
 
 		color: rgba(main.$asphalt, 0.5);
 		font-weight: bold;
-		font-size: 1.2rem;
+		font-size: 0.9rem;
 		text-align: center;
 		text-transform: capitalize;
 
 		cursor: default;
 
-		@media only screen and (max-width: 610px) {
-			font-size: 0.9rem;
+		@include main.breakpoint-medium {
+			font-size: 1.2rem;
 		}
 	}
 
-	.modal-contents-wrapper-footer {
+	.form-template-footer {
 		display: flex;
 		justify-content: space-around;
 		width: 100%;
-		height: 80px;
-		margin-top: 24px;
-		padding: 12px 12px 6px;
+
+		height: 50px;
+		margin-top: 12px;
 
 		border-bottom-right-radius: inherit;
 		border-bottom-left-radius: inherit;
 
-		.button {
-			flex-grow: 1;
-			height: 100%;
-			margin: 0 0.5rem;
-
-			font-size: 1.3rem;
+		@include main.breakpoint-medium {
+			height: 4rem;
+			margin-top: 24px;
 		}
 
-		@media only screen and (max-width: 610px) {
-			height: 50px;
-			margin-top: 12px;
-			padding-top: 0;
-			padding-bottom: 0;
+		.form-template-button {
+			width: 50%;
+			height: 100%;
+			margin: 0;
+
+			font-size: 1.3rem;
+
+			border-radius: 0 0 6px;
+
+			&:first-of-type {
+				color: rgba(main.$asphalt, 0.5);
+				border-top: 1px solid main.$gray;
+			}
+
+			&:last-of-type {
+				color: main.$white;
+
+				background-color: main.$purple;
+				box-shadow: none;
+			}
+
+			&:hover,
+			&:focus {
+				color: main.$background-blue;
+			}
 		}
 	}
 }
 
 @include main.dark-theme {
-	.modal-contents-wrapper {
+	.form-template {
 		background-color: main.$task-background-dark;
 
-		.modal-contents-wrapper-title {
+		.form-template-title {
 			color: main.$gray;
 		}
 
-		.modal-contents-wrapper-subtitle {
+		.form-template-subtitle {
 			color: rgba(main.$gray, 0.5);
+		}
+
+		.form-template-button {
+			&:first-of-type {
+				color: rgba(main.$gray, 0.5);
+				border-top: 1px solid main.$asphalt;
+
+				&:hover,
+				&:focus {
+					color: main.$background-blue;
+				}
+			}
 		}
 	}
 }

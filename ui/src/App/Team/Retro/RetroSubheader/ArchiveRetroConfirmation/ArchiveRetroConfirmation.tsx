@@ -17,7 +17,7 @@
 import React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import ModalContentsWrapper from '../../../../../Common/ModalContentsWrapper/ModalContentsWrapper';
+import FormTemplate from '../../../../../Common/FormTemplate/FormTemplate';
 import BoardService from '../../../../../Services/Api/BoardService';
 import { ModalContentsState } from '../../../../../State/ModalContentsState';
 import { TeamState } from '../../../../../State/TeamState';
@@ -30,22 +30,22 @@ function ArchiveRetroConfirmation() {
 
 	const closeModal = () => setModalContents(null);
 
-	const handleSubmit = () => {
+	const onSubmit = () => {
 		BoardService.archiveRetro(team.id)
 			.then(() => closeModal())
 			.catch(console.error);
 	};
 
 	return (
-		<ModalContentsWrapper
+		<FormTemplate
 			testId="archiveRetroDialog"
-			className="archive-retro-dialog"
+			className="archive-retro-confirmation"
 			title="Do you want to end the retro for everybody?"
 			subtitle="This will permanently archive all thoughts!"
-			buttons={{
-				cancel: { text: 'Nope', onClick: closeModal },
-				confirm: { text: 'Yes!', onClick: handleSubmit },
-			}}
+			onSubmit={onSubmit}
+			onCancel={closeModal}
+			cancelButtonText="Nope"
+			submitButtonText="Yes!"
 		/>
 	);
 }
