@@ -14,18 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useState } from 'react';
+import React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { RecoilRoot } from 'recoil';
 
 import ActionItem from '../App/Team/Retro/ActionItemsColumn/ActionItem/ActionItem';
+import { ActionItemState } from '../State/ActionItemState';
 
 export default {
 	title: 'components/ActionItem',
 	component: ActionItem,
 } as ComponentMeta<typeof ActionItem>;
 
-const testAction = {
+const actionItem = {
 	id: 0,
 	task: 'Finish this react migration',
 	assignee: 'FordLabs',
@@ -35,12 +36,14 @@ const testAction = {
 };
 
 const Template: ComponentStory<typeof ActionItem> = () => {
-	const [action] = useState(testAction);
-
 	return (
-		<RecoilRoot>
+		<RecoilRoot
+			initializeState={({ set }) => {
+				set(ActionItemState, [actionItem]);
+			}}
+		>
 			<div style={{ width: '400px', marginBottom: '20px' }}>
-				<ActionItem action={action} />
+				<ActionItem actionItemId={actionItem.id} />
 			</div>
 		</RecoilRoot>
 	);

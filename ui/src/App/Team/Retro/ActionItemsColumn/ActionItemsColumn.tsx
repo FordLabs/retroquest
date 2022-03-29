@@ -63,10 +63,10 @@ function ActionItemsColumn() {
 		}
 	};
 
-	const renderActionItem = (action: Action) => {
+	const renderActionItem = (actionItem: Action) => {
 		return (
-			<li key={action.id}>
-				<ActionItem action={action} />
+			<li key={actionItem.id}>
+				<ActionItem actionItemId={actionItem.id} />
 			</li>
 		);
 	};

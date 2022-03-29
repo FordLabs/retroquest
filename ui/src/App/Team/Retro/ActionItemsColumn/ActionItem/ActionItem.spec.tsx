@@ -22,6 +22,7 @@ import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
 
 import ActionItemService from '../../../../../Services/Api/ActionItemService';
+import { ActionItemState } from '../../../../../State/ActionItemState';
 import {
 	ModalContents,
 	ModalContentsState,
@@ -30,7 +31,6 @@ import { TeamState } from '../../../../../State/TeamState';
 import Action from '../../../../../Types/Action';
 import Team from '../../../../../Types/Team';
 import { RecoilObserver } from '../../../../../Utils/RecoilObserver';
-import ActionItemModal from '../ActionItemModal/ActionItemModal';
 
 import ActionItem from './ActionItem';
 
@@ -63,8 +63,12 @@ describe('ActionItem', () => {
 
 	it('should render without axe errors', async () => {
 		const { container } = render(
-			<RecoilRoot>
-				<ActionItem action={fakeAction} />
+			<RecoilRoot
+				initializeState={({ set }) => {
+					set(ActionItemState, [fakeAction]);
+				}}
+			>
+				<ActionItem actionItemId={fakeAction.id} />
 			</RecoilRoot>
 		);
 		const results = await axe(container);
@@ -73,8 +77,12 @@ describe('ActionItem', () => {
 
 	it('should render as an action column item with created date', () => {
 		render(
-			<RecoilRoot>
-				<ActionItem action={fakeAction} />
+			<RecoilRoot
+				initializeState={({ set }) => {
+					set(ActionItemState, [fakeAction]);
+				}}
+			>
+				<ActionItem actionItemId={fakeAction.id} />
 			</RecoilRoot>
 		);
 
@@ -84,8 +92,12 @@ describe('ActionItem', () => {
 
 	it('should disable animations', () => {
 		render(
-			<RecoilRoot>
-				<ActionItem action={fakeAction} disableAnimations={true} />
+			<RecoilRoot
+				initializeState={({ set }) => {
+					set(ActionItemState, [fakeAction]);
+				}}
+			>
+				<ActionItem actionItemId={fakeAction.id} disableAnimations />
 			</RecoilRoot>
 		);
 
@@ -100,6 +112,7 @@ describe('ActionItem', () => {
 				<RecoilRoot
 					initializeState={({ set }) => {
 						set(TeamState, team);
+						set(ActionItemState, [fakeAction]);
 					}}
 				>
 					<RecoilObserver
@@ -108,7 +121,7 @@ describe('ActionItem', () => {
 							modalContent = value;
 						}}
 					/>
-					<ActionItem action={fakeAction} />
+					<ActionItem actionItemId={fakeAction.id} />
 				</RecoilRoot>
 			);
 		});
@@ -118,7 +131,9 @@ describe('ActionItem', () => {
 			await waitFor(() =>
 				expect(modalContent).toEqual({
 					title: 'Action Item',
-					component: <ActionItemModal actionItemId={fakeAction.id} />,
+					component: (
+						<ActionItem actionItemId={fakeAction.id} disableAnimations />
+					),
 					superSize: true,
 				})
 			);
@@ -273,9 +288,10 @@ describe('ActionItem', () => {
 				<RecoilRoot
 					initializeState={({ set }) => {
 						set(TeamState, team);
+						set(ActionItemState, [{ ...fakeAction, completed: true }]);
 					}}
 				>
-					<ActionItem action={{ ...fakeAction, completed: true }} />
+					<ActionItem actionItemId={fakeAction.id} />
 				</RecoilRoot>
 			);
 		});
