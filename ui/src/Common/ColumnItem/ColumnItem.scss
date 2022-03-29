@@ -259,7 +259,7 @@ $base-drop-shadow: 0 19px 38px rgba(main.$black, 0.3);
 		}
 	}
 
-	.modal {
+	.modal-container {
 		$happy-shadow-dark: 0 0 0 $in-modal-border-width main.$dark-green,
 			$base-drop-shadow;
 		$confused-shadow-dark: 0 0 0 $in-modal-border-width main.$belize-hole,
