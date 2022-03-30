@@ -64,16 +64,6 @@ public class TeamController {
         return new ResponseEntity<>(jwt, headers, CREATED);
     }
 
-    @PostMapping("/update-password")
-    @Transactional(rollbackOn = URISyntaxException.class)
-    @PreAuthorize("#updatePasswordRequest.teamId == authentication.principal")
-    @Operation(summary = "Resets a password for a team id", description = "updatePasswords")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public ResponseEntity<String> updatePassword(@RequestBody @Valid UpdatePasswordRequest updatePasswordRequest) {
-        teamService.updatePassword(updatePasswordRequest);
-        return ResponseEntity.ok().body("Password Reset Successfully");
-    }
-
     @GetMapping("/team/{teamUri}/name")
     @Operation(summary = "Gets a team name given the team uri", description = "getTeamName")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})

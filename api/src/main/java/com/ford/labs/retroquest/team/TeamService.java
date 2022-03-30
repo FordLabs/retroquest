@@ -92,17 +92,6 @@ public class TeamService {
         return savedTeam;
     }
 
-    public Team updatePassword(UpdatePasswordRequest updatePasswordRequest) {
-        var savedTeam = getTeamByUri(updatePasswordRequest.getTeamId());
-        if (passwordEncoder.matches(updatePasswordRequest.getPreviousPassword(), savedTeam.getPassword())) {
-            var encryptedPassword = passwordEncoder.encode(updatePasswordRequest.getNewPassword());
-            savedTeam.setPassword(encryptedPassword);
-            return teamRepository.save(savedTeam);
-        } else {
-            throw new PasswordInvalidException();
-        }
-    }
-
     private Team createTeamEntity(String name, String password) {
         var trimmedName = name.trim();
         var uri = convertTeamNameToURI(trimmedName);
