@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoginRequest implements TeamRequest {
+public class LoginRequest {
     private String name;
     private String password;
 }
