@@ -121,7 +121,7 @@ describe('Retro Member Journey', () => {
 
 		cy.findByText('Give Feedback').as('giveFeedbackButton').click();
 
-		cy.get('[data-testid=feedbackDialog]')
+		cy.get('[data-testid=feedbackForm]')
 			.as('modal')
 			.should('contain', modalText);
 
@@ -134,7 +134,7 @@ describe('Retro Member Journey', () => {
 		cy.get('@giveFeedbackButton').click();
 		ensureModalIsOpen();
 
-		cy.get('@modal').find('[data-testid=feedback-star-5]').click();
+		cy.get('@modal').find('[data-testid=feedback-star-5-label]').click();
 		cy.get('@modal').findByLabelText('Comments*').type('Doing great!');
 		cy.get('@modal').findByLabelText('Feedback Email').focus().type('a@b.c');
 

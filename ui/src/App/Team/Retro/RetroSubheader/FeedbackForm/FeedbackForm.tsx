@@ -52,7 +52,7 @@ function FeedbackForm() {
 
 	return (
 		<FormTemplate
-			testId="feedbackDialog"
+			testId="feedbackForm"
 			className="feedback-form"
 			onSubmit={onSubmit}
 			onCancel={closeModal}
@@ -61,7 +61,7 @@ function FeedbackForm() {
 			cancelButtonText="Cancel"
 			submitButtonText="Send!"
 		>
-			<FeedbackStars className="section" value={stars} onChange={setStars} />
+			<FeedbackStars value={stars} onChange={setStars} />
 			<div className="section comments-section">
 				<label className="label" htmlFor="comments">
 					Comments<span className="required-field">*</span>

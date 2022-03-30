@@ -17,6 +17,7 @@
 
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
+import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
 
 import {
@@ -27,7 +28,7 @@ import { RecoilObserver } from '../../Utils/RecoilObserver';
 
 import Modal from './Modal';
 
-describe('ModalContentsWrapper', () => {
+describe('Modal', () => {
 	let modalContent: ModalContents | null;
 
 	beforeEach(() => {
@@ -35,7 +36,7 @@ describe('ModalContentsWrapper', () => {
 	});
 
 	const setupComponentWithModalContents = () => {
-		render(
+		return render(
 			<RecoilRoot
 				initializeState={({ set }) => {
 					set(ModalContentsState, {
@@ -54,6 +55,12 @@ describe('ModalContentsWrapper', () => {
 			</RecoilRoot>
 		);
 	};
+
+	it('should render without axe errors', async () => {
+		const { container } = setupComponentWithModalContents();
+		const results = await axe(container);
+		expect(results).toHaveNoViolations();
+	});
 
 	it('should show modal when modal contents exist', () => {
 		setupComponentWithModalContents();

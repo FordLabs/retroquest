@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,15 +18,56 @@
 @use '../../../../../../Styles/main';
 
 .feedback-stars {
-	color: main.$blue;
-	font-size: 3.3rem;
+	margin: -1rem 0;
+
+	font-weight: 400;
+	font-size: 2.8rem;
 	text-align: center;
 
-	@media only screen and (max-width: 610px) {
-		font-size: 2.8rem;
+	border: 0;
+
+	@include main.breakpoint-medium {
+		font-size: 3.3rem;
 	}
 
-	.active {
-		color: main.$yellow;
+	.hidden {
+		display: none;
+	}
+
+	.feedback-star-input.with-font {
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		padding: 0;
+		overflow: hidden;
+
+		border: 0;
+
+		clip: rect(0 0 0 0);
+
+		position: absolute;
+
+		+ label::before {
+			display: inline-block;
+			width: 4rem;
+
+			color: main.$blue;
+			font-family: FontAwesome, serif;
+
+			cursor: pointer;
+
+			content: '\f006';
+		}
+
+		&.highlight + label::before,
+		&:checked + label::before {
+			color: main.$yellow;
+			content: '\f005';
+		}
+
+		&:focus + label::before {
+			color: main.$dark-yellow;
+			font-weight: bold;
+		}
 	}
 }

@@ -18,20 +18,34 @@
 import React, { useState } from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { axe } from 'jest-axe';
 
 import FeedbackStars from './FeedbackStars';
 
 describe('Feedback Stars', () => {
-	it('should hover stars', () => {
-		render(<FeedbackStarTestRenderer />);
+	let container: string | Element;
+	const highlightedStarClass = 'highlight';
 
+	beforeEach(() => {
+		({ container } = render(<FeedbackStarTestRenderer />));
+	});
+
+	it('should render without axe errors', async () => {
+		const results = await axe(container);
+		expect(results).toHaveNoViolations();
+	});
+
+	it('should hover stars', () => {
 		hoverStar(4);
 
-		expectActiveStars(4);
+		expect(getStar(1).className).toContain(highlightedStarClass);
+		expect(getStar(2).className).toContain(highlightedStarClass);
+		expect(getStar(3).className).toContain(highlightedStarClass);
+		expect(getStar(4).className).toContain(highlightedStarClass);
+		expect(getStar(5).className).not.toContain(highlightedStarClass);
 	});
 
 	it('should select stars', () => {
-		render(<FeedbackStarTestRenderer />);
 		expectSelectedStars(0);
 
 		clickStar(3);
@@ -47,13 +61,20 @@ describe('Feedback Stars', () => {
 		expectSelectedStars(0);
 	});
 
-	it('should not hover stars after select', () => {
-		render(<FeedbackStarTestRenderer />);
+	it('should still hover stars after select', () => {
+		clickStar(2);
 
-		clickStar(4);
-		hoverStar(5);
+		expect(getStar(1).className).toContain(highlightedStarClass);
+		expect(getStar(2).className).toContain(highlightedStarClass);
+		expect(getStar(3).className).not.toContain(highlightedStarClass);
 
-		expectActiveStars(4);
+		hoverStar(3);
+
+		expect(getStar(1).className).toContain(highlightedStarClass);
+		expect(getStar(2).className).toContain(highlightedStarClass);
+		expect(getStar(3).className).toContain(highlightedStarClass);
+		expect(getStar(4).className).not.toContain(highlightedStarClass);
+		expect(getStar(5).className).not.toContain(highlightedStarClass);
 	});
 });
 
@@ -69,33 +90,26 @@ function FeedbackStarTestRenderer() {
 	);
 }
 
+const getStar = (starIndex: number) => {
+	return screen.getByTestId(getStarTestId(starIndex));
+};
+
 function getStarTestId(starIndex: number) {
-	return `feedback-star-${starIndex}`;
+	return `feedback-star-${starIndex}-input`;
 }
 
-function clickStar(count: number) {
-	userEvent.click(screen.getByTestId(getStarTestId(count)));
+function clickStar(starIndex: number) {
+	const star = screen.getByTestId(getStarTestId(starIndex));
+	userEvent.click(star);
 }
 
-function hoverStar(count: number) {
-	userEvent.hover(screen.getByTestId(getStarTestId(count)));
+function hoverStar(starIndex: number) {
+	const star = screen.getByTestId(`feedback-star-${starIndex}-label`);
+	userEvent.hover(star);
 }
 
 function resetStars() {
 	userEvent.click(screen.getByText('reset'));
-}
-
-function expectActiveStars(count: number) {
-	for (let i = 0; i < count; i++) {
-		expect(screen.getByTestId(getStarTestId(i + 1)).className).toContain(
-			'active'
-		);
-	}
-	for (let i = count; i < 5; i++) {
-		expect(screen.getByTestId(getStarTestId(i + 1)).className).not.toContain(
-			'active'
-		);
-	}
 }
 
 function expectSelectedStars(count: number) {
