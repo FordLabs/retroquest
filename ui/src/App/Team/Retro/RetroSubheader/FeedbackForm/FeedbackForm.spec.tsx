@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
 
 import FeedbackService from '../../../../../Services/Api/FeedbackService';
@@ -33,7 +34,7 @@ import FeedbackForm from './FeedbackForm';
 
 jest.mock('../../../../../Services/Api/FeedbackService');
 
-describe('FeedbackForm', () => {
+describe('Feedback Form', () => {
 	const fakeComment = 'This is a fake comment';
 	const fakeEmail = 'user@ford.com';
 	const team: Team = {
@@ -41,13 +42,14 @@ describe('FeedbackForm', () => {
 		id: 'fake-team-id',
 	};
 	let modalContent: ModalContents | null;
+	let container: string | Element;
 
 	beforeEach(() => {
 		jest.clearAllMocks();
 
 		modalContent = null;
 
-		render(
+		({ container } = render(
 			<RecoilRoot
 				initializeState={({ set }) => {
 					set(TeamState, team);
@@ -65,11 +67,16 @@ describe('FeedbackForm', () => {
 				/>
 				<FeedbackForm />
 			</RecoilRoot>
-		);
+		));
+	});
+
+	it('should render without axe errors', async () => {
+		const results = await axe(container);
+		expect(results).toHaveNoViolations();
 	});
 
 	it('should submit feedback', async () => {
-		userEvent.click(screen.getByTestId('feedback-star-4'));
+		userEvent.click(screen.getByTestId('feedback-star-4-label'));
 		userEvent.type(screen.getByLabelText('Feedback Email'), fakeEmail);
 		userEvent.type(screen.getByLabelText('Comments*'), fakeComment);
 		userEvent.click(screen.getByText('Send!'));
@@ -85,7 +92,7 @@ describe('FeedbackForm', () => {
 	});
 
 	it('should not submit with empty comments', () => {
-		userEvent.click(screen.getByTestId('feedback-star-4'));
+		userEvent.click(screen.getByTestId('feedback-star-4-label'));
 		userEvent.type(screen.getByLabelText('Feedback Email'), fakeEmail);
 		userEvent.click(screen.getByText('Send!'));
 

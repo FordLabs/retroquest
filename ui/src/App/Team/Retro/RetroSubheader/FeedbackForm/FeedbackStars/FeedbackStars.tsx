@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,54 +15,58 @@
  * limitations under the License.
  */
 
-import React, { useMemo, useState } from 'react';
-import classnames from 'classnames';
+import React, { Fragment, useState } from 'react';
+import classNames from 'classnames';
 
 import './FeedbackStars.scss';
-
-type StarState = boolean;
-
-type Stars = [StarState, StarState, StarState, StarState, StarState];
-
-const EMPTY_STARS: Stars = [false, false, false, false, false];
-
-function starsWith(count: number, newState: StarState): Stars {
-	return EMPTY_STARS.map((state, index) =>
-		index < count ? newState : state
-	) as Stars;
-}
 
 type FeedbackStarsProps = {
 	value: number;
 	onChange: (stars: number) => void;
-	className?: string;
 };
 
-export default function FeedbackStars(props: FeedbackStarsProps) {
-	const { value, onChange, className } = props;
-	const [hoverStars, setHoverStars] = useState<Stars>(EMPTY_STARS);
-
-	const activeStars = useMemo(() => {
-		return hoverStars.map((star, index) => (value ? index < value : star));
-	}, [hoverStars, value]);
+function FeedbackStars(props: FeedbackStarsProps) {
+	const { value, onChange } = props;
+	const [hoveredStarValue, setHoveredStarValue] = useState<number>(-1);
 
 	return (
-		<div
-			className={classnames('feedback-stars', className)}
-			onMouseLeave={() => setHoverStars(starsWith(5, false))}
-		>
-			{activeStars.map((star, index) => {
-				const starIndex = index + 1;
-				return (
-					<button
-						key={starIndex}
-						data-testid={`feedback-star-${starIndex}`}
-						className={classnames('fa-star', star ? 'active fas' : 'far')}
-						onMouseEnter={() => setHoverStars(starsWith(starIndex, true))}
-						onClick={() => onChange(starIndex)}
-					/>
-				);
-			})}
-		</div>
+		<fieldset className={`feedback-stars`}>
+			<div role="group" aria-labelledby="rate-retroquest">
+				<p id="rate-retroquest" className="hidden">
+					How would you rate your experience with retroquest?
+				</p>
+				<div className="star-list">
+					{[1, 2, 3, 4, 5].map((starValue) => {
+						const starId = `feedback-star-${starValue}`;
+						const isHovering = starValue <= hoveredStarValue;
+						const isHighlight = starValue <= value;
+						return (
+							<Fragment key={starId}>
+								<input
+									data-testid={`${starId}-input`}
+									id={starId}
+									type="radio"
+									name="feedback-star"
+									value={value}
+									className={classNames('feedback-star-input with-font', {
+										highlight: isHighlight || isHovering,
+									})}
+									onChange={() => onChange(starValue)}
+								/>
+								<label
+									htmlFor={starId}
+									data-testid={`${starId}-label`}
+									onMouseEnter={() => setHoveredStarValue(starValue)}
+									onMouseLeave={() => setHoveredStarValue(value)}
+									aria-label={`Feedback rating of ${starValue}`}
+								/>
+							</Fragment>
+						);
+					})}
+				</div>
+			</div>
+		</fieldset>
 	);
 }
+
+export default FeedbackStars;
