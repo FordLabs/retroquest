@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useState } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -28,24 +28,14 @@ import RetroItemWithAddAction from '../RetroItemWithAddAction/RetroItemWithAddAc
 
 import UpvoteButton from './UpvoteButton/UpvoteButton';
 
-import './RetroItem.scss';
-
 type RetroItemProps = {
 	thoughtId: number;
 	type: ThoughtTopic;
 	disableButtons?: boolean;
-	disableAnimations?: boolean;
 };
 
 function RetroItem(props: RetroItemProps) {
-	const {
-		type,
-		thoughtId,
-		disableButtons = false,
-		disableAnimations = false,
-	} = props;
-
-	const [animateFadeOut, setAnimateFadeOut] = useState<boolean>(false);
+	const { type, thoughtId, disableButtons = false } = props;
 
 	const team = useRecoilValue(TeamState);
 	const thought = useRecoilValue(ThoughtByIdState(thoughtId));
@@ -63,7 +53,6 @@ function RetroItem(props: RetroItemProps) {
 
 	const updateThoughtDiscussionStatus = () => {
 		if (thought) {
-			setAnimateFadeOut(true);
 			ThoughtService.updateDiscussionStatus(
 				team.id,
 				thoughtId,
@@ -84,15 +73,6 @@ function RetroItem(props: RetroItemProps) {
 		ThoughtService.upvoteThought(team.id, thoughtId).catch(console.error);
 	};
 
-	const getAnimationClasses = () => {
-		if (disableAnimations === false) {
-			return {
-				'fade-in': !disableAnimations && !animateFadeOut,
-				'fade-out': !disableAnimations && animateFadeOut,
-			};
-		}
-	};
-
 	const openRetroItemModal = () =>
 		setModalContents({
 			title: 'Retro Item',
@@ -104,11 +84,7 @@ function RetroItem(props: RetroItemProps) {
 		<>
 			{thought && (
 				<ColumnItem
-					className={classnames(
-						'retro-item',
-						{ completed: thought.discussed },
-						getAnimationClasses()
-					)}
+					className={classnames('retro-item', { completed: thought.discussed })}
 					data-testid="retroItem"
 					type={type}
 					text={thought.message}

@@ -49,7 +49,6 @@ function RetroItemWithAddAction(props: RetroItemModalProps) {
 				thoughtId={thoughtId}
 				disableButtons={showAddActionItemCard}
 				type={type}
-				disableAnimations
 			/>
 			{!showAddActionItemCard && (
 				<button

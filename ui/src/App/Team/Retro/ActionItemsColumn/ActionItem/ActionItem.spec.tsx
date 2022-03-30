@@ -97,7 +97,7 @@ describe('ActionItem', () => {
 					set(ActionItemState, [fakeAction]);
 				}}
 			>
-				<ActionItem actionItemId={fakeAction.id} disableAnimations />
+				<ActionItem actionItemId={fakeAction.id} />
 			</RecoilRoot>
 		);
 
@@ -131,9 +131,7 @@ describe('ActionItem', () => {
 			await waitFor(() =>
 				expect(modalContent).toEqual({
 					title: 'Action Item',
-					component: (
-						<ActionItem actionItemId={fakeAction.id} disableAnimations />
-					),
+					component: <ActionItem actionItemId={fakeAction.id} />,
 					superSize: true,
 				})
 			);
@@ -233,10 +231,7 @@ describe('ActionItem', () => {
 			await waitFor(() => expect(modalContent).toBeNull());
 		});
 
-		it('should mark action item as completed and switch animation class', async () => {
-			const actionItem = screen.getByTestId('actionItem');
-			expect(actionItem.className).toContain(fadeInAnimationClass);
-			expect(actionItem.className).not.toContain(fadeOutAnimationClass);
+		it('should mark action item as completed', async () => {
 			clickCheckbox();
 
 			await waitFor(() =>
@@ -246,8 +241,6 @@ describe('ActionItem', () => {
 					true
 				)
 			);
-			expect(actionItem.className).not.toContain(fadeInAnimationClass);
-			expect(actionItem.className).toContain(fadeOutAnimationClass);
 		});
 
 		it('should close modal after marking item complete from action item modal', async () => {
@@ -294,6 +287,11 @@ describe('ActionItem', () => {
 					<ActionItem actionItemId={fakeAction.id} />
 				</RecoilRoot>
 			);
+		});
+
+		it('should have completed class', () => {
+			const actionItem = screen.getByTestId('actionItem');
+			expect(actionItem.className).toContain('completed');
 		});
 
 		it('should disable edit button', () => {

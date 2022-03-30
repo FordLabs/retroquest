@@ -54,42 +54,37 @@ export const ThoughtsByTopicState = atomFamily<Thought[], ThoughtTopic>({
 	}),
 });
 
-export const ActiveThoughtsByTopicState = atomFamily<
+export const SortableThoughtsByTopicState = atomFamily<
 	Thought[],
 	ThoughtFilterParams
 >({
-	key: 'ActiveThoughtsByTopicState',
+	key: 'SortableThoughtsByTopicState',
 	default: selectorFamily({
-		key: 'ActiveThoughtsByTopicState/Default',
+		key: 'SortableThoughtsByTopicState/Default',
 		get:
 			(params: ThoughtFilterParams) =>
 			({ get }) => {
-				const filteredThoughts = get(ThoughtsByTopicState(params.topic)).filter(
-					(thought) => !thought.discussed
-				);
+				const thoughts = get(ThoughtsByTopicState(params.topic));
+				const sortedByIfDiscussed = [...thoughts].sort((a, b) => {
+					return a.discussed === b.discussed ? 0 : a.discussed ? 1 : -1;
+				});
 				return params.sorted
-					? filteredThoughts.sort((a, b) => b.hearts - a.hearts)
-					: filteredThoughts;
+					? sortedByIfDiscussed.sort((a, b) => b.hearts - a.hearts)
+					: sortedByIfDiscussed;
 			},
 	}),
 });
 
-export const DiscussedThoughtsByTopicState = atomFamily<
-	Thought[],
-	ThoughtFilterParams
->({
-	key: 'DiscussedThoughtsByTopicState',
+export const ActiveThoughtCountByTopicState = atomFamily<number, ThoughtTopic>({
+	key: 'ActiveThoughtCountByTopicState',
 	default: selectorFamily({
-		key: 'DiscussedThoughtsState/Default',
+		key: 'ActiveThoughtCountByTopicState/Default',
 		get:
-			(params: ThoughtFilterParams) =>
+			(topic: ThoughtTopic) =>
 			({ get }) => {
-				const filteredThoughts = get(ThoughtsByTopicState(params.topic)).filter(
-					(thought) => thought.discussed
-				);
-				return params.sorted
-					? filteredThoughts.sort((a, b) => b.hearts - a.hearts)
-					: filteredThoughts;
+				return get(ThoughtsState)
+					.filter((thought) => thought.topic === topic)
+					.filter((thought) => !thought.discussed).length;
 			},
 	}),
 });

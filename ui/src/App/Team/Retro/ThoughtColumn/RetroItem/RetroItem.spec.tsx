@@ -40,8 +40,6 @@ jest.mock('../../../../../Services/Api/ThoughtService');
 
 describe('Retro Item', () => {
 	let modalContent: ModalContents | null;
-	const fadeInAnimationClass = 'fade-in';
-	const fadeOutAnimationClass = 'fade-out';
 	const team: Team = {
 		name: 'My Team',
 		id: 'my-team',
@@ -104,26 +102,6 @@ describe('Retro Item', () => {
 		screen.getByText(fakeThought.message);
 		screen.getByText(fakeThought.hearts);
 		screen.getByText('Upvote');
-	});
-
-	it('should disable animations', () => {
-		render(
-			<RecoilRoot
-				initializeState={({ set }) => {
-					set(ThoughtsState, [fakeThought]);
-				}}
-			>
-				<RetroItem
-					thoughtId={fakeThought.id}
-					type={Topic.HAPPY}
-					disableAnimations={true}
-				/>
-			</RecoilRoot>
-		);
-
-		const retroItem = screen.getByTestId('retroItem');
-		expect(retroItem.className).not.toContain(fadeInAnimationClass);
-		expect(retroItem.className).not.toContain(fadeOutAnimationClass);
 	});
 
 	describe('When not discussed and not readonly', () => {
@@ -261,10 +239,7 @@ describe('Retro Item', () => {
 			await waitFor(() => expect(modalContent).toBeNull());
 		});
 
-		it('should mark as discussed and switch animation class', async () => {
-			const retroItem = screen.getByTestId('retroItem');
-			expect(retroItem.className).toContain(fadeInAnimationClass);
-			expect(retroItem.className).not.toContain(fadeOutAnimationClass);
+		it('should mark as discussed', async () => {
 			clickCheckboxToMarkItemAsDiscussed();
 			await waitFor(() =>
 				expect(ThoughtService.updateDiscussionStatus).toHaveBeenCalledWith(
@@ -273,8 +248,6 @@ describe('Retro Item', () => {
 					true
 				)
 			);
-			expect(retroItem.className).toContain(fadeOutAnimationClass);
-			expect(retroItem.className).not.toContain(fadeInAnimationClass);
 		});
 
 		it('should close modal when marked as discussed retro item modal', async () => {
@@ -300,6 +273,11 @@ describe('Retro Item', () => {
 					<RetroItem type={Topic.HAPPY} thoughtId={fakeThought.id} />
 				</RecoilRoot>
 			);
+		});
+
+		it('should have completed class', () => {
+			const retroItem = screen.getByTestId('retroItem');
+			expect(retroItem.className).toContain('completed');
 		});
 
 		it('should disable upvote button', () => {

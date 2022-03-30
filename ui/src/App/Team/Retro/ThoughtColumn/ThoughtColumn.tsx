@@ -15,8 +15,7 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { useRecoilValue } from 'recoil';
 
@@ -27,8 +26,8 @@ import ColumnService from '../../../../Services/Api/ColumnService';
 import ThoughtService from '../../../../Services/Api/ThoughtService';
 import { TeamState } from '../../../../State/TeamState';
 import {
-	ActiveThoughtsByTopicState,
-	DiscussedThoughtsByTopicState,
+	ActiveThoughtCountByTopicState,
+	SortableThoughtsByTopicState,
 } from '../../../../State/ThoughtsState';
 import { Column } from '../../../../Types/Column';
 import { getCreateThoughtRequest } from '../../../../Types/CreateThoughtRequest';
@@ -47,11 +46,11 @@ function ThoughtColumn(props: Props) {
 
 	const team = useRecoilValue(TeamState);
 	const [sorted, setSorted] = useState(false);
-	const activeThoughts = useRecoilValue<Thought[]>(
-		ActiveThoughtsByTopicState({ topic: column.topic, sorted })
+	const thoughts = useRecoilValue<Thought[]>(
+		SortableThoughtsByTopicState({ topic: column.topic, sorted })
 	);
-	const discussedThoughts = useRecoilValue<Thought[]>(
-		DiscussedThoughtsByTopicState({ topic: column.topic, sorted })
+	const activeThoughtCount = useRecoilValue<number>(
+		ActiveThoughtCountByTopicState(column.topic)
 	);
 
 	const changeTitle = (title: string) => {
@@ -103,15 +102,12 @@ function ThoughtColumn(props: Props) {
 				placeholder="Enter a Thought"
 				handleSubmission={createThought}
 			/>
-			<CountSeparator count={activeThoughts.length} />
+			<CountSeparator count={activeThoughtCount} />
 			<Droppable droppableId={`${column.id}`} type="THOUGHT">
 				{(provided, snapshot) => (
 					<ul className="thought-list">
 						<div ref={provided.innerRef} {...provided.droppableProps}>
-							{activeThoughts.map(renderThought)}
-							{discussedThoughts.map((thought, index) =>
-								renderThought(thought, activeThoughts.length + index)
-							)}
+							{thoughts.map(renderThought)}
 							{provided.placeholder}
 						</div>
 					</ul>

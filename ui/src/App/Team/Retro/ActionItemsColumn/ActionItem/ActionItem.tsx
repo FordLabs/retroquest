@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -30,17 +30,14 @@ import Topic from '../../../../../Types/Topic';
 
 type ActionItemProps = {
 	actionItemId: number;
-	disableAnimations?: boolean;
 };
 
 function ActionItem(props: ActionItemProps) {
-	const { disableAnimations = false, actionItemId } = props;
+	const { actionItemId } = props;
 
 	const team = useRecoilValue(TeamState);
 	const actionItem = useRecoilValue(ActionItemByIdState(actionItemId));
 	const setModalContents = useSetRecoilState(ModalContentsState);
-
-	const [animateFadeOut, setAnimateFadeOut] = useState<boolean>(false);
 
 	const deleteActionItem = () => {
 		ActionItemService.delete(team.id, actionItemId)
@@ -64,7 +61,6 @@ function ActionItem(props: ActionItemProps) {
 
 	const updateActionItemCompletionStatus = () => {
 		if (actionItem) {
-			setAnimateFadeOut(true);
 			ActionItemService.updateCompletionStatus(
 				team.id,
 				actionItem.id,
@@ -75,19 +71,10 @@ function ActionItem(props: ActionItemProps) {
 		}
 	};
 
-	const getAnimationClasses = () => {
-		if (!disableAnimations) {
-			return {
-				'fade-in': !disableAnimations && !animateFadeOut,
-				'fade-out': !disableAnimations && animateFadeOut,
-			};
-		}
-	};
-
 	const openActionItemModal = () =>
 		setModalContents({
 			title: 'Action Item',
-			component: <ActionItem actionItemId={actionItemId} disableAnimations />,
+			component: <ActionItem actionItemId={actionItemId} />,
 			superSize: true,
 		});
 
@@ -98,11 +85,9 @@ function ActionItem(props: ActionItemProps) {
 			{actionItem && (
 				<ColumnItem
 					data-testid="actionItem"
-					className={classnames(
-						'action-item',
-						{ completed: actionItem.completed },
-						getAnimationClasses()
-					)}
+					className={classnames('action-item', {
+						completed: actionItem.completed,
+					})}
 					type={Topic.ACTION}
 					text={actionItem.task}
 					checked={actionItem.completed}
