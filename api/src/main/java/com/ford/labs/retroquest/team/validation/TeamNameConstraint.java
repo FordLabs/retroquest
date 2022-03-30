@@ -15,19 +15,18 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.validation;
-
+package com.ford.labs.retroquest.team.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = PasswordValidator.class)
+@Constraint(validatedBy = TeamNameValidator.class)
 @Target( { ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PasswordConstraint {
-    String message() default "Invalid Password";
+public @interface TeamNameConstraint {
+    String message() default "Invalid Team Name";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
