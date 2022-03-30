@@ -93,51 +93,6 @@ class TeamServiceTest {
     }
 
     @Test
-    void updatePassword_WithValidInformation_SavesNewPassword() {
-        Team savedTeam = new Team();
-        savedTeam.setUri("a-name");
-        savedTeam.setName("A name");
-        savedTeam.setPassword("encryptedPassword");
-        savedTeam.setDateCreated(LocalDate.now());
-
-        UpdatePasswordRequest updatePasswordRequest = new UpdatePasswordRequest();
-        updatePasswordRequest.setTeamId("a-name");
-        updatePasswordRequest.setNewPassword("newPassword");
-        updatePasswordRequest.setPreviousPassword("password");
-
-        when(passwordEncoder.matches("password", "encryptedPassword")).thenReturn(true);
-        when(passwordEncoder.encode("newPassword")).thenReturn("newEncryptedPassword");
-        when(teamRepository.findTeamByUri("a-name")).thenReturn(Optional.of(savedTeam));
-        when(teamRepository.save(any(Team.class))).then(returnsFirstArg());
-
-        savedTeam = teamService.updatePassword(updatePasswordRequest);
-        assertEquals("newEncryptedPassword", savedTeam.getPassword());
-        verify(teamRepository).save(any(Team.class));
-    }
-
-    @Test
-    void updatePassword_WithIncorrectOldPassword_DoesNotSavePassword() {
-        Team savedTeam = new Team();
-        savedTeam.setUri("a-name");
-        savedTeam.setName("A name");
-        savedTeam.setPassword("encryptedPassword");
-        savedTeam.setDateCreated(LocalDate.now());
-
-        UpdatePasswordRequest updatePasswordRequest = new UpdatePasswordRequest();
-        updatePasswordRequest.setTeamId("a-name");
-        updatePasswordRequest.setNewPassword("newPassword");
-        updatePasswordRequest.setPreviousPassword("incorrectPassword");
-
-        when(passwordEncoder.matches("incorrectPassword", "encryptedPassword")).thenReturn(false);
-        when(teamRepository.findTeamByUri("a-name")).thenReturn(Optional.of(savedTeam));
-
-        assertThrows(
-                PasswordInvalidException.class,
-                () -> teamService.updatePassword(updatePasswordRequest)
-        );
-    }
-
-    @Test
     void returnsSavedTeamOnSuccessfulLogin() {
         LoginRequest loginRequest = new LoginRequest("beach-bums", "password");
         Team expectedTeam = new Team();
