@@ -23,6 +23,7 @@ import Board from '../../Types/Board';
 import BoardService from './BoardService';
 
 describe('Board Service', () => {
+	const teamId = 'teamId';
 	const fakeToken = 'fake-token';
 	const mockConfig = { headers: { Authorization: `Bearer ${fakeToken}` } };
 
@@ -30,17 +31,28 @@ describe('Board Service', () => {
 		mockGetCookie.mockReturnValue(fakeToken);
 	});
 
-	it('should return list of boards by page index', async () => {
-		const teamId = 'teamId';
-		const expectedBoards: Board[] = [];
-		axios.get = jest.fn().mockResolvedValue({ data: expectedBoards });
+	describe('archiveRetro', () => {
+		it('should archive the active retro for a team', () => {
+			BoardService.archiveRetro(teamId);
+			expect(axios.put).toHaveBeenCalledWith(
+				`/api/team/${teamId}/end-retro`,
+				mockConfig
+			);
+		});
+	});
 
-		const actual = await BoardService.getBoards(teamId, 0);
+	describe('getBoards', () => {
+		it('should return list of boards by page index', async () => {
+			const expectedBoards: Board[] = [];
+			axios.get = jest.fn().mockResolvedValue({ data: expectedBoards });
 
-		expect(actual).toEqual(expectedBoards);
-		expect(axios.get).toHaveBeenCalledWith(
-			'/api/team/teamId/boards?pageIndex=0',
-			mockConfig
-		);
+			const actual = await BoardService.getBoards(teamId, 0);
+
+			expect(actual).toEqual(expectedBoards);
+			expect(axios.get).toHaveBeenCalledWith(
+				'/api/team/teamId/boards?pageIndex=0',
+				mockConfig
+			);
+		});
 	});
 });
