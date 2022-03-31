@@ -176,4 +176,14 @@
         </preConditions>
         <dropTable  cascadeConstraints="true" tableName="user"/>
     </changeSet>
+    <changeSet id="add-column-id-foreign-key-to-thought" author="nreuter">
+        <preConditions>
+            <tableExists tableName="thought" />
+        </preConditions>
+        <addColumn tableName="thought">
+            <column name="column_id" type="bigint">
+                <constraints foreignKeyName="fk_thought_column" references="column_title(id)" />
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

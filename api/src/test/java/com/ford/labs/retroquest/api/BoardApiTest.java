@@ -20,12 +20,14 @@ package com.ford.labs.retroquest.api;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.board.Board;
 import com.ford.labs.retroquest.board.BoardRepository;
+import com.ford.labs.retroquest.column.ColumnTitle;
+import com.ford.labs.retroquest.column.ColumnTitleRepository;
 import com.ford.labs.retroquest.thought.CreateThoughtRequest;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
 import com.ford.labs.retroquest.thought.ThoughtService;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +37,7 @@ import java.util.List;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -51,15 +51,18 @@ class BoardApiTest extends ApiTestBase {
     private ThoughtRepository thoughtRepository;
 
     @Autowired
+    private ColumnTitleRepository columnTitleRepository;
+
+    @Autowired
     private ThoughtService thoughtService;
 
-    @AfterEach
-    void teardown() {
-        boardRepository.deleteAllInBatch();
+    @BeforeEach
+    void setup() {
         thoughtRepository.deleteAllInBatch();
+        columnTitleRepository.deleteAllInBatch();
+        boardRepository.deleteAllInBatch();
 
-        assertThat(boardRepository.count()).isZero();
-        assertThat(thoughtRepository.count()).isZero();
+        columnTitleRepository.save(new ColumnTitle(null, "happy", "Happy", teamId));
     }
 
     @Test

@@ -139,24 +139,26 @@ class BoardServiceTest {
                     false,
                     expectedTeamId,
                     null,
-                    expectedBoardId
+                    expectedBoardId,
+                    null
                 )
             )
         );
 
         when(thoughtService.fetchAllActiveThoughts(eq(expectedTeamId))).thenReturn(
-                List.of(
-                        new Thought(
-                                4321L,
-                                expectedMessage,
-                                0,
-                                null,
-                                false,
-                                expectedTeamId,
-                                null,
-                                null
-                        )
+            List.of(
+                new Thought(
+                    4321L,
+                    expectedMessage,
+                    0,
+                    null,
+                    false,
+                    expectedTeamId,
+                    null,
+                    null,
+                    null
                 )
+            )
         );
 
         when(boardRepository.save(any(Board.class))).thenAnswer(a -> {

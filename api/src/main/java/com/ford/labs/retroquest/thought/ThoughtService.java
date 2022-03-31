@@ -68,6 +68,7 @@ public class ThoughtService {
         var columnTitle = columnTitleRepository.findByTeamIdAndId(teamId, columnId).orElseThrow(ColumnTitleNotFoundException::new);
         var thought = fetchThought(teamId, thoughtId);
         thought.setTopic(columnTitle.getTopic());
+        thought.setColumnId(columnTitle.getId());
         var savedThought = thoughtRepository.save(thought);
         websocketService.publishEvent(new WebsocketThoughtEvent(savedThought.getTeamId(), UPDATE, savedThought));
         return savedThought;
@@ -104,6 +105,7 @@ public class ThoughtService {
 
         var columnTitle = columnTitleRepository.findByTeamIdAndTopic(teamId, thought.getTopic());
         thought.setColumnTitle(columnTitle);
+        thought.setColumnId(columnTitle.getId());
         return thoughtRepository.save(thought);
     }
 

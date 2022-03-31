@@ -107,14 +107,14 @@ class ThoughtServiceTest {
         String newTopic = "right-column";
         Thought thought = Thought.builder().id(1234L).topic("wrong-column").build();
         ColumnTitle expectedColumnTitle = new ColumnTitle(6789L, newTopic, "TITLE", teamId);
-        Thought expectedThought = Thought.builder().id(1234L).topic(newTopic).build();
+        Thought expectedThought = Thought.builder().id(1234L).topic(newTopic).columnId(6789L).build();
         given(this.thoughtRepository.findByTeamIdAndId(teamId, 1234L)).willReturn(Optional.of(thought));
         given(this.thoughtRepository.save(expectedThought)).willReturn(expectedThought);
         given(this.columnTitleRepository.findByTeamIdAndId(teamId, 6789L)).willReturn(Optional.of(expectedColumnTitle));
 
         Thought actualThought = thoughtService.updateColumn(teamId, 1234L, 6789L);
 
-        assertThat(actualThought).isEqualTo(expectedThought);
+        assertThat(actualThought).usingRecursiveComparison().isEqualTo(expectedThought);
     }
 
     @Test
@@ -123,7 +123,7 @@ class ThoughtServiceTest {
         String newTopic = "right-column";
         Thought thought = Thought.builder().id(1234L).topic("wrong-column").build();
         ColumnTitle expectedColumnTitle = new ColumnTitle(6789L, newTopic, "TITLE", teamId);
-        Thought expectedThought = Thought.builder().id(1234L).topic(newTopic).build();
+        Thought expectedThought = Thought.builder().id(1234L).topic(newTopic).columnId(6789L).build();
         given(this.thoughtRepository.findByTeamIdAndId(teamId, 1234L)).willReturn(Optional.of(thought));
         given(this.thoughtRepository.save(expectedThought)).willReturn(expectedThought);
         given(this.columnTitleRepository.findByTeamIdAndId(teamId, 6789L)).willReturn(Optional.of(expectedColumnTitle));
@@ -179,7 +179,7 @@ class ThoughtServiceTest {
     void shouldCreateThought() {
         var message = "Hello there!";
         var topic = "topic";
-        var columnTitle = ColumnTitle.builder().title("Happy").build();
+        var columnTitle = ColumnTitle.builder().id(6789L).title("Happy").build();
         var request = new CreateThoughtRequest(
             null,
             message,
@@ -198,7 +198,8 @@ class ThoughtServiceTest {
                 false,
                 "the-team",
                 columnTitle,
-                null
+                null,
+                6789L
         );
         var expectedEvent = new WebsocketThoughtEvent("the-team", UPDATE, expectedThought);
 
