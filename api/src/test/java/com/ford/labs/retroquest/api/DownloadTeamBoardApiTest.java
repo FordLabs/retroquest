@@ -35,7 +35,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.sql.Date;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -69,11 +68,6 @@ class DownloadTeamBoardApiTest extends ApiTestBase {
         actionItemRepository.deleteAllInBatch();
         thoughtRepository.deleteAllInBatch();
         columnTitleRepository.deleteAllInBatch();
-
-        assertThat(teamRepository.count()).isZero();
-        assertThat(actionItemRepository.count()).isZero();
-        assertThat(thoughtRepository.count()).isZero();
-        assertThat(columnTitleRepository.count()).isZero();
     }
 
     @Test
@@ -96,11 +90,10 @@ class DownloadTeamBoardApiTest extends ApiTestBase {
         thoughtRepository.save(
                 Thought.builder()
                         .message("task")
-                        .columnTitle(savedColumnTitle)
                         .teamId(teamId)
                         .hearts(5)
                         .discussed(false)
-                        .topic("happy")
+                        .columnId(savedColumnTitle.getId())
                         .build()
         );
 

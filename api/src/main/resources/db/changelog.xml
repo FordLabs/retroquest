@@ -196,4 +196,10 @@
             <where>column_id IS NULL</where>
         </update>
     </changeSet>
+    <changeSet id="make-column-id-not-null" author="nreuter">
+        <preConditions>
+            <columnExists tableName="thought" columnName="column_id" />
+        </preConditions>
+        <addNotNullConstraint tableName="thought" columnName="column_id" />
+    </changeSet>
 </databaseChangeLog>

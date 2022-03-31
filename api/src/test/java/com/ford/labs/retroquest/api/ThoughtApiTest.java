@@ -53,6 +53,7 @@ class ThoughtApiTest extends ApiTestBase {
     private ColumnTitleRepository columnTitleRepository;
 
     private String BASE_API_URL;
+    private ColumnTitle savedColumnTitle;
 
     @BeforeEach
     void setup() {
@@ -60,12 +61,12 @@ class ThoughtApiTest extends ApiTestBase {
         columnTitleRepository.deleteAllInBatch();
 
         BASE_API_URL = "/api/team/" + teamId;
-        columnTitleRepository.save(new ColumnTitle(null, "happy", "Happy", teamId));
+        savedColumnTitle = columnTitleRepository.save(new ColumnTitle(null, "happy", "Happy", teamId));
     }
 
     @Test
     void should_like_thought_on_upvote() throws Exception {
-        Thought originalThought = thoughtRepository.save(Thought.builder().teamId(teamId).hearts(1).build());
+        Thought originalThought = thoughtRepository.save(Thought.builder().teamId(teamId).hearts(1).columnId(savedColumnTitle.getId()).build());
 
         mockMvc.perform(put("/api/team/" + teamId + "/thought/" + originalThought.getId() + "/heart")
                 .header("Authorization", getBearerAuthToken()))
@@ -84,7 +85,7 @@ class ThoughtApiTest extends ApiTestBase {
 
     @Test
     void should_update_thought_discussion() throws Exception {
-        Thought originalThought = thoughtRepository.save(Thought.builder().teamId(teamId).discussed(false).build());
+        Thought originalThought = thoughtRepository.save(Thought.builder().teamId(teamId).discussed(false).columnId(savedColumnTitle.getId()).build());
 
         mockMvc.perform(put("/api/team/" + teamId + "/thought/" + originalThought.getId() + "/discuss")
                 .contentType(APPLICATION_JSON)
@@ -107,7 +108,7 @@ class ThoughtApiTest extends ApiTestBase {
 
     @Test
     void should_update_thought_message() throws Exception {
-        var originalThought = thoughtRepository.save(Thought.builder().teamId(teamId).message("hello").build());
+        var originalThought = thoughtRepository.save(Thought.builder().teamId(teamId).message("hello").columnId(savedColumnTitle.getId()).build());
         var updatedMessage = "goodbye";
 
         mockMvc.perform(put("/api/team/" + teamId + "/thought/" + originalThought.getId() + "/message")
@@ -144,10 +145,10 @@ class ThoughtApiTest extends ApiTestBase {
 
     @Test
     public void should_move_thought_column() throws Exception {
-        ColumnTitle savedColumnTitle = columnTitleRepository.save(
+        ColumnTitle newSavedColumn = columnTitleRepository.save(
             new ColumnTitle(null, "cheeseburgers", "CheeseBurgers", teamId)
         );
-        MoveThoughtRequest changeRequest = new MoveThoughtRequest(savedColumnTitle.getId());
+        MoveThoughtRequest changeRequest = new MoveThoughtRequest(newSavedColumn.getId());
         Thought savedThought = thoughtRepository.save(
             Thought.builder()
                 .teamId(teamId)
@@ -155,6 +156,7 @@ class ThoughtApiTest extends ApiTestBase {
                 .message("message")
                 .discussed(false)
                 .hearts(1)
+                .columnId(savedColumnTitle.getId())
                 .build()
         );
 
@@ -168,15 +170,15 @@ class ThoughtApiTest extends ApiTestBase {
 
         assertThat(updatedThought.getId()).isEqualTo(savedThought.getId());
         assertThat(updatedThought.getMessage()).isEqualTo(savedThought.getMessage());
-        assertThat(updatedThought.getTopic()).isEqualTo(savedColumnTitle.getTopic());
-        assertThat(updatedThought.getColumnTitle()).isEqualTo(savedColumnTitle);
+        assertThat(updatedThought.getTopic()).isEqualTo(newSavedColumn.getTopic());
+        assertThat(updatedThought.getColumnTitle()).isEqualTo(newSavedColumn);
     }
 
     @Test
     void should_return_all_thoughts_by_team_id() throws Exception {
         List<Thought> expectedThoughts = List.of(
-            Thought.builder().teamId(teamId).message("hello").build(),
-            Thought.builder().teamId(teamId).message("goodbye").build());
+            Thought.builder().teamId(teamId).message("hello").columnId(savedColumnTitle.getId()).build(),
+            Thought.builder().teamId(teamId).message("goodbye").columnId(savedColumnTitle.getId()).build());
 
         List<Thought> persistedExpectedThoughts = thoughtRepository.saveAll(expectedThoughts);
 
@@ -199,8 +201,8 @@ class ThoughtApiTest extends ApiTestBase {
     @Test
     void should_delete_thoughts_by_thought_id() throws Exception {
         List<Thought> thoughtsToSave = List.of(
-            Thought.builder().teamId(teamId).message("hello").build(),
-            Thought.builder().teamId(teamId).message("goodbye").build());
+            Thought.builder().teamId(teamId).message("hello").columnId(savedColumnTitle.getId()).build(),
+            Thought.builder().teamId(teamId).message("goodbye").columnId(savedColumnTitle.getId()).build());
 
         List<Thought> persistedThoughts = thoughtRepository.saveAll(thoughtsToSave);
 
@@ -287,9 +289,9 @@ class ThoughtApiTest extends ApiTestBase {
     @Test
     void should_get_thoughts_on_same_team() throws Exception {
         List<Thought> savedThoughts = List.of(
-            Thought.builder().message("message 1").teamId(teamId).build(),
-            Thought.builder().message("message 2").teamId(teamId).build(),
-            Thought.builder().message("message 2").teamId("team 2").build()
+            Thought.builder().message("message 1").teamId(teamId).columnId(savedColumnTitle.getId()).build(),
+            Thought.builder().message("message 2").teamId(teamId).columnId(savedColumnTitle.getId()).build(),
+            Thought.builder().message("message 2").teamId("team 2").columnId(savedColumnTitle.getId()).build()
         );
 
         thoughtRepository.saveAll(savedThoughts);
@@ -308,7 +310,7 @@ class ThoughtApiTest extends ApiTestBase {
     @Test
     void should_not_get_thoughts_unauthorized() throws Exception {
         List<Thought> savedThoughts = List.of(
-            Thought.builder().message("message 1").teamId(teamId).build()
+            Thought.builder().message("message 1").teamId(teamId).columnId(savedColumnTitle.getId()).build()
         );
 
         thoughtRepository.saveAll(savedThoughts);

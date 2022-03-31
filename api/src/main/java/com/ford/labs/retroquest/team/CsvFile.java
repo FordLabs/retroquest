@@ -18,6 +18,7 @@
 package com.ford.labs.retroquest.team;
 
 import com.ford.labs.retroquest.actionitem.ActionItem;
+import com.ford.labs.retroquest.column.Column;
 import com.ford.labs.retroquest.thought.Thought;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,7 +32,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -41,6 +44,7 @@ public class CsvFile {
     private String teamName;
     private List<Thought> thoughts;
     private List<ActionItem> actionItems;
+    private List<Column> columns;
 
     public String getFileName() {
         var today = LocalDate.now();
@@ -51,10 +55,10 @@ public class CsvFile {
         var out = new ByteArrayOutputStream();
         var writer = new BufferedWriter(new OutputStreamWriter(out));
 
-        var csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT
-                .withHeader("Column", "Message", "Likes", "Completed", "Assigned To"));
+        var csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader("Column", "Message", "Likes", "Completed", "Assigned To"));
+        Map<Long, String> columnNameMap = columns.stream().collect(Collectors.toMap(Column::getId, Column::getTitle));
         for (var thought : thoughts) {
-            csvPrinter.printRecord(getFieldsFrom(thought));
+            csvPrinter.printRecord(getFieldsFrom(thought, columnNameMap));
         }
 
         for (var actionItem : actionItems) {
@@ -65,9 +69,9 @@ public class CsvFile {
         return out.toString();
     }
 
-    private List<String> getFieldsFrom(Thought thought) {
+    private List<String> getFieldsFrom(Thought thought, Map<Long, String> columnNameMap) {
         return List.of(
-                thought.getColumnTitle().getTitle(),
+                columnNameMap.get(thought.getColumnId()),
                 thought.getMessage(),
                 String.valueOf(thought.getHearts()),
                 getBooleanString(thought.isDiscussed())
