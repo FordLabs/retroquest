@@ -56,13 +56,11 @@ class ThoughtApiTest extends ApiTestBase {
 
     @BeforeEach
     void setup() {
-        BASE_API_URL = "/api/team/" + teamId;
-    }
-
-    @AfterEach
-    void teardown() {
         thoughtRepository.deleteAllInBatch();
         columnTitleRepository.deleteAllInBatch();
+
+        BASE_API_URL = "/api/team/" + teamId;
+        columnTitleRepository.save(new ColumnTitle(null, "happy", "Happy", teamId));
     }
 
     @Test

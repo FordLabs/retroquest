@@ -19,11 +19,10 @@ package com.ford.labs.retroquest.thought;
 
 import com.ford.labs.retroquest.column.ColumnTitle;
 import lombok.*;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.util.Objects;
 
+@Data
 @Getter
 @Setter
 @ToString
@@ -59,17 +58,5 @@ public class Thought {
     )
     private ColumnTitle columnTitle;
     private Long boardId;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Thought thought = (Thought) o;
-        return id != null && Objects.equals(id, thought.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
+    private Long columnId;
 }

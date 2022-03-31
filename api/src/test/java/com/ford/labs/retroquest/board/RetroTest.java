@@ -32,7 +32,7 @@ public class RetroTest {
     @Test
     public void fromBoard_returnsAllExpectedBoardFields() {
         var columnTitle = new ColumnTitle(3L, "topic", "title", "teamId");
-        var thought = new Thought(2L, "A message", 0, "topic", false, "teamId", columnTitle, 1L);
+        var thought = new Thought(2L, "A message", 0, "topic", false, "teamId", columnTitle, 1L, 3L);
         var board = new Board(1L, "teamId", LocalDate.now(), List.of(thought));
         var retro = Retro.fromBoard(board);
 
@@ -45,8 +45,8 @@ public class RetroTest {
     @Test
     public void fromBoard_returnsDistinctColumnsFromThoughts() {
         var columnTitle1 = new ColumnTitle(3L, "topic", "title", "teamId");
-        var thought1 = new Thought(2L, "A message", 0, "topic", false, "teamId", columnTitle1, 1L);
-        var thought2 = new Thought(4L, "A message", 0, "topic", false, "teamId", columnTitle1, 1L);
+        var thought1 = new Thought(2L, "A message", 0, "topic", false, "teamId", columnTitle1, 1L, 3L);
+        var thought2 = new Thought(4L, "A message", 0, "topic", false, "teamId", columnTitle1, 1L, 3L);
         var board = new Board(1L, "teamId", LocalDate.now(), List.of(thought1, thought2));
         var retro = Retro.fromBoard(board);
 
@@ -57,8 +57,8 @@ public class RetroTest {
     public void fromBoard_returnsColumnsInSavedOrder() {
         var columnTitle1 = new ColumnTitle(2L, "topic", "title", "teamId");
         var columnTitle2 = new ColumnTitle(3L, "topic", "title", "teamId");
-        var thought1 = new Thought(4L, "A message", 0, "topic", false, "teamId", columnTitle2, 1L);
-        var thought2 = new Thought(5L, "A message", 0, "topic", false, "teamId", columnTitle1, 1L);
+        var thought1 = new Thought(4L, "A message", 0, "topic", false, "teamId", columnTitle2, 1L, 3L);
+        var thought2 = new Thought(5L, "A message", 0, "topic", false, "teamId", columnTitle1, 1L, 2L);
         var board = new Board(1L, "teamId", LocalDate.now(), List.of(thought1, thought2));
         var retro = Retro.fromBoard(board);
 
