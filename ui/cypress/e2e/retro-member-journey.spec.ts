@@ -97,7 +97,67 @@ describe('Retro Member Journey', () => {
 		cy.confirmNumberOfThoughtsInColumn(Topic.HAPPY, 1);
 	});
 
-	xit('Move thought between columns', () => {});
+	it('Move thought between columns', () => {
+		cy.intercept(
+			'PUT',
+			`/api/team/${teamCredentials.teamId}/thought/*/column-id`
+		).as('moveRetroItem');
+
+		const thoughtToMove = 'Move me!';
+		const thoughtNotToMove = 'Do not move me';
+		shouldAddHappyThoughts([thoughtToMove, thoughtNotToMove]);
+
+		const green = 'rgb(46, 204, 113)';
+		const blue = 'rgb(52, 152, 219)';
+		const red = 'rgb(231, 76, 60)';
+		const keycodes = {
+			space: 32,
+			arrowRight: 39,
+			arrowLeft: 37,
+		};
+
+		// eslint-disable-next-line cypress/no-unnecessary-waiting
+		cy.get('[data-testid=draggableRetroItem-happy-1]')
+			.should('contain.text', thoughtToMove)
+			.focus()
+			.trigger('keydown', { keyCode: keycodes.space })
+			.should('have.css', 'box-shadow', `${green} 0px 0px 0px 2px`)
+			.trigger('keydown', { keyCode: keycodes.arrowRight, force: true })
+			.wait(200)
+			.trigger('keydown', { keyCode: keycodes.space, force: true });
+
+		cy.wait('@moveRetroItem');
+
+		// eslint-disable-next-line cypress/no-unnecessary-waiting
+		cy.get('[data-testid=draggableRetroItem-confused-1]')
+			.should('contain.text', thoughtToMove)
+			.focus()
+			.trigger('keydown', { keyCode: keycodes.space })
+			.should('have.css', 'box-shadow', `${blue} 0px 0px 0px 2px`)
+			.trigger('keydown', { keyCode: keycodes.arrowRight, force: true })
+			.wait(200)
+			.trigger('keydown', { keyCode: keycodes.space, force: true });
+
+		cy.wait('@moveRetroItem');
+
+		// eslint-disable-next-line cypress/no-unnecessary-waiting
+		cy.get('[data-testid=draggableRetroItem-unhappy-1]')
+			.should('contain.text', thoughtToMove)
+			.focus()
+			.trigger('keydown', { keyCode: keycodes.space })
+			.should('have.css', 'box-shadow', `${red} 0px 0px 0px 2px`)
+			.trigger('keydown', { keyCode: keycodes.arrowLeft, force: true })
+			.wait(200)
+			.trigger('keydown', { keyCode: keycodes.space, force: true });
+
+		cy.wait('@moveRetroItem');
+
+		cy.get('[data-testid=draggableRetroItem-confused-1]')
+			.should('contain.text', thoughtToMove)
+			.focus()
+			.trigger('keydown', { keyCode: keycodes.space })
+			.should('have.css', 'box-shadow', `${blue} 0px 0px 0px 2px`);
+	});
 
 	it('Delete thought', () => {
 		const thoughtToDelete = 'Delete Me!';

@@ -49,6 +49,7 @@ const DraggableRetroItem = (props: Props): JSX.Element => {
 					{...provided.draggableProps}
 					{...provided.dragHandleProps}
 					className={classNames('draggable-retro-item', thought.topic)}
+					data-testid={`draggableRetroItem-${thought.topic}-${index + 1}`}
 				>
 					<RetroItem thoughtId={thought.id} type={thought.topic} />
 				</li>

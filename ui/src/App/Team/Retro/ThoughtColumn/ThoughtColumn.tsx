@@ -84,7 +84,10 @@ function ThoughtColumn(props: Props) {
 			<CountSeparator count={activeThoughtCount} />
 			<Droppable droppableId={`${column.id}`} type="THOUGHT">
 				{(provided, snapshot) => (
-					<ul className="thought-list">
+					<ul
+						className="thought-list"
+						data-testid={`droppableThoughtColumn-${column.topic}`}
+					>
 						<div ref={provided.innerRef} {...provided.droppableProps}>
 							{thoughts.map((thought: Thought, index: number) => (
 								<Fragment key={index}>
