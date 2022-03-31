@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,9 +15,11 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { HTMLAttributes, useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
+import { useSetRecoilState } from 'recoil';
 
+import { DisableDraggableState } from '../../../State/DisableDraggableState';
 import { onKeys } from '../../../Utils/EventUtils';
 import FloatingCharacterCountdown from '../../FloatingCharacterCountdown/FloatingCharacterCountdown';
 
@@ -27,7 +29,7 @@ const MAX_LENGTH = 255;
 
 const NO_OP = () => undefined;
 
-type EditableTextProps = React.HTMLAttributes<HTMLDivElement> & {
+type EditableTextProps = HTMLAttributes<HTMLDivElement> & {
 	value: string;
 	editing: boolean;
 	selectable?: boolean;
@@ -37,7 +39,7 @@ type EditableTextProps = React.HTMLAttributes<HTMLDivElement> & {
 	onSelect?: () => void;
 };
 
-export default function EditableText(props: EditableTextProps) {
+function EditableText(props: EditableTextProps) {
 	const {
 		value,
 		editing,
@@ -50,6 +52,7 @@ export default function EditableText(props: EditableTextProps) {
 		...divProps
 	} = props;
 
+	const setDisableDraggable = useSetRecoilState(DisableDraggableState);
 	const [editValue, setEditValue] = useState(value);
 
 	const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -80,6 +83,10 @@ export default function EditableText(props: EditableTextProps) {
 			};
 		}
 	}, [editing, onCancel, value]);
+
+	useEffect(() => {
+		setDisableDraggable(editing);
+	}, [editing, setDisableDraggable]);
 
 	function resizeTextArea() {
 		const textArea = textAreaRef.current;
@@ -129,3 +136,5 @@ export default function EditableText(props: EditableTextProps) {
 		</div>
 	);
 }
+
+export default EditableText;

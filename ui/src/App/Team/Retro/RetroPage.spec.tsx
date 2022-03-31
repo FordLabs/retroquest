@@ -14,15 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { render, screen, within } from '@testing-library/react';
-import { axe } from 'jest-axe';
-import { RecoilRoot } from 'recoil';
+import { screen, within } from '@testing-library/react';
 
 import { mockColumns } from '../../../Services/Api/__mocks__/ColumnService';
 import ActionItemService from '../../../Services/Api/ActionItemService';
 import ColumnService from '../../../Services/Api/ColumnService';
 import ThoughtService from '../../../Services/Api/ThoughtService';
 import { TeamState } from '../../../State/TeamState';
+import renderWithRecoilRoot from '../../../Utils/renderWithRecoilRoot';
 
 import RetroPage from './RetroPage';
 
@@ -49,7 +48,6 @@ jest.mock('../../../Hooks/useWebSocketMessageHandler', () => {
 });
 
 describe('RetroPage.spec.tsx', () => {
-	let container: HTMLElement;
 	const teamId = 'some-team-id';
 
 	beforeEach(() => {
@@ -57,24 +55,12 @@ describe('RetroPage.spec.tsx', () => {
 	});
 
 	const setupComponent = async () => {
-		({ container } = render(
-			<RecoilRoot
-				initializeState={({ set }) => {
-					set(TeamState, { name: '', id: teamId });
-				}}
-			>
-				<RetroPage />
-			</RecoilRoot>
-		));
+		renderWithRecoilRoot(<RetroPage />, ({ set }) => {
+			set(TeamState, { name: '', id: teamId });
+		});
 
 		await screen.findByTestId('retroColumn__happy');
 	};
-
-	it('should render without axe errors', async () => {
-		await setupComponent();
-		const results = await axe(container);
-		expect(results).toHaveNoViolations();
-	});
 
 	it('should allow column item animations after 1 second', async () => {
 		jest.useFakeTimers();

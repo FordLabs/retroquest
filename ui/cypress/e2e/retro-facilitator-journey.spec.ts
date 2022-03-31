@@ -155,38 +155,59 @@ describe('Retro Facilitator Journey', () => {
 	});
 
 	it('Mark thought as discussed (default and expanded)', () => {
+		cy.intercept(
+			'PUT',
+			`/api/team/${teamCredentials.teamId}/thought/*/discuss`
+		).as('updateDiscussedState');
+		const editButtonSelector = '[data-testid=editButton]';
+
 		const happyThought = 'This is a good week';
 		cy.enterThought(Topic.HAPPY, happyThought);
 		cy.enterThought(Topic.HAPPY, 'Another positive note');
-		getHappyColumnItems().last().should('not.have.class', 'completed');
-
-		getRetroItemByText(happyThought)
-			.find('[data-testid=checkboxButton]')
-			.as('discussedButton');
+		getHappyColumnItems()
+			.last()
+			.should('not.have.class', 'completed')
+			.find(editButtonSelector)
+			.should('not.be.disabled');
 
 		cy.log(`**Mark happy thought "${happyThought}" as discussed**`);
-		cy.get(`@discussedButton`).click();
+		getDiscussedButton(happyThought).click();
+		cy.wait('@updateDiscussedState');
 
 		cy.log('**Thought marked as discussed should move to bottom of the list**');
 		getHappyColumnItems().should('have.length', 2);
-		getDiscussedThought().should('have.class', 'completed');
-		getHappyColumnItems().last().should('have.class', 'completed');
+		getDiscussedThought().find(editButtonSelector).should('be.disabled');
+		getHappyColumnItems()
+			.last()
+			.should('have.class', 'completed')
+			.find(editButtonSelector)
+			.should('be.disabled');
 
-		cy.get(`@discussedButton`).click();
+		getDiscussedButton(happyThought).click();
+		cy.wait('@updateDiscussedState');
 
 		cy.log(`**Unmark happy thought as discussed and move up the list**`);
 		getHappyColumnItems().should('have.length', 2);
-		getHappyColumnItems().last().should('not.have.class', 'completed');
+		getHappyColumnItems()
+			.last()
+			.should('not.have.class', 'completed')
+			.find(editButtonSelector)
+			.should('not.be.disabled');
 
 		cy.log(`**Mark happy thought as discussed from the thought modal**`);
 		clickOnFirstThought();
 		getRetroActionModal().find('[data-testid=checkboxButton]').first().click();
+		cy.wait('@updateDiscussedState');
 
 		cy.log(
 			'**Thought marked as discussed from modal should move to bottom of the list**'
 		);
 		getHappyColumnItems().should('have.length', 2);
-		getHappyColumnItems().last().should('have.class', 'completed');
+		getHappyColumnItems()
+			.last()
+			.should('have.class', 'completed')
+			.find(editButtonSelector)
+			.should('be.disabled');
 	});
 
 	it('Action item actions (create, edit, delete, mark as complete)', () => {
@@ -355,3 +376,5 @@ const clickOnFirstThought = () =>
 const getRetroActionModal = () => cy.get('[data-testid=retro-item-modal]');
 const getColumnHeaderByTopic = (topic: Topic) =>
 	cy.get(`[data-testid=columnHeader-${topic}]`);
+const getDiscussedButton = (thoughtText: string) =>
+	getRetroItemByText(thoughtText).find('[data-testid=checkboxButton]');

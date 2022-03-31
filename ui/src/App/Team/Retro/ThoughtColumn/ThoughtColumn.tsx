@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-import React, { useState } from 'react';
-import { Draggable, Droppable } from 'react-beautiful-dnd';
+import React, { Fragment, useState } from 'react';
+import { Droppable } from 'react-beautiful-dnd';
 import { useRecoilValue } from 'recoil';
 
 import ColumnHeader from '../../../../Common/ColumnHeader/ColumnHeader';
@@ -33,7 +33,7 @@ import { Column } from '../../../../Types/Column';
 import { getCreateThoughtRequest } from '../../../../Types/CreateThoughtRequest';
 import Thought from '../../../../Types/Thought';
 
-import RetroItem from './RetroItem/RetroItem';
+import DraggableRetroItem from './DraggableRetroItem/DraggableRetroItem';
 
 import './ThoughtColumn.scss';
 
@@ -68,27 +68,6 @@ function ThoughtColumn(props: Props) {
 		}
 	};
 
-	const renderThought = (thought: Thought, index: number) => {
-		return (
-			<Draggable
-				key={thought.id}
-				draggableId={`${thought.id}`}
-				index={index}
-				disableInteractiveElementBlocking={true}
-			>
-				{(provided, snapshot) => (
-					<li
-						ref={provided.innerRef}
-						{...provided.draggableProps}
-						{...provided.dragHandleProps}
-					>
-						<RetroItem thoughtId={thought.id} type={thought.topic} />
-					</li>
-				)}
-			</Draggable>
-		);
-	};
-
 	return (
 		<div className="retro-column" data-testid={`retroColumn__${column.topic}`}>
 			<ColumnHeader
@@ -107,7 +86,11 @@ function ThoughtColumn(props: Props) {
 				{(provided, snapshot) => (
 					<ul className="thought-list">
 						<div ref={provided.innerRef} {...provided.droppableProps}>
-							{thoughts.map(renderThought)}
+							{thoughts.map((thought: Thought, index: number) => (
+								<Fragment key={index}>
+									<DraggableRetroItem thought={thought} index={index} />
+								</Fragment>
+							))}
 							{provided.placeholder}
 						</div>
 					</ul>

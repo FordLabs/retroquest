@@ -22,6 +22,7 @@ module.exports = {
 	],
 	ignoreFiles: ['build/**/*', 'node_modules/**/*'],
 	rules: {
+		'a11y/no-outline-none': null,
 		'a11y/selector-pseudo-class-focus': null,
 		'a11y/media-prefers-reduced-motion': null,
 		'order/order': null,

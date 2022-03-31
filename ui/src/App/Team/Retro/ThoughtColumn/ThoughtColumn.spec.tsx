@@ -16,19 +16,20 @@
  */
 
 import React from 'react';
-import { render, screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { axe } from 'jest-axe';
-import { RecoilRoot } from 'recoil';
 
 import { getMockThought } from '../../../../Services/Api/__mocks__/ThoughtService';
+import ColumnService from '../../../../Services/Api/ColumnService';
 import ThoughtService from '../../../../Services/Api/ThoughtService';
+import DragAndDrop from '../../../../Services/DragAndDrop/DragAndDrop';
 import { TeamState } from '../../../../State/TeamState';
 import { ThoughtsState } from '../../../../State/ThoughtsState';
 import { Column } from '../../../../Types/Column';
 import Team from '../../../../Types/Team';
 import Thought from '../../../../Types/Thought';
 import Topic from '../../../../Types/Topic';
+import renderWithRecoilRoot from '../../../../Utils/renderWithRecoilRoot';
 
 import ThoughtColumn from './ThoughtColumn';
 
@@ -52,30 +53,22 @@ const column: Column = {
 jest.mock('../../../../Services/Api/ThoughtService');
 jest.mock('../../../../Services/Api/ColumnService');
 
-describe('ThoughtColumn.spec.tsx', () => {
-	let container: HTMLElement;
-
+describe('ThoughtColumn', () => {
 	beforeEach(async () => {
-		({ container } = render(
-			<RecoilRoot
-				initializeState={({ set }) => {
-					set(ThoughtsState, [
-						activeThought1,
-						activeThought2,
-						discussedThought1,
-						discussedThought2,
-					]);
-					set(TeamState, team);
-				}}
-			>
+		renderWithRecoilRoot(
+			<DragAndDrop>
 				<ThoughtColumn column={column} />
-			</RecoilRoot>
-		));
-	});
-
-	it('should render without axe errors', async () => {
-		const results = await axe(container);
-		expect(results).toHaveNoViolations();
+			</DragAndDrop>,
+			({ set }) => {
+				set(ThoughtsState, [
+					activeThought1,
+					activeThought2,
+					discussedThought1,
+					discussedThought2,
+				]);
+				set(TeamState, team);
+			}
+		);
 	});
 
 	it('should show column title', () => {
@@ -120,44 +113,54 @@ describe('ThoughtColumn.spec.tsx', () => {
 		});
 	});
 
-	describe('sort', () => {
-		const getSortButton = () => screen.getByTestId('columnHeader-sortButton');
-
-		it('should return thoughts in descending order based on heart count after activity when sort clicked', () => {
+	describe('Sorting Columns', () => {
+		it('should sort thoughts in descending order based on heart count', () => {
+			confirmThoughtsAreInOriginalOrder();
 			userEvent.click(getSortButton());
-			const thoughtItems = screen.getAllByTestId('retroItem');
-			expect(thoughtItems).toHaveLength(4);
-			expect(within(thoughtItems[0]).queryByText('2')).not.toBeNull();
-			expect(within(thoughtItems[1]).queryByText('1')).not.toBeNull();
-			expect(within(thoughtItems[2]).queryByText('4')).not.toBeNull();
-			expect(within(thoughtItems[3]).queryByText('3')).not.toBeNull();
+			confirmThoughtsAreInSortedOrder();
 		});
 
-		it('should return thoughts in unedited order after activity sorting when sort clicked twice', () => {
+		it('should unsort thoughts by returning thoughts original order', () => {
 			const sortButton = getSortButton();
 			userEvent.click(sortButton);
 			userEvent.click(sortButton);
 			const thoughtItems = screen.getAllByTestId('retroItem');
 			expect(thoughtItems).toHaveLength(4);
-			expect(within(thoughtItems[0]).queryByText('1')).not.toBeNull();
-			expect(within(thoughtItems[1]).queryByText('2')).not.toBeNull();
-			expect(within(thoughtItems[2]).queryByText('3')).not.toBeNull();
-			expect(within(thoughtItems[3]).queryByText('4')).not.toBeNull();
+			confirmThoughtsAreInOriginalOrder();
 		});
 	});
 
-	it('should send update event to API when header title changed', async () => {
+	it('should update header title', async () => {
 		userEvent.click(screen.getByTestId('columnHeader-editTitleButton'));
 		userEvent.type(
 			await screen.findByTestId('column-input'),
 			'Something Else{enter}'
 		);
-		// await waitFor(() =>
-		// 	expect(ColumnService.updateColumnTitle).toHaveBeenCalledWith(
-		// 		'my-team',
-		// 		123456,
-		// 		'Something Else'
-		// 	)
-		// );
+		await waitFor(() =>
+			expect(ColumnService.updateColumnTitle).toHaveBeenCalledWith(
+				'my-team',
+				123456,
+				'Something Else'
+			)
+		);
 	});
 });
+
+const getSortButton = () => screen.getByTestId('columnHeader-sortButton');
+
+const confirmThoughtsAreInOriginalOrder = () => {
+	const thoughtItems = screen.getAllByTestId('retroItem');
+	expect(within(thoughtItems[0]).getByText('1')).toBeDefined();
+	expect(within(thoughtItems[1]).getByText('2')).toBeDefined();
+	expect(within(thoughtItems[2]).getByText('3')).toBeDefined();
+	expect(within(thoughtItems[3]).getByText('4')).toBeDefined();
+};
+
+const confirmThoughtsAreInSortedOrder = () => {
+	const thoughtItems = screen.getAllByTestId('retroItem');
+	expect(thoughtItems).toHaveLength(4);
+	expect(within(thoughtItems[0]).getByText('4')).toBeDefined();
+	expect(within(thoughtItems[1]).getByText('3')).toBeDefined();
+	expect(within(thoughtItems[2]).getByText('2')).toBeDefined();
+	expect(within(thoughtItems[3]).getByText('1')).toBeDefined();
+};
