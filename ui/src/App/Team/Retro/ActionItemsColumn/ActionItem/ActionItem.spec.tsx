@@ -15,11 +15,10 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import React from 'react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
-import { RecoilRoot } from 'recoil';
 
 import ActionItemService from '../../../../../Services/Api/ActionItemService';
 import { ActionItemState } from '../../../../../State/ActionItemState';
@@ -31,6 +30,7 @@ import { TeamState } from '../../../../../State/TeamState';
 import Action from '../../../../../Types/Action';
 import Team from '../../../../../Types/Team';
 import { RecoilObserver } from '../../../../../Utils/RecoilObserver';
+import renderWithRecoilRoot from '../../../../../Utils/renderWithRecoilRoot';
 
 import ActionItem from './ActionItem';
 
@@ -62,28 +62,22 @@ describe('ActionItem', () => {
 	});
 
 	it('should render without axe errors', async () => {
-		const { container } = render(
-			<RecoilRoot
-				initializeState={({ set }) => {
-					set(ActionItemState, [fakeAction]);
-				}}
-			>
-				<ActionItem actionItemId={fakeAction.id} />
-			</RecoilRoot>
+		const { container } = renderWithRecoilRoot(
+			<ActionItem actionItemId={fakeAction.id} />,
+			({ set }) => {
+				set(ActionItemState, [fakeAction]);
+			}
 		);
 		const results = await axe(container);
 		expect(results).toHaveNoViolations();
 	});
 
 	it('should render as an action column item with created date', () => {
-		render(
-			<RecoilRoot
-				initializeState={({ set }) => {
-					set(ActionItemState, [fakeAction]);
-				}}
-			>
-				<ActionItem actionItemId={fakeAction.id} />
-			</RecoilRoot>
+		renderWithRecoilRoot(
+			<ActionItem actionItemId={fakeAction.id} />,
+			({ set }) => {
+				set(ActionItemState, [fakeAction]);
+			}
 		);
 
 		expect(screen.getByTestId('actionItem').className).toContain('action');
@@ -91,16 +85,12 @@ describe('ActionItem', () => {
 	});
 
 	it('should disable animations', () => {
-		render(
-			<RecoilRoot
-				initializeState={({ set }) => {
-					set(ActionItemState, [fakeAction]);
-				}}
-			>
-				<ActionItem actionItemId={fakeAction.id} />
-			</RecoilRoot>
+		renderWithRecoilRoot(
+			<ActionItem actionItemId={fakeAction.id} />,
+			({ set }) => {
+				set(ActionItemState, [fakeAction]);
+			}
 		);
-
 		const actionItem = screen.getByTestId('actionItem');
 		expect(actionItem.className).not.toContain(fadeInAnimationClass);
 		expect(actionItem.className).not.toContain(fadeOutAnimationClass);
@@ -108,13 +98,8 @@ describe('ActionItem', () => {
 
 	describe('When not completed', () => {
 		beforeEach(() => {
-			render(
-				<RecoilRoot
-					initializeState={({ set }) => {
-						set(TeamState, team);
-						set(ActionItemState, [fakeAction]);
-					}}
-				>
+			renderWithRecoilRoot(
+				<>
 					<RecoilObserver
 						recoilState={ModalContentsState}
 						onChange={(value: ModalContents) => {
@@ -122,7 +107,11 @@ describe('ActionItem', () => {
 						}}
 					/>
 					<ActionItem actionItemId={fakeAction.id} />
-				</RecoilRoot>
+				</>,
+				({ set }) => {
+					set(TeamState, team);
+					set(ActionItemState, [fakeAction]);
+				}
 			);
 		});
 
@@ -277,15 +266,12 @@ describe('ActionItem', () => {
 
 	describe('When completed', () => {
 		beforeEach(() => {
-			render(
-				<RecoilRoot
-					initializeState={({ set }) => {
-						set(TeamState, team);
-						set(ActionItemState, [{ ...fakeAction, completed: true }]);
-					}}
-				>
-					<ActionItem actionItemId={fakeAction.id} />
-				</RecoilRoot>
+			renderWithRecoilRoot(
+				<ActionItem actionItemId={fakeAction.id} />,
+				({ set }) => {
+					set(TeamState, team);
+					set(ActionItemState, [{ ...fakeAction, completed: true }]);
+				}
 			);
 		});
 

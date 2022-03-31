@@ -17,28 +17,70 @@
 
 import { PropsWithChildren, useCallback } from 'react';
 import { DragDropContext, OnDragEndResponder } from 'react-beautiful-dnd';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
+import { ColumnsState } from '../../State/ColumnsState';
 import { TeamState } from '../../State/TeamState';
+import { ThoughtsState } from '../../State/ThoughtsState';
+import Thought from '../../Types/Thought';
+import { ThoughtTopic } from '../../Types/Topic';
 import ThoughtService from '../Api/ThoughtService';
 
 type Props = {};
 
 function DragAndDrop({ children }: PropsWithChildren<Props>): JSX.Element {
 	const team = useRecoilValue(TeamState);
+	const setThoughts = useSetRecoilState(ThoughtsState);
+	const columns = useRecoilValue(ColumnsState);
 
 	const onDragEnd: OnDragEndResponder = useCallback(
 		(result, provided) => {
-			ThoughtService.updateColumn(
-				team.id,
-				parseInt(result.draggableId),
-				parseInt(result.destination!.droppableId)
-			).catch();
+			if (result.destination) {
+				const thoughtId = parseInt(result.draggableId);
+				const columnId = parseInt(result.destination!.droppableId);
+
+				let oldColumnTopic: ThoughtTopic;
+				const newColumn = columns.find((c) => c.id === columnId);
+
+				if (newColumn) {
+					setThoughts((currentState: Thought[]) => {
+						return currentState.map((thought) => {
+							if (thought.id === thoughtId) {
+								oldColumnTopic = thought.topic;
+								return { ...thought, topic: newColumn.topic };
+							}
+							return thought;
+						});
+					});
+					ThoughtService.updateColumn(team.id, thoughtId, columnId).catch(
+						() => {
+							if (oldColumnTopic) {
+								setThoughts((currentState: Thought[]) => {
+									return currentState.map((thought) =>
+										thought.id === thoughtId
+											? { ...thought, topic: oldColumnTopic }
+											: thought
+									);
+								});
+							}
+						}
+					);
+				}
+			}
 		},
-		[team]
+		[columns, setThoughts, team.id]
 	);
 
-	return <DragDropContext onDragEnd={onDragEnd}>{children}</DragDropContext>;
+	return (
+		<DragDropContext
+			onDragEnd={onDragEnd}
+			onBeforeCapture={() => {
+				console.log('onBeforeCapture');
+			}}
+		>
+			{children}
+		</DragDropContext>
+	);
 }
 
 export default DragAndDrop;

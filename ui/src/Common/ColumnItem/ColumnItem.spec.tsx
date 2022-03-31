@@ -16,10 +16,11 @@
  */
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import Topic from '../../Types/Topic';
+import renderWithRecoilRoot from '../../Utils/renderWithRecoilRoot';
 
 import ColumnItem from './ColumnItem';
 
@@ -38,7 +39,7 @@ describe('ColumnItem', () => {
 	it.each([[Topic.HAPPY], [Topic.CONFUSED], [Topic.UNHAPPY], [Topic.ACTION]])(
 		'should render %s type',
 		(type) => {
-			render(<ColumnItem text={startingText} type={type} />);
+			renderWithRecoilRoot(<ColumnItem text={startingText} type={type} />);
 
 			expect(screen.getByTestId('columnItem').className).toContain(type);
 		}
@@ -46,7 +47,7 @@ describe('ColumnItem', () => {
 
 	describe('When not checked and not readonly', () => {
 		beforeEach(() => {
-			render(
+			renderWithRecoilRoot(
 				<ColumnItem
 					type={Topic.HAPPY}
 					text={startingText}
@@ -134,7 +135,7 @@ describe('ColumnItem', () => {
 
 	describe('When checked', () => {
 		beforeEach(() => {
-			render(
+			renderWithRecoilRoot(
 				<ColumnItem
 					type={Topic.HAPPY}
 					text={startingText}
@@ -171,7 +172,7 @@ describe('ColumnItem', () => {
 
 	describe('When readonly', () => {
 		beforeEach(() => {
-			render(
+			renderWithRecoilRoot(
 				<ColumnItem
 					type={Topic.HAPPY}
 					text={startingText}
@@ -205,7 +206,7 @@ describe('ColumnItem', () => {
 
 	describe('Without default buttons', () => {
 		beforeEach(() => {
-			render(
+			renderWithRecoilRoot(
 				<ColumnItem
 					type={Topic.HAPPY}
 					text={startingText}
@@ -223,7 +224,7 @@ describe('ColumnItem', () => {
 
 	describe('With custom buttons', () => {
 		beforeEach(() => {
-			render(
+			renderWithRecoilRoot(
 				<ColumnItem
 					type={Topic.HAPPY}
 					text={startingText}
@@ -239,7 +240,7 @@ describe('ColumnItem', () => {
 
 	describe('With children', () => {
 		beforeEach(() => {
-			render(
+			renderWithRecoilRoot(
 				<ColumnItem type={Topic.HAPPY} text={startingText}>
 					{() => "I'm a child"}
 				</ColumnItem>

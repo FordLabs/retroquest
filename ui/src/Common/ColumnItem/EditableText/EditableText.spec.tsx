@@ -16,8 +16,12 @@
  */
 
 import * as React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+
+import { DisableDraggableState } from '../../../State/DisableDraggableState';
+import { RecoilObserver } from '../../../Utils/RecoilObserver';
+import renderWithRecoilRoot from '../../../Utils/renderWithRecoilRoot';
 
 import EditableText from './EditableText';
 
@@ -25,22 +29,36 @@ describe('EditableText', () => {
 	const mockSelect = jest.fn();
 	const mockConfirmEdit = jest.fn();
 	const mockCancelEdit = jest.fn();
+	let disableDraggable: boolean | null;
 
 	beforeEach(() => {
+		disableDraggable = null;
 		jest.clearAllMocks();
 	});
 
 	describe('When editing and selectable', () => {
 		beforeEach(() => {
-			render(
-				<EditableText
-					value="sample text"
-					editing={true}
-					selectable={true}
-					onCancel={mockCancelEdit}
-					onConfirm={mockConfirmEdit}
-				/>
+			renderWithRecoilRoot(
+				<>
+					<RecoilObserver
+						recoilState={DisableDraggableState}
+						onChange={(value: boolean) => {
+							disableDraggable = value;
+						}}
+					/>
+					<EditableText
+						value="sample text"
+						editing={true}
+						selectable={true}
+						onCancel={mockCancelEdit}
+						onConfirm={mockConfirmEdit}
+					/>
+				</>
 			);
+		});
+
+		it('should disable drag and drop when editing', () => {
+			expect(disableDraggable).toBeTruthy();
 		});
 
 		it('should not select', () => {
@@ -76,14 +94,26 @@ describe('EditableText', () => {
 
 	describe('When not editing and selectable', () => {
 		beforeEach(() => {
-			render(
-				<EditableText
-					value="sample text"
-					editing={false}
-					selectable={true}
-					onSelect={mockSelect}
-				/>
+			renderWithRecoilRoot(
+				<>
+					<RecoilObserver
+						recoilState={DisableDraggableState}
+						onChange={(value: boolean) => {
+							disableDraggable = value;
+						}}
+					/>
+					<EditableText
+						value="sample text"
+						editing={false}
+						selectable={true}
+						onSelect={mockSelect}
+					/>
+				</>
 			);
+		});
+
+		it('should enable drag and drop when not editing', () => {
+			expect(disableDraggable).toBeFalsy();
 		});
 
 		it('text is readonly and disable', () => {
@@ -100,7 +130,7 @@ describe('EditableText', () => {
 
 	describe('when disabled', () => {
 		beforeEach(() => {
-			render(
+			renderWithRecoilRoot(
 				<EditableText value="sample text" editing={false} disabled={true} />
 			);
 		});
@@ -120,7 +150,7 @@ describe('EditableText', () => {
 
 	describe('When not selectable', () => {
 		beforeEach(() => {
-			render(
+			renderWithRecoilRoot(
 				<EditableText value="sample text" editing={false} selectable={false} />
 			);
 		});

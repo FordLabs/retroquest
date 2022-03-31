@@ -14,7 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { render } from '@testing-library/react';
+import { MutableSnapshot, RecoilRoot } from 'recoil';
 
-.retro-item {
-	margin-bottom: 24px;
-}
+const renderWithRecoilRoot = (
+	element: JSX.Element,
+	initializeState?: (mutableSnapshot: MutableSnapshot) => void
+) => {
+	return render(
+		<RecoilRoot initializeState={initializeState}>{element}</RecoilRoot>
+	);
+};
+
+export default renderWithRecoilRoot;
