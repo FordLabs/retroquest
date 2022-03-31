@@ -19,12 +19,11 @@ import axios from 'axios';
 
 import Board from '../../Types/Board';
 
-import { getArchiveRetroApiPath } from './ApiConstants';
 import getAuthConfig from './getAuthConfig';
 
 const BoardService = {
 	archiveRetro(teamId: string): Promise<void> {
-		const url = `${getArchiveRetroApiPath(teamId)}`;
+		const url = `/api/team/${teamId}/end-retro`;
 		return axios.put(url, getAuthConfig());
 	},
 
