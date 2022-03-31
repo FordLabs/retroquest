@@ -211,6 +211,11 @@ describe('Retro Facilitator Journey', () => {
 	});
 
 	it('Action item actions (create, edit, delete, mark as complete)', () => {
+		cy.intercept(
+			'PUT',
+			`/api/team/${teamCredentials.teamId}/action-item/*/completed`
+		).as('updateCompletedState');
+
 		cy.log('**Should have "Action Items" column header in yellow**');
 		const yellow = 'rgb(241, 196, 15)';
 		cy.findByText('Action Items')
@@ -332,7 +337,12 @@ function shouldEditActionItemTaskAndAssignee(
 }
 
 function shouldMarkAndUnmarkActionItemAsCompleted(actionItemTask: string) {
-	getActionColumnItems().last().should('not.have.class', 'completed');
+	const editButtonSelector = '[data-testid=editButton]';
+	getActionColumnItems()
+		.last()
+		.should('not.have.class', 'completed')
+		.find(editButtonSelector)
+		.should('not.be.disabled');
 
 	cy.getActionItemByTask(actionItemTask)
 		.find('[data-testid=checkboxButton]')
@@ -341,19 +351,27 @@ function shouldMarkAndUnmarkActionItemAsCompleted(actionItemTask: string) {
 	cy.log(`**Mark action item task "${actionItemTask}" as completed**`);
 	cy.get(`@completedButton`).click();
 
+	cy.wait('@updateCompletedState');
+
 	cy.log('**Completed action item should move to bottom of the list**');
 	getActionColumnItems()
 		.should('have.length', 2)
 		.last()
-		.should('have.class', 'completed');
+		.should('have.class', 'completed')
+		.find(editButtonSelector)
+		.should('be.disabled');
 
 	cy.get(`@completedButton`).click();
+
+	cy.wait('@updateCompletedState');
 
 	cy.log('**Unmark action item as completed and move up the list**');
 	getActionColumnItems()
 		.should('have.length', 2)
 		.last()
-		.should('not.have.class', 'completed');
+		.should('not.have.class', 'completed')
+		.find(editButtonSelector)
+		.should('not.be.disabled');
 }
 
 function shouldDeleteActionItem(actionItemTask: string) {
