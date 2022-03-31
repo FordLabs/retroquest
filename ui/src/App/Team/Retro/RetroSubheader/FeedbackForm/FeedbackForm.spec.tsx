@@ -82,7 +82,7 @@ describe('Feedback Form', () => {
 		userEvent.click(screen.getByText('Send!'));
 
 		await waitFor(() =>
-			expect(FeedbackService.addFeedback).toHaveBeenCalledWith({
+			expect(FeedbackService.submitFeedback).toHaveBeenCalledWith({
 				teamId: team.id,
 				stars: 4,
 				comment: fakeComment,
@@ -96,13 +96,13 @@ describe('Feedback Form', () => {
 		userEvent.type(screen.getByLabelText('Feedback Email'), fakeEmail);
 		userEvent.click(screen.getByText('Send!'));
 
-		expect(FeedbackService.addFeedback).not.toHaveBeenCalled();
+		expect(FeedbackService.submitFeedback).not.toHaveBeenCalled();
 	});
 
 	it('should cancel submitting feedback', () => {
 		userEvent.click(screen.getByText('Cancel'));
 
 		expect(modalContent).toBeNull();
-		expect(FeedbackService.addFeedback).not.toHaveBeenCalled();
+		expect(FeedbackService.submitFeedback).not.toHaveBeenCalled();
 	});
 });

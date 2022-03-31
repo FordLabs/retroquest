@@ -23,7 +23,7 @@ import { FEEDBACK_API_PATH } from './ApiConstants';
 import getAuthConfig from './getAuthConfig';
 
 const FeedbackService = {
-	addFeedback(feedback: Feedback) {
+	submitFeedback(feedback: Feedback) {
 		return axios.post(FEEDBACK_API_PATH, feedback, getAuthConfig());
 	},
 };
