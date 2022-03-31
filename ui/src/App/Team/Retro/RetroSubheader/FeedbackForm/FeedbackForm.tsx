@@ -44,7 +44,7 @@ function FeedbackForm() {
 				comment,
 				userEmail,
 			};
-			FeedbackService.addFeedback(feedback)
+			FeedbackService.submitFeedback(feedback)
 				.then(() => closeModal())
 				.catch(console.error);
 		}
