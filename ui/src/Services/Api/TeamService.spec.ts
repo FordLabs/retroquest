@@ -17,22 +17,70 @@
 
 import axios from 'axios';
 
-import TeamService from './TeamService';
+import TeamService, { AuthResponse } from './TeamService';
 
 describe('Team Service', () => {
 	const teamId = 'team-id';
+	const user = {
+		name: 'Julia',
+		password: 'Password1',
+	};
+	const axiosResponse = {
+		data: 'jwt-token-123',
+		headers: { location: teamId },
+	};
 
-	it('should get CSV', async () => {
-		const expectedCSVData = 'column 1, column 2';
-		axios.get = jest.fn().mockResolvedValue({ data: expectedCSVData });
-
-		const actualResponse = await TeamService.getCSV(teamId);
-
-		const expectedUrl = `/api/team/${teamId}/csv`;
-		expect(axios.get).toHaveBeenCalledWith(expectedUrl, {
-			responseType: 'blob',
-			timeout: 30000,
+	describe('login', () => {
+		it('should login to retroquest', async () => {
+			axios.post = jest.fn().mockResolvedValue(axiosResponse);
+			const authResponse: AuthResponse = await TeamService.login(
+				user.name,
+				user.password
+			);
+			expect(authResponse).toEqual({
+				token: authResponse.token,
+				teamId,
+			});
+			expect(axios.post).toHaveBeenCalledWith('/api/team/login', user);
 		});
-		expect(actualResponse).toBe(expectedCSVData);
+	});
+
+	describe('create', () => {
+		it('should create a retroquest team', async () => {
+			axios.post = jest.fn().mockResolvedValue(axiosResponse);
+			const authResponse: AuthResponse = await TeamService.create(
+				user.name,
+				user.password
+			);
+			expect(authResponse).toEqual({
+				token: authResponse.token,
+				teamId,
+			});
+			expect(axios.post).toHaveBeenCalledWith('/api/team', user);
+		});
+	});
+
+	describe('getTeamName', () => {
+		it('should get team name by team id', async () => {
+			axios.get = jest.fn().mockResolvedValue({ data: user.name });
+			const actualTeamName = await TeamService.getTeamName(teamId);
+			expect(actualTeamName).toBe(user.name);
+			expect(axios.get).toHaveBeenCalledWith(`/api/team/${teamId}/name`);
+		});
+	});
+
+	describe('getCSV', () => {
+		it('should get CSV for active retro board', async () => {
+			const expectedCSVData = 'column 1, column 2';
+			axios.get = jest.fn().mockResolvedValue({ data: expectedCSVData });
+
+			const actualResponse = await TeamService.getCSV(teamId);
+
+			expect(actualResponse).toBe(expectedCSVData);
+			expect(axios.get).toHaveBeenCalledWith(`/api/team/${teamId}/csv`, {
+				responseType: 'blob',
+				timeout: 30000,
+			});
+		});
 	});
 });
