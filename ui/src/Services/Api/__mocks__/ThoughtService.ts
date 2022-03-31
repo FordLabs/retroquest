@@ -46,6 +46,7 @@ const ThoughtService = {
 	updateMessage: jest.fn().mockResolvedValue(null),
 	upvoteThought: jest.fn().mockResolvedValue(null),
 	updateDiscussionStatus: jest.fn().mockResolvedValue(null),
+	updateColumn: jest.fn().mockResolvedValue(null),
 };
 
 export default ThoughtService;
