@@ -18,6 +18,7 @@
 package com.ford.labs.retroquest.team;
 
 import com.ford.labs.retroquest.actionitem.ActionItemRepository;
+import com.ford.labs.retroquest.column.Column;
 import com.ford.labs.retroquest.column.ColumnTitle;
 import com.ford.labs.retroquest.column.ColumnTitleRepository;
 import com.ford.labs.retroquest.exception.BoardDoesNotExistException;
@@ -28,6 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.stream.Collectors;
 
 @Service
 public class TeamService {
@@ -68,7 +70,8 @@ public class TeamService {
     public CsvFile buildCsvFileFromTeam(String team) {
         var thoughts = thoughtRepository.findAllByTeamIdAndBoardIdIsNullOrderByTopic(team);
         var actionItems = actionItemRepository.findAllByTeamIdAndArchived(team, false);
-        return new CsvFile(team, thoughts, actionItems);
+        var columns = columnTitleRepository.findAllByTeamId(team).stream().map(Column::fromColumnTitle).collect(Collectors.toList());
+        return new CsvFile(team, thoughts, actionItems, columns);
     }
 
     public Team createNewTeam(CreateTeamRequest createTeamRequest) {

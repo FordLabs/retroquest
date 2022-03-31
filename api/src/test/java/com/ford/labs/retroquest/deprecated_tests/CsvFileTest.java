@@ -18,6 +18,7 @@
 package com.ford.labs.retroquest.deprecated_tests;
 
 import com.ford.labs.retroquest.actionitem.ActionItem;
+import com.ford.labs.retroquest.column.Column;
 import com.ford.labs.retroquest.column.ColumnTitle;
 import com.ford.labs.retroquest.team.CsvFile;
 import com.ford.labs.retroquest.thought.Thought;
@@ -38,32 +39,32 @@ class CsvFileTest {
 
     @Test
     void shouldConvertThoughtsAndActionItemsToACSV() throws IOException {
+        var column1 = new Column(1L, "Happy", "happy");
+        var column2 = new Column(2L, "Meh", "confused");
+        var column3 = new Column(3L, "Sad", "unhappy");
 
-        Thought firstThought = Thought.builder()
-            .topic("confused")
+        var firstThought = Thought.builder()
             .message("stuff \"goes here\"")
             .hearts(5)
             .discussed(false)
-            .columnTitle(ColumnTitle.builder().title("CONFUSED").build())
+            .columnId(2L)
             .build();
 
-        Thought secondThoght = Thought.builder()
-            .topic("happy")
+        var secondThought = Thought.builder()
             .message("a thought, with a comma")
             .hearts(2)
-            .columnTitle(ColumnTitle.builder().title("HAPPY").build())
             .discussed(true)
+            .columnId(1L)
             .build();
 
-        Thought thirdThought = Thought.builder()
-            .topic("unhappy")
+        var thirdThought = Thought.builder()
             .message("sad")
             .hearts(0)
             .discussed(false)
-            .columnTitle(ColumnTitle.builder().title("SAD").build())
+            .columnId(3L)
             .build();
 
-        ActionItem actionItem = ActionItem.builder()
+        var actionItem = ActionItem.builder()
             .task("tasks and \"stuff, yo\"")
             .completed(false)
             .assignee("test user")
@@ -71,8 +72,9 @@ class CsvFileTest {
 
         String actual = new CsvFile(
             "teamName",
-            List.of(firstThought, secondThoght, thirdThought),
-            List.of(actionItem)
+            List.of(firstThought, secondThought, thirdThought),
+            List.of(actionItem),
+            List.of(column1, column2, column3)
         ).getCsvString();
 
         String expected = FileUtils.readFileToString(
@@ -89,7 +91,8 @@ class CsvFileTest {
         String actual = new CsvFile(
                 "teamName",
                 List.of(),
-                List.of(actionItem)
+                List.of(actionItem),
+                List.of()
         ).getCsvString();
         Assertions.assertThat(actual).contains("action item,task,,yes,assignee");
     }
@@ -100,7 +103,8 @@ class CsvFileTest {
         String actual = new CsvFile(
                 "teamName",
                 List.of(),
-                List.of(actionItem)
+                List.of(actionItem),
+                List.of()
         ).getCsvString();
         Assertions.assertThat(actual).contains("action item,task,,no,assignee");
     }
@@ -111,7 +115,8 @@ class CsvFileTest {
         String actual = new CsvFile(
                 "teamName",
                 List.of(),
-                List.of(actionItem)
+                List.of(actionItem),
+                List.of()
         ).getCsvString();
         Assertions.assertThat(actual).contains("action item,task,,no,");
     }
