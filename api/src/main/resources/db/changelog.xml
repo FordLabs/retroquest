@@ -186,4 +186,14 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet id="update-column-id-based-on-topic-and-team" author="nreuter">
+        <update tableName="thought">
+            <column name="column_id" valueComputed="(
+                SELECT column_title.id
+                from column_title
+                where column_title.topic = thought.topic and column_title.team_id = thought.team_id
+            )"/>
+            <where>column_id IS NULL</where>
+        </update>
+    </changeSet>
 </databaseChangeLog>
