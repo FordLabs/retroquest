@@ -34,7 +34,7 @@ function DragAndDrop({ children }: PropsWithChildren<Props>): JSX.Element {
 	const columns = useRecoilValue(ColumnsState);
 
 	const onDragEnd: OnDragEndResponder = useCallback(
-		(result, provided) => {
+		(result) => {
 			if (result.destination) {
 				const thoughtId = parseInt(result.draggableId);
 				const columnId = parseInt(result.destination!.droppableId);
@@ -71,16 +71,7 @@ function DragAndDrop({ children }: PropsWithChildren<Props>): JSX.Element {
 		[columns, setThoughts, team.id]
 	);
 
-	return (
-		<DragDropContext
-			onDragEnd={onDragEnd}
-			onBeforeCapture={() => {
-				console.log('onBeforeCapture');
-			}}
-		>
-			{children}
-		</DragDropContext>
-	);
+	return <DragDropContext onDragEnd={onDragEnd}>{children}</DragDropContext>;
 }
 
 export default DragAndDrop;
