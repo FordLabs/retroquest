@@ -41,104 +41,116 @@ describe('Action Item Service', () => {
 		mockGetCookie.mockReturnValue(fakeToken);
 	});
 
-	it('should retrieve unarchived action items', async () => {
-		const expected = [getMockActionItem(), getMockActionItem()];
-		axios.get = jest.fn().mockResolvedValue({ data: expected });
-		const actual = await ActionItemService.get(teamId, false);
-		expect(actual).toEqual(expected);
-		expect(axios.get).toHaveBeenCalledWith(
-			allActionItemsUrl + '?archived=false',
-			mockConfig
-		);
+	describe('get', () => {
+		it('should retrieve unarchived action items', async () => {
+			const expected = [getMockActionItem(), getMockActionItem()];
+			axios.get = jest.fn().mockResolvedValue({ data: expected });
+			const actual = await ActionItemService.get(teamId, false);
+			expect(actual).toEqual(expected);
+			expect(axios.get).toHaveBeenCalledWith(
+				allActionItemsUrl + '?archived=false',
+				mockConfig
+			);
+		});
+
+		it('should retrieve archived action items', async () => {
+			const expected = [getMockActionItem()];
+			axios.get = jest.fn().mockResolvedValue({ data: expected });
+			const actual = await ActionItemService.get(teamId, true);
+			expect(actual).toEqual(expected);
+			expect(axios.get).toHaveBeenCalledWith(
+				allActionItemsUrl + '?archived=true',
+				mockConfig
+			);
+		});
 	});
 
-	it('should retrieve archived action items', async () => {
-		const expected = [getMockActionItem()];
-		axios.get = jest.fn().mockResolvedValue({ data: expected });
-		const actual = await ActionItemService.get(teamId, true);
-		expect(actual).toEqual(expected);
-		expect(axios.get).toHaveBeenCalledWith(
-			allActionItemsUrl + '?archived=true',
-			mockConfig
-		);
+	describe('create', () => {
+		it('should create an action item', async () => {
+			const expectedResult: Action = getMockActionItem();
+			axios.post = jest.fn().mockResolvedValue({ data: expectedResult });
+
+			const task = 'Action to do';
+			const assignees = 'me, you';
+
+			const actualResult = await ActionItemService.create(
+				teamId,
+				task,
+				assignees
+			);
+			expect(actualResult).toBe(expectedResult);
+			const expectedCreateActionItemRequest: CreateActionItemRequest = {
+				id: null,
+				teamId,
+				task,
+				completed: false,
+				assignee: 'me, you',
+				dateCreated: moment().format(),
+				archived: false,
+			};
+			expect(axios.post).toHaveBeenCalledWith(
+				allActionItemsUrl,
+				expectedCreateActionItemRequest,
+				mockConfig
+			);
+		});
 	});
 
-	it('should create an action item', async () => {
-		const expectedResult: Action = getMockActionItem();
-		axios.post = jest.fn().mockResolvedValue({ data: expectedResult });
-
-		const task = 'Action to do';
-		const assignees = 'me, you';
-
-		const actualResult = await ActionItemService.create(
-			teamId,
-			task,
-			assignees
-		);
-		expect(actualResult).toBe(expectedResult);
-		const expectedCreateActionItemRequest: CreateActionItemRequest = {
-			id: null,
-			teamId,
-			task,
-			completed: false,
-			assignee: 'me, you',
-			dateCreated: moment().format(),
-			archived: false,
-		};
-		expect(axios.post).toHaveBeenCalledWith(
-			allActionItemsUrl,
-			expectedCreateActionItemRequest,
-			mockConfig
-		);
+	describe('delete', () => {
+		it('should delete an action item', async () => {
+			await ActionItemService.delete(teamId, actionItemId);
+			expect(axios.delete).toHaveBeenCalledWith(actionItemByIdUrl, mockConfig);
+		});
 	});
 
-	it('should delete an action item', async () => {
-		await ActionItemService.delete(teamId, actionItemId);
-		expect(axios.delete).toHaveBeenCalledWith(actionItemByIdUrl, mockConfig);
+	describe('updateTask', () => {
+		it('should update an action item task', async () => {
+			const updatedTask = 'Update Task';
+			await ActionItemService.updateTask(teamId, actionItemId, updatedTask);
+			expect(axios.put).toHaveBeenCalledWith(
+				`${actionItemByIdUrl}/task`,
+				{
+					task: updatedTask,
+				},
+				mockConfig
+			);
+		});
 	});
 
-	it('should update an action item task', async () => {
-		const updatedTask = 'Update Task';
-		await ActionItemService.updateTask(teamId, actionItemId, updatedTask);
-		expect(axios.put).toHaveBeenCalledWith(
-			`${actionItemByIdUrl}/task`,
-			{
-				task: updatedTask,
-			},
-			mockConfig
-		);
+	describe('updateAssignee', () => {
+		it('should update an action item Assignee', async () => {
+			const updatedAssignee = 'Updated Assignee';
+			await ActionItemService.updateAssignee(
+				teamId,
+				actionItemId,
+				updatedAssignee
+			);
+			expect(axios.put).toHaveBeenCalledWith(
+				`${actionItemByIdUrl}/assignee`,
+				{
+					assignee: updatedAssignee,
+				},
+				mockConfig
+			);
+		});
 	});
 
-	it('should update an action item Assignee', async () => {
-		const updatedAssignee = 'Updated Assignee';
-		await ActionItemService.updateAssignee(
-			teamId,
-			actionItemId,
-			updatedAssignee
-		);
-		expect(axios.put).toHaveBeenCalledWith(
-			`${actionItemByIdUrl}/assignee`,
-			{
-				assignee: updatedAssignee,
-			},
-			mockConfig
-		);
-	});
-
-	it('should update completion status', async () => {
-		const completed = true;
-		await ActionItemService.updateCompletionStatus(
-			teamId,
-			actionItemId,
-			completed
-		);
-		expect(axios.put).toHaveBeenCalledWith(
-			`${actionItemByIdUrl}/completed`,
-			{
-				completed,
-			},
-			mockConfig
-		);
+	describe('updateCompletionStatus', () => {
+		it('should update completion status', async () => {
+			const completed = true;
+			await ActionItemService.updateCompletionStatus(
+				teamId,
+				actionItemId,
+				completed
+			);
+			expect(axios.put).toHaveBeenCalledWith(
+				`${actionItemByIdUrl}/completed`,
+				{
+					completed,
+				},
+				mockConfig
+			);
+		});
 	});
 
 	describe('parseAssignees', () => {
