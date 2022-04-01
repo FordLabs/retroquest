@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
-spring.datasource.url=jdbc:postgresql://localhost:5432/retroquest
-spring.datasource.username=root
-spring.datasource.password=retroquest
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/retroquest
+    username: root
+    password: retroquest
