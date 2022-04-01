@@ -22,6 +22,8 @@ import com.ford.labs.retroquest.board.Board;
 import com.ford.labs.retroquest.board.BoardRepository;
 import com.ford.labs.retroquest.board.BoardService;
 import com.ford.labs.retroquest.board.Retro;
+import com.ford.labs.retroquest.column.Column;
+import com.ford.labs.retroquest.column.ColumnService;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtService;
 import com.ford.labs.retroquest.websocket.events.WebsocketEndRetroEvent;
@@ -45,30 +47,32 @@ import static org.mockito.Mockito.when;
 
 class BoardServiceTest {
     private final BoardRepository boardRepository = mock(BoardRepository.class);
+    private final ColumnService columnService = mock(ColumnService.class);
     private final ThoughtService thoughtService = mock(ThoughtService.class);
     private final ActionItemService actionItemService = mock(ActionItemService.class);
     private final WebsocketService websocketService = mock(WebsocketService.class);
     private final int pageSize = 2;
 
-    private final BoardService boardService = new BoardService(boardRepository, thoughtService, actionItemService, websocketService, pageSize);
+    private final BoardService boardService = new BoardService(boardRepository, columnService, thoughtService, actionItemService, websocketService, pageSize);
 
     @Test
     void getBoardsForTeamId() {
-        Board expectedBoard = Board.builder()
+        var savedColumns = List.of(new Column(123L, "title", "topic"));
+        var expectedBoard = Board.builder()
             .teamId("team1")
             .dateCreated(LocalDate.of(2012, 12, 12))
             .id(1L)
             .thoughts(List.of())
             .build();
 
-        Board savedBoard = Board.builder()
+        var savedBoard = Board.builder()
             .teamId("team1")
             .dateCreated(LocalDate.of(2012, 12, 12))
             .id(1L)
             .thoughts(List.of())
             .build();
 
-        Retro expectedRetro = Retro.fromBoard(expectedBoard);
+        var expectedRetro = Retro.from(expectedBoard, savedColumns);
 
         final PageRequest pageRequest = PageRequest.of(
             0,
@@ -77,8 +81,8 @@ class BoardServiceTest {
         );
 
 
-        when(boardRepository.findAllByTeamIdOrderByDateCreatedDesc("team1", pageRequest))
-            .thenReturn(List.of(savedBoard));
+        when(boardRepository.findAllByTeamIdOrderByDateCreatedDesc("team1", pageRequest)).thenReturn(List.of(savedBoard));
+        when(columnService.getColumns("team1")).thenReturn(savedColumns);
 
         List<Retro> actualRetros = boardService.getBoardsForTeamId("team1", 0);
 
@@ -89,7 +93,7 @@ class BoardServiceTest {
     @Test
     void getBoardsForTeamId_shouldReturnAPagedResult() {
         var pageSize = 5;
-        var subject = new BoardService(boardRepository, thoughtService, actionItemService, websocketService, pageSize);
+        var subject = new BoardService(boardRepository, columnService, thoughtService, actionItemService, websocketService, pageSize);
 
         final PageRequest pageRequest = PageRequest.of(
             0,

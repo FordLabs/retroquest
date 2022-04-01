@@ -22,7 +22,6 @@ import com.ford.labs.retroquest.thought.Thought;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public record Retro(
     Long id,
@@ -31,19 +30,13 @@ public record Retro(
     List<Thought> thoughts,
     List<Column> columns
 ) {
-    public static Retro fromBoard(Board board) {
-        var calculatedColumns = board.getThoughts().stream()
-            .map(Thought::getColumnTitle)
-            .distinct()
-            .map(Column::fromColumnTitle)
-            .sorted()
-            .collect(Collectors.toList());
+    public static Retro from(Board board, List<Column> columns) {
         return new Retro(
             board.getId(),
             board.getTeamId(),
             board.getDateCreated(),
             board.getThoughts(),
-            calculatedColumns
+            columns.stream().sorted().toList()
         );
     }
 }
