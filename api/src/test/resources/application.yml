@@ -15,23 +15,27 @@
 # limitations under the License.
 #
 
-spring.data.jpa.repositories.enabled=true
-spring.jpa.show-sql=false
-spring.jpa.hibernate.ddl-auto=validate
-spring.liquibase.change-log=db/changelog.xml
+retroquest:
+  archive:
+    thought:
+      page-size: 5
+  security:
+    require-https: false
+    jwt-signing-secret: IMSOSECRETYOUDONTEVENKNOW
 
-jwt.signing.secret=IMSOSECRETYOUDONTEVENKNOW
-com.retroquest.requirehttps=false
-
-# H2
-spring.h2.console.enabled=true
-spring.h2.console.path=/h2
-
-# Datasource
-spring.datasource.url=jdbc:h2:mem:testdb
-spring.datasource.username=sa
-spring.datasource.password=
-spring.datasource.driver-class-name=org.h2.Driver
-
-spring.flyway.locations=classpath:db/h2
-app.archive.thought.pageSize=5
+spring:
+  data:
+    jpa:
+      repositories:
+        enabled: true
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  liquibase:
+    change-log: db/changelog.xml
