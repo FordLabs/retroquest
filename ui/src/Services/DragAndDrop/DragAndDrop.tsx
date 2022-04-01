@@ -35,38 +35,36 @@ function DragAndDrop({ children }: PropsWithChildren<Props>): JSX.Element {
 
 	const onDragEnd: OnDragEndResponder = useCallback(
 		(result) => {
-			if (result.destination) {
-				const thoughtId = parseInt(result.draggableId);
-				const columnId = parseInt(result.destination!.droppableId);
+			if (!result.destination) return;
 
-				let oldColumnTopic: ThoughtTopic;
-				const newColumn = columns.find((c) => c.id === columnId);
+			const thoughtId = parseInt(result.draggableId);
+			const columnId = parseInt(result.destination!.droppableId);
 
-				if (newColumn) {
-					setThoughts((currentState: Thought[]) => {
-						return currentState.map((thought) => {
-							if (thought.id === thoughtId) {
-								oldColumnTopic = thought.topic;
-								return { ...thought, topic: newColumn.topic };
-							}
-							return thought;
-						});
-					});
-					ThoughtService.updateColumn(team.id, thoughtId, columnId).catch(
-						() => {
-							if (oldColumnTopic) {
-								setThoughts((currentState: Thought[]) => {
-									return currentState.map((thought) =>
-										thought.id === thoughtId
-											? { ...thought, topic: oldColumnTopic }
-											: thought
-									);
-								});
-							}
-						}
+			let oldColumnTopic: ThoughtTopic;
+			const newColumn = columns.find((c) => c.id === columnId);
+
+			if (!newColumn) return;
+
+			setThoughts((currentState: Thought[]) => {
+				return currentState.map((thought) => {
+					if (thought.id === thoughtId) {
+						oldColumnTopic = thought.topic;
+						return { ...thought, topic: newColumn.topic };
+					}
+					return thought;
+				});
+			});
+			ThoughtService.updateColumn(team.id, thoughtId, columnId).catch(() => {
+				if (!oldColumnTopic) return;
+
+				setThoughts((currentState: Thought[]) => {
+					return currentState.map((thought) =>
+						thought.id === thoughtId
+							? { ...thought, topic: oldColumnTopic }
+							: thought
 					);
-				}
-			}
+				});
+			});
 		},
 		[columns, setThoughts, team.id]
 	);
