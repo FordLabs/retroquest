@@ -15,9 +15,13 @@
  * limitations under the License.
  */
 
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+
+import CookieService from '../CookieService';
 
 import TeamService, { AuthResponse } from './TeamService';
+
+jest.mock('../CookieService');
 
 describe('Team Service', () => {
 	const teamId = 'team-id';
@@ -80,6 +84,110 @@ describe('Team Service', () => {
 			expect(axios.get).toHaveBeenCalledWith(`/api/team/${teamId}/csv`, {
 				responseType: 'blob',
 				timeout: 30000,
+			});
+		});
+	});
+
+	describe('onResponseInterceptRejection', () => {
+		let location: (string | Location) & Location;
+		let mockAssign = jest.fn();
+
+		beforeEach(() => {
+			mockAssign = jest.fn();
+			location = window.location;
+			Reflect.deleteProperty(window, 'location');
+
+			Object.defineProperty(window, 'location', {
+				value: { pathname: '/', assign: mockAssign },
+				writable: true,
+			});
+		});
+
+		afterEach(() => {
+			window.location = location;
+		});
+
+		describe('If error status is 401 unauthorized', () => {
+			let returnedAxiosError: AxiosError;
+			const axiosError = Object.assign(new Error('You are not authorized.'), {
+				response: { status: 401 },
+			}) as unknown as AxiosError;
+
+			it('should clear token', async () => {
+				await TeamService.onResponseInterceptRejection(axiosError)
+					.catch(jest.fn())
+					.finally(() => expect(CookieService.clearToken).toHaveBeenCalled());
+			});
+
+			it('should return a rejected promise containing error', async () => {
+				await TeamService.onResponseInterceptRejection(axiosError)
+					.catch((error) => {
+						returnedAxiosError = error;
+					})
+					.finally(() => expect(returnedAxiosError).toEqual(axiosError));
+			});
+
+			it('should redirect to login page if NOT already on login or create page', async () => {
+				window.location.pathname = '/team/superwoman';
+				await TeamService.onResponseInterceptRejection(axiosError)
+					.catch(jest.fn())
+					.finally(() => expect(mockAssign).toHaveBeenCalledWith('/login'));
+			});
+
+			it('should NOT redirect to login page if already on the login page', async () => {
+				window.location.pathname = '/login';
+				await TeamService.onResponseInterceptRejection(axiosError)
+					.catch(jest.fn())
+					.finally(() => expect(mockAssign).not.toHaveBeenCalled());
+			});
+
+			it('should NOT redirect to login page if already on the create page', async () => {
+				window.location.pathname = '/create';
+				await TeamService.onResponseInterceptRejection(axiosError)
+					.catch(jest.fn())
+					.finally(() => expect(mockAssign).not.toHaveBeenCalled());
+			});
+		});
+
+		describe('If error status is 403 forbidden', () => {
+			let returnedAxiosError: AxiosError;
+			const axiosError = Object.assign(new Error('You are forbidden.'), {
+				response: { status: 403 },
+			}) as unknown as AxiosError;
+
+			it('should clear token', async () => {
+				await TeamService.onResponseInterceptRejection(axiosError)
+					.catch(jest.fn())
+					.finally(() => expect(CookieService.clearToken).toHaveBeenCalled());
+			});
+
+			it('should return a rejected promise containing error', async () => {
+				await TeamService.onResponseInterceptRejection(axiosError)
+					.catch((error) => {
+						returnedAxiosError = error;
+					})
+					.finally(() => expect(returnedAxiosError).toEqual(axiosError));
+			});
+
+			it('should redirect to login page if NOT already on login or create page', async () => {
+				window.location.pathname = '/team/superwoman';
+				await TeamService.onResponseInterceptRejection(axiosError)
+					.catch(jest.fn())
+					.finally(() => expect(mockAssign).toHaveBeenCalledWith('/login'));
+			});
+
+			it('should NOT redirect to login page if already on the login page', async () => {
+				window.location.pathname = '/login';
+				await TeamService.onResponseInterceptRejection(axiosError)
+					.catch(jest.fn())
+					.finally(() => expect(mockAssign).not.toHaveBeenCalled());
+			});
+
+			it('should NOT redirect to login page if already on the create page', async () => {
+				window.location.pathname = '/create';
+				await TeamService.onResponseInterceptRejection(axiosError)
+					.catch(jest.fn())
+					.finally(() => expect(mockAssign).not.toHaveBeenCalled());
 			});
 		});
 	});
