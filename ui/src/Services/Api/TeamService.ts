@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
 import { CREATE_TEAM_PAGE_PATH, LOGIN_PAGE_PATH } from '../../RouteConstants';
 import CookieService from '../CookieService';
@@ -34,25 +34,6 @@ export interface AuthResponse {
 
 const UNAUTHORIZED_STATUS = 401;
 const FORBIDDEN_STATUS = 403;
-axios.interceptors.response.use(
-	(response) => response,
-	(error) => {
-		const { status } = error?.response;
-
-		if (status === UNAUTHORIZED_STATUS || status === FORBIDDEN_STATUS) {
-			CookieService.clearToken();
-
-			const { pathname } = window.location;
-			const isLoginPage = pathname.includes(LOGIN_PAGE_PATH);
-			const isCreateNewTeamPage = pathname === CREATE_TEAM_PAGE_PATH;
-
-			if (!isLoginPage && !isCreateNewTeamPage) {
-				window.location.pathname = LOGIN_PAGE_PATH;
-			}
-		}
-		return Promise.reject(error);
-	}
-);
 
 const returnTokenAndTeamId = (response: AxiosResponse): AuthResponse => ({
 	token: response.data,
@@ -86,6 +67,28 @@ const TeamService = {
 			})
 			.then((response) => response.data);
 	},
+
+	onResponseInterceptRejection(error: AxiosError): Promise<AxiosError> {
+		const { status } = error?.response || {};
+
+		if (status === UNAUTHORIZED_STATUS || status === FORBIDDEN_STATUS) {
+			CookieService.clearToken();
+
+			const { pathname } = window.location;
+			const isLoginPage = pathname.includes(LOGIN_PAGE_PATH);
+			const isCreateNewTeamPage = pathname === CREATE_TEAM_PAGE_PATH;
+
+			if (!isLoginPage && !isCreateNewTeamPage) {
+				window.location.assign(LOGIN_PAGE_PATH);
+			}
+		}
+		return Promise.reject(error);
+	},
 };
+
+axios.interceptors.response.use(
+	(response) => response,
+	TeamService.onResponseInterceptRejection
+);
 
 export default TeamService;
