@@ -104,7 +104,6 @@ public class ThoughtService {
         thought.setBoardId(boardId);
 
         var columnTitle = columnTitleRepository.findByTeamIdAndTopic(teamId, thought.getTopic());
-        thought.setColumnTitle(columnTitle);
         thought.setColumnId(columnTitle.getId());
         return thoughtRepository.save(thought);
     }

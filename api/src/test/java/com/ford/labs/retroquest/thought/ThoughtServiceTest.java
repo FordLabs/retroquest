@@ -197,7 +197,6 @@ class ThoughtServiceTest {
                 topic,
                 false,
                 "the-team",
-                columnTitle,
                 null,
                 6789L
         );
