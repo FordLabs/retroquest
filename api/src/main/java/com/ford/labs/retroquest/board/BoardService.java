@@ -18,6 +18,7 @@
 package com.ford.labs.retroquest.board;
 
 import com.ford.labs.retroquest.actionitem.ActionItemService;
+import com.ford.labs.retroquest.column.ColumnService;
 import com.ford.labs.retroquest.thought.ThoughtService;
 import com.ford.labs.retroquest.websocket.WebsocketService;
 import com.ford.labs.retroquest.websocket.events.WebsocketEndRetroEvent;
@@ -33,6 +34,7 @@ import java.util.stream.Collectors;
 @Service
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final ColumnService columnService;
     private final ThoughtService thoughtService;
     private final ActionItemService actionItemService;
     private final WebsocketService websocketService;
@@ -40,12 +42,14 @@ public class BoardService {
 
     public BoardService(
         BoardRepository boardRepository,
+        ColumnService columnService,
         ThoughtService thoughtService,
         ActionItemService actionItemService,
         WebsocketService websocketService,
         @Value("${retroquest.archive.thought.page-size}") int pageSize
     ) {
         this.boardRepository = boardRepository;
+        this.columnService = columnService;
         this.thoughtService = thoughtService;
         this.actionItemService = actionItemService;
         this.websocketService = websocketService;
@@ -53,13 +57,14 @@ public class BoardService {
     }
 
     public List<Retro> getBoardsForTeamId(String teamId, Integer pageIndex) {
+        var columns = columnService.getColumns(teamId);
         return this.boardRepository.findAllByTeamIdOrderByDateCreatedDesc(teamId,
             PageRequest.of(
                 pageIndex,
                 pageSize,
                 Sort.by(Sort.Order.desc("dateCreated"))
             )
-        ).stream().map(Retro::fromBoard).collect(Collectors.toList());
+        ).stream().map(board -> Retro.from(board, columns)).collect(Collectors.toList());
     }
 
     public Board createBoard(String teamId) {

@@ -17,24 +17,23 @@
 
 package com.ford.labs.retroquest.board;
 
-import com.ford.labs.retroquest.column.ColumnTitle;
+import com.ford.labs.retroquest.column.Column;
 import com.ford.labs.retroquest.thought.Thought;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.ford.labs.retroquest.column.Column.fromColumnTitle;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RetroTest {
 
     @Test
-    public void fromBoard_returnsAllExpectedBoardFields() {
-        var columnTitle = new ColumnTitle(3L, "topic", "title", "teamId");
-        var thought = new Thought(2L, "A message", 0, "topic", false, "teamId", columnTitle, 1L, 3L);
+    public void from_returnsAllExpectedBoardFields() {
+        var column = new Column(3L, "title", "topic");
+        var thought = new Thought(2L, "A message", 0, "topic", false, "teamId", null, 1L, 3L);
         var board = new Board(1L, "teamId", LocalDate.now(), List.of(thought));
-        var retro = Retro.fromBoard(board);
+        var retro = Retro.from(board, List.of(column));
 
         assertThat(retro.id()).isEqualTo(board.getId());
         assertThat(retro.teamId()).isEqualTo(board.getTeamId());
@@ -43,26 +42,13 @@ public class RetroTest {
     }
 
     @Test
-    public void fromBoard_returnsDistinctColumnsFromThoughts() {
-        var columnTitle1 = new ColumnTitle(3L, "topic", "title", "teamId");
-        var thought1 = new Thought(2L, "A message", 0, "topic", false, "teamId", columnTitle1, 1L, 3L);
-        var thought2 = new Thought(4L, "A message", 0, "topic", false, "teamId", columnTitle1, 1L, 3L);
-        var board = new Board(1L, "teamId", LocalDate.now(), List.of(thought1, thought2));
-        var retro = Retro.fromBoard(board);
+    public void from_returnsColumnsInSavedOrder() {
+        var column1 = new Column(2L, "topic", "title");
+        var column2 = new Column(3L, "topic", "title");
+        var board = new Board(1L, "teamId", LocalDate.now(), List.of());
+        var retro = Retro.from(board, List.of(column2, column1));
 
-        assertThat(retro.columns()).isEqualTo(List.of(fromColumnTitle(columnTitle1)));
-    }
-
-    @Test
-    public void fromBoard_returnsColumnsInSavedOrder() {
-        var columnTitle1 = new ColumnTitle(2L, "topic", "title", "teamId");
-        var columnTitle2 = new ColumnTitle(3L, "topic", "title", "teamId");
-        var thought1 = new Thought(4L, "A message", 0, "topic", false, "teamId", columnTitle2, 1L, 3L);
-        var thought2 = new Thought(5L, "A message", 0, "topic", false, "teamId", columnTitle1, 1L, 2L);
-        var board = new Board(1L, "teamId", LocalDate.now(), List.of(thought1, thought2));
-        var retro = Retro.fromBoard(board);
-
-        assertThat(retro.columns()).isEqualTo(List.of(fromColumnTitle(columnTitle1), fromColumnTitle(columnTitle2)));
+        assertThat(retro.columns()).isEqualTo(List.of(column1, column2));
     }
 
 }
