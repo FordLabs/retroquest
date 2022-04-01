@@ -17,10 +17,12 @@
 
 package com.ford.labs.retroquest.thought;
 
-import com.ford.labs.retroquest.column.ColumnTitle;
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Data
 @Getter
@@ -43,20 +45,6 @@ public class Thought {
     private boolean discussed;
     private String teamId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(
-        name = "topic",
-        referencedColumnName = "topic",
-        insertable = false,
-        updatable = false
-    )
-    @JoinColumn(
-        name = "teamId",
-        referencedColumnName = "teamId",
-        insertable = false,
-        updatable = false
-    )
-    private ColumnTitle columnTitle;
     private Long boardId;
     private Long columnId;
 }

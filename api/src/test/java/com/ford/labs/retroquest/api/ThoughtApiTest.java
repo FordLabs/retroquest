@@ -171,7 +171,7 @@ class ThoughtApiTest extends ApiTestBase {
         assertThat(updatedThought.getId()).isEqualTo(savedThought.getId());
         assertThat(updatedThought.getMessage()).isEqualTo(savedThought.getMessage());
         assertThat(updatedThought.getTopic()).isEqualTo(newSavedColumn.getTopic());
-        assertThat(updatedThought.getColumnTitle()).isEqualTo(newSavedColumn);
+        assertThat(updatedThought.getColumnId()).isEqualTo(newSavedColumn.getId());
     }
 
     @Test

@@ -142,7 +142,6 @@ class BoardServiceTest {
                     null,
                     false,
                     expectedTeamId,
-                    null,
                     expectedBoardId,
                     null
                 )
@@ -158,7 +157,6 @@ class BoardServiceTest {
                     null,
                     false,
                     expectedTeamId,
-                    null,
                     null,
                     null
                 )
