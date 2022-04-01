@@ -66,7 +66,8 @@ export const SortableThoughtsByTopicState = atomFamily<
 			({ get }) => {
 				const thoughts = get(ThoughtsByTopicState(params.topic));
 				const sortedByIfDiscussed = [...thoughts].sort((a, b) => {
-					return a.discussed === b.discussed ? 0 : a.discussed ? 1 : -1;
+					if (a.discussed === b.discussed) return 0;
+					return a.discussed ? 1 : -1;
 				});
 				return params.sorted
 					? sortedByIfDiscussed.sort((a, b) => b.hearts - a.hearts)
