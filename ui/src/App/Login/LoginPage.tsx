@@ -25,7 +25,6 @@ import useAuth from '../../Hooks/useAuth';
 import useTeamFromRoute from '../../Hooks/useTeamFromRoute';
 import { CREATE_TEAM_PAGE_PATH } from '../../RouteConstants';
 import TeamService from '../../Services/Api/TeamService';
-import { validatePassword, validateTeamName } from '../../Utils/StringUtils';
 
 function LoginPage(): JSX.Element {
 	const { login } = useAuth();
@@ -34,24 +33,14 @@ function LoginPage(): JSX.Element {
 	const [teamName, setTeamName] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
 
-	const [isValidated, setIsValidated] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
 	useEffect(() => setTeamName(team.name), [team.name]);
 
-	const teamNameErrorMessage = validateTeamName(teamName);
-	const passwordErrorMessage = validatePassword(password);
-
-	const captureErrors = () => {
-		const errors = [];
-		if (teamNameErrorMessage) errors.push(teamNameErrorMessage);
-		if (passwordErrorMessage) errors.push(passwordErrorMessage);
-		setErrorMessages(errors);
-	};
-
-	const loginTeam = () => {
+	function onLoginFormSubmit() {
 		setIsLoading(true);
+
 		TeamService.login(teamName, password)
 			.then(login)
 			.catch(() => {
@@ -60,17 +49,6 @@ function LoginPage(): JSX.Element {
 				]);
 			})
 			.finally(() => setIsLoading(false));
-	};
-
-	function onLoginFormSubmit() {
-		setIsValidated(true);
-		setErrorMessages([]);
-
-		if (teamNameErrorMessage || passwordErrorMessage) {
-			captureErrors();
-		} else {
-			loginTeam();
-		}
 	}
 
 	return (
@@ -90,7 +68,6 @@ function LoginPage(): JSX.Element {
 						setTeamName(updatedTeamName);
 						setErrorMessages([]);
 					}}
-					invalid={isValidated && !!teamNameErrorMessage}
 					readOnly={isLoading}
 				/>
 				<InputPassword
@@ -99,7 +76,6 @@ function LoginPage(): JSX.Element {
 						setPassword(updatedPassword);
 						setErrorMessages([]);
 					}}
-					invalid={isValidated && !!passwordErrorMessage}
 					readOnly={isLoading}
 				/>
 			</Form>
