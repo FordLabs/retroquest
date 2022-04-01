@@ -1,0 +1,7 @@
+retroquest:
+  archive:
+    thought:
+      page-size: ${app.archive.thought.pageSize}
+  security:
+    require-https: ${com.retroquest.requirehttps}
+    jwt-signing-secret: ${jwt.signing.secret}
