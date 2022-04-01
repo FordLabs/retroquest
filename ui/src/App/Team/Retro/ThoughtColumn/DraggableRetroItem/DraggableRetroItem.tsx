@@ -43,7 +43,7 @@ const DraggableRetroItem = (props: Props): JSX.Element => {
 			disableInteractiveElementBlocking
 			isDragDisabled={disableDraggable}
 		>
-			{(provided, snapshot) => (
+			{(provided) => (
 				<li
 					ref={provided.innerRef}
 					{...provided.draggableProps}
