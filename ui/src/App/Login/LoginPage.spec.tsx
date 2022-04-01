@@ -116,32 +116,6 @@ describe('LoginPage.spec.tsx', () => {
 	});
 
 	describe('Form errors', () => {
-		it('should show validation message when team name is not valid', async () => {
-			expect(screen.queryByTestId('inputValidationMessage')).toBeNull();
-
-			typeIntoPasswordInput(validPassword);
-
-			const invalidTeamName = '&%(#';
-			typeIntoTeamNameInput(invalidTeamName);
-
-			fireEvent.submit(getTeamNameInput());
-
-			expect(screen.getByTestId('inputValidationMessage')).toBeDefined();
-		});
-
-		it('should show validation message when password is not valid', async () => {
-			expect(screen.queryByTestId('inputValidationMessage')).toBeNull();
-
-			typeIntoTeamNameInput(validTeamName);
-
-			const invalidPassword = 'MissingANumber';
-			typeIntoPasswordInput(invalidPassword);
-
-			fireEvent.submit(getPasswordInput());
-
-			expect(screen.getByTestId('inputValidationMessage')).toBeDefined();
-		});
-
 		it('should show error if login was unsuccessful', async () => {
 			TeamService.login = jest.fn().mockRejectedValue(new Error('Async error'));
 
