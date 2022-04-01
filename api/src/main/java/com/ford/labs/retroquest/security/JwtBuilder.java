@@ -30,7 +30,7 @@ public class JwtBuilder {
 
     private final String jwtSecret;
 
-    public JwtBuilder(@Value("${jwt.signing.secret}") String jwtSecret){
+    public JwtBuilder(@Value("${retroquest.security.jwt-signing-secret}") String jwtSecret){
         this.jwtSecret = jwtSecret;
     }
 

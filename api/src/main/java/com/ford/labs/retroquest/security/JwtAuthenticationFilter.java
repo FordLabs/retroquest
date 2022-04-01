@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final String jwtSecret;
 
-    public JwtAuthenticationFilter(@Value("${jwt.signing.secret}") String jwtSecret){
+    public JwtAuthenticationFilter(@Value("${retroquest.security.jwt-signing-secret}") String jwtSecret) {
         this.jwtSecret = jwtSecret;
     }
 
@@ -44,9 +44,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         FilterChain filterChain
     ) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
-        if(authHeader != null && !authHeader.contains("Basic")) {
+        if (authHeader != null && !authHeader.contains("Basic")) {
             String token = authHeader.replace("Bearer ", "");
-            if(!token.isEmpty()){
+            if (!token.isEmpty()) {
                 SecurityContextHolder.getContext().setAuthentication(new JwtAuthentication(token, false, jwtSecret));
             }
         }

@@ -45,7 +45,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private final String jwtSecret;
 
-    public WebSocketConfig(@Value("${jwt.signing.secret}") String jwtSecret) {
+    public WebSocketConfig(@Value("${retroquest.security.jwt-signing-secret}") String jwtSecret) {
         this.jwtSecret = jwtSecret;
     }
 

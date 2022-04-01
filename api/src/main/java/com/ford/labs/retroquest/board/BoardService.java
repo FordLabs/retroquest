@@ -18,10 +18,9 @@
 package com.ford.labs.retroquest.board;
 
 import com.ford.labs.retroquest.actionitem.ActionItemService;
-import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtService;
-import com.ford.labs.retroquest.websocket.events.WebsocketEndRetroEvent;
 import com.ford.labs.retroquest.websocket.WebsocketService;
+import com.ford.labs.retroquest.websocket.events.WebsocketEndRetroEvent;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -44,7 +43,7 @@ public class BoardService {
         ThoughtService thoughtService,
         ActionItemService actionItemService,
         WebsocketService websocketService,
-        @Value("${app.archive.thought.pageSize}") int pageSize
+        @Value("${retroquest.archive.thought.page-size}") int pageSize
     ) {
         this.boardRepository = boardRepository;
         this.thoughtService = thoughtService;
@@ -55,11 +54,11 @@ public class BoardService {
 
     public List<Retro> getBoardsForTeamId(String teamId, Integer pageIndex) {
         return this.boardRepository.findAllByTeamIdOrderByDateCreatedDesc(teamId,
-                PageRequest.of(
-                        pageIndex,
-                        pageSize,
-                        Sort.by(Sort.Order.desc("dateCreated"))
-                )
+            PageRequest.of(
+                pageIndex,
+                pageSize,
+                Sort.by(Sort.Order.desc("dateCreated"))
+            )
         ).stream().map(Retro::fromBoard).collect(Collectors.toList());
     }
 
@@ -71,7 +70,7 @@ public class BoardService {
     }
 
     public void endRetro(String teamId) {
-        if(this.thoughtService.fetchAllActiveThoughts(teamId).size() > 0) {
+        if (this.thoughtService.fetchAllActiveThoughts(teamId).size() > 0) {
             var createdBoard = createBoard(teamId);
             var thoughts = this.thoughtService.fetchAllActiveThoughts(teamId);
             thoughts.forEach(thought -> thought.setBoardId(createdBoard.getId()));
