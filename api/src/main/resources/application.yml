@@ -15,11 +15,13 @@
 # limitations under the License.
 #
 
-
-jwt.signing.secret: ASLKJHDKJHikjsdkjhg1iu2heiIUGEIUQ@IUeiUIU@iyrgiu2g3i
-com.retroquest.requirehttps: false
-
-app.archive.thought.pageSize: 30
+retroquest:
+  archive:
+    thought:
+      page-size: 30
+  security:
+    require-https: false
+    jwt-signing-secret: ASLKJHDKJHikjsdkjhg1iu2heiIUGEIUQ@IUeiUIU@iyrgiu2g3i # This is a default value. Ensure you override this value on any real deployments.
 
 spring:
   data:

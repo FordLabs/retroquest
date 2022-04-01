@@ -24,7 +24,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -42,13 +41,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
-    @Value("${com.retroquest.requirehttps}")
-    private boolean requireHttps;
+    private final boolean requireHttps;
 
     @Autowired
-    public WebSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, JwtAuthenticationProvider jwtAuthenticationProvider) {
+    public WebSecurityConfig(
+        JwtAuthenticationFilter jwtAuthenticationFilter,
+        JwtAuthenticationProvider jwtAuthenticationProvider,
+        @Value("${retroquest.security.require-https}") boolean requireHttps
+    ) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.jwtAuthenticationProvider = jwtAuthenticationProvider;
+        this.requireHttps = requireHttps;
     }
 
     @Bean
@@ -63,12 +66,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         }
 
         httpSecurity
-                .authorizeRequests()
-                .antMatchers("/**").permitAll()
-                .anyRequest().authenticated()
-                .and().exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(UNAUTHORIZED)))
-                .httpBasic()
-                .and().addFilterAfter(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
+            .authorizeRequests()
+            .antMatchers("/**").permitAll()
+            .anyRequest().authenticated()
+            .and().exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(UNAUTHORIZED)))
+            .httpBasic()
+            .and().addFilterAfter(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
 
         httpSecurity.csrf().disable();
         displayH2ConsoleToDevs(httpSecurity);
