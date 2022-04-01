@@ -83,7 +83,7 @@ function ThoughtColumn(props: Props) {
 			/>
 			<CountSeparator count={activeThoughtCount} />
 			<Droppable droppableId={`${column.id}`} type="THOUGHT">
-				{(provided, snapshot) => (
+				{(provided) => (
 					<ul
 						className="thought-list"
 						data-testid={`droppableThoughtColumn-${column.topic}`}
