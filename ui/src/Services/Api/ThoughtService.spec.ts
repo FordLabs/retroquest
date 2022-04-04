@@ -36,7 +36,7 @@ describe('Thought Service', () => {
 
 	describe('create', () => {
 		it('should create a new thought for column', async () => {
-			const expectedThought = getMockThought(Topic.HAPPY);
+			const expectedThought = getMockThought(Topic.HAPPY, 1);
 			axios.post = jest.fn().mockResolvedValue({ data: expectedThought });
 
 			const createThoughtRequest: CreateThoughtRequest = {
@@ -46,6 +46,7 @@ describe('Thought Service', () => {
 				topic: Topic.HAPPY,
 				discussed: false,
 				teamId,
+				columnId: 10,
 			};
 
 			const actualThought = await ThoughtService.create(
@@ -64,9 +65,9 @@ describe('Thought Service', () => {
 	describe('getThoughts', () => {
 		it('should get all thoughts for current retro', async () => {
 			const expectedThoughts = [
-				getMockThought(Topic.HAPPY),
-				getMockThought(Topic.UNHAPPY),
-				getMockThought(Topic.CONFUSED),
+				getMockThought(Topic.HAPPY, 1),
+				getMockThought(Topic.UNHAPPY, 3),
+				getMockThought(Topic.CONFUSED, 2),
 			];
 			axios.get = jest.fn().mockResolvedValue({ data: expectedThoughts });
 			const actualThoughts = await ThoughtService.getThoughts(teamId);

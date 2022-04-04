@@ -51,6 +51,7 @@ describe('Retro Item', () => {
 		hearts: 3,
 		discussed: false,
 		topic: Topic.HAPPY,
+		columnId: 10,
 	};
 
 	beforeEach(() => {

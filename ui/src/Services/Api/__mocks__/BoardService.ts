@@ -30,6 +30,7 @@ export const mockBoards: Board[] = [
 				hearts: 0,
 				discussed: false,
 				topic: Topic.HAPPY,
+				columnId: 10,
 			},
 		],
 		columns: [

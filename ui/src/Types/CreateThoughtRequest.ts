@@ -15,9 +15,12 @@
  * limitations under the License.
  */
 
+import { ThoughtTopic } from './Topic';
+
 export function getCreateThoughtRequest(
 	teamId: string,
-	topic: string,
+	columnId: number,
+	topic: ThoughtTopic,
 	message: string
 ): CreateThoughtRequest {
 	return {
@@ -27,6 +30,7 @@ export function getCreateThoughtRequest(
 		message,
 		hearts: 0,
 		discussed: false,
+		columnId,
 	};
 }
 
@@ -37,6 +41,7 @@ interface CreateThoughtRequest {
 	topic: string;
 	discussed: boolean;
 	teamId: string;
+	columnId: number;
 }
 
 export default CreateThoughtRequest;

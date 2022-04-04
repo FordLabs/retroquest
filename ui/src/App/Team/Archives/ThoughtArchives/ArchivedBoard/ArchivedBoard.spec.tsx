@@ -86,6 +86,7 @@ const testBoard: Board = {
 			hearts: 20,
 			discussed: false,
 			topic: Topic.HAPPY,
+			columnId: 10,
 		},
 		{
 			id: 101,
@@ -93,6 +94,7 @@ const testBoard: Board = {
 			hearts: 30,
 			discussed: false,
 			topic: Topic.UNHAPPY,
+			columnId: 11,
 		},
 		{
 			id: 102,
@@ -100,6 +102,7 @@ const testBoard: Board = {
 			hearts: 10,
 			discussed: true,
 			topic: Topic.UNHAPPY,
+			columnId: 11,
 		},
 		{
 			id: 103,
@@ -107,6 +110,7 @@ const testBoard: Board = {
 			hearts: 10,
 			discussed: false,
 			topic: Topic.HAPPY,
+			columnId: 10,
 		},
 	],
 	columns: [
@@ -134,6 +138,7 @@ const singleColumnTestBoard: Board = {
 			hearts: 10,
 			discussed: false,
 			topic: Topic.HAPPY,
+			columnId: 10,
 		},
 		{
 			id: 101,
@@ -141,6 +146,7 @@ const singleColumnTestBoard: Board = {
 			hearts: 30,
 			discussed: true,
 			topic: Topic.HAPPY,
+			columnId: 10,
 		},
 		{
 			id: 102,
@@ -148,6 +154,7 @@ const singleColumnTestBoard: Board = {
 			hearts: 10,
 			discussed: true,
 			topic: Topic.HAPPY,
+			columnId: 10,
 		},
 		{
 			id: 103,
@@ -155,6 +162,7 @@ const singleColumnTestBoard: Board = {
 			hearts: 20,
 			discussed: false,
 			topic: Topic.HAPPY,
+			columnId: 10,
 		},
 	],
 	columns: [
