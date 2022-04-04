@@ -187,7 +187,8 @@ class ThoughtServiceTest {
             topic,
             false,
             "the-team",
-            null
+            null,
+            columnTitle.getId()
         );
 
         var expectedThought = new Thought(

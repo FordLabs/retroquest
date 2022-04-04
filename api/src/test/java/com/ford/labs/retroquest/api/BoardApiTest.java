@@ -56,13 +56,15 @@ class BoardApiTest extends ApiTestBase {
     @Autowired
     private ThoughtService thoughtService;
 
+    private ColumnTitle columnTitle;
+
     @BeforeEach
     void setup() {
         thoughtRepository.deleteAllInBatch();
         columnTitleRepository.deleteAllInBatch();
         boardRepository.deleteAllInBatch();
 
-        columnTitleRepository.save(new ColumnTitle(null, "happy", "Happy", teamId));
+        columnTitle = columnTitleRepository.save(new ColumnTitle(null, "happy", "Happy", teamId));
     }
 
     @Test
@@ -112,7 +114,7 @@ class BoardApiTest extends ApiTestBase {
     @Test
     public void endRetro_ShouldSaveABoardWithThoughts() throws Exception {
         Thought savedThought = thoughtService.createThought(teamId, new CreateThoughtRequest(null, "TEST_MESSAGE", 0,
-            "happy", false, teamId, null));
+            "happy", false, teamId, null, columnTitle.getId()));
 
         mockMvc.perform(put(format("/api/team/%s/end-retro", teamId))
                 .header("Authorization", getBearerAuthToken()))
@@ -125,7 +127,7 @@ class BoardApiTest extends ApiTestBase {
     @Test
     public void endRetro_ShouldRemoveThoughtsWithoutABoard() throws Exception {
         Thought savedThought = thoughtService.createThought(teamId, new CreateThoughtRequest(null, "TEST_MESSAGE", 0,
-            "happy", false, teamId, null));
+            "happy", false, teamId, null, columnTitle.getId()));
 
         mockMvc.perform(put(format("/api/team/%s/end-retro", teamId))
                 .header("Authorization", getBearerAuthToken()))

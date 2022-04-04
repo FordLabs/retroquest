@@ -251,7 +251,8 @@ class ThoughtApiTest extends ApiTestBase {
             "happy",
             false,
             null,
-            null
+            null,
+            savedColumnTitle.getId()
         );
 
         mockMvc.perform(post(String.join("", "/api/team/", teamId, "/thought"))
@@ -276,7 +277,8 @@ class ThoughtApiTest extends ApiTestBase {
             "happy",
             false,
             null,
-            null
+            null,
+            savedColumnTitle.getId()
         );
 
         mockMvc.perform(post(String.join("", "/api/team/", teamId, "/thought"))
