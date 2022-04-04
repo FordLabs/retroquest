@@ -18,8 +18,10 @@
 import { join } from 'path';
 
 import { getArchivesPagePathWithTeamId } from '../../src/RouteConstants';
+import { Column } from '../../src/Types/Column';
 import { getTeamCredentials } from '../support/helpers';
-import Topic, { ThoughtTopic } from '../support/types/Topic';
+import { ThoughtTopic } from '../support/types/Topic';
+import Chainable = Cypress.Chainable;
 
 describe('Archivist Journey', () => {
 	const teamCredentials = getTeamCredentials();
@@ -29,16 +31,41 @@ describe('Archivist Journey', () => {
 	});
 
 	it('Archives page functionality', () => {
-		addThoughtToTeam(teamCredentials.teamId, 'message1', 0, false, Topic.HAPPY);
-		addThoughtToTeam(teamCredentials.teamId, 'message2', 1, false, Topic.HAPPY);
-		addThoughtToTeam(teamCredentials.teamId, 'message3', 2, true, Topic.HAPPY);
-		addThoughtToTeam(
-			teamCredentials.teamId,
-			'message4',
-			0,
-			false,
-			Topic.UNHAPPY
-		);
+		console.log(getColumnsForTeam(teamCredentials.teamId));
+		getColumnsForTeam(teamCredentials.teamId).then((columns) => {
+			addThoughtToTeam(
+				teamCredentials.teamId,
+				'message1',
+				0,
+				false,
+				columns[0].topic,
+				columns[0].id
+			);
+			addThoughtToTeam(
+				teamCredentials.teamId,
+				'message2',
+				1,
+				false,
+				columns[0].topic,
+				columns[0].id
+			);
+			addThoughtToTeam(
+				teamCredentials.teamId,
+				'message3',
+				2,
+				true,
+				columns[0].topic,
+				columns[0].id
+			);
+			addThoughtToTeam(
+				teamCredentials.teamId,
+				'message4',
+				0,
+				false,
+				columns[2].topic,
+				columns[2].id
+			);
+		});
 		addCompletedActionItemToTeam(
 			teamCredentials.teamId,
 			'action to take',
@@ -91,12 +118,22 @@ function shouldBeOnArchivesPage(teamId: string) {
 	cy.findByText('Thought Archives').should('exist');
 }
 
+function getColumnsForTeam(teamId: string): Chainable<Column[]> {
+	return cy
+		.request({
+			url: `/api/team/${teamId}/columns`,
+			method: 'GET',
+		})
+		.then((response) => response.body as Column[]);
+}
+
 function addThoughtToTeam(
 	teamId: string,
 	message: string,
 	hearts: number,
 	discussed: boolean,
-	topic: ThoughtTopic
+	topic: ThoughtTopic,
+	columnId: number
 ) {
 	cy.request({
 		url: `/api/team/${teamId}/thought`,
@@ -107,6 +144,7 @@ function addThoughtToTeam(
 			hearts,
 			discussed,
 			topic,
+			columnId,
 		},
 	});
 }

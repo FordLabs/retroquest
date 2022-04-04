@@ -88,24 +88,18 @@ public class ThoughtService {
     }
 
     public Thought createThought(String teamId, CreateThoughtRequest request) {
-        Thought createdThought = createThought(teamId, null, request);
-        websocketService.publishEvent(new WebsocketThoughtEvent(teamId, UPDATE, createdThought));
-        return createdThought;
-    }
-
-    public Thought createThought(String teamId, Long boardId, CreateThoughtRequest request) {
         var thought = new Thought();
         thought.setId(request.id());
         thought.setMessage(request.message());
         thought.setHearts(request.hearts());
         thought.setTopic(request.topic());
         thought.setDiscussed(request.discussed());
+        thought.setColumnId(request.columnId());
         thought.setTeamId(teamId);
-        thought.setBoardId(boardId);
 
-        var columnTitle = columnTitleRepository.findByTeamIdAndTopic(teamId, thought.getTopic());
-        thought.setColumnId(columnTitle.getId());
-        return thoughtRepository.save(thought);
+        Thought createdThought = thoughtRepository.save(thought);
+        websocketService.publishEvent(new WebsocketThoughtEvent(teamId, UPDATE, createdThought));
+        return createdThought;
     }
 
     private Thought fetchThought(String teamId, Long thoughtId) throws ThoughtNotFoundException {

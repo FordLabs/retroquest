@@ -28,5 +28,6 @@ public record CreateThoughtRequest(
     String topic,
     boolean discussed,
     String teamId,
-    Long boardId
+    Long boardId,
+    Long columnId
 ) { }
