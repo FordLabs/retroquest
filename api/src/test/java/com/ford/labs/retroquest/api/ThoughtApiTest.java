@@ -245,13 +245,8 @@ class ThoughtApiTest extends ApiTestBase {
     @Test
     void should_create_thought() throws Exception {
         var createThoughtRequest = new CreateThoughtRequest(
-            null,
             "Hello",
-            0,
             "happy",
-            false,
-            null,
-            null,
             savedColumnTitle.getId()
         );
 
@@ -271,13 +266,8 @@ class ThoughtApiTest extends ApiTestBase {
     @Test
     public void should_not_create_thought_unauthorized() throws Exception {
         var createThoughtRequest = new CreateThoughtRequest(
-            null,
             "Hello",
-            0,
             "happy",
-            false,
-            null,
-            null,
             savedColumnTitle.getId()
         );
 

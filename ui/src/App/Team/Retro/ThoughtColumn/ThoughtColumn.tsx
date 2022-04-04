@@ -63,7 +63,7 @@ function ThoughtColumn(props: Props) {
 		if (text && text.length) {
 			ThoughtService.create(
 				team.id,
-				getCreateThoughtRequest(team.id, column.id, column.topic, text)
+				getCreateThoughtRequest(column.id, column.topic, text)
 			).catch(console.error);
 		}
 	};

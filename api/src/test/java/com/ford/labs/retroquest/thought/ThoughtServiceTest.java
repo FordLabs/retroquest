@@ -181,13 +181,8 @@ class ThoughtServiceTest {
         var topic = "topic";
         var columnTitle = ColumnTitle.builder().id(6789L).title("Happy").build();
         var request = new CreateThoughtRequest(
-            null,
             message,
-            0,
             topic,
-            false,
-            "the-team",
-            null,
             columnTitle.getId()
         );
 

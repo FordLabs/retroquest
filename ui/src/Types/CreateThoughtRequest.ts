@@ -18,29 +18,20 @@
 import { ThoughtTopic } from './Topic';
 
 export function getCreateThoughtRequest(
-	teamId: string,
 	columnId: number,
 	topic: ThoughtTopic,
 	message: string
 ): CreateThoughtRequest {
 	return {
-		id: -1,
-		teamId,
 		topic,
 		message,
-		hearts: 0,
-		discussed: false,
 		columnId,
 	};
 }
 
 interface CreateThoughtRequest {
-	id: number;
 	message: string;
-	hearts: number;
 	topic: string;
-	discussed: boolean;
-	teamId: string;
 	columnId: number;
 }
 

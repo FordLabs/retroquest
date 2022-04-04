@@ -40,12 +40,8 @@ describe('Thought Service', () => {
 			axios.post = jest.fn().mockResolvedValue({ data: expectedThought });
 
 			const createThoughtRequest: CreateThoughtRequest = {
-				id: 1,
 				message: 'I had a thought..',
-				hearts: 5,
 				topic: Topic.HAPPY,
-				discussed: false,
-				teamId,
 				columnId: 10,
 			};
 

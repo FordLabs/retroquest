@@ -103,13 +103,9 @@ describe('ThoughtColumn', () => {
 			userEvent.type(textField, `${thoughtMessage}{enter}`);
 
 			expect(ThoughtService.create).toHaveBeenCalledWith(team.id, {
-				id: -1,
-				teamId: team.id,
-				topic: column.topic,
 				message: thoughtMessage,
-				hearts: 0,
+				topic: column.topic,
 				columnId: column.id,
-				discussed: false,
 			});
 		});
 	});
