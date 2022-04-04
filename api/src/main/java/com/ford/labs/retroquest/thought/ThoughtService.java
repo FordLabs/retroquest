@@ -89,11 +89,8 @@ public class ThoughtService {
 
     public Thought createThought(String teamId, CreateThoughtRequest request) {
         var thought = new Thought();
-        thought.setId(request.id());
         thought.setMessage(request.message());
-        thought.setHearts(request.hearts());
         thought.setTopic(request.topic());
-        thought.setDiscussed(request.discussed());
         thought.setColumnId(request.columnId());
         thought.setTeamId(teamId);
 
