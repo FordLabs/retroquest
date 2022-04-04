@@ -20,6 +20,7 @@ import Topic, { ThoughtTopic } from '../../../Types/Topic';
 
 export const getMockThought = (
 	topic: ThoughtTopic,
+	columnId: number,
 	isDiscussed = false,
 	hearts = 0
 ): Thought => ({
@@ -28,18 +29,19 @@ export const getMockThought = (
 	topic,
 	hearts,
 	discussed: isDiscussed,
+	columnId,
 });
 
 const ThoughtService = {
 	getThoughts: jest
 		.fn()
 		.mockResolvedValue([
-			getMockThought(Topic.HAPPY, false),
-			getMockThought(Topic.HAPPY, true),
-			getMockThought(Topic.CONFUSED, false),
-			getMockThought(Topic.CONFUSED, true),
-			getMockThought(Topic.UNHAPPY, false),
-			getMockThought(Topic.UNHAPPY, true),
+			getMockThought(Topic.HAPPY, 1, false),
+			getMockThought(Topic.HAPPY, 1, true),
+			getMockThought(Topic.CONFUSED, 2, false),
+			getMockThought(Topic.CONFUSED, 2, true),
+			getMockThought(Topic.UNHAPPY, 3, false),
+			getMockThought(Topic.UNHAPPY, 3, true),
 		]),
 	create: jest.fn().mockResolvedValue((thought: Thought) => thought),
 	delete: jest.fn().mockResolvedValue(null),

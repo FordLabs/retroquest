@@ -37,6 +37,7 @@ const thought: Thought = {
 		"If elevators hadn't been invented, all the CEOs and" +
 		'important people would have their offices on the first floor as a sign of status.',
 	topic: Topic.HAPPY,
+	columnId: 0,
 };
 
 const Template: ComponentStory<typeof RetroItemWithAddAction> = () => {

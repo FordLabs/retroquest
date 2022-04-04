@@ -23,6 +23,7 @@ interface Thought {
 	hearts: number;
 	discussed: boolean;
 	topic: ThoughtTopic;
+	columnId: number;
 	state?: string;
 }
 

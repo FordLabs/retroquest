@@ -56,7 +56,7 @@ describe('useWebsocketMessageHandler Hook', () => {
 		};
 
 		it('should add a thought to the global thoughts state', async () => {
-			const newThought = getMockThought(Topic.HAPPY, false);
+			const newThought = getMockThought(Topic.HAPPY, 1, false);
 
 			render(
 				<RecoilRoot
@@ -77,7 +77,7 @@ describe('useWebsocketMessageHandler Hook', () => {
 		});
 
 		it('should update a thought in the global thoughts state', async () => {
-			const originalThought = getMockThought(Topic.CONFUSED, false);
+			const originalThought = getMockThought(Topic.CONFUSED, 2, false);
 			const updatedThought = originalThought;
 			updatedThought.discussed = true;
 			updatedThought.hearts = 2;
@@ -101,8 +101,8 @@ describe('useWebsocketMessageHandler Hook', () => {
 		});
 
 		it('should delete a thought from the global thoughts state', async () => {
-			const thoughtNotToDelete = getMockThought(Topic.HAPPY, true);
-			const thoughtToDelete = getMockThought(Topic.CONFUSED, false);
+			const thoughtNotToDelete = getMockThought(Topic.HAPPY, 1, true);
+			const thoughtToDelete = getMockThought(Topic.CONFUSED, 2, false);
 
 			render(
 				<RecoilRoot
@@ -242,9 +242,9 @@ describe('useWebsocketMessageHandler Hook', () => {
 			const completeActionItem = getMockActionItem(true);
 			const actionItems = [activeActionItem, completeActionItem];
 			const thoughts = [
-				getMockThought(Topic.HAPPY),
-				getMockThought(Topic.CONFUSED),
-				getMockThought(Topic.UNHAPPY),
+				getMockThought(Topic.HAPPY, 1),
+				getMockThought(Topic.CONFUSED, 2),
+				getMockThought(Topic.UNHAPPY, 3),
 			];
 			render(
 				<RecoilRoot

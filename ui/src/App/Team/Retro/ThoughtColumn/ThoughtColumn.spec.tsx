@@ -38,11 +38,11 @@ const team: Team = {
 	id: 'my-team',
 };
 
-const activeThought1: Thought = getMockThought(Topic.HAPPY, false, 1);
+const activeThought1: Thought = getMockThought(Topic.HAPPY, 1, false, 1);
 activeThought1.id = 943;
-const activeThought2: Thought = getMockThought(Topic.HAPPY, false, 2);
-const discussedThought1: Thought = getMockThought(Topic.HAPPY, true, 3);
-const discussedThought2: Thought = getMockThought(Topic.HAPPY, true, 4);
+const activeThought2: Thought = getMockThought(Topic.HAPPY, 1, false, 2);
+const discussedThought1: Thought = getMockThought(Topic.HAPPY, 1, true, 3);
+const discussedThought2: Thought = getMockThought(Topic.HAPPY, 1, true, 4);
 
 const column: Column = {
 	id: 123456,
@@ -108,6 +108,7 @@ describe('ThoughtColumn', () => {
 				topic: column.topic,
 				message: thoughtMessage,
 				hearts: 0,
+				columnId: column.id,
 				discussed: false,
 			});
 		});

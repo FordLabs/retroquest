@@ -39,6 +39,7 @@ const thoughts: Thought[] = [
 		topic: Topic.HAPPY,
 		hearts: 2,
 		discussed: false,
+		columnId: 10,
 	},
 	{
 		id: 13,
@@ -46,6 +47,7 @@ const thoughts: Thought[] = [
 		topic: Topic.UNHAPPY,
 		hearts: 2,
 		discussed: false,
+		columnId: 11,
 	},
 ];
 
