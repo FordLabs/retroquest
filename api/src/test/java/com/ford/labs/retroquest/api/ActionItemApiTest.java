@@ -161,6 +161,24 @@ class ActionItemApiTest extends ApiTestBase {
     }
 
     @Test
+    public void deleteActionItem_WhenActionItemOnOtherTeam_IgnoresDelete() throws Exception {
+        String unauthorizedTeamJwt = jwtBuilder.buildJwt("not-beach-bums");
+        String authorizationHeader = format("Bearer %s", unauthorizedTeamJwt);
+
+        ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder()
+                .task("Some Action")
+                .teamId("beach-bums")
+                .build());
+
+        mockMvc.perform(delete("/api/team/not-beach-bums/action-item/%d".formatted(savedActionItem.getId()))
+                .header("Authorization", authorizationHeader))
+                .andExpect(status().isOk());
+
+        assertThat(actionItemRepository.count()).isEqualTo(1);
+        assertThat(savedActionItem).isEqualTo(actionItemRepository.findAll().get(0));
+    }
+
+    @Test
     void should_edit_action_item_task() throws Exception {
         ActionItem expectedActionItem = actionItemRepository.save(ActionItem.builder()
             .task("I AM A TEMPORARY TASK")
@@ -206,7 +224,7 @@ class ActionItemApiTest extends ApiTestBase {
     }
 
     @Test
-    public void should_archive_action_item() throws Exception{
+    public void should_archive_action_item() throws Exception {
         var request = new UpdateActionItemArchivedRequest(true);
         ActionItem actionItem = actionItemRepository.save(ActionItem.builder()
                 .task(teamId)
