@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.actionitem;
 
+import com.ford.labs.retroquest.websocket.WebsocketService;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -25,7 +26,8 @@ import static org.mockito.Mockito.*;
 
 class ActionItemServiceTest {
     private final ActionItemRepository mockActionItemRepository = mock(ActionItemRepository.class);
-    private final ActionItemService actionItemService = new ActionItemService(mockActionItemRepository);
+    private final WebsocketService mockWebsocketService = mock(WebsocketService.class);
+    private final ActionItemService actionItemService = new ActionItemService(mockActionItemRepository, mockWebsocketService);
 
     @Test
     public void archiveCompletedActionItems_MarksCompletedButUnarchivedActionItemsAsArchived() {
