@@ -31,7 +31,6 @@ describe('Archivist Journey', () => {
 	});
 
 	it('Archives page functionality', () => {
-		console.log(getColumnsForTeam(teamCredentials.teamId));
 		getColumnsForTeam(teamCredentials.teamId).then((columns) => {
 			addThoughtToTeam(
 				teamCredentials.teamId,
