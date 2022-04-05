@@ -48,7 +48,7 @@ public class ThoughtController {
 
     @Transactional
     @PutMapping("/api/team/{teamId}/thought/{thoughtId}/heart")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "adds a like to a thought given a thought and team id", description = "likeThought")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Created") })
     public void likeThought(@PathVariable("thoughtId") Long thoughtId, @PathVariable("teamId") String teamId) {
@@ -56,7 +56,7 @@ public class ThoughtController {
     }
 
     @PutMapping("/api/team/{teamId}/thought/{thoughtId}/discuss")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "toggles between a thought being discussed or not discussed", description = "discussThought")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     public void discussThought(
@@ -69,7 +69,7 @@ public class ThoughtController {
 
     @Transactional
     @PutMapping("/api/team/{teamId}/thought/{thoughtId}/column-id")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Updates the topic of a thought given a thought and team id", description = "moveThought")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     public void moveThought(
@@ -82,7 +82,7 @@ public class ThoughtController {
 
     @Transactional
     @PutMapping("/api/team/{teamId}/thought/{id}/message")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(
         summary = "Updates the content of a thought given a thought and team id",
         description = "updateThoughtMessage"
@@ -94,7 +94,7 @@ public class ThoughtController {
     }
 
     @GetMapping("/api/team/{teamId}/thoughts")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Returns all thoughts given a team id", description = "getThoughtsForTeam")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     public List<Thought> getThoughtsForTeam(@PathVariable("teamId") String teamId) {
@@ -103,7 +103,7 @@ public class ThoughtController {
 
     @Transactional
     @DeleteMapping("/api/team/{teamId}/thought/{thoughtId}")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Removes a thought given a team id and thought id", description = "clearIndividualThoughtForTeam")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     public void clearIndividualThoughtForTeam(@PathVariable("teamId") String teamId, @PathVariable("thoughtId") Long id) {
@@ -111,7 +111,7 @@ public class ThoughtController {
     }
 
     @PostMapping("/api/team/{teamId}/thought")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Creates a thought given a team id and thought", description = "createThoughtForTeam")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Created"),

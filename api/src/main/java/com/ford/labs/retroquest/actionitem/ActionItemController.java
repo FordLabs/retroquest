@@ -55,7 +55,7 @@ public class ActionItemController {
     }
 
     @PutMapping("/api/team/{teamId}/action-item/{thoughtId}/completed")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Marks a thought as complete for a given team id", description = "completeActionItem")
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "No Content")})
     public void completeActionItem(
@@ -70,7 +70,7 @@ public class ActionItemController {
     }
 
     @PutMapping("/api/team/{teamId}/action-item/{thoughtId}/task")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Updates an action item given a thought id and a team id", description = "updateActionItemTask")
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "No Content")})
     public void updateActionItemTask(
@@ -85,7 +85,7 @@ public class ActionItemController {
     }
 
     @PutMapping("/api/team/{teamId}/action-item/{thoughtId}/assignee")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Updates an action item assignee a thought id and a team id", description = "updateActionItemAssignee")
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "No Content")})
     public void updateActionItemAssignee(
@@ -100,7 +100,7 @@ public class ActionItemController {
     }
 
     @PutMapping("/api/team/{teamId}/action-item/{actionItemId}/archived")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Updates an action item's archived status with a thought id and a team id", description = "updateActionItemArchivedStatus")
     @ApiResponses(value = {@ApiResponse(responseCode = "204", description = "No Content")})
     public void updateActionItemArchivedStatus(
@@ -115,7 +115,7 @@ public class ActionItemController {
     }
 
     @GetMapping("/api/team/{teamId}/action-item")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Retrieves all action items given a team id", description = "getActionItemsForTeam", parameters = {
         @Parameter(name = "archived", description = "The archived status of the action items")
     })
@@ -126,7 +126,7 @@ public class ActionItemController {
     }
 
     @PostMapping("/api/team/{teamId}/action-item")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Creates an action item given a team id", description = "createActionItemForTeam")
     @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Created")})
     public ResponseEntity<URI> createActionItemForTeam(
@@ -141,7 +141,7 @@ public class ActionItemController {
 
     @Transactional
     @DeleteMapping("/api/team/{teamId}/action-item/{id}")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Deletes an action item given a team id and action item id", description = "deleteActionItem")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public void deleteActionItemByTeamIdAndId(@PathVariable("teamId") String teamId, @PathVariable("id") Long id) {
