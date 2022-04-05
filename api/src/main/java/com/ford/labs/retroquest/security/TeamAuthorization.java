@@ -22,9 +22,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ApiAuthorization {
+public class TeamAuthorization {
 
-    public ApiAuthorization() {}
+    public TeamAuthorization() {}
 
     public boolean requestIsAuthorized(Authentication authentication, String teamId) {
         return Objects.nullSafeEquals(authentication.getPrincipal(), teamId);

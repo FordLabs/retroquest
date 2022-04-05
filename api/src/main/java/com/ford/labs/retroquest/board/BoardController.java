@@ -44,7 +44,7 @@ public class BoardController {
     }
 
     @GetMapping("/team/{teamId}/boards")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Gets a retro board given a team id and page index", description = "getBoardsForTeamId")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public List<Retro> getBoardsForTeamId(
@@ -55,7 +55,7 @@ public class BoardController {
     }
 
     @PostMapping("/team/{teamId}/board")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Saves a board given a team id", description = "saveBoard")
     @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Created")})
     public ResponseEntity<Void> createBoard(@PathVariable("teamId") String teamId) throws URISyntaxException {
@@ -65,7 +65,7 @@ public class BoardController {
     }
 
     @PutMapping("/team/{teamId}/end-retro")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Ends a retro for a given team", description = "endTeamRetro")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public void endRetro(@PathVariable("teamId") String teamId) {

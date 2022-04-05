@@ -24,21 +24,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-class ApiAuthorizationTest {
+class TeamAuthorizationTest {
 
     private final Authentication authentication = mock(Authentication.class);
-    private final ApiAuthorization apiAuthorization = new ApiAuthorization();
+    private final TeamAuthorization teamAuthorization = new TeamAuthorization();
 
     @Test
     void requestIsAuthorized_WithMatchingPrincipal_ReturnsTrue() {
         given(authentication.getPrincipal()).willReturn("teamId");
-        assertThat(apiAuthorization.requestIsAuthorized(authentication, "teamId")).isTrue();
+        assertThat(teamAuthorization.requestIsAuthorized(authentication, "teamId")).isTrue();
     }
 
     @Test
     void requestIsAuthorized_WithoutMatchingPrincipal_ReturnsFalse() {
         given(authentication.getPrincipal()).willReturn("notAuthorized");
-        assertThat(apiAuthorization.requestIsAuthorized(authentication, "teamId")).isFalse();
+        assertThat(teamAuthorization.requestIsAuthorized(authentication, "teamId")).isFalse();
     }
 
 }

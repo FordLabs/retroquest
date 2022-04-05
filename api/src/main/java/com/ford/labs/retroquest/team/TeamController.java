@@ -72,7 +72,7 @@ public class TeamController {
     }
 
     @GetMapping(value = "/team/{teamId}/csv", produces = "application/board.csv")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "downloads a team board", description = "downloadTeamBoard")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public ResponseEntity<byte[]> downloadTeamBoard(@PathVariable("teamId") String teamId) throws IOException {
@@ -84,7 +84,7 @@ public class TeamController {
     }
 
     @GetMapping(value = "team/{teamId}/validate")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Validates a team id", description = "deprecated")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public ResponseEntity<Void> validateTeamId(@PathVariable("teamId") String teamId) {

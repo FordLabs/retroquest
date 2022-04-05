@@ -44,7 +44,7 @@ public class ColumnController {
     }
 
     @GetMapping("/api/team/{teamId}/columns")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Gets all columns of a retro board for a given Team ID", description = "getColumns")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "OK"),
@@ -56,7 +56,7 @@ public class ColumnController {
 
     @Transactional
     @PutMapping("/api/team/{teamId}/column/{columnId}/title")
-    @PreAuthorize("@apiAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(
         summary = "Updates the title of a column of a retro board given a team id and column id",
         description = "updateTitleOfColumn"
