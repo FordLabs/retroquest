@@ -24,16 +24,16 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ThoughtRepository extends JpaRepository<Thought, Long> {
     List<Thought> findAllByTeamId(String teamId);
-
     List<Thought> findAllByTeamIdAndBoardIdIsNull(String teamId);
-
     List<Thought> findAllByTeamIdAndBoardIdIsNullOrderByTopic(String teamId);
 
     void deleteThoughtByTeamIdAndId(String teamId, Long id);
+    Optional<Thought> findByTeamIdAndId(String teamId, Long id);
 
     @Modifying
     @Query("UPDATE Thought thought set thought.hearts = thought.hearts + 1 where thought.id = :thoughtId")
