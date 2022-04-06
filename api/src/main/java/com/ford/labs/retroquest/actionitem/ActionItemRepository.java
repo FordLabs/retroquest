@@ -21,9 +21,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ActionItemRepository extends JpaRepository<ActionItem, Long>{
+    Optional<ActionItem> findByTeamIdAndId(String teamId, Long actionItemId);
     List<ActionItem> findAllByTeamId(String teamId);
     List<ActionItem> findAllByTeamIdAndArchived(String teamId, boolean archived);
     List<ActionItem> findAllByTeamIdAndArchivedIsFalseAndCompletedIsTrue(String teamId);

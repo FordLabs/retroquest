@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.actionitem;
 
+import com.ford.labs.retroquest.exception.ActionItemDoesNotExistException;
 import com.ford.labs.retroquest.websocket.WebsocketService;
 import com.ford.labs.retroquest.websocket.events.WebsocketActionItemEvent;
 import org.springframework.stereotype.Service;
@@ -51,15 +52,15 @@ public class ActionItemService {
     }
 
     public ActionItem updateCompletedStatus(String teamId, Long actionItemId, UpdateActionItemCompletedRequest request) {
-        var actionItem = actionItemRepository.findById(actionItemId).orElseThrow();
-        actionItem.setCompleted(request.completed());
-        var updatedActionItem = actionItemRepository.save(actionItem);
+        var savedActionItem = fetchActionItem(teamId, actionItemId);
+        savedActionItem.setCompleted(request.completed());
+        var updatedActionItem = actionItemRepository.save(savedActionItem);
         websocketService.publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, updatedActionItem));
         return updatedActionItem;
     }
 
     public ActionItem updateTask(String teamId, Long actionItemId, UpdateActionItemTaskRequest request) {
-        var savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
+        var savedActionItem = fetchActionItem(teamId, actionItemId);
         savedActionItem.setTask(request.task());
         var updatedActionItem = actionItemRepository.save(savedActionItem);
         websocketService.publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, updatedActionItem));
@@ -67,7 +68,7 @@ public class ActionItemService {
     }
 
     public ActionItem updateAssignee(String teamId, Long actionItemId, UpdateActionItemAssigneeRequest request) {
-        var savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
+        var savedActionItem = fetchActionItem(teamId, actionItemId);
         savedActionItem.setAssignee(request.assignee());
         var updatedActionItem = actionItemRepository.save(savedActionItem);
         websocketService.publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, updatedActionItem));
@@ -75,7 +76,7 @@ public class ActionItemService {
     }
 
     public ActionItem updateArchivedStatus(String teamId, Long actionItemId, UpdateActionItemArchivedRequest request) {
-        var savedActionItem = actionItemRepository.findById(actionItemId).orElseThrow();
+        var savedActionItem = fetchActionItem(teamId, actionItemId);
         savedActionItem.setArchived(request.archived());
         var updatedActionItem = actionItemRepository.save(savedActionItem);
         websocketService.publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, updatedActionItem));
@@ -91,5 +92,9 @@ public class ActionItemService {
         var itemsToUpdate = actionItemRepository.findAllByTeamIdAndArchivedIsFalseAndCompletedIsTrue(teamId);
         itemsToUpdate.forEach(item -> item.setArchived(true));
         actionItemRepository.saveAll(itemsToUpdate);
+    }
+
+    private ActionItem fetchActionItem(String teamId, Long actionItemId) {
+        return actionItemRepository.findByTeamIdAndId(teamId, actionItemId).orElseThrow(ActionItemDoesNotExistException::new);
     }
 }

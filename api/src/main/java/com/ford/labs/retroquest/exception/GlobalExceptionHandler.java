@@ -92,4 +92,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(thoughtNotFoundException.getMessage());
     }
 
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ActionItemDoesNotExistException.class)
+    public void actionItemDoesNotExistExceptionHandler() {
+        // Used by Spring for Controller Advice
+    }
 }

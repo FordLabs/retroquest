@@ -204,8 +204,8 @@ class ActionItemApiTest extends ApiTestBase {
     @Test
     void should_add_assignee_to_action_item() throws Exception {
         ActionItem actionItem = actionItemRepository.save(ActionItem.builder()
-            .task(teamId)
-            .teamId("suchateam")
+            .task("task")
+            .teamId(teamId)
             .build()
         );
 
@@ -227,16 +227,16 @@ class ActionItemApiTest extends ApiTestBase {
     public void should_archive_action_item() throws Exception {
         var request = new UpdateActionItemArchivedRequest(true);
         ActionItem actionItem = actionItemRepository.save(ActionItem.builder()
-                .task(teamId)
-                .teamId("suchateam")
-                .build()
+            .task("task")
+            .teamId(teamId)
+            .build()
         );
 
         mockMvc.perform(put(format(BASE_API_URL + "/%d/archived", actionItem.getId()))
-                .content(objectMapper.writeValueAsBytes(request))
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isOk());
+            .content(objectMapper.writeValueAsBytes(request))
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", getBearerAuthToken()))
+            .andExpect(status().isOk());
 
         assertThat(actionItemRepository.count()).isEqualTo(1);
         var actual = actionItemRepository.findAll().get(0);
@@ -271,10 +271,10 @@ class ActionItemApiTest extends ApiTestBase {
             .andExpect(status().isForbidden());
 
         mockMvc.perform(put("/api/team/beach-bums/action-item/1/assignee")
-                .header("Authorization", authorizationHeader)
-                .content("{}")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());
+            .header("Authorization", authorizationHeader)
+            .content("{}")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isForbidden());
 
         mockMvc.perform(put("/api/team/beach-bums/action-item/1/completed")
             .header("Authorization", authorizationHeader)
@@ -283,10 +283,10 @@ class ActionItemApiTest extends ApiTestBase {
             .andExpect(status().isForbidden());
 
         mockMvc.perform(put("/api/team/beach-bums/action-item/1/archived")
-                .header("Authorization", authorizationHeader)
-                .content("{}")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());
+            .header("Authorization", authorizationHeader)
+            .content("{}")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isForbidden());
 
         mockMvc.perform(delete("/api/team/beach-bums/action-item/1")
             .header("Authorization", authorizationHeader))
@@ -294,6 +294,41 @@ class ActionItemApiTest extends ApiTestBase {
 
         assertThat(actionItemRepository.count()).isEqualTo(1);
         assertThat(savedActionItem).isEqualTo(actionItemRepository.findAll().get(0));
+    }
+
+    @Test
+    public void modifyingActionItem_WithActionItemForDifferentTeam_Returns404() throws Exception {
+        String unauthorizedTeamJwt = jwtBuilder.buildJwt("not-beach-bums");
+        String authorizationHeader = format("Bearer %s", unauthorizedTeamJwt);
+
+        ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder()
+            .task("Some Action")
+            .teamId("beach-bums")
+            .build());
+
+        mockMvc.perform(put("/api/team/not-beach-bums/action-item/%d/task".formatted(savedActionItem.getId()))
+            .header("Authorization", authorizationHeader)
+            .content("{}")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
+
+        mockMvc.perform(put("/api/team/not-beach-bums/action-item/%d/assignee".formatted(savedActionItem.getId()))
+            .header("Authorization", authorizationHeader)
+            .content("{}")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
+
+        mockMvc.perform(put("/api/team/not-beach-bums/action-item/%d/completed".formatted(savedActionItem.getId()))
+            .header("Authorization", authorizationHeader)
+            .content("{}")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
+
+        mockMvc.perform(put("/api/team/not-beach-bums/action-item/%d/archived".formatted(savedActionItem.getId()))
+            .header("Authorization", authorizationHeader)
+            .content("{}")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
     }
 
     private List<ActionItem> createThreeActionItems(String teamId) {
