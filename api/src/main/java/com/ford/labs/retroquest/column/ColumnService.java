@@ -54,7 +54,7 @@ public class ColumnService {
     }
 
     public ColumnTitle editColumnTitleName(Long columnId, String newColumnName, String teamId) {
-        var existingColumnTitle = columnTitleRepository.findById(columnId).orElseThrow(ColumnTitleNotFoundException::new);
+        var existingColumnTitle = fetchColumnTitle(teamId, columnId);
         existingColumnTitle.setTitle(newColumnName);
 
         ColumnTitle newColumnTitle = columnTitleRepository.save(existingColumnTitle);
@@ -64,5 +64,9 @@ public class ColumnService {
         meterRegistry.counter("retroquest.columns.changed.count").increment();
 
         return newColumnTitle;
+    }
+
+    private ColumnTitle fetchColumnTitle(String teamId, Long columnId) {
+        return columnTitleRepository.findByTeamIdAndId(teamId, columnId).orElseThrow(ColumnTitleNotFoundException::new);
     }
 }

@@ -114,4 +114,21 @@ public class ColumnApiTest extends ApiTestBase {
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    public void updateColumnTitle_WithColumnIdFromOtherTeam_ReturnsNotFound() throws Exception {
+        var savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder()
+                .teamId("NotBeachBums")
+                .title("old title")
+                .build());
+        var expectedColumnTitle = new ColumnTitle(savedColumnTitle.getId(), null, "new title", "BeachBums");
+
+        var request = new UpdateColumnTitleRequest("new title");
+
+        mockMvc.perform(put("/api/team/BeachBums/column/%d/title".formatted(expectedColumnTitle.getId()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsBytes(request))
+                .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isNotFound());
+    }
 }
