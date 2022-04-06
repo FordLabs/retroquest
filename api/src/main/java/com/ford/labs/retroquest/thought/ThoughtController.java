@@ -46,6 +46,30 @@ public class ThoughtController {
         this.thoughtService = thoughtService;
     }
 
+    @PostMapping("/api/team/{teamId}/thought")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @Operation(summary = "Creates a thought given a team id and thought", description = "createThoughtForTeam")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Created"),
+            @ApiResponse(responseCode = "400", description = "Path to saved thought is not a valid URI")
+    })
+    public ResponseEntity<Void> createThoughtForTeam(
+            @PathVariable("teamId") String teamId,
+            @RequestBody CreateThoughtRequest request
+    ) throws URISyntaxException {
+        var thought = thoughtService.createThought(teamId, request);
+        var uri = new URI(String.format("/api/team/%s/thought/%s", thought.getTeamId(), thought.getId()));
+        return ResponseEntity.created(uri).build();
+    }
+
+    @GetMapping("/api/team/{teamId}/thoughts")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @Operation(summary = "Returns all thoughts given a team id", description = "getThoughtsForTeam")
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
+    public List<Thought> getThoughtsForTeam(@PathVariable("teamId") String teamId) {
+        return thoughtService.fetchAllActiveThoughts(teamId);
+    }
+
     @Transactional
     @PutMapping("/api/team/{teamId}/thought/{thoughtId}/heart")
     @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
@@ -93,14 +117,6 @@ public class ThoughtController {
         thoughtService.updateThoughtMessage(teamId, id, request.message());
     }
 
-    @GetMapping("/api/team/{teamId}/thoughts")
-    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
-    @Operation(summary = "Returns all thoughts given a team id", description = "getThoughtsForTeam")
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
-    public List<Thought> getThoughtsForTeam(@PathVariable("teamId") String teamId) {
-        return thoughtService.fetchAllActiveThoughts(teamId);
-    }
-
     @Transactional
     @DeleteMapping("/api/team/{teamId}/thought/{thoughtId}")
     @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
@@ -108,21 +124,5 @@ public class ThoughtController {
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     public void clearIndividualThoughtForTeam(@PathVariable("teamId") String teamId, @PathVariable("thoughtId") Long id) {
         thoughtService.deleteThought(teamId, id);
-    }
-
-    @PostMapping("/api/team/{teamId}/thought")
-    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
-    @Operation(summary = "Creates a thought given a team id and thought", description = "createThoughtForTeam")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Created"),
-        @ApiResponse(responseCode = "400", description = "Path to saved thought is not a valid URI")
-    })
-    public ResponseEntity<Void> createThoughtForTeam(
-        @PathVariable("teamId") String teamId,
-        @RequestBody CreateThoughtRequest request
-    ) throws URISyntaxException {
-        var thought = thoughtService.createThought(teamId, request);
-        var uri = new URI(String.format("/api/team/%s/thought/%s", thought.getTeamId(), thought.getId()));
-        return ResponseEntity.created(uri).build();
     }
 }
