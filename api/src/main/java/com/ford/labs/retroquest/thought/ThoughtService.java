@@ -45,40 +45,36 @@ public class ThoughtService {
         this.websocketService = websocketService;
     }
 
-    public Thought fetchThought(Long thoughtId) throws ThoughtNotFoundException {
-        return thoughtRepository.findById(thoughtId).orElseThrow(() -> new ThoughtNotFoundException(thoughtId));
-    }
-
     public List<Thought> fetchAllActiveThoughts(String teamId) {
         return thoughtRepository.findAllByTeamIdAndBoardIdIsNull(teamId);
     }
 
-    public Thought likeThought(Long thoughtId) {
+    public Thought likeThought(String teamId, Long thoughtId) {
         thoughtRepository.incrementHeartCount(thoughtId);
-        var thought = fetchThought(thoughtId);
+        var thought = fetchThought(teamId, thoughtId);
         websocketService.publishEvent(new WebsocketThoughtEvent(thought.getTeamId(), UPDATE, thought));
         return thought;
     }
 
-    public Thought discussThought(Long thoughtId, boolean discussed) {
-        var thought = fetchThought(thoughtId);
+    public Thought discussThought(String teamId, Long thoughtId, boolean discussed) {
+        var thought = fetchThought(teamId, thoughtId);
         thought.setDiscussed(discussed);
         var savedThought = thoughtRepository.save(thought);
         websocketService.publishEvent(new WebsocketThoughtEvent(savedThought.getTeamId(), UPDATE, savedThought));
         return savedThought;
     }
 
-    public Thought updateColumn(Long thoughtId, long columnId) {
+    public Thought updateColumn(String teamId, Long thoughtId, long columnId) {
         var columnTitle = columnTitleRepository.findById(columnId).orElseThrow(ColumnTitleNotFoundException::new);
-        var thought = fetchThought(thoughtId);
+        var thought = fetchThought(teamId, thoughtId);
         thought.setTopic(columnTitle.getTopic());
         var savedThought = thoughtRepository.save(thought);
         websocketService.publishEvent(new WebsocketThoughtEvent(savedThought.getTeamId(), UPDATE, savedThought));
         return savedThought;
     }
 
-    public Thought updateThoughtMessage(Long thoughtId, String updatedMessage) {
-        var returnedThought = fetchThought(thoughtId);
+    public Thought updateThoughtMessage(String teamId, Long thoughtId, String updatedMessage) {
+        var returnedThought = fetchThought(teamId, thoughtId);
         returnedThought.setMessage(updatedMessage);
         var savedThought = thoughtRepository.save(returnedThought);
         websocketService.publishEvent(new WebsocketThoughtEvent(savedThought.getTeamId(), UPDATE, savedThought));
@@ -109,5 +105,9 @@ public class ThoughtService {
         var columnTitle = columnTitleRepository.findByTeamIdAndTopic(teamId, thought.getTopic());
         thought.setColumnTitle(columnTitle);
         return thoughtRepository.save(thought);
+    }
+
+    private Thought fetchThought(String teamId, Long thoughtId) throws ThoughtNotFoundException {
+        return thoughtRepository.findByTeamIdAndId(teamId, thoughtId).orElseThrow(() -> new ThoughtNotFoundException(thoughtId));
     }
 }

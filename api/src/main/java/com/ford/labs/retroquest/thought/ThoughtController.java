@@ -52,7 +52,7 @@ public class ThoughtController {
     @Operation(summary = "adds a like to a thought given a thought and team id", description = "likeThought")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Created") })
     public void likeThought(@PathVariable("thoughtId") Long thoughtId, @PathVariable("teamId") String teamId) {
-        thoughtService.likeThought(thoughtId);
+        thoughtService.likeThought(teamId, thoughtId);
     }
 
     @PutMapping("/api/team/{teamId}/thought/{thoughtId}/discuss")
@@ -64,7 +64,7 @@ public class ThoughtController {
         @PathVariable("teamId") String teamId,
         @RequestBody UpdateThoughtDiscussedRequest request
     ) {
-        thoughtService.discussThought(thoughtId, request.discussed());
+        thoughtService.discussThought(teamId, thoughtId, request.discussed());
     }
 
     @Transactional
@@ -77,7 +77,7 @@ public class ThoughtController {
         @PathVariable Long thoughtId,
         @RequestBody MoveThoughtRequest request
     ) {
-        thoughtService.updateColumn(thoughtId, request.columnId());
+        thoughtService.updateColumn(teamId, thoughtId, request.columnId());
     }
 
     @Transactional
@@ -90,7 +90,7 @@ public class ThoughtController {
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "OK") })
     public void updateThoughtMessage(@PathVariable("id") Long id, @RequestBody UpdateThoughtMessageRequest request,
                                      @PathVariable("teamId") String teamId) {
-        thoughtService.updateThoughtMessage(id, request.message());
+        thoughtService.updateThoughtMessage(teamId, id, request.message());
     }
 
     @GetMapping("/api/team/{teamId}/thoughts")

@@ -18,21 +18,18 @@
 package com.ford.labs.retroquest.api;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.ford.labs.retroquest.actionitem.ActionItem;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.column.ColumnTitle;
 import com.ford.labs.retroquest.column.ColumnTitleRepository;
-import com.ford.labs.retroquest.thought.CreateThoughtRequest;
-import com.ford.labs.retroquest.thought.MoveThoughtRequest;
-import com.ford.labs.retroquest.thought.Thought;
-import com.ford.labs.retroquest.thought.ThoughtRepository;
-import com.ford.labs.retroquest.thought.UpdateThoughtDiscussedRequest;
-import com.ford.labs.retroquest.thought.UpdateThoughtMessageRequest;
+import com.ford.labs.retroquest.thought.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
@@ -233,6 +230,19 @@ class ThoughtApiTest extends ApiTestBase {
     }
 
     @Test
+    public void deleteThought_WhenThoughtOnOtherTeam_IgnoresDelete() throws Exception {
+        var unauthorizedTeamJwt = jwtBuilder.buildJwt("not-beach-bums");
+        var thought = thoughtRepository.save(Thought.builder().teamId(teamId).message("hello").build());
+
+        mockMvc.perform(delete("/api/team/%s/thought/%d".formatted("not-beach-bums", thought.getId()))
+                .contentType(APPLICATION_JSON)
+                .header("Authorization", format("Bearer %s", unauthorizedTeamJwt)))
+                .andExpect(status().isOk());
+
+        assertThat(thoughtRepository.findAll()).hasSize(1);
+    }
+
+    @Test
     void should_create_thought() throws Exception {
         var createThoughtRequest = new CreateThoughtRequest(
             null,
@@ -309,5 +319,39 @@ class ThoughtApiTest extends ApiTestBase {
                 .contentType(APPLICATION_JSON)
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
             .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void modifyingThought_WithThoughtForDifferentTeam_ReturnsNotFound() throws Exception {
+        String unauthorizedTeamJwt = jwtBuilder.buildJwt("not-beach-bums");
+        String authorizationHeader = format("Bearer %s", unauthorizedTeamJwt);
+
+        var savedThought = thoughtRepository.save(Thought.builder()
+                .teamId("beach-bums")
+                .build());
+
+        mockMvc.perform(put("/api/team/not-beach-bums/thought/%d/heart".formatted(savedThought.getId()))
+                .header("Authorization", authorizationHeader)
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(put("/api/team/not-beach-bums/thought/%d/discuss".formatted(savedThought.getId()))
+                .header("Authorization", authorizationHeader)
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(put("/api/team/not-beach-bums/thought/%d/column-id".formatted(savedThought.getId()))
+                .header("Authorization", authorizationHeader)
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(put("/api/team/not-beach-bums/thought/%d/message".formatted(savedThought.getId()))
+                .header("Authorization", authorizationHeader)
+                .content("{}")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }
