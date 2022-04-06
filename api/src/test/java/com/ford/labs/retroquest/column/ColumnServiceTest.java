@@ -62,7 +62,7 @@ class ColumnServiceTest {
         var expectedEvent = new WebsocketColumnTitleEvent(teamId, WebsocketEventType.UPDATE, expectedColumn);
         var mockedCounter = mock(Counter.class);
 
-        when(columnTitleRepository.findById(columnId)).thenReturn(Optional.of(savedColumn));
+        when(columnTitleRepository.findByTeamIdAndId(teamId, columnId)).thenReturn(Optional.of(savedColumn));
         when(columnTitleRepository.save(expectedColumn)).thenReturn(expectedColumn);
         when(meterRegistry.counter("retroquest.columns.changed.count")).thenReturn(mockedCounter);
 
