@@ -75,11 +75,23 @@ class ColumnServiceTest {
 
     @Test
     void throws_column_title_not_found_exception_when_column_title_not_in_db() {
-        var columnId = 42L;
-        when(columnTitleRepository.findById(columnId)).thenReturn(Optional.empty());
-
         assertThatThrownBy(() ->
-                service.editColumnTitleName(columnId, "some name", "some team id")
+                service.editColumnTitleName(42L, "some name", "some team id")
+        ).isInstanceOf(ColumnTitleNotFoundException.class);
+    }
+
+    @Test
+    public void fetchColumnTitle() {
+        var expected = new ColumnTitle(42L, "topic", "title", "teamId");
+        when(columnTitleRepository.findByTeamIdAndId("teamId", 42L)).thenReturn(Optional.of(expected));
+        var actual = service.fetchColumnTitle("teamId", 42L);
+        assertThat(actual).usingRecursiveComparison().isEqualTo(actual);
+    }
+
+    @Test
+    public void fetchColumnTitle_WithMissingColumnTitle_ThrowsColumnNotFoundException() {
+        assertThatThrownBy(() ->
+                service.fetchColumnTitle("some team id", 42L)
         ).isInstanceOf(ColumnTitleNotFoundException.class);
     }
 }
