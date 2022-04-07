@@ -21,8 +21,8 @@ import com.ford.labs.retroquest.column.ColumnTitle;
 import com.ford.labs.retroquest.column.ColumnTitleRepository;
 import com.ford.labs.retroquest.exception.ColumnTitleNotFoundException;
 import com.ford.labs.retroquest.exception.ThoughtNotFoundException;
-import com.ford.labs.retroquest.websocket.events.WebsocketEvent;
 import com.ford.labs.retroquest.websocket.WebsocketService;
+import com.ford.labs.retroquest.websocket.events.WebsocketEvent;
 import com.ford.labs.retroquest.websocket.events.WebsocketThoughtEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -110,7 +110,7 @@ class ThoughtServiceTest {
         Thought expectedThought = Thought.builder().id(1234L).topic(newTopic).build();
         given(this.thoughtRepository.findByTeamIdAndId(teamId, 1234L)).willReturn(Optional.of(thought));
         given(this.thoughtRepository.save(expectedThought)).willReturn(expectedThought);
-        given(this.columnTitleRepository.findById(6789L)).willReturn(Optional.of(expectedColumnTitle));
+        given(this.columnTitleRepository.findByTeamIdAndId(teamId, 6789L)).willReturn(Optional.of(expectedColumnTitle));
 
         Thought actualThought = thoughtService.updateColumn(teamId, 1234L, 6789L);
 
@@ -126,7 +126,7 @@ class ThoughtServiceTest {
         Thought expectedThought = Thought.builder().id(1234L).topic(newTopic).build();
         given(this.thoughtRepository.findByTeamIdAndId(teamId, 1234L)).willReturn(Optional.of(thought));
         given(this.thoughtRepository.save(expectedThought)).willReturn(expectedThought);
-        given(this.columnTitleRepository.findById(6789L)).willReturn(Optional.of(expectedColumnTitle));
+        given(this.columnTitleRepository.findByTeamIdAndId(teamId, 6789L)).willReturn(Optional.of(expectedColumnTitle));
 
         thoughtService.updateColumn(teamId, 1234L, 6789L);
 
