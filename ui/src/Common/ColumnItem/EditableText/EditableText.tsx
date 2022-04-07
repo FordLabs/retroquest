@@ -61,11 +61,7 @@ function EditableText(props: EditableTextProps) {
 
 	useEffect(() => {
 		resizeTextArea();
-	}, [value]);
-
-	useEffect(() => {
-		resizeTextArea();
-	}, [editValue]);
+	}, [value, editValue, textAreaRef?.current?.scrollHeight]);
 
 	useEffect(() => {
 		if (editing) {
