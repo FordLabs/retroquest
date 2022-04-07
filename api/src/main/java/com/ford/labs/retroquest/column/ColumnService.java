@@ -66,7 +66,7 @@ public class ColumnService {
         return newColumnTitle;
     }
 
-    private ColumnTitle fetchColumnTitle(String teamId, Long columnId) {
+    public ColumnTitle fetchColumnTitle(String teamId, Long columnId) {
         return columnTitleRepository.findByTeamIdAndId(teamId, columnId).orElseThrow(ColumnTitleNotFoundException::new);
     }
 }
