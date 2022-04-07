@@ -65,7 +65,7 @@ public class ThoughtService {
     }
 
     public Thought updateColumn(String teamId, Long thoughtId, long columnId) {
-        var columnTitle = columnTitleRepository.findById(columnId).orElseThrow(ColumnTitleNotFoundException::new);
+        var columnTitle = columnTitleRepository.findByTeamIdAndId(teamId, columnId).orElseThrow(ColumnTitleNotFoundException::new);
         var thought = fetchThought(teamId, thoughtId);
         thought.setTopic(columnTitle.getTopic());
         var savedThought = thoughtRepository.save(thought);
