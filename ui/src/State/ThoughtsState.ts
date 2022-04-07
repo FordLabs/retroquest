@@ -64,14 +64,14 @@ export const SortableThoughtsByTopicState = atomFamily<
 		get:
 			(params: ThoughtFilterParams) =>
 			({ get }) => {
-				const thoughts = get(ThoughtsByTopicState(params.topic));
-				const sortedByIfDiscussed = [...thoughts].sort((a, b) => {
+				let thoughts = get(ThoughtsByTopicState(params.topic));
+				if (params.sorted) {
+					thoughts = [...thoughts].sort((a, b) => b.hearts - a.hearts);
+				}
+				return [...thoughts].sort((a, b) => {
 					if (a.discussed === b.discussed) return 0;
 					return a.discussed ? 1 : -1;
 				});
-				return params.sorted
-					? sortedByIfDiscussed.sort((a, b) => b.hearts - a.hearts)
-					: sortedByIfDiscussed;
 			},
 	}),
 });
@@ -83,9 +83,9 @@ export const ActiveThoughtCountByTopicState = atomFamily<number, ThoughtTopic>({
 		get:
 			(topic: ThoughtTopic) =>
 			({ get }) => {
-				return get(ThoughtsState)
-					.filter((thought) => thought.topic === topic)
-					.filter((thought) => !thought.discussed).length;
+				return get(ThoughtsByTopicState(topic)).filter(
+					(thought) => !thought.discussed
+				).length;
 			},
 	}),
 });

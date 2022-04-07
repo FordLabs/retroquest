@@ -159,8 +159,8 @@ const confirmThoughtsAreInOriginalOrder = () => {
 const confirmThoughtsAreInSortedOrder = () => {
 	const thoughtItems = screen.getAllByTestId('retroItem');
 	expect(thoughtItems).toHaveLength(4);
-	expect(within(thoughtItems[0]).getByText('4')).toBeDefined();
-	expect(within(thoughtItems[1]).getByText('3')).toBeDefined();
-	expect(within(thoughtItems[2]).getByText('2')).toBeDefined();
-	expect(within(thoughtItems[3]).getByText('1')).toBeDefined();
+	expect(within(thoughtItems[0]).getByText('2')).toBeDefined();
+	expect(within(thoughtItems[1]).getByText('1')).toBeDefined();
+	expect(within(thoughtItems[2]).getByText('4')).toBeDefined();
+	expect(within(thoughtItems[3]).getByText('3')).toBeDefined();
 };
