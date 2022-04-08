@@ -70,7 +70,7 @@ describe('Assignee Input', () => {
 			<AssigneeInput
 				assignee={assignee}
 				onAssign={mockOnAssign}
-				readOnly={true}
+				disabled={true}
 			/>
 		);
 		const assigneeInput = getAssigneeInput();

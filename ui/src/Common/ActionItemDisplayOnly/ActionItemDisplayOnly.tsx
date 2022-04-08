@@ -35,7 +35,7 @@ function ActionItemDisplayOnly(props: Props) {
 			<div className="action-item-display-only-task">{actionItem.task}</div>
 			<div className="action-item-display-only-bottom">
 				<DateCreated date={actionItem.dateCreated} disabled />
-				<AssigneeInput assignee={actionItem.assignee} readOnly />
+				<AssigneeInput assignee={actionItem.assignee} disabled />
 			</div>
 		</div>
 	);

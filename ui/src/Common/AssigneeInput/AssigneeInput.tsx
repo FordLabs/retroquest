@@ -16,6 +16,7 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
+import classNames from 'classnames';
 
 import { onKeys } from '../../Utils/EventUtils';
 import FloatingCharacterCountdown from '../FloatingCharacterCountdown/FloatingCharacterCountdown';
@@ -27,13 +28,11 @@ const MAX_ASSIGNEE_LENGTH = 50;
 interface Props {
 	assignee: string;
 	onAssign?: (assignee: string) => void;
-	editing?: boolean;
-	deleting?: boolean;
-	readOnly?: boolean;
+	disabled?: boolean;
 }
 
 function AssigneeInput(props: Props) {
-	const { assignee = '', onAssign, editing, deleting, readOnly } = props;
+	const { assignee = '', onAssign, disabled } = props;
 	const assigneeInputRef = useRef<HTMLInputElement>(null);
 
 	const [editAssignee, setEditAssignee] = useState<string>(assignee || '');
@@ -53,7 +52,7 @@ function AssigneeInput(props: Props) {
 	}
 
 	return (
-		<div className="assignee-container">
+		<div className={classNames('assignee-container', { opacity: disabled })}>
 			<label className="label">
 				assigned to
 				<input
@@ -64,8 +63,7 @@ function AssigneeInput(props: Props) {
 					onBlur={onAssigneeConfirmed}
 					onKeyDown={onKeys('Enter', handleEnter)}
 					maxLength={MAX_ASSIGNEE_LENGTH}
-					disabled={readOnly || editing || deleting}
-					readOnly={readOnly || editing || deleting}
+					disabled={disabled}
 					data-testid="assigneeInput"
 					ref={assigneeInputRef}
 				/>
