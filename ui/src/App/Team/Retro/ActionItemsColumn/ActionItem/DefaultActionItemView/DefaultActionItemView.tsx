@@ -26,7 +26,7 @@ import {
 	ColumnItemButtonGroup,
 	DeleteButton,
 	EditButton,
-} from '../../../../../../Common/ColumnItemButtons/ColumnItemButtons';
+} from '../../../../../../Common/ColumnItemButtons';
 import { DateCreated } from '../../../../../../Common/DateCreated/DateCreated';
 import ActionItemService from '../../../../../../Services/Api/ActionItemService';
 import { ModalContentsState } from '../../../../../../State/ModalContentsState';

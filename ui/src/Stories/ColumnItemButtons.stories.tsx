@@ -25,7 +25,7 @@ import {
 	ConfirmButton,
 	DeleteButton,
 	EditButton,
-} from '../Common/ColumnItemButtons/ColumnItemButtons';
+} from '../Common/ColumnItemButtons';
 
 export default {
 	title: 'components/ColumnItemButtons',

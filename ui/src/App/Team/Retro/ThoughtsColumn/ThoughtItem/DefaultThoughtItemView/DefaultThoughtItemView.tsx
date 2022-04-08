@@ -24,7 +24,7 @@ import {
 	ColumnItemButtonGroup,
 	DeleteButton,
 	EditButton,
-} from '../../../../../../Common/ColumnItemButtons/ColumnItemButtons';
+} from '../../../../../../Common/ColumnItemButtons';
 import ThoughtService from '../../../../../../Services/Api/ThoughtService';
 import { ModalContentsState } from '../../../../../../State/ModalContentsState';
 import { TeamState } from '../../../../../../State/TeamState';

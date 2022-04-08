@@ -23,7 +23,7 @@ import {
 	CancelButton,
 	ColumnItemButtonGroup,
 	ConfirmButton,
-} from '../../ColumnItemButtons/ColumnItemButtons';
+} from '../../ColumnItemButtons';
 
 import './DeleteColumnItem.scss';
 
