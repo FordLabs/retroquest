@@ -95,22 +95,18 @@ function ActionItem(props: ActionItemProps) {
 					onEdit={editActionItemTask}
 					onDelete={deleteActionItem}
 					onCheck={updateActionItemCompletionStatus}
-					customButtons={({ editing, deleting }) => (
+					customButton={
 						<DateCreated
 							date={actionItem.dateCreated}
-							disabled={actionItem.completed || editing || deleting}
+							disabled={actionItem.completed}
 						/>
-					)}
+					}
 				>
-					{({ editing, deleting }) => (
-						<Assignee
-							assignee={actionItem.assignee}
-							onAssign={editActionItemAssignee}
-							readOnly={actionItem.completed}
-							editing={editing}
-							deleting={deleting}
-						/>
-					)}
+					<Assignee
+						assignee={actionItem.assignee}
+						onAssign={editActionItemAssignee}
+						readOnly={actionItem.completed}
+					/>
 				</ColumnItem>
 			)}
 		</>

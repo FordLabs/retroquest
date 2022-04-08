@@ -40,7 +40,7 @@ const Template: ComponentStory<typeof ColumnItemButtonGroup> = () => {
 				style={{ width: '500px', marginBottom: '20px' }}
 			>
 				<ColumnItemButtonGroup>
-					<EditButton editing={false} onClick={() => alert('edit')} />
+					<EditButton onClick={() => alert('edit')} />
 					<DeleteButton onClick={() => alert('delete')} />
 					<CheckboxButton checked={false} onClick={() => alert('close')} />
 				</ColumnItemButtonGroup>
@@ -51,7 +51,7 @@ const Template: ComponentStory<typeof ColumnItemButtonGroup> = () => {
 				style={{ width: '500px', marginBottom: '20px' }}
 			>
 				<ColumnItemButtonGroup>
-					<EditButton editing={true} onClick={() => alert('cancel edit')} />
+					<EditButton onClick={() => alert('cancel edit')} />
 					<DeleteButton onClick={() => alert('delete')} />
 					<CheckboxButton checked={true} onClick={() => alert('open')} />
 				</ColumnItemButtonGroup>
@@ -62,11 +62,7 @@ const Template: ComponentStory<typeof ColumnItemButtonGroup> = () => {
 				style={{ width: '500px', marginBottom: '20px' }}
 			>
 				<ColumnItemButtonGroup>
-					<EditButton
-						editing={false}
-						onClick={() => alert('edit')}
-						disabled={true}
-					/>
+					<EditButton onClick={() => alert('edit')} disabled={true} />
 					<DeleteButton onClick={() => alert('delete')} disabled={true} />
 					<CheckboxButton
 						checked={false}
@@ -86,11 +82,7 @@ const Template: ComponentStory<typeof ColumnItemButtonGroup> = () => {
 				style={{ width: '500px', marginBottom: '20px' }}
 			>
 				<ColumnItemButtonGroup>
-					<EditButton
-						editing={false}
-						onClick={() => alert('edit')}
-						disabled={true}
-					/>
+					<EditButton onClick={() => alert('edit')} disabled={true} />
 					<DeleteButton onClick={() => alert('delete')} disabled={true} />
 					<CheckboxButton
 						checked={false}

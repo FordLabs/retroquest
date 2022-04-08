@@ -101,7 +101,7 @@ Cypress.Commands.add('enterActionItem', (actionItemTask: string) => {
 });
 
 Cypress.Commands.add('getActionItemByTask', (actionItemTask: string) => {
-	cy.findByDisplayValue(actionItemTask).closest(`[data-testid=actionItem]`);
+	cy.findByText(actionItemTask).closest(`[data-testid=actionItem]`);
 });
 
 Cypress.Commands.add(
