@@ -21,7 +21,7 @@ import { useRecoilValue } from 'recoil';
 
 import ColumnHeader from '../../../../Common/ColumnHeader/ColumnHeader';
 import CountSeparator from '../../../../Common/CountSeparator/CountSeparator';
-import TextField from '../../../../Common/TextField/TextField';
+import CreateColumnItemInput from '../../../../Common/CreateColumnItemInput/CreateColumnItemInput';
 import ColumnService from '../../../../Services/Api/ColumnService';
 import ThoughtService from '../../../../Services/Api/ThoughtService';
 import { TeamState } from '../../../../State/TeamState';
@@ -79,7 +79,7 @@ function ThoughtsColumn(props: Props) {
 				sortedChanged={setSorted}
 				titleChanged={changeTitle}
 			/>
-			<TextField
+			<CreateColumnItemInput
 				type={column.topic}
 				placeholder="Enter a Thought"
 				handleSubmission={createThought}

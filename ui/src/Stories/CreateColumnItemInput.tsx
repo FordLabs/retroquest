@@ -18,13 +18,13 @@
 import React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import TextField from '../Common/TextField/TextField';
+import CreateColumnItemInput from '../Common/CreateColumnItemInput/CreateColumnItemInput';
 import Topic from '../Types/Topic';
 
 export default {
-	title: 'components/TextField',
-	component: TextField,
-} as ComponentMeta<typeof TextField>;
+	title: 'components/CreateColumnItemInput',
+	component: CreateColumnItemInput,
+} as ComponentMeta<typeof CreateColumnItemInput>;
 
 const props = {
 	placeholder: 'Enter A Thought',
@@ -33,7 +33,7 @@ const props = {
 	},
 };
 
-const Template: ComponentStory<typeof TextField> = () => (
+const Template: ComponentStory<typeof CreateColumnItemInput> = () => (
 	<span
 		style={{
 			display: 'flex',
@@ -42,10 +42,10 @@ const Template: ComponentStory<typeof TextField> = () => (
 			maxWidth: '800px',
 		}}
 	>
-		<TextField {...props} type={Topic.HAPPY} />
-		<TextField {...props} type={Topic.CONFUSED} />
-		<TextField {...props} type={Topic.UNHAPPY} />
-		<TextField {...props} type={Topic.ACTION} />
+		<CreateColumnItemInput {...props} type={Topic.HAPPY} />
+		<CreateColumnItemInput {...props} type={Topic.CONFUSED} />
+		<CreateColumnItemInput {...props} type={Topic.UNHAPPY} />
+		<CreateColumnItemInput {...props} type={Topic.ACTION} />
 	</span>
 );
 
