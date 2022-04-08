@@ -45,7 +45,7 @@ describe('Textarea', () => {
 		expect(getTextarea()).toHaveValue(mockInitialValue);
 	});
 
-	it('should auto focus and auto select textarea', () => {
+	it('should auto focus on textarea', () => {
 		expect(getTextarea()).toHaveFocus();
 	});
 
@@ -64,8 +64,15 @@ describe('Textarea', () => {
 		expect(mockOnChange).toHaveBeenCalledWith('Hey!');
 	});
 
+	it('should enter a new line when user clicks shift + enter', () => {
+		const textarea = getTextarea();
+		userEvent.type(textarea, 'Hello there!{shift}{enter}New line.');
+		expect(textarea).toHaveValue(`Hello there!\nNew line.`);
+		expect(mockOnEnter).not.toHaveBeenCalled();
+	});
+
 	it('should trigger onEnter when user types and clicks enter', async () => {
-		userEvent.type(getTextarea(), 'Hello there!{Enter}');
+		userEvent.type(getTextarea(), 'Hello there!{enter}');
 
 		await waitFor(() =>
 			expect(mockOnEnter).toHaveBeenCalledWith(
