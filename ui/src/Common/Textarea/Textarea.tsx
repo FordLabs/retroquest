@@ -60,6 +60,9 @@ function Textarea(props: Props) {
 			textArea.style.height = textArea.scrollHeight + 'px';
 		}
 	}
+	function onKeypressEnter(event: KeyboardEvent<HTMLTextAreaElement>) {
+		if (!event.shiftKey) onEnter(editValue, event);
+	}
 
 	return (
 		<div className={classnames('text-area', className)}>
@@ -73,7 +76,7 @@ function Textarea(props: Props) {
 					setEditValue(event.target.value);
 					onChange(event.target.value);
 				}}
-				onKeyDown={onKeys('Enter', (event) => onEnter(editValue, event))}
+				onKeyDown={onKeys('Enter', onKeypressEnter)}
 				maxLength={MAX_LENGTH}
 			/>
 			<FloatingCharacterCountdown
