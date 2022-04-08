@@ -30,13 +30,9 @@ import './ColumnItemButtons.scss';
 
 type ButtonProps = ComponentPropsWithoutRef<'button'>;
 
-type EditButtonProps = ButtonProps & {
-	editing: boolean;
-};
-
 export const EditButton = forwardRef(
-	(props: EditButtonProps, ref: LegacyRef<HTMLButtonElement>) => {
-		const { editing, className, ...buttonProps } = props;
+	(props: ButtonProps, ref: LegacyRef<HTMLButtonElement>) => {
+		const { className, ...buttonProps } = props;
 
 		return (
 			<button
@@ -45,20 +41,8 @@ export const EditButton = forwardRef(
 				ref={ref}
 				data-testid="editButton"
 			>
-				{editing ? (
-					<i
-						className="fas fa-times"
-						aria-hidden="true"
-						data-testid="cancelIcon"
-					/>
-				) : (
-					<i
-						className="fas fa-edit"
-						aria-hidden="true"
-						data-testid="editIcon"
-					/>
-				)}
-				<Tooltip>{editing ? 'Cancel' : 'Edit'}</Tooltip>
+				<i className="fas fa-edit" aria-hidden="true" data-testid="editIcon" />
+				<Tooltip>Edit</Tooltip>
 			</button>
 		);
 	}
@@ -127,7 +111,7 @@ export const ConfirmButton = forwardRef(
 				{...buttonProps}
 				ref={ref}
 			>
-				<span>{children}</span>
+				{children}
 			</button>
 		);
 	}
@@ -143,16 +127,12 @@ export const CancelButton = forwardRef(
 				{...buttonProps}
 				ref={ref}
 			>
-				<span>{children}</span>
+				{children}
 			</button>
 		);
 	}
 );
 
-type ColumnItemButtonGroupProps = PropsWithChildren<unknown>;
-
-export function ColumnItemButtonGroup(props: ColumnItemButtonGroupProps) {
-	const { children } = props;
-
-	return <div className="column-item-button-group">{children}</div>;
+export function ColumnItemButtonGroup(props: PropsWithChildren<unknown>) {
+	return <div className="column-item-button-group">{props.children}</div>;
 }

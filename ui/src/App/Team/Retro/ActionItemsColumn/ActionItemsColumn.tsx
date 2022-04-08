@@ -65,7 +65,7 @@ function ActionItemsColumn() {
 
 	const renderActionItem = (actionItem: Action) => {
 		return (
-			<li key={actionItem.id}>
+			<li key={actionItem.id} className="action-item-li">
 				<ActionItem actionItemId={actionItem.id} />
 			</li>
 		);

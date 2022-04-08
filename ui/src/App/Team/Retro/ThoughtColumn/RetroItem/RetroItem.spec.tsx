@@ -105,7 +105,7 @@ describe('Retro Item', () => {
 		screen.getByText('Upvote');
 	});
 
-	describe('When not discussed and not readonly', () => {
+	describe('When not discussed and buttons are not disabled', () => {
 		beforeEach(() => {
 			render(
 				<RecoilRoot
@@ -171,22 +171,15 @@ describe('Retro Item', () => {
 			editText(newText);
 			screen.getByText(newText);
 
-			clickEdit();
+			screen.getByText('Cancel').click();
 			screen.getByText(fakeThought.message);
 		});
 
-		it('should disable other buttons while editing', () => {
+		it('should show edit view on edit button click', () => {
 			clickEdit();
-			expect(textReadonly()).toBeFalsy();
-
-			clickUpvote();
-			expect(ThoughtService.upvoteThought).not.toHaveBeenCalled();
-
-			clickDelete();
-			expect(deleteMessage()).toBeFalsy();
-
-			clickCheckboxToMarkItemAsDiscussed();
-			expect(ThoughtService.updateDiscussionStatus).not.toHaveBeenCalled();
+			expect(screen.getByTestId('textareaField')).toBeDefined();
+			expect(screen.queryByText('Delete this')).toBeNull();
+			expect(screen.queryByTestId('columnItemMessageButton')).toBeNull();
 		});
 
 		it('should edit thought', () => {
@@ -287,12 +280,11 @@ describe('Retro Item', () => {
 		});
 
 		it('should disable edit button', () => {
-			clickEdit();
-			expect(textReadonly()).toBeTruthy();
+			expect(screen.getByTestId('editButton')).toBeDisabled();
 		});
 
 		it('should not open modal', () => {
-			const retroItemButton = screen.queryByTestId('editableText-select');
+			const retroItemButton = screen.queryByTestId('textareaField');
 			expect(retroItemButton).toBeNull();
 			expect(modalContent).toBeNull();
 		});
@@ -314,7 +306,7 @@ describe('Retro Item', () => {
 		});
 	});
 
-	describe('When readonly', () => {
+	describe('When buttons are disabled', () => {
 		beforeEach(() => {
 			render(
 				<RecoilRoot
@@ -338,45 +330,23 @@ describe('Retro Item', () => {
 		});
 
 		it('should disable all buttons', () => {
-			clickUpvote();
-			expect(ThoughtService.upvoteThought).not.toHaveBeenCalled();
-
-			clickEdit();
-			expect(textReadonly()).toBeTruthy();
-
-			clickDelete();
-			expect(deleteMessage()).toBeFalsy();
-
-			clickCheckboxToMarkItemAsDiscussed();
-			expect(ThoughtService.updateDiscussionStatus).not.toHaveBeenCalled();
-		});
-
-		it('should open retro item modal', async () => {
-			openRetroItemModal();
-			await waitFor(() =>
-				expect(modalContent).toEqual({
-					title: 'Retro Item',
-					component: (
-						<RetroItemWithAddAction
-							thoughtId={fakeThought.id}
-							type={Topic.HAPPY}
-						/>
-					),
-					superSize: true,
-				})
-			);
+			expect(screen.getByTestId('columnItemMessageButton')).toBeDisabled();
+			expect(screen.getByTestId('retroItem-upvote')).toBeDisabled();
+			expect(screen.getByTestId('editButton')).toBeDisabled();
+			expect(screen.getByTestId('deleteButton')).toBeDisabled();
+			expect(screen.getByTestId('checkboxButton')).toBeDisabled();
 		});
 	});
 });
 
 function editText(text: string) {
-	const textArea = screen.getByTestId('editableText') as HTMLTextAreaElement;
+	const textArea = screen.getByTestId('textareaField') as HTMLTextAreaElement;
 	textArea.select();
 	userEvent.type(textArea, text);
 }
 
 function openRetroItemModal() {
-	userEvent.click(screen.getByTestId('editableText-select'));
+	userEvent.click(screen.getByTestId('columnItemMessageButton'));
 }
 
 function clickUpvote() {
@@ -405,10 +375,6 @@ function clickConfirmDelete() {
 
 function escapeKey() {
 	userEvent.type(document.body, '{Escape}');
-}
-
-function textReadonly() {
-	return screen.getByTestId('editableText').getAttribute('readonly') === '';
 }
 
 function deleteMessage() {

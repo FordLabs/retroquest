@@ -124,12 +124,12 @@ describe('Retro Facilitator Journey', () => {
 		clickOnFirstThought();
 
 		getRetroActionModal().as('retroItemModal');
-		cy.get('@retroItemModal').findByDisplayValue(happyThought).should('exist');
+		cy.get('@retroItemModal').findByText(happyThought).should('exist');
 		cy.get('@retroItemModal').findByText('Add Action Item').click();
 
 		const actionItemTask = 'Handle by Friday';
 		cy.get('@retroItemModal')
-			.find('[data-testid="addActionItem-task"]')
+			.find('[data-testid="textareaField"]')
 			.type(actionItemTask);
 		const actionItemAssignee = 'Harry, and Corey';
 		cy.get('@retroItemModal')
@@ -144,11 +144,11 @@ describe('Retro Facilitator Journey', () => {
 		getHappyColumnItems().should('have.length', 1);
 		getDiscussedThought()
 			.should('have.class', 'completed')
-			.findByDisplayValue(happyThought)
+			.findByText(happyThought)
 			.should('exist');
 
 		cy.log('**Action Item should exist in action items column**');
-		getActionColumnItems().findByDisplayValue(actionItemTask).should('exist');
+		getActionColumnItems().findByText(actionItemTask).should('exist');
 		getActionColumnItems()
 			.findByDisplayValue(actionItemAssignee)
 			.should('exist');
@@ -215,6 +215,10 @@ describe('Retro Facilitator Journey', () => {
 			'PUT',
 			`/api/team/${teamCredentials.teamId}/action-item/*/completed`
 		).as('updateCompletedState');
+		cy.intercept(
+			'PUT',
+			`/api/team/${teamCredentials.teamId}/action-item/*/task`
+		).as('updateTask');
 
 		cy.log('**Should have "Action Items" column header in yellow**');
 		const yellow = 'rgb(241, 196, 15)';
@@ -279,7 +283,7 @@ describe('Retro Facilitator Journey', () => {
 		ensureModalIsClosed();
 		cy.get('@putArchiveRetro').its('response.statusCode').should('eq', 200);
 
-		cy.findByDisplayValue(activeActionItemTask).should('exist');
+		cy.findByText(activeActionItemTask).should('exist');
 		cy.findByDisplayValue(completedActionItemTask).should('not.exist');
 		cy.confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 0);
 		cy.confirmNumberOfActionItemsInColumn(1);
@@ -301,10 +305,10 @@ function shouldCreateActionItems(actionItems: string[]) {
 		cy.confirmNumberOfActionItemsInColumn(index + 1);
 
 		const splitActionString = actionString.split('@');
-		const action = splitActionString[0].trim();
+		const actionTask = splitActionString[0].trim();
 		const assignedTo = splitActionString[1];
 
-		cy.findByDisplayValue(action).should('exist');
+		cy.findByText(actionTask).should('exist');
 		cy.findByDisplayValue(assignedTo).should('exist');
 	});
 }
@@ -319,19 +323,21 @@ function shouldEditActionItemTaskAndAssignee(
 	appendToAssignee: string
 ) {
 	cy.log(`**Edit Action Item: ${currentTask}**`);
-	cy.getActionItemByTask(currentTask).as('actionItemToEdit');
 
-	cy.get('@actionItemToEdit')
+	cy.getActionItemByTask(currentTask)
 		.find('[data-testid=editButton]')
 		.type(`{rightarrow} ${appendToTask}{enter}`);
-	cy.get('@actionItemToEdit')
-		.findByDisplayValue(`${currentTask} ${appendToTask}`)
-		.should('exist');
 
-	cy.get('@actionItemToEdit')
+	cy.wait('@updateTask');
+
+	const expectedNewTask = `${currentTask} ${appendToTask}`;
+	cy.getActionItemByTask(expectedNewTask).should('exist');
+
+	cy.getActionItemByTask(expectedNewTask)
 		.find('[data-testid=actionItem-assignee]')
 		.type(`${appendToAssignee}{enter}`);
-	cy.get('@actionItemToEdit')
+
+	cy.getActionItemByTask(expectedNewTask)
 		.findByDisplayValue(`${currentAssignee}${appendToAssignee}`)
 		.should('exist');
 }
@@ -379,18 +385,18 @@ function shouldDeleteActionItem(actionItemTask: string) {
 	cy.getActionItemByTask(actionItemTask)
 		.find(`[data-testid=deleteButton]`)
 		.click();
-	cy.get('[data-testid=deletionOverlay]').contains('Yes').click();
+	cy.get('[data-testid=deleteColumnItem]').contains('Yes').click();
 }
 
 const getActionColumnItems = () =>
 	cy.get('[data-testid=retroColumn__action]').find(`[data-testid=actionItem]`);
 const getRetroItemByText = (text: string): Chainable =>
-	cy.findByDisplayValue(text).closest(`[data-testid=retroItem]`);
+	cy.findByText(text).closest(`[data-testid=retroItem]`);
 
 const getDiscussedThought = () =>
 	cy.get('[data-testid=checkmark]').closest('[data-testid="retroItem"]');
 const clickOnFirstThought = () =>
-	cy.get('[data-testid="editableText-select"]').first().click();
+	cy.get('[data-testid=columnItemMessageButton]').first().click();
 const getRetroActionModal = () => cy.get('[data-testid=retro-item-modal]');
 const getColumnHeaderByTopic = (topic: Topic) =>
 	cy.get(`[data-testid=columnHeader-${topic}]`);

@@ -21,8 +21,10 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
-import classnames from 'classnames';
+import classNames from 'classnames';
+import { useRecoilValue } from 'recoil';
 
+import { ModalContentsState } from '../../State/ModalContentsState';
 import Topic from '../../Types/Topic';
 import {
 	CheckboxButton,
@@ -31,12 +33,18 @@ import {
 	EditButton,
 } from '../ColumnItemButtons/ColumnItemButtons';
 
-import DeletionOverlay from './DeletionOverlay/DeletionOverlay';
-import EditableText from './EditableText/EditableText';
+import DeleteColumnItem from './DeleteColumnItem/DeleteColumnItem';
+import EditColumnItem from './EditColumnItem/EditColumnItem';
 
 import './ColumnItem.scss';
 
 const NO_OP = () => undefined;
+
+enum ViewState {
+	DELETE = 'delete',
+	EDIT = 'edit',
+	DEFAULT = 'default',
+}
 
 type ColumnItemProps = ComponentPropsWithoutRef<'div'> & {
 	type: Topic;
@@ -47,12 +55,11 @@ type ColumnItemProps = ComponentPropsWithoutRef<'div'> & {
 	onEdit?: (message: string) => void;
 	onDelete?: () => void;
 	onCheck?: () => void;
-	defaultButtons?: boolean;
-	customButtons?: (state: { editing: boolean; deleting: boolean }) => ReactNode;
-	children?: (state: { editing: boolean; deleting: boolean }) => ReactNode;
+	customButton?: ReactNode;
+	children?: ReactNode;
 };
 
-export default function ColumnItem(props: ColumnItemProps) {
+function ColumnItem(props: ColumnItemProps) {
 	const {
 		type,
 		text,
@@ -62,111 +69,89 @@ export default function ColumnItem(props: ColumnItemProps) {
 		onEdit = NO_OP,
 		onDelete = NO_OP,
 		onCheck = NO_OP,
-		defaultButtons = true,
-		customButtons,
+		customButton,
 		children,
 		className,
 		...divProps
 	} = props;
 
-	const editButtonRef = useRef<HTMLButtonElement>(null);
-	const deleteButtonRef = useRef<HTMLButtonElement>(null);
+	const columnItemRef = useRef<HTMLDivElement>(null);
 
-	const [editing, setEditing] = useState<boolean>(false);
-	const [deleting, setDeleting] = useState<boolean>(false);
+	const modalContents = useRecoilValue(ModalContentsState);
+	const [viewState, setViewState] = useState<ViewState>(ViewState.DEFAULT);
+	const [columnItemHeight, setColumnItemHeight] = useState<number | undefined>(
+		0
+	);
 
-	const canSelect =
-		((!editing && !deleting && !checked) || disableButtons) && !!onSelect;
-
-	function onEditToggle() {
-		return setEditing((editingState) => !editingState);
-	}
-
-	function onEditCanceled() {
-		setEditing(false);
-		editButtonRef.current?.focus();
-	}
-
-	function onEditConfirmed(updatedText: string) {
-		onEdit(updatedText);
-		setEditing(false);
-	}
-
-	function onDeleteStarted() {
-		setDeleting(true);
-	}
-
-	function onDeleteConfirmed() {
-		setDeleting(false);
-		onDelete();
-	}
-
-	function onDeleteCanceled() {
-		setDeleting(false);
-		if (deleteButtonRef.current) {
-			deleteButtonRef.current.disabled = false;
-			deleteButtonRef.current?.focus();
-		}
-	}
-
-	function onTextSelect() {
-		if (canSelect) onSelect();
-	}
-
-	return (
-		<div
-			data-testid="columnItem"
-			className={classnames('column-item', type, className, {
-				editing,
-				deleting,
-			})}
-			{...divProps}
-		>
-			<EditableText
-				value={text}
-				editing={editing}
-				selectable={canSelect}
-				onConfirm={onEditConfirmed}
-				onCancel={onEditCanceled}
-				onSelect={onTextSelect}
-				className="text-container"
-				data-testid="columnItem-textarea"
-			/>
-			{children && children({ editing, deleting })}
-			<ColumnItemButtonGroup>
-				{customButtons && customButtons({ editing, deleting })}
-				{defaultButtons && (
-					<>
+	switch (viewState) {
+		case ViewState.DELETE:
+			return (
+				<DeleteColumnItem
+					onConfirm={onDelete}
+					onCancel={() => setViewState(ViewState.DEFAULT)}
+					height={columnItemHeight}
+				>
+					<>Delete this {type === Topic.ACTION ? 'Action Item' : 'Thought'}?</>
+				</DeleteColumnItem>
+			);
+		case ViewState.EDIT:
+			return (
+				<EditColumnItem
+					initialValue={text}
+					onConfirm={(updatedText: string) => {
+						onEdit(updatedText);
+						setViewState(ViewState.DEFAULT);
+					}}
+					onCancel={() => setViewState(ViewState.DEFAULT)}
+					height={columnItemHeight}
+				>
+					{children}
+				</EditColumnItem>
+			);
+		default:
+			return (
+				<div
+					data-testid="columnItem"
+					className={classNames('column-item', type, className)}
+					ref={columnItemRef}
+					{...divProps}
+				>
+					<button
+						onClick={onSelect}
+						className={classNames('column-item-message-button', {
+							opacity: checked,
+						})}
+						data-testid="columnItemMessageButton"
+						disabled={checked || !!modalContents || disableButtons}
+					>
+						{text}
+					</button>
+					{children}
+					<ColumnItemButtonGroup>
+						{customButton}
 						<EditButton
 							aria-label="Edit"
-							editing={editing}
-							onClick={onEditToggle}
-							disabled={checked || disableButtons || deleting}
-							ref={editButtonRef}
+							onClick={() => setViewState(ViewState.EDIT)}
+							disabled={checked || disableButtons}
 						/>
 						<DeleteButton
 							aria-label="Delete"
-							onClick={onDeleteStarted}
-							disabled={disableButtons || editing || deleting}
-							ref={deleteButtonRef}
+							onClick={() => {
+								setColumnItemHeight(columnItemRef?.current?.clientHeight);
+								setViewState(ViewState.DELETE);
+							}}
+							disabled={disableButtons}
 						/>
 						<CheckboxButton
 							aria-label="Mark as complete"
 							checked={checked}
 							onClick={onCheck}
-							disabled={disableButtons || editing || deleting}
+							disabled={disableButtons}
 						/>
-					</>
-				)}
-			</ColumnItemButtonGroup>
-			{deleting && (
-				<DeletionOverlay
-					onCancel={onDeleteCanceled}
-					onConfirm={onDeleteConfirmed}
-				>
-					Delete this {type === Topic.ACTION ? 'Action Item' : 'Thought'}?
-				</DeletionOverlay>
-			)}
-		</div>
-	);
+					</ColumnItemButtonGroup>
+				</div>
+			);
+	}
 }
+
+export default ColumnItem;

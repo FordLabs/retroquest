@@ -45,7 +45,7 @@ describe('ColumnItem', () => {
 		}
 	);
 
-	describe('When not checked and not readonly', () => {
+	describe('When not checked and not disabled', () => {
 		beforeEach(() => {
 			renderWithRecoilRoot(
 				<ColumnItem
@@ -60,7 +60,7 @@ describe('ColumnItem', () => {
 		});
 
 		it('can select', () => {
-			userEvent.click(screen.getByTestId('editableText-select'));
+			userEvent.click(screen.getByTestId('columnItemMessageButton'));
 			expect(mockSelect).toHaveBeenCalledTimes(1);
 		});
 
@@ -84,19 +84,15 @@ describe('ColumnItem', () => {
 			editText(newText);
 			screen.getByText(newText);
 
-			clickEdit();
+			screen.getByText('Cancel').click();
 			screen.getByText(startingText);
 		});
 
-		it('should disable other buttons while editing', () => {
+		it('should show edit view on edit button click', () => {
 			clickEdit();
-			expect(textReadonly()).toBeFalsy();
-
-			clickDelete();
-			expect(deleteMessage()).toBeFalsy();
-
-			clickCheckbox();
-			expect(mockCheck).not.toHaveBeenCalled();
+			expect(screen.getByTestId('textareaField')).toBeDefined();
+			expect(screen.queryByText('Delete this')).toBeNull();
+			expect(screen.queryByTestId('columnItemMessageButton')).toBeNull();
 		});
 
 		it('can complete edit', () => {
@@ -149,19 +145,17 @@ describe('ColumnItem', () => {
 		});
 
 		it('should disable edit button', () => {
-			clickEdit();
-			expect(textReadonly()).toBeTruthy();
+			expect(screen.getByTestId('editButton')).toBeDisabled();
 		});
 
 		it('should disable select', () => {
-			const select = screen.queryByTestId('editableText-select');
+			const select = screen.queryByTestId('textareaField');
 			expect(select).toBeNull();
 			expect(mockSelect).not.toHaveBeenCalled();
 		});
 
 		it('should not disable delete button', () => {
-			clickDelete();
-			expect(deleteMessage()).toBeTruthy();
+			expect(screen.getByTestId('deleteButton')).not.toBeDisabled();
 		});
 
 		it('should not disable checkbox button', () => {
@@ -170,7 +164,7 @@ describe('ColumnItem', () => {
 		});
 	});
 
-	describe('When readonly', () => {
+	describe('When buttons are disabled', () => {
 		beforeEach(() => {
 			renderWithRecoilRoot(
 				<ColumnItem
@@ -187,38 +181,10 @@ describe('ColumnItem', () => {
 		});
 
 		it('should disable all buttons', () => {
-			clickEdit();
-			expect(textReadonly()).toBeTruthy();
-
-			clickDelete();
-			expect(deleteMessage()).toBeFalsy();
-
-			clickCheckbox();
-			expect(mockCheck).not.toHaveBeenCalled();
-		});
-
-		it('should not disable select', () => {
-			userEvent.click(screen.getByTestId('editableText-select'));
-
-			expect(mockSelect).toHaveBeenCalledTimes(1);
-		});
-	});
-
-	describe('Without default buttons', () => {
-		beforeEach(() => {
-			renderWithRecoilRoot(
-				<ColumnItem
-					type={Topic.HAPPY}
-					text={startingText}
-					defaultButtons={false}
-				/>
-			);
-		});
-
-		it('should not render the edit, delete, and checkbox buttons', () => {
-			expect(screen.queryByTestId('editButton')).toBeFalsy();
-			expect(screen.queryByTestId('checkboxButton')).toBeFalsy();
-			expect(screen.queryByTestId('checkboxButton')).toBeFalsy();
+			expect(screen.getByTestId('columnItemMessageButton')).toBeDisabled();
+			expect(screen.getByTestId('editButton')).toBeDisabled();
+			expect(screen.getByTestId('deleteButton')).toBeDisabled();
+			expect(screen.getByTestId('checkboxButton')).toBeDisabled();
 		});
 	});
 
@@ -228,7 +194,7 @@ describe('ColumnItem', () => {
 				<ColumnItem
 					type={Topic.HAPPY}
 					text={startingText}
-					customButtons={() => <button data-testid="columnItem-upvote" />}
+					customButton={<button data-testid="columnItem-upvote" />}
 				/>
 			);
 		});
@@ -242,7 +208,7 @@ describe('ColumnItem', () => {
 		beforeEach(() => {
 			renderWithRecoilRoot(
 				<ColumnItem type={Topic.HAPPY} text={startingText}>
-					{() => "I'm a child"}
+					I'm a child
 				</ColumnItem>
 			);
 		});
@@ -254,7 +220,7 @@ describe('ColumnItem', () => {
 });
 
 function editText(text: string) {
-	const textArea = screen.getByTestId('editableText') as HTMLTextAreaElement;
+	const textArea = screen.getByTestId('textareaField') as HTMLTextAreaElement;
 	textArea.select();
 	userEvent.type(textArea, text);
 }
@@ -282,10 +248,6 @@ function clickConfirmDelete() {
 
 function escapeKey() {
 	userEvent.type(document.body, '{Escape}');
-}
-
-function textReadonly() {
-	return screen.getByTestId('editableText').getAttribute('readonly') === '';
 }
 
 function deleteMessage() {

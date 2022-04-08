@@ -38,8 +38,6 @@ jest.mock('../../../../../Services/Api/ActionItemService');
 
 describe('ActionItem', () => {
 	let modalContent: ModalContents | null;
-	const fadeInAnimationClass = 'fade-in';
-	const fadeOutAnimationClass = 'fade-out';
 
 	const team: Team = {
 		name: 'My Team',
@@ -82,18 +80,6 @@ describe('ActionItem', () => {
 
 		expect(screen.getByTestId('actionItem').className).toContain('action');
 		screen.getByText('Aug 12th');
-	});
-
-	it('should disable animations', () => {
-		renderWithRecoilRoot(
-			<ActionItem actionItemId={fakeAction.id} />,
-			({ set }) => {
-				set(ActionItemState, [fakeAction]);
-			}
-		);
-		const actionItem = screen.getByTestId('actionItem');
-		expect(actionItem.className).not.toContain(fadeInAnimationClass);
-		expect(actionItem.className).not.toContain(fadeOutAnimationClass);
 	});
 
 	describe('When not completed', () => {
@@ -146,25 +132,15 @@ describe('ActionItem', () => {
 			editTask(newTask);
 			screen.getByText(newTask);
 
-			clickEdit();
+			screen.getByText('Cancel').click();
 			screen.getByText(fakeAction.task);
 		});
 
-		it('should disable other items while editing', () => {
+		it('should show edit view on edit button click', () => {
 			clickEdit();
-			expect(
-				screen.getByTestId('editableText').getAttribute('readonly') === ''
-			).toBeFalsy();
-
-			expect(
-				screen.getByTestId('actionItem-assignee').getAttribute('disabled')
-			).not.toBeNull();
-
-			clickDelete();
-			expect(deleteMessage()).toBeFalsy();
-
-			clickCheckbox();
-			expect(ActionItemService.updateCompletionStatus).not.toHaveBeenCalled();
+			expect(screen.getByTestId('textareaField')).toBeDefined();
+			expect(screen.queryByText('Delete this')).toBeNull();
+			expect(screen.queryByTestId('columnItemMessageButton')).toBeNull();
 		});
 
 		it('should edit action item', () => {
@@ -281,21 +257,19 @@ describe('ActionItem', () => {
 		});
 
 		it('should disable edit button', () => {
-			clickEdit();
-			expect(screen.getByTestId('editableText').getAttribute('readonly')).toBe(
-				''
-			);
+			expect(screen.getByTestId('editButton')).toBeDisabled();
 		});
 
 		it('should not open modal', () => {
-			const actionItemTaskButton = screen.queryByTestId('editableText-select');
-			expect(actionItemTaskButton).toBeNull();
+			const actionItemTaskButton = screen.queryByTestId(
+				'columnItemMessageButton'
+			);
+			expect(actionItemTaskButton).toBeDisabled();
 			expect(modalContent).toBeNull();
 		});
 
 		it('should not disable delete button', () => {
-			clickDelete();
-			expect(deleteMessage()).toBeTruthy();
+			expect(screen.getByTestId('deleteButton')).not.toBeDisabled();
 		});
 
 		it('should not disable checkbox button', async () => {
@@ -312,14 +286,13 @@ describe('ActionItem', () => {
 });
 
 export function editTask(text: string) {
-	const textArea = (screen.queryByTestId('editableText') ||
-		screen.queryByTestId('addActionItem-task')) as HTMLTextAreaElement;
+	const textArea: HTMLTextAreaElement = screen.getByTestId('textareaField');
 	textArea.select();
 	userEvent.type(textArea, text);
 }
 
 function openActionItemModal() {
-	userEvent.click(screen.getByTestId('editableText-select'));
+	userEvent.click(screen.getByTestId('columnItemMessageButton'));
 }
 
 export function typeAssignee(text: string) {

@@ -93,7 +93,7 @@ describe('Retro Member Journey', () => {
 		getRetroItemByMessage(currentThought)
 			.find('[data-testid=editButton]')
 			.type(`${updatedThought}{enter}`);
-		cy.findByDisplayValue(updatedThought).should('exist');
+		cy.findByText(updatedThought).should('exist');
 		cy.confirmNumberOfThoughtsInColumn(Topic.HAPPY, 1);
 	});
 
@@ -168,10 +168,10 @@ describe('Retro Member Journey', () => {
 		getRetroItemByMessage(thoughtToDelete)
 			.find(`[data-testid=deleteButton]`)
 			.click();
-		cy.get('[data-testid=deletionOverlay]').contains('Yes').click();
+		cy.get('[data-testid=deleteColumnItem]').contains('Yes').click();
 
-		cy.findByDisplayValue(thoughtNotToDelete).should('exist');
-		cy.findByDisplayValue(thoughtToDelete).should('not.exist');
+		cy.findByText(thoughtNotToDelete).should('exist');
+		cy.findByText(thoughtToDelete).should('not.exist');
 		cy.confirmNumberOfThoughtsInColumn(Topic.HAPPY, 1);
 	});
 
@@ -299,7 +299,7 @@ describe('Retro Member Journey', () => {
 });
 
 const getRetroItemByMessage = (message: string): Chainable =>
-	cy.findByDisplayValue(message).closest(`[data-testid=retroItem]`);
+	cy.findByText(message).closest(`[data-testid=retroItem]`);
 const getHappyColumnItems = () =>
 	cy.get('[data-testid=retroColumn__happy]').find(`[data-testid=retroItem]`);
 
@@ -317,7 +317,7 @@ function shouldUpvoteFirstItemInHappyColumn(expectedStarCount: number) {
 function shouldAddHappyThoughts(happyThoughts: string[]) {
 	happyThoughts.forEach((happyThought, index) => {
 		cy.enterThought(Topic.HAPPY, happyThought);
-		cy.findByDisplayValue(happyThought).should('exist');
+		cy.findByText(happyThought).should('exist');
 		cy.confirmNumberOfThoughtsInColumn(Topic.HAPPY, index + 1);
 	});
 }

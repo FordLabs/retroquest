@@ -94,16 +94,16 @@ function RetroItem(props: RetroItemProps) {
 					onEdit={editThought}
 					onDelete={deleteThought}
 					onCheck={updateThoughtDiscussionStatus}
-					customButtons={({ editing, deleting }) => (
+					customButton={
 						<UpvoteButton
 							votes={thought.hearts}
 							onClick={upvoteThought}
-							disabled={thought.discussed || editing || deleting}
+							disabled={thought.discussed}
 							readOnly={disableButtons}
 							aria-label={`Upvote (${thought.hearts})`}
 							data-testid="retroItem-upvote"
 						/>
-					)}
+					}
 				/>
 			)}
 		</>

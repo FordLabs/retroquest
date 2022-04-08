@@ -37,7 +37,7 @@ describe('ColumnItemButtons', () => {
 		it('should render', () => {
 			render(
 				<ColumnItemButtonGroup>
-					<EditButton editing={false} />
+					<EditButton />
 				</ColumnItemButtonGroup>
 			);
 
@@ -49,29 +49,19 @@ describe('ColumnItemButtons', () => {
 		const mockEdit = jest.fn();
 
 		it('should display edit icon', () => {
-			render(<EditButton editing={false} />);
+			render(<EditButton />);
 
 			screen.getByTestId('editIcon');
 		});
 
-		it('should display cancel icon', () => {
-			render(<EditButton editing={true} />);
-
-			screen.getByTestId('cancelIcon');
-		});
-
-		it('should have tooltips', () => {
-			render(<EditButton editing={false} />);
+		it('should have tooltip', () => {
+			render(<EditButton />);
 
 			screen.getByText('Edit');
-
-			render(<EditButton editing={true} />);
-
-			screen.getByText('Cancel');
 		});
 
 		it('should handle clicks', () => {
-			render(<EditButton editing={false} onClick={mockEdit} />);
+			render(<EditButton onClick={mockEdit} />);
 
 			userEvent.click(screen.getByTestId('editIcon'));
 
@@ -79,7 +69,7 @@ describe('ColumnItemButtons', () => {
 		});
 
 		it('can be disabled', () => {
-			render(<EditButton editing={false} onClick={mockEdit} disabled={true} />);
+			render(<EditButton onClick={mockEdit} disabled={true} />);
 			const editButton = screen.getByTestId('editButton');
 
 			userEvent.click(editButton);
