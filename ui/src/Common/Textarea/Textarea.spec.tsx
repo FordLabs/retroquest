@@ -81,6 +81,17 @@ describe('Textarea', () => {
 			)
 		);
 	});
+
+	it('should trim value if user leaves whitespace before or after typing', async () => {
+		userEvent.type(getTextarea(), '      Word!  Another Word!      {enter}');
+
+		await waitFor(() =>
+			expect(mockOnEnter).toHaveBeenCalledWith(
+				'Word!  Another Word!',
+				expect.anything()
+			)
+		);
+	});
 });
 
 function getTextarea() {
