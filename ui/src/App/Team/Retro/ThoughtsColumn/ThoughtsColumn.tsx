@@ -33,15 +33,15 @@ import { Column } from '../../../../Types/Column';
 import { getCreateThoughtRequest } from '../../../../Types/CreateThoughtRequest';
 import Thought from '../../../../Types/Thought';
 
-import DraggableRetroItem from './DraggableRetroItem/DraggableRetroItem';
+import DraggableRetroItem from './DraggableThoughtItem/DraggableRetroItem';
 
-import './ThoughtColumn.scss';
+import './ThoughtsColumn.scss';
 
 interface Props {
 	column: Column;
 }
 
-function ThoughtColumn(props: Props) {
+function ThoughtsColumn(props: Props) {
 	const { column } = props;
 
 	const team = useRecoilValue(TeamState);
@@ -103,4 +103,4 @@ function ThoughtColumn(props: Props) {
 	);
 }
 
-export default ThoughtColumn;
+export default ThoughtsColumn;

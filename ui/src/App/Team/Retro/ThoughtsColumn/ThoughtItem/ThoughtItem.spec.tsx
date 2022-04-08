@@ -32,9 +32,9 @@ import Team from '../../../../../Types/Team';
 import Thought from '../../../../../Types/Thought';
 import Topic, { ThoughtTopic } from '../../../../../Types/Topic';
 import { RecoilObserver } from '../../../../../Utils/RecoilObserver';
-import RetroItemWithAddAction from '../RetroItemWithAddAction/RetroItemWithAddAction';
+import ThoughtItemWithAddAction from '../ThoughtItemWithAddAction/ThoughtItemWithAddAction';
 
-import RetroItem from './RetroItem';
+import ThoughtItem from './ThoughtItem';
 
 jest.mock('../../../../../Services/Api/ThoughtService');
 
@@ -65,7 +65,7 @@ describe('Retro Item', () => {
 					set(ThoughtsState, [fakeThought]);
 				}}
 			>
-				<RetroItem thoughtId={fakeThought.id} type={Topic.HAPPY} />
+				<ThoughtItem thoughtId={fakeThought.id} type={Topic.HAPPY} />
 			</RecoilRoot>
 		);
 		const results = await axe(container);
@@ -81,7 +81,7 @@ describe('Retro Item', () => {
 						set(ThoughtsState, [fakeThought]);
 					}}
 				>
-					<RetroItem thoughtId={fakeThought.id} type={type as ThoughtTopic} />
+					<ThoughtItem thoughtId={fakeThought.id} type={type as ThoughtTopic} />
 				</RecoilRoot>
 			);
 
@@ -96,7 +96,7 @@ describe('Retro Item', () => {
 					set(ThoughtsState, [fakeThought]);
 				}}
 			>
-				<RetroItem thoughtId={fakeThought.id} type={Topic.HAPPY} />
+				<ThoughtItem thoughtId={fakeThought.id} type={Topic.HAPPY} />
 			</RecoilRoot>
 		);
 
@@ -120,7 +120,7 @@ describe('Retro Item', () => {
 							modalContent = value;
 						}}
 					/>
-					<RetroItem type={Topic.HAPPY} thoughtId={fakeThought.id} />
+					<ThoughtItem type={Topic.HAPPY} thoughtId={fakeThought.id} />
 				</RecoilRoot>
 			);
 		});
@@ -132,7 +132,7 @@ describe('Retro Item', () => {
 				expect(modalContent).toEqual({
 					title: 'Retro Item',
 					component: (
-						<RetroItemWithAddAction
+						<ThoughtItemWithAddAction
 							type={Topic.HAPPY}
 							thoughtId={fakeThought.id}
 						/>
@@ -264,7 +264,7 @@ describe('Retro Item', () => {
 						set(ThoughtsState, [{ ...fakeThought, discussed: true }]);
 					}}
 				>
-					<RetroItem type={Topic.HAPPY} thoughtId={fakeThought.id} />
+					<ThoughtItem type={Topic.HAPPY} thoughtId={fakeThought.id} />
 				</RecoilRoot>
 			);
 		});
@@ -320,7 +320,7 @@ describe('Retro Item', () => {
 							modalContent = value;
 						}}
 					/>
-					<RetroItem
+					<ThoughtItem
 						disableButtons={true}
 						type={Topic.HAPPY}
 						thoughtId={fakeThought.id}

@@ -45,7 +45,7 @@ import Thought from '../../../Types/Thought';
 import ActionItemsColumn from './ActionItemsColumn/ActionItemsColumn';
 import MobileColumnNav from './MobileColumnNav/MobileColumnNav';
 import RetroSubheader from './RetroSubheader/RetroSubheader';
-import ThoughtColumn from './ThoughtColumn/ThoughtColumn';
+import ThoughtsColumn from './ThoughtsColumn/ThoughtsColumn';
 
 import './RetroPage.scss';
 
@@ -158,7 +158,7 @@ function RetroPage(): ReactElement {
 											selected: index === selectedMobileColumnIndex,
 										})}
 									>
-										<ThoughtColumn column={column} />
+										<ThoughtsColumn column={column} />
 									</div>
 								);
 							})}

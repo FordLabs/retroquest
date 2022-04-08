@@ -18,18 +18,18 @@ import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 
 import { ThoughtTopic } from '../../../../../Types/Topic';
-import RetroItem from '../RetroItem/RetroItem';
+import ThoughtItem from '../ThoughtItem/ThoughtItem';
 
 import AddActionItem from './AddActionItem/AddActionItem';
 
-import './RetroItemWithAddAction.scss';
+import './ThoughtItemWithAddAction.scss';
 
-interface RetroItemModalProps {
+interface Props {
 	type: ThoughtTopic;
 	thoughtId: number;
 }
 
-function RetroItemWithAddAction(props: RetroItemModalProps) {
+function ThoughtItemWithAddAction(props: Props) {
 	const { type, thoughtId } = props;
 
 	const [showAddActionItemCard, setShowAddActionItemCard] = useState(false);
@@ -46,7 +46,7 @@ function RetroItemWithAddAction(props: RetroItemModalProps) {
 				'creating-action': showAddActionItemCard,
 			})}
 		>
-			<RetroItem
+			<ThoughtItem
 				thoughtId={thoughtId}
 				disableButtons={showAddActionItemCard}
 				type={type}
@@ -71,4 +71,4 @@ function RetroItemWithAddAction(props: RetroItemModalProps) {
 	);
 }
 
-export default RetroItemWithAddAction;
+export default ThoughtItemWithAddAction;

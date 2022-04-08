@@ -31,7 +31,7 @@ import Thought from '../../../../Types/Thought';
 import Topic from '../../../../Types/Topic';
 import renderWithRecoilRoot from '../../../../Utils/renderWithRecoilRoot';
 
-import ThoughtColumn from './ThoughtColumn';
+import ThoughtsColumn from './ThoughtsColumn';
 
 const team: Team = {
 	name: 'My Team',
@@ -53,11 +53,11 @@ const column: Column = {
 jest.mock('../../../../Services/Api/ThoughtService');
 jest.mock('../../../../Services/Api/ColumnService');
 
-describe('ThoughtColumn', () => {
+describe('ThoughtsColumn', () => {
 	beforeEach(async () => {
 		renderWithRecoilRoot(
 			<DragAndDrop>
-				<ThoughtColumn column={column} />
+				<ThoughtsColumn column={column} />
 			</DragAndDrop>,
 			({ set }) => {
 				set(ThoughtsState, [

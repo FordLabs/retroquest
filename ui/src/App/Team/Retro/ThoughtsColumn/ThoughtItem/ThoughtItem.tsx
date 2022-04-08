@@ -24,7 +24,7 @@ import { ModalContentsState } from '../../../../../State/ModalContentsState';
 import { TeamState } from '../../../../../State/TeamState';
 import { ThoughtByIdState } from '../../../../../State/ThoughtsState';
 import { ThoughtTopic } from '../../../../../Types/Topic';
-import RetroItemWithAddAction from '../RetroItemWithAddAction/RetroItemWithAddAction';
+import ThoughtItemWithAddAction from '../ThoughtItemWithAddAction/ThoughtItemWithAddAction';
 
 import UpvoteButton from './UpvoteButton/UpvoteButton';
 
@@ -34,7 +34,7 @@ type RetroItemProps = {
 	disableButtons?: boolean;
 };
 
-function RetroItem(props: RetroItemProps) {
+function ThoughtItem(props: RetroItemProps) {
 	const { type, thoughtId, disableButtons = false } = props;
 
 	const team = useRecoilValue(TeamState);
@@ -76,7 +76,7 @@ function RetroItem(props: RetroItemProps) {
 	const openRetroItemModal = () =>
 		setModalContents({
 			title: 'Retro Item',
-			component: <RetroItemWithAddAction thoughtId={thoughtId} type={type} />,
+			component: <ThoughtItemWithAddAction thoughtId={thoughtId} type={type} />,
 			superSize: true,
 		});
 
@@ -110,4 +110,4 @@ function RetroItem(props: RetroItemProps) {
 	);
 }
 
-export default RetroItem;
+export default ThoughtItem;
