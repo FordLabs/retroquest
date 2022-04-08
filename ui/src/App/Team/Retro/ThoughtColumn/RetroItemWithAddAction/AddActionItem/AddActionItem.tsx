@@ -19,21 +19,21 @@ import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import ActionItemService from '../../Services/Api/ActionItemService';
-import ThoughtService from '../../Services/Api/ThoughtService';
-import { ModalContentsState } from '../../State/ModalContentsState';
-import { TeamState } from '../../State/TeamState';
-import { ThoughtByIdState } from '../../State/ThoughtsState';
-import { onKeys } from '../../Utils/EventUtils';
-import Assignee from '../Assignee/Assignee';
+import Assignee from '../../../../../../Common/Assignee/Assignee';
 import {
 	CancelButton,
 	ColumnItemButtonGroup,
 	ConfirmButton,
-} from '../ColumnItemButtons/ColumnItemButtons';
-import FloatingCharacterCountdown from '../FloatingCharacterCountdown/FloatingCharacterCountdown';
+} from '../../../../../../Common/ColumnItemButtons/ColumnItemButtons';
+import Textarea from '../../../../../../Common/Textarea/Textarea';
+import ActionItemService from '../../../../../../Services/Api/ActionItemService';
+import ThoughtService from '../../../../../../Services/Api/ThoughtService';
+import { ModalContentsState } from '../../../../../../State/ModalContentsState';
+import { TeamState } from '../../../../../../State/TeamState';
+import { ThoughtByIdState } from '../../../../../../State/ThoughtsState';
+import { onKeys } from '../../../../../../Utils/EventUtils';
 
-const MAX_LENGTH_TASK = 255;
+import './AddActionItem.scss';
 
 type AddActionItemProps = {
 	thoughtId: number;
@@ -102,24 +102,12 @@ function AddActionItem(props: AddActionItemProps) {
 				shake,
 			})}
 		>
-			<div className="text-container">
-				<textarea
-					data-testid="addActionItem-task"
-					className="text-area"
-					value={task}
-					// eslint-disable-next-line jsx-a11y/no-autofocus
-					autoFocus
-					onChange={(event) => setTask(event.target.value)}
-					onKeyDown={onKeys('Enter', (e) => e.currentTarget.blur())}
-					maxLength={MAX_LENGTH_TASK}
-					ref={textAreaRef}
-				/>
-				<FloatingCharacterCountdown
-					characterCount={task.length}
-					charsAreRunningOutThreshold={50}
-					maxCharacterCount={MAX_LENGTH_TASK}
-				/>
-			</div>
+			<Textarea
+				onChange={setTask}
+				onEnter={(_value: any, e: { currentTarget: { blur: () => any } }) =>
+					e.currentTarget.blur()
+				}
+			/>
 			<Assignee assignee={assignee} onAssign={setAssignee} />
 			<ColumnItemButtonGroup>
 				<CancelButton onClick={hideComponentCallback}>Discard</CancelButton>

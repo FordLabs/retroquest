@@ -20,29 +20,29 @@ import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
 
+import { getMockThought } from '../../../../../../Services/Api/__mocks__/ThoughtService';
+import ActionItemService from '../../../../../../Services/Api/ActionItemService';
+import ThoughtService from '../../../../../../Services/Api/ThoughtService';
+import {
+	ModalContents,
+	ModalContentsState,
+} from '../../../../../../State/ModalContentsState';
+import { TeamState } from '../../../../../../State/TeamState';
+import { ThoughtsState } from '../../../../../../State/ThoughtsState';
+import Team from '../../../../../../Types/Team';
+import Topic from '../../../../../../Types/Topic';
+import { RecoilObserver } from '../../../../../../Utils/RecoilObserver';
 import {
 	editTask,
 	hitEscapeKey,
 	typeAssignee,
-} from '../../App/Team/Retro/ActionItemsColumn/ActionItem/ActionItem.spec';
-import RetroItemWithAddAction from '../../App/Team/Retro/ThoughtColumn/RetroItemWithAddAction/RetroItemWithAddAction';
-import { getMockThought } from '../../Services/Api/__mocks__/ThoughtService';
-import ActionItemService from '../../Services/Api/ActionItemService';
-import ThoughtService from '../../Services/Api/ThoughtService';
-import {
-	ModalContents,
-	ModalContentsState,
-} from '../../State/ModalContentsState';
-import { TeamState } from '../../State/TeamState';
-import { ThoughtsState } from '../../State/ThoughtsState';
-import Team from '../../Types/Team';
-import Topic from '../../Types/Topic';
-import { RecoilObserver } from '../../Utils/RecoilObserver';
+} from '../../../ActionItemsColumn/ActionItem/ActionItem.spec';
+import RetroItemWithAddAction from '../RetroItemWithAddAction';
 
 import AddActionItem from './AddActionItem';
 
-jest.mock('../../Services/Api/ActionItemService');
-jest.mock('../../Services/Api/ThoughtService');
+jest.mock('../../../../../../Services/Api/ActionItemService');
+jest.mock('../../../../../../Services/Api/ThoughtService');
 
 describe('AddActionItem', () => {
 	const hideComponentCallback = jest.fn();
