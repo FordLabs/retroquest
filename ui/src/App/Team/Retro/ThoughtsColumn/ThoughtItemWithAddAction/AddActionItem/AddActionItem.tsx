@@ -24,7 +24,7 @@ import {
 	CancelButton,
 	ColumnItemButtonGroup,
 	ConfirmButton,
-} from '../../../../../../Common/ColumnItemButtons/ColumnItemButtons';
+} from '../../../../../../Common/ColumnItemButtons';
 import Textarea from '../../../../../../Common/Textarea/Textarea';
 import ActionItemService from '../../../../../../Services/Api/ActionItemService';
 import ThoughtService from '../../../../../../Services/Api/ThoughtService';

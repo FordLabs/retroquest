@@ -25,7 +25,7 @@ import {
 	CancelButton,
 	ColumnItemButtonGroup,
 	ConfirmButton,
-} from '../../ColumnItemButtons/ColumnItemButtons';
+} from '../../ColumnItemButtons';
 import Textarea from '../../Textarea/Textarea';
 
 import './EditColumnItem.scss';
