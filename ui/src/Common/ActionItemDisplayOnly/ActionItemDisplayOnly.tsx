@@ -18,7 +18,7 @@
 import React from 'react';
 
 import Action from '../../Types/Action';
-import Assignee from '../Assignee/Assignee';
+import AssigneeInput from '../AssigneeInput/AssigneeInput';
 import { DateCreated } from '../DateCreated/DateCreated';
 
 import './ActionItemDisplayOnly.scss';
@@ -35,7 +35,7 @@ function ActionItemDisplayOnly(props: Props) {
 			<div className="action-item-display-only-task">{actionItem.task}</div>
 			<div className="action-item-display-only-bottom">
 				<DateCreated date={actionItem.dateCreated} disabled />
-				<Assignee assignee={actionItem.assignee} readOnly />
+				<AssigneeInput assignee={actionItem.assignee} readOnly />
 			</div>
 		</div>
 	);

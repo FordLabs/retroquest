@@ -20,19 +20,19 @@ import React, { useEffect, useRef, useState } from 'react';
 import { onKeys } from '../../Utils/EventUtils';
 import FloatingCharacterCountdown from '../FloatingCharacterCountdown/FloatingCharacterCountdown';
 
-import './Assignee.scss';
+import './AssigneeInput.scss';
 
 const MAX_ASSIGNEE_LENGTH = 50;
 
-type AssigneeProps = {
+interface Props {
 	assignee: string;
 	onAssign?: (assignee: string) => void;
 	editing?: boolean;
 	deleting?: boolean;
 	readOnly?: boolean;
-};
+}
 
-function Assignee(props: AssigneeProps) {
+function AssigneeInput(props: Props) {
 	const { assignee = '', onAssign, editing, deleting, readOnly } = props;
 	const assigneeInputRef = useRef<HTMLInputElement>(null);
 
@@ -66,7 +66,7 @@ function Assignee(props: AssigneeProps) {
 					maxLength={MAX_ASSIGNEE_LENGTH}
 					disabled={readOnly || editing || deleting}
 					readOnly={readOnly || editing || deleting}
-					data-testid="actionItem-assignee"
+					data-testid="assigneeInput"
 					ref={assigneeInputRef}
 				/>
 				<FloatingCharacterCountdown
@@ -79,4 +79,4 @@ function Assignee(props: AssigneeProps) {
 	);
 }
 
-export default Assignee;
+export default AssigneeInput;

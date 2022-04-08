@@ -51,7 +51,7 @@ const actionItemsColumnTitle: ColumnTitle = {
 
 jest.mock('../../../../Services/Api/ActionItemService');
 
-describe('ActionItemsColumn.spec.tsx', () => {
+describe('Action Items Column', () => {
 	let container: HTMLElement;
 
 	beforeEach(async () => {
@@ -171,7 +171,7 @@ describe('ActionItemsColumn.spec.tsx', () => {
 			);
 		});
 
-		it('should not let the user submit a Assignee string greater than the max limit', () => {
+		it('should not let the user submit a assignee string greater than the max limit', () => {
 			const expectedAssignee =
 				'llllllllllllllllllllllllllllllllllllllllllllllllll';
 			const newTask = `a new actionItem @${expectedAssignee}thisGetsCutOff`;
@@ -191,10 +191,10 @@ describe('ActionItemsColumn.spec.tsx', () => {
 	});
 
 	describe('Edit Action Item', () => {
-		it('should make call to update Assignee', () => {
+		it('should make call to update assignee', () => {
 			const actionItems = screen.getAllByTestId('actionItem');
 			const firstThoughtsAssigneeInput = within(actionItems[0]).getByTestId(
-				'actionItem-assignee'
+				'assigneeInput'
 			);
 
 			const newAssignee = ', SomeoneElse';

@@ -19,7 +19,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import Assignee from '../../../../../Common/Assignee/Assignee';
+import AssigneeInput from '../../../../../Common/AssigneeInput/AssigneeInput';
 import ColumnItem from '../../../../../Common/ColumnItem/ColumnItem';
 import { DateCreated } from '../../../../../Common/DateCreated/DateCreated';
 import ActionItemService from '../../../../../Services/Api/ActionItemService';
@@ -102,7 +102,7 @@ function ActionItem(props: ActionItemProps) {
 						/>
 					}
 				>
-					<Assignee
+					<AssigneeInput
 						assignee={actionItem.assignee}
 						onAssign={editActionItemAssignee}
 						readOnly={actionItem.completed}

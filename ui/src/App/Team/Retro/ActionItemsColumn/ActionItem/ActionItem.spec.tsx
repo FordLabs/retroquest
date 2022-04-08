@@ -218,7 +218,7 @@ describe('ActionItem', () => {
 			await waitFor(() => expect(modalContent).toBeNull());
 		});
 
-		it('should edit Assignee', () => {
+		it('should edit assignee', () => {
 			typeAssignee('FordLabs{enter}');
 
 			expect(ActionItemService.updateAssignee).toHaveBeenCalledWith(
@@ -296,7 +296,7 @@ function openActionItemModal() {
 }
 
 export function typeAssignee(text: string) {
-	return userEvent.type(screen.getByTestId('actionItem-assignee'), text);
+	return userEvent.type(screen.getByTestId('assigneeInput'), text);
 }
 
 function clickEdit() {

@@ -19,7 +19,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import Assignee from '../../../../../../Common/Assignee/Assignee';
+import AssigneeInput from '../../../../../../Common/AssigneeInput/AssigneeInput';
 import {
 	CancelButton,
 	ColumnItemButtonGroup,
@@ -108,7 +108,7 @@ function AddActionItem(props: AddActionItemProps) {
 					e.currentTarget.blur()
 				}
 			/>
-			<Assignee assignee={assignee} onAssign={setAssignee} />
+			<AssigneeInput assignee={assignee} onAssign={setAssignee} />
 			<ColumnItemButtonGroup>
 				<CancelButton onClick={hideComponentCallback}>Discard</CancelButton>
 				<ConfirmButton onClick={onCreate}>
