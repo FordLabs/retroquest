@@ -53,7 +53,7 @@ function DeleteColumnItem(props: DeletionOverlayProps) {
 
 	return (
 		<div
-			className={classNames('delete-column-item', className)}
+			className={classNames('delete-column-item thought-item', className)}
 			data-testid="deleteColumnItem"
 			style={{ height }}
 		>
