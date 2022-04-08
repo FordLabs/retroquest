@@ -17,9 +17,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 
-import AddActionItem from '../../../../../Common/AddActionItem/AddActionItem';
 import { ThoughtTopic } from '../../../../../Types/Topic';
 import RetroItem from '../RetroItem/RetroItem';
+
+import AddActionItem from './AddActionItem/AddActionItem';
 
 import './RetroItemWithAddAction.scss';
 
