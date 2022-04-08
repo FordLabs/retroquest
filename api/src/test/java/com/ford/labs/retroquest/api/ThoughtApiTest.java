@@ -232,7 +232,7 @@ class ThoughtApiTest extends ApiTestBase {
     @Test
     public void deleteThought_WhenThoughtOnOtherTeam_IgnoresDelete() throws Exception {
         var unauthorizedTeamJwt = jwtBuilder.buildJwt("not-beach-bums");
-        var thought = thoughtRepository.save(Thought.builder().teamId(teamId).message("hello").build());
+        var thought = thoughtRepository.save(Thought.builder().teamId(teamId).message("hello").columnId(savedColumnTitle.getId()).build());
 
         mockMvc.perform(delete("/api/team/%s/thought/%d".formatted("not-beach-bums", thought.getId()))
                 .contentType(APPLICATION_JSON)
@@ -320,6 +320,7 @@ class ThoughtApiTest extends ApiTestBase {
 
         var savedThought = thoughtRepository.save(Thought.builder()
                 .teamId("beach-bums")
+                .columnId(savedColumnTitle.getId())
                 .build());
 
         mockMvc.perform(put("/api/team/not-beach-bums/thought/%d/heart".formatted(savedThought.getId()))
