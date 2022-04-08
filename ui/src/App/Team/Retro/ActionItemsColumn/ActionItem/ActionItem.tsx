@@ -105,7 +105,7 @@ function ActionItem(props: ActionItemProps) {
 					<AssigneeInput
 						assignee={actionItem.assignee}
 						onAssign={editActionItemAssignee}
-						readOnly={actionItem.completed}
+						disabled={actionItem.completed}
 					/>
 				</ColumnItem>
 			)}
