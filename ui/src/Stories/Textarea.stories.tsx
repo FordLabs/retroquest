@@ -15,36 +15,25 @@
  * limitations under the License.
  */
 
-.completed {
-	.editable-text-container {
-		opacity: 0.2;
+import React from 'react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-		user-select: none;
-		pointer-events: none;
-	}
-}
+import Textarea from '../Common/Textarea/Textarea';
 
-.editable-text-container {
-	&.disabled {
-		opacity: 0.2;
-	}
+export default {
+	title: 'components/Textarea',
+	component: Textarea,
+} as ComponentMeta<typeof Textarea>;
 
-	.editable-text-select {
-		width: 100%;
-		height: 100%;
-		padding: 0;
+const Template: ComponentStory<typeof Textarea> = () => (
+	<div style={{ width: '200px', backgroundColor: 'white' }}>
+		<Textarea
+			initialValue="This is the value"
+			onChange={(value) => {
+				console.log('onChange', value);
+			}}
+		/>
+	</div>
+);
 
-		background-color: inherit;
-		border: 0;
-		border-radius: inherit;
-
-		position: absolute;
-		top: 0;
-		left: 0;
-
-		&:hover,
-		&:focus {
-			cursor: pointer;
-		}
-	}
-}
+export const Example = Template.bind({});
