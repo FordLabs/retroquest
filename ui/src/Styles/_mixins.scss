@@ -46,6 +46,12 @@
 	}
 }
 
+@mixin inside-modal {
+	.modal-container {
+		@content;
+	}
+}
+
 @mixin site-max-width() {
 	max-width: sizes.$max-width;
 	margin: 0 auto;
