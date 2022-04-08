@@ -20,7 +20,7 @@ import { useRecoilValue } from 'recoil';
 
 import ColumnHeader from '../../../../Common/ColumnHeader/ColumnHeader';
 import CountSeparator from '../../../../Common/CountSeparator/CountSeparator';
-import TextField from '../../../../Common/TextField/TextField';
+import CreateColumnItemInput from '../../../../Common/CreateColumnItemInput/CreateColumnItemInput';
 import ActionItemService from '../../../../Services/Api/ActionItemService';
 import {
 	ActiveActionItemsState,
@@ -74,7 +74,7 @@ function ActionItemsColumn() {
 	return (
 		<div className="action-items-column" data-testid={`retroColumn__${topic}`}>
 			<ColumnHeader initialTitle="Action Items" type={topic} />
-			<TextField
+			<CreateColumnItemInput
 				type={topic}
 				placeholder="Enter an Action Item"
 				handleSubmission={createActionItem}

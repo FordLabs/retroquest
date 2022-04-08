@@ -22,9 +22,9 @@ import { axe } from 'jest-axe';
 
 import Topic from '../../Types/Topic';
 
-import TextField from './TextField';
+import CreateColumnItemInput from './CreateColumnItemInput';
 
-describe('TextField', () => {
+describe('Create Column Item Input', () => {
 	const mockHandleSubmit = jest.fn();
 	const placeholder = 'Enter A Thought';
 
@@ -34,7 +34,7 @@ describe('TextField', () => {
 
 	it('should render without axe errors', async () => {
 		const { container } = render(
-			<TextField
+			<CreateColumnItemInput
 				data-testid="happy"
 				type={Topic.HAPPY}
 				placeholder={placeholder}
@@ -47,48 +47,43 @@ describe('TextField', () => {
 
 	it('should style based on type', () => {
 		const { rerender } = render(
-			<TextField
-				data-testid="happy"
+			<CreateColumnItemInput
 				type={Topic.HAPPY}
 				placeholder={placeholder}
 				handleSubmission={mockHandleSubmit}
 			/>
 		);
-		expect(screen.getByTestId('happy').className).toContain('happy');
+		expect(screen.getByPlaceholderText(placeholder)).toHaveClass('happy');
 
 		rerender(
-			<TextField
-				data-testid="confused"
+			<CreateColumnItemInput
 				type={Topic.CONFUSED}
 				placeholder={placeholder}
 				handleSubmission={mockHandleSubmit}
 			/>
 		);
-		expect(screen.getByTestId('confused').className).toContain('confused');
+		expect(screen.getByPlaceholderText(placeholder)).toHaveClass('confused');
 
 		rerender(
-			<TextField
-				data-testid="unhappy"
+			<CreateColumnItemInput
 				type={Topic.UNHAPPY}
 				placeholder={placeholder}
 				handleSubmission={mockHandleSubmit}
 			/>
 		);
-		expect(screen.getByTestId('unhappy').className).toContain('unhappy');
+		expect(screen.getByPlaceholderText(placeholder)).toHaveClass('unhappy');
 	});
 
 	it('should submit on enter', () => {
 		render(
-			<TextField
+			<CreateColumnItemInput
 				type={Topic.HAPPY}
 				placeholder={placeholder}
 				handleSubmission={mockHandleSubmit}
 			/>
 		);
 		const textField = screen.getByPlaceholderText(placeholder);
-
 		userEvent.type(textField, 'Submission Text{enter}');
-
 		expect(mockHandleSubmit).toHaveBeenCalledWith('Submission Text');
 	});
 });

@@ -15,47 +15,50 @@
  * limitations under the License.
  */
 
-import React, { HTMLAttributes, useState } from 'react';
+import React, { useState } from 'react';
 import classnames from 'classnames';
 
 import Topic from '../../Types/Topic';
 import { onKeys } from '../../Utils/EventUtils';
 import FloatingCharacterCountdown from '../FloatingCharacterCountdown/FloatingCharacterCountdown';
 
-import './TextField.scss';
+import './CreateColumnItemInput.scss';
 
-export interface TextFieldProps extends HTMLAttributes<HTMLSpanElement> {
+interface Props {
 	type: Topic;
 	placeholder: string;
 	handleSubmission: (string: string) => void;
 }
 
-const maxCharacterCount = 255;
+const MAX_CHARACTER_COUNT = 255;
 
-export default function TextField(props: TextFieldProps): JSX.Element {
+function CreateColumnItemInput(props: Props): JSX.Element {
 	const { placeholder, type, handleSubmission, ...labelProps } = props;
 
-	const [text, setText] = useState('');
+	const [value, setValue] = useState('');
 
 	return (
-		<label {...labelProps} className={classnames('text-field', type)}>
+		<label {...labelProps} className="create-column-item-input">
 			<input
 				type="text"
-				className="text-input"
+				data-testid="createColumnItemInputField"
+				className={classnames('input-field', type)}
 				placeholder={placeholder}
-				maxLength={maxCharacterCount}
-				value={text}
-				onChange={(event) => setText(event.target.value)}
+				maxLength={MAX_CHARACTER_COUNT}
+				value={value}
+				onChange={(event) => setValue(event.target.value)}
 				onKeyPress={onKeys('Enter', () => {
-					handleSubmission(text);
-					setText('');
+					handleSubmission(value);
+					setValue('');
 				})}
 			/>
 			<FloatingCharacterCountdown
-				maxCharacterCount={maxCharacterCount}
+				maxCharacterCount={MAX_CHARACTER_COUNT}
 				charsAreRunningOutThreshold={50}
-				characterCount={text.length}
+				characterCount={value.length}
 			/>
 		</label>
 	);
 }
+
+export default CreateColumnItemInput;
