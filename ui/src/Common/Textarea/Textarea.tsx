@@ -61,7 +61,7 @@ function Textarea(props: Props) {
 		}
 	}
 	function onKeypressEnter(event: KeyboardEvent<HTMLTextAreaElement>) {
-		if (!event.shiftKey) onEnter(editValue, event);
+		if (!event.shiftKey) onEnter(editValue.trim(), event);
 	}
 
 	return (
