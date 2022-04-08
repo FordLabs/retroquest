@@ -24,11 +24,11 @@ import { ThoughtsState } from '../../../../../State/ThoughtsState';
 import Thought from '../../../../../Types/Thought';
 import Topic from '../../../../../Types/Topic';
 
-import RetroItemWithAddAction from './RetroItemWithAddAction';
+import ThoughtItemWithAddAction from './ThoughtItemWithAddAction';
 
 jest.mock('axios');
 
-describe('RetroItemWithAddAction', () => {
+describe('ThoughtItemWithAddAction', () => {
 	const fakeThought: Thought = {
 		id: 0,
 		message: 'fake thought',
@@ -92,7 +92,7 @@ const renderComponent = (fakeThought: Thought) => {
 				set(ThoughtsState, [fakeThought]);
 			}}
 		>
-			<RetroItemWithAddAction type={Topic.HAPPY} thoughtId={fakeThought.id} />
+			<ThoughtItemWithAddAction type={Topic.HAPPY} thoughtId={fakeThought.id} />
 		</RecoilRoot>
 	);
 };

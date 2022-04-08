@@ -19,15 +19,15 @@ import React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { RecoilRoot } from 'recoil';
 
-import RetroItemWithAddAction from '../App/Team/Retro/ThoughtColumn/RetroItemWithAddAction/RetroItemWithAddAction';
+import ThoughtItemWithAddAction from '../App/Team/Retro/ThoughtsColumn/ThoughtItemWithAddAction/ThoughtItemWithAddAction';
 import { ThoughtsState } from '../State/ThoughtsState';
 import Thought from '../Types/Thought';
 import Topic from '../Types/Topic';
 
 export default {
-	title: 'components/RetroItemWithAddAction',
-	component: RetroItemWithAddAction,
-} as ComponentMeta<typeof RetroItemWithAddAction>;
+	title: 'components/ThoughtItemWithAddAction',
+	component: ThoughtItemWithAddAction,
+} as ComponentMeta<typeof ThoughtItemWithAddAction>;
 
 const thought: Thought = {
 	id: 0,
@@ -40,7 +40,7 @@ const thought: Thought = {
 	columnId: 0,
 };
 
-const Template: ComponentStory<typeof RetroItemWithAddAction> = () => {
+const Template: ComponentStory<typeof ThoughtItemWithAddAction> = () => {
 	return (
 		<RecoilRoot
 			initializeState={({ set }) => {
@@ -48,7 +48,7 @@ const Template: ComponentStory<typeof RetroItemWithAddAction> = () => {
 			}}
 		>
 			<div style={{ backgroundColor: 'white', width: '450px' }}>
-				<RetroItemWithAddAction type={Topic.HAPPY} thoughtId={thought.id} />
+				<ThoughtItemWithAddAction type={Topic.HAPPY} thoughtId={thought.id} />
 			</div>
 		</RecoilRoot>
 	);

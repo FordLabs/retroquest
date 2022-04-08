@@ -19,15 +19,15 @@ import React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { RecoilRoot } from 'recoil';
 
-import RetroItem from '../App/Team/Retro/ThoughtColumn/RetroItem/RetroItem';
+import ThoughtItem from '../App/Team/Retro/ThoughtsColumn/ThoughtItem/ThoughtItem';
 import { ThoughtsState } from '../State/ThoughtsState';
 import Thought from '../Types/Thought';
 import Topic from '../Types/Topic';
 
 export default {
-	title: 'components/RetroItem',
-	component: RetroItem,
-} as ComponentMeta<typeof RetroItem>;
+	title: 'components/ThoughtItem',
+	component: ThoughtItem,
+} as ComponentMeta<typeof ThoughtItem>;
 
 const thought1: Thought = {
 	id: 1,
@@ -51,7 +51,7 @@ const thought2: Thought = {
 	columnId: 10,
 };
 
-const Template: ComponentStory<typeof RetroItem> = () => {
+const Template: ComponentStory<typeof ThoughtItem> = () => {
 	return (
 		<RecoilRoot
 			initializeState={({ set }) => {
@@ -59,10 +59,10 @@ const Template: ComponentStory<typeof RetroItem> = () => {
 			}}
 		>
 			<div style={{ width: '400px', marginBottom: '20px' }}>
-				<RetroItem thoughtId={thought1.id} type={Topic.HAPPY} />
+				<ThoughtItem thoughtId={thought1.id} type={Topic.HAPPY} />
 			</div>
 			<div style={{ width: '400px' }}>
-				<RetroItem
+				<ThoughtItem
 					disableButtons={true}
 					thoughtId={thought2.id}
 					type={Topic.UNHAPPY}

@@ -37,7 +37,7 @@ import {
 	hitEscapeKey,
 	typeAssignee,
 } from '../../../ActionItemsColumn/ActionItem/ActionItem.spec';
-import RetroItemWithAddAction from '../RetroItemWithAddAction';
+import ThoughtItemWithAddAction from '../ThoughtItemWithAddAction';
 
 import AddActionItem from './AddActionItem';
 
@@ -66,7 +66,7 @@ describe('AddActionItem', () => {
 					set(ModalContentsState, {
 						title: 'Action Item',
 						component: (
-							<RetroItemWithAddAction
+							<ThoughtItemWithAddAction
 								thoughtId={thought.id}
 								type={thought.topic}
 							/>
