@@ -51,7 +51,6 @@ function EditThoughtView(props: Props) {
 				updateThought(updatedThought);
 				changeToDefaultView();
 			}}
-			className="retro-item-edit-form"
 		/>
 	);
 }

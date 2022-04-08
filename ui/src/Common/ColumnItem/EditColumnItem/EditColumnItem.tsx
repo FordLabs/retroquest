@@ -69,7 +69,7 @@ function EditColumnItem(props: Props) {
 
 	return (
 		<div
-			className={classNames('edit-column-item', className)}
+			className={classNames('edit-column-item thought-item', className)}
 			data-testid="editColumnItem"
 			style={{ minHeight: height }}
 		>
