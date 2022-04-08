@@ -42,7 +42,7 @@ function ThoughtItemWithAddAction(props: Props) {
 
 	return (
 		<div
-			className={classnames('retro-item-with-add-action', {
+			className={classnames('thought-item-with-add-action', {
 				'creating-action': showAddActionItemCard,
 			})}
 		>

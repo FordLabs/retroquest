@@ -17,10 +17,6 @@
 
 @use '../../Styles/main';
 
-$border-width: 2px;
-$in-modal-border-width: 8px;
-$base-drop-shadow: 0 19px 38px rgba(main.$black, 0.3);
-
 .column-item {
 	color: inherit;
 	font-weight: bold;
@@ -31,44 +27,6 @@ $base-drop-shadow: 0 19px 38px rgba(main.$black, 0.3);
 	box-shadow: 0 1px 2px rgba(main.$black, 0.25);
 
 	transition: none;
-
-	position: relative;
-
-	&.happy {
-		&:hover,
-		&:focus {
-			box-shadow: 0 0 0 $border-width main.$green;
-		}
-	}
-
-	&.confused {
-		&:hover,
-		&:focus {
-			box-shadow: 0 0 0 $border-width main.$blue;
-		}
-	}
-
-	&.unhappy {
-		&:hover,
-		&:focus {
-			box-shadow: 0 0 0 $border-width main.$red;
-		}
-	}
-
-	&.action {
-		&:hover,
-		&:focus {
-			box-shadow: 0 0 0 $border-width main.$yellow;
-		}
-	}
-
-	&.editing {
-		box-shadow: 0 0 0 4px main.$purple !important;
-	}
-
-	&.deleting {
-		box-shadow: 0 0 0 4px main.$red !important;
-	}
 
 	.column-item-message-button {
 		width: 100%;
@@ -89,159 +47,21 @@ $base-drop-shadow: 0 19px 38px rgba(main.$black, 0.3);
 			pointer-events: none;
 		}
 	}
-
-	.text-container {
-		$padding: 18px;
-
-		border-radius: inherit;
-		cursor: pointer;
-
-		position: relative;
-
-		.text-area {
-			display: inline-block;
-			width: 100%;
-			height: 56px;
-			min-height: 56px;
-			padding: $padding;
-			overflow: auto;
-
-			color: inherit;
-			font-family: inherit;
-			font-weight: inherit;
-			font-size: inherit;
-			white-space: pre-wrap;
-			word-break: break-word;
-
-			background-color: inherit;
-
-			border: 0;
-			border-radius: inherit;
-			box-shadow: none;
-			cursor: default;
-
-			resize: none;
-
-			&[readonly] {
-				cursor: pointer;
-				caret-color: transparent;
-			}
-		}
-
-		.floating-character-countdown {
-			bottom: 2px;
-			right: $padding;
-		}
-	}
-
-	@media only screen and (max-width: 610px) {
-		&.action,
-		&.unhappy,
-		&.confused,
-		&.happy {
-			&:hover,
-			&:focus {
-				box-shadow: 0 1px 2px rgba(main.$black, 0.25);
-			}
-		}
-	}
 }
 
-.modal-container {
-	$happy-shadow: 0 0 0 $in-modal-border-width main.$green, $base-drop-shadow;
-	$confused-shadow: 0 0 0 $in-modal-border-width main.$blue, $base-drop-shadow;
-	$unhappy-shadow: 0 0 0 $in-modal-border-width main.$red, $base-drop-shadow;
-	$edit-mode-shadow: 0 0 0 8px main.$purple, $base-drop-shadow;
-	$action-shadow: 0 0 0 $in-modal-border-width main.$yellow, $base-drop-shadow;
-
+@include main.inside-modal {
 	.column-item {
 		width: calc(100% - 16px);
-		margin: $in-modal-border-width;
+		margin: main.$in-modal-border-width;
 
 		border-radius: 6px;
-
 		transform: none;
 
 		@include main.breakpoint-medium {
 			width: 450px;
 			max-width: 650px;
-			height: auto;
-			max-height: 50%;
 
 			font-size: 1rem;
-		}
-
-		&.happy {
-			box-shadow: $happy-shadow;
-		}
-
-		&.confused {
-			box-shadow: $confused-shadow;
-		}
-
-		&.unhappy {
-			box-shadow: $unhappy-shadow;
-		}
-
-		&.action {
-			box-shadow: $action-shadow;
-		}
-
-		&.deleting {
-			box-shadow: $unhappy-shadow !important;
-		}
-
-		&.editing {
-			box-shadow: $edit-mode-shadow !important;
-		}
-
-		&:not(.editing) .text-container {
-			cursor: default;
-			pointer-events: none;
-		}
-
-		.editable-text-select {
-			display: none;
-		}
-	}
-
-	.shake {
-		backface-visibility: hidden;
-		perspective: 1000px;
-
-		animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-	}
-
-	@media screen and (prefers-reduced-motion: reduce) {
-		.shake {
-			animation: none;
-		}
-	}
-
-	@keyframes shake {
-		10%,
-		90% {
-			box-shadow: $unhappy-shadow;
-			transform: translate3d(-1px, 0, 0);
-		}
-
-		20%,
-		80% {
-			box-shadow: $unhappy-shadow;
-			transform: translate3d(3px, 0, 0);
-		}
-
-		30%,
-		50%,
-		70% {
-			box-shadow: $unhappy-shadow;
-			transform: translate3d(-6px, 0, 0);
-		}
-
-		40%,
-		60% {
-			box-shadow: $unhappy-shadow;
-			transform: translate3d(6px, 0, 0);
 		}
 	}
 }
@@ -252,68 +72,5 @@ $base-drop-shadow: 0 19px 38px rgba(main.$black, 0.3);
 
 		background-color: main.$task-background-dark;
 		box-shadow: 0 1px 2px rgba(main.$black, 0.35);
-
-		&.happy {
-			&:hover,
-			&:focus {
-				box-shadow: 0 0 0 $border-width main.$dark-green;
-			}
-		}
-
-		&.confused {
-			&:hover,
-			&:focus {
-				box-shadow: 0 0 0 $border-width main.$belize-hole;
-			}
-		}
-
-		&.unhappy {
-			&:hover,
-			&:focus {
-				box-shadow: 0 0 0 $border-width main.$dark-red;
-			}
-		}
-
-		&.editing {
-			box-shadow: 0 0 0 4px main.$dark-purple !important;
-		}
-	}
-
-	.modal-container {
-		$happy-shadow-dark: 0 0 0 $in-modal-border-width main.$dark-green,
-			$base-drop-shadow;
-		$confused-shadow-dark: 0 0 0 $in-modal-border-width main.$belize-hole,
-			$base-drop-shadow;
-		$unhappy-shadow-dark: 0 0 0 $in-modal-border-width main.$dark-red,
-			$base-drop-shadow;
-		$edit-mode-shadow-dark: 0 0 0 8px main.$dark-purple, $base-drop-shadow;
-		$action-shadow-dark: 0 0 0 $in-modal-border-width main.$dark-yellow,
-			$base-drop-shadow;
-
-		.column-item {
-			&.happy {
-				box-shadow: $happy-shadow-dark;
-			}
-
-			&.confused {
-				box-shadow: $confused-shadow-dark;
-			}
-
-			&.unhappy {
-				box-shadow: $unhappy-shadow-dark;
-			}
-
-			&.action {
-				box-shadow: $action-shadow-dark;
-			}
-
-			&.deleting {
-				box-shadow: $unhappy-shadow-dark !important;
-			}
-
-			&.editing {
-				box-shadow: $edit-mode-shadow-dark !important;
-			}
-		}
 	}
 }

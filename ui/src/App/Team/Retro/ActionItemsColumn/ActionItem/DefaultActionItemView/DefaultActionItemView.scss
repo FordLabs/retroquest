@@ -15,25 +15,32 @@
  * limitations under the License.
  */
 
-import React, { ComponentPropsWithRef, forwardRef, LegacyRef } from 'react';
-import classnames from 'classnames';
+@use '../../../../../../Styles/main';
 
-import './ColumnItem.scss';
-
-function ColumnItem(
-	props: ComponentPropsWithRef<'div'>,
-	ref: LegacyRef<HTMLDivElement>
-) {
-	const { children, className, ...otherProps } = props;
-	return (
-		<div
-			{...otherProps}
-			className={classnames('column-item', className)}
-			ref={ref}
-		>
-			{children}
-		</div>
-	);
+.action-item {
+	&:hover,
+	&:focus {
+		box-shadow: main.default-column-item-shadow(main.$yellow);
+	}
 }
 
-export default forwardRef(ColumnItem);
+@include main.inside-modal {
+	.action-item {
+		box-shadow: main.in-modal-column-item-shadow(main.$yellow);
+	}
+}
+
+@include main.dark-theme {
+	.action-item {
+		&:hover,
+		&:focus {
+			box-shadow: main.default-column-item-shadow(main.$dark-yellow);
+		}
+	}
+
+	@include main.inside-modal {
+		.action-item {
+			box-shadow: main.in-modal-column-item-shadow(main.$dark-yellow);
+		}
+	}
+}

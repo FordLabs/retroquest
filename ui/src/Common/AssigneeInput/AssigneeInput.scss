@@ -16,8 +16,6 @@
  */
 @use '../../Styles/main';
 
-$opacity: 0.2;
-
 .assignee-container {
 	margin: 2px 18px 18px;
 
@@ -25,14 +23,8 @@ $opacity: 0.2;
 
 	position: relative;
 
-	.discussed:not(.readonly) &,
-	.editing &,
-	.completed & {
-		opacity: $opacity;
-	}
-
-	.deleting & {
-		visibility: hidden;
+	&.opacity {
+		opacity: 0.25;
 	}
 
 	.label {

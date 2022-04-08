@@ -22,6 +22,7 @@ import Chainable = Cypress.Chainable;
 
 describe('Retro Facilitator Journey', () => {
 	let teamCredentials;
+	const editButtonSelector = '[data-testid=editButton]';
 
 	beforeEach(() => {
 		teamCredentials = getTeamCredentials();
@@ -121,7 +122,7 @@ describe('Retro Facilitator Journey', () => {
 		const happyThought = 'This is a good week';
 		cy.enterThought(Topic.HAPPY, happyThought);
 
-		clickOnFirstThought();
+		getRetroItemByText(happyThought).click();
 
 		getRetroActionModal().as('retroItemModal');
 		cy.get('@retroItemModal').findByText(happyThought).should('exist');
@@ -142,10 +143,9 @@ describe('Retro Facilitator Journey', () => {
 
 		cy.log('**Thought should be marked as discussed**');
 		getHappyColumnItems().should('have.length', 1);
-		getDiscussedThought()
-			.should('have.class', 'completed')
-			.findByText(happyThought)
-			.should('exist');
+		getRetroItemByText(happyThought)
+			.find(editButtonSelector)
+			.should('be.disabled');
 
 		cy.log('**Action Item should exist in action items column**');
 		getActionColumnItems().findByText(actionItemTask).should('exist');
@@ -159,14 +159,12 @@ describe('Retro Facilitator Journey', () => {
 			'PUT',
 			`/api/team/${teamCredentials.teamId}/thought/*/discuss`
 		).as('updateDiscussedState');
-		const editButtonSelector = '[data-testid=editButton]';
 
 		const happyThought = 'This is a good week';
 		cy.enterThought(Topic.HAPPY, happyThought);
 		cy.enterThought(Topic.HAPPY, 'Another positive note');
 		getHappyColumnItems()
 			.last()
-			.should('not.have.class', 'completed')
 			.find(editButtonSelector)
 			.should('not.be.disabled');
 
@@ -177,11 +175,7 @@ describe('Retro Facilitator Journey', () => {
 		cy.log('**Thought marked as discussed should move to bottom of the list**');
 		getHappyColumnItems().should('have.length', 2);
 		getDiscussedThought().find(editButtonSelector).should('be.disabled');
-		getHappyColumnItems()
-			.last()
-			.should('have.class', 'completed')
-			.find(editButtonSelector)
-			.should('be.disabled');
+		getHappyColumnItems().last().find(editButtonSelector).should('be.disabled');
 
 		getDiscussedButton(happyThought).click();
 		cy.wait('@updateDiscussedState');
@@ -190,12 +184,11 @@ describe('Retro Facilitator Journey', () => {
 		getHappyColumnItems().should('have.length', 2);
 		getHappyColumnItems()
 			.last()
-			.should('not.have.class', 'completed')
 			.find(editButtonSelector)
 			.should('not.be.disabled');
 
 		cy.log(`**Mark happy thought as discussed from the thought modal**`);
-		clickOnFirstThought();
+		getRetroItemByText(happyThought).click();
 		getRetroActionModal().find('[data-testid=checkboxButton]').first().click();
 		cy.wait('@updateDiscussedState');
 
@@ -203,11 +196,7 @@ describe('Retro Facilitator Journey', () => {
 			'**Thought marked as discussed from modal should move to bottom of the list**'
 		);
 		getHappyColumnItems().should('have.length', 2);
-		getHappyColumnItems()
-			.last()
-			.should('have.class', 'completed')
-			.find(editButtonSelector)
-			.should('be.disabled');
+		getHappyColumnItems().last().find(editButtonSelector).should('be.disabled');
 	});
 
 	it('Action item actions (create, edit, delete, mark as complete)', () => {
@@ -238,7 +227,7 @@ describe('Retro Facilitator Journey', () => {
 		shouldEditActionItemTaskAndAssignee(task1, 'by 10%', assignee1, ', Larry');
 
 		task1 += ' by 10%';
-		shouldMarkAndUnmarkActionItemAsCompleted(task1);
+		shouldMarkAndUnmarkActionItemAsDiscussed(task1);
 
 		shouldDeleteActionItem(task2);
 
@@ -284,7 +273,7 @@ describe('Retro Facilitator Journey', () => {
 		cy.get('@putArchiveRetro').its('response.statusCode').should('eq', 200);
 
 		cy.findByText(activeActionItemTask).should('exist');
-		cy.findByDisplayValue(completedActionItemTask).should('not.exist');
+		cy.findByText(completedActionItemTask).should('not.exist');
 		cy.confirmNumberOfThoughtsInColumn(Topic.UNHAPPY, 0);
 		cy.confirmNumberOfActionItemsInColumn(1);
 	});
@@ -305,10 +294,10 @@ function shouldCreateActionItems(actionItems: string[]) {
 		cy.confirmNumberOfActionItemsInColumn(index + 1);
 
 		const splitActionString = actionString.split('@');
-		const actionTask = splitActionString[0].trim();
+		const action = splitActionString[0].trim();
 		const assignedTo = splitActionString[1];
 
-		cy.findByText(actionTask).should('exist');
+		cy.findByText(action).should('exist');
 		cy.findByDisplayValue(assignedTo).should('exist');
 	});
 }
@@ -330,23 +319,23 @@ function shouldEditActionItemTaskAndAssignee(
 
 	cy.wait('@updateTask');
 
-	const expectedNewTask = `${currentTask} ${appendToTask}`;
-	cy.getActionItemByTask(expectedNewTask).should('exist');
+	cy.getActionItemByTask(currentTask)
+		.contains(`${currentTask} ${appendToTask}`)
+		.should('exist');
 
-	cy.getActionItemByTask(expectedNewTask)
+	cy.getActionItemByTask(currentTask)
 		.find('[data-testid=assigneeInput]')
 		.type(`${appendToAssignee}{enter}`);
 
-	cy.getActionItemByTask(expectedNewTask)
+	cy.getActionItemByTask(currentTask)
 		.findByDisplayValue(`${currentAssignee}${appendToAssignee}`)
 		.should('exist');
 }
 
-function shouldMarkAndUnmarkActionItemAsCompleted(actionItemTask: string) {
+function shouldMarkAndUnmarkActionItemAsDiscussed(actionItemTask: string) {
 	const editButtonSelector = '[data-testid=editButton]';
 	getActionColumnItems()
 		.last()
-		.should('not.have.class', 'completed')
 		.find(editButtonSelector)
 		.should('not.be.disabled');
 
@@ -363,7 +352,6 @@ function shouldMarkAndUnmarkActionItemAsCompleted(actionItemTask: string) {
 	getActionColumnItems()
 		.should('have.length', 2)
 		.last()
-		.should('have.class', 'completed')
 		.find(editButtonSelector)
 		.should('be.disabled');
 
@@ -375,7 +363,6 @@ function shouldMarkAndUnmarkActionItemAsCompleted(actionItemTask: string) {
 	getActionColumnItems()
 		.should('have.length', 2)
 		.last()
-		.should('not.have.class', 'completed')
 		.find(editButtonSelector)
 		.should('not.be.disabled');
 }
@@ -395,8 +382,6 @@ const getRetroItemByText = (text: string): Chainable =>
 
 const getDiscussedThought = () =>
 	cy.get('[data-testid=checkmark]').closest('[data-testid="retroItem"]');
-const clickOnFirstThought = () =>
-	cy.get('[data-testid=columnItemMessageButton]').first().click();
 const getRetroActionModal = () => cy.get('[data-testid=retro-item-modal]');
 const getColumnHeaderByTopic = (topic: Topic) =>
 	cy.get(`[data-testid=columnHeader-${topic}]`);

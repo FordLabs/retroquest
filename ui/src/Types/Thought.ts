@@ -24,7 +24,6 @@ interface Thought {
 	discussed: boolean;
 	topic: ThoughtTopic;
 	columnId: number;
-	state?: string;
 }
 
 export default Thought;

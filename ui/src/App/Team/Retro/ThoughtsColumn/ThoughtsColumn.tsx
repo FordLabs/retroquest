@@ -69,7 +69,10 @@ function ThoughtsColumn(props: Props) {
 	};
 
 	return (
-		<div className="retro-column" data-testid={`retroColumn__${column.topic}`}>
+		<div
+			className="thoughts-column"
+			data-testid={`retroColumn__${column.topic}`}
+		>
 			<ColumnHeader
 				initialTitle={column.title}
 				type={column.topic}

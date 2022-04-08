@@ -15,6 +15,50 @@
  *  limitations under the License.
  */
 
+@use '../../../../../../Styles/main';
+
 .action-item.add-action-item {
 	margin-top: 0.8rem;
+}
+
+.shake {
+	backface-visibility: hidden;
+	perspective: 1000px;
+
+	animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+	.shake {
+		animation: none;
+	}
+}
+
+$shake-shadow: 0 0 0 8px main.$red, main.$base-drop-shadow;
+
+@keyframes shake {
+	10%,
+	90% {
+		box-shadow: $shake-shadow;
+		transform: translate3d(-1px, 0, 0);
+	}
+
+	20%,
+	80% {
+		box-shadow: $shake-shadow;
+		transform: translate3d(3px, 0, 0);
+	}
+
+	30%,
+	50%,
+	70% {
+		box-shadow: $shake-shadow;
+		transform: translate3d(-6px, 0, 0);
+	}
+
+	40%,
+	60% {
+		box-shadow: $shake-shadow;
+		transform: translate3d(6px, 0, 0);
+	}
 }

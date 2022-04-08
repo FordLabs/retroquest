@@ -32,11 +32,6 @@ import { ThoughtsState } from '../../../../../../State/ThoughtsState';
 import Team from '../../../../../../Types/Team';
 import Topic from '../../../../../../Types/Topic';
 import { RecoilObserver } from '../../../../../../Utils/RecoilObserver';
-import {
-	editTask,
-	hitEscapeKey,
-	typeAssignee,
-} from '../../../ActionItemsColumn/ActionItem/ActionItem.spec';
 import ThoughtItemWithAddAction from '../ThoughtItemWithAddAction';
 
 import AddActionItem from './AddActionItem';
@@ -44,7 +39,7 @@ import AddActionItem from './AddActionItem';
 jest.mock('../../../../../../Services/Api/ActionItemService');
 jest.mock('../../../../../../Services/Api/ThoughtService');
 
-describe('AddActionItem', () => {
+describe('Add Action Item', () => {
 	const hideComponentCallback = jest.fn();
 	const team: Team = {
 		name: 'My Team',
@@ -88,19 +83,23 @@ describe('AddActionItem', () => {
 		);
 	});
 
-	it('should cancel on escape and discard', () => {
-		hitEscapeKey();
-		clickDiscard();
+	it('should hide component when user presses the escape key', () => {
+		userEvent.type(document.body, '{Escape}');
+		expect(hideComponentCallback).toHaveBeenCalledTimes(1);
+		expect(ActionItemService.create).not.toHaveBeenCalled();
+	});
 
-		expect(hideComponentCallback).toHaveBeenCalledTimes(2);
+	it('should hide component when user clicks the discard button', () => {
+		clickDiscard();
+		expect(hideComponentCallback).toHaveBeenCalledTimes(1);
 		expect(ActionItemService.create).not.toHaveBeenCalled();
 	});
 
 	it('should create action item, mark associated thought as discussed, and close modal', async () => {
 		const task = 'Run this test';
 		const assignee = 'jest';
-		editTask(task);
-		typeAssignee(assignee);
+		editActionItemTask(task);
+		editActionItemAssignee(assignee);
 		clickCreate();
 
 		await act(async () =>
@@ -119,7 +118,7 @@ describe('AddActionItem', () => {
 	});
 
 	it('should shake and not call onConfirm when task is empty', () => {
-		typeAssignee('jest');
+		editActionItemAssignee('jest');
 		clickCreate();
 
 		expect(hideComponentCallback).not.toHaveBeenCalled();
@@ -134,4 +133,17 @@ function clickDiscard() {
 
 function clickCreate() {
 	userEvent.click(screen.getByText('Create', { exact: false }));
+}
+
+function editActionItemTask(text: string) {
+	const taskTextarea = screen.getByTestId(
+		'textareaField'
+	) as HTMLTextAreaElement;
+	taskTextarea.select();
+	userEvent.type(taskTextarea, text);
+}
+
+function editActionItemAssignee(text: string) {
+	const assigneeInput = screen.getByTestId('assigneeInput');
+	userEvent.type(assigneeInput, `{selectall}${text}`);
 }

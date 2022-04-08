@@ -15,102 +15,62 @@
  * limitations under the License.
  */
 
-import React from 'react';
-import classnames from 'classnames';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import React, { useState } from 'react';
+import { useRecoilValue } from 'recoil';
 
-import AssigneeInput from '../../../../../Common/AssigneeInput/AssigneeInput';
-import ColumnItem from '../../../../../Common/ColumnItem/ColumnItem';
-import { DateCreated } from '../../../../../Common/DateCreated/DateCreated';
-import ActionItemService from '../../../../../Services/Api/ActionItemService';
 import { ActionItemByIdState } from '../../../../../State/ActionItemState';
-import { ModalContentsState } from '../../../../../State/ModalContentsState';
-import { TeamState } from '../../../../../State/TeamState';
-import Topic from '../../../../../Types/Topic';
 
-type ActionItemProps = {
+import DefaultActionItemView from './DefaultActionItemView/DefaultActionItemView';
+import DeleteActionItemView from './DeleteActionItemView/DeleteActionItemView';
+import EditActionItemView from './EditActionItemView/EditActionItemView';
+
+export enum ActionItemViewState {
+	DELETE_ACTION_ITEM = 'delete-action-item',
+	EDIT_ACTION_ITEM = 'edit-action-item',
+	DEFAULT = 'default-action-item',
+}
+
+interface Props {
 	actionItemId: number;
-};
+}
 
-function ActionItem(props: ActionItemProps) {
+function ActionItem(props: Props) {
 	const { actionItemId } = props;
 
-	const team = useRecoilValue(TeamState);
 	const actionItem = useRecoilValue(ActionItemByIdState(actionItemId));
-	const setModalContents = useSetRecoilState(ModalContentsState);
 
-	const deleteActionItem = () => {
-		ActionItemService.delete(team.id, actionItemId)
-			.then(closeModal)
-			.catch(console.error);
-	};
-
-	const editActionItemTask = (updatedTask: string) => {
-		ActionItemService.updateTask(team.id, actionItemId, updatedTask).catch(
-			console.error
-		);
-	};
-
-	const editActionItemAssignee = (updatedAssignee: string) => {
-		ActionItemService.updateAssignee(
-			team.id,
-			actionItemId,
-			updatedAssignee
-		).catch(console.error);
-	};
-
-	const updateActionItemCompletionStatus = () => {
-		if (actionItem) {
-			ActionItemService.updateCompletionStatus(
-				team.id,
-				actionItem.id,
-				!actionItem.completed
-			)
-				.then(closeModal)
-				.catch(console.error);
-		}
-	};
-
-	const openActionItemModal = () =>
-		setModalContents({
-			title: 'Action Item',
-			component: <ActionItem actionItemId={actionItemId} />,
-			superSize: true,
-		});
-
-	const closeModal = () => setModalContents(null);
-
-	return (
-		<>
-			{actionItem && (
-				<ColumnItem
-					data-testid="actionItem"
-					className={classnames('action-item', {
-						completed: actionItem.completed,
-					})}
-					type={Topic.ACTION}
-					text={actionItem.task}
-					checked={actionItem.completed}
-					onSelect={openActionItemModal}
-					onEdit={editActionItemTask}
-					onDelete={deleteActionItem}
-					onCheck={updateActionItemCompletionStatus}
-					customButton={
-						<DateCreated
-							date={actionItem.dateCreated}
-							disabled={actionItem.completed}
-						/>
-					}
-				>
-					<AssigneeInput
-						assignee={actionItem.assignee}
-						onAssign={editActionItemAssignee}
-						disabled={actionItem.completed}
-					/>
-				</ColumnItem>
-			)}
-		</>
+	const [viewState, setViewState] = useState<ActionItemViewState>(
+		ActionItemViewState.DEFAULT
 	);
+	const [actionItemMinHeight, setActionItemMinHeight] = useState<number>();
+
+	if (!actionItem) return <></>;
+
+	switch (viewState) {
+		case ActionItemViewState.DELETE_ACTION_ITEM:
+			return (
+				<DeleteActionItemView
+					actionItemId={actionItem.id}
+					setViewState={setViewState}
+					height={actionItemMinHeight}
+				/>
+			);
+		case ActionItemViewState.EDIT_ACTION_ITEM:
+			return (
+				<EditActionItemView
+					actionItem={actionItem}
+					setViewState={setViewState}
+				/>
+			);
+		default:
+			return (
+				<DefaultActionItemView
+					actionItem={actionItem}
+					setViewState={setViewState}
+					setActionItemMinHeight={setActionItemMinHeight}
+				/>
+			);
+	}
 }
 
 export default ActionItem;
