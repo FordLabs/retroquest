@@ -26,16 +26,14 @@ import Topic from '../../../../../Types/Topic';
 
 import ThoughtItemWithAddAction from './ThoughtItemWithAddAction';
 
-jest.mock('axios');
-
-describe('ThoughtItemWithAddAction', () => {
+describe('Thought Item With Add Action', () => {
 	const fakeThought: Thought = {
 		id: 0,
 		message: 'fake thought',
 		hearts: 3,
 		discussed: false,
 		topic: Topic.HAPPY,
-		columnId: 10,
+		columnId: 1,
 	};
 
 	beforeEach(() => {

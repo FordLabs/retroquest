@@ -17,9 +17,13 @@
 
 @use '../../../../../Styles/main';
 
-.retro-item-with-add-action {
+.thought-item-with-add-action {
+	.thought-item {
+		margin-bottom: 30px;
+	}
+
 	&.creating-action {
-		.retro-item {
+		.thought-item {
 			box-shadow: 0 19px 38px rgba(main.$black, 0.3) !important;
 			transform: scale(0.85);
 
@@ -35,7 +39,7 @@
 	.add-action-item-button {
 		display: block;
 		height: 35px;
-		margin: 1.8rem auto 0;
+		margin: 2rem auto 0;
 		padding: 8px 16px;
 
 		font-weight: bolder;
@@ -62,7 +66,7 @@
 }
 
 @include main.dark-theme {
-	.retro-item-with-add-action {
+	.thought-item-with-add-action {
 		.add-action-item-button {
 			color: main.$gray;
 			background-color: main.$task-background-dark;
