@@ -133,7 +133,7 @@ describe('Retro Facilitator Journey', () => {
 			.type(actionItemTask);
 		const actionItemAssignee = 'Harry, and Corey';
 		cy.get('@retroItemModal')
-			.find('[data-testid="actionItem-assignee"]')
+			.find('[data-testid="assigneeInput"]')
 			.type(actionItemAssignee, { force: true });
 
 		cy.findByText('Create!').click();
@@ -334,7 +334,7 @@ function shouldEditActionItemTaskAndAssignee(
 	cy.getActionItemByTask(expectedNewTask).should('exist');
 
 	cy.getActionItemByTask(expectedNewTask)
-		.find('[data-testid=actionItem-assignee]')
+		.find('[data-testid=assigneeInput]')
 		.type(`${appendToAssignee}{enter}`);
 
 	cy.getActionItemByTask(expectedNewTask)

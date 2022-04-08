@@ -118,8 +118,8 @@ describe('Action Item Service', () => {
 	});
 
 	describe('updateAssignee', () => {
-		it('should update an action item Assignee', async () => {
-			const updatedAssignee = 'Updated Assignee';
+		it('should update an action item assignee', async () => {
+			const updatedAssignee = 'Updated assignee';
 			await ActionItemService.updateAssignee(
 				teamId,
 				actionItemId,
