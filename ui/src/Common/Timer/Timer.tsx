@@ -18,6 +18,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import moment from 'moment';
 
+import pauseButton from '../../Assets/pause-icon.svg';
 import playButton from '../../Assets/play-icon.svg';
 
 enum TimerOption {
@@ -48,12 +49,19 @@ function Timer(): JSX.Element {
 		setTimerRunning(true);
 	}
 
+	function handlePausePressed() {
+		setTimerRunning(false);
+	}
+
 	return (
 		<div>
 			<div>{secondsLeft}</div>
 			<div>{moment(secondsLeft * 1000).format('mm:ss')}</div>
 			<button onClick={handlePlayPressed}>
 				<img src={playButton} alt="Start timer" />
+			</button>
+			<button onClick={handlePausePressed}>
+				<img src={pauseButton} alt="Pause timer" />
 			</button>
 		</div>
 	);
