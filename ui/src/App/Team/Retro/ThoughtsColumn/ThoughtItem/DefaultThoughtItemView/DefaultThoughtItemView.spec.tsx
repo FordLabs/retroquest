@@ -19,25 +19,22 @@ import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
+import ThoughtService from 'Services/Api/ThoughtService';
+import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
+import { TeamState } from 'State/TeamState';
+import { ThoughtsState } from 'State/ThoughtsState';
+import Team from 'Types/Team';
+import Thought from 'Types/Thought';
+import Topic from 'Types/Topic';
+import { RecoilObserver } from 'Utils/RecoilObserver';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
-import ThoughtService from '../../../../../../Services/Api/ThoughtService';
-import {
-	ModalContents,
-	ModalContentsState,
-} from '../../../../../../State/ModalContentsState';
-import { TeamState } from '../../../../../../State/TeamState';
-import { ThoughtsState } from '../../../../../../State/ThoughtsState';
-import Team from '../../../../../../Types/Team';
-import Thought from '../../../../../../Types/Thought';
-import Topic from '../../../../../../Types/Topic';
-import { RecoilObserver } from '../../../../../../Utils/RecoilObserver';
-import renderWithRecoilRoot from '../../../../../../Utils/renderWithRecoilRoot';
 import ThoughtItemWithAddAction from '../../ThoughtItemWithAddAction/ThoughtItemWithAddAction';
 import ThoughtItem, { ThoughtItemViewState } from '../ThoughtItem';
 
 import DefaultThoughtItemView from './DefaultThoughtItemView';
 
-jest.mock('../../../../../../Services/Api/ThoughtService');
+jest.mock('Services/Api/ThoughtService');
 
 describe('Default Thought Item View', () => {
 	let modalContent: ModalContents | null;

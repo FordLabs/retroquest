@@ -17,9 +17,8 @@
 
 import React, { ComponentPropsWithoutRef } from 'react';
 import classnames from 'classnames';
-
-import Tooltip from '../../Tooltip/Tooltip';
-import UpvoteCount from '../../UpvoteCount/UpvoteCount';
+import Tooltip from 'Common/Tooltip/Tooltip';
+import UpvoteCount from 'Common/UpvoteCount/UpvoteCount';
 
 type UpvoteButtonProps = ComponentPropsWithoutRef<'button'> & {
 	votes: number;

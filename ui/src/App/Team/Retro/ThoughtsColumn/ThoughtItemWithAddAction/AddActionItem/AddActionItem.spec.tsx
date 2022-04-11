@@ -19,25 +19,22 @@ import * as React from 'react';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
+import { getMockThought } from 'Services/Api/__mocks__/ThoughtService';
+import ActionItemService from 'Services/Api/ActionItemService';
+import ThoughtService from 'Services/Api/ThoughtService';
+import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
+import { TeamState } from 'State/TeamState';
+import { ThoughtsState } from 'State/ThoughtsState';
+import Team from 'Types/Team';
+import Topic from 'Types/Topic';
+import { RecoilObserver } from 'Utils/RecoilObserver';
 
-import { getMockThought } from '../../../../../../Services/Api/__mocks__/ThoughtService';
-import ActionItemService from '../../../../../../Services/Api/ActionItemService';
-import ThoughtService from '../../../../../../Services/Api/ThoughtService';
-import {
-	ModalContents,
-	ModalContentsState,
-} from '../../../../../../State/ModalContentsState';
-import { TeamState } from '../../../../../../State/TeamState';
-import { ThoughtsState } from '../../../../../../State/ThoughtsState';
-import Team from '../../../../../../Types/Team';
-import Topic from '../../../../../../Types/Topic';
-import { RecoilObserver } from '../../../../../../Utils/RecoilObserver';
 import ThoughtItemWithAddAction from '../ThoughtItemWithAddAction';
 
 import AddActionItem from './AddActionItem';
 
-jest.mock('../../../../../../Services/Api/ActionItemService');
-jest.mock('../../../../../../Services/Api/ThoughtService');
+jest.mock('Services/Api/ActionItemService');
+jest.mock('Services/Api/ThoughtService');
 
 describe('Add Action Item', () => {
 	const hideComponentCallback = jest.fn();

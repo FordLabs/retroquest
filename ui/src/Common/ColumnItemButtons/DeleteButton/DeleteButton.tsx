@@ -15,8 +15,7 @@
  * limitations under the License.
  */
 import React, { ComponentPropsWithoutRef } from 'react';
-
-import Tooltip from '../../Tooltip/Tooltip';
+import Tooltip from 'Common/Tooltip/Tooltip';
 
 const DeleteButton = (props: ComponentPropsWithoutRef<'button'>) => {
 	const { ...buttonProps } = props;

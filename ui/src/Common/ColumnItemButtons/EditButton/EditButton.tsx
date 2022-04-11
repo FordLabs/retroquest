@@ -16,8 +16,7 @@
  */
 import React, { ComponentPropsWithoutRef } from 'react';
 import classnames from 'classnames';
-
-import Tooltip from '../../Tooltip/Tooltip';
+import Tooltip from 'Common/Tooltip/Tooltip';
 
 const EditButton = (props: ComponentPropsWithoutRef<'button'>) => {
 	const { className, ...buttonProps } = props;

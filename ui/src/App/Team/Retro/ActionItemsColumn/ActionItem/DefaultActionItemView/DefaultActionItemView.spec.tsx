@@ -19,23 +19,20 @@ import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
+import ActionItemService from 'Services/Api/ActionItemService';
+import { ActionItemState } from 'State/ActionItemState';
+import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
+import { TeamState } from 'State/TeamState';
+import Action from 'Types/Action';
+import Team from 'Types/Team';
+import { RecoilObserver } from 'Utils/RecoilObserver';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
-import ActionItemService from '../../../../../../Services/Api/ActionItemService';
-import { ActionItemState } from '../../../../../../State/ActionItemState';
-import {
-	ModalContents,
-	ModalContentsState,
-} from '../../../../../../State/ModalContentsState';
-import { TeamState } from '../../../../../../State/TeamState';
-import Action from '../../../../../../Types/Action';
-import Team from '../../../../../../Types/Team';
-import { RecoilObserver } from '../../../../../../Utils/RecoilObserver';
-import renderWithRecoilRoot from '../../../../../../Utils/renderWithRecoilRoot';
 import ActionItem, { ActionItemViewState } from '../ActionItem';
 
 import DefaultActionItemView from './DefaultActionItemView';
 
-jest.mock('../../../../../../Services/Api/ActionItemService');
+jest.mock('Services/Api/ActionItemService');
 
 describe('Default Action Item View', () => {
 	let modalContent: ModalContents | null;

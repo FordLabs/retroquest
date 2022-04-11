@@ -16,21 +16,21 @@
  */
 import React, { useRef } from 'react';
 import classNames from 'classnames';
-import { useRecoilState, useRecoilValue } from 'recoil';
-
-import ColumnItem from '../../../../../../Common/ColumnItem/ColumnItem';
+import ColumnItem from 'Common/ColumnItem/ColumnItem';
 import {
 	CheckboxButton,
 	ColumnItemButtonGroup,
 	DeleteButton,
 	EditButton,
 	UpvoteButton,
-} from '../../../../../../Common/ColumnItemButtons';
-import ThoughtService from '../../../../../../Services/Api/ThoughtService';
-import { ModalContentsState } from '../../../../../../State/ModalContentsState';
-import { TeamState } from '../../../../../../State/TeamState';
-import Thought from '../../../../../../Types/Thought';
-import { ThoughtTopic } from '../../../../../../Types/Topic';
+} from 'Common/ColumnItemButtons';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import ThoughtService from 'Services/Api/ThoughtService';
+import { ModalContentsState } from 'State/ModalContentsState';
+import { TeamState } from 'State/TeamState';
+import Thought from 'Types/Thought';
+import { ThoughtTopic } from 'Types/Topic';
+
 import ThoughtItemWithAddAction from '../../ThoughtItemWithAddAction/ThoughtItemWithAddAction';
 import { ThoughtItemViewState } from '../ThoughtItem';
 
