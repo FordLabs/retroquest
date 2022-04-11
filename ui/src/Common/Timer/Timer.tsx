@@ -64,12 +64,16 @@ function Timer(): JSX.Element {
 		<div>
 			<div>{secondsLeft}</div>
 			<div>{moment(secondsLeft * 1000).format('mm:ss')}</div>
-			<button onClick={handlePlayPressed}>
-				<img src={playButton} alt="Start timer" />
-			</button>
-			<button onClick={handlePausePressed}>
-				<img src={pauseButton} alt="Pause timer" />
-			</button>
+			{!timerRunning && (
+				<button onClick={handlePlayPressed}>
+					<img src={playButton} alt="Start timer" />
+				</button>
+			)}
+			{timerRunning && (
+				<button onClick={handlePausePressed}>
+					<img src={pauseButton} alt="Pause timer" />
+				</button>
+			)}
 			<button onClick={handleResetPressed}>
 				<img src={resetButton} alt="Reset timer" />
 			</button>
