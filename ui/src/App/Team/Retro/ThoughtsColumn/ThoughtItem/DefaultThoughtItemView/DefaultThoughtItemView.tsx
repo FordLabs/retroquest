@@ -25,6 +25,7 @@ import {
 	DeleteButton,
 	EditButton,
 } from '../../../../../../Common/ColumnItemButtons';
+import UpvoteButton from '../../../../../../Common/ColumnItemButtons/UpvoteButton/UpvoteButton';
 import ThoughtService from '../../../../../../Services/Api/ThoughtService';
 import { ModalContentsState } from '../../../../../../State/ModalContentsState';
 import { TeamState } from '../../../../../../State/TeamState';
@@ -32,7 +33,6 @@ import Thought from '../../../../../../Types/Thought';
 import { ThoughtTopic } from '../../../../../../Types/Topic';
 import ThoughtItemWithAddAction from '../../ThoughtItemWithAddAction/ThoughtItemWithAddAction';
 import { ThoughtItemViewState } from '../ThoughtItem';
-import UpvoteButton from '../UpvoteButton/UpvoteButton';
 
 import './DefaultThoughtItemView.scss';
 
@@ -105,8 +105,7 @@ function DefaultThoughtItemView(props: Props) {
 				<UpvoteButton
 					votes={thought.hearts}
 					onClick={upvoteThought}
-					disabled={thought.discussed}
-					readOnly={disableButtons}
+					disabled={thought.discussed || disableButtons}
 					aria-label={`Upvote (${thought.hearts})`}
 					data-testid="retroItem-upvote"
 				/>
