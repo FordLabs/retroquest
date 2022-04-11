@@ -87,6 +87,30 @@ describe('Radiator Page', () => {
 		).toBeNull();
 	});
 
+	it('should show date and assignee in readOnly mode', async () => {
+		ActionItemService.get = jest.fn().mockResolvedValue(archivedActionItems);
+
+		render(
+			<RecoilRoot
+				initializeState={({ set }) => {
+					set(TeamState, { name: '', id: teamId });
+				}}
+			>
+				<RadiatorPage />
+			</RecoilRoot>
+		);
+
+		await waitFor(() =>
+			expect(ActionItemService.get).toHaveBeenCalledWith(teamId, false)
+		);
+
+		const dateCreatedField = screen.getByTestId('dateCreated');
+		expect(dateCreatedField).toHaveClass('readOnly');
+		expect(
+			screen.getAllByTestId('assigneeInput')[0].getAttribute('readOnly')
+		).not.toBeNull();
+	});
+
 	it('should show "No active action items" message when no active action items are present', () => {
 		ActionItemService.get = jest.fn().mockResolvedValue([]);
 

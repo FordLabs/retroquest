@@ -76,6 +76,18 @@ describe('Assignee Input', () => {
 		const assigneeInput = getAssigneeInput();
 		expect(assigneeInput).toBeDisabled();
 	});
+
+	it('should be read only', () => {
+		rerender(
+			<AssigneeInput
+				assignee={assignee}
+				onAssign={mockOnAssign}
+				readOnly={true}
+			/>
+		);
+		const assigneeInput = getAssigneeInput();
+		expect(assigneeInput.getAttribute('readOnly')).not.toBeNull();
+	});
 });
 
 function getAssigneeInput() {
