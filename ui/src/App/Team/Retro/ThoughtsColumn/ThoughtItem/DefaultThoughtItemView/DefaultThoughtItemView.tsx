@@ -24,8 +24,8 @@ import {
 	ColumnItemButtonGroup,
 	DeleteButton,
 	EditButton,
+	UpvoteButton,
 } from '../../../../../../Common/ColumnItemButtons';
-import UpvoteButton from '../../../../../../Common/ColumnItemButtons/UpvoteButton/UpvoteButton';
 import ThoughtService from '../../../../../../Services/Api/ThoughtService';
 import { ModalContentsState } from '../../../../../../State/ModalContentsState';
 import { TeamState } from '../../../../../../State/TeamState';
