@@ -90,7 +90,7 @@
 			color: main.$background-gray;
 			border-bottom-color: main.$dark-yellow;
 
-			&:focus {
+			&:focus:not(:read-only) {
 				border-bottom-color: main.$dark-purple;
 			}
 		}
