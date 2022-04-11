@@ -20,6 +20,7 @@ import moment from 'moment';
 
 import pauseButton from '../../Assets/pause-icon.svg';
 import playButton from '../../Assets/play-icon.svg';
+import resetButton from '../../Assets/x-icon.svg';
 
 enum TimerOption {
 	// THIRTY_SECONDS = 30,
@@ -30,6 +31,7 @@ enum TimerOption {
 
 function Timer(): JSX.Element {
 	const [timerRunning, setTimerRunning] = useState<boolean>(false);
+	const [currentTimerOption] = useState<TimerOption>(TimerOption.FIVE_MINUTES);
 	const [secondsLeft, setSecondsLeft] = useState<number>(
 		TimerOption.FIVE_MINUTES
 	);
@@ -53,6 +55,11 @@ function Timer(): JSX.Element {
 		setTimerRunning(false);
 	}
 
+	function handleResetPressed() {
+		setTimerRunning(false);
+		setSecondsLeft(currentTimerOption);
+	}
+
 	return (
 		<div>
 			<div>{secondsLeft}</div>
@@ -62,6 +69,9 @@ function Timer(): JSX.Element {
 			</button>
 			<button onClick={handlePausePressed}>
 				<img src={pauseButton} alt="Pause timer" />
+			</button>
+			<button onClick={handleResetPressed}>
+				<img src={resetButton} alt="Reset timer" />
 			</button>
 		</div>
 	);
