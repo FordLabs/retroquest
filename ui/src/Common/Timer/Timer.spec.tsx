@@ -55,6 +55,19 @@ describe('Timer', () => {
 		screen.getByText('04:57');
 	});
 
+	it('should not show pause button if timer not running', () => {
+		render(<Timer />);
+		const pauseButton = screen.queryByAltText('Pause timer');
+		expect(pauseButton).toBeNull();
+	});
+
+	it('should not show play button if timer is running', () => {
+		render(<Timer />);
+		fireEvent.click(screen.getByAltText('Start timer'));
+		const playButton = screen.queryByAltText('Start timer');
+		expect(playButton).toBeNull();
+	});
+
 	it('should reset the timer when the reset button is pressed', () => {
 		render(<Timer />);
 		fireEvent.click(screen.getByAltText('Start timer'));
