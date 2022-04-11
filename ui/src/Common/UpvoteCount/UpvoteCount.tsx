@@ -27,7 +27,7 @@ function UpvoteCount({ votes }: Props): JSX.Element {
 	return (
 		<div className="upvote-count">
 			<div className="star-icon">
-				<i className="fas fa-star" aria-hidden="true" />
+				<i className="fas fa-star" aria-hidden="true" data-testid="starIcon" />
 				<span className="star-shadow" />
 			</div>
 			<div className="star-count">{votes}</div>

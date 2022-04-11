@@ -18,30 +18,21 @@
 import React, { ComponentPropsWithoutRef } from 'react';
 import classnames from 'classnames';
 
-import Tooltip from '../../../../../../Common/Tooltip/Tooltip';
-import UpvoteCount from '../../../../../../Common/UpvoteCount/UpvoteCount';
+import Tooltip from '../../Tooltip/Tooltip';
+import UpvoteCount from '../../UpvoteCount/UpvoteCount';
 
 type UpvoteButtonProps = ComponentPropsWithoutRef<'button'> & {
 	votes: number;
-	readOnly?: boolean;
 };
 
 function UpvoteButton(props: UpvoteButtonProps) {
-	const {
-		votes,
-		disabled = false,
-		readOnly = false,
-		className,
-		...buttonProps
-	} = props;
+	const { votes, disabled = false, className, ...buttonProps } = props;
 
 	return (
 		<button
 			{...buttonProps}
-			className={classnames('column-item-button', className, {
-				readonly: readOnly,
-			})}
-			disabled={disabled || readOnly}
+			className={classnames('column-item-button', className)}
+			disabled={disabled}
 		>
 			<UpvoteCount votes={votes} />
 			<Tooltip>Upvote</Tooltip>
