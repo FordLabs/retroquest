@@ -20,6 +20,7 @@ import ColumnItemButtonGroup from './ColumnItemButtonGroup/ColumnItemButtonGroup
 import ConfirmButton from './ConfirmButton/ConfirmButton';
 import DeleteButton from './DeleteButton/DeleteButton';
 import EditButton from './EditButton/EditButton';
+import UpvoteButton from './UpvoteButton/UpvoteButton';
 
 export {
 	CancelButton,
@@ -28,4 +29,5 @@ export {
 	ConfirmButton,
 	DeleteButton,
 	EditButton,
+	UpvoteButton,
 };
