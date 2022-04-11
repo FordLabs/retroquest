@@ -54,6 +54,14 @@ describe('Timer', () => {
 		advanceTimersSafely(3010);
 		screen.getByText('04:57');
 	});
+
+	it('should reset the timer when the reset button is pressed', () => {
+		render(<Timer />);
+		fireEvent.click(screen.getByAltText('Start timer'));
+		advanceTimersSafely(3010);
+		fireEvent.click(screen.getByAltText('Reset timer'));
+		screen.getByText('05:00');
+	});
 });
 
 function advanceTimersSafely(duration: number) {
