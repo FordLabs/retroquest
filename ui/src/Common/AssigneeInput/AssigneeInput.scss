@@ -62,7 +62,7 @@
 			right: 0;
 		}
 
-		&:focus {
+		&:focus:not(:read-only) {
 			border-bottom-color: main.$purple;
 
 			+ .floating-character-countdown {

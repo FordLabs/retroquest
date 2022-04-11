@@ -19,7 +19,10 @@
 	flex: 25%;
 	flex-direction: column;
 
-	cursor: default;
+	&.column-item-button {
+		cursor: initial;
+		user-select: initial;
+	}
 
 	.date-created-header {
 		font-weight: bold;

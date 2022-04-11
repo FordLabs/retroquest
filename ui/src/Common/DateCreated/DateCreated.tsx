@@ -24,18 +24,20 @@ import './DateCreated.scss';
 type DateCreatedProps = {
 	date: string;
 	disabled?: boolean;
+	readOnly?: boolean;
 	className?: string;
 };
 
 export function DateCreated(props: DateCreatedProps) {
-	const { date, className, disabled = false } = props;
+	const { date, className, disabled = false, readOnly = false } = props;
 
 	return (
 		<div
 			className={classnames('column-item-button date-created', className, {
 				disabled,
+				readOnly,
 			})}
-			data-testid="actionItem-dateCreated"
+			data-testid="dateCreated"
 		>
 			<div className="date-created-header">created</div>
 			<div className="date-created-value">{moment(date).format('MMM Do')}</div>

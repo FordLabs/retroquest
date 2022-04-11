@@ -29,10 +29,11 @@ interface Props {
 	assignee: string;
 	onAssign?: (assignee: string) => void;
 	disabled?: boolean;
+	readOnly?: boolean;
 }
 
 function AssigneeInput(props: Props) {
-	const { assignee = '', onAssign, disabled } = props;
+	const { assignee = '', onAssign, disabled, readOnly } = props;
 	const assigneeInputRef = useRef<HTMLInputElement>(null);
 
 	const [editAssignee, setEditAssignee] = useState<string>(assignee || '');
@@ -64,6 +65,7 @@ function AssigneeInput(props: Props) {
 					onKeyDown={onKeys('Enter', handleEnter)}
 					maxLength={MAX_ASSIGNEE_LENGTH}
 					disabled={disabled}
+					readOnly={readOnly}
 					data-testid="assigneeInput"
 					ref={assigneeInputRef}
 				/>
