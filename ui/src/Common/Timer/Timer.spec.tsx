@@ -45,6 +45,15 @@ describe('Timer', () => {
 		advanceTimersSafely(3010);
 		screen.getByText('04:57');
 	});
+
+	it('should stop the timer if the pause button is pressed', () => {
+		render(<Timer />);
+		fireEvent.click(screen.getByAltText('Start timer'));
+		advanceTimersSafely(3010);
+		fireEvent.click(screen.getByAltText('Pause timer'));
+		advanceTimersSafely(3010);
+		screen.getByText('04:57');
+	});
 });
 
 function advanceTimersSafely(duration: number) {
