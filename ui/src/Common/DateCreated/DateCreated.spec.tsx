@@ -21,7 +21,6 @@ import { DateCreated } from './DateCreated';
 
 describe('Date Created', () => {
 	const date: string = '2022-04-11';
-	const mockOnAssign = jest.fn();
 	let rerender: (arg0: JSX.Element) => void;
 
 	beforeEach(() => {
