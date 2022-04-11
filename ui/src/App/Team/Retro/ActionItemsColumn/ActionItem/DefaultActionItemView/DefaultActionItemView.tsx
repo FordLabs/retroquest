@@ -17,21 +17,21 @@
 
 import React, { useRef } from 'react';
 import classNames from 'classnames';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-
-import AssigneeInput from '../../../../../../Common/AssigneeInput/AssigneeInput';
-import ColumnItem from '../../../../../../Common/ColumnItem/ColumnItem';
+import AssigneeInput from 'Common/AssigneeInput/AssigneeInput';
+import ColumnItem from 'Common/ColumnItem/ColumnItem';
 import {
 	CheckboxButton,
 	ColumnItemButtonGroup,
 	DeleteButton,
 	EditButton,
-} from '../../../../../../Common/ColumnItemButtons';
-import { DateCreated } from '../../../../../../Common/DateCreated/DateCreated';
-import ActionItemService from '../../../../../../Services/Api/ActionItemService';
-import { ModalContentsState } from '../../../../../../State/ModalContentsState';
-import { TeamState } from '../../../../../../State/TeamState';
-import Action from '../../../../../../Types/Action';
+} from 'Common/ColumnItemButtons';
+import { DateCreated } from 'Common/DateCreated/DateCreated';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import ActionItemService from 'Services/Api/ActionItemService';
+import { ModalContentsState } from 'State/ModalContentsState';
+import { TeamState } from 'State/TeamState';
+import Action from 'Types/Action';
+
 import ActionItem, { ActionItemViewState } from '../ActionItem';
 
 import './DefaultActionItemView.scss';

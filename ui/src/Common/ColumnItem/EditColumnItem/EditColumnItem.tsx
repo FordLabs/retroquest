@@ -17,16 +17,15 @@
 
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
-import { useSetRecoilState } from 'recoil';
-
-import { DisableDraggableState } from '../../../State/DisableDraggableState';
-import { onKeys } from '../../../Utils/EventUtils';
 import {
 	CancelButton,
 	ColumnItemButtonGroup,
 	ConfirmButton,
-} from '../../ColumnItemButtons';
-import Textarea from '../../Textarea/Textarea';
+} from 'Common/ColumnItemButtons';
+import Textarea from 'Common/Textarea/Textarea';
+import { useSetRecoilState } from 'recoil';
+import { DisableDraggableState } from 'State/DisableDraggableState';
+import { onKeys } from 'Utils/EventUtils';
 
 import './EditColumnItem.scss';
 

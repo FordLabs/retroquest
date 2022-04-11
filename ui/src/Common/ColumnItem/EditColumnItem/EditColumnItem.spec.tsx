@@ -18,11 +18,10 @@
 import * as React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
-import { DisableDraggableState } from '../../../State/DisableDraggableState';
-import { ModalContents } from '../../../State/ModalContentsState';
-import { RecoilObserver } from '../../../Utils/RecoilObserver';
-import renderWithRecoilRoot from '../../../Utils/renderWithRecoilRoot';
+import { DisableDraggableState } from 'State/DisableDraggableState';
+import { ModalContents } from 'State/ModalContentsState';
+import { RecoilObserver } from 'Utils/RecoilObserver';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import EditColumnItem from './EditColumnItem';
 

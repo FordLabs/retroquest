@@ -17,7 +17,6 @@
 
 import React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-
 import {
 	CancelButton,
 	CheckboxButton,
@@ -25,7 +24,7 @@ import {
 	ConfirmButton,
 	DeleteButton,
 	EditButton,
-} from '../Common/ColumnItemButtons';
+} from 'Common/ColumnItemButtons';
 
 export default {
 	title: 'components/ColumnItemButtons',

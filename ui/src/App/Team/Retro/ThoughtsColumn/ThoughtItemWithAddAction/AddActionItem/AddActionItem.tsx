@@ -17,21 +17,20 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-
-import AssigneeInput from '../../../../../../Common/AssigneeInput/AssigneeInput';
+import AssigneeInput from 'Common/AssigneeInput/AssigneeInput';
 import {
 	CancelButton,
 	ColumnItemButtonGroup,
 	ConfirmButton,
-} from '../../../../../../Common/ColumnItemButtons';
-import Textarea from '../../../../../../Common/Textarea/Textarea';
-import ActionItemService from '../../../../../../Services/Api/ActionItemService';
-import ThoughtService from '../../../../../../Services/Api/ThoughtService';
-import { ModalContentsState } from '../../../../../../State/ModalContentsState';
-import { TeamState } from '../../../../../../State/TeamState';
-import { ThoughtByIdState } from '../../../../../../State/ThoughtsState';
-import { onKeys } from '../../../../../../Utils/EventUtils';
+} from 'Common/ColumnItemButtons';
+import Textarea from 'Common/Textarea/Textarea';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import ActionItemService from 'Services/Api/ActionItemService';
+import ThoughtService from 'Services/Api/ThoughtService';
+import { ModalContentsState } from 'State/ModalContentsState';
+import { TeamState } from 'State/TeamState';
+import { ThoughtByIdState } from 'State/ThoughtsState';
+import { onKeys } from 'Utils/EventUtils';
 
 import './AddActionItem.scss';
 

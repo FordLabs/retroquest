@@ -17,13 +17,12 @@
 
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
-
-import { onKeys } from '../../../Utils/EventUtils';
 import {
 	CancelButton,
 	ColumnItemButtonGroup,
 	ConfirmButton,
-} from '../../ColumnItemButtons';
+} from 'Common/ColumnItemButtons';
+import { onKeys } from 'Utils/EventUtils';
 
 import './DeleteColumnItem.scss';
 

@@ -17,8 +17,7 @@
 
 import React, { ComponentPropsWithoutRef, forwardRef, LegacyRef } from 'react';
 import classnames from 'classnames';
-
-import Tooltip from '../../Tooltip/Tooltip';
+import Tooltip from 'Common/Tooltip/Tooltip';
 
 import './CheckboxButton.scss';
 
