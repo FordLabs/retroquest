@@ -32,7 +32,7 @@ interface Props {
 function ArchivedBoard({ board }: Props): JSX.Element {
 	function getThoughts(initialBoard: Board, column: Column): Thought[] {
 		const columnSpecificThoughts = initialBoard.thoughts.filter(
-			(thought) => thought.topic === column.topic
+			(thought) => thought.columnId === column.id
 		);
 		const discussedThoughts = columnSpecificThoughts
 			.filter((thought) => thought.discussed)
