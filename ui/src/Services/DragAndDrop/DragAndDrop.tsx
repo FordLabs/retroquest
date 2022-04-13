@@ -23,7 +23,6 @@ import { ColumnsState } from '../../State/ColumnsState';
 import { TeamState } from '../../State/TeamState';
 import { ThoughtsState } from '../../State/ThoughtsState';
 import Thought from '../../Types/Thought';
-import { ThoughtTopic } from '../../Types/Topic';
 import ThoughtService from '../Api/ThoughtService';
 
 type Props = {};
@@ -40,7 +39,7 @@ function DragAndDrop({ children }: PropsWithChildren<Props>): JSX.Element {
 			const thoughtId = parseInt(result.draggableId);
 			const columnId = parseInt(result.destination!.droppableId);
 
-			let oldColumnTopic: ThoughtTopic;
+			let oldColumnId: number;
 			const newColumn = columns.find((c) => c.id === columnId);
 
 			if (!newColumn) return;
@@ -48,19 +47,19 @@ function DragAndDrop({ children }: PropsWithChildren<Props>): JSX.Element {
 			setThoughts((currentState: Thought[]) => {
 				return currentState.map((thought) => {
 					if (thought.id === thoughtId) {
-						oldColumnTopic = thought.topic;
-						return { ...thought, topic: newColumn.topic };
+						oldColumnId = thought.columnId;
+						return { ...thought, columnId: newColumn.id };
 					}
 					return thought;
 				});
 			});
 			ThoughtService.updateColumn(team.id, thoughtId, columnId).catch(() => {
-				if (!oldColumnTopic) return;
+				if (!oldColumnId) return;
 
 				setThoughts((currentState: Thought[]) => {
 					return currentState.map((thought) =>
 						thought.id === thoughtId
-							? { ...thought, topic: oldColumnTopic }
+							? { ...thought, columnId: oldColumnId }
 							: thought
 					);
 				});
