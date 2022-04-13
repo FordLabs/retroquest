@@ -16,12 +16,12 @@
  */
 
 import React from 'react';
+import Timer from 'Common/Timer/Timer';
 import fileSaver from 'file-saver';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-
-import TeamService from '../../../../Services/Api/TeamService';
-import { ModalContentsState } from '../../../../State/ModalContentsState';
-import { TeamState } from '../../../../State/TeamState';
+import TeamService from 'Services/Api/TeamService';
+import { ModalContentsState } from 'State/ModalContentsState';
+import { TeamState } from 'State/TeamState';
 
 import ArchiveRetroDialog from './ArchiveRetroConfirmation/ArchiveRetroConfirmation';
 import FeedbackForm from './FeedbackForm/FeedbackForm';
@@ -39,8 +39,9 @@ function RetroSubheader(): JSX.Element {
 	};
 
 	return (
-		<>
-			<div className="retro-subheader">
+		<div className="retro-subheader">
+			<div className="retro-subheader-container">
+				<Timer />
 				<ul className="retro-subheader-links">
 					<li>
 						<button
@@ -80,7 +81,7 @@ function RetroSubheader(): JSX.Element {
 					</li>
 				</ul>
 			</div>
-		</>
+		</div>
 	);
 }
 

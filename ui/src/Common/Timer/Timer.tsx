@@ -22,6 +22,8 @@ import pauseButton from '../../Assets/pause-icon.svg';
 import playButton from '../../Assets/play-icon.svg';
 import resetButton from '../../Assets/x-icon.svg';
 
+import './Timer.scss';
+
 enum TimerOption {
 	// THIRTY_SECONDS = 30,
 	// ONE_MINUTE = 60,
@@ -61,20 +63,20 @@ function Timer(): JSX.Element {
 	}
 
 	return (
-		<div>
-			<div>{secondsLeft}</div>
-			<div>{moment(secondsLeft * 1000).format('mm:ss')}</div>
-			{!timerRunning && (
-				<button onClick={handlePlayPressed}>
+		<div className="timer">
+			<div className="timer-seconds">
+				{moment(secondsLeft * 1000).format('mm:ss')}
+			</div>
+			{timerRunning ? (
+				<button onClick={handlePausePressed} className="pause-button">
+					<img src={pauseButton} alt="Pause timer" />
+				</button>
+			) : (
+				<button onClick={handlePlayPressed} className="start-button">
 					<img src={playButton} alt="Start timer" />
 				</button>
 			)}
-			{timerRunning && (
-				<button onClick={handlePausePressed}>
-					<img src={pauseButton} alt="Pause timer" />
-				</button>
-			)}
-			<button onClick={handleResetPressed}>
+			<button onClick={handleResetPressed} className="reset-button">
 				<img src={resetButton} alt="Reset timer" />
 			</button>
 		</div>
