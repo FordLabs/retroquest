@@ -22,7 +22,7 @@ import Topic from '../Types/Topic';
 
 export type ThoughtTopic = Topic.HAPPY | Topic.CONFUSED | Topic.UNHAPPY;
 export type ThoughtFilterParams = {
-	topic: ThoughtTopic;
+	columnId: number;
 	sorted: boolean;
 };
 
@@ -42,14 +42,16 @@ export const ThoughtByIdState = selectorFamily({
 		},
 });
 
-export const ThoughtsByTopicState = atomFamily<Thought[], ThoughtTopic>({
+export const ThoughtsByColumnIdState = atomFamily<Thought[], number>({
 	key: 'ThoughtsByTopicState',
 	default: selectorFamily({
 		key: 'ThoughtsByTopicState/Default',
 		get:
-			(topic: ThoughtTopic) =>
+			(columnId: number) =>
 			({ get }) => {
-				return get(ThoughtsState).filter((thought) => thought.topic === topic);
+				return get(ThoughtsState).filter(
+					(thought) => thought.columnId === columnId
+				);
 			},
 	}),
 });
@@ -64,7 +66,7 @@ export const SortableThoughtsByTopicState = atomFamily<
 		get:
 			(params: ThoughtFilterParams) =>
 			({ get }) => {
-				let thoughts = get(ThoughtsByTopicState(params.topic));
+				let thoughts = get(ThoughtsByColumnIdState(params.columnId));
 				if (params.sorted) {
 					thoughts = [...thoughts].sort((a, b) => b.hearts - a.hearts);
 				}
@@ -76,14 +78,14 @@ export const SortableThoughtsByTopicState = atomFamily<
 	}),
 });
 
-export const ActiveThoughtCountByTopicState = atomFamily<number, ThoughtTopic>({
+export const ActiveThoughtCountByColumnIdState = atomFamily<number, number>({
 	key: 'ActiveThoughtCountByTopicState',
 	default: selectorFamily({
 		key: 'ActiveThoughtCountByTopicState/Default',
 		get:
-			(topic: ThoughtTopic) =>
+			(columnId: number) =>
 			({ get }) => {
-				return get(ThoughtsByTopicState(topic)).filter(
+				return get(ThoughtsByColumnIdState(columnId)).filter(
 					(thought) => !thought.discussed
 				).length;
 			},
