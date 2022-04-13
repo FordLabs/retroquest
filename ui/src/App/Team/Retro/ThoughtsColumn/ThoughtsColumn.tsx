@@ -26,7 +26,7 @@ import ColumnService from '../../../../Services/Api/ColumnService';
 import ThoughtService from '../../../../Services/Api/ThoughtService';
 import { TeamState } from '../../../../State/TeamState';
 import {
-	ActiveThoughtCountByTopicState,
+	ActiveThoughtCountByColumnIdState,
 	SortableThoughtsByTopicState,
 } from '../../../../State/ThoughtsState';
 import { Column } from '../../../../Types/Column';
@@ -47,10 +47,10 @@ function ThoughtsColumn(props: Props) {
 	const team = useRecoilValue(TeamState);
 	const [sorted, setSorted] = useState(false);
 	const thoughts = useRecoilValue<Thought[]>(
-		SortableThoughtsByTopicState({ topic: column.topic, sorted })
+		SortableThoughtsByTopicState({ columnId: column.id, sorted })
 	);
 	const activeThoughtCount = useRecoilValue<number>(
-		ActiveThoughtCountByTopicState(column.topic)
+		ActiveThoughtCountByColumnIdState(column.id)
 	);
 
 	const changeTitle = (title: string) => {

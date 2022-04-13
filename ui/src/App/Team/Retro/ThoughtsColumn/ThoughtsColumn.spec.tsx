@@ -45,7 +45,7 @@ const discussedThought1: Thought = getMockThought(Topic.HAPPY, 1, true, 3);
 const discussedThought2: Thought = getMockThought(Topic.HAPPY, 1, true, 4);
 
 const column: Column = {
-	id: 123456,
+	id: 1,
 	topic: Topic.HAPPY,
 	title: 'Happy',
 };
@@ -136,7 +136,7 @@ describe('ThoughtsColumn', () => {
 		await waitFor(() =>
 			expect(ColumnService.updateColumnTitle).toHaveBeenCalledWith(
 				'my-team',
-				123456,
+				1,
 				'Something Else'
 			)
 		);
