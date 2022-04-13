@@ -32,6 +32,8 @@ module.exports = {
 		// You can change the configuration based on that.
 		// 'PRODUCTION' is used when building the static version of storybook.
 
+		config.resolve.modules.push(process.cwd() + '/src');
+
 		config.module.rules.push({
 			test: /\.scss$/,
 			use: [
