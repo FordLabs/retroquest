@@ -132,7 +132,7 @@ describe('Drag and Drop', () => {
 			);
 
 			expect(updatedThoughtsState).toEqual([
-				{ ...thoughtToMove, topic: columnToMoveThoughtTo.topic },
+				{ ...thoughtToMove, columnId: columnToMoveThoughtTo.id },
 				thoughtNotToMove,
 			]);
 		});
