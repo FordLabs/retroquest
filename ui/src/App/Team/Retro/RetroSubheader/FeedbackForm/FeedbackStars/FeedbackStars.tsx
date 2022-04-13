@@ -30,7 +30,7 @@ function FeedbackStars(props: FeedbackStarsProps) {
 	const [hoveredStarValue, setHoveredStarValue] = useState<number>(-1);
 
 	return (
-		<fieldset className={`feedback-stars`}>
+		<fieldset className="feedback-stars">
 			<div role="group" aria-labelledby="rate-retroquest">
 				<p id="rate-retroquest" className="hidden">
 					How would you rate your experience with retroquest?
