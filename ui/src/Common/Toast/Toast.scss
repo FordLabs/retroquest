@@ -31,7 +31,7 @@
 	font-family: 'Quicksand', sans-serif;
 
 	background-color: $white;
-	border-left: 1.125rem solid $retro-dark-gray;
+	border-left: 1.125rem solid $dark-gray;
 	border-radius: 6px;
 	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.25);
 
@@ -53,12 +53,12 @@
 		margin: 0;
 		padding: 0 1.25rem;
 
-		color: $retro-dark-gray;
+		color: $dark-gray;
 		font-weight: bold;
 		font-size: 0.75rem;
 		text-transform: uppercase;
 
-		border-left: 1px solid $retro-light-gray;
+		border-left: 1px solid $gray;
 	}
 
 	&.error {
@@ -91,7 +91,7 @@
 		color: $gray;
 
 		background-color: $asphalt;
-		border-left: 1.125rem solid $retro-dark-gray;
+		border-left: 1.125rem solid $dark-gray;
 
 		.close-button {
 			border-left: 1px solid $dark-gray;
