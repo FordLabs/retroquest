@@ -15,10 +15,27 @@
  * limitations under the License.
  */
 
-@use '../../../../Styles/main';
+@use 'Styles/main';
 
 .retro-subheader {
 	@include main.subheader;
+
+	.retro-subheader-container {
+		display: flex;
+		justify-content: right;
+
+		@include main.breakpoint-medium {
+			justify-content: space-between;
+		}
+	}
+
+	.timer {
+		display: none;
+
+		@include main.breakpoint-medium {
+			display: inherit;
+		}
+	}
 }
 
 .retro-subheader-links {

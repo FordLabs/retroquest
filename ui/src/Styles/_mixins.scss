@@ -20,18 +20,17 @@
 }
 
 @mixin subheader {
-	height: 32px;
+	height: 2.81rem;
 	background-color: colors.$white;
 
-	@include breakpoint-medium {
-		height: 45px;
-	}
-
-	:only-child {
+	> :only-child {
 		@include site-max-width;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
+	}
+
+	ul {
 		height: 100%;
 	}
 

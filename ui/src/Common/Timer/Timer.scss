@@ -1,0 +1,81 @@
+/*
+ * Copyright (c) 2022. Ford Motor Company
+ *  All rights reserved.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+@use 'Styles/main';
+
+$timer-height: 2.81rem;
+
+.timer {
+	display: flex;
+
+	> * {
+		margin: auto 0.25rem;
+	}
+
+	.timer-seconds {
+		box-sizing: border-box;
+		width: 7.25rem;
+		height: $timer-height;
+
+		color: main.$asphalt;
+		font-weight: 500;
+		font-size: 24px;
+		line-height: 30px;
+
+		border: 2px solid main.$asphalt;
+		border-radius: 5px;
+	}
+
+	.timer-seconds,
+	[class*='-button'] {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-sizing: border-box;
+
+		border-radius: 5px;
+
+		img {
+			width: 1rem;
+			height: 1rem;
+		}
+	}
+
+	[class*='-button'] {
+		width: $timer-height;
+		height: $timer-height;
+	}
+
+	.reset-button {
+		background: main.$red;
+	}
+
+	.start-button {
+		background: main.$green;
+	}
+
+	.pause-button {
+		background: main.$yellow;
+	}
+}
+
+@include main.dark-theme {
+	.timer {
+		.timer-seconds {
+			background-color: main.$white;
+		}
+	}
+}
