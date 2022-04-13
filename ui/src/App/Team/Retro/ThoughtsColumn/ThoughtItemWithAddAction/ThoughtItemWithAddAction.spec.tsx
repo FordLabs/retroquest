@@ -32,7 +32,6 @@ describe('Thought Item With Add Action', () => {
 		message: 'fake thought',
 		hearts: 3,
 		discussed: false,
-		topic: Topic.HAPPY,
 		columnId: 1,
 	};
 

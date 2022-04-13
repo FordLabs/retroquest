@@ -36,18 +36,16 @@ const thoughts: Thought[] = [
 	{
 		id: 12,
 		message: `This is a thought`,
-		topic: Topic.HAPPY,
 		hearts: 2,
 		discussed: false,
-		columnId: 10,
+		columnId: 1,
 	},
 	{
 		id: 13,
 		message: `This is a thought`,
-		topic: Topic.UNHAPPY,
 		hearts: 2,
 		discussed: false,
-		columnId: 11,
+		columnId: 2,
 	},
 ];
 
@@ -119,7 +117,7 @@ describe('Drag and Drop', () => {
 		});
 
 		it('should move thought to new column in global state then update database', async () => {
-			expect(thoughtToMove.topic).toBe(columnThoughtWasOriginallyIn.topic);
+			expect(thoughtToMove.columnId).toBe(columnThoughtWasOriginallyIn.id);
 
 			screen.getByText('trigger-onDragEnd').click();
 
@@ -150,7 +148,7 @@ describe('Drag and Drop', () => {
 			);
 
 			expect(updatedThoughtsState).toEqual([
-				{ ...thoughtToMove, topic: columnThoughtWasOriginallyIn.topic },
+				{ ...thoughtToMove, columnId: columnThoughtWasOriginallyIn.id },
 				thoughtNotToMove,
 			]);
 		});

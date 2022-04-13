@@ -48,7 +48,6 @@ describe('Default Thought Item View', () => {
 		message: 'fake message',
 		hearts: 3,
 		discussed: false,
-		topic: Topic.HAPPY,
 		columnId: 1,
 	};
 	const mockSetViewState = jest.fn();

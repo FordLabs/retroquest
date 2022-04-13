@@ -26,7 +26,6 @@ export const getMockThought = (
 ): Thought => ({
 	id: Math.random(),
 	message: `This is a ${topic} thought`,
-	topic,
 	hearts,
 	discussed: isDiscussed,
 	columnId,

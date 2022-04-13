@@ -25,7 +25,6 @@ import { TeamState } from '../../../../../../State/TeamState';
 import { ThoughtsState } from '../../../../../../State/ThoughtsState';
 import Team from '../../../../../../Types/Team';
 import Thought from '../../../../../../Types/Thought';
-import Topic from '../../../../../../Types/Topic';
 import renderWithRecoilRoot from '../../../../../../Utils/renderWithRecoilRoot';
 import { ThoughtItemViewState } from '../ThoughtItem';
 
@@ -43,7 +42,6 @@ describe('Edit Thought View', () => {
 		message: 'fake message',
 		hearts: 3,
 		discussed: false,
-		topic: Topic.HAPPY,
 		columnId: 1,
 	};
 	const newThought = 'New Fake Text';
