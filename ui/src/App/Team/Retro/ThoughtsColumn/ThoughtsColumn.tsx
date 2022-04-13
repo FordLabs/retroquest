@@ -94,7 +94,11 @@ function ThoughtsColumn(props: Props) {
 						<div ref={provided.innerRef} {...provided.droppableProps}>
 							{thoughts.map((thought: Thought, index: number) => (
 								<Fragment key={index}>
-									<DraggableRetroItem thought={thought} index={index} />
+									<DraggableRetroItem
+										thought={thought}
+										topic={column.topic}
+										index={index}
+									/>
 								</Fragment>
 							))}
 							{provided.placeholder}

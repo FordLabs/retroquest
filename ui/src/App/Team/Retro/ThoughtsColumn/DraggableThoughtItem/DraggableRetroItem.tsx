@@ -22,17 +22,19 @@ import { useRecoilValue } from 'recoil';
 
 import { DisableDraggableState } from '../../../../../State/DisableDraggableState';
 import Thought from '../../../../../Types/Thought';
+import { ThoughtTopic } from '../../../../../Types/Topic';
 import ThoughtItem from '../ThoughtItem/ThoughtItem';
 
 import './DraggableRetroItem.scss';
 
 interface Props {
 	thought: Thought;
+	topic: ThoughtTopic;
 	index: number;
 }
 
 const DraggableRetroItem = (props: Props): JSX.Element => {
-	const { thought, index } = props;
+	const { thought, topic, index } = props;
 	const disableDraggable = useRecoilValue(DisableDraggableState);
 
 	return (
@@ -48,10 +50,10 @@ const DraggableRetroItem = (props: Props): JSX.Element => {
 					ref={provided.innerRef}
 					{...provided.draggableProps}
 					{...provided.dragHandleProps}
-					className={classNames('draggable-retro-item', thought.topic)}
-					data-testid={`draggableRetroItem-${thought.topic}-${index + 1}`}
+					className={classNames('draggable-retro-item', topic)}
+					data-testid={`draggableRetroItem-${topic}-${index + 1}`}
 				>
-					<ThoughtItem thoughtId={thought.id} type={thought.topic} />
+					<ThoughtItem thoughtId={thought.id} type={topic} />
 				</li>
 			)}
 		</Draggable>
