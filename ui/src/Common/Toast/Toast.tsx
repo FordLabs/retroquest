@@ -21,34 +21,34 @@ import classNames from 'classnames';
 import './Toast.scss';
 
 enum ToastLevel {
-  ERROR = 'error',
-  WARNING = 'warning',
-  INFO = 'info',
+	ERROR = 'error',
+	WARNING = 'warning',
+	INFO = 'info',
 }
 
 interface Props {
-  title: string;
-  toastLevel?: ToastLevel;
-  handleClose: () => void;
+	title: string;
+	toastLevel?: ToastLevel;
+	handleClose: () => void;
 }
 
 function Toast({
-  title,
-  children,
-  handleClose,
-  toastLevel = ToastLevel.ERROR,
+	title,
+	children,
+	handleClose,
+	toastLevel = ToastLevel.ERROR,
 }: React.PropsWithChildren<Props>): JSX.Element {
-  return (
-    <div className={classNames('toast', toastLevel)}>
-      <div>
-        <p className="title">{title}</p>
-        <div className="content">{children}</div>
-      </div>
-      <button className="close-button" onClick={handleClose}>
-        Close
-      </button>
-    </div>
-  );
+	return (
+		<div className={classNames('toast', toastLevel)} data-testid="toast">
+			<div>
+				<p className="title">{title}</p>
+				<div className="content">{children}</div>
+			</div>
+			<button className="close-button" onClick={handleClose}>
+				Close
+			</button>
+		</div>
+	);
 }
 
 export { Toast, ToastLevel };
