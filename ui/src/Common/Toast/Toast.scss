@@ -26,6 +26,8 @@
 
 	padding: 0.625rem 0 0.625rem 1rem;
 
+	color: $black;
+
 	font-family: 'Quicksand', sans-serif;
 
 	background-color: $white;
@@ -80,6 +82,43 @@
 
 		.title {
 			color: $blue;
+		}
+	}
+}
+
+@include dark-theme {
+	.toast {
+		color: $gray;
+
+		background-color: $asphalt;
+		border-left: 1.125rem solid $retro-dark-gray;
+
+		.close-button {
+			border-left: 1px solid $dark-gray;
+		}
+
+		&.error {
+			border-left: 1.125rem solid $red;
+
+			.title {
+				color: $red;
+			}
+		}
+
+		&.warning {
+			border-left: 1.125rem solid $dark-yellow;
+
+			.title {
+				color: $dark-yellow;
+			}
+		}
+
+		&.info {
+			border-left: 1.125rem solid $dark-blue;
+
+			.title {
+				color: $dark-blue;
+			}
 		}
 	}
 }
