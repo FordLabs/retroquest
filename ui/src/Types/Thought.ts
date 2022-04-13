@@ -15,14 +15,11 @@
  * limitations under the License.
  */
 
-import { ThoughtTopic } from './Topic';
-
 interface Thought {
 	id: number;
 	message: string;
 	hearts: number;
 	discussed: boolean;
-	topic: ThoughtTopic;
 	columnId: number;
 }
 

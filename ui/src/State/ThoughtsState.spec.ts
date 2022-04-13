@@ -18,7 +18,6 @@
 import { snapshot_UNSTABLE } from 'recoil';
 
 import Thought from '../Types/Thought';
-import Topic from '../Types/Topic';
 
 import {
 	ActiveThoughtCountByColumnIdState,
@@ -32,42 +31,36 @@ describe('Thought State', () => {
 	const happyThought1 = {
 		id: 1,
 		hearts: 1,
-		topic: Topic.HAPPY,
 		discussed: true,
 		columnId: 10,
 	};
 	const happyThought2 = {
 		id: 2,
 		hearts: 2,
-		topic: Topic.HAPPY,
 		discussed: false,
 		columnId: 10,
 	};
 	const happyThought3 = {
 		id: 3,
 		hearts: 3,
-		topic: Topic.HAPPY,
 		discussed: false,
 		columnId: 10,
 	};
 	const happyThought4 = {
 		id: 4,
 		hearts: 4,
-		topic: Topic.HAPPY,
 		discussed: true,
 		columnId: 10,
 	};
 	const confusedThought1 = {
 		id: 5,
 		hearts: 5,
-		topic: Topic.CONFUSED,
 		discussed: true,
 		columnId: 11,
 	};
 	const sadThought1 = {
 		id: 6,
 		hearts: 6,
-		topic: Topic.UNHAPPY,
 		discussed: true,
 		columnId: 12,
 	};

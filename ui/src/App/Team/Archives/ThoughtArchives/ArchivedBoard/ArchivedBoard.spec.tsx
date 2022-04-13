@@ -85,7 +85,6 @@ const testBoard: Board = {
 			message: 'I am a message1',
 			hearts: 20,
 			discussed: false,
-			topic: Topic.HAPPY,
 			columnId: 10,
 		},
 		{
@@ -93,7 +92,6 @@ const testBoard: Board = {
 			message: 'I am a message2',
 			hearts: 30,
 			discussed: false,
-			topic: Topic.UNHAPPY,
 			columnId: 11,
 		},
 		{
@@ -101,7 +99,6 @@ const testBoard: Board = {
 			message: 'I am a message3',
 			hearts: 10,
 			discussed: true,
-			topic: Topic.UNHAPPY,
 			columnId: 11,
 		},
 		{
@@ -109,7 +106,6 @@ const testBoard: Board = {
 			message: 'I am a message4',
 			hearts: 10,
 			discussed: false,
-			topic: Topic.HAPPY,
 			columnId: 10,
 		},
 	],
@@ -137,7 +133,6 @@ const singleColumnTestBoard: Board = {
 			message: 'I am a message1',
 			hearts: 10,
 			discussed: false,
-			topic: Topic.HAPPY,
 			columnId: 10,
 		},
 		{
@@ -145,7 +140,6 @@ const singleColumnTestBoard: Board = {
 			message: 'I am a message2',
 			hearts: 30,
 			discussed: true,
-			topic: Topic.HAPPY,
 			columnId: 10,
 		},
 		{
@@ -153,7 +147,6 @@ const singleColumnTestBoard: Board = {
 			message: 'I am a message3',
 			hearts: 10,
 			discussed: true,
-			topic: Topic.HAPPY,
 			columnId: 10,
 		},
 		{
@@ -161,7 +154,6 @@ const singleColumnTestBoard: Board = {
 			message: 'I am a message4',
 			hearts: 20,
 			discussed: false,
-			topic: Topic.HAPPY,
 			columnId: 10,
 		},
 	],

@@ -60,7 +60,7 @@ describe('Add Action Item', () => {
 						component: (
 							<ThoughtItemWithAddAction
 								thoughtId={thought.id}
-								type={thought.topic}
+								type={Topic.HAPPY}
 							/>
 						),
 					});

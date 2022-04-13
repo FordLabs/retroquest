@@ -24,7 +24,6 @@ import ThoughtService from '../../../../../../Services/Api/ThoughtService';
 import { TeamState } from '../../../../../../State/TeamState';
 import Team from '../../../../../../Types/Team';
 import Thought from '../../../../../../Types/Thought';
-import Topic from '../../../../../../Types/Topic';
 import renderWithRecoilRoot from '../../../../../../Utils/renderWithRecoilRoot';
 import { ThoughtItemViewState } from '../ThoughtItem';
 
@@ -45,7 +44,6 @@ describe('Delete Thought View', () => {
 		message: 'fake message',
 		hearts: 3,
 		discussed: false,
-		topic: Topic.HAPPY,
 		columnId: 1,
 	};
 	let container: string | Element;

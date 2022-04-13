@@ -29,7 +29,6 @@ export const mockBoards: Board[] = [
 				message: 'I am a message',
 				hearts: 0,
 				discussed: false,
-				topic: Topic.HAPPY,
 				columnId: 10,
 			},
 		],
