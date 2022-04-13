@@ -18,31 +18,43 @@
 import * as React from 'react';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { Toast, ToastLevel } from '../components/toast/Toast';
+import { Toast, ToastLevel } from '../Common/Toast/Toast';
 
 export default {
-  title: 'components/Toast',
-  component: Toast,
+	title: 'components/Toast',
+	component: Toast,
 } as ComponentMeta<typeof Toast>;
 
 const Template: ComponentStory<typeof Toast> = () => {
-  const handleClick = () => {
-    alert('close clicked');
-  };
+	const handleClick = () => {
+		alert('close clicked');
+	};
 
-  return (
-    <>
-      <Toast title={'Uh oh...'} handleClose={handleClick} toastLevel={ToastLevel.ERROR}>
-        <p style={{ margin: 0 }}>This is an error!</p>
-      </Toast>
-      <Toast title={'Heads up!'} handleClose={handleClick} toastLevel={ToastLevel.WARNING}>
-        <p style={{ margin: 0 }}>This is a warning!</p>
-      </Toast>
-      <Toast title={'Just so you know'} handleClose={handleClick} toastLevel={ToastLevel.INFO}>
-        <p style={{ margin: 0 }}>This is an info!</p>
-      </Toast>
-    </>
-  );
+	return (
+		<div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+			<Toast
+				title="Uh oh..."
+				handleClose={handleClick}
+				toastLevel={ToastLevel.ERROR}
+			>
+				<p style={{ margin: 0 }}>This is an error!</p>
+			</Toast>
+			<Toast
+				title="Heads up!"
+				handleClose={handleClick}
+				toastLevel={ToastLevel.WARNING}
+			>
+				<p style={{ margin: 0 }}>This is a warning!</p>
+			</Toast>
+			<Toast
+				title="Just so you know"
+				handleClose={handleClick}
+				toastLevel={ToastLevel.INFO}
+			>
+				<p style={{ margin: 0 }}>This is an info!</p>
+			</Toast>
+		</div>
+	);
 };
 
 export const Example = Template.bind({});
