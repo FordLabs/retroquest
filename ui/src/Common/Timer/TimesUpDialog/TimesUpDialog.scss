@@ -15,28 +15,6 @@
  *  limitations under the License.
  */
 
-import FormTemplate from 'Common/FormTemplate/FormTemplate';
-
-import './TimesUpDialog.scss';
-
-interface Props {
-	onConfirm(): void;
-	onAddTime(): void;
+.times-up-dialog {
+	width: 28rem;
 }
-
-function TimesUpDialog(props: Props) {
-	const { onConfirm, onAddTime } = props;
-	return (
-		<FormTemplate
-			className="times-up-dialog"
-			title="Time's Up!"
-			subtitle="Your timer has expired."
-			onSubmit={onConfirm}
-			onCancel={onAddTime}
-			cancelButtonText="Add 1 Minute"
-			submitButtonText="Okay!"
-		/>
-	);
-}
-
-export default TimesUpDialog;
