@@ -15,12 +15,21 @@
  *  limitations under the License.
  */
 
-import { act, render, screen } from '@testing-library/react';
+import React from 'react';
+import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 
+import {
+	ModalContents,
+	ModalContentsState,
+} from '../../State/ModalContentsState';
+import { RecoilObserver } from '../../Utils/RecoilObserver';
+import renderWithRecoilRoot from '../../Utils/renderWithRecoilRoot';
 import { DropdownOption } from '../Dropdown/Dropdown';
+import Modal from '../Modal/Modal';
 
+import TimesUpDialog from './TimesUpDialog/TimesUpDialog';
 import Timer from './Timer';
 
 const expectedOption_30Sec = {
@@ -42,11 +51,23 @@ const expectedOption_10Min = {
 
 describe('Timer', () => {
 	let container: string | Element;
+	let modalContent: ModalContents;
 
 	beforeEach(() => {
 		jest.useFakeTimers();
 
-		({ container } = render(<Timer />));
+		({ container } = renderWithRecoilRoot(
+			<>
+				<RecoilObserver
+					recoilState={ModalContentsState}
+					onChange={(value: ModalContents) => {
+						modalContent = value;
+					}}
+				/>
+				<Timer />
+				<Modal />
+			</>
+		));
 	});
 
 	afterEach(() => {
@@ -97,35 +118,71 @@ describe('Timer', () => {
 		});
 	});
 
-	describe('Using Timer', () => {
-		it('should display 5 minutes as the default', () => {
-			confirmOptionIsSelected(expectedOption_5Min);
-		});
+	it('should display 5 minutes as the default', () => {
+		confirmOptionIsSelected(expectedOption_5Min);
+	});
 
-		it('should not change time if play button is not pressed', () => {
-			advanceTimersSafely(1010);
-			confirmOptionIsSelected(expectedOption_5Min);
-		});
+	it('should not change time if play button is not pressed', () => {
+		advanceTimersSafely(1010);
+		confirmOptionIsSelected(expectedOption_5Min);
+	});
 
-		it('should count time down when play button is pressed', async () => {
+	it('should count time down when play button is pressed', async () => {
+		startTimer();
+		advanceTimersSafely(3010);
+		await screen.findByText('04:57');
+	});
+
+	it('should stop the timer if the pause button is pressed', () => {
+		startTimer();
+		advanceTimersSafely(3010);
+		pauseTimer();
+		advanceTimersSafely(3010);
+		screen.getByText('04:57');
+	});
+
+	it('should reset the timer when the reset button is pressed', () => {
+		startTimer();
+		advanceTimersSafely(3010);
+		resetTimer();
+		confirmOptionIsSelected(expectedOption_5Min);
+	});
+
+	describe('When time is up', () => {
+		beforeEach(() => {
+			userEvent.selectOptions(
+				getSelect(),
+				expectedOption_30Sec.value.toString()
+			);
 			startTimer();
-			advanceTimersSafely(3010);
-			await screen.findByText('04:57');
+			advanceTimersSafely(31000);
 		});
 
-		it('should stop the timer if the pause button is pressed', () => {
-			startTimer();
-			advanceTimersSafely(3010);
-			pauseTimer();
-			advanceTimersSafely(3010);
-			screen.getByText('04:57');
+		it('should stop timer and open modal when timer hits zero', () => {
+			screen.getByText('00:00');
+			expect(modalContent).toEqual({
+				title: "Time's Up!",
+				component: (
+					<TimesUpDialog
+						onConfirm={expect.anything()}
+						onAddTime={expect.anything()}
+					/>
+				),
+			});
 		});
 
-		it('should reset the timer when the reset button is pressed', () => {
-			startTimer();
+		it("should close modal and reset timer when user clicks 'Okay!' from modal", () => {
+			userEvent.click(screen.getByText('Okay!'));
+			expect(modalContent).toBeNull();
+			confirmOptionIsSelected(expectedOption_30Sec);
+		});
+
+		it("should close modal, reset timer, add 1 minute, and start timer when user clicks 'Add 1 Minute' from modal", async () => {
+			userEvent.click(screen.getByText('Add 1 Minute'));
+			expect(modalContent).toBeNull();
+			screen.getByText('01:00');
 			advanceTimersSafely(3010);
-			resetTimer();
-			confirmOptionIsSelected(expectedOption_5Min);
+			await screen.findByText('00:57');
 		});
 	});
 
