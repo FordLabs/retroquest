@@ -202,4 +202,12 @@
         </preConditions>
         <addNotNullConstraint tableName="thought" columnName="column_id" />
     </changeSet>
+    <changeSet id="remove-topic-from-thought" author="nreuter">
+        <preConditions>
+            <columnExists tableName="thought" columnName="topic" />
+        </preConditions>
+        <dropColumn tableName="thought">
+            <column name="topic" />
+        </dropColumn>
+    </changeSet>
 </databaseChangeLog>
