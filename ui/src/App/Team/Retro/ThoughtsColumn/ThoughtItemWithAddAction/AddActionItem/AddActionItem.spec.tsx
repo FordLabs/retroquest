@@ -43,7 +43,7 @@ describe('Add Action Item', () => {
 		id: 'my-team',
 	};
 	let modalContent: ModalContents | null;
-	const thought = getMockThought(Topic.HAPPY, 1);
+	const thought = getMockThought(1);
 
 	beforeEach(() => {
 		jest.clearAllMocks();

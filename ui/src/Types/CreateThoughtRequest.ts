@@ -15,15 +15,11 @@
  * limitations under the License.
  */
 
-import { ThoughtTopic } from './Topic';
-
 export function getCreateThoughtRequest(
 	columnId: number,
-	topic: ThoughtTopic,
 	message: string
 ): CreateThoughtRequest {
 	return {
-		topic,
 		message,
 		columnId,
 	};
@@ -31,7 +27,6 @@ export function getCreateThoughtRequest(
 
 interface CreateThoughtRequest {
 	message: string;
-	topic: string;
 	columnId: number;
 }
 
