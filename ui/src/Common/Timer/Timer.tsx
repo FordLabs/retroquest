@@ -61,22 +61,37 @@ function Timer(): JSX.Element {
 			});
 	};
 
-	function formatSeconds(seconds: number) {
-		return moment(seconds * 1000).format('mm:ss');
-	}
+	const formatSeconds = (seconds: number) =>
+		moment(seconds * 1000).format('mm:ss');
 
-	function startTimer() {
-		setTimerState(TimerState.RUNNING);
-	}
+	const startTimer = () => setTimerState(TimerState.RUNNING);
 
-	function pauseTimer() {
-		setTimerState(TimerState.PAUSED);
-	}
+	const pauseTimer = () => setTimerState(TimerState.PAUSED);
 
 	const resetTimer = useCallback(() => {
 		setSecondsLeft(currentTimerOption);
 		setTimerState(TimerState.DEFAULT);
 	}, [currentTimerOption]);
+
+	const openModal = useCallback(() => {
+		setModalContents({
+			title: "Time's Up!",
+			component: (
+				<TimesUpDialog
+					onConfirm={() => {
+						resetTimer();
+						setModalContents(null);
+					}}
+					onAddTime={() => {
+						setCurrentTimerOption(TimerOption.ONE_MINUTE);
+						setSecondsLeft(TimerOption.ONE_MINUTE);
+						startTimer();
+						setModalContents(null);
+					}}
+				/>
+			),
+		});
+	}, [resetTimer, setModalContents]);
 
 	useEffect(() => {
 		if (timerState === TimerState.RUNNING) {
@@ -97,25 +112,9 @@ function Timer(): JSX.Element {
 	useEffect(() => {
 		if (secondsLeft === 0) {
 			setTimerState(TimerState.PAUSED);
-			setModalContents({
-				title: "Time's Up!",
-				component: (
-					<TimesUpDialog
-						onConfirm={() => {
-							resetTimer();
-							setModalContents(null);
-						}}
-						onAddTime={() => {
-							setCurrentTimerOption(TimerOption.ONE_MINUTE);
-							setSecondsLeft(TimerOption.ONE_MINUTE);
-							startTimer();
-							setModalContents(null);
-						}}
-					/>
-				),
-			});
+			openModal();
 		}
-	}, [resetTimer, secondsLeft, setModalContents]);
+	}, [secondsLeft, openModal]);
 
 	return (
 		<div className="timer">
