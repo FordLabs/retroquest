@@ -115,7 +115,7 @@ class BoardApiTest extends ApiTestBase {
     public void endRetro_ShouldSaveABoardWithThoughts() throws Exception {
         Thought savedThought = thoughtService.createThought(
                 teamId,
-                new CreateThoughtRequest("TEST_MESSAGE","happy", columnTitle.getId())
+                new CreateThoughtRequest("TEST_MESSAGE", columnTitle.getId())
         );
 
         mockMvc.perform(put(format("/api/team/%s/end-retro", teamId))
@@ -130,7 +130,7 @@ class BoardApiTest extends ApiTestBase {
     public void endRetro_ShouldRemoveThoughtsWithoutABoard() throws Exception {
         Thought savedThought = thoughtService.createThought(
                 teamId,
-                new CreateThoughtRequest("TEST_MESSAGE","happy", columnTitle.getId())
+                new CreateThoughtRequest("TEST_MESSAGE", columnTitle.getId())
         );
 
         mockMvc.perform(put(format("/api/team/%s/end-retro", teamId))

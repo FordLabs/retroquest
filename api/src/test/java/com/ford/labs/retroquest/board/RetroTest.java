@@ -31,7 +31,7 @@ public class RetroTest {
     @Test
     public void from_returnsAllExpectedBoardFields() {
         var column = new Column(3L, "title", "topic");
-        var thought = new Thought(2L, "A message", 0, "topic", false, "teamId", 1L, 3L);
+        var thought = new Thought(2L, "A message", 0, false, "teamId", 1L, 3L);
         var board = new Board(1L, "teamId", LocalDate.now(), List.of(thought));
         var retro = Retro.from(board, List.of(column));
 
@@ -43,8 +43,8 @@ public class RetroTest {
 
     @Test
     public void from_returnsColumnsInSavedOrder() {
-        var column1 = new Column(2L, "topic", "title");
-        var column2 = new Column(3L, "topic", "title");
+        var column1 = new Column(2L, "title", "topic");
+        var column2 = new Column(3L, "title", "topic");
         var board = new Board(1L, "teamId", LocalDate.now(), List.of());
         var retro = Retro.from(board, List.of(column2, column1));
 

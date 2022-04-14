@@ -30,7 +30,7 @@ import java.util.Optional;
 public interface ThoughtRepository extends JpaRepository<Thought, Long> {
     List<Thought> findAllByTeamId(String teamId);
     List<Thought> findAllByTeamIdAndBoardIdIsNull(String teamId);
-    List<Thought> findAllByTeamIdAndBoardIdIsNullOrderByTopic(String teamId);
+    List<Thought> findAllByTeamIdAndBoardIdIsNullOrderByColumnId(String teamId);
 
     void deleteThoughtByTeamIdAndId(String teamId, Long id);
     Optional<Thought> findByTeamIdAndId(String teamId, Long id);
