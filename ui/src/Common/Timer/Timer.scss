@@ -25,21 +25,22 @@ $timer-height: 2.81rem;
 		margin: auto 0.25rem;
 	}
 
-	.timer-seconds {
+	.timer-count-down {
 		box-sizing: border-box;
 		width: 7.25rem;
 		height: $timer-height;
 
 		color: main.$asphalt;
+		font-family: inherit;
 		font-weight: 500;
-		font-size: 24px;
-		line-height: 30px;
+		font-size: 1.5rem;
+		line-height: 1.87rem;
 
 		border: 2px solid main.$asphalt;
 		border-radius: 5px;
 	}
 
-	.timer-seconds,
+	.timer-count-down,
 	[class*='-button'] {
 		display: flex;
 		align-items: center;
@@ -74,8 +75,8 @@ $timer-height: 2.81rem;
 
 @include main.dark-theme {
 	.timer {
-		.timer-seconds {
-			background-color: main.$white;
+		.timer-count-down {
+			background-color: main.$gray;
 		}
 	}
 }

@@ -67,6 +67,12 @@ describe('Retro Subheader', () => {
 		);
 	});
 
+	describe('Timer', () => {
+		it('should show timer', () => {
+			expect(screen.getByText('05:00')).toBeDefined();
+		});
+	});
+
 	describe('Feedback Button', () => {
 		it('should open give feedback modal', async () => {
 			const modalText = 'How can we improve RetroQuest?';
