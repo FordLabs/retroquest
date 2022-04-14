@@ -16,58 +16,94 @@
  */
 
 import { useCallback, useEffect, useState } from 'react';
+import pauseButton from 'Assets/pause-icon.svg';
+import playButton from 'Assets/play-icon.svg';
+import resetButton from 'Assets/x-icon.svg';
 import moment from 'moment';
 
-import pauseButton from '../../Assets/pause-icon.svg';
-import playButton from '../../Assets/play-icon.svg';
-import resetButton from '../../Assets/x-icon.svg';
+import Dropdown from '../Dropdown/Dropdown';
 
 import './Timer.scss';
 
 enum TimerOption {
-	// THIRTY_SECONDS = 30,
-	// ONE_MINUTE = 60,
+	THIRTY_SECONDS = 30,
+	ONE_MINUTE = 60,
 	FIVE_MINUTES = 300,
-	// TEN_MINUTES = 600,
+	TEN_MINUTES = 600,
+}
+
+enum TimerState {
+	PAUSED,
+	RUNNING,
+	DEFAULT,
 }
 
 function Timer(): JSX.Element {
-	const [timerRunning, setTimerRunning] = useState<boolean>(false);
-	const [currentTimerOption] = useState<TimerOption>(TimerOption.FIVE_MINUTES);
+	const [timerState, setTimerState] = useState<TimerState>(TimerState.DEFAULT);
+	const [currentTimerOption, setCurrentTimerOption] = useState<TimerOption>(
+		TimerOption.FIVE_MINUTES
+	);
 	const [secondsLeft, setSecondsLeft] = useState<number>(
 		TimerOption.FIVE_MINUTES
 	);
+
+	const getOptions = () => {
+		return Object.keys(TimerOption)
+			.filter((v) => !isNaN(Number(v)))
+			.map((value) => {
+				const time = parseInt(value, 10);
+				return { label: formatSeconds(time), value: time };
+			});
+	};
 
 	const decrementTime = useCallback(() => {
 		setSecondsLeft((currentSecondsLeft) => currentSecondsLeft - 1);
 	}, []);
 
 	useEffect(() => {
-		if (timerRunning) {
+		if (timerState === TimerState.RUNNING) {
 			const id = setInterval(decrementTime, 1000);
 			return () => clearInterval(id);
 		}
-	}, [timerRunning, decrementTime]);
+	}, [timerState, decrementTime]);
+
+	function formatSeconds(seconds: number) {
+		return moment(seconds * 1000).format('mm:ss');
+	}
 
 	function handlePlayPressed() {
-		setTimerRunning(true);
+		setTimerState(TimerState.RUNNING);
 	}
 
 	function handlePausePressed() {
-		setTimerRunning(false);
+		setTimerState(TimerState.PAUSED);
 	}
 
 	function handleResetPressed() {
-		setTimerRunning(false);
 		setSecondsLeft(currentTimerOption);
+		setTimerState(TimerState.DEFAULT);
 	}
 
 	return (
 		<div className="timer">
-			<div className="timer-seconds">
-				{moment(secondsLeft * 1000).format('mm:ss')}
-			</div>
-			{timerRunning ? (
+			{timerState === TimerState.DEFAULT ? (
+				<Dropdown
+					label="Timer amount"
+					options={getOptions()}
+					defaultValue={currentTimerOption}
+					onChange={(value) => {
+						const time = parseInt(value, 10);
+						setSecondsLeft(time);
+						setCurrentTimerOption(time);
+					}}
+				/>
+			) : (
+				<div className="timer-count-down" data-testid="timerCountDownDisplay">
+					{formatSeconds(secondsLeft)}
+				</div>
+			)}
+
+			{timerState === TimerState.RUNNING ? (
 				<button onClick={handlePausePressed} className="pause-button">
 					<img src={pauseButton} alt="Pause timer" />
 				</button>
@@ -76,6 +112,7 @@ function Timer(): JSX.Element {
 					<img src={playButton} alt="Start timer" />
 				</button>
 			)}
+
 			<button onClick={handleResetPressed} className="reset-button">
 				<img src={resetButton} alt="Reset timer" />
 			</button>
