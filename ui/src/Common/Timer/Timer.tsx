@@ -15,13 +15,17 @@
  *  limitations under the License.
  */
 
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import pauseButton from 'Assets/pause-icon.svg';
 import playButton from 'Assets/play-icon.svg';
 import resetButton from 'Assets/x-icon.svg';
 import moment from 'moment';
+import { useSetRecoilState } from 'recoil';
 
+import { ModalContentsState } from '../../State/ModalContentsState';
 import Dropdown from '../Dropdown/Dropdown';
+
+import TimesUpDialog from './TimesUpDialog/TimesUpDialog';
 
 import './Timer.scss';
 
@@ -39,6 +43,7 @@ enum TimerState {
 }
 
 function Timer(): JSX.Element {
+	const setModalContents = useSetRecoilState(ModalContentsState);
 	const [timerState, setTimerState] = useState<TimerState>(TimerState.DEFAULT);
 	const [currentTimerOption, setCurrentTimerOption] = useState<TimerOption>(
 		TimerOption.FIVE_MINUTES
@@ -56,33 +61,61 @@ function Timer(): JSX.Element {
 			});
 	};
 
-	const decrementTime = useCallback(() => {
-		setSecondsLeft((currentSecondsLeft) => currentSecondsLeft - 1);
-	}, []);
-
-	useEffect(() => {
-		if (timerState === TimerState.RUNNING) {
-			const id = setInterval(decrementTime, 1000);
-			return () => clearInterval(id);
-		}
-	}, [timerState, decrementTime]);
-
 	function formatSeconds(seconds: number) {
 		return moment(seconds * 1000).format('mm:ss');
 	}
 
-	function handlePlayPressed() {
+	function startTimer() {
 		setTimerState(TimerState.RUNNING);
 	}
 
-	function handlePausePressed() {
+	function pauseTimer() {
 		setTimerState(TimerState.PAUSED);
 	}
 
-	function handleResetPressed() {
+	const resetTimer = useCallback(() => {
 		setSecondsLeft(currentTimerOption);
 		setTimerState(TimerState.DEFAULT);
-	}
+	}, [currentTimerOption]);
+
+	useEffect(() => {
+		if (timerState === TimerState.RUNNING) {
+			const id = setInterval(() => {
+				setSecondsLeft((currentSecondsLeft: number) => {
+					if (currentSecondsLeft === 0) {
+						clearInterval(id);
+						return currentSecondsLeft;
+					} else {
+						return currentSecondsLeft - 1;
+					}
+				});
+			}, 1000);
+			return () => clearInterval(id);
+		}
+	}, [timerState]);
+
+	useEffect(() => {
+		if (secondsLeft === 0) {
+			setTimerState(TimerState.PAUSED);
+			setModalContents({
+				title: "Time's Up!",
+				component: (
+					<TimesUpDialog
+						onConfirm={() => {
+							resetTimer();
+							setModalContents(null);
+						}}
+						onAddTime={() => {
+							setCurrentTimerOption(TimerOption.ONE_MINUTE);
+							setSecondsLeft(TimerOption.ONE_MINUTE);
+							startTimer();
+							setModalContents(null);
+						}}
+					/>
+				),
+			});
+		}
+	}, [resetTimer, secondsLeft, setModalContents]);
 
 	return (
 		<div className="timer">
@@ -104,16 +137,16 @@ function Timer(): JSX.Element {
 			)}
 
 			{timerState === TimerState.RUNNING ? (
-				<button onClick={handlePausePressed} className="pause-button">
+				<button onClick={pauseTimer} className="pause-button">
 					<img src={pauseButton} alt="Pause timer" />
 				</button>
 			) : (
-				<button onClick={handlePlayPressed} className="start-button">
+				<button onClick={startTimer} className="start-button">
 					<img src={playButton} alt="Start timer" />
 				</button>
 			)}
 
-			<button onClick={handleResetPressed} className="reset-button">
+			<button onClick={resetTimer} className="reset-button">
 				<img src={resetButton} alt="Reset timer" />
 			</button>
 		</div>
