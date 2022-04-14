@@ -45,13 +45,11 @@ function Dropdown(props: Props) {
 				defaultValue={defaultValue}
 				onChange={(event) => onChange(event.currentTarget.value)}
 			>
-				{options.map(({ label, value }: DropdownOption) => {
-					return (
-						<option value={value} key={label}>
-							{label}
-						</option>
-					);
-				})}
+				{options.map((option: DropdownOption) => (
+					<option value={option.value} key={option.label}>
+						{option.label}
+					</option>
+				))}
 			</select>
 			<i className="fas fa-sort-down select-arrow" />
 		</div>
