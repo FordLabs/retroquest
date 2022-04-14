@@ -23,6 +23,5 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record CreateThoughtRequest(
     String message,
-    String topic,
     Long columnId
 ) { }

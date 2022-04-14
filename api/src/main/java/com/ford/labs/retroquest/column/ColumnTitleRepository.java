@@ -26,6 +26,5 @@ import java.util.Optional;
 @Repository
 public interface ColumnTitleRepository extends JpaRepository<ColumnTitle, Long> {
     Optional<ColumnTitle> findByTeamIdAndId(String teamId, Long id);
-    ColumnTitle findByTeamIdAndTopic(String teamId, String topic);
     List<ColumnTitle> findAllByTeamId(String teamId);
 }

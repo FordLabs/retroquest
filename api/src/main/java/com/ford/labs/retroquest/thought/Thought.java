@@ -39,12 +39,10 @@ public class Thought {
     private Long id;
 
     private String message;
-
     private int hearts;
-    private String topic;
     private boolean discussed;
-    private String teamId;
 
+    private String teamId;
     private Long boardId;
     private Long columnId;
 }

@@ -152,7 +152,6 @@ class ThoughtApiTest extends ApiTestBase {
         Thought savedThought = thoughtRepository.save(
             Thought.builder()
                 .teamId(teamId)
-                .topic("hamburgers")
                 .message("message")
                 .discussed(false)
                 .hearts(1)
@@ -170,7 +169,6 @@ class ThoughtApiTest extends ApiTestBase {
 
         assertThat(updatedThought.getId()).isEqualTo(savedThought.getId());
         assertThat(updatedThought.getMessage()).isEqualTo(savedThought.getMessage());
-        assertThat(updatedThought.getTopic()).isEqualTo(newSavedColumn.getTopic());
         assertThat(updatedThought.getColumnId()).isEqualTo(newSavedColumn.getId());
     }
 
@@ -246,7 +244,6 @@ class ThoughtApiTest extends ApiTestBase {
     void should_create_thought() throws Exception {
         var createThoughtRequest = new CreateThoughtRequest(
             "Hello",
-            "happy",
             savedColumnTitle.getId()
         );
 
@@ -260,14 +257,13 @@ class ThoughtApiTest extends ApiTestBase {
         assertThat(savedThoughts).hasSize(1);
         var savedThought = savedThoughts.get(0);
         assertThat(savedThought.getMessage()).isEqualTo("Hello");
-        assertThat(savedThought.getTopic()).isEqualTo("happy");
+        assertThat(savedThought.getColumnId()).isEqualTo(savedColumnTitle.getId());
     }
 
     @Test
     public void should_not_create_thought_unauthorized() throws Exception {
         var createThoughtRequest = new CreateThoughtRequest(
             "Hello",
-            "happy",
             savedColumnTitle.getId()
         );
 

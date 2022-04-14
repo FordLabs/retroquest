@@ -68,7 +68,7 @@ public class TeamService {
     }
 
     public CsvFile buildCsvFileFromTeam(String team) {
-        var thoughts = thoughtRepository.findAllByTeamIdAndBoardIdIsNullOrderByTopic(team);
+        var thoughts = thoughtRepository.findAllByTeamIdAndBoardIdIsNullOrderByColumnId(team);
         var actionItems = actionItemRepository.findAllByTeamIdAndArchived(team, false);
         var columns = columnTitleRepository.findAllByTeamId(team).stream().map(Column::fromColumnTitle).collect(Collectors.toList());
         return new CsvFile(team, thoughts, actionItems, columns);
