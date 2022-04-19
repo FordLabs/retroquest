@@ -80,7 +80,7 @@ $timer-height: 2.81rem;
 @include main.dark-theme {
 	.timer {
 		.timer-count-down {
-			background-color: main.$gray;
+			background-color: main.$gray-1;
 		}
 	}
 }
