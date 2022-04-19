@@ -204,14 +204,14 @@ class TeamServiceTest {
         CreateTeamRequest requestedTeam = new CreateTeamRequest("beach-bums", "password");
         teamService.createNewTeam(requestedTeam);
 
-        Column happyColumn = Column.builder().teamId("beach-bums").topic("happy").title("Happy").build();
-        verify(columnRepository, times(1)).save(happyColumn);
+        Column happyColumn = new Column(null, "happy", "Happy", "beach-bums");
+        Column confusedColumn = new Column(null, "confused", "Confused", "beach-bums");
+        Column unhappyColumn = new Column(null, "unhappy", "Sad", "beach-bums");
 
-        Column confusedColumn = Column.builder().teamId("beach-bums").topic("confused").title("Confused").build();
-        verify(columnRepository, times(1)).save(confusedColumn);
-
-        Column unhappyColumn = Column.builder().teamId("beach-bums").topic("unhappy").title("Sad").build();
-        verify(columnRepository, times(1)).save(unhappyColumn);
+        var inOrder = inOrder(columnRepository);
+        inOrder.verify(columnRepository, times(1)).save(happyColumn);
+        inOrder.verify(columnRepository, times(1)).save(confusedColumn);
+        inOrder.verify(columnRepository, times(1)).save(unhappyColumn);
     }
 
     @Test

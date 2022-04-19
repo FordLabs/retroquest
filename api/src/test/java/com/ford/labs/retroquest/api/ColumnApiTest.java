@@ -77,10 +77,7 @@ public class ColumnApiTest extends ApiTestBase {
 
     @Test
     public void updateTitle() throws Exception {
-        var savedColumn = columnRepository.save(Column.builder()
-                .teamId("BeachBums")
-                .title("old title")
-                .build());
+        var savedColumn = columnRepository.save(new Column(null, null, "old title", "BeachBums"));
         var expectedColumn = new Column(savedColumn.getId(), null, "new title", "BeachBums");
 
         var request = new UpdateColumnTitleRequest("new title");
@@ -117,15 +114,11 @@ public class ColumnApiTest extends ApiTestBase {
 
     @Test
     public void updateTitle_WithColumnIdFromOtherTeam_ReturnsNotFound() throws Exception {
-        var savedColumn = columnRepository.save(Column.builder()
-                .teamId("NotBeachBums")
-                .title("old title")
-                .build());
-        var expectedColumn = new Column(savedColumn.getId(), null, "new title", "BeachBums");
+        var savedColumn = columnRepository.save(new Column(null, null, "old title", "NotBeachBums"));
 
         var request = new UpdateColumnTitleRequest("new title");
 
-        mockMvc.perform(put("/api/team/BeachBums/column/%d/title".formatted(expectedColumn.getId()))
+        mockMvc.perform(put("/api/team/BeachBums/column/%d/title".formatted(savedColumn.getId()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(request))
                 .header("Authorization", getBearerAuthToken()))

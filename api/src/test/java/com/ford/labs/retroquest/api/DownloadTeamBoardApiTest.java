@@ -81,11 +81,7 @@ class DownloadTeamBoardApiTest extends ApiTestBase {
                 .dateCreated(Date.valueOf("2019-01-01"))
                 .build());
 
-        Column savedColumn = columnRepository.save(Column.builder()
-                .title("Happy")
-                .teamId(teamId)
-                .topic("happy")
-                .build());
+        Column savedColumn = columnRepository.save(new Column(null, "happy", "Happy", teamId));
 
         thoughtRepository.save(
                 Thought.builder()

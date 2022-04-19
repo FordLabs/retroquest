@@ -18,7 +18,6 @@
 package com.ford.labs.retroquest.column;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
@@ -33,18 +32,14 @@ import java.io.Serializable;
 @Entity(name = "rq_column")
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(toBuilder=true)
 public class Column implements Serializable, Comparable<Column> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NaturalId
     private String topic;
-
-    @Builder.Default
-    private String title = "";
+    private String title;
 
     @NaturalId
     private String teamId;
