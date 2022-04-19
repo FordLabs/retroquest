@@ -16,6 +16,7 @@
  */
 
 import { LOGIN_PAGE_PATH } from '../../src/RouteConstants';
+import Theme from '../../src/Types/Theme';
 import { getTeamCredentials } from '../support/helpers';
 import TeamCredentials from '../support/types/teamCredentials';
 import Topic from '../support/types/Topic';
@@ -38,6 +39,18 @@ describe('Login', () => {
 		cy.get('[data-testid=teamNameInput]').as('teamNameInput');
 		cy.get('[data-testid=passwordInput]').as('passwordInput');
 		cy.get('[data-testid=formSubmitButton]').as('loginButton');
+	});
+
+	describe('Accessibility', () => {
+		it('Light Theme', () => {
+			cy.testAccessibility();
+		});
+
+		it('Dark Theme', () => {
+			cy.setLocalStorage('theme', Theme.DARK);
+			cy.reload();
+			cy.testAccessibility();
+		});
 	});
 
 	it('Navigates to team board after successful login', () => {
