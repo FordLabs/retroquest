@@ -130,7 +130,7 @@ function Timer(): JSX.Element {
 				/>
 			) : (
 				<div className="timer-count-down" data-testid="timerCountDownDisplay">
-					{formatSeconds(secondsLeft)}
+					<span>{formatSeconds(secondsLeft)}</span>
 				</div>
 			)}
 
