@@ -178,7 +178,7 @@ class ThoughtServiceTest {
     @Test
     void shouldCreateThought() {
         var message = "Hello there!";
-        var column = Column.builder().id(6789L).title("Happy").build();
+        var column = new Column(6789L, "happy", "Happy", "the-team");
         var request = new CreateThoughtRequest(
             message,
             column.getId()
