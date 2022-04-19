@@ -64,7 +64,7 @@
 		color: main.$gray;
 
 		.separator {
-			background: main.$count-separator-background-dark none;
+			background: rgba($black, 0.22) none;
 		}
 	}
 }

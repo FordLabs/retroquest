@@ -94,14 +94,16 @@ $opacity: 0.25;
 }
 
 @include main.dark-theme {
+	$dark-border: rgba(main.$black, 0.08);
+
 	.column-item-button-group {
-		border-top-color: main.$task-footer-separator-dark;
+		border-top-color: $dark-border;
 
 		.column-item-button {
 			color: main.$gray;
 
 			background-color: inherit;
-			border-color: main.$task-footer-separator-dark;
+			border-color: $dark-border;
 
 			&.button-secondary {
 				&:hover,
