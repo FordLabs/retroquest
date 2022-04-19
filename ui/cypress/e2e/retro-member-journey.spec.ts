@@ -18,16 +18,37 @@
 import { getLoginPagePathWithTeamId } from '../../src/RouteConstants';
 import { FEEDBACK_API_PATH } from '../../src/Services/Api/ApiConstants';
 import { TOKEN_KEY } from '../../src/Services/CookieService';
+import Theme from '../../src/Types/Theme';
+import Topic from '../../src/Types/Topic';
 import { getTeamCredentials } from '../support/helpers';
-import Topic from '../support/types/Topic';
 import Chainable = Cypress.Chainable;
 
 describe('Retro Member Journey', () => {
 	let teamCredentials;
 
 	beforeEach(() => {
+		cy.removeLocalStorage('theme');
+
 		teamCredentials = getTeamCredentials();
 		cy.createTeamAndLogin(teamCredentials);
+	});
+
+	describe('Accessibility', () => {
+		beforeEach(() => {
+			cy.enterThought(Topic.HAPPY, 'Some thought');
+			cy.enterThought(Topic.HAPPY, 'Some other thought');
+			cy.enterActionItem('Action Item');
+		});
+
+		it('Light Theme', () => {
+			cy.testAccessibility();
+		});
+
+		it('Dark Theme', () => {
+			cy.setLocalStorage('theme', Theme.DARK);
+			cy.reload();
+			cy.testAccessibility();
+		});
 	});
 
 	it('Add thoughts to each column', () => {
