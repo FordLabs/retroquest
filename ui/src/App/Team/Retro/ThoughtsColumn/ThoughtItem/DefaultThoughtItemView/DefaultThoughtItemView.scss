@@ -67,7 +67,7 @@
 	&.confused {
 		&:hover,
 		&:focus {
-			box-shadow: main.default-column-item-shadow(main.$belize-hole);
+			box-shadow: main.default-column-item-shadow(main.$dark-blue);
 		}
 	}
 
@@ -84,7 +84,7 @@
 		}
 
 		&.confused {
-			box-shadow: main.in-modal-column-item-shadow(main.$belize-hole);
+			box-shadow: main.in-modal-column-item-shadow(main.$dark-blue);
 		}
 
 		&.unhappy {
