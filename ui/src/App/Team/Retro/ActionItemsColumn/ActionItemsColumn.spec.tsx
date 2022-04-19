@@ -26,9 +26,7 @@ import ActionItemService from '../../../../Services/Api/ActionItemService';
 import { ActionItemState } from '../../../../State/ActionItemState';
 import { TeamState } from '../../../../State/TeamState';
 import Action from '../../../../Types/Action';
-import { ColumnTitle } from '../../../../Types/ColumnTitle';
 import Team from '../../../../Types/Team';
-import Topic from '../../../../Types/Topic';
 
 import ActionItemsColumn from './ActionItemsColumn';
 
@@ -41,13 +39,6 @@ const activeActionItem1: Action = getMockActionItem(false);
 activeActionItem1.id = 943;
 const activeActionItem2: Action = getMockActionItem(false);
 const completedActionItem1: Action = getMockActionItem(true);
-
-const actionItemsColumnTitle: ColumnTitle = {
-	id: 465657,
-	topic: Topic.ACTION,
-	title: 'Action Items',
-	teamId: 'team-id',
-};
 
 jest.mock('../../../../Services/Api/ActionItemService');
 
@@ -83,7 +74,7 @@ describe('Action Items Column', () => {
 	});
 
 	it('should show column title', () => {
-		expect(screen.getByText(actionItemsColumnTitle.title)).toBeDefined();
+		expect(screen.getByText('Action Items')).toBeDefined();
 	});
 
 	it('should show count of active items', () => {

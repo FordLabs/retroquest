@@ -272,18 +272,18 @@ describe('useWebsocketMessageHandler Hook', () => {
 		});
 	});
 
-	describe('columnTitleMessageHandler', () => {
+	describe('columnMessageHandler', () => {
 		const ColumnTestComponent = ({
 			websocketMessageBody,
 		}: TestComponentProps): ReactElement => {
 			const columns = useRecoilValue(ColumnsState);
 
-			const { columnTitleMessageHandler } = useWebSocketMessageHandler();
+			const { columnMessageHandler } = useWebSocketMessageHandler();
 
 			useEffect(() => {
 				const imessage = formatWebsocketMessage(websocketMessageBody);
-				columnTitleMessageHandler(imessage);
-			}, [columnTitleMessageHandler, websocketMessageBody]);
+				columnMessageHandler(imessage);
+			}, [columnMessageHandler, websocketMessageBody]);
 
 			return <div data-testid="columns">{JSON.stringify(columns)}</div>;
 		};

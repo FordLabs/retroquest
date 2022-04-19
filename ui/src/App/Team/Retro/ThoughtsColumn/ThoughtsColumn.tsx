@@ -54,9 +54,7 @@ function ThoughtsColumn(props: Props) {
 	);
 
 	const changeTitle = (title: string) => {
-		ColumnService.updateColumnTitle(team.id, column.id, title).catch(
-			console.error
-		);
+		ColumnService.updateTitle(team.id, column.id, title).catch(console.error);
 	};
 
 	const createThought = (text: string) => {

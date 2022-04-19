@@ -33,14 +33,14 @@ jest.mock('../../../Services/Websocket/WebSocketController');
 
 jest.setTimeout(60000);
 
-const mockColumnTitleMessageHandler = jest.fn();
+const mockColumnMessageHandler = jest.fn();
 const mockThoughtMessageHandler = jest.fn();
 const mockActionItemMessageHandler = jest.fn();
 const mockEndRetroMessageHandler = jest.fn();
 
 jest.mock('../../../Hooks/useWebSocketMessageHandler', () => {
 	return () => ({
-		columnTitleMessageHandler: mockColumnTitleMessageHandler,
+		columnMessageHandler: mockColumnMessageHandler,
 		thoughtMessageHandler: mockThoughtMessageHandler,
 		actionItemMessageHandler: mockActionItemMessageHandler,
 		endRetroMessageHandler: mockEndRetroMessageHandler,

@@ -38,7 +38,7 @@ export const mockColumns: Column[] = [
 
 const ColumnService = {
 	getColumns: jest.fn().mockResolvedValue(mockColumns),
-	updateColumnTitle: jest.fn().mockResolvedValue(null),
+	updateTitle: jest.fn().mockResolvedValue(null),
 };
 
 export default ColumnService;
