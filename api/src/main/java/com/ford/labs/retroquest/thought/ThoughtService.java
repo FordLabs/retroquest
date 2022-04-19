@@ -17,7 +17,7 @@
 
 package com.ford.labs.retroquest.thought;
 
-import com.ford.labs.retroquest.column.ColumnTitleRepository;
+import com.ford.labs.retroquest.column.ColumnRepository;
 import com.ford.labs.retroquest.exception.ColumnTitleNotFoundException;
 import com.ford.labs.retroquest.exception.ThoughtNotFoundException;
 import com.ford.labs.retroquest.websocket.WebsocketService;
@@ -33,15 +33,15 @@ import static com.ford.labs.retroquest.websocket.events.WebsocketEventType.UPDAT
 public class ThoughtService {
 
     private final ThoughtRepository thoughtRepository;
-    private final ColumnTitleRepository columnTitleRepository;
+    private final ColumnRepository columnRepository;
     private final WebsocketService websocketService;
 
     public ThoughtService(ThoughtRepository thoughtRepository,
-                          ColumnTitleRepository columnTitleRepository,
+                          ColumnRepository columnRepository,
                           WebsocketService websocketService) {
 
         this.thoughtRepository = thoughtRepository;
-        this.columnTitleRepository = columnTitleRepository;
+        this.columnRepository = columnRepository;
         this.websocketService = websocketService;
     }
 
@@ -65,7 +65,7 @@ public class ThoughtService {
     }
 
     public Thought updateColumn(String teamId, Long thoughtId, long columnId) {
-        var columnTitle = columnTitleRepository.findByTeamIdAndId(teamId, columnId).orElseThrow(ColumnTitleNotFoundException::new);
+        var columnTitle = columnRepository.findByTeamIdAndId(teamId, columnId).orElseThrow(ColumnTitleNotFoundException::new);
         var thought = fetchThought(teamId, thoughtId);
         thought.setColumnId(columnTitle.getId());
         var savedThought = thoughtRepository.save(thought);

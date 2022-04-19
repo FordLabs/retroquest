@@ -19,8 +19,7 @@ package com.ford.labs.retroquest.team;
 
 import com.ford.labs.retroquest.actionitem.ActionItemRepository;
 import com.ford.labs.retroquest.column.Column;
-import com.ford.labs.retroquest.column.ColumnTitle;
-import com.ford.labs.retroquest.column.ColumnTitleRepository;
+import com.ford.labs.retroquest.column.ColumnRepository;
 import com.ford.labs.retroquest.exception.BoardDoesNotExistException;
 import com.ford.labs.retroquest.exception.PasswordInvalidException;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
@@ -29,7 +28,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.stream.Collectors;
 
 @Service
 public class TeamService {
@@ -37,20 +35,20 @@ public class TeamService {
     private final ActionItemRepository actionItemRepository;
     private final TeamRepository teamRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ColumnTitleRepository columnTitleRepository;
+    private final ColumnRepository columnRepository;
 
     public TeamService(
         ThoughtRepository thoughtRepository,
         ActionItemRepository actionItemRepository,
         TeamRepository teamRepository,
         PasswordEncoder passwordEncoder,
-        ColumnTitleRepository columnTitleRepository
+        ColumnRepository columnRepository
     ) {
         this.thoughtRepository = thoughtRepository;
         this.actionItemRepository = actionItemRepository;
         this.teamRepository = teamRepository;
         this.passwordEncoder = passwordEncoder;
-        this.columnTitleRepository = columnTitleRepository;
+        this.columnRepository = columnRepository;
     }
 
     public Team getTeamByName(String teamName) {
@@ -70,7 +68,7 @@ public class TeamService {
     public CsvFile buildCsvFileFromTeam(String team) {
         var thoughts = thoughtRepository.findAllByTeamIdAndBoardIdIsNullOrderByColumnId(team);
         var actionItems = actionItemRepository.findAllByTeamIdAndArchived(team, false);
-        var columns = columnTitleRepository.findAllByTeamId(team).stream().map(Column::fromColumnTitle).collect(Collectors.toList());
+        var columns = columnRepository.findAllByTeamId(team);
         return new CsvFile(team, thoughts, actionItems, columns);
     }
 
@@ -113,25 +111,14 @@ public class TeamService {
         return teamEntity;
     }
 
-    private void generateColumns(Team teamEntity) {
-        var happyColumnTitle = new ColumnTitle();
-        happyColumnTitle.setTeamId(teamEntity.getUri());
-        happyColumnTitle.setTopic("happy");
-        happyColumnTitle.setTitle("Happy");
+    private void generateColumns(Team team) {
+        var happyColumn = new Column(null, "happy", "Happy", team.getUri());
+        var confusedColumn = new Column(null, "confused", "Confused", team.getUri());
+        var unhappyColumn = new Column(null, "unhappy", "Sad", team.getUri());
 
-        var confusedColumnTitle = new ColumnTitle();
-        confusedColumnTitle.setTeamId(teamEntity.getUri());
-        confusedColumnTitle.setTopic("confused");
-        confusedColumnTitle.setTitle("Confused");
-
-        var unhappyColumnTitle = new ColumnTitle();
-        unhappyColumnTitle.setTeamId(teamEntity.getUri());
-        unhappyColumnTitle.setTopic("unhappy");
-        unhappyColumnTitle.setTitle("Sad");
-
-        columnTitleRepository.save(happyColumnTitle);
-        columnTitleRepository.save(confusedColumnTitle);
-        columnTitleRepository.save(unhappyColumnTitle);
+        columnRepository.save(happyColumn);
+        columnRepository.save(confusedColumn);
+        columnRepository.save(unhappyColumn);
     }
 
     private void updateFailedAttempts(Team savedTeam, int failedAttempts) {

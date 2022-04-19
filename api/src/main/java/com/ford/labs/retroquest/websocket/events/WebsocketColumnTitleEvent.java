@@ -17,14 +17,14 @@
 
 package com.ford.labs.retroquest.websocket.events;
 
-import com.ford.labs.retroquest.column.ColumnTitle;
+import com.ford.labs.retroquest.column.Column;
 
 public class WebsocketColumnTitleEvent extends WebsocketEvent{
 
     private static final String ROUTE_STRING = "/topic/%s/column-titles";
     private final String teamId;
 
-    public WebsocketColumnTitleEvent(String teamId, WebsocketEventType type, ColumnTitle payload) {
+    public WebsocketColumnTitleEvent(String teamId, WebsocketEventType type, Column payload) {
         super(type, payload);
         this.teamId = teamId;
     }

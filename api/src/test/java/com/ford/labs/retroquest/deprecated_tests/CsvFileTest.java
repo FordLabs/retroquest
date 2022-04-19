@@ -19,7 +19,6 @@ package com.ford.labs.retroquest.deprecated_tests;
 
 import com.ford.labs.retroquest.actionitem.ActionItem;
 import com.ford.labs.retroquest.column.Column;
-import com.ford.labs.retroquest.column.ColumnTitle;
 import com.ford.labs.retroquest.team.CsvFile;
 import com.ford.labs.retroquest.thought.Thought;
 import org.apache.commons.io.FileUtils;
@@ -39,9 +38,9 @@ class CsvFileTest {
 
     @Test
     void shouldConvertThoughtsAndActionItemsToACSV() throws IOException {
-        var column1 = new Column(1L, "Happy", "happy");
-        var column2 = new Column(2L, "Meh", "confused");
-        var column3 = new Column(3L, "Sad", "unhappy");
+        var column1 = new Column(1L, "happy", "Happy", "teamId");
+        var column2 = new Column(2L, "confused", "Meh", "teamId");
+        var column3 = new Column(3L, "unhappy", "Sad", "teamId");
 
         var firstThought = Thought.builder()
             .message("stuff \"goes here\"")

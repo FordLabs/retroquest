@@ -210,4 +210,10 @@
             <column name="topic" />
         </dropColumn>
     </changeSet>
+    <changeSet id="rename-column_title-to-rq_column" author="nreuter">
+        <preConditions>
+            <tableExists tableName="column_title" />
+        </preConditions>
+        <renameTable oldTableName="column_title" newTableName="rq_column" />
+    </changeSet>
 </databaseChangeLog>

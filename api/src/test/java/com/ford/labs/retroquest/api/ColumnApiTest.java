@@ -18,8 +18,8 @@
 package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
-import com.ford.labs.retroquest.column.ColumnTitle;
-import com.ford.labs.retroquest.column.ColumnTitleRepository;
+import com.ford.labs.retroquest.column.Column;
+import com.ford.labs.retroquest.column.ColumnRepository;
 import com.ford.labs.retroquest.column.UpdateColumnTitleRequest;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,23 +39,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ColumnApiTest extends ApiTestBase {
 
     @Autowired
-    ColumnTitleRepository columnTitleRepository;
+    ColumnRepository columnRepository;
 
     @Autowired
     ThoughtRepository thoughtRepository;
 
     @BeforeEach
     void setup() {
-        columnTitleRepository.deleteAllInBatch();
+        columnRepository.deleteAllInBatch();
         thoughtRepository.deleteAllInBatch();
     }
 
     @Test
     public void getColumns_shouldReturnListOfColumns() throws Exception {
-        var happyColumn = new ColumnTitle(null, "happy", "Happy Thoughts", teamId);
-        var sadColumn = new ColumnTitle(null, "sad", "Sad Thoughts", teamId);
-        happyColumn = columnTitleRepository.save(happyColumn);
-        sadColumn = columnTitleRepository.save(sadColumn);
+        var happyColumn = new Column(null, "happy", "Happy Thoughts", teamId);
+        var sadColumn = new Column(null, "sad", "Sad Thoughts", teamId);
+        happyColumn = columnRepository.save(happyColumn);
+        sadColumn = columnRepository.save(sadColumn);
 
         mockMvc.perform(get(format("/api/team/%s/columns", teamId))
                 .header("Authorization", "Bearer " + getBearerAuthToken()))
@@ -77,11 +77,11 @@ public class ColumnApiTest extends ApiTestBase {
 
     @Test
     public void updateColumnTitle() throws Exception {
-        var savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder()
+        var savedColumnTitle = columnRepository.save(Column.builder()
                 .teamId("BeachBums")
                 .title("old title")
                 .build());
-        var expectedColumnTitle = new ColumnTitle(savedColumnTitle.getId(), null, "new title", "BeachBums");
+        var expectedColumnTitle = new Column(savedColumnTitle.getId(), null, "new title", "BeachBums");
 
         var request = new UpdateColumnTitleRequest("new title");
 
@@ -91,7 +91,7 @@ public class ColumnApiTest extends ApiTestBase {
                 .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk());
 
-        assertThat(columnTitleRepository.findAll()).containsExactly(expectedColumnTitle);
+        assertThat(columnRepository.findAll()).containsExactly(expectedColumnTitle);
     }
 
     @Test
@@ -117,11 +117,11 @@ public class ColumnApiTest extends ApiTestBase {
 
     @Test
     public void updateColumnTitle_WithColumnIdFromOtherTeam_ReturnsNotFound() throws Exception {
-        var savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder()
+        var savedColumnTitle = columnRepository.save(Column.builder()
                 .teamId("NotBeachBums")
                 .title("old title")
                 .build());
-        var expectedColumnTitle = new ColumnTitle(savedColumnTitle.getId(), null, "new title", "BeachBums");
+        var expectedColumnTitle = new Column(savedColumnTitle.getId(), null, "new title", "BeachBums");
 
         var request = new UpdateColumnTitleRequest("new title");
 
