@@ -99,7 +99,7 @@
 		white-space: nowrap;
 		text-transform: capitalize;
 
-		background-color: main.$gray;
+		background-color: main.$gray-1;
 		cursor: pointer;
 
 		&.selected {
@@ -125,11 +125,11 @@
 		background-color: main.$light-asphalt;
 
 		.settings-title {
-			color: main.$gray;
+			color: main.$gray-1;
 		}
 
 		.settings-subtitle {
-			color: rgba(main.$gray, 0.5);
+			color: rgba(main.$gray-1, 0.5);
 		}
 	}
 
@@ -138,6 +138,6 @@
 	}
 
 	.tab {
-		background-color: rgba($black, 0.22);
+		background-color: rgba(main.$black, 0.22);
 	}
 }

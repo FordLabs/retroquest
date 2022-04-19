@@ -80,22 +80,22 @@
 @include main.dark-theme {
 	.archived-boards-list {
 		.thoughts-archive-title {
-			color: main.$gray;
+			color: main.$gray-1;
 		}
 
 		.list-header {
-			background: main.$light-gray;
+			background: main.$gray-4;
 
 			.sort-button {
-				color: main.$lighter-gray;
+				color: main.$gray-2;
 				font-weight: bold;
 
 				&.selected-asc {
-					color: main.$gray;
+					color: main.$gray-1;
 				}
 
 				&.selected-desc {
-					color: main.$gray;
+					color: main.$gray-1;
 				}
 			}
 		}

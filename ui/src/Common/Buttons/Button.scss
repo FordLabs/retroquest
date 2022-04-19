@@ -38,7 +38,7 @@
 }
 
 .button-primary {
-	color: main.$gray;
+	color: main.$gray-1;
 
 	background-color: main.$asphalt;
 	outline: none;
@@ -65,15 +65,15 @@
 @include main.dark-theme {
 	.button-primary {
 		color: main.$asphalt;
-		background-color: main.$gray;
+		background-color: main.$gray-1;
 
 		&:hover,
 		&:focus {
-			color: main.$gray;
+			color: main.$gray-1;
 		}
 	}
 
 	.button-secondary {
-		color: rgba(main.$gray, 0.8);
+		color: rgba(main.$gray-1, 0.8);
 	}
 }

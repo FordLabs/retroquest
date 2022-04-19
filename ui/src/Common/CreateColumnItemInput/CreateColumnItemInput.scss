@@ -77,11 +77,11 @@
 @include main.dark-theme {
 	.create-column-item-input {
 		.input-field {
-			color: main.$gray;
+			color: main.$gray-1;
 			background-color: main.$asphalt;
 
 			&::placeholder {
-				color: rgba(main.$gray, 0.4);
+				color: rgba(main.$gray-1, 0.4);
 			}
 
 			&.happy {

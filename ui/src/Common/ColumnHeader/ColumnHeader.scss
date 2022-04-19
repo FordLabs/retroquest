@@ -157,7 +157,7 @@
 
 @include main.dark-theme {
 	.column-header {
-		color: main.$gray;
+		color: main.$gray-1;
 
 		&.happy {
 			background-color: main.$dark-green;

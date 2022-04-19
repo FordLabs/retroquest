@@ -56,6 +56,6 @@
 
 @include main.dark-theme {
 	.contributors {
-		background-color: rgba($black, 0.22);
+		background-color: rgba(main.$black, 0.22);
 	}
 }

@@ -102,7 +102,7 @@
 
 			&:first-of-type {
 				color: rgba(main.$asphalt, 0.5);
-				border-top: 1px solid main.$gray;
+				border-top: 1px solid main.$gray-1;
 			}
 
 			&:last-of-type {
@@ -125,16 +125,16 @@
 		background-color: main.$light-asphalt;
 
 		.form-template-title {
-			color: main.$gray;
+			color: main.$gray-1;
 		}
 
 		.form-template-subtitle {
-			color: rgba(main.$gray, 0.5);
+			color: rgba(main.$gray-1, 0.5);
 		}
 
 		.form-template-button {
 			&:first-of-type {
-				color: rgba(main.$gray, 0.5);
+				color: rgba(main.$gray-1, 0.5);
 				border-top: 1px solid main.$asphalt;
 
 				&:hover,

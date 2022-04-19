@@ -36,7 +36,7 @@
 		height: 2rem;
 		margin: 1rem;
 
-		background: main.$gray;
+		background: main.$gray-1;
 		border-radius: 20px;
 	}
 
@@ -46,7 +46,7 @@
 
 	.view-button {
 		padding: 1rem 1.5rem;
-		border-left: 1px solid main.$gray;
+		border-left: 1px solid main.$gray-1;
 
 		&:hover {
 			color: main.$turquoise;
@@ -56,15 +56,15 @@
 
 @include main.dark-theme {
 	.archived-board-tile {
-		color: main.$gray;
+		color: main.$gray-1;
 		background: main.$light-asphalt;
 
 		.thought-count {
-			background: main.$light-gray;
+			background: main.$gray-4;
 		}
 
 		.view-button {
-			color: main.$lighter-gray;
+			color: main.$gray-2;
 			border-left: 1px solid main.$asphalt;
 
 			&:hover {
