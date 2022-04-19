@@ -18,8 +18,11 @@
 package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
-import com.ford.labs.retroquest.column.ColumnTitleRepository;
-import com.ford.labs.retroquest.team.*;
+import com.ford.labs.retroquest.column.ColumnRepository;
+import com.ford.labs.retroquest.team.CreateTeamRequest;
+import com.ford.labs.retroquest.team.LoginRequest;
+import com.ford.labs.retroquest.team.Team;
+import com.ford.labs.retroquest.team.TeamRepository;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,16 +33,10 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.web.client.RestTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.client.ExpectedCount.times;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,13 +48,10 @@ class TeamApiTest extends ApiTestBase {
     private TeamRepository teamRepository;
 
     @Autowired
-    private ColumnTitleRepository columnTitleRepository;
+    private ColumnRepository columnRepository;
 
     @Autowired
     private TestRestTemplate testRestTemplate;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private MeterRegistry meterRegistry;
@@ -68,9 +62,9 @@ class TeamApiTest extends ApiTestBase {
     @AfterEach
     void clean() {
         teamRepository.deleteAllInBatch();
-        columnTitleRepository.deleteAllInBatch();
+        columnRepository.deleteAllInBatch();
         assertThat(teamRepository.count()).isZero();
-        assertThat(columnTitleRepository.count()).isZero();
+        assertThat(columnRepository.count()).isZero();
     }
 
     @Test

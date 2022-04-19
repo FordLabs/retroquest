@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ColumnTitleRepository extends JpaRepository<ColumnTitle, Long> {
-    Optional<ColumnTitle> findByTeamIdAndId(String teamId, Long id);
-    List<ColumnTitle> findAllByTeamId(String teamId);
+public interface ColumnRepository extends JpaRepository<Column, Long> {
+    Optional<Column> findByTeamIdAndId(String teamId, Long id);
+    List<Column> findAllByTeamId(String teamId);
 }

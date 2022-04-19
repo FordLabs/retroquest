@@ -20,8 +20,8 @@ package com.ford.labs.retroquest.api;
 import com.ford.labs.retroquest.actionitem.ActionItem;
 import com.ford.labs.retroquest.actionitem.ActionItemRepository;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
-import com.ford.labs.retroquest.column.ColumnTitle;
-import com.ford.labs.retroquest.column.ColumnTitleRepository;
+import com.ford.labs.retroquest.column.Column;
+import com.ford.labs.retroquest.column.ColumnRepository;
 import com.ford.labs.retroquest.team.LoginRequest;
 import com.ford.labs.retroquest.team.TeamRepository;
 import com.ford.labs.retroquest.thought.Thought;
@@ -54,7 +54,7 @@ class DownloadTeamBoardApiTest extends ApiTestBase {
     private ThoughtRepository thoughtRepository;
 
     @Autowired
-    private ColumnTitleRepository columnTitleRepository;
+    private ColumnRepository columnRepository;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -67,7 +67,7 @@ class DownloadTeamBoardApiTest extends ApiTestBase {
         teamRepository.deleteAllInBatch();
         actionItemRepository.deleteAllInBatch();
         thoughtRepository.deleteAllInBatch();
-        columnTitleRepository.deleteAllInBatch();
+        columnRepository.deleteAllInBatch();
     }
 
     @Test
@@ -81,7 +81,7 @@ class DownloadTeamBoardApiTest extends ApiTestBase {
                 .dateCreated(Date.valueOf("2019-01-01"))
                 .build());
 
-        ColumnTitle savedColumnTitle = columnTitleRepository.save(ColumnTitle.builder()
+        Column savedColumn = columnRepository.save(Column.builder()
                 .title("Happy")
                 .teamId(teamId)
                 .topic("happy")
@@ -93,7 +93,7 @@ class DownloadTeamBoardApiTest extends ApiTestBase {
                         .teamId(teamId)
                         .hearts(5)
                         .discussed(false)
-                        .columnId(savedColumnTitle.getId())
+                        .columnId(savedColumn.getId())
                         .build()
         );
 

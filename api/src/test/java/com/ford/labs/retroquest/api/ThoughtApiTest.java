@@ -18,12 +18,10 @@
 package com.ford.labs.retroquest.api;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.ford.labs.retroquest.actionitem.ActionItem;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
-import com.ford.labs.retroquest.column.ColumnTitle;
-import com.ford.labs.retroquest.column.ColumnTitleRepository;
+import com.ford.labs.retroquest.column.Column;
+import com.ford.labs.retroquest.column.ColumnRepository;
 import com.ford.labs.retroquest.thought.*;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -50,23 +48,23 @@ class ThoughtApiTest extends ApiTestBase {
     private ThoughtRepository thoughtRepository;
 
     @Autowired
-    private ColumnTitleRepository columnTitleRepository;
+    private ColumnRepository columnRepository;
 
     private String BASE_API_URL;
-    private ColumnTitle savedColumnTitle;
+    private Column savedColumn;
 
     @BeforeEach
     void setup() {
         thoughtRepository.deleteAllInBatch();
-        columnTitleRepository.deleteAllInBatch();
+        columnRepository.deleteAllInBatch();
 
         BASE_API_URL = "/api/team/" + teamId;
-        savedColumnTitle = columnTitleRepository.save(new ColumnTitle(null, "happy", "Happy", teamId));
+        savedColumn = columnRepository.save(new Column(null, "happy", "Happy", teamId));
     }
 
     @Test
     void should_like_thought_on_upvote() throws Exception {
-        Thought originalThought = thoughtRepository.save(Thought.builder().teamId(teamId).hearts(1).columnId(savedColumnTitle.getId()).build());
+        Thought originalThought = thoughtRepository.save(Thought.builder().teamId(teamId).hearts(1).columnId(savedColumn.getId()).build());
 
         mockMvc.perform(put("/api/team/" + teamId + "/thought/" + originalThought.getId() + "/heart")
                 .header("Authorization", getBearerAuthToken()))
@@ -85,7 +83,7 @@ class ThoughtApiTest extends ApiTestBase {
 
     @Test
     void should_update_thought_discussion() throws Exception {
-        Thought originalThought = thoughtRepository.save(Thought.builder().teamId(teamId).discussed(false).columnId(savedColumnTitle.getId()).build());
+        Thought originalThought = thoughtRepository.save(Thought.builder().teamId(teamId).discussed(false).columnId(savedColumn.getId()).build());
 
         mockMvc.perform(put("/api/team/" + teamId + "/thought/" + originalThought.getId() + "/discuss")
                 .contentType(APPLICATION_JSON)
@@ -108,7 +106,7 @@ class ThoughtApiTest extends ApiTestBase {
 
     @Test
     void should_update_thought_message() throws Exception {
-        var originalThought = thoughtRepository.save(Thought.builder().teamId(teamId).message("hello").columnId(savedColumnTitle.getId()).build());
+        var originalThought = thoughtRepository.save(Thought.builder().teamId(teamId).message("hello").columnId(savedColumn.getId()).build());
         var updatedMessage = "goodbye";
 
         mockMvc.perform(put("/api/team/" + teamId + "/thought/" + originalThought.getId() + "/message")
@@ -145,8 +143,8 @@ class ThoughtApiTest extends ApiTestBase {
 
     @Test
     public void should_move_thought_column() throws Exception {
-        ColumnTitle newSavedColumn = columnTitleRepository.save(
-            new ColumnTitle(null, "cheeseburgers", "CheeseBurgers", teamId)
+        Column newSavedColumn = columnRepository.save(
+            new Column(null, "cheeseburgers", "CheeseBurgers", teamId)
         );
         MoveThoughtRequest changeRequest = new MoveThoughtRequest(newSavedColumn.getId());
         Thought savedThought = thoughtRepository.save(
@@ -155,7 +153,7 @@ class ThoughtApiTest extends ApiTestBase {
                 .message("message")
                 .discussed(false)
                 .hearts(1)
-                .columnId(savedColumnTitle.getId())
+                .columnId(savedColumn.getId())
                 .build()
         );
 
@@ -175,8 +173,8 @@ class ThoughtApiTest extends ApiTestBase {
     @Test
     void should_return_all_thoughts_by_team_id() throws Exception {
         List<Thought> expectedThoughts = List.of(
-            Thought.builder().teamId(teamId).message("hello").columnId(savedColumnTitle.getId()).build(),
-            Thought.builder().teamId(teamId).message("goodbye").columnId(savedColumnTitle.getId()).build());
+            Thought.builder().teamId(teamId).message("hello").columnId(savedColumn.getId()).build(),
+            Thought.builder().teamId(teamId).message("goodbye").columnId(savedColumn.getId()).build());
 
         List<Thought> persistedExpectedThoughts = thoughtRepository.saveAll(expectedThoughts);
 
@@ -199,8 +197,8 @@ class ThoughtApiTest extends ApiTestBase {
     @Test
     void should_delete_thoughts_by_thought_id() throws Exception {
         List<Thought> thoughtsToSave = List.of(
-            Thought.builder().teamId(teamId).message("hello").columnId(savedColumnTitle.getId()).build(),
-            Thought.builder().teamId(teamId).message("goodbye").columnId(savedColumnTitle.getId()).build());
+            Thought.builder().teamId(teamId).message("hello").columnId(savedColumn.getId()).build(),
+            Thought.builder().teamId(teamId).message("goodbye").columnId(savedColumn.getId()).build());
 
         List<Thought> persistedThoughts = thoughtRepository.saveAll(thoughtsToSave);
 
@@ -230,7 +228,7 @@ class ThoughtApiTest extends ApiTestBase {
     @Test
     public void deleteThought_WhenThoughtOnOtherTeam_IgnoresDelete() throws Exception {
         var unauthorizedTeamJwt = jwtBuilder.buildJwt("not-beach-bums");
-        var thought = thoughtRepository.save(Thought.builder().teamId(teamId).message("hello").columnId(savedColumnTitle.getId()).build());
+        var thought = thoughtRepository.save(Thought.builder().teamId(teamId).message("hello").columnId(savedColumn.getId()).build());
 
         mockMvc.perform(delete("/api/team/%s/thought/%d".formatted("not-beach-bums", thought.getId()))
                 .contentType(APPLICATION_JSON)
@@ -244,7 +242,7 @@ class ThoughtApiTest extends ApiTestBase {
     void should_create_thought() throws Exception {
         var createThoughtRequest = new CreateThoughtRequest(
             "Hello",
-            savedColumnTitle.getId()
+            savedColumn.getId()
         );
 
         mockMvc.perform(post(String.join("", "/api/team/", teamId, "/thought"))
@@ -257,14 +255,14 @@ class ThoughtApiTest extends ApiTestBase {
         assertThat(savedThoughts).hasSize(1);
         var savedThought = savedThoughts.get(0);
         assertThat(savedThought.getMessage()).isEqualTo("Hello");
-        assertThat(savedThought.getColumnId()).isEqualTo(savedColumnTitle.getId());
+        assertThat(savedThought.getColumnId()).isEqualTo(savedColumn.getId());
     }
 
     @Test
     public void should_not_create_thought_unauthorized() throws Exception {
         var createThoughtRequest = new CreateThoughtRequest(
             "Hello",
-            savedColumnTitle.getId()
+            savedColumn.getId()
         );
 
         mockMvc.perform(post(String.join("", "/api/team/", teamId, "/thought"))
@@ -277,9 +275,9 @@ class ThoughtApiTest extends ApiTestBase {
     @Test
     void should_get_thoughts_on_same_team() throws Exception {
         List<Thought> savedThoughts = List.of(
-            Thought.builder().message("message 1").teamId(teamId).columnId(savedColumnTitle.getId()).build(),
-            Thought.builder().message("message 2").teamId(teamId).columnId(savedColumnTitle.getId()).build(),
-            Thought.builder().message("message 2").teamId("team 2").columnId(savedColumnTitle.getId()).build()
+            Thought.builder().message("message 1").teamId(teamId).columnId(savedColumn.getId()).build(),
+            Thought.builder().message("message 2").teamId(teamId).columnId(savedColumn.getId()).build(),
+            Thought.builder().message("message 2").teamId("team 2").columnId(savedColumn.getId()).build()
         );
 
         thoughtRepository.saveAll(savedThoughts);
@@ -298,7 +296,7 @@ class ThoughtApiTest extends ApiTestBase {
     @Test
     void should_not_get_thoughts_unauthorized() throws Exception {
         List<Thought> savedThoughts = List.of(
-            Thought.builder().message("message 1").teamId(teamId).columnId(savedColumnTitle.getId()).build()
+            Thought.builder().message("message 1").teamId(teamId).columnId(savedColumn.getId()).build()
         );
 
         thoughtRepository.saveAll(savedThoughts);
@@ -316,7 +314,7 @@ class ThoughtApiTest extends ApiTestBase {
 
         var savedThought = thoughtRepository.save(Thought.builder()
                 .teamId("beach-bums")
-                .columnId(savedColumnTitle.getId())
+                .columnId(savedColumn.getId())
                 .build());
 
         mockMvc.perform(put("/api/team/not-beach-bums/thought/%d/heart".formatted(savedThought.getId()))

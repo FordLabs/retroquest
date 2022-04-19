@@ -17,8 +17,8 @@
 
 package com.ford.labs.retroquest.thought;
 
-import com.ford.labs.retroquest.column.ColumnTitle;
-import com.ford.labs.retroquest.column.ColumnTitleRepository;
+import com.ford.labs.retroquest.column.Column;
+import com.ford.labs.retroquest.column.ColumnRepository;
 import com.ford.labs.retroquest.exception.ColumnTitleNotFoundException;
 import com.ford.labs.retroquest.exception.ThoughtNotFoundException;
 import com.ford.labs.retroquest.websocket.WebsocketService;
@@ -45,7 +45,7 @@ import static org.mockito.Mockito.*;
 class ThoughtServiceTest {
 
     private final ThoughtRepository thoughtRepository = mock(ThoughtRepository.class);
-    private final ColumnTitleRepository columnTitleRepository = mock(ColumnTitleRepository.class);
+    private final ColumnRepository columnRepository = mock(ColumnRepository.class);
     private final WebsocketService websocketService = mock(WebsocketService.class);
 
     private ThoughtService thoughtService;
@@ -54,7 +54,7 @@ class ThoughtServiceTest {
     void setup() {
         this.thoughtService = new ThoughtService(
                 this.thoughtRepository,
-                this.columnTitleRepository,
+                this.columnRepository,
                 this.websocketService
         );
     }
@@ -106,11 +106,11 @@ class ThoughtServiceTest {
         var teamId = "the-team";
         String newTopic = "right-column";
         Thought thought = Thought.builder().id(1234L).build();
-        ColumnTitle expectedColumnTitle = new ColumnTitle(6789L, newTopic, "TITLE", teamId);
+        Column expectedColumn = new Column(6789L, newTopic, "TITLE", teamId);
         Thought expectedThought = Thought.builder().id(1234L).columnId(6789L).build();
         given(this.thoughtRepository.findByTeamIdAndId(teamId, 1234L)).willReturn(Optional.of(thought));
         given(this.thoughtRepository.save(expectedThought)).willReturn(expectedThought);
-        given(this.columnTitleRepository.findByTeamIdAndId(teamId, 6789L)).willReturn(Optional.of(expectedColumnTitle));
+        given(this.columnRepository.findByTeamIdAndId(teamId, 6789L)).willReturn(Optional.of(expectedColumn));
 
         Thought actualThought = thoughtService.updateColumn(teamId, 1234L, 6789L);
 
@@ -122,11 +122,11 @@ class ThoughtServiceTest {
         var teamId = "the-team";
         String newTopic = "right-column";
         Thought thought = Thought.builder().id(1234L).build();
-        ColumnTitle expectedColumnTitle = new ColumnTitle(6789L, newTopic, "TITLE", teamId);
+        Column expectedColumn = new Column(6789L, newTopic, "TITLE", teamId);
         Thought expectedThought = Thought.builder().id(1234L).columnId(6789L).build();
         given(this.thoughtRepository.findByTeamIdAndId(teamId, 1234L)).willReturn(Optional.of(thought));
         given(this.thoughtRepository.save(expectedThought)).willReturn(expectedThought);
-        given(this.columnTitleRepository.findByTeamIdAndId(teamId, 6789L)).willReturn(Optional.of(expectedColumnTitle));
+        given(this.columnRepository.findByTeamIdAndId(teamId, 6789L)).willReturn(Optional.of(expectedColumn));
 
         thoughtService.updateColumn(teamId, 1234L, 6789L);
 
@@ -137,7 +137,7 @@ class ThoughtServiceTest {
 
     @Test
     public void updateColumn_WithColumnThatDoesNotExist_ThrowsColumnTitleNotFoundException() {
-        given(this.columnTitleRepository.findByTeamIdAndId("the-team", 6789L)).willReturn(Optional.empty());
+        given(this.columnRepository.findByTeamIdAndId("the-team", 6789L)).willReturn(Optional.empty());
         assertThatThrownBy(() -> thoughtService.updateColumn("the-team", 1234L, 6789L))
                 .isInstanceOf(ColumnTitleNotFoundException.class);
     }
@@ -178,7 +178,7 @@ class ThoughtServiceTest {
     @Test
     void shouldCreateThought() {
         var message = "Hello there!";
-        var columnTitle = ColumnTitle.builder().id(6789L).title("Happy").build();
+        var columnTitle = Column.builder().id(6789L).title("Happy").build();
         var request = new CreateThoughtRequest(
             message,
             columnTitle.getId()
@@ -195,7 +195,7 @@ class ThoughtServiceTest {
         );
         var expectedEvent = new WebsocketThoughtEvent("the-team", UPDATE, expectedThought);
 
-        given(columnTitleRepository.findByTeamIdAndId("the-team", 6789L)).willReturn(Optional.of(columnTitle));
+        given(columnRepository.findByTeamIdAndId("the-team", 6789L)).willReturn(Optional.of(columnTitle));
         given(thoughtRepository.save(any(Thought.class))).willAnswer(a -> {
             var thought = a.<Thought>getArgument(0);
             thought.setId(1234L);

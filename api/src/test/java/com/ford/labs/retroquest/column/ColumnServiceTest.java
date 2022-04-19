@@ -34,18 +34,16 @@ import static org.mockito.Mockito.*;
 
 class ColumnServiceTest {
 
-    private final ColumnTitleRepository columnTitleRepository = mock(ColumnTitleRepository.class);
+    private final ColumnRepository columnRepository = mock(ColumnRepository.class);
     private final MeterRegistry meterRegistry = mock(MeterRegistry.class);
     private final WebsocketService websocketService = mock(WebsocketService.class);
-    private final ColumnService service = new ColumnService(columnTitleRepository, meterRegistry, websocketService);
-
-    private final ColumnTitle.ColumnTitleBuilder columnTitleBuilder = ColumnTitle.builder();
+    private final ColumnService service = new ColumnService(columnRepository, meterRegistry, websocketService);
 
     @Test
     public void getColumns_ReturnsSortedListOfColumns() {
-        var expectedColumns = List.of(new Column(1L, "title 1", "happy"), new Column(2L, "title 2", "unhappy"));
-        var savedColumnTitles = List.of(new ColumnTitle(2L, "unhappy", "title 2", "team id"), new ColumnTitle(1L, "happy", "title 1", "team id"));
-        when(columnTitleRepository.findAllByTeamId("team id")).thenReturn(savedColumnTitles);
+        var expectedColumns = List.of(new Column(1L, "happy", "title 1", "teamId"), new Column(2L, "unhappy", "title 2", "teamId"));
+        var savedColumns = List.of(new Column(2L, "unhappy", "title 2", "teamId"), new Column(1L, "happy", "title 1", "teamId"));
+        when(columnRepository.findAllByTeamId("team id")).thenReturn(savedColumns);
 
         var actualColumns = service.getColumns("team id");
 
@@ -57,13 +55,13 @@ class ColumnServiceTest {
         var teamId = "some team ID";
         var newColumnName = "Some new Title";
         var columnId = 42L;
-        var savedColumn = columnTitleBuilder.id(columnId).topic("happy").title("Some Title").teamId(teamId).build();
-        var expectedColumn = columnTitleBuilder.id(columnId).topic("happy").title("Some new Title").teamId(teamId).build();
+        var savedColumn = new Column(columnId, "happy", "Some Title", teamId);
+        var expectedColumn = new Column(columnId, "happy", "Some new Title", teamId);
         var expectedEvent = new WebsocketColumnTitleEvent(teamId, WebsocketEventType.UPDATE, expectedColumn);
         var mockedCounter = mock(Counter.class);
 
-        when(columnTitleRepository.findByTeamIdAndId(teamId, columnId)).thenReturn(Optional.of(savedColumn));
-        when(columnTitleRepository.save(expectedColumn)).thenReturn(expectedColumn);
+        when(columnRepository.findByTeamIdAndId(teamId, columnId)).thenReturn(Optional.of(savedColumn));
+        when(columnRepository.save(expectedColumn)).thenReturn(expectedColumn);
         when(meterRegistry.counter("retroquest.columns.changed.count")).thenReturn(mockedCounter);
 
         var savedColumnTitle = service.editColumnTitleName(columnId, newColumnName, teamId );
@@ -82,8 +80,8 @@ class ColumnServiceTest {
 
     @Test
     public void fetchColumnTitle() {
-        var expected = new ColumnTitle(42L, "topic", "title", "teamId");
-        when(columnTitleRepository.findByTeamIdAndId("teamId", 42L)).thenReturn(Optional.of(expected));
+        var expected = new Column(42L, "topic", "title", "teamId");
+        when(columnRepository.findByTeamIdAndId("teamId", 42L)).thenReturn(Optional.of(expected));
         var actual = service.fetchColumnTitle("teamId", 42L);
         assertThat(actual).usingRecursiveComparison().isEqualTo(actual);
     }

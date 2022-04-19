@@ -57,7 +57,7 @@ class BoardServiceTest {
 
     @Test
     void getBoardsForTeamId() {
-        var savedColumns = List.of(new Column(123L, "title", "topic"));
+        var savedColumns = List.of(new Column(123L, "title", "topic", "team1"));
         var expectedBoard = Board.builder()
             .teamId("team1")
             .dateCreated(LocalDate.of(2012, 12, 12))

@@ -17,8 +17,8 @@
 
 package com.ford.labs.retroquest.deprecated_tests;
 
-import com.ford.labs.retroquest.column.ColumnTitle;
-import com.ford.labs.retroquest.column.ColumnTitleRepository;
+import com.ford.labs.retroquest.column.Column;
+import com.ford.labs.retroquest.column.ColumnRepository;
 import com.ford.labs.retroquest.exception.BoardDoesNotExistException;
 import com.ford.labs.retroquest.exception.PasswordInvalidException;
 import com.ford.labs.retroquest.team.*;
@@ -43,7 +43,7 @@ class TeamServiceTest {
     private TeamRepository teamRepository;
 
     @Mock
-    private ColumnTitleRepository columnTitleRepository;
+    private ColumnRepository columnRepository;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -204,14 +204,14 @@ class TeamServiceTest {
         CreateTeamRequest requestedTeam = new CreateTeamRequest("beach-bums", "password");
         teamService.createNewTeam(requestedTeam);
 
-        ColumnTitle happyColumnTitle = ColumnTitle.builder().teamId("beach-bums").topic("happy").title("Happy").build();
-        verify(columnTitleRepository, times(1)).save(happyColumnTitle);
+        Column happyColumn = Column.builder().teamId("beach-bums").topic("happy").title("Happy").build();
+        verify(columnRepository, times(1)).save(happyColumn);
 
-        ColumnTitle confusedColumnTitle = ColumnTitle.builder().teamId("beach-bums").topic("confused").title("Confused").build();
-        verify(columnTitleRepository, times(1)).save(confusedColumnTitle);
+        Column confusedColumn = Column.builder().teamId("beach-bums").topic("confused").title("Confused").build();
+        verify(columnRepository, times(1)).save(confusedColumn);
 
-        ColumnTitle unhappyColumnTitle = ColumnTitle.builder().teamId("beach-bums").topic("unhappy").title("Sad").build();
-        verify(columnTitleRepository, times(1)).save(unhappyColumnTitle);
+        Column unhappyColumn = Column.builder().teamId("beach-bums").topic("unhappy").title("Sad").build();
+        verify(columnRepository, times(1)).save(unhappyColumn);
     }
 
     @Test

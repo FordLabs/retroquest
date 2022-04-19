@@ -17,18 +17,17 @@
 
 package com.ford.labs.retroquest.websocket.events;
 
-import com.ford.labs.retroquest.column.ColumnTitle;
-import com.ford.labs.retroquest.websocket.events.WebsocketColumnTitleEvent;
+import com.ford.labs.retroquest.column.Column;
 import org.junit.jupiter.api.Test;
 
 import static com.ford.labs.retroquest.websocket.events.WebsocketEventType.UPDATE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class WebsocketColumnTitleEventTest {
+class WebsocketColumnEventTest {
 
     @Test
     public void getRoute_returnsTeamSpecificTopic() {
-        var event = new WebsocketColumnTitleEvent("team-id", UPDATE, new ColumnTitle());
+        var event = new WebsocketColumnTitleEvent("team-id", UPDATE, new Column());
         assertThat(event.getRoute()).isEqualTo("/topic/team-id/column-titles");
     }
 

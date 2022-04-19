@@ -20,8 +20,8 @@ package com.ford.labs.retroquest.api;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.board.Board;
 import com.ford.labs.retroquest.board.BoardRepository;
-import com.ford.labs.retroquest.column.ColumnTitle;
-import com.ford.labs.retroquest.column.ColumnTitleRepository;
+import com.ford.labs.retroquest.column.Column;
+import com.ford.labs.retroquest.column.ColumnRepository;
 import com.ford.labs.retroquest.thought.CreateThoughtRequest;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
@@ -51,20 +51,20 @@ class BoardApiTest extends ApiTestBase {
     private ThoughtRepository thoughtRepository;
 
     @Autowired
-    private ColumnTitleRepository columnTitleRepository;
+    private ColumnRepository columnRepository;
 
     @Autowired
     private ThoughtService thoughtService;
 
-    private ColumnTitle columnTitle;
+    private Column column;
 
     @BeforeEach
     void setup() {
         thoughtRepository.deleteAllInBatch();
-        columnTitleRepository.deleteAllInBatch();
+        columnRepository.deleteAllInBatch();
         boardRepository.deleteAllInBatch();
 
-        columnTitle = columnTitleRepository.save(new ColumnTitle(null, "happy", "Happy", teamId));
+        column = columnRepository.save(new Column(null, "happy", "Happy", teamId));
     }
 
     @Test
@@ -115,7 +115,7 @@ class BoardApiTest extends ApiTestBase {
     public void endRetro_ShouldSaveABoardWithThoughts() throws Exception {
         Thought savedThought = thoughtService.createThought(
                 teamId,
-                new CreateThoughtRequest("TEST_MESSAGE", columnTitle.getId())
+                new CreateThoughtRequest("TEST_MESSAGE", column.getId())
         );
 
         mockMvc.perform(put(format("/api/team/%s/end-retro", teamId))
@@ -130,7 +130,7 @@ class BoardApiTest extends ApiTestBase {
     public void endRetro_ShouldRemoveThoughtsWithoutABoard() throws Exception {
         Thought savedThought = thoughtService.createThought(
                 teamId,
-                new CreateThoughtRequest("TEST_MESSAGE", columnTitle.getId())
+                new CreateThoughtRequest("TEST_MESSAGE", column.getId())
         );
 
         mockMvc.perform(put(format("/api/team/%s/end-retro", teamId))

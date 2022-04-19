@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Ford Motor Company
+ * Copyright (c) 2021 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,18 +18,36 @@
 package com.ford.labs.retroquest.column;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NaturalId;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.io.Serializable;
 
 @Data
+@Entity(name = "rq_column")
+@NoArgsConstructor
 @AllArgsConstructor
-public class Column implements Comparable<Column>{
+@Builder(toBuilder=true)
+public class Column implements Serializable, Comparable<Column> {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
+
+    @NaturalId
     private String topic;
 
-    public static Column fromColumnTitle(ColumnTitle columnTitle) {
-        return new Column(columnTitle.getId(), columnTitle.getTitle(), columnTitle.getTopic());
-    }
+    @Builder.Default
+    private String title = "";
+
+    @NaturalId
+    private String teamId;
 
     @Override
     public int compareTo(Column o) {
