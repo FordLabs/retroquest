@@ -42,7 +42,7 @@
 			margin-top: 0.5rem;
 			margin-bottom: 2rem;
 
-			color: main.$dark-gray;
+			color: main.$gray-3;
 			font-size: 1.1rem;
 		}
 	}
@@ -84,6 +84,6 @@
 
 @include main.dark-theme {
 	.radiator-page-title {
-		color: main.$gray;
+		color: main.$gray-1;
 	}
 }

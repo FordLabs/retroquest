@@ -61,10 +61,10 @@
 
 @include main.dark-theme {
 	.count-separator {
-		color: main.$gray;
+		color: main.$gray-1;
 
 		.separator {
-			background: rgba($black, 0.22) none;
+			background: rgba(main.$black, 0.22) none;
 		}
 	}
 }

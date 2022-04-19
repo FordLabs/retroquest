@@ -83,11 +83,11 @@
 @include main.dark-theme {
 	.assignee-container {
 		.label {
-			color: main.$lighter-gray;
+			color: main.$gray-2;
 		}
 
 		.assignee {
-			color: main.$gray;
+			color: main.$gray-1;
 			border-bottom-color: main.$dark-yellow;
 
 			&:focus:not(:read-only) {

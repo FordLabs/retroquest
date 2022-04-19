@@ -165,24 +165,24 @@
 @include main.dark-theme {
 	.header {
 		.right-content {
-			color: main.$gray;
+			color: main.$gray-1;
 		}
 
 		.horizontal-separator {
-			background-color: rgba($black, 0.22);
+			background-color: rgba(main.$black, 0.22);
 			opacity: 1;
 		}
 
 		.team-name {
-			color: rgba(main.$gray, 0.75);
+			color: rgba(main.$gray-1, 0.75);
 		}
 
 		.nav-link {
-			color: rgba(main.$gray, 0.4);
+			color: rgba(main.$gray-1, 0.4);
 
 			&.selected {
-				color: main.$gray;
-				background-color: rgba(main.$gray, 0.2);
+				color: main.$gray-1;
+				background-color: rgba(main.$gray-1, 0.2);
 			}
 		}
 	}

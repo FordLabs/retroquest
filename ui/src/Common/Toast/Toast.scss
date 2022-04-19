@@ -15,8 +15,7 @@
  *  limitations under the License.
  */
 
-@import '../../Styles/colors';
-@import '../../Styles/mixins';
+@use '../../Styles/main';
 
 .toast {
 	display: flex;
@@ -26,12 +25,12 @@
 
 	padding: 0.625rem 0 0.625rem 1rem;
 
-	color: $black;
+	color: main.$black;
 
 	font-family: 'Quicksand', sans-serif;
 
-	background-color: $white;
-	border-left: 1.125rem solid $dark-gray;
+	background-color: main.$white;
+	border-left: 1.125rem solid main.$gray-3;
 	border-radius: 6px;
 	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.25);
 
@@ -53,71 +52,71 @@
 		margin: 0;
 		padding: 0 1.25rem;
 
-		color: $dark-gray;
+		color: main.$gray-3;
 		font-weight: bold;
 		font-size: 0.75rem;
 		text-transform: uppercase;
 
-		border-left: 1px solid $gray;
+		border-left: 1px solid main.$gray-1;
 	}
 
 	&.error {
-		border-left: 1.125rem solid $red;
+		border-left: 1.125rem solid main.$red;
 
 		.title {
-			color: $red;
+			color: main.$red;
 		}
 	}
 
 	&.warning {
-		border-left: 1.125rem solid $yellow;
+		border-left: 1.125rem solid main.$yellow;
 
 		.title {
-			color: $yellow;
+			color: main.$yellow;
 		}
 	}
 
 	&.info {
-		border-left: 1.125rem solid $blue;
+		border-left: 1.125rem solid main.$blue;
 
 		.title {
-			color: $blue;
+			color: main.$blue;
 		}
 	}
 }
 
-@include dark-theme {
+@include main.dark-theme {
 	.toast {
-		color: $gray;
+		color: main.$gray-1;
 
-		background-color: $asphalt;
-		border-left: 1.125rem solid $dark-gray;
+		background-color: main.$asphalt;
+		border-left: 1.125rem solid main.$gray-3;
 
 		.close-button {
-			border-left: 1px solid $dark-gray;
+			border-left: 1px solid main.$gray-3;
 		}
 
 		&.error {
-			border-left: 1.125rem solid $red;
+			border-left: 1.125rem solid main.$red;
 
 			.title {
-				color: $red;
+				color: main.$red;
 			}
 		}
 
 		&.warning {
-			border-left: 1.125rem solid $dark-yellow;
+			border-left: 1.125rem solid main.$dark-yellow;
 
 			.title {
-				color: $dark-yellow;
+				color: main.$dark-yellow;
 			}
 		}
 
 		&.info {
-			border-left: 1.125rem solid $dark-blue;
+			border-left: 1.125rem solid main.$dark-blue;
 
 			.title {
-				color: $dark-blue;
+				color: main.$dark-blue;
 			}
 		}
 	}

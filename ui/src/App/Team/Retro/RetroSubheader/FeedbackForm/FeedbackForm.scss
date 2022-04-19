@@ -106,22 +106,22 @@
 	.feedback-form {
 		.comments-section {
 			.label {
-				color: main.$gray;
+				color: main.$gray-1;
 			}
 
 			.comments-textarea {
-				color: main.$gray;
+				color: main.$gray-1;
 			}
 		}
 
 		.feedback-email-section {
 			.label {
-				color: rgba(main.$gray, 0.4);
+				color: rgba(main.$gray-1, 0.4);
 			}
 
 			.email-input {
-				color: main.$gray;
-				border-bottom-color: rgba(main.$gray, 0.15);
+				color: main.$gray-1;
+				border-bottom-color: rgba(main.$gray-1, 0.15);
 			}
 		}
 

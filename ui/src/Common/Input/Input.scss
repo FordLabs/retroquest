@@ -73,10 +73,10 @@
 @include main.dark-theme {
 	.input-group {
 		.input-text {
-			color: main.$gray;
+			color: main.$gray-1;
 
 			background-color: main.$asphalt;
-			box-shadow: 0 0 0 1px main.$dark-gray;
+			box-shadow: 0 0 0 1px main.$gray-3;
 
 			&:focus {
 				box-shadow: 0 0 0 2px main.$turquoise;

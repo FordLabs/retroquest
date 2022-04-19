@@ -61,7 +61,7 @@
 @include main.dark-theme {
 	.archived-column {
 		.archived-thought {
-			color: main.$gray;
+			color: main.$gray-1;
 			background-color: main.$light-asphalt;
 
 			.archived-thought-footer {

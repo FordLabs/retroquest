@@ -68,7 +68,7 @@
 @include main.dark-theme {
 	.thought-item-with-add-action {
 		.add-action-item-button {
-			color: main.$gray;
+			color: main.$gray-1;
 			background-color: main.$light-asphalt;
 		}
 	}

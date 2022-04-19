@@ -35,7 +35,7 @@
 	}
 
 	.dark-theme & {
-		background-color: colors.$black-opaque;
+		background-color: rgba(colors.$black, 0.22);
 	}
 }
 
