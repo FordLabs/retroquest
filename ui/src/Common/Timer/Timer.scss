@@ -38,6 +38,10 @@ $timer-height: 2.81rem;
 
 		border: 2px solid main.$asphalt;
 		border-radius: 5px;
+
+		:first-child {
+			width: 3.85rem;
+		}
 	}
 
 	.timer-count-down,
