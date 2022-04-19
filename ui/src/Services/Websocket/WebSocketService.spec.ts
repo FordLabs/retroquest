@@ -46,7 +46,7 @@ describe('webSocketService', () => {
 		const webSocketMessageHandler = jest.fn();
 		webSocketService.subscribeToColumns(teamId, webSocketMessageHandler);
 
-		const expectedDestination = `/topic/${teamId}/column-titles`;
+		const expectedDestination = `/topic/${teamId}/columns`;
 		expect(mockClient.subscribe).toHaveBeenCalledWith(
 			expectedDestination,
 			expect.any(Function),

@@ -21,7 +21,7 @@ import com.ford.labs.retroquest.column.Column;
 
 public class WebsocketColumnEvent extends WebsocketEvent{
 
-    private static final String ROUTE_STRING = "/topic/%s/column-titles";
+    private static final String ROUTE_STRING = "/topic/%s/columns";
     private final String teamId;
 
     public WebsocketColumnEvent(String teamId, WebsocketEventType type, Column payload) {
