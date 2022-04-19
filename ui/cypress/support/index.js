@@ -29,6 +29,7 @@
 // You can read more here:
 // https://on.cypress.io/configuration
 // ***********************************************************
+import 'cypress-axe';
 import './commands';
 
 Cypress.Cookies.defaults({

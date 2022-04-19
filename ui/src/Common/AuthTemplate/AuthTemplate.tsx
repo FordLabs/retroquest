@@ -32,7 +32,7 @@ export default function AuthTemplate(props: AuthTemplateProps): JSX.Element {
 	const { header, subHeader, children } = props;
 
 	return (
-		<div className="auth-template">
+		<main className="auth-template">
 			<div className="auth-template-container">
 				<RetroQuestLogo />
 				<div className="auth-template-header">
@@ -53,6 +53,6 @@ export default function AuthTemplate(props: AuthTemplateProps): JSX.Element {
 				</div>
 			</div>
 			<Contributors />
-		</div>
+		</main>
 	);
 }

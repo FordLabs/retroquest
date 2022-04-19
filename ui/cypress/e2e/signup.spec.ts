@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 import { CREATE_TEAM_PAGE_PATH } from '../../src/RouteConstants';
+import Theme from '../../src/Types/Theme';
 import { getTeamCredentials } from '../support/helpers';
 import TeamCredentials from '../support/types/teamCredentials';
 
@@ -24,6 +25,8 @@ describe('Signup', () => {
 	beforeEach(() => {
 		cy.intercept('POST', '/api/team').as('postCreateTeam');
 
+		cy.removeLocalStorage('theme');
+
 		cy.visit(CREATE_TEAM_PAGE_PATH);
 		cy.contains('Create a new Team!').should('exist');
 
@@ -31,6 +34,18 @@ describe('Signup', () => {
 		cy.get('[data-testid=passwordInput]').as('passwordInput');
 		cy.get('[data-testid=confirmPasswordInput]').as('confirmPasswordInput');
 		cy.get('[data-testid=formSubmitButton]').as('createButton');
+	});
+
+	describe('Accessibility', () => {
+		it('Light Theme', () => {
+			cy.testAccessibility();
+		});
+
+		it('Dark Theme', () => {
+			cy.setLocalStorage('theme', Theme.DARK);
+			cy.reload();
+			cy.testAccessibility();
+		});
 	});
 
 	it('Create a new team and go to retro page', () => {

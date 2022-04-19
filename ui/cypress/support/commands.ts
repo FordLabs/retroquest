@@ -27,6 +27,7 @@
 //
 //
 import '@testing-library/cypress/add-commands';
+import 'cypress-localstorage-commands';
 
 import { getRetroPagePathWithTeamId } from '../../src/RouteConstants';
 import {
@@ -36,6 +37,11 @@ import {
 
 import TeamCredentials from './types/teamCredentials';
 import Topic from './types/Topic';
+
+Cypress.Commands.add('testAccessibility', () => {
+	cy.injectAxe();
+	cy.checkA11y();
+});
 
 Cypress.Commands.add(
 	'createTeam',

@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 import 'cypress-jest-adapter';
+import 'cypress-axe';
 
 import Topic from '../../src/types/Topic';
 
@@ -23,6 +24,8 @@ import TeamCredentials from './types/teamCredentials';
 declare global {
 	namespace Cypress {
 		interface Chainable {
+			testAccessibility(): Chainable<Element>;
+
 			login(teamCredentials: TeamCredentials): Chainable<Response<unknown>>;
 
 			createTeam(teamCredentials: TeamCredentials): Chainable<void>;
