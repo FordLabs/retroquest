@@ -44,11 +44,11 @@ describe('Column Service', () => {
 		});
 	});
 
-	describe('updateColumnTitle', () => {
+	describe('updateTitle', () => {
 		it('should update title for specified column', () => {
 			const columnId = 1;
 			const newTitle = 'This is New!';
-			ColumnService.updateColumnTitle(teamId, columnId, newTitle);
+			ColumnService.updateTitle(teamId, columnId, newTitle);
 			expect(axios.put).toHaveBeenCalledWith(
 				`/api/team/${teamId}/column/${columnId}/title`,
 				{ title: newTitle },

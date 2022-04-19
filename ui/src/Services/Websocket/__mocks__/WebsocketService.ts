@@ -21,7 +21,7 @@ class WebsocketService {
 	});
 	disconnect = jest.fn();
 	subscribe = jest.fn();
-	subscribeToColumnTitle = jest.fn();
+	subscribeToColumns = jest.fn();
 	subscribeToThoughts = jest.fn();
 	subscribeToActionItems = jest.fn();
 	subscribeToEndRetro = jest.fn();

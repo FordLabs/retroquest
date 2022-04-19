@@ -133,7 +133,7 @@ describe('ThoughtsColumn', () => {
 			'Something Else{enter}'
 		);
 		await waitFor(() =>
-			expect(ColumnService.updateColumnTitle).toHaveBeenCalledWith(
+			expect(ColumnService.updateTitle).toHaveBeenCalledWith(
 				'my-team',
 				1,
 				'Something Else'

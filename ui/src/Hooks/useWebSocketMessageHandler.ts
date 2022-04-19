@@ -23,7 +23,7 @@ import { ActionItemState } from '../State/ActionItemState';
 import { ColumnsState } from '../State/ColumnsState';
 import { ThoughtsState } from '../State/ThoughtsState';
 import Action from '../Types/Action';
-import { ColumnTitle } from '../Types/ColumnTitle';
+import { Column } from '../Types/Column';
 import Thought from '../Types/Thought';
 
 enum MessageType {
@@ -39,7 +39,7 @@ interface IncomingMessage {
 export type WebsocketMessageHandlerType = ({ body }: Partial<IMessage>) => void;
 
 interface WebsocketCallback {
-	columnTitleMessageHandler: WebsocketMessageHandlerType;
+	columnMessageHandler: WebsocketMessageHandlerType;
 	thoughtMessageHandler: WebsocketMessageHandlerType;
 	actionItemMessageHandler: WebsocketMessageHandlerType;
 	endRetroMessageHandler: WebsocketMessageHandlerType;
@@ -71,17 +71,17 @@ function useWebSocketMessageHandler(): WebsocketCallback {
 		});
 	};
 
-	const columnTitleMessageHandler = useCallback(
+	const columnMessageHandler = useCallback(
 		({ body }: Partial<IMessage>) => {
 			const incomingMessage: IncomingMessage = JSON.parse(body || '');
-			const columnTitle = incomingMessage.payload as ColumnTitle;
+			const newColumn = incomingMessage.payload as Column;
 			setColumns((currentState) => {
 				const updateItem =
-					currentState.findIndex((i) => i.id === columnTitle.id) > -1;
+					currentState.findIndex((i) => i.id === newColumn.id) > -1;
 				if (updateItem)
 					return currentState.map((column) =>
-						column.id === columnTitle.id
-							? { ...column, title: columnTitle.title }
+						column.id === newColumn.id
+							? { ...column, title: newColumn.title }
 							: column
 					);
 
@@ -119,7 +119,7 @@ function useWebSocketMessageHandler(): WebsocketCallback {
 	}, [setActionItems, setThoughts]);
 
 	return {
-		columnTitleMessageHandler,
+		columnMessageHandler,
 		thoughtMessageHandler,
 		actionItemMessageHandler,
 		endRetroMessageHandler,

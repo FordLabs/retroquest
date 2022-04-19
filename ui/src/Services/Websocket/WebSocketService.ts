@@ -50,7 +50,7 @@ class WebSocketService {
 		);
 	}
 
-	subscribeToColumnTitle(
+	subscribeToColumns(
 		teamId: string,
 		webSocketMessageHandler: WebsocketMessageHandlerType
 	): void {

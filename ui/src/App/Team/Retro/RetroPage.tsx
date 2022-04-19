@@ -64,7 +64,7 @@ function RetroPage(): ReactElement {
 	const isMobileView = (): boolean => window.innerWidth <= 610;
 
 	const {
-		columnTitleMessageHandler,
+		columnMessageHandler,
 		thoughtMessageHandler,
 		actionItemMessageHandler,
 		endRetroMessageHandler,
@@ -110,7 +110,7 @@ function RetroPage(): ReactElement {
 		if (!isLoading) {
 			if (isMobileView()) addTouchListeners();
 			webSocket.connect(() => {
-				webSocket.subscribeToColumnTitle(team.id, columnTitleMessageHandler);
+				webSocket.subscribeToColumns(team.id, columnMessageHandler);
 				webSocket.subscribeToThoughts(team.id, thoughtMessageHandler);
 				webSocket.subscribeToActionItems(team.id, actionItemMessageHandler);
 				webSocket.subscribeToEndRetro(team.id, endRetroMessageHandler);
@@ -123,7 +123,7 @@ function RetroPage(): ReactElement {
 	}, [
 		isLoading,
 		team.id,
-		columnTitleMessageHandler,
+		columnMessageHandler,
 		thoughtMessageHandler,
 		actionItemMessageHandler,
 		endRetroMessageHandler,

@@ -208,43 +208,43 @@ describe('Retro Member Journey', () => {
 	it('Navigate between columns on mobile', () => {
 		cy.viewport(414, 736);
 
-		const happyColumnTitle = 'Happy';
-		const confusedColumnTitle = 'Confused';
-		const sadColumnTitle = 'Sad';
-		const actionItemsColumnTitle = 'Action Items';
+		const happyColumn = 'Happy';
+		const confusedColumn = 'Confused';
+		const sadColumn = 'Sad';
+		const actionItemsColumn = 'Action Items';
 
-		cy.findByText(happyColumnTitle).should('be.visible');
-		cy.findByText(confusedColumnTitle).should('not.be.visible');
-		cy.findByText(sadColumnTitle).should('not.be.visible');
-		cy.findByText(actionItemsColumnTitle).should('not.be.visible');
+		cy.findByText(happyColumn).should('be.visible');
+		cy.findByText(confusedColumn).should('not.be.visible');
+		cy.findByText(sadColumn).should('not.be.visible');
+		cy.findByText(actionItemsColumn).should('not.be.visible');
 
 		cy.get('[data-testid=mobileColumnNav-3]').click();
 
-		cy.findByText(happyColumnTitle).should('not.be.visible');
-		cy.findByText(confusedColumnTitle).should('not.be.visible');
-		cy.findByText(sadColumnTitle).should('not.be.visible');
-		cy.findByText(actionItemsColumnTitle).should('be.visible');
+		cy.findByText(happyColumn).should('not.be.visible');
+		cy.findByText(confusedColumn).should('not.be.visible');
+		cy.findByText(sadColumn).should('not.be.visible');
+		cy.findByText(actionItemsColumn).should('be.visible');
 
 		cy.get('[data-testid=mobileColumnNav-2]').click();
 
-		cy.findByText(happyColumnTitle).should('not.be.visible');
-		cy.findByText(confusedColumnTitle).should('not.be.visible');
-		cy.findByText(sadColumnTitle).should('be.visible');
-		cy.findByText(actionItemsColumnTitle).should('not.be.visible');
+		cy.findByText(happyColumn).should('not.be.visible');
+		cy.findByText(confusedColumn).should('not.be.visible');
+		cy.findByText(sadColumn).should('be.visible');
+		cy.findByText(actionItemsColumn).should('not.be.visible');
 
 		cy.get('[data-testid=mobileColumnNav-1]').click();
 
-		cy.findByText(happyColumnTitle).should('not.be.visible');
-		cy.findByText(confusedColumnTitle).should('be.visible');
-		cy.findByText(sadColumnTitle).should('not.be.visible');
-		cy.findByText(actionItemsColumnTitle).should('not.be.visible');
+		cy.findByText(happyColumn).should('not.be.visible');
+		cy.findByText(confusedColumn).should('be.visible');
+		cy.findByText(sadColumn).should('not.be.visible');
+		cy.findByText(actionItemsColumn).should('not.be.visible');
 
 		cy.get('[data-testid=mobileColumnNav-0]').click();
 
-		cy.findByText(happyColumnTitle).should('be.visible');
-		cy.findByText(confusedColumnTitle).should('not.be.visible');
-		cy.findByText(sadColumnTitle).should('not.be.visible');
-		cy.findByText(actionItemsColumnTitle).should('not.be.visible');
+		cy.findByText(happyColumn).should('be.visible');
+		cy.findByText(confusedColumn).should('not.be.visible');
+		cy.findByText(sadColumn).should('not.be.visible');
+		cy.findByText(actionItemsColumn).should('not.be.visible');
 	});
 
 	describe('Settings', () => {

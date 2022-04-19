@@ -27,7 +27,7 @@ const ColumnService = {
 		return axios.get(url, getAuthConfig()).then((response) => response.data);
 	},
 
-	updateColumnTitle(
+	updateTitle(
 		teamId: string,
 		columnId: number,
 		title: string
