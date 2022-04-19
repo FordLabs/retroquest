@@ -54,7 +54,7 @@ class WebSocketService {
 		teamId: string,
 		webSocketMessageHandler: WebsocketMessageHandlerType
 	): void {
-		const destination = `/topic/${teamId}/column-titles`;
+		const destination = `/topic/${teamId}/columns`;
 		this.subscribe(destination, webSocketMessageHandler);
 	}
 
