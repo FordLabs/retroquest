@@ -83,7 +83,6 @@ function Timer(): JSX.Element {
 						setModalContents(null);
 					}}
 					onAddTime={() => {
-						setCurrentTimerOption(TimerOption.ONE_MINUTE);
 						setSecondsLeft(TimerOption.ONE_MINUTE);
 						startTimer();
 						setModalContents(null);
