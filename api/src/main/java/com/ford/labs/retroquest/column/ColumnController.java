@@ -67,6 +67,6 @@ public class ColumnController {
         @RequestBody UpdateColumnTitleRequest request,
         @PathVariable("columnId") Long columnId
     ) {
-        columnService.editColumnTitleName(columnId, request.title(), teamId);
+        columnService.editTitle(columnId, request.title(), teamId);
     }
 }

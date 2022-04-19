@@ -17,8 +17,8 @@
 
 package com.ford.labs.retroquest.column;
 
-import com.ford.labs.retroquest.exception.ColumnTitleNotFoundException;
-import com.ford.labs.retroquest.websocket.events.WebsocketColumnTitleEvent;
+import com.ford.labs.retroquest.exception.ColumnNotFoundException;
+import com.ford.labs.retroquest.websocket.events.WebsocketColumnEvent;
 import com.ford.labs.retroquest.websocket.events.WebsocketEventType;
 import com.ford.labs.retroquest.websocket.WebsocketService;
 import io.micrometer.core.instrument.Counter;
@@ -57,16 +57,16 @@ class ColumnServiceTest {
         var columnId = 42L;
         var savedColumn = new Column(columnId, "happy", "Some Title", teamId);
         var expectedColumn = new Column(columnId, "happy", "Some new Title", teamId);
-        var expectedEvent = new WebsocketColumnTitleEvent(teamId, WebsocketEventType.UPDATE, expectedColumn);
+        var expectedEvent = new WebsocketColumnEvent(teamId, WebsocketEventType.UPDATE, expectedColumn);
         var mockedCounter = mock(Counter.class);
 
         when(columnRepository.findByTeamIdAndId(teamId, columnId)).thenReturn(Optional.of(savedColumn));
         when(columnRepository.save(expectedColumn)).thenReturn(expectedColumn);
         when(meterRegistry.counter("retroquest.columns.changed.count")).thenReturn(mockedCounter);
 
-        var savedColumnTitle = service.editColumnTitleName(columnId, newColumnName, teamId );
+        var actualColumn = service.editTitle(columnId, newColumnName, teamId );
 
-        assertThat(savedColumnTitle).usingRecursiveComparison().isEqualTo(expectedColumn);
+        assertThat(actualColumn).usingRecursiveComparison().isEqualTo(expectedColumn);
         verify(mockedCounter, times(1)).increment();
         verify(websocketService).publishEvent(expectedEvent);
     }
@@ -74,22 +74,22 @@ class ColumnServiceTest {
     @Test
     void throws_column_title_not_found_exception_when_column_title_not_in_db() {
         assertThatThrownBy(() ->
-                service.editColumnTitleName(42L, "some name", "some team id")
-        ).isInstanceOf(ColumnTitleNotFoundException.class);
+                service.editTitle(42L, "some name", "some team id")
+        ).isInstanceOf(ColumnNotFoundException.class);
     }
 
     @Test
-    public void fetchColumnTitle() {
+    public void fetchColumn() {
         var expected = new Column(42L, "topic", "title", "teamId");
         when(columnRepository.findByTeamIdAndId("teamId", 42L)).thenReturn(Optional.of(expected));
-        var actual = service.fetchColumnTitle("teamId", 42L);
+        var actual = service.fetchColumn("teamId", 42L);
         assertThat(actual).usingRecursiveComparison().isEqualTo(actual);
     }
 
     @Test
-    public void fetchColumnTitle_WithMissingColumnTitle_ThrowsColumnNotFoundException() {
+    public void fetchColumn_WithMissingColumn_ThrowsColumnNotFoundException() {
         assertThatThrownBy(() ->
-                service.fetchColumnTitle("some team id", 42L)
-        ).isInstanceOf(ColumnTitleNotFoundException.class);
+                service.fetchColumn("some team id", 42L)
+        ).isInstanceOf(ColumnNotFoundException.class);
     }
 }

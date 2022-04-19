@@ -17,9 +17,9 @@
 
 package com.ford.labs.retroquest.column;
 
-import com.ford.labs.retroquest.exception.ColumnTitleNotFoundException;
+import com.ford.labs.retroquest.exception.ColumnNotFoundException;
 import com.ford.labs.retroquest.websocket.WebsocketService;
-import com.ford.labs.retroquest.websocket.events.WebsocketColumnTitleEvent;
+import com.ford.labs.retroquest.websocket.events.WebsocketColumnEvent;
 import com.ford.labs.retroquest.websocket.events.WebsocketEventType;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.stereotype.Service;
@@ -43,20 +43,20 @@ public class ColumnService {
         return columnRepository.findAllByTeamId(teamId).stream().sorted().toList();
     }
 
-    public Column editColumnTitleName(Long columnId, String newColumnName, String teamId) {
-        var existingColumnTitle = fetchColumnTitle(teamId, columnId);
-        existingColumnTitle.setTitle(newColumnName);
+    public Column editTitle(Long columnId, String title, String teamId) {
+        var existingColumn = fetchColumn(teamId, columnId);
+        existingColumn.setTitle(title);
 
-        Column newColumn = columnRepository.save(existingColumnTitle);
+        Column newColumn = columnRepository.save(existingColumn);
 
-        websocketService.publishEvent(new WebsocketColumnTitleEvent(teamId, WebsocketEventType.UPDATE, newColumn));
+        websocketService.publishEvent(new WebsocketColumnEvent(teamId, WebsocketEventType.UPDATE, newColumn));
 
         meterRegistry.counter("retroquest.columns.changed.count").increment();
 
         return newColumn;
     }
 
-    public Column fetchColumnTitle(String teamId, Long columnId) {
-        return columnRepository.findByTeamIdAndId(teamId, columnId).orElseThrow(ColumnTitleNotFoundException::new);
+    public Column fetchColumn(String teamId, Long columnId) {
+        return columnRepository.findByTeamIdAndId(teamId, columnId).orElseThrow(ColumnNotFoundException::new);
     }
 }
