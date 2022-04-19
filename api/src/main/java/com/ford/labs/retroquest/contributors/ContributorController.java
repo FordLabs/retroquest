@@ -37,7 +37,7 @@ public class ContributorController {
     }
 
     @GetMapping("/api/contributors")
-    @Operation(summary = "Gets the all of the contributors to Retroquest", description = "getColumnTitlesForTeam")
+    @Operation(summary = "Gets the all of the contributors to Retroquest", description = "getContributorsToRetroQuest")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public List<Contributor> getContributors() {
         return contributorService.getContributors();

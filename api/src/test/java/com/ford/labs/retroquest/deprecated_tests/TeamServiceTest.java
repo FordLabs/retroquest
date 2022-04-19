@@ -197,7 +197,7 @@ class TeamServiceTest {
     }
 
     @Test
-    void creatingTeamAlsoCreatesThreeColumnTitles() {
+    void creatingTeamAlsoCreatesThreeColumns() {
         when(teamRepository.save(any(Team.class))).then(returnsFirstArg());
         when(teamRepository.findTeamByUri("beach-bums")).thenReturn(Optional.empty());
 

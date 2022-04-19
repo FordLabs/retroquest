@@ -17,5 +17,5 @@
 
 package com.ford.labs.retroquest.exception;
 
-public class ColumnTitleNotFoundException extends RuntimeException{
+public class ColumnNotFoundException extends RuntimeException{
 }

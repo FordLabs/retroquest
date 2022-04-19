@@ -27,7 +27,7 @@ class WebsocketColumnEventTest {
 
     @Test
     public void getRoute_returnsTeamSpecificTopic() {
-        var event = new WebsocketColumnTitleEvent("team-id", UPDATE, new Column());
+        var event = new WebsocketColumnEvent("team-id", UPDATE, new Column());
         assertThat(event.getRoute()).isEqualTo("/topic/team-id/column-titles");
     }
 

@@ -19,7 +19,7 @@ package com.ford.labs.retroquest.thought;
 
 import com.ford.labs.retroquest.column.Column;
 import com.ford.labs.retroquest.column.ColumnRepository;
-import com.ford.labs.retroquest.exception.ColumnTitleNotFoundException;
+import com.ford.labs.retroquest.exception.ColumnNotFoundException;
 import com.ford.labs.retroquest.exception.ThoughtNotFoundException;
 import com.ford.labs.retroquest.websocket.WebsocketService;
 import com.ford.labs.retroquest.websocket.events.WebsocketEvent;
@@ -136,10 +136,10 @@ class ThoughtServiceTest {
     }
 
     @Test
-    public void updateColumn_WithColumnThatDoesNotExist_ThrowsColumnTitleNotFoundException() {
+    public void updateColumn_WithColumnThatDoesNotExist_ThrowsColumnNotFoundException() {
         given(this.columnRepository.findByTeamIdAndId("the-team", 6789L)).willReturn(Optional.empty());
         assertThatThrownBy(() -> thoughtService.updateColumn("the-team", 1234L, 6789L))
-                .isInstanceOf(ColumnTitleNotFoundException.class);
+                .isInstanceOf(ColumnNotFoundException.class);
     }
 
     @Test
@@ -178,10 +178,10 @@ class ThoughtServiceTest {
     @Test
     void shouldCreateThought() {
         var message = "Hello there!";
-        var columnTitle = Column.builder().id(6789L).title("Happy").build();
+        var column = Column.builder().id(6789L).title("Happy").build();
         var request = new CreateThoughtRequest(
             message,
-            columnTitle.getId()
+            column.getId()
         );
 
         var expectedThought = new Thought(
@@ -195,7 +195,7 @@ class ThoughtServiceTest {
         );
         var expectedEvent = new WebsocketThoughtEvent("the-team", UPDATE, expectedThought);
 
-        given(columnRepository.findByTeamIdAndId("the-team", 6789L)).willReturn(Optional.of(columnTitle));
+        given(columnRepository.findByTeamIdAndId("the-team", 6789L)).willReturn(Optional.of(column));
         given(thoughtRepository.save(any(Thought.class))).willAnswer(a -> {
             var thought = a.<Thought>getArgument(0);
             thought.setId(1234L);

@@ -34,8 +34,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Column Title with that ID not found")
-    @ExceptionHandler(ColumnTitleNotFoundException.class)
-    public void columnTitleNotFound(){
+    @ExceptionHandler(ColumnNotFoundException.class)
+    public void columnNotFound(){
         // Used by Spring for Controller Advice
     }
 
