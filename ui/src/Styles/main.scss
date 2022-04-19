@@ -39,11 +39,11 @@ body {
 	height: 100%;
 	overflow: auto;
 
-	background-color: colors.$background-color-light;
+	background-color: colors.$gray;
 
 	/* stylelint-disable selector-no-qualifying-type */
 	&.dark-theme {
-		background-color: colors.$background-color-dark;
+		background-color: colors.$dark-asphalt;
 	}
 
 	.root {

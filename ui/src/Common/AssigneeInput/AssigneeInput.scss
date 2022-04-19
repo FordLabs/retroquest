@@ -87,7 +87,7 @@
 		}
 
 		.assignee {
-			color: main.$background-gray;
+			color: main.$gray;
 			border-bottom-color: main.$dark-yellow;
 
 			&:focus:not(:read-only) {
