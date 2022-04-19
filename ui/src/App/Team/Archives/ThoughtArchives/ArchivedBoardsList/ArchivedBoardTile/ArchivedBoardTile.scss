@@ -36,7 +36,7 @@
 		height: 2rem;
 		margin: 1rem;
 
-		background: main.$lighter-asphalt;
+		background: main.$gray;
 		border-radius: 20px;
 	}
 
@@ -57,7 +57,7 @@
 @include main.dark-theme {
 	.archived-board-tile {
 		color: main.$gray;
-		background: main.$task-background-dark;
+		background: main.$light-asphalt;
 
 		.thought-count {
 			background: main.$light-gray;

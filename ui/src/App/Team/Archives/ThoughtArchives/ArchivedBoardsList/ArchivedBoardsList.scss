@@ -34,11 +34,11 @@
 		margin: 0 auto 1rem;
 		padding: 0.5rem;
 
-		background: main.$lighter-asphalt;
+		background: rgba(main.$asphalt, 0.08);
 		border-radius: 6px;
 
 		.sort-button {
-			color: main.$light-asphalt;
+			color: rgba(main.$asphalt, 0.4);
 			font-weight: bold;
 
 			&.selected-asc {
