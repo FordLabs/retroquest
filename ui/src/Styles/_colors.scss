@@ -49,50 +49,9 @@ $dark-purple: #8e44ad;
 
 $belize-hole: #2980b9;
 
-$happy-hover-green: #d6f9d6;
-$confused-hover-blue: #d1f0f8;
-$unhappy-hover-red: #ffdfde;
-$end-retro-button-red: #ff7365;
-
-$guide-link-text-color: #333;
-
-$text-gray: #a5a5a5;
-$text-error: #d22e36;
-$text-off-white: #f2f2f2;
-
-$border-gray: #6b6b6b;
-
-$button-green: #6a9f19;
-$button-blue: #056ccb;
-$button-hover-blue: #058ceb;
-$button-active-blue: #0550a0;
-
-$background-blue: #34495e;
-$background-gray: #ecf0f1;
-$background-hover-gray: #dbdbdb;
-
-$header-background: #f3f3f3;
-
-$app-header: #f5f5f5;
-
-$icon-gray: #555;
-
-$modal-blur: #333;
-
-$positive-action: #65d68a;
-$negative-action: #f16a6a;
-
-@function opacity($color, $level) {
-	@return rgba($color, $level);
-}
-
-$background-color-light: $background-gray;
-$background-color-dark: #2c3e50;
+$task-background-dark: #3c566f;
 
 $temp-count-separator-color: #111;
-
-$task-background-dark: #3c566f;
-$task-footer-separator-dark: opacity($black, 0.08);
-$count-separator-background-dark: opacity($temp-count-separator-color, 0.25);
-$text-field-background-color: #364d64;
-$header-background-color-dark: opacity($black, 0.22);
+$count-separator-background-dark: rgba($temp-count-separator-color, 0.25);
+$task-footer-separator-dark: rgba($black, 0.08);
+$header-background-color-dark: rgba($black, 0.22);

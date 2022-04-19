@@ -101,7 +101,7 @@
 
 @include main.dark-theme {
 	.auth-template {
-		color: main.$background-gray;
-		background-color: main.$background-color-dark;
+		color: main.$gray;
+		background-color: main.$dark-asphalt;
 	}
 }
