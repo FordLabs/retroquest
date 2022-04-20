@@ -85,6 +85,36 @@ function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
 		return sorted ? 'Unsort' : 'Sort';
 	};
 
+	const SortButton = () => (
+		<button
+			className="sort-button"
+			onClick={toggleSort}
+			aria-label={`${getSortedButtonText()} the ${title} column.`}
+			data-testid="columnHeader-sortButton"
+		>
+			<i
+				aria-hidden
+				role="presentation"
+				className={classNames('fas fa-sort-down sort-icon', {
+					'sort-icon-translucent': !sorted,
+				})}
+			/>
+			<Tooltip>{getSortedButtonText()}</Tooltip>
+		</button>
+	);
+
+	const EditButton = () => (
+		<button
+			className="edit-button"
+			onClick={enableEditing}
+			aria-label={`Edit the "${title}" column title.`}
+			data-testid="columnHeader-editTitleButton"
+		>
+			<i role="presentation" className="fas fa-pencil-alt" aria-hidden />
+			<Tooltip>Edit</Tooltip>
+		</button>
+	);
+
 	return (
 		<div
 			{...divProps}
@@ -114,39 +144,9 @@ function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
 				</>
 			) : (
 				<>
-					<p className="display-text">{emojify(title)}</p>
-					{sortable && (
-						<button
-							className="sort-button"
-							onClick={toggleSort}
-							aria-label={`${getSortedButtonText()} the ${title} column.`}
-							data-testid="columnHeader-sortButton"
-						>
-							<i
-								aria-hidden
-								role="presentation"
-								className={classNames('fas fa-sort-down sort-icon', {
-									'sort-icon-translucent': !sorted,
-								})}
-							/>
-							<Tooltip>{getSortedButtonText()}</Tooltip>
-						</button>
-					)}
-					{editable && (
-						<button
-							className="edit-button"
-							onClick={enableEditing}
-							aria-label={`Edit the "${title}" column title.`}
-							data-testid="columnHeader-editTitleButton"
-						>
-							<i
-								role="presentation"
-								className="fas fa-pencil-alt"
-								aria-hidden
-							/>
-							<Tooltip>Edit</Tooltip>
-						</button>
-					)}
+					<h2 className="display-text">{emojify(title)}</h2>
+					{sortable && <SortButton />}
+					{editable && <EditButton />}
 				</>
 			)}
 		</div>
