@@ -54,12 +54,11 @@ function Header() {
 						<img
 							src={theme === Theme.DARK ? lightLogoPath : darkLogoPath}
 							className="logo"
-							title="RetroQuest"
 							alt="RetroQuest"
 						/>
 					</a>
-					<div className="horizontal-separator" />
-					<div className="team-name">{team.name}</div>
+					<span className="horizontal-separator" />
+					<h1 className="team-name">{team.name}</h1>
 				</div>
 				<nav className="center-content">
 					{LINKS.map((link) => (
