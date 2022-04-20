@@ -34,8 +34,8 @@ describe('ColumnHeader', () => {
 		const { container } = render(
 			<ColumnHeader
 				initialTitle="Some title"
-				sortedChanged={mockHandleSortChange}
-				titleChanged={mockHandleTitleChange}
+				onSort={mockHandleSortChange}
+				onTitleChange={mockHandleTitleChange}
 			/>
 		);
 		const results = await axe(container);
@@ -46,7 +46,7 @@ describe('ColumnHeader', () => {
 		render(
 			<ColumnHeader
 				initialTitle="Not Sortable"
-				titleChanged={mockHandleTitleChange}
+				onTitleChange={mockHandleTitleChange}
 			/>
 		);
 		expect(screen.queryByTestId('columnHeader-sortButton')).toBeNull();
@@ -56,8 +56,8 @@ describe('ColumnHeader', () => {
 		render(
 			<ColumnHeader
 				initialTitle="Sortable"
-				sortedChanged={mockHandleSortChange}
-				titleChanged={mockHandleTitleChange}
+				onSort={mockHandleSortChange}
+				onTitleChange={mockHandleTitleChange}
 			/>
 		);
 		expect(screen.queryByTestId('columnHeader-sortButton')).not.toBeNull();
@@ -66,8 +66,8 @@ describe('ColumnHeader', () => {
 	it('should toggle and emit sort state when the sort is toggled', () => {
 		render(
 			<ColumnHeader
-				sortedChanged={mockHandleSortChange}
-				titleChanged={mockHandleTitleChange}
+				onSort={mockHandleSortChange}
+				onTitleChange={mockHandleTitleChange}
 			/>
 		);
 
@@ -80,10 +80,7 @@ describe('ColumnHeader', () => {
 
 	it('should not display edit button when header is read only', () => {
 		render(
-			<ColumnHeader
-				initialTitle="Read Only"
-				sortedChanged={mockHandleSortChange}
-			/>
+			<ColumnHeader initialTitle="Read Only" onSort={mockHandleSortChange} />
 		);
 		expect(screen.queryByTestId('columnHeader-editTitleButton')).toBeNull();
 	});
@@ -92,8 +89,8 @@ describe('ColumnHeader', () => {
 		render(
 			<ColumnHeader
 				initialTitle="Not Read Only"
-				sortedChanged={mockHandleSortChange}
-				titleChanged={mockHandleTitleChange}
+				onSort={mockHandleSortChange}
+				onTitleChange={mockHandleTitleChange}
 			/>
 		);
 		expect(screen.queryByTestId('columnHeader-editTitleButton')).not.toBeNull();
@@ -103,8 +100,8 @@ describe('ColumnHeader', () => {
 		render(
 			<ColumnHeader
 				initialTitle="Change This"
-				sortedChanged={mockHandleSortChange}
-				titleChanged={mockHandleTitleChange}
+				onSort={mockHandleSortChange}
+				onTitleChange={mockHandleTitleChange}
 			/>
 		);
 		expect(screen.queryByText('5')).toBeNull();
@@ -114,8 +111,8 @@ describe('ColumnHeader', () => {
 		render(
 			<ColumnHeader
 				initialTitle="Change This"
-				sortedChanged={mockHandleSortChange}
-				titleChanged={mockHandleTitleChange}
+				onSort={mockHandleSortChange}
+				onTitleChange={mockHandleTitleChange}
 			/>
 		);
 		userEvent.click(screen.getByTestId('columnHeader-editTitleButton'));
@@ -126,8 +123,8 @@ describe('ColumnHeader', () => {
 		render(
 			<ColumnHeader
 				initialTitle="Change This"
-				sortedChanged={mockHandleSortChange}
-				titleChanged={mockHandleTitleChange}
+				onSort={mockHandleSortChange}
+				onTitleChange={mockHandleTitleChange}
 			/>
 		);
 
@@ -141,8 +138,8 @@ describe('ColumnHeader', () => {
 		render(
 			<ColumnHeader
 				initialTitle="Change This"
-				sortedChanged={mockHandleSortChange}
-				titleChanged={mockHandleTitleChange}
+				onSort={mockHandleSortChange}
+				onTitleChange={mockHandleTitleChange}
 			/>
 		);
 
@@ -159,8 +156,8 @@ describe('ColumnHeader', () => {
 		render(
 			<ColumnHeader
 				initialTitle="Change This"
-				sortedChanged={mockHandleSortChange}
-				titleChanged={mockHandleTitleChange}
+				onSort={mockHandleSortChange}
+				onTitleChange={mockHandleTitleChange}
 			/>
 		);
 
@@ -176,8 +173,8 @@ describe('ColumnHeader', () => {
 		render(
 			<ColumnHeader
 				initialTitle="No Change"
-				sortedChanged={mockHandleSortChange}
-				titleChanged={mockHandleTitleChange}
+				onSort={mockHandleSortChange}
+				onTitleChange={mockHandleTitleChange}
 			/>
 		);
 
@@ -194,8 +191,8 @@ describe('ColumnHeader', () => {
 		render(
 			<ColumnHeader
 				initialTitle={title}
-				sortedChanged={mockHandleSortChange}
-				titleChanged={mockHandleTitleChange}
+				onSort={mockHandleSortChange}
+				onTitleChange={mockHandleTitleChange}
 			/>
 		);
 
@@ -216,8 +213,8 @@ describe('ColumnHeader', () => {
 		render(
 			<ColumnHeader
 				initialTitle={title}
-				sortedChanged={mockHandleSortChange}
-				titleChanged={mockHandleTitleChange}
+				onSort={mockHandleSortChange}
+				onTitleChange={mockHandleTitleChange}
 			/>
 		);
 

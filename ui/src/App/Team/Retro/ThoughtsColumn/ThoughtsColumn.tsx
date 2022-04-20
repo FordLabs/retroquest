@@ -74,8 +74,8 @@ function ThoughtsColumn(props: Props) {
 			<ColumnHeader
 				initialTitle={column.title}
 				type={column.topic}
-				sortedChanged={setSorted}
-				titleChanged={changeTitle}
+				onSort={setSorted}
+				onTitleChange={changeTitle}
 			/>
 			<CreateColumnItemInput
 				type={column.topic}

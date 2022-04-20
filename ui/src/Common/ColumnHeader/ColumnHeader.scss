@@ -37,43 +37,7 @@
 
 	position: relative;
 
-	.input-container {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-
-		position: relative;
-	}
-
-	@media only screen and (max-width: 610px) {
-		.floating-character-countdown {
-			bottom: -18px;
-		}
-	}
-
-	.column-input {
-		display: inline-block;
-		width: 100%;
-		padding: 0;
-
-		color: main.$white;
-		font-family: inherit;
-		font-weight: inherit;
-		font-size: inherit;
-		text-align: center;
-
-		background-color: transparent;
-		border: 0;
-		outline: none;
-		cursor: inherit;
-
-		/* stylelint-disable selector-no-qualifying-type */
-		&[readonly] {
-			cursor: default;
-		}
-	}
-
-	.display-text {
+	.column-header-title {
 		display: inline-block;
 		width: auto;
 		height: auto;
@@ -93,49 +57,6 @@
 		border: 0;
 		outline: none;
 		cursor: inherit;
-	}
-
-	.sort-button {
-		padding: 0;
-
-		text-align: center;
-
-		position: relative;
-
-		.sort-icon {
-			display: block;
-
-			font-size: 1.5rem;
-
-			cursor: pointer;
-
-			&.sort-icon-translucent {
-				opacity: 0.45;
-			}
-		}
-	}
-
-	.edit-button {
-		padding: 0;
-
-		color: main.$white;
-		font-size: 1rem;
-
-		cursor: pointer;
-
-		position: absolute;
-		right: 5px;
-		top: 5px;
-
-		&:hover,
-		&:focus {
-			.tooltip {
-				visibility: visible;
-				opacity: 1;
-
-				top: 30px;
-			}
-		}
 	}
 
 	&.happy {
