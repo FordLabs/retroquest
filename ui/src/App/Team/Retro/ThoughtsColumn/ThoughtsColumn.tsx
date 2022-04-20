@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import { useRecoilValue } from 'recoil';
 
@@ -88,19 +88,19 @@ function ThoughtsColumn(props: Props) {
 					<ul
 						className="thought-list"
 						data-testid={`droppableThoughtColumn-${column.topic}`}
+						ref={provided.innerRef}
+						{...provided.droppableProps}
 					>
-						<div ref={provided.innerRef} {...provided.droppableProps}>
-							{thoughts.map((thought: Thought, index: number) => (
-								<Fragment key={index}>
-									<DraggableRetroItem
-										thought={thought}
-										topic={column.topic}
-										index={index}
-									/>
-								</Fragment>
-							))}
-							{provided.placeholder}
-						</div>
+						{thoughts.map((thought: Thought, index: number) => (
+							<li key={index}>
+								<DraggableRetroItem
+									thought={thought}
+									topic={column.topic}
+									index={index}
+								/>
+							</li>
+						))}
+						{provided.placeholder}
 					</ul>
 				)}
 			</Droppable>
