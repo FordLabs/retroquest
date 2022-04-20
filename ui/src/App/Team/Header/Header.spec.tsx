@@ -75,7 +75,9 @@ describe('Header', () => {
 
 		const retroQuestLogoLink = screen.getByTestId('retroquestLogoLink');
 		expect(retroQuestLogoLink.getAttribute('href')).toBe('/');
-		expect(within(retroQuestLogoLink).getByAltText('RetroQuest')).toBeDefined();
+		expect(
+			within(retroQuestLogoLink).getByAltText('Retro Quest')
+		).toBeDefined();
 	});
 
 	it('should render nav links', async () => {
