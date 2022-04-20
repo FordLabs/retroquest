@@ -54,7 +54,8 @@ function Header() {
 						<img
 							src={theme === Theme.DARK ? lightLogoPath : darkLogoPath}
 							className="logo"
-							alt="RetroQuest"
+							title="RetroQuest"
+							alt="Retro Quest"
 						/>
 					</a>
 					<span className="horizontal-separator" />
