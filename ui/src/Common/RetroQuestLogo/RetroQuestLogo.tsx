@@ -30,12 +30,7 @@ function RetroQuestLogo() {
 
 	return (
 		<div className="logo-container">
-			<img
-				className="logo-image"
-				src={logoPath}
-				title="RetroQuest Icon"
-				alt="Logo"
-			/>
+			<img className="logo-image" src={logoPath} alt="" />
 			<h1 className="logo-text-container">
 				<span className="logo-text">RetroQuest</span>
 				<span className="logo-sub-text">
