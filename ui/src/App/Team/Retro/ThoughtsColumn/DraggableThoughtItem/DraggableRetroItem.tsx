@@ -46,15 +46,15 @@ const DraggableRetroItem = (props: Props): JSX.Element => {
 			isDragDisabled={disableDraggable}
 		>
 			{(provided) => (
-				<li
+				<div
 					ref={provided.innerRef}
 					{...provided.draggableProps}
 					{...provided.dragHandleProps}
-					className={classNames('draggable-retro-item', topic)}
+					className={classNames('draggable-thought-item', topic)}
 					data-testid={`draggableRetroItem-${topic}-${index + 1}`}
 				>
 					<ThoughtItem thoughtId={thought.id} type={topic} />
-				</li>
+				</div>
 			)}
 		</Draggable>
 	);
