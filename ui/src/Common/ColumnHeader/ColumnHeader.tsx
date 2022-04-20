@@ -17,72 +17,43 @@
 
 import React, { HTMLAttributes, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
+import { emojify } from 'Services/EmojiGenerator';
+import Topic from 'Types/Topic';
 
-import { emojify } from '../../Services/EmojiGenerator';
-import Topic from '../../Types/Topic';
-import { onEachKey } from '../../Utils/EventUtils';
-import FloatingCharacterCountdown from '../FloatingCharacterCountdown/FloatingCharacterCountdown';
-import Tooltip from '../Tooltip/Tooltip';
+import ColumnHeaderInput from './ColumnHeaderInput/ColumnHeaderInput';
+import EditColumnButton from './EditColumnButton/EditColumnButton';
+import SortColumnButton from './SortColumnButton/SortColumnButton';
 
 import './ColumnHeader.scss';
-
-const maxTitleLength = 16;
-const almostOutOfCharactersThreshold = 5;
 
 interface ColumnHeaderProps extends HTMLAttributes<HTMLDivElement> {
 	initialTitle?: string;
 	type?: Topic;
-	sortedChanged?: (changed: boolean) => void;
-	titleChanged?: (title: string) => void;
+	onSort?(sortedState: boolean): void;
+	onTitleChange?(title: string): void;
 }
 
 function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
 	const {
 		initialTitle = '',
 		type = '',
-		titleChanged,
-		sortedChanged,
+		onTitleChange,
+		onSort,
 		...divProps
 	} = props;
+
+	const sortable = useMemo(() => onSort !== undefined, [onSort]);
+	const editable = useMemo(() => onTitleChange !== undefined, [onTitleChange]);
+
 	const [title, setTitle] = useState(initialTitle);
-	const [editedTitle, setEditedTitle] = useState(initialTitle);
-	const sortable = useMemo(() => sortedChanged !== undefined, [sortedChanged]);
-	const editable = useMemo(() => titleChanged !== undefined, [titleChanged]);
 	const [editing, setEditing] = useState(false);
-	const [sorted, setSorted] = useState(false);
 
 	useEffect(() => setTitle(initialTitle), [initialTitle]);
 
 	const updateTitle = (newTitle: string) => {
 		setTitle(newTitle);
 		setEditing(false);
-		if (titleChanged) titleChanged(newTitle);
-	};
-
-	const handleBlur = () => {
-		updateTitle(editedTitle);
-	};
-
-	const handleKeyDown = onEachKey({
-		Enter: () => updateTitle(editedTitle),
-		Escape: () => setEditing(false),
-	});
-
-	const toggleSort = () => {
-		const newSorted = !sorted;
-		setSorted(newSorted);
-		if (sortedChanged) sortedChanged(newSorted);
-	};
-
-	const enableEditing = () => {
-		setEditedTitle(title);
-		setEditing(true);
-	};
-
-	const handleInputFocus = (event: any) => event.target.select();
-
-	const getSortedButtonText = (): string => {
-		return sorted ? 'Unsort' : 'Sort';
+		if (onTitleChange) onTitleChange(newTitle);
 	};
 
 	return (
@@ -92,60 +63,17 @@ function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
 			data-testid={`columnHeader-${type}`}
 		>
 			{editing ? (
-				<>
-					<input
-						type="text"
-						className="column-input"
-						data-testid="column-input"
-						maxLength={maxTitleLength}
-						value={editedTitle}
-						onChange={(event) => setEditedTitle(event.target.value)}
-						onBlur={handleBlur}
-						onKeyDown={handleKeyDown}
-						/* eslint-disable-next-line jsx-a11y/no-autofocus */
-						autoFocus={true}
-						onFocus={handleInputFocus}
-					/>
-					<FloatingCharacterCountdown
-						characterCount={editedTitle.length}
-						maxCharacterCount={maxTitleLength}
-						charsAreRunningOutThreshold={almostOutOfCharactersThreshold}
-					/>
-				</>
+				<ColumnHeaderInput
+					initialTitle={initialTitle}
+					updateTitle={updateTitle}
+					setEditing={setEditing}
+				/>
 			) : (
 				<>
-					<h2 className="display-text">{emojify(title)}</h2>
-					{sortable && (
-						<button
-							className="sort-button"
-							onClick={toggleSort}
-							aria-label={`${getSortedButtonText()} the ${title} column.`}
-							data-testid="columnHeader-sortButton"
-						>
-							<i
-								aria-hidden
-								role="presentation"
-								className={classNames('fas fa-sort-down sort-icon', {
-									'sort-icon-translucent': !sorted,
-								})}
-							/>
-							<Tooltip>{getSortedButtonText()}</Tooltip>
-						</button>
-					)}
+					<h2 className="column-header-title">{emojify(title)}</h2>
+					{sortable && <SortColumnButton title={title} onClick={onSort} />}
 					{editable && (
-						<button
-							className="edit-button"
-							onClick={enableEditing}
-							aria-label={`Edit the "${title}" column title.`}
-							data-testid="columnHeader-editTitleButton"
-						>
-							<i
-								role="presentation"
-								className="fas fa-pencil-alt"
-								aria-hidden
-							/>
-							<Tooltip>Edit</Tooltip>
-						</button>
+						<EditColumnButton title={title} onClick={() => setEditing(true)} />
 					)}
 				</>
 			)}
