@@ -26,7 +26,7 @@ interface Props {
 	onClick?(sortedState: boolean): void;
 }
 
-function SortButton(props: Props) {
+function SortColumnButton(props: Props) {
 	const { title, onClick } = props;
 	const [sorted, setSorted] = useState(false);
 
@@ -59,4 +59,4 @@ function SortButton(props: Props) {
 	);
 }
 
-export default SortButton;
+export default SortColumnButton;
