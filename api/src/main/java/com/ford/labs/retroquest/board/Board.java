@@ -23,6 +23,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -46,4 +47,7 @@ public class Board {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "boardId", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Thought> thoughts;
+
+    @Formula("(select count(*) from thought where thought.board_id=id)")
+    private int thoughtCount;
 }
