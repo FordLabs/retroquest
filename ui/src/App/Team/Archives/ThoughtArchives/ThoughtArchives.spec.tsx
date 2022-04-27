@@ -16,39 +16,35 @@
  */
 
 import React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { RecoilRoot } from 'recoil';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
+import BoardService from 'Services/Api/BoardService';
+import { TeamState } from 'State/TeamState';
 
-import BoardService from '../../../../Services/Api/BoardService';
-import { TeamState } from '../../../../State/TeamState';
+import renderWithRecoilRoot from '../../../../Utils/renderWithRecoilRoot';
 
 import ThoughtArchives from './ThoughtArchives';
 
-jest.mock('../../../../Services/Api/BoardService');
+jest.mock('Services/Api/BoardService');
 
 describe('Thought Archives', () => {
 	it('should display Archived Boards List by default', async () => {
 		await setUpThoughtArchives();
-		expect(screen.queryByText('Thought Archives')).not.toBeNull();
+		expect(screen.getByText('Thought Archives')).toBeDefined();
 	});
 
 	it('should display board when selected', async () => {
 		await setUpThoughtArchives();
-		fireEvent.click(screen.getAllByText('View')[1]);
-		expect(screen.queryByText('I am a message')).not.toBeNull();
+		fireEvent.click(screen.getAllByText('View')[0]);
+
+		await waitFor(() => expect(BoardService.getBoard).toHaveBeenCalled());
+		expect(screen.getByText('I am a message')).toBeDefined();
 	});
 });
 
 const setUpThoughtArchives = async () => {
-	render(
-		<RecoilRoot
-			initializeState={({ set }) => {
-				set(TeamState, { id: 'teamId', name: '' });
-			}}
-		>
-			<ThoughtArchives />
-		</RecoilRoot>
-	);
+	renderWithRecoilRoot(<ThoughtArchives />, ({ set }) => {
+		set(TeamState, { id: 'teamId', name: '' });
+	});
 
 	await waitFor(() => expect(BoardService.getBoards).toHaveBeenCalled());
 };

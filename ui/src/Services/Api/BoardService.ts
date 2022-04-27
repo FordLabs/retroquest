@@ -21,14 +21,34 @@ import Board from '../../Types/Board';
 
 import getAuthConfig from './getAuthConfig';
 
+export enum SortOrder {
+	DESC = 'DESC',
+	ASC = 'ASC',
+}
+
 const BoardService = {
 	archiveRetro(teamId: string): Promise<void> {
 		const url = `/api/team/${teamId}/end-retro`;
 		return axios.put(url, getAuthConfig());
 	},
 
-	getBoards(teamId: string, pageIndex: number): Promise<Board[]> {
-		const url = `/api/team/${teamId}/boards?pageIndex=${pageIndex}`;
+	getBoards(
+		teamId: string,
+		pageIndex: number,
+		pageSize?: number,
+		sortBy?: string,
+		sortOrder?: SortOrder
+	): Promise<Board[]> {
+		let url = `/api/team/${teamId}/boards?`;
+		if (pageIndex !== undefined) url += `pageIndex=${pageIndex}`;
+		if (pageSize !== undefined) url += `&pageSize=${pageSize}`;
+		if (sortBy !== undefined) url += `&sortBy=${sortBy}`;
+		if (sortOrder !== undefined) url += `&sortOrder=${sortOrder}`;
+		return axios.get(url, getAuthConfig()).then((response) => response.data);
+	},
+
+	getBoard(teamId: string, boardId: number) {
+		let url = `/api/team/${teamId}/boards/${boardId}`;
 		return axios.get(url, getAuthConfig()).then((response) => response.data);
 	},
 };

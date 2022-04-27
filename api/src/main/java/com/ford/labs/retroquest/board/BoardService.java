@@ -18,18 +18,20 @@
 package com.ford.labs.retroquest.board;
 
 import com.ford.labs.retroquest.actionitem.ActionItemService;
+import com.ford.labs.retroquest.column.Column;
 import com.ford.labs.retroquest.column.ColumnService;
 import com.ford.labs.retroquest.thought.ThoughtService;
 import com.ford.labs.retroquest.websocket.WebsocketService;
 import com.ford.labs.retroquest.websocket.events.WebsocketEndRetroEvent;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class BoardService {
@@ -38,33 +40,40 @@ public class BoardService {
     private final ThoughtService thoughtService;
     private final ActionItemService actionItemService;
     private final WebsocketService websocketService;
-    private final int pageSize;
 
     public BoardService(
         BoardRepository boardRepository,
         ColumnService columnService,
         ThoughtService thoughtService,
         ActionItemService actionItemService,
-        WebsocketService websocketService,
-        @Value("${retroquest.archive.thought.page-size}") int pageSize
+        WebsocketService websocketService
     ) {
         this.boardRepository = boardRepository;
         this.columnService = columnService;
         this.thoughtService = thoughtService;
         this.actionItemService = actionItemService;
         this.websocketService = websocketService;
-        this.pageSize = pageSize;
     }
 
-    public List<Retro> getBoardsForTeamId(String teamId, Integer pageIndex) {
-        var columns = columnService.getColumns(teamId);
-        return this.boardRepository.findAllByTeamIdOrderByDateCreatedDesc(teamId,
-            PageRequest.of(
-                pageIndex,
-                pageSize,
-                Sort.by(Sort.Order.desc("dateCreated"))
-            )
-        ).stream().map(board -> Retro.from(board, columns)).collect(Collectors.toList());
+    public List<Board> getBoardsForTeamId(String teamId, Integer pageIndex, Integer pageSize, String sortBy, String sortOrder) {
+        Sort.Direction orderBy = Sort.DEFAULT_DIRECTION;
+        if ("ASC".equals(sortOrder)) orderBy = Sort.Direction.ASC;
+        if ("DESC".equals(sortOrder)) orderBy = Sort.Direction.DESC;
+        Pageable pageable = PageRequest.of(pageIndex, pageSize, Sort.by(orderBy, sortBy));
+
+        Page<Board> pagedResult = this.boardRepository.findAllByTeamId(teamId, pageable);
+
+        if(pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public Retro getArchivedRetroForTeam(String teamId, Long boardId) {
+        List<Column> columns = columnService.getColumns(teamId);
+        Board board = this.boardRepository.findByIdAndTeamId(boardId, teamId);
+        return Retro.from(board, columns);
     }
 
     public Board createBoard(String teamId) {

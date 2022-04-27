@@ -16,69 +16,96 @@
  */
 
 import * as React from 'react';
-import { render, screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 
-import Board from '../../../../../Types/Board';
+import BoardService from '../../../../../Services/Api/BoardService';
+import { TeamState } from '../../../../../State/TeamState';
+import Retro from '../../../../../Types/Retro';
 import Topic from '../../../../../Types/Topic';
+import renderWithRecoilRoot from '../../../../../Utils/renderWithRecoilRoot';
 
 import ArchivedBoard from './ArchivedBoard';
 
+jest.mock('Services/Api/BoardService');
+
 describe('Archived Board', () => {
-	it('should display columns', () => {
-		render(<ArchivedBoard board={testBoard} />);
-		const columns = screen.getAllByTestId('archived-column');
-		expect(within(columns[0]).queryByText('Happy')).not.toBeNull();
-		expect(within(columns[1]).queryByText('Sad')).not.toBeNull();
+	beforeEach(() => {
+		BoardService.getBoard = jest.fn().mockResolvedValue(mockFullBoard);
 	});
 
-	it('should display thoughts for column', () => {
-		render(<ArchivedBoard board={testBoard} />);
-		const columns = screen.getAllByTestId('archived-column');
-		expect(within(columns[0]).queryByText('I am a message4')).not.toBeNull();
-		expect(within(columns[0]).queryByText('I am a message1')).not.toBeNull();
-		expect(within(columns[1]).queryByText('I am a message2')).not.toBeNull();
-		expect(within(columns[1]).queryByText('I am a message3')).not.toBeNull();
+	it('should display columns', async () => {
+		await setupComponent(mockFullBoard.id);
+		const columns = getColumns();
+		expect(within(columns[0]).getByText('Happy')).toBeDefined();
+		expect(within(columns[1]).getByText('Confused')).toBeDefined();
+		expect(within(columns[2]).getByText('Sad')).toBeDefined();
 	});
 
-	it('should display number of thoughts per column', () => {
-		render(<ArchivedBoard board={testBoard} />);
-		const columns = screen.getAllByTestId('archived-column');
-		expect(within(columns[0]).queryByText('2')).not.toBeNull();
-		expect(within(columns[1]).queryByText('2')).not.toBeNull();
+	it('should display thoughts for column', async () => {
+		await setupComponent(mockFullBoard.id);
+		const columns = getColumns();
+		expect(within(columns[0]).getByText('I am a message4')).toBeDefined();
+		expect(within(columns[0]).getByText('I am a message1')).toBeDefined();
+		expect(within(columns[1]).getByText('I am a message2')).toBeDefined();
+		expect(within(columns[1]).getByText('I am a message3')).toBeDefined();
 	});
 
-	it('should display thought heart count', () => {
-		render(<ArchivedBoard board={testBoard} />);
+	it('should display number of thoughts per column', async () => {
+		await setupComponent(mockFullBoard.id);
+		const columns = getColumns();
+		expect(within(columns[0]).getByText('2')).toBeDefined();
+		expect(within(columns[1]).getByText('2')).toBeDefined();
+	});
+
+	it('should display thought heart count', async () => {
+		await setupComponent(mockFullBoard.id);
 		const thought = screen.getByTestId('thought100');
-		expect(within(thought).queryByText('20')).not.toBeNull();
+		expect(within(thought).getByText('20')).toBeDefined();
 	});
 
-	it('should display Not Discussed if thought was not discussed', () => {
-		render(<ArchivedBoard board={testBoard} />);
+	it('should display Not Discussed if thought was not discussed', async () => {
+		await setupComponent(mockFullBoard.id);
 		const thought = screen.getByTestId('thought100');
-		expect(within(thought).queryByText('Not Discussed')).not.toBeNull();
+		expect(within(thought).getByText('Not Discussed')).toBeDefined();
 	});
 
-	it('should display Discussed if thought was discussed', () => {
-		render(<ArchivedBoard board={testBoard} />);
+	it('should display Discussed if thought was discussed', async () => {
+		await setupComponent(mockFullBoard.id);
 		const thought = screen.getByTestId('thought102');
-		expect(within(thought).queryByText('Discussed')).not.toBeNull();
+		expect(within(thought).getByText('Discussed')).toBeDefined();
 	});
 
-	it('should display thoughts in order by discussion status and then thought count', () => {
-		render(<ArchivedBoard board={singleColumnTestBoard} />);
+	it('should display thoughts in order by discussion status and then thought count', async () => {
+		BoardService.getBoard = jest
+			.fn()
+			.mockResolvedValue(singleColumnFullRetroBoard);
+		await setupComponent(singleColumnFullRetroBoard.id);
 		const thoughts = screen.getAllByTestId(/thought/);
-		expect(within(thoughts[0]).queryByText('I am a message4')).not.toBeNull();
-		expect(within(thoughts[1]).queryByText('I am a message1')).not.toBeNull();
-		expect(within(thoughts[2]).queryByText('I am a message2')).not.toBeNull();
-		expect(within(thoughts[3]).queryByText('I am a message3')).not.toBeNull();
+		expect(within(thoughts[0]).getByText('I am a message4')).toBeDefined();
+		expect(within(thoughts[1]).getByText('I am a message1')).toBeDefined();
+		expect(within(thoughts[2]).getByText('I am a message2')).toBeDefined();
+		expect(within(thoughts[3]).getByText('I am a message3')).toBeDefined();
 	});
 });
 
-const testBoard: Board = {
+async function setupComponent(boardId: number) {
+	renderWithRecoilRoot(<ArchivedBoard boardId={boardId} />, ({ set }) => {
+		set(TeamState, { name: 'Name', id: 'team-id' });
+	});
+
+	await waitFor(() =>
+		expect(BoardService.getBoard).toHaveBeenCalledWith('team-id', boardId)
+	);
+}
+
+function getColumns() {
+	return screen.getAllByTestId('archived-column');
+}
+
+const mockFullBoard: Retro = {
 	dateCreated: new Date(),
 	id: 1,
-	teamId: '',
+	teamId: 'team-id',
 	thoughts: [
 		{
 			id: 100,
@@ -117,16 +144,21 @@ const testBoard: Board = {
 		},
 		{
 			id: 11,
+			title: 'Confused',
+			topic: Topic.CONFUSED,
+		},
+		{
+			id: 12,
 			title: 'Sad',
 			topic: Topic.UNHAPPY,
 		},
 	],
 };
 
-const singleColumnTestBoard: Board = {
+const singleColumnFullRetroBoard: Retro = {
 	dateCreated: new Date(),
 	id: 1,
-	teamId: '',
+	teamId: 'team-id',
 	thoughts: [
 		{
 			id: 100,

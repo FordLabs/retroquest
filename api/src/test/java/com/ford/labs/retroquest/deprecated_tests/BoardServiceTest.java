@@ -30,8 +30,7 @@ import com.ford.labs.retroquest.websocket.events.WebsocketEndRetroEvent;
 import com.ford.labs.retroquest.websocket.WebsocketService;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -51,59 +50,53 @@ class BoardServiceTest {
     private final ThoughtService thoughtService = mock(ThoughtService.class);
     private final ActionItemService actionItemService = mock(ActionItemService.class);
     private final WebsocketService websocketService = mock(WebsocketService.class);
-    private final int pageSize = 2;
 
-    private final BoardService boardService = new BoardService(boardRepository, columnService, thoughtService, actionItemService, websocketService, pageSize);
+    private final BoardService boardService = new BoardService(boardRepository, columnService, thoughtService, actionItemService, websocketService);
 
     @Test
-    void getBoardsForTeamId() {
-        var savedColumns = List.of(new Column(123L, "title", "topic", "team1"));
-        var expectedBoard = Board.builder()
-            .teamId("team1")
-            .dateCreated(LocalDate.of(2012, 12, 12))
-            .id(1L)
-            .thoughts(List.of())
-            .build();
-
-        var savedBoard = Board.builder()
-            .teamId("team1")
-            .dateCreated(LocalDate.of(2012, 12, 12))
-            .id(1L)
-            .thoughts(List.of())
-            .build();
-
-        var expectedRetro = Retro.from(expectedBoard, savedColumns);
-
+    void getBoardsForTeamId_ShouldReturnPagedBoardsSortedByDateInDescendingOrder() {
+        var pageSize = 2;
+        var pageIndex = 3;
         final PageRequest pageRequest = PageRequest.of(
-            0,
-            2,
-            Sort.by(Sort.Order.desc("dateCreated"))
+                pageIndex,
+                pageSize,
+            Sort.by(Sort.Direction.DESC, "dateCreated")
         );
 
+        var expectedBoard = Board.builder()
+                .teamId("team1")
+                .dateCreated(LocalDate.of(2012, 12, 12))
+                .id(1L)
+                .thoughts(List.of())
+                .build();
 
-        when(boardRepository.findAllByTeamIdOrderByDateCreatedDesc("team1", pageRequest)).thenReturn(List.of(savedBoard));
-        when(columnService.getColumns("team1")).thenReturn(savedColumns);
+        when(boardRepository.findAllByTeamId("team1", pageRequest)).thenReturn(new PageImpl(List.of(expectedBoard)));
 
-        List<Retro> actualRetros = boardService.getBoardsForTeamId("team1", 0);
-
-        assertThat(actualRetros).containsExactly(expectedRetro);
+        List<Board> actualBoards = boardService.getBoardsForTeamId("team1", pageIndex, pageSize, "dateCreated", "DESC");
+        assertThat(actualBoards).containsExactly(expectedBoard);
     }
 
-
     @Test
-    void getBoardsForTeamId_shouldReturnAPagedResult() {
-        var pageSize = 5;
-        var subject = new BoardService(boardRepository, columnService, thoughtService, actionItemService, websocketService, pageSize);
-
+    void getBoardsForTeamId_ShouldReturnPagedBoardsSortedByDateInAscendingOrder() {
+        var pageSize = 2;
+        var pageIndex = 0;
         final PageRequest pageRequest = PageRequest.of(
-            0,
-            pageSize,
-            Sort.by(Sort.Order.desc("dateCreated"))
+                pageIndex,
+                pageSize,
+                Sort.by(Sort.Direction.ASC, "dateCreated")
         );
 
-        subject.getBoardsForTeamId("team1", 0);
+        var expectedBoard = Board.builder()
+                .teamId("team1")
+                .dateCreated(LocalDate.of(2012, 12, 12))
+                .id(1L)
+                .thoughts(List.of())
+                .build();
 
-        verify(boardRepository).findAllByTeamIdOrderByDateCreatedDesc("team1", pageRequest);
+        when(boardRepository.findAllByTeamId("team1", pageRequest)).thenReturn(new PageImpl(List.of(expectedBoard)));
+
+        List<Board> actualBoards = boardService.getBoardsForTeamId("team1", pageIndex, pageSize, "dateCreated", "ASC");
+        assertThat(actualBoards).containsExactly(expectedBoard);
     }
 
     @Test
@@ -144,7 +137,8 @@ class BoardServiceTest {
                     expectedBoardId,
                     null
                 )
-            )
+            ),
+            0
         );
 
         when(thoughtService.fetchAllActiveThoughts(eq(expectedTeamId))).thenReturn(

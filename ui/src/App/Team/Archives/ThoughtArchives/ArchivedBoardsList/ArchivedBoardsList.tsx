@@ -17,11 +17,12 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import classnames from 'classnames';
-import moment from 'moment';
 import { useRecoilValue } from 'recoil';
 
 import NotFoundSection from '../../../../../Common/NotFoundSection/NotFoundSection';
-import BoardService from '../../../../../Services/Api/BoardService';
+import BoardService, {
+	SortOrder,
+} from '../../../../../Services/Api/BoardService';
 import { TeamState } from '../../../../../State/TeamState';
 import Board from '../../../../../Types/Board';
 
@@ -46,64 +47,50 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 		SortState.DateDescending
 	);
 	const team = useRecoilValue(TeamState);
+	const PAGE_SIZE = 30;
+	const PAGE_INDEX = 0;
 
-	const getSortFunction = useCallback((currentSortState) => {
-		switch (currentSortState) {
-			case SortState.CountAscending:
-				return sortByCountAscending;
-			case SortState.CountDescending:
-				return sortByCountDescending;
-			case SortState.DateAscending:
-				return sortByDateAscending;
-			default:
-				return sortByDateDescending;
-		}
-	}, []);
-
-	useEffect(() => {
-		if (team.id) {
-			BoardService.getBoards(team.id, 0).then((retrievedBoards) =>
-				setBoards([...retrievedBoards].sort(sortByDateDescending))
-			);
-		}
-	}, [team.id]);
+	const getBoards = useCallback(
+		(sortBy: string, sortOrder: SortOrder) => {
+			if (team.id) {
+				BoardService.getBoards(
+					team.id,
+					PAGE_INDEX,
+					PAGE_SIZE,
+					sortBy,
+					sortOrder
+				).then(setBoards);
+			}
+		},
+		[team.id]
+	);
 
 	useEffect(() => {
-		setBoards((currentBoards) => {
-			return [...currentBoards].sort(getSortFunction(sortState));
-		});
-	}, [getSortFunction, sortState]);
-
-	function sortByDateDescending(a: Board, b: Board) {
-		return moment(b.dateCreated).valueOf() - moment(a.dateCreated).valueOf();
-	}
-
-	function sortByDateAscending(a: Board, b: Board) {
-		return moment(a.dateCreated).valueOf() - moment(b.dateCreated).valueOf();
-	}
-
-	function sortByCountDescending(a: Board, b: Board) {
-		return b.thoughts.length - a.thoughts.length;
-	}
-
-	function sortByCountAscending(a: Board, b: Board) {
-		return a.thoughts.length - b.thoughts.length;
-	}
+		getBoards('dateCreated', SortOrder.DESC);
+	}, [getBoards]);
 
 	function handleCountSort() {
-		setSortState(
-			sortState === SortState.CountDescending
-				? SortState.CountAscending
-				: SortState.CountDescending
-		);
+		const isDescending = sortState === SortState.CountDescending;
+		const thoughtCountSortState = isDescending
+			? SortState.CountAscending
+			: SortState.CountDescending;
+
+		setSortState(thoughtCountSortState);
+
+		const sortOrder = isDescending ? SortOrder.ASC : SortOrder.DESC;
+		getBoards('thoughtCount', sortOrder);
 	}
 
 	function handleDateSort() {
-		setSortState(
-			sortState === SortState.DateDescending
-				? SortState.DateAscending
-				: SortState.DateDescending
-		);
+		const isDescending = sortState === SortState.DateDescending;
+		const dateSortState = isDescending
+			? SortState.DateAscending
+			: SortState.DateDescending;
+
+		setSortState(dateSortState);
+
+		const sortOrder = isDescending ? SortOrder.ASC : SortOrder.DESC;
+		getBoards('dateCreated', sortOrder);
 	}
 
 	return (

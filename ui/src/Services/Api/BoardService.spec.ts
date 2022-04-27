@@ -20,12 +20,21 @@ import axios from 'axios';
 import { mockGetCookie } from '../../__mocks__/universal-cookie';
 import Board from '../../Types/Board';
 
-import BoardService from './BoardService';
+import BoardService, { SortOrder } from './BoardService';
 
 describe('Board Service', () => {
 	const teamId = 'teamId';
 	const fakeToken = 'fake-token';
 	const mockConfig = { headers: { Authorization: `Bearer ${fakeToken}` } };
+	const boardId = 234;
+	const boardUrl = `/api/team/${teamId}/boards`;
+	const expectedBoard: Board = {
+		id: boardId,
+		teamId,
+		thoughtCount: 2,
+		dateCreated: new Date(),
+		thoughts: [],
+	};
 
 	beforeAll(() => {
 		mockGetCookie.mockReturnValue(fakeToken);
@@ -42,15 +51,67 @@ describe('Board Service', () => {
 	});
 
 	describe('getBoards', () => {
-		it('should return list of boards by page index', async () => {
-			const expectedBoards: Board[] = [];
+		it('should return list of boards by page index, and pageSize', async () => {
+			const expectedBoards: Board[] = [expectedBoard];
 			axios.get = jest.fn().mockResolvedValue({ data: expectedBoards });
 
-			const actual = await BoardService.getBoards(teamId, 0);
+			const actualBoards = await BoardService.getBoards(teamId, 0, 5);
 
-			expect(actual).toEqual(expectedBoards);
+			expect(actualBoards).toEqual(expectedBoards);
 			expect(axios.get).toHaveBeenCalledWith(
-				'/api/team/teamId/boards?pageIndex=0',
+				`${boardUrl}?pageIndex=0&pageSize=5`,
+				mockConfig
+			);
+		});
+
+		it('should return list of boards sorted by thoughtCount in ascending order', async () => {
+			const expectedBoards: Board[] = [expectedBoard];
+			axios.get = jest.fn().mockResolvedValue({ data: expectedBoards });
+
+			const actualBoards = await BoardService.getBoards(
+				teamId,
+				0,
+				5,
+				'thoughtCount',
+				SortOrder.ASC
+			);
+
+			expect(actualBoards).toEqual(expectedBoards);
+			expect(axios.get).toHaveBeenCalledWith(
+				`${boardUrl}?pageIndex=0&pageSize=5&sortBy=thoughtCount&sortOrder=ASC`,
+				mockConfig
+			);
+		});
+
+		it('should return list of boards sorted by thoughtCount in descending order', async () => {
+			const expectedBoards: Board[] = [expectedBoard];
+			axios.get = jest.fn().mockResolvedValue({ data: expectedBoards });
+
+			const actualBoards = await BoardService.getBoards(
+				teamId,
+				0,
+				5,
+				'thoughtCount',
+				SortOrder.DESC
+			);
+
+			expect(actualBoards).toEqual(expectedBoards);
+			expect(axios.get).toHaveBeenCalledWith(
+				`${boardUrl}?pageIndex=0&pageSize=5&sortBy=thoughtCount&sortOrder=DESC`,
+				mockConfig
+			);
+		});
+	});
+
+	describe('getBoard', () => {
+		it('should get board by team id and board id', async () => {
+			axios.get = jest.fn().mockResolvedValue({ data: expectedBoard });
+
+			const actualBoard = await BoardService.getBoard(teamId, boardId);
+
+			expect(actualBoard).toEqual(expectedBoard);
+			expect(axios.get).toHaveBeenCalledWith(
+				`${boardUrl}/${boardId}`,
 				mockConfig
 			);
 		});
