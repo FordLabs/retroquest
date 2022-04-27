@@ -17,8 +17,7 @@
 
 import React, { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-
-import { ArchivedBoardState } from '../../../../State/ArchivedBoardState';
+import { ArchivedBoardState } from 'State/ArchivedBoardState';
 
 import ArchivedBoard from './ArchivedBoard/ArchivedBoard';
 import ArchivedBoardsList from './ArchivedBoardsList/ArchivedBoardsList';
@@ -32,7 +31,7 @@ function ThoughtArchives(): JSX.Element {
 	}, [setSelectedArchivedBoard]);
 
 	return selectedArchivedBoard ? (
-		<ArchivedBoard board={selectedArchivedBoard} />
+		<ArchivedBoard boardId={selectedArchivedBoard.id} />
 	) : (
 		<ArchivedBoardsList onBoardSelection={setSelectedArchivedBoard} />
 	);

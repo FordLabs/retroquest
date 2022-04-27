@@ -38,8 +38,7 @@ import java.util.List;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Tag("api")
 class BoardApiTest extends ApiTestBase {
@@ -68,27 +67,81 @@ class BoardApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_get_boards_assigned_to_requested_team_with_newest_boards_first() throws Exception {
-        Board oldBoard = Board.builder()
-            .dateCreated(LocalDate.of(2018, 1, 1))
-            .teamId(teamId)
-            .thoughts(List.of())
-            .build();
-
-        Board newBoard = Board.builder()
-            .dateCreated(LocalDate.of(2018, 2, 2))
-            .teamId(teamId)
-            .thoughts(List.of())
-            .build();
-
-        boardRepository.save(oldBoard);
-        boardRepository.save(newBoard);
-
+    void getBoards_ShouldGetBoardsSortedByDescendingDate() throws Exception {
+        setupBoards();
         mockMvc.perform(get("/api/team/" + teamId + "/boards")
                 .header("Authorization", getBearerAuthToken()))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$[0].dateCreated", Matchers.is("2018-02-02")))
-            .andExpect(jsonPath("$[1].dateCreated", Matchers.is("2018-01-01")));
+            .andExpect(jsonPath("$.size()", Matchers.is(3)))
+            .andExpect(jsonPath("$[0].dateCreated", Matchers.is("2018-03-03")))
+            .andExpect(jsonPath("$[1].dateCreated", Matchers.is("2018-02-02")))
+            .andExpect(jsonPath("$[2].dateCreated", Matchers.is("2018-01-01")));
+    }
+
+    @Test
+    void getBoards_ShouldGetBoardsSortedByAscendingDate() throws Exception {
+        setupBoards();
+        mockMvc.perform(get("/api/team/" + teamId + "/boards?sortOrder=ASC")
+                        .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", Matchers.is(3)))
+                .andExpect(jsonPath("$[0].dateCreated", Matchers.is("2018-01-01")))
+                .andExpect(jsonPath("$[1].dateCreated", Matchers.is("2018-02-02")))
+                .andExpect(jsonPath("$[2].dateCreated", Matchers.is("2018-03-03")));
+    }
+
+    @Test
+    void getBoards_ShouldGetBoardsSortedByDescendingThoughtCount() throws Exception {
+        setupBoards();
+        mockMvc.perform(get("/api/team/" + teamId + "/boards?sortBy=thoughtCount&sortOrder=DESC")
+                        .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].thoughtCount", Matchers.is(3)))
+                .andExpect(jsonPath("$[1].thoughtCount", Matchers.is(2)))
+                .andExpect(jsonPath("$[2].thoughtCount", Matchers.is(1)));
+    }
+
+    @Test
+    void getBoards_ShouldGetBoardsSortedByAscendingThoughtCount() throws Exception {
+        setupBoards();
+        mockMvc.perform(get("/api/team/" + teamId + "/boards?sortBy=thoughtCount&sortOrder=ASC")
+                        .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].thoughtCount", Matchers.is(1)))
+                .andExpect(jsonPath("$[1].thoughtCount", Matchers.is(2)))
+                .andExpect(jsonPath("$[2].thoughtCount", Matchers.is(3)));
+    }
+
+    @Test
+    void getBoards_ShouldGetPaginatedBoards() throws Exception {
+        setupBoards();
+        mockMvc.perform(get("/api/team/" + teamId + "/boards?pageIndex=1&pageSize=1")
+                        .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", Matchers.is(1)))
+                .andExpect(jsonPath("$[0].dateCreated", Matchers.is("2018-02-02")));
+    }
+
+    @Test
+    void getBoard_ShouldGetFullRetroBoardFromTeamIdAndBoardId() throws Exception {
+        Board expectedBoard = boardRepository.save(Board.builder()
+                .dateCreated(LocalDate.of(2018, 1, 1))
+                .teamId(teamId)
+                .thoughts(List.of())
+                .build());
+        Thought expectedThought = thoughtRepository.save(Thought.builder()
+                .boardId(expectedBoard.getId())
+                .columnId(column.getId())
+                .build());
+
+        mockMvc.perform(get("/api/team/" + teamId + "/boards/" + expectedBoard.getId())
+                        .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", Matchers.is(expectedBoard.getId().intValue())))
+                .andExpect(jsonPath("$.teamId", Matchers.is(expectedBoard.getTeamId())))
+                .andExpect(jsonPath("$.dateCreated", Matchers.is("2018-01-01")))
+                .andExpect(jsonPath("$.thoughts[0].id", Matchers.is(expectedThought.getId().intValue())))
+                .andExpect(jsonPath("$.columns[0].id", Matchers.is(column.getId().intValue())));
     }
 
     @Test
@@ -146,5 +199,53 @@ class BoardApiTest extends ApiTestBase {
         mockMvc.perform(put(format("/api/team/%s/end-retro", teamId))
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
             .andExpect(status().isForbidden());
+    }
+
+    public void setupBoards() {
+        Board janBoard = Board.builder()
+                .dateCreated(LocalDate.of(2018, 1, 1))
+                .teamId(teamId)
+                .thoughts(List.of())
+                .build();
+
+        Board febBoard = Board.builder()
+                .dateCreated(LocalDate.of(2018, 2, 2))
+                .teamId(teamId)
+                .thoughts(List.of())
+                .build();
+        Board marBoard = Board.builder()
+                .dateCreated(LocalDate.of(2018, 3, 3))
+                .teamId(teamId)
+                .thoughts(List.of())
+                .build();
+
+        Board result1 =  boardRepository.save(janBoard);
+        Board result2 =  boardRepository.save(febBoard);
+        Board result3 =  boardRepository.save(marBoard);
+
+        thoughtRepository.save(Thought.builder()
+                .boardId(result1.getId())
+                .columnId(column.getId())
+                .build());
+        thoughtRepository.save(Thought.builder()
+                .boardId(result1.getId())
+                .columnId(column.getId())
+                .build());
+        thoughtRepository.save(Thought.builder()
+                .boardId(result2.getId())
+                .columnId(column.getId())
+                .build());
+        thoughtRepository.save(Thought.builder()
+                .boardId(result2.getId())
+                .columnId(column.getId())
+                .build());
+        thoughtRepository.save(Thought.builder()
+                .boardId(result2.getId())
+                .columnId(column.getId())
+                .build());
+        thoughtRepository.save(Thought.builder()
+                .boardId(result3.getId())
+                .columnId(column.getId())
+                .build());
     }
 }

@@ -16,42 +16,61 @@
  */
 
 import Board from '../../../Types/Board';
-import Topic from '../../../Types/Topic';
+import Retro from '../../../Types/Retro';
 
-export const mockBoards: Board[] = [
-	{
-		id: 1,
-		dateCreated: new Date(1982, 9, 1),
-		teamId: 'teamId',
-		thoughts: [
-			{
-				id: 100,
-				message: 'I am a message',
-				hearts: 0,
-				discussed: false,
-				columnId: 10,
-			},
-		],
-		columns: [
-			{
-				id: 10,
-				title: 'Happy',
-				topic: Topic.HAPPY,
-			},
-		],
-	},
-	{
-		id: 2,
-		dateCreated: new Date(1998, 3, 22),
-		teamId: 'teamId',
-		thoughts: [],
-		columns: [],
-	},
-];
+import { mockColumns } from './ColumnService';
+
+export enum SortOrder {
+	DESC = 'DESC',
+	ASC = 'ASC',
+}
+
+export const mockBoard1: Board = {
+	id: 1,
+	dateCreated: new Date(1982, 9, 1),
+	teamId: 'teamId',
+	thoughtCount: 1,
+	thoughts: [
+		{
+			id: 100,
+			message: 'I am a message',
+			hearts: 0,
+			discussed: false,
+			columnId: 1,
+		},
+	],
+};
+
+export const mockBoard2: Board = {
+	id: 2,
+	dateCreated: new Date(1998, 3, 22),
+	teamId: 'teamId',
+	thoughtCount: 0,
+	thoughts: [],
+};
+
+export const mockBoards: Board[] = [mockBoard1, mockBoard2];
+
+export const mockRetro: Retro = {
+	id: 2,
+	dateCreated: new Date(1998, 3, 22),
+	teamId: 'teamId',
+	thoughts: [
+		{
+			id: 100,
+			message: 'I am a message',
+			hearts: 0,
+			discussed: false,
+			columnId: 1,
+		},
+	],
+	columns: mockColumns,
+};
 
 const BoardService = {
 	archiveRetro: jest.fn().mockResolvedValue(null),
 	getBoards: jest.fn().mockResolvedValue(mockBoards),
+	getBoard: jest.fn().mockResolvedValue(mockRetro),
 };
 
 export default BoardService;

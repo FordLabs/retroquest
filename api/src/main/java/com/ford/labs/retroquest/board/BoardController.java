@@ -17,17 +17,15 @@
 
 package com.ford.labs.retroquest.board;
 
-
-import com.ford.labs.retroquest.thought.Thought;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -45,13 +43,23 @@ public class BoardController {
 
     @GetMapping("/team/{teamId}/boards")
     @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
-    @Operation(summary = "Gets a retro board given a team id and page index", description = "getBoardsForTeamId")
+    @Operation(summary = "Gets a retro board metadata list given a team id and page index", description = "getBoardsForTeamId")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public List<Retro> getBoardsForTeamId(
+    public List<Board> getBoards(
             @PathVariable("teamId") String teamId,
-            @RequestParam(value = "pageIndex", defaultValue = "0") Integer pageIndex
+            @RequestParam(value = "pageIndex", defaultValue = "0") Integer pageIndex,
+            @RequestParam(value = "pageSize", defaultValue = "30") Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = "dateCreated") String sortBy,
+            @RequestParam(value = "sortOrder", defaultValue = "DESC") String sortOrder
     ) {
-        return this.boardService.getBoardsForTeamId(teamId, pageIndex);
+        return this.boardService.getBoardsForTeamId(teamId, pageIndex, pageSize, sortBy, sortOrder);
+    }
+
+    @GetMapping("/team/{teamId}/boards/{boardId}")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @Operation(summary = "Gets a single retro board given a team id and board id", description = "getBoardsForTeamId")
+    public Retro getBoard(@PathVariable("teamId") String teamId, @PathVariable("boardId") Long boardId) {
+        return this.boardService.getArchivedRetroForTeam(teamId, boardId);
     }
 
     @PostMapping("/team/{teamId}/board")
