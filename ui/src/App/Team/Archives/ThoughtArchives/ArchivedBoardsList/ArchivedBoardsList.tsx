@@ -35,16 +35,13 @@ import './ArchivedBoardsList.scss';
 
 interface Props {
 	onBoardSelection(board: Board): void;
-	pageSize?: number;
 }
 
-function ArchivedBoardsList({
-	onBoardSelection,
-	pageSize = 30,
-}: Props): JSX.Element {
+function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 	const [boards, setBoards] = useState<Board[]>([]);
 	const [paginationData, setPaginationData] = useState<PaginationData>();
 	const team = useRecoilValue(TeamState);
+	const PAGE_SIZE = 6;
 
 	const getBoards = useCallback(
 		(pageIndex: number, sortBy: SortByType, sortOrder: SortOrder) => {
@@ -52,7 +49,7 @@ function ArchivedBoardsList({
 				BoardService.getBoards(
 					team.id,
 					pageIndex,
-					pageSize,
+					PAGE_SIZE,
 					sortBy,
 					sortOrder
 				).then((response) => {
@@ -61,7 +58,7 @@ function ArchivedBoardsList({
 				});
 			}
 		},
-		[pageSize, team.id]
+		[team.id]
 	);
 
 	useEffect(() => {

@@ -36,7 +36,7 @@ import ArchivedBoardsList from './ArchivedBoardsList';
 
 jest.mock('../../../../../Services/Api/BoardService');
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 6;
 const INITIAL_PAGE_INDEX = 0;
 
 describe('Archived Boards List', () => {
@@ -58,7 +58,7 @@ describe('Archived Boards List', () => {
 	describe('Pagination', () => {
 		it('should display text telling user info about what is on the page', async () => {
 			await setUpThoughtArchives();
-			expect(screen.getByText('(showing 1-5 of 11)')).toBeDefined();
+			expect(screen.getByText('(showing 1-6 of 11)')).toBeDefined();
 		});
 
 		it('should start on first paginated page', async () => {
@@ -246,9 +246,7 @@ describe('Archived Boards List', () => {
 	it('should show "No Archives" message when no archived thoughts are present', async () => {
 		BoardService.getBoards = jest.fn().mockResolvedValue(getBoardsResponse([]));
 
-		renderWithRecoilRoot(
-			<ArchivedBoardsList onBoardSelection={jest.fn()} pageSize={PAGE_SIZE} />
-		);
+		renderWithRecoilRoot(<ArchivedBoardsList onBoardSelection={jest.fn()} />);
 
 		screen.getByText('No archives were found.');
 		const description = screen.getByTestId('notFoundSectionDescription');
@@ -260,7 +258,7 @@ describe('Archived Boards List', () => {
 
 const setUpThoughtArchives = async () => {
 	renderWithRecoilRoot(
-		<ArchivedBoardsList onBoardSelection={jest.fn()} pageSize={PAGE_SIZE} />,
+		<ArchivedBoardsList onBoardSelection={jest.fn()} />,
 		({ set }) => {
 			set(TeamState, { id: 'teamId', name: 'Team' });
 		}
@@ -282,7 +280,7 @@ function getBoardsResponse(
 			sortBy: sortBy,
 			pageIndex: INITIAL_PAGE_INDEX,
 			pageSize: PAGE_SIZE,
-			pageRange: '1-5',
+			pageRange: '1-' + PAGE_SIZE,
 			totalBoardCount: 11,
 			totalPages: 3,
 		},
