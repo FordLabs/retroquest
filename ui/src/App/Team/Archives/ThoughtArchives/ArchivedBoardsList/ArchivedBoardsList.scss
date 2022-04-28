@@ -18,18 +18,27 @@
 @use './../../../../../Styles/main';
 
 .archived-boards-list {
-	margin-bottom: 3rem;
-	text-align: center;
+	@include main.site-max-width;
+	max-width: 400px;
+	margin: 0 auto 3rem;
 
 	.thoughts-archive-title {
-		margin-bottom: 0.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin: 1.5rem 0;
 
 		font-weight: 500;
 		font-size: 1.5rem;
+		white-space: nowrap;
 	}
 
 	.thoughts-archive-metadata {
 		margin-top: 0;
+
+		color: rgba(main.$asphalt, 0.5);
+		font-weight: 500;
+		font-size: 0.8rem;
 	}
 
 	.list-header {
@@ -91,7 +100,7 @@
 		}
 
 		.list-header {
-			background: main.$gray-4;
+			background: main.$black;
 
 			.sort-button {
 				color: main.$gray-2;
