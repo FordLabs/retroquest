@@ -58,7 +58,7 @@ describe('Archived Boards List', () => {
 	describe('Pagination', () => {
 		it('should display text telling user info about what is on the page', async () => {
 			await setUpThoughtArchives();
-			expect(screen.getByText('( showing 1-5 of 11 )')).toBeDefined();
+			expect(screen.getByText('(showing 1-5 of 11)')).toBeDefined();
 		});
 
 		it('should start on first paginated page', async () => {

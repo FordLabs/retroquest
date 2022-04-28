@@ -84,15 +84,17 @@ function ArchivedBoardsList({
 	}
 
 	function getPageData(): string {
-		return `( showing ${paginationData?.pageRange} of ${paginationData?.totalBoardCount} )`;
+		return `(showing ${paginationData?.pageRange} of ${paginationData?.totalBoardCount})`;
 	}
 
 	return (
 		<div className="archived-boards-list">
 			{boards?.length ? (
 				<>
-					<h1 className="thoughts-archive-title">Thought Archives</h1>
-					<p className="thoughts-archive-metadata">{getPageData()}</p>
+					<h1 className="thoughts-archive-title">
+						Thought Archives
+						<span className="thoughts-archive-metadata">{getPageData()}</span>
+					</h1>
 					<ArchivedBoardListHeader
 						onDateClick={handleDateSort}
 						onHashClick={handleCountSort}
