@@ -15,11 +15,26 @@
  * limitations under the License.
  */
 
-import axios from 'axios';
+import axios, { AxiosResponseHeaders } from 'axios';
 
 import Board from '../../Types/Board';
 
 import getAuthConfig from './getAuthConfig';
+
+export interface GetBoardsResponse {
+	boards: Board[];
+	paginationData: PaginationData;
+}
+
+export interface PaginationData {
+	sortOrder: SortOrder;
+	sortBy: string;
+	pageIndex: number;
+	pageSize: number;
+	pageRange: string;
+	totalBoardCount: number;
+	totalPages: number;
+}
 
 export enum SortOrder {
 	DESC = 'DESC',
@@ -38,13 +53,19 @@ const BoardService = {
 		pageSize?: number,
 		sortBy?: string,
 		sortOrder?: SortOrder
-	): Promise<Board[]> {
+	): Promise<GetBoardsResponse> {
 		let url = `/api/team/${teamId}/boards?`;
 		if (pageIndex !== undefined) url += `pageIndex=${pageIndex}`;
 		if (pageSize !== undefined) url += `&pageSize=${pageSize}`;
 		if (sortBy !== undefined) url += `&sortBy=${sortBy}`;
 		if (sortOrder !== undefined) url += `&sortOrder=${sortOrder}`;
-		return axios.get(url, getAuthConfig()).then((response) => response.data);
+
+		return axios.get(url, getAuthConfig()).then((response) => {
+			return {
+				boards: response.data,
+				paginationData: getPaginatedDataFromHeaders(response.headers),
+			};
+		});
 	},
 
 	getBoard(teamId: string, boardId: number) {
@@ -54,3 +75,17 @@ const BoardService = {
 };
 
 export default BoardService;
+
+function getPaginatedDataFromHeaders(
+	headers: AxiosResponseHeaders
+): PaginationData {
+	return {
+		sortBy: headers['sort-by'],
+		sortOrder: headers['sort-order'] as SortOrder,
+		pageIndex: parseInt(headers['page-index'], 10),
+		pageSize: parseInt(headers['page-size'], 10),
+		pageRange: headers['page-range'],
+		totalBoardCount: parseInt(headers['total-board-count'], 10),
+		totalPages: parseInt(headers['total-pages'], 10),
+	};
+}

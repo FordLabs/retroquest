@@ -67,6 +67,27 @@ class BoardApiTest extends ApiTestBase {
     }
 
     @Test
+    void getBoards_ShouldReturnPaginationInfo() throws Exception {
+        setupBoards();
+        mockMvc.perform(get("/api/team/" + teamId + "/boards?pageIndex=0&pageSize=2")
+                        .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", Matchers.is(2)))
+                .andExpect(header().string(
+                        "Access-Control-Expose-Headers",
+                        "Sort-Order,Sort-By,Page-Index,Page-Size,Total-Board-Count,Total-Pages,Page-Range"
+                ))
+                .andExpect(header().string("Sort-By", "dateCreated"))
+                .andExpect(header().string("Sort-Order", "DESC"))
+                .andExpect(header().string("Page-Index", "0"))
+                .andExpect(header().string("Page-Size", "2"))
+                .andExpect(header().string("Page-Range", "1-2"))
+                .andExpect(header().string("Total-Board-Count", "3"))
+                .andExpect(header().string("Total-Pages", "2"));
+
+    }
+
+    @Test
     void getBoards_ShouldGetBoardsSortedByDescendingDate() throws Exception {
         setupBoards();
         mockMvc.perform(get("/api/team/" + teamId + "/boards")

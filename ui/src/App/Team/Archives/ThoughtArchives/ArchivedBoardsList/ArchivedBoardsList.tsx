@@ -17,14 +17,16 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import classnames from 'classnames';
+import NotFoundSection from 'Common/NotFoundSection/NotFoundSection';
 import { useRecoilValue } from 'recoil';
-
-import NotFoundSection from '../../../../../Common/NotFoundSection/NotFoundSection';
 import BoardService, {
+	PaginationData,
 	SortOrder,
-} from '../../../../../Services/Api/BoardService';
-import { TeamState } from '../../../../../State/TeamState';
-import Board from '../../../../../Types/Board';
+} from 'Services/Api/BoardService';
+import { TeamState } from 'State/TeamState';
+import Board from 'Types/Board';
+
+import Pagination from '../../Pagination/Pagination';
 
 import ArchivedBoardTile from './ArchivedBoardTile/ArchivedBoardTile';
 
@@ -43,31 +45,44 @@ interface Props {
 
 function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 	const [boards, setBoards] = useState<Board[]>([]);
+	const [paginationData, setPaginationData] = useState<PaginationData>();
 	const [sortState, setSortState] = useState<SortState>(
 		SortState.DateDescending
 	);
 	const team = useRecoilValue(TeamState);
 	const PAGE_SIZE = 30;
-	const PAGE_INDEX = 0;
 
 	const getBoards = useCallback(
-		(sortBy: string, sortOrder: SortOrder) => {
+		(pageIndex: number, sortBy: string, sortOrder: SortOrder) => {
 			if (team.id) {
 				BoardService.getBoards(
 					team.id,
-					PAGE_INDEX,
+					pageIndex,
 					PAGE_SIZE,
 					sortBy,
 					sortOrder
-				).then(setBoards);
+				).then((response) => {
+					setBoards(response.boards);
+					setPaginationData(response.paginationData);
+				});
 			}
 		},
 		[team.id]
 	);
 
 	useEffect(() => {
-		getBoards('dateCreated', SortOrder.DESC);
+		getBoards(0, 'dateCreated', SortOrder.DESC);
 	}, [getBoards]);
+
+	const getBoardsForPage = useCallback(
+		(pageIndex: number) => {
+			if (paginationData) {
+				const { sortBy, sortOrder } = paginationData;
+				getBoards(pageIndex, sortBy, sortOrder);
+			}
+		},
+		[getBoards, paginationData]
+	);
 
 	function handleCountSort() {
 		const isDescending = sortState === SortState.CountDescending;
@@ -78,7 +93,7 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 		setSortState(thoughtCountSortState);
 
 		const sortOrder = isDescending ? SortOrder.ASC : SortOrder.DESC;
-		getBoards('thoughtCount', sortOrder);
+		getBoards(paginationData?.pageIndex || 0, 'thoughtCount', sortOrder);
 	}
 
 	function handleDateSort() {
@@ -90,14 +105,19 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 		setSortState(dateSortState);
 
 		const sortOrder = isDescending ? SortOrder.ASC : SortOrder.DESC;
-		getBoards('dateCreated', sortOrder);
+		getBoards(paginationData?.pageIndex || 0, 'dateCreated', sortOrder);
 	}
+
+	const getPageData = (): string => {
+		return `( showing ${paginationData?.pageRange} of ${paginationData?.totalBoardCount} )`;
+	};
 
 	return (
 		<div className="archived-boards-list">
-			{boards.length ? (
+			{boards?.length ? (
 				<>
 					<h1 className="thoughts-archive-title">Thought Archives</h1>
+					<p className="thoughts-archive-metadata">{getPageData()}</p>
 					<div className="list-header">
 						<button
 							className={classnames('sort-button', {
@@ -130,6 +150,10 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 							);
 						})}
 					</ol>
+					<Pagination
+						pageCount={paginationData?.totalPages || 0}
+						onPageChange={getBoardsForPage}
+					/>
 				</>
 			) : (
 				<NotFoundSection

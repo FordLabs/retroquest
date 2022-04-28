@@ -27,6 +27,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -55,7 +57,7 @@ public class BoardService {
         this.websocketService = websocketService;
     }
 
-    public List<Board> getBoardsForTeamId(String teamId, Integer pageIndex, Integer pageSize, String sortBy, String sortOrder) {
+    public List<Board> getPaginatedBoardList(String teamId, Integer pageIndex, Integer pageSize, String sortBy, String sortOrder) {
         Sort.Direction orderBy = Sort.DEFAULT_DIRECTION;
         if ("ASC".equals(sortOrder)) orderBy = Sort.Direction.ASC;
         if ("DESC".equals(sortOrder)) orderBy = Sort.Direction.DESC;
@@ -68,6 +70,32 @@ public class BoardService {
         } else {
             return new ArrayList<>();
         }
+    }
+
+    public ResponseEntity<List<Board>> getPaginatedBoardListWithHeaders(String teamId, Integer pageIndex, Integer pageSize, String sortBy, String sortOrder) {
+        List<Board> pageOfBoards = this.getPaginatedBoardList(teamId, pageIndex, pageSize, sortBy, sortOrder);
+        Integer totalBoardCount = this.boardRepository.findAllByTeamId(teamId).size();
+
+        var headers = new HttpHeaders();
+        headers.add(
+                "Access-Control-Expose-Headers",
+                "Sort-Order,Sort-By,Page-Index,Page-Size,Total-Board-Count,Total-Pages,Page-Range"
+        );
+        headers.set("Sort-Order", String.valueOf(sortOrder));
+        headers.set("Sort-By", String.valueOf(sortBy));
+        headers.set("Page-Index", String.valueOf(pageIndex));
+        headers.set("Page-Size", String.valueOf(pageSize));
+
+        var start = pageIndex * pageSize + 1;
+        var end = (start - 1) + pageOfBoards.size();
+        headers.set("Page-Range", start + "-" + end);
+        headers.set("Total-Board-Count", String.valueOf(totalBoardCount));
+        int totalPages = (int) Math.ceil((double) totalBoardCount / pageSize);
+        headers.set("Total-Pages",  String.valueOf(totalPages));
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pageOfBoards);
     }
 
     public Retro getArchivedRetroForTeam(String teamId, Long boardId) {
