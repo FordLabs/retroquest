@@ -24,25 +24,45 @@ enum SortState {
 	CountAscending,
 }
 
-function ArchivedBoardListHeader() {
+export enum SortOrder {
+	DESC = 'DESC',
+	ASC = 'ASC',
+}
+
+interface Props {
+	onDateClick(sortOrder: SortOrder): void;
+	onHashClick(sortOrder: SortOrder): void;
+}
+
+function ArchivedBoardListHeader(props: Props) {
+	const { onDateClick, onHashClick } = props;
+
 	const [sortState, setSortState] = useState<SortState>(
 		SortState.DateDescending
 	);
 
 	function handleCountSort() {
-		setSortState(
-			sortState === SortState.CountDescending
-				? SortState.CountAscending
-				: SortState.CountDescending
-		);
+		const isDescending = sortState === SortState.CountDescending;
+		const thoughtCountSortState = isDescending
+			? SortState.CountAscending
+			: SortState.CountDescending;
+
+		setSortState(thoughtCountSortState);
+
+		const sortOrder = isDescending ? SortOrder.ASC : SortOrder.DESC;
+		onHashClick(sortOrder);
 	}
 
 	function handleDateSort() {
-		setSortState(
-			sortState === SortState.DateDescending
-				? SortState.DateAscending
-				: SortState.DateDescending
-		);
+		const isDescending = sortState === SortState.DateDescending;
+		const dateSortState = isDescending
+			? SortState.DateAscending
+			: SortState.DateDescending;
+
+		setSortState(dateSortState);
+
+		const sortOrder = isDescending ? SortOrder.ASC : SortOrder.DESC;
+		onDateClick(sortOrder);
 	}
 
 	return (
