@@ -16,14 +16,8 @@
  */
 
 import React from 'react';
-import {
-	fireEvent,
-	render,
-	screen,
-	waitFor,
-	within,
-} from '@testing-library/react';
-import { RecoilRoot } from 'recoil';
+import { screen, waitFor, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import {
 	mockBoard1,
@@ -32,6 +26,7 @@ import {
 } from '../../../../../Services/Api/__mocks__/BoardService';
 import BoardService, {
 	GetBoardsResponse,
+	SortByType,
 } from '../../../../../Services/Api/BoardService';
 import { TeamState } from '../../../../../State/TeamState';
 import Board from '../../../../../Types/Board';
@@ -41,8 +36,8 @@ import ArchivedBoardsList from './ArchivedBoardsList';
 
 jest.mock('../../../../../Services/Api/BoardService');
 
-const PAGE_SIZE = 30;
-const PAGE_INDEX = 0;
+const PAGE_SIZE = 5;
+const INITIAL_PAGE_INDEX = 0;
 
 describe('Archived Boards List', () => {
 	const oldestDate = 'October 1st, 1982';
@@ -54,137 +49,205 @@ describe('Archived Boards List', () => {
 			.mockResolvedValue(getBoardsResponse([mockBoard1, mockBoard2]));
 	});
 
-	it('should display a list and count of completed retros', async () => {
+	it('should display a list of completed retros', async () => {
 		await setUpThoughtArchives();
-		screen.getByText('( showing 1-5 of 11 )');
-		screen.getByText(oldestDate);
-		screen.getByText(newestDate);
+		expect(screen.getByText(oldestDate)).toBeDefined();
+		expect(screen.getByText(newestDate)).toBeDefined();
 	});
 
-	it('should be sorted by date descending by default', async () => {
-		BoardService.getBoards = jest
-			.fn()
-			.mockResolvedValue(getBoardsResponse([mockBoard2, mockBoard1]));
-		await setUpThoughtArchives();
+	describe('Pagination', () => {
+		it('should display text telling user info about what is on the page', async () => {
+			await setUpThoughtArchives();
+			expect(screen.getByText('( showing 1-5 of 11 )')).toBeDefined();
+		});
 
-		expect(BoardService.getBoards).toHaveBeenCalledWith(
-			'teamId',
-			PAGE_INDEX,
-			PAGE_SIZE,
-			'dateCreated',
-			'DESC'
-		);
+		it('should start on first paginated page', async () => {
+			await setUpThoughtArchives();
+			const paginationButton = screen.getAllByText('1').slice(-1)[0];
+			expect(paginationButton).toHaveClass('active');
+		});
 
-		const tiles = screen.getAllByTestId('boardArchive');
-		expect(within(tiles[0]).getByText(newestDate)).toBeDefined();
-		expect(within(tiles[1]).getByText(oldestDate)).toBeDefined();
+		it('should paginate to second page with default sorting', async () => {
+			await setUpThoughtArchives();
+			const pagination2Button = screen.getAllByText('2').slice(-1)[0];
+			expect(pagination2Button).not.toHaveClass('active');
+			expect(screen.getAllByTestId('boardArchive')).toHaveLength(2);
+
+			BoardService.getBoards = jest
+				.fn()
+				.mockResolvedValue(getBoardsResponse([mockBoard2]));
+
+			userEvent.click(pagination2Button);
+
+			expect(pagination2Button).toHaveClass('active');
+			await waitFor(() =>
+				expect(BoardService.getBoards).toHaveBeenCalledWith(
+					'teamId',
+					INITIAL_PAGE_INDEX + 1,
+					PAGE_SIZE,
+					'dateCreated',
+					'DESC'
+				)
+			);
+			expect(screen.getAllByTestId('boardArchive')).toHaveLength(1);
+		});
+
+		it('should paginate to second page with new sorting', async () => {
+			await setUpThoughtArchives();
+			const pagination2Button = screen.getAllByText('2').slice(-1)[0];
+			expect(pagination2Button).not.toHaveClass('active');
+			expect(screen.getAllByTestId('boardArchive')).toHaveLength(2);
+
+			BoardService.getBoards = jest
+				.fn()
+				.mockResolvedValue(
+					getBoardsResponse([mockBoard2], 'thoughtCount', SortOrder.DESC)
+				);
+
+			clickThoughtCountSortingButton();
+
+			await waitFor(() => expect(BoardService.getBoards).toHaveBeenCalled());
+
+			userEvent.click(pagination2Button);
+
+			expect(pagination2Button).toHaveClass('active');
+			await waitFor(() =>
+				expect(BoardService.getBoards).toHaveBeenCalledWith(
+					'teamId',
+					INITIAL_PAGE_INDEX,
+					PAGE_SIZE,
+					'thoughtCount',
+					'DESC'
+				)
+			);
+			expect(screen.getAllByTestId('boardArchive')).toHaveLength(1);
+		});
 	});
 
-	it('should be sorted by date ascending when Date clicked', async () => {
-		await setUpThoughtArchives();
+	describe('Sorting', () => {
+		it('should be sorted by date descending by default', async () => {
+			BoardService.getBoards = jest
+				.fn()
+				.mockResolvedValue(getBoardsResponse([mockBoard2, mockBoard1]));
+			await setUpThoughtArchives();
 
-		BoardService.getBoards = jest
-			.fn()
-			.mockResolvedValue(getBoardsResponse([mockBoard1, mockBoard2]));
-
-		fireEvent.click(screen.getByText('Date'));
-
-		await waitFor(() =>
 			expect(BoardService.getBoards).toHaveBeenCalledWith(
 				'teamId',
-				PAGE_INDEX,
-				PAGE_SIZE,
-				'dateCreated',
-				'ASC'
-			)
-		);
-
-		const tiles = screen.getAllByTestId('boardArchive');
-		expect(within(tiles[0]).getByText(oldestDate)).toBeDefined();
-		expect(within(tiles[1]).getByText(newestDate)).toBeDefined();
-	});
-
-	it('should be sorted by date descending when Date clicked and already sorted by ascending', async () => {
-		await setUpThoughtArchives();
-		fireEvent.click(screen.getByText('Date'));
-
-		BoardService.getBoards = jest
-			.fn()
-			.mockResolvedValue(getBoardsResponse([mockBoard2, mockBoard1]));
-
-		fireEvent.click(screen.getByText('Date'));
-
-		await waitFor(() =>
-			expect(BoardService.getBoards).toHaveBeenCalledWith(
-				'teamId',
-				PAGE_INDEX,
+				INITIAL_PAGE_INDEX,
 				PAGE_SIZE,
 				'dateCreated',
 				'DESC'
-			)
-		);
+			);
 
-		const tiles = screen.getAllByTestId('boardArchive');
-		expect(within(tiles[0]).getByText('April 22nd, 1998')).toBeDefined();
-		expect(within(tiles[1]).getByText('October 1st, 1982')).toBeDefined();
-	});
+			const tiles = screen.getAllByTestId('boardArchive');
+			expect(within(tiles[0]).getByText(newestDate)).toBeDefined();
+			expect(within(tiles[1]).getByText(oldestDate)).toBeDefined();
+		});
 
-	it('should be sorted by thought count descending when # clicked', async () => {
-		await setUpThoughtArchives();
+		it('should be sorted by date ascending when Date clicked', async () => {
+			await setUpThoughtArchives();
 
-		BoardService.getBoards = jest
-			.fn()
-			.mockResolvedValue(getBoardsResponse([mockBoard1, mockBoard2]));
+			BoardService.getBoards = jest
+				.fn()
+				.mockResolvedValue(getBoardsResponse([mockBoard1, mockBoard2]));
 
-		fireEvent.click(screen.getByText('#'));
+			clickDateSortingButton();
 
-		await waitFor(() =>
-			expect(BoardService.getBoards).toHaveBeenCalledWith(
-				'teamId',
-				PAGE_INDEX,
-				PAGE_SIZE,
-				'thoughtCount',
-				'DESC'
-			)
-		);
+			await waitFor(() =>
+				expect(BoardService.getBoards).toHaveBeenCalledWith(
+					'teamId',
+					INITIAL_PAGE_INDEX,
+					PAGE_SIZE,
+					'dateCreated',
+					'ASC'
+				)
+			);
 
-		const tiles = screen.getAllByTestId('boardArchive');
-		expect(within(tiles[0]).getByText('1')).toBeDefined();
-		expect(within(tiles[1]).getByText('0')).toBeDefined();
-	});
+			const tiles = screen.getAllByTestId('boardArchive');
+			expect(within(tiles[0]).getByText(oldestDate)).toBeDefined();
+			expect(within(tiles[1]).getByText(newestDate)).toBeDefined();
+		});
 
-	it('should be sorted by thought count ascending when # clicked and already sorted by descending', async () => {
-		await setUpThoughtArchives();
-		fireEvent.click(screen.getByText('#'));
+		it('should be sorted by date descending when Date clicked and already sorted by ascending', async () => {
+			await setUpThoughtArchives();
+			clickDateSortingButton();
 
-		BoardService.getBoards = jest
-			.fn()
-			.mockResolvedValue(getBoardsResponse([mockBoard2, mockBoard1]));
+			BoardService.getBoards = jest
+				.fn()
+				.mockResolvedValue(getBoardsResponse([mockBoard2, mockBoard1]));
 
-		fireEvent.click(screen.getByText('#'));
+			clickDateSortingButton();
 
-		await waitFor(() =>
-			expect(BoardService.getBoards).toHaveBeenCalledWith(
-				'teamId',
-				PAGE_INDEX,
-				PAGE_SIZE,
-				'thoughtCount',
-				'ASC'
-			)
-		);
+			await waitFor(() =>
+				expect(BoardService.getBoards).toHaveBeenCalledWith(
+					'teamId',
+					INITIAL_PAGE_INDEX,
+					PAGE_SIZE,
+					'dateCreated',
+					'DESC'
+				)
+			);
 
-		const tiles = screen.getAllByTestId('boardArchive');
-		expect(within(tiles[0]).queryByText('0')).not.toBeNull();
-		expect(within(tiles[1]).queryByText('1')).not.toBeNull();
+			const tiles = screen.getAllByTestId('boardArchive');
+			expect(within(tiles[0]).getByText('April 22nd, 1998')).toBeDefined();
+			expect(within(tiles[1]).getByText('October 1st, 1982')).toBeDefined();
+		});
+
+		it('should be sorted by thought count descending when # clicked', async () => {
+			await setUpThoughtArchives();
+
+			BoardService.getBoards = jest
+				.fn()
+				.mockResolvedValue(getBoardsResponse([mockBoard1, mockBoard2]));
+
+			clickThoughtCountSortingButton();
+
+			await waitFor(() =>
+				expect(BoardService.getBoards).toHaveBeenCalledWith(
+					'teamId',
+					INITIAL_PAGE_INDEX,
+					PAGE_SIZE,
+					'thoughtCount',
+					'DESC'
+				)
+			);
+
+			const tiles = screen.getAllByTestId('boardArchive');
+			expect(within(tiles[0]).getByText('1')).toBeDefined();
+			expect(within(tiles[1]).getByText('0')).toBeDefined();
+		});
+
+		it('should be sorted by thought count ascending when # clicked and already sorted by descending', async () => {
+			await setUpThoughtArchives();
+			clickThoughtCountSortingButton();
+
+			BoardService.getBoards = jest
+				.fn()
+				.mockResolvedValue(getBoardsResponse([mockBoard2, mockBoard1]));
+
+			clickThoughtCountSortingButton();
+
+			await waitFor(() =>
+				expect(BoardService.getBoards).toHaveBeenCalledWith(
+					'teamId',
+					INITIAL_PAGE_INDEX,
+					PAGE_SIZE,
+					'thoughtCount',
+					'ASC'
+				)
+			);
+
+			const tiles = screen.getAllByTestId('boardArchive');
+			expect(within(tiles[0]).queryByText('0')).not.toBeNull();
+			expect(within(tiles[1]).queryByText('1')).not.toBeNull();
+		});
 	});
 
 	it('should show "No Archives" message when no archived thoughts are present', async () => {
 		BoardService.getBoards = jest.fn().mockResolvedValue(getBoardsResponse([]));
 
-		render(
-			<RecoilRoot>
-				<ArchivedBoardsList onBoardSelection={jest.fn()} />
-			</RecoilRoot>
+		renderWithRecoilRoot(
+			<ArchivedBoardsList onBoardSelection={jest.fn()} pageSize={PAGE_SIZE} />
 		);
 
 		screen.getByText('No archives were found.');
@@ -197,7 +260,7 @@ describe('Archived Boards List', () => {
 
 const setUpThoughtArchives = async () => {
 	renderWithRecoilRoot(
-		<ArchivedBoardsList onBoardSelection={jest.fn()} />,
+		<ArchivedBoardsList onBoardSelection={jest.fn()} pageSize={PAGE_SIZE} />,
 		({ set }) => {
 			set(TeamState, { id: 'teamId', name: 'Team' });
 		}
@@ -207,17 +270,29 @@ const setUpThoughtArchives = async () => {
 	await screen.findByText('Thought Archives');
 };
 
-function getBoardsResponse(boards: Board[]): GetBoardsResponse {
+function getBoardsResponse(
+	boards: Board[],
+	sortBy: SortByType = 'dateCreated',
+	sortOrder: SortOrder = SortOrder.DESC
+): GetBoardsResponse {
 	return {
 		boards,
 		paginationData: {
-			sortOrder: SortOrder.DESC,
-			sortBy: 'dateCreated',
-			pageIndex: PAGE_INDEX,
+			sortOrder: sortOrder,
+			sortBy: sortBy,
+			pageIndex: INITIAL_PAGE_INDEX,
 			pageSize: PAGE_SIZE,
 			pageRange: '1-5',
 			totalBoardCount: 11,
 			totalPages: 3,
 		},
 	};
+}
+
+function clickDateSortingButton() {
+	userEvent.click(screen.getByText('Date'));
+}
+
+function clickThoughtCountSortingButton() {
+	userEvent.click(screen.getByText('#'));
 }
