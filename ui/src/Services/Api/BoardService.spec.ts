@@ -31,7 +31,6 @@ describe('Board Service', () => {
 	const expectedBoard: Board = {
 		id: boardId,
 		teamId,
-		thoughtCount: 2,
 		dateCreated: new Date(),
 		thoughts: [],
 	};
@@ -82,34 +81,34 @@ describe('Board Service', () => {
 			);
 		});
 
-		it('should return list of boards sorted by thoughtCount in ascending order', async () => {
+		it('should return list of boards sorted by dateCreated in ascending order', async () => {
 			const actualResponse = await BoardService.getBoards(
 				teamId,
 				0,
 				5,
-				'thoughtCount',
+				'dateCreated',
 				SortOrder.ASC
 			);
 
 			expect(actualResponse.boards).toEqual([expectedBoard]);
 			expect(axios.get).toHaveBeenCalledWith(
-				`${boardUrl}?pageIndex=0&pageSize=5&sortBy=thoughtCount&sortOrder=ASC`,
+				`${boardUrl}?pageIndex=0&pageSize=5&sortBy=dateCreated&sortOrder=ASC`,
 				mockConfig
 			);
 		});
 
-		it('should return list of boards sorted by thoughtCount in descending order', async () => {
+		it('should return list of boards sorted by dateCreated in descending order', async () => {
 			const actualResponse = await BoardService.getBoards(
 				teamId,
 				0,
 				5,
-				'thoughtCount',
+				'dateCreated',
 				SortOrder.DESC
 			);
 
 			expect(actualResponse.boards).toEqual([expectedBoard]);
 			expect(axios.get).toHaveBeenCalledWith(
-				`${boardUrl}?pageIndex=0&pageSize=5&sortBy=thoughtCount&sortOrder=DESC`,
+				`${boardUrl}?pageIndex=0&pageSize=5&sortBy=dateCreated&sortOrder=DESC`,
 				mockConfig
 			);
 		});
