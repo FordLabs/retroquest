@@ -21,7 +21,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -45,14 +44,14 @@ public class BoardController {
     @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Gets a retro board metadata list given a team id and page index", description = "getBoardsForTeamId")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public List<Board> getBoards(
+    public ResponseEntity<List<Board>> getBoards(
             @PathVariable("teamId") String teamId,
             @RequestParam(value = "pageIndex", defaultValue = "0") Integer pageIndex,
             @RequestParam(value = "pageSize", defaultValue = "30") Integer pageSize,
             @RequestParam(value = "sortBy", defaultValue = "dateCreated") String sortBy,
             @RequestParam(value = "sortOrder", defaultValue = "DESC") String sortOrder
     ) {
-        return this.boardService.getBoardsForTeamId(teamId, pageIndex, pageSize, sortBy, sortOrder);
+        return this.boardService.getPaginatedBoardListWithHeaders(teamId, pageIndex, pageSize, sortBy, sortOrder);
     }
 
     @GetMapping("/team/{teamId}/boards/{boardId}")

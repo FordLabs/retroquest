@@ -15,14 +15,12 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.deprecated_tests;
+package com.ford.labs.retroquest.board;
 
 import com.ford.labs.retroquest.actionitem.ActionItemService;
 import com.ford.labs.retroquest.board.Board;
 import com.ford.labs.retroquest.board.BoardRepository;
 import com.ford.labs.retroquest.board.BoardService;
-import com.ford.labs.retroquest.board.Retro;
-import com.ford.labs.retroquest.column.Column;
 import com.ford.labs.retroquest.column.ColumnService;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtService;
@@ -54,7 +52,7 @@ class BoardServiceTest {
     private final BoardService boardService = new BoardService(boardRepository, columnService, thoughtService, actionItemService, websocketService);
 
     @Test
-    void getBoardsForTeamId_ShouldReturnPagedBoardsSortedByDateInDescendingOrder() {
+    void getPaginatedBoardList_ShouldReturnPagedBoardsSortedByDateInDescendingOrder() {
         var pageSize = 2;
         var pageIndex = 3;
         final PageRequest pageRequest = PageRequest.of(
@@ -72,12 +70,12 @@ class BoardServiceTest {
 
         when(boardRepository.findAllByTeamId("team1", pageRequest)).thenReturn(new PageImpl(List.of(expectedBoard)));
 
-        List<Board> actualBoards = boardService.getBoardsForTeamId("team1", pageIndex, pageSize, "dateCreated", "DESC");
+        List<Board> actualBoards = boardService.getPaginatedBoardList("team1", pageIndex, pageSize, "dateCreated", "DESC");
         assertThat(actualBoards).containsExactly(expectedBoard);
     }
 
     @Test
-    void getBoardsForTeamId_ShouldReturnPagedBoardsSortedByDateInAscendingOrder() {
+    void getPaginatedBoardList_ShouldReturnPagedBoardsSortedByDateInAscendingOrder() {
         var pageSize = 2;
         var pageIndex = 0;
         final PageRequest pageRequest = PageRequest.of(
@@ -95,7 +93,7 @@ class BoardServiceTest {
 
         when(boardRepository.findAllByTeamId("team1", pageRequest)).thenReturn(new PageImpl(List.of(expectedBoard)));
 
-        List<Board> actualBoards = boardService.getBoardsForTeamId("team1", pageIndex, pageSize, "dateCreated", "ASC");
+        List<Board> actualBoards = boardService.getPaginatedBoardList("team1", pageIndex, pageSize, "dateCreated", "ASC");
         assertThat(actualBoards).containsExactly(expectedBoard);
     }
 

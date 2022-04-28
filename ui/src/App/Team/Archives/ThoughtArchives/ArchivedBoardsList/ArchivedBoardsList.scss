@@ -18,11 +18,18 @@
 @use './../../../../../Styles/main';
 
 .archived-boards-list {
+	margin-bottom: 3rem;
 	text-align: center;
 
 	.thoughts-archive-title {
+		margin-bottom: 0.5rem;
+
 		font-weight: 500;
 		font-size: 1.5rem;
+	}
+
+	.thoughts-archive-metadata {
+		margin-top: 0;
 	}
 
 	.list-header {

@@ -15,8 +15,10 @@
  * limitations under the License.
  */
 
-import Board from '../../../Types/Board';
-import Retro from '../../../Types/Retro';
+import Board from 'Types/Board';
+import Retro from 'Types/Retro';
+
+import { GetBoardsResponse, PaginationData } from '../BoardService';
 
 import { mockColumns } from './ColumnService';
 
@@ -67,9 +69,22 @@ export const mockRetro: Retro = {
 	columns: mockColumns,
 };
 
+export const mockPaginationData: PaginationData = {
+	sortOrder: SortOrder.DESC,
+	sortBy: '',
+	pageIndex: 0,
+	pageSize: 5,
+	pageRange: '1-5',
+	totalBoardCount: 0,
+	totalPages: 0,
+};
+
 const BoardService = {
 	archiveRetro: jest.fn().mockResolvedValue(null),
-	getBoards: jest.fn().mockResolvedValue(mockBoards),
+	getBoards: jest.fn().mockResolvedValue({
+		boards: mockBoards,
+		paginationData: mockPaginationData,
+	} as GetBoardsResponse),
 	getBoard: jest.fn().mockResolvedValue(mockRetro),
 };
 

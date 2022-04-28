@@ -28,22 +28,35 @@ import { RecoilRoot } from 'recoil';
 import {
 	mockBoard1,
 	mockBoard2,
+	SortOrder,
 } from '../../../../../Services/Api/__mocks__/BoardService';
-import BoardService from '../../../../../Services/Api/BoardService';
+import BoardService, {
+	GetBoardsResponse,
+} from '../../../../../Services/Api/BoardService';
 import { TeamState } from '../../../../../State/TeamState';
+import Board from '../../../../../Types/Board';
+import renderWithRecoilRoot from '../../../../../Utils/renderWithRecoilRoot';
 
 import ArchivedBoardsList from './ArchivedBoardsList';
 
 jest.mock('../../../../../Services/Api/BoardService');
 
+const PAGE_SIZE = 30;
+const PAGE_INDEX = 0;
+
 describe('Archived Boards List', () => {
 	const oldestDate = 'October 1st, 1982';
 	const newestDate = 'April 22nd, 1998';
-	const PAGE_SIZE = 30;
-	const PAGE_INDEX = 0;
 
-	it('should display a list of completed retros', async () => {
+	beforeEach(() => {
+		BoardService.getBoards = jest
+			.fn()
+			.mockResolvedValue(getBoardsResponse([mockBoard1, mockBoard2]));
+	});
+
+	it('should display a list and count of completed retros', async () => {
 		await setUpThoughtArchives();
+		screen.getByText('( showing 1-5 of 11 )');
 		screen.getByText(oldestDate);
 		screen.getByText(newestDate);
 	});
@@ -51,7 +64,7 @@ describe('Archived Boards List', () => {
 	it('should be sorted by date descending by default', async () => {
 		BoardService.getBoards = jest
 			.fn()
-			.mockResolvedValue([mockBoard2, mockBoard1]);
+			.mockResolvedValue(getBoardsResponse([mockBoard2, mockBoard1]));
 		await setUpThoughtArchives();
 
 		expect(BoardService.getBoards).toHaveBeenCalledWith(
@@ -72,7 +85,7 @@ describe('Archived Boards List', () => {
 
 		BoardService.getBoards = jest
 			.fn()
-			.mockResolvedValue([mockBoard1, mockBoard2]);
+			.mockResolvedValue(getBoardsResponse([mockBoard1, mockBoard2]));
 
 		fireEvent.click(screen.getByText('Date'));
 
@@ -97,7 +110,7 @@ describe('Archived Boards List', () => {
 
 		BoardService.getBoards = jest
 			.fn()
-			.mockResolvedValue([mockBoard2, mockBoard1]);
+			.mockResolvedValue(getBoardsResponse([mockBoard2, mockBoard1]));
 
 		fireEvent.click(screen.getByText('Date'));
 
@@ -121,7 +134,7 @@ describe('Archived Boards List', () => {
 
 		BoardService.getBoards = jest
 			.fn()
-			.mockResolvedValue([mockBoard1, mockBoard2]);
+			.mockResolvedValue(getBoardsResponse([mockBoard1, mockBoard2]));
 
 		fireEvent.click(screen.getByText('#'));
 
@@ -146,7 +159,7 @@ describe('Archived Boards List', () => {
 
 		BoardService.getBoards = jest
 			.fn()
-			.mockResolvedValue([mockBoard2, mockBoard1]);
+			.mockResolvedValue(getBoardsResponse([mockBoard2, mockBoard1]));
 
 		fireEvent.click(screen.getByText('#'));
 
@@ -166,7 +179,7 @@ describe('Archived Boards List', () => {
 	});
 
 	it('should show "No Archives" message when no archived thoughts are present', async () => {
-		BoardService.getBoards = jest.fn().mockResolvedValue([]);
+		BoardService.getBoards = jest.fn().mockResolvedValue(getBoardsResponse([]));
 
 		render(
 			<RecoilRoot>
@@ -183,15 +196,28 @@ describe('Archived Boards List', () => {
 });
 
 const setUpThoughtArchives = async () => {
-	render(
-		<RecoilRoot
-			initializeState={({ set }) => {
-				set(TeamState, { id: 'teamId', name: '' });
-			}}
-		>
-			<ArchivedBoardsList onBoardSelection={jest.fn()} />
-		</RecoilRoot>
+	renderWithRecoilRoot(
+		<ArchivedBoardsList onBoardSelection={jest.fn()} />,
+		({ set }) => {
+			set(TeamState, { id: 'teamId', name: 'Team' });
+		}
 	);
 
+	await waitFor(() => expect(BoardService.getBoards).toHaveBeenCalled());
 	await screen.findByText('Thought Archives');
 };
+
+function getBoardsResponse(boards: Board[]): GetBoardsResponse {
+	return {
+		boards,
+		paginationData: {
+			sortOrder: SortOrder.DESC,
+			sortBy: 'dateCreated',
+			pageIndex: PAGE_INDEX,
+			pageSize: PAGE_SIZE,
+			pageRange: '1-5',
+			totalBoardCount: 11,
+			totalPages: 3,
+		},
+	};
+}
