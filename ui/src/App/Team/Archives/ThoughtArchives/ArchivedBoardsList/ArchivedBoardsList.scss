@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-@use './../../../../../Styles/main';
+@use 'Styles/main';
 
 .archived-boards-list {
 	@include main.site-max-width;
@@ -41,52 +41,6 @@
 		font-size: 0.8rem;
 	}
 
-	.list-header {
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-
-		max-width: 21.875rem;
-		margin: 0 auto 1rem;
-		padding: 0.5rem;
-
-		background: rgba(main.$asphalt, 0.08);
-		border-radius: 6px;
-
-		.sort-button {
-			color: rgba(main.$asphalt, 0.4);
-			font-weight: bold;
-
-			&.selected-asc {
-				color: main.$asphalt;
-			}
-
-			&.selected-asc::after {
-				display: inline-block;
-
-				transform: rotate(180deg) translateX(-3px) translateY(-3px);
-
-				content: '▾';
-			}
-
-			&.selected-desc {
-				color: main.$asphalt;
-			}
-
-			&.selected-desc::after {
-				display: inline-block;
-
-				transform: translateX(3px);
-
-				content: '▾';
-			}
-		}
-
-		.spacer {
-			padding: 0.75rem;
-		}
-	}
-
 	.list {
 		max-width: 21.875rem;
 		margin: 0 auto 1rem;
@@ -97,23 +51,6 @@
 	.archived-boards-list {
 		.thoughts-archive-title {
 			color: main.$gray-1;
-		}
-
-		.list-header {
-			background: main.$black;
-
-			.sort-button {
-				color: main.$gray-2;
-				font-weight: bold;
-
-				&.selected-asc {
-					color: main.$gray-1;
-				}
-
-				&.selected-desc {
-					color: main.$gray-1;
-				}
-			}
 		}
 	}
 }

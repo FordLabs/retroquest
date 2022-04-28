@@ -23,13 +23,7 @@ import ArchivedBoardListHeader from './ArchivedBoardListHeader';
 describe('Archived Board List Header', () => {
 	it('should toggle from ascending to descending and back for date click', () => {
 		const onDateClick = jest.fn();
-		const onHashClick = jest.fn();
-		render(
-			<ArchivedBoardListHeader
-				onDateClick={onDateClick}
-				onHashClick={onHashClick}
-			/>
-		);
+		render(<ArchivedBoardListHeader onDateClick={onDateClick} />);
 
 		clickDateSortingButton();
 		expect(onDateClick).toHaveBeenCalledWith('ASC');
@@ -39,35 +33,9 @@ describe('Archived Board List Header', () => {
 
 		clickDateSortingButton();
 		expect(onDateClick).toHaveBeenCalledWith('ASC');
-		expect(onHashClick).not.toHaveBeenCalled();
-	});
-
-	it('should toggle from descending to ascending and back for hash click', () => {
-		const onDateClick = jest.fn();
-		const onHashClick = jest.fn();
-		render(
-			<ArchivedBoardListHeader
-				onDateClick={onDateClick}
-				onHashClick={onHashClick}
-			/>
-		);
-
-		clickThoughtCountSortingButton();
-		expect(onHashClick).toHaveBeenCalledWith('DESC');
-
-		clickThoughtCountSortingButton();
-		expect(onHashClick).toHaveBeenCalledWith('ASC');
-
-		clickThoughtCountSortingButton();
-		expect(onHashClick).toHaveBeenCalledWith('DESC');
-		expect(onDateClick).not.toHaveBeenCalled();
 	});
 });
 
 function clickDateSortingButton() {
 	userEvent.click(screen.getByText('Date'));
-}
-
-function clickThoughtCountSortingButton() {
-	userEvent.click(screen.getByText('#'));
 }

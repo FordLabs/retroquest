@@ -31,7 +31,7 @@ public class RetroTest {
     public void from_returnsAllExpectedBoardFields() {
         var column = new Column(3L, "topic", "title", "teamId");
         var thought = new Thought(2L, "A message", 0, false, "teamId", 1L, 3L);
-        var board = new Board(1L, "teamId", LocalDate.now(), List.of(thought), 1);
+        var board = new Board(1L, "teamId", LocalDate.now(), List.of(thought));
         var retro = Retro.from(board, List.of(column));
 
         assertThat(retro.id()).isEqualTo(board.getId());
@@ -44,7 +44,7 @@ public class RetroTest {
     public void from_returnsColumnsInSavedOrder() {
         var column1 = new Column(2L, "topic", "title", "teamId");
         var column2 = new Column(3L, "topic", "title", "teamId");
-        var board = new Board(1L, "teamId", LocalDate.now(), List.of(), 0);
+        var board = new Board(1L, "teamId", LocalDate.now(), List.of());
         var retro = Retro.from(board, List.of(column2, column1));
 
         assertThat(retro.columns()).isEqualTo(List.of(column1, column2));

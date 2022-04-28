@@ -18,9 +18,6 @@
 package com.ford.labs.retroquest.board;
 
 import com.ford.labs.retroquest.actionitem.ActionItemService;
-import com.ford.labs.retroquest.board.Board;
-import com.ford.labs.retroquest.board.BoardRepository;
-import com.ford.labs.retroquest.board.BoardService;
 import com.ford.labs.retroquest.column.ColumnService;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtService;
@@ -135,8 +132,7 @@ class BoardServiceTest {
                     expectedBoardId,
                     null
                 )
-            ),
-            0
+            )
         );
 
         when(thoughtService.fetchAllActiveThoughts(eq(expectedTeamId))).thenReturn(

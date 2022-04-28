@@ -31,7 +31,6 @@ export const mockBoard1: Board = {
 	id: 1,
 	dateCreated: new Date(1982, 9, 1),
 	teamId: 'teamId',
-	thoughtCount: 1,
 	thoughts: [
 		{
 			id: 100,
@@ -47,7 +46,6 @@ export const mockBoard2: Board = {
 	id: 2,
 	dateCreated: new Date(1998, 3, 22),
 	teamId: 'teamId',
-	thoughtCount: 0,
 	thoughts: [],
 };
 

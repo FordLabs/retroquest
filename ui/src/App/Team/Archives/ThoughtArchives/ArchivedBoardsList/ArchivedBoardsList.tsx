@@ -72,10 +72,6 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 		}
 	}
 
-	function handleCountSort(sortOrder: SortOrder): void {
-		getBoards(paginationData?.pageIndex || 0, 'thoughtCount', sortOrder);
-	}
-
 	function handleDateSort(sortOrder: SortOrder): void {
 		getBoards(paginationData?.pageIndex || 0, 'dateCreated', sortOrder);
 	}
@@ -92,10 +88,7 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 						Thought Archives
 						<span className="thoughts-archive-metadata">{getPageData()}</span>
 					</h1>
-					<ArchivedBoardListHeader
-						onDateClick={handleDateSort}
-						onHashClick={handleCountSort}
-					/>
+					<ArchivedBoardListHeader onDateClick={handleDateSort} />
 					<ol className="list">
 						{boards.map(function (board: Board) {
 							return (

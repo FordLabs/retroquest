@@ -21,7 +21,6 @@ interface Board {
 	id: number;
 	teamId: string;
 	dateCreated: Date;
-	thoughtCount: number;
 	thoughts: Thought[];
 }
 

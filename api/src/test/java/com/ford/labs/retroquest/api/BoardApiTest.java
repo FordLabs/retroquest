@@ -112,28 +112,6 @@ class BoardApiTest extends ApiTestBase {
     }
 
     @Test
-    void getBoards_ShouldGetBoardsSortedByDescendingThoughtCount() throws Exception {
-        setupBoards();
-        mockMvc.perform(get("/api/team/" + teamId + "/boards?sortBy=thoughtCount&sortOrder=DESC")
-                        .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].thoughtCount", Matchers.is(3)))
-                .andExpect(jsonPath("$[1].thoughtCount", Matchers.is(2)))
-                .andExpect(jsonPath("$[2].thoughtCount", Matchers.is(1)));
-    }
-
-    @Test
-    void getBoards_ShouldGetBoardsSortedByAscendingThoughtCount() throws Exception {
-        setupBoards();
-        mockMvc.perform(get("/api/team/" + teamId + "/boards?sortBy=thoughtCount&sortOrder=ASC")
-                        .header("Authorization", getBearerAuthToken()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].thoughtCount", Matchers.is(1)))
-                .andExpect(jsonPath("$[1].thoughtCount", Matchers.is(2)))
-                .andExpect(jsonPath("$[2].thoughtCount", Matchers.is(3)));
-    }
-
-    @Test
     void getBoards_ShouldGetPaginatedBoards() throws Exception {
         setupBoards();
         mockMvc.perform(get("/api/team/" + teamId + "/boards?pageIndex=1&pageSize=1")

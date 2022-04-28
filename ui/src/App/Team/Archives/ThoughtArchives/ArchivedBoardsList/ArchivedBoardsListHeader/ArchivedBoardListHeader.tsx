@@ -17,12 +17,7 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
 
-enum SortState {
-	DateDescending,
-	DateAscending,
-	CountDescending,
-	CountAscending,
-}
+import './ArchivedBoardListHeader.scss';
 
 export enum SortOrder {
 	DESC = 'DESC',
@@ -31,61 +26,32 @@ export enum SortOrder {
 
 interface Props {
 	onDateClick(sortOrder: SortOrder): void;
-	onHashClick(sortOrder: SortOrder): void;
 }
 
 function ArchivedBoardListHeader(props: Props) {
-	const { onDateClick, onHashClick } = props;
+	const { onDateClick } = props;
 
-	const [sortState, setSortState] = useState<SortState>(
-		SortState.DateDescending
-	);
-
-	function handleCountSort() {
-		const isDescending = sortState === SortState.CountDescending;
-		const thoughtCountSortState = isDescending
-			? SortState.CountAscending
-			: SortState.CountDescending;
-
-		setSortState(thoughtCountSortState);
-
-		const sortOrder = isDescending ? SortOrder.ASC : SortOrder.DESC;
-		onHashClick(sortOrder);
-	}
+	const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.DESC);
 
 	function handleDateSort() {
-		const isDescending = sortState === SortState.DateDescending;
-		const dateSortState = isDescending
-			? SortState.DateAscending
-			: SortState.DateDescending;
+		const newSortOrder =
+			sortOrder === SortOrder.DESC ? SortOrder.ASC : SortOrder.DESC;
 
-		setSortState(dateSortState);
-
-		const sortOrder = isDescending ? SortOrder.ASC : SortOrder.DESC;
-		onDateClick(sortOrder);
+		setSortOrder(newSortOrder);
+		onDateClick(newSortOrder);
 	}
 
 	return (
 		<div className="list-header">
 			<button
 				className={classnames('sort-button', {
-					'selected-asc': sortState === SortState.CountAscending,
-					'selected-desc': sortState === SortState.CountDescending,
-				})}
-				onClick={handleCountSort}
-			>
-				#
-			</button>
-			<button
-				className={classnames('sort-button', {
-					'selected-asc': sortState === SortState.DateAscending,
-					'selected-desc': sortState === SortState.DateDescending,
+					'selected-asc': sortOrder === SortOrder.ASC,
+					'selected-desc': sortOrder === SortOrder.DESC,
 				})}
 				onClick={handleDateSort}
 			>
 				Date
 			</button>
-			<div className="spacer" />
 		</div>
 	);
 }
