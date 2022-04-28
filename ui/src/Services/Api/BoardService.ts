@@ -26,9 +26,11 @@ export interface GetBoardsResponse {
 	paginationData: PaginationData;
 }
 
+export type SortByType = 'dateCreated' | 'thoughtCount';
+
 export interface PaginationData {
 	sortOrder: SortOrder;
-	sortBy: string;
+	sortBy: SortByType;
 	pageIndex: number;
 	pageSize: number;
 	pageRange: string;
@@ -51,7 +53,7 @@ const BoardService = {
 		teamId: string,
 		pageIndex: number,
 		pageSize?: number,
-		sortBy?: string,
+		sortBy?: SortByType,
 		sortOrder?: SortOrder
 	): Promise<GetBoardsResponse> {
 		let url = `/api/team/${teamId}/boards?`;
@@ -80,7 +82,7 @@ function getPaginatedDataFromHeaders(
 	headers: AxiosResponseHeaders
 ): PaginationData {
 	return {
-		sortBy: headers['sort-by'],
+		sortBy: headers['sort-by'] as SortByType,
 		sortOrder: headers['sort-order'] as SortOrder,
 		pageIndex: parseInt(headers['page-index'], 10),
 		pageSize: parseInt(headers['page-size'], 10),

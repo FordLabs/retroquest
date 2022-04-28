@@ -20,6 +20,7 @@ import NotFoundSection from 'Common/NotFoundSection/NotFoundSection';
 import { useRecoilValue } from 'recoil';
 import BoardService, {
 	PaginationData,
+	SortByType,
 	SortOrder,
 } from 'Services/Api/BoardService';
 import { TeamState } from 'State/TeamState';
@@ -34,21 +35,24 @@ import './ArchivedBoardsList.scss';
 
 interface Props {
 	onBoardSelection(board: Board): void;
+	pageSize?: number;
 }
 
-function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
+function ArchivedBoardsList({
+	onBoardSelection,
+	pageSize = 30,
+}: Props): JSX.Element {
 	const [boards, setBoards] = useState<Board[]>([]);
 	const [paginationData, setPaginationData] = useState<PaginationData>();
 	const team = useRecoilValue(TeamState);
-	const PAGE_SIZE = 30;
 
 	const getBoards = useCallback(
-		(pageIndex: number, sortBy: string, sortOrder: SortOrder) => {
+		(pageIndex: number, sortBy: SortByType, sortOrder: SortOrder) => {
 			if (team.id) {
 				BoardService.getBoards(
 					team.id,
 					pageIndex,
-					PAGE_SIZE,
+					pageSize,
 					sortBy,
 					sortOrder
 				).then((response) => {
@@ -57,7 +61,7 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 				});
 			}
 		},
-		[team.id]
+		[pageSize, team.id]
 	);
 
 	useEffect(() => {

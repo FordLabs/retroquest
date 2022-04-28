@@ -71,7 +71,7 @@ export const mockRetro: Retro = {
 
 export const mockPaginationData: PaginationData = {
 	sortOrder: SortOrder.DESC,
-	sortBy: '',
+	sortBy: 'dateCreated',
 	pageIndex: 0,
 	pageSize: 5,
 	pageRange: '1-5',
