@@ -28,3 +28,5 @@ expect.extend(toHaveNoViolations);
 afterEach(() => {
 	jest.clearAllMocks();
 });
+
+window.matchMedia = jest.fn().mockReturnValue({ matches: false });

@@ -37,7 +37,10 @@ export const ThemeState = atom<Theme>({
 	],
 });
 
-function getThemeUserSettings() {
+export function getThemeUserSettings() {
 	const activeTheme = localStorage.getItem(ITEM_KEY) as Theme;
-	return activeTheme || Theme.LIGHT;
+	const clientPrefersDark = window.matchMedia(
+		'(prefers-color-scheme:dark)'
+	).matches;
+	return activeTheme || (clientPrefersDark ? Theme.DARK : Theme.LIGHT);
 }

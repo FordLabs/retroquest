@@ -20,7 +20,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import { RecoilRoot } from 'recoil';
 
-import { ThemeState } from '../State/ThemeState';
+import { getThemeUserSettings, ThemeState } from '../State/ThemeState';
 import Theme from '../Types/Theme';
 
 import App from './App';
@@ -34,32 +34,70 @@ jest.mock('../Common/Modal/Modal', () => {
 });
 
 describe('App', () => {
-	it('should default theme to light mode', () => {
-		render(
-			<MemoryRouter>
-				<RecoilRoot>
-					<App />
-				</RecoilRoot>
-			</MemoryRouter>
-		);
+	describe('without local storage theme', () => {
+		it('should default theme to dark if device prefers color scheme dark', async () => {
+			(window.matchMedia as jest.Mock).mockReturnValue({ matches: true });
 
-		expect(document.body.classList).not.toContain('dark-theme');
+			render(
+				<MemoryRouter>
+					<RecoilRoot
+						initializeState={({ set }) => {
+							set(ThemeState, getThemeUserSettings());
+						}}
+					>
+						<App />
+					</RecoilRoot>
+				</MemoryRouter>
+			);
+
+			await screen.findByText('Login Page');
+
+			expect(window.matchMedia).toHaveBeenCalledWith(
+				'(prefers-color-scheme:dark)'
+			);
+			expect(document.body.classList).toContain('dark-theme');
+		});
+
+		it('should default theme to light if device does not prefer dark', () => {
+			(window.matchMedia as jest.Mock).mockReturnValue({ matches: false });
+
+			render(
+				<MemoryRouter>
+					<RecoilRoot
+						initializeState={({ set }) => {
+							set(ThemeState, getThemeUserSettings());
+						}}
+					>
+						<App />
+					</RecoilRoot>
+				</MemoryRouter>
+			);
+
+			expect(window.matchMedia).toHaveBeenCalledWith(
+				'(prefers-color-scheme:dark)'
+			);
+			expect(document.body.classList).not.toContain('dark-theme');
+		});
 	});
 
-	it('should set theme to dark mode', () => {
-		render(
-			<MemoryRouter>
-				<RecoilRoot
-					initializeState={({ set }) => {
-						set(ThemeState, Theme.DARK);
-					}}
-				>
-					<App />
-				</RecoilRoot>
-			</MemoryRouter>
-		);
+	describe('with local storage theme', () => {
+		it('should default theme to local storage value if set', () => {
+			window.localStorage.setItem('theme', Theme.DARK);
 
-		expect(document.body.classList).toContain('dark-theme');
+			render(
+				<MemoryRouter>
+					<RecoilRoot
+						initializeState={({ set }) => {
+							set(ThemeState, getThemeUserSettings());
+						}}
+					>
+						<App />
+					</RecoilRoot>
+				</MemoryRouter>
+			);
+
+			expect(document.body.classList).toContain('dark-theme');
+		});
 	});
 
 	it('should include root modal', () => {
