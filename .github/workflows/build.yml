@@ -30,7 +30,9 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: install ui dependencies
         working-directory: ./ui
-        run: npm ci
+        run: |
+          npm --version
+          npm ci
       - name: build ui
         working-directory: ./ui
         run: |
