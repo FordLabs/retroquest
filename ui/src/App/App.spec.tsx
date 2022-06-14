@@ -20,7 +20,6 @@ import { MemoryRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import { RecoilRoot } from 'recoil';
 
-import { getThemeUserSettings, ThemeState } from '../State/ThemeState';
 import Theme from '../Types/Theme';
 
 import App from './App';
@@ -38,20 +37,9 @@ describe('App', () => {
 		it('should default theme to dark if device prefers color scheme dark', async () => {
 			(window.matchMedia as jest.Mock).mockReturnValue({ matches: true });
 
-			render(
-				<MemoryRouter>
-					<RecoilRoot
-						initializeState={({ set }) => {
-							set(ThemeState, getThemeUserSettings());
-						}}
-					>
-						<App />
-					</RecoilRoot>
-				</MemoryRouter>
-			);
+			renderApp();
 
 			await screen.findByText('Login Page');
-
 			expect(window.matchMedia).toHaveBeenCalledWith(
 				'(prefers-color-scheme:dark)'
 			);
@@ -61,17 +49,7 @@ describe('App', () => {
 		it('should default theme to light if device does not prefer dark', () => {
 			(window.matchMedia as jest.Mock).mockReturnValue({ matches: false });
 
-			render(
-				<MemoryRouter>
-					<RecoilRoot
-						initializeState={({ set }) => {
-							set(ThemeState, getThemeUserSettings());
-						}}
-					>
-						<App />
-					</RecoilRoot>
-				</MemoryRouter>
-			);
+			renderApp();
 
 			expect(window.matchMedia).toHaveBeenCalledWith(
 				'(prefers-color-scheme:dark)'
@@ -81,33 +59,59 @@ describe('App', () => {
 	});
 
 	describe('with local storage theme', () => {
-		it('should default theme to local storage value if set', () => {
+		it('should set theme to dark when local storage theme is "dark-theme"', () => {
 			window.localStorage.setItem('theme', Theme.DARK);
 
-			render(
-				<MemoryRouter>
-					<RecoilRoot
-						initializeState={({ set }) => {
-							set(ThemeState, getThemeUserSettings());
-						}}
-					>
-						<App />
-					</RecoilRoot>
-				</MemoryRouter>
-			);
+			renderApp();
 
 			expect(document.body.classList).toContain('dark-theme');
+		});
+
+		it('should set theme to light when local storage theme is "light-theme"', () => {
+			window.localStorage.setItem('theme', Theme.LIGHT);
+
+			renderApp();
+
+			expect(document.body.classList).toContain('light-theme');
+		});
+
+		it('should set theme to dark when local storage theme is "system-theme" and system is in dark mode', () => {
+			window.localStorage.setItem('theme', Theme.SYSTEM);
+			(window.matchMedia as jest.Mock).mockReturnValue({ matches: true });
+
+			renderApp();
+
+			expect(window.matchMedia).toHaveBeenCalledWith(
+				'(prefers-color-scheme:dark)'
+			);
+			expect(document.body.classList).toContain('dark-theme');
+		});
+
+		it('should set theme to light when local storage theme is "system-theme" and system is in light mode', () => {
+			window.localStorage.setItem('theme', Theme.SYSTEM);
+			(window.matchMedia as jest.Mock).mockReturnValue({ matches: false });
+
+			renderApp();
+
+			expect(window.matchMedia).toHaveBeenCalledWith(
+				'(prefers-color-scheme:dark)'
+			);
+			expect(document.body.classList).toContain('light-theme');
 		});
 	});
 
 	it('should include root modal', () => {
-		render(
-			<MemoryRouter>
-				<RecoilRoot>
-					<App />
-				</RecoilRoot>
-			</MemoryRouter>
-		);
+		renderApp();
 		screen.getByText('Root Modal');
 	});
 });
+
+const renderApp = () => {
+	render(
+		<MemoryRouter>
+			<RecoilRoot>
+				<App />
+			</RecoilRoot>
+		</MemoryRouter>
+	);
+};

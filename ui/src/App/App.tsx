@@ -20,8 +20,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
 import Modal from '../Common/Modal/Modal';
-import { ThemeState } from '../State/ThemeState';
-import Theme from '../Types/Theme';
+import { getThemeClassFromUserSettings, ThemeState } from '../State/ThemeState';
 
 import CreatePage from './Create/CreatePage';
 import LoginPage from './Login/LoginPage';
@@ -38,12 +37,7 @@ function App() {
 	const theme = useRecoilValue(ThemeState);
 
 	useEffect(() => {
-		const isDarkMode = theme === Theme.DARK;
-		if (isDarkMode) {
-			document.body.classList.add(Theme.DARK);
-		} else {
-			document.body.classList.remove(Theme.DARK);
-		}
+		document.body.className = getThemeClassFromUserSettings();
 	}, [theme]);
 
 	return (

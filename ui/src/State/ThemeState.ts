@@ -22,25 +22,25 @@ const ITEM_KEY = 'theme';
 
 export const ThemeState = atom<Theme>({
 	key: 'themeState',
-	default: getThemeUserSettings(),
+	default: (localStorage.getItem(ITEM_KEY) as Theme) || Theme.SYSTEM,
 	effects_UNSTABLE: [
 		({ onSet }) => {
 			onSet((newTheme) => {
-				const isDarkMode = newTheme === Theme.DARK;
-				if (isDarkMode) {
-					localStorage.setItem(ITEM_KEY, Theme.DARK);
-				} else {
-					localStorage.setItem(ITEM_KEY, Theme.LIGHT);
-				}
+				localStorage.setItem(ITEM_KEY, newTheme);
 			});
 		},
 	],
 });
 
-export function getThemeUserSettings() {
+export function getThemeClassFromUserSettings() {
 	const activeTheme = localStorage.getItem(ITEM_KEY) as Theme;
-	const clientPrefersDark = window.matchMedia(
-		'(prefers-color-scheme:dark)'
-	).matches;
-	return activeTheme || (clientPrefersDark ? Theme.DARK : Theme.LIGHT);
+
+	if (!activeTheme || activeTheme === Theme.SYSTEM) {
+		const clientPrefersDark = window.matchMedia(
+			'(prefers-color-scheme:dark)'
+		).matches;
+		return clientPrefersDark ? Theme.DARK : Theme.LIGHT;
+	}
+
+	return activeTheme;
 }

@@ -21,6 +21,7 @@ import { useRecoilState } from 'recoil';
 
 import darkThemeImagePath from '../../../../../Assets/dark-theme-picture.jpg';
 import lightThemeImagePath from '../../../../../Assets/light-theme-picture.jpg';
+import systemThemeImagePath from '../../../../../Assets/system-theme-picture.jpg';
 import { ThemeState } from '../../../../../State/ThemeState';
 import Theme from '../../../../../Types/Theme';
 
@@ -34,7 +35,7 @@ function StylesTab(): JSX.Element {
 			<div className="label">Appearance</div>
 			<div className="theme-buttons">
 				<button
-					className="theme-icon-container"
+					className="theme-icon-button"
 					onClick={() => setTheme(Theme.LIGHT)}
 				>
 					<img
@@ -47,7 +48,7 @@ function StylesTab(): JSX.Element {
 					<div className="theme-icon-label">light</div>
 				</button>
 				<button
-					className="theme-icon-container"
+					className="theme-icon-button"
 					onClick={() => setTheme(Theme.DARK)}
 				>
 					<img
@@ -58,6 +59,19 @@ function StylesTab(): JSX.Element {
 						alt="Dark Theme"
 					/>
 					<div className="theme-icon-label">dark</div>
+				</button>
+				<button
+					className="theme-icon-button"
+					onClick={() => setTheme(Theme.SYSTEM)}
+				>
+					<img
+						src={systemThemeImagePath}
+						className={classnames('theme-image', {
+							selected: theme === Theme.SYSTEM,
+						})}
+						alt="System Settings Theme"
+					/>
+					<div className="theme-icon-label">System Settings</div>
 				</button>
 			</div>
 		</div>

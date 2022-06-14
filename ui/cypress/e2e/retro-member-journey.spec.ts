@@ -27,7 +27,13 @@ describe('Retro Member Journey', () => {
 
 	beforeEach(() => {
 		teamCredentials = getTeamCredentials();
-		cy.createTeamAndLogin(teamCredentials);
+		cy.createTeamAndLogin(teamCredentials, {
+			onBeforeLoad(win: Cypress.AUTWindow) {
+				cy.stub(win, 'matchMedia')
+					.withArgs('(prefers-color-scheme:dark)')
+					.returns({ matches: false });
+			},
+		});
 	});
 
 	it('Add thoughts to each column', () => {
@@ -256,17 +262,56 @@ describe('Retro Member Journey', () => {
 			cy.findByText('Account').as('accountTab');
 		});
 
-		it('Styles Tab: Change theme between light mode and dark', () => {
+		it.only('Styles Tab: Change theme between light, dark, and system settings mode', () => {
 			cy.get('@stylesTab').as('stylesTab').should('have.class', 'selected');
 			cy.get('@accountTab').should('not.have.class', 'selected');
 
 			const darkThemeClass = '.dark-theme';
 			cy.get(darkThemeClass).should('not.exist');
 
-			cy.findByAltText('Dark Theme').click();
+			const purpleBoxShadow = 'rgb(165, 109, 226) 0px 0px 0px 8px';
+			cy.findByAltText('Dark Theme')
+				.should('not.have.css', 'box-shadow', purpleBoxShadow)
+				.as('darkThemeIcon')
+				.click();
+			cy.get('@darkThemeIcon').should(
+				'have.css',
+				'box-shadow',
+				purpleBoxShadow
+			);
 			cy.get(darkThemeClass).should('exist');
 
-			cy.findByAltText('Light Theme').click();
+			cy.findByAltText('Light Theme')
+				.should('not.have.css', 'box-shadow', purpleBoxShadow)
+				.as('lightThemeIcon')
+				.click();
+			cy.get('@lightThemeIcon').should(
+				'have.css',
+				'box-shadow',
+				purpleBoxShadow
+			);
+			cy.get(darkThemeClass).should('not.exist');
+
+			cy.findByAltText('Dark Theme').click();
+
+			cy.findByAltText('System Settings Theme')
+				.should('not.have.css', 'box-shadow', purpleBoxShadow)
+				.as('systemThemeIcon')
+				.click();
+			cy.get('@systemThemeIcon').should(
+				'have.css',
+				'box-shadow',
+				purpleBoxShadow
+			);
+			cy.get(darkThemeClass).should('not.exist');
+
+			cy.reload();
+			cy.get('[data-testid=settingsButton]').click();
+			cy.findByAltText('System Settings Theme').should(
+				'have.css',
+				'box-shadow',
+				purpleBoxShadow
+			);
 			cy.get(darkThemeClass).should('not.exist');
 		});
 

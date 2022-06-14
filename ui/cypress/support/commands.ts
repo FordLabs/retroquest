@@ -36,6 +36,7 @@ import {
 
 import TeamCredentials from './types/teamCredentials';
 import Topic from './types/Topic';
+import VisitOptions = Cypress.VisitOptions;
 
 Cypress.Commands.add(
 	'createTeam',
@@ -55,7 +56,7 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
 	'createTeamAndLogin',
-	(teamCredentials: TeamCredentials) => {
+	(teamCredentials: TeamCredentials, visitOptions?: Partial<VisitOptions>) => {
 		cy.createTeam(teamCredentials).then(() => {
 			cy.log('**Logging in via api**');
 			cy.request({
@@ -73,7 +74,7 @@ Cypress.Commands.add(
 					const retroPagePath = getRetroPagePathWithTeamId(
 						teamCredentials.teamId
 					);
-					cy.visit(retroPagePath);
+					cy.visit(retroPagePath, visitOptions);
 					cy.contains(teamCredentials.teamName).should('exist');
 					cy.title().should('eq', `${teamCredentials.teamName} | RetroQuest`);
 				} else {

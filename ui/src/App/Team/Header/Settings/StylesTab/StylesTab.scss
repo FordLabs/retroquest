@@ -36,15 +36,21 @@
 }
 
 .theme-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
 	margin-top: 24px;
 	overflow: visible;
 
 	border-radius: 0;
 
-	.theme-icon-container {
-		&:not(:last-child) {
-			margin-right: 32px;
-		}
+	> * {
+		flex: 1;
+		align-self: start;
+	}
+
+	.theme-icon-button {
+		text-align: center;
 
 		.theme-image {
 			width: 96px;
@@ -52,11 +58,6 @@
 
 			border-radius: 12px;
 			cursor: pointer;
-
-			@include main.breakpoint-medium {
-				width: unset;
-				height: unset;
-			}
 
 			&.selected {
 				box-shadow: 0 0 0 8px main.$purple;
