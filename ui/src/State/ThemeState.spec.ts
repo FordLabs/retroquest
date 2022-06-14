@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +15,14 @@
  * limitations under the License.
  */
 
-enum Theme {
-	DARK = 'dark-theme',
-	LIGHT = 'light-theme',
-	SYSTEM = 'system-theme',
-}
+import { snapshot_UNSTABLE } from 'recoil';
 
-export default Theme;
+import { ThemeState } from './ThemeState';
+
+describe('Theme State', () => {
+	it('should default theme to system theme', () => {
+		const initialSnapshot = snapshot_UNSTABLE();
+		const actual = initialSnapshot.getLoadable(ThemeState).valueOrThrow();
+		expect(actual).toEqual('system-theme');
+	});
+});

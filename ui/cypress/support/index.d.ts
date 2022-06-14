@@ -27,7 +27,10 @@ declare global {
 
 			createTeam(teamCredentials: TeamCredentials): Chainable<void>;
 
-			createTeamAndLogin(teamCredentials: TeamCredentials): Chainable<void>;
+			createTeamAndLogin(
+				teamCredentials: TeamCredentials,
+				visitOptions?: Partial<VisitOptions>
+			): Chainable<void>;
 
 			enterThought(topic: Topic, thought: string): Chainable<void>;
 
