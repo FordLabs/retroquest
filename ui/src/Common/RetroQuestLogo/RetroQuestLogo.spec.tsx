@@ -19,28 +19,55 @@ import { render, screen } from '@testing-library/react';
 import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
 
+import * as ThemeState from '../../State/ThemeState';
+import Theme from '../../Types/Theme';
+
 import RetroQuestLogo from './RetroQuestLogo';
 
 describe('RetroQuestLogo', () => {
-	let container: HTMLElement;
-
-	beforeEach(async () => {
-		({ container } = render(
+	function renderLogo() {
+		return render(
 			<RecoilRoot>
 				<RetroQuestLogo />
 			</RecoilRoot>
-		));
-	});
+		);
+	}
 
 	it('should render without axe errors', async () => {
+		const { container } = renderLogo();
 		const results = await axe(container);
 		expect(results).toHaveNoViolations();
 	});
 
 	it('should render title and link correctly', () => {
+		renderLogo();
 		screen.getByText('RetroQuest');
 		expect(screen.getByText('FordLabs').getAttribute('href')).toBe(
 			'https://fordlabs.com'
 		);
+	});
+
+	describe('Icon', () => {
+		it('should render light image in dark mode or system mode and system preferences are dark mode', () => {
+			jest
+				.spyOn(ThemeState, 'getThemeClassFromUserSettings')
+				.mockImplementation(() => Theme.DARK);
+			renderLogo();
+			expect(screen.getByTestId('retroquestLogoImage')).toHaveAttribute(
+				'src',
+				'icon-light-72x72.png'
+			);
+		});
+
+		it('should render dark image in light mode or system mode and system preferences are light mode', () => {
+			jest
+				.spyOn(ThemeState, 'getThemeClassFromUserSettings')
+				.mockImplementation(() => Theme.LIGHT);
+			renderLogo();
+			expect(screen.getByTestId('retroquestLogoImage')).toHaveAttribute(
+				'src',
+				'icon-72x72.png'
+			);
+		});
 	});
 });
