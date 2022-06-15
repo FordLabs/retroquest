@@ -17,13 +17,13 @@
 
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 
 import darkLogoPath from '../../../Assets/icons/icon-72x72.png';
 import lightLogoPath from '../../../Assets/icons/icon-light-72x72.png';
 import useTeamFromRoute from '../../../Hooks/useTeamFromRoute';
 import { ModalContentsState } from '../../../State/ModalContentsState';
-import { ThemeState } from '../../../State/ThemeState';
+import { getThemeClassFromUserSettings } from '../../../State/ThemeState';
 import Theme from '../../../Types/Theme';
 
 import Settings from './Settings/Settings';
@@ -43,8 +43,11 @@ const LINKS: RqLink[] = [
 
 function Header() {
 	const team = useTeamFromRoute();
-	const [theme] = useRecoilState<Theme>(ThemeState);
 	const setModalContents = useSetRecoilState(ModalContentsState);
+	const retroquestLogo =
+		getThemeClassFromUserSettings() === Theme.DARK
+			? lightLogoPath
+			: darkLogoPath;
 
 	return (
 		<>
@@ -52,7 +55,7 @@ function Header() {
 				<div className="left-content">
 					<a href="/" className="logo-link" data-testid="retroquestLogoLink">
 						<img
-							src={theme === Theme.DARK ? lightLogoPath : darkLogoPath}
+							src={retroquestLogo}
 							className="logo"
 							title="RetroQuest"
 							alt="Retro Quest"
