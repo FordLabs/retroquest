@@ -62,24 +62,36 @@ describe('Settings', () => {
 	});
 
 	describe('Styles Tab', () => {
-		it('should change theme from light to dark and back', () => {
-			userEvent.click(screen.getByText('Appearance'));
+		it('should change theme from light to dark to system settings', () => {
+			expect(screen.getByText('Appearance')).toBeDefined();
 
 			const lightThemeButton = screen.getByAltText('Light Theme');
 			const darkThemeButton = screen.getByAltText('Dark Theme');
+			const systemSettingsThemeButton = screen.getByAltText(
+				'System Settings Theme'
+			);
 
-			expect(lightThemeButton.getAttribute('class')).toContain('selected');
-			expect(darkThemeButton.getAttribute('class')).not.toContain('selected');
+			expect(systemSettingsThemeButton).toHaveClass('selected');
+			expect(lightThemeButton).not.toHaveClass('selected');
+			expect(darkThemeButton).not.toHaveClass('selected');
 
 			userEvent.click(darkThemeButton);
 
-			expect(lightThemeButton.getAttribute('class')).not.toContain('selected');
-			expect(darkThemeButton.getAttribute('class')).toContain('selected');
+			expect(systemSettingsThemeButton).not.toHaveClass('selected');
+			expect(lightThemeButton).not.toHaveClass('selected');
+			expect(darkThemeButton).toHaveClass('selected');
 
 			userEvent.click(lightThemeButton);
 
-			expect(lightThemeButton.getAttribute('class')).toContain('selected');
-			expect(darkThemeButton.getAttribute('class')).not.toContain('selected');
+			expect(systemSettingsThemeButton).not.toHaveClass('selected');
+			expect(lightThemeButton).toHaveClass('selected');
+			expect(darkThemeButton).not.toHaveClass('selected');
+
+			userEvent.click(systemSettingsThemeButton);
+
+			expect(systemSettingsThemeButton).toHaveClass('selected');
+			expect(lightThemeButton).not.toHaveClass('selected');
+			expect(darkThemeButton).not.toHaveClass('selected');
 		});
 	});
 
