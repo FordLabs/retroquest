@@ -15,22 +15,28 @@
  * limitations under the License.
  */
 import React from 'react';
-import { useRecoilValue } from 'recoil';
 
 import darkLogoPath from '../../Assets/icons/icon-72x72.png';
 import lightLogoPath from '../../Assets/icons/icon-light-72x72.png';
-import { ThemeState } from '../../State/ThemeState';
+import { getThemeClassFromUserSettings } from '../../State/ThemeState';
 import Theme from '../../Types/Theme';
 
 import './RetroQuestLogo.scss';
 
 function RetroQuestLogo() {
-	const theme = useRecoilValue(ThemeState);
-	const logoPath = theme === Theme.DARK ? lightLogoPath : darkLogoPath;
+	const logoPath =
+		getThemeClassFromUserSettings() === Theme.DARK
+			? lightLogoPath
+			: darkLogoPath;
 
 	return (
 		<div className="logo-container">
-			<img className="logo-image" src={logoPath} alt="" />
+			<img
+				className="logo-image"
+				src={logoPath}
+				alt=""
+				data-testid="retroquestLogoImage"
+			/>
 			<h1 className="logo-text-container">
 				<span className="logo-text">RetroQuest</span>
 				<span className="logo-sub-text">
