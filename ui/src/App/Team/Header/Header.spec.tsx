@@ -25,7 +25,9 @@ import {
 	ModalContents,
 	ModalContentsState,
 } from '../../../State/ModalContentsState';
+import * as ThemeState from '../../../State/ThemeState';
 import Team from '../../../Types/Team';
+import Theme from '../../../Types/Theme';
 import { RecoilObserver } from '../../../Utils/RecoilObserver';
 
 import Settings from './Settings/Settings';
@@ -42,13 +44,14 @@ jest.mock('../../../Hooks/useTeamFromRoute', () => {
 });
 
 describe('Header', () => {
-	let container: Element;
 	let modalContent: ModalContents | null;
 
 	beforeEach(() => {
 		modalContent = null;
+	});
 
-		({ container } = render(
+	function renderHeader() {
+		return render(
 			<MemoryRouter initialEntries={[`/team/${teamId}`]}>
 				<RecoilRoot>
 					<RecoilObserver
@@ -62,15 +65,17 @@ describe('Header', () => {
 					</Routes>
 				</RecoilRoot>
 			</MemoryRouter>
-		));
-	});
+		);
+	}
 
 	it('should render without axe errors', async () => {
+		const { container } = renderHeader();
 		const results = await axe(container);
 		expect(results).toHaveNoViolations();
 	});
 
 	it('should render logo link and team name', async () => {
+		renderHeader();
 		expect(await screen.findByText(teamName)).toBeDefined();
 
 		const retroQuestLogoLink = screen.getByTestId('retroquestLogoLink');
@@ -81,6 +86,7 @@ describe('Header', () => {
 	});
 
 	it('should render nav links', async () => {
+		renderHeader();
 		const archivesLink = screen.getByText('Archives');
 		expect(archivesLink.getAttribute('href')).toBe(`/team/${teamId}/archives`);
 
@@ -92,10 +98,35 @@ describe('Header', () => {
 	});
 
 	it('should open settings modal', () => {
+		renderHeader();
 		userEvent.click(screen.getByTestId('settingsButton'));
 		expect(modalContent).toEqual({
 			title: 'Settings',
 			component: <Settings />,
+		});
+	});
+
+	describe('Icon', () => {
+		it('should render light image in dark mode or system mode and system preferences are dark mode', () => {
+			jest
+				.spyOn(ThemeState, 'getThemeClassFromUserSettings')
+				.mockImplementation(() => Theme.DARK);
+			renderHeader();
+			expect(screen.getByAltText('Retro Quest')).toHaveAttribute(
+				'src',
+				'icon-light-72x72.png'
+			);
+		});
+
+		it('should render dark image in light mode or system mode and system preferences are light mode', () => {
+			jest
+				.spyOn(ThemeState, 'getThemeClassFromUserSettings')
+				.mockImplementation(() => Theme.LIGHT);
+			renderHeader();
+			expect(screen.getByAltText('Retro Quest')).toHaveAttribute(
+				'src',
+				'icon-72x72.png'
+			);
 		});
 	});
 });
