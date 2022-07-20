@@ -79,7 +79,14 @@ const TeamService = {
 			const isCreateNewTeamPage = pathname === CREATE_TEAM_PAGE_PATH;
 
 			if (!isLoginPage && !isCreateNewTeamPage) {
-				window.location.assign(LOGIN_PAGE_PATH);
+				let teamNamePath = '';
+				const isTeamPage = pathname.includes('/team');
+				if (isTeamPage) {
+					const params = pathname.split('/');
+					teamNamePath = `/${params[2]}`;
+				}
+
+				window.location.assign(LOGIN_PAGE_PATH + teamNamePath);
 			}
 		}
 		return Promise.reject(error);
