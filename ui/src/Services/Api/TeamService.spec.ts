@@ -127,11 +127,13 @@ describe('Team Service', () => {
 					.finally(() => expect(returnedAxiosError).toEqual(axiosError));
 			});
 
-			it('should redirect to login page if NOT already on login or create page', async () => {
+			it('should redirect to login page with team name if NOT already on login or create page', async () => {
 				window.location.pathname = '/team/superwoman';
 				await TeamService.onResponseInterceptRejection(axiosError)
 					.catch(jest.fn())
-					.finally(() => expect(mockAssign).toHaveBeenCalledWith('/login'));
+					.finally(() =>
+						expect(mockAssign).toHaveBeenCalledWith('/login/superwoman')
+					);
 			});
 
 			it('should NOT redirect to login page if already on the login page', async () => {
@@ -173,7 +175,9 @@ describe('Team Service', () => {
 				window.location.pathname = '/team/superwoman';
 				await TeamService.onResponseInterceptRejection(axiosError)
 					.catch(jest.fn())
-					.finally(() => expect(mockAssign).toHaveBeenCalledWith('/login'));
+					.finally(() =>
+						expect(mockAssign).toHaveBeenCalledWith('/login/superwoman')
+					);
 			});
 
 			it('should NOT redirect to login page if already on the login page', async () => {
