@@ -94,7 +94,10 @@ describe('Login', () => {
 			cy.document().setCookie('token', '');
 			cy.document().setCookie('JSESSIONID', '');
 			cy.enterThought(Topic.HAPPY, 'I have a thought');
-			cy.url().should('eq', Cypress.config().baseUrl + '/login');
+			cy.url().should(
+				'eq',
+				Cypress.config().baseUrl + '/login/' + teamCredentials.teamId
+			);
 		});
 
 		it('Redirects to login page when team name back forbidden', () => {
@@ -107,7 +110,10 @@ describe('Login', () => {
 
 			cy.wait('@getTeamName');
 
-			cy.url().should('eq', Cypress.config().baseUrl + '/login');
+			cy.url().should(
+				'eq',
+				Cypress.config().baseUrl + '/login/teamNameThatDoesNotExist'
+			);
 		});
 	});
 });
