@@ -63,7 +63,7 @@
 
 @include main.dark-theme {
 	.list-header {
-		background: main.$black;
+		background-color: rgba(main.$black, 0.22);
 
 		.sort-button {
 			color: main.$gray-2;
