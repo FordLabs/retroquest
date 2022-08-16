@@ -38,6 +38,8 @@ jest.mock('../../Hooks/useAuth', () => {
 	});
 });
 
+jest.mock('../../Services/Api/ConfigurationService');
+
 describe('LoginPage.spec.tsx', () => {
 	let container: HTMLElement;
 	let rerender: (ui: ReactElement) => void;
@@ -69,6 +71,11 @@ describe('LoginPage.spec.tsx', () => {
 
 	it('should show correct heading', () => {
 		expect(screen.getByText('Sign in to your Team!')).toBeDefined();
+	});
+
+	it('should query the API for survey link href', () => {
+		const surveyLink = screen.getByText(/take the retroquest survey/i);
+		expect(surveyLink.getAttribute('href')).toEqual("mockSurveyLinkHref")
 	});
 
 	it('should show link to create new team', () => {
