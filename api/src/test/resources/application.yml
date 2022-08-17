@@ -16,6 +16,8 @@
 #
 
 retroquest:
+  marketing:
+    survey-link-href: test-survey-link-href
   archive:
     thought:
       page-size: 5

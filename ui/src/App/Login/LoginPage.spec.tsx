@@ -22,6 +22,7 @@ import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
 
 import { mockContributors } from '../../Services/Api/__mocks__/ContributorsService';
+import ConfigurationService from '../../Services/Api/ConfigurationService';
 import ContributorsService from '../../Services/Api/ContributorsService';
 import TeamService from '../../Services/Api/TeamService';
 
@@ -38,9 +39,12 @@ jest.mock('../../Hooks/useAuth', () => {
 	});
 });
 
+jest.mock('../../Services/Api/ConfigurationService');
+
 describe('LoginPage.spec.tsx', () => {
 	let container: HTMLElement;
 	let rerender: (ui: ReactElement) => void;
+	let unmount: () => void;
 	const validTeamName = 'Team Awesome';
 	const validPassword = 'Password1';
 
@@ -49,15 +53,7 @@ describe('LoginPage.spec.tsx', () => {
 		TeamService.getTeamName = jest.fn().mockResolvedValue(validTeamName);
 		TeamService.login = jest.fn().mockResolvedValue(validTeamName);
 
-		({ container, rerender } = render(
-			<MemoryRouter initialEntries={['/login']}>
-				<RecoilRoot>
-					<Routes>
-						<Route path="/login" element={<LoginPage />} />
-					</Routes>
-				</RecoilRoot>
-			</MemoryRouter>
-		));
+		({ container, rerender, unmount } = renderComponent());
 
 		await waitFor(() => expect(ContributorsService.get).toHaveBeenCalled());
 	});
@@ -69,6 +65,23 @@ describe('LoginPage.spec.tsx', () => {
 
 	it('should show correct heading', () => {
 		expect(screen.getByText('Sign in to your Team!')).toBeDefined();
+	});
+
+	it('should query the API for survey link href and show the survey link', () => {
+		const surveyLink = screen.getByText(/take the retroquest survey/i);
+		expect(surveyLink.getAttribute('href')).toEqual('mockSurveyLinkHref');
+		expect(ConfigurationService.get).toHaveBeenCalled();
+	});
+
+	it('should not show the survey link if its href is empty', async () => {
+		unmount();
+		ConfigurationService.get = jest
+			.fn()
+			.mockResolvedValue({ survey_link_href: '' });
+		renderComponent();
+		await waitFor(() => expect(ConfigurationService.get).toHaveBeenCalled());
+		const surveyLink = screen.queryByText(/take the retroquest survey/i);
+		expect(surveyLink).toBeNull();
 	});
 
 	it('should show link to create new team', () => {
@@ -161,3 +174,15 @@ const typeIntoTeamNameInput = (teamName: string) => {
 	const teamNameInput = getTeamNameInput();
 	fireEvent.change(teamNameInput, { target: { value: teamName } });
 };
+
+function renderComponent() {
+	return render(
+		<MemoryRouter initialEntries={['/login']}>
+			<RecoilRoot>
+				<Routes>
+					<Route path="/login" element={<LoginPage />} />
+				</Routes>
+			</RecoilRoot>
+		</MemoryRouter>
+	);
+}
