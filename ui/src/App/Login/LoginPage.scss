@@ -48,3 +48,14 @@
 		cursor: pointer;
 	}
 }
+@include main.dark-theme {
+	.survey-link {
+		color: main.$asphalt;
+		background-color: main.$dark-yellow;
+
+		&:hover,
+		&:focus {
+			color: main.$gray-1;
+		}
+	}
+}
