@@ -24,8 +24,10 @@ import InputTeamName from '../../Common/AuthTemplate/InputTeamName/InputTeamName
 import useAuth from '../../Hooks/useAuth';
 import useTeamFromRoute from '../../Hooks/useTeamFromRoute';
 import { CREATE_TEAM_PAGE_PATH } from '../../RouteConstants';
-import ConfigurationService from "../../Services/Api/ConfigurationService";
+import ConfigurationService from '../../Services/Api/ConfigurationService';
 import TeamService from '../../Services/Api/TeamService';
+
+import './LoginPage.scss';
 
 function LoginPage(): JSX.Element {
 	const { login } = useAuth();
@@ -42,9 +44,9 @@ function LoginPage(): JSX.Element {
 
 	useEffect(() => {
 		ConfigurationService.get().then((config) => {
-			setSurveyLink(config.survey_link_href)
-		})
-	}, [])
+			setSurveyLink(config.survey_link_href);
+		});
+	}, []);
 
 	function onLoginFormSubmit() {
 		setIsLoading(true);
@@ -65,7 +67,12 @@ function LoginPage(): JSX.Element {
 			subHeader={<Link to={CREATE_TEAM_PAGE_PATH}>or create a new team</Link>}
 		>
 			{surveyLink && (
-				<a href={surveyLink} target="_blank" rel="noopener noreferrer">
+				<a
+					href={surveyLink}
+					target="_blank"
+					rel="noopener noreferrer"
+					className="survey-link"
+				>
 					Take the RetroQuest Survey
 				</a>
 			)}

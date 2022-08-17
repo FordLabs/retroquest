@@ -15,8 +15,36 @@
  * limitations under the License.
  */
 
-const configurationService = {
-	get: jest.fn().mockResolvedValue({ survey_link_href: 'mockSurveyLinkHref' }),
-};
+@use '../../Styles/main';
 
-export default configurationService;
+.survey-link {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 125px;
+	height: 45px;
+	margin-bottom: 1rem;
+	padding: 0 24px;
+
+	color: inherit;
+
+	font-family: inherit;
+	font-weight: 700;
+	font-size: 1rem;
+	white-space: nowrap;
+	text-transform: capitalize;
+	text-decoration: none;
+
+	background-color: main.$yellow;
+
+	border: 0;
+	border-radius: 18px;
+	box-shadow: 0 4px 15px rgba(main.$black, 0.25);
+	cursor: pointer;
+
+	&:hover,
+	&:focus {
+		background-color: main.$purple;
+		cursor: pointer;
+	}
+}
