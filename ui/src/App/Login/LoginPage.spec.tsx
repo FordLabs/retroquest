@@ -26,6 +26,7 @@ import ContributorsService from '../../Services/Api/ContributorsService';
 import TeamService from '../../Services/Api/TeamService';
 
 import LoginPage from './LoginPage';
+import ConfigurationService from "../../Services/Api/ConfigurationService";
 
 jest.mock('../../Services/Api/ContributorsService');
 jest.mock('../../Services/Api/TeamService');
@@ -75,7 +76,8 @@ describe('LoginPage.spec.tsx', () => {
 
 	it('should query the API for survey link href', () => {
 		const surveyLink = screen.getByText(/take the retroquest survey/i);
-		expect(surveyLink.getAttribute('href')).toEqual("mockSurveyLinkHref")
+		expect(surveyLink.getAttribute('href')).toEqual("mockSurveyLinkHref");
+		expect(ConfigurationService.get).toHaveBeenCalled();
 	});
 
 	it('should show link to create new team', () => {

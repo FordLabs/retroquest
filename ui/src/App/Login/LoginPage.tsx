@@ -24,6 +24,7 @@ import InputTeamName from '../../Common/AuthTemplate/InputTeamName/InputTeamName
 import useAuth from '../../Hooks/useAuth';
 import useTeamFromRoute from '../../Hooks/useTeamFromRoute';
 import { CREATE_TEAM_PAGE_PATH } from '../../RouteConstants';
+import ConfigurationService from "../../Services/Api/ConfigurationService";
 import TeamService from '../../Services/Api/TeamService';
 
 function LoginPage(): JSX.Element {
@@ -32,11 +33,18 @@ function LoginPage(): JSX.Element {
 
 	const [teamName, setTeamName] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
+	const [surveyLink, setSurveyLink] = useState<string>('');
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
 	useEffect(() => setTeamName(team.name), [team.name]);
+
+	useEffect(() => {
+		ConfigurationService.get().then((config) => {
+			setSurveyLink(config.survey_link_href)
+		})
+	}, [])
 
 	function onLoginFormSubmit() {
 		setIsLoading(true);
@@ -56,6 +64,11 @@ function LoginPage(): JSX.Element {
 			header="Sign in to your Team!"
 			subHeader={<Link to={CREATE_TEAM_PAGE_PATH}>or create a new team</Link>}
 		>
+			{surveyLink && (
+				<a href={surveyLink} target="_blank" rel="noopener noreferrer">
+					Take the RetroQuest Survey
+				</a>
+			)}
 			<Form
 				onSubmit={onLoginFormSubmit}
 				errorMessages={errorMessages}

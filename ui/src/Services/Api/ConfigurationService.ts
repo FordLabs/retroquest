@@ -1,7 +1,11 @@
 import axios from "axios";
 
+interface Config {
+	survey_link_href: string;
+}
+
 const configurationService = {
-	get(){
+	get(): Promise<Config> {
 		return axios.get('/api/config').then(response => response.data);
 	}
 }
