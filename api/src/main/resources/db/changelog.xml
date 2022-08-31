@@ -216,4 +216,12 @@
         </preConditions>
         <renameTable oldTableName="column_title" newTableName="rq_column" />
     </changeSet>
+    <changeSet id="add_email_column_to_team_table" author="cshaugh1">
+        <preConditions>
+            <tableExists tableName="team" />
+        </preConditions>
+        <addColumn tableName="team">
+            <column name="email" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

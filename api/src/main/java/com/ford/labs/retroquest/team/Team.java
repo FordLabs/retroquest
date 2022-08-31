@@ -41,6 +41,9 @@ public class Team implements Persistable<String> {
 
     private String name;
 
+    @Builder.Default
+    private String email = "";
+
     @JsonIgnore
     private String password;
 
@@ -53,11 +56,17 @@ public class Team implements Persistable<String> {
     @JsonIgnore
     private LocalDate lastLoginDate;
 
-    public Team(String uri, String name, String password) {
+    public Team(String uri, String name, String password){
+        this(uri, name, password, "");
+    }
+
+    public Team(String uri, String name, String password, String email) {
         this.uri = uri;
         this.name = name;
+        this.email = email;
         this.password = password;
         this.failedAttempts = 0;
+        this.dateCreated = LocalDate.now();
     }
 
     @Override

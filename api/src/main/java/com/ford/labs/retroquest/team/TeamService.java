@@ -75,7 +75,19 @@ public class TeamService {
     public Team createNewTeam(CreateTeamRequest createTeamRequest) {
         var encryptedPassword = passwordEncoder.encode(createTeamRequest.getPassword());
 
-        return createTeamEntity(createTeamRequest.getName(), encryptedPassword);
+        var trimmedName = createTeamRequest.getName().trim();
+        var uri = convertTeamNameToURI(trimmedName);
+        teamRepository
+            .findTeamByUri(uri)
+            .ifPresent(s -> {
+                throw new DataIntegrityViolationException(s.getUri());
+            });
+
+        var team = new Team(uri, trimmedName, encryptedPassword, createTeamRequest.getEmail().trim());
+        team = teamRepository.save(team);
+        generateColumns(team);
+
+        return team;
     }
 
     public Team login(LoginRequest loginRequest) {
@@ -91,24 +103,6 @@ public class TeamService {
         teamRepository.save(savedTeam);
         updateFailedAttempts(savedTeam, 0);
         return savedTeam;
-    }
-
-    private Team createTeamEntity(String name, String password) {
-        var trimmedName = name.trim();
-        var uri = convertTeamNameToURI(trimmedName);
-        teamRepository
-            .findTeamByUri(uri)
-            .ifPresent(s -> {
-                throw new DataIntegrityViolationException(s.getUri());
-            });
-
-        var teamEntity = new Team(uri, trimmedName, password);
-        teamEntity.setDateCreated(LocalDate.now());
-
-        teamEntity = teamRepository.save(teamEntity);
-        generateColumns(teamEntity);
-
-        return teamEntity;
     }
 
     private void generateColumns(Team team) {

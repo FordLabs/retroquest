@@ -61,6 +61,8 @@ class TeamServiceTest {
         CreateTeamRequest requestedTeam = new CreateTeamRequest();
         requestedTeam.setName("A name");
         requestedTeam.setPassword("password");
+        requestedTeam.setEmail("em@ai.l");
+
 
         when(passwordEncoder.encode("password")).thenReturn("encryptedPassword");
         when(teamRepository.save(any(Team.class))).then(returnsFirstArg());
@@ -79,6 +81,7 @@ class TeamServiceTest {
         CreateTeamRequest requestedTeam = new CreateTeamRequest();
         requestedTeam.setName("   A name");
         requestedTeam.setPassword("password");
+        requestedTeam.setEmail("em@ai.l");
 
         when(passwordEncoder.encode("password")).thenReturn("encryptedPassword");
         when(teamRepository.save(any(Team.class))).then(returnsFirstArg());
@@ -201,7 +204,7 @@ class TeamServiceTest {
         when(teamRepository.save(any(Team.class))).then(returnsFirstArg());
         when(teamRepository.findTeamByUri("beach-bums")).thenReturn(Optional.empty());
 
-        CreateTeamRequest requestedTeam = new CreateTeamRequest("beach-bums", "password");
+        CreateTeamRequest requestedTeam = new CreateTeamRequest("beach-bums", "password", "email");
         teamService.createNewTeam(requestedTeam);
 
         Column happyColumn = new Column(null, "happy", "Happy", "beach-bums");

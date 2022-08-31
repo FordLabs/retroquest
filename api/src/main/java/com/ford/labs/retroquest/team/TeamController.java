@@ -58,6 +58,8 @@ public class TeamController {
         var teamId = team.getUri();
         var jwt = jwtBuilder.buildJwt(teamId);
 
+
+
         var headers = new HttpHeaders();
         headers.add(HttpHeaders.LOCATION, teamId);
 

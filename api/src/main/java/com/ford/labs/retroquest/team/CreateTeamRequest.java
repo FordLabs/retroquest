@@ -17,12 +17,15 @@
 
 package com.ford.labs.retroquest.team;
 
+import com.ford.labs.retroquest.team.validation.EmailConstraint;
 import com.ford.labs.retroquest.team.validation.PasswordConstraint;
 import com.ford.labs.retroquest.team.validation.TeamNameConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotBlank;
 
 @Data
 @AllArgsConstructor
@@ -35,4 +38,7 @@ public class CreateTeamRequest {
 
     @PasswordConstraint
     private String password;
+
+    @EmailConstraint
+    private String email;
 }
