@@ -23,6 +23,8 @@ import com.ford.labs.retroquest.team.CreateTeamRequest;
 import com.ford.labs.retroquest.team.LoginRequest;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
+import com.ford.labs.retroquest.team.password.PasswordResetToken;
+import com.ford.labs.retroquest.team.password.PasswordResetTokenRepository;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -30,7 +32,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -41,6 +42,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Tag("api")
 class TeamApiTest extends ApiTestBase {
+
+    @Autowired
+    private PasswordResetTokenRepository passwordResetRepository;
 
     @Autowired
     private TeamRepository teamRepository;
@@ -56,20 +60,22 @@ class TeamApiTest extends ApiTestBase {
 
     private static final String VALID_PASSWORD = "Passw0rd";
     private static final String VALID_EMAIL = "e@ma.il";
-    private CreateTeamRequest.CreateTeamRequestBuilder validTeamBuilder;
+    private CreateTeamRequest.CreateTeamRequestBuilder validTeamRequestBuilder;
 
     @BeforeEach
     void beforeClass(){
         clean();
-        validTeamBuilder = CreateTeamRequest.builder()
+        validTeamRequestBuilder = CreateTeamRequest.builder()
                 .name(teamId)
                 .password(VALID_PASSWORD)
                 .email(VALID_EMAIL);
     }
     @AfterEach
     void clean() {
+        passwordResetRepository.deleteAllInBatch();
         teamRepository.deleteAllInBatch();
         columnRepository.deleteAllInBatch();
+        assertThat(passwordResetRepository.count()).isZero();
         assertThat(teamRepository.count()).isZero();
         assertThat(columnRepository.count()).isZero();
     }
@@ -80,7 +86,7 @@ class TeamApiTest extends ApiTestBase {
 
         var mvcResult = mockMvc.perform(post("/api/team")
                         .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(validTeamBuilder.build())))
+                        .content(objectMapper.writeValueAsBytes(validTeamRequestBuilder.build())))
                 .andExpect(status().isCreated())
                 .andReturn();
 
@@ -96,7 +102,7 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_create_team_with_valid_name_and_password_and_email() throws Exception {
-        var sentCreateTeamRequest = validTeamBuilder
+        var sentCreateTeamRequest = validTeamRequestBuilder
                 .build();
 
         var mvcResult = mockMvc.perform(post("/api/team")
@@ -115,8 +121,22 @@ class TeamApiTest extends ApiTestBase {
     }
 
     @Test
+    void should_create_password_reset_request_when_team_is_valid() throws Exception {
+        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
+        teamRepository.save(expectedResetTeam);
+
+        mockMvc.perform(get("/api/team/TeamUri/password/request-reset"))
+                .andExpect(status().isCreated());
+
+        assertThat(passwordResetRepository.count()).isEqualTo(1);
+        PasswordResetToken actualToken = passwordResetRepository.findByTeam(expectedResetTeam);
+        assertThat(actualToken.getDateCreated()).isNotNull();
+        assertThat(actualToken.getResetToken()).isNotBlank();
+    }
+
+    @Test
     void should_not_create_team_with_empty_email() throws Exception {
-        var sentCreateTeamRequest = validTeamBuilder.email("")
+        var sentCreateTeamRequest = validTeamRequestBuilder.email("")
                 .build();
 
         mockMvc.perform(post("/api/team")
@@ -128,7 +148,7 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_create_team_with_empty_password() throws Exception {
-        var sentCreateTeamRequest = validTeamBuilder.password("")
+        var sentCreateTeamRequest = validTeamRequestBuilder.password("")
                 .build();
 
         mockMvc.perform(post("/api/team")
@@ -140,7 +160,7 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_create_team_with_empty_name() throws Exception {
-        var sentCreateTeamRequest = validTeamBuilder.name("")
+        var sentCreateTeamRequest = validTeamRequestBuilder.name("")
                 .build();
 
         mockMvc.perform(post("/api/team")
@@ -153,7 +173,7 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_create_team_with_special_characters_in_name() throws Exception {
-        var sentCreateTeamRequest = validTeamBuilder
+        var sentCreateTeamRequest = validTeamRequestBuilder
                 .name("The@Mild$Ones")
                 .build();
 
@@ -166,7 +186,7 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_create_team_with_duplicate_name() throws Exception {
-        var sentCreateTeamRequest = validTeamBuilder.build();
+        var sentCreateTeamRequest = validTeamRequestBuilder.build();
 
         teamRepository.save(Team.builder()
                 .uri(sentCreateTeamRequest.getName().toLowerCase())
@@ -183,7 +203,7 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_create_team_with_duplicate_lower_case_name() throws Exception {
-        var upperCaseCreateTeamRequest = validTeamBuilder
+        var upperCaseCreateTeamRequest = validTeamRequestBuilder
                 .build();
 
         var lowerCaseCreateTeamRequest = upperCaseCreateTeamRequest.toBuilder().name(upperCaseCreateTeamRequest.getName().toLowerCase()).build();
@@ -203,7 +223,7 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_create_team_with_duplicate_upper_case_name() throws Exception {
-        var upperCaseCreateTeamRequest = validTeamBuilder
+        var upperCaseCreateTeamRequest = validTeamRequestBuilder
                 .build();
 
         var lowerCaseCreateTeamRequest = upperCaseCreateTeamRequest.toBuilder().name(upperCaseCreateTeamRequest.getName().toLowerCase()).build();
@@ -223,7 +243,7 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_create_team_with_duplicate_with_leading_spaces() throws Exception {
-        var createTeamRequest = validTeamBuilder
+        var createTeamRequest = validTeamRequestBuilder
                 .build();
 
         var leadingSpacesRequest = createTeamRequest.toBuilder().name("    " + createTeamRequest.getName()).build();
@@ -243,7 +263,7 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_create_team_with_duplicate_with_trailing_spaces() throws Exception {
-        var createTeamRequest = validTeamBuilder
+        var createTeamRequest = validTeamRequestBuilder
                 .build();
 
         var trailingSpacesRequest = createTeamRequest.toBuilder().name(createTeamRequest.getName() + "    ").build();
@@ -263,7 +283,7 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_create_team_with_leading_spaces_dropped_from_team_name_and_uri() throws Exception {
-        var sentCreateTeamRequest = validTeamBuilder
+        var sentCreateTeamRequest = validTeamRequestBuilder
                 .name("    " + teamId)
                 .build();
 
@@ -283,7 +303,7 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_create_team_with_trailing_spaces_dropped_from_team_name_and_uri() throws Exception {
-        var sentCreateTeamRequest = validTeamBuilder
+        var sentCreateTeamRequest = validTeamRequestBuilder
                 .name(teamId + "    ")
                 .build();
 
@@ -305,7 +325,7 @@ class TeamApiTest extends ApiTestBase {
     void should_get_team_name() throws Exception {
         var expectedName = "Beachity Bums";
 
-        var createTeamRequest = validTeamBuilder
+        var createTeamRequest = validTeamRequestBuilder
                 .name(expectedName)
                 .build();
 
@@ -335,7 +355,7 @@ class TeamApiTest extends ApiTestBase {
             "    PEACHY BEACHY  "
     })
     void should_log_in(String attemptedLoginTeamName) throws Exception {
-        var createTeamRequest = validTeamBuilder
+        var createTeamRequest = validTeamRequestBuilder
                 .name("PEACHY BEACHY")
                 .build();
 

@@ -18,6 +18,8 @@
 package com.ford.labs.retroquest.team;
 
 import com.ford.labs.retroquest.security.JwtBuilder;
+import com.ford.labs.retroquest.team.password.PasswordResetToken;
+import com.ford.labs.retroquest.team.password.PasswordResetTokenRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -43,10 +46,12 @@ public class TeamController {
 
     private final TeamService teamService;
     private final JwtBuilder jwtBuilder;
+    private final PasswordResetTokenRepository passwordResetRepository;
 
-    public TeamController(TeamService teamService, JwtBuilder jwtBuilder) {
+    public TeamController(TeamService teamService, JwtBuilder jwtBuilder, PasswordResetTokenRepository passwordResetRepository) {
         this.teamService = teamService;
         this.jwtBuilder = jwtBuilder;
+        this.passwordResetRepository = passwordResetRepository;
     }
 
     @PostMapping("/team")
@@ -71,6 +76,15 @@ public class TeamController {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public String getTeamName(@PathVariable("teamUri") String teamUri) {
         return teamService.getTeamByUri(teamUri).getName();
+    }
+
+    @GetMapping("/team/{teamUri}/password/request-reset")
+    public ResponseEntity<String> requestPasswordReset(@PathVariable("teamUri") String teamUri){
+        Team team = teamService.getTeamByUri(teamUri);
+        PasswordResetToken passwordResetToken = new PasswordResetToken();
+        passwordResetToken.setTeam(team);
+        passwordResetRepository.save(passwordResetToken);
+        return ResponseEntity.created(URI.create("breaktime")).build();
     }
 
     @GetMapping(value = "/team/{teamId}/csv", produces = "application/board.csv")
