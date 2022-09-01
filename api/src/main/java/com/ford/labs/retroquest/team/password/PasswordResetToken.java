@@ -8,10 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Persistable;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -27,7 +24,7 @@ public class PasswordResetToken {
     @Builder.Default
     private String resetToken = UUID.randomUUID().toString();
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="team_id", referencedColumnName="uri")
     private Team team;
 

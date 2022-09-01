@@ -19,10 +19,7 @@ package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.column.ColumnRepository;
-import com.ford.labs.retroquest.team.CreateTeamRequest;
-import com.ford.labs.retroquest.team.LoginRequest;
-import com.ford.labs.retroquest.team.Team;
-import com.ford.labs.retroquest.team.TeamRepository;
+import com.ford.labs.retroquest.team.*;
 import com.ford.labs.retroquest.team.password.PasswordResetToken;
 import com.ford.labs.retroquest.team.password.PasswordResetTokenRepository;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -32,6 +29,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -146,6 +145,28 @@ class TeamApiTest extends ApiTestBase {
                 .andExpect(status().isOk());
 
         assertThat(passwordResetRepository.count()).isEqualTo(1);
+    }
+
+    @Test
+    void should_change_password_when_reset_token_is_valid() throws Exception {
+        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
+        teamRepository.save(expectedResetTeam);
+
+        PasswordResetToken passwordResetToken = new PasswordResetToken();
+        passwordResetToken.setTeam(expectedResetTeam);
+        passwordResetRepository.save(passwordResetToken);
+
+        mockMvc.perform(post("/api/password/reset")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(
+                                new ResetPasswordRequest("Password1", passwordResetToken.getResetToken()))
+                        )
+                )
+                .andExpect(status().isOk());
+
+        Optional<Team> actualTeam = teamRepository.findTeamByUri("teamuri");
+        assertThat(actualTeam.isPresent()).isTrue();
+        assertThat(actualTeam.get().getPassword()).isEqualTo("Password1");
     }
 
     @Test

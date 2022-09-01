@@ -88,6 +88,11 @@ public class TeamController {
         passwordResetRepository.save(passwordResetToken);
     }
 
+    @PostMapping("/password/reset")
+    public void resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
+        var passwordResetToken = passwordResetRepository.findByResetToken(resetPasswordRequest.getResetToken());
+    }
+
     @GetMapping(value = "/team/{teamId}/csv", produces = "application/board.csv")
     @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "downloads a team board", description = "downloadTeamBoard")
