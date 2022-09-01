@@ -79,12 +79,13 @@ public class TeamController {
     }
 
     @GetMapping("/team/{teamUri}/password/request-reset")
-    public ResponseEntity<String> requestPasswordReset(@PathVariable("teamUri") String teamUri){
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
+    public void requestPasswordReset(@PathVariable("teamUri") String teamUri){
         Team team = teamService.getTeamByUri(teamUri);
         PasswordResetToken passwordResetToken = new PasswordResetToken();
         passwordResetToken.setTeam(team);
+        passwordResetRepository.deleteAllByTeam(team);
         passwordResetRepository.save(passwordResetToken);
-        return ResponseEntity.created(URI.create("breaktime")).build();
     }
 
     @GetMapping(value = "/team/{teamId}/csv", produces = "application/board.csv")

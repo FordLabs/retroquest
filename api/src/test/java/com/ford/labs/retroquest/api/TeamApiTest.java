@@ -126,12 +126,26 @@ class TeamApiTest extends ApiTestBase {
         teamRepository.save(expectedResetTeam);
 
         mockMvc.perform(get("/api/team/TeamUri/password/request-reset"))
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk());
 
         assertThat(passwordResetRepository.count()).isEqualTo(1);
         PasswordResetToken actualToken = passwordResetRepository.findByTeam(expectedResetTeam);
         assertThat(actualToken.getDateCreated()).isNotNull();
         assertThat(actualToken.getResetToken()).isNotBlank();
+    }
+
+    @Test
+    void should_create_a_second_password_reset_request_when_team_is_valid() throws Exception {
+        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
+        teamRepository.save(expectedResetTeam);
+
+        mockMvc.perform(get("/api/team/TeamUri/password/request-reset"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/team/TeamUri/password/request-reset"))
+                .andExpect(status().isOk());
+
+        assertThat(passwordResetRepository.count()).isEqualTo(1);
     }
 
     @Test

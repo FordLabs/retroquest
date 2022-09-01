@@ -21,10 +21,14 @@ import com.ford.labs.retroquest.team.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Optional;
 
 @Repository
 public interface PasswordResetTokenRepository extends JpaRepository<PasswordResetToken, String> {
     PasswordResetToken findByTeam(Team team);
+
+    @Transactional
+    void deleteAllByTeam(Team team);
 }
