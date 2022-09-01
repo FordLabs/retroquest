@@ -6,10 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Persistable;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -30,8 +32,13 @@ public class PasswordResetToken {
 
     @JsonIgnore
     @Builder.Default
-    private LocalDate dateCreated = LocalDate.now();
+    private LocalDateTime dateCreated = LocalDateTime.now();
 
+    @Transient
+    @Builder.Default
+    private int maximumAge = 600;
 
-
+    public boolean isExpired(){
+        return Math.abs(Duration.between(LocalDateTime.now(), dateCreated).toSeconds()) > maximumAge;
+    }
 }

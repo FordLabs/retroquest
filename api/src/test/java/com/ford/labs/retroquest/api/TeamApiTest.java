@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -183,6 +184,30 @@ class TeamApiTest extends ApiTestBase {
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(
                                 new ResetPasswordRequest("Password1", UUID.randomUUID().toString()))
+                        )
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(status().reason("Reset token incorrect or expired."));
+
+        Optional<Team> actualTeam = teamRepository.findTeamByUri("teamuri");
+        assertThat(actualTeam.isPresent()).isTrue();
+        assertThat(actualTeam.get().getPassword()).isEqualTo("%$&357");
+    }
+
+    @Test
+    void should_not_change_password_when_reset_token_is_expired() throws Exception {
+        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
+        teamRepository.save(expectedResetTeam);
+
+        PasswordResetToken passwordResetToken = new PasswordResetToken();
+        passwordResetToken.setTeam(expectedResetTeam);
+        passwordResetToken.setDateCreated(LocalDateTime.MIN);
+        passwordResetRepository.save(passwordResetToken);
+
+        mockMvc.perform(post("/api/password/reset")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(
+                                new ResetPasswordRequest("Password1", passwordResetToken.getResetToken()))
                         )
                 )
                 .andExpect(status().isBadRequest())

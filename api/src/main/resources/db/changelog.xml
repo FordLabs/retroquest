@@ -237,7 +237,7 @@
             <column name="team_id" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column defaultValueComputed="NULL" name="date_created" type="date"/>
+            <column defaultValueComputed="NULL" name="date_created" type="datetime"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

@@ -91,8 +91,8 @@ public class TeamController {
 
     @PostMapping("/password/reset")
     public void resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
-        var passwordResetToken = passwordResetRepository.findByResetToken(resetPasswordRequest.getResetToken());
-        if(passwordResetToken == null) throw new BadResetTokenException();
+        PasswordResetToken passwordResetToken = passwordResetRepository.findByResetToken(resetPasswordRequest.getResetToken());
+        if(passwordResetToken == null || passwordResetToken.isExpired()) throw new BadResetTokenException();
         teamService.changePassword(passwordResetToken.getTeam(), resetPasswordRequest.getPassword());
     }
 
