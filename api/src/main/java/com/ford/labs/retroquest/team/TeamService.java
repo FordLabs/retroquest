@@ -115,6 +115,11 @@ public class TeamService {
         columnRepository.save(unhappyColumn);
     }
 
+    public void changePassword(Team existingTeam, String newPassword){
+        existingTeam.setPassword(newPassword);
+        teamRepository.save(existingTeam);
+    }
+
     private void updateFailedAttempts(Team savedTeam, int failedAttempts) {
         savedTeam.setFailedAttempts(failedAttempts);
         teamRepository.save(savedTeam);

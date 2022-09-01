@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.team;
 
+import com.ford.labs.retroquest.exception.BadResetTokenException;
 import com.ford.labs.retroquest.security.JwtBuilder;
 import com.ford.labs.retroquest.team.password.PasswordResetToken;
 import com.ford.labs.retroquest.team.password.PasswordResetTokenRepository;
@@ -91,6 +92,8 @@ public class TeamController {
     @PostMapping("/password/reset")
     public void resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
         var passwordResetToken = passwordResetRepository.findByResetToken(resetPasswordRequest.getResetToken());
+        if(passwordResetToken == null) throw new BadResetTokenException();
+        teamService.changePassword(passwordResetToken.getTeam(), resetPasswordRequest.getPassword());
     }
 
     @GetMapping(value = "/team/{teamId}/csv", produces = "application/board.csv")

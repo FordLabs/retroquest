@@ -63,6 +63,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         // Used by Spring for Controller Advice
     }
 
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Reset token incorrect or expired.")
+    @ExceptionHandler(BadResetTokenException.class)
+    public void badPasswordResetTokenExceptionHandler() {
+        // Used by Spring for Controller Advice
+    }
+
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Password must be 8 characters or longer.")
     @ExceptionHandler(PasswordTooShortException.class)
     public void passwordTooShortExceptionHandler() {

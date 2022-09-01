@@ -24,6 +24,7 @@ import com.ford.labs.retroquest.exception.PasswordInvalidException;
 import com.ford.labs.retroquest.team.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -269,6 +270,17 @@ class TeamServiceTest {
         Team actualTeam = teamService.getTeamByUri(uri);
 
         assertEquals(uri, actualTeam.getUri());
+    }
+
+    @Test
+    void changePasswordUpdatesPassword() {
+        Team expectedTeam = new Team();
+
+        teamService.changePassword(expectedTeam, "NeW PaSsWoRd");
+
+        ArgumentCaptor<Team> captor = ArgumentCaptor.forClass(Team.class);
+        verify(teamRepository).save(captor.capture());
+        assertEquals(captor.getValue().getPassword(), "NeW PaSsWoRd");
     }
 
     @Test
