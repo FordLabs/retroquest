@@ -19,7 +19,7 @@ package com.ford.labs.retroquest.deprecated_tests;
 
 import com.ford.labs.retroquest.column.Column;
 import com.ford.labs.retroquest.column.ColumnRepository;
-import com.ford.labs.retroquest.exception.BoardDoesNotExistException;
+import com.ford.labs.retroquest.exception.TeamDoesNotExistException;
 import com.ford.labs.retroquest.exception.PasswordInvalidException;
 import com.ford.labs.retroquest.team.*;
 import org.junit.jupiter.api.Test;
@@ -127,7 +127,7 @@ class TeamServiceTest {
 
         when(teamRepository.findTeamByNameIgnoreCase("beach-bums")).thenReturn(Optional.empty());
         assertThrows(
-                BoardDoesNotExistException.class,
+                TeamDoesNotExistException.class,
                 () -> teamService.login(loginRequest)
         );
     }
@@ -221,7 +221,7 @@ class TeamServiceTest {
     void getTeamByName_throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
         when(teamRepository.findTeamByNameIgnoreCase("beach-bums")).thenReturn(Optional.empty());
         assertThrows(
-                BoardDoesNotExistException.class,
+                TeamDoesNotExistException.class,
                 () -> teamService.getTeamByName("beach-bums")
         );
     }
@@ -254,7 +254,7 @@ class TeamServiceTest {
     void getTeamByUri_throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
         when(teamRepository.findTeamByUri("beach-bums")).thenReturn(Optional.empty());
         assertThrows(
-                BoardDoesNotExistException.class,
+                TeamDoesNotExistException.class,
                 () -> teamService.getTeamByUri("beach-bums")
         );
     }

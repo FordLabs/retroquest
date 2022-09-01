@@ -20,7 +20,7 @@ package com.ford.labs.retroquest.team;
 import com.ford.labs.retroquest.actionitem.ActionItemRepository;
 import com.ford.labs.retroquest.column.Column;
 import com.ford.labs.retroquest.column.ColumnRepository;
-import com.ford.labs.retroquest.exception.BoardDoesNotExistException;
+import com.ford.labs.retroquest.exception.TeamDoesNotExistException;
 import com.ford.labs.retroquest.exception.PasswordInvalidException;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -53,12 +53,12 @@ public class TeamService {
 
     public Team getTeamByName(String teamName) {
         return teamRepository.findTeamByNameIgnoreCase(teamName.trim())
-            .orElseThrow(BoardDoesNotExistException::new);
+            .orElseThrow(TeamDoesNotExistException::new);
     }
 
     public Team getTeamByUri(String teamUri) {
         return teamRepository.findTeamByUri(teamUri.toLowerCase())
-            .orElseThrow(BoardDoesNotExistException::new);
+            .orElseThrow(TeamDoesNotExistException::new);
     }
 
     public String convertTeamNameToURI(String teamName) {
