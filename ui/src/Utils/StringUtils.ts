@@ -42,12 +42,3 @@ export function validatePassword(password: string): string | undefined {
 		return 'Password must contain at least one number.';
 	}
 }
-
-export function validateConfirmationPassword(
-	password: string,
-	confirmationPassword: string
-) {
-	if (password !== confirmationPassword) {
-		return 'Please enter matching passwords';
-	}
-}

@@ -85,7 +85,6 @@ describe('CreatePage.spec.tsx', () => {
 	it('should successfully create team', async () => {
 		typeIntoTeamNameInput(validTeamName);
 		typeIntoPasswordInput(validPassword);
-		typeIntoConfirmPasswordInput(validPassword);
 
 		const submitButton = screen.getByText('Create Team');
 		userEvent.click(submitButton);
@@ -104,7 +103,6 @@ describe('CreatePage.spec.tsx', () => {
 
 		it('should warn user with message when team name has special characters', async () => {
 			typeIntoPasswordInput(validPassword);
-			typeIntoConfirmPasswordInput(validPassword);
 
 			const invalidTeamName = '&%(#';
 			typeIntoTeamNameInput(invalidTeamName);
@@ -129,7 +127,6 @@ describe('CreatePage.spec.tsx', () => {
 
 			const invalidPassword = 'MissingANumber';
 			typeIntoPasswordInput(invalidPassword);
-			typeIntoConfirmPasswordInput(invalidPassword);
 
 			fireEvent.submit(getPasswordInput());
 
@@ -143,21 +140,6 @@ describe('CreatePage.spec.tsx', () => {
 			const formErrorMessage = screen.getByTestId('formErrorMessage');
 			expect(formErrorMessage.textContent).toBe(
 				'Password must contain at least one number.'
-			);
-		});
-
-		it('should warn user with message when passwords do not match', () => {
-			typeIntoTeamNameInput(validTeamName);
-			typeIntoPasswordInput(validPassword);
-			typeIntoConfirmPasswordInput(validPassword + '-nice-try');
-
-			fireEvent.submit(getPasswordInput());
-
-			expect(screen.queryByTestId('inputValidationMessage')).toBeNull();
-
-			const formErrorMessage = screen.getByTestId('formErrorMessage');
-			expect(formErrorMessage.textContent).toBe(
-				'Please enter matching passwords'
 			);
 		});
 	});
