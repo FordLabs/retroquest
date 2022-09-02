@@ -22,6 +22,7 @@ import AuthTemplate from '../../Common/AuthTemplate/AuthTemplate';
 import Form from '../../Common/AuthTemplate/Form/Form';
 import InputPassword from '../../Common/AuthTemplate/InputPassword/InputPassword';
 import InputTeamName from '../../Common/AuthTemplate/InputTeamName/InputTeamName';
+import Input from '../../Common/Input/Input';
 import useAuth from '../../Hooks/useAuth';
 import { LOGIN_PAGE_PATH } from '../../RouteConstants';
 import TeamService from '../../Services/Api/TeamService';
@@ -31,6 +32,7 @@ export default function CreatePage(): JSX.Element {
 	const { login } = useAuth();
 	const [teamName, setTeamName] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
+	const [email, setEmail] = useState<string>('');
 
 	const [isValidated, setIsValidated] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -48,7 +50,7 @@ export default function CreatePage(): JSX.Element {
 
 	function createTeam() {
 		setIsLoading(true);
-		TeamService.create(teamName, password)
+		TeamService.create(teamName, password, email)
 			.then(login)
 			.catch((error) => {
 				let errorMsg = 'Incorrect team name or password. Please try again.';
@@ -106,6 +108,17 @@ export default function CreatePage(): JSX.Element {
 						setErrorMessages([]);
 					}}
 					invalid={isValidated && !!passwordErrorMessage}
+					readOnly={isLoading}
+				/>
+				<Input
+					id="emailInput"
+					label="Email"
+					type="email"
+					value={email}
+					onChange={(event) => {
+						setEmail(event.target.value);
+						setErrorMessages([]);
+					}}
 					readOnly={isLoading}
 				/>
 			</Form>

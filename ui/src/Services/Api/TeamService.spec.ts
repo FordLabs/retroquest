@@ -28,6 +28,7 @@ describe('Team Service', () => {
 	const user = {
 		name: 'Julia',
 		password: 'Password1',
+		email: 'e@mail.com',
 	};
 	const axiosResponse = {
 		data: 'jwt-token-123',
@@ -45,7 +46,10 @@ describe('Team Service', () => {
 				token: authResponse.token,
 				teamId,
 			});
-			expect(axios.post).toHaveBeenCalledWith('/api/team/login', user);
+			expect(axios.post).toHaveBeenCalledWith('/api/team/login', {
+				name: user.name,
+				password: user.password,
+			});
 		});
 	});
 
@@ -54,7 +58,8 @@ describe('Team Service', () => {
 			axios.post = jest.fn().mockResolvedValue(axiosResponse);
 			const authResponse: AuthResponse = await TeamService.create(
 				user.name,
-				user.password
+				user.password,
+				user.email
 			);
 			expect(authResponse).toEqual({
 				token: authResponse.token,
