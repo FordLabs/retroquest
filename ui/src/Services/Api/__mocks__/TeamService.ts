@@ -20,6 +20,7 @@ const TeamService = {
 	create: jest.fn().mockResolvedValue(''),
 	getTeamName: jest.fn().mockResolvedValue('Active Team Name'),
 	getCSV: jest.fn().mockResolvedValue('column 1, column 2'),
+	setEmails: jest.fn().mockResolvedValue(''),
 };
 
 export default TeamService;

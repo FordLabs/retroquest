@@ -93,6 +93,19 @@ describe('Team Service', () => {
 		});
 	});
 
+	describe('changeEmails', () => {
+		it('should post emails to /email/reset with the token', async () => {
+			axios.post = jest.fn();
+			await TeamService.setEmails('e1@ma.il', 'e2@ma.il', 'T0k3n');
+
+			expect(axios.post).toHaveBeenCalledWith('/api/email/reset', {
+				email1: 'e1@ma.il',
+				email2: 'e2@ma.il',
+				emailResetToken: 'T0k3n',
+			});
+		});
+	});
+
 	describe('onResponseInterceptRejection', () => {
 		let location: (string | Location) & Location;
 		let mockAssign = jest.fn();

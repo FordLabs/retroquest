@@ -21,6 +21,7 @@ import { CREATE_TEAM_PAGE_PATH, LOGIN_PAGE_PATH } from '../../RouteConstants';
 import CookieService from '../CookieService';
 
 import {
+	CHANGE_EMAIL_API_PATH,
 	CREATE_TEAM_API_PATH,
 	getCSVApiPath,
 	getTeamNameApiPath,
@@ -51,6 +52,18 @@ const TeamService = {
 		return axios
 			.post(CREATE_TEAM_API_PATH, { name, password, email })
 			.then(returnTokenAndTeamId);
+	},
+
+	setEmails(
+		email1: string,
+		email2: string,
+		token: string
+	): Promise<AxiosResponse> {
+		return axios.post(CHANGE_EMAIL_API_PATH, {
+			email1: email1,
+			email2: email2,
+			emailResetToken: token,
+		});
 	},
 
 	getTeamName(teamId: string): Promise<string> {
