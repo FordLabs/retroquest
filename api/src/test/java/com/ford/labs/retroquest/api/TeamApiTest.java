@@ -68,13 +68,14 @@ class TeamApiTest extends ApiTestBase {
     private CreateTeamRequest.CreateTeamRequestBuilder validTeamRequestBuilder;
 
     @BeforeEach
-    void beforeClass(){
+    void beforeClass() {
         clean();
         validTeamRequestBuilder = CreateTeamRequest.builder()
                 .name(teamId)
                 .password(VALID_PASSWORD)
                 .email(VALID_EMAIL);
     }
+
     @AfterEach
     void clean() {
         passwordResetRepository.deleteAllInBatch();
@@ -130,7 +131,7 @@ class TeamApiTest extends ApiTestBase {
         Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
         teamRepository.save(expectedResetTeam);
 
-        mockMvc.perform(get("/api/team/TeamUri/password/request-reset"))
+        mockMvc.perform(post("/api/password/request-reset").contentType(APPLICATION_JSON).content(objectMapper.writeValueAsBytes(new RequestPasswordResetRequest("TeamName", "e@ma.il"))))
                 .andExpect(status().isOk());
 
         assertThat(passwordResetRepository.count()).isEqualTo(1);
@@ -144,17 +145,28 @@ class TeamApiTest extends ApiTestBase {
         Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
         teamRepository.save(expectedResetTeam);
 
-        mockMvc.perform(get("/api/team/TeamUri/password/request-reset"))
+        mockMvc.perform(post("/api/password/request-reset").contentType(APPLICATION_JSON).content(objectMapper.writeValueAsBytes(new RequestPasswordResetRequest("TeamName", "e@ma.il"))))
                 .andExpect(status().isOk());
 
-        mockMvc.perform(get("/api/team/TeamUri/password/request-reset"))
+        mockMvc.perform(post("/api/password/request-reset").contentType(APPLICATION_JSON).content(objectMapper.writeValueAsBytes(new RequestPasswordResetRequest("TeamName", "e@ma.il"))))
                 .andExpect(status().isOk());
 
         assertThat(passwordResetRepository.count()).isEqualTo(1);
     }
 
     @Test
-    void should_change_password_when_reset_token_is_valid() throws Exception {
+    void should_not_create_password_reset_request_when_team_is_invalid() throws Exception {
+        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
+        teamRepository.save(expectedResetTeam);
+
+        mockMvc.perform(post("/api/password/request-reset").contentType(APPLICATION_JSON).content(objectMapper.writeValueAsBytes(new RequestPasswordResetRequest("NotTeamName", "e@ma.il"))))
+                .andExpect(status().isForbidden());
+
+        assertThat(passwordResetRepository.count()).isEqualTo(0);
+    }
+
+    @Test
+    void should_change_password_and_consume_token_when_reset_token_is_valid() throws Exception {
         Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
         teamRepository.save(expectedResetTeam);
 
@@ -173,6 +185,7 @@ class TeamApiTest extends ApiTestBase {
         Optional<Team> actualTeam = teamRepository.findTeamByUri("teamuri");
         assertThat(actualTeam.isPresent()).isTrue();
         assertThat(passwordEncoder.matches("Password1", actualTeam.get().getPassword())).isTrue();
+        assertThat(passwordResetRepository.count()).isZero();
     }
 
     @Test
