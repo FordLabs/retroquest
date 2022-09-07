@@ -18,6 +18,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
 import { CREATE_TEAM_PAGE_PATH, LOGIN_PAGE_PATH } from '../../RouteConstants';
+import team from '../../Types/Team';
 import CookieService from '../CookieService';
 
 import {
@@ -27,6 +28,7 @@ import {
 	getCSVApiPath,
 	getTeamNameApiPath,
 	LOGIN_API_PATH,
+	PASSWORD_REQUEST_API_PATH,
 } from './ApiConstants';
 
 export interface AuthResponse {
@@ -64,6 +66,16 @@ const TeamService = {
 			email1: email1,
 			email2: email2,
 			emailResetToken: token,
+		});
+	},
+
+	sendPasswordResetLink(
+		teamName: string,
+		email: string
+	): Promise<AxiosResponse> {
+		return axios.post(PASSWORD_REQUEST_API_PATH, {
+			teamName: teamName,
+			email: email,
 		});
 	},
 

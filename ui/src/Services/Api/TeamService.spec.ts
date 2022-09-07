@@ -93,7 +93,7 @@ describe('Team Service', () => {
 		});
 	});
 
-	describe('change Emails', () => {
+	describe('setEmails', () => {
 		it('should post emails to /email/reset with the token', async () => {
 			axios.post = jest.fn();
 			await TeamService.setEmails('e1@ma.il', 'e2@ma.il', 'T0k3n');
@@ -106,7 +106,7 @@ describe('Team Service', () => {
 		});
 	});
 
-	describe('change passwords', () => {
+	describe('setPasswords', () => {
 		it('should post password to /password/reset with the token', async () => {
 			axios.post = jest.fn();
 			await TeamService.setPassword('wordword', 'T0k3n');
@@ -114,6 +114,18 @@ describe('Team Service', () => {
 			expect(axios.post).toHaveBeenCalledWith('/api/password/reset', {
 				password: 'wordword',
 				resetToken: 'T0k3n',
+			});
+		});
+	});
+
+	describe('sendPasswordResetLink', () => {
+		it('should send password reset link', async () => {
+			axios.post = jest.fn();
+			await TeamService.sendPasswordResetLink('Team Name', 'a@b.c');
+
+			expect(axios.post).toHaveBeenCalledWith('/api/password/request-reset', {
+				teamName: 'Team Name',
+				email: 'a@b.c',
 			});
 		});
 	});

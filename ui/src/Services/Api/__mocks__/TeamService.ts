@@ -22,6 +22,7 @@ const TeamService = {
 	getCSV: jest.fn().mockResolvedValue('column 1, column 2'),
 	setEmails: jest.fn().mockResolvedValue(''),
 	setPassword: jest.fn().mockResolvedValue(''),
+	sendPasswordResetLink: jest.fn().mockResolvedValue(''),
 };
 
 export default TeamService;

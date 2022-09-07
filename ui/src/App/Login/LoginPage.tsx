@@ -26,6 +26,7 @@ import useTeamFromRoute from '../../Hooks/useTeamFromRoute';
 import { CREATE_TEAM_PAGE_PATH } from '../../RouteConstants';
 import ConfigurationService from '../../Services/Api/ConfigurationService';
 import TeamService from '../../Services/Api/TeamService';
+import { PASSWORD_RESET_ROUTE } from '../App';
 
 import './LoginPage.scss';
 
@@ -99,6 +100,7 @@ function LoginPage(): JSX.Element {
 					readOnly={isLoading}
 				/>
 			</Form>
+			<Link to={PASSWORD_RESET_ROUTE}>Forgot your login info?</Link>
 		</AuthTemplate>
 	);
 }
