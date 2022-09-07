@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { FormEvent, useState } from 'react';
+import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import TeamService from '../../../Services/Api/TeamService';

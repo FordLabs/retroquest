@@ -36,20 +36,24 @@ describe('the change team email form', () => {
 		renderWithToken('');
 		submitValidForm();
 
-		expect(TeamService.setEmails).toHaveBeenCalledWith(
-			'email1@email1.email1',
-			'email2@email2.email2',
-			expect.anything()
+		await waitFor(() =>
+			expect(TeamService.setEmails).toHaveBeenCalledWith(
+				'email1@email1.email1',
+				'email2@email2.email2',
+				expect.anything()
+			)
 		);
 	});
 	it('should send the secret code in the url to the backend on submission', async () => {
 		renderWithToken('ABC123');
 		submitValidForm();
 
-		expect(TeamService.setEmails).toHaveBeenCalledWith(
-			expect.anything(),
-			expect.anything(),
-			'ABC123'
+		await waitFor(() =>
+			expect(TeamService.setEmails).toHaveBeenCalledWith(
+				expect.anything(),
+				expect.anything(),
+				'ABC123'
+			)
 		);
 	});
 	it('should show "Saved!" if the backend returns 200 after submission', async () => {

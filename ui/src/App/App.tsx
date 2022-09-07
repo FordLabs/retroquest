@@ -25,6 +25,7 @@ import { getThemeClassFromUserSettings, ThemeState } from '../State/ThemeState';
 import CreatePage from './Create/CreatePage';
 import LoginPage from './Login/LoginPage';
 import ArchivesPage from './Team/Archives/ArchivesPage';
+import ChangePasswordPage from './Team/Details/ChangePasswordPage';
 import ChangeTeamDetailsPage from './Team/Details/ChangeTeamDetailsPage';
 import RadiatorPage from './Team/Radiator/RadiatorPage';
 import RetroPage from './Team/Retro/RetroPage';
@@ -49,6 +50,7 @@ function App() {
 				<Route path="/login/:teamId" element={<LoginPage />} />
 				<Route path="/create" element={<CreatePage />} />
 				<Route path="/email/reset" element={<ChangeTeamDetailsPage />} />
+				<Route path="/password/reset" element={<ChangePasswordPage />} />
 				<Route path="/team/:teamId" element={<TeamPages />}>
 					<Route path="" element={<RetroPage />} />
 					<Route path="archives" element={<ArchivesPage />} />

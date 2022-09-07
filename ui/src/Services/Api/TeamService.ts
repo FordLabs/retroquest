@@ -22,6 +22,7 @@ import CookieService from '../CookieService';
 
 import {
 	CHANGE_EMAIL_API_PATH,
+	CHANGE_PASSWORD_API_PATH,
 	CREATE_TEAM_API_PATH,
 	getCSVApiPath,
 	getTeamNameApiPath,
@@ -63,6 +64,13 @@ const TeamService = {
 			email1: email1,
 			email2: email2,
 			emailResetToken: token,
+		});
+	},
+
+	setPassword(password: string, token: string): Promise<AxiosResponse> {
+		return axios.post(CHANGE_PASSWORD_API_PATH, {
+			password: password,
+			resetToken: token,
 		});
 	},
 
