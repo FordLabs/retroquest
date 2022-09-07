@@ -29,6 +29,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -55,6 +56,9 @@ class TeamApiTest extends ApiTestBase {
 
     @Autowired
     private TestRestTemplate testRestTemplate;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     private MeterRegistry meterRegistry;
@@ -168,7 +172,7 @@ class TeamApiTest extends ApiTestBase {
 
         Optional<Team> actualTeam = teamRepository.findTeamByUri("teamuri");
         assertThat(actualTeam.isPresent()).isTrue();
-        assertThat(actualTeam.get().getPassword()).isEqualTo("Password1");
+        assertThat(passwordEncoder.matches("Password1", actualTeam.get().getPassword())).isTrue();
     }
 
     @Test

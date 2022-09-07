@@ -29,12 +29,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -49,10 +49,13 @@ public class TeamController {
     private final JwtBuilder jwtBuilder;
     private final PasswordResetTokenRepository passwordResetRepository;
 
-    public TeamController(TeamService teamService, JwtBuilder jwtBuilder, PasswordResetTokenRepository passwordResetRepository) {
+    private final PasswordEncoder passwordEncoder;
+
+    public TeamController(TeamService teamService, JwtBuilder jwtBuilder, PasswordResetTokenRepository passwordResetRepository, PasswordEncoder passwordEncoder) {
         this.teamService = teamService;
         this.jwtBuilder = jwtBuilder;
         this.passwordResetRepository = passwordResetRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/team")
@@ -63,8 +66,6 @@ public class TeamController {
         var team = teamService.createNewTeam(createTeamRequest);
         var teamId = team.getUri();
         var jwt = jwtBuilder.buildJwt(teamId);
-
-
 
         var headers = new HttpHeaders();
         headers.add(HttpHeaders.LOCATION, teamId);
@@ -93,7 +94,7 @@ public class TeamController {
     public void resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
         PasswordResetToken passwordResetToken = passwordResetRepository.findByResetToken(resetPasswordRequest.getResetToken());
         if(passwordResetToken == null || passwordResetToken.isExpired()) throw new BadResetTokenException();
-        teamService.changePassword(passwordResetToken.getTeam(), resetPasswordRequest.getPassword());
+        teamService.changePassword(passwordResetToken.getTeam(), passwordEncoder.encode(resetPasswordRequest.getPassword()));
     }
 
     @GetMapping(value = "/team/{teamId}/csv", produces = "application/board.csv")
