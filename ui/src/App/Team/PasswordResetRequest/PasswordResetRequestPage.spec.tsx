@@ -60,6 +60,26 @@ describe('Password Reset Request Page', () => {
 		render(<PasswordResetRequestPage />);
 		expect(screen.queryByText('Saved!')).not.toBeInTheDocument();
 	});
+
+	it('should show an error message if the request is not successful that persists until you type in either input', async () => {
+		TeamService.sendPasswordResetLink = jest
+			.fn()
+			.mockRejectedValue('API says you are bad');
+		render(<PasswordResetRequestPage />);
+		submitValidForm();
+		let pleaseTryAgain = 'Team name or email is incorrect. Please try again.';
+		expect(await screen.findByText(pleaseTryAgain)).toBeInTheDocument();
+		fireEvent.change(screen.getByLabelText('Team Name'), {
+			target: { value: 't' },
+		});
+		expect(screen.queryByText(pleaseTryAgain)).not.toBeInTheDocument();
+		submitValidForm();
+		expect(await screen.findByText(pleaseTryAgain)).toBeInTheDocument();
+		fireEvent.change(screen.getByLabelText('Email'), {
+			target: { value: 'e@ma.il' },
+		});
+		expect(screen.queryByText(pleaseTryAgain)).not.toBeInTheDocument();
+	});
 });
 
 function submitValidForm(

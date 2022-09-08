@@ -26,12 +26,19 @@ function PasswordResetRequestPage(): JSX.Element {
 	const [shouldShowSent, setShouldShowSent] = useState(false);
 	const [teamName, setTeamName] = useState<string>('');
 	const [email, setEmail] = useState<string>('');
+	const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
 	function submitRequest() {
 		if (!!teamName && !!email) {
-			TeamService.sendPasswordResetLink(teamName, email).then(() => {
-				setShouldShowSent(true);
-			});
+			TeamService.sendPasswordResetLink(teamName, email)
+				.then(() => {
+					setShouldShowSent(true);
+				})
+				.catch(() => {
+					setErrorMessages([
+						'Team name or email is incorrect. Please try again.',
+					]);
+				});
 		}
 	}
 
@@ -43,13 +50,27 @@ function PasswordResetRequestPage(): JSX.Element {
 					Enter the Team Name and email associated with your team's account and
 					we’ll send an email with instructions to reset your password.
 				</p>
-				<Form submitButtonText="Send reset link" onSubmit={submitRequest}>
+				<Form
+					submitButtonText="Send reset link"
+					onSubmit={submitRequest}
+					errorMessages={errorMessages}
+				>
 					<InputTeamName
 						teamName={teamName}
-						onTeamNameInputChange={setTeamName}
+						onTeamNameInputChange={(name) => {
+							setTeamName(name);
+							setErrorMessages([]);
+						}}
 						required
 					/>
-					<InputEmail email={email} onEmailInputChange={setEmail} required />
+					<InputEmail
+						email={email}
+						onEmailInputChange={(email) => {
+							setEmail(email);
+							setErrorMessages([]);
+						}}
+						required
+					/>
 				</Form>
 				{shouldShowSent && <div className="success-indicator">Link Sent!</div>}
 			</div>

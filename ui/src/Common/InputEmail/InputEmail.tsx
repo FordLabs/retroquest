@@ -21,7 +21,7 @@ import Input from 'Common/Input/Input';
 interface Props {
 	email?: string;
 	required?: boolean;
-	onEmailInputChange: (updatedTeamName: string) => void;
+	onEmailInputChange: (updatedEmail: string) => void;
 	invalid?: boolean;
 	readOnly?: boolean;
 }

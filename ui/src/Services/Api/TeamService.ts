@@ -17,7 +17,11 @@
 
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
-import { CREATE_TEAM_PAGE_PATH, LOGIN_PAGE_PATH } from '../../RouteConstants';
+import {
+	CREATE_TEAM_PAGE_PATH,
+	LOGIN_PAGE_PATH,
+	REQUEST_PASSWORD_RESET_PAGE_PATH,
+} from '../../RouteConstants';
 import team from '../../Types/Team';
 import CookieService from '../CookieService';
 
@@ -108,10 +112,13 @@ const TeamService = {
 			CookieService.clearToken();
 
 			const { pathname } = window.location;
-			const isLoginPage = pathname.includes(LOGIN_PAGE_PATH);
-			const isCreateNewTeamPage = pathname === CREATE_TEAM_PAGE_PATH;
+			const unauthorizedPaths = [
+				LOGIN_PAGE_PATH,
+				CREATE_TEAM_PAGE_PATH,
+				REQUEST_PASSWORD_RESET_PAGE_PATH,
+			];
 
-			if (!isLoginPage && !isCreateNewTeamPage) {
+			if (!unauthorizedPaths.some((path) => pathname.includes(path))) {
 				let teamNamePath = '';
 				const isTeamPage = pathname.includes('/team');
 				if (isTeamPage) {

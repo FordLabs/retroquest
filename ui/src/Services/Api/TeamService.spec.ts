@@ -17,6 +17,7 @@
 
 import axios, { AxiosError } from 'axios';
 
+import { REQUEST_PASSWORD_RESET_PAGE_PATH } from '../../RouteConstants';
 import CookieService from '../CookieService';
 
 import TeamService, { AuthResponse } from './TeamService';
@@ -187,6 +188,13 @@ describe('Team Service', () => {
 
 			it('should NOT redirect to login page if already on the create page', async () => {
 				window.location.pathname = '/create';
+				await TeamService.onResponseInterceptRejection(axiosError)
+					.catch(jest.fn())
+					.finally(() => expect(mockAssign).not.toHaveBeenCalled());
+			});
+
+			it('should NOT redirect to login page if already on the request password reset page', async () => {
+				window.location.pathname = REQUEST_PASSWORD_RESET_PAGE_PATH;
 				await TeamService.onResponseInterceptRejection(axiosError)
 					.catch(jest.fn())
 					.finally(() => expect(mockAssign).not.toHaveBeenCalled());
