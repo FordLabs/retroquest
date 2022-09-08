@@ -25,7 +25,7 @@ interface FormProps extends ComponentPropsWithoutRef<'form'> {
 	onSubmit: () => void;
 	errorMessages?: string[];
 	submitButtonText?: string;
-	isLoading: boolean;
+	isLoading?: boolean;
 }
 
 function Form(props: FormProps): JSX.Element {

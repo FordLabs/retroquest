@@ -16,38 +16,32 @@
  */
 
 import * as React from 'react';
-
-import Input from '../../Input/Input';
+import Input from 'Common/Input/Input';
 
 interface Props {
-	teamName?: string;
+	email?: string;
 	required?: boolean;
-	onTeamNameInputChange: (updatedTeamName: string) => void;
+	onEmailInputChange: (updatedTeamName: string) => void;
 	invalid?: boolean;
 	readOnly?: boolean;
 }
 
-function InputTeamName(props: Props) {
-	const {
-		teamName = '',
-		required,
-		onTeamNameInputChange,
-		invalid,
-		readOnly,
-	} = props;
+function InputEmail(props: Props) {
+	const { email = '', required, onEmailInputChange, invalid, readOnly } = props;
 
 	return (
 		<Input
-			id="teamNameInput"
-			label="Team Name"
-			value={teamName}
+			id="emailInput"
+			label="Email"
+			value={email}
+			type="email"
 			required={required}
-			onChange={(event) => onTeamNameInputChange(event.target.value)}
-			validationMessage="Names must not contain special characters."
+			onChange={(event) => onEmailInputChange(event.target.value)}
+			validationMessage="Nope"
 			invalid={invalid}
 			readOnly={readOnly}
 		/>
 	);
 }
 
-export default InputTeamName;
+export default InputEmail;

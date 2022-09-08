@@ -15,23 +15,20 @@
  * limitations under the License.
  */
 import React, { useState } from 'react';
+import InputTeamName from 'Common/AuthTemplate/InputTeamName/InputTeamName';
+import TeamService from 'Services/Api/TeamService';
 
-import TeamService from '../../../Services/Api/TeamService';
+import Form from '../../../Common/AuthTemplate/Form/Form';
+import InputEmail from '../../../Common/InputEmail/InputEmail';
 
-type ElementType = {
-	teamName: { value: string };
-	email: { value: string };
-};
+import './PasswordResetRequestPage.scss';
 
 function PasswordResetRequestPage(): JSX.Element {
 	const [shouldShowSent, setShouldShowSent] = useState(false);
+	const [teamName, setTeamName] = useState<string>('');
+	const [email, setEmail] = useState<string>('');
 
-	function submitRequest(e: React.SyntheticEvent<HTMLFormElement>) {
-		e.preventDefault();
-		const teamName = (e.currentTarget.elements as unknown as ElementType)
-			.teamName.value;
-		const email = (e.currentTarget.elements as unknown as ElementType).email
-			.value;
+	function submitRequest() {
 		if (!!teamName && !!email) {
 			TeamService.sendPasswordResetLink(teamName, email).then(() => {
 				setShouldShowSent(true);
@@ -40,14 +37,24 @@ function PasswordResetRequestPage(): JSX.Element {
 	}
 
 	return (
-		<form onSubmit={submitRequest}>
-			<label htmlFor="teamnameinput">Team Name</label>
-			<input type="text" id="teamnameinput" name="teamName" required />
-			<label htmlFor="emailinput">Email</label>
-			<input type="email" id="emailinput" name="email" required />
-			<button type="submit">Send reset link</button>
-			{shouldShowSent && <div className="success-indicator">Link Sent!</div>}
-		</form>
+		<div className="password-reset-request-page">
+			<div className="password-reset-request-form">
+				<h1 className="reset-password-title">Reset your password</h1>
+				<p className="reset-password-paragraph">
+					Enter the Team Name and email associated with your team's account and
+					we’ll send an email with instructions to reset your password.
+				</p>
+				<Form submitButtonText="Send reset link" onSubmit={submitRequest}>
+					<InputTeamName
+						teamName={teamName}
+						onTeamNameInputChange={setTeamName}
+						required
+					/>
+					<InputEmail email={email} onEmailInputChange={setEmail} required />
+				</Form>
+				{shouldShowSent && <div className="success-indicator">Link Sent!</div>}
+			</div>
+		</div>
 	);
 }
 
