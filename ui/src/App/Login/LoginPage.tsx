@@ -100,7 +100,9 @@ function LoginPage(): JSX.Element {
 					readOnly={isLoading}
 				/>
 			</Form>
-			<Link to={PASSWORD_RESET_ROUTE}>Forgot your login info?</Link>
+			<Link to={PASSWORD_RESET_ROUTE} className="forgot-login-link">
+				Forgot your login info?
+			</Link>
 		</AuthTemplate>
 	);
 }

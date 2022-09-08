@@ -48,6 +48,17 @@
 		cursor: pointer;
 	}
 }
+
+.forgot-login-link {
+	margin: 1rem auto 0;
+	color: main.$dark-turquoise;
+
+	&:hover,
+	&:focus {
+		color: main.$turquoise;
+	}
+}
+
 @include main.dark-theme {
 	.survey-link {
 		color: main.$asphalt;
@@ -56,6 +67,16 @@
 		&:hover,
 		&:focus {
 			color: main.$gray-1;
+		}
+	}
+
+	.forgot-login-link {
+		margin: 1rem auto 0;
+		color: main.$turquoise;
+
+		&:hover,
+		&:focus {
+			color: main.$dark-turquoise;
 		}
 	}
 }

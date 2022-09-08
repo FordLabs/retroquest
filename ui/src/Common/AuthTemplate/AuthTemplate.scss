@@ -76,8 +76,13 @@
 		font-size: 1.2rem;
 
 		a {
-			color: #00a887;
+			color: main.$dark-turquoise;
 			font-weight: 500;
+
+			&:hover,
+			&:focus {
+				color: main.$turquoise;
+			}
 		}
 	}
 
@@ -103,5 +108,18 @@
 	.auth-template {
 		color: main.$gray-1;
 		background-color: main.$dark-asphalt;
+
+		.auth-sub-heading {
+			font-size: 1.2rem;
+
+			a {
+				color: main.$turquoise;
+
+				&:hover,
+				&:focus {
+					color: main.$dark-turquoise;
+				}
+			}
+		}
 	}
 }
