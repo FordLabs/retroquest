@@ -168,7 +168,7 @@ describe('LoginPage.spec.tsx', () => {
 });
 
 const getTeamNameInput = (): HTMLInputElement =>
-	screen.getByLabelText('Team name', { selector: 'input' }) as HTMLInputElement;
+	screen.getByLabelText('Team Name', { selector: 'input' }) as HTMLInputElement;
 const getPasswordInput = (): HTMLInputElement =>
 	screen.getByLabelText('Password', { selector: 'input' }) as HTMLInputElement;
 

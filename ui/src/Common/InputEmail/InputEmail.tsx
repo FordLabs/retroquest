@@ -24,15 +24,25 @@ interface Props {
 	onEmailInputChange: (updatedEmail: string) => void;
 	invalid?: boolean;
 	readOnly?: boolean;
+	label?: string;
+	id?: string;
 }
 
 function InputEmail(props: Props) {
-	const { email = '', required, onEmailInputChange, invalid, readOnly } = props;
+	const {
+		email = '',
+		required,
+		onEmailInputChange,
+		invalid,
+		readOnly,
+		label = 'Email',
+		id = 'emailInput',
+	} = props;
 
 	return (
 		<Input
-			id="emailInput"
-			label="Email"
+			id={id}
+			label={label}
 			value={email}
 			type="email"
 			required={required}

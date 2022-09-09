@@ -15,44 +15,59 @@
  * limitations under the License.
  */
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
+import Form from '../../../Common/AuthTemplate/Form/Form';
+import InputEmail from '../../../Common/InputEmail/InputEmail';
 import TeamService from '../../../Services/Api/TeamService';
 
-type TargetType = {
-	email1: { value: string };
-	email2: { value: string };
-};
+import './ChangeTeamDetailsPage.scss';
 
 function ChangeTeamDetailsPage(): JSX.Element {
 	const { search } = useLocation();
+
+	const [email, setEmail] = useState<string>('');
+	const [secondaryEmail, setSecondaryEmail] = useState<string>('');
 	const [shouldShowSaved, setShouldShowSaved] = useState(false);
 
-	function submitEmails(e: React.SyntheticEvent<HTMLFormElement>) {
-		e.preventDefault();
-		const email1 = (e.currentTarget.elements as unknown as TargetType).email1
-			.value;
-		const email2 = (e.currentTarget.elements as unknown as TargetType).email2
-			.value;
-		let token = new URLSearchParams(search).get('token');
-		TeamService.setEmails(email1, email2, token == null ? '' : token).then(
-			() => {
-				setShouldShowSaved(true);
-			}
-		);
+	function submitEmails() {
+		if (email) {
+			const token = new URLSearchParams(search).get('token') || '';
+			TeamService.setEmails(email, secondaryEmail, token).then(() =>
+				setShouldShowSaved(true)
+			);
+		}
 	}
 
 	return (
-		<form onSubmit={submitEmails}>
-			<label htmlFor="email1input">Email Address 1</label>
-			<input type="email" id="email1input" name="email1" />
-			<label htmlFor="email2input">Email Address 2</label>
-			<input type="email" id="email2input" name="email2" />
-
-			<button type="submit">Update Team Details</button>
-			{shouldShowSaved && <div className={'success-indicator'}>Saved!</div>}
-		</form>
+		<div className="change-team-details-page">
+			<div className="change-team-details-form">
+				<h1>Update Team Details</h1>
+				<p>
+					Edit the current details in the boxes below and press "Update Team
+					Details" to update your team's email addresses (for password
+					recovery).
+				</p>
+				<Form onSubmit={submitEmails} submitButtonText="Save Changes">
+					<InputEmail
+						label="Email 1"
+						onEmailInputChange={setEmail}
+						email={email}
+						id="email1Id"
+						required
+					/>
+					<InputEmail
+						label="Email 2"
+						onEmailInputChange={setSecondaryEmail}
+						email={secondaryEmail}
+						id="email2Id"
+						required
+					/>
+					{shouldShowSaved && <div className="success-indicator">Saved!</div>}
+				</Form>
+			</div>
+		</div>
 	);
 }
 

@@ -27,9 +27,9 @@ jest.mock('Services/Api/TeamService');
 describe('the change team email form', () => {
 	it('should have a field for email1 and email2, plus a submit button', async () => {
 		renderWithToken('');
-		expect(screen.getByLabelText('Email Address 1')).toBeInTheDocument();
-		expect(screen.getByLabelText('Email Address 2')).toBeInTheDocument();
-		expect(screen.getByText('Update Team Details')).toBeInTheDocument();
+		expect(screen.getByLabelText('Email 1')).toBeInTheDocument();
+		expect(screen.getByLabelText('Email 2')).toBeInTheDocument();
+		expect(screen.getByText('Save Changes')).toBeInTheDocument();
 	});
 
 	it('should send emails to the backend on submission', async () => {
@@ -65,14 +65,14 @@ describe('the change team email form', () => {
 });
 
 function submitValidForm() {
-	fireEvent.change(screen.getByLabelText('Email Address 1'), {
+	fireEvent.change(screen.getByLabelText('Email 1'), {
 		target: { value: 'email1@email1.email1' },
 	});
-	fireEvent.change(screen.getByLabelText('Email Address 2'), {
+	fireEvent.change(screen.getByLabelText('Email 2'), {
 		target: { value: 'email2@email2.email2' },
 	});
 
-	fireEvent.click(screen.getByText('Update Team Details'));
+	fireEvent.click(screen.getByText('Save Changes'));
 }
 
 function renderWithToken(token: string) {
