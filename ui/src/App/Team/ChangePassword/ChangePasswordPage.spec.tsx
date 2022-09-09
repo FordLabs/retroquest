@@ -28,7 +28,6 @@ describe('the change team password form', () => {
 	it('should have a field for password and password confirmation, plus a submit button', async () => {
 		renderWithToken('');
 		expect(screen.getByLabelText('New Password')).toBeInTheDocument();
-		expect(screen.getByLabelText('Confirm New Password')).toBeInTheDocument();
 		expect(screen.getByText('Reset Password')).toBeInTheDocument();
 	});
 
@@ -43,6 +42,7 @@ describe('the change team password form', () => {
 			)
 		);
 	});
+
 	it('should send the secret code in the body to the backend on submission', async () => {
 		renderWithToken('ABC123');
 		submitValidForm();
@@ -54,9 +54,10 @@ describe('the change team password form', () => {
 			)
 		);
 	});
-	it('should not send to the API if the passwords differ', async () => {
-		renderWithToken('ABC123');
-		submitValidForm('abc', 'ABC');
+
+	it('should not send to the API if there is no password', () => {
+		renderWithToken('');
+		submitValidForm('');
 		expect(TeamService.setPassword).toHaveBeenCalledTimes(0);
 	});
 
@@ -66,23 +67,17 @@ describe('the change team password form', () => {
 
 		await screen.findByText('Saved!');
 	});
+
 	it('should not show "Saved!" if the form is not submitted', async () => {
 		renderWithToken('ABC321');
 		expect(screen.queryByText('Saved!')).not.toBeInTheDocument();
 	});
 });
 
-function submitValidForm(
-	password: string = 'p@ssw0rd',
-	confirmPassword: string = 'p@ssw0rd'
-) {
+function submitValidForm(password: string = 'p@ssw0rd') {
 	fireEvent.change(screen.getByLabelText('New Password'), {
 		target: { value: password },
 	});
-	fireEvent.change(screen.getByLabelText('Confirm New Password'), {
-		target: { value: confirmPassword },
-	});
-
 	fireEvent.click(screen.getByText('Reset Password'));
 }
 

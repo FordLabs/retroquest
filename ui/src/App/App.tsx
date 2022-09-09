@@ -25,7 +25,7 @@ import { getThemeClassFromUserSettings, ThemeState } from '../State/ThemeState';
 import CreatePage from './Create/CreatePage';
 import LoginPage from './Login/LoginPage';
 import ArchivesPage from './Team/Archives/ArchivesPage';
-import ChangePasswordPage from './Team/Details/ChangePasswordPage';
+import ChangePasswordPage from './Team/ChangePassword/ChangePasswordPage';
 import ChangeTeamDetailsPage from './Team/Details/ChangeTeamDetailsPage';
 import PasswordResetRequestPage from './Team/PasswordResetRequest/PasswordResetRequestPage';
 import RadiatorPage from './Team/Radiator/RadiatorPage';

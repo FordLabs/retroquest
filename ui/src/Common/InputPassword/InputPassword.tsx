@@ -19,23 +19,33 @@ import React from 'react';
 import Input from 'Common/Input/Input';
 
 type Props = {
+	label?: string;
 	password: string;
 	onPasswordInputChange: (updatedTeamName: string) => void;
-	readOnly: boolean;
+	required?: boolean;
+	readOnly?: boolean;
 	invalid?: boolean;
 };
 
 function InputPassword(props: Props) {
-	const { password, onPasswordInputChange, invalid, readOnly } = props;
+	const {
+		label = 'Password',
+		password,
+		onPasswordInputChange,
+		required,
+		invalid,
+		readOnly,
+	} = props;
 
 	return (
 		<Input
 			id="passwordInput"
-			label="Password"
+			label={label}
 			type="password"
 			value={password}
 			onChange={(event) => onPasswordInputChange(event.target.value)}
 			validationMessage="8 or more characters with a mix of numbers and letters"
+			required={required}
 			invalid={invalid}
 			readOnly={readOnly}
 		/>

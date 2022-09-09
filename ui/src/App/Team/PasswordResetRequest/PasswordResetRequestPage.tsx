@@ -38,8 +38,8 @@ function PasswordResetRequestPage(): JSX.Element {
 	return (
 		<div className="password-reset-request-page">
 			<div className="password-reset-request-form">
-				<h1 className="reset-password-title">Reset your password</h1>
-				<p className="reset-password-paragraph">
+				<h1>Reset your password</h1>
+				<p>
 					Enter the Team Name and email associated with your team's account and
 					we’ll send an email with instructions to reset your password.
 				</p>
