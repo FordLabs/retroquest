@@ -15,39 +15,31 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import React from 'react';
+import Input from 'Common/Input/Input';
 
-import Input from '../../Input/Input';
-
-interface Props {
-	teamName?: string;
-	required?: boolean;
-	onTeamNameInputChange: (updatedTeamName: string) => void;
+type Props = {
+	password: string;
+	onPasswordInputChange: (updatedTeamName: string) => void;
+	readOnly: boolean;
 	invalid?: boolean;
-	readOnly?: boolean;
-}
+};
 
-function InputTeamName(props: Props) {
-	const {
-		teamName = '',
-		required,
-		onTeamNameInputChange,
-		invalid,
-		readOnly,
-	} = props;
+function InputPassword(props: Props) {
+	const { password, onPasswordInputChange, invalid, readOnly } = props;
 
 	return (
 		<Input
-			id="teamNameInput"
-			label="Team Name"
-			value={teamName}
-			required={required}
-			onChange={(event) => onTeamNameInputChange(event.target.value)}
-			validationMessage="Names must not contain special characters."
+			id="passwordInput"
+			label="Password"
+			type="password"
+			value={password}
+			onChange={(event) => onPasswordInputChange(event.target.value)}
+			validationMessage="8 or more characters with a mix of numbers and letters"
 			invalid={invalid}
 			readOnly={readOnly}
 		/>
 	);
 }
 
-export default InputTeamName;
+export default InputPassword;

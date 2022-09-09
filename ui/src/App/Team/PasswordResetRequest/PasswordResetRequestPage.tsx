@@ -15,11 +15,10 @@
  * limitations under the License.
  */
 import React, { useState } from 'react';
-import InputTeamName from 'Common/AuthTemplate/InputTeamName/InputTeamName';
+import Form from 'Common/AuthTemplate/Form/Form';
+import InputEmail from 'Common/InputEmail/InputEmail';
+import InputTeamName from 'Common/InputTeamName/InputTeamName';
 import TeamService from 'Services/Api/TeamService';
-
-import Form from '../../../Common/AuthTemplate/Form/Form';
-import InputEmail from '../../../Common/InputEmail/InputEmail';
 
 import './PasswordResetRequestPage.scss';
 

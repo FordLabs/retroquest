@@ -16,16 +16,16 @@
  */
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
+import Form from 'Common/AuthTemplate/Form/Form';
+import InputPassword from 'Common/InputPassword/InputPassword';
+import InputTeamName from 'Common/InputTeamName/InputTeamName';
+import useAuth from 'Hooks/useAuth';
+import useTeamFromRoute from 'Hooks/useTeamFromRoute';
+import { CREATE_TEAM_PAGE_PATH } from 'RouteConstants';
+import ConfigurationService from 'Services/Api/ConfigurationService';
+import TeamService from 'Services/Api/TeamService';
 
-import AuthTemplate from '../../Common/AuthTemplate/AuthTemplate';
-import Form from '../../Common/AuthTemplate/Form/Form';
-import InputPassword from '../../Common/AuthTemplate/InputPassword/InputPassword';
-import InputTeamName from '../../Common/AuthTemplate/InputTeamName/InputTeamName';
-import useAuth from '../../Hooks/useAuth';
-import useTeamFromRoute from '../../Hooks/useTeamFromRoute';
-import { CREATE_TEAM_PAGE_PATH } from '../../RouteConstants';
-import ConfigurationService from '../../Services/Api/ConfigurationService';
-import TeamService from '../../Services/Api/TeamService';
 import { PASSWORD_RESET_ROUTE } from '../App';
 
 import './LoginPage.scss';

@@ -17,15 +17,15 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
+import Form from 'Common/AuthTemplate/Form/Form';
+import Input from 'Common/Input/Input';
+import InputPassword from 'Common/InputPassword/InputPassword';
+import InputTeamName from 'Common/InputTeamName/InputTeamName';
+import useAuth from 'Hooks/useAuth';
+import { LOGIN_PAGE_PATH } from 'RouteConstants';
+import TeamService from 'Services/Api/TeamService';
 
-import AuthTemplate from '../../Common/AuthTemplate/AuthTemplate';
-import Form from '../../Common/AuthTemplate/Form/Form';
-import InputPassword from '../../Common/AuthTemplate/InputPassword/InputPassword';
-import InputTeamName from '../../Common/AuthTemplate/InputTeamName/InputTeamName';
-import Input from '../../Common/Input/Input';
-import useAuth from '../../Hooks/useAuth';
-import { LOGIN_PAGE_PATH } from '../../RouteConstants';
-import TeamService from '../../Services/Api/TeamService';
 import { validatePassword, validateTeamName } from '../../Utils/StringUtils';
 
 export default function CreatePage(): JSX.Element {
