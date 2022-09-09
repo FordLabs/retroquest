@@ -27,7 +27,7 @@ import LoginPage from './Login/LoginPage';
 import ArchivesPage from './Team/Archives/ArchivesPage';
 import ChangePasswordPage from './Team/Details/ChangePasswordPage';
 import ChangeTeamDetailsPage from './Team/Details/ChangeTeamDetailsPage';
-import PasswordResetRequestPage from './Team/Details/PasswordResetRequestPage';
+import PasswordResetRequestPage from './Team/PasswordResetRequest/PasswordResetRequestPage';
 import RadiatorPage from './Team/Radiator/RadiatorPage';
 import RetroPage from './Team/Retro/RetroPage';
 import TeamPages from './Team/TeamPages';
