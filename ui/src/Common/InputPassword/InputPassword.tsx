@@ -15,8 +15,12 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
+import { ReactComponent as EyeOpenIcon } from 'Assets/eye-open_blue.svg';
+import { ReactComponent as EyeClosedIcon } from 'Assets/eye-slash_blue.svg';
 import Input from 'Common/Input/Input';
+
+import './InputPassword.scss';
 
 type Props = {
 	label?: string;
@@ -37,18 +41,34 @@ function InputPassword(props: Props) {
 		readOnly,
 	} = props;
 
+	const [showPassword, setShowPassword] = useState<boolean>(false);
+
 	return (
-		<Input
-			id="passwordInput"
-			label={label}
-			type="password"
-			value={password}
-			onChange={(event) => onPasswordInputChange(event.target.value)}
-			validationMessage="8 or more characters with a mix of numbers and letters"
-			required={required}
-			invalid={invalid}
-			readOnly={readOnly}
-		/>
+		<div className="input-password">
+			<Input
+				id="passwordInput"
+				label={label}
+				type={showPassword ? 'text' : 'password'}
+				value={password}
+				onChange={(event) => onPasswordInputChange(event.target.value)}
+				validationMessage="8 or more characters with a mix of numbers and letters"
+				required={required}
+				invalid={invalid}
+				readOnly={readOnly}
+			/>
+			<button
+				className="eye-icon-toggle"
+				type="button"
+				aria-label={`${showPassword ? 'Hide' : 'Show'} Password`}
+				onClick={() => setShowPassword(!showPassword)}
+			>
+				{showPassword ? (
+					<EyeClosedIcon role="presentation" />
+				) : (
+					<EyeOpenIcon role="presentation" />
+				)}
+			</button>
+		</div>
 	);
 }
 
