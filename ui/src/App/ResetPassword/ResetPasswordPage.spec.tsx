@@ -24,10 +24,18 @@ import ResetPasswordPage from './ResetPasswordPage';
 jest.mock('Services/Api/TeamService');
 
 describe('Reset Password Page', () => {
-	it('should have a field for password and password confirmation, plus a submit button', async () => {
+	it('should have a field for password and password confirmation, plus a disabled submit button', async () => {
 		renderWithToken('');
 		expect(screen.getByLabelText('New Password')).toBeInTheDocument();
-		expect(screen.getByText('Reset Password')).toBeInTheDocument();
+		const submitButton = screen.getByText('Reset Password');
+		expect(submitButton).toBeInTheDocument();
+		expect(submitButton).toBeDisabled();
+	});
+
+	it('should enable submit button once user types into form', () => {
+		renderWithToken('');
+		typeIntoNewPasswordField();
+		expect(screen.getByText('Reset Password')).not.toBeDisabled();
 	});
 
 	it('should send passwords to the backend on submission', async () => {
@@ -74,10 +82,14 @@ describe('Reset Password Page', () => {
 });
 
 function submitValidForm(password: string = 'p@ssw0rd') {
+	typeIntoNewPasswordField(password);
+	fireEvent.click(screen.getByText('Reset Password'));
+}
+
+function typeIntoNewPasswordField(password: string = 'p@ssw0rd') {
 	fireEvent.change(screen.getByLabelText('New Password'), {
 		target: { value: password },
 	});
-	fireEvent.click(screen.getByText('Reset Password'));
 }
 
 function renderWithToken(token: string) {

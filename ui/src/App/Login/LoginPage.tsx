@@ -81,7 +81,7 @@ function LoginPage(): JSX.Element {
 				onSubmit={onLoginFormSubmit}
 				errorMessages={errorMessages}
 				submitButtonText="Sign in"
-				isLoading={isLoading}
+				disableSubmitBtn={isLoading}
 			>
 				<InputTeamName
 					teamName={teamName}

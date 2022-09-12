@@ -46,7 +46,11 @@ function ResetPasswordPage(): JSX.Element {
 					Almost done! Enter your new password here and then remember to tell
 					any active teammates so that they can continue to login to your board.
 				</p>
-				<Form onSubmit={submitNewPassword} submitButtonText="Reset Password">
+				<Form
+					onSubmit={submitNewPassword}
+					submitButtonText="Reset Password"
+					disableSubmitBtn={!newPassword}
+				>
 					<InputPassword
 						label="New Password"
 						password={newPassword}

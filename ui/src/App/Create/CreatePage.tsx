@@ -90,7 +90,7 @@ export default function CreatePage(): JSX.Element {
 				onSubmit={onSubmit}
 				errorMessages={errorMessages}
 				submitButtonText="Create Team"
-				isLoading={isLoading}
+				disableSubmitBtn={isLoading}
 			>
 				<InputTeamName
 					teamName={teamName}

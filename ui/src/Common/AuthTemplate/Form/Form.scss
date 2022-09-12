@@ -31,8 +31,13 @@
 
 		background-color: main.$dark-turquoise;
 
-		&:hover,
-		&:focus {
+		&:disabled {
+			cursor: initial;
+			opacity: 0.3;
+		}
+
+		&:hover:not(:disabled),
+		&:focus:not(:disabled) {
 			background-color: main.$turquoise;
 		}
 	}

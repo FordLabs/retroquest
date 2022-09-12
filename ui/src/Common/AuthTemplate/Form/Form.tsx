@@ -25,7 +25,7 @@ interface FormProps extends ComponentPropsWithoutRef<'form'> {
 	onSubmit: () => void;
 	errorMessages?: string[];
 	submitButtonText?: string;
-	isLoading?: boolean;
+	disableSubmitBtn?: boolean;
 }
 
 function Form(props: FormProps): JSX.Element {
@@ -33,7 +33,7 @@ function Form(props: FormProps): JSX.Element {
 		onSubmit,
 		errorMessages = [],
 		submitButtonText = 'Submit',
-		isLoading,
+		disableSubmitBtn,
 		children,
 		...formProps
 	} = props;
@@ -59,7 +59,7 @@ function Form(props: FormProps): JSX.Element {
 			))}
 			<PrimaryButton
 				className="submit-button"
-				disabled={isLoading}
+				disabled={disableSubmitBtn}
 				data-testid="formSubmitButton"
 			>
 				{submitButtonText}

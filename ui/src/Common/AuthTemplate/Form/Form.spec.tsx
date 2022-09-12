@@ -30,7 +30,7 @@ describe('Form', () => {
 				submitButtonText="Submit"
 				onSubmit={mockSubmit}
 				errorMessages={[]}
-				isLoading={false}
+				disableSubmitBtn={false}
 			>
 				Child Elements
 			</Form>
@@ -45,7 +45,7 @@ describe('Form', () => {
 				submitButtonText="Submit"
 				onSubmit={mockSubmit}
 				errorMessages={['error message1', 'error message2']}
-				isLoading={false}
+				disableSubmitBtn={false}
 			>
 				Child Elements
 			</Form>
@@ -62,7 +62,7 @@ describe('Form', () => {
 				submitButtonText={submitButtonText}
 				onSubmit={mockSubmit}
 				errorMessages={['error message1', 'error message2']}
-				isLoading={false}
+				disableSubmitBtn={false}
 			>
 				Child Elements
 			</Form>
@@ -80,7 +80,7 @@ describe('Form', () => {
 				submitButtonText={submitButtonText}
 				onSubmit={mockSubmit}
 				errorMessages={['error message1', 'error message2']}
-				isLoading={true}
+				disableSubmitBtn={true}
 			>
 				Child Elements
 			</Form>
