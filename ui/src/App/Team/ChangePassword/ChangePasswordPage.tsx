@@ -42,7 +42,11 @@ function ChangePasswordPage(): JSX.Element {
 	return (
 		<div className="change-password-page">
 			<div className="change-password-form">
-				<h1 className="change-password-title">Change Password</h1>
+				<h1>Reset Your Password</h1>
+				<p>
+					Almost done! Enter your new password here and then remember to tell
+					any active teammates so that they can continue to login to your board.
+				</p>
 				<Form onSubmit={submitNewPassword} submitButtonText="Reset Password">
 					<InputPassword
 						label="New Password"
