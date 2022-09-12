@@ -18,7 +18,7 @@
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
-import TeamService from '../../../Services/Api/TeamService';
+import TeamService from '../../Services/Api/TeamService';
 
 import ChangeTeamDetailsPage from './ChangeTeamDetailsPage';
 

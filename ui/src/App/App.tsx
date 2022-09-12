@@ -22,11 +22,11 @@ import { useRecoilValue } from 'recoil';
 import Modal from '../Common/Modal/Modal';
 import { getThemeClassFromUserSettings, ThemeState } from '../State/ThemeState';
 
+import ChangeTeamDetailsPage from './ChangeTeamDetails/ChangeTeamDetailsPage';
 import CreatePage from './Create/CreatePage';
 import LoginPage from './Login/LoginPage';
 import ResetPasswordPage from './ResetPassword/ResetPasswordPage';
 import ArchivesPage from './Team/Archives/ArchivesPage';
-import ChangeTeamDetailsPage from './Team/Details/ChangeTeamDetailsPage';
 import PasswordResetRequestPage from './Team/PasswordResetRequest/PasswordResetRequestPage';
 import RadiatorPage from './Team/Radiator/RadiatorPage';
 import RetroPage from './Team/Retro/RetroPage';

@@ -18,9 +18,9 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import Form from '../../../Common/AuthTemplate/Form/Form';
-import InputEmail from '../../../Common/InputEmail/InputEmail';
-import TeamService from '../../../Services/Api/TeamService';
+import Form from '../../Common/AuthTemplate/Form/Form';
+import InputEmail from '../../Common/InputEmail/InputEmail';
+import TeamService from '../../Services/Api/TeamService';
 
 import './ChangeTeamDetailsPage.scss';
 
