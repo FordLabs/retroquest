@@ -15,14 +15,18 @@
  * limitations under the License.
  */
 
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+
+import { ThemeState } from '../../State/ThemeState';
+import Theme from '../../Types/Theme';
+import renderWithRecoilRoot from '../../Utils/renderWithRecoilRoot';
 
 import InputPassword from './InputPassword';
 
 describe('Input Password', () => {
 	it('should hide password and show opened eye icon by default', () => {
-		render(
+		renderWithRecoilRoot(
 			<InputPassword
 				password="HideMyPassword!"
 				onPasswordInputChange={() => {}}
@@ -34,7 +38,7 @@ describe('Input Password', () => {
 	});
 
 	it('should show password and closed eye icon when opened eye icon is clicked', () => {
-		render(
+		renderWithRecoilRoot(
 			<InputPassword
 				password="ShowMyPassword!"
 				onPasswordInputChange={() => {}}
@@ -51,7 +55,7 @@ describe('Input Password', () => {
 	});
 
 	it('should hide password and opened eye icon when closed eye icon is clicked', () => {
-		render(
+		renderWithRecoilRoot(
 			<InputPassword
 				password="HideMyPasswordAgain!"
 				onPasswordInputChange={() => {}}
@@ -63,6 +67,34 @@ describe('Input Password', () => {
 
 		expect(screen.queryByText('HideMyPasswordAgain!')).toBeNull();
 		shouldShowOpenedEyeIconAndNotClosedEyeIcon();
+	});
+
+	it('should eye icons should be blue in light mode', () => {
+		renderWithRecoilRoot(
+			<InputPassword password="" onPasswordInputChange={() => {}} />,
+			({ set }) => {
+				set(ThemeState, Theme.LIGHT);
+			}
+		);
+		const eyeOpenIcon = screen.getByTestId('eyeOpenIcon');
+		expect(eyeOpenIcon.getAttribute('fill')).toBe('#34495E');
+		clickOnEyeIcon('Show Password');
+		const eyeSlashIcon = screen.getByTestId('eyeSlashIcon');
+		expect(eyeSlashIcon.getAttribute('fill')).toBe('#34495E');
+	});
+
+	it('should eye icons should be off white in dark mode', () => {
+		renderWithRecoilRoot(
+			<InputPassword password="" onPasswordInputChange={() => {}} />,
+			({ set }) => {
+				set(ThemeState, Theme.DARK);
+			}
+		);
+		const eyeOpenIcon = screen.getByTestId('eyeOpenIcon');
+		expect(eyeOpenIcon.getAttribute('fill')).toBe('#ecf0f1');
+		clickOnEyeIcon('Show Password');
+		const eyeSlashIcon = screen.getByTestId('eyeSlashIcon');
+		expect(eyeSlashIcon.getAttribute('fill')).toBe('#ecf0f1');
 	});
 });
 

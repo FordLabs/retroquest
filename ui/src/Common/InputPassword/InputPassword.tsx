@@ -16,9 +16,12 @@
  */
 
 import React, { useState } from 'react';
-import { ReactComponent as EyeOpenIcon } from 'Assets/eye-open_blue.svg';
-import { ReactComponent as EyeClosedIcon } from 'Assets/eye-slash_blue.svg';
+import EyeOpenIcon from 'Assets/EyeOpenIcon';
+import EyeSlashIcon from 'Assets/EyeSlashIcon';
 import Input from 'Common/Input/Input';
+import { useRecoilValue } from 'recoil';
+import { ThemeState } from 'State/ThemeState';
+import Theme from 'Types/Theme';
 
 import './InputPassword.scss';
 
@@ -41,7 +44,9 @@ function InputPassword(props: Props) {
 		readOnly,
 	} = props;
 
+	const theme = useRecoilValue(ThemeState);
 	const [showPassword, setShowPassword] = useState<boolean>(false);
+	const eyeIconColor = theme === Theme.DARK ? '#ecf0f1' : '#34495E';
 
 	return (
 		<div className="input-password">
@@ -63,9 +68,9 @@ function InputPassword(props: Props) {
 				onClick={() => setShowPassword(!showPassword)}
 			>
 				{showPassword ? (
-					<EyeClosedIcon role="presentation" />
+					<EyeSlashIcon color={eyeIconColor} />
 				) : (
-					<EyeOpenIcon role="presentation" />
+					<EyeOpenIcon color={eyeIconColor} />
 				)}
 			</button>
 		</div>
