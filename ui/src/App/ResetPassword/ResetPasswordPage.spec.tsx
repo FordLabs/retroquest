@@ -17,14 +17,13 @@
 
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import TeamService from 'Services/Api/TeamService';
 
-import TeamService from '../../../Services/Api/TeamService';
-
-import ChangePasswordPage from './ChangePasswordPage';
+import ResetPasswordPage from './ResetPasswordPage';
 
 jest.mock('Services/Api/TeamService');
 
-describe('the change team password form', () => {
+describe('Reset Password Page', () => {
 	it('should have a field for password and password confirmation, plus a submit button', async () => {
 		renderWithToken('');
 		expect(screen.getByLabelText('New Password')).toBeInTheDocument();
@@ -87,7 +86,7 @@ function renderWithToken(token: string) {
 	render(
 		<MemoryRouter initialEntries={[initialEntry]}>
 			<Routes>
-				<Route element={<ChangePasswordPage />} path={'/change-password'} />
+				<Route element={<ResetPasswordPage />} path={'/change-password'} />
 			</Routes>
 		</MemoryRouter>
 	);

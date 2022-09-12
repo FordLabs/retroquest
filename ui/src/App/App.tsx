@@ -24,8 +24,8 @@ import { getThemeClassFromUserSettings, ThemeState } from '../State/ThemeState';
 
 import CreatePage from './Create/CreatePage';
 import LoginPage from './Login/LoginPage';
+import ResetPasswordPage from './ResetPassword/ResetPasswordPage';
 import ArchivesPage from './Team/Archives/ArchivesPage';
-import ChangePasswordPage from './Team/ChangePassword/ChangePasswordPage';
 import ChangeTeamDetailsPage from './Team/Details/ChangeTeamDetailsPage';
 import PasswordResetRequestPage from './Team/PasswordResetRequest/PasswordResetRequestPage';
 import RadiatorPage from './Team/Radiator/RadiatorPage';
@@ -53,7 +53,7 @@ function App() {
 				<Route path="/login/:teamId" element={<LoginPage />} />
 				<Route path="/create" element={<CreatePage />} />
 				<Route path="/email/reset" element={<ChangeTeamDetailsPage />} />
-				<Route path="/password/reset" element={<ChangePasswordPage />} />
+				<Route path="/password/reset" element={<ResetPasswordPage />} />
 				<Route
 					path={PASSWORD_RESET_ROUTE}
 					element={<PasswordResetRequestPage />}

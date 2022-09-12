@@ -17,14 +17,13 @@
 
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import Form from 'Common/AuthTemplate/Form/Form';
+import InputPassword from 'Common/InputPassword/InputPassword';
+import TeamService from 'Services/Api/TeamService';
 
-import Form from '../../../Common/AuthTemplate/Form/Form';
-import InputPassword from '../../../Common/InputPassword/InputPassword';
-import TeamService from '../../../Services/Api/TeamService';
+import './ResetPasswordPage.scss';
 
-import './ChangePasswordPage.scss';
-
-function ChangePasswordPage(): JSX.Element {
+function ResetPasswordPage(): JSX.Element {
 	const { search } = useLocation();
 
 	const [newPassword, setNewPassword] = useState<string>('');
@@ -40,8 +39,8 @@ function ChangePasswordPage(): JSX.Element {
 	}
 
 	return (
-		<div className="change-password-page">
-			<div className="change-password-form">
+		<div className="reset-password-page">
+			<div className="reset-password-form">
 				<h1>Reset Your Password</h1>
 				<p>
 					Almost done! Enter your new password here and then remember to tell
@@ -61,4 +60,4 @@ function ChangePasswordPage(): JSX.Element {
 	);
 }
 
-export default ChangePasswordPage;
+export default ResetPasswordPage;
