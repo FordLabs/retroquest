@@ -16,6 +16,7 @@
  */
 
 export const CREATE_TEAM_PAGE_PATH = '/create';
+export const REQUEST_PASSWORD_RESET_PAGE_PATH = '/request-password-reset';
 export const LOGIN_PAGE_PATH = '/login';
 export const getLoginPagePathWithTeamId = (teamId: string) =>
 	`${LOGIN_PAGE_PATH}/${teamId}`;

@@ -17,6 +17,7 @@
 
 import axios, { AxiosError } from 'axios';
 
+import { REQUEST_PASSWORD_RESET_PAGE_PATH } from '../../RouteConstants';
 import CookieService from '../CookieService';
 
 import TeamService, { AuthResponse } from './TeamService';
@@ -28,6 +29,7 @@ describe('Team Service', () => {
 	const user = {
 		name: 'Julia',
 		password: 'Password1',
+		email: 'e@mail.com',
 	};
 	const axiosResponse = {
 		data: 'jwt-token-123',
@@ -45,7 +47,10 @@ describe('Team Service', () => {
 				token: authResponse.token,
 				teamId,
 			});
-			expect(axios.post).toHaveBeenCalledWith('/api/team/login', user);
+			expect(axios.post).toHaveBeenCalledWith('/api/team/login', {
+				name: user.name,
+				password: user.password,
+			});
 		});
 	});
 
@@ -54,7 +59,8 @@ describe('Team Service', () => {
 			axios.post = jest.fn().mockResolvedValue(axiosResponse);
 			const authResponse: AuthResponse = await TeamService.create(
 				user.name,
-				user.password
+				user.password,
+				user.email
 			);
 			expect(authResponse).toEqual({
 				token: authResponse.token,
@@ -84,6 +90,43 @@ describe('Team Service', () => {
 			expect(axios.get).toHaveBeenCalledWith(`/api/team/${teamId}/csv`, {
 				responseType: 'blob',
 				timeout: 30000,
+			});
+		});
+	});
+
+	describe('setEmails', () => {
+		it('should post emails to /email/reset with the token', async () => {
+			axios.post = jest.fn();
+			await TeamService.setEmails('e1@ma.il', 'e2@ma.il', 'T0k3n');
+
+			expect(axios.post).toHaveBeenCalledWith('/api/email/reset', {
+				email1: 'e1@ma.il',
+				email2: 'e2@ma.il',
+				emailResetToken: 'T0k3n',
+			});
+		});
+	});
+
+	describe('setPasswords', () => {
+		it('should post password to /password/reset with the token', async () => {
+			axios.post = jest.fn();
+			await TeamService.setPassword('wordword', 'T0k3n');
+
+			expect(axios.post).toHaveBeenCalledWith('/api/password/reset', {
+				password: 'wordword',
+				resetToken: 'T0k3n',
+			});
+		});
+	});
+
+	describe('sendPasswordResetLink', () => {
+		it('should send password reset link', async () => {
+			axios.post = jest.fn();
+			await TeamService.sendPasswordResetLink('Team Name', 'a@b.c');
+
+			expect(axios.post).toHaveBeenCalledWith('/api/password/request-reset', {
+				teamName: 'Team Name',
+				email: 'a@b.c',
 			});
 		});
 	});
@@ -145,6 +188,13 @@ describe('Team Service', () => {
 
 			it('should NOT redirect to login page if already on the create page', async () => {
 				window.location.pathname = '/create';
+				await TeamService.onResponseInterceptRejection(axiosError)
+					.catch(jest.fn())
+					.finally(() => expect(mockAssign).not.toHaveBeenCalled());
+			});
+
+			it('should NOT redirect to login page if already on the request password reset page', async () => {
+				window.location.pathname = REQUEST_PASSWORD_RESET_PAGE_PATH;
 				await TeamService.onResponseInterceptRejection(axiosError)
 					.catch(jest.fn())
 					.finally(() => expect(mockAssign).not.toHaveBeenCalled());

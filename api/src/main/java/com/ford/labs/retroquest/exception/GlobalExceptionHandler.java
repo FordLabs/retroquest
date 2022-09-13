@@ -35,7 +35,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Column Title with that ID not found")
     @ExceptionHandler(ColumnNotFoundException.class)
-    public void columnNotFound(){
+    public void columnNotFound() {
         // Used by Spring for Controller Advice
     }
 
@@ -52,7 +52,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Incorrect team name or password. Please try again.")
-    @ExceptionHandler(BoardDoesNotExistException.class)
+    @ExceptionHandler(TeamDoesNotExistException.class)
     public void noTeamExceptionHandler() {
         // Used by Spring for Controller Advice
     }
@@ -63,9 +63,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         // Used by Spring for Controller Advice
     }
 
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Reset token incorrect or expired.")
+    @ExceptionHandler(BadResetTokenException.class)
+    public void badPasswordResetTokenExceptionHandler() {
+        // Used by Spring for Controller Advice
+    }
+
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Password must be 8 characters or longer.")
     @ExceptionHandler(PasswordTooShortException.class)
     public void passwordTooShortExceptionHandler() {
+        // Used by Spring for Controller Advice
+    }
+
+    @ExceptionHandler(EmailNotValidException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Team email is required.")
+    public void emailRequiredExceptionHandler() {
         // Used by Spring for Controller Advice
     }
 

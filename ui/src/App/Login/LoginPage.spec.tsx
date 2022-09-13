@@ -128,6 +128,13 @@ describe('LoginPage.spec.tsx', () => {
 		await waitFor(() => expect(mockLogin).toHaveBeenCalled());
 	});
 
+	it('should have a "Forgot your login info?" link that goes to the request password reset page', () => {
+		const forgotLoginInfoLink = screen.getByText('Forgot your login info?');
+		expect(forgotLoginInfoLink.getAttribute('href')).toBe(
+			'/request-password-reset'
+		);
+	});
+
 	describe('Form errors', () => {
 		it('should show error if login was unsuccessful', async () => {
 			TeamService.login = jest.fn().mockRejectedValue(new Error('Async error'));
@@ -161,7 +168,7 @@ describe('LoginPage.spec.tsx', () => {
 });
 
 const getTeamNameInput = (): HTMLInputElement =>
-	screen.getByLabelText('Team name', { selector: 'input' }) as HTMLInputElement;
+	screen.getByLabelText('Team Name', { selector: 'input' }) as HTMLInputElement;
 const getPasswordInput = (): HTMLInputElement =>
 	screen.getByLabelText('Password', { selector: 'input' }) as HTMLInputElement;
 

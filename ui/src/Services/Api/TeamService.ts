@@ -17,14 +17,21 @@
 
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
-import { CREATE_TEAM_PAGE_PATH, LOGIN_PAGE_PATH } from '../../RouteConstants';
+import {
+	CREATE_TEAM_PAGE_PATH,
+	LOGIN_PAGE_PATH,
+	REQUEST_PASSWORD_RESET_PAGE_PATH,
+} from '../../RouteConstants';
 import CookieService from '../CookieService';
 
 import {
+	CHANGE_EMAIL_API_PATH,
+	CHANGE_PASSWORD_API_PATH,
 	CREATE_TEAM_API_PATH,
 	getCSVApiPath,
 	getTeamNameApiPath,
 	LOGIN_API_PATH,
+	PASSWORD_REQUEST_API_PATH,
 } from './ApiConstants';
 
 export interface AuthResponse {
@@ -47,10 +54,39 @@ const TeamService = {
 			.then(returnTokenAndTeamId);
 	},
 
-	create(name: string, password: string): Promise<AuthResponse> {
+	create(name: string, password: string, email: string): Promise<AuthResponse> {
 		return axios
-			.post(CREATE_TEAM_API_PATH, { name, password })
+			.post(CREATE_TEAM_API_PATH, { name, password, email })
 			.then(returnTokenAndTeamId);
+	},
+
+	setEmails(
+		email1: string,
+		email2: string,
+		token: string
+	): Promise<AxiosResponse> {
+		return axios.post(CHANGE_EMAIL_API_PATH, {
+			email1: email1,
+			email2: email2,
+			emailResetToken: token,
+		});
+	},
+
+	sendPasswordResetLink(
+		teamName: string,
+		email: string
+	): Promise<AxiosResponse> {
+		return axios.post(PASSWORD_REQUEST_API_PATH, {
+			teamName: teamName,
+			email: email,
+		});
+	},
+
+	setPassword(password: string, token: string): Promise<AxiosResponse> {
+		return axios.post(CHANGE_PASSWORD_API_PATH, {
+			password: password,
+			resetToken: token,
+		});
 	},
 
 	getTeamName(teamId: string): Promise<string> {
@@ -75,10 +111,13 @@ const TeamService = {
 			CookieService.clearToken();
 
 			const { pathname } = window.location;
-			const isLoginPage = pathname.includes(LOGIN_PAGE_PATH);
-			const isCreateNewTeamPage = pathname === CREATE_TEAM_PAGE_PATH;
+			const unauthorizedPaths = [
+				LOGIN_PAGE_PATH,
+				CREATE_TEAM_PAGE_PATH,
+				REQUEST_PASSWORD_RESET_PAGE_PATH,
+			];
 
-			if (!isLoginPage && !isCreateNewTeamPage) {
+			if (!unauthorizedPaths.some((path) => pathname.includes(path))) {
 				let teamNamePath = '';
 				const isTeamPage = pathname.includes('/team');
 				if (isTeamPage) {

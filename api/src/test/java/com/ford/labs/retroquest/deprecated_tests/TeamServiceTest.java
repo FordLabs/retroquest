@@ -19,11 +19,12 @@ package com.ford.labs.retroquest.deprecated_tests;
 
 import com.ford.labs.retroquest.column.Column;
 import com.ford.labs.retroquest.column.ColumnRepository;
-import com.ford.labs.retroquest.exception.BoardDoesNotExistException;
+import com.ford.labs.retroquest.exception.TeamDoesNotExistException;
 import com.ford.labs.retroquest.exception.PasswordInvalidException;
 import com.ford.labs.retroquest.team.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -61,6 +62,8 @@ class TeamServiceTest {
         CreateTeamRequest requestedTeam = new CreateTeamRequest();
         requestedTeam.setName("A name");
         requestedTeam.setPassword("password");
+        requestedTeam.setEmail("em@ai.l");
+
 
         when(passwordEncoder.encode("password")).thenReturn("encryptedPassword");
         when(teamRepository.save(any(Team.class))).then(returnsFirstArg());
@@ -79,6 +82,7 @@ class TeamServiceTest {
         CreateTeamRequest requestedTeam = new CreateTeamRequest();
         requestedTeam.setName("   A name");
         requestedTeam.setPassword("password");
+        requestedTeam.setEmail("em@ai.l");
 
         when(passwordEncoder.encode("password")).thenReturn("encryptedPassword");
         when(teamRepository.save(any(Team.class))).then(returnsFirstArg());
@@ -124,7 +128,7 @@ class TeamServiceTest {
 
         when(teamRepository.findTeamByNameIgnoreCase("beach-bums")).thenReturn(Optional.empty());
         assertThrows(
-                BoardDoesNotExistException.class,
+                TeamDoesNotExistException.class,
                 () -> teamService.login(loginRequest)
         );
     }
@@ -201,7 +205,7 @@ class TeamServiceTest {
         when(teamRepository.save(any(Team.class))).then(returnsFirstArg());
         when(teamRepository.findTeamByUri("beach-bums")).thenReturn(Optional.empty());
 
-        CreateTeamRequest requestedTeam = new CreateTeamRequest("beach-bums", "password");
+        CreateTeamRequest requestedTeam = new CreateTeamRequest("beach-bums", "password", "email");
         teamService.createNewTeam(requestedTeam);
 
         Column happyColumn = new Column(null, "happy", "Happy", "beach-bums");
@@ -218,7 +222,7 @@ class TeamServiceTest {
     void getTeamByName_throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
         when(teamRepository.findTeamByNameIgnoreCase("beach-bums")).thenReturn(Optional.empty());
         assertThrows(
-                BoardDoesNotExistException.class,
+                TeamDoesNotExistException.class,
                 () -> teamService.getTeamByName("beach-bums")
         );
     }
@@ -251,7 +255,7 @@ class TeamServiceTest {
     void getTeamByUri_throwsBoardDoesNotExistExceptionWhenTeamDoesNotExist() {
         when(teamRepository.findTeamByUri("beach-bums")).thenReturn(Optional.empty());
         assertThrows(
-                BoardDoesNotExistException.class,
+                TeamDoesNotExistException.class,
                 () -> teamService.getTeamByUri("beach-bums")
         );
     }
@@ -266,6 +270,17 @@ class TeamServiceTest {
         Team actualTeam = teamService.getTeamByUri(uri);
 
         assertEquals(uri, actualTeam.getUri());
+    }
+
+    @Test
+    void changePasswordUpdatesPassword() {
+        Team expectedTeam = new Team();
+
+        teamService.changePassword(expectedTeam, "NeW PaSsWoRd");
+
+        ArgumentCaptor<Team> captor = ArgumentCaptor.forClass(Team.class);
+        verify(teamRepository).save(captor.capture());
+        assertEquals(captor.getValue().getPassword(), "NeW PaSsWoRd");
     }
 
     @Test

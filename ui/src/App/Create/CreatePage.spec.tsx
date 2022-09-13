@@ -42,6 +42,7 @@ describe('CreatePage.spec.tsx', () => {
 	let container: HTMLElement;
 	const validTeamName = 'Team Awesome';
 	const validPassword = 'Password1';
+	const validEmail = 'e@mail.com';
 
 	beforeEach(async () => {
 		ContributorsService.get = jest.fn().mockResolvedValue(mockContributors);
@@ -85,13 +86,14 @@ describe('CreatePage.spec.tsx', () => {
 	it('should successfully create team', async () => {
 		typeIntoTeamNameInput(validTeamName);
 		typeIntoPasswordInput(validPassword);
-		typeIntoConfirmPasswordInput(validPassword);
+		typeIntoEmail(validEmail);
 
 		const submitButton = screen.getByText('Create Team');
 		userEvent.click(submitButton);
 		expect(TeamService.create).toHaveBeenCalledWith(
 			validTeamName,
-			validPassword
+			validPassword,
+			validEmail
 		);
 		await waitFor(() => expect(mockLogin).toHaveBeenCalled());
 	});
@@ -104,7 +106,6 @@ describe('CreatePage.spec.tsx', () => {
 
 		it('should warn user with message when team name has special characters', async () => {
 			typeIntoPasswordInput(validPassword);
-			typeIntoConfirmPasswordInput(validPassword);
 
 			const invalidTeamName = '&%(#';
 			typeIntoTeamNameInput(invalidTeamName);
@@ -129,7 +130,6 @@ describe('CreatePage.spec.tsx', () => {
 
 			const invalidPassword = 'MissingANumber';
 			typeIntoPasswordInput(invalidPassword);
-			typeIntoConfirmPasswordInput(invalidPassword);
 
 			fireEvent.submit(getPasswordInput());
 
@@ -145,30 +145,15 @@ describe('CreatePage.spec.tsx', () => {
 				'Password must contain at least one number.'
 			);
 		});
-
-		it('should warn user with message when passwords do not match', () => {
-			typeIntoTeamNameInput(validTeamName);
-			typeIntoPasswordInput(validPassword);
-			typeIntoConfirmPasswordInput(validPassword + '-nice-try');
-
-			fireEvent.submit(getPasswordInput());
-
-			expect(screen.queryByTestId('inputValidationMessage')).toBeNull();
-
-			const formErrorMessage = screen.getByTestId('formErrorMessage');
-			expect(formErrorMessage.textContent).toBe(
-				'Please enter matching passwords'
-			);
-		});
 	});
 });
 
 const getTeamNameInput = (): HTMLInputElement =>
-	screen.getByLabelText('Team name', { selector: 'input' }) as HTMLInputElement;
+	screen.getByLabelText('Team Name', { selector: 'input' }) as HTMLInputElement;
 const getPasswordInput = (): HTMLInputElement =>
 	screen.getByLabelText('Password', { selector: 'input' }) as HTMLInputElement;
-const getConfirmPasswordInput = (): HTMLInputElement =>
-	screen.getByLabelText('Confirm Password', {
+const getEmailInput = (): HTMLInputElement =>
+	screen.getByLabelText('Email', {
 		selector: 'input',
 	}) as HTMLInputElement;
 
@@ -177,10 +162,10 @@ const typeIntoPasswordInput = (password: string) => {
 	fireEvent.change(passwordInput, { target: { value: password } });
 };
 
-const typeIntoConfirmPasswordInput = (confirmationPassword: string) => {
-	const confirmPasswordInput = getConfirmPasswordInput();
+const typeIntoEmail = (email: string) => {
+	const confirmPasswordInput = getEmailInput();
 	fireEvent.change(confirmPasswordInput, {
-		target: { value: confirmationPassword },
+		target: { value: email },
 	});
 };
 

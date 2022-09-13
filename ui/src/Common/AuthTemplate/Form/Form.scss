@@ -25,13 +25,19 @@
 
 	.submit-button {
 		width: 100%;
+		margin-top: 48px;
 
 		color: main.$gray-1;
 
 		background-color: main.$dark-turquoise;
 
-		&:hover,
-		&:focus {
+		&:disabled {
+			cursor: initial;
+			opacity: 0.3;
+		}
+
+		&:hover:not(:disabled),
+		&:focus:not(:disabled) {
 			background-color: main.$turquoise;
 		}
 	}

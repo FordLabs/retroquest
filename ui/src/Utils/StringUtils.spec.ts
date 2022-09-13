@@ -14,11 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {
-	validateConfirmationPassword,
-	validatePassword,
-	validateTeamName,
-} from './StringUtils';
+import { validatePassword, validateTeamName } from './StringUtils';
 
 describe('String Utils', () => {
 	const emptyTeamNameError = 'Please enter a team name.';
@@ -71,19 +67,6 @@ describe('String Utils', () => {
 		'validating password %s should return error message "%s"',
 		(password, errorMessage) => {
 			expect(validatePassword(password!)).toBe(errorMessage);
-		}
-	);
-
-	const misMatchingPasswords = 'Please enter matching passwords';
-
-	it.each([
-		['CorrectPassword1', 'WrongConfirmationPassword', misMatchingPasswords],
-	])(
-		'validating password: "%s" and confirmation password "%s" should return error message "%s"',
-		(password, confirmationPassword, errorMessage) => {
-			expect(validateConfirmationPassword(password, confirmationPassword)).toBe(
-				errorMessage
-			);
 		}
 	);
 });

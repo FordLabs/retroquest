@@ -17,7 +17,11 @@
 
 package com.ford.labs.retroquest.team;
 
+import com.ford.labs.retroquest.exception.BadResetTokenException;
+import com.ford.labs.retroquest.exception.TeamDoesNotExistException;
 import com.ford.labs.retroquest.security.JwtBuilder;
+import com.ford.labs.retroquest.team.password.PasswordResetToken;
+import com.ford.labs.retroquest.team.password.PasswordResetTokenRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -26,6 +30,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
@@ -43,10 +48,15 @@ public class TeamController {
 
     private final TeamService teamService;
     private final JwtBuilder jwtBuilder;
+    private final PasswordResetTokenRepository passwordResetRepository;
 
-    public TeamController(TeamService teamService, JwtBuilder jwtBuilder) {
+    private final PasswordEncoder passwordEncoder;
+
+    public TeamController(TeamService teamService, JwtBuilder jwtBuilder, PasswordResetTokenRepository passwordResetRepository, PasswordEncoder passwordEncoder) {
         this.teamService = teamService;
         this.jwtBuilder = jwtBuilder;
+        this.passwordResetRepository = passwordResetRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/team")
@@ -69,6 +79,32 @@ public class TeamController {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public String getTeamName(@PathVariable("teamUri") String teamUri) {
         return teamService.getTeamByUri(teamUri).getName();
+    }
+
+    @PostMapping("/password/request-reset")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
+    public void requestPasswordReset(@RequestBody RequestPasswordResetRequest requestPasswordResetRequest){
+        Team team = teamService.getTeamByName(requestPasswordResetRequest.getTeamName());
+        if(team != null && isEmailOnTeam(team, requestPasswordResetRequest.getEmail())) {
+            PasswordResetToken passwordResetToken = new PasswordResetToken();
+            passwordResetToken.setTeam(team);
+            passwordResetRepository.deleteAllByTeam(team);
+            passwordResetRepository.save(passwordResetToken);
+            //send the email here
+        }
+        else throw new TeamDoesNotExistException();
+    }
+
+    private static boolean isEmailOnTeam(Team team, String email) {
+        return team.getEmail().equals(email);
+    }
+
+    @PostMapping("/password/reset")
+    public void resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
+        PasswordResetToken passwordResetToken = passwordResetRepository.findByResetToken(resetPasswordRequest.getResetToken());
+        if(passwordResetToken == null || passwordResetToken.isExpired()) throw new BadResetTokenException();
+        teamService.changePassword(passwordResetToken.getTeam(), passwordEncoder.encode(resetPasswordRequest.getPassword()));
+        passwordResetRepository.delete(passwordResetToken);
     }
 
     @GetMapping(value = "/team/{teamId}/csv", produces = "application/board.csv")

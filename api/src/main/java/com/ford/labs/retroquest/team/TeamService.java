@@ -20,7 +20,7 @@ package com.ford.labs.retroquest.team;
 import com.ford.labs.retroquest.actionitem.ActionItemRepository;
 import com.ford.labs.retroquest.column.Column;
 import com.ford.labs.retroquest.column.ColumnRepository;
-import com.ford.labs.retroquest.exception.BoardDoesNotExistException;
+import com.ford.labs.retroquest.exception.TeamDoesNotExistException;
 import com.ford.labs.retroquest.exception.PasswordInvalidException;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -53,12 +53,12 @@ public class TeamService {
 
     public Team getTeamByName(String teamName) {
         return teamRepository.findTeamByNameIgnoreCase(teamName.trim())
-            .orElseThrow(BoardDoesNotExistException::new);
+            .orElseThrow(TeamDoesNotExistException::new);
     }
 
     public Team getTeamByUri(String teamUri) {
         return teamRepository.findTeamByUri(teamUri.toLowerCase())
-            .orElseThrow(BoardDoesNotExistException::new);
+            .orElseThrow(TeamDoesNotExistException::new);
     }
 
     public String convertTeamNameToURI(String teamName) {
@@ -75,7 +75,19 @@ public class TeamService {
     public Team createNewTeam(CreateTeamRequest createTeamRequest) {
         var encryptedPassword = passwordEncoder.encode(createTeamRequest.getPassword());
 
-        return createTeamEntity(createTeamRequest.getName(), encryptedPassword);
+        var trimmedName = createTeamRequest.getName().trim();
+        var uri = convertTeamNameToURI(trimmedName);
+        teamRepository
+            .findTeamByUri(uri)
+            .ifPresent(s -> {
+                throw new DataIntegrityViolationException(s.getUri());
+            });
+
+        var team = new Team(uri, trimmedName, encryptedPassword, createTeamRequest.getEmail().trim());
+        team = teamRepository.save(team);
+        generateColumns(team);
+
+        return team;
     }
 
     public Team login(LoginRequest loginRequest) {
@@ -93,24 +105,6 @@ public class TeamService {
         return savedTeam;
     }
 
-    private Team createTeamEntity(String name, String password) {
-        var trimmedName = name.trim();
-        var uri = convertTeamNameToURI(trimmedName);
-        teamRepository
-            .findTeamByUri(uri)
-            .ifPresent(s -> {
-                throw new DataIntegrityViolationException(s.getUri());
-            });
-
-        var teamEntity = new Team(uri, trimmedName, password);
-        teamEntity.setDateCreated(LocalDate.now());
-
-        teamEntity = teamRepository.save(teamEntity);
-        generateColumns(teamEntity);
-
-        return teamEntity;
-    }
-
     private void generateColumns(Team team) {
         var happyColumn = new Column(null, "happy", "Happy", team.getUri());
         var confusedColumn = new Column(null, "confused", "Confused", team.getUri());
@@ -119,6 +113,11 @@ public class TeamService {
         columnRepository.save(happyColumn);
         columnRepository.save(confusedColumn);
         columnRepository.save(unhappyColumn);
+    }
+
+    public void changePassword(Team existingTeam, String newPassword){
+        existingTeam.setPassword(newPassword);
+        teamRepository.save(existingTeam);
     }
 
     private void updateFailedAttempts(Team savedTeam, int failedAttempts) {

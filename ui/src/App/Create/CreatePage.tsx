@@ -17,26 +17,22 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
+import Form from 'Common/AuthTemplate/Form/Form';
+import Input from 'Common/Input/Input';
+import InputPassword from 'Common/InputPassword/InputPassword';
+import InputTeamName from 'Common/InputTeamName/InputTeamName';
+import useAuth from 'Hooks/useAuth';
+import { LOGIN_PAGE_PATH } from 'RouteConstants';
+import TeamService from 'Services/Api/TeamService';
 
-import AuthTemplate from '../../Common/AuthTemplate/AuthTemplate';
-import Form from '../../Common/AuthTemplate/Form/Form';
-import InputPassword from '../../Common/AuthTemplate/InputPassword/InputPassword';
-import InputTeamName from '../../Common/AuthTemplate/InputTeamName/InputTeamName';
-import Input from '../../Common/Input/Input';
-import useAuth from '../../Hooks/useAuth';
-import { LOGIN_PAGE_PATH } from '../../RouteConstants';
-import TeamService from '../../Services/Api/TeamService';
-import {
-	validateConfirmationPassword,
-	validatePassword,
-	validateTeamName,
-} from '../../Utils/StringUtils';
+import { validatePassword, validateTeamName } from '../../Utils/StringUtils';
 
 export default function CreatePage(): JSX.Element {
 	const { login } = useAuth();
 	const [teamName, setTeamName] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
-	const [confirmationPassword, setConfirmationPassword] = useState<string>('');
+	const [email, setEmail] = useState<string>('');
 
 	const [isValidated, setIsValidated] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -44,22 +40,17 @@ export default function CreatePage(): JSX.Element {
 
 	const teamNameErrorMessage = validateTeamName(teamName);
 	const passwordErrorMessage = validatePassword(password);
-	const confirmPasswordErrorMessage = validateConfirmationPassword(
-		password,
-		confirmationPassword
-	);
 
 	const captureErrors = () => {
 		const errors = [];
 		if (teamNameErrorMessage) errors.push(teamNameErrorMessage);
 		if (passwordErrorMessage) errors.push(passwordErrorMessage);
-		if (confirmPasswordErrorMessage) errors.push(confirmPasswordErrorMessage);
 		setErrorMessages(errors);
 	};
 
 	function createTeam() {
 		setIsLoading(true);
-		TeamService.create(teamName, password)
+		TeamService.create(teamName, password, email)
 			.then(login)
 			.catch((error) => {
 				let errorMsg = 'Incorrect team name or password. Please try again.';
@@ -79,11 +70,7 @@ export default function CreatePage(): JSX.Element {
 		setIsValidated(true);
 		setErrorMessages([]);
 
-		if (
-			teamNameErrorMessage ||
-			passwordErrorMessage ||
-			confirmPasswordErrorMessage
-		) {
+		if (teamNameErrorMessage || passwordErrorMessage) {
 			captureErrors();
 		} else {
 			createTeam();
@@ -103,7 +90,7 @@ export default function CreatePage(): JSX.Element {
 				onSubmit={onSubmit}
 				errorMessages={errorMessages}
 				submitButtonText="Create Team"
-				isLoading={isLoading}
+				disableSubmitBtn={isLoading}
 			>
 				<InputTeamName
 					teamName={teamName}
@@ -124,15 +111,14 @@ export default function CreatePage(): JSX.Element {
 					readOnly={isLoading}
 				/>
 				<Input
-					id="confirmPasswordInput"
-					label="Confirm Password"
-					type="password"
-					value={confirmationPassword}
+					id="emailInput"
+					label="Email"
+					type="email"
+					value={email}
 					onChange={(event) => {
-						setConfirmationPassword(event.target.value);
+						setEmail(event.target.value);
 						setErrorMessages([]);
 					}}
-					invalid={isValidated && !!confirmPasswordErrorMessage}
 					readOnly={isLoading}
 				/>
 			</Form>

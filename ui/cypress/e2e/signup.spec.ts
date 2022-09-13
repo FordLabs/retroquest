@@ -29,7 +29,7 @@ describe('Signup', () => {
 
 		cy.get('[data-testid=teamNameInput]').as('teamNameInput');
 		cy.get('[data-testid=passwordInput]').as('passwordInput');
-		cy.get('[data-testid=confirmPasswordInput]').as('confirmPasswordInput');
+		cy.get('[data-testid=emailInput]').as('emailInput');
 		cy.get('[data-testid=formSubmitButton]').as('createButton');
 	});
 
@@ -53,13 +53,13 @@ describe('Signup', () => {
 });
 
 function fillOutAndSubmitCreateForm(
-	{ teamName, password }: TeamCredentials,
+	{ teamName, password, email }: TeamCredentials,
 	expectedStatusCode = 200
 ) {
 	cy.log('**Log in using the login form**');
 	cy.get('@teamNameInput').type(teamName);
 	cy.get('@passwordInput').type(password);
-	cy.get('@confirmPasswordInput').type(password);
+	cy.get('@emailInput').type(email);
 	cy.get('@createButton').click();
 
 	cy.wait('@postCreateTeam').then(({ response }) => {

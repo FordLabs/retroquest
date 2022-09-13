@@ -15,32 +15,43 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import * as React from 'react';
+import Input from 'Common/Input/Input';
 
-import Input from '../../Input/Input';
-
-type Props = {
-	password: string;
-	onPasswordInputChange: (updatedTeamName: string) => void;
-	readOnly: boolean;
+interface Props {
+	email?: string;
+	required?: boolean;
+	onEmailInputChange: (updatedEmail: string) => void;
 	invalid?: boolean;
-};
+	readOnly?: boolean;
+	label?: string;
+	id?: string;
+}
 
-function InputPassword(props: Props) {
-	const { password, onPasswordInputChange, invalid, readOnly } = props;
+function InputEmail(props: Props) {
+	const {
+		email = '',
+		required,
+		onEmailInputChange,
+		invalid,
+		readOnly,
+		label = 'Email',
+		id = 'emailInput',
+	} = props;
 
 	return (
 		<Input
-			id="passwordInput"
-			label="Password"
-			type="password"
-			value={password}
-			onChange={(event) => onPasswordInputChange(event.target.value)}
-			validationMessage="8 or more characters with a mix of numbers and letters"
+			id={id}
+			label={label}
+			value={email}
+			type="email"
+			required={required}
+			onChange={(event) => onEmailInputChange(event.target.value)}
+			validationMessage="Nope"
 			invalid={invalid}
 			readOnly={readOnly}
 		/>
 	);
 }
 
-export default InputPassword;
+export default InputEmail;

@@ -216,4 +216,28 @@
         </preConditions>
         <renameTable oldTableName="column_title" newTableName="rq_column" />
     </changeSet>
+    <changeSet id="add_email_column_to_team_table" author="cshaugh1">
+        <preConditions>
+            <tableExists tableName="team" />
+        </preConditions>
+        <addColumn tableName="team">
+            <column name="email" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="add_password_reset_table" author="cshaugh1">
+        <preConditions>
+            <not>
+                <tableExists tableName="password_reset_token"/>
+            </not>
+        </preConditions>
+        <createTable tableName="password_reset_token">
+            <column name="reset_token" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="team_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="NULL" name="date_created" type="datetime"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Ford Motor Company
+ * Copyright (c) 2021 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,14 +15,19 @@
  * limitations under the License.
  */
 
-const TeamService = {
-	login: jest.fn().mockResolvedValue(''),
-	create: jest.fn().mockResolvedValue(''),
-	getTeamName: jest.fn().mockResolvedValue('Active Team Name'),
-	getCSV: jest.fn().mockResolvedValue('column 1, column 2'),
-	setEmails: jest.fn().mockResolvedValue(''),
-	setPassword: jest.fn().mockResolvedValue(''),
-	sendPasswordResetLink: jest.fn().mockResolvedValue(''),
-};
+package com.ford.labs.retroquest.team.validation;
 
-export default TeamService;
+
+import javax.validation.Constraint;
+import javax.validation.Payload;
+import java.lang.annotation.*;
+
+@Documented
+@Constraint(validatedBy = EmailValidator.class)
+@Target( { ElementType.METHOD, ElementType.FIELD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface EmailConstraint {
+    String message() default "Invalid Email";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
+}

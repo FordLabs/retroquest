@@ -17,5 +17,5 @@
 
 package com.ford.labs.retroquest.exception;
 
-public class BoardDoesNotExistException extends RuntimeException {
+public class TeamDoesNotExistException extends RuntimeException {
 }
