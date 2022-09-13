@@ -262,7 +262,7 @@ describe('Retro Member Journey', () => {
 			cy.findByText('Account').as('accountTab');
 		});
 
-		it.only('Styles Tab: Change theme between light, dark, and system settings mode', () => {
+		it('Styles Tab: Change theme between light, dark, and system settings mode', () => {
 			cy.get('@stylesTab').as('stylesTab').should('have.class', 'selected');
 			cy.get('@accountTab').should('not.have.class', 'selected');
 
