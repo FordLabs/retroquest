@@ -21,6 +21,10 @@ retroquest:
   security:
     require-https: false
     jwt-signing-secret: ASLKJHDKJHikjsdkjhg1iu2heiIUGEIUQ@IUeiUIU@iyrgiu2g3i # This is a default value. Ensure you override this value on any real deployments.
+  app-base-url: something.com
+  email:
+    from-address: rq@test.com
+    is-enabled: true
 
 spring:
   data:
@@ -34,6 +38,9 @@ spring:
     show-sql: false
   liquibase:
     change-log: db/changelog.xml
+  mail:
+    host: mrl.azell.com
+    port: 25
 
 server:
   error:

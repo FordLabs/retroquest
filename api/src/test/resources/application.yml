@@ -18,12 +18,13 @@
 retroquest:
   marketing:
     survey-link-href: test-survey-link-href
-  archive:
-    thought:
-      page-size: 5
   security:
     require-https: false
     jwt-signing-secret: IMSOSECRETYOUDONTEVENKNOW
+  app-base-url: something.com
+  email:
+    from-address: test@mail.com
+    is-enabled: true
 
 spring:
   data:

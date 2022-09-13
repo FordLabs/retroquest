@@ -26,17 +26,24 @@ import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.Mockito.verify;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -138,6 +145,31 @@ class TeamApiTest extends ApiTestBase {
         PasswordResetToken actualToken = passwordResetRepository.findByTeam(expectedResetTeam);
         assertThat(actualToken.getDateCreated()).isNotNull();
         assertThat(actualToken.getResetToken()).isNotBlank();
+
+        final ArgumentCaptor<SimpleMailMessage> captor = ArgumentCaptor.forClass(SimpleMailMessage.class);
+        verify(javaMailSender).send(captor.capture());
+        final SimpleMailMessage value = captor.getValue();
+        assertThat(value.getTo()).hasSize(1);
+        assertThat(Objects.requireNonNull(value.getTo())[0]).isEqualTo("e@ma.il");
+        assertThat(value.getSubject()).isEqualTo("Your password reset link from RetroQuest!");
+        assertThat(value.getText()).isEqualTo("Hi there! \n" +
+                "We’ve received a request to reset the password for the " +
+               "TeamName" +
+                " RetroQuest account associated with the email address " +
+                "e@ma.il" +
+                ". No changes have been made to your account yet. \r\n" +
+                "You can reset the password by clicking the link below: \r\n" +
+                "something.com/password/reset?token=" +
+                actualToken.getResetToken() +
+                "\r\n" +
+                "This link will expire in 10 minutes. After 10 minutes, you must submit a new password reset request at " +
+                "\r\n" +
+                "something.com/request-password-reset ." +
+                "\r\n" +
+                "If you didn’t make this request, you can safely ignore this email. \r\n"
+        );
+        assertThat(value.getFrom()).isEqualTo("test@mail.com");
+        assertThat(value.getSentDate()).isCloseTo(new Date(), 5000);
     }
 
     @Test

@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.team;
 
+import com.ford.labs.retroquest.email.EmailService;
 import com.ford.labs.retroquest.exception.BadResetTokenException;
 import com.ford.labs.retroquest.exception.TeamDoesNotExistException;
 import com.ford.labs.retroquest.security.JwtBuilder;
@@ -52,11 +53,14 @@ public class TeamController {
 
     private final PasswordEncoder passwordEncoder;
 
-    public TeamController(TeamService teamService, JwtBuilder jwtBuilder, PasswordResetTokenRepository passwordResetRepository, PasswordEncoder passwordEncoder) {
+    private final EmailService emailService;
+
+    public TeamController(TeamService teamService, JwtBuilder jwtBuilder, PasswordResetTokenRepository passwordResetRepository, PasswordEncoder passwordEncoder, EmailService emailService) {
         this.teamService = teamService;
         this.jwtBuilder = jwtBuilder;
         this.passwordResetRepository = passwordResetRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     @PostMapping("/team")
@@ -90,7 +94,12 @@ public class TeamController {
             passwordResetToken.setTeam(team);
             passwordResetRepository.deleteAllByTeam(team);
             passwordResetRepository.save(passwordResetToken);
-            //send the email here
+
+            emailService.sendUnencryptedEmail(
+                    "Your password reset link from RetroQuest!",
+                    emailService.getPasswordResetMessage(passwordResetToken, requestPasswordResetRequest),
+                    team.getEmail()
+            );
         }
         else throw new TeamDoesNotExistException();
     }
