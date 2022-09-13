@@ -24,6 +24,7 @@ export function getTeamCredentials(): TeamCredentials {
 		teamName,
 		teamId,
 		password: 'Login1234',
+		email: 'login1234@mail.com',
 		jwt: '',
 	};
 }

@@ -19,6 +19,7 @@ interface TeamCredentials {
 	teamName: string;
 	teamId: string;
 	password: string;
+	email: string;
 	jwt: string;
 }
 

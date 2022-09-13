@@ -40,7 +40,7 @@ import VisitOptions = Cypress.VisitOptions;
 
 Cypress.Commands.add(
 	'createTeam',
-	({ teamName, password }: TeamCredentials) => {
+	({ teamName, password, email }: TeamCredentials) => {
 		cy.log('**Creating Team via api**');
 		cy.request({
 			url: CREATE_TEAM_API_PATH,
@@ -49,6 +49,7 @@ Cypress.Commands.add(
 			body: {
 				name: teamName,
 				password,
+				email,
 			},
 		});
 	}
