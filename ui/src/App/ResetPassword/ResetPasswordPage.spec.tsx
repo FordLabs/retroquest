@@ -16,8 +16,9 @@
  */
 
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import TeamService from 'Services/Api/TeamService';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import ResetPasswordPage from './ResetPasswordPage';
 
@@ -95,10 +96,10 @@ function typeIntoNewPasswordField(password: string = 'p@ssw0rd') {
 function renderWithToken(token: string) {
 	const initialEntry =
 		token !== '' ? '/change-password?token=' + token : '/change-password';
-	render(
+	renderWithRecoilRoot(
 		<MemoryRouter initialEntries={[initialEntry]}>
 			<Routes>
-				<Route element={<ResetPasswordPage />} path={'/change-password'} />
+				<Route element={<ResetPasswordPage />} path="/change-password" />
 			</Routes>
 		</MemoryRouter>
 	);
