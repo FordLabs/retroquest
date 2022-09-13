@@ -22,7 +22,6 @@ import {
 	LOGIN_PAGE_PATH,
 	REQUEST_PASSWORD_RESET_PAGE_PATH,
 } from '../../RouteConstants';
-import team from '../../Types/Team';
 import CookieService from '../CookieService';
 
 import {
