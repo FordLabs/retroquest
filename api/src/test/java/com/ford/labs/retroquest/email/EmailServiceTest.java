@@ -17,6 +17,9 @@
 
 package com.ford.labs.retroquest.email;
 
+import com.ford.labs.retroquest.team.RequestPasswordResetRequest;
+import com.ford.labs.retroquest.team.Team;
+import com.ford.labs.retroquest.team.password.PasswordResetToken;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -26,6 +29,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.util.ReflectionTestUtils;
+
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -46,5 +51,33 @@ class EmailServiceTest {
         assertThat(captor.getValue().getSubject()).isEqualTo("a subject");
         assertThat(captor.getValue().getText()).isEqualTo("a message");
         assertThat(captor.getValue().getTo()).isEqualTo(new String[]{"address1@e.m", "address2@e.m"});
+    }
+
+    @Test
+    void shouldTheMessage(){
+        JavaMailSender mockSender = Mockito.mock(JavaMailSender.class);
+        EmailService underTest = new EmailService(mockSender);
+        ReflectionTestUtils.setField(underTest, "emailEnabled", true);
+        ReflectionTestUtils.setField(underTest, "appBaseUrl", "something.com");
+
+        String actual = underTest.getPasswordResetMessage(new PasswordResetToken("t0k3n", new Team("teamUri", "teamUri", "passw0rD1"), LocalDateTime.now(), 600), new RequestPasswordResetRequest("teamUri", "e@ma.il"));
+
+        assertThat(actual).isEqualTo(			"Hi there! \n" +
+                "We’ve received a request to reset the password for the " +
+                "teamUri" +
+                " RetroQuest account associated with the email address " +
+                "e@ma.il" +
+                ". No changes have been made to your account yet. \r\n" +
+                "You can reset the password by clicking the link below: \r\n" +
+                "something.com" +
+                "/password/reset?token=" +
+                "t0k3n" +
+                "\r\n" +
+                "This link will expire in 10 minutes. After 10 minutes, you must submit a new password reset request at " +
+                "\r\n" +
+                "something.com" +
+                "/request-password-reset ." +
+                "\r\n" +
+                "If you didn’t make this request, you can safely ignore this email. \r\n");
     }
 }
