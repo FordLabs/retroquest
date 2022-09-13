@@ -19,6 +19,7 @@ package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.column.ColumnRepository;
+import com.ford.labs.retroquest.email.EmailService;
 import com.ford.labs.retroquest.team.*;
 import com.ford.labs.retroquest.team.password.PasswordResetToken;
 import com.ford.labs.retroquest.team.password.PasswordResetTokenRepository;
@@ -26,7 +27,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.ArgumentCaptor;
+import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -43,7 +44,9 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -73,6 +76,9 @@ class TeamApiTest extends ApiTestBase {
     private static final String VALID_PASSWORD = "Passw0rd";
     private static final String VALID_EMAIL = "e@ma.il";
     private CreateTeamRequest.CreateTeamRequestBuilder validTeamRequestBuilder;
+
+    @MockBean
+    private EmailService emailService;
 
     @BeforeEach
     void beforeClass() {
@@ -137,6 +143,7 @@ class TeamApiTest extends ApiTestBase {
     void should_create_password_reset_request_when_team_is_valid() throws Exception {
         Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
         teamRepository.save(expectedResetTeam);
+        when(emailService.getPasswordResetMessage(any(), any())).thenReturn("expectedMessage");
 
         mockMvc.perform(post("/api/password/request-reset").contentType(APPLICATION_JSON).content(objectMapper.writeValueAsBytes(new RequestPasswordResetRequest("TeamName", "e@ma.il"))))
                 .andExpect(status().isOk());
@@ -146,30 +153,7 @@ class TeamApiTest extends ApiTestBase {
         assertThat(actualToken.getDateCreated()).isNotNull();
         assertThat(actualToken.getResetToken()).isNotBlank();
 
-        final ArgumentCaptor<SimpleMailMessage> captor = ArgumentCaptor.forClass(SimpleMailMessage.class);
-        verify(javaMailSender).send(captor.capture());
-        final SimpleMailMessage value = captor.getValue();
-        assertThat(value.getTo()).hasSize(1);
-        assertThat(Objects.requireNonNull(value.getTo())[0]).isEqualTo("e@ma.il");
-        assertThat(value.getSubject()).isEqualTo("Your password reset link from RetroQuest!");
-        assertThat(value.getText()).isEqualTo("Hi there! \n" +
-                "We’ve received a request to reset the password for the " +
-               "TeamName" +
-                " RetroQuest account associated with the email address " +
-                "e@ma.il" +
-                ". No changes have been made to your account yet. \r\n" +
-                "You can reset the password by clicking the link below: \r\n" +
-                "something.com/password/reset?token=" +
-                actualToken.getResetToken() +
-                "\r\n" +
-                "This link will expire in 10 minutes. After 10 minutes, you must submit a new password reset request at " +
-                "\r\n" +
-                "something.com/request-password-reset ." +
-                "\r\n" +
-                "If you didn’t make this request, you can safely ignore this email. \r\n"
-        );
-        assertThat(value.getFrom()).isEqualTo("test@mail.com");
-        assertThat(value.getSentDate()).isCloseTo(new Date(), 5000);
+        verify(emailService).sendUnencryptedEmail("Your password reset link from RetroQuest!","expectedMessage","e@ma.il");
     }
 
     @Test

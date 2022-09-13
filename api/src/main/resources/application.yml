@@ -39,7 +39,7 @@ spring:
   liquibase:
     change-log: db/changelog.xml
   mail:
-    host: mrl.azell.com
+    host: hostieboi.mail.com
     port: 25
 
 server:

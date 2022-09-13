@@ -49,9 +49,6 @@ public abstract class ApiTestBase {
     @MockBean
     public ContributorController contributorController;
 
-    @MockBean
-    public JavaMailSender javaMailSender;
-
     @Value("${local.server.port}")
     private int port;
 
