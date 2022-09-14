@@ -19,6 +19,7 @@ package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.column.ColumnRepository;
+import com.ford.labs.retroquest.email.EmailService;
 import com.ford.labs.retroquest.team.*;
 import com.ford.labs.retroquest.team.password.PasswordResetToken;
 import com.ford.labs.retroquest.team.password.PasswordResetTokenRepository;
@@ -26,17 +27,26 @@ import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -66,6 +76,9 @@ class TeamApiTest extends ApiTestBase {
     private static final String VALID_PASSWORD = "Passw0rd";
     private static final String VALID_EMAIL = "e@ma.il";
     private CreateTeamRequest.CreateTeamRequestBuilder validTeamRequestBuilder;
+
+    @MockBean
+    private EmailService emailService;
 
     @BeforeEach
     void beforeClass() {
@@ -130,6 +143,7 @@ class TeamApiTest extends ApiTestBase {
     void should_create_password_reset_request_when_team_is_valid() throws Exception {
         Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
         teamRepository.save(expectedResetTeam);
+        when(emailService.getPasswordResetMessage(any(), any())).thenReturn("expectedMessage");
 
         mockMvc.perform(post("/api/password/request-reset").contentType(APPLICATION_JSON).content(objectMapper.writeValueAsBytes(new RequestPasswordResetRequest("TeamName", "e@ma.il"))))
                 .andExpect(status().isOk());
@@ -138,6 +152,8 @@ class TeamApiTest extends ApiTestBase {
         PasswordResetToken actualToken = passwordResetRepository.findByTeam(expectedResetTeam);
         assertThat(actualToken.getDateCreated()).isNotNull();
         assertThat(actualToken.getResetToken()).isNotBlank();
+
+        verify(emailService).sendUnencryptedEmail("Your password reset link from RetroQuest!","expectedMessage","e@ma.il");
     }
 
     @Test

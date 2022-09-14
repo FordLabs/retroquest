@@ -18,12 +18,13 @@
 retroquest:
   marketing:
     survey-link-href: test-survey-link-href
-  archive:
-    thought:
-      page-size: 5
   security:
     require-https: false
     jwt-signing-secret: IMSOSECRETYOUDONTEVENKNOW
+  app-base-url: something.com
+  email:
+    from-address: test@mail.com
+    is-enabled: true
 
 spring:
   data:
@@ -41,3 +42,6 @@ spring:
     driver-class-name: org.h2.Driver
   liquibase:
     change-log: db/changelog.xml
+  mail:
+    host: hostieboi.mail.com
+    port: 25
