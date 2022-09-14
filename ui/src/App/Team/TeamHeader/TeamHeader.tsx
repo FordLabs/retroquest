@@ -17,18 +17,14 @@
 
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import Header from 'Common/Header/Header';
+import useTeamFromRoute from 'Hooks/useTeamFromRoute';
 import { useSetRecoilState } from 'recoil';
-
-import darkLogoPath from '../../../Assets/icons/icon-72x72.png';
-import lightLogoPath from '../../../Assets/icons/icon-light-72x72.png';
-import useTeamFromRoute from '../../../Hooks/useTeamFromRoute';
-import { ModalContentsState } from '../../../State/ModalContentsState';
-import { getThemeClassFromUserSettings } from '../../../State/ThemeState';
-import Theme from '../../../Types/Theme';
+import { ModalContentsState } from 'State/ModalContentsState';
 
 import Settings from './Settings/Settings';
 
-import './Header.scss';
+import './TeamHeader.scss';
 
 type RqLink = {
 	label: 'Retro' | 'Archives' | 'Radiator';
@@ -41,29 +37,13 @@ const LINKS: RqLink[] = [
 	{ label: 'Radiator', path: '/radiator' },
 ];
 
-function Header() {
+function TeamHeader() {
 	const team = useTeamFromRoute();
 	const setModalContents = useSetRecoilState(ModalContentsState);
-	const retroquestLogo =
-		getThemeClassFromUserSettings() === Theme.DARK
-			? lightLogoPath
-			: darkLogoPath;
 
 	return (
-		<>
-			<header className="header">
-				<div className="left-content">
-					<a href="/" className="logo-link" data-testid="retroquestLogoLink">
-						<img
-							src={retroquestLogo}
-							className="logo"
-							title="RetroQuest"
-							alt="Retro Quest"
-						/>
-					</a>
-					<span className="horizontal-separator" />
-					<h1 className="team-name">{team.name}</h1>
-				</div>
+		<Header name={team.name}>
+			<>
 				<nav className="center-content">
 					{LINKS.map((link) => (
 						<NavLink
@@ -91,9 +71,9 @@ function Header() {
 						data-testid="settingsButton"
 					/>
 				</div>
-			</header>
-		</>
+			</>
+		</Header>
 	);
 }
 
-export default Header;
+export default TeamHeader;

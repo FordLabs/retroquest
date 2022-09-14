@@ -1,0 +1,116 @@
+/*
+ * Copyright (c) 2022 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@use '../../Styles/main';
+
+.header {
+	@include main.site-max-width;
+
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 42px;
+
+	position: relative;
+
+	@include main.breakpoint-medium {
+		height: 64px;
+	}
+
+	.left-content {
+		display: flex;
+		flex: 1;
+		align-items: center;
+		overflow: hidden;
+
+		font-size: 1rem;
+
+		@include main.breakpoint-medium {
+			font-size: 1.5rem;
+		}
+
+		.logo-link {
+			font-size: 0;
+			border: 2px solid transparent;
+
+			&:hover,
+			&:focus {
+				border: 2px solid main.$blue;
+				border-radius: 7px;
+			}
+		}
+
+		.logo {
+			height: 24px;
+			border-radius: 6px;
+
+			@include main.breakpoint-medium {
+				height: 36px;
+			}
+		}
+
+		.horizontal-separator {
+			display: none;
+			width: 3px;
+			height: 24px;
+			margin: 0 24px;
+
+			background-color: main.$asphalt;
+			border-radius: 6px;
+			opacity: 0.1;
+
+			@include main.breakpoint-medium {
+				display: initial;
+			}
+		}
+
+		.team-name {
+			flex: 1;
+			padding: 0 6px;
+			overflow: hidden;
+
+			color: inherit;
+			font-weight: bold;
+			font-size: inherit;
+			white-space: nowrap;
+			text-align: center;
+			text-overflow: ellipsis;
+
+			@include main.breakpoint-medium {
+				flex: initial;
+				padding: initial;
+
+				text-align: initial;
+			}
+		}
+	}
+}
+
+@include main.dark-theme {
+	.header {
+		.left-content {
+			.horizontal-separator {
+				background-color: rgba(main.$black, 0.22);
+				opacity: 1;
+			}
+
+			.team-name {
+				color: rgba(main.$gray-1, 0.75);
+			}
+		}
+	}
+}

@@ -18,12 +18,8 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
-
-import {
-	ModalContents,
-	ModalContentsState,
-} from '../../../../State/ModalContentsState';
-import { RecoilObserver } from '../../../../Utils/RecoilObserver';
+import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
+import { RecoilObserver } from 'Utils/RecoilObserver';
 
 import Settings from './Settings';
 

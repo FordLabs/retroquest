@@ -16,31 +16,26 @@
  */
 
 import * as React from 'react';
-import { useSetRecoilState } from 'recoil';
+import RetroQuestLogo from 'Common/RetroQuestLogo/RetroQuestLogo';
 
-import { PrimaryButton } from '../../../../../Common/Buttons/Button';
-import useAuth from '../../../../../Hooks/useAuth';
-import { ModalContentsState } from '../../../../../State/ModalContentsState';
+import versionJson from '../../../../../application-version.json';
 
-import './AccountTab.scss';
+import './InfoTab.scss';
 
-function AccountTab(): JSX.Element {
-	const { logout } = useAuth();
-	const setModalContents = useSetRecoilState(ModalContentsState);
-
+function InfoTab(): JSX.Element {
 	return (
-		<div className="tab-body account-tab-body">
-			<PrimaryButton
-				onClick={() => {
-					logout();
-					setModalContents(null);
-				}}
-				className="logout-button"
-			>
-				Logout
-			</PrimaryButton>
+		<div className="tab-body info-tab-body">
+			<RetroQuestLogo />
+			<label className="version-label">
+				Version:{' '}
+				<input
+					className="version-container"
+					disabled
+					value={versionJson.version}
+				/>
+			</label>
 		</div>
 	);
 }
 
-export default AccountTab;
+export default InfoTab;
