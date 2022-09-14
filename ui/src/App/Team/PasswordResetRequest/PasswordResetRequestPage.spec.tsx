@@ -17,22 +17,24 @@
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
+import ContributorsService from '../../../Services/Api/ContributorsService';
 import TeamService from '../../../Services/Api/TeamService';
 
 import PasswordResetRequestPage from './PasswordResetRequestPage';
 
 jest.mock('Services/Api/TeamService');
+jest.mock('Services/Api/ContributorsService');
 
 describe('Password Reset Request Page', () => {
 	it('should have a field for team name and email, plus a send link button', async () => {
-		render(<PasswordResetRequestPage />);
+		await renderPasswordResetRequestPage();
 		expect(screen.getByLabelText('Team Name')).toBeInTheDocument();
 		expect(screen.getByLabelText('Email')).toBeInTheDocument();
 		expect(screen.getByText('Send reset link')).toBeInTheDocument();
 	});
 
 	it('should send team name and email to the backend on submission', async () => {
-		render(<PasswordResetRequestPage />);
+		await renderPasswordResetRequestPage();
 		submitValidForm();
 
 		await waitFor(() =>
@@ -44,20 +46,20 @@ describe('Password Reset Request Page', () => {
 	});
 
 	it('should not send if any fields are blank', async () => {
-		render(<PasswordResetRequestPage />);
+		await renderPasswordResetRequestPage();
 		submitValidForm('', '');
 		expect(TeamService.sendPasswordResetLink).toHaveBeenCalledTimes(0);
 	});
 
 	it('should show "Saved!" if the backend returns 200 after submission', async () => {
-		render(<PasswordResetRequestPage />);
+		await renderPasswordResetRequestPage();
 		submitValidForm();
 
 		await screen.findByText('Link Sent!');
 	});
 
 	it('should not show "Saved!" if the form is not submitted', async () => {
-		render(<PasswordResetRequestPage />);
+		await renderPasswordResetRequestPage();
 		expect(screen.queryByText('Saved!')).not.toBeInTheDocument();
 	});
 
@@ -65,7 +67,7 @@ describe('Password Reset Request Page', () => {
 		TeamService.sendPasswordResetLink = jest
 			.fn()
 			.mockRejectedValue('API says you are bad');
-		render(<PasswordResetRequestPage />);
+		await renderPasswordResetRequestPage();
 		submitValidForm();
 		let pleaseTryAgain = 'Team name or email is incorrect. Please try again.';
 		expect(await screen.findByText(pleaseTryAgain)).toBeInTheDocument();
@@ -81,6 +83,11 @@ describe('Password Reset Request Page', () => {
 		expect(screen.queryByText(pleaseTryAgain)).not.toBeInTheDocument();
 	});
 });
+
+async function renderPasswordResetRequestPage() {
+	render(<PasswordResetRequestPage />);
+	await waitFor(() => expect(ContributorsService.get).toHaveBeenCalled());
+}
 
 function submitValidForm(
 	teamName: string = 'Team Name',
