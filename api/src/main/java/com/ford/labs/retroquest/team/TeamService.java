@@ -51,6 +51,10 @@ public class TeamService {
         this.columnRepository = columnRepository;
     }
 
+    static boolean isEmailOnTeam(Team team, String email) {
+        return team.getEmail().equalsIgnoreCase(email) || team.getSecondaryEmail().equalsIgnoreCase(email);
+    }
+
     public Team getTeamByName(String teamName) {
         return teamRepository.findTeamByNameIgnoreCase(teamName.trim())
             .orElseThrow(TeamDoesNotExistException::new);
@@ -83,7 +87,7 @@ public class TeamService {
                 throw new DataIntegrityViolationException(s.getUri());
             });
 
-        var team = new Team(uri, trimmedName, encryptedPassword, createTeamRequest.getEmail().trim());
+        var team = new Team(uri, trimmedName, encryptedPassword, createTeamRequest.getEmail().trim(), createTeamRequest.getSecondaryEmail().trim());
         team = teamRepository.save(team);
         generateColumns(team);
 

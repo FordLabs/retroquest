@@ -89,7 +89,7 @@ public class TeamController {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public void requestPasswordReset(@RequestBody RequestPasswordResetRequest requestPasswordResetRequest){
         Team team = teamService.getTeamByName(requestPasswordResetRequest.getTeamName());
-        if(team != null && isEmailOnTeam(team, requestPasswordResetRequest.getEmail())) {
+        if(team != null && TeamService.isEmailOnTeam(team, requestPasswordResetRequest.getEmail())) {
             PasswordResetToken passwordResetToken = new PasswordResetToken();
             passwordResetToken.setTeam(team);
             passwordResetRepository.deleteAllByTeam(team);
@@ -98,14 +98,10 @@ public class TeamController {
             emailService.sendUnencryptedEmail(
                     "Your password reset link from RetroQuest!",
                     emailService.getPasswordResetMessage(passwordResetToken, requestPasswordResetRequest),
-                    team.getEmail()
+                    requestPasswordResetRequest.getEmail()
             );
         }
         else throw new TeamDoesNotExistException();
-    }
-
-    private static boolean isEmailOnTeam(Team team, String email) {
-        return team.getEmail().equals(email);
     }
 
     @PostMapping("/password/reset")

@@ -28,11 +28,12 @@ import TeamService from 'Services/Api/TeamService';
 
 import { validatePassword, validateTeamName } from '../../Utils/StringUtils';
 
-export default function CreatePage(): JSX.Element {
+export default function CreateTeamPage(): JSX.Element {
 	const { login } = useAuth();
 	const [teamName, setTeamName] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
 	const [email, setEmail] = useState<string>('');
+	const [secondEmail, setSecondEmail] = useState<string>('');
 
 	const [isValidated, setIsValidated] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -50,7 +51,7 @@ export default function CreatePage(): JSX.Element {
 
 	function createTeam() {
 		setIsLoading(true);
-		TeamService.create(teamName, password, email)
+		TeamService.create(teamName, password, email, secondEmail)
 			.then(login)
 			.catch((error) => {
 				let errorMsg = 'Incorrect team name or password. Please try again.';
@@ -117,6 +118,17 @@ export default function CreatePage(): JSX.Element {
 					value={email}
 					onChange={(event) => {
 						setEmail(event.target.value);
+						setErrorMessages([]);
+					}}
+					readOnly={isLoading}
+				/>
+				<Input
+					id="secondEmailInput"
+					label="Second Teammate's Email (optional)"
+					type="email"
+					value={secondEmail}
+					onChange={(event) => {
+						setSecondEmail(event.target.value);
 						setErrorMessages([]);
 					}}
 					readOnly={isLoading}

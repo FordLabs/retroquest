@@ -41,4 +41,7 @@ public class CreateTeamRequest {
 
     @EmailConstraint
     private String email;
+
+    @Builder.Default
+    private String secondaryEmail = "";
 }

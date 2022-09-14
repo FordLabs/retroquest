@@ -30,6 +30,7 @@ describe('Team Service', () => {
 		name: 'Julia',
 		password: 'Password1',
 		email: 'e@mail.com',
+		secondaryEmail: 'e2@mail2.com',
 	};
 	const axiosResponse = {
 		data: 'jwt-token-123',
@@ -60,7 +61,8 @@ describe('Team Service', () => {
 			const authResponse: AuthResponse = await TeamService.create(
 				user.name,
 				user.password,
-				user.email
+				user.email,
+				user.secondaryEmail
 			);
 			expect(authResponse).toEqual({
 				token: authResponse.token,

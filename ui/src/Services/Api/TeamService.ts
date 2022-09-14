@@ -54,9 +54,19 @@ const TeamService = {
 			.then(returnTokenAndTeamId);
 	},
 
-	create(name: string, password: string, email: string): Promise<AuthResponse> {
+	create(
+		name: string,
+		password: string,
+		email: string,
+		secondEmail: string
+	): Promise<AuthResponse> {
 		return axios
-			.post(CREATE_TEAM_API_PATH, { name, password, email })
+			.post(CREATE_TEAM_API_PATH, {
+				name,
+				password,
+				email,
+				secondaryEmail: secondEmail,
+			})
 			.then(returnTokenAndTeamId);
 	},
 
