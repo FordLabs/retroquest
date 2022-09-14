@@ -18,6 +18,7 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Form from 'Common/AuthTemplate/Form/Form';
+import Header from 'Common/Header/Header';
 import InputPassword from 'Common/InputPassword/InputPassword';
 import TeamService from 'Services/Api/TeamService';
 
@@ -40,6 +41,7 @@ function ResetPasswordPage(): JSX.Element {
 
 	return (
 		<div className="reset-password-page">
+			<Header name="RetroQuest" />
 			<div className="reset-password-form">
 				<h1>Reset Your Password</h1>
 				<p>

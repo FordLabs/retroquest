@@ -25,6 +25,11 @@ import ResetPasswordPage from './ResetPasswordPage';
 jest.mock('Services/Api/TeamService');
 
 describe('Reset Password Page', () => {
+	it('should have retroquest header', () => {
+		renderWithToken('');
+		expect(screen.getByText('RetroQuest')).toBeDefined();
+	});
+
 	it('should have a field for password and password confirmation, plus a disabled submit button', async () => {
 		renderWithToken('');
 		expect(screen.getByLabelText('New Password')).toBeInTheDocument();

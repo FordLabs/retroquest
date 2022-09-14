@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 import React, { useState } from 'react';
+import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import Form from 'Common/AuthTemplate/Form/Form';
 import InputEmail from 'Common/InputEmail/InputEmail';
 import InputTeamName from 'Common/InputTeamName/InputTeamName';
@@ -43,38 +44,40 @@ function PasswordResetRequestPage(): JSX.Element {
 	}
 
 	return (
-		<div className="password-reset-request-page">
-			<div className="password-reset-request-form">
-				<h1>Reset your password</h1>
-				<p>
+		<AuthTemplate
+			header="Reset your password"
+			subHeader={
+				<p className="password-reset-description">
 					Enter the Team Name and email associated with your team's account and
 					we’ll send an email with instructions to reset your password.
 				</p>
-				<Form
-					submitButtonText="Send reset link"
-					onSubmit={submitRequest}
-					errorMessages={errorMessages}
-				>
-					<InputTeamName
-						teamName={teamName}
-						onTeamNameInputChange={(name) => {
-							setTeamName(name);
-							setErrorMessages([]);
-						}}
-						required
-					/>
-					<InputEmail
-						email={email}
-						onEmailInputChange={(email) => {
-							setEmail(email);
-							setErrorMessages([]);
-						}}
-						required
-					/>
-				</Form>
-				{shouldShowSent && <div className="success-indicator">Link Sent!</div>}
-			</div>
-		</div>
+			}
+			className="password-reset-request-page"
+		>
+			<Form
+				submitButtonText="Send reset link"
+				onSubmit={submitRequest}
+				errorMessages={errorMessages}
+			>
+				<InputTeamName
+					teamName={teamName}
+					onTeamNameInputChange={(name) => {
+						setTeamName(name);
+						setErrorMessages([]);
+					}}
+					required
+				/>
+				<InputEmail
+					email={email}
+					onEmailInputChange={(email) => {
+						setEmail(email);
+						setErrorMessages([]);
+					}}
+					required
+				/>
+			</Form>
+			{shouldShowSent && <div className="success-indicator">Link Sent!</div>}
+		</AuthTemplate>
 	);
 }
 

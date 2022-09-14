@@ -17,14 +17,18 @@
 
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-
-import TeamService from '../../Services/Api/TeamService';
+import TeamService from 'Services/Api/TeamService';
 
 import ChangeTeamDetailsPage from './ChangeTeamDetailsPage';
 
 jest.mock('Services/Api/TeamService');
 
-describe('the change team email form', () => {
+describe('Change Team Details Page', () => {
+	it('should have retroquest header', () => {
+		renderWithToken('');
+		expect(screen.getByText('RetroQuest')).toBeDefined();
+	});
+
 	it('should have a field for email1 and email2, plus a submit button', async () => {
 		renderWithToken('');
 		expect(screen.getByLabelText('Email 1')).toBeInTheDocument();

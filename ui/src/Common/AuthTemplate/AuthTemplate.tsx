@@ -16,6 +16,7 @@
  */
 
 import React from 'react';
+import classNames from 'classnames';
 
 import RetroQuestLogo from '../RetroQuestLogo/RetroQuestLogo';
 
@@ -26,13 +27,14 @@ import './AuthTemplate.scss';
 type AuthTemplateProps = React.PropsWithChildren<{
 	header: React.ReactNode;
 	subHeader: React.ReactNode;
+	className?: string;
 }>;
 
 export default function AuthTemplate(props: AuthTemplateProps): JSX.Element {
-	const { header, subHeader, children } = props;
+	const { header, subHeader, children, className } = props;
 
 	return (
-		<main className="auth-template">
+		<main className={classNames('auth-template', className)}>
 			<div className="auth-template-container">
 				<RetroQuestLogo />
 				<div className="auth-template-header">

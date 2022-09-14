@@ -18,12 +18,12 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 
-import Header from './Header/Header';
+import TeamHeader from './TeamHeader/TeamHeader';
 
 function TeamPages() {
 	return (
 		<>
-			<Header />
+			<TeamHeader />
 			<main>
 				<Outlet />
 			</main>
