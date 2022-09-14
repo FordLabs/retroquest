@@ -16,9 +16,8 @@
  */
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-
-import ContributorsService from '../../../Services/Api/ContributorsService';
-import TeamService from '../../../Services/Api/TeamService';
+import ContributorsService from 'Services/Api/ContributorsService';
+import TeamService from 'Services/Api/TeamService';
 
 import PasswordResetRequestPage from './PasswordResetRequestPage';
 
