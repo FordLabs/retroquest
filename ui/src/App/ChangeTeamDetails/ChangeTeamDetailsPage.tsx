@@ -17,10 +17,10 @@
 
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-
-import Form from '../../Common/AuthTemplate/Form/Form';
-import InputEmail from '../../Common/InputEmail/InputEmail';
-import TeamService from '../../Services/Api/TeamService';
+import Form from 'Common/AuthTemplate/Form/Form';
+import Header from 'Common/Header/Header';
+import InputEmail from 'Common/InputEmail/InputEmail';
+import TeamService from 'Services/Api/TeamService';
 
 import './ChangeTeamDetailsPage.scss';
 
@@ -42,6 +42,7 @@ function ChangeTeamDetailsPage(): JSX.Element {
 
 	return (
 		<div className="change-team-details-page">
+			<Header name="RetroQuest" />
 			<div className="change-team-details-form">
 				<h1>Update Team Details</h1>
 				<p>

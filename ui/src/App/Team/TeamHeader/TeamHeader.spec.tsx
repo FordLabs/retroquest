@@ -20,18 +20,14 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
-
-import {
-	ModalContents,
-	ModalContentsState,
-} from '../../../State/ModalContentsState';
-import * as ThemeState from '../../../State/ThemeState';
-import Team from '../../../Types/Team';
-import Theme from '../../../Types/Theme';
-import { RecoilObserver } from '../../../Utils/RecoilObserver';
+import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
+import * as ThemeState from 'State/ThemeState';
+import Team from 'Types/Team';
+import Theme from 'Types/Theme';
+import { RecoilObserver } from 'Utils/RecoilObserver';
 
 import Settings from './Settings/Settings';
-import Header from './Header';
+import TeamHeader from './TeamHeader';
 
 const teamName = 'Lucille Ball';
 const teamId = 'lucille-ball';
@@ -43,14 +39,14 @@ jest.mock('../../../Hooks/useTeamFromRoute', () => {
 	});
 });
 
-describe('Header', () => {
+describe('Team Header', () => {
 	let modalContent: ModalContents | null;
 
 	beforeEach(() => {
 		modalContent = null;
 	});
 
-	function renderHeader() {
+	function renderTeamHeader() {
 		return render(
 			<MemoryRouter initialEntries={[`/team/${teamId}`]}>
 				<RecoilRoot>
@@ -61,7 +57,7 @@ describe('Header', () => {
 						}}
 					/>
 					<Routes>
-						<Route path="/team/:teamId" element={<Header />} />
+						<Route path="/team/:teamId" element={<TeamHeader />} />
 					</Routes>
 				</RecoilRoot>
 			</MemoryRouter>
@@ -69,13 +65,13 @@ describe('Header', () => {
 	}
 
 	it('should render without axe errors', async () => {
-		const { container } = renderHeader();
+		const { container } = renderTeamHeader();
 		const results = await axe(container);
 		expect(results).toHaveNoViolations();
 	});
 
 	it('should render logo link and team name', async () => {
-		renderHeader();
+		renderTeamHeader();
 		expect(await screen.findByText(teamName)).toBeDefined();
 
 		const retroQuestLogoLink = screen.getByTestId('retroquestLogoLink');
@@ -86,7 +82,7 @@ describe('Header', () => {
 	});
 
 	it('should render nav links', async () => {
-		renderHeader();
+		renderTeamHeader();
 		const archivesLink = screen.getByText('Archives');
 		expect(archivesLink.getAttribute('href')).toBe(`/team/${teamId}/archives`);
 
@@ -98,7 +94,7 @@ describe('Header', () => {
 	});
 
 	it('should open settings modal', () => {
-		renderHeader();
+		renderTeamHeader();
 		userEvent.click(screen.getByTestId('settingsButton'));
 		expect(modalContent).toEqual({
 			title: 'Settings',
@@ -111,7 +107,7 @@ describe('Header', () => {
 			jest
 				.spyOn(ThemeState, 'getThemeClassFromUserSettings')
 				.mockImplementation(() => Theme.DARK);
-			renderHeader();
+			renderTeamHeader();
 			expect(screen.getByAltText('Retro Quest')).toHaveAttribute(
 				'src',
 				'icon-light-72x72.png'
@@ -122,7 +118,7 @@ describe('Header', () => {
 			jest
 				.spyOn(ThemeState, 'getThemeClassFromUserSettings')
 				.mockImplementation(() => Theme.LIGHT);
-			renderHeader();
+			renderTeamHeader();
 			expect(screen.getByAltText('Retro Quest')).toHaveAttribute(
 				'src',
 				'icon-72x72.png'

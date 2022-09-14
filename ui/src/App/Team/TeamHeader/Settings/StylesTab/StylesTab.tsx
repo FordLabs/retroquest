@@ -16,14 +16,13 @@
  */
 
 import * as React from 'react';
+import darkThemeImagePath from 'Assets/dark-theme-picture.jpg';
+import lightThemeImagePath from 'Assets/light-theme-picture.jpg';
+import systemThemeImagePath from 'Assets/system-theme-picture.jpg';
 import classnames from 'classnames';
 import { useRecoilState } from 'recoil';
-
-import darkThemeImagePath from '../../../../../Assets/dark-theme-picture.jpg';
-import lightThemeImagePath from '../../../../../Assets/light-theme-picture.jpg';
-import systemThemeImagePath from '../../../../../Assets/system-theme-picture.jpg';
-import { ThemeState } from '../../../../../State/ThemeState';
-import Theme from '../../../../../Types/Theme';
+import { ThemeState } from 'State/ThemeState';
+import Theme from 'Types/Theme';
 
 import './StylesTab.scss';
 
