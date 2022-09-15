@@ -22,8 +22,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMailMessage;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.Date;
 
 @Service
@@ -47,14 +51,18 @@ public class EmailService {
 
 	public void sendUnencryptedEmail(String subject, String message, String... toAddresses) {
 		if (emailEnabled) {
-			SimpleMailMessage mailMessage = new SimpleMailMessage();
-			mailMessage.setTo(toAddresses);
-			mailMessage.setSubject(subject);
-			mailMessage.setText(message);
-			mailMessage.setFrom(fromEmailAddress);
-			mailMessage.setSentDate(new Date());
 			try {
-				javaMailSender.send(mailMessage);
+				MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+				mimeMessage.setSubject(subject);
+				mimeMessage.setSentDate(new Date());
+
+				MimeMessageHelper helper;
+				helper = new MimeMessageHelper(mimeMessage, true);
+				helper.setFrom(fromEmailAddress);
+				helper.setTo(toAddresses);
+				helper.setText(message, true);
+
+				javaMailSender.send(mimeMessage);
 			} catch (Exception e) {
 				System.out.println("Error in sending email message: " + e.getMessage());
 			}

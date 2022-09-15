@@ -27,9 +27,14 @@ import org.mockito.Mockito;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMailMessage;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,18 +44,20 @@ import static org.mockito.Mockito.*;
 
 class EmailServiceTest {
     @Test
-    void shouldTransmitCorrectValuesToMailSender() {
+    void shouldTransmitCorrectValuesToMailSender() throws MessagingException, IOException {
         JavaMailSender mockSender = Mockito.mock(JavaMailSender.class);
         EmailService underTest = new EmailService(mockSender);
+        MimeMessage mimeMessage = new MimeMessage((Session)null);
+        when(mockSender.createMimeMessage()).thenReturn(mimeMessage);
         ReflectionTestUtils.setField(underTest, "emailEnabled", true);
 
         underTest.sendUnencryptedEmail("a subject", "a message", "address1@e.m", "address2@e.m");
 
-        ArgumentCaptor<SimpleMailMessage> captor = ArgumentCaptor.forClass(SimpleMailMessage.class);
+        ArgumentCaptor<MimeMessage> captor = ArgumentCaptor.forClass(MimeMessage.class);
         verify(mockSender).send(captor.capture());
         assertThat(captor.getValue().getSubject()).isEqualTo("a subject");
-        assertThat(captor.getValue().getText()).isEqualTo("a message");
-        assertThat(captor.getValue().getTo()).isEqualTo(new String[]{"address1@e.m", "address2@e.m"});
+        assertThat(captor.getValue().getContent()).isEqualTo("a message");
+        assertThat(captor.getValue().getAllRecipients()).isEqualTo(new String[]{"address1@e.m", "address2@e.m"});
     }
 
     @Test
