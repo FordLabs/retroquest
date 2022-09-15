@@ -20,16 +20,14 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
-
-import { mockContributors } from '../../Services/Api/__mocks__/ContributorsService';
-import ConfigurationService from '../../Services/Api/ConfigurationService';
-import ContributorsService from '../../Services/Api/ContributorsService';
-import TeamService from '../../Services/Api/TeamService';
+import { mockContributors } from 'Services/Api/__mocks__/ContributorsService';
+import ContributorsService from 'Services/Api/ContributorsService';
+import TeamService from 'Services/Api/TeamService';
 
 import LoginPage from './LoginPage';
 
-jest.mock('../../Services/Api/ContributorsService');
-jest.mock('../../Services/Api/TeamService');
+jest.mock('Services/Api/ContributorsService');
+jest.mock('Services/Api/TeamService');
 
 const mockLogin = jest.fn();
 
@@ -44,7 +42,6 @@ jest.mock('../../Services/Api/ConfigurationService');
 describe('LoginPage.spec.tsx', () => {
 	let container: HTMLElement;
 	let rerender: (ui: ReactElement) => void;
-	let unmount: () => void;
 	const validTeamName = 'Team Awesome';
 	const validPassword = 'Password1';
 
@@ -53,7 +50,7 @@ describe('LoginPage.spec.tsx', () => {
 		TeamService.getTeamName = jest.fn().mockResolvedValue(validTeamName);
 		TeamService.login = jest.fn().mockResolvedValue(validTeamName);
 
-		({ container, rerender, unmount } = renderComponent());
+		({ container, rerender } = renderComponent());
 
 		await waitFor(() => expect(ContributorsService.get).toHaveBeenCalled());
 	});
@@ -65,23 +62,6 @@ describe('LoginPage.spec.tsx', () => {
 
 	it('should show correct heading', () => {
 		expect(screen.getByText('Sign in to your Team!')).toBeDefined();
-	});
-
-	it('should query the API for survey link href and show the survey link', () => {
-		const surveyLink = screen.getByText(/take the retroquest survey/i);
-		expect(surveyLink.getAttribute('href')).toEqual('mockSurveyLinkHref');
-		expect(ConfigurationService.get).toHaveBeenCalled();
-	});
-
-	it('should not show the survey link if its href is empty', async () => {
-		unmount();
-		ConfigurationService.get = jest
-			.fn()
-			.mockResolvedValue({ survey_link_href: '' });
-		renderComponent();
-		await waitFor(() => expect(ConfigurationService.get).toHaveBeenCalled());
-		const surveyLink = screen.queryByText(/take the retroquest survey/i);
-		expect(surveyLink).toBeNull();
 	});
 
 	it('should show link to create new team', () => {
