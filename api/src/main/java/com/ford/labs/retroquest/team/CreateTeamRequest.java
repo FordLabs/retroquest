@@ -20,10 +20,8 @@ package com.ford.labs.retroquest.team;
 import com.ford.labs.retroquest.team.validation.EmailConstraint;
 import com.ford.labs.retroquest.team.validation.PasswordConstraint;
 import com.ford.labs.retroquest.team.validation.TeamNameConstraint;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.validation.constraints.NotBlank;
 
@@ -44,4 +42,8 @@ public class CreateTeamRequest {
 
     @Builder.Default
     private String secondaryEmail = "";
+
+    public String getSecondaryEmail() {
+        return this.secondaryEmail == null ? "" : this.secondaryEmail;
+    }
 }

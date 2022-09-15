@@ -87,7 +87,13 @@ public class TeamService {
                 throw new DataIntegrityViolationException(s.getUri());
             });
 
-        var team = new Team(uri, trimmedName, encryptedPassword, createTeamRequest.getEmail().trim(), createTeamRequest.getSecondaryEmail().trim());
+        var team = new Team(
+                uri,
+                trimmedName,
+                encryptedPassword,
+                createTeamRequest.getEmail().trim(),
+                createTeamRequest.getSecondaryEmail().trim()
+        );
         team = teamRepository.save(team);
         generateColumns(team);
 
