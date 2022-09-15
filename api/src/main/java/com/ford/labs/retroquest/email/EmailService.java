@@ -57,7 +57,7 @@ public class EmailService {
 				mimeMessage.setSentDate(new Date());
 
 				MimeMessageHelper helper;
-				helper = new MimeMessageHelper(mimeMessage, true);
+				helper = new MimeMessageHelper(mimeMessage, "utf-8");
 				helper.setFrom(fromEmailAddress);
 				helper.setTo(toAddresses);
 				helper.setText(message, true);
