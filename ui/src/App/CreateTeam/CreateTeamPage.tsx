@@ -43,7 +43,7 @@ export default function CreateTeamPage(): JSX.Element {
 
 	const teamNameErrorMessage = getTeamNameInvalidMessage(teamName);
 	const passwordErrorMessage = getPasswordInvalidMessage(password);
-
+  
 	const captureErrors = () => {
 		const errors = [];
 		if (teamNameErrorMessage) errors.push(teamNameErrorMessage);
