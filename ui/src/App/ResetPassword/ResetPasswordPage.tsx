@@ -57,7 +57,6 @@ function ResetPasswordPage(): JSX.Element {
 						label="New Password"
 						password={newPassword}
 						onPasswordInputChange={setNewPassword}
-						required
 					/>
 					{shouldShowSaved && <div className="success-indicator">Saved!</div>}
 				</Form>

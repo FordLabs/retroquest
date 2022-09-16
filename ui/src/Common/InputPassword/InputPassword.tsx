@@ -23,6 +23,8 @@ import { useRecoilValue } from 'recoil';
 import { ThemeState } from 'State/ThemeState';
 import Theme from 'Types/Theme';
 
+import { PASSWORD_REGEX } from '../../Utils/StringUtils';
+
 import './InputPassword.scss';
 
 type Props = {
@@ -47,6 +49,9 @@ function InputPassword(props: Props) {
 	const theme = useRecoilValue(ThemeState);
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 	const eyeIconColor = theme === Theme.DARK ? '#ecf0f1' : '#34495E';
+	const [invalidPassword, setInvalidPassword] = useState<boolean>(false);
+
+	const isInvalidPassword = (pw: string) => !pw.match(PASSWORD_REGEX);
 
 	return (
 		<div className="input-password">
@@ -55,10 +60,17 @@ function InputPassword(props: Props) {
 				label={label}
 				type={showPassword ? 'text' : 'password'}
 				value={password}
-				onChange={(event) => onPasswordInputChange(event.target.value)}
-				validationMessage="8 or more characters with a mix of numbers and letters"
+				onChange={(event) => {
+					const newPassword = event.target.value;
+					onPasswordInputChange(newPassword);
+					setInvalidPassword(isInvalidPassword(newPassword));
+				}}
+				onFocus={() => {
+					if (isInvalidPassword(password)) setInvalidPassword(true);
+				}}
+				validationMessage="Must have: 8+ Characters, 1 Upper Case Letter, 1 Number"
 				required={required}
-				invalid={invalid}
+				invalid={invalid || invalidPassword}
 				readOnly={readOnly}
 			/>
 			<button

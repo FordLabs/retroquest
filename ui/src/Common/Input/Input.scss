@@ -60,12 +60,14 @@
 
 	.validation-message {
 		margin-top: 0.5rem;
+
+		color: main.$red;
 		font-size: 0.8rem;
 	}
 
 	&.invalid {
 		.input-text {
-			box-shadow: 0 0 0 2px main.$dark-red;
+			box-shadow: 0 0 0 2px main.$red;
 		}
 	}
 }

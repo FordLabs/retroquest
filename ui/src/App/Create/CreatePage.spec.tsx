@@ -137,7 +137,7 @@ describe('CreatePage.spec.tsx', () => {
 				'inputValidationMessage'
 			);
 			expect(inputValidationMessage.textContent).toBe(
-				'8 or more characters with a mix of numbers and letters'
+				'Must have: 8+ Characters, 1 Upper Case Letter, 1 Number'
 			);
 
 			const formErrorMessage = screen.getByTestId('formErrorMessage');

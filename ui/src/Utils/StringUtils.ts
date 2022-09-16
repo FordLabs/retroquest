@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 export const TEAM_NAME_REGEX = /^[A-Za-z0-9 ]+$/;
-export const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+export const PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 
 export const LOWERCASE_REGEX = /[a-z]/;
 export const UPPERCASE_REGEX = /[A-Z]/;
