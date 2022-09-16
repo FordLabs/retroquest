@@ -62,7 +62,11 @@ function ResetPasswordPage(): JSX.Element {
 							setIsValid(isValid);
 						}}
 					/>
-					{shouldShowSaved && <div className="success-indicator">Saved!</div>}
+					{shouldShowSaved && (
+						<div className="success-indicator">
+							Your Password has been changed!
+						</div>
+					)}
 				</Form>
 			</div>
 		</div>

@@ -77,16 +77,18 @@ describe('Reset Password Page', () => {
 		expect(TeamService.setPassword).toHaveBeenCalledTimes(0);
 	});
 
-	it('should show "Saved!" if the backend returns 200 after submission', async () => {
+	it('should show success message if the backend returns 200 after submission', async () => {
 		renderWithToken('ABC321');
 		submitValidForm();
 
-		await screen.findByText('Saved!');
+		await screen.findByText('Your Password has been changed!');
 	});
 
-	it('should not show "Saved!" if the form is not submitted', async () => {
+	it('should not show auccess message if the form is not submitted', async () => {
 		renderWithToken('ABC321');
-		expect(screen.queryByText('Saved!')).not.toBeInTheDocument();
+		expect(
+			screen.queryByText('Your Password has been changed!')
+		).not.toBeInTheDocument();
 	});
 });
 
