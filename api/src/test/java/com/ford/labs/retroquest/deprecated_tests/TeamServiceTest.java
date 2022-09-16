@@ -205,7 +205,7 @@ class TeamServiceTest {
         when(teamRepository.save(any(Team.class))).then(returnsFirstArg());
         when(teamRepository.findTeamByUri("beach-bums")).thenReturn(Optional.empty());
 
-        CreateTeamRequest requestedTeam = new CreateTeamRequest("beach-bums", "password", "email");
+        CreateTeamRequest requestedTeam = new CreateTeamRequest("beach-bums", "password", "email", "");
         teamService.createNewTeam(requestedTeam);
 
         Column happyColumn = new Column(null, "happy", "Happy", "beach-bums");

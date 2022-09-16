@@ -120,7 +120,7 @@ class TeamApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_create_team_with_valid_name_and_password_and_email() throws Exception {
+    void should_create_team_with_valid_name_and_password_and_one_email() throws Exception {
         var sentCreateTeamRequest = validTeamRequestBuilder
                 .build();
 
@@ -136,6 +136,29 @@ class TeamApiTest extends ApiTestBase {
         assertThat(team.getUri()).isEqualTo(teamId.toLowerCase());
         assertThat(team.getPassword()).hasSize(60);
         assertThat(team.getEmail()).isEqualTo(VALID_EMAIL);
+        assertThat(team.getSecondaryEmail()).isEqualTo("");
+        assertThat(mvcResult.getResponse().getContentAsString()).isNotNull();
+    }
+
+    @Test
+    void should_create_team_with_valid_name_and_password_and_two_emails() throws Exception {
+        String expectedSecondaryEmail = "seconde@ma.il";
+        var sentCreateTeamRequest = validTeamRequestBuilder.secondaryEmail(expectedSecondaryEmail)
+                .build();
+
+        var mvcResult = mockMvc.perform(post("/api/team")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(sentCreateTeamRequest)))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        Team team = teamRepository.findById(sentCreateTeamRequest.getName().toLowerCase()).orElseThrow();
+
+        assertThat(team.getName()).isEqualTo(teamId);
+        assertThat(team.getUri()).isEqualTo(teamId.toLowerCase());
+        assertThat(team.getPassword()).hasSize(60);
+        assertThat(team.getEmail()).isEqualTo(VALID_EMAIL);
+        assertThat(team.getSecondaryEmail()).isEqualTo(expectedSecondaryEmail);
         assertThat(mvcResult.getResponse().getContentAsString()).isNotNull();
     }
 
@@ -153,7 +176,47 @@ class TeamApiTest extends ApiTestBase {
         assertThat(actualToken.getDateCreated()).isNotNull();
         assertThat(actualToken.getResetToken()).isNotBlank();
 
-        verify(emailService).sendUnencryptedEmail("Your password reset link from RetroQuest!","expectedMessage","e@ma.il");
+        verify(emailService).sendUnencryptedEmail("Your password reset link from RetroQuest!", "expectedMessage", "e@ma.il");
+    }
+
+    @Test
+    void should_create_password_reset_request_using_secondary_email() throws Exception {
+        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il", "seconde@ma.il");
+        teamRepository.save(expectedResetTeam);
+        when(emailService.getPasswordResetMessage(any(), any())).thenReturn("expectedMessage");
+
+        mockMvc.perform(post("/api/password/request-reset")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(
+                                new RequestPasswordResetRequest("TeamName", "seconde@ma.il"))))
+                .andExpect(status().isOk());
+
+        assertThat(passwordResetRepository.count()).isEqualTo(1);
+        PasswordResetToken actualToken = passwordResetRepository.findByTeam(expectedResetTeam);
+        assertThat(actualToken.getDateCreated()).isNotNull();
+        assertThat(actualToken.getResetToken()).isNotBlank();
+
+        verify(emailService).sendUnencryptedEmail("Your password reset link from RetroQuest!", "expectedMessage", "seconde@ma.il");
+    }
+
+    @Test
+    void should_create_password_reset_request_using_secondary_email_ignoring_case() throws Exception {
+        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il", "seconde@ma.il");
+        teamRepository.save(expectedResetTeam);
+        when(emailService.getPasswordResetMessage(any(), any())).thenReturn("expectedMessage");
+
+        mockMvc.perform(post("/api/password/request-reset")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(
+                                new RequestPasswordResetRequest("TeamName", "SecondE@MA.il"))))
+                .andExpect(status().isOk());
+
+        assertThat(passwordResetRepository.count()).isEqualTo(1);
+        PasswordResetToken actualToken = passwordResetRepository.findByTeam(expectedResetTeam);
+        assertThat(actualToken.getDateCreated()).isNotNull();
+        assertThat(actualToken.getResetToken()).isNotBlank();
+
+        verify(emailService).sendUnencryptedEmail("Your password reset link from RetroQuest!", "expectedMessage", "SecondE@MA.il");
     }
 
     @Test

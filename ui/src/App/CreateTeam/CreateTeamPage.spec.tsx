@@ -25,7 +25,7 @@ import { mockContributors } from '../../Services/Api/__mocks__/ContributorsServi
 import ContributorsService from '../../Services/Api/ContributorsService';
 import TeamService from '../../Services/Api/TeamService';
 
-import CreatePage from './CreatePage';
+import CreateTeamPage from './CreateTeamPage';
 
 jest.mock('../../Services/Api/ContributorsService');
 jest.mock('../../Services/Api/TeamService');
@@ -43,6 +43,7 @@ describe('CreatePage.spec.tsx', () => {
 	const validTeamName = 'Team Awesome';
 	const validPassword = 'Password1';
 	const validEmail = 'e@mail.com';
+	const validSecondaryEmail = 'eTwo@mailTwo.com';
 
 	beforeEach(async () => {
 		ContributorsService.get = jest.fn().mockResolvedValue(mockContributors);
@@ -51,7 +52,7 @@ describe('CreatePage.spec.tsx', () => {
 		({ container } = render(
 			<MemoryRouter>
 				<RecoilRoot>
-					<CreatePage />
+					<CreateTeamPage />
 				</RecoilRoot>
 			</MemoryRouter>
 		));
@@ -93,7 +94,25 @@ describe('CreatePage.spec.tsx', () => {
 		expect(TeamService.create).toHaveBeenCalledWith(
 			validTeamName,
 			validPassword,
-			validEmail
+			validEmail,
+			''
+		);
+		await waitFor(() => expect(mockLogin).toHaveBeenCalled());
+	});
+
+	it('should successfully create team with the optional secondary email', async () => {
+		typeIntoTeamNameInput(validTeamName);
+		typeIntoPasswordInput(validPassword);
+		typeIntoEmail(validEmail);
+		typeIntoSecondaryEmail(validSecondaryEmail);
+
+		const submitButton = screen.getByText('Create Team');
+		userEvent.click(submitButton);
+		expect(TeamService.create).toHaveBeenCalledWith(
+			validTeamName,
+			validPassword,
+			validEmail,
+			validSecondaryEmail
 		);
 		await waitFor(() => expect(mockLogin).toHaveBeenCalled());
 	});
@@ -156,6 +175,10 @@ const getEmailInput = (): HTMLInputElement =>
 	screen.getByLabelText('Email', {
 		selector: 'input',
 	}) as HTMLInputElement;
+const getSecondaryEmailInput = (): HTMLInputElement =>
+	screen.getByLabelText("Second Teammate's Email (optional)", {
+		selector: 'input',
+	}) as HTMLInputElement;
 
 const typeIntoPasswordInput = (password: string) => {
 	const passwordInput = getPasswordInput();
@@ -163,8 +186,15 @@ const typeIntoPasswordInput = (password: string) => {
 };
 
 const typeIntoEmail = (email: string) => {
-	const confirmPasswordInput = getEmailInput();
-	fireEvent.change(confirmPasswordInput, {
+	const emailInput = getEmailInput();
+	fireEvent.change(emailInput, {
+		target: { value: email },
+	});
+};
+
+const typeIntoSecondaryEmail = (email: string) => {
+	const secondEmailInput = getSecondaryEmailInput();
+	fireEvent.change(secondEmailInput, {
 		target: { value: email },
 	});
 };

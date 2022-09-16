@@ -240,4 +240,12 @@
             <column defaultValueComputed="NULL" name="date_created" type="datetime"/>
         </createTable>
     </changeSet>
+    <changeSet id="add_secondary_email_column_to_team_table" author="cshaugh1">
+        <preConditions>
+            <tableExists tableName="team" />
+        </preConditions>
+        <addColumn tableName="team">
+            <column name="secondary_email" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

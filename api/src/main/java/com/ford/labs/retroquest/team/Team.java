@@ -44,6 +44,9 @@ public class Team implements Persistable<String> {
     @Builder.Default
     private String email = "";
 
+    @Builder.Default
+    private String secondaryEmail = "";
+
     @JsonIgnore
     private String password;
 
@@ -64,6 +67,16 @@ public class Team implements Persistable<String> {
         this.uri = uri;
         this.name = name;
         this.email = email;
+        this.password = password;
+        this.failedAttempts = 0;
+        this.dateCreated = LocalDate.now();
+    }
+
+    public Team(String uri, String name, String password, String email, String email2) {
+        this.uri = uri;
+        this.name = name;
+        this.email = email;
+        this.secondaryEmail = email2;
         this.password = password;
         this.failedAttempts = 0;
         this.dateCreated = LocalDate.now();
