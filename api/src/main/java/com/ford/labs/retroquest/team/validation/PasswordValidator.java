@@ -16,8 +16,6 @@
  */
 
 package com.ford.labs.retroquest.team.validation;
-
-import com.ford.labs.retroquest.exception.PasswordMissingLowerCaseAlphaException;
 import com.ford.labs.retroquest.exception.PasswordMissingNumberException;
 import com.ford.labs.retroquest.exception.PasswordMissingUpperCaseAlphaException;
 import com.ford.labs.retroquest.exception.PasswordTooShortException;
@@ -50,7 +48,6 @@ public class PasswordValidator implements ConstraintValidator<PasswordConstraint
     private enum PasswordValidityChecker {
         LENGTH("^.{8,}$", new PasswordTooShortException()),
         CONTAINS_NUMBER("^.*\\d.*$", new PasswordMissingNumberException()),
-        CONTAINS_LOWER("^.*[\\p{javaLowerCase}].*$", new PasswordMissingLowerCaseAlphaException()),
         CONTAINS_UPPER("^.*[\\p{javaUpperCase}].*$", new PasswordMissingUpperCaseAlphaException());
 
         private final Pattern pattern;

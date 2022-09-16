@@ -36,8 +36,6 @@ export function getPasswordInvalidMessage(
 		return 'Please enter a password.';
 	} else if (password.length < 8) {
 		return 'Password must be at least 8 characters.';
-	} else if (!password.match(LOWERCASE_REGEX)) {
-		return 'Password must contain at least one lower case letter.';
 	} else if (!password.match(UPPERCASE_REGEX)) {
 		return 'Password must contain at least one upper case letter.';
 	} else if (!password.match(NUMBER_REGEX)) {

@@ -46,8 +46,6 @@ describe('String Utils', () => {
 
 	const emptyPasswordError = 'Please enter a password.';
 	const minLengthError = 'Password must be at least 8 characters.';
-	const lowercaseError =
-		'Password must contain at least one lower case letter.';
 	const uppercaseError =
 		'Password must contain at least one upper case letter.';
 	const numberError = 'Password must contain at least one number.';
@@ -61,8 +59,6 @@ describe('String Utils', () => {
 		['A', minLengthError],
 		['a', minLengthError],
 		['aA1', minLengthError],
-		['12345678', lowercaseError],
-		['12345678A', lowercaseError],
 		['12345678a', uppercaseError],
 		['abcdefgA', numberError],
 		['abcdefgA1', undefined],

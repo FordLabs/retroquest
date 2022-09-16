@@ -17,7 +17,6 @@
 
 package com.ford.labs.retroquest.team.validation;
 
-import com.ford.labs.retroquest.exception.PasswordMissingLowerCaseAlphaException;
 import com.ford.labs.retroquest.exception.PasswordMissingNumberException;
 import com.ford.labs.retroquest.exception.PasswordMissingUpperCaseAlphaException;
 import com.ford.labs.retroquest.exception.PasswordTooShortException;
@@ -59,14 +58,6 @@ class PasswordValidatorTest {
         assertThrows(
                 PasswordMissingNumberException.class,
                 () -> validator.isValid("Password", null)
-        );
-    }
-
-    @Test
-    void whenPasswordIsMissingALowerCaseAlpha_ThrowPasswordMissingLowerCaseAlphaException() {
-        assertThrows(
-                PasswordMissingLowerCaseAlphaException.class,
-                () -> validator.isValid("PASSW0RD", null)
         );
     }
 
