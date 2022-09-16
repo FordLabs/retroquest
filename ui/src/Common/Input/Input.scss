@@ -24,6 +24,8 @@
 
 	color: inherit;
 
+	position: relative;
+
 	.input-label {
 		font-weight: bold;
 		font-size: 0.9rem;
@@ -32,7 +34,7 @@
 	.input-text {
 		width: 100%;
 		height: 35px;
-		margin: 12px 0 0;
+		margin: 0.75rem 0 1rem;
 		padding: 12px 36px 12px 12px;
 
 		color: main.$asphalt;
@@ -59,10 +61,11 @@
 	}
 
 	.validation-message {
-		margin-top: 0.5rem;
-
 		color: main.$red;
 		font-size: 0.8rem;
+
+		position: absolute;
+		bottom: -0.3rem;
 	}
 
 	&.invalid {
