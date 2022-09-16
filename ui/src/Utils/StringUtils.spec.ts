@@ -14,7 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { validatePassword, validateTeamName } from './StringUtils';
+import {
+	checkValidityOfPassword,
+	getPasswordInvalidMessage,
+	getTeamNameInvalidMessage,
+} from './StringUtils';
 
 describe('String Utils', () => {
 	const emptyTeamNameError = 'Please enter a team name.';
@@ -36,7 +40,7 @@ describe('String Utils', () => {
 	])(
 		'validating team name "%s" should return error message "%s"',
 		(teamName, errorMessage) => {
-			expect(validateTeamName(teamName!)).toBe(errorMessage);
+			expect(getTeamNameInvalidMessage(teamName!)).toBe(errorMessage);
 		}
 	);
 
@@ -66,7 +70,28 @@ describe('String Utils', () => {
 	])(
 		'validating password %s should return error message "%s"',
 		(password, errorMessage) => {
-			expect(validatePassword(password!)).toBe(errorMessage);
+			expect(getPasswordInvalidMessage(password!)).toBe(errorMessage);
 		}
 	);
+
+	it.each([
+		['', false],
+		[null, false],
+		[undefined, false],
+		['1', false],
+		['1234567', false],
+		['A', false],
+		['a', false],
+		['aA1', false],
+		['12345678', false],
+		['12345678a', false],
+		['abcdefgA', false],
+		['abcdefgA1', true],
+		['12345678A', true],
+		['PASSWORD1', true],
+		["abcdefgA1#!@#$%^&*()_+}{[];'\\<>? ", true],
+		['P@ssw0rd', true],
+	])('validating password %s should return "%s"', (password, errorMessage) => {
+		expect(checkValidityOfPassword(password!)).toBe(errorMessage);
+	});
 });

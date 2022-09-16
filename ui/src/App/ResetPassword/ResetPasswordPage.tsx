@@ -29,6 +29,7 @@ function ResetPasswordPage(): JSX.Element {
 
 	const [newPassword, setNewPassword] = useState<string>('');
 	const [shouldShowSaved, setShouldShowSaved] = useState(false);
+	const [isValid, setIsValid] = useState<boolean>(false);
 
 	function submitNewPassword() {
 		if (newPassword) {
@@ -51,12 +52,15 @@ function ResetPasswordPage(): JSX.Element {
 				<Form
 					onSubmit={submitNewPassword}
 					submitButtonText="Reset Password"
-					disableSubmitBtn={!newPassword}
+					disableSubmitBtn={!isValid}
 				>
 					<InputPassword
 						label="New Password"
 						password={newPassword}
-						onPasswordInputChange={setNewPassword}
+						onPasswordInputChange={(newPassword, isValid) => {
+							setNewPassword(newPassword);
+							setIsValid(isValid);
+						}}
 					/>
 					{shouldShowSaved && <div className="success-indicator">Saved!</div>}
 				</Form>

@@ -38,10 +38,13 @@ describe('Reset Password Page', () => {
 		expect(submitButton).toBeDisabled();
 	});
 
-	it('should enable submit button once user types into form', () => {
+	it('should enable submit button once user types valid password', () => {
 		renderWithToken('');
-		typeIntoNewPasswordField();
-		expect(screen.getByText('Reset Password')).not.toBeDisabled();
+		typeIntoNewPasswordField('invalidpassword');
+		const submitButton = screen.getByText('Reset Password');
+		expect(submitButton).toBeDisabled();
+		typeIntoNewPasswordField('Validpassword1');
+		expect(submitButton).toBeEnabled();
 	});
 
 	it('should send passwords to the backend on submission', async () => {
@@ -50,7 +53,7 @@ describe('Reset Password Page', () => {
 
 		await waitFor(() =>
 			expect(TeamService.setPassword).toHaveBeenCalledWith(
-				'p@ssw0rd',
+				'P@ssw0rd',
 				expect.anything()
 			)
 		);
@@ -87,12 +90,12 @@ describe('Reset Password Page', () => {
 	});
 });
 
-function submitValidForm(password: string = 'p@ssw0rd') {
+function submitValidForm(password: string = 'P@ssw0rd') {
 	typeIntoNewPasswordField(password);
 	fireEvent.click(screen.getByText('Reset Password'));
 }
 
-function typeIntoNewPasswordField(password: string = 'p@ssw0rd') {
+function typeIntoNewPasswordField(password: string = 'P@ssw0rd') {
 	fireEvent.change(screen.getByLabelText('New Password'), {
 		target: { value: password },
 	});
@@ -100,11 +103,11 @@ function typeIntoNewPasswordField(password: string = 'p@ssw0rd') {
 
 function renderWithToken(token: string) {
 	const initialEntry =
-		token !== '' ? '/change-password?token=' + token : '/change-password';
+		token !== '' ? '/password/reset?token=' + token : '/password/reset';
 	renderWithRecoilRoot(
 		<MemoryRouter initialEntries={[initialEntry]}>
 			<Routes>
-				<Route element={<ResetPasswordPage />} path="/change-password" />
+				<Route element={<ResetPasswordPage />} path="/password/reset" />
 			</Routes>
 		</MemoryRouter>
 	);
