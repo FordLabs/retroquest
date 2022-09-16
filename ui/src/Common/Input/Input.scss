@@ -88,9 +88,13 @@
 			}
 		}
 
+		.validation-message {
+			color: main.$light-red;
+		}
+
 		&.invalid {
 			.input-text {
-				box-shadow: 0 0 0 2px main.$red;
+				box-shadow: 0 0 0 2px main.$light-red;
 			}
 		}
 	}

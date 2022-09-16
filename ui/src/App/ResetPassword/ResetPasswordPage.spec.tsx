@@ -82,6 +82,8 @@ describe('Reset Password Page', () => {
 		submitValidForm();
 
 		await screen.findByText('Your Password has been changed!');
+		const loginLink = await screen.findByText('Go to log in page');
+		expect(loginLink).toHaveAttribute('href', '/login');
 	});
 
 	it('should not show auccess message if the form is not submitted', async () => {

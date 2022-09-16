@@ -16,7 +16,7 @@
  */
 
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Form from 'Common/AuthTemplate/Form/Form';
 import Header from 'Common/Header/Header';
 import InputPassword from 'Common/InputPassword/InputPassword';
@@ -62,12 +62,17 @@ function ResetPasswordPage(): JSX.Element {
 							setIsValid(isValid);
 						}}
 					/>
-					{shouldShowSaved && (
+				</Form>
+				{shouldShowSaved && (
+					<div className={'success-feedback-container'}>
 						<div className="success-indicator">
 							Your Password has been changed!
 						</div>
-					)}
-				</Form>
+						<Link className={'login-link'} to={'/login'}>
+							Go to log in page
+						</Link>
+					</div>
+				)}
 			</div>
 		</div>
 	);
