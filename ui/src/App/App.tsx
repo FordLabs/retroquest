@@ -23,7 +23,7 @@ import Modal from '../Common/Modal/Modal';
 import { getThemeClassFromUserSettings, ThemeState } from '../State/ThemeState';
 
 import ChangeTeamDetailsPage from './ChangeTeamDetails/ChangeTeamDetailsPage';
-import CreatePage from './Create/CreatePage';
+import CreateTeamPage from './CreateTeam/CreateTeamPage';
 import LoginPage from './Login/LoginPage';
 import PasswordResetRequestPage from './PasswordResetRequest/PasswordResetRequestPage';
 import ResetPasswordPage from './ResetPassword/ResetPasswordPage';
@@ -51,7 +51,7 @@ function App() {
 				<Route path="/" element={<Navigate replace to="/login" />} />
 				<Route path="/login" element={<LoginPage />} />
 				<Route path="/login/:teamId" element={<LoginPage />} />
-				<Route path="/create" element={<CreatePage />} />
+				<Route path="/create" element={<CreateTeamPage />} />
 				<Route path="/email/reset" element={<ChangeTeamDetailsPage />} />
 				<Route path="/password/reset" element={<ResetPasswordPage />} />
 				<Route
