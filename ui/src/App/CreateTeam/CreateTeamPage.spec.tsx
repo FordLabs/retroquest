@@ -66,7 +66,29 @@ describe('CreatePage.spec.tsx', () => {
 	});
 
 	it('should show correct heading', () => {
-		expect(screen.getByText('Create a new Team!')).toBeDefined();
+		expect(screen.getByText('Create a New Team!')).toBeDefined();
+	});
+
+	it('should disable submit button until form is populated', () => {
+		const submitButton = screen.getByTestId('formSubmitButton');
+		expect(submitButton).toBeDisabled();
+		typeIntoTeamNameInput(validTeamName);
+		expect(submitButton).toBeDisabled();
+		typeIntoPasswordInput(validPassword);
+		expect(submitButton).toBeDisabled();
+		typeIntoEmail(validEmail);
+		expect(submitButton).toBeEnabled();
+	});
+
+	it('should disable submit button if form is filled out, and a required field is cleared', () => {
+		const submitButton = screen.getByTestId('formSubmitButton');
+		expect(submitButton).toBeDisabled();
+		typeIntoTeamNameInput(validTeamName);
+		typeIntoPasswordInput(validPassword);
+		typeIntoEmail(validEmail);
+		expect(submitButton).toBeEnabled();
+		typeIntoEmail('');
+		expect(submitButton).toBeDisabled();
 	});
 
 	it('should show link to login page', () => {

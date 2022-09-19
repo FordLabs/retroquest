@@ -53,6 +53,10 @@ export default function CreateTeamPage(): JSX.Element {
 		setErrorMessages(errors);
 	};
 
+	function disableSubmitButton(): boolean {
+		return !teamName || !password || !email;
+	}
+
 	function createTeam() {
 		setIsLoading(true);
 		TeamService.create(teamName, password, email, secondEmail)
@@ -83,12 +87,12 @@ export default function CreateTeamPage(): JSX.Element {
 	}
 
 	return (
-		<AuthTemplate header="Create a new Team!" className="create-team-page">
+		<AuthTemplate header="Create a New Team!" className="create-team-page">
 			<Form
 				onSubmit={onSubmit}
 				errorMessages={errorMessages}
 				submitButtonText="Create Team"
-				disableSubmitBtn={isLoading}
+				disableSubmitBtn={isLoading || disableSubmitButton()}
 			>
 				<InputTeamName
 					teamName={teamName}
