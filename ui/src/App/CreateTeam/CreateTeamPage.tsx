@@ -30,6 +30,8 @@ import {
 	getTeamNameInvalidMessage,
 } from 'Utils/StringUtils';
 
+import './CreateTeamPage.scss';
+
 export default function CreateTeamPage(): JSX.Element {
 	const { login } = useAuth();
 	const [teamName, setTeamName] = useState<string>('');
@@ -81,14 +83,7 @@ export default function CreateTeamPage(): JSX.Element {
 	}
 
 	return (
-		<AuthTemplate
-			header="Create a new Team!"
-			subHeader={
-				<Link to={LOGIN_PAGE_PATH} data-testid="goToLoginPageLink">
-					or sign in to your existing team
-				</Link>
-			}
-		>
+		<AuthTemplate header="Create a new Team!" className="create-team-page">
 			<Form
 				onSubmit={onSubmit}
 				errorMessages={errorMessages}
@@ -136,6 +131,16 @@ export default function CreateTeamPage(): JSX.Element {
 					readOnly={isLoading}
 				/>
 			</Form>
+			<div className="or-separator-line">
+				<span>or</span>
+			</div>
+			<Link
+				to={LOGIN_PAGE_PATH}
+				data-testid="goToLoginPageLink"
+				className="link-secondary"
+			>
+				Log in to your existing team
+			</Link>
 		</AuthTemplate>
 	);
 }

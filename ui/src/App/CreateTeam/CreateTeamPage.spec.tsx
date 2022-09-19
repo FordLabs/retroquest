@@ -70,9 +70,7 @@ describe('CreatePage.spec.tsx', () => {
 	});
 
 	it('should show link to login page', () => {
-		const createNewTeamLink = screen.getByText(
-			'or sign in to your existing team'
-		);
+		const createNewTeamLink = screen.getByText('Log in to your existing team');
 		expect(createNewTeamLink.getAttribute('href')).toBe('/login');
 	});
 

@@ -26,7 +26,7 @@ import './AuthTemplate.scss';
 
 type AuthTemplateProps = React.PropsWithChildren<{
 	header: React.ReactNode;
-	subHeader: React.ReactNode;
+	subHeader?: React.ReactNode;
 	className?: string;
 }>;
 
@@ -44,7 +44,7 @@ export default function AuthTemplate(props: AuthTemplateProps): JSX.Element {
 				<div className="auth-template-content">{children}</div>
 				<div className="auth-template-footer">
 					<a
-						className="github"
+						className="github-link"
 						target="_blank"
 						rel="noopener noreferrer"
 						href="https://github.com/FordLabs/retroquest"
