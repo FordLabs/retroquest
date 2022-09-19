@@ -50,9 +50,10 @@ export default function CreateTeamPage(): JSX.Element {
 		blankValueWithValidity
 	);
 	const [email, setEmail] = useState<ValueAndValidity>(blankValueWithValidity);
-	const [secondEmail, setSecondEmail] = useState<ValueAndValidity>(
-		blankValueWithValidity
-	);
+	const [secondEmail, setSecondEmail] = useState<ValueAndValidity>({
+		value: '',
+		validity: true,
+	});
 
 	const [isValidated, setIsValidated] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -69,7 +70,12 @@ export default function CreateTeamPage(): JSX.Element {
 	};
 
 	function disableSubmitButton(): boolean {
-		return !teamName.validity || !password.validity || !email.validity;
+		return (
+			!teamName.validity ||
+			!password.validity ||
+			!email.validity ||
+			!secondEmail.validity
+		);
 	}
 
 	function createTeam() {
@@ -145,13 +151,13 @@ export default function CreateTeamPage(): JSX.Element {
 					}}
 					readOnly={isLoading}
 				/>
-				<Input
+				<InputEmail
 					id="secondEmailInput"
 					label="Second Teammate's Email (optional)"
-					type="email"
 					value={secondEmail.value}
-					onChange={(event) => {
-						setSecondEmail({ value: event.target.value, validity: true });
+					required={false}
+					onChange={(value, validity) => {
+						setSecondEmail({ value: value, validity: validity });
 						setErrorMessages([]);
 					}}
 					readOnly={isLoading}

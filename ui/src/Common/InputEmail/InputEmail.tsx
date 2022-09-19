@@ -34,7 +34,7 @@ const EMAIL_REGEX = /^.+@.+$/;
 function InputEmail(props: Props) {
 	const {
 		value = '',
-		required,
+		required = true,
 		onChange,
 		invalid,
 		readOnly,
@@ -42,10 +42,10 @@ function InputEmail(props: Props) {
 		id = 'emailInput',
 	} = props;
 
-	const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
+	const [isValidEmail, setIsValidEmail] = useState<boolean>(true);
 
 	function checkValidityOfEmail(email: string): boolean {
-		return !!email.match(EMAIL_REGEX);
+		return !!email.match(EMAIL_REGEX) || (!required && email === '');
 	}
 
 	return (
@@ -60,8 +60,9 @@ function InputEmail(props: Props) {
 				setIsValidEmail(isValid);
 				onChange(event.target.value, isValid);
 			}}
-			validationMessage="Nope"
-			invalid={invalid}
+			validationMessage="Valid email address required"
+			onFocus={() => setIsValidEmail(checkValidityOfEmail(value))}
+			invalid={invalid || !isValidEmail}
 			readOnly={readOnly}
 		/>
 	);
