@@ -30,21 +30,36 @@ import {
 	getTeamNameInvalidMessage,
 } from 'Utils/StringUtils';
 
+import InputEmail from '../../Common/InputEmail/InputEmail';
+import team from '../../Types/Team';
+
 import './CreateTeamPage.scss';
 
 export default function CreateTeamPage(): JSX.Element {
+	interface ValueAndValidity {
+		value: string;
+		validity: boolean;
+	}
+	const blankValueWithValidity = { value: '', validity: false };
+
 	const { login } = useAuth();
-	const [teamName, setTeamName] = useState<string>('');
-	const [password, setPassword] = useState<string>('');
-	const [email, setEmail] = useState<string>('');
-	const [secondEmail, setSecondEmail] = useState<string>('');
+	const [teamName, setTeamName] = useState<ValueAndValidity>(
+		blankValueWithValidity
+	);
+	const [password, setPassword] = useState<ValueAndValidity>(
+		blankValueWithValidity
+	);
+	const [email, setEmail] = useState<ValueAndValidity>(blankValueWithValidity);
+	const [secondEmail, setSecondEmail] = useState<ValueAndValidity>(
+		blankValueWithValidity
+	);
 
 	const [isValidated, setIsValidated] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
-	const teamNameErrorMessage = getTeamNameInvalidMessage(teamName);
-	const passwordErrorMessage = getPasswordInvalidMessage(password);
+	const teamNameErrorMessage = getTeamNameInvalidMessage(teamName.value);
+	const passwordErrorMessage = getPasswordInvalidMessage(password.value);
 
 	const captureErrors = () => {
 		const errors = [];
@@ -54,12 +69,17 @@ export default function CreateTeamPage(): JSX.Element {
 	};
 
 	function disableSubmitButton(): boolean {
-		return !teamName || !password || !email;
+		return !teamName.validity || !password.validity || !email.validity;
 	}
 
 	function createTeam() {
 		setIsLoading(true);
-		TeamService.create(teamName, password, email, secondEmail)
+		TeamService.create(
+			teamName.value,
+			password.value,
+			email.value,
+			secondEmail.value
+		)
 			.then(login)
 			.catch((error) => {
 				let errorMsg = 'Incorrect team name or password. Please try again.';
@@ -95,30 +115,32 @@ export default function CreateTeamPage(): JSX.Element {
 				disableSubmitBtn={isLoading || disableSubmitButton()}
 			>
 				<InputTeamName
-					teamName={teamName}
+					teamName={teamName.value}
 					onTeamNameInputChange={(updatedTeamName: string) => {
-						setTeamName(updatedTeamName);
+						setTeamName({ value: updatedTeamName, validity: true });
 						setErrorMessages([]);
 					}}
 					invalid={isValidated && !!teamNameErrorMessage}
 					readOnly={isLoading}
 				/>
 				<InputPassword
-					password={password}
-					onPasswordInputChange={(updatedPassword: string) => {
-						setPassword(updatedPassword);
+					password={password.value}
+					onPasswordInputChange={(
+						updatedPassword: string,
+						isValid: boolean
+					) => {
+						setPassword({ value: updatedPassword, validity: isValid });
 						setErrorMessages([]);
 					}}
 					invalid={isValidated && !!passwordErrorMessage}
 					readOnly={isLoading}
 				/>
-				<Input
+				<InputEmail
 					id="emailInput"
 					label="Email"
-					type="email"
-					value={email}
-					onChange={(event) => {
-						setEmail(event.target.value);
+					value={email.value}
+					onChange={(value, validity) => {
+						setEmail({ value: value, validity: validity });
 						setErrorMessages([]);
 					}}
 					readOnly={isLoading}
@@ -127,9 +149,9 @@ export default function CreateTeamPage(): JSX.Element {
 					id="secondEmailInput"
 					label="Second Teammate's Email (optional)"
 					type="email"
-					value={secondEmail}
+					value={secondEmail.value}
 					onChange={(event) => {
-						setSecondEmail(event.target.value);
+						setSecondEmail({ value: event.target.value, validity: true });
 						setErrorMessages([]);
 					}}
 					readOnly={isLoading}

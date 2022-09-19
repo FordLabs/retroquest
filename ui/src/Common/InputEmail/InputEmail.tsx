@@ -16,37 +16,50 @@
  */
 
 import * as React from 'react';
+import { useState } from 'react';
 import Input from 'Common/Input/Input';
 
 interface Props {
-	email?: string;
+	value?: string;
 	required?: boolean;
-	onEmailInputChange: (updatedEmail: string) => void;
+	onChange: (updatedEmail: string, isValid: boolean) => void;
 	invalid?: boolean;
 	readOnly?: boolean;
 	label?: string;
 	id?: string;
 }
 
+const EMAIL_REGEX = /^.+@.+$/;
+
 function InputEmail(props: Props) {
 	const {
-		email = '',
+		value = '',
 		required,
-		onEmailInputChange,
+		onChange,
 		invalid,
 		readOnly,
 		label = 'Email',
 		id = 'emailInput',
 	} = props;
 
+	const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
+
+	function checkValidityOfEmail(email: string): boolean {
+		return !!email.match(EMAIL_REGEX);
+	}
+
 	return (
 		<Input
 			id={id}
 			label={label}
-			value={email}
+			value={value}
 			type="email"
 			required={required}
-			onChange={(event) => onEmailInputChange(event.target.value)}
+			onChange={(event) => {
+				const isValid = checkValidityOfEmail(event.target.value);
+				setIsValidEmail(isValid);
+				onChange(event.target.value, isValid);
+			}}
 			validationMessage="Nope"
 			invalid={invalid}
 			readOnly={readOnly}

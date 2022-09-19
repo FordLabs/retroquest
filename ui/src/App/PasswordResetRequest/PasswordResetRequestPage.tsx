@@ -68,8 +68,8 @@ function PasswordResetRequestPage(): JSX.Element {
 					required
 				/>
 				<InputEmail
-					email={email}
-					onEmailInputChange={(email) => {
+					value={email}
+					onChange={(email) => {
 						setEmail(email);
 						setErrorMessages([]);
 					}}

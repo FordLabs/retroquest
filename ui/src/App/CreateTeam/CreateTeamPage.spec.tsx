@@ -91,6 +91,30 @@ describe('CreatePage.spec.tsx', () => {
 		expect(submitButton).toBeDisabled();
 	});
 
+	it('should disable submit button if form is filled out using invalid password', () => {
+		const submitButton = screen.getByTestId('formSubmitButton');
+		expect(submitButton).toBeDisabled();
+		typeIntoTeamNameInput(validTeamName);
+		typeIntoPasswordInput(validPassword);
+		typeIntoEmail(validEmail);
+		expect(submitButton).toBeEnabled();
+		const tooShortPassword = validPassword.substring(0, 6);
+		typeIntoPasswordInput(tooShortPassword);
+		expect(submitButton).toBeDisabled();
+	});
+
+	it('should disable submit button if form is filled out using invalid email', () => {
+		const submitButton = screen.getByTestId('formSubmitButton');
+		expect(submitButton).toBeDisabled();
+		typeIntoTeamNameInput(validTeamName);
+		typeIntoPasswordInput(validPassword);
+		typeIntoEmail(validEmail);
+		expect(submitButton).toBeEnabled();
+		const emailWithNoAt = 'email';
+		typeIntoEmail(emailWithNoAt);
+		expect(submitButton).toBeDisabled();
+	});
+
 	it('should show link to login page', () => {
 		const createNewTeamLink = screen.getByText('Log in to your existing team');
 		expect(createNewTeamLink.getAttribute('href')).toBe('/login');
