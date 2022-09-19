@@ -115,6 +115,18 @@ describe('CreatePage.spec.tsx', () => {
 		expect(submitButton).toBeDisabled();
 	});
 
+	it('should disable submit button if form is filled out using invalid team name', () => {
+		const submitButton = screen.getByTestId('formSubmitButton');
+		expect(submitButton).toBeDisabled();
+		typeIntoTeamNameInput(validTeamName);
+		typeIntoPasswordInput(validPassword);
+		typeIntoEmail(validEmail);
+		expect(submitButton).toBeEnabled();
+		const teamNameWithSpecialCharacter = validTeamName + '-';
+		typeIntoTeamNameInput(teamNameWithSpecialCharacter);
+		expect(submitButton).toBeDisabled();
+	});
+
 	it('should disable submit button if form is filled out using invalid second email', () => {
 		const submitButton = screen.getByTestId('formSubmitButton');
 		expect(submitButton).toBeDisabled();
@@ -191,7 +203,7 @@ describe('CreatePage.spec.tsx', () => {
 				'inputValidationMessage'
 			);
 			expect(inputValidationMessage.textContent).toBe(
-				'Names must not contain special characters.'
+				'Must have: letters, numbers, and spaces only'
 			);
 
 			const formErrorMessage = screen.getByTestId('formErrorMessage');

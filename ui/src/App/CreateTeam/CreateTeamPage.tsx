@@ -121,9 +121,9 @@ export default function CreateTeamPage(): JSX.Element {
 				disableSubmitBtn={isLoading || disableSubmitButton()}
 			>
 				<InputTeamName
-					teamName={teamName.value}
-					onTeamNameInputChange={(updatedTeamName: string) => {
-						setTeamName({ value: updatedTeamName, validity: true });
+					value={teamName.value}
+					onChange={(updatedTeamName: string, validity: boolean) => {
+						setTeamName({ value: updatedTeamName, validity: validity });
 						setErrorMessages([]);
 					}}
 					invalid={isValidated && !!teamNameErrorMessage}

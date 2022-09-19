@@ -16,34 +16,47 @@
  */
 
 import * as React from 'react';
+import { useState } from 'react';
 import Input from 'Common/Input/Input';
 
+import { checkValidityOfPassword } from '../../Utils/StringUtils';
+
 interface Props {
-	teamName?: string;
+	value?: string;
 	required?: boolean;
-	onTeamNameInputChange: (updatedTeamName: string) => void;
+	onChange: (updatedTeamName: string, validity: boolean) => void;
 	invalid?: boolean;
 	readOnly?: boolean;
 }
 
+const TEAM_NAME_REGEX = /^[\w\s]+$/;
+
 function InputTeamName(props: Props) {
-	const {
-		teamName = '',
-		required,
-		onTeamNameInputChange,
-		invalid,
-		readOnly,
-	} = props;
+	const { value = '', required, onChange, invalid, readOnly } = props;
+
+	function checkValidityOfTeamName(value: string): boolean {
+		const isValid = value.match(TEAM_NAME_REGEX) != null;
+		setIsValidTeamName(isValid);
+		return isValid;
+	}
+
+	const [isValidTeamName, setIsValidTeamName] = useState<boolean>(true);
 
 	return (
 		<Input
 			id="teamNameInput"
 			label="Team Name"
-			value={teamName}
+			value={value}
 			required={required}
-			onChange={(event) => onTeamNameInputChange(event.target.value)}
-			validationMessage="Names must not contain special characters."
-			invalid={invalid}
+			onChange={(event) => {
+				onChange(
+					event.target.value,
+					checkValidityOfTeamName(event.target.value)
+				);
+			}}
+			onFocus={() => checkValidityOfTeamName(value)}
+			validationMessage="Must have: letters, numbers, and spaces only"
+			invalid={invalid || !isValidTeamName}
 			readOnly={readOnly}
 		/>
 	);

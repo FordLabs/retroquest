@@ -66,8 +66,8 @@ function LoginPage(): JSX.Element {
 				disableSubmitBtn={isLoading}
 			>
 				<InputTeamName
-					teamName={teamName}
-					onTeamNameInputChange={(updatedTeamName: string) => {
+					value={teamName}
+					onChange={(updatedTeamName: string) => {
 						setTeamName(updatedTeamName);
 						setErrorMessages([]);
 					}}

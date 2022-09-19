@@ -60,8 +60,8 @@ function PasswordResetRequestPage(): JSX.Element {
 				errorMessages={errorMessages}
 			>
 				<InputTeamName
-					teamName={teamName}
-					onTeamNameInputChange={(name) => {
+					value={teamName}
+					onChange={(name) => {
 						setTeamName(name);
 						setErrorMessages([]);
 					}}
