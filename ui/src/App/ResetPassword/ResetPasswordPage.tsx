@@ -27,16 +27,14 @@ import './ResetPasswordPage.scss';
 function ResetPasswordPage(): JSX.Element {
 	const { search } = useLocation();
 
+	const [isReset, setIsReset] = useState(false);
 	const [newPassword, setNewPassword] = useState<string>('');
-	const [shouldShowSaved, setShouldShowSaved] = useState(false);
 	const [isValid, setIsValid] = useState<boolean>(false);
 
 	function submitNewPassword() {
 		if (newPassword) {
 			const token = new URLSearchParams(search).get('token') || '';
-			TeamService.setPassword(newPassword, token).then(() =>
-				setShouldShowSaved(true)
-			);
+			TeamService.setPassword(newPassword, token).then(() => setIsReset(true));
 		}
 	}
 
@@ -45,31 +43,41 @@ function ResetPasswordPage(): JSX.Element {
 			<Header name="RetroQuest" />
 			<div className="reset-password-form">
 				<h1>Reset Your Password</h1>
-				<p>
-					Almost done! Enter your new password here and then remember to tell
-					any active teammates so that they can continue to login to your board.
-				</p>
-				<Form
-					onSubmit={submitNewPassword}
-					submitButtonText="Reset Password"
-					disableSubmitBtn={!isValid}
-				>
-					<InputPassword
-						label="New Password"
-						password={newPassword}
-						onPasswordInputChange={(newPassword, isValid) => {
-							setNewPassword(newPassword);
-							setIsValid(isValid);
-						}}
-					/>
-				</Form>
-				{shouldShowSaved && (
-					<div className={'success-feedback-container'}>
-						<div className="success-indicator">
-							Your Password has been changed!
+				{!isReset && (
+					<>
+						<p data-testid="resetPasswordFormDescription">
+							Almost done! Enter your new password here and then remember to
+							tell any active teammates so that they can continue to login to
+							your board.
+						</p>
+						<Form
+							onSubmit={submitNewPassword}
+							submitButtonText="Reset Password"
+							disableSubmitBtn={!isValid}
+						>
+							<InputPassword
+								label="New Password"
+								password={newPassword}
+								onPasswordInputChange={(newPassword, isValid) => {
+									setNewPassword(newPassword);
+									setIsValid(isValid);
+								}}
+							/>
+						</Form>
+						<div className="login-link-container">
+							<Link className="login-link" to="/login">
+								Return to Login
+							</Link>
 						</div>
-						<Link className={'login-link'} to={'/login'}>
-							Go to log in page
+					</>
+				)}
+				{isReset && (
+					<div className="success-feedback-container">
+						<div className="success-indicator">
+							All set! Your password has been changed.
+						</div>
+						<Link className="login-button-link" to="/login">
+							Return to Login
 						</Link>
 					</div>
 				)}
