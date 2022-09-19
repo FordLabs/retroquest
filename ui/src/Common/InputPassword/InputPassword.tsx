@@ -22,13 +22,14 @@ import Input from 'Common/Input/Input';
 import { useRecoilValue } from 'recoil';
 import { ThemeState } from 'State/ThemeState';
 import Theme from 'Types/Theme';
+import { checkValidityOfPassword } from 'Utils/StringUtils';
 
 import './InputPassword.scss';
 
 type Props = {
 	label?: string;
 	password: string;
-	onPasswordInputChange: (updatedTeamName: string) => void;
+	onPasswordInputChange: (updatedTeamName: string, isValid: boolean) => void;
 	required?: boolean;
 	readOnly?: boolean;
 	invalid?: boolean;
@@ -47,6 +48,7 @@ function InputPassword(props: Props) {
 	const theme = useRecoilValue(ThemeState);
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 	const eyeIconColor = theme === Theme.DARK ? '#ecf0f1' : '#34495E';
+	const [isValidPassword, setIsValidPassword] = useState<boolean>(true);
 
 	return (
 		<div className="input-password">
@@ -55,10 +57,16 @@ function InputPassword(props: Props) {
 				label={label}
 				type={showPassword ? 'text' : 'password'}
 				value={password}
-				onChange={(event) => onPasswordInputChange(event.target.value)}
-				validationMessage="8 or more characters with a mix of numbers and letters"
+				onChange={(event) => {
+					const newPassword = event.target.value;
+					const isValid = checkValidityOfPassword(newPassword);
+					setIsValidPassword(isValid);
+					onPasswordInputChange(newPassword, isValid);
+				}}
+				onFocus={() => setIsValidPassword(checkValidityOfPassword(password))}
+				validationMessage="Must have: 8+ Characters, 1 Upper Case Letter, 1 Number"
 				required={required}
-				invalid={invalid}
+				invalid={invalid || !isValidPassword}
 				readOnly={readOnly}
 			/>
 			<button

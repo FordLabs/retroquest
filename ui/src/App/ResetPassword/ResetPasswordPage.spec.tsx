@@ -38,10 +38,13 @@ describe('Reset Password Page', () => {
 		expect(submitButton).toBeDisabled();
 	});
 
-	it('should enable submit button once user types into form', () => {
+	it('should enable submit button once user types valid password', () => {
 		renderWithToken('');
-		typeIntoNewPasswordField();
-		expect(screen.getByText('Reset Password')).not.toBeDisabled();
+		typeIntoNewPasswordField('invalidpassword');
+		const submitButton = screen.getByText('Reset Password');
+		expect(submitButton).toBeDisabled();
+		typeIntoNewPasswordField('Validpassword1');
+		expect(submitButton).toBeEnabled();
 	});
 
 	it('should send passwords to the backend on submission', async () => {
@@ -50,7 +53,7 @@ describe('Reset Password Page', () => {
 
 		await waitFor(() =>
 			expect(TeamService.setPassword).toHaveBeenCalledWith(
-				'p@ssw0rd',
+				'P@ssw0rd',
 				expect.anything()
 			)
 		);
@@ -74,25 +77,29 @@ describe('Reset Password Page', () => {
 		expect(TeamService.setPassword).toHaveBeenCalledTimes(0);
 	});
 
-	it('should show "Saved!" if the backend returns 200 after submission', async () => {
+	it('should show success message if the backend returns 200 after submission', async () => {
 		renderWithToken('ABC321');
 		submitValidForm();
 
-		await screen.findByText('Saved!');
+		await screen.findByText('Your Password has been changed!');
+		const loginLink = await screen.findByText('Go to log in page');
+		expect(loginLink).toHaveAttribute('href', '/login');
 	});
 
-	it('should not show "Saved!" if the form is not submitted', async () => {
+	it('should not show auccess message if the form is not submitted', async () => {
 		renderWithToken('ABC321');
-		expect(screen.queryByText('Saved!')).not.toBeInTheDocument();
+		expect(
+			screen.queryByText('Your Password has been changed!')
+		).not.toBeInTheDocument();
 	});
 });
 
-function submitValidForm(password: string = 'p@ssw0rd') {
+function submitValidForm(password: string = 'P@ssw0rd') {
 	typeIntoNewPasswordField(password);
 	fireEvent.click(screen.getByText('Reset Password'));
 }
 
-function typeIntoNewPasswordField(password: string = 'p@ssw0rd') {
+function typeIntoNewPasswordField(password: string = 'P@ssw0rd') {
 	fireEvent.change(screen.getByLabelText('New Password'), {
 		target: { value: password },
 	});
@@ -100,11 +107,11 @@ function typeIntoNewPasswordField(password: string = 'p@ssw0rd') {
 
 function renderWithToken(token: string) {
 	const initialEntry =
-		token !== '' ? '/change-password?token=' + token : '/change-password';
+		token !== '' ? '/password/reset?token=' + token : '/password/reset';
 	renderWithRecoilRoot(
 		<MemoryRouter initialEntries={[initialEntry]}>
 			<Routes>
-				<Route element={<ResetPasswordPage />} path="/change-password" />
+				<Route element={<ResetPasswordPage />} path="/password/reset" />
 			</Routes>
 		</MemoryRouter>
 	);

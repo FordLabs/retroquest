@@ -108,8 +108,7 @@ describe('LoginPage.spec.tsx', () => {
 		await waitFor(() => expect(mockLogin).toHaveBeenCalled());
 	});
 
-	// @todo Add back in when login flow is ready
-	xit('should have a "Forgot your login info?" link that goes to the request password reset page', () => {
+	it('should have a "Forgot your login info?" link that goes to the request password reset page', () => {
 		const forgotLoginInfoLink = screen.getByText('Forgot your login info?');
 		expect(forgotLoginInfoLink.getAttribute('href')).toBe(
 			'/request-password-reset'

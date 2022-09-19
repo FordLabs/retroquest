@@ -25,8 +25,10 @@ import InputTeamName from 'Common/InputTeamName/InputTeamName';
 import useAuth from 'Hooks/useAuth';
 import { LOGIN_PAGE_PATH } from 'RouteConstants';
 import TeamService from 'Services/Api/TeamService';
-
-import { validatePassword, validateTeamName } from '../../Utils/StringUtils';
+import {
+	getPasswordInvalidMessage,
+	getTeamNameInvalidMessage,
+} from 'Utils/StringUtils';
 
 export default function CreateTeamPage(): JSX.Element {
 	const { login } = useAuth();
@@ -39,8 +41,8 @@ export default function CreateTeamPage(): JSX.Element {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
-	const teamNameErrorMessage = validateTeamName(teamName);
-	const passwordErrorMessage = validatePassword(password);
+	const teamNameErrorMessage = getTeamNameInvalidMessage(teamName);
+	const passwordErrorMessage = getPasswordInvalidMessage(password);
 
 	const captureErrors = () => {
 		const errors = [];

@@ -16,7 +16,7 @@
  */
 
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Form from 'Common/AuthTemplate/Form/Form';
 import Header from 'Common/Header/Header';
 import InputPassword from 'Common/InputPassword/InputPassword';
@@ -29,6 +29,7 @@ function ResetPasswordPage(): JSX.Element {
 
 	const [newPassword, setNewPassword] = useState<string>('');
 	const [shouldShowSaved, setShouldShowSaved] = useState(false);
+	const [isValid, setIsValid] = useState<boolean>(false);
 
 	function submitNewPassword() {
 		if (newPassword) {
@@ -51,16 +52,27 @@ function ResetPasswordPage(): JSX.Element {
 				<Form
 					onSubmit={submitNewPassword}
 					submitButtonText="Reset Password"
-					disableSubmitBtn={!newPassword}
+					disableSubmitBtn={!isValid}
 				>
 					<InputPassword
 						label="New Password"
 						password={newPassword}
-						onPasswordInputChange={setNewPassword}
-						required
+						onPasswordInputChange={(newPassword, isValid) => {
+							setNewPassword(newPassword);
+							setIsValid(isValid);
+						}}
 					/>
-					{shouldShowSaved && <div className="success-indicator">Saved!</div>}
 				</Form>
+				{shouldShowSaved && (
+					<div className={'success-feedback-container'}>
+						<div className="success-indicator">
+							Your Password has been changed!
+						</div>
+						<Link className={'login-link'} to={'/login'}>
+							Go to log in page
+						</Link>
+					</div>
+				)}
 			</div>
 		</div>
 	);
