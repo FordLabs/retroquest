@@ -50,16 +50,17 @@ describe('Password Reset Request Page', () => {
 		expect(TeamService.sendPasswordResetLink).toHaveBeenCalledTimes(0);
 	});
 
-	it('should show "Saved!" if the backend returns 200 after submission', async () => {
+	const confirmationMessage = 'Link Sent!';
+	it('should show confirmation message if the backend returns 200 after submission', async () => {
 		await renderPasswordResetRequestPage();
 		submitValidForm();
 
-		await screen.findByText('Link Sent!');
+		await screen.findByText(confirmationMessage);
 	});
 
-	it('should not show "Saved!" if the form is not submitted', async () => {
+	it('should not show confirmation message if the form is not submitted', async () => {
 		await renderPasswordResetRequestPage();
-		expect(screen.queryByText('Saved!')).not.toBeInTheDocument();
+		expect(screen.queryByText(confirmationMessage)).not.toBeInTheDocument();
 	});
 
 	it('should show an error message if the request is not successful that persists until you type in either input', async () => {
