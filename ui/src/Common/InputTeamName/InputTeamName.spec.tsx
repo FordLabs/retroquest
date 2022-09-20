@@ -33,6 +33,15 @@ describe('Input Team Name', () => {
 			expect(screen.getByText(expectedValidationMessage)).toBeDefined();
 		});
 
+		it('should be able to resist validating', () => {
+			render(
+				<InputTeamName value="" onChange={() => {}} validateInput={false} />
+			);
+			expect(screen.queryByText(expectedValidationMessage)).toBeNull();
+			screen.getByTestId('teamNameInput').focus();
+			expect(screen.queryByText(expectedValidationMessage)).toBeNull();
+		});
+
 		it('should hide validation message when user types a valid name (even on focus)', () => {
 			function TestComponent() {
 				const [name, setName] = useState<string>('');

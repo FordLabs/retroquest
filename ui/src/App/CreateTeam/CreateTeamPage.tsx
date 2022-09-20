@@ -25,6 +25,8 @@ import useAuth from 'Hooks/useAuth';
 import { LOGIN_PAGE_PATH } from 'RouteConstants';
 import TeamService from 'Services/Api/TeamService';
 
+import HorizontalRuleWithText from '../../Common/HorizontalRuleWithText/HorizontalRuleWithText';
+
 import './CreateTeamPage.scss';
 
 const blankValueWithValidity = { value: '', validity: false };
@@ -130,9 +132,7 @@ function CreateTeamPage(): JSX.Element {
 					}}
 				/>
 			</Form>
-			<div className="or-separator-line">
-				<span>or</span>
-			</div>
+			<HorizontalRuleWithText text={'or'} />
 			<Link
 				to={LOGIN_PAGE_PATH}
 				data-testid="goToLoginPageLink"

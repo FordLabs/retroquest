@@ -17,45 +17,34 @@
 
 @use '../../Styles/main';
 
-.survey-link {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	min-width: 125px;
-	height: 45px;
-	margin-bottom: 1rem;
-	padding: 0 24px;
-
-	color: inherit;
-
-	font-family: inherit;
-	font-weight: 700;
-	font-size: 1rem;
-	white-space: nowrap;
-	text-transform: capitalize;
-	text-decoration: none;
-
-	background-color: main.$yellow;
-
-	border: 0;
-	border-radius: 18px;
-	box-shadow: 0 4px 15px rgba(main.$black, 0.25);
-	cursor: pointer;
-
-	&:hover,
-	&:focus {
-		background-color: main.$purple;
-		cursor: pointer;
-	}
-}
-
 .forgot-login-link {
 	margin: 1rem auto 0;
+
 	color: main.$dark-turquoise;
+	font-weight: bold;
 
 	&:hover,
 	&:focus {
 		color: main.$turquoise;
+	}
+}
+
+.link-secondary {
+	@include main.button-defaults;
+	max-width: 17.25rem;
+	margin: 3rem auto 0;
+
+	color: main.$dark-turquoise;
+	text-decoration: none;
+
+	border: 2px solid main.$dark-turquoise;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.12),
+		0 1px 8px rgba(0, 0, 0, 0.1);
+
+	&:focus,
+	&:hover {
+		color: main.$white;
+		background-color: main.$dark-turquoise;
 	}
 }
 

@@ -15,25 +15,14 @@
  * limitations under the License.
  */
 
-@use '../../Styles/main';
+import { render } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 
-.create-team-page {
-	.link-secondary {
-		@include main.button-defaults;
-		max-width: 17.25rem;
-		margin: 3rem auto 0;
+import HorizontalRuleWithText from './HorizontalRuleWithText';
 
-		color: main.$dark-turquoise;
-		text-decoration: none;
-
-		border: 2px solid main.$dark-turquoise;
-		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.12),
-			0 1px 8px rgba(0, 0, 0, 0.1);
-
-		&:focus,
-		&:hover {
-			color: main.$white;
-			background-color: main.$dark-turquoise;
-		}
-	}
-}
+describe('the text passed as a prop', () => {
+	it('is rendered', () => {
+		render(<HorizontalRuleWithText text={'expected TEXT'} />);
+		expect(screen.getByText(/expected TEXT/)).toBeInTheDocument();
+	});
+});

@@ -14,27 +14,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { checkValidityOfPassword } from './StringUtils';
 
-describe('String Utils', () => {
-	it.each([
-		['', false],
-		[null, false],
-		[undefined, false],
-		['1', false],
-		['1234567', false],
-		['A', false],
-		['a', false],
-		['aA1', false],
-		['12345678', false],
-		['12345678a', false],
-		['abcdefgA', false],
-		['abcdefgA1', true],
-		['12345678A', true],
-		['PASSWORD1', true],
-		["abcdefgA1#!@#$%^&*()_+}{[];'\\<>? ", true],
-		['P@ssw0rd', true],
-	])('validating password %s should return "%s"', (password, errorMessage) => {
-		expect(checkValidityOfPassword(password!)).toBe(errorMessage);
-	});
-});
+import React from 'react';
+
+import './HorizontalRuleWithText.scss';
+
+interface RuleProps {
+	text: string;
+}
+
+function HorizontalRuleWithText(props: RuleProps): JSX.Element {
+	const { text } = props;
+	return (
+		<div className="or-separator-line">
+			<span>{text}</span>
+		</div>
+	);
+}
+
+export default HorizontalRuleWithText;

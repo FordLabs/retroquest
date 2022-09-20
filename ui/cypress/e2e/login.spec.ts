@@ -33,7 +33,7 @@ describe('Login', () => {
 		cy.intercept('POST', '/api/team/login').as('postTeamLogin');
 
 		cy.visit(LOGIN_PAGE_PATH);
-		cy.contains('Sign in to your Team!').should('exist');
+		cy.contains('Log in to your Team!').should('exist');
 
 		cy.get('[data-testid=teamNameInput]').as('teamNameInput');
 		cy.get('[data-testid=passwordInput]').as('passwordInput');
@@ -64,6 +64,7 @@ describe('Login', () => {
 					teamId: 'Something not correct',
 					password: 'Something else wrong 1',
 					jwt: '',
+					email: 'eee',
 				},
 				403
 			);

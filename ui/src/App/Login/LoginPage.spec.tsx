@@ -61,11 +61,11 @@ describe('LoginPage.spec.tsx', () => {
 	});
 
 	it('should show correct heading', () => {
-		expect(screen.getByText('Sign in to your Team!')).toBeDefined();
+		expect(screen.getByText('Log in to your Team!')).toBeDefined();
 	});
 
 	it('should show link to create new team', () => {
-		const createNewTeamLink = screen.getByText('or create a new team');
+		const createNewTeamLink = screen.getByText('Create new team');
 		expect(createNewTeamLink.getAttribute('href')).toBe('/create');
 	});
 
@@ -98,7 +98,7 @@ describe('LoginPage.spec.tsx', () => {
 		typeIntoTeamNameInput(validTeamName);
 		typeIntoPasswordInput(validPassword);
 
-		const submitButton = screen.getByText('Sign in');
+		const submitButton = screen.getByText('Log in');
 		userEvent.click(submitButton);
 
 		expect(TeamService.login).toHaveBeenCalledWith(
@@ -131,7 +131,7 @@ describe('LoginPage.spec.tsx', () => {
 
 			typeIntoPasswordInput(validPassword);
 
-			const submitButton = await screen.findByText('Sign in');
+			const submitButton = await screen.findByText('Log in');
 			userEvent.click(submitButton);
 			expect(TeamService.login).toHaveBeenCalledWith(
 				validTeamName,
@@ -144,6 +144,22 @@ describe('LoginPage.spec.tsx', () => {
 				)
 			).toBeDefined();
 		});
+	});
+	it('should not validate anything pre-submit', async () => {
+		TeamService.login = jest.fn().mockRejectedValue(new Error('Async error'));
+
+		typeIntoPasswordInput(validPassword.substring(0, 1));
+		typeIntoTeamNameInput('');
+
+		const submitButton = await screen.findByText('Log in');
+		userEvent.click(submitButton);
+		expect(TeamService.login).toHaveBeenCalledWith('', 'P');
+		expect(mockLogin).not.toHaveBeenCalled();
+		expect(
+			await screen.findByText(
+				'Incorrect team name or password. Please try again.'
+			)
+		).toBeDefined();
 	});
 });
 
