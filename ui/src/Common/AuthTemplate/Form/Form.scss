@@ -18,14 +18,25 @@
 @use '../../../Styles/main';
 
 .form {
-	.error-message {
-		margin-top: 1rem;
-		color: main.$dark-red;
+	.error-messages {
+		display: flex;
+		flex-direction: column;
+		flex-flow: column-reverse;
+		height: 2rem;
+
+		.error-message {
+			margin: 0.5rem 0;
+
+			color: main.$red;
+			font-weight: 500;
+			font-size: 14px;
+			font-style: normal;
+			line-height: 18px;
+		}
 	}
 
 	.submit-button {
 		width: 100%;
-		margin-top: 48px;
 
 		color: main.$gray-1;
 
@@ -45,8 +56,10 @@
 
 @include main.dark-theme {
 	.form {
-		.error-message {
-			color: main.$red;
+		.error-messages {
+			.error-message {
+				color: main.$light-red;
+			}
 		}
 
 		.submit-button {
