@@ -45,11 +45,12 @@ function PasswordResetRequestPage(): JSX.Element {
 
 	return (
 		<AuthTemplate
-			header="Reset your password"
+			header="Reset your Password"
 			subHeader={
 				<p className="password-reset-description">
-					Enter the Team Name and email associated with your team's account and
-					we’ll send an email with instructions to reset your password.
+					Enter the Team Name <u>and</u> email associated with your team's
+					account and we’ll send an email with instructions to reset your
+					password.
 				</p>
 			}
 			className="password-reset-request-page"
