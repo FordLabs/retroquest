@@ -53,15 +53,15 @@ function ChangeTeamDetailsPage(): JSX.Element {
 				<Form onSubmit={submitEmails} submitButtonText="Save Changes">
 					<InputEmail
 						label="Email 1"
-						onEmailInputChange={setEmail}
-						email={email}
+						onChange={setEmail}
+						value={email}
 						id="email1Id"
 						required
 					/>
 					<InputEmail
 						label="Email 2"
-						onEmailInputChange={setSecondaryEmail}
-						email={secondaryEmail}
+						onChange={setSecondaryEmail}
+						value={secondaryEmail}
 						id="email2Id"
 						required
 					/>

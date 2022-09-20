@@ -25,7 +25,7 @@ describe('Signup', () => {
 		cy.intercept('POST', '/api/team').as('postCreateTeam');
 
 		cy.visit(CREATE_TEAM_PAGE_PATH);
-		cy.contains('Create a new Team!').should('exist');
+		cy.contains('Create a New Team!').should('exist');
 
 		cy.get('[data-testid=teamNameInput]').as('teamNameInput');
 		cy.get('[data-testid=passwordInput]').as('passwordInput');

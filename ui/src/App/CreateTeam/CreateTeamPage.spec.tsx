@@ -66,13 +66,81 @@ describe('CreatePage.spec.tsx', () => {
 	});
 
 	it('should show correct heading', () => {
-		expect(screen.getByText('Create a new Team!')).toBeDefined();
+		expect(screen.getByText('Create a New Team!')).toBeDefined();
+	});
+
+	it('should disable submit button until form is populated', () => {
+		const submitButton = screen.getByTestId('formSubmitButton');
+		expect(submitButton).toBeDisabled();
+		typeIntoTeamNameInput(validTeamName);
+		expect(submitButton).toBeDisabled();
+		typeIntoPasswordInput(validPassword);
+		expect(submitButton).toBeDisabled();
+		typeIntoEmail(validEmail);
+		expect(submitButton).toBeEnabled();
+	});
+
+	it('should disable submit button if form is filled out, and a required field is cleared', () => {
+		const submitButton = screen.getByTestId('formSubmitButton');
+		expect(submitButton).toBeDisabled();
+		typeIntoTeamNameInput(validTeamName);
+		typeIntoPasswordInput(validPassword);
+		typeIntoEmail(validEmail);
+		expect(submitButton).toBeEnabled();
+		typeIntoEmail('');
+		expect(submitButton).toBeDisabled();
+	});
+
+	it('should disable submit button if form is filled out using invalid password', () => {
+		const submitButton = screen.getByTestId('formSubmitButton');
+		expect(submitButton).toBeDisabled();
+		typeIntoTeamNameInput(validTeamName);
+		typeIntoPasswordInput(validPassword);
+		typeIntoEmail(validEmail);
+		expect(submitButton).toBeEnabled();
+		const tooShortPassword = validPassword.substring(0, 6);
+		typeIntoPasswordInput(tooShortPassword);
+		expect(submitButton).toBeDisabled();
+	});
+
+	it('should disable submit button if form is filled out using invalid email', () => {
+		const submitButton = screen.getByTestId('formSubmitButton');
+		expect(submitButton).toBeDisabled();
+		typeIntoTeamNameInput(validTeamName);
+		typeIntoPasswordInput(validPassword);
+		typeIntoEmail(validEmail);
+		expect(submitButton).toBeEnabled();
+		const emailWithNoAt = 'email';
+		typeIntoEmail(emailWithNoAt);
+		expect(submitButton).toBeDisabled();
+	});
+
+	it('should disable submit button if form is filled out using invalid team name', () => {
+		const submitButton = screen.getByTestId('formSubmitButton');
+		expect(submitButton).toBeDisabled();
+		typeIntoTeamNameInput(validTeamName);
+		typeIntoPasswordInput(validPassword);
+		typeIntoEmail(validEmail);
+		expect(submitButton).toBeEnabled();
+		const teamNameWithSpecialCharacter = validTeamName + '-';
+		typeIntoTeamNameInput(teamNameWithSpecialCharacter);
+		expect(submitButton).toBeDisabled();
+	});
+
+	it('should disable submit button if form is filled out using invalid second email', () => {
+		const submitButton = screen.getByTestId('formSubmitButton');
+		expect(submitButton).toBeDisabled();
+		typeIntoTeamNameInput(validTeamName);
+		typeIntoPasswordInput(validPassword);
+		typeIntoEmail(validEmail);
+		expect(submitButton).toBeEnabled();
+		const tooShortEmail = '@b';
+		typeIntoSecondaryEmail(tooShortEmail);
+		expect(submitButton).toBeDisabled();
 	});
 
 	it('should show link to login page', () => {
-		const createNewTeamLink = screen.getByText(
-			'or sign in to your existing team'
-		);
+		const createNewTeamLink = screen.getByText('Log in to your existing team');
 		expect(createNewTeamLink.getAttribute('href')).toBe('/login');
 	});
 
@@ -135,7 +203,7 @@ describe('CreatePage.spec.tsx', () => {
 				'inputValidationMessage'
 			);
 			expect(inputValidationMessage.textContent).toBe(
-				'Names must not contain special characters.'
+				'Must have: letters, numbers, and spaces only'
 			);
 
 			const formErrorMessage = screen.getByTestId('formErrorMessage');

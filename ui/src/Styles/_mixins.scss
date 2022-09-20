@@ -131,3 +131,23 @@
 		}
 	}
 }
+
+@mixin button-defaults {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 125px;
+	height: 45px;
+	padding: 0 24px;
+
+	font-family: inherit;
+	font-weight: 700;
+	font-size: 1rem;
+	white-space: nowrap;
+	text-transform: capitalize;
+
+	border: 0;
+	border-radius: 6px;
+	box-shadow: none;
+	cursor: pointer;
+}

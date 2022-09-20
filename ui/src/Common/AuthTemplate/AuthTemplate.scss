@@ -41,7 +41,7 @@
 	}
 
 	.auth-template-header {
-		margin-bottom: 3rem;
+		margin-bottom: 1.5rem;
 		text-align: center;
 	}
 
@@ -90,7 +90,9 @@
 		flex-basis: 40%;
 	}
 
-	.github {
+	.github-link {
+		margin: 1rem auto 0;
+
 		color: unset;
 		text-decoration: none;
 	}

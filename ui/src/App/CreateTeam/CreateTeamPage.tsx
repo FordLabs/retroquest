@@ -19,7 +19,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import Form from 'Common/AuthTemplate/Form/Form';
-import Input from 'Common/Input/Input';
 import InputPassword from 'Common/InputPassword/InputPassword';
 import InputTeamName from 'Common/InputTeamName/InputTeamName';
 import useAuth from 'Hooks/useAuth';
@@ -30,19 +29,36 @@ import {
 	getTeamNameInvalidMessage,
 } from 'Utils/StringUtils';
 
+import InputEmail from '../../Common/InputEmail/InputEmail';
+
+import './CreateTeamPage.scss';
+
 export default function CreateTeamPage(): JSX.Element {
+	interface ValueAndValidity {
+		value: string;
+		validity: boolean;
+	}
+	const blankValueWithValidity = { value: '', validity: false };
+
 	const { login } = useAuth();
-	const [teamName, setTeamName] = useState<string>('');
-	const [password, setPassword] = useState<string>('');
-	const [email, setEmail] = useState<string>('');
-	const [secondEmail, setSecondEmail] = useState<string>('');
+	const [teamName, setTeamName] = useState<ValueAndValidity>(
+		blankValueWithValidity
+	);
+	const [password, setPassword] = useState<ValueAndValidity>(
+		blankValueWithValidity
+	);
+	const [email, setEmail] = useState<ValueAndValidity>(blankValueWithValidity);
+	const [secondEmail, setSecondEmail] = useState<ValueAndValidity>({
+		value: '',
+		validity: true,
+	});
 
 	const [isValidated, setIsValidated] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
-	const teamNameErrorMessage = getTeamNameInvalidMessage(teamName);
-	const passwordErrorMessage = getPasswordInvalidMessage(password);
+	const teamNameErrorMessage = getTeamNameInvalidMessage(teamName.value);
+	const passwordErrorMessage = getPasswordInvalidMessage(password.value);
 
 	const captureErrors = () => {
 		const errors = [];
@@ -51,9 +67,23 @@ export default function CreateTeamPage(): JSX.Element {
 		setErrorMessages(errors);
 	};
 
+	function disableSubmitButton(): boolean {
+		return (
+			!teamName.validity ||
+			!password.validity ||
+			!email.validity ||
+			!secondEmail.validity
+		);
+	}
+
 	function createTeam() {
 		setIsLoading(true);
-		TeamService.create(teamName, password, email, secondEmail)
+		TeamService.create(
+			teamName.value,
+			password.value,
+			email.value,
+			secondEmail.value
+		)
 			.then(login)
 			.catch((error) => {
 				let errorMsg = 'Incorrect team name or password. Please try again.';
@@ -81,61 +111,66 @@ export default function CreateTeamPage(): JSX.Element {
 	}
 
 	return (
-		<AuthTemplate
-			header="Create a new Team!"
-			subHeader={
-				<Link to={LOGIN_PAGE_PATH} data-testid="goToLoginPageLink">
-					or sign in to your existing team
-				</Link>
-			}
-		>
+		<AuthTemplate header="Create a New Team!" className="create-team-page">
 			<Form
 				onSubmit={onSubmit}
 				errorMessages={errorMessages}
 				submitButtonText="Create Team"
-				disableSubmitBtn={isLoading}
+				disableSubmitBtn={isLoading || disableSubmitButton()}
 			>
 				<InputTeamName
-					teamName={teamName}
-					onTeamNameInputChange={(updatedTeamName: string) => {
-						setTeamName(updatedTeamName);
+					value={teamName.value}
+					onChange={(updatedTeamName: string, validity: boolean) => {
+						setTeamName({ value: updatedTeamName, validity: validity });
 						setErrorMessages([]);
 					}}
 					invalid={isValidated && !!teamNameErrorMessage}
 					readOnly={isLoading}
 				/>
 				<InputPassword
-					password={password}
-					onPasswordInputChange={(updatedPassword: string) => {
-						setPassword(updatedPassword);
+					password={password.value}
+					onPasswordInputChange={(
+						updatedPassword: string,
+						isValid: boolean
+					) => {
+						setPassword({ value: updatedPassword, validity: isValid });
 						setErrorMessages([]);
 					}}
 					invalid={isValidated && !!passwordErrorMessage}
 					readOnly={isLoading}
 				/>
-				<Input
+				<InputEmail
 					id="emailInput"
 					label="Email"
-					type="email"
-					value={email}
-					onChange={(event) => {
-						setEmail(event.target.value);
+					value={email.value}
+					onChange={(value, validity) => {
+						setEmail({ value: value, validity: validity });
 						setErrorMessages([]);
 					}}
 					readOnly={isLoading}
 				/>
-				<Input
+				<InputEmail
 					id="secondEmailInput"
 					label="Second Teammate's Email (optional)"
-					type="email"
-					value={secondEmail}
-					onChange={(event) => {
-						setSecondEmail(event.target.value);
+					value={secondEmail.value}
+					required={false}
+					onChange={(value, validity) => {
+						setSecondEmail({ value: value, validity: validity });
 						setErrorMessages([]);
 					}}
 					readOnly={isLoading}
 				/>
 			</Form>
+			<div className="or-separator-line">
+				<span>or</span>
+			</div>
+			<Link
+				to={LOGIN_PAGE_PATH}
+				data-testid="goToLoginPageLink"
+				className="link-secondary"
+			>
+				Log in to your existing team
+			</Link>
 		</AuthTemplate>
 	);
 }
