@@ -23,7 +23,7 @@ import { ThemeState } from '../../State/ThemeState';
 import Theme from '../../Types/Theme';
 import renderWithRecoilRoot from '../../Utils/renderWithRecoilRoot';
 
-import InputPassword from './InputPassword';
+import InputPassword, { validatePasswordString } from './InputPassword';
 
 describe('Input Password', () => {
 	describe('Eye Icon Toggle', () => {
@@ -153,6 +153,32 @@ describe('Input Password', () => {
 			passwordInput.focus();
 			expect(screen.queryByText(expectedValidationMessage)).toBeNull();
 		});
+	});
+
+	describe('password string validation', () => {
+		it.each([
+			['', false],
+			[null, false],
+			[undefined, false],
+			['1', false],
+			['1234567', false],
+			['A', false],
+			['a', false],
+			['aA1', false],
+			['12345678', false],
+			['12345678a', false],
+			['abcdefgA', false],
+			['abcdefgA1', true],
+			['12345678A', true],
+			['PASSWORD1', true],
+			["abcdefgA1#!@#$%^&*()_+}{[];'\\<>? ", true],
+			['P@ssw0rd', true],
+		])(
+			'validating password %s should return "%s"',
+			(password, errorMessage) => {
+				expect(validatePasswordString(password!)).toBe(errorMessage);
+			}
+		);
 	});
 });
 

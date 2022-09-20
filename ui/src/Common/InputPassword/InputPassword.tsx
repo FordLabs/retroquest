@@ -23,8 +23,6 @@ import { useRecoilValue } from 'recoil';
 import { ThemeState } from 'State/ThemeState';
 import Theme from 'Types/Theme';
 
-import { validatePasswordString } from '../../Utils/StringUtils';
-
 import './InputPassword.scss';
 
 type Props = {
@@ -36,6 +34,18 @@ type Props = {
 	invalid?: boolean;
 	validateInput?: boolean;
 };
+
+const UPPERCASE_REGEX = /[A-Z]/;
+const NUMBER_REGEX = /\d/;
+
+export function validatePasswordString(password: string): boolean {
+	return (
+		!!password &&
+		password.length >= 8 &&
+		!!password.match(UPPERCASE_REGEX) &&
+		!!password.match(NUMBER_REGEX)
+	);
+}
 
 function InputPassword(props: Props) {
 	const {
