@@ -29,6 +29,7 @@ import {
 	getTeamNameInvalidMessage,
 } from 'Utils/StringUtils';
 
+import HorizontalRuleWithText from '../../Common/HorizontalRuleWithText/HorizontalRuleWithText';
 import InputEmail from '../../Common/InputEmail/InputEmail';
 
 import './CreateTeamPage.scss';
@@ -161,9 +162,7 @@ export default function CreateTeamPage(): JSX.Element {
 					readOnly={isLoading}
 				/>
 			</Form>
-			<div className="or-separator-line">
-				<span>or</span>
-			</div>
+			<HorizontalRuleWithText text={'or'} />
 			<Link
 				to={LOGIN_PAGE_PATH}
 				data-testid="goToLoginPageLink"

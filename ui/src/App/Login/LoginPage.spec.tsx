@@ -65,7 +65,7 @@ describe('LoginPage.spec.tsx', () => {
 	});
 
 	it('should show link to create new team', () => {
-		const createNewTeamLink = screen.getByText('or create a new team');
+		const createNewTeamLink = screen.getByText('Create new team');
 		expect(createNewTeamLink.getAttribute('href')).toBe('/create');
 	});
 

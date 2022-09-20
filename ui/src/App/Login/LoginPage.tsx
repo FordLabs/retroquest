@@ -25,6 +25,7 @@ import useTeamFromRoute from 'Hooks/useTeamFromRoute';
 import { CREATE_TEAM_PAGE_PATH } from 'RouteConstants';
 import TeamService from 'Services/Api/TeamService';
 
+import HorizontalRuleWithText from '../../Common/HorizontalRuleWithText/HorizontalRuleWithText';
 import { PASSWORD_RESET_ROUTE } from '../App';
 
 import './LoginPage.scss';
@@ -55,10 +56,7 @@ function LoginPage(): JSX.Element {
 	}
 
 	return (
-		<AuthTemplate
-			header="Log in to your Team!"
-			subHeader={<Link to={CREATE_TEAM_PAGE_PATH}>or create a new team</Link>}
-		>
+		<AuthTemplate header="Log in to your Team!">
 			<Form
 				onSubmit={onLoginFormSubmit}
 				errorMessages={errorMessages}
@@ -86,6 +84,10 @@ function LoginPage(): JSX.Element {
 			</Form>
 			<Link to={PASSWORD_RESET_ROUTE} className="forgot-login-link">
 				Forgot your login info?
+			</Link>
+			<HorizontalRuleWithText text={'or'} />
+			<Link to={CREATE_TEAM_PAGE_PATH} className={'link-secondary'}>
+				Create new team
 			</Link>
 		</AuthTemplate>
 	);
