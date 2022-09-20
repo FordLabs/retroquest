@@ -20,8 +20,7 @@
 .form {
 	.error-messages {
 		display: flex;
-		flex-direction: column;
-		flex-flow: column-reverse;
+		flex-direction: column-reverse;
 		height: 2rem;
 
 		.error-message {
