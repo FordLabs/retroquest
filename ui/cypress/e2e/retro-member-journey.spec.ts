@@ -328,7 +328,7 @@ describe('Retro Member Journey', () => {
 				getLoginPagePathWithTeamId(teamCredentials.teamId);
 			cy.url().should('eq', LoginPagePathWithTeamId);
 
-			cy.contains('Sign in to your Team!').should('exist');
+			cy.contains('Log in to your Team!').should('exist');
 
 			cy.getCookie(TOKEN_KEY).should('not.exist');
 		});
