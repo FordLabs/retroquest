@@ -40,6 +40,7 @@ function Form(props: FormProps): JSX.Element {
 
 	return (
 		<form
+			data-testid="form"
 			className="form"
 			onSubmit={(event) => {
 				event.preventDefault();

@@ -30,6 +30,12 @@ describe('Reset Password Page', () => {
 		expect(screen.getByText('RetroQuest')).toBeDefined();
 	});
 
+	it('should have "Return to Login" link', () => {
+		renderWithToken('');
+		const loginLink = screen.getByText('Return to Login');
+		expect(loginLink).toHaveAttribute('href', '/login');
+	});
+
 	it('should have a field for password and password confirmation, plus a disabled submit button', async () => {
 		renderWithToken('');
 		expect(screen.getByLabelText('New Password')).toBeInTheDocument();
@@ -77,20 +83,23 @@ describe('Reset Password Page', () => {
 		expect(TeamService.setPassword).toHaveBeenCalledTimes(0);
 	});
 
-	it('should show success message if the backend returns 200 after submission', async () => {
+	const confirmationMessage = 'All set! Your password has been changed.';
+	it('should show success message and hide form if the backend returns 200 after submission', async () => {
 		renderWithToken('ABC321');
 		submitValidForm();
 
-		await screen.findByText('Your Password has been changed!');
-		const loginLink = await screen.findByText('Go to log in page');
+		await screen.findByText(confirmationMessage);
+
+		const loginLink = await screen.findByText('Return to Login');
 		expect(loginLink).toHaveAttribute('href', '/login');
+
+		expect(screen.queryByTestId('resetPasswordFormDescription')).toBeNull();
+		expect(screen.queryByTestId('form')).toBeNull();
 	});
 
-	it('should not show auccess message if the form is not submitted', async () => {
+	it('should not show success message if the form is not submitted', async () => {
 		renderWithToken('ABC321');
-		expect(
-			screen.queryByText('Your Password has been changed!')
-		).not.toBeInTheDocument();
+		expect(screen.queryByText(confirmationMessage)).not.toBeInTheDocument();
 	});
 });
 
