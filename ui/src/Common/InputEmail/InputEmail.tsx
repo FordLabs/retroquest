@@ -29,7 +29,7 @@ interface Props {
 	id?: string;
 }
 
-const EMAIL_REGEX = /^.+@.+$/;
+const EMAIL_REGEX = /^[^@]+@[^@]+$/;
 
 function InputEmail(props: Props) {
 	const {
