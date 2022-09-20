@@ -133,6 +133,26 @@ describe('Input Password', () => {
 			passwordInput.focus();
 			expect(screen.queryByText(expectedValidationMessage)).toBeNull();
 		});
+
+		it('should hide validation message when validation is turned off, e.g. for login', () => {
+			function TestComponent() {
+				const [password, setPassword] = useState<string>('');
+				return (
+					<InputPassword
+						password={password}
+						onPasswordInputChange={setPassword}
+						validated={false}
+					/>
+				);
+			}
+
+			renderWithRecoilRoot(<TestComponent />);
+			expect(screen.queryByText(expectedValidationMessage)).toBeNull();
+			const passwordInput = screen.getByTestId('passwordInput');
+			userEvent.type(passwordInput, 'pass');
+			passwordInput.focus();
+			expect(screen.queryByText(expectedValidationMessage)).toBeNull();
+		});
 	});
 });
 

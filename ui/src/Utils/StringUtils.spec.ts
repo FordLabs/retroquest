@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 import {
-	checkValidityOfPassword,
 	getPasswordInvalidMessage,
 	getTeamNameInvalidMessage,
+	validatePasswordString,
 } from './StringUtils';
 
 describe('String Utils', () => {
@@ -88,6 +88,6 @@ describe('String Utils', () => {
 		["abcdefgA1#!@#$%^&*()_+}{[];'\\<>? ", true],
 		['P@ssw0rd', true],
 	])('validating password %s should return "%s"', (password, errorMessage) => {
-		expect(checkValidityOfPassword(password!)).toBe(errorMessage);
+		expect(validatePasswordString(password!)).toBe(errorMessage);
 	});
 });

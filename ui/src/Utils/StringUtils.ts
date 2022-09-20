@@ -43,7 +43,7 @@ export function getPasswordInvalidMessage(
 	}
 }
 
-export function checkValidityOfPassword(password: string): boolean {
+export function validatePasswordString(password: string): boolean {
 	return (
 		!!password &&
 		password.length >= 8 &&

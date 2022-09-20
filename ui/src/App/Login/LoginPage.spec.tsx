@@ -61,7 +61,7 @@ describe('LoginPage.spec.tsx', () => {
 	});
 
 	it('should show correct heading', () => {
-		expect(screen.getByText('Sign in to your Team!')).toBeDefined();
+		expect(screen.getByText('Log in to your Team!')).toBeDefined();
 	});
 
 	it('should show link to create new team', () => {
@@ -98,7 +98,7 @@ describe('LoginPage.spec.tsx', () => {
 		typeIntoTeamNameInput(validTeamName);
 		typeIntoPasswordInput(validPassword);
 
-		const submitButton = screen.getByText('Sign in');
+		const submitButton = screen.getByText('Log in');
 		userEvent.click(submitButton);
 
 		expect(TeamService.login).toHaveBeenCalledWith(
@@ -131,7 +131,7 @@ describe('LoginPage.spec.tsx', () => {
 
 			typeIntoPasswordInput(validPassword);
 
-			const submitButton = await screen.findByText('Sign in');
+			const submitButton = await screen.findByText('Log in');
 			userEvent.click(submitButton);
 			expect(TeamService.login).toHaveBeenCalledWith(
 				validTeamName,

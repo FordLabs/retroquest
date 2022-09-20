@@ -22,7 +22,8 @@ import Input from 'Common/Input/Input';
 import { useRecoilValue } from 'recoil';
 import { ThemeState } from 'State/ThemeState';
 import Theme from 'Types/Theme';
-import { checkValidityOfPassword } from 'Utils/StringUtils';
+
+import { validatePasswordString } from '../../Utils/StringUtils';
 
 import './InputPassword.scss';
 
@@ -33,6 +34,7 @@ type Props = {
 	required?: boolean;
 	readOnly?: boolean;
 	invalid?: boolean;
+	validated?: boolean;
 };
 
 function InputPassword(props: Props) {
@@ -43,7 +45,12 @@ function InputPassword(props: Props) {
 		required,
 		invalid,
 		readOnly,
+		validated = true,
 	} = props;
+
+	function checkValidityOfPassword(password: string): boolean {
+		return !validated || validatePasswordString(password);
+	}
 
 	const theme = useRecoilValue(ThemeState);
 	const [showPassword, setShowPassword] = useState<boolean>(false);

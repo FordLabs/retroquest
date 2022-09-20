@@ -51,7 +51,9 @@
 
 .forgot-login-link {
 	margin: 1rem auto 0;
+
 	color: main.$dark-turquoise;
+	font-weight: bold;
 
 	&:hover,
 	&:focus {

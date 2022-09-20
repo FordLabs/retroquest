@@ -56,13 +56,13 @@ function LoginPage(): JSX.Element {
 
 	return (
 		<AuthTemplate
-			header="Sign in to your Team!"
+			header="Log in to your Team!"
 			subHeader={<Link to={CREATE_TEAM_PAGE_PATH}>or create a new team</Link>}
 		>
 			<Form
 				onSubmit={onLoginFormSubmit}
 				errorMessages={errorMessages}
-				submitButtonText="Sign in"
+				submitButtonText="Log in"
 				disableSubmitBtn={isLoading}
 			>
 				<InputTeamName
@@ -80,6 +80,7 @@ function LoginPage(): JSX.Element {
 						setErrorMessages([]);
 					}}
 					readOnly={isLoading}
+					validated={false}
 				/>
 			</Form>
 			<Link to={PASSWORD_RESET_ROUTE} className="forgot-login-link">
