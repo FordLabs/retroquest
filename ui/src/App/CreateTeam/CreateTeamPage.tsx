@@ -14,33 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import Form from 'Common/AuthTemplate/Form/Form';
+import InputEmail from 'Common/InputEmail/InputEmail';
 import InputPassword from 'Common/InputPassword/InputPassword';
 import InputTeamName from 'Common/InputTeamName/InputTeamName';
 import useAuth from 'Hooks/useAuth';
 import { LOGIN_PAGE_PATH } from 'RouteConstants';
 import TeamService from 'Services/Api/TeamService';
-import {
-	getPasswordInvalidMessage,
-	getTeamNameInvalidMessage,
-} from 'Utils/StringUtils';
-
-import InputEmail from '../../Common/InputEmail/InputEmail';
 
 import './CreateTeamPage.scss';
 
-export default function CreateTeamPage(): JSX.Element {
-	interface ValueAndValidity {
-		value: string;
-		validity: boolean;
-	}
-	const blankValueWithValidity = { value: '', validity: false };
+const blankValueWithValidity = { value: '', validity: false };
 
+interface ValueAndValidity {
+	value: string;
+	validity: boolean;
+}
+
+function CreateTeamPage(): JSX.Element {
 	const { login } = useAuth();
+
 	const [teamName, setTeamName] = useState<ValueAndValidity>(
 		blankValueWithValidity
 	);
@@ -52,20 +48,7 @@ export default function CreateTeamPage(): JSX.Element {
 		value: '',
 		validity: true,
 	});
-
-	const [isValidated, setIsValidated] = useState<boolean>(false);
-	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
-
-	const teamNameErrorMessage = getTeamNameInvalidMessage(teamName.value);
-	const passwordErrorMessage = getPasswordInvalidMessage(password.value);
-
-	const captureErrors = () => {
-		const errors = [];
-		if (teamNameErrorMessage) errors.push(teamNameErrorMessage);
-		if (passwordErrorMessage) errors.push(passwordErrorMessage);
-		setErrorMessages(errors);
-	};
 
 	function disableSubmitButton(): boolean {
 		return (
@@ -77,7 +60,6 @@ export default function CreateTeamPage(): JSX.Element {
 	}
 
 	function createTeam() {
-		setIsLoading(true);
 		TeamService.create(
 			teamName.value,
 			password.value,
@@ -95,19 +77,12 @@ export default function CreateTeamPage(): JSX.Element {
 							: error.message;
 				}
 				setErrorMessages([errorMsg]);
-			})
-			.finally(() => setIsLoading(false));
+			});
 	}
 
 	function onSubmit() {
-		setIsValidated(true);
 		setErrorMessages([]);
-
-		if (teamNameErrorMessage || passwordErrorMessage) {
-			captureErrors();
-		} else {
-			createTeam();
-		}
+		createTeam();
 	}
 
 	return (
@@ -116,7 +91,7 @@ export default function CreateTeamPage(): JSX.Element {
 				onSubmit={onSubmit}
 				errorMessages={errorMessages}
 				submitButtonText="Create Team"
-				disableSubmitBtn={isLoading || disableSubmitButton()}
+				disableSubmitBtn={disableSubmitButton()}
 			>
 				<InputTeamName
 					value={teamName.value}
@@ -124,8 +99,6 @@ export default function CreateTeamPage(): JSX.Element {
 						setTeamName({ value: updatedTeamName, validity: validity });
 						setErrorMessages([]);
 					}}
-					invalid={isValidated && !!teamNameErrorMessage}
-					readOnly={isLoading}
 				/>
 				<InputPassword
 					password={password.value}
@@ -136,8 +109,6 @@ export default function CreateTeamPage(): JSX.Element {
 						setPassword({ value: updatedPassword, validity: isValid });
 						setErrorMessages([]);
 					}}
-					invalid={isValidated && !!passwordErrorMessage}
-					readOnly={isLoading}
 				/>
 				<InputEmail
 					id="emailInput"
@@ -147,7 +118,6 @@ export default function CreateTeamPage(): JSX.Element {
 						setEmail({ value: value, validity: validity });
 						setErrorMessages([]);
 					}}
-					readOnly={isLoading}
 				/>
 				<InputEmail
 					id="secondEmailInput"
@@ -158,7 +128,6 @@ export default function CreateTeamPage(): JSX.Element {
 						setSecondEmail({ value: value, validity: validity });
 						setErrorMessages([]);
 					}}
-					readOnly={isLoading}
 				/>
 			</Form>
 			<div className="or-separator-line">
@@ -174,3 +143,5 @@ export default function CreateTeamPage(): JSX.Element {
 		</AuthTemplate>
 	);
 }
+
+export default CreateTeamPage;

@@ -69,74 +69,76 @@ describe('CreatePage.spec.tsx', () => {
 		expect(screen.getByText('Create a New Team!')).toBeDefined();
 	});
 
-	it('should disable submit button until form is populated', () => {
-		const submitButton = screen.getByTestId('formSubmitButton');
-		expect(submitButton).toBeDisabled();
-		typeIntoTeamNameInput(validTeamName);
-		expect(submitButton).toBeDisabled();
-		typeIntoPasswordInput(validPassword);
-		expect(submitButton).toBeDisabled();
-		typeIntoEmail(validEmail);
-		expect(submitButton).toBeEnabled();
-	});
+	describe('should disable submit button', () => {
+		it('until form is populated', () => {
+			const submitButton = screen.getByTestId('formSubmitButton');
+			expect(submitButton).toBeDisabled();
+			typeIntoTeamNameInput(validTeamName);
+			expect(submitButton).toBeDisabled();
+			typeIntoPasswordInput(validPassword);
+			expect(submitButton).toBeDisabled();
+			typeIntoEmail1(validEmail);
+			expect(submitButton).toBeEnabled();
+		});
 
-	it('should disable submit button if form is filled out, and a required field is cleared', () => {
-		const submitButton = screen.getByTestId('formSubmitButton');
-		expect(submitButton).toBeDisabled();
-		typeIntoTeamNameInput(validTeamName);
-		typeIntoPasswordInput(validPassword);
-		typeIntoEmail(validEmail);
-		expect(submitButton).toBeEnabled();
-		typeIntoEmail('');
-		expect(submitButton).toBeDisabled();
-	});
+		it('if form is filled out, and a required field is cleared', () => {
+			const submitButton = screen.getByTestId('formSubmitButton');
+			expect(submitButton).toBeDisabled();
+			typeIntoTeamNameInput(validTeamName);
+			typeIntoPasswordInput(validPassword);
+			typeIntoEmail1(validEmail);
+			expect(submitButton).toBeEnabled();
+			typeIntoEmail1('');
+			expect(submitButton).toBeDisabled();
+		});
 
-	it('should disable submit button if form is filled out using invalid password', () => {
-		const submitButton = screen.getByTestId('formSubmitButton');
-		expect(submitButton).toBeDisabled();
-		typeIntoTeamNameInput(validTeamName);
-		typeIntoPasswordInput(validPassword);
-		typeIntoEmail(validEmail);
-		expect(submitButton).toBeEnabled();
-		const tooShortPassword = validPassword.substring(0, 6);
-		typeIntoPasswordInput(tooShortPassword);
-		expect(submitButton).toBeDisabled();
-	});
+		it('if form is filled out using invalid password', () => {
+			const submitButton = screen.getByTestId('formSubmitButton');
+			expect(submitButton).toBeDisabled();
+			typeIntoTeamNameInput(validTeamName);
+			typeIntoPasswordInput(validPassword);
+			typeIntoEmail1(validEmail);
+			expect(submitButton).toBeEnabled();
+			const tooShortPassword = validPassword.substring(0, 6);
+			typeIntoPasswordInput(tooShortPassword);
+			expect(submitButton).toBeDisabled();
+		});
 
-	it('should disable submit button if form is filled out using invalid email', () => {
-		const submitButton = screen.getByTestId('formSubmitButton');
-		expect(submitButton).toBeDisabled();
-		typeIntoTeamNameInput(validTeamName);
-		typeIntoPasswordInput(validPassword);
-		typeIntoEmail(validEmail);
-		expect(submitButton).toBeEnabled();
-		const emailWithNoAt = 'email';
-		typeIntoEmail(emailWithNoAt);
-		expect(submitButton).toBeDisabled();
-	});
+		it('if form is filled out using invalid email', () => {
+			const submitButton = screen.getByTestId('formSubmitButton');
+			expect(submitButton).toBeDisabled();
+			typeIntoTeamNameInput(validTeamName);
+			typeIntoPasswordInput(validPassword);
+			typeIntoEmail1(validEmail);
+			expect(submitButton).toBeEnabled();
+			const emailWithNoAt = 'email';
+			typeIntoEmail1(emailWithNoAt);
+			expect(submitButton).toBeDisabled();
+		});
 
-	it('should disable submit button if form is filled out using invalid team name', () => {
-		const submitButton = screen.getByTestId('formSubmitButton');
-		expect(submitButton).toBeDisabled();
-		typeIntoTeamNameInput(validTeamName);
-		typeIntoPasswordInput(validPassword);
-		typeIntoEmail(validEmail);
-		expect(submitButton).toBeEnabled();
-		const teamNameWithSpecialCharacter = validTeamName + '-';
-		typeIntoTeamNameInput(teamNameWithSpecialCharacter);
-		expect(submitButton).toBeDisabled();
-	});
+		it('if form is filled out using invalid team name', () => {
+			const submitButton = screen.getByTestId('formSubmitButton');
+			expect(submitButton).toBeDisabled();
+			typeIntoTeamNameInput(validTeamName);
+			typeIntoPasswordInput(validPassword);
+			typeIntoEmail1(validEmail);
+			expect(submitButton).toBeEnabled();
+			const teamNameWithSpecialCharacter = validTeamName + '-';
+			typeIntoTeamNameInput(teamNameWithSpecialCharacter);
+			expect(submitButton).toBeDisabled();
+		});
 
-	it('should disable submit button if form is filled out using invalid second email', () => {
-		const submitButton = screen.getByTestId('formSubmitButton');
-		expect(submitButton).toBeDisabled();
-		typeIntoTeamNameInput(validTeamName);
-		typeIntoPasswordInput(validPassword);
-		typeIntoEmail(validEmail);
-		expect(submitButton).toBeEnabled();
-		const tooShortEmail = '@b';
-		typeIntoSecondaryEmail(tooShortEmail);
-		expect(submitButton).toBeDisabled();
+		it('if form is filled out using invalid second email', () => {
+			const submitButton = screen.getByTestId('formSubmitButton');
+			expect(submitButton).toBeDisabled();
+			typeIntoTeamNameInput(validTeamName);
+			typeIntoPasswordInput(validPassword);
+			typeIntoEmail1(validEmail);
+			expect(submitButton).toBeEnabled();
+			const tooShortEmail = '@b';
+			typeIntoSecondaryEmail(tooShortEmail);
+			expect(submitButton).toBeDisabled();
+		});
 	});
 
 	it('should show link to login page', () => {
@@ -155,7 +157,7 @@ describe('CreatePage.spec.tsx', () => {
 	it('should successfully create team', async () => {
 		typeIntoTeamNameInput(validTeamName);
 		typeIntoPasswordInput(validPassword);
-		typeIntoEmail(validEmail);
+		typeIntoEmail1(validEmail);
 
 		const submitButton = screen.getByText('Create Team');
 		userEvent.click(submitButton);
@@ -171,7 +173,7 @@ describe('CreatePage.spec.tsx', () => {
 	it('should successfully create team with the optional secondary email', async () => {
 		typeIntoTeamNameInput(validTeamName);
 		typeIntoPasswordInput(validPassword);
-		typeIntoEmail(validEmail);
+		typeIntoEmail1(validEmail);
 		typeIntoSecondaryEmail(validSecondaryEmail);
 
 		const submitButton = screen.getByText('Create Team');
@@ -191,46 +193,38 @@ describe('CreatePage.spec.tsx', () => {
 			expect(screen.queryByTestId('formErrorMessage')).toBeNull();
 		});
 
-		it('should warn user with message when team name has special characters', async () => {
-			typeIntoPasswordInput(validPassword);
-
+		it('should warn user when team name has special characters', () => {
 			const invalidTeamName = '&%(#';
 			typeIntoTeamNameInput(invalidTeamName);
 
-			fireEvent.submit(getTeamNameInput());
-
-			const inputValidationMessage = screen.getByTestId(
-				'inputValidationMessage'
-			);
-			expect(inputValidationMessage.textContent).toBe(
-				'Must have: letters, numbers, and spaces only'
-			);
-
-			const formErrorMessage = screen.getByTestId('formErrorMessage');
-			expect(formErrorMessage.textContent).toBe(
-				'Please enter a team name without any special characters.'
-			);
+			expect(
+				screen.getByText('Must have: letters, numbers, and spaces only')
+			).toBeDefined();
 		});
 
-		it('should warn user with message when password is not valid', async () => {
-			typeIntoTeamNameInput(validTeamName);
-
+		it('should warn user when password is not valid', () => {
 			const invalidPassword = 'MissingANumber';
 			typeIntoPasswordInput(invalidPassword);
 
-			fireEvent.submit(getPasswordInput());
+			expect(
+				screen.getByText(
+					'Must have: 8+ Characters, 1 Upper Case Letter, 1 Number'
+				)
+			).toBeDefined();
+		});
 
-			const inputValidationMessage = screen.getByTestId(
-				'inputValidationMessage'
-			);
-			expect(inputValidationMessage.textContent).toBe(
-				'Must have: 8+ Characters, 1 Upper Case Letter, 1 Number'
-			);
+		it('should warn user when primary email is not valid', () => {
+			const invalidEmail = 'Aaaaa.com';
+			typeIntoEmail1(invalidEmail);
 
-			const formErrorMessage = screen.getByTestId('formErrorMessage');
-			expect(formErrorMessage.textContent).toBe(
-				'Password must contain at least one number.'
-			);
+			expect(screen.getByText('Valid email address required')).toBeDefined();
+		});
+
+		it('should warn user when secondary email is not valid', () => {
+			const invalidEmail = 'Aaaaa.com';
+			typeIntoSecondaryEmail(invalidEmail);
+
+			expect(screen.getByText('Valid email address required')).toBeDefined();
 		});
 	});
 });
@@ -253,7 +247,7 @@ const typeIntoPasswordInput = (password: string) => {
 	fireEvent.change(passwordInput, { target: { value: password } });
 };
 
-const typeIntoEmail = (email: string) => {
+const typeIntoEmail1 = (email: string) => {
 	const emailInput = getEmailInput();
 	fireEvent.change(emailInput, {
 		target: { value: email },
