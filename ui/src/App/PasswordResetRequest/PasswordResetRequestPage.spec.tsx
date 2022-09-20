@@ -16,6 +16,7 @@
  */
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import ContributorsService from 'Services/Api/ContributorsService';
 import TeamService from 'Services/Api/TeamService';
 
@@ -25,11 +26,23 @@ jest.mock('Services/Api/TeamService');
 jest.mock('Services/Api/ContributorsService');
 
 describe('Password Reset Request Page', () => {
-	it('should have a field for team name and email, plus a send link button', async () => {
+	it('should have a field for team name and email, plus a disabled send link button', async () => {
 		await renderPasswordResetRequestPage();
 		expect(screen.getByLabelText('Team Name')).toBeInTheDocument();
 		expect(screen.getByLabelText('Email')).toBeInTheDocument();
-		expect(screen.getByText('Send reset link')).toBeInTheDocument();
+		const submitButton = screen.getByText('Send reset link');
+		expect(submitButton).toBeDisabled();
+	});
+
+	it('should enable submit button when fields are populated with valid values', async () => {
+		await renderPasswordResetRequestPage();
+		userEvent.type(screen.getByLabelText('Team Name'), 'Super Board');
+		const emailInput = screen.getByLabelText('Email');
+		userEvent.type(emailInput, 'a@');
+		const submitButton = screen.getByText('Send reset link');
+		expect(submitButton).toBeDisabled();
+		userEvent.type(emailInput, 'a@b');
+		expect(submitButton).toBeEnabled();
 	});
 
 	it('should send team name and email to the backend on submission', async () => {

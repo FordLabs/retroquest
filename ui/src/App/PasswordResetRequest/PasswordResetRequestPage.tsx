@@ -23,24 +23,37 @@ import TeamService from 'Services/Api/TeamService';
 
 import './PasswordResetRequestPage.scss';
 
+const blankValueWithValidity = { value: '', validity: false };
+
+interface ValueAndValidity {
+	value: string;
+	validity: boolean;
+}
+
 function PasswordResetRequestPage(): JSX.Element {
 	const [shouldShowSent, setShouldShowSent] = useState(false);
-	const [teamName, setTeamName] = useState<string>('');
-	const [email, setEmail] = useState<string>('');
+
+	const [teamName, setTeamName] = useState<ValueAndValidity>(
+		blankValueWithValidity
+	);
+	const [email, setEmail] = useState<ValueAndValidity>(blankValueWithValidity);
+
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
 	function submitRequest() {
 		if (!!teamName && !!email) {
-			TeamService.sendPasswordResetLink(teamName, email)
-				.then(() => {
-					setShouldShowSent(true);
-				})
-				.catch(() => {
+			TeamService.sendPasswordResetLink(teamName.value, email.value)
+				.then(() => setShouldShowSent(true))
+				.catch(() =>
 					setErrorMessages([
 						'Team name or email is incorrect. Please try again.',
-					]);
-				});
+					])
+				);
 		}
+	}
+
+	function disableSubmitButton(): boolean {
+		return !teamName.validity || !email.validity;
 	}
 
 	return (
@@ -59,22 +72,21 @@ function PasswordResetRequestPage(): JSX.Element {
 				submitButtonText="Send reset link"
 				onSubmit={submitRequest}
 				errorMessages={errorMessages}
+				disableSubmitBtn={disableSubmitButton()}
 			>
 				<InputTeamName
-					value={teamName}
-					onChange={(name) => {
-						setTeamName(name);
+					value={teamName.value}
+					onChange={(name, isValid) => {
+						setTeamName({ value: name, validity: isValid });
 						setErrorMessages([]);
 					}}
-					required
 				/>
 				<InputEmail
-					value={email}
-					onChange={(email) => {
-						setEmail(email);
+					value={email.value}
+					onChange={(email, isValid) => {
+						setEmail({ value: email, validity: isValid });
 						setErrorMessages([]);
 					}}
-					required
 				/>
 			</Form>
 			{shouldShowSent && <div className="success-indicator">Link Sent!</div>}

@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import * as React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import Form from 'Common/AuthTemplate/Form/Form';
+import InputEmail from 'Common/InputEmail/InputEmail';
 import InputPassword from 'Common/InputPassword/InputPassword';
 import InputTeamName from 'Common/InputTeamName/InputTeamName';
 import useAuth from 'Hooks/useAuth';
@@ -29,18 +29,18 @@ import {
 	getTeamNameInvalidMessage,
 } from 'Utils/StringUtils';
 
-import InputEmail from '../../Common/InputEmail/InputEmail';
-
 import './CreateTeamPage.scss';
 
-export default function CreateTeamPage(): JSX.Element {
-	interface ValueAndValidity {
-		value: string;
-		validity: boolean;
-	}
-	const blankValueWithValidity = { value: '', validity: false };
+const blankValueWithValidity = { value: '', validity: false };
 
+interface ValueAndValidity {
+	value: string;
+	validity: boolean;
+}
+
+function CreateTeamPage(): JSX.Element {
 	const { login } = useAuth();
+
 	const [teamName, setTeamName] = useState<ValueAndValidity>(
 		blankValueWithValidity
 	);
@@ -174,3 +174,5 @@ export default function CreateTeamPage(): JSX.Element {
 		</AuthTemplate>
 	);
 }
+
+export default CreateTeamPage;
