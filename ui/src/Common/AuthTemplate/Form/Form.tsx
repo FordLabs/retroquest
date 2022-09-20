@@ -49,15 +49,17 @@ function Form(props: FormProps): JSX.Element {
 			{...formProps}
 		>
 			{children}
-			{errorMessages.map((errorMessage, index) => (
-				<div
-					className="error-message"
-					key={index}
-					data-testid="formErrorMessage"
-				>
-					{errorMessage}
-				</div>
-			))}
+			<div className="error-messages">
+				{errorMessages.map((errorMessage, index) => (
+					<span
+						className="error-message"
+						key={index}
+						data-testid="formErrorMessage"
+					>
+						{errorMessage}
+					</span>
+				))}
+			</div>
 			<PrimaryButton
 				className="submit-button"
 				disabled={disableSubmitBtn}
