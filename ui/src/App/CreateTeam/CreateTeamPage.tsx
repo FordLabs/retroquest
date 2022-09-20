@@ -19,7 +19,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import Form from 'Common/AuthTemplate/Form/Form';
-import Input from 'Common/Input/Input';
 import InputPassword from 'Common/InputPassword/InputPassword';
 import InputTeamName from 'Common/InputTeamName/InputTeamName';
 import useAuth from 'Hooks/useAuth';
@@ -31,7 +30,6 @@ import {
 } from 'Utils/StringUtils';
 
 import InputEmail from '../../Common/InputEmail/InputEmail';
-import team from '../../Types/Team';
 
 import './CreateTeamPage.scss';
 
