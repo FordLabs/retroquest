@@ -145,6 +145,22 @@ describe('LoginPage.spec.tsx', () => {
 			).toBeDefined();
 		});
 	});
+	it('should not validate anything pre-submit', async () => {
+		TeamService.login = jest.fn().mockRejectedValue(new Error('Async error'));
+
+		typeIntoPasswordInput(validPassword.substring(0, 1));
+		typeIntoTeamNameInput('');
+
+		const submitButton = await screen.findByText('Log in');
+		userEvent.click(submitButton);
+		expect(TeamService.login).toHaveBeenCalledWith('', 'P');
+		expect(mockLogin).not.toHaveBeenCalled();
+		expect(
+			await screen.findByText(
+				'Incorrect team name or password. Please try again.'
+			)
+		).toBeDefined();
+	});
 });
 
 const getTeamNameInput = (): HTMLInputElement =>

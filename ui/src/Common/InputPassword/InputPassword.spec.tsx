@@ -141,7 +141,7 @@ describe('Input Password', () => {
 					<InputPassword
 						password={password}
 						onPasswordInputChange={setPassword}
-						validated={false}
+						validateInput={false}
 					/>
 				);
 			}

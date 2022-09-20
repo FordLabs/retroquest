@@ -24,15 +24,23 @@ interface Props {
 	onChange: (updatedTeamName: string, validity: boolean) => void;
 	invalid?: boolean;
 	readOnly?: boolean;
+	validateInput?: boolean;
 }
 
 const TEAM_NAME_REGEX = /^[\w\s]+$/;
 
 function InputTeamName(props: Props) {
-	const { value = '', required, onChange, invalid, readOnly } = props;
+	const {
+		value = '',
+		required,
+		onChange,
+		invalid,
+		readOnly,
+		validateInput = true,
+	} = props;
 
 	function checkValidityOfTeamName(value: string): boolean {
-		const isValid = value.match(TEAM_NAME_REGEX) != null;
+		const isValid = !validateInput || value.match(TEAM_NAME_REGEX) != null;
 		setIsValidTeamName(isValid);
 		return isValid;
 	}

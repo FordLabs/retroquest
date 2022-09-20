@@ -72,6 +72,7 @@ function LoginPage(): JSX.Element {
 						setErrorMessages([]);
 					}}
 					readOnly={isLoading}
+					validateInput={false}
 				/>
 				<InputPassword
 					password={password}
@@ -80,7 +81,7 @@ function LoginPage(): JSX.Element {
 						setErrorMessages([]);
 					}}
 					readOnly={isLoading}
-					validated={false}
+					validateInput={false}
 				/>
 			</Form>
 			<Link to={PASSWORD_RESET_ROUTE} className="forgot-login-link">

@@ -34,7 +34,7 @@ type Props = {
 	required?: boolean;
 	readOnly?: boolean;
 	invalid?: boolean;
-	validated?: boolean;
+	validateInput?: boolean;
 };
 
 function InputPassword(props: Props) {
@@ -45,11 +45,11 @@ function InputPassword(props: Props) {
 		required,
 		invalid,
 		readOnly,
-		validated = true,
+		validateInput = true,
 	} = props;
 
 	function checkValidityOfPassword(password: string): boolean {
-		return !validated || validatePasswordString(password);
+		return !validateInput || validatePasswordString(password);
 	}
 
 	const theme = useRecoilValue(ThemeState);
