@@ -45,7 +45,10 @@ function ResetPasswordPage(): JSX.Element {
 				<h1>Reset Your Password</h1>
 				{!isReset && (
 					<>
-						<p data-testid="resetPasswordFormDescription">
+						<p
+							data-testid="resetPasswordFormDescription"
+							className={'reset-form-description'}
+						>
 							Almost done! Enter your new password here and then remember to
 							tell any active teammates so that they can continue to login to
 							your board.
