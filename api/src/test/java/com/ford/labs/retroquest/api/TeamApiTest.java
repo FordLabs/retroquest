@@ -234,6 +234,71 @@ class TeamApiTest extends ApiTestBase {
     }
 
     @Test
+    void should_return_true_when_password_reset_token_is_valid() throws Exception {
+        Team team = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
+        teamRepository.save(team);
+        PasswordResetToken passwordResetToken = new PasswordResetToken();
+        passwordResetToken.setTeam(team);
+        passwordResetRepository.save(passwordResetToken);
+
+        var mvcResult = mockMvc.perform(
+                post("/api/password/reset/is-valid")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(
+                                new ResetTokenStatusRequest(passwordResetToken.getResetToken()))
+                        )
+                )
+                .andExpect(status().is2xxSuccessful())
+                .andReturn();
+
+        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("true");
+    }
+
+    @Test
+    void should_return_false_when_password_reset_token_is_expired() throws Exception {
+        Team team = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
+        teamRepository.save(team);
+        PasswordResetToken passwordResetToken = new PasswordResetToken();
+        passwordResetToken.setDateCreated(LocalDateTime.MIN);
+        passwordResetToken.setTeam(team);
+        passwordResetRepository.save(passwordResetToken);
+
+        var mvcResult = mockMvc.perform(
+                        post("/api/password/reset/is-valid")
+                                .contentType(APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsBytes(
+                                        new ResetTokenStatusRequest(passwordResetToken.getResetToken()))
+                                )
+                )
+                .andExpect(status().is2xxSuccessful())
+                .andReturn();
+
+        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("false");
+    }
+
+    @Test
+    void should_return_false_when_password_reset_token_does_not_exist() throws Exception {
+        Team team = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
+        teamRepository.save(team);
+        PasswordResetToken passwordResetToken = new PasswordResetToken();
+        passwordResetToken.setDateCreated(LocalDateTime.MIN);
+        passwordResetToken.setTeam(team);
+        passwordResetRepository.save(passwordResetToken);
+
+        var mvcResult = mockMvc.perform(
+                        post("/api/password/reset/is-valid")
+                                .contentType(APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsBytes(
+                                        new ResetTokenStatusRequest(UUID.randomUUID().toString()))
+                                )
+                )
+                .andExpect(status().is2xxSuccessful())
+                .andReturn();
+
+        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("false");
+    }
+
+    @Test
     void should_not_create_password_reset_request_when_team_is_invalid() throws Exception {
         Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
         teamRepository.save(expectedResetTeam);

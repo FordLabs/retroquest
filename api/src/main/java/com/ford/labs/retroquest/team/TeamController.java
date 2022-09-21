@@ -112,6 +112,13 @@ public class TeamController {
         passwordResetRepository.delete(passwordResetToken);
     }
 
+    @PostMapping("/password/reset/is-valid")
+    public boolean checkResetTokenStatus(@RequestBody ResetTokenStatusRequest resetTokenStatusRequest) {
+        PasswordResetToken passwordResetToken = passwordResetRepository.findByResetToken(resetTokenStatusRequest.getResetToken());
+        if (passwordResetToken == null) return false;
+        return !passwordResetToken.isExpired();
+    }
+
     @GetMapping(value = "/team/{teamId}/csv", produces = "application/board.csv")
     @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "downloads a team board", description = "downloadTeamBoard")
