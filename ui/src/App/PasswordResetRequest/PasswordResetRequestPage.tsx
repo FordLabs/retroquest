@@ -115,6 +115,7 @@ function PasswordResetRequestPage(): JSX.Element {
 				<AuthTemplate
 					header="Check your Mail!"
 					className="password-reset-request-page"
+					showGithubLink={false}
 				>
 					<div className="paragraph-1-container">
 						<CheckedCheckboxIcon

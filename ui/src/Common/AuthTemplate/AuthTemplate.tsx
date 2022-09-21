@@ -28,10 +28,17 @@ type AuthTemplateProps = React.PropsWithChildren<{
 	header: React.ReactNode;
 	subHeader?: React.ReactNode;
 	className?: string;
+	showGithubLink?: boolean;
 }>;
 
 export default function AuthTemplate(props: AuthTemplateProps): JSX.Element {
-	const { header, subHeader, children, className } = props;
+	const {
+		header,
+		subHeader,
+		children,
+		className,
+		showGithubLink = true,
+	} = props;
 
 	return (
 		<main className={classNames('auth-template', className)}>
@@ -43,15 +50,17 @@ export default function AuthTemplate(props: AuthTemplateProps): JSX.Element {
 				</div>
 				<div className="auth-template-content">{children}</div>
 				<div className="auth-template-footer">
-					<a
-						className="github-link"
-						target="_blank"
-						rel="noopener noreferrer"
-						href="https://github.com/FordLabs/retroquest"
-					>
-						<i className="fab fa-github" aria-hidden="true" />
-						<span>Github</span>
-					</a>
+					{showGithubLink && (
+						<a
+							className="github-link"
+							target="_blank"
+							rel="noopener noreferrer"
+							href="https://github.com/FordLabs/retroquest"
+						>
+							<i className="fab fa-github" aria-hidden="true" />
+							<span>Github</span>
+						</a>
+					)}
 				</div>
 			</div>
 			<Contributors />
