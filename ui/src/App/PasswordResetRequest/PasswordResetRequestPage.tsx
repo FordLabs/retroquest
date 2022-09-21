@@ -23,6 +23,8 @@ import InputTeamName from 'Common/InputTeamName/InputTeamName';
 import ConfigurationService from 'Services/Api/ConfigurationService';
 import TeamService from 'Services/Api/TeamService';
 
+import { LOGIN_PAGE_PATH } from '../../RouteConstants';
+
 import './PasswordResetRequestPage.scss';
 
 const blankValueWithValidity = { value: '', validity: false };
@@ -103,7 +105,10 @@ function PasswordResetRequestPage(): JSX.Element {
 				</AuthTemplate>
 			)}
 			{requestSent && (
-				<AuthTemplate header="Check your Mail!">
+				<AuthTemplate
+					header="Check your Mail!"
+					className="password-reset-request-page"
+				>
 					<p>
 						We’ve sent an email to {email.value} with password reset
 						instructions.
@@ -112,7 +117,7 @@ function PasswordResetRequestPage(): JSX.Element {
 						If an email doesn't show up soon, check your spam folder. We sent it
 						from {emailFromAddress}.
 					</p>
-					<Link className="login-button-link" to="/login">
+					<Link className="login-button-link" to={LOGIN_PAGE_PATH}>
 						Return to Login
 					</Link>
 				</AuthTemplate>
