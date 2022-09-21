@@ -79,18 +79,17 @@ describe('Password Reset Request Page', () => {
 		await waitFor(() =>
 			expect(screen.queryByText('Reset your Password')).toBeNull()
 		);
-		expect(screen.getByText(confirmationMessage)).toBeInTheDocument();
-		expect(
-			screen.getByText(
-				`We’ve sent an email to test@mail.com with password reset instructions.`
-			)
-		).toBeInTheDocument();
-		expect(
-			screen.getByText(
-				"If an email doesn't show up soon, check your spam folder. We sent it from mock@email.com."
-			)
-		).toBeInTheDocument();
 		expect(screen.queryByText('Github')).toBeNull();
+		expect(screen.getByText(confirmationMessage)).toBeInTheDocument();
+		const paragraph1 = `We’ve sent an email to test@mail.com with password reset instructions.`;
+		expect(screen.getByText(paragraph1)).toBeInTheDocument();
+		const paragraph2 =
+			"If an email doesn't show up soon, check your spam folder. We sent it from mock@email.com.";
+		expect(screen.getByText(paragraph2)).toBeInTheDocument();
+		expect(screen.getByText('Return to Login')).toHaveAttribute(
+			'href',
+			'/login'
+		);
 	});
 
 	it('should not show confirmation message if the form is not submitted', async () => {
