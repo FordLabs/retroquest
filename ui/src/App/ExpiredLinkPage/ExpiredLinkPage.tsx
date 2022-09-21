@@ -15,18 +15,44 @@
  * limitations under the License.
  */
 
+import React from 'react';
 import { Link } from 'react-router-dom';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
+import { useRecoilValue } from 'recoil';
 import { PASSWORD_RESET_PATH } from 'RouteConstants';
 
+import ErrorStopSignIcon from '../../Assets/ErrorStopSignIcon';
+import { ThemeState } from '../../State/ThemeState';
+import Theme from '../../Types/Theme';
+
+import './ExpiredLinkPage.scss';
+
 function ExpiredLinkPage() {
+	const theme = useRecoilValue(ThemeState);
+	const checkboxIconColor = theme === Theme.DARK ? '#c0392b' : '#e74c3c';
+
 	return (
-		<AuthTemplate header="Expired Link">
-			<p>
-				For your safety, our password reset link is only valid for 10 minutes.
+		<AuthTemplate
+			header="Expired Link"
+			className="expired-link-page"
+			showGithubLink={false}
+		>
+			<div className="paragraph-1-container">
+				<ErrorStopSignIcon
+					color={checkboxIconColor}
+					className="checkbox-icon"
+				/>
+				<p className="paragraph-1">
+					For your safety, our password reset link is only valid for 10 minutes.
+					instructions.
+				</p>
+			</div>
+			<p className="paragraph-2">
+				Fear not! Click here to request a fresh, new reset link.
 			</p>
-			<p>Fear not! Click here to request a fresh, new reset link.</p>
-			<Link to={PASSWORD_RESET_PATH}>Reset my Password</Link>
+			<Link to={PASSWORD_RESET_PATH} className="reset-password-link">
+				Reset my Password
+			</Link>
 		</AuthTemplate>
 	);
 }
