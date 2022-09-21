@@ -15,8 +15,10 @@
  * limitations under the License.
  */
 
+import { MemoryRouter } from 'react-router-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import ConfigurationService from 'Services/Api/ConfigurationService';
 import ContributorsService from 'Services/Api/ContributorsService';
 import TeamService from 'Services/Api/TeamService';
 
@@ -24,6 +26,7 @@ import PasswordResetRequestPage from './PasswordResetRequestPage';
 
 jest.mock('Services/Api/TeamService');
 jest.mock('Services/Api/ContributorsService');
+jest.mock('Services/Api/ConfigurationService');
 
 describe('Password Reset Request Page', () => {
 	it('should have a field for team name and email, plus a disabled send link button', async () => {
@@ -63,17 +66,33 @@ describe('Password Reset Request Page', () => {
 		expect(TeamService.sendPasswordResetLink).toHaveBeenCalledTimes(0);
 	});
 
-	const confirmationMessage = 'Link Sent!';
+	const confirmationMessage = 'Check your Mail!';
 	it('should show confirmation message if the backend returns 200 after submission', async () => {
 		await renderPasswordResetRequestPage();
-		submitValidForm();
+		submitValidForm('TeamName', 'test@mail.com');
 
-		await screen.findByText(confirmationMessage);
+		await waitFor(() =>
+			expect(screen.queryByText('Reset your Password')).toBeNull()
+		);
+		expect(screen.getByText(confirmationMessage)).toBeInTheDocument();
+		expect(
+			screen.getByText(
+				`We’ve sent an email to test@mail.com with password reset instructions.`
+			)
+		).toBeInTheDocument();
+		expect(
+			screen.getByText(
+				"If an email doesn't show up soon, check your spam folder. We sent it from mock@email.com."
+			)
+		).toBeInTheDocument();
 	});
 
 	it('should not show confirmation message if the form is not submitted', async () => {
 		await renderPasswordResetRequestPage();
-		expect(screen.queryByText(confirmationMessage)).not.toBeInTheDocument();
+		await waitFor(() =>
+			expect(screen.queryByText(confirmationMessage)).toBeNull()
+		);
+		expect(screen.getByText('Reset your Password')).toBeInTheDocument();
 	});
 
 	it('should show an error message if the request is not successful that persists until you type in either input', async () => {
@@ -98,8 +117,15 @@ describe('Password Reset Request Page', () => {
 });
 
 async function renderPasswordResetRequestPage() {
-	render(<PasswordResetRequestPage />);
+	render(
+		<MemoryRouter>
+			<PasswordResetRequestPage />
+		</MemoryRouter>
+	);
 	await waitFor(() => expect(ContributorsService.get).toHaveBeenCalled());
+	await waitFor(() =>
+		expect(ConfigurationService.get).toHaveBeenCalledTimes(1)
+	);
 }
 
 function submitValidForm(

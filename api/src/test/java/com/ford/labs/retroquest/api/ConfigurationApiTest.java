@@ -15,20 +15,20 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.config;
+package com.ford.labs.retroquest.api;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Tag("api")
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ConfigurationApiTest {
@@ -42,6 +42,6 @@ public class ConfigurationApiTest {
                 .andReturn();
 
         assertThat(mvcResult.getResponse().getContentAsString())
-                .isEqualTo("{\"survey_link_href\":\"test-survey-link-href\"}");
+                .isEqualTo("{\"email_from_address\":\"test@mail.com\"}");
     }
 }

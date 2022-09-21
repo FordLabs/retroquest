@@ -15,15 +15,8 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.config;
-
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-@Component
-@Data
-public class EnvironmentConfiguration {
-    @Value("${retroquest.email.from-address}")
-    String email_from_address = "";
+interface EnvironmentConfig {
+	email_from_address: string;
 }
+
+export default EnvironmentConfig;
