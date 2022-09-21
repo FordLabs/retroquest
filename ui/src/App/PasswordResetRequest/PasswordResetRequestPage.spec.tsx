@@ -16,11 +16,15 @@
  */
 
 import { MemoryRouter } from 'react-router-dom';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MutableSnapshot } from 'recoil';
 import ConfigurationService from 'Services/Api/ConfigurationService';
 import ContributorsService from 'Services/Api/ContributorsService';
 import TeamService from 'Services/Api/TeamService';
+import { ThemeState } from 'State/ThemeState';
+import Theme from 'Types/Theme';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import PasswordResetRequestPage from './PasswordResetRequestPage';
 
@@ -95,6 +99,30 @@ describe('Password Reset Request Page', () => {
 		expect(screen.getByText('Reset your Password')).toBeInTheDocument();
 	});
 
+	it('should render checkbox in confirmation screen as dark turquoise in light mode', async () => {
+		await renderPasswordResetRequestPage(({ set }) => {
+			set(ThemeState, Theme.LIGHT);
+		});
+		submitValidForm();
+
+		const checkedCheckboxIcon = await screen.findByTestId(
+			'checkedCheckboxIcon'
+		);
+		expect(checkedCheckboxIcon.getAttribute('fill')).toBe('#16a085');
+	});
+
+	it('should render checkbox in confirmation screen as light turquoise in dark mode', async () => {
+		await renderPasswordResetRequestPage(({ set }) => {
+			set(ThemeState, Theme.DARK);
+		});
+		submitValidForm();
+
+		const checkedCheckboxIcon = await screen.findByTestId(
+			'checkedCheckboxIcon'
+		);
+		expect(checkedCheckboxIcon.getAttribute('fill')).toBe('#1abc9c');
+	});
+
 	it('should show an error message if the request is not successful that persists until you type in either input', async () => {
 		TeamService.sendPasswordResetLink = jest
 			.fn()
@@ -116,11 +144,14 @@ describe('Password Reset Request Page', () => {
 	});
 });
 
-async function renderPasswordResetRequestPage() {
-	render(
+async function renderPasswordResetRequestPage(
+	recoilState?: (mutableSnapshot: MutableSnapshot) => void
+) {
+	renderWithRecoilRoot(
 		<MemoryRouter>
 			<PasswordResetRequestPage />
-		</MemoryRouter>
+		</MemoryRouter>,
+		recoilState
 	);
 	await waitFor(() => expect(ContributorsService.get).toHaveBeenCalled());
 	await waitFor(() =>
