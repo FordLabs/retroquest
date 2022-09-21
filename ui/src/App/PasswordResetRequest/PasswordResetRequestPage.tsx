@@ -14,12 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import CheckedCheckboxIcon from 'Assets/CheckedCheckboxIcon';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import Form from 'Common/AuthTemplate/Form/Form';
 import InputEmail from 'Common/InputEmail/InputEmail';
 import InputTeamName from 'Common/InputTeamName/InputTeamName';
+import { useRecoilValue } from 'recoil';
+import { LOGIN_PAGE_PATH } from 'RouteConstants';
+import ConfigurationService from 'Services/Api/ConfigurationService';
 import TeamService from 'Services/Api/TeamService';
+import { ThemeState } from 'State/ThemeState';
+import Theme from 'Types/Theme';
 
 import './PasswordResetRequestPage.scss';
 
@@ -31,19 +38,22 @@ interface ValueAndValidity {
 }
 
 function PasswordResetRequestPage(): JSX.Element {
-	const [shouldShowSent, setShouldShowSent] = useState(false);
+	const [emailFromAddress, setEmailFromAddress] = useState<string>('');
+	const [requestSent, setRequestSent] = useState<boolean>(false);
+	const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
 	const [teamName, setTeamName] = useState<ValueAndValidity>(
 		blankValueWithValidity
 	);
 	const [email, setEmail] = useState<ValueAndValidity>(blankValueWithValidity);
 
-	const [errorMessages, setErrorMessages] = useState<string[]>([]);
+	const theme = useRecoilValue(ThemeState);
+	const checkboxIconColor = theme === Theme.DARK ? '#1abc9c' : '#16a085';
 
 	function submitRequest() {
 		if (!!teamName && !!email) {
 			TeamService.sendPasswordResetLink(teamName.value, email.value)
-				.then(() => setShouldShowSent(true))
+				.then(() => setRequestSent(true))
 				.catch(() =>
 					setErrorMessages([
 						'Team name or email is incorrect. Please try again.',
@@ -56,41 +66,77 @@ function PasswordResetRequestPage(): JSX.Element {
 		return !teamName.validity || !email.validity;
 	}
 
+	useEffect(() => {
+		if (!emailFromAddress) {
+			ConfigurationService.get().then((config) =>
+				setEmailFromAddress(config.email_from_address)
+			);
+		}
+	});
+
 	return (
-		<AuthTemplate
-			header="Reset your Password"
-			subHeader={
-				<p className="password-reset-description">
-					Enter the Team Name <u>and</u> email associated with your team's
-					account and we’ll send an email with instructions to reset your
-					password.
-				</p>
-			}
-			className="password-reset-request-page"
-		>
-			<Form
-				submitButtonText="Send reset link"
-				onSubmit={submitRequest}
-				errorMessages={errorMessages}
-				disableSubmitBtn={disableSubmitButton()}
-			>
-				<InputTeamName
-					value={teamName.value}
-					onChange={(name, isValid) => {
-						setTeamName({ value: name, validity: isValid });
-						setErrorMessages([]);
-					}}
-				/>
-				<InputEmail
-					value={email.value}
-					onChange={(email, isValid) => {
-						setEmail({ value: email, validity: isValid });
-						setErrorMessages([]);
-					}}
-				/>
-			</Form>
-			{shouldShowSent && <div className="success-indicator">Link Sent!</div>}
-		</AuthTemplate>
+		<>
+			{!requestSent && (
+				<AuthTemplate
+					header="Reset your Password"
+					subHeader={
+						<p className="password-reset-description">
+							Enter the Team Name <u>and</u> email associated with your team's
+							account and we’ll send an email with instructions to reset your
+							password.
+						</p>
+					}
+					className="password-reset-request-page"
+				>
+					<Form
+						submitButtonText="Send reset link"
+						onSubmit={submitRequest}
+						errorMessages={errorMessages}
+						disableSubmitBtn={disableSubmitButton()}
+					>
+						<InputTeamName
+							value={teamName.value}
+							onChange={(name, isValid) => {
+								setTeamName({ value: name, validity: isValid });
+								setErrorMessages([]);
+							}}
+						/>
+						<InputEmail
+							value={email.value}
+							onChange={(email, isValid) => {
+								setEmail({ value: email, validity: isValid });
+								setErrorMessages([]);
+							}}
+						/>
+					</Form>
+				</AuthTemplate>
+			)}
+			{requestSent && (
+				<AuthTemplate
+					header="Check your Mail!"
+					className="password-reset-request-page"
+					showGithubLink={false}
+				>
+					<div className="paragraph-1-container">
+						<CheckedCheckboxIcon
+							color={checkboxIconColor}
+							className="checkbox-icon"
+						/>
+						<p className="paragraph-1">
+							We’ve sent an email to {email.value} with password reset
+							instructions.
+						</p>
+					</div>
+					<p className="paragraph-2">
+						If an email doesn't show up soon, check your spam folder. We sent it
+						from {emailFromAddress}.
+					</p>
+					<Link className="login-button-link" to={LOGIN_PAGE_PATH}>
+						Return to Login
+					</Link>
+				</AuthTemplate>
+			)}
+		</>
 	);
 }
 

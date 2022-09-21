@@ -16,13 +16,10 @@
  */
 
 import axios from 'axios';
-
-interface Config {
-	survey_link_href: string;
-}
+import EnvironmentConfig from 'Types/EnvironmentConfig';
 
 const configurationService = {
-	get(): Promise<Config> {
+	get(): Promise<EnvironmentConfig> {
 		return axios.get('/api/config').then((response) => response.data);
 	},
 };
