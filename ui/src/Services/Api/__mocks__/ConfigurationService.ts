@@ -15,8 +15,12 @@
  * limitations under the License.
  */
 
+import EnvironmentConfig from 'Types/EnvironmentConfig';
+
 const configurationService = {
-	get: jest.fn().mockResolvedValue({ survey_link_href: 'mockSurveyLinkHref' }),
+	get: jest.fn().mockResolvedValue({
+		email_from_address: 'mock@email.com',
+	} as EnvironmentConfig),
 };
 
 export default configurationService;

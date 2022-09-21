@@ -15,34 +15,8 @@
  * limitations under the License.
  */
 
-$white: #fff;
-$black: #000;
+interface EnvironmentConfig {
+	email_from_address: string;
+}
 
-$gray-1: #ecf0f1;
-$gray-2: #ecf0f1ad;
-$gray-3: #95a5a6;
-$dark-gray: #64717d;
-$light-gray: #b2bbc5;
-
-$green: #2ecc71;
-$dark-green: #27ae60;
-
-$blue: #3498db;
-$dark-blue: #2980b9;
-
-$light-red: #ef8a7e;
-$red: #e74c3c;
-$dark-red: #c0392b;
-
-$yellow: #f1c40f;
-$dark-yellow: #f39c12;
-
-$light-asphalt: #3c566f;
-$asphalt: #34495e;
-$dark-asphalt: #2c3e50;
-
-$turquoise: #1abc9c;
-$dark-turquoise: #16a085;
-
-$purple: #a56de2;
-$dark-purple: #8e44ad;
+export default EnvironmentConfig;

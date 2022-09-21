@@ -24,6 +24,6 @@ import org.springframework.stereotype.Component;
 @Component
 @Data
 public class EnvironmentConfiguration {
-    @Value("${retroquest.marketing.survey-link-href}")
-    String survey_link_href = "";
+    @Value("${retroquest.email.from-address}")
+    String email_from_address = "";
 }

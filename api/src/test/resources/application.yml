@@ -16,8 +16,6 @@
 #
 
 retroquest:
-  marketing:
-    survey-link-href: test-survey-link-href
   security:
     require-https: false
     jwt-signing-secret: IMSOSECRETYOUDONTEVENKNOW

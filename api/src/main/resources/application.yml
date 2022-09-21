@@ -16,8 +16,6 @@
 #
 
 retroquest:
-  marketing:
-    survey-link-href:
   security:
     require-https: false
     jwt-signing-secret: ASLKJHDKJHikjsdkjhg1iu2heiIUGEIUQ@IUeiUIU@iyrgiu2g3i # This is a default value. Ensure you override this value on any real deployments.
