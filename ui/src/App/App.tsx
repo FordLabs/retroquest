@@ -17,13 +17,15 @@
 
 import React, { useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import Modal from 'Common/Modal/Modal';
 import { useRecoilValue } from 'recoil';
+import { getThemeClassFromUserSettings, ThemeState } from 'State/ThemeState';
 
-import Modal from '../Common/Modal/Modal';
-import { getThemeClassFromUserSettings, ThemeState } from '../State/ThemeState';
+import { EXPIRED_LINK_PATH, PASSWORD_RESET_PATH } from '../RouteConstants';
 
 import ChangeTeamDetailsPage from './ChangeTeamDetails/ChangeTeamDetailsPage';
 import CreateTeamPage from './CreateTeam/CreateTeamPage';
+import ExpiredLinkPage from './ExpiredLinkPage/ExpiredLinkPage';
 import LoginPage from './Login/LoginPage';
 import PasswordResetRequestPage from './PasswordResetRequest/PasswordResetRequestPage';
 import ResetPasswordPage from './ResetPassword/ResetPasswordPage';
@@ -35,8 +37,6 @@ import TeamPages from './Team/TeamPages';
 import '@fortawesome/fontawesome-free/css/all.css';
 import '../Styles/main.scss';
 import './App.scss';
-
-export const PASSWORD_RESET_ROUTE = '/request-password-reset';
 
 function App() {
 	const theme = useRecoilValue(ThemeState);
@@ -54,8 +54,9 @@ function App() {
 				<Route path="/create" element={<CreateTeamPage />} />
 				<Route path="/email/reset" element={<ChangeTeamDetailsPage />} />
 				<Route path="/password/reset" element={<ResetPasswordPage />} />
+				<Route path={EXPIRED_LINK_PATH} element={<ExpiredLinkPage />} />
 				<Route
-					path={PASSWORD_RESET_ROUTE}
+					path={PASSWORD_RESET_PATH}
 					element={<PasswordResetRequestPage />}
 				/>
 				<Route path="/team/:teamId" element={<TeamPages />}>

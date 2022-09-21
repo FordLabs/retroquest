@@ -15,15 +15,20 @@
  * limitations under the License.
  */
 
-const TeamService = {
-	login: jest.fn().mockResolvedValue(''),
-	create: jest.fn().mockResolvedValue(''),
-	getTeamName: jest.fn().mockResolvedValue('Active Team Name'),
-	getCSV: jest.fn().mockResolvedValue('column 1, column 2'),
-	setEmails: jest.fn().mockResolvedValue(''),
-	setPassword: jest.fn().mockResolvedValue(''),
-	sendPasswordResetLink: jest.fn().mockResolvedValue(''),
-	checkIfResetTokenIsValid: jest.fn().mockResolvedValue(true),
-};
+import { Link } from 'react-router-dom';
+import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
+import { PASSWORD_RESET_PATH } from 'RouteConstants';
 
-export default TeamService;
+function ExpiredLinkPage() {
+	return (
+		<AuthTemplate header="Expired Link">
+			<p>
+				For your safety, our password reset link is only valid for 10 minutes.
+			</p>
+			<p>Fear not! Click here to request a fresh, new reset link.</p>
+			<Link to={PASSWORD_RESET_PATH}>Reset my Password</Link>
+		</AuthTemplate>
+	);
+}
+
+export default ExpiredLinkPage;

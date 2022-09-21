@@ -18,6 +18,7 @@
 export const CREATE_TEAM_API_PATH = '/api/team';
 export const CHANGE_EMAIL_API_PATH = '/api/email/reset';
 export const CHANGE_PASSWORD_API_PATH = '/api/password/reset';
+export const RESET_TOKEN_STATUS_API_PATH = '/api/password/reset/is-valid';
 export const PASSWORD_REQUEST_API_PATH = '/api/password/request-reset';
 export const LOGIN_API_PATH = `${CREATE_TEAM_API_PATH}/login`;
 export const getTeamNameApiPath = (teamId: string) =>

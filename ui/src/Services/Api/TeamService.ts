@@ -32,6 +32,7 @@ import {
 	getTeamNameApiPath,
 	LOGIN_API_PATH,
 	PASSWORD_REQUEST_API_PATH,
+	RESET_TOKEN_STATUS_API_PATH,
 } from './ApiConstants';
 
 export interface AuthResponse {
@@ -90,6 +91,14 @@ const TeamService = {
 			teamName: teamName,
 			email: email,
 		});
+	},
+
+	checkIfResetTokenIsValid(resetToken: string): Promise<boolean> {
+		return axios
+			.post(RESET_TOKEN_STATUS_API_PATH, {
+				resetToken: resetToken,
+			})
+			.then((res) => res.data);
 	},
 
 	setPassword(password: string, token: string): Promise<AxiosResponse> {

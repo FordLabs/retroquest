@@ -15,35 +15,48 @@
  * limitations under the License.
  */
 
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Form from 'Common/AuthTemplate/Form/Form';
 import Header from 'Common/Header/Header';
 import InputPassword from 'Common/InputPassword/InputPassword';
 import TeamService from 'Services/Api/TeamService';
 
+import { EXPIRED_LINK_PATH } from '../../RouteConstants';
+
 import './ResetPasswordPage.scss';
 
 function ResetPasswordPage(): JSX.Element {
 	const { search } = useLocation();
+	const navigate = useNavigate();
+	const passwordResetToken = new URLSearchParams(search).get('token') || '';
 
-	const [isReset, setIsReset] = useState(false);
 	const [newPassword, setNewPassword] = useState<string>('');
-	const [isValid, setIsValid] = useState<boolean>(false);
+	const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+	const [isValidForm, setIsValidForm] = useState<boolean>(false);
 
 	function submitNewPassword() {
 		if (newPassword) {
-			const token = new URLSearchParams(search).get('token') || '';
-			TeamService.setPassword(newPassword, token).then(() => setIsReset(true));
+			TeamService.setPassword(newPassword, passwordResetToken).then(() =>
+				setIsFormSubmitted(true)
+			);
 		}
 	}
+
+	useEffect(() => {
+		TeamService.checkIfResetTokenIsValid(passwordResetToken).then(
+			(isValidToken) => {
+				if (!isValidToken) navigate(EXPIRED_LINK_PATH);
+			}
+		);
+	}, [navigate, passwordResetToken]);
 
 	return (
 		<div className="reset-password-page">
 			<Header name="RetroQuest" />
 			<div className="reset-password-form">
 				<h1>Reset Your Password</h1>
-				{!isReset && (
+				{!isFormSubmitted && (
 					<>
 						<p data-testid="resetPasswordFormDescription">
 							Almost done! Enter your new password here and then remember to
@@ -53,14 +66,14 @@ function ResetPasswordPage(): JSX.Element {
 						<Form
 							onSubmit={submitNewPassword}
 							submitButtonText="Reset Password"
-							disableSubmitBtn={!isValid}
+							disableSubmitBtn={!isValidForm}
 						>
 							<InputPassword
 								label="New Password"
 								password={newPassword}
 								onPasswordInputChange={(newPassword, isValid) => {
 									setNewPassword(newPassword);
-									setIsValid(isValid);
+									setIsValidForm(isValid);
 								}}
 							/>
 						</Form>
@@ -71,7 +84,7 @@ function ResetPasswordPage(): JSX.Element {
 						</div>
 					</>
 				)}
-				{isReset && (
+				{isFormSubmitted && (
 					<div className="success-feedback-container">
 						<div className="success-indicator">
 							All set! Your password has been changed.
