@@ -115,8 +115,7 @@ public class TeamController {
     @PostMapping("/password/reset/is-valid")
     public boolean checkResetTokenStatus(@RequestBody ResetTokenStatusRequest resetTokenStatusRequest) {
         PasswordResetToken passwordResetToken = passwordResetRepository.findByResetToken(resetTokenStatusRequest.getResetToken());
-        if (passwordResetToken == null) return false;
-        return !passwordResetToken.isExpired();
+        return passwordResetToken != null && !passwordResetToken.isExpired();
     }
 
     @GetMapping(value = "/team/{teamId}/csv", produces = "application/board.csv")
