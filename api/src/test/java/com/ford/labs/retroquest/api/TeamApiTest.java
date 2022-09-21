@@ -29,13 +29,16 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.web.servlet.MvcResult;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
@@ -160,6 +163,12 @@ class TeamApiTest extends ApiTestBase {
         assertThat(team.getEmail()).isEqualTo(VALID_EMAIL);
         assertThat(team.getSecondaryEmail()).isEqualTo(expectedSecondaryEmail);
         assertThat(mvcResult.getResponse().getContentAsString()).isNotNull();
+    }
+
+    @Test
+    public void shouldReportCorrectPasswordTokenExpirationTime() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/api/password/reset/token-lifetime-seconds")).andExpect(status().isOk()).andReturn();
+        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("600");
     }
 
     @Test

@@ -27,6 +27,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.coyote.Response;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -116,6 +118,12 @@ public class TeamController {
     public boolean checkResetTokenStatus(@RequestBody ResetTokenStatusRequest resetTokenStatusRequest) {
         PasswordResetToken passwordResetToken = passwordResetRepository.findByResetToken(resetTokenStatusRequest.getResetToken());
         return passwordResetToken != null && !passwordResetToken.isExpired();
+    }
+
+    @GetMapping("/password/reset/token-lifetime-seconds")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
+    public ResponseEntity<Integer> getResetTokenValiditySeconds(@Value("${retroquest.password.reset.token-lifetime-seconds:600}") int tokenSeconds){
+        return ResponseEntity.ok(tokenSeconds);
     }
 
     @GetMapping(value = "/team/{teamId}/csv", produces = "application/board.csv")
