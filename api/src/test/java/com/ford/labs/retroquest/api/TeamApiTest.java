@@ -123,6 +123,27 @@ class TeamApiTest extends ApiTestBase {
     }
 
     @Test
+    void should_get_team() throws Exception {
+        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
+        teamRepository.save(expectedResetTeam);
+
+        MvcResult resultOfGet = mockMvc.perform(get("/api/team/teamuri")).andExpect(status().isOk()).andReturn();
+        String content = resultOfGet.getResponse().getContentAsString();
+        assertThat(content).contains("\"name\":\"TeamName\"");
+        assertThat(content).contains("\"email\":\"e@ma.il\"");
+        assertThat(content).contains("\"secondaryEmail\":null");
+        assertThat(content).contains("\"id\":\"teamuri\"");
+        assertThat(content).doesNotContain("password");
+    }
+
+    @Test
+    void should_not_get_team_with_nonexistent_name() throws Exception {
+        mockMvc.perform(get("/api/team/nonExistentTeamName"))
+                .andExpect(status().isForbidden())
+                .andExpect(status().reason("Incorrect team name or password. Please try again."));
+    }
+
+    @Test
     void should_create_team_with_valid_name_and_password_and_one_email() throws Exception {
         var sentCreateTeamRequest = validTeamRequestBuilder
                 .build();

@@ -80,6 +80,14 @@ public class TeamController {
         return new ResponseEntity<>(jwt, headers, CREATED);
     }
 
+    @GetMapping("/team/{teamUri}")
+    @Transactional(rollbackOn = URISyntaxException.class)
+    @Operation(summary = "Get an entire team", description = "getTeam")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
+    public ResponseEntity<Team> getTeam(@PathVariable("teamUri") String teamUri){
+        return ResponseEntity.ok(teamService.getTeamByUri(teamUri));
+    }
+
     @GetMapping("/team/{teamUri}/name")
     @Operation(summary = "Gets a team name given the team uri", description = "getTeamName")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
