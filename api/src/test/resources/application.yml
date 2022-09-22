@@ -23,6 +23,9 @@ retroquest:
   email:
     from-address: test@mail.com
     is-enabled: true
+  password:
+    reset:
+      token-lifetime-seconds: 600
 
 spring:
   data:

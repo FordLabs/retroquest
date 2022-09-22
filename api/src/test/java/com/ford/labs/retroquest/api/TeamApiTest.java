@@ -29,13 +29,16 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.web.servlet.MvcResult;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
@@ -163,6 +166,12 @@ class TeamApiTest extends ApiTestBase {
     }
 
     @Test
+    public void shouldReportCorrectPasswordTokenExpirationTime() throws Exception {
+        MvcResult mvcResult = mockMvc.perform(get("/api/password/reset/token-lifetime-seconds")).andExpect(status().isOk()).andReturn();
+        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("600");
+    }
+
+    @Test
     void should_create_password_reset_request_when_team_is_valid() throws Exception {
         Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
         teamRepository.save(expectedResetTeam);
@@ -231,6 +240,71 @@ class TeamApiTest extends ApiTestBase {
                 .andExpect(status().isOk());
 
         assertThat(passwordResetRepository.count()).isEqualTo(1);
+    }
+
+    @Test
+    void should_return_true_when_password_reset_token_is_valid() throws Exception {
+        Team team = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
+        teamRepository.save(team);
+        PasswordResetToken passwordResetToken = new PasswordResetToken();
+        passwordResetToken.setTeam(team);
+        passwordResetRepository.save(passwordResetToken);
+
+        var mvcResult = mockMvc.perform(
+                post("/api/password/reset/is-valid")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(
+                                new ResetTokenStatusRequest(passwordResetToken.getResetToken()))
+                        )
+                )
+                .andExpect(status().is2xxSuccessful())
+                .andReturn();
+
+        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("true");
+    }
+
+    @Test
+    void should_return_false_when_password_reset_token_is_expired() throws Exception {
+        Team team = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
+        teamRepository.save(team);
+        PasswordResetToken passwordResetToken = new PasswordResetToken();
+        passwordResetToken.setDateCreated(LocalDateTime.MIN);
+        passwordResetToken.setTeam(team);
+        passwordResetRepository.save(passwordResetToken);
+
+        var mvcResult = mockMvc.perform(
+                        post("/api/password/reset/is-valid")
+                                .contentType(APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsBytes(
+                                        new ResetTokenStatusRequest(passwordResetToken.getResetToken()))
+                                )
+                )
+                .andExpect(status().is2xxSuccessful())
+                .andReturn();
+
+        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("false");
+    }
+
+    @Test
+    void should_return_false_when_password_reset_token_does_not_exist() throws Exception {
+        Team team = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
+        teamRepository.save(team);
+        PasswordResetToken passwordResetToken = new PasswordResetToken();
+        passwordResetToken.setDateCreated(LocalDateTime.MIN);
+        passwordResetToken.setTeam(team);
+        passwordResetRepository.save(passwordResetToken);
+
+        var mvcResult = mockMvc.perform(
+                        post("/api/password/reset/is-valid")
+                                .contentType(APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsBytes(
+                                        new ResetTokenStatusRequest(UUID.randomUUID().toString()))
+                                )
+                )
+                .andExpect(status().is2xxSuccessful())
+                .andReturn();
+
+        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("false");
     }
 
     @Test

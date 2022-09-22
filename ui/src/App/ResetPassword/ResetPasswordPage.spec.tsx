@@ -24,24 +24,54 @@ import ResetPasswordPage from './ResetPasswordPage';
 
 jest.mock('Services/Api/TeamService');
 
+const mockedUsedNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+	...(jest.requireActual('react-router-dom') as any),
+	useNavigate: () => mockedUsedNavigate,
+}));
+
 describe('Reset Password Page', () => {
 	it('should have retroquest header', () => {
 		renderWithToken('');
 		expect(screen.getByText('RetroQuest')).toBeDefined();
 	});
 
-	it('should have "Return to Login" link', () => {
+	it('should have a field for new password, a disabled submit button, and a return to login link', async () => {
 		renderWithToken('');
+		expect(screen.getByLabelText('New Password')).toBeInTheDocument();
+		const submitButton = screen.getByText('Reset Password');
+		expect(submitButton).toBeDisabled();
 		const loginLink = screen.getByText('Return to Login');
 		expect(loginLink).toHaveAttribute('href', '/login');
 	});
 
-	it('should have a field for password, plus a disabled submit button', async () => {
-		renderWithToken('');
-		expect(screen.getByLabelText('New Password')).toBeInTheDocument();
-		const submitButton = screen.getByText('Reset Password');
-		expect(submitButton).toBeInTheDocument();
-		expect(submitButton).toBeDisabled();
+	describe('Token Validity', () => {
+		it('should check if token is valid and navigate to Expired Token page if token is invalid', async () => {
+			TeamService.checkIfResetTokenIsValid = jest.fn().mockResolvedValue(false);
+
+			renderWithToken('expired-token');
+			await waitFor(() =>
+				expect(TeamService.checkIfResetTokenIsValid).toHaveBeenCalledWith(
+					'expired-token'
+				)
+			);
+			expect(mockedUsedNavigate).toHaveBeenCalledWith('/expired-link');
+			expect(screen.queryByText('Reset Your Password')).toBeInTheDocument();
+		});
+
+		it('should check if token is valid and stay on page if it is valid', async () => {
+			TeamService.checkIfResetTokenIsValid = jest.fn().mockResolvedValue(true);
+
+			renderWithToken('valid-token');
+			await waitFor(() =>
+				expect(TeamService.checkIfResetTokenIsValid).toHaveBeenCalledWith(
+					'valid-token'
+				)
+			);
+			expect(mockedUsedNavigate).not.toHaveBeenCalled();
+			expect(screen.getByText('Reset Your Password')).toBeInTheDocument();
+		});
 	});
 
 	it('should enable submit button once user types valid password', () => {
