@@ -42,14 +42,12 @@ describe('Password Reset Request Page', () => {
 		expect(screen.getByText('Github')).toBeInTheDocument();
 	});
 
-	it('should enable submit button when fields are populated with valid values', async () => {
+	it('should enable submit button when fields are populated with any values', async () => {
 		await renderPasswordResetRequestPage();
-		userEvent.type(screen.getByLabelText('Team Name'), 'Super Board');
+		userEvent.type(screen.getByLabelText('Team Name'), 'S');
 		const emailInput = screen.getByLabelText('Email');
-		userEvent.type(emailInput, 'a@');
 		const submitButton = screen.getByText('Send reset link');
-		expect(submitButton).toBeDisabled();
-		userEvent.type(emailInput, 'a@b');
+		userEvent.type(emailInput, 'a@');
 		expect(submitButton).toBeEnabled();
 	});
 

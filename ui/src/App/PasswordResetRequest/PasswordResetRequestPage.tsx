@@ -100,6 +100,7 @@ function PasswordResetRequestPage(): JSX.Element {
 								setTeamName({ value: name, validity: isValid });
 								setErrorMessages([]);
 							}}
+							validateInput={false}
 						/>
 						<InputEmail
 							value={email.value}
@@ -107,6 +108,7 @@ function PasswordResetRequestPage(): JSX.Element {
 								setEmail({ value: email, validity: isValid });
 								setErrorMessages([]);
 							}}
+							validateInput={false}
 						/>
 					</Form>
 				</AuthTemplate>
