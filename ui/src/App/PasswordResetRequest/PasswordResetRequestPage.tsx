@@ -78,6 +78,7 @@ function PasswordResetRequestPage(): JSX.Element {
 						</p>
 					}
 					className="password-reset-request-page"
+					showGithubLink={false}
 				>
 					<Form
 						submitButtonText="Send reset link"
