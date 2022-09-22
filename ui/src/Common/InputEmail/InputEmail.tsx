@@ -27,6 +27,7 @@ interface Props {
 	readOnly?: boolean;
 	label?: string;
 	id?: string;
+	validateInput?: boolean;
 }
 
 const EMAIL_REGEX = /^.+@[^@]+$/;
@@ -40,12 +41,17 @@ function InputEmail(props: Props) {
 		readOnly,
 		label = 'Email',
 		id = 'emailInput',
+		validateInput = true,
 	} = props;
 
 	const [isValidEmail, setIsValidEmail] = useState<boolean>(true);
 
 	function checkValidityOfEmail(email: string): boolean {
-		return !!email.match(EMAIL_REGEX) || (!required && email === '');
+		return (
+			!validateInput ||
+			!!email.match(EMAIL_REGEX) ||
+			(!required && email === '')
+		);
 	}
 
 	return (

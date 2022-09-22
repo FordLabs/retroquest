@@ -36,7 +36,7 @@ describe('Reset Password Page', () => {
 		expect(loginLink).toHaveAttribute('href', '/login');
 	});
 
-	it('should have a field for password and password confirmation, plus a disabled submit button', async () => {
+	it('should have a field for password, plus a disabled submit button', async () => {
 		renderWithToken('');
 		expect(screen.getByLabelText('New Password')).toBeInTheDocument();
 		const submitButton = screen.getByText('Reset Password');

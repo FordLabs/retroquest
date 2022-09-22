@@ -19,6 +19,8 @@ import { useState } from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import InputTeamName from '../InputTeamName/InputTeamName';
+
 import InputEmail from './InputEmail';
 
 describe('Input Email', () => {
@@ -45,6 +47,13 @@ describe('Input Email', () => {
 			expect(screen.getByText(expectedValidationMessage)).toBeDefined();
 			userEvent.type(passwordInput, 'e@m');
 			passwordInput.focus();
+			expect(screen.queryByText(expectedValidationMessage)).toBeNull();
+		});
+
+		it('should not validate when asked not to using validateInput prop', () => {
+			render(<InputEmail value="" onChange={() => {}} validateInput={false} />);
+			expect(screen.queryByText(expectedValidationMessage)).toBeNull();
+			screen.getByTestId('emailInput').focus();
 			expect(screen.queryByText(expectedValidationMessage)).toBeNull();
 		});
 

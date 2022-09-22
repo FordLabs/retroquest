@@ -33,7 +33,7 @@ describe('Input Team Name', () => {
 			expect(screen.getByText(expectedValidationMessage)).toBeDefined();
 		});
 
-		it('should be able to resist validating', () => {
+		it('should not validate when asked not to using validateInput prop', () => {
 			render(
 				<InputTeamName value="" onChange={() => {}} validateInput={false} />
 			);

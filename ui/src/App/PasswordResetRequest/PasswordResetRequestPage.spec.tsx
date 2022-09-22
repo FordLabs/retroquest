@@ -33,23 +33,21 @@ jest.mock('Services/Api/ContributorsService');
 jest.mock('Services/Api/ConfigurationService');
 
 describe('Password Reset Request Page', () => {
-	it('should have a field for team name and email, a disabled send link button, & a github link', async () => {
+	it('should have a field for team name and email, a disabled send link button, & no github link', async () => {
 		await renderPasswordResetRequestPage();
 		expect(screen.getByLabelText('Team Name')).toBeInTheDocument();
 		expect(screen.getByLabelText('Email')).toBeInTheDocument();
 		const submitButton = screen.getByText('Send reset link');
 		expect(submitButton).toBeDisabled();
-		expect(screen.getByText('Github')).toBeInTheDocument();
+		expect(screen.queryByText('Github')).toBeNull();
 	});
 
-	it('should enable submit button when fields are populated with valid values', async () => {
+	it('should enable submit button when fields are populated with any values', async () => {
 		await renderPasswordResetRequestPage();
-		userEvent.type(screen.getByLabelText('Team Name'), 'Super Board');
+		userEvent.type(screen.getByLabelText('Team Name'), 'S');
 		const emailInput = screen.getByLabelText('Email');
-		userEvent.type(emailInput, 'a@');
 		const submitButton = screen.getByText('Send reset link');
-		expect(submitButton).toBeDisabled();
-		userEvent.type(emailInput, 'a@b');
+		userEvent.type(emailInput, 'a@');
 		expect(submitButton).toBeEnabled();
 	});
 
