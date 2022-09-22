@@ -30,29 +30,20 @@ import Theme from 'Types/Theme';
 
 import './PasswordResetRequestPage.scss';
 
-const blankValueWithValidity = { value: '', validity: false };
-
-interface ValueAndValidity {
-	value: string;
-	validity: boolean;
-}
-
 function PasswordResetRequestPage(): JSX.Element {
 	const [emailFromAddress, setEmailFromAddress] = useState<string>('');
 	const [requestSent, setRequestSent] = useState<boolean>(false);
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
-	const [teamName, setTeamName] = useState<ValueAndValidity>(
-		blankValueWithValidity
-	);
-	const [email, setEmail] = useState<ValueAndValidity>(blankValueWithValidity);
+	const [teamName, setTeamName] = useState<string>('');
+	const [email, setEmail] = useState<string>('');
 
 	const theme = useRecoilValue(ThemeState);
 	const checkboxIconColor = theme === Theme.DARK ? '#1abc9c' : '#16a085';
 
 	function submitRequest() {
 		if (!!teamName && !!email) {
-			TeamService.sendPasswordResetLink(teamName.value, email.value)
+			TeamService.sendPasswordResetLink(teamName, email)
 				.then(() => setRequestSent(true))
 				.catch(() =>
 					setErrorMessages([
@@ -63,7 +54,7 @@ function PasswordResetRequestPage(): JSX.Element {
 	}
 
 	function disableSubmitButton(): boolean {
-		return !teamName.validity || !email.validity;
+		return !teamName || !email;
 	}
 
 	useEffect(() => {
@@ -95,17 +86,17 @@ function PasswordResetRequestPage(): JSX.Element {
 						disableSubmitBtn={disableSubmitButton()}
 					>
 						<InputTeamName
-							value={teamName.value}
-							onChange={(name, isValid) => {
-								setTeamName({ value: name, validity: isValid });
+							value={teamName}
+							onChange={(name) => {
+								setTeamName(name);
 								setErrorMessages([]);
 							}}
 							validateInput={false}
 						/>
 						<InputEmail
-							value={email.value}
-							onChange={(email, isValid) => {
-								setEmail({ value: email, validity: isValid });
+							value={email}
+							onChange={(email) => {
+								setEmail(email);
 								setErrorMessages([]);
 							}}
 							validateInput={false}
@@ -125,8 +116,7 @@ function PasswordResetRequestPage(): JSX.Element {
 							className="checkbox-icon"
 						/>
 						<p className="paragraph-1">
-							We’ve sent an email to {email.value} with password reset
-							instructions.
+							We’ve sent an email to {email} with password reset instructions.
 						</p>
 					</div>
 					<p className="paragraph-2">
