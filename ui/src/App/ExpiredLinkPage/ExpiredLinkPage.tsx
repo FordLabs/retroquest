@@ -15,21 +15,29 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import ErrorStopSignIcon from 'Assets/ErrorStopSignIcon';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import { useRecoilValue } from 'recoil';
 import { PASSWORD_RESET_PATH } from 'RouteConstants';
-
-import ErrorStopSignIcon from '../../Assets/ErrorStopSignIcon';
-import { ThemeState } from '../../State/ThemeState';
-import Theme from '../../Types/Theme';
+import TeamService from 'Services/Api/TeamService';
+import { ThemeState } from 'State/ThemeState';
+import Theme from 'Types/Theme';
 
 import './ExpiredLinkPage.scss';
 
 function ExpiredLinkPage() {
 	const theme = useRecoilValue(ThemeState);
 	const checkboxIconColor = theme === Theme.DARK ? '#c0392b' : '#e74c3c';
+
+	const [resetTokenLifetime, setResetTokenLifetime] = useState<number>(600);
+
+	useEffect(() => {
+		TeamService.getResetTokenLifetime().then((seconds) => {
+			setResetTokenLifetime(Math.floor(seconds / 60));
+		});
+	}, []);
 
 	return (
 		<AuthTemplate
@@ -43,8 +51,8 @@ function ExpiredLinkPage() {
 					className="checkbox-icon"
 				/>
 				<p className="paragraph-1">
-					For your safety, our password reset link is only valid for 10 minutes.
-					instructions.
+					For your safety, our password reset link is only valid for{' '}
+					{resetTokenLifetime} minutes.
 				</p>
 			</div>
 			<p className="paragraph-2">

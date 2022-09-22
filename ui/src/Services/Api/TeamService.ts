@@ -32,6 +32,7 @@ import {
 	getTeamNameApiPath,
 	LOGIN_API_PATH,
 	PASSWORD_REQUEST_API_PATH,
+	RESET_TOKEN_LIFETIME_API_PATH,
 	RESET_TOKEN_STATUS_API_PATH,
 } from './ApiConstants';
 
@@ -120,6 +121,12 @@ const TeamService = {
 				responseType: 'blob',
 				timeout: 30000,
 			})
+			.then((response) => response.data);
+	},
+
+	getResetTokenLifetime(): Promise<number> {
+		return axios
+			.get(RESET_TOKEN_LIFETIME_API_PATH)
 			.then((response) => response.data);
 	},
 

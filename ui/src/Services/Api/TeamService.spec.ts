@@ -157,6 +157,14 @@ describe('Team Service', () => {
 		});
 	});
 
+	describe('getResetTokenLifetime', () => {
+		it('should get the lifetime of the reset token', async () => {
+			axios.get = jest.fn().mockResolvedValue({ data: 500 });
+			const actualTokenLifetime = await TeamService.getResetTokenLifetime();
+			expect(actualTokenLifetime).toBe(500);
+		});
+	});
+
 	describe('onResponseInterceptRejection', () => {
 		let location: (string | Location) & Location;
 		let mockAssign = jest.fn();

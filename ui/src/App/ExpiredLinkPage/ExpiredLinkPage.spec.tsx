@@ -18,21 +18,40 @@
 import { MemoryRouter } from 'react-router-dom';
 import { screen, waitFor } from '@testing-library/react';
 import { MutableSnapshot } from 'recoil';
-
-import ContributorsService from '../../Services/Api/ContributorsService';
-import { ThemeState } from '../../State/ThemeState';
-import Theme from '../../Types/Theme';
-import renderWithRecoilRoot from '../../Utils/renderWithRecoilRoot';
+import ContributorsService from 'Services/Api/ContributorsService';
+import TeamService from 'Services/Api/TeamService';
+import { ThemeState } from 'State/ThemeState';
+import Theme from 'Types/Theme';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import ExpiredLinkPage from './ExpiredLinkPage';
 
 jest.mock('Services/Api/ContributorsService');
+jest.mock('Services/Api/TeamService');
 
 describe('Expired Link Page', () => {
 	it('should render header and link to reset password page', async () => {
 		await renderExpiredLinkPage();
 		expect(screen.getByText('Expired Link')).toBeDefined();
-		expect(screen.getByText('Reset my Password')).toBeDefined();
+		let resetPasswordPageLink = screen.getByText('Reset my Password');
+		expect(resetPasswordPageLink).toBeDefined();
+		expect(resetPasswordPageLink).toHaveAttribute(
+			'href',
+			'/request-password-reset'
+		);
+	});
+
+	it('should show token lifetime in page description', async () => {
+		TeamService.getResetTokenLifetime = jest.fn().mockResolvedValue(600);
+		await renderExpiredLinkPage();
+		await waitFor(() =>
+			expect(TeamService.getResetTokenLifetime).toHaveBeenCalled()
+		);
+		expect(
+			screen.getByText(
+				'For your safety, our password reset link is only valid for 10 minutes.'
+			)
+		).toBeDefined();
 	});
 
 	it('should render error stop sign icon in confirmation screen as red in light mode', async () => {

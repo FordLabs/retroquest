@@ -24,6 +24,7 @@ const TeamService = {
 	setPassword: jest.fn().mockResolvedValue(''),
 	sendPasswordResetLink: jest.fn().mockResolvedValue(''),
 	checkIfResetTokenIsValid: jest.fn().mockResolvedValue(true),
+	getResetTokenLifetime: jest.fn().mockResolvedValue(800),
 };
 
 export default TeamService;
