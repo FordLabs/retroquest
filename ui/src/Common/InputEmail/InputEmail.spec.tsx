@@ -19,8 +19,6 @@ import { useState } from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import InputTeamName from '../InputTeamName/InputTeamName';
-
 import InputEmail from './InputEmail';
 
 describe('Input Email', () => {
