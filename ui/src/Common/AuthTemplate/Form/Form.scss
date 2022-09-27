@@ -33,6 +33,10 @@
 			line-height: 18px;
 		}
 	}
+
+	.submit-button {
+		margin-bottom: 0.5rem;
+	}
 }
 
 @include main.dark-theme {
