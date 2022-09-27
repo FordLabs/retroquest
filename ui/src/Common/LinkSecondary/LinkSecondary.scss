@@ -17,26 +17,6 @@
 
 @use '../../Styles/main';
 
-.forgot-login-link {
-	margin: 1rem auto 0;
-
-	color: main.$dark-turquoise;
-	font-weight: bold;
-
-	&:hover,
-	&:focus {
-		color: main.$turquoise;
-	}
-}
-
-@include main.dark-theme {
-	.forgot-login-link {
-		margin: 1rem auto 0;
-		color: main.$turquoise;
-
-		&:hover,
-		&:focus {
-			color: main.$dark-turquoise;
-		}
-	}
+.link-secondary {
+	@include main.button-secondary;
 }

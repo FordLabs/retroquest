@@ -15,28 +15,20 @@
  * limitations under the License.
  */
 
-@use '../../Styles/main';
+import React from 'react';
+import { Link, LinkProps } from 'react-router-dom';
+import classnames from 'classnames';
 
-.forgot-login-link {
-	margin: 1rem auto 0;
+import './LinkSecondary.scss';
 
-	color: main.$dark-turquoise;
-	font-weight: bold;
+function LinkSecondary(props: LinkProps) {
+	const { className, children, ...linkProps } = props;
 
-	&:hover,
-	&:focus {
-		color: main.$turquoise;
-	}
+	return (
+		<Link className={classnames('link-secondary', className)} {...linkProps}>
+			{children}
+		</Link>
+	);
 }
 
-@include main.dark-theme {
-	.forgot-login-link {
-		margin: 1rem auto 0;
-		color: main.$turquoise;
-
-		&:hover,
-		&:focus {
-			color: main.$dark-turquoise;
-		}
-	}
-}
+export default LinkSecondary;

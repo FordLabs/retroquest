@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import Form from 'Common/AuthTemplate/Form/Form';
 import InputEmail from 'Common/InputEmail/InputEmail';
@@ -26,8 +25,7 @@ import { LOGIN_PAGE_PATH } from 'RouteConstants';
 import TeamService from 'Services/Api/TeamService';
 
 import HorizontalRuleWithText from '../../Common/HorizontalRuleWithText/HorizontalRuleWithText';
-
-import './CreateTeamPage.scss';
+import LinkSecondary from '../../Common/LinkSecondary/LinkSecondary';
 
 const blankValueWithValidity = { value: '', validity: false };
 
@@ -132,14 +130,10 @@ function CreateTeamPage(): JSX.Element {
 					}}
 				/>
 			</Form>
-			<HorizontalRuleWithText text={'or'} />
-			<Link
-				to={LOGIN_PAGE_PATH}
-				data-testid="goToLoginPageLink"
-				className="link-secondary"
-			>
+			<HorizontalRuleWithText text="or" />
+			<LinkSecondary to={LOGIN_PAGE_PATH} data-testid="goToLoginPageLink">
 				Log in to your existing team
-			</Link>
+			</LinkSecondary>
 		</AuthTemplate>
 	);
 }

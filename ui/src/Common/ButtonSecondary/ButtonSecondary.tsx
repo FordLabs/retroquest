@@ -15,28 +15,22 @@
  * limitations under the License.
  */
 
-@use '../../Styles/main';
+import React, { ButtonHTMLAttributes } from 'react';
+import classnames from 'classnames';
 
-.forgot-login-link {
-	margin: 1rem auto 0;
+import './ButtonSecondary.scss';
 
-	color: main.$dark-turquoise;
-	font-weight: bold;
+function ButtonSecondary(props: ButtonHTMLAttributes<HTMLButtonElement>) {
+	const { className, children, ...buttonProps } = props;
 
-	&:hover,
-	&:focus {
-		color: main.$turquoise;
-	}
+	return (
+		<button
+			className={classnames('button-secondary', className)}
+			{...buttonProps}
+		>
+			{children}
+		</button>
+	);
 }
 
-@include main.dark-theme {
-	.forgot-login-link {
-		margin: 1rem auto 0;
-		color: main.$turquoise;
-
-		&:hover,
-		&:focus {
-			color: main.$dark-turquoise;
-		}
-	}
-}
+export default ButtonSecondary;
