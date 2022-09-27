@@ -17,15 +17,16 @@
 import React, { useState } from 'react';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import Form from 'Common/AuthTemplate/Form/Form';
+import HorizontalRuleWithText from 'Common/HorizontalRuleWithText/HorizontalRuleWithText';
 import InputEmail from 'Common/InputEmail/InputEmail';
 import InputPassword from 'Common/InputPassword/InputPassword';
 import InputTeamName from 'Common/InputTeamName/InputTeamName';
+import LinkSecondary from 'Common/LinkSecondary/LinkSecondary';
 import useAuth from 'Hooks/useAuth';
 import { LOGIN_PAGE_PATH } from 'RouteConstants';
 import TeamService from 'Services/Api/TeamService';
 
-import HorizontalRuleWithText from '../../Common/HorizontalRuleWithText/HorizontalRuleWithText';
-import LinkSecondary from '../../Common/LinkSecondary/LinkSecondary';
+import './CreateTeamPage.scss';
 
 const blankValueWithValidity = { value: '', validity: false };
 
@@ -131,7 +132,11 @@ function CreateTeamPage(): JSX.Element {
 				/>
 			</Form>
 			<HorizontalRuleWithText text="or" />
-			<LinkSecondary to={LOGIN_PAGE_PATH} data-testid="goToLoginPageLink">
+			<LinkSecondary
+				to={LOGIN_PAGE_PATH}
+				className="login-page-link"
+				data-testid="goToLoginPageLink"
+			>
 				Log in to your existing team
 			</LinkSecondary>
 		</AuthTemplate>

@@ -15,31 +15,20 @@
  * limitations under the License.
  */
 
-@use '../../Styles/main';
+import React from 'react';
+import { Link, LinkProps } from 'react-router-dom';
+import classnames from 'classnames';
 
-.or-separator-line {
-	width: 100%;
-	height: 0.8rem;
-	margin: 1.5rem 0 2.5rem;
+import './LinkTertiary.scss';
 
-	text-align: center;
+function LinkTertiary(props: LinkProps) {
+	const { className, children, ...linkProps } = props;
 
-	border-bottom: 1px solid main.$black;
-
-	span {
-		padding: 0 10px;
-
-		font-size: 1rem;
-
-		background-color: main.$white;
-	}
+	return (
+		<Link className={classnames('link-tertiary', className)} {...linkProps}>
+			{children}
+		</Link>
+	);
 }
 
-@include main.dark-theme {
-	.or-separator-line {
-		border-bottom: 1px solid main.$gray-1;
-		span {
-			background-color: main.$dark-asphalt;
-		}
-	}
-}
+export default LinkTertiary;

@@ -15,31 +15,8 @@
  * limitations under the License.
  */
 
-@use '../../Styles/main';
-
-.or-separator-line {
-	width: 100%;
-	height: 0.8rem;
-	margin: 1.5rem 0 2.5rem;
-
-	text-align: center;
-
-	border-bottom: 1px solid main.$black;
-
-	span {
-		padding: 0 10px;
-
-		font-size: 1rem;
-
-		background-color: main.$white;
-	}
-}
-
-@include main.dark-theme {
-	.or-separator-line {
-		border-bottom: 1px solid main.$gray-1;
-		span {
-			background-color: main.$dark-asphalt;
-		}
+.create-team-page {
+	.login-page-link {
+		max-width: 17.25rem;
 	}
 }

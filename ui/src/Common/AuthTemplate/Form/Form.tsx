@@ -59,11 +59,7 @@ function Form(props: FormProps): JSX.Element {
 					</span>
 				))}
 			</div>
-			<ButtonPrimary
-				className="submit-button"
-				disabled={disableSubmitBtn}
-				data-testid="formSubmitButton"
-			>
+			<ButtonPrimary disabled={disableSubmitBtn} data-testid="formSubmitButton">
 				{submitButtonText}
 			</ButtonPrimary>
 		</form>
