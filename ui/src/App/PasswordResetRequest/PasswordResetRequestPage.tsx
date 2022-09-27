@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import CheckedCheckboxIcon from 'Assets/CheckedCheckboxIcon';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import Form from 'Common/AuthTemplate/Form/Form';
 import InputEmail from 'Common/InputEmail/InputEmail';
 import InputTeamName from 'Common/InputTeamName/InputTeamName';
+import LinkPrimary from 'Common/LinkPrimary/LinkPrimary';
 import { useRecoilValue } from 'recoil';
 import { LOGIN_PAGE_PATH } from 'RouteConstants';
 import ConfigurationService from 'Services/Api/ConfigurationService';
@@ -124,9 +124,9 @@ function PasswordResetRequestPage(): JSX.Element {
 						If an email doesn't show up soon, check your spam folder. We sent it
 						from {emailFromAddress}.
 					</p>
-					<Link className="login-button-link" to={LOGIN_PAGE_PATH}>
+					<LinkPrimary className="login-button-link" to={LOGIN_PAGE_PATH}>
 						Return to Login
-					</Link>
+					</LinkPrimary>
 				</AuthTemplate>
 			)}
 		</>
