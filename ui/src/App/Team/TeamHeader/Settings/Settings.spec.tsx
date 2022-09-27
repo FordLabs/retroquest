@@ -18,22 +18,11 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
-import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
-import { RecoilObserver } from 'Utils/RecoilObserver';
+import { ModalContentsState } from 'State/ModalContentsState';
 
 import Settings from './Settings';
 
-const mockLogout = jest.fn();
-
-jest.mock('../../../../Hooks/useAuth', () => {
-	return jest.fn(() => ({
-		logout: mockLogout,
-	}));
-});
-
 describe('Settings', () => {
-	let modalContent: ModalContents | null;
-
 	beforeEach(() => {
 		jest.clearAllMocks();
 
@@ -46,12 +35,6 @@ describe('Settings', () => {
 					});
 				}}
 			>
-				<RecoilObserver
-					recoilState={ModalContentsState}
-					onChange={(value: ModalContents) => {
-						modalContent = value;
-					}}
-				/>
 				<Settings />
 			</RecoilRoot>
 		);
@@ -88,17 +71,6 @@ describe('Settings', () => {
 			expect(systemSettingsThemeButton).toHaveClass('selected');
 			expect(lightThemeButton).not.toHaveClass('selected');
 			expect(darkThemeButton).not.toHaveClass('selected');
-		});
-	});
-
-	describe('Account Tab', () => {
-		it('should logout', () => {
-			expect(modalContent).not.toBeNull();
-			userEvent.click(screen.getByText('Account'));
-			userEvent.click(screen.getByText('Logout'));
-
-			expect(mockLogout).toHaveBeenCalledTimes(1);
-			expect(modalContent).toBeNull();
 		});
 	});
 
