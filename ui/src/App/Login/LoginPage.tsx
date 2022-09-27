@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import Form from 'Common/AuthTemplate/Form/Form';
 import HorizontalRuleWithText from 'Common/HorizontalRuleWithText/HorizontalRuleWithText';
 import InputPassword from 'Common/InputPassword/InputPassword';
 import InputTeamName from 'Common/InputTeamName/InputTeamName';
 import LinkSecondary from 'Common/LinkSecondary/LinkSecondary';
+import LinkTertiary from 'Common/LinkTertiary/LinkTertiary';
 import useAuth from 'Hooks/useAuth';
 import useTeamFromRoute from 'Hooks/useTeamFromRoute';
 import { CREATE_TEAM_PAGE_PATH, PASSWORD_RESET_PATH } from 'RouteConstants';
@@ -55,7 +55,7 @@ function LoginPage(): JSX.Element {
 	}
 
 	return (
-		<AuthTemplate header="Log in to your Team!">
+		<AuthTemplate header="Log in to your Team!" className="login-page">
 			<Form
 				onSubmit={onLoginFormSubmit}
 				errorMessages={errorMessages}
@@ -81,11 +81,16 @@ function LoginPage(): JSX.Element {
 					validateInput={false}
 				/>
 			</Form>
-			<Link to={PASSWORD_RESET_PATH} className="forgot-login-link">
+			<LinkTertiary to={PASSWORD_RESET_PATH}>
 				Forgot your login info?
-			</Link>
+			</LinkTertiary>
 			<HorizontalRuleWithText text="or" />
-			<LinkSecondary to={CREATE_TEAM_PAGE_PATH}>Create new team</LinkSecondary>
+			<LinkSecondary
+				to={CREATE_TEAM_PAGE_PATH}
+				className="create-new-team-link"
+			>
+				Create new team
+			</LinkSecondary>
 		</AuthTemplate>
 	);
 }
