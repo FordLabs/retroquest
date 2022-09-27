@@ -83,7 +83,7 @@
 @mixin white-form {
 	max-width: 540px;
 	margin: 10% auto 1rem;
-	padding: 3rem 3rem 4.5rem;
+	padding: 3rem 3.5rem 4.5rem;
 
 	background-color: colors.$white;
 	border-radius: 5px;
@@ -91,24 +91,24 @@
 		0 12px 24px rgba(0, 0, 0, 0.12), 0 1px 32px rgba(0, 0, 0, 0.12);
 
 	h1 {
-		margin-top: 0;
+		margin: 0;
 
 		font-size: 2.5rem;
-		line-height: 50px;
+		line-height: 3.125rem;
 		text-align: center;
 	}
 
 	p {
-		margin-bottom: 2.5rem;
-
 		color: colors.$dark-gray;
+
+		font-family: 'Quicksand', serif;
+		font-weight: 700;
 		font-size: 1rem;
-		line-height: 20px;
+		font-style: normal;
+		line-height: 1.25rem;
 	}
 
 	.submit-button {
-		margin-top: 3rem;
-
 		border-radius: 6px;
 		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.12),
 			0 1px 8px rgba(0, 0, 0, 0.1);

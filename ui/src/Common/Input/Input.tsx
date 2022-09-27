@@ -51,7 +51,7 @@ export default function Input(props: Props): JSX.Element {
 			<input
 				id={id}
 				data-testid={id}
-				className={classnames('input-text', className)}
+				className={classnames('input-element', className)}
 				value={value}
 				onChange={onChange}
 				type={type}
