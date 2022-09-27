@@ -15,8 +15,7 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Input from 'Common/Input/Input';
 
 interface Props {
