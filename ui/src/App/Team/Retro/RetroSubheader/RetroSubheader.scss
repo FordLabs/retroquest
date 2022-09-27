@@ -15,10 +15,15 @@
  * limitations under the License.
  */
 
-@use 'Styles/main';
+@use '../../../../Styles/main';
 
 .retro-subheader {
 	@include main.subheader;
+
+	button {
+		margin-top: 0;
+		margin-bottom: 0;
+	}
 
 	.retro-subheader-container {
 		display: flex;
