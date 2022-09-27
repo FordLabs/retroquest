@@ -16,8 +16,7 @@
  */
 
 import React, { ComponentPropsWithoutRef } from 'react';
-
-import { PrimaryButton } from '../../Buttons/Button';
+import ButtonPrimary from 'Common/ButtonPrimary/ButtonPrimary';
 
 import './Form.scss';
 
@@ -60,13 +59,13 @@ function Form(props: FormProps): JSX.Element {
 					</span>
 				))}
 			</div>
-			<PrimaryButton
+			<ButtonPrimary
 				className="submit-button"
 				disabled={disableSubmitBtn}
 				data-testid="formSubmitButton"
 			>
 				{submitButtonText}
-			</PrimaryButton>
+			</ButtonPrimary>
 		</form>
 	);
 }
