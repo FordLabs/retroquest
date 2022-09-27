@@ -16,9 +16,9 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import ErrorStopSignIcon from 'Assets/ErrorStopSignIcon';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
+import LinkPrimary from 'Common/LinkPrimary/LinkPrimary';
 import { useRecoilValue } from 'recoil';
 import { PASSWORD_RESET_PATH } from 'RouteConstants';
 import TeamService from 'Services/Api/TeamService';
@@ -58,9 +58,9 @@ function ExpiredLinkPage() {
 			<p className="paragraph-2">
 				Fear not! Click here to request a fresh, new reset link.
 			</p>
-			<Link to={PASSWORD_RESET_PATH} className="reset-password-link">
+			<LinkPrimary to={PASSWORD_RESET_PATH} className="reset-password-link">
 				Reset my Password
-			</Link>
+			</LinkPrimary>
 		</AuthTemplate>
 	);
 }

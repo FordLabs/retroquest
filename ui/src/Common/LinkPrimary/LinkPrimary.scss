@@ -17,33 +17,6 @@
 
 @use '../../Styles/main';
 
-.reset-password-page {
-	.reset-password-form {
-		@include main.white-form;
-	}
-
-	.reset-form-description {
-		font-weight: 700;
-	}
-
-	.login-link-container {
-		text-align: center;
-
-		.login-link {
-			display: inline-block;
-			margin: 1.5rem 0 0;
-		}
-	}
-
-	.success-feedback-container {
-		.success-message {
-			margin: 1rem 0;
-
-			font-weight: 700;
-			font-size: 20px;
-			line-height: 25px;
-			letter-spacing: 0;
-			text-align: center;
-		}
-	}
+.link-primary {
+	@include main.button-primary;
 }
