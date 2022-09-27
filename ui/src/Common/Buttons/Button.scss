@@ -21,7 +21,7 @@
 	@include main.button-defaults;
 }
 
-.button-primary {
+.button-primary-old {
 	color: main.$gray-1;
 
 	background-color: main.$asphalt;
@@ -35,7 +35,7 @@
 	}
 }
 
-.button-secondary {
+.button-secondary-old {
 	color: inherit;
 	background: transparent;
 
@@ -47,7 +47,7 @@
 }
 
 @include main.dark-theme {
-	.button-primary {
+	.button-primary-old {
 		color: main.$asphalt;
 		background-color: main.$gray-1;
 
@@ -57,7 +57,7 @@
 		}
 	}
 
-	.button-secondary {
+	.button-secondary-old {
 		color: rgba(main.$gray-1, 0.8);
 	}
 }

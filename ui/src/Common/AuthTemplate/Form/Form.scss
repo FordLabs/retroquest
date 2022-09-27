@@ -35,21 +35,7 @@
 	}
 
 	.submit-button {
-		width: 100%;
-
-		color: main.$gray-1;
-
-		background-color: main.$dark-turquoise;
-
-		&:disabled {
-			cursor: initial;
-			opacity: 0.3;
-		}
-
-		&:hover:not(:disabled),
-		&:focus:not(:disabled) {
-			background-color: main.$turquoise;
-		}
+		margin: 0;
 	}
 }
 
@@ -58,16 +44,6 @@
 		.error-messages {
 			.error-message {
 				color: main.$light-red;
-			}
-		}
-
-		.submit-button {
-			color: main.$asphalt;
-			background-color: main.$turquoise;
-
-			&:hover,
-			&:focus {
-				background-color: main.$dark-turquoise;
 			}
 		}
 	}

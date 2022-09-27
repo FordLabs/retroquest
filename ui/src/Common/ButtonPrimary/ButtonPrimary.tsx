@@ -15,29 +15,22 @@
  * limitations under the License.
  */
 
-import { ComponentPropsWithoutRef, forwardRef, LegacyRef } from 'react';
+import React, { ButtonHTMLAttributes } from 'react';
 import classnames from 'classnames';
 
-const ConfirmButton = forwardRef(
-	(
-		props: ComponentPropsWithoutRef<'button'>,
-		ref: LegacyRef<HTMLButtonElement>
-	) => {
-		const { className, children, ...buttonProps } = props;
+import './ButtonPrimary.scss';
 
-		return (
-			<button
-				{...buttonProps}
-				className={classnames(
-					'column-item-button button-primary-old',
-					className
-				)}
-				ref={ref}
-			>
-				{children}
-			</button>
-		);
-	}
-);
+function ButtonPrimary(props: ButtonHTMLAttributes<HTMLButtonElement>) {
+	const { className, children, ...buttonProps } = props;
 
-export default ConfirmButton;
+	return (
+		<button
+			className={classnames('button-primary', className)}
+			{...buttonProps}
+		>
+			{children}
+		</button>
+	);
+}
+
+export default ButtonPrimary;
