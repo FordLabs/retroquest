@@ -37,10 +37,6 @@
 		margin-bottom: 0;
 		color: main.$dark-gray;
 	}
-
-	.reset-password-link {
-		@include main.button-primary;
-	}
 }
 
 @include main.dark-theme {

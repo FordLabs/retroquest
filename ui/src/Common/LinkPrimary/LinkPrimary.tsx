@@ -15,35 +15,20 @@
  * limitations under the License.
  */
 
-@use '../../Styles/main';
+import React from 'react';
+import { Link, LinkProps } from 'react-router-dom';
+import classnames from 'classnames';
 
-.reset-password-page {
-	.reset-password-form {
-		@include main.white-form;
-	}
+import './LinkPrimary.scss';
 
-	.reset-form-description {
-		font-weight: 700;
-	}
+function LinkPrimary(props: LinkProps) {
+	const { className, children, ...linkProps } = props;
 
-	.login-link-container {
-		text-align: center;
-
-		.login-link {
-			display: inline-block;
-			margin: 1.5rem 0 0;
-		}
-	}
-
-	.success-feedback-container {
-		.success-message {
-			margin: 1rem 0;
-
-			font-weight: 700;
-			font-size: 20px;
-			line-height: 25px;
-			letter-spacing: 0;
-			text-align: center;
-		}
-	}
+	return (
+		<Link className={classnames('link-primary', className)} {...linkProps}>
+			{children}
+		</Link>
+	);
 }
+
+export default LinkPrimary;

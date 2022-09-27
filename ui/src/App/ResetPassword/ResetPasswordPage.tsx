@@ -16,13 +16,15 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Form from 'Common/AuthTemplate/Form/Form';
 import Header from 'Common/Header/Header';
 import InputPassword from 'Common/InputPassword/InputPassword';
+import LinkPrimary from 'Common/LinkPrimary/LinkPrimary';
+import LinkTertiary from 'Common/LinkTertiary/LinkTertiary';
 import TeamService from 'Services/Api/TeamService';
 
-import { EXPIRED_LINK_PATH } from '../../RouteConstants';
+import { EXPIRED_LINK_PATH, LOGIN_PAGE_PATH } from '../../RouteConstants';
 
 import './ResetPasswordPage.scss';
 
@@ -81,9 +83,9 @@ function ResetPasswordPage(): JSX.Element {
 							/>
 						</Form>
 						<div className="login-link-container">
-							<Link className="login-link" to="/login">
+							<LinkTertiary to={LOGIN_PAGE_PATH} className="login-link">
 								Return to Login
-							</Link>
+							</LinkTertiary>
 						</div>
 					</>
 				)}
@@ -92,9 +94,7 @@ function ResetPasswordPage(): JSX.Element {
 						<div className="success-indicator">
 							All set! Your password has been changed.
 						</div>
-						<Link className="login-button-link" to="/login">
-							Return to Login
-						</Link>
+						<LinkPrimary to={LOGIN_PAGE_PATH}>Return to Login</LinkPrimary>
 					</div>
 				)}
 			</div>
