@@ -25,11 +25,16 @@ import renderWithRecoilRoot from '../../../Utils/renderWithRecoilRoot';
 
 import RetroPage from './RetroPage';
 
-jest.mock('../../../Services/Api/ColumnService');
-jest.mock('../../../Services/Api/ThoughtService');
-jest.mock('../../../Services/Api/ActionItemService');
-jest.mock('../../../Services/Websocket/WebSocketService');
-jest.mock('../../../Services/Websocket/WebSocketController');
+jest.mock('Hooks/useAuth', () => {
+	return jest.fn(() => ({
+		logout: jest.fn(),
+	}));
+});
+jest.mock('Services/Api/ColumnService');
+jest.mock('Services/Api/ThoughtService');
+jest.mock('Services/Api/ActionItemService');
+jest.mock('Services/Websocket/WebSocketService');
+jest.mock('Services/Websocket/WebSocketController');
 
 jest.setTimeout(60000);
 
@@ -38,7 +43,7 @@ const mockThoughtMessageHandler = jest.fn();
 const mockActionItemMessageHandler = jest.fn();
 const mockEndRetroMessageHandler = jest.fn();
 
-jest.mock('../../../Hooks/useWebSocketMessageHandler', () => {
+jest.mock('Hooks/useWebSocketMessageHandler', () => {
 	return () => ({
 		columnMessageHandler: mockColumnMessageHandler,
 		thoughtMessageHandler: mockThoughtMessageHandler,

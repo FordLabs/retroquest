@@ -17,23 +17,27 @@
 
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import fileSaver from 'file-saver';
 import { RecoilRoot } from 'recoil';
-
-import TeamService from '../../../../Services/Api/TeamService';
-import {
-	ModalContents,
-	ModalContentsState,
-} from '../../../../State/ModalContentsState';
-import { TeamState } from '../../../../State/TeamState';
-import Team from '../../../../Types/Team';
-import { RecoilObserver } from '../../../../Utils/RecoilObserver';
+import TeamService from 'Services/Api/TeamService';
+import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
+import { TeamState } from 'State/TeamState';
+import Team from 'Types/Team';
+import { RecoilObserver } from 'Utils/RecoilObserver';
 
 import ArchiveRetroConfirmation from './ArchiveRetroConfirmation/ArchiveRetroConfirmation';
 import FeedbackForm from './FeedbackForm/FeedbackForm';
 import RetroSubheader from './RetroSubheader';
 
-jest.mock('../../../../Services/Api/TeamService');
+const mockLogout = jest.fn();
+
+jest.mock('Hooks/useAuth', () => {
+	return jest.fn(() => ({
+		logout: mockLogout,
+	}));
+});
+jest.mock('Services/Api/TeamService');
 jest.mock('file-saver');
 
 const team: Team = {
@@ -100,6 +104,15 @@ describe('Retro Subheader', () => {
 					'my-team-board.csv'
 				)
 			);
+		});
+	});
+
+	describe('Log Out Button', () => {
+		it('should logout', () => {
+			userEvent.click(screen.getByText('Log Out'));
+
+			expect(mockLogout).toHaveBeenCalledTimes(1);
+			expect(modalContent).toBeNull();
 		});
 	});
 
