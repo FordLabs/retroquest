@@ -21,6 +21,7 @@ import Form from 'Common/AuthTemplate/Form/Form';
 import HorizontalRuleWithText from 'Common/HorizontalRuleWithText/HorizontalRuleWithText';
 import InputPassword from 'Common/InputPassword/InputPassword';
 import InputTeamName from 'Common/InputTeamName/InputTeamName';
+import LinkSecondary from 'Common/LinkSecondary/LinkSecondary';
 import useAuth from 'Hooks/useAuth';
 import useTeamFromRoute from 'Hooks/useTeamFromRoute';
 import { CREATE_TEAM_PAGE_PATH, PASSWORD_RESET_PATH } from 'RouteConstants';
@@ -84,9 +85,7 @@ function LoginPage(): JSX.Element {
 				Forgot your login info?
 			</Link>
 			<HorizontalRuleWithText text="or" />
-			<Link to={CREATE_TEAM_PAGE_PATH} className={'link-secondary'}>
-				Create new team
-			</Link>
+			<LinkSecondary to={CREATE_TEAM_PAGE_PATH}>Create new team</LinkSecondary>
 		</AuthTemplate>
 	);
 }
