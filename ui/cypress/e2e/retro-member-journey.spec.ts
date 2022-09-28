@@ -274,12 +274,12 @@ describe('Retro Member Journey', () => {
 			cy.findAllByText('Settings').eq(1).should('exist');
 
 			cy.findByText('Styles').as('stylesTab');
-			cy.findByText('Account').as('accountTab');
+			// cy.findByText('Account').as('accountTab');
 		});
 
 		it('Styles Tab: Change theme between light, dark, and system settings mode', () => {
 			cy.get('@stylesTab').as('stylesTab').should('have.class', 'selected');
-			cy.get('@accountTab').should('not.have.class', 'selected');
+			// cy.get('@accountTab').should('not.have.class', 'selected');
 
 			const darkThemeClass = '.dark-theme';
 			cy.get(darkThemeClass).should('not.exist');
