@@ -19,26 +19,18 @@ import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
-
-import BoardService from '../../../../../Services/Api/BoardService';
-import {
-	ModalContents,
-	ModalContentsState,
-} from '../../../../../State/ModalContentsState';
-import { TeamState } from '../../../../../State/TeamState';
-import Team from '../../../../../Types/Team';
-import { RecoilObserver } from '../../../../../Utils/RecoilObserver';
+import { mockTeam } from 'Services/Api/__mocks__/TeamService';
+import BoardService from 'Services/Api/BoardService';
+import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
+import { TeamState } from 'State/TeamState';
+import { RecoilObserver } from 'Utils/RecoilObserver';
 
 import ArchiveRetroConfirmation from './ArchiveRetroConfirmation';
 
-jest.mock('../../../../../Services/Api/BoardService');
+jest.mock('Services/Api/BoardService');
 
 describe('ArchiveRetroConfirmation', () => {
 	let modalContent: ModalContents | null;
-	const team: Team = {
-		name: 'My Team',
-		id: 'fake-team-id',
-	};
 
 	beforeEach(() => {
 		jest.clearAllMocks();
@@ -48,7 +40,7 @@ describe('ArchiveRetroConfirmation', () => {
 		render(
 			<RecoilRoot
 				initializeState={({ set }) => {
-					set(TeamState, team);
+					set(TeamState, mockTeam);
 					set(ModalContentsState, {
 						title: 'Archive Retro',
 						component: <ArchiveRetroConfirmation />,
@@ -70,7 +62,7 @@ describe('ArchiveRetroConfirmation', () => {
 		userEvent.click(screen.getByText('Yes!'));
 
 		await act(async () =>
-			expect(BoardService.archiveRetro).toHaveBeenCalledWith(team.id)
+			expect(BoardService.archiveRetro).toHaveBeenCalledWith(mockTeam.id)
 		);
 		expect(modalContent).toBe(null);
 	});

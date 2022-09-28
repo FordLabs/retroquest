@@ -19,27 +19,23 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
+import { getMockActionItem } from 'Services/Api/__mocks__/ActionItemService';
+import { mockTeam } from 'Services/Api/__mocks__/TeamService';
+import ActionItemService from 'Services/Api/ActionItemService';
+import { ActionItemState } from 'State/ActionItemState';
+import { TeamState } from 'State/TeamState';
+import Action from 'Types/Action';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
-import { getMockActionItem } from '../../../../../../Services/Api/__mocks__/ActionItemService';
-import ActionItemService from '../../../../../../Services/Api/ActionItemService';
-import { ActionItemState } from '../../../../../../State/ActionItemState';
-import { TeamState } from '../../../../../../State/TeamState';
-import Action from '../../../../../../Types/Action';
-import Team from '../../../../../../Types/Team';
-import renderWithRecoilRoot from '../../../../../../Utils/renderWithRecoilRoot';
 import { ActionItemViewState } from '../ActionItem';
 
 import EditActionItemView from './EditActionItemView';
 
-jest.mock('../../../../../../Services/Api/ActionItemService');
+jest.mock('Services/Api/ActionItemService');
 
 describe('Edit Action Item View', () => {
 	const mockSetViewState = jest.fn();
 	let container: string | Element;
-	const team: Team = {
-		name: 'My Team',
-		id: 'my-team',
-	};
 	const fakeActionItem: Action = getMockActionItem();
 
 	beforeEach(() => {
@@ -49,7 +45,7 @@ describe('Edit Action Item View', () => {
 				setViewState={mockSetViewState}
 			/>,
 			({ set }) => {
-				set(TeamState, team);
+				set(TeamState, mockTeam);
 				set(ActionItemState, [fakeActionItem]);
 			}
 		));
@@ -84,7 +80,7 @@ describe('Edit Action Item View', () => {
 		const updatedText = 'New Fake Text';
 		editActionItemTask(`${updatedText}{Enter}`);
 		expect(ActionItemService.updateTask).toHaveBeenCalledWith(
-			team.id,
+			mockTeam.id,
 			fakeActionItem.id,
 			updatedText
 		);
@@ -93,10 +89,10 @@ describe('Edit Action Item View', () => {
 
 	it('should edit action item task and save on save button click', () => {
 		const updatedText = 'Save Me!';
-		editActionItemTask(`${updatedText}`);
+		editActionItemTask(updatedText);
 		screen.getByText('Save!').click();
 		expect(ActionItemService.updateTask).toHaveBeenCalledWith(
-			team.id,
+			mockTeam.id,
 			fakeActionItem.id,
 			updatedText
 		);
@@ -108,7 +104,7 @@ describe('Edit Action Item View', () => {
 		editActionItemAssignee(`${newAssignee}{enter}`);
 
 		expect(ActionItemService.updateAssignee).toHaveBeenCalledWith(
-			team.id,
+			mockTeam.id,
 			fakeActionItem.id,
 			newAssignee
 		);

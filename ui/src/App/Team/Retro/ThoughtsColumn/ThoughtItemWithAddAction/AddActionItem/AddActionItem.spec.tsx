@@ -19,13 +19,13 @@ import * as React from 'react';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
+import { mockTeam } from 'Services/Api/__mocks__/TeamService';
 import { getMockThought } from 'Services/Api/__mocks__/ThoughtService';
 import ActionItemService from 'Services/Api/ActionItemService';
 import ThoughtService from 'Services/Api/ThoughtService';
 import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
 import { TeamState } from 'State/TeamState';
 import { ThoughtsState } from 'State/ThoughtsState';
-import Team from 'Types/Team';
 import Topic from 'Types/Topic';
 import { RecoilObserver } from 'Utils/RecoilObserver';
 
@@ -38,10 +38,6 @@ jest.mock('Services/Api/ThoughtService');
 
 describe('Add Action Item', () => {
 	const hideComponentCallback = jest.fn();
-	const team: Team = {
-		name: 'My Team',
-		id: 'my-team',
-	};
 	let modalContent: ModalContents | null;
 	const thought = getMockThought(1);
 
@@ -53,7 +49,7 @@ describe('Add Action Item', () => {
 		render(
 			<RecoilRoot
 				initializeState={({ set }) => {
-					set(TeamState, team);
+					set(TeamState, mockTeam);
 					set(ThoughtsState, [thought]);
 					set(ModalContentsState, {
 						title: 'Action Item',
@@ -101,13 +97,13 @@ describe('Add Action Item', () => {
 
 		await act(async () =>
 			expect(ActionItemService.create).toHaveBeenCalledWith(
-				team.id,
+				mockTeam.id,
 				task,
 				assignee
 			)
 		);
 		expect(ThoughtService.updateDiscussionStatus).toHaveBeenCalledWith(
-			team.id,
+			mockTeam.id,
 			thought.id,
 			true
 		);

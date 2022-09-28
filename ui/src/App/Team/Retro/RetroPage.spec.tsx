@@ -15,13 +15,14 @@
  * limitations under the License.
  */
 import { screen, within } from '@testing-library/react';
+import { mockColumns } from 'Services/Api/__mocks__/ColumnService';
+import ActionItemService from 'Services/Api/ActionItemService';
+import ColumnService from 'Services/Api/ColumnService';
+import ThoughtService from 'Services/Api/ThoughtService';
+import { TeamState } from 'State/TeamState';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
-import { mockColumns } from '../../../Services/Api/__mocks__/ColumnService';
-import ActionItemService from '../../../Services/Api/ActionItemService';
-import ColumnService from '../../../Services/Api/ColumnService';
-import ThoughtService from '../../../Services/Api/ThoughtService';
-import { TeamState } from '../../../State/TeamState';
-import renderWithRecoilRoot from '../../../Utils/renderWithRecoilRoot';
+import { mockTeam } from '../../../Services/Api/__mocks__/TeamService';
 
 import RetroPage from './RetroPage';
 
@@ -53,15 +54,13 @@ jest.mock('Hooks/useWebSocketMessageHandler', () => {
 });
 
 describe('RetroPage.spec.tsx', () => {
-	const teamId = 'some-team-id';
-
 	beforeEach(() => {
 		jest.useRealTimers();
 	});
 
 	const setupComponent = async () => {
 		renderWithRecoilRoot(<RetroPage />, ({ set }) => {
-			set(TeamState, { name: '', id: teamId });
+			set(TeamState, mockTeam);
 		});
 
 		await screen.findByTestId('retroColumn__happy');
@@ -80,9 +79,9 @@ describe('RetroPage.spec.tsx', () => {
 	it('should show all columns and column items returned from backend', async () => {
 		await setupComponent();
 
-		expect(ColumnService.getColumns).toHaveBeenCalledWith(teamId);
-		expect(ActionItemService.get).toHaveBeenCalledWith(teamId, false);
-		expect(ThoughtService.getThoughts).toHaveBeenCalledWith(teamId);
+		expect(ColumnService.getColumns).toHaveBeenCalledWith(mockTeam.id);
+		expect(ActionItemService.get).toHaveBeenCalledWith(mockTeam.id, false);
+		expect(ThoughtService.getThoughts).toHaveBeenCalledWith(mockTeam.id);
 
 		for (const column of mockColumns) {
 			const retroColumn = await screen.findByTestId(

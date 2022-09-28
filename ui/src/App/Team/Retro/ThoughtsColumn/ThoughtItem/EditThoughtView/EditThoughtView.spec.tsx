@@ -19,24 +19,20 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
+import { mockTeam } from 'Services/Api/__mocks__/TeamService';
+import ThoughtService from 'Services/Api/ThoughtService';
+import { TeamState } from 'State/TeamState';
+import { ThoughtsState } from 'State/ThoughtsState';
+import Thought from 'Types/Thought';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
-import ThoughtService from '../../../../../../Services/Api/ThoughtService';
-import { TeamState } from '../../../../../../State/TeamState';
-import { ThoughtsState } from '../../../../../../State/ThoughtsState';
-import Team from '../../../../../../Types/Team';
-import Thought from '../../../../../../Types/Thought';
-import renderWithRecoilRoot from '../../../../../../Utils/renderWithRecoilRoot';
 import { ThoughtItemViewState } from '../ThoughtItem';
 
 import EditThoughtView from './EditThoughtView';
 
-jest.mock('../../../../../../Services/Api/ThoughtService');
+jest.mock('Services/Api/ThoughtService');
 
 describe('Edit Thought View', () => {
-	const team: Team = {
-		name: 'My Team',
-		id: 'my-team',
-	};
 	const fakeThought: Thought = {
 		id: 12,
 		message: 'fake message',
@@ -52,7 +48,7 @@ describe('Edit Thought View', () => {
 		({ container } = renderWithRecoilRoot(
 			<EditThoughtView thought={fakeThought} setViewState={mockSetViewState} />,
 			({ set }) => {
-				set(TeamState, team);
+				set(TeamState, mockTeam);
 				set(ThoughtsState, [fakeThought]);
 			}
 		));
@@ -85,7 +81,7 @@ describe('Edit Thought View', () => {
 		const updatedText = 'New Fake Text';
 		editThought(`${updatedText}{Enter}`);
 		expect(ThoughtService.updateMessage).toHaveBeenCalledWith(
-			team.id,
+			mockTeam.id,
 			fakeThought.id,
 			updatedText
 		);
@@ -97,7 +93,7 @@ describe('Edit Thought View', () => {
 		editThought(`${updatedText}`);
 		screen.getByText('Save!').click();
 		expect(ThoughtService.updateMessage).toHaveBeenCalledWith(
-			team.id,
+			mockTeam.id,
 			fakeThought.id,
 			updatedText
 		);

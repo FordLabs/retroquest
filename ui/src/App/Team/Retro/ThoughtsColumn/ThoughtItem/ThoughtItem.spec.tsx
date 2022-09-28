@@ -19,30 +19,23 @@ import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
+import { mockTeam } from 'Services/Api/__mocks__/TeamService';
+import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
+import { TeamState } from 'State/TeamState';
+import { ThoughtsState } from 'State/ThoughtsState';
+import Thought from 'Types/Thought';
+import Topic from 'Types/Topic';
+import { RecoilObserver } from 'Utils/RecoilObserver';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
-import {
-	ModalContents,
-	ModalContentsState,
-} from '../../../../../State/ModalContentsState';
-import { TeamState } from '../../../../../State/TeamState';
-import { ThoughtsState } from '../../../../../State/ThoughtsState';
-import Team from '../../../../../Types/Team';
-import Thought from '../../../../../Types/Thought';
-import Topic from '../../../../../Types/Topic';
-import { RecoilObserver } from '../../../../../Utils/RecoilObserver';
-import renderWithRecoilRoot from '../../../../../Utils/renderWithRecoilRoot';
 import ThoughtItemWithAddAction from '../ThoughtItemWithAddAction/ThoughtItemWithAddAction';
 
 import ThoughtItem from './ThoughtItem';
 
-jest.mock('../../../../../Services/Api/ThoughtService');
+jest.mock('Services/Api/ThoughtService');
 
 describe('Thought Item', () => {
 	let modalContent: ModalContents | null;
-	const team: Team = {
-		name: 'My Team',
-		id: 'my-team',
-	};
 
 	const fakeThought: Thought = {
 		id: 12,
@@ -115,7 +108,7 @@ describe('Thought Item', () => {
 					<ThoughtItem thoughtId={fakeThought.id} type={Topic.HAPPY} />,
 				</>,
 				({ set }) => {
-					set(TeamState, team);
+					set(TeamState, mockTeam);
 					set(ThoughtsState, [{ ...fakeThought, discussed: true }]);
 					set(ModalContentsState, {
 						title: 'Retro Item',

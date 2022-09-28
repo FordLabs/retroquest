@@ -17,12 +17,12 @@
 
 import * as React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
-
-import BoardService from '../../../../../Services/Api/BoardService';
-import { TeamState } from '../../../../../State/TeamState';
-import Retro from '../../../../../Types/Retro';
-import Topic from '../../../../../Types/Topic';
-import renderWithRecoilRoot from '../../../../../Utils/renderWithRecoilRoot';
+import { mockTeam } from 'Services/Api/__mocks__/TeamService';
+import BoardService from 'Services/Api/BoardService';
+import { TeamState } from 'State/TeamState';
+import Retro from 'Types/Retro';
+import Topic from 'Types/Topic';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import ArchivedBoard from './ArchivedBoard';
 
@@ -90,11 +90,11 @@ describe('Archived Board', () => {
 
 async function setupComponent(boardId: number) {
 	renderWithRecoilRoot(<ArchivedBoard boardId={boardId} />, ({ set }) => {
-		set(TeamState, { name: 'Name', id: 'team-id' });
+		set(TeamState, mockTeam);
 	});
 
 	await waitFor(() =>
-		expect(BoardService.getBoard).toHaveBeenCalledWith('team-id', boardId)
+		expect(BoardService.getBoard).toHaveBeenCalledWith(mockTeam.id, boardId)
 	);
 }
 
@@ -105,7 +105,7 @@ function getColumns() {
 const mockFullBoard: Retro = {
 	dateCreated: new Date(),
 	id: 1,
-	teamId: 'team-id',
+	teamId: mockTeam.id,
 	thoughts: [
 		{
 			id: 100,
@@ -158,7 +158,7 @@ const mockFullBoard: Retro = {
 const singleColumnFullRetroBoard: Retro = {
 	dateCreated: new Date(),
 	id: 1,
-	teamId: 'team-id',
+	teamId: mockTeam.id,
 	thoughts: [
 		{
 			id: 100,

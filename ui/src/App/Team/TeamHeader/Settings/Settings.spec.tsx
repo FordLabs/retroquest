@@ -15,33 +15,17 @@
  * limitations under the License.
  */
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { RecoilRoot } from 'recoil';
-import { ModalContentsState } from 'State/ModalContentsState';
+import { MutableSnapshot } from 'recoil';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import Settings from './Settings';
 
 describe('Settings', () => {
-	beforeEach(() => {
-		jest.clearAllMocks();
-
-		render(
-			<RecoilRoot
-				initializeState={({ set }) => {
-					set(ModalContentsState, {
-						title: 'Settings',
-						component: <Settings />,
-					});
-				}}
-			>
-				<Settings />
-			</RecoilRoot>
-		);
-	});
-
 	describe('Styles Tab', () => {
 		it('should change theme from light to dark to system settings', () => {
+			renderSettings();
 			expect(screen.getByText('Appearance')).toBeDefined();
 
 			const lightThemeButton = screen.getByAltText('Light Theme');
@@ -74,8 +58,15 @@ describe('Settings', () => {
 		});
 	});
 
+	describe('Account', () => {
+		it('should show "Add Board Owners" form if NO emails are present', () => {});
+
+		it("should show current board owner's emails if emails are present", () => {});
+	});
+
 	describe('Info Tab', () => {
 		it('should show app version', () => {
+			renderSettings();
 			userEvent.click(screen.getByText('Info'));
 			expect(screen.getByLabelText('Version:').getAttribute('value')).toBe(
 				'0ddb411'
@@ -83,3 +74,9 @@ describe('Settings', () => {
 		});
 	});
 });
+
+function renderSettings(
+	recoilState?: (mutableSnapshot: MutableSnapshot) => void
+) {
+	renderWithRecoilRoot(<Settings />, recoilState);
+}

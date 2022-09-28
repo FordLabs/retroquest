@@ -20,27 +20,21 @@ import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
-
-import { getMockActionItem } from '../../../../Services/Api/__mocks__/ActionItemService';
-import ActionItemService from '../../../../Services/Api/ActionItemService';
-import { ActionItemState } from '../../../../State/ActionItemState';
-import { TeamState } from '../../../../State/TeamState';
-import Action from '../../../../Types/Action';
-import Team from '../../../../Types/Team';
+import { getMockActionItem } from 'Services/Api/__mocks__/ActionItemService';
+import { mockTeam } from 'Services/Api/__mocks__/TeamService';
+import ActionItemService from 'Services/Api/ActionItemService';
+import { ActionItemState } from 'State/ActionItemState';
+import { TeamState } from 'State/TeamState';
+import Action from 'Types/Action';
 
 import ActionItemsColumn from './ActionItemsColumn';
-
-const team: Team = {
-	name: 'My Team',
-	id: 'my-team',
-};
 
 const activeActionItem1: Action = getMockActionItem(false);
 activeActionItem1.id = 943;
 const activeActionItem2: Action = getMockActionItem(false);
 const completedActionItem1: Action = getMockActionItem(true);
 
-jest.mock('../../../../Services/Api/ActionItemService');
+jest.mock('Services/Api/ActionItemService');
 
 describe('Action Items Column', () => {
 	let container: HTMLElement;
@@ -54,7 +48,7 @@ describe('Action Items Column', () => {
 						activeActionItem2,
 						completedActionItem1,
 					]);
-					set(TeamState, team);
+					set(TeamState, mockTeam);
 				}}
 			>
 				<ActionItemsColumn />
@@ -128,7 +122,7 @@ describe('Action Items Column', () => {
 			userEvent.type(actionItemTextField, `${taskWithoutAssignees} @me{enter}`);
 
 			expect(ActionItemService.create).toHaveBeenCalledWith(
-				team.id,
+				mockTeam.id,
 				taskWithoutAssignees,
 				parsedAssignees
 			);
@@ -144,7 +138,7 @@ describe('Action Items Column', () => {
 
 			const expectedAssignee = 'ben12, frank, jeana';
 			expect(ActionItemService.create).toHaveBeenCalledWith(
-				team.id,
+				mockTeam.id,
 				expectedFormattedTask,
 				expectedAssignee
 			);
@@ -156,7 +150,7 @@ describe('Action Items Column', () => {
 			removeAssigneesFromTaskSpy.mockReturnValue(newTask);
 			userEvent.type(actionItemTextField, `${newTask}{enter}`);
 			expect(ActionItemService.create).toHaveBeenCalledWith(
-				team.id,
+				mockTeam.id,
 				newTask,
 				null
 			);
@@ -174,7 +168,7 @@ describe('Action Items Column', () => {
 			userEvent.type(actionItemTextField, `${newTask}{enter}`);
 
 			expect(ActionItemService.create).toHaveBeenCalledWith(
-				team.id,
+				mockTeam.id,
 				expectedFormattedTask,
 				expectedAssignee
 			);
@@ -192,7 +186,7 @@ describe('Action Items Column', () => {
 			userEvent.type(firstThoughtsAssigneeInput, `${newAssignee}{enter}`);
 
 			expect(ActionItemService.updateAssignee).toHaveBeenCalledWith(
-				team.id,
+				mockTeam.id,
 				activeActionItem1.id,
 				'Bob, SomeoneElse'
 			);
@@ -208,7 +202,7 @@ describe('Action Items Column', () => {
 
 		await waitFor(() =>
 			expect(ActionItemService.updateCompletionStatus).toHaveBeenCalledWith(
-				team.id,
+				mockTeam.id,
 				activeActionItem1.id,
 				!activeActionItem1.completed
 			)

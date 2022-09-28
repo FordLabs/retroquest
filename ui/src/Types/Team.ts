@@ -16,8 +16,10 @@
  */
 
 interface Team {
-	name: string;
 	id: string;
+	name: string;
+	email: string;
+	secondaryEmail: string;
 }
 
 export default Team;

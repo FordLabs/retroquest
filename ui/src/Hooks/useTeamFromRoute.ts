@@ -18,10 +18,9 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-
-import TeamService from '../Services/Api/TeamService';
-import { TeamState } from '../State/TeamState';
-import Team from '../Types/Team';
+import TeamService from 'Services/Api/TeamService';
+import { TeamState } from 'State/TeamState';
+import Team from 'Types/Team';
 
 function useTeamFromRoute(): Team {
 	const { teamId = '' } = useParams();
@@ -36,6 +35,8 @@ function useTeamFromRoute(): Team {
 					setTeam({
 						name: activeTeamName,
 						id: teamId,
+						email: '',
+						secondaryEmail: '',
 					});
 				})
 				.catch(console.error);

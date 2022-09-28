@@ -16,15 +16,16 @@
  */
 
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import fileSaver from 'file-saver';
-import { RecoilRoot } from 'recoil';
 import TeamService from 'Services/Api/TeamService';
 import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
 import { TeamState } from 'State/TeamState';
-import Team from 'Types/Team';
 import { RecoilObserver } from 'Utils/RecoilObserver';
+
+import { mockTeam } from '../../../../Services/Api/__mocks__/TeamService';
+import renderWithRecoilRoot from '../../../../Utils/renderWithRecoilRoot';
 
 import ArchiveRetroConfirmation from './ArchiveRetroConfirmation/ArchiveRetroConfirmation';
 import FeedbackForm from './FeedbackForm/FeedbackForm';
@@ -40,11 +41,6 @@ jest.mock('Hooks/useAuth', () => {
 jest.mock('Services/Api/TeamService');
 jest.mock('file-saver');
 
-const team: Team = {
-	name: 'My Team',
-	id: 'my-team',
-};
-
 describe('Retro Subheader', () => {
 	const mockCSVString = 'column 1, column 2';
 	let modalContent: ModalContents | null;
@@ -54,12 +50,8 @@ describe('Retro Subheader', () => {
 
 		TeamService.getCSV = jest.fn().mockResolvedValue(mockCSVString);
 
-		render(
-			<RecoilRoot
-				initializeState={({ set }) => {
-					set(TeamState, team);
-				}}
-			>
+		renderWithRecoilRoot(
+			<>
 				<RecoilObserver
 					recoilState={ModalContentsState}
 					onChange={(value: ModalContents) => {
@@ -67,7 +59,10 @@ describe('Retro Subheader', () => {
 					}}
 				/>
 				<RetroSubheader />
-			</RecoilRoot>
+			</>,
+			({ set }) => {
+				set(TeamState, mockTeam);
+			}
 		);
 	});
 
@@ -97,11 +92,11 @@ describe('Retro Subheader', () => {
 		it('should call to download csv', async () => {
 			const downloadCSVButton = screen.getByText('Download CSV');
 			downloadCSVButton.click();
-			expect(TeamService.getCSV).toHaveBeenCalledWith(team.id);
+			expect(TeamService.getCSV).toHaveBeenCalledWith(mockTeam.id);
 			await waitFor(() =>
 				expect(fileSaver.saveAs).toHaveBeenCalledWith(
 					mockCSVString,
-					'my-team-board.csv'
+					mockTeam.id + '-board.csv'
 				)
 			);
 		});

@@ -19,26 +19,21 @@ import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
+import { getMockActionItem } from 'Services/Api/__mocks__/ActionItemService';
+import { mockTeam } from 'Services/Api/__mocks__/TeamService';
+import ActionItemService from 'Services/Api/ActionItemService';
+import { TeamState } from 'State/TeamState';
+import Action from 'Types/Action';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
-import { getMockActionItem } from '../../../../../../Services/Api/__mocks__/ActionItemService';
-import ActionItemService from '../../../../../../Services/Api/ActionItemService';
-import { TeamState } from '../../../../../../State/TeamState';
-import Action from '../../../../../../Types/Action';
-import Team from '../../../../../../Types/Team';
-import renderWithRecoilRoot from '../../../../../../Utils/renderWithRecoilRoot';
 import { ActionItemViewState } from '../ActionItem';
 
 import DeleteActionItemView from './DeleteActionItemView';
 
-jest.mock('../../../../../../Services/Api/ActionItemService');
+jest.mock('Services/Api/ActionItemService');
 
 describe('Delete Action Item View', () => {
 	let mockSetViewState: jest.Mock;
-
-	const team: Team = {
-		name: 'My Team',
-		id: 'my-team',
-	};
 
 	const fakeActionItem: Action = getMockActionItem();
 	let container: string | Element;
@@ -53,7 +48,7 @@ describe('Delete Action Item View', () => {
 				actionItemId={fakeActionItem.id}
 			/>,
 			({ set }) => {
-				set(TeamState, team);
+				set(TeamState, mockTeam);
 			}
 		));
 	});
@@ -82,7 +77,7 @@ describe('Delete Action Item View', () => {
 
 		await waitFor(() =>
 			expect(ActionItemService.delete).toHaveBeenCalledWith(
-				team.id,
+				mockTeam.id,
 				fakeActionItem.id
 			)
 		);

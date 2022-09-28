@@ -16,6 +16,7 @@
  */
 
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import Team from 'Types/Team';
 
 import {
 	CREATE_TEAM_PAGE_PATH,
@@ -107,6 +108,12 @@ const TeamService = {
 			password: password,
 			resetToken: token,
 		});
+	},
+
+	getTeam(teamId: string): Promise<Team> {
+		return axios
+			.get(`${CREATE_TEAM_API_PATH}/${teamId}`)
+			.then((res) => res.data);
 	},
 
 	getTeamName(teamId: string): Promise<string> {

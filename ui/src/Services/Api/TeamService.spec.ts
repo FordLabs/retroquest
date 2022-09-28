@@ -16,6 +16,7 @@
  */
 
 import axios, { AxiosError } from 'axios';
+import Team from 'Types/Team';
 
 import { REQUEST_PASSWORD_RESET_PAGE_PATH } from '../../RouteConstants';
 import CookieService from '../CookieService';
@@ -26,7 +27,7 @@ jest.mock('../CookieService');
 
 describe('Team Service', () => {
 	const teamId = 'team-id';
-	const user = {
+	const teamData = {
 		name: 'Julia',
 		password: 'Password1',
 		email: 'e@mail.com',
@@ -41,16 +42,16 @@ describe('Team Service', () => {
 		it('should login to retroquest', async () => {
 			axios.post = jest.fn().mockResolvedValue(axiosResponse);
 			const authResponse: AuthResponse = await TeamService.login(
-				user.name,
-				user.password
+				teamData.name,
+				teamData.password
 			);
 			expect(authResponse).toEqual({
 				token: authResponse.token,
 				teamId,
 			});
 			expect(axios.post).toHaveBeenCalledWith('/api/team/login', {
-				name: user.name,
-				password: user.password,
+				name: teamData.name,
+				password: teamData.password,
 			});
 		});
 	});
@@ -59,24 +60,39 @@ describe('Team Service', () => {
 		it('should create a retroquest team', async () => {
 			axios.post = jest.fn().mockResolvedValue(axiosResponse);
 			const authResponse: AuthResponse = await TeamService.create(
-				user.name,
-				user.password,
-				user.email,
-				user.secondaryEmail
+				teamData.name,
+				teamData.password,
+				teamData.email,
+				teamData.secondaryEmail
 			);
 			expect(authResponse).toEqual({
 				token: authResponse.token,
 				teamId,
 			});
-			expect(axios.post).toHaveBeenCalledWith('/api/team', user);
+			expect(axios.post).toHaveBeenCalledWith('/api/team', teamData);
+		});
+	});
+
+	describe('getTeam', () => {
+		it('should get team name by team id', async () => {
+			const expectedTeam: Team = {
+				id: 'team-id',
+				name: 'Team Name',
+				email: '',
+				secondaryEmail: '',
+			};
+			axios.get = jest.fn().mockResolvedValue({ data: expectedTeam });
+			const actualTeamName = await TeamService.getTeam(expectedTeam.id);
+			expect(actualTeamName).toBe(expectedTeam);
+			expect(axios.get).toHaveBeenCalledWith(`/api/team/${expectedTeam.id}`);
 		});
 	});
 
 	describe('getTeamName', () => {
 		it('should get team name by team id', async () => {
-			axios.get = jest.fn().mockResolvedValue({ data: user.name });
+			axios.get = jest.fn().mockResolvedValue({ data: teamData.name });
 			const actualTeamName = await TeamService.getTeamName(teamId);
-			expect(actualTeamName).toBe(user.name);
+			expect(actualTeamName).toBe(teamData.name);
 			expect(axios.get).toHaveBeenCalledWith(`/api/team/${teamId}/name`);
 		});
 	});

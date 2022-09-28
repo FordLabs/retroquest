@@ -19,10 +19,10 @@ import { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { act, renderHook } from '@testing-library/react-hooks';
 import { RecoilRoot } from 'recoil';
-
-import { AuthResponse } from '../Services/Api/TeamService';
-import CookieService from '../Services/CookieService';
-import { TeamState } from '../State/TeamState';
+import { mockTeam } from 'Services/Api/__mocks__/TeamService';
+import { AuthResponse } from 'Services/Api/TeamService';
+import CookieService from 'Services/CookieService';
+import { TeamState } from 'State/TeamState';
 
 import useAuth from './useAuth';
 
@@ -40,7 +40,7 @@ describe('useAuth Hook', () => {
 		<MemoryRouter initialEntries={['/login']}>
 			<RecoilRoot
 				initializeState={({ set }) => {
-					set(TeamState, { name: 'My Team', id: 'my-team' });
+					set(TeamState, mockTeam);
 				}}
 			>
 				{children}
@@ -76,7 +76,7 @@ describe('useAuth Hook', () => {
 		});
 
 		expect(CookieService.clearToken).toHaveReturned();
-		expect(mockedUsedNavigate).toHaveBeenCalledWith(`/login/my-team`, {
+		expect(mockedUsedNavigate).toHaveBeenCalledWith(`/login/${mockTeam.id}`, {
 			replace: true,
 		});
 	});
