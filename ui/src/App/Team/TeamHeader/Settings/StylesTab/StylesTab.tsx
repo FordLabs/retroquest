@@ -16,9 +16,9 @@
  */
 
 import * as React from 'react';
-import darkThemeImagePath from 'Assets/dark-theme-picture.jpg';
-import lightThemeImagePath from 'Assets/light-theme-picture.jpg';
-import systemThemeImagePath from 'Assets/system-theme-picture.jpg';
+import darkThemeImagePath from 'Assets/dark-theme-setting.png';
+import lightThemeImagePath from 'Assets/light-theme-setting.png';
+import systemThemeImagePath from 'Assets/system-theme-setting.png';
 import classnames from 'classnames';
 import { useRecoilState } from 'recoil';
 import { ThemeState } from 'State/ThemeState';
