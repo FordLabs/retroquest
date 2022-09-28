@@ -211,6 +211,21 @@ describe('Retro Member Journey', () => {
 			.should('eq', 201);
 	});
 
+	it('Log Out Button', () => {
+		cy.findByText('Log Out').click();
+
+		cy.log('**Should be on Login page with pre-populated team name**');
+
+		const LoginPagePathWithTeamId =
+			Cypress.config().baseUrl +
+			getLoginPagePathWithTeamId(teamCredentials.teamId);
+		cy.url().should('eq', LoginPagePathWithTeamId);
+
+		cy.contains('Log in to your Team!').should('exist');
+
+		cy.getCookie(TOKEN_KEY).should('not.exist');
+	});
+
 	it('Navigate between columns on mobile', () => {
 		cy.viewport(414, 736);
 
@@ -259,12 +274,12 @@ describe('Retro Member Journey', () => {
 			cy.findAllByText('Settings').eq(1).should('exist');
 
 			cy.findByText('Styles').as('stylesTab');
-			cy.findByText('Account').as('accountTab');
+			// cy.findByText('Account').as('accountTab');
 		});
 
 		it('Styles Tab: Change theme between light, dark, and system settings mode', () => {
 			cy.get('@stylesTab').as('stylesTab').should('have.class', 'selected');
-			cy.get('@accountTab').should('not.have.class', 'selected');
+			// cy.get('@accountTab').should('not.have.class', 'selected');
 
 			const darkThemeClass = '.dark-theme';
 			cy.get(darkThemeClass).should('not.exist');
@@ -313,24 +328,6 @@ describe('Retro Member Journey', () => {
 				purpleBoxShadow
 			);
 			cy.get(darkThemeClass).should('not.exist');
-		});
-
-		it('Account Tab: Log out', () => {
-			cy.get('@accountTab').click().should('have.class', 'selected');
-			cy.get('@stylesTab').should('not.have.class', 'selected');
-
-			cy.findByText('Logout').click();
-
-			cy.log('**Should be on Login page with pre-populated team name**');
-
-			const LoginPagePathWithTeamId =
-				Cypress.config().baseUrl +
-				getLoginPagePathWithTeamId(teamCredentials.teamId);
-			cy.url().should('eq', LoginPagePathWithTeamId);
-
-			cy.contains('Log in to your Team!').should('exist');
-
-			cy.getCookie(TOKEN_KEY).should('not.exist');
 		});
 	});
 

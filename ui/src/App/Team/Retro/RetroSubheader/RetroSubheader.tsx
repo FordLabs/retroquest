@@ -18,6 +18,7 @@
 import React from 'react';
 import Timer from 'Common/Timer/Timer';
 import fileSaver from 'file-saver';
+import useAuth from 'Hooks/useAuth';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import TeamService from 'Services/Api/TeamService';
 import { ModalContentsState } from 'State/ModalContentsState';
@@ -29,6 +30,8 @@ import FeedbackForm from './FeedbackForm/FeedbackForm';
 import './RetroSubheader.scss';
 
 function RetroSubheader(): JSX.Element {
+	const { logout } = useAuth();
+
 	const setModalContents = useSetRecoilState(ModalContentsState);
 	const team = useRecoilValue(TeamState);
 
@@ -63,6 +66,15 @@ function RetroSubheader(): JSX.Element {
 							onClick={downloadCSV}
 						>
 							<span className="button-text">Download CSV</span>
+							<i className="fas fa-download button-icon" aria-hidden="true" />
+						</button>
+					</li>
+					<li>
+						<button
+							className="download-csv-button button button-secondary-old"
+							onClick={logout}
+						>
+							<span className="button-text">Log Out</span>
 							<i className="fas fa-download button-icon" aria-hidden="true" />
 						</button>
 					</li>
