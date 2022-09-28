@@ -28,16 +28,10 @@ function useTeamFromRoute(): Team {
 
 	useEffect(() => {
 		if (teamId) {
-			TeamService.getTeamName(teamId)
-				.then((activeTeamName) => {
-					document.title = `${activeTeamName} | RetroQuest`;
-
-					setTeam({
-						name: activeTeamName,
-						id: teamId,
-						email: '',
-						secondaryEmail: '',
-					});
+			TeamService.getTeam(teamId)
+				.then((activeTeam) => {
+					document.title = `${activeTeam.name} | RetroQuest`;
+					setTeam(activeTeam);
 				})
 				.catch(console.error);
 		}
