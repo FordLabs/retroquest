@@ -284,39 +284,31 @@ describe('Retro Member Journey', () => {
 			const darkThemeClass = '.dark-theme';
 			cy.get(darkThemeClass).should('not.exist');
 
-			const purpleBoxShadow = 'rgb(165, 109, 226) 0px 0px 0px 8px';
+			const tealBoxShadow = 'rgb(22, 160, 133) 0px 0px 0px 8px';
 			cy.findByAltText('Dark Theme')
-				.should('not.have.css', 'box-shadow', purpleBoxShadow)
+				.should('not.have.css', 'box-shadow', tealBoxShadow)
 				.as('darkThemeIcon')
 				.click();
-			cy.get('@darkThemeIcon').should(
-				'have.css',
-				'box-shadow',
-				purpleBoxShadow
-			);
+			cy.get('@darkThemeIcon').should('have.css', 'box-shadow', tealBoxShadow);
 			cy.get(darkThemeClass).should('exist');
 
 			cy.findByAltText('Light Theme')
-				.should('not.have.css', 'box-shadow', purpleBoxShadow)
+				.should('not.have.css', 'box-shadow', tealBoxShadow)
 				.as('lightThemeIcon')
 				.click();
-			cy.get('@lightThemeIcon').should(
-				'have.css',
-				'box-shadow',
-				purpleBoxShadow
-			);
+			cy.get('@lightThemeIcon').should('have.css', 'box-shadow', tealBoxShadow);
 			cy.get(darkThemeClass).should('not.exist');
 
 			cy.findByAltText('Dark Theme').click();
 
 			cy.findByAltText('System Settings Theme')
-				.should('not.have.css', 'box-shadow', purpleBoxShadow)
+				.should('not.have.css', 'box-shadow', tealBoxShadow)
 				.as('systemThemeIcon')
 				.click();
 			cy.get('@systemThemeIcon').should(
 				'have.css',
 				'box-shadow',
-				purpleBoxShadow
+				tealBoxShadow
 			);
 			cy.get(darkThemeClass).should('not.exist');
 
@@ -325,7 +317,7 @@ describe('Retro Member Journey', () => {
 			cy.findByAltText('System Settings Theme').should(
 				'have.css',
 				'box-shadow',
-				purpleBoxShadow
+				tealBoxShadow
 			);
 			cy.get(darkThemeClass).should('not.exist');
 		});
