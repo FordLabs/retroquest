@@ -58,10 +58,12 @@
 		width: 100%;
 		margin-bottom: 1rem;
 
-		color: rgba(main.$asphalt, 0.5);
-		font-weight: bold;
+		color: main.$dark-gray;
+		font-family: 'Quicksand', serif;
+		font-size: 1.25rem;
+		font-style: normal;
+		line-height: 25px;
 
-		font-size: 0.9rem;
 		text-align: center;
 		text-transform: capitalize;
 
@@ -104,7 +106,7 @@
 
 		&.selected {
 			color: main.$white;
-			background-color: main.$purple;
+			background-color: main.$dark-turquoise;
 		}
 
 		&:not(:last-child) {
@@ -122,14 +124,14 @@
 
 @include main.dark-theme {
 	.settings {
-		background-color: main.$light-asphalt;
+		background-color: main.$dark-asphalt;
 
 		.settings-title {
 			color: main.$gray-1;
 		}
 
 		.settings-subtitle {
-			color: rgba(main.$gray-1, 0.5);
+			color: main.$light-gray;
 		}
 	}
 
@@ -139,5 +141,10 @@
 
 	.tab {
 		background-color: rgba(main.$black, 0.22);
+
+		&.selected {
+			color: main.$black-asphalt;
+			background-color: main.$turquoise;
+		}
 	}
 }
