@@ -23,19 +23,23 @@
 		align-items: center;
 
 		.checkbox-icon {
-			width: 35px;
-			height: 28px;
+			width: 3rem;
 			margin: 1rem;
 		}
 
 		.paragraph-1 {
+			max-width: 20rem;
+
 			color: main.$red;
+			font-weight: 600;
 		}
 	}
 
 	.paragraph-2 {
-		margin-bottom: 0;
+		margin-bottom: 0.5rem;
+
 		color: main.$dark-gray;
+		font-weight: 600;
 	}
 }
 
