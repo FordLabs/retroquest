@@ -44,8 +44,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
@@ -130,6 +129,42 @@ class TeamApiTest extends ApiTestBase {
         assertThat(content).contains("\"secondaryEmail\":null");
         assertThat(content).contains("\"id\":\"team-id\"");
         assertThat(content).doesNotContain("password");
+    }
+
+    @Test
+    void should_update_both_team_primary_email_address() throws Exception {
+        Team expectedResetTeam = new Team("team-id", "TeamName", "%$&357", "");
+        teamRepository.save(expectedResetTeam);
+
+        mockMvc.perform(
+                put("/api/team/team-id/email-addresses")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new UpdateTeamEmailAddressesRequest("primary@mail.com", null)))
+                        .header("Authorization", "Bearer " + jwtBuilder.buildJwt("team-id"))
+        ).andExpect(status().isOk()).andReturn();
+
+        var updatedTeam = teamRepository.findTeamByUri(expectedResetTeam.getUri()).orElseThrow();
+        assertThat(updatedTeam.getName()).contains("TeamName");
+        assertThat(updatedTeam.getEmail()).contains("primary@mail.com");
+        assertThat(updatedTeam.getSecondaryEmail()).isNull();
+    }
+
+    @Test
+    void should_update_both_team_email_addresses() throws Exception {
+        Team expectedResetTeam = new Team("team-id", "TeamName", "%$&357", "");
+        teamRepository.save(expectedResetTeam);
+
+        mockMvc.perform(
+                put("/api/team/team-id/email-addresses")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new UpdateTeamEmailAddressesRequest("primary@mail.com", "secondary@mail.com")))
+                        .header("Authorization", "Bearer " + jwtBuilder.buildJwt("team-id"))
+        ).andExpect(status().isOk()).andReturn();
+
+        var updatedTeam = teamRepository.findTeamByUri(expectedResetTeam.getUri()).orElseThrow();
+        assertThat(updatedTeam.getName()).contains("TeamName");
+        assertThat(updatedTeam.getEmail()).contains("primary@mail.com");
+        assertThat(updatedTeam.getSecondaryEmail()).contains("secondary@mail.com");
     }
 
     @Test

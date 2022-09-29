@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -133,5 +133,12 @@ public class TeamService {
     private void updateFailedAttempts(Team savedTeam, int failedAttempts) {
         savedTeam.setFailedAttempts(failedAttempts);
         teamRepository.save(savedTeam);
+    }
+
+    public void updateTeamEmailAddresses(String teamId, UpdateTeamEmailAddressesRequest request) {
+        Team team = this.getTeamByUri(teamId);
+        team.setEmail(request.primaryEmail());
+        team.setSecondaryEmail(request.secondaryEmail());
+        teamRepository.save(team);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -87,6 +86,13 @@ public class TeamController {
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public ResponseEntity<Team> getTeam(@PathVariable("teamId") String teamId){
         return ResponseEntity.ok(teamService.getTeamByUri(teamId));
+    }
+
+    @PutMapping("/team/{teamId}/email-addresses")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @Operation(summary = "Update one or both team email addresses", description = "updateEmailAddresses")
+    public void updateEmailAddresses(@PathVariable("teamId") String teamId, @RequestBody UpdateTeamEmailAddressesRequest request) {
+        teamService.updateTeamEmailAddresses(teamId, request);
     }
 
     @GetMapping("/team/{teamId}/name")
