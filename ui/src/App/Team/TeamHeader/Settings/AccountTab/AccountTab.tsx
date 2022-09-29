@@ -30,10 +30,11 @@ function AccountTab(): JSX.Element {
 	}
 
 	return (
-		<div className="tab-body account-tab-body">
+		<div className="tab-body account-tab-body" data-testid="accountTab">
 			{!teamHasEmail() && <AddBoardOwnersForm />}
 			{teamHasEmail() && (
 				<div>
+					<div>Board Owners</div>
 					<div>Email 1: {team.email}</div>
 					<div> Email 2: {team.secondaryEmail}</div>
 				</div>

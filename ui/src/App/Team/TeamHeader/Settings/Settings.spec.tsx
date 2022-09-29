@@ -17,109 +17,60 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MutableSnapshot } from 'recoil';
-import { TeamState } from 'State/TeamState';
-import Team from 'Types/Team';
 import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import Settings from './Settings';
 
 describe('Settings', () => {
-	describe('Styles Tab', () => {
-		it('should change theme from light to dark to system settings', () => {
-			renderSettings();
-			expect(screen.getByText('Appearance')).toBeDefined();
-
-			const lightThemeButton = screen.getByAltText('Light Theme');
-			const darkThemeButton = screen.getByAltText('Dark Theme');
-			const systemSettingsThemeButton = screen.getByAltText(
-				'System Settings Theme'
-			);
-
-			expect(systemSettingsThemeButton).toHaveClass('selected');
-			expect(lightThemeButton).not.toHaveClass('selected');
-			expect(darkThemeButton).not.toHaveClass('selected');
-
-			userEvent.click(darkThemeButton);
-
-			expect(systemSettingsThemeButton).not.toHaveClass('selected');
-			expect(lightThemeButton).not.toHaveClass('selected');
-			expect(darkThemeButton).toHaveClass('selected');
-
-			userEvent.click(lightThemeButton);
-
-			expect(systemSettingsThemeButton).not.toHaveClass('selected');
-			expect(lightThemeButton).toHaveClass('selected');
-			expect(darkThemeButton).not.toHaveClass('selected');
-
-			userEvent.click(systemSettingsThemeButton);
-
-			expect(systemSettingsThemeButton).toHaveClass('selected');
-			expect(lightThemeButton).not.toHaveClass('selected');
-			expect(darkThemeButton).not.toHaveClass('selected');
-		});
+	beforeEach(() => {
+		renderWithRecoilRoot(<Settings />);
 	});
 
-	describe('Account', () => {
-		const addBoardOwnersFormTitle = 'Add Board Owners';
-		let activeTeam: Team;
-
-		beforeEach(() => {
-			activeTeam = {
-				id: 'name-1',
-				name: 'Name',
-				email: '',
-				secondaryEmail: '',
-			};
-		});
-
-		it('should show "Add Board Owners" form if NO emails are present', async () => {
-			renderSettings(({ set }) => {
-				set(TeamState, activeTeam);
-			});
-			clickAccountTab();
-
-			expect(await screen.findByText(addBoardOwnersFormTitle)).toBeDefined();
-		});
-
-		it('should NOT show "Add Board Owners" form if team has a primary email', () => {
-			activeTeam.email = 'a@b.c';
-			renderSettings(({ set }) => {
-				set(TeamState, activeTeam);
-			});
-			clickAccountTab();
-
-			expect(screen.queryByText(addBoardOwnersFormTitle)).toBeDefined();
-		});
-
-		it('should NOT show "Add Board Owners" form if team has a secondary email', () => {
-			activeTeam.email = 'a@b.c';
-			renderSettings(({ set }) => {
-				set(TeamState, activeTeam);
-			});
-			clickAccountTab();
-
-			expect(screen.queryByText(addBoardOwnersFormTitle)).toBeDefined();
-		});
+	it('should be on the styles tab by default', () => {
+		expect(hasSelectedTabClass(getStylesTab())).toBeTruthy();
+		expect(screen.getByText('Appearance')).toBeInTheDocument();
+		expect(screen.queryByTestId('accountTab')).not.toBeInTheDocument();
+		expect(screen.queryByText('Version:')).not.toBeInTheDocument();
 	});
 
-	describe('Info Tab', () => {
-		it('should show app version', () => {
-			renderSettings();
-			userEvent.click(screen.getByText('Info'));
-			expect(screen.getByLabelText('Version:').getAttribute('value')).toBe(
-				'0ddb411'
-			);
-		});
+	it('should go to the account settings when user clicks on the account tab', () => {
+		userEvent.click(getAccountTab());
+		expect(hasSelectedTabClass(getAccountTab())).toBeTruthy();
+		expect(screen.getByTestId('accountTab')).toBeInTheDocument();
+	});
+
+	it('should go to the styles settings when user clicks on the styles tab', () => {
+		userEvent.click(getAccountTab());
+		const stylesTab = getStylesTab();
+		expect(hasSelectedTabClass(stylesTab)).toBeFalsy();
+		userEvent.click(stylesTab);
+		expect(hasSelectedTabClass(stylesTab)).toBeTruthy();
+		expect(screen.getByText('Appearance')).toBeInTheDocument();
+	});
+
+	it('should go to the info settings when user clicks on the info tab', () => {
+		const infoTab = getInfoTab();
+		expect(hasSelectedTabClass(infoTab)).toBeFalsy();
+
+		userEvent.click(infoTab);
+
+		expect(hasSelectedTabClass(infoTab)).toBeTruthy();
+		expect(screen.getByText('Version:')).toBeInTheDocument();
 	});
 });
 
-function renderSettings(
-	recoilState?: (mutableSnapshot: MutableSnapshot) => void
-) {
-	renderWithRecoilRoot(<Settings />, recoilState);
+function getStylesTab() {
+	return screen.getByText('Styles');
 }
 
-function clickAccountTab() {
-	userEvent.click(screen.getByText('Account'));
+function getAccountTab() {
+	return screen.getByText('Account');
+}
+
+function getInfoTab() {
+	return screen.getByText('Info');
+}
+
+function hasSelectedTabClass(element: HTMLElement): boolean {
+	return element.classList.contains('selected');
 }
