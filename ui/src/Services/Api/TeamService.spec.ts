@@ -37,6 +37,12 @@ describe('Team Service', () => {
 		data: 'jwt-token-123',
 		headers: { location: teamId },
 	};
+	const fakeToken = 'fake-token';
+	const mockConfig = { headers: { Authorization: `Bearer ${fakeToken}` } };
+
+	beforeAll(() => {
+		CookieService.getToken = jest.fn().mockReturnValue(fakeToken);
+	});
 
 	describe('login', () => {
 		it('should login to retroquest', async () => {
@@ -84,7 +90,10 @@ describe('Team Service', () => {
 			axios.get = jest.fn().mockResolvedValue({ data: expectedTeam });
 			const actualTeamName = await TeamService.getTeam(expectedTeam.id);
 			expect(actualTeamName).toBe(expectedTeam);
-			expect(axios.get).toHaveBeenCalledWith(`/api/team/${expectedTeam.id}`);
+			expect(axios.get).toHaveBeenCalledWith(
+				`/api/team/${expectedTeam.id}`,
+				mockConfig
+			);
 		});
 	});
 

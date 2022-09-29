@@ -36,6 +36,7 @@ import {
 	RESET_TOKEN_LIFETIME_API_PATH,
 	RESET_TOKEN_STATUS_API_PATH,
 } from './ApiConstants';
+import getAuthConfig from './getAuthConfig';
 
 export interface AuthResponse {
 	token: string;
@@ -112,7 +113,7 @@ const TeamService = {
 
 	getTeam(teamId: string): Promise<Team> {
 		return axios
-			.get(`${CREATE_TEAM_API_PATH}/${teamId}`)
+			.get(`${CREATE_TEAM_API_PATH}/${teamId}`, getAuthConfig())
 			.then((res) => res.data);
 	},
 

@@ -80,18 +80,19 @@ public class TeamController {
         return new ResponseEntity<>(jwt, headers, CREATED);
     }
 
-    @GetMapping("/team/{teamUri}")
+    @GetMapping("/team/{teamId}")
     @Transactional(rollbackOn = URISyntaxException.class)
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Get an entire team", description = "getTeam")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public ResponseEntity<Team> getTeam(@PathVariable("teamUri") String teamUri){
-        return ResponseEntity.ok(teamService.getTeamByUri(teamUri));
+    public ResponseEntity<Team> getTeam(@PathVariable("teamId") String teamId){
+        return ResponseEntity.ok(teamService.getTeamByUri(teamId));
     }
 
-    @GetMapping("/team/{teamUri}/name")
+    @GetMapping("/team/{teamId}/name")
     @Operation(summary = "Gets a team name given the team uri", description = "getTeamName")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public String getTeamName(@PathVariable("teamUri") String teamUri) {
+    public String getTeamName(@PathVariable("teamId") String teamUri) {
         return teamService.getTeamByUri(teamUri).getName();
     }
 
@@ -146,7 +147,7 @@ public class TeamController {
             .body(file.getCsvString().getBytes());
     }
 
-    @GetMapping(value = "team/{teamId}/validate")
+    @GetMapping(value = "/team/{teamId}/validate")
     @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Validates a team id", description = "deprecated")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
