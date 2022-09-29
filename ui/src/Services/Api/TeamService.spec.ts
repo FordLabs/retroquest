@@ -88,10 +88,29 @@ describe('Team Service', () => {
 				secondaryEmail: '',
 			};
 			axios.get = jest.fn().mockResolvedValue({ data: expectedTeam });
-			const actualTeamName = await TeamService.getTeam(expectedTeam.id);
-			expect(actualTeamName).toBe(expectedTeam);
+			const actualTeam = await TeamService.getTeam(expectedTeam.id);
+			expect(actualTeam).toBe(expectedTeam);
 			expect(axios.get).toHaveBeenCalledWith(
 				`/api/team/${expectedTeam.id}`,
+				mockConfig
+			);
+		});
+	});
+
+	describe('updateTeamEmails', () => {
+		it('should get team name by team id', async () => {
+			const teamId = 'team-id';
+			await TeamService.updateTeamEmailAddresses(
+				teamId,
+				'primary@mail.com',
+				'secondary@mail.com'
+			);
+			expect(axios.put).toHaveBeenCalledWith(
+				`/api/team/${teamId}/email-addresses`,
+				{
+					email1: 'primary@mail.com',
+					email2: 'secondary@mail.com',
+				},
 				mockConfig
 			);
 		});
@@ -124,7 +143,11 @@ describe('Team Service', () => {
 	describe('setEmails', () => {
 		it('should post emails to /email/reset with the token', async () => {
 			axios.post = jest.fn();
-			await TeamService.setEmails('e1@ma.il', 'e2@ma.il', 'T0k3n');
+			await TeamService.updateEmailsWithResetToken(
+				'e1@ma.il',
+				'e2@ma.il',
+				'T0k3n'
+			);
 
 			expect(axios.post).toHaveBeenCalledWith('/api/email/reset', {
 				email1: 'e1@ma.il',

@@ -15,10 +15,31 @@
  * limitations under the License.
  */
 
+import { useRecoilValue } from 'recoil';
+import { TeamState } from 'State/TeamState';
+
+import AddBoardOwnersForm from './AddBoardOwnersForm/AddBoardOwnersForm';
+
 import './AccountTab.scss';
 
 function AccountTab(): JSX.Element {
-	return <div className="tab-body account-tab-body"></div>;
+	const team = useRecoilValue(TeamState);
+
+	function teamHasEmail(): boolean {
+		return !!team.email || !!team.secondaryEmail;
+	}
+
+	return (
+		<div className="tab-body account-tab-body">
+			{!teamHasEmail() && <AddBoardOwnersForm />}
+			{teamHasEmail() && (
+				<div>
+					<div>Email 1: {team.email}</div>
+					<div> Email 2: {team.secondaryEmail}</div>
+				</div>
+			)}
+		</div>
+	);
 }
 
 export default AccountTab;

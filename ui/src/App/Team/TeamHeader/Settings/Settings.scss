@@ -34,7 +34,7 @@
 
 	@include main.breakpoint-medium {
 		width: 450px;
-		height: 450px;
+		min-height: 450px;
 	}
 
 	.settings-title {

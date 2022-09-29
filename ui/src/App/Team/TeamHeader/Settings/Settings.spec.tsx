@@ -18,6 +18,8 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MutableSnapshot } from 'recoil';
+import { TeamState } from 'State/TeamState';
+import Team from 'Types/Team';
 import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import Settings from './Settings';
@@ -59,9 +61,46 @@ describe('Settings', () => {
 	});
 
 	describe('Account', () => {
-		it('should show "Add Board Owners" form if NO emails are present', () => {});
+		const addBoardOwnersFormTitle = 'Add Board Owners';
+		let activeTeam: Team;
 
-		it("should show current board owner's emails if emails are present", () => {});
+		beforeEach(() => {
+			activeTeam = {
+				id: 'name-1',
+				name: 'Name',
+				email: '',
+				secondaryEmail: '',
+			};
+		});
+
+		it('should show "Add Board Owners" form if NO emails are present', async () => {
+			renderSettings(({ set }) => {
+				set(TeamState, activeTeam);
+			});
+			clickAccountTab();
+
+			expect(await screen.findByText(addBoardOwnersFormTitle)).toBeDefined();
+		});
+
+		it('should NOT show "Add Board Owners" form if team has a primary email', () => {
+			activeTeam.email = 'a@b.c';
+			renderSettings(({ set }) => {
+				set(TeamState, activeTeam);
+			});
+			clickAccountTab();
+
+			expect(screen.queryByText(addBoardOwnersFormTitle)).toBeDefined();
+		});
+
+		it('should NOT show "Add Board Owners" form if team has a secondary email', () => {
+			activeTeam.email = 'a@b.c';
+			renderSettings(({ set }) => {
+				set(TeamState, activeTeam);
+			});
+			clickAccountTab();
+
+			expect(screen.queryByText(addBoardOwnersFormTitle)).toBeDefined();
+		});
 	});
 
 	describe('Info Tab', () => {
@@ -79,4 +118,8 @@ function renderSettings(
 	recoilState?: (mutableSnapshot: MutableSnapshot) => void
 ) {
 	renderWithRecoilRoot(<Settings />, recoilState);
+}
+
+function clickAccountTab() {
+	userEvent.click(screen.getByText('Account'));
 }

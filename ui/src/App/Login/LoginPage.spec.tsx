@@ -21,6 +21,7 @@ import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
 import { mockContributors } from 'Services/Api/__mocks__/ContributorsService';
+import { mockTeam } from 'Services/Api/__mocks__/TeamService';
 import ContributorsService from 'Services/Api/ContributorsService';
 import TeamService from 'Services/Api/TeamService';
 
@@ -31,24 +32,24 @@ jest.mock('Services/Api/TeamService');
 
 const mockLogin = jest.fn();
 
-jest.mock('../../Hooks/useAuth', () => {
+jest.mock('Hooks/useAuth', () => {
 	return () => ({
 		login: mockLogin,
 	});
 });
 
-jest.mock('../../Services/Api/ConfigurationService');
+jest.mock('Services/Api/ConfigurationService');
 
 describe('LoginPage.spec.tsx', () => {
 	let container: HTMLElement;
 	let rerender: (ui: ReactElement) => void;
-	const validTeamName = 'Team Awesome';
+	const validTeamName = mockTeam.name;
 	const validPassword = 'Password1';
 
 	beforeEach(async () => {
 		ContributorsService.get = jest.fn().mockResolvedValue(mockContributors);
-		TeamService.getTeamName = jest.fn().mockResolvedValue(validTeamName);
-		TeamService.login = jest.fn().mockResolvedValue(validTeamName);
+		TeamService.getTeam = jest.fn().mockResolvedValue(mockTeam);
+		TeamService.login = jest.fn().mockResolvedValue(mockTeam);
 
 		({ container, rerender } = renderComponent());
 
@@ -83,7 +84,7 @@ describe('LoginPage.spec.tsx', () => {
 
 		rerender(
 			<RecoilRoot>
-				<MemoryRouter initialEntries={[`/login/${validTeamName}`]}>
+				<MemoryRouter initialEntries={[`/login/${mockTeam.id}`]}>
 					<Routes>
 						<Route path="/login/:teamId" element={<LoginPage />} />
 					</Routes>
@@ -91,7 +92,7 @@ describe('LoginPage.spec.tsx', () => {
 			</RecoilRoot>
 		);
 		teamNameInput = getTeamNameInput();
-		await waitFor(async () => expect(teamNameInput.value).toBe(validTeamName));
+		await waitFor(async () => expect(teamNameInput.value).toBe(mockTeam.name));
 	});
 
 	it('should login with correct credentials', async () => {

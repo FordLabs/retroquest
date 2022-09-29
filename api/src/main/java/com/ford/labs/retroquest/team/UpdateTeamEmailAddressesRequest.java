@@ -22,6 +22,6 @@ import io.micrometer.core.lang.Nullable;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record UpdateTeamEmailAddressesRequest(
-        String primaryEmail,
-        @Nullable String secondaryEmail
+        String email1,
+        @Nullable String email2
 ) { }

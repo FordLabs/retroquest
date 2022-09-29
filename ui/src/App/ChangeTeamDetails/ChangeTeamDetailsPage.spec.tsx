@@ -41,7 +41,7 @@ describe('Change Team Details Page', () => {
 		submitValidForm();
 
 		await waitFor(() =>
-			expect(TeamService.setEmails).toHaveBeenCalledWith(
+			expect(TeamService.updateEmailsWithResetToken).toHaveBeenCalledWith(
 				'email1@email1.email1',
 				'email2@email2.email2',
 				expect.anything()
@@ -53,7 +53,7 @@ describe('Change Team Details Page', () => {
 		submitValidForm();
 
 		await waitFor(() =>
-			expect(TeamService.setEmails).toHaveBeenCalledWith(
+			expect(TeamService.updateEmailsWithResetToken).toHaveBeenCalledWith(
 				expect.anything(),
 				expect.anything(),
 				'ABC123'

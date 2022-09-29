@@ -137,8 +137,8 @@ public class TeamService {
 
     public void updateTeamEmailAddresses(String teamId, UpdateTeamEmailAddressesRequest request) {
         Team team = this.getTeamByUri(teamId);
-        team.setEmail(request.primaryEmail());
-        team.setSecondaryEmail(request.secondaryEmail());
+        team.setEmail(request.email1());
+        team.setSecondaryEmail(request.email2());
         teamRepository.save(team);
     }
 }

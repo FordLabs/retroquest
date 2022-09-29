@@ -34,8 +34,8 @@ function ChangeTeamDetailsPage(): JSX.Element {
 	function submitEmails() {
 		if (email) {
 			const token = new URLSearchParams(search).get('token') || '';
-			TeamService.setEmails(email, secondaryEmail, token).then(() =>
-				setShouldShowSaved(true)
+			TeamService.updateEmailsWithResetToken(email, secondaryEmail, token).then(
+				() => setShouldShowSaved(true)
 			);
 		}
 	}

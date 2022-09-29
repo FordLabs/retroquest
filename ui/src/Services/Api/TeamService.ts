@@ -74,7 +74,7 @@ const TeamService = {
 			.then(returnTokenAndTeamId);
 	},
 
-	setEmails(
+	updateEmailsWithResetToken(
 		email1: string,
 		email2: string,
 		token: string
@@ -120,6 +120,18 @@ const TeamService = {
 	getTeamName(teamId: string): Promise<string> {
 		const TEAM_NAME_API_PATH = getTeamNameApiPath(teamId);
 		return axios.get(TEAM_NAME_API_PATH).then((res) => res.data);
+	},
+
+	updateTeamEmailAddresses(teamId: string, email1: string, email2: string) {
+		const url = `${CREATE_TEAM_API_PATH}/${teamId}/email-addresses`;
+		return axios.put(
+			url,
+			{
+				email1: email1,
+				email2: email2,
+			},
+			getAuthConfig()
+		);
 	},
 
 	getCSV(teamId: string): Promise<Blob> {
