@@ -22,6 +22,8 @@ import { useRecoilValue } from 'recoil';
 import teamService from 'Services/Api/TeamService';
 import { TeamState } from 'State/TeamState';
 
+import './AddBoardOwnersForm.scss';
+
 const blankValueWithValidity = { value: '', validity: false };
 
 interface ValueAndValidity {
@@ -53,11 +55,12 @@ function AddBoardOwnersForm() {
 	return (
 		<Form
 			submitButtonText="Add Email"
+			className="add-board-owners-form"
 			disableSubmitBtn={!primaryEmail.validity}
 			onSubmit={submitForm}
 		>
 			<div className="label">Add Board Owners</div>
-			<p>
+			<p className="description">
 				Want the ability to change your team’s password? Add 1 or 2 board owners
 				to your RetroQuest team and these email addresses will be able to reset
 				the team’s password, when desired.

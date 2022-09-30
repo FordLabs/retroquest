@@ -23,16 +23,6 @@
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-
-	.label {
-		font-weight: bold;
-		font-size: 1.1rem;
-		text-transform: capitalize;
-
-		@include main.breakpoint-medium {
-			font-size: 1.2rem;
-		}
-	}
 }
 
 .theme-buttons {
