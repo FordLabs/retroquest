@@ -15,18 +15,20 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.team;
+package com.ford.labs.retroquest.team.validation;
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
-import java.lang.annotation.*;
+import com.ford.labs.retroquest.exception.EmailNotValidException;
+import org.apache.commons.lang3.StringUtils;
 
-@Documented
-@Constraint(validatedBy = TeamNameValidator.class)
-@Target( { ElementType.METHOD, ElementType.FIELD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface TeamNameConstraint {
-    String message() default "Invalid Team Name";
-    Class<?>[] groups() default {};
-    Class<? extends Payload>[] payload() default {};
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
+public class EmailValidator implements ConstraintValidator<EmailConstraint, String> {
+    @Override
+    public boolean isValid(String email, ConstraintValidatorContext context) {
+        if (StringUtils.isBlank(email) || !email.contains("@")) {
+            throw new EmailNotValidException();
+        }
+        return true;
+    }
 }

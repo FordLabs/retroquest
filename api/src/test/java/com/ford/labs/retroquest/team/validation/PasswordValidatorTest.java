@@ -20,7 +20,6 @@ package com.ford.labs.retroquest.team.validation;
 import com.ford.labs.retroquest.exception.PasswordMissingNumberException;
 import com.ford.labs.retroquest.exception.PasswordMissingUpperCaseAlphaException;
 import com.ford.labs.retroquest.exception.PasswordTooShortException;
-import com.ford.labs.retroquest.team.PasswordValidator;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

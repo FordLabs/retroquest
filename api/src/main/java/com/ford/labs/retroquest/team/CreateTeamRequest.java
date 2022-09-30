@@ -17,6 +17,9 @@
 
 package com.ford.labs.retroquest.team;
 
+import com.ford.labs.retroquest.team.validation.EmailConstraint;
+import com.ford.labs.retroquest.team.validation.PasswordConstraint;
+import com.ford.labs.retroquest.team.validation.TeamNameConstraint;
 import lombok.*;
 
 @Data

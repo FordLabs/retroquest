@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.team;
+package com.ford.labs.retroquest.team.validation;
 import com.ford.labs.retroquest.exception.PasswordMissingNumberException;
 import com.ford.labs.retroquest.exception.PasswordMissingUpperCaseAlphaException;
 import com.ford.labs.retroquest.exception.PasswordTooShortException;
