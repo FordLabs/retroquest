@@ -20,6 +20,7 @@ package com.ford.labs.retroquest.team.validation;
 
 import com.ford.labs.retroquest.exception.EmptyTeamNameException;
 import com.ford.labs.retroquest.exception.SpecialCharacterTeamNameException;
+import com.ford.labs.retroquest.team.TeamNameValidator;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

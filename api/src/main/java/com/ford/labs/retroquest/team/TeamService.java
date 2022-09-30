@@ -23,11 +23,15 @@ import com.ford.labs.retroquest.column.ColumnRepository;
 import com.ford.labs.retroquest.exception.TeamDoesNotExistException;
 import com.ford.labs.retroquest.exception.PasswordInvalidException;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
+import com.ford.labs.retroquest.websocket.WebsocketService;
+import com.ford.labs.retroquest.websocket.events.WebsocketTeamEvent;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+
+import static com.ford.labs.retroquest.websocket.events.WebsocketEventType.UPDATE;
 
 @Service
 public class TeamService {
@@ -36,19 +40,21 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final PasswordEncoder passwordEncoder;
     private final ColumnRepository columnRepository;
+    private final WebsocketService websocketService;
 
     public TeamService(
         ThoughtRepository thoughtRepository,
         ActionItemRepository actionItemRepository,
         TeamRepository teamRepository,
         PasswordEncoder passwordEncoder,
-        ColumnRepository columnRepository
-    ) {
+        ColumnRepository columnRepository,
+        WebsocketService websocketService) {
         this.thoughtRepository = thoughtRepository;
         this.actionItemRepository = actionItemRepository;
         this.teamRepository = teamRepository;
         this.passwordEncoder = passwordEncoder;
         this.columnRepository = columnRepository;
+        this.websocketService = websocketService;
     }
 
     static boolean isEmailOnTeam(Team team, String email) {
@@ -139,6 +145,7 @@ public class TeamService {
         Team team = this.getTeamByUri(teamId);
         team.setEmail(request.email1());
         team.setSecondaryEmail(request.email2());
-        teamRepository.save(team);
+        Team updatedTeam = teamRepository.save(team);
+        websocketService.publishEvent(new WebsocketTeamEvent(updatedTeam.getId(), UPDATE, updatedTeam));
     }
 }
