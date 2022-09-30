@@ -102,14 +102,12 @@ describe('Login', () => {
 		});
 
 		it('Redirects to login page when team name back forbidden', () => {
-			cy.intercept('GET', '/api/team/teamNameThatDoesNotExist/name').as(
-				'getTeamName'
-			);
+			cy.intercept('GET', '/api/team/teamNameThatDoesNotExist').as('getTeam');
 
 			cy.createTeamAndLogin(teamCredentials);
 			cy.visit('/team/teamNameThatDoesNotExist');
 
-			cy.wait('@getTeamName');
+			cy.wait('@getTeam');
 
 			cy.url().should(
 				'eq',
