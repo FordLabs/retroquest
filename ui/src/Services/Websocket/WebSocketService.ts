@@ -81,6 +81,14 @@ class WebSocketService {
 		const destination = `/topic/${teamId}/end-retro`;
 		this.subscribe(destination, webSocketMessageHandler);
 	}
+
+	subscribeToTeam(
+		teamId: string,
+		webSocketMessageHandler: WebsocketMessageHandlerType
+	) {
+		const destination = `/topic/${teamId}/team`;
+		this.subscribe(destination, webSocketMessageHandler);
+	}
 }
 
 export default WebSocketService;
