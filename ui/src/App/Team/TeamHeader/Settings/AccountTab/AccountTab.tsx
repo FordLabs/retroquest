@@ -34,9 +34,9 @@ function AccountTab(): JSX.Element {
 			{!teamHasEmail() && <AddBoardOwnersForm />}
 			{teamHasEmail() && (
 				<div>
-					<div>Board Owners</div>
-					<div>Email 1: {team.email}</div>
-					<div> Email 2: {team.secondaryEmail}</div>
+					<div className="label">Board Owners</div>
+					<div className="team-email">{team.email}</div>
+					<div className="team-email">{team.secondaryEmail}</div>
 				</div>
 			)}
 		</div>
