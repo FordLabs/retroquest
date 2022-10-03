@@ -126,8 +126,6 @@ function useWebSocketMessageHandler(): WebsocketCallback {
 			const incomingMessage: IncomingMessage = JSON.parse(body || '');
 			const updatedTeam = incomingMessage.payload as Team;
 
-			console.log('updatedTeam', updatedTeam);
-
 			setTeam({ ...updatedTeam });
 		},
 		[setTeam]

@@ -115,8 +115,6 @@ function RetroPage(): ReactElement {
 				webSocket.subscribeToThoughts(team.id, thoughtMessageHandler);
 				webSocket.subscribeToActionItems(team.id, actionItemMessageHandler);
 				webSocket.subscribeToEndRetro(team.id, endRetroMessageHandler);
-
-				// @todo figure out how to test this call (probably via cypress)
 				webSocket.subscribeToTeam(team.id, teamMessageHandler);
 			});
 

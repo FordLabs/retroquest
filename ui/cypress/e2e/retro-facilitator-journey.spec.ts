@@ -303,6 +303,7 @@ describe('Retro Facilitator Journey', () => {
 
 			cy.findByText('Add Email').click();
 
+			cy.findByText('Board Owners').should('exist');
 			cy.findByText('Add Board Owners').should('not.exist');
 			cy.contains(primaryEmail).should('exist');
 			cy.contains(secondaryEmail).should('exist');
@@ -316,6 +317,7 @@ describe('Retro Facilitator Journey', () => {
 
 			cy.findByText('Add Email').click();
 
+			cy.findByText('Board Owners').should('exist');
 			cy.findByText('Add Board Owners').should('not.exist');
 			cy.contains(primaryEmail).should('exist');
 			cy.contains(secondaryEmail).should('not.exist');
