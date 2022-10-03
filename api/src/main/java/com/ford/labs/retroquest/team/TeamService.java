@@ -82,8 +82,12 @@ public class TeamService {
         return new CsvFile(team, thoughts, actionItems, columns);
     }
 
+    public String encodePassword(String password) {
+        return passwordEncoder.encode(password);
+    }
+
     public Team createNewTeam(CreateTeamRequest createTeamRequest) {
-        var encryptedPassword = passwordEncoder.encode(createTeamRequest.getPassword());
+        var encryptedPassword = this.encodePassword(createTeamRequest.getPassword());
 
         var trimmedName = createTeamRequest.getName().trim();
         var uri = convertTeamNameToURI(trimmedName);
@@ -121,7 +125,7 @@ public class TeamService {
         return savedTeam;
     }
 
-    private void generateColumns(Team team) {
+    public void generateColumns(Team team) {
         var happyColumn = new Column(null, "happy", "Happy", team.getUri());
         var confusedColumn = new Column(null, "confused", "Confused", team.getUri());
         var unhappyColumn = new Column(null, "unhappy", "Sad", team.getUri());

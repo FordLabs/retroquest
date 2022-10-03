@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class WebController {
-    @RequestMapping(value = {"/login/**", "/create", "/team/**"})
+    @RequestMapping(value = {"/login/**", "/create", "/team/**", "/e2e/**"})
     public String redirect() {
         return "forward:/";
     }
