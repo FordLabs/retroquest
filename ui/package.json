@@ -17,7 +17,7 @@
     "tests:pre-commit": "CI=true react-scripts test --findRelatedTests",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
-    "start:api": "cd .. && SPRING_PROFILES_ACTIVE=local,e2e-test ./gradlew bootRun withH2",
+    "start:api": "cd .. && SPRING_PROFILES_ACTIVE=local ./gradlew bootRun withH2",
     "cy:start-server": "BROWSER=none start-server-and-test start:api 8080",
     "test:e2e": "npm run cy:setup cy:open",
     "test:e2e:ci": "CYPRESS_BASE_URL=http://localhost:8080 npm run cy:start-server cy:run",

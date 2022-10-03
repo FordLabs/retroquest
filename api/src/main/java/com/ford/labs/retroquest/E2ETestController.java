@@ -19,7 +19,7 @@ import java.net.URISyntaxException;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
-@Profile("e2e-test")
+@Profile("local")
 @RestController
 @RequestMapping(value = "/api/e2e")
 @Tag(name = "E2E test Controller", description = "The controller that manages endpoints only available for E2E testing")
