@@ -25,7 +25,7 @@ const CancelButton = forwardRef(
 		const { className, children, ...buttonProps } = props;
 		return (
 			<button
-				className={classnames('column-item-button button-secondary', className)}
+				className={classnames('column-item-button cancel', className)}
 				{...buttonProps}
 				ref={ref}
 			>

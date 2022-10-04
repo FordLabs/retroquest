@@ -36,10 +36,4 @@ describe('ConfirmButton', () => {
 
 		expect(mockConfirm).toHaveBeenCalledTimes(1);
 	});
-
-	it('should have primary button class', () => {
-		render(<ConfirmButton data-testid="confirmButton">Confirm</ConfirmButton>);
-		const confirmButton = screen.getByTestId('confirmButton');
-		expect(confirmButton).toHaveClass('button-primary-old');
-	});
 });
