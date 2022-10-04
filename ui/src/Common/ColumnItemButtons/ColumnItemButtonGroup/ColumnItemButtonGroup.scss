@@ -72,19 +72,19 @@ $opacity: 0.25;
 			}
 		}
 
-		&.button-primary,
-		&.button-secondary {
+		&.confirm,
+		&.cancel {
 			font-size: 1rem;
 		}
 
-		&.button-secondary {
+		&.cancel {
 			&:hover,
 			&:focus {
 				color: main.$purple;
 			}
 		}
 
-		&.button-primary {
+		&.confirm {
 			&:hover,
 			&:focus {
 				background-color: main.$purple;
@@ -105,14 +105,14 @@ $opacity: 0.25;
 			background-color: inherit;
 			border-color: $dark-border;
 
-			&.button-secondary {
+			&.cancel {
 				&:hover,
 				&:focus {
 					color: main.$gray-3;
 				}
 			}
 
-			&.button-primary {
+			&.confirm {
 				&:hover,
 				&:focus {
 					background-color: main.$dark-purple;
