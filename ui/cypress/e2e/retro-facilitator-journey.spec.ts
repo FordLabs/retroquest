@@ -269,7 +269,7 @@ describe('Retro Facilitator Journey', () => {
 
 		ensureModalIsOpen();
 
-		cy.get('@modal').findByText('Nope').click();
+		cy.get('@modal').findByText('Cancel').click();
 		ensureModalIsClosed();
 		cy.get('@putArchiveRetro').its('response.statusCode').should('eq', null);
 
@@ -278,7 +278,7 @@ describe('Retro Facilitator Journey', () => {
 
 		cy.get('@archiveRetroButton').click();
 		ensureModalIsOpen();
-		cy.get('@modal').findByText('Yes!').click();
+		cy.get('@modal').findByText('Yes! End Retro.').click();
 		ensureModalIsClosed();
 		cy.get('@putArchiveRetro').its('response.statusCode').should('eq', 200);
 

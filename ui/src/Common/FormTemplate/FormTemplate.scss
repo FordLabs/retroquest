@@ -18,29 +18,29 @@
 @use '../../Styles/main';
 
 .form-template {
-	$base-drop-shadow: 0 19px 38px rgba(main.$black, 0.3);
-	$border-width: 8px;
-
 	display: flex;
 	flex-direction: column;
 
 	box-sizing: border-box;
 	width: auto;
+	max-width: 40.625rem;
 	margin: 0 auto;
 
 	font-weight: 700;
 	font-size: 1.3rem;
 
 	background-color: main.$white;
-	border-radius: 6px;
+	border-radius: 5px;
 
-	box-shadow: 0 0 0 8px main.$asphalt, 0 19px 38px #0000004d;
+	box-shadow: 0 4px 4px rgba(main.$black, 0.25),
+		0 8px 16px rgba(main.$black, 0.12), 0 12px 24px rgba(main.$black, 0.12),
+		0 1px 32px rgba(main.$black, 0.12);
 	transform: none;
 
 	position: relative;
 
 	.form-template-body {
-		margin: 1rem;
+		margin: 3rem 3.625rem 2rem;
 	}
 
 	.form-template-title {
@@ -62,18 +62,20 @@
 
 	.form-template-subtitle {
 		width: 100%;
-		margin-bottom: 1rem;
+		max-width: 33rem;
+		margin-bottom: 0.5rem;
 
-		color: rgba(main.$asphalt, 0.5);
-		font-weight: bold;
+		color: main.$dark-gray;
+		font-weight: 600;
 		font-size: 0.9rem;
+		font-style: normal;
+		line-height: 25px;
 		text-align: center;
-		text-transform: capitalize;
 
 		cursor: default;
 
 		@include main.breakpoint-medium {
-			font-size: 1.2rem;
+			font-size: 1.25rem;
 		}
 	}
 
@@ -98,23 +100,22 @@
 
 			font-size: 1.3rem;
 
-			border-radius: 0 0 6px;
+			border-radius: 0 0 5px;
+			box-shadow: none;
+		}
 
-			&:first-of-type {
-				color: rgba(main.$asphalt, 0.5);
-				border-top: 1px solid main.$gray-1;
-			}
+		.form-template-button.cancel {
+			color: main.$asphalt;
 
-			&:last-of-type {
-				color: main.$white;
-
-				background-color: main.$purple;
-				box-shadow: none;
-			}
+			border: 0;
+			border-top: 1px solid main.$gray-1;
+			border-bottom-right-radius: 0;
+			border-bottom-left-radius: inherit;
 
 			&:hover,
 			&:focus {
-				color: main.$asphalt;
+				background-color: rgba(main.$light-gray, 0.75);
+				border-top: 1px solid rgba(main.$light-gray, 0.75);
 			}
 		}
 	}
@@ -122,25 +123,24 @@
 
 @include main.dark-theme {
 	.form-template {
-		background-color: main.$light-asphalt;
+		background-color: main.$dark-asphalt;
 
 		.form-template-title {
 			color: main.$gray-1;
 		}
 
 		.form-template-subtitle {
-			color: rgba(main.$gray-1, 0.5);
+			color: main.$light-gray;
 		}
 
-		.form-template-button {
-			&:first-of-type {
-				color: rgba(main.$gray-1, 0.5);
-				border-top: 1px solid main.$asphalt;
+		.form-template-button.cancel {
+			color: main.$gray-1;
+			border-top: 1px solid main.$dark-gray;
 
-				&:hover,
-				&:focus {
-					color: main.$gray-1;
-				}
+			&:hover,
+			&:focus {
+				background-color: main.$light-asphalt;
+				border-top: 1px solid main.$dark-gray;
 			}
 		}
 	}

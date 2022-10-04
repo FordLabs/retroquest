@@ -22,17 +22,15 @@ import './TeamHeaderNavLink.scss';
 
 interface Props {
 	to: string;
-	key: string;
 	children: ReactNode;
 }
 
 function TeamHeaderNavLink(props: Props) {
-	const { to, key, children } = props;
+	const { to, children } = props;
 
 	return (
 		<NavLink
 			to={to}
-			key={key}
 			className={({ isActive }) =>
 				'team-header-nav-link' + (isActive ? ' selected' : '')
 			}

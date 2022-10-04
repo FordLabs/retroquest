@@ -28,10 +28,7 @@ const ConfirmButton = forwardRef(
 		return (
 			<button
 				{...buttonProps}
-				className={classnames(
-					'column-item-button button-primary-old',
-					className
-				)}
+				className={classnames('column-item-button confirm', className)}
 				ref={ref}
 			>
 				{children}
