@@ -53,27 +53,13 @@
 		}
 	}
 
-	.nav-link {
-		height: 28px;
-
-		color: rgba(main.$asphalt, 0.4);
-		font-size: 1.1rem;
-		text-decoration: none;
-
-		border-radius: 32px;
-
-		&.selected {
-			color: main.$asphalt;
-			background-color: rgba(main.$asphalt, 0.2);
-		}
-	}
-
 	.settings-button {
+		color: main.$asphalt;
 		font-size: 1.3rem;
 
 		&:hover,
 		&:focus {
-			color: main.$purple;
+			color: main.$teal;
 		}
 	}
 }
@@ -83,14 +69,14 @@
 		.right-content {
 			color: main.$gray-1;
 		}
+	}
 
-		.nav-link {
-			color: rgba(main.$gray-1, 0.4);
+	.settings-button {
+		color: main.$white;
 
-			&.selected {
-				color: main.$gray-1;
-				background-color: rgba(main.$gray-1, 0.2);
-			}
+		&:hover,
+		&:focus {
+			color: main.$sea-foam;
 		}
 	}
 }

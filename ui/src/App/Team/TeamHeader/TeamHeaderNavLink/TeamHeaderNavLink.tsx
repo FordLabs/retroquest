@@ -15,44 +15,32 @@
  * limitations under the License.
  */
 
-@use '../../../../Styles/main';
+import React, { ReactNode } from 'react';
+import { NavLink } from 'react-router-dom';
 
-.retro-subheader {
-	@include main.subheader;
+import './TeamHeaderNavLink.scss';
 
-	* button {
-		margin-top: 0;
-		margin-bottom: 0;
-	}
-
-	.retro-subheader-container {
-		display: flex;
-		justify-content: right;
-
-		@include main.breakpoint-medium {
-			justify-content: space-between;
-		}
-	}
-
-	.timer {
-		display: none;
-
-		@include main.breakpoint-medium {
-			display: inherit;
-		}
-	}
+interface Props {
+	to: string;
+	key: string;
+	children: ReactNode;
 }
 
-.retro-subheader-links {
-	display: flex;
-	justify-content: flex-end;
+function TeamHeaderNavLink(props: Props) {
+	const { to, key, children } = props;
 
-	li {
-		width: auto;
-		height: 100%;
-	}
-
-	.archive-button {
-		margin-left: 24px;
-	}
+	return (
+		<NavLink
+			to={to}
+			key={key}
+			className={({ isActive }) =>
+				'team-header-nav-link' + (isActive ? ' selected' : '')
+			}
+			end
+		>
+			{children}
+		</NavLink>
+	);
 }
+
+export default TeamHeaderNavLink;

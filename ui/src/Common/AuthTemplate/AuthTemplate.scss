@@ -77,12 +77,12 @@
 		text-align: left;
 
 		a {
-			color: main.$dark-turquoise;
+			color: main.$teal;
 			font-weight: 500;
 
 			&:hover,
 			&:focus {
-				color: main.$turquoise;
+				color: main.$sea-foam;
 			}
 		}
 	}
@@ -112,11 +112,11 @@
 			font-size: 1.2rem;
 
 			a {
-				color: main.$turquoise;
+				color: main.$sea-foam;
 
 				&:hover,
 				&:focus {
-					color: main.$dark-turquoise;
+					color: main.$teal;
 				}
 			}
 		}

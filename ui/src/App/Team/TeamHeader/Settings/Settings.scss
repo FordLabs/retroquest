@@ -107,7 +107,7 @@
 
 		&.selected {
 			color: main.$white;
-			background-color: main.$dark-turquoise;
+			background-color: main.$teal;
 		}
 
 		&:not(:last-child) {
@@ -156,7 +156,7 @@
 
 		&.selected {
 			color: main.$black-asphalt;
-			background-color: main.$turquoise;
+			background-color: main.$sea-foam;
 		}
 	}
 }

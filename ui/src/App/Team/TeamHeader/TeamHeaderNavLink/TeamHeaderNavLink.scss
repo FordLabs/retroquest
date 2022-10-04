@@ -17,42 +17,30 @@
 
 @use '../../../../Styles/main';
 
-.retro-subheader {
-	@include main.subheader;
+.team-header-nav-link {
+	@include main.button-defaults;
 
-	* button {
-		margin-top: 0;
-		margin-bottom: 0;
-	}
+	height: 28px;
 
-	.retro-subheader-container {
-		display: flex;
-		justify-content: right;
+	color: rgba(main.$asphalt, 0.4);
+	font-size: 1.1rem;
+	text-decoration: none;
 
-		@include main.breakpoint-medium {
-			justify-content: space-between;
-		}
-	}
+	border-radius: 32px;
 
-	.timer {
-		display: none;
-
-		@include main.breakpoint-medium {
-			display: inherit;
-		}
+	&.selected {
+		color: main.$asphalt;
+		background-color: rgba(main.$asphalt, 0.2);
 	}
 }
 
-.retro-subheader-links {
-	display: flex;
-	justify-content: flex-end;
+@include main.dark-theme {
+	.team-header-nav-link {
+		color: rgba(main.$gray-1, 0.4);
 
-	li {
-		width: auto;
-		height: 100%;
-	}
-
-	.archive-button {
-		margin-left: 24px;
+		&.selected {
+			color: main.$gray-1;
+			background-color: rgba(main.$gray-1, 0.2);
+		}
 	}
 }

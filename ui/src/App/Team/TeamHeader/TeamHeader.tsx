@@ -16,13 +16,13 @@
  */
 
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import Header from 'Common/Header/Header';
 import useTeamFromRoute from 'Hooks/useTeamFromRoute';
 import { useSetRecoilState } from 'recoil';
 import { ModalContentsState } from 'State/ModalContentsState';
 
 import Settings from './Settings/Settings';
+import TeamHeaderNavLink from './TeamHeaderNavLink/TeamHeaderNavLink';
 
 import './TeamHeader.scss';
 
@@ -46,16 +46,12 @@ function TeamHeader() {
 			<>
 				<nav className="center-content">
 					{LINKS.map((link) => (
-						<NavLink
+						<TeamHeaderNavLink
 							to={`/team/${team.id}${link.path}`}
 							key={link.path}
-							className={({ isActive }) =>
-								'nav-link button' + (isActive ? ' selected' : '')
-							}
-							end
 						>
 							{link.label}
-						</NavLink>
+						</TeamHeaderNavLink>
 					))}
 				</nav>
 				<div className="right-content">

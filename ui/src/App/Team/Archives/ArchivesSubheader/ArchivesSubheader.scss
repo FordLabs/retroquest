@@ -29,7 +29,15 @@
 		}
 
 		.active {
-			color: main.$purple;
+			color: main.$teal;
+		}
+	}
+}
+
+@include main.dark-theme {
+	.archives-subheader-links {
+		.active {
+			color: main.$sea-foam;
 		}
 	}
 }
