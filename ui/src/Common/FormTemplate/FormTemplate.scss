@@ -100,7 +100,7 @@
 
 			font-size: 1.3rem;
 
-			border-radius: 0 0 6px;
+			border-radius: 0 0 5px;
 			box-shadow: none;
 		}
 
@@ -115,7 +115,7 @@
 			&:hover,
 			&:focus {
 				background-color: rgba(main.$light-gray, 0.75);
-				border-top: 1px solid main.$gray-1;
+				border-top: 1px solid rgba(main.$light-gray, 0.75);
 			}
 		}
 	}
