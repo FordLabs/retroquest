@@ -18,8 +18,7 @@
 import React, { FormEventHandler } from 'react';
 import classnames from 'classnames';
 
-import ButtonPrimary from '../ButtonPrimary/ButtonPrimary';
-import ButtonSecondary from '../ButtonSecondary/ButtonSecondary';
+import { PrimaryButton, SecondaryButton } from '../Buttons/Button';
 
 import './FormTemplate.scss';
 
@@ -63,16 +62,16 @@ function FormTemplate(props: Props) {
 				{children}
 			</div>
 			<div className="form-template-footer">
-				<ButtonSecondary
+				<SecondaryButton
 					type="button"
 					className="form-template-button"
 					onClick={onCancel}
 				>
 					{cancelButtonText}
-				</ButtonSecondary>
-				<ButtonPrimary type="submit" className="form-template-button">
+				</SecondaryButton>
+				<PrimaryButton type="submit" className="form-template-button">
 					{submitButtonText}
-				</ButtonPrimary>
+				</PrimaryButton>
 			</div>
 		</form>
 	);
