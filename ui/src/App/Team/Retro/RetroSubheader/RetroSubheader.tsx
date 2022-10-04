@@ -16,6 +16,7 @@
  */
 
 import React from 'react';
+import ButtonSubheader from 'Common/ButtonSubheader/ButtonSubheader';
 import Timer from 'Common/Timer/Timer';
 import fileSaver from 'file-saver';
 import useAuth from 'Hooks/useAuth';
@@ -24,7 +25,7 @@ import TeamService from 'Services/Api/TeamService';
 import { ModalContentsState } from 'State/ModalContentsState';
 import { TeamState } from 'State/TeamState';
 
-import ArchiveRetroDialog from './ArchiveRetroConfirmation/ArchiveRetroConfirmation';
+import ArchiveRetroButton from './ArchiveRetroButton/ArchiveRetroButton';
 import FeedbackForm from './FeedbackForm/FeedbackForm';
 
 import './RetroSubheader.scss';
@@ -47,49 +48,36 @@ function RetroSubheader(): JSX.Element {
 				<Timer />
 				<ul className="retro-subheader-links">
 					<li>
-						<button
-							className="feedback-button button button-secondary-old"
+						<ButtonSubheader
 							onClick={() =>
 								setModalContents({
 									component: <FeedbackForm />,
 									title: 'Feedback',
 								})
 							}
+							fontAwesomeIconClasses="far fa-comments"
 						>
-							<span className="button-text">Give Feedback</span>
-							<i className="far fa-comments button-icon" aria-hidden="true" />
-						</button>
+							Give Feedback
+						</ButtonSubheader>
 					</li>
 					<li>
-						<button
-							className="download-csv-button button button-secondary-old"
+						<ButtonSubheader
 							onClick={downloadCSV}
+							fontAwesomeIconClasses="fas fa-download"
 						>
-							<span className="button-text">Download CSV</span>
-							<i className="fas fa-download button-icon" aria-hidden="true" />
-						</button>
+							Download CSV
+						</ButtonSubheader>
 					</li>
 					<li>
-						<button
-							className="download-csv-button button button-secondary-old"
+						<ButtonSubheader
 							onClick={logout}
+							fontAwesomeIconClasses="fa-solid fa-arrow-right-from-bracket"
 						>
-							<span className="button-text">Log Out</span>
-							<i className="fas fa-download button-icon" aria-hidden="true" />
-						</button>
+							Log Out
+						</ButtonSubheader>
 					</li>
 					<li>
-						<button
-							className="archive-button button button-primary-old"
-							onClick={() =>
-								setModalContents({
-									title: 'Archive Retro',
-									component: <ArchiveRetroDialog />,
-								})
-							}
-						>
-							Archive Retro
-						</button>
+						<ArchiveRetroButton />
 					</li>
 				</ul>
 			</div>

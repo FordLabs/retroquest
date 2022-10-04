@@ -54,11 +54,12 @@
 	}
 
 	.settings-button {
+		color: main.$asphalt;
 		font-size: 1.3rem;
 
 		&:hover,
 		&:focus {
-			color: main.$purple;
+			color: main.$teal;
 		}
 	}
 }
@@ -67,6 +68,15 @@
 	.header {
 		.right-content {
 			color: main.$gray-1;
+		}
+	}
+
+	.settings-button {
+		color: main.$white;
+
+		&:hover,
+		&:focus {
+			color: main.$sea-foam;
 		}
 	}
 }

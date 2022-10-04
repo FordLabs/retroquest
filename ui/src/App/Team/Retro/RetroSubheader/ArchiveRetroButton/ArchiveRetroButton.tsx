@@ -15,44 +15,30 @@
  * limitations under the License.
  */
 
-@use '../../../../Styles/main';
+import React from 'react';
+import { useSetRecoilState } from 'recoil';
+import { ModalContentsState } from 'State/ModalContentsState';
 
-.retro-subheader {
-	@include main.subheader;
+import ArchiveRetroDialog from '../ArchiveRetroConfirmation/ArchiveRetroConfirmation';
 
-	* button {
-		margin-top: 0;
-		margin-bottom: 0;
-	}
+import './ArchiveRetroButton.scss';
 
-	.retro-subheader-container {
-		display: flex;
-		justify-content: right;
+function ArchiveRetroButton() {
+	const setModalContents = useSetRecoilState(ModalContentsState);
 
-		@include main.breakpoint-medium {
-			justify-content: space-between;
-		}
-	}
-
-	.timer {
-		display: none;
-
-		@include main.breakpoint-medium {
-			display: inherit;
-		}
-	}
+	return (
+		<button
+			className="archive-button"
+			onClick={() =>
+				setModalContents({
+					title: 'Archive Retro',
+					component: <ArchiveRetroDialog />,
+				})
+			}
+		>
+			Archive Retro
+		</button>
+	);
 }
 
-.retro-subheader-links {
-	display: flex;
-	justify-content: flex-end;
-
-	li {
-		width: auto;
-		height: 100%;
-	}
-
-	.archive-button {
-		margin-left: 24px;
-	}
-}
+export default ArchiveRetroButton;
