@@ -15,58 +15,32 @@
  * limitations under the License.
  */
 
-@use '../../../Styles/main';
+@use '../../../../Styles/main';
 
-.header {
-	@include main.site-max-width;
+.team-header-nav-link {
+	@include main.button-defaults;
 
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	height: 42px;
+	height: 28px;
 
-	position: relative;
+	color: rgba(main.$asphalt, 0.4);
+	font-size: 1.1rem;
+	text-decoration: none;
 
-	@include main.breakpoint-medium {
-		height: 64px;
-	}
+	border-radius: 32px;
 
-	.center-content {
-		display: none;
-		flex: 1;
-		align-items: center;
-		justify-content: center;
-
-		@include main.breakpoint-medium {
-			display: flex;
-		}
-	}
-
-	.right-content {
-		display: flex;
-		flex: initial;
-		align-items: center;
-		justify-content: flex-end;
-
-		@include main.breakpoint-medium {
-			flex: 1;
-		}
-	}
-
-	.settings-button {
-		font-size: 1.3rem;
-
-		&:hover,
-		&:focus {
-			color: main.$purple;
-		}
+	&.selected {
+		color: main.$asphalt;
+		background-color: rgba(main.$asphalt, 0.2);
 	}
 }
 
 @include main.dark-theme {
-	.header {
-		.right-content {
+	.team-header-nav-link {
+		color: rgba(main.$gray-1, 0.4);
+
+		&.selected {
 			color: main.$gray-1;
+			background-color: rgba(main.$gray-1, 0.2);
 		}
 	}
 }
