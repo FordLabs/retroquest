@@ -15,44 +15,28 @@
  * limitations under the License.
  */
 
-@use '../../../../Styles/main';
+@use '../../../../../Styles/main';
 
-.retro-subheader {
-	@include main.subheader;
+.archive-button {
+	@include main.button-defaults;
+	color: main.$white;
+	background-color: main.$asphalt;
 
-	* button {
-		margin-top: 0;
-		margin-bottom: 0;
-	}
-
-	.retro-subheader-container {
-		display: flex;
-		justify-content: right;
-
-		@include main.breakpoint-medium {
-			justify-content: space-between;
-		}
-	}
-
-	.timer {
-		display: none;
-
-		@include main.breakpoint-medium {
-			display: inherit;
-		}
+	&:focus,
+	&:hover {
+		background-color: main.$teal;
 	}
 }
 
-.retro-subheader-links {
-	display: flex;
-	justify-content: flex-end;
-
-	li {
-		width: auto;
-		height: 100%;
-	}
-
+@include main.dark-theme {
 	.archive-button {
-		margin-left: 24px;
+		color: main.$asphalt;
+		background-color: main.$gray-1;
+
+		&:focus,
+		&:hover {
+			color: main.$white;
+			background-color: main.$sea-foam;
+		}
 	}
 }

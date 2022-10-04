@@ -17,9 +17,9 @@
 
 import * as React from 'react';
 import classNames from 'classnames';
+import ButtonSubheader from 'Common/ButtonSubheader/ButtonSubheader';
 import { useSetRecoilState } from 'recoil';
-
-import { ArchivedBoardState } from '../../../../State/ArchivedBoardState';
+import { ArchivedBoardState } from 'State/ArchivedBoardState';
 
 import './ArchivesSubheader.scss';
 
@@ -41,24 +41,24 @@ function ArchivesSubheader(props: Props): JSX.Element {
 		<div className="archives-subheader">
 			<ul className="archives-subheader-links">
 				<li>
-					<button
-						className={classNames('button button-secondary', {
+					<ButtonSubheader
+						className={classNames({
 							active: !showActionItems,
 						})}
 						onClick={handleThoughtsClick}
 					>
 						Thoughts
-					</button>
+					</ButtonSubheader>
 				</li>
 				<li>
-					<button
-						className={classNames('button button-secondary', {
-							active: !!showActionItems,
+					<ButtonSubheader
+						className={classNames({
+							active: showActionItems,
 						})}
 						onClick={() => setShowActionItems(true)}
 					>
 						Action Items
-					</button>
+					</ButtonSubheader>
 				</li>
 			</ul>
 		</div>

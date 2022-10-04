@@ -50,7 +50,7 @@ $box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.12),
 
 	text-decoration: none;
 
-	background-color: colors.$dark-turquoise;
+	background-color: colors.$teal;
 	box-shadow: $box-shadow;
 
 	&:disabled {
@@ -60,16 +60,16 @@ $box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.12),
 
 	&:hover:not(:disabled),
 	&:focus:not(:disabled) {
-		background-color: colors.$turquoise;
+		background-color: colors.$sea-foam;
 	}
 
 	.dark-theme & {
 		color: colors.$asphalt;
-		background-color: colors.$turquoise;
+		background-color: colors.$sea-foam;
 
 		&:hover:not(:disabled),
 		&:focus:not(:disabled) {
-			background-color: colors.$dark-turquoise;
+			background-color: colors.$teal;
 		}
 	}
 }
@@ -79,25 +79,25 @@ $box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.12),
 	width: 100%;
 	margin: 0.5rem auto 0;
 
-	color: colors.$dark-turquoise;
+	color: colors.$teal;
 
-	border: 2px solid colors.$dark-turquoise;
+	border: 2px solid colors.$teal;
 	box-shadow: $box-shadow;
 
 	&:focus,
 	&:hover {
 		color: colors.$white;
-		background-color: colors.$dark-turquoise;
+		background-color: colors.$teal;
 	}
 
 	.dark-theme & {
-		color: colors.$turquoise;
-		border: 2px solid colors.$turquoise;
+		color: colors.$sea-foam;
+		border: 2px solid colors.$sea-foam;
 
 		&:hover:not(:disabled),
 		&:focus:not(:disabled) {
-			background-color: colors.$turquoise;
-			border: 2px solid colors.$turquoise;
+			background-color: colors.$sea-foam;
+			border: 2px solid colors.$sea-foam;
 		}
 	}
 }
@@ -105,21 +105,21 @@ $box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.12),
 @mixin button-tertiary {
 	margin: 1rem auto;
 
-	color: colors.$dark-turquoise;
+	color: colors.$teal;
 	font-weight: bold;
 
 	&:hover,
 	&:focus {
-		color: colors.$turquoise;
+		color: colors.$sea-foam;
 	}
 
 	.dark-theme & {
 		margin: 1rem auto 0;
-		color: colors.$turquoise;
+		color: colors.$sea-foam;
 
 		&:hover,
 		&:focus {
-			color: colors.$dark-turquoise;
+			color: colors.$teal;
 		}
 	}
 }
