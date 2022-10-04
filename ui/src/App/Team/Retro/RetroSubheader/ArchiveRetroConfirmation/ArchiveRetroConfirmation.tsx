@@ -15,14 +15,11 @@
  * limitations under the License.
  */
 import React from 'react';
+import FormTemplate from 'Common/FormTemplate/FormTemplate';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-
-import FormTemplate from '../../../../../Common/FormTemplate/FormTemplate';
-import BoardService from '../../../../../Services/Api/BoardService';
-import { ModalContentsState } from '../../../../../State/ModalContentsState';
-import { TeamState } from '../../../../../State/TeamState';
-
-import './ArchiveRetroConfirmation.scss';
+import BoardService from 'Services/Api/BoardService';
+import { ModalContentsState } from 'State/ModalContentsState';
+import { TeamState } from 'State/TeamState';
 
 function ArchiveRetroConfirmation() {
 	const team = useRecoilValue(TeamState);
@@ -40,12 +37,12 @@ function ArchiveRetroConfirmation() {
 		<FormTemplate
 			testId="archiveRetroDialog"
 			className="archive-retro-confirmation"
-			title="Do you want to end the retro for everybody?"
-			subtitle="This will permanently archive all thoughts!"
+			title="End Retro for All?"
+			subtitle="Are you sure you want to end the retro for everybody? This will permanently archive all thoughts!"
 			onSubmit={onSubmit}
 			onCancel={closeModal}
-			cancelButtonText="Nope"
-			submitButtonText="Yes!"
+			cancelButtonText="Cancel"
+			submitButtonText="Yes! End Retro."
 		/>
 	);
 }

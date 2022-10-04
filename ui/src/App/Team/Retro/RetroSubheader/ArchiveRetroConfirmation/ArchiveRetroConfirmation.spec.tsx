@@ -67,7 +67,7 @@ describe('ArchiveRetroConfirmation', () => {
 	});
 
 	it('should archive retro and close modal', async () => {
-		userEvent.click(screen.getByText('Yes!'));
+		userEvent.click(screen.getByText('Yes! End Retro.'));
 
 		await act(async () =>
 			expect(BoardService.archiveRetro).toHaveBeenCalledWith(team.id)
@@ -76,7 +76,7 @@ describe('ArchiveRetroConfirmation', () => {
 	});
 
 	it('should cancel archiving retro', () => {
-		userEvent.click(screen.getByText('Nope'));
+		userEvent.click(screen.getByText('Cancel'));
 
 		expect(BoardService.archiveRetro).not.toHaveBeenCalled();
 		expect(modalContent).toBe(null);

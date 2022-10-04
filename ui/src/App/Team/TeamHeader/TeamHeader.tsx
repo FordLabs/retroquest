@@ -46,12 +46,11 @@ function TeamHeader() {
 			<>
 				<nav className="center-content">
 					{LINKS.map((link) => (
-						<TeamHeaderNavLink
-							to={`/team/${team.id}${link.path}`}
-							key={link.path}
-						>
-							{link.label}
-						</TeamHeaderNavLink>
+						<React.Fragment key={link.path}>
+							<TeamHeaderNavLink to={`/team/${team.id}${link.path}`}>
+								{link.label}
+							</TeamHeaderNavLink>
+						</React.Fragment>
 					))}
 				</nav>
 				<div className="right-content">
