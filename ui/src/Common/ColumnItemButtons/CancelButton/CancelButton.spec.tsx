@@ -36,10 +36,4 @@ describe('CancelButton', () => {
 
 		expect(mockCancel).toHaveBeenCalledTimes(1);
 	});
-
-	it('should have secondary button class', () => {
-		render(<CancelButton data-testid="cancelButton">Cancel</CancelButton>);
-		const cancelButton = screen.getByTestId('cancelButton');
-		expect(cancelButton).toHaveClass('button-secondary');
-	});
 });
