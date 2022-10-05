@@ -16,6 +16,7 @@
  */
 
 import React, { ComponentPropsWithoutRef } from 'react';
+import classNames from 'classnames';
 import ButtonPrimary from 'Common/ButtonPrimary/ButtonPrimary';
 
 import './Form.scss';
@@ -34,13 +35,14 @@ function Form(props: FormProps): JSX.Element {
 		submitButtonText = 'Submit',
 		disableSubmitBtn,
 		children,
+		className,
 		...formProps
 	} = props;
 
 	return (
 		<form
 			data-testid="form"
-			className="form"
+			className={classNames('form', className)}
 			onSubmit={(event) => {
 				event.preventDefault();
 				onSubmit();

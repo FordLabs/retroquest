@@ -18,8 +18,14 @@
 @use '../../../../../Styles/main';
 
 .account-tab-body {
-	@include main.breakpoint-medium {
-		padding-top: 1.5rem;
+	.team-email {
+		margin-top: 1rem;
+
+		font-weight: 600;
+		font-size: 14px;
+		line-height: 18px;
+		letter-spacing: 0;
+		text-align: center;
 	}
 
 	.button-primary-old.logout-button {

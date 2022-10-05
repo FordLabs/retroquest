@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Ford Motor Company
+ * Copyright (c) 2022. Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,11 +15,23 @@
  * limitations under the License.
  */
 
-interface Team {
-	id: string;
-	name: string;
-	email: string;
-	secondaryEmail: string;
-}
+package com.ford.labs.retroquest.websocket.events;
 
-export default Team;
+import com.ford.labs.retroquest.team.Team;
+
+
+public class WebsocketTeamEvent extends WebsocketEvent {
+
+    private static final String ROUTE_STRING = "/topic/%s/team";
+    private final String teamId;
+
+    public WebsocketTeamEvent(String teamId, WebsocketEventType type, Team payload) {
+        super(type, payload);
+        this.teamId = teamId;
+    }
+
+    @Override
+    public String getRoute() {
+        return String.format(ROUTE_STRING, teamId);
+    }
+}

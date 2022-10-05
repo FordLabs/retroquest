@@ -70,6 +70,9 @@ dependencies {
     implementation 'org.liquibase:liquibase-core:4.3.5'
     implementation 'org.springdoc:springdoc-openapi-ui:1.5.9'
 
+    // https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305
+    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 

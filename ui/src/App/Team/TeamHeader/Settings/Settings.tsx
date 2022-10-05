@@ -49,12 +49,12 @@ export function Settings() {
 					>
 						Styles
 					</button>
-					{/*<button*/}
-					{/*	className={classnames('tab', { selected: accountTabIsActive() })}*/}
-					{/*	onClick={() => setTab(Tabs.ACCOUNT)}*/}
-					{/*>*/}
-					{/*	Account*/}
-					{/*</button>*/}
+					<button
+						className={classnames('tab', { selected: accountTabIsActive() })}
+						onClick={() => setTab(Tabs.ACCOUNT)}
+					>
+						Account
+					</button>
 					<button
 						className={classnames('tab', { selected: infoTabIsActive() })}
 						onClick={() => setTab(Tabs.INFO)}

@@ -17,20 +17,18 @@
 import React, { ReactChildren } from 'react';
 import { DropResult } from 'react-beautiful-dnd';
 import { screen, waitFor } from '@testing-library/react';
-
-import { ColumnsState } from '../../State/ColumnsState';
-import { TeamState } from '../../State/TeamState';
-import { ThoughtsState } from '../../State/ThoughtsState';
-import { Column } from '../../Types/Column';
-import Thought from '../../Types/Thought';
-import Topic from '../../Types/Topic';
-import { RecoilObserver } from '../../Utils/RecoilObserver';
-import renderWithRecoilRoot from '../../Utils/renderWithRecoilRoot';
-import ThoughtService from '../Api/ThoughtService';
+import { mockTeam } from 'Services/Api/__mocks__/TeamService';
+import ThoughtService from 'Services/Api/ThoughtService';
+import { ColumnsState } from 'State/ColumnsState';
+import { TeamState } from 'State/TeamState';
+import { ThoughtsState } from 'State/ThoughtsState';
+import { Column } from 'Types/Column';
+import Thought from 'Types/Thought';
+import Topic from 'Types/Topic';
+import { RecoilObserver } from 'Utils/RecoilObserver';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import DragAndDrop from './DragAndDrop';
-
-const team = { id: 'team-name', name: 'Team Name' };
 
 const thoughts: Thought[] = [
 	{
@@ -109,7 +107,7 @@ describe('Drag and Drop', () => {
 					<DragAndDrop>children</DragAndDrop>
 				</>,
 				({ set }) => {
-					set(TeamState, team);
+					set(TeamState, mockTeam);
 					set(ColumnsState, columns);
 					set(ThoughtsState, thoughts);
 				}
@@ -123,7 +121,7 @@ describe('Drag and Drop', () => {
 
 			await waitFor(() =>
 				expect(ThoughtService.updateColumn).toHaveBeenCalledWith(
-					team.id,
+					mockTeam.id,
 					thoughtToMove.id,
 					columnToMoveThoughtTo.id
 				)
@@ -141,7 +139,7 @@ describe('Drag and Drop', () => {
 
 			await waitFor(() =>
 				expect(ThoughtService.updateColumn).toHaveBeenCalledWith(
-					team.id,
+					mockTeam.id,
 					thoughtToMove.id,
 					columnToMoveThoughtTo.id
 				)

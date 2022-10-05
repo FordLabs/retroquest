@@ -16,12 +16,13 @@
  */
 
 import { atom } from 'recoil';
+import Team from 'Types/Team';
 
-import Team from '../Types/Team';
-
-const EMPTY_TEAM = {
-	name: '',
+const EMPTY_TEAM: Team = {
 	id: '',
+	name: '',
+	email: '',
+	secondaryEmail: '',
 };
 
 export const TeamState = atom<Team>({

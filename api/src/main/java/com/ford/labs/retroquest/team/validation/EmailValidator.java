@@ -18,8 +18,6 @@
 package com.ford.labs.retroquest.team.validation;
 
 import com.ford.labs.retroquest.exception.EmailNotValidException;
-import com.ford.labs.retroquest.exception.EmptyTeamNameException;
-import com.ford.labs.retroquest.exception.SpecialCharacterTeamNameException;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.validation.ConstraintValidator;

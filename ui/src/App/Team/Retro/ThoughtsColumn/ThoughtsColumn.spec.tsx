@@ -18,25 +18,19 @@
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
-import { getMockThought } from '../../../../Services/Api/__mocks__/ThoughtService';
-import ColumnService from '../../../../Services/Api/ColumnService';
-import ThoughtService from '../../../../Services/Api/ThoughtService';
-import DragAndDrop from '../../../../Services/DragAndDrop/DragAndDrop';
-import { TeamState } from '../../../../State/TeamState';
-import { ThoughtsState } from '../../../../State/ThoughtsState';
-import { Column } from '../../../../Types/Column';
-import Team from '../../../../Types/Team';
-import Thought from '../../../../Types/Thought';
-import Topic from '../../../../Types/Topic';
-import renderWithRecoilRoot from '../../../../Utils/renderWithRecoilRoot';
+import { mockTeam } from 'Services/Api/__mocks__/TeamService';
+import { getMockThought } from 'Services/Api/__mocks__/ThoughtService';
+import ColumnService from 'Services/Api/ColumnService';
+import ThoughtService from 'Services/Api/ThoughtService';
+import DragAndDrop from 'Services/DragAndDrop/DragAndDrop';
+import { TeamState } from 'State/TeamState';
+import { ThoughtsState } from 'State/ThoughtsState';
+import { Column } from 'Types/Column';
+import Thought from 'Types/Thought';
+import Topic from 'Types/Topic';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import ThoughtsColumn from './ThoughtsColumn';
-
-const team: Team = {
-	name: 'My Team',
-	id: 'my-team',
-};
 
 const activeThought1: Thought = getMockThought(1, false, 1);
 activeThought1.id = 943;
@@ -50,8 +44,8 @@ const column: Column = {
 	title: 'Happy',
 };
 
-jest.mock('../../../../Services/Api/ThoughtService');
-jest.mock('../../../../Services/Api/ColumnService');
+jest.mock('Services/Api/ThoughtService');
+jest.mock('Services/Api/ColumnService');
 
 describe('ThoughtsColumn', () => {
 	beforeEach(async () => {
@@ -66,7 +60,7 @@ describe('ThoughtsColumn', () => {
 					discussedThought1,
 					discussedThought2,
 				]);
-				set(TeamState, team);
+				set(TeamState, mockTeam);
 			}
 		);
 	});
@@ -102,7 +96,7 @@ describe('ThoughtsColumn', () => {
 			const thoughtMessage = 'I had a new thought...';
 			userEvent.type(textField, `${thoughtMessage}{enter}`);
 
-			expect(ThoughtService.create).toHaveBeenCalledWith(team.id, {
+			expect(ThoughtService.create).toHaveBeenCalledWith(mockTeam.id, {
 				message: thoughtMessage,
 				columnId: column.id,
 			});
@@ -134,7 +128,7 @@ describe('ThoughtsColumn', () => {
 		);
 		await waitFor(() =>
 			expect(ColumnService.updateTitle).toHaveBeenCalledWith(
-				'my-team',
+				mockTeam.id,
 				1,
 				'Something Else'
 			)

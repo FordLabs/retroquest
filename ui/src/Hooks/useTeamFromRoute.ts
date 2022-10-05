@@ -18,10 +18,9 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-
-import TeamService from '../Services/Api/TeamService';
-import { TeamState } from '../State/TeamState';
-import Team from '../Types/Team';
+import TeamService from 'Services/Api/TeamService';
+import { TeamState } from 'State/TeamState';
+import Team from 'Types/Team';
 
 function useTeamFromRoute(): Team {
 	const { teamId = '' } = useParams();
@@ -29,14 +28,10 @@ function useTeamFromRoute(): Team {
 
 	useEffect(() => {
 		if (teamId) {
-			TeamService.getTeamName(teamId)
-				.then((activeTeamName) => {
-					document.title = `${activeTeamName} | RetroQuest`;
-
-					setTeam({
-						name: activeTeamName,
-						id: teamId,
-					});
+			TeamService.getTeam(teamId)
+				.then((activeTeam) => {
+					document.title = `${activeTeam.name} | RetroQuest`;
+					setTeam(activeTeam);
 				})
 				.catch(console.error);
 		}

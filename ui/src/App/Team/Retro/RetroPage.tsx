@@ -68,6 +68,7 @@ function RetroPage(): ReactElement {
 		thoughtMessageHandler,
 		actionItemMessageHandler,
 		endRetroMessageHandler,
+		teamMessageHandler,
 	} = useWebSocketMessageHandler();
 
 	const addTouchListeners = useCallback(() => {
@@ -114,6 +115,7 @@ function RetroPage(): ReactElement {
 				webSocket.subscribeToThoughts(team.id, thoughtMessageHandler);
 				webSocket.subscribeToActionItems(team.id, actionItemMessageHandler);
 				webSocket.subscribeToEndRetro(team.id, endRetroMessageHandler);
+				webSocket.subscribeToTeam(team.id, teamMessageHandler);
 			});
 
 			return () => {
@@ -127,6 +129,7 @@ function RetroPage(): ReactElement {
 		thoughtMessageHandler,
 		actionItemMessageHandler,
 		endRetroMessageHandler,
+		teamMessageHandler,
 		addTouchListeners,
 		webSocket,
 	]);

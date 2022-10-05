@@ -15,11 +15,15 @@
  * limitations under the License.
  */
 
-interface Team {
-	id: string;
-	name: string;
-	email: string;
-	secondaryEmail: string;
-}
+import { render, screen } from '@testing-library/react';
 
-export default Team;
+import InfoTab from './InfoTab';
+
+describe('Info Tab', () => {
+	it('should show app version', () => {
+		render(<InfoTab />);
+		expect(screen.getByLabelText('Version:').getAttribute('value')).toBe(
+			'0ddb411'
+		);
+	});
+});

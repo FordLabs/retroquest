@@ -34,7 +34,7 @@
 
 	@include main.breakpoint-medium {
 		width: 450px;
-		height: 450px;
+		min-height: 450px;
 	}
 
 	.settings-title {
@@ -114,12 +114,23 @@
 			border-right: 2px solid rgba(main.$asphalt, 0.08);
 		}
 	}
+}
 
-	.tab-body {
-		margin-top: 36px;
-		padding: 0 48px;
+.tab-body {
+	.label {
+		font-weight: bold;
+		font-size: 1.1rem;
+		text-align: center;
+		text-transform: capitalize;
 
-		position: relative;
+		@include main.breakpoint-medium {
+			font-size: 1.2rem;
+		}
+	}
+
+	.description {
+		color: main.$dark-gray;
+		font-weight: 600;
 	}
 }
 

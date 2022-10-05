@@ -15,7 +15,11 @@
  * limitations under the License.
  */
 
-import { getArchiveRetroApiPath } from '../../src/Services/Api/ApiConstants';
+import { getRetroPagePathWithTeamId } from '../../src/RouteConstants';
+import {
+	getArchiveRetroApiPath,
+	LOGIN_API_PATH,
+} from '../../src/Services/Api/ApiConstants';
 import { getTeamCredentials } from '../support/helpers';
 import Topic from '../support/types/Topic';
 import Chainable = Cypress.Chainable;
@@ -26,10 +30,10 @@ describe('Retro Facilitator Journey', () => {
 
 	beforeEach(() => {
 		teamCredentials = getTeamCredentials();
-		cy.createTeamAndLogin(teamCredentials);
 	});
 
 	it('Rename columns titles', () => {
+		cy.createTeamAndLogin(teamCredentials);
 		cy.intercept(
 			'PUT',
 			`/api/team/${teamCredentials.teamId}/column/*/title`
@@ -79,6 +83,7 @@ describe('Retro Facilitator Journey', () => {
 	});
 
 	it('Sort thoughts', () => {
+		cy.createTeamAndLogin(teamCredentials);
 		const thought2 = 'Thought Two';
 		cy.enterThought(Topic.HAPPY, 'Thought One');
 		cy.enterThought(Topic.HAPPY, thought2);
@@ -111,6 +116,7 @@ describe('Retro Facilitator Journey', () => {
 	});
 
 	it('Display thought in expanded mode', () => {
+		cy.createTeamAndLogin(teamCredentials);
 		const thought = 'This is a good week';
 		cy.enterThought(Topic.HAPPY, thought);
 		cy.log(`**Expand thought: ${thought}**`);
@@ -119,6 +125,7 @@ describe('Retro Facilitator Journey', () => {
 	});
 
 	it('Add action item from expanded mode', () => {
+		cy.createTeamAndLogin(teamCredentials);
 		const happyThought = 'This is a good week';
 		cy.enterThought(Topic.HAPPY, happyThought);
 
@@ -155,6 +162,7 @@ describe('Retro Facilitator Journey', () => {
 	});
 
 	it('Mark thought as discussed (default and expanded)', () => {
+		cy.createTeamAndLogin(teamCredentials);
 		cy.intercept(
 			'PUT',
 			`/api/team/${teamCredentials.teamId}/thought/*/discuss`
@@ -200,6 +208,7 @@ describe('Retro Facilitator Journey', () => {
 	});
 
 	it('Action item actions (create, edit, delete, mark as complete)', () => {
+		cy.createTeamAndLogin(teamCredentials);
 		cy.intercept(
 			'PUT',
 			`/api/team/${teamCredentials.teamId}/action-item/*/completed`
@@ -237,6 +246,7 @@ describe('Retro Facilitator Journey', () => {
 	});
 
 	it('Archive retro', () => {
+		cy.createTeamAndLogin(teamCredentials);
 		cy.intercept('PUT', getArchiveRetroApiPath(teamCredentials.teamId)).as(
 			'putArchiveRetro'
 		);
@@ -278,6 +288,42 @@ describe('Retro Facilitator Journey', () => {
 		cy.confirmNumberOfActionItemsInColumn(1);
 	});
 
+	describe('Settings', () => {
+		const primaryEmail = 'primary@mail.com';
+		const secondaryEmail = 'secondary@mail.com';
+
+		it('Add two email addresses to team (for old teams that did not add them upon team creation)', () => {
+			createTeamWithNoEmailsAndLogin();
+			goToAccountSettings();
+
+			cy.findByLabelText('Email Address 1').type(primaryEmail);
+			cy.findByLabelText('Second Teammate’s Email (optional)').type(
+				secondaryEmail
+			);
+
+			cy.findByText('Add Email').click();
+
+			cy.findByText('Board Owners').should('exist');
+			cy.findByText('Add Board Owners').should('not.exist');
+			cy.contains(primaryEmail).should('exist');
+			cy.contains(secondaryEmail).should('exist');
+		});
+
+		it('Add one email address to team (for old teams that did not add them upon team creation)', () => {
+			createTeamWithNoEmailsAndLogin();
+			goToAccountSettings();
+
+			cy.findByLabelText('Email Address 1').type(primaryEmail);
+
+			cy.findByText('Add Email').click();
+
+			cy.findByText('Board Owners').should('exist');
+			cy.findByText('Add Board Owners').should('not.exist');
+			cy.contains(primaryEmail).should('exist');
+			cy.contains(secondaryEmail).should('not.exist');
+		});
+	});
+
 	const ensureModalIsOpen = () => {
 		cy.get('@modal').should('exist');
 	};
@@ -286,6 +332,41 @@ describe('Retro Facilitator Journey', () => {
 		cy.get('@modal').should('not.exist');
 	};
 });
+
+function createTeamWithNoEmailsAndLogin() {
+	const teamName = 'Team With No Email';
+	const teamId = 'team-with-no-email';
+
+	cy.log('**Creating Team via api**');
+	cy.request('POST', '/api/e2e/create-team-with-no-emails').then(() => {
+		cy.log('**Logging in via api**');
+		cy.request({
+			url: LOGIN_API_PATH,
+			failOnStatusCode: false,
+			method: 'POST',
+			body: {
+				name: teamName,
+				password: 'Password1',
+			},
+		}).then((response) => {
+			if (response.status === 200) {
+				const token = response.body as string;
+				cy.setCookie('token', token);
+				cy.visit(getRetroPagePathWithTeamId(teamId));
+				cy.contains(teamName).should('exist');
+			} else {
+				cy.log('**Login via api failed with status code: **' + response.status);
+			}
+		});
+	});
+}
+
+function goToAccountSettings() {
+	cy.get('[data-testid=settingsButton]').click();
+	cy.findAllByText('Settings').eq(1).should('exist');
+	cy.findByText('Account').click();
+	cy.findByText('Add Board Owners').should('exist');
+}
 
 function shouldCreateActionItems(actionItems: string[]) {
 	actionItems.forEach((actionString, index) => {

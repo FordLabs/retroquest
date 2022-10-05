@@ -15,16 +15,27 @@
  * limitations under the License.
  */
 
+import Team from 'Types/Team';
+
+export const mockTeam: Team = {
+	id: 'mock-team-name',
+	name: 'Mock Team Name',
+	email: 'a@b.c',
+	secondaryEmail: 'd@e.f',
+};
+
 const TeamService = {
 	login: jest.fn().mockResolvedValue(''),
 	create: jest.fn().mockResolvedValue(''),
+	getTeam: jest.fn().mockResolvedValue(mockTeam),
 	getTeamName: jest.fn().mockResolvedValue('Active Team Name'),
 	getCSV: jest.fn().mockResolvedValue('column 1, column 2'),
-	setEmails: jest.fn().mockResolvedValue(''),
+	updateEmailsWithResetToken: jest.fn().mockResolvedValue(''),
 	setPassword: jest.fn().mockResolvedValue(''),
 	sendPasswordResetLink: jest.fn().mockResolvedValue(''),
 	checkIfResetTokenIsValid: jest.fn().mockResolvedValue(true),
 	getResetTokenLifetime: jest.fn().mockResolvedValue(800),
+	updateTeamEmailAddresses: jest.fn().mockResolvedValue(''),
 };
 
 export default TeamService;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,21 +27,14 @@ import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -51,8 +44,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
@@ -124,21 +116,61 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_get_team() throws Exception {
-        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
+        Team expectedResetTeam = new Team("team-id", "TeamName", "%$&357", "e@ma.il");
         teamRepository.save(expectedResetTeam);
 
-        MvcResult resultOfGet = mockMvc.perform(get("/api/team/teamuri")).andExpect(status().isOk()).andReturn();
+        MvcResult resultOfGet = mockMvc.perform(
+            get("/api/team/team-id")
+                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("team-id"))
+        ).andExpect(status().isOk()).andReturn();
         String content = resultOfGet.getResponse().getContentAsString();
         assertThat(content).contains("\"name\":\"TeamName\"");
         assertThat(content).contains("\"email\":\"e@ma.il\"");
         assertThat(content).contains("\"secondaryEmail\":null");
-        assertThat(content).contains("\"id\":\"teamuri\"");
+        assertThat(content).contains("\"id\":\"team-id\"");
         assertThat(content).doesNotContain("password");
     }
 
     @Test
-    void should_not_get_team_with_nonexistent_name() throws Exception {
-        mockMvc.perform(get("/api/team/nonExistentTeamName"))
+    void should_update_both_team_primary_email_address() throws Exception {
+        Team expectedResetTeam = new Team("team-id", "TeamName", "%$&357", "");
+        teamRepository.save(expectedResetTeam);
+
+        mockMvc.perform(
+                put("/api/team/team-id/email-addresses")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new UpdateTeamEmailAddressesRequest("primary@mail.com", null)))
+                        .header("Authorization", "Bearer " + jwtBuilder.buildJwt("team-id"))
+        ).andExpect(status().isOk()).andReturn();
+
+        var updatedTeam = teamRepository.findTeamByUri(expectedResetTeam.getUri()).orElseThrow();
+        assertThat(updatedTeam.getName()).contains("TeamName");
+        assertThat(updatedTeam.getEmail()).contains("primary@mail.com");
+        assertThat(updatedTeam.getSecondaryEmail()).isNull();
+    }
+
+    @Test
+    void should_update_both_team_email_addresses() throws Exception {
+        Team expectedResetTeam = new Team("team-id", "TeamName", "%$&357", "");
+        teamRepository.save(expectedResetTeam);
+
+        mockMvc.perform(
+                put("/api/team/team-id/email-addresses")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new UpdateTeamEmailAddressesRequest("primary@mail.com", "secondary@mail.com")))
+                        .header("Authorization", "Bearer " + jwtBuilder.buildJwt("team-id"))
+        ).andExpect(status().isOk()).andReturn();
+
+        var updatedTeam = teamRepository.findTeamByUri(expectedResetTeam.getUri()).orElseThrow();
+        assertThat(updatedTeam.getName()).contains("TeamName");
+        assertThat(updatedTeam.getEmail()).contains("primary@mail.com");
+        assertThat(updatedTeam.getSecondaryEmail()).contains("secondary@mail.com");
+    }
+
+    @Test
+    void should_not_get_team_with_nonexistent_id() throws Exception {
+        mockMvc.perform(get("/api/team/nonExistentTeamId")
+                        .header("Authorization", "Bearer " + jwtBuilder.buildJwt("nonExistentTeamId")))
                 .andExpect(status().isForbidden())
                 .andExpect(status().reason("Incorrect team name or password. Please try again."));
     }

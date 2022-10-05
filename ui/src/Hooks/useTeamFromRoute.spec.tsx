@@ -20,30 +20,37 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { waitFor } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import { RecoilRoot } from 'recoil';
-
-import TeamService from '../Services/Api/TeamService';
+import TeamService from 'Services/Api/TeamService';
+import Team from 'Types/Team';
 
 import useTeamFromRoute from './useTeamFromRoute';
 
-jest.mock('../Services/Api/TeamService');
+jest.mock('Services/Api/TeamService');
 
 const teamId = 'active-team-name';
 describe('useTeamFromRoute Hook', () => {
-	let result: { current: { name: any; id: any } };
+	let result: { current: Team };
+	const expectedTeam: Team = {
+		name: 'Active Team Name',
+		id: teamId,
+		email: 'a@b.c',
+		secondaryEmail: 'b@b.c',
+	};
 
 	beforeEach(async () => {
 		document.title = '';
 
+		TeamService.getTeam = jest.fn().mockResolvedValue(expectedTeam);
+
 		({ result } = renderHook(() => useTeamFromRoute(), { wrapper }));
 
 		await waitFor(() =>
-			expect(TeamService.getTeamName).toHaveBeenCalledWith(teamId)
+			expect(TeamService.getTeam).toHaveBeenCalledWith(teamId)
 		);
 	});
 
-	it('should get and return active team name if team id is in route path', () => {
-		expect(result.current.name).toBe('Active Team Name');
-		expect(result.current.id).toBe(teamId);
+	it('should get and return active team if team id is in route path', () => {
+		expect(result.current).toEqual(expectedTeam);
 	});
 
 	it('should set document title', () => {

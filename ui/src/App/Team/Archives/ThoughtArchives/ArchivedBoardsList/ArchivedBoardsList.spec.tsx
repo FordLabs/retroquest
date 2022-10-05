@@ -18,23 +18,23 @@
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
 import {
 	mockBoard1,
 	mockBoard2,
 	SortOrder,
-} from '../../../../../Services/Api/__mocks__/BoardService';
+} from 'Services/Api/__mocks__/BoardService';
+import { mockTeam } from 'Services/Api/__mocks__/TeamService';
 import BoardService, {
 	GetBoardsResponse,
 	SortByType,
-} from '../../../../../Services/Api/BoardService';
-import { TeamState } from '../../../../../State/TeamState';
-import Board from '../../../../../Types/Board';
-import renderWithRecoilRoot from '../../../../../Utils/renderWithRecoilRoot';
+} from 'Services/Api/BoardService';
+import { TeamState } from 'State/TeamState';
+import Board from 'Types/Board';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import ArchivedBoardsList from './ArchivedBoardsList';
 
-jest.mock('../../../../../Services/Api/BoardService');
+jest.mock('Services/Api/BoardService');
 
 const PAGE_SIZE = 6;
 const INITIAL_PAGE_INDEX = 0;
@@ -82,7 +82,7 @@ describe('Archived Boards List', () => {
 			expect(pagination2Button).toHaveClass('active');
 			await waitFor(() =>
 				expect(BoardService.getBoards).toHaveBeenCalledWith(
-					'teamId',
+					mockTeam.id,
 					INITIAL_PAGE_INDEX + 1,
 					PAGE_SIZE,
 					'dateCreated',
@@ -113,7 +113,7 @@ describe('Archived Boards List', () => {
 			expect(pagination2Button).toHaveClass('active');
 			await waitFor(() =>
 				expect(BoardService.getBoards).toHaveBeenCalledWith(
-					'teamId',
+					mockTeam.id,
 					INITIAL_PAGE_INDEX,
 					PAGE_SIZE,
 					'dateCreated',
@@ -132,7 +132,7 @@ describe('Archived Boards List', () => {
 			await setUpThoughtArchives();
 
 			expect(BoardService.getBoards).toHaveBeenCalledWith(
-				'teamId',
+				mockTeam.id,
 				INITIAL_PAGE_INDEX,
 				PAGE_SIZE,
 				'dateCreated',
@@ -155,7 +155,7 @@ describe('Archived Boards List', () => {
 
 			await waitFor(() =>
 				expect(BoardService.getBoards).toHaveBeenCalledWith(
-					'teamId',
+					mockTeam.id,
 					INITIAL_PAGE_INDEX,
 					PAGE_SIZE,
 					'dateCreated',
@@ -180,7 +180,7 @@ describe('Archived Boards List', () => {
 
 			await waitFor(() =>
 				expect(BoardService.getBoards).toHaveBeenCalledWith(
-					'teamId',
+					mockTeam.id,
 					INITIAL_PAGE_INDEX,
 					PAGE_SIZE,
 					'dateCreated',
@@ -211,7 +211,7 @@ const setUpThoughtArchives = async () => {
 	renderWithRecoilRoot(
 		<ArchivedBoardsList onBoardSelection={jest.fn()} />,
 		({ set }) => {
-			set(TeamState, { id: 'teamId', name: 'Team' });
+			set(TeamState, mockTeam);
 		}
 	);
 

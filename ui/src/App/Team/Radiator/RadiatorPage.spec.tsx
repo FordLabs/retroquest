@@ -16,16 +16,16 @@
  */
 
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import moment from 'moment';
-import { RecoilRoot } from 'recoil';
-
-import ActionItemService from '../../../Services/Api/ActionItemService';
-import { TeamState } from '../../../State/TeamState';
+import { mockTeam } from 'Services/Api/__mocks__/TeamService';
+import ActionItemService from 'Services/Api/ActionItemService';
+import { TeamState } from 'State/TeamState';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import RadiatorPage from './RadiatorPage';
 
-jest.mock('../../../Services/Api/ActionItemService');
+jest.mock('Services/Api/ActionItemService');
 
 const archivedActionItems = [
 	{
@@ -47,23 +47,15 @@ const archivedActionItems = [
 ];
 
 describe('Radiator Page', () => {
-	const teamId = 'team-id';
-
 	it('should get active action items and display them on page', async () => {
 		ActionItemService.get = jest.fn().mockResolvedValue(archivedActionItems);
 
-		render(
-			<RecoilRoot
-				initializeState={({ set }) => {
-					set(TeamState, { name: '', id: teamId });
-				}}
-			>
-				<RadiatorPage />
-			</RecoilRoot>
-		);
+		renderWithRecoilRoot(<RadiatorPage />, ({ set }) => {
+			set(TeamState, mockTeam);
+		});
 
 		await waitFor(() =>
-			expect(ActionItemService.get).toHaveBeenCalledWith(teamId, false)
+			expect(ActionItemService.get).toHaveBeenCalledWith(mockTeam.id, false)
 		);
 		expect(screen.getByText('Radiator')).toBeDefined();
 		expect(
@@ -90,18 +82,12 @@ describe('Radiator Page', () => {
 	it('should show date and assignee in readOnly mode', async () => {
 		ActionItemService.get = jest.fn().mockResolvedValue(archivedActionItems);
 
-		render(
-			<RecoilRoot
-				initializeState={({ set }) => {
-					set(TeamState, { name: '', id: teamId });
-				}}
-			>
-				<RadiatorPage />
-			</RecoilRoot>
-		);
+		renderWithRecoilRoot(<RadiatorPage />, ({ set }) => {
+			set(TeamState, mockTeam);
+		});
 
 		await waitFor(() =>
-			expect(ActionItemService.get).toHaveBeenCalledWith(teamId, false)
+			expect(ActionItemService.get).toHaveBeenCalledWith(mockTeam.id, false)
 		);
 
 		const dateCreatedField = screen.getByTestId('dateCreated');
@@ -114,11 +100,7 @@ describe('Radiator Page', () => {
 	it('should show "No active action items" message when no active action items are present', () => {
 		ActionItemService.get = jest.fn().mockResolvedValue([]);
 
-		render(
-			<RecoilRoot>
-				<RadiatorPage />
-			</RecoilRoot>
-		);
+		renderWithRecoilRoot(<RadiatorPage />);
 
 		screen.getByText('No active action items were found.');
 		const description = screen.getByTestId('notFoundSectionDescription');

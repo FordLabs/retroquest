@@ -19,25 +19,20 @@ import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
+import ThoughtService from 'Services/Api/ThoughtService';
+import { TeamState } from 'State/TeamState';
+import Thought from 'Types/Thought';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
-import ThoughtService from '../../../../../../Services/Api/ThoughtService';
-import { TeamState } from '../../../../../../State/TeamState';
-import Team from '../../../../../../Types/Team';
-import Thought from '../../../../../../Types/Thought';
-import renderWithRecoilRoot from '../../../../../../Utils/renderWithRecoilRoot';
+import { mockTeam } from '../../../../../../Services/Api/__mocks__/TeamService';
 import { ThoughtItemViewState } from '../ThoughtItem';
 
 import DeleteThoughtView from './DeleteThoughtView';
 
-jest.mock('../../../../../../Services/Api/ThoughtService');
+jest.mock('Services/Api/ThoughtService');
 
 describe('Delete Thought View', () => {
 	let mockSetViewState: jest.Mock<any, any>;
-
-	const team: Team = {
-		name: 'My Team',
-		id: 'my-team',
-	};
 
 	const fakeThought: Thought = {
 		id: 12,
@@ -58,7 +53,7 @@ describe('Delete Thought View', () => {
 				thoughtId={fakeThought.id}
 			/>,
 			({ set }) => {
-				set(TeamState, team);
+				set(TeamState, mockTeam);
 			}
 		));
 	});
@@ -87,7 +82,7 @@ describe('Delete Thought View', () => {
 
 		await waitFor(() =>
 			expect(ThoughtService.delete).toHaveBeenCalledWith(
-				team.id,
+				mockTeam.id,
 				fakeThought.id
 			)
 		);

@@ -16,6 +16,7 @@
  */
 
 import axios, { AxiosError } from 'axios';
+import Team from 'Types/Team';
 
 import { REQUEST_PASSWORD_RESET_PAGE_PATH } from '../../RouteConstants';
 import CookieService from '../CookieService';
@@ -26,7 +27,7 @@ jest.mock('../CookieService');
 
 describe('Team Service', () => {
 	const teamId = 'team-id';
-	const user = {
+	const teamData = {
 		name: 'Julia',
 		password: 'Password1',
 		email: 'e@mail.com',
@@ -36,21 +37,27 @@ describe('Team Service', () => {
 		data: 'jwt-token-123',
 		headers: { location: teamId },
 	};
+	const fakeToken = 'fake-token';
+	const mockConfig = { headers: { Authorization: `Bearer ${fakeToken}` } };
+
+	beforeAll(() => {
+		CookieService.getToken = jest.fn().mockReturnValue(fakeToken);
+	});
 
 	describe('login', () => {
 		it('should login to retroquest', async () => {
 			axios.post = jest.fn().mockResolvedValue(axiosResponse);
 			const authResponse: AuthResponse = await TeamService.login(
-				user.name,
-				user.password
+				teamData.name,
+				teamData.password
 			);
 			expect(authResponse).toEqual({
 				token: authResponse.token,
 				teamId,
 			});
 			expect(axios.post).toHaveBeenCalledWith('/api/team/login', {
-				name: user.name,
-				password: user.password,
+				name: teamData.name,
+				password: teamData.password,
 			});
 		});
 	});
@@ -59,24 +66,61 @@ describe('Team Service', () => {
 		it('should create a retroquest team', async () => {
 			axios.post = jest.fn().mockResolvedValue(axiosResponse);
 			const authResponse: AuthResponse = await TeamService.create(
-				user.name,
-				user.password,
-				user.email,
-				user.secondaryEmail
+				teamData.name,
+				teamData.password,
+				teamData.email,
+				teamData.secondaryEmail
 			);
 			expect(authResponse).toEqual({
 				token: authResponse.token,
 				teamId,
 			});
-			expect(axios.post).toHaveBeenCalledWith('/api/team', user);
+			expect(axios.post).toHaveBeenCalledWith('/api/team', teamData);
+		});
+	});
+
+	describe('getTeam', () => {
+		it('should get team name by team id', async () => {
+			const expectedTeam: Team = {
+				id: 'team-id',
+				name: 'Team Name',
+				email: '',
+				secondaryEmail: '',
+			};
+			axios.get = jest.fn().mockResolvedValue({ data: expectedTeam });
+			const actualTeam = await TeamService.getTeam(expectedTeam.id);
+			expect(actualTeam).toBe(expectedTeam);
+			expect(axios.get).toHaveBeenCalledWith(
+				`/api/team/${expectedTeam.id}`,
+				mockConfig
+			);
+		});
+	});
+
+	describe('updateTeamEmails', () => {
+		it('should get team name by team id', async () => {
+			const teamId = 'team-id';
+			await TeamService.updateTeamEmailAddresses(
+				teamId,
+				'primary@mail.com',
+				'secondary@mail.com'
+			);
+			expect(axios.put).toHaveBeenCalledWith(
+				`/api/team/${teamId}/email-addresses`,
+				{
+					email1: 'primary@mail.com',
+					email2: 'secondary@mail.com',
+				},
+				mockConfig
+			);
 		});
 	});
 
 	describe('getTeamName', () => {
 		it('should get team name by team id', async () => {
-			axios.get = jest.fn().mockResolvedValue({ data: user.name });
+			axios.get = jest.fn().mockResolvedValue({ data: teamData.name });
 			const actualTeamName = await TeamService.getTeamName(teamId);
-			expect(actualTeamName).toBe(user.name);
+			expect(actualTeamName).toBe(teamData.name);
 			expect(axios.get).toHaveBeenCalledWith(`/api/team/${teamId}/name`);
 		});
 	});
@@ -99,7 +143,11 @@ describe('Team Service', () => {
 	describe('setEmails', () => {
 		it('should post emails to /email/reset with the token', async () => {
 			axios.post = jest.fn();
-			await TeamService.setEmails('e1@ma.il', 'e2@ma.il', 'T0k3n');
+			await TeamService.updateEmailsWithResetToken(
+				'e1@ma.il',
+				'e2@ma.il',
+				'T0k3n'
+			);
 
 			expect(axios.post).toHaveBeenCalledWith('/api/email/reset', {
 				email1: 'e1@ma.il',

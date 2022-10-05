@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,11 +23,15 @@ import com.ford.labs.retroquest.column.ColumnRepository;
 import com.ford.labs.retroquest.exception.TeamDoesNotExistException;
 import com.ford.labs.retroquest.exception.PasswordInvalidException;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
+import com.ford.labs.retroquest.websocket.WebsocketService;
+import com.ford.labs.retroquest.websocket.events.WebsocketTeamEvent;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+
+import static com.ford.labs.retroquest.websocket.events.WebsocketEventType.UPDATE;
 
 @Service
 public class TeamService {
@@ -36,19 +40,21 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final PasswordEncoder passwordEncoder;
     private final ColumnRepository columnRepository;
+    private final WebsocketService websocketService;
 
     public TeamService(
         ThoughtRepository thoughtRepository,
         ActionItemRepository actionItemRepository,
         TeamRepository teamRepository,
         PasswordEncoder passwordEncoder,
-        ColumnRepository columnRepository
-    ) {
+        ColumnRepository columnRepository,
+        WebsocketService websocketService) {
         this.thoughtRepository = thoughtRepository;
         this.actionItemRepository = actionItemRepository;
         this.teamRepository = teamRepository;
         this.passwordEncoder = passwordEncoder;
         this.columnRepository = columnRepository;
+        this.websocketService = websocketService;
     }
 
     static boolean isEmailOnTeam(Team team, String email) {
@@ -76,8 +82,12 @@ public class TeamService {
         return new CsvFile(team, thoughts, actionItems, columns);
     }
 
+    public String encodePassword(String password) {
+        return passwordEncoder.encode(password);
+    }
+
     public Team createNewTeam(CreateTeamRequest createTeamRequest) {
-        var encryptedPassword = passwordEncoder.encode(createTeamRequest.getPassword());
+        var encryptedPassword = this.encodePassword(createTeamRequest.getPassword());
 
         var trimmedName = createTeamRequest.getName().trim();
         var uri = convertTeamNameToURI(trimmedName);
@@ -115,7 +125,7 @@ public class TeamService {
         return savedTeam;
     }
 
-    private void generateColumns(Team team) {
+    public void generateColumns(Team team) {
         var happyColumn = new Column(null, "happy", "Happy", team.getUri());
         var confusedColumn = new Column(null, "confused", "Confused", team.getUri());
         var unhappyColumn = new Column(null, "unhappy", "Sad", team.getUri());
@@ -133,5 +143,13 @@ public class TeamService {
     private void updateFailedAttempts(Team savedTeam, int failedAttempts) {
         savedTeam.setFailedAttempts(failedAttempts);
         teamRepository.save(savedTeam);
+    }
+
+    public void updateTeamEmailAddresses(String teamId, UpdateTeamEmailAddressesRequest request) {
+        Team team = this.getTeamByUri(teamId);
+        team.setEmail(request.email1());
+        team.setSecondaryEmail(request.email2());
+        Team updatedTeam = teamRepository.save(team);
+        websocketService.publishEvent(new WebsocketTeamEvent(updatedTeam.getId(), UPDATE, updatedTeam));
     }
 }

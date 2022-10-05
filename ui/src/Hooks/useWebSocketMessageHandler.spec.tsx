@@ -16,16 +16,18 @@
  */
 
 import React, { ReactElement, useEffect } from 'react';
-import { render, screen } from '@testing-library/react';
-import { RecoilRoot, useRecoilValue } from 'recoil';
-
-import { getMockActionItem } from '../Services/Api/__mocks__/ActionItemService';
-import { getMockThought } from '../Services/Api/__mocks__/ThoughtService';
-import { ActionItemState } from '../State/ActionItemState';
-import { ColumnsState } from '../State/ColumnsState';
-import { ThoughtsState } from '../State/ThoughtsState';
-import { Column } from '../Types/Column';
-import Topic from '../Types/Topic';
+import { screen } from '@testing-library/react';
+import { useRecoilValue } from 'recoil';
+import { getMockActionItem } from 'Services/Api/__mocks__/ActionItemService';
+import { getMockThought } from 'Services/Api/__mocks__/ThoughtService';
+import { ActionItemState } from 'State/ActionItemState';
+import { ColumnsState } from 'State/ColumnsState';
+import { TeamState } from 'State/TeamState';
+import { ThoughtsState } from 'State/ThoughtsState';
+import { Column } from 'Types/Column';
+import Team from 'Types/Team';
+import Topic from 'Types/Topic';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import useWebSocketMessageHandler from './useWebSocketMessageHandler';
 
@@ -58,19 +60,16 @@ describe('useWebsocketMessageHandler Hook', () => {
 		it('should add a thought to the global thoughts state', async () => {
 			const newThought = getMockThought(1, false);
 
-			render(
-				<RecoilRoot
-					initializeState={({ set }) => {
-						set(ThoughtsState, []);
+			renderWithRecoilRoot(
+				<ThoughtsTestComponent
+					websocketMessageBody={{
+						type: 'put',
+						payload: newThought,
 					}}
-				>
-					<ThoughtsTestComponent
-						websocketMessageBody={{
-							type: 'put',
-							payload: newThought,
-						}}
-					/>
-				</RecoilRoot>
+				/>,
+				({ set }) => {
+					set(ThoughtsState, []);
+				}
 			);
 
 			expect(screen.getByText(JSON.stringify([newThought]))).toBeDefined();
@@ -82,19 +81,16 @@ describe('useWebsocketMessageHandler Hook', () => {
 			updatedThought.discussed = true;
 			updatedThought.hearts = 2;
 
-			render(
-				<RecoilRoot
-					initializeState={({ set }) => {
-						set(ThoughtsState, [originalThought]);
+			renderWithRecoilRoot(
+				<ThoughtsTestComponent
+					websocketMessageBody={{
+						type: 'put',
+						payload: updatedThought,
 					}}
-				>
-					<ThoughtsTestComponent
-						websocketMessageBody={{
-							type: 'put',
-							payload: updatedThought,
-						}}
-					/>
-				</RecoilRoot>
+				/>,
+				({ set }) => {
+					set(ThoughtsState, [originalThought]);
+				}
 			);
 
 			expect(screen.getByText(JSON.stringify([updatedThought]))).toBeDefined();
@@ -104,19 +100,16 @@ describe('useWebsocketMessageHandler Hook', () => {
 			const thoughtNotToDelete = getMockThought(1, true);
 			const thoughtToDelete = getMockThought(2, false);
 
-			render(
-				<RecoilRoot
-					initializeState={({ set }) => {
-						set(ThoughtsState, [thoughtToDelete, thoughtNotToDelete]);
+			renderWithRecoilRoot(
+				<ThoughtsTestComponent
+					websocketMessageBody={{
+						type: 'delete',
+						payload: thoughtToDelete,
 					}}
-				>
-					<ThoughtsTestComponent
-						websocketMessageBody={{
-							type: 'delete',
-							payload: thoughtToDelete,
-						}}
-					/>
-				</RecoilRoot>
+				/>,
+				({ set }) => {
+					set(ThoughtsState, [thoughtToDelete, thoughtNotToDelete]);
+				}
 			);
 
 			expect(
@@ -146,19 +139,16 @@ describe('useWebsocketMessageHandler Hook', () => {
 		it('should add an action item to the global action items state', async () => {
 			const newActionItem = getMockActionItem();
 
-			render(
-				<RecoilRoot
-					initializeState={({ set }) => {
-						set(ActionItemState, []);
+			renderWithRecoilRoot(
+				<ActionItemsTestComponent
+					websocketMessageBody={{
+						type: 'put',
+						payload: newActionItem,
 					}}
-				>
-					<ActionItemsTestComponent
-						websocketMessageBody={{
-							type: 'put',
-							payload: newActionItem,
-						}}
-					/>
-				</RecoilRoot>
+				/>,
+				({ set }) => {
+					set(ActionItemState, []);
+				}
 			);
 
 			expect(screen.getByText(JSON.stringify([newActionItem]))).toBeDefined();
@@ -170,19 +160,16 @@ describe('useWebsocketMessageHandler Hook', () => {
 			updatedActionItem.completed = true;
 			updatedActionItem.task = 'I changed this action.. the last one sucked.';
 
-			render(
-				<RecoilRoot
-					initializeState={({ set }) => {
-						set(ActionItemState, [originalActionItem]);
+			renderWithRecoilRoot(
+				<ActionItemsTestComponent
+					websocketMessageBody={{
+						type: 'put',
+						payload: updatedActionItem,
 					}}
-				>
-					<ActionItemsTestComponent
-						websocketMessageBody={{
-							type: 'put',
-							payload: updatedActionItem,
-						}}
-					/>
-				</RecoilRoot>
+				/>,
+				({ set }) => {
+					set(ActionItemState, [originalActionItem]);
+				}
 			);
 
 			expect(
@@ -194,19 +181,16 @@ describe('useWebsocketMessageHandler Hook', () => {
 			const actionItemNotToDelete = getMockActionItem(true);
 			const actionItemToDelete = getMockActionItem(false);
 
-			render(
-				<RecoilRoot
-					initializeState={({ set }) => {
-						set(ActionItemState, [actionItemToDelete, actionItemNotToDelete]);
+			renderWithRecoilRoot(
+				<ActionItemsTestComponent
+					websocketMessageBody={{
+						type: 'delete',
+						payload: actionItemToDelete,
 					}}
-				>
-					<ActionItemsTestComponent
-						websocketMessageBody={{
-							type: 'delete',
-							payload: actionItemToDelete,
-						}}
-					/>
-				</RecoilRoot>
+				/>,
+				({ set }) => {
+					set(ActionItemState, [actionItemToDelete, actionItemNotToDelete]);
+				}
 			);
 
 			expect(
@@ -246,20 +230,17 @@ describe('useWebsocketMessageHandler Hook', () => {
 				getMockThought(2),
 				getMockThought(3),
 			];
-			render(
-				<RecoilRoot
-					initializeState={({ set }) => {
-						set(ActionItemState, actionItems);
-						set(ThoughtsState, thoughts);
+			renderWithRecoilRoot(
+				<EndRetroTestComponent
+					websocketMessageBody={{
+						type: 'put',
+						payload: null,
 					}}
-				>
-					<EndRetroTestComponent
-						websocketMessageBody={{
-							type: 'put',
-							payload: null,
-						}}
-					/>
-				</RecoilRoot>
+				/>,
+				({ set }) => {
+					set(ActionItemState, actionItems);
+					set(ThoughtsState, thoughts);
+				}
 			);
 
 			const thoughtsColumn = screen.getByTestId('thoughts');
@@ -307,23 +288,20 @@ describe('useWebsocketMessageHandler Hook', () => {
 				},
 			];
 
-			render(
-				<RecoilRoot
-					initializeState={({ set }) => {
-						set(ColumnsState, [...expectedColumns]);
+			renderWithRecoilRoot(
+				<ColumnTestComponent
+					websocketMessageBody={{
+						type: 'put',
+						payload: {
+							id: 2,
+							topic: Topic.CONFUSED,
+							title: 'Updated Confused',
+						},
 					}}
-				>
-					<ColumnTestComponent
-						websocketMessageBody={{
-							type: 'put',
-							payload: {
-								id: 2,
-								topic: Topic.CONFUSED,
-								title: 'Updated Confused',
-							},
-						}}
-					/>
-				</RecoilRoot>
+				/>,
+				({ set }) => {
+					set(ColumnsState, [...expectedColumns]);
+				}
 			);
 
 			await screen.findByText(
@@ -333,6 +311,51 @@ describe('useWebsocketMessageHandler Hook', () => {
 					expectedColumns[2],
 				])
 			);
+		});
+	});
+
+	describe('teamMessageHandler', () => {
+		const TeamTestComponent = ({
+			websocketMessageBody,
+		}: TestComponentProps): ReactElement => {
+			const team = useRecoilValue(TeamState);
+
+			const { teamMessageHandler } = useWebSocketMessageHandler();
+
+			useEffect(() => {
+				const imessage = formatWebsocketMessage(websocketMessageBody);
+				teamMessageHandler(imessage);
+			}, [teamMessageHandler, websocketMessageBody]);
+
+			return <div data-testid="team">{JSON.stringify(team)}</div>;
+		};
+
+		it('should update team with the latest team data', async () => {
+			const initialTeam: Team = {
+				id: '123',
+				name: 'Test Team Name',
+				email: 'a@b.c',
+				secondaryEmail: 'b@c.d',
+			};
+			const expectedTeam: Team = {
+				...initialTeam,
+				email: 'changed@it.com',
+				secondaryEmail: 'something@else.com',
+			};
+
+			renderWithRecoilRoot(
+				<TeamTestComponent
+					websocketMessageBody={{
+						type: 'put',
+						payload: expectedTeam,
+					}}
+				/>,
+				({ set }) => {
+					set(TeamState, { ...initialTeam });
+				}
+			);
+
+			await screen.findByText(JSON.stringify(expectedTeam));
 		});
 	});
 });

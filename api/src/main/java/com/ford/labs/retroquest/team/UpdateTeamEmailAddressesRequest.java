@@ -15,11 +15,13 @@
  * limitations under the License.
  */
 
-interface Team {
-	id: string;
-	name: string;
-	email: string;
-	secondaryEmail: string;
-}
+package com.ford.labs.retroquest.team;
 
-export default Team;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.micrometer.core.lang.Nullable;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record UpdateTeamEmailAddressesRequest(
+        String email1,
+        @Nullable String email2
+) { }

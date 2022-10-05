@@ -18,13 +18,14 @@
 import { useCallback } from 'react';
 import { IMessage } from '@stomp/stompjs';
 import { useSetRecoilState } from 'recoil';
-
-import { ActionItemState } from '../State/ActionItemState';
-import { ColumnsState } from '../State/ColumnsState';
-import { ThoughtsState } from '../State/ThoughtsState';
-import Action from '../Types/Action';
-import { Column } from '../Types/Column';
-import Thought from '../Types/Thought';
+import { ActionItemState } from 'State/ActionItemState';
+import { ColumnsState } from 'State/ColumnsState';
+import { TeamState } from 'State/TeamState';
+import { ThoughtsState } from 'State/ThoughtsState';
+import Action from 'Types/Action';
+import { Column } from 'Types/Column';
+import Team from 'Types/Team';
+import Thought from 'Types/Thought';
 
 enum MessageType {
 	PUT = 'put',
@@ -43,12 +44,14 @@ interface WebsocketCallback {
 	thoughtMessageHandler: WebsocketMessageHandlerType;
 	actionItemMessageHandler: WebsocketMessageHandlerType;
 	endRetroMessageHandler: WebsocketMessageHandlerType;
+	teamMessageHandler: WebsocketMessageHandlerType;
 }
 
 function useWebSocketMessageHandler(): WebsocketCallback {
 	const setThoughts = useSetRecoilState(ThoughtsState);
 	const setActionItems = useSetRecoilState(ActionItemState);
 	const setColumns = useSetRecoilState(ColumnsState);
+	const setTeam = useSetRecoilState(TeamState);
 
 	const recoilStateUpdater = (
 		recoilStateSetter: Function,
@@ -118,11 +121,22 @@ function useWebSocketMessageHandler(): WebsocketCallback {
 		);
 	}, [setActionItems, setThoughts]);
 
+	const teamMessageHandler = useCallback(
+		({ body }: Partial<IMessage>) => {
+			const incomingMessage: IncomingMessage = JSON.parse(body || '');
+			const updatedTeam = incomingMessage.payload as Team;
+
+			setTeam({ ...updatedTeam });
+		},
+		[setTeam]
+	);
+
 	return {
 		columnMessageHandler,
 		thoughtMessageHandler,
 		actionItemMessageHandler,
 		endRetroMessageHandler,
+		teamMessageHandler,
 	};
 }
 

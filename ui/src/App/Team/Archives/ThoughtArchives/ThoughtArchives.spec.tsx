@@ -17,10 +17,10 @@
 
 import React from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { mockTeam } from 'Services/Api/__mocks__/TeamService';
 import BoardService from 'Services/Api/BoardService';
 import { TeamState } from 'State/TeamState';
-
-import renderWithRecoilRoot from '../../../../Utils/renderWithRecoilRoot';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import ThoughtArchives from './ThoughtArchives';
 
@@ -43,7 +43,7 @@ describe('Thought Archives', () => {
 
 const setUpThoughtArchives = async () => {
 	renderWithRecoilRoot(<ThoughtArchives />, ({ set }) => {
-		set(TeamState, { id: 'teamId', name: '' });
+		set(TeamState, mockTeam);
 	});
 
 	await waitFor(() => expect(BoardService.getBoards).toHaveBeenCalled());

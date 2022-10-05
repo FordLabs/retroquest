@@ -19,13 +19,13 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import moment from 'moment';
 import { RecoilRoot } from 'recoil';
-
-import ActionItemService from '../../../../Services/Api/ActionItemService';
-import { TeamState } from '../../../../State/TeamState';
+import { mockTeam } from 'Services/Api/__mocks__/TeamService';
+import ActionItemService from 'Services/Api/ActionItemService';
+import { TeamState } from 'State/TeamState';
 
 import ActionItemArchives from './ActionItemArchives';
 
-jest.mock('../../../../Services/Api/ActionItemService');
+jest.mock('Services/Api/ActionItemService');
 
 const archivedActionItems = [
 	{
@@ -47,15 +47,13 @@ const archivedActionItems = [
 ];
 
 describe('Action Item Archives', () => {
-	const teamId = 'team-id';
-
 	it('should get archived action items and display them on page', async () => {
 		ActionItemService.get = jest.fn().mockResolvedValue(archivedActionItems);
 
 		render(
 			<RecoilRoot
 				initializeState={({ set }) => {
-					set(TeamState, { name: '', id: teamId });
+					set(TeamState, mockTeam);
 				}}
 			>
 				<ActionItemArchives />
@@ -63,7 +61,7 @@ describe('Action Item Archives', () => {
 		);
 
 		await waitFor(() =>
-			expect(ActionItemService.get).toHaveBeenCalledWith(teamId, true)
+			expect(ActionItemService.get).toHaveBeenCalledWith(mockTeam.id, true)
 		);
 		expect(screen.getByText('Action Item Archives')).toBeDefined();
 

@@ -24,10 +24,10 @@ import { ActionItemState } from 'State/ActionItemState';
 import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
 import { TeamState } from 'State/TeamState';
 import Action from 'Types/Action';
-import Team from 'Types/Team';
 import { RecoilObserver } from 'Utils/RecoilObserver';
 import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
+import { mockTeam } from '../../../../../../Services/Api/__mocks__/TeamService';
 import ActionItem, { ActionItemViewState } from '../ActionItem';
 
 import DefaultActionItemView from './DefaultActionItemView';
@@ -36,10 +36,6 @@ jest.mock('Services/Api/ActionItemService');
 
 describe('Default Action Item View', () => {
 	let modalContent: ModalContents | null;
-	const team: Team = {
-		name: 'My Team',
-		id: 'my-team',
-	};
 
 	const fakeActionItem: Action = {
 		id: 0,
@@ -90,7 +86,7 @@ describe('Default Action Item View', () => {
 					/>
 				</>,
 				({ set }) => {
-					set(TeamState, team);
+					set(TeamState, mockTeam);
 					set(ActionItemState, [fakeActionItem]);
 				}
 			);
@@ -130,7 +126,7 @@ describe('Default Action Item View', () => {
 
 			await waitFor(() =>
 				expect(ActionItemService.updateCompletionStatus).toHaveBeenCalledWith(
-					team.id,
+					mockTeam.id,
 					fakeActionItem.id,
 					true
 				)
@@ -169,7 +165,7 @@ describe('Default Action Item View', () => {
 					/>
 				</>,
 				({ set }) => {
-					set(TeamState, team);
+					set(TeamState, mockTeam);
 					set(ActionItemState, [completedActionItem]);
 				}
 			);

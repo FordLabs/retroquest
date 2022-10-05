@@ -100,4 +100,19 @@ describe('webSocketService', () => {
 			}
 		);
 	});
+
+	it('should subscribe to team', async () => {
+		const teamId = 'Idddddd';
+		const webSocketMessageHandler = jest.fn();
+		webSocketService.subscribeToTeam(teamId, webSocketMessageHandler);
+
+		const expectedDestination = `/topic/${teamId}/team`;
+		expect(mockClient.subscribe).toHaveBeenCalledWith(
+			expectedDestination,
+			expect.any(Function),
+			{
+				Authorization: `Bearer ` + mockAccessToken,
+			}
+		);
+	});
 });

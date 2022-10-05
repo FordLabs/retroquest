@@ -20,27 +20,19 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
-
-import FeedbackService from '../../../../../Services/Api/FeedbackService';
-import {
-	ModalContents,
-	ModalContentsState,
-} from '../../../../../State/ModalContentsState';
-import { TeamState } from '../../../../../State/TeamState';
-import Team from '../../../../../Types/Team';
-import { RecoilObserver } from '../../../../../Utils/RecoilObserver';
+import { mockTeam } from 'Services/Api/__mocks__/TeamService';
+import FeedbackService from 'Services/Api/FeedbackService';
+import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
+import { TeamState } from 'State/TeamState';
+import { RecoilObserver } from 'Utils/RecoilObserver';
 
 import FeedbackForm from './FeedbackForm';
 
-jest.mock('../../../../../Services/Api/FeedbackService');
+jest.mock('Services/Api/FeedbackService');
 
 describe('Feedback Form', () => {
 	const fakeComment = 'This is a fake comment';
 	const fakeEmail = 'user@ford.com';
-	const team: Team = {
-		name: 'My Team',
-		id: 'fake-team-id',
-	};
 	let modalContent: ModalContents | null;
 	let container: string | Element;
 
@@ -52,7 +44,7 @@ describe('Feedback Form', () => {
 		({ container } = render(
 			<RecoilRoot
 				initializeState={({ set }) => {
-					set(TeamState, team);
+					set(TeamState, mockTeam);
 					set(ModalContentsState, {
 						title: 'Feedback',
 						component: <FeedbackForm />,
@@ -83,7 +75,7 @@ describe('Feedback Form', () => {
 
 		await waitFor(() =>
 			expect(FeedbackService.submitFeedback).toHaveBeenCalledWith({
-				teamId: team.id,
+				teamId: mockTeam.id,
 				stars: 4,
 				comment: fakeComment,
 				userEmail: fakeEmail,

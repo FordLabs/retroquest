@@ -20,19 +20,18 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
-
-import { mockContributors } from '../../Services/Api/__mocks__/ContributorsService';
-import ContributorsService from '../../Services/Api/ContributorsService';
-import TeamService from '../../Services/Api/TeamService';
+import { mockContributors } from 'Services/Api/__mocks__/ContributorsService';
+import ContributorsService from 'Services/Api/ContributorsService';
+import TeamService from 'Services/Api/TeamService';
 
 import CreateTeamPage from './CreateTeamPage';
 
-jest.mock('../../Services/Api/ContributorsService');
-jest.mock('../../Services/Api/TeamService');
+jest.mock('Services/Api/ContributorsService');
+jest.mock('Services/Api/TeamService');
 
 const mockLogin = jest.fn();
 
-jest.mock('../../Hooks/useAuth', () => {
+jest.mock('Hooks/useAuth', () => {
 	return () => ({
 		login: mockLogin,
 	});

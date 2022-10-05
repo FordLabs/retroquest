@@ -21,9 +21,6 @@ import com.ford.labs.retroquest.team.validation.EmailConstraint;
 import com.ford.labs.retroquest.team.validation.PasswordConstraint;
 import com.ford.labs.retroquest.team.validation.TeamNameConstraint;
 import lombok.*;
-import org.springframework.boot.context.properties.bind.DefaultValue;
-
-import javax.validation.constraints.NotBlank;
 
 @Data
 @AllArgsConstructor

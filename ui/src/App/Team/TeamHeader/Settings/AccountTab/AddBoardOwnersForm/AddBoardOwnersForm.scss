@@ -15,11 +15,12 @@
  * limitations under the License.
  */
 
-interface Team {
-	id: string;
-	name: string;
-	email: string;
-	secondaryEmail: string;
-}
+.add-board-owners-form {
+	.submit-button {
+		margin-top: 0;
+	}
 
-export default Team;
+	.input-group:nth-last-of-type(2) {
+		margin-bottom: 0;
+	}
+}

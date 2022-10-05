@@ -16,6 +16,7 @@
  */
 
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import Team from 'Types/Team';
 
 import {
 	CREATE_TEAM_PAGE_PATH,
@@ -35,6 +36,7 @@ import {
 	RESET_TOKEN_LIFETIME_API_PATH,
 	RESET_TOKEN_STATUS_API_PATH,
 } from './ApiConstants';
+import getAuthConfig from './getAuthConfig';
 
 export interface AuthResponse {
 	token: string;
@@ -72,7 +74,7 @@ const TeamService = {
 			.then(returnTokenAndTeamId);
 	},
 
-	setEmails(
+	updateEmailsWithResetToken(
 		email1: string,
 		email2: string,
 		token: string
@@ -109,9 +111,27 @@ const TeamService = {
 		});
 	},
 
+	getTeam(teamId: string): Promise<Team> {
+		return axios
+			.get(`${CREATE_TEAM_API_PATH}/${teamId}`, getAuthConfig())
+			.then((res) => res.data);
+	},
+
 	getTeamName(teamId: string): Promise<string> {
 		const TEAM_NAME_API_PATH = getTeamNameApiPath(teamId);
 		return axios.get(TEAM_NAME_API_PATH).then((res) => res.data);
+	},
+
+	updateTeamEmailAddresses(teamId: string, email1: string, email2: string) {
+		const url = `${CREATE_TEAM_API_PATH}/${teamId}/email-addresses`;
+		return axios.put(
+			url,
+			{
+				email1: email1,
+				email2: email2,
+			},
+			getAuthConfig()
+		);
 	},
 
 	getCSV(teamId: string): Promise<Blob> {

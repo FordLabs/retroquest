@@ -15,13 +15,14 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.deprecated_tests;
+package com.ford.labs.retroquest.team;
 
 import com.ford.labs.retroquest.column.Column;
 import com.ford.labs.retroquest.column.ColumnRepository;
 import com.ford.labs.retroquest.exception.TeamDoesNotExistException;
 import com.ford.labs.retroquest.exception.PasswordInvalidException;
-import com.ford.labs.retroquest.team.*;
+import com.ford.labs.retroquest.websocket.WebsocketService;
+import com.ford.labs.retroquest.websocket.events.WebsocketTeamEvent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -33,8 +34,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import static com.ford.labs.retroquest.websocket.events.WebsocketEventType.UPDATE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,8 +55,11 @@ class TeamServiceTest {
     @InjectMocks
     private TeamService teamService;
 
+    @Mock
+    private WebsocketService websocketService;
+
     @Test
-    void convertValidTeamNametoURI() {
+    void convertValidTeamNameToURI() {
         assertEquals("ford-labs", teamService.convertTeamNameToURI("Ford Labs"));
     }
 
@@ -63,7 +69,6 @@ class TeamServiceTest {
         requestedTeam.setName("A name");
         requestedTeam.setPassword("password");
         requestedTeam.setEmail("em@ai.l");
-
 
         when(passwordEncoder.encode("password")).thenReturn("encryptedPassword");
         when(teamRepository.save(any(Team.class))).then(returnsFirstArg());
@@ -285,7 +290,6 @@ class TeamServiceTest {
 
     @Test
     void loggingInUpdatesLastLoginDateOfTeam() {
-
         Team savedTeam = new Team();
         savedTeam.setName("Name");
         savedTeam.setPassword("Password");
@@ -300,5 +304,19 @@ class TeamServiceTest {
 
         assertTrue(savedTeam.getLastLoginDate().isEqual(LocalDate.now()));
         verify(teamRepository, times(2)).save(savedTeam);
+    }
+
+    @Test
+    void shouldSendWebsocketEventWhenUpdatingTeamEmailAddresses() {
+        var teamId = "the-team";
+        var email1 = "primary@mail.com";
+        var email2 = "secondary@mail.com";
+        Team savedTeam = new Team(teamId, email1, email2);
+        when(teamRepository.findTeamByUri(teamId)).thenReturn(Optional.of(savedTeam));
+        when(teamRepository.save(savedTeam)).thenReturn(savedTeam);
+
+        teamService.updateTeamEmailAddresses(teamId, new UpdateTeamEmailAddressesRequest(email1, email2));
+        then(teamRepository).should().save(savedTeam);
+        then(websocketService).should().publishEvent(new WebsocketTeamEvent(teamId, UPDATE, savedTeam));
     }
 }

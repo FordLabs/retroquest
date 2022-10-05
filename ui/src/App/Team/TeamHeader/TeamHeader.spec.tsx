@@ -32,10 +32,12 @@ import TeamHeader from './TeamHeader';
 const teamName = 'Lucille Ball';
 const teamId = 'lucille-ball';
 
-jest.mock('../../../Hooks/useTeamFromRoute', () => {
+jest.mock('Hooks/useTeamFromRoute', () => {
 	return (): Team => ({
 		name: teamName,
 		id: teamId,
+		email: '',
+		secondaryEmail: '',
 	});
 });
 

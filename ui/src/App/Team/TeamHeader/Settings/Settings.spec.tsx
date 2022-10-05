@@ -15,71 +15,62 @@
  * limitations under the License.
  */
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { RecoilRoot } from 'recoil';
-import { ModalContentsState } from 'State/ModalContentsState';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import Settings from './Settings';
 
 describe('Settings', () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
-
-		render(
-			<RecoilRoot
-				initializeState={({ set }) => {
-					set(ModalContentsState, {
-						title: 'Settings',
-						component: <Settings />,
-					});
-				}}
-			>
-				<Settings />
-			</RecoilRoot>
-		);
+		renderWithRecoilRoot(<Settings />);
 	});
 
-	describe('Styles Tab', () => {
-		it('should change theme from light to dark to system settings', () => {
-			expect(screen.getByText('Appearance')).toBeDefined();
-
-			const lightThemeButton = screen.getByAltText('Light Theme');
-			const darkThemeButton = screen.getByAltText('Dark Theme');
-			const systemSettingsThemeButton = screen.getByAltText(
-				'System Settings Theme'
-			);
-
-			expect(systemSettingsThemeButton).toHaveClass('selected');
-			expect(lightThemeButton).not.toHaveClass('selected');
-			expect(darkThemeButton).not.toHaveClass('selected');
-
-			userEvent.click(darkThemeButton);
-
-			expect(systemSettingsThemeButton).not.toHaveClass('selected');
-			expect(lightThemeButton).not.toHaveClass('selected');
-			expect(darkThemeButton).toHaveClass('selected');
-
-			userEvent.click(lightThemeButton);
-
-			expect(systemSettingsThemeButton).not.toHaveClass('selected');
-			expect(lightThemeButton).toHaveClass('selected');
-			expect(darkThemeButton).not.toHaveClass('selected');
-
-			userEvent.click(systemSettingsThemeButton);
-
-			expect(systemSettingsThemeButton).toHaveClass('selected');
-			expect(lightThemeButton).not.toHaveClass('selected');
-			expect(darkThemeButton).not.toHaveClass('selected');
-		});
+	it('should be on the styles tab by default', () => {
+		expect(hasSelectedTabClass(getStylesTab())).toBeTruthy();
+		expect(screen.getByText('Appearance')).toBeInTheDocument();
+		expect(screen.queryByTestId('accountTab')).not.toBeInTheDocument();
+		expect(screen.queryByText('Version:')).not.toBeInTheDocument();
 	});
 
-	describe('Info Tab', () => {
-		it('should show app version', () => {
-			userEvent.click(screen.getByText('Info'));
-			expect(screen.getByLabelText('Version:').getAttribute('value')).toBe(
-				'0ddb411'
-			);
-		});
+	it('should go to the account settings when user clicks on the account tab', () => {
+		userEvent.click(getAccountTab());
+		expect(hasSelectedTabClass(getAccountTab())).toBeTruthy();
+		expect(screen.getByTestId('accountTab')).toBeInTheDocument();
+	});
+
+	it('should go to the styles settings when user clicks on the styles tab', () => {
+		userEvent.click(getAccountTab());
+		const stylesTab = getStylesTab();
+		expect(hasSelectedTabClass(stylesTab)).toBeFalsy();
+		userEvent.click(stylesTab);
+		expect(hasSelectedTabClass(stylesTab)).toBeTruthy();
+		expect(screen.getByText('Appearance')).toBeInTheDocument();
+	});
+
+	it('should go to the info settings when user clicks on the info tab', () => {
+		const infoTab = getInfoTab();
+		expect(hasSelectedTabClass(infoTab)).toBeFalsy();
+
+		userEvent.click(infoTab);
+
+		expect(hasSelectedTabClass(infoTab)).toBeTruthy();
+		expect(screen.getByText('Version:')).toBeInTheDocument();
 	});
 });
+
+function getStylesTab() {
+	return screen.getByText('Styles');
+}
+
+function getAccountTab() {
+	return screen.getByText('Account');
+}
+
+function getInfoTab() {
+	return screen.getByText('Info');
+}
+
+function hasSelectedTabClass(element: HTMLElement): boolean {
+	return element.classList.contains('selected');
+}
