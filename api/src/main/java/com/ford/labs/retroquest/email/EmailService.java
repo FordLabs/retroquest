@@ -66,23 +66,18 @@ public class EmailService {
 			RequestPasswordResetRequest requestPasswordResetRequest
 	) {
 		return (
-			"Hi there! \n" +
-			"We’ve received a request to reset the password for the " +
+			"Hey there! \n" +
+			"You recently requested to reset your password for your RetroQuest account " +
 			requestPasswordResetRequest.getTeamName() +
-			" RetroQuest account associated with the email address " +
+			" associated with your email account " +
 			requestPasswordResetRequest.getEmail() +
-			". No changes have been made to your account yet. \r\n" +
-			"You can reset the password by clicking the link below: \r\n" +
+			". No changes have been made to the account yet. \r\n" +
+			"Use the link below to reset your password. This link is only valid for the next 10 minutes. \r\n" +
 			appBaseUrl +
 			"/password/reset?token=" +
 			passwordResetToken.getResetToken() +
 			"\r\n" +
-			"This link will expire in 10 minutes. After 10 minutes, you must submit a new password reset request at " +
-			"\r\n" +
-			appBaseUrl +
-			"/request-password-reset ." +
-			"\r\n" +
-			"If you didn’t make this request, you can safely ignore this email. \r\n"
+			"Thanks, \r\n The RetroQuest Team \r\n"
 		);
 	}
 }

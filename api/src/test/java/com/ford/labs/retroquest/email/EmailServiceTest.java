@@ -54,30 +54,25 @@ class EmailServiceTest {
     }
 
     @Test
-    void shouldTheMessage(){
+    void shouldGetThePasswordResetMessage(){
         JavaMailSender mockSender = Mockito.mock(JavaMailSender.class);
         EmailService underTest = new EmailService(mockSender);
         ReflectionTestUtils.setField(underTest, "emailEnabled", true);
         ReflectionTestUtils.setField(underTest, "appBaseUrl", "something.com");
 
-        String actual = underTest.getPasswordResetMessage(new PasswordResetToken("t0k3n", new Team("teamUri", "teamUri", "passw0rD1"), LocalDateTime.now(), 600), new RequestPasswordResetRequest("teamUri", "e@ma.il"));
+        String actual = underTest.getPasswordResetMessage(new PasswordResetToken("t0k3n", new Team("team-name", "Team Name", "passw0rD1"), LocalDateTime.now(), 600), new RequestPasswordResetRequest("Team Name", "e@ma.il"));
 
-        assertThat(actual).isEqualTo(			"Hi there! \n" +
-                "We’ve received a request to reset the password for the " +
-                "teamUri" +
-                " RetroQuest account associated with the email address " +
+        assertThat(actual).isEqualTo(
+        "Hey there! \n" +
+                "You recently requested to reset your password for your RetroQuest account " +
+                "Team Name" +
+                " associated with your email account " +
                 "e@ma.il" +
-                ". No changes have been made to your account yet. \r\n" +
-                "You can reset the password by clicking the link below: \r\n" +
-                "something.com" +
-                "/password/reset?token=" +
-                "t0k3n" +
+                ". No changes have been made to the account yet. \r\n" +
+                "Use the link below to reset your password. This link is only valid for the next 10 minutes. \r\n" +
+                "something.com/password/reset?token=t0k3n" +
                 "\r\n" +
-                "This link will expire in 10 minutes. After 10 minutes, you must submit a new password reset request at " +
-                "\r\n" +
-                "something.com" +
-                "/request-password-reset ." +
-                "\r\n" +
-                "If you didn’t make this request, you can safely ignore this email. \r\n");
+                "Thanks, \r\n The RetroQuest Team \r\n"
+        );
     }
 }
