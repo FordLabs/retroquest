@@ -72,7 +72,8 @@ class EmailServiceTest {
                 "Use the link below to reset your password. This link is only valid for the next 10 minutes. \r\n" +
                 "something.com/password/reset?token=t0k3n" +
                 "\r\n" +
-                "Thanks, \r\n The RetroQuest Team \r\n"
+                "Thanks, \r\n" +
+                "The RetroQuest Team \r\n"
         );
     }
 }

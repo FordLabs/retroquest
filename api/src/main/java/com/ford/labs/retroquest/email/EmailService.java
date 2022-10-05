@@ -77,7 +77,8 @@ public class EmailService {
 			"/password/reset?token=" +
 			passwordResetToken.getResetToken() +
 			"\r\n" +
-			"Thanks, \r\n The RetroQuest Team \r\n"
+			"Thanks, \r\n" +
+			"The RetroQuest Team \r\n"
 		);
 	}
 }
