@@ -238,7 +238,7 @@ class TeamApiTest extends ApiTestBase {
         assertThat(actualToken.getDateCreated()).isNotNull();
         assertThat(actualToken.getResetToken()).isNotBlank();
 
-        verify(emailService).sendUnencryptedEmail("Your password reset link from RetroQuest!", "expectedMessage", "e@ma.il");
+        verify(emailService).sendUnencryptedEmail("Your Password Reset Link From RetroQuest!", "expectedMessage", "e@ma.il");
     }
 
     @Test
@@ -258,7 +258,7 @@ class TeamApiTest extends ApiTestBase {
         assertThat(actualToken.getDateCreated()).isNotNull();
         assertThat(actualToken.getResetToken()).isNotBlank();
 
-        verify(emailService).sendUnencryptedEmail("Your password reset link from RetroQuest!", "expectedMessage", "seconde@ma.il");
+        verify(emailService).sendUnencryptedEmail("Your Password Reset Link From RetroQuest!", "expectedMessage", "seconde@ma.il");
     }
 
     @Test
@@ -278,7 +278,7 @@ class TeamApiTest extends ApiTestBase {
         assertThat(actualToken.getDateCreated()).isNotNull();
         assertThat(actualToken.getResetToken()).isNotBlank();
 
-        verify(emailService).sendUnencryptedEmail("Your password reset link from RetroQuest!", "expectedMessage", "SecondE@MA.il");
+        verify(emailService).sendUnencryptedEmail("Your Password Reset Link From RetroQuest!", "expectedMessage", "SecondE@MA.il");
     }
 
     @Test

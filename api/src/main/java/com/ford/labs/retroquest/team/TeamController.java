@@ -113,7 +113,7 @@ public class TeamController {
             passwordResetRepository.save(passwordResetToken);
 
             emailService.sendUnencryptedEmail(
-                    "Your password reset link from RetroQuest!",
+                    "Your Password Reset Link From RetroQuest!",
                     emailService.getPasswordResetMessage(passwordResetToken, requestPasswordResetRequest),
                     requestPasswordResetRequest.getEmail()
             );
