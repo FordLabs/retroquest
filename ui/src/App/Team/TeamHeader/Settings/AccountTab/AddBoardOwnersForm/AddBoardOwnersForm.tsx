@@ -18,9 +18,10 @@
 import { useState } from 'react';
 import Form from 'Common/AuthTemplate/Form/Form';
 import InputEmail from 'Common/InputEmail/InputEmail';
-import { useRecoilValue } from 'recoil';
-import teamService from 'Services/Api/TeamService';
-import { TeamState } from 'State/TeamState';
+import { useSetRecoilState } from 'recoil';
+import { ModalContentsState } from 'State/ModalContentsState';
+
+import AddBoardOwnersConfirmationForm from './AddBoardOwnersConfirmationForm/AddBoardOwnersConfirmationForm';
 
 import './AddBoardOwnersForm.scss';
 
@@ -31,25 +32,34 @@ interface ValueAndValidity {
 	validity: boolean;
 }
 
-function AddBoardOwnersForm() {
-	const team = useRecoilValue(TeamState);
+export interface AddBoardOwnersFormProps {
+	email1?: string;
+	email2?: string;
+}
+
+function AddBoardOwnersForm(props: AddBoardOwnersFormProps) {
+	const { email1 = '', email2 = '' } = props;
+
+	const setModalContents = useSetRecoilState(ModalContentsState);
 
 	const [primaryEmail, setPrimaryEmail] = useState<ValueAndValidity>(
-		blankValueWithValidity
+		email1 ? { value: email1, validity: true } : blankValueWithValidity
 	);
 	const [secondaryEmail, setSecondaryEmail] = useState<ValueAndValidity>({
-		value: '',
+		value: email2,
 		validity: true,
 	});
 
 	function submitForm() {
-		teamService
-			.updateTeamEmailAddresses(
-				team.id,
-				primaryEmail.value,
-				secondaryEmail.value
-			)
-			.catch(console.error);
+		setModalContents({
+			title: 'Add Board Owners?',
+			component: (
+				<AddBoardOwnersConfirmationForm
+					email1={primaryEmail.value}
+					email2={secondaryEmail.value}
+				/>
+			),
+		});
 	}
 
 	return (

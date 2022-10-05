@@ -301,10 +301,10 @@ describe('Retro Facilitator Journey', () => {
 				secondaryEmail
 			);
 
-			cy.findByText('Add Email').click();
-
-			cy.findByText('Board Owners').should('exist');
-			cy.findByText('Add Board Owners').should('not.exist');
+			shouldSuccessfullyConfirmAndSaveEmailChanges([
+				primaryEmail,
+				secondaryEmail,
+			]);
 			cy.contains(primaryEmail).should('exist');
 			cy.contains(secondaryEmail).should('exist');
 		});
@@ -315,12 +315,29 @@ describe('Retro Facilitator Journey', () => {
 
 			cy.findByLabelText('Email Address 1').type(primaryEmail);
 
-			cy.findByText('Add Email').click();
-
-			cy.findByText('Board Owners').should('exist');
-			cy.findByText('Add Board Owners').should('not.exist');
+			shouldSuccessfullyConfirmAndSaveEmailChanges([primaryEmail]);
 			cy.contains(primaryEmail).should('exist');
 			cy.contains(secondaryEmail).should('not.exist');
+		});
+
+		it('Start adding two email addresses to team and then cancel action', () => {
+			createTeamWithNoEmailsAndLogin();
+			goToAccountSettings();
+
+			cy.findByLabelText('Email Address 1').type(primaryEmail);
+			cy.findByLabelText('Second Teammate’s Email (optional)').type(
+				secondaryEmail
+			);
+
+			cy.findByText('Add Email').click();
+			cy.findByText('Cancel').click();
+
+			cy.findByLabelText('Email Address 1').should('have.value', primaryEmail);
+			cy.findByLabelText('Second Teammate’s Email (optional)').should(
+				'have.value',
+				secondaryEmail
+			);
+			cy.findByText('Add Email').should('be.enabled');
 		});
 	});
 
@@ -332,6 +349,22 @@ describe('Retro Facilitator Journey', () => {
 		cy.get('@modal').should('not.exist');
 	};
 });
+
+function shouldSuccessfullyConfirmAndSaveEmailChanges(
+	expectedEmailAddresses: string[]
+) {
+	cy.findByText('Add Email').click();
+
+	cy.contains('Add Board Owners?').should('exist');
+	cy.findByText(
+		'These emails will be the board owners for everyone at Team With No Email.'
+	).should('exist');
+	expectedEmailAddresses.forEach((email) => {
+		cy.contains(email).should('exist');
+	});
+
+	cy.contains('Yes, Add Board Owners').click();
+}
 
 function createTeamWithNoEmailsAndLogin() {
 	const teamName = 'Team With No Email';

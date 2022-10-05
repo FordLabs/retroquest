@@ -124,19 +124,5 @@
 				border-bottom-color: rgba(main.$gray-1, 0.15);
 			}
 		}
-
-		.button-secondary {
-			border-top: 0;
-		}
-
-		.button-primary {
-			color: main.$white;
-			background-color: main.$blue;
-
-			&:hover,
-			&:focus {
-				background-color: main.$purple;
-			}
-		}
 	}
 }

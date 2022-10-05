@@ -19,23 +19,31 @@ import React, { useState } from 'react';
 import classnames from 'classnames';
 
 import AccountTab from './AccountTab/AccountTab';
+import { AddBoardOwnersFormProps } from './AccountTab/AddBoardOwnersForm/AddBoardOwnersForm';
 import InfoTab from './InfoTab/InfoTab';
 import StylesTab from './StylesTab/StylesTab';
 
 import './Settings.scss';
 
-enum Tabs {
+export enum SettingsTabs {
 	STYLES = 'styles',
 	ACCOUNT = 'account',
 	INFO = 'info',
 }
 
-export function Settings() {
-	const [tab, setTab] = useState<Tabs>(Tabs.STYLES);
+interface Props {
+	activeTab?: SettingsTabs;
+	accountTabData?: AddBoardOwnersFormProps;
+}
 
-	const stylesTabIsActive = () => tab === Tabs.STYLES;
-	const accountTabIsActive = () => tab === Tabs.ACCOUNT;
-	const infoTabIsActive = () => tab === Tabs.INFO;
+export function Settings(props: Props) {
+	const { activeTab = SettingsTabs.STYLES, accountTabData } = props;
+
+	const [tab, setTab] = useState<SettingsTabs>(activeTab);
+
+	const stylesTabIsActive = () => tab === SettingsTabs.STYLES;
+	const accountTabIsActive = () => tab === SettingsTabs.ACCOUNT;
+	const infoTabIsActive = () => tab === SettingsTabs.INFO;
 
 	return (
 		<div className="settings">
@@ -45,25 +53,25 @@ export function Settings() {
 				<div className="tab-heading">
 					<button
 						className={classnames('tab', { selected: stylesTabIsActive() })}
-						onClick={() => setTab(Tabs.STYLES)}
+						onClick={() => setTab(SettingsTabs.STYLES)}
 					>
 						Styles
 					</button>
 					<button
 						className={classnames('tab', { selected: accountTabIsActive() })}
-						onClick={() => setTab(Tabs.ACCOUNT)}
+						onClick={() => setTab(SettingsTabs.ACCOUNT)}
 					>
 						Account
 					</button>
 					<button
 						className={classnames('tab', { selected: infoTabIsActive() })}
-						onClick={() => setTab(Tabs.INFO)}
+						onClick={() => setTab(SettingsTabs.INFO)}
 					>
 						Info
 					</button>
 				</div>
 				{stylesTabIsActive() && <StylesTab />}
-				{accountTabIsActive() && <AccountTab />}
+				{accountTabIsActive() && <AccountTab accountTabData={accountTabData} />}
 				{infoTabIsActive() && <InfoTab />}
 			</div>
 		</div>

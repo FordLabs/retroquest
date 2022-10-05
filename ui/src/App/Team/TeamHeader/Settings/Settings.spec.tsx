@@ -19,27 +19,53 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
-import Settings from './Settings';
+import Settings, { SettingsTabs } from './Settings';
 
 describe('Settings', () => {
-	beforeEach(() => {
-		renderWithRecoilRoot(<Settings />);
-	});
-
 	it('should be on the styles tab by default', () => {
+		renderWithRecoilRoot(<Settings />);
 		expect(hasSelectedTabClass(getStylesTab())).toBeTruthy();
 		expect(screen.getByText('Appearance')).toBeInTheDocument();
 		expect(screen.queryByTestId('accountTab')).not.toBeInTheDocument();
 		expect(screen.queryByText('Version:')).not.toBeInTheDocument();
 	});
 
+	it('should start on a different tab if specified via prop', () => {
+		renderWithRecoilRoot(<Settings activeTab={SettingsTabs.ACCOUNT} />);
+		expect(hasSelectedTabClass(getAccountTab())).toBeTruthy();
+		expect(screen.getByText('Add Board Owners')).toBeInTheDocument();
+	});
+
+	it('should pre-populate "Add Board Owners" if emails are passed down via props', () => {
+		renderWithRecoilRoot(
+			<Settings
+				activeTab={SettingsTabs.ACCOUNT}
+				accountTabData={{
+					email1: 'email1@mail.com',
+					email2: 'email2@mail.com',
+				}}
+			/>
+		);
+		expect(hasSelectedTabClass(getAccountTab())).toBeTruthy();
+		expect(screen.getByText('Add Board Owners')).toBeInTheDocument();
+
+		const email1Field = screen.getByLabelText('Email Address 1');
+		expect(email1Field).toHaveValue('email1@mail.com');
+		const email2Field = screen.getByLabelText(
+			'Second Teammate’s Email (optional)'
+		);
+		expect(email2Field).toHaveValue('email2@mail.com');
+	});
+
 	it('should go to the account settings when user clicks on the account tab', () => {
+		renderWithRecoilRoot(<Settings />);
 		userEvent.click(getAccountTab());
 		expect(hasSelectedTabClass(getAccountTab())).toBeTruthy();
 		expect(screen.getByTestId('accountTab')).toBeInTheDocument();
 	});
 
 	it('should go to the styles settings when user clicks on the styles tab', () => {
+		renderWithRecoilRoot(<Settings />);
 		userEvent.click(getAccountTab());
 		const stylesTab = getStylesTab();
 		expect(hasSelectedTabClass(stylesTab)).toBeFalsy();
@@ -49,6 +75,7 @@ describe('Settings', () => {
 	});
 
 	it('should go to the info settings when user clicks on the info tab', () => {
+		renderWithRecoilRoot(<Settings />);
 		const infoTab = getInfoTab();
 		expect(hasSelectedTabClass(infoTab)).toBeFalsy();
 

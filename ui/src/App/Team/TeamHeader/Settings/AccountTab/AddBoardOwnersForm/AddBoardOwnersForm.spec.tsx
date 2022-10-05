@@ -15,17 +15,24 @@
  * limitations under the License.
  */
 
+import React from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import TeamService from 'Services/Api/TeamService';
+import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
 import { TeamState } from 'State/TeamState';
+import { RecoilObserver } from 'Utils/RecoilObserver';
 import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
+import AddBoardOwnersConfirmationForm from './AddBoardOwnersConfirmationForm/AddBoardOwnersConfirmationForm';
 import AddBoardOwnersForm from './AddBoardOwnersForm';
 
-jest.mock('Services/Api/TeamService');
+let modalContent: ModalContents | null;
 
 describe('Add Board Owners Form', () => {
-	it('should fill out form with one email and successfully submit form', async () => {
+	beforeEach(() => {
+		modalContent = null;
+	});
+
+	it('should submit one email address which should trigger a confirmation modal', async () => {
 		const email1 = 'email1@mail.co';
 		renderAddBoardOwnersForm();
 
@@ -33,15 +40,14 @@ describe('Add Board Owners Form', () => {
 		submitForm();
 
 		await waitFor(() =>
-			expect(TeamService.updateTeamEmailAddresses).toHaveBeenCalledWith(
-				'team-id',
-				email1,
-				''
-			)
+			expect(modalContent).toEqual({
+				title: 'Add Board Owners?',
+				component: <AddBoardOwnersConfirmationForm email1={email1} email2="" />,
+			})
 		);
 	});
 
-	it('should fill out form with two emails and successfully submit form', async () => {
+	it('should submit two email addresses which should trigger a confirmation modal', async () => {
 		const email1 = 'email1@mail.co';
 		const email2 = 'email2@mail.co';
 		renderAddBoardOwnersForm();
@@ -51,11 +57,12 @@ describe('Add Board Owners Form', () => {
 		submitForm();
 
 		await waitFor(() =>
-			expect(TeamService.updateTeamEmailAddresses).toHaveBeenCalledWith(
-				'team-id',
-				email1,
-				email2
-			)
+			expect(modalContent).toEqual({
+				title: 'Add Board Owners?',
+				component: (
+					<AddBoardOwnersConfirmationForm email1={email1} email2={email2} />
+				),
+			})
 		);
 	});
 
@@ -94,14 +101,26 @@ describe('Add Board Owners Form', () => {
 });
 
 function renderAddBoardOwnersForm() {
-	renderWithRecoilRoot(<AddBoardOwnersForm />, ({ set }) => {
-		set(TeamState, {
-			id: 'team-id',
-			name: 'Team Name',
-			email: '',
-			secondaryEmail: '',
-		});
-	});
+	renderWithRecoilRoot(
+		<>
+			<RecoilObserver
+				recoilState={ModalContentsState}
+				onChange={(value: ModalContents) => {
+					modalContent = value;
+				}}
+			/>
+			<AddBoardOwnersForm />
+		</>,
+		({ set }) => {
+			set(ModalContentsState, null);
+			set(TeamState, {
+				id: 'team-id',
+				name: 'Team Name',
+				email: '',
+				secondaryEmail: '',
+			});
+		}
+	);
 }
 
 function typeIntoFirstEmailField(email: string) {
