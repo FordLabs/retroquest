@@ -18,11 +18,19 @@
 import { useRecoilValue } from 'recoil';
 import { TeamState } from 'State/TeamState';
 
-import AddBoardOwnersForm from './AddBoardOwnersForm/AddBoardOwnersForm';
+import AddBoardOwnersForm, {
+	AddBoardOwnersFormProps,
+} from './AddBoardOwnersForm/AddBoardOwnersForm';
 
 import './AccountTab.scss';
 
-function AccountTab(): JSX.Element {
+interface Props {
+	accountTabData?: AddBoardOwnersFormProps;
+}
+
+function AccountTab(props: Props): JSX.Element {
+	const { accountTabData } = props;
+
 	const team = useRecoilValue(TeamState);
 
 	function teamHasEmail(): boolean {
@@ -31,7 +39,12 @@ function AccountTab(): JSX.Element {
 
 	return (
 		<div className="tab-body account-tab-body" data-testid="accountTab">
-			{!teamHasEmail() && <AddBoardOwnersForm />}
+			{!teamHasEmail() && (
+				<AddBoardOwnersForm
+					email1={accountTabData?.email1}
+					email2={accountTabData?.email2}
+				/>
+			)}
 			{teamHasEmail() && (
 				<div>
 					<div className="label">Board Owners</div>

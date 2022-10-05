@@ -15,16 +15,27 @@
  * limitations under the License.
  */
 
-@use '../../../../../Styles/main';
+@use '../../../../../../../Styles/main';
 
-.account-tab-body {
-	.team-email {
-		margin-top: 1rem;
+.add-board-owners-confirmation-form {
+	.board-owners-container {
+		max-width: 26.875rem;
+		height: 9.625rem;
+		margin: 2rem auto 0.5rem;
 
-		font-weight: 600;
-		font-size: 14px;
-		line-height: 18px;
-		letter-spacing: 0;
 		text-align: center;
+
+		border: 2px solid main.$asphalt;
+		border-radius: 5px;
+
+		.board-owners-label {
+			margin: 1rem 0 1.5rem;
+			font-size: 1.5rem;
+		}
+
+		.team-email {
+			margin: 1rem;
+			font-size: 0.875rem;
+		}
 	}
 }
