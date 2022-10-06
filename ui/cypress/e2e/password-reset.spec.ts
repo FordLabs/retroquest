@@ -15,42 +15,10 @@
  * limitations under the License.
  */
 
-@use '../../Styles/main';
-
-.password-reset-request-page {
-	.paragraph-1-container {
-		display: flex;
-		align-items: center;
-
-		.checkbox-icon {
-			width: 35px;
-			height: 28px;
-			margin: 1rem;
-		}
-
-		.paragraph-1 {
-			margin-top: 1rem;
-
-			color: main.$teal;
-			font-weight: bold;
-		}
-	}
-
-	.paragraph-2 {
-		color: main.$dark-gray;
-		font-weight: bold;
-		text-align: center;
-	}
-}
-
-@include main.dark-theme {
-	.password-reset-request-page {
-		.paragraph-1 {
-			color: main.$sea-foam;
-		}
-
-		.paragraph-2 {
-			color: main.$light-gray;
-		}
-	}
-}
+describe('Password Reset & Team Name Recovery', () => {
+	it('Use email to recover team names associated with said email', () => {
+		cy.visit('/request-password-reset');
+		cy.findByText("I don't remember my team name").click();
+		cy.contains('Recover Team Name').should('exist');
+	});
+});

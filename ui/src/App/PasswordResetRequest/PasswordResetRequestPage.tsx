@@ -21,6 +21,7 @@ import Form from 'Common/AuthTemplate/Form/Form';
 import InputEmail from 'Common/InputEmail/InputEmail';
 import InputTeamName from 'Common/InputTeamName/InputTeamName';
 import LinkPrimary from 'Common/LinkPrimary/LinkPrimary';
+import LinkTertiary from 'Common/LinkTertiary/LinkTertiary';
 import { useRecoilValue } from 'recoil';
 import { LOGIN_PAGE_PATH } from 'RouteConstants';
 import ConfigurationService from 'Services/Api/ConfigurationService';
@@ -71,11 +72,11 @@ function PasswordResetRequestPage(): JSX.Element {
 				<AuthTemplate
 					header="Reset your Password"
 					subHeader={
-						<p className="password-reset-description">
+						<>
 							Enter the Team Name <u>and</u> email associated with your team's
 							account and we’ll send an email with instructions to reset your
 							password.
-						</p>
+						</>
 					}
 					className="password-reset-request-page"
 					showGithubLink={false}
@@ -103,6 +104,9 @@ function PasswordResetRequestPage(): JSX.Element {
 							validateInput={false}
 						/>
 					</Form>
+					<LinkTertiary to="/recover-team-name">
+						I don't remember my team name
+					</LinkTertiary>
 				</AuthTemplate>
 			)}
 			{requestSent && (
