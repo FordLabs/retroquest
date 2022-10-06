@@ -30,8 +30,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,7 +50,7 @@ public class EmailApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_send_team_name_recovery_email_if_teams_with_email_are_found() throws Exception {
+    void recover_team_names__should_send_email_if_teams_with_recovery_email_are_found() throws Exception {
         String recoveryEmail = "recovery@mail.com";
         Team team1 = new Team("team-name-1", "Team Name 1", "P@ssword1", recoveryEmail);
         teamRepository.save(team1);
@@ -67,5 +66,24 @@ public class EmailApiTest extends ApiTestBase {
                 .andExpect(status().isOk());
 
         verify(emailService).sendUnencryptedEmail("RetroQuest Teams Names Associated with your Account", "expectedMessage", recoveryEmail);
+    }
+
+    @Test
+    void recover_team_names__should_not_send_email_when_no_teams_are_associated_with_recovery_email() throws Exception {
+        String recoveryEmail = "recovery@mail.com";
+        Team team1 = new Team("team-name-1", "Team Name 1", "P@ssword1", "a@b");
+        teamRepository.save(team1);
+        Team team2 = new Team("team-name-2", "TeamName 2", "P@ssword2", "e@mail.com", "b@d");
+        teamRepository.save(team2);
+
+        when(emailService.getTeamNameRecoveryEmailMessage(any(), any())).thenReturn("expectedMessage");
+
+        mockMvc.perform(post("/api/email/recover-team-names")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(new RecoverTeamNamesRequest(recoveryEmail)))
+                )
+                .andExpect(status().isOk());
+
+        verify(emailService, never()).sendUnencryptedEmail("RetroQuest Teams Names Associated with your Account", "expectedMessage", recoveryEmail);
     }
 }

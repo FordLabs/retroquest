@@ -62,9 +62,13 @@ class EmailServiceTest {
         assertThat(actualMessage).isEqualTo(
         """
                 Hey there!\s
+
                 You recently requested to reset your password for your RetroQuest account Team Name associated with your email account e@ma.il. No changes have been made to the account yet. \r
+
                 Use the link below to reset your password. This link is only valid for the next 10 minutes. \r
+
                 something.com/password/reset?token=t0k3n\r
+
                 Thanks, \r
                 The RetroQuest Team \r
                 """
