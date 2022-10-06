@@ -44,7 +44,7 @@ function PasswordResetRequestPage(): JSX.Element {
 
 	function submitRequest() {
 		if (!!teamName && !!email) {
-			TeamService.sendPasswordResetLink(teamName, email)
+			TeamService.sendPasswordResetEmail(teamName, email)
 				.then(() => setRequestSent(true))
 				.catch(() =>
 					setErrorMessages([

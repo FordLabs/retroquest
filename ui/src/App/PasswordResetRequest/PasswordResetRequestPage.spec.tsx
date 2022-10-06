@@ -68,7 +68,7 @@ describe('Password Reset Request Page', () => {
 		submitValidForm();
 
 		await waitFor(() =>
-			expect(TeamService.sendPasswordResetLink).toHaveBeenCalledWith(
+			expect(TeamService.sendPasswordResetEmail).toHaveBeenCalledWith(
 				'Team Name',
 				'e@mail.com'
 			)
@@ -78,7 +78,7 @@ describe('Password Reset Request Page', () => {
 	it('should not send if any fields are blank', async () => {
 		await renderPasswordResetRequestPage();
 		submitValidForm('', '');
-		expect(TeamService.sendPasswordResetLink).toHaveBeenCalledTimes(0);
+		expect(TeamService.sendPasswordResetEmail).toHaveBeenCalledTimes(0);
 	});
 
 	const confirmationMessage = 'Check your Mail!';
@@ -135,7 +135,7 @@ describe('Password Reset Request Page', () => {
 	});
 
 	it('should show an error message if the request is not successful that persists until you type in either input', async () => {
-		TeamService.sendPasswordResetLink = jest
+		TeamService.sendPasswordResetEmail = jest
 			.fn()
 			.mockRejectedValue('API says you are bad');
 		await renderPasswordResetRequestPage();

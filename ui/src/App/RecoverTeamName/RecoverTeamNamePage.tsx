@@ -15,15 +15,18 @@
  * limitations under the License.
  */
 
+import { useState } from 'react';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import Form from 'Common/AuthTemplate/Form/Form';
 import InputEmail from 'Common/InputEmail/InputEmail';
 
-function RecoverTeamNamePage() {
-	function onSubmit() {}
+import TeamService from '../../Services/Api/TeamService';
 
-	function disableSubmitButton() {
-		return true;
+function RecoverTeamNamePage() {
+	const [recoveryEmail, setRecoveryEmail] = useState<string>('');
+
+	function onSubmit() {
+		TeamService.sendTeamNameRecoveryEmail(recoveryEmail).catch(console.error);
 	}
 
 	return (
@@ -35,9 +38,13 @@ function RecoverTeamNamePage() {
 			<Form
 				submitButtonText="Send me my team name"
 				onSubmit={onSubmit}
-				disableSubmitBtn={disableSubmitButton()}
+				disableSubmitBtn={!recoveryEmail}
 			>
-				<InputEmail onChange={() => {}} />
+				<InputEmail
+					value={recoveryEmail}
+					onChange={setRecoveryEmail}
+					validateInput={false}
+				/>
 			</Form>
 		</AuthTemplate>
 	);

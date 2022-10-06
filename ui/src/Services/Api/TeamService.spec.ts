@@ -169,14 +169,24 @@ describe('Team Service', () => {
 		});
 	});
 
-	describe('sendPasswordResetLink', () => {
+	describe('sendPasswordResetEmail', () => {
 		it('should send password reset link', async () => {
 			axios.post = jest.fn();
-			await TeamService.sendPasswordResetLink('Team Name', 'a@b.c');
+			await TeamService.sendPasswordResetEmail('Team Name', 'a@b.c');
 
 			expect(axios.post).toHaveBeenCalledWith('/api/password/request-reset', {
 				teamName: 'Team Name',
 				email: 'a@b.c',
+			});
+		});
+	});
+
+	describe('sendTeamNameRecoveryEmail', () => {
+		it('should send password reset link', async () => {
+			await TeamService.sendTeamNameRecoveryEmail('recovery@email.com');
+
+			expect(axios.post).toHaveBeenCalledWith('/api/team', {
+				recoveryEmail: 'recovery@email.com',
 			});
 		});
 	});

@@ -28,13 +28,13 @@ import CookieService from '../CookieService';
 import {
 	CHANGE_EMAIL_API_PATH,
 	CHANGE_PASSWORD_API_PATH,
-	CREATE_TEAM_API_PATH,
 	getCSVApiPath,
 	getTeamNameApiPath,
 	LOGIN_API_PATH,
 	PASSWORD_REQUEST_API_PATH,
 	RESET_TOKEN_LIFETIME_API_PATH,
 	RESET_TOKEN_STATUS_API_PATH,
+	TEAM_API_PATH,
 } from './ApiConstants';
 import getAuthConfig from './getAuthConfig';
 
@@ -65,7 +65,7 @@ const TeamService = {
 		secondEmail: string
 	): Promise<AuthResponse> {
 		return axios
-			.post(CREATE_TEAM_API_PATH, {
+			.post(TEAM_API_PATH, {
 				name,
 				password,
 				email,
@@ -86,13 +86,19 @@ const TeamService = {
 		});
 	},
 
-	sendPasswordResetLink(
+	sendPasswordResetEmail(
 		teamName: string,
 		email: string
 	): Promise<AxiosResponse> {
 		return axios.post(PASSWORD_REQUEST_API_PATH, {
 			teamName: teamName,
 			email: email,
+		});
+	},
+
+	sendTeamNameRecoveryEmail(recoveryEmail: string): Promise<AxiosResponse> {
+		return axios.post(TEAM_API_PATH, {
+			recoveryEmail: recoveryEmail,
 		});
 	},
 
@@ -113,7 +119,7 @@ const TeamService = {
 
 	getTeam(teamId: string): Promise<Team> {
 		return axios
-			.get(`${CREATE_TEAM_API_PATH}/${teamId}`, getAuthConfig())
+			.get(`${TEAM_API_PATH}/${teamId}`, getAuthConfig())
 			.then((res) => res.data);
 	},
 
@@ -123,7 +129,7 @@ const TeamService = {
 	},
 
 	updateTeamEmailAddresses(teamId: string, email1: string, email2: string) {
-		const url = `${CREATE_TEAM_API_PATH}/${teamId}/email-addresses`;
+		const url = `${TEAM_API_PATH}/${teamId}/email-addresses`;
 		return axios.put(
 			url,
 			{

@@ -17,12 +17,13 @@
 
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
-import ContributorsService from '../../Services/Api/ContributorsService';
+import ContributorsService from 'Services/Api/ContributorsService';
+import TeamService from 'Services/Api/TeamService';
 
 import RecoverTeamNamePage from './RecoverTeamNamePage';
 
 jest.mock('Services/Api/ContributorsService');
+jest.mock('Services/Api/TeamService');
 
 describe('Recover Team Name', () => {
 	it('should show title, have a field for email, and a disabled submit button', async () => {
@@ -38,10 +39,22 @@ describe('Recover Team Name', () => {
 		expect(screen.queryByText('Github')).toBeNull();
 	});
 
-	xit('should enable submit button when email field is populated with valid email', async () => {
+	it('should type email and submit form', async () => {
 		await renderRecoverTeamNamesPage();
-		const emailInput = screen.getByLabelText('Email');
-		userEvent.type(emailInput, 'a@');
+		typeIntoEmailField('valid@email.com');
+		const submitButton = screen.getByText('Send me my team name');
+		userEvent.click(submitButton);
+		expect(TeamService.sendTeamNameRecoveryEmail).toHaveBeenCalledWith(
+			'valid@email.com'
+		);
+	});
+
+	it('should not validate email pre-submit', async () => {
+		await renderRecoverTeamNamesPage();
+		const invalidEmail = 'invalid@';
+		typeIntoEmailField(invalidEmail);
+		const emailInputErrorMessage = 'Valid email address required';
+		expect(screen.queryByText(emailInputErrorMessage)).toBeNull();
 		const submitButton = screen.getByText('Send me my team name');
 		expect(submitButton).toBeEnabled();
 	});
@@ -50,4 +63,9 @@ describe('Recover Team Name', () => {
 async function renderRecoverTeamNamesPage() {
 	render(<RecoverTeamNamePage />);
 	await waitFor(() => expect(ContributorsService.get).toHaveBeenCalled());
+}
+
+function typeIntoEmailField(email: string) {
+	const emailInput = screen.getByLabelText('Email');
+	userEvent.type(emailInput, email);
 }

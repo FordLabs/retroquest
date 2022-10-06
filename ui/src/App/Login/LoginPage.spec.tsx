@@ -146,6 +146,7 @@ describe('LoginPage.spec.tsx', () => {
 			).toBeDefined();
 		});
 	});
+
 	it('should not validate anything pre-submit', async () => {
 		TeamService.login = jest.fn().mockRejectedValue(new Error('Async error'));
 
