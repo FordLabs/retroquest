@@ -225,10 +225,10 @@ class TeamApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_create_password_reset_request_when_team_is_valid() throws Exception {
+    void should_send_password_reset_request_email_when_team_is_valid() throws Exception {
         Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
         teamRepository.save(expectedResetTeam);
-        when(emailService.getPasswordResetMessage(any(), any())).thenReturn("expectedMessage");
+        when(emailService.getPasswordResetEmailMessage(any(), any())).thenReturn("expectedMessage");
 
         mockMvc.perform(post("/api/password/request-reset").contentType(APPLICATION_JSON).content(objectMapper.writeValueAsBytes(new RequestPasswordResetRequest("TeamName", "e@ma.il"))))
                 .andExpect(status().isOk());
@@ -242,10 +242,10 @@ class TeamApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_create_password_reset_request_using_secondary_email() throws Exception {
+    void should_send_password_reset_request_email_using_secondary_email() throws Exception {
         Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il", "seconde@ma.il");
         teamRepository.save(expectedResetTeam);
-        when(emailService.getPasswordResetMessage(any(), any())).thenReturn("expectedMessage");
+        when(emailService.getPasswordResetEmailMessage(any(), any())).thenReturn("expectedMessage");
 
         mockMvc.perform(post("/api/password/request-reset")
                         .contentType(APPLICATION_JSON)
@@ -262,10 +262,10 @@ class TeamApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_create_password_reset_request_using_secondary_email_ignoring_case() throws Exception {
+    void should_send_password_reset_request_email_using_secondary_email_ignoring_case() throws Exception {
         Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il", "seconde@ma.il");
         teamRepository.save(expectedResetTeam);
-        when(emailService.getPasswordResetMessage(any(), any())).thenReturn("expectedMessage");
+        when(emailService.getPasswordResetEmailMessage(any(), any())).thenReturn("expectedMessage");
 
         mockMvc.perform(post("/api/password/request-reset")
                         .contentType(APPLICATION_JSON)
@@ -282,7 +282,7 @@ class TeamApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_create_a_second_password_reset_request_when_team_is_valid() throws Exception {
+    void should_send_a_second_password_reset_request_email_when_team_is_valid() throws Exception {
         Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
         teamRepository.save(expectedResetTeam);
 

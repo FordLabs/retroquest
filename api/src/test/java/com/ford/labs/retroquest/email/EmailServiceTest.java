@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,19 +22,16 @@ import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.password.PasswordResetToken;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mockito;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 class EmailServiceTest {
@@ -60,20 +57,46 @@ class EmailServiceTest {
         ReflectionTestUtils.setField(underTest, "emailEnabled", true);
         ReflectionTestUtils.setField(underTest, "appBaseUrl", "something.com");
 
-        String actual = underTest.getPasswordResetMessage(new PasswordResetToken("t0k3n", new Team("team-name", "Team Name", "passw0rD1"), LocalDateTime.now(), 600), new RequestPasswordResetRequest("Team Name", "e@ma.il"));
+        String actualMessage = underTest.getPasswordResetEmailMessage(new PasswordResetToken("t0k3n", new Team("team-name", "Team Name", "passw0rD1"), LocalDateTime.now(), 600), new RequestPasswordResetRequest("Team Name", "e@ma.il"));
 
-        assertThat(actual).isEqualTo(
-        "Hey there! \n" +
-                "You recently requested to reset your password for your RetroQuest account " +
-                "Team Name" +
-                " associated with your email account " +
-                "e@ma.il" +
-                ". No changes have been made to the account yet. \r\n" +
-                "Use the link below to reset your password. This link is only valid for the next 10 minutes. \r\n" +
-                "something.com/password/reset?token=t0k3n" +
-                "\r\n" +
-                "Thanks, \r\n" +
-                "The RetroQuest Team \r\n"
+        assertThat(actualMessage).isEqualTo(
+        """
+                Hey there!\s
+                You recently requested to reset your password for your RetroQuest account Team Name associated with your email account e@ma.il. No changes have been made to the account yet. \r
+                Use the link below to reset your password. This link is only valid for the next 10 minutes. \r
+                something.com/password/reset?token=t0k3n\r
+                Thanks, \r
+                The RetroQuest Team \r
+                """
+        );
+    }
+
+    @Test
+    public void shouldGetTeamNameRecoveryEmailMessage() {
+        JavaMailSender mockSender = Mockito.mock(JavaMailSender.class);
+        EmailService underTest = new EmailService(mockSender);
+        ReflectionTestUtils.setField(underTest, "emailEnabled", true);
+        ReflectionTestUtils.setField(underTest, "appBaseUrl", "something.com");
+
+        List<String> teamNamesAssociatedWithEmail = Arrays.asList("Team 4", "Team 10", "Team 3", "Team 1");
+        String actualMessage = underTest.getTeamNameRecoveryEmailMessage(
+                "recovery@mail.com",
+                teamNamesAssociatedWithEmail
+        );
+
+        assertThat(actualMessage).isEqualTo(
+        """
+                Hey there!\s
+                We’ve received a request to send you the RetroQuest name(s) associated with your email (recovery@mail.com).\r
+    
+                Team 4\r
+                Team 10\r
+                Team 3\r
+                Team 1\r
+    
+                Thanks, \r
+                The RetroQuest Team \r
+                """
         );
     }
 }

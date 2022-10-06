@@ -30,6 +30,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static com.ford.labs.retroquest.websocket.events.WebsocketEventType.UPDATE;
 
@@ -151,5 +152,9 @@ public class TeamService {
         team.setSecondaryEmail(request.email2());
         Team updatedTeam = teamRepository.save(team);
         websocketService.publishEvent(new WebsocketTeamEvent(updatedTeam.getId(), UPDATE, updatedTeam));
+    }
+
+    public List<Team> getTeamsByEmail(String recoveryEmail) {
+        return teamRepository.findTeamByEmailIgnoreCaseOrSecondaryEmailIgnoreCase(recoveryEmail, recoveryEmail);
     }
 }
