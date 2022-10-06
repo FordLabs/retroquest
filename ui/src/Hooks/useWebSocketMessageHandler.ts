@@ -39,7 +39,7 @@ interface IncomingMessage {
 
 export type WebsocketMessageHandlerType = ({ body }: Partial<IMessage>) => void;
 
-interface WebsocketCallback {
+export interface UseWebsocketHandlerResponse {
 	columnMessageHandler: WebsocketMessageHandlerType;
 	thoughtMessageHandler: WebsocketMessageHandlerType;
 	actionItemMessageHandler: WebsocketMessageHandlerType;
@@ -47,7 +47,7 @@ interface WebsocketCallback {
 	teamMessageHandler: WebsocketMessageHandlerType;
 }
 
-function useWebSocketMessageHandler(): WebsocketCallback {
+function useWebSocketMessageHandler(): UseWebsocketHandlerResponse {
 	const setThoughts = useSetRecoilState(ThoughtsState);
 	const setActionItems = useSetRecoilState(ActionItemState);
 	const setColumns = useSetRecoilState(ColumnsState);

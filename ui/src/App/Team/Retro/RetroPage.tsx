@@ -24,23 +24,22 @@ import React, {
 } from 'react';
 import classNames from 'classnames';
 import Hammer from 'hammerjs';
+import useWebSocketMessageHandler from 'Hooks/useWebSocketMessageHandler';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-
-import useWebSocketMessageHandler from '../../../Hooks/useWebSocketMessageHandler';
-import ActionItemService from '../../../Services/Api/ActionItemService';
-import ColumnService from '../../../Services/Api/ColumnService';
-import ThoughtService from '../../../Services/Api/ThoughtService';
-import DragAndDrop from '../../../Services/DragAndDrop/DragAndDrop';
-import WebSocketController from '../../../Services/Websocket/WebSocketController';
-import WebSocketService from '../../../Services/Websocket/WebSocketService';
-import { ActionItemState } from '../../../State/ActionItemState';
-import { ColumnsState } from '../../../State/ColumnsState';
-import { TeamState } from '../../../State/TeamState';
-import { ThoughtsState } from '../../../State/ThoughtsState';
-import Action from '../../../Types/Action';
-import { Column } from '../../../Types/Column';
-import Team from '../../../Types/Team';
-import Thought from '../../../Types/Thought';
+import ActionItemService from 'Services/Api/ActionItemService';
+import ColumnService from 'Services/Api/ColumnService';
+import ThoughtService from 'Services/Api/ThoughtService';
+import DragAndDrop from 'Services/DragAndDrop/DragAndDrop';
+import WebSocketController from 'Services/Websocket/WebSocketController';
+import WebSocketService from 'Services/Websocket/WebSocketService';
+import { ActionItemState } from 'State/ActionItemState';
+import { ColumnsState } from 'State/ColumnsState';
+import { TeamState } from 'State/TeamState';
+import { ThoughtsState } from 'State/ThoughtsState';
+import Action from 'Types/Action';
+import { Column } from 'Types/Column';
+import Team from 'Types/Team';
+import Thought from 'Types/Thought';
 
 import ActionItemsColumn from './ActionItemsColumn/ActionItemsColumn';
 import MobileColumnNav from './MobileColumnNav/MobileColumnNav';

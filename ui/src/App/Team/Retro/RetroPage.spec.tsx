@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 import { screen, within } from '@testing-library/react';
+import { UseWebsocketHandlerResponse } from 'Hooks/useWebSocketMessageHandler';
 import { mockColumns } from 'Services/Api/__mocks__/ColumnService';
+import { mockTeam } from 'Services/Api/__mocks__/TeamService';
 import ActionItemService from 'Services/Api/ActionItemService';
 import ColumnService from 'Services/Api/ColumnService';
 import ThoughtService from 'Services/Api/ThoughtService';
 import { TeamState } from 'State/TeamState';
 import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
-
-import { mockTeam } from '../../../Services/Api/__mocks__/TeamService';
 
 import RetroPage from './RetroPage';
 
@@ -39,17 +39,13 @@ jest.mock('Services/Websocket/WebSocketController');
 
 jest.setTimeout(60000);
 
-const mockColumnMessageHandler = jest.fn();
-const mockThoughtMessageHandler = jest.fn();
-const mockActionItemMessageHandler = jest.fn();
-const mockEndRetroMessageHandler = jest.fn();
-
 jest.mock('Hooks/useWebSocketMessageHandler', () => {
-	return () => ({
-		columnMessageHandler: mockColumnMessageHandler,
-		thoughtMessageHandler: mockThoughtMessageHandler,
-		actionItemMessageHandler: mockActionItemMessageHandler,
-		endRetroMessageHandler: mockEndRetroMessageHandler,
+	return (): UseWebsocketHandlerResponse => ({
+		columnMessageHandler: jest.fn(),
+		thoughtMessageHandler: jest.fn(),
+		actionItemMessageHandler: jest.fn(),
+		endRetroMessageHandler: jest.fn(),
+		teamMessageHandler: jest.fn(),
 	});
 });
 

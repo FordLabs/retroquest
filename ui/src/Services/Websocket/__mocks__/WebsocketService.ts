@@ -25,6 +25,7 @@ class WebsocketService {
 	subscribeToThoughts = jest.fn();
 	subscribeToActionItems = jest.fn();
 	subscribeToEndRetro = jest.fn();
+	subscribeToTeam = jest.fn();
 }
 
 export default WebsocketService;
