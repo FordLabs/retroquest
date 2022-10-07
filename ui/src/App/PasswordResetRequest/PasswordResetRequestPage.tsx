@@ -22,7 +22,7 @@ import InputEmail from 'Common/InputEmail/InputEmail';
 import InputTeamName from 'Common/InputTeamName/InputTeamName';
 import LinkTertiary from 'Common/LinkTertiary/LinkTertiary';
 import ConfigurationService from 'Services/Api/ConfigurationService';
-import TeamService from 'Services/Api/TeamService';
+import EmailService from 'Services/Api/EmailService';
 
 function PasswordResetRequestPage(): JSX.Element {
 	const [emailFromAddress, setEmailFromAddress] = useState<string>('');
@@ -34,7 +34,7 @@ function PasswordResetRequestPage(): JSX.Element {
 
 	function submitRequest() {
 		if (!!teamName && !!email) {
-			TeamService.sendPasswordResetEmail(teamName, email)
+			EmailService.sendPasswordResetEmail(teamName, email)
 				.then(() => setEmailSent(true))
 				.catch(() =>
 					setErrorMessages([

@@ -21,13 +21,13 @@ import userEvent from '@testing-library/user-event';
 import { mockEnvironmentConfig } from 'Services/Api/__mocks__/ConfigurationService';
 import ConfigurationService from 'Services/Api/ConfigurationService';
 import ContributorsService from 'Services/Api/ContributorsService';
-import TeamService from 'Services/Api/TeamService';
+import EmailService from 'Services/Api/EmailService';
 import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import RecoverTeamNamePage from './RecoverTeamNamePage';
 
 jest.mock('Services/Api/ContributorsService');
-jest.mock('Services/Api/TeamService');
+jest.mock('Services/Api/EmailService');
 jest.mock('Services/Api/ConfigurationService');
 
 describe('Recover Team Name', () => {
@@ -63,7 +63,7 @@ describe('Recover Team Name', () => {
 
 	it('should show error message if error is returned from the api call', async () => {
 		const expectedErrorMessage = 'errorMessage';
-		TeamService.sendTeamNameRecoveryEmail = jest.fn().mockRejectedValue({
+		EmailService.sendTeamNameRecoveryEmail = jest.fn().mockRejectedValue({
 			response: { data: { message: expectedErrorMessage } },
 		});
 
@@ -105,6 +105,6 @@ async function submitFormAndConfirmApiCall(email: string) {
 	typeIntoEmailField(email);
 	userEvent.click(getSubmitButton());
 	await waitFor(() =>
-		expect(TeamService.sendTeamNameRecoveryEmail).toHaveBeenCalledWith(email)
+		expect(EmailService.sendTeamNameRecoveryEmail).toHaveBeenCalledWith(email)
 	);
 }

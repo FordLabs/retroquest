@@ -17,9 +17,7 @@
 
 package com.ford.labs.retroquest.team;
 
-import com.ford.labs.retroquest.email.EmailService;
 import com.ford.labs.retroquest.exception.BadResetTokenException;
-import com.ford.labs.retroquest.exception.TeamDoesNotExistException;
 import com.ford.labs.retroquest.security.JwtBuilder;
 import com.ford.labs.retroquest.team.password.PasswordResetToken;
 import com.ford.labs.retroquest.team.password.PasswordResetTokenRepository;
@@ -45,7 +43,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping(value = "/api")
-@Tag(name = "Team Controller", description = "The controller that manages team boards")
+@Tag(name = "Team Controller", description = "The controller that manages teams")
 public class TeamController {
 
     private final TeamService teamService;
@@ -54,14 +52,16 @@ public class TeamController {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final EmailService emailService;
-
-    public TeamController(TeamService teamService, JwtBuilder jwtBuilder, PasswordResetTokenRepository passwordResetRepository, PasswordEncoder passwordEncoder, EmailService emailService) {
+    public TeamController(
+            TeamService teamService,
+            JwtBuilder jwtBuilder,
+            PasswordResetTokenRepository passwordResetRepository,
+            PasswordEncoder passwordEncoder
+    ) {
         this.teamService = teamService;
         this.jwtBuilder = jwtBuilder;
         this.passwordResetRepository = passwordResetRepository;
         this.passwordEncoder = passwordEncoder;
-        this.emailService = emailService;
     }
 
     @PostMapping("/team")
@@ -82,7 +82,7 @@ public class TeamController {
     @GetMapping("/team/{teamId}")
     @Transactional(rollbackOn = URISyntaxException.class)
     @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
-    @Operation(summary = "Get an entire team", description = "getTeam")
+    @Operation(summary = "Get an entire team by team id", description = "getTeam")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public ResponseEntity<Team> getTeam(@PathVariable("teamId") String teamId){
         return ResponseEntity.ok(teamService.getTeamByUri(teamId));
@@ -96,29 +96,10 @@ public class TeamController {
     }
 
     @GetMapping("/team/{teamId}/name")
-    @Operation(summary = "Gets a team name given the team uri", description = "getTeamName")
+    @Operation(summary = "Get a team name given the team id", description = "getTeamName")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public String getTeamName(@PathVariable("teamId") String teamUri) {
         return teamService.getTeamByUri(teamUri).getName();
-    }
-
-    @PostMapping("/password/request-reset")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public void requestPasswordReset(@RequestBody RequestPasswordResetRequest requestPasswordResetRequest){
-        Team team = teamService.getTeamByName(requestPasswordResetRequest.getTeamName());
-        if(team != null && TeamService.isEmailOnTeam(team, requestPasswordResetRequest.getEmail())) {
-            PasswordResetToken passwordResetToken = new PasswordResetToken();
-            passwordResetToken.setTeam(team);
-            passwordResetRepository.deleteAllByTeam(team);
-            passwordResetRepository.save(passwordResetToken);
-
-            emailService.sendUnencryptedEmail(
-                    "Your Password Reset Link From RetroQuest!",
-                    emailService.getPasswordResetEmailMessage(passwordResetToken, requestPasswordResetRequest),
-                    requestPasswordResetRequest.getEmail()
-            );
-        }
-        else throw new TeamDoesNotExistException();
     }
 
     @PostMapping("/password/reset")

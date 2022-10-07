@@ -21,7 +21,8 @@ import Form from 'Common/AuthTemplate/Form/Form';
 import CheckYourMailConfirmation from 'Common/CheckYourMailConfirmation/CheckYourMailConfirmation';
 import InputEmail from 'Common/InputEmail/InputEmail';
 import ConfigurationService from 'Services/Api/ConfigurationService';
-import TeamService from 'Services/Api/TeamService';
+
+import EmailService from '../../Services/Api/EmailService';
 
 function RecoverTeamNamePage() {
 	const [emailFromAddress, setEmailFromAddress] = useState<string>('');
@@ -30,7 +31,7 @@ function RecoverTeamNamePage() {
 	const [emailSent, setEmailSent] = useState<boolean>(false);
 
 	function onSubmit() {
-		TeamService.sendTeamNameRecoveryEmail(recoveryEmail)
+		EmailService.sendTeamNameRecoveryEmail(recoveryEmail)
 			.then(() => setEmailSent(true))
 			.catch((error) => {
 				setErrorMessages([error.response?.data?.message]);

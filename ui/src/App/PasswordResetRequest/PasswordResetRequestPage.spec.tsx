@@ -22,12 +22,12 @@ import { MutableSnapshot } from 'recoil';
 import { mockEnvironmentConfig } from 'Services/Api/__mocks__/ConfigurationService';
 import ConfigurationService from 'Services/Api/ConfigurationService';
 import ContributorsService from 'Services/Api/ContributorsService';
-import TeamService from 'Services/Api/TeamService';
+import EmailService from 'Services/Api/EmailService';
 import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import PasswordResetRequestPage from './PasswordResetRequestPage';
 
-jest.mock('Services/Api/TeamService');
+jest.mock('Services/Api/EmailService');
 jest.mock('Services/Api/ContributorsService');
 jest.mock('Services/Api/ConfigurationService');
 
@@ -67,7 +67,7 @@ describe('Password Reset Request Page', () => {
 		submitValidForm();
 
 		await waitFor(() =>
-			expect(TeamService.sendPasswordResetEmail).toHaveBeenCalledWith(
+			expect(EmailService.sendPasswordResetEmail).toHaveBeenCalledWith(
 				'Team Name',
 				'e@mail.com'
 			)
@@ -77,7 +77,7 @@ describe('Password Reset Request Page', () => {
 	it('should not send if any fields are blank', async () => {
 		await renderPasswordResetRequestPage();
 		submitValidForm('', '');
-		expect(TeamService.sendPasswordResetEmail).toHaveBeenCalledTimes(0);
+		expect(EmailService.sendPasswordResetEmail).toHaveBeenCalledTimes(0);
 	});
 
 	const confirmationMessage = 'Check your Mail!';
@@ -109,7 +109,7 @@ describe('Password Reset Request Page', () => {
 	});
 
 	it('should show an error message if the request is not successful that persists until you type in either input', async () => {
-		TeamService.sendPasswordResetEmail = jest
+		EmailService.sendPasswordResetEmail = jest
 			.fn()
 			.mockRejectedValue('API says you are bad');
 		await renderPasswordResetRequestPage();

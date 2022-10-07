@@ -18,8 +18,12 @@
 package com.ford.labs.retroquest.email;
 
 import com.ford.labs.retroquest.exception.EmailNotAssociatedWithAnyTeamsException;
+import com.ford.labs.retroquest.exception.TeamDoesNotExistException;
+import com.ford.labs.retroquest.team.RequestPasswordResetRequest;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamService;
+import com.ford.labs.retroquest.team.password.PasswordResetToken;
+import com.ford.labs.retroquest.team.password.PasswordResetTokenService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,9 +42,12 @@ public class EmailController {
 
     private final EmailService emailService;
 
-    public EmailController(TeamService teamService, EmailService emailService) {
+    private final PasswordResetTokenService passwordResetTokenService;
+
+    public EmailController(TeamService teamService, EmailService emailService, PasswordResetTokenService passwordResetTokenService) {
         this.teamService = teamService;
         this.emailService = emailService;
+        this.passwordResetTokenService = passwordResetTokenService;
     }
 
     @PostMapping("/recover-team-names")
@@ -59,5 +66,21 @@ public class EmailController {
                 emailService.getTeamNameRecoveryEmailMessage(recoveryEmail, teamNames),
                 recoveryEmail
         );
+    }
+
+    @PostMapping("/password-reset-request")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
+    public void requestPasswordReset(@RequestBody RequestPasswordResetRequest requestPasswordResetRequest){
+        Team team = teamService.getTeamByName(requestPasswordResetRequest.getTeamName());
+        if(team != null && teamService.isEmailOnTeam(team, requestPasswordResetRequest.getEmail())) {
+            PasswordResetToken passwordResetToken = passwordResetTokenService.getNewPasswordResetToken(team);
+
+            emailService.sendUnencryptedEmail(
+                    "Your Password Reset Link From RetroQuest!",
+                    emailService.getPasswordResetEmailMessage(passwordResetToken, requestPasswordResetRequest),
+                    requestPasswordResetRequest.getEmail()
+            );
+        }
+        else throw new TeamDoesNotExistException();
     }
 }

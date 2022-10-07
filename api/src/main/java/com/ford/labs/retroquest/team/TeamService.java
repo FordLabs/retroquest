@@ -58,7 +58,7 @@ public class TeamService {
         this.websocketService = websocketService;
     }
 
-    static boolean isEmailOnTeam(Team team, String email) {
+    public boolean isEmailOnTeam(Team team, String email) {
         return team.getEmail().equalsIgnoreCase(email) || team.getSecondaryEmail().equalsIgnoreCase(email);
     }
 
