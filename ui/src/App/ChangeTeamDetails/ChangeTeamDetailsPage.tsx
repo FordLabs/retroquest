@@ -44,11 +44,10 @@ function ChangeTeamDetailsPage(): JSX.Element {
 		<div className="change-team-details-page">
 			<Header name="RetroQuest" />
 			<div className="change-team-details-form">
-				<h1>Update Team Details</h1>
+				<h1>Update Board Owners</h1>
 				<p>
-					Edit the current details in the boxes below and press "Update Team
-					Details" to update your team's email addresses (for password
-					recovery).
+					Edit the current details in the boxes below and press “Save Changes”
+					to update your team’s email addresses (for password recovery).
 				</p>
 				<Form onSubmit={submitEmails} submitButtonText="Save Changes">
 					<InputEmail
@@ -59,7 +58,7 @@ function ChangeTeamDetailsPage(): JSX.Element {
 						required
 					/>
 					<InputEmail
-						label="Email 2"
+						label="Second Teammate’s Email (optional)"
 						onChange={setSecondaryEmail}
 						value={secondaryEmail}
 						id="email2Id"

@@ -24,15 +24,15 @@ import ChangeTeamDetailsPage from './ChangeTeamDetailsPage';
 jest.mock('Services/Api/TeamService');
 
 describe('Change Team Details Page', () => {
-	it('should have retroquest header', () => {
+	it('should have RetroQuest header', () => {
 		renderWithToken('');
 		expect(screen.getByText('RetroQuest')).toBeDefined();
 	});
 
 	it('should have a field for email1 and email2, plus a submit button', async () => {
 		renderWithToken('');
-		expect(screen.getByLabelText('Email 1')).toBeInTheDocument();
-		expect(screen.getByLabelText('Email 2')).toBeInTheDocument();
+		expect(getEmail1InputField()).toBeInTheDocument();
+		expect(getEmail2InputField()).toBeInTheDocument();
 		expect(screen.getByText('Save Changes')).toBeInTheDocument();
 	});
 
@@ -69,14 +69,22 @@ describe('Change Team Details Page', () => {
 });
 
 function submitValidForm() {
-	fireEvent.change(screen.getByLabelText('Email 1'), {
+	fireEvent.change(getEmail1InputField(), {
 		target: { value: 'email1@email1.email1' },
 	});
-	fireEvent.change(screen.getByLabelText('Email 2'), {
+	fireEvent.change(getEmail2InputField(), {
 		target: { value: 'email2@email2.email2' },
 	});
 
 	fireEvent.click(screen.getByText('Save Changes'));
+}
+
+function getEmail1InputField() {
+	return screen.getByLabelText('Email 1');
+}
+
+function getEmail2InputField() {
+	return screen.getByLabelText('Second Teammate’s Email (optional)');
 }
 
 function renderWithToken(token: string) {
@@ -85,7 +93,7 @@ function renderWithToken(token: string) {
 	render(
 		<MemoryRouter initialEntries={[initialEntry]}>
 			<Routes>
-				<Route element={<ChangeTeamDetailsPage />} path={'/change-emails'} />
+				<Route element={<ChangeTeamDetailsPage />} path="/change-emails" />
 			</Routes>
 		</MemoryRouter>
 	);
