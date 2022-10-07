@@ -19,7 +19,6 @@ package com.ford.labs.retroquest.email;
 
 import com.ford.labs.retroquest.exception.EmailNotAssociatedWithAnyTeamsException;
 import com.ford.labs.retroquest.exception.TeamDoesNotExistException;
-import com.ford.labs.retroquest.team.RequestPasswordResetRequest;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamService;
 import com.ford.labs.retroquest.team.password.PasswordResetToken;

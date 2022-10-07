@@ -17,7 +17,6 @@
 
 package com.ford.labs.retroquest.email;
 
-import com.ford.labs.retroquest.team.RequestPasswordResetRequest;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.password.PasswordResetToken;
 import org.junit.jupiter.api.Test;

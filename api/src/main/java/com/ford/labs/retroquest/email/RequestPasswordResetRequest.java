@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.team;
+package com.ford.labs.retroquest.email;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

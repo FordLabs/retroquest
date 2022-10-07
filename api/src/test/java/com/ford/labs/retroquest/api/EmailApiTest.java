@@ -19,7 +19,7 @@ package com.ford.labs.retroquest.api;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.email.EmailService;
 import com.ford.labs.retroquest.email.RecoverTeamNamesRequest;
-import com.ford.labs.retroquest.team.RequestPasswordResetRequest;
+import com.ford.labs.retroquest.email.RequestPasswordResetRequest;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import com.ford.labs.retroquest.team.password.PasswordResetToken;

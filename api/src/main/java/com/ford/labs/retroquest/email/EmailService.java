@@ -16,7 +16,6 @@
  */
 package com.ford.labs.retroquest.email;
 
-import com.ford.labs.retroquest.team.RequestPasswordResetRequest;
 import com.ford.labs.retroquest.team.password.PasswordResetToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
