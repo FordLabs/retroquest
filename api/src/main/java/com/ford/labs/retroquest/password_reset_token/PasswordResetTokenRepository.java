@@ -15,17 +15,19 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.team;
+package com.ford.labs.retroquest.password_reset_token;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.ford.labs.retroquest.team.Team;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder(toBuilder=true)
-public class ResetTokenStatusRequest {
-    private String resetToken;
+import javax.transaction.Transactional;
+
+@Repository
+public interface PasswordResetTokenRepository extends JpaRepository<PasswordResetToken, String> {
+    PasswordResetToken findByTeam(Team team);
+    PasswordResetToken findByResetToken(String resetToken);
+
+    @Transactional
+    void deleteAllByTeam(Team team);
 }

@@ -17,12 +17,14 @@
 
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
+import PasswordResetTokenService from 'Services/Api/PasswordResetTokenService';
 import TeamService from 'Services/Api/TeamService';
 import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import ResetPasswordPage from './ResetPasswordPage';
 
 jest.mock('Services/Api/TeamService');
+jest.mock('Services/Api/PasswordResetTokenService');
 
 const mockedUsedNavigate = jest.fn();
 
@@ -32,7 +34,7 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe('Reset Password Page', () => {
-	it('should have retroquest header', () => {
+	it('should have RetroQuest header', () => {
 		renderWithToken('');
 		expect(screen.getByText('RetroQuest')).toBeDefined();
 	});
@@ -48,26 +50,30 @@ describe('Reset Password Page', () => {
 
 	describe('Token Validity', () => {
 		it('should check if token is valid and navigate to Expired Token page if token is invalid', async () => {
-			TeamService.checkIfResetTokenIsValid = jest.fn().mockResolvedValue(false);
+			PasswordResetTokenService.checkIfResetTokenIsValid = jest
+				.fn()
+				.mockResolvedValue(false);
 
 			renderWithToken('expired-token');
 			await waitFor(() =>
-				expect(TeamService.checkIfResetTokenIsValid).toHaveBeenCalledWith(
-					'expired-token'
-				)
+				expect(
+					PasswordResetTokenService.checkIfResetTokenIsValid
+				).toHaveBeenCalledWith('expired-token')
 			);
 			expect(mockedUsedNavigate).toHaveBeenCalledWith('/expired-link');
 			expect(screen.queryByText('Reset Your Password')).toBeInTheDocument();
 		});
 
 		it('should check if token is valid and stay on page if it is valid', async () => {
-			TeamService.checkIfResetTokenIsValid = jest.fn().mockResolvedValue(true);
+			PasswordResetTokenService.checkIfResetTokenIsValid = jest
+				.fn()
+				.mockResolvedValue(true);
 
 			renderWithToken('valid-token');
 			await waitFor(() =>
-				expect(TeamService.checkIfResetTokenIsValid).toHaveBeenCalledWith(
-					'valid-token'
-				)
+				expect(
+					PasswordResetTokenService.checkIfResetTokenIsValid
+				).toHaveBeenCalledWith('valid-token')
 			);
 			expect(mockedUsedNavigate).not.toHaveBeenCalled();
 			expect(screen.getByText('Reset Your Password')).toBeInTheDocument();

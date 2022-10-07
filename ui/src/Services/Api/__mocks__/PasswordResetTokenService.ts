@@ -14,17 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import axios from 'axios';
 
-import configurationService from './ConfigurationService';
+const PasswordResetTokenService = {
+	checkIfResetTokenIsValid: jest.fn().mockResolvedValue(true),
+	getResetTokenLifetime: jest.fn().mockResolvedValue(800),
+};
 
-describe('the configuration service', () => {
-	it('should perform a GET to /api/config', async () => {
-		let value = { data: { propertyName: 'propertyValue' } };
-		axios.get = jest.fn().mockResolvedValue(value);
-		await configurationService
-			.get()
-			.then((result) => expect(result).toEqual(value.data));
-		expect(axios.get).toHaveBeenCalledWith('/api/config');
-	});
-});
+export default PasswordResetTokenService;

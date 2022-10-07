@@ -19,15 +19,12 @@ package com.ford.labs.retroquest.email;
 
 import com.ford.labs.retroquest.team.RequestPasswordResetRequest;
 import com.ford.labs.retroquest.team.Team;
-import com.ford.labs.retroquest.team.password.PasswordResetToken;
+import com.ford.labs.retroquest.password_reset_token.PasswordResetToken;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mockito;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;

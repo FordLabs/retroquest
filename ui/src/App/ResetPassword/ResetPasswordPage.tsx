@@ -22,6 +22,7 @@ import Header from 'Common/Header/Header';
 import InputPassword from 'Common/InputPassword/InputPassword';
 import LinkPrimary from 'Common/LinkPrimary/LinkPrimary';
 import LinkTertiary from 'Common/LinkTertiary/LinkTertiary';
+import PasswordResetTokenService from 'Services/Api/PasswordResetTokenService';
 import TeamService from 'Services/Api/TeamService';
 
 import { EXPIRED_LINK_PATH, LOGIN_PAGE_PATH } from '../../RouteConstants';
@@ -46,7 +47,7 @@ function ResetPasswordPage(): JSX.Element {
 	}
 
 	useEffect(() => {
-		TeamService.checkIfResetTokenIsValid(passwordResetToken).then(
+		PasswordResetTokenService.checkIfResetTokenIsValid(passwordResetToken).then(
 			(isValidToken) => {
 				if (!isValidToken) navigate(EXPIRED_LINK_PATH);
 			}

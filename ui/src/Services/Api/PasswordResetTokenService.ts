@@ -16,15 +16,19 @@
  */
 import axios from 'axios';
 
-import configurationService from './ConfigurationService';
+const PASSWORD_RESET_TOKEN_API_PATH = '/api/password-reset-token';
 
-describe('the configuration service', () => {
-	it('should perform a GET to /api/config', async () => {
-		let value = { data: { propertyName: 'propertyValue' } };
-		axios.get = jest.fn().mockResolvedValue(value);
-		await configurationService
-			.get()
-			.then((result) => expect(result).toEqual(value.data));
-		expect(axios.get).toHaveBeenCalledWith('/api/config');
-	});
-});
+const PasswordResetTokenService = {
+	checkIfResetTokenIsValid(resetToken: string): Promise<boolean> {
+		const url = `${PASSWORD_RESET_TOKEN_API_PATH}/${resetToken}/is-valid`;
+		return axios.get(url).then((res) => res.data);
+	},
+
+	getResetTokenLifetime(): Promise<number> {
+		return axios
+			.get(`${PASSWORD_RESET_TOKEN_API_PATH}/lifetime-in-seconds`)
+			.then((response) => response.data);
+	},
+};
+
+export default PasswordResetTokenService;

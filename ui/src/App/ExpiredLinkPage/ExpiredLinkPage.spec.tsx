@@ -19,7 +19,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { screen, waitFor } from '@testing-library/react';
 import { MutableSnapshot } from 'recoil';
 import ContributorsService from 'Services/Api/ContributorsService';
-import TeamService from 'Services/Api/TeamService';
+import PasswordResetTokenService from 'Services/Api/PasswordResetTokenService';
 import { ThemeState } from 'State/ThemeState';
 import Theme from 'Types/Theme';
 import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
@@ -28,6 +28,7 @@ import ExpiredLinkPage from './ExpiredLinkPage';
 
 jest.mock('Services/Api/ContributorsService');
 jest.mock('Services/Api/TeamService');
+jest.mock('Services/Api/PasswordResetTokenService');
 
 describe('Expired Link Page', () => {
 	it('should render header and link to reset password page', async () => {
@@ -42,10 +43,12 @@ describe('Expired Link Page', () => {
 	});
 
 	it('should show token lifetime in page description', async () => {
-		TeamService.getResetTokenLifetime = jest.fn().mockResolvedValue(600);
+		PasswordResetTokenService.getResetTokenLifetime = jest
+			.fn()
+			.mockResolvedValue(600);
 		await renderExpiredLinkPage();
 		await waitFor(() =>
-			expect(TeamService.getResetTokenLifetime).toHaveBeenCalled()
+			expect(PasswordResetTokenService.getResetTokenLifetime).toHaveBeenCalled()
 		);
 		expect(
 			screen.getByText(
