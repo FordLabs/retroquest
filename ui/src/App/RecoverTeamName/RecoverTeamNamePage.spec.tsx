@@ -39,7 +39,7 @@ describe('Recover Team Name', () => {
 		expect(screen.queryByText('Github')).toBeNull();
 	});
 
-	it('should type email and submit form', async () => {
+	it('should type email and submit form successfully', async () => {
 		await renderRecoverTeamNamesPage();
 		typeIntoEmailField('valid@email.com');
 		const submitButton = screen.getByText('Send me my team name');
@@ -47,6 +47,24 @@ describe('Recover Team Name', () => {
 		expect(TeamService.sendTeamNameRecoveryEmail).toHaveBeenCalledWith(
 			'valid@email.com'
 		);
+	});
+
+	it('should show error message if error is returned from the api call', async () => {
+		const expectedErrorMessage = 'errorMessage';
+		TeamService.sendTeamNameRecoveryEmail = jest.fn().mockRejectedValue({
+			response: { data: { message: expectedErrorMessage } },
+		});
+
+		await renderRecoverTeamNamesPage();
+		typeIntoEmailField('valid@email.com');
+		const submitButton = screen.getByText('Send me my team name');
+		userEvent.click(submitButton);
+		await waitFor(() =>
+			expect(TeamService.sendTeamNameRecoveryEmail).toHaveBeenCalledWith(
+				'valid@email.com'
+			)
+		);
+		expect(screen.getByText(expectedErrorMessage)).toBeInTheDocument();
 	});
 
 	it('should not validate email pre-submit', async () => {

@@ -21,7 +21,9 @@ export const CHANGE_PASSWORD_API_PATH = '/api/password/reset';
 export const RESET_TOKEN_LIFETIME_API_PATH =
 	'/api/password/reset/token-lifetime-seconds';
 export const RESET_TOKEN_STATUS_API_PATH = '/api/password/reset/is-valid';
-export const PASSWORD_REQUEST_API_PATH = '/api/password/request-reset';
+export const EMAIL_PASSWORD_REQUEST_API_PATH = '/api/password/request-reset';
+export const EMAIL_TEAM_NAME_RECOVERY_API_PATH =
+	'/api/email/recover-team-names';
 export const LOGIN_API_PATH = `${TEAM_API_PATH}/login`;
 export const getTeamNameApiPath = (teamId: string) =>
 	`${TEAM_API_PATH}/${teamId}/name`;

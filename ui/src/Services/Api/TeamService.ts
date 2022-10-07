@@ -28,10 +28,11 @@ import CookieService from '../CookieService';
 import {
 	CHANGE_EMAIL_API_PATH,
 	CHANGE_PASSWORD_API_PATH,
+	EMAIL_PASSWORD_REQUEST_API_PATH,
+	EMAIL_TEAM_NAME_RECOVERY_API_PATH,
 	getCSVApiPath,
 	getTeamNameApiPath,
 	LOGIN_API_PATH,
-	PASSWORD_REQUEST_API_PATH,
 	RESET_TOKEN_LIFETIME_API_PATH,
 	RESET_TOKEN_STATUS_API_PATH,
 	TEAM_API_PATH,
@@ -90,14 +91,14 @@ const TeamService = {
 		teamName: string,
 		email: string
 	): Promise<AxiosResponse> {
-		return axios.post(PASSWORD_REQUEST_API_PATH, {
+		return axios.post(EMAIL_PASSWORD_REQUEST_API_PATH, {
 			teamName: teamName,
 			email: email,
 		});
 	},
 
 	sendTeamNameRecoveryEmail(recoveryEmail: string): Promise<AxiosResponse> {
-		return axios.post(TEAM_API_PATH, {
+		return axios.post(EMAIL_TEAM_NAME_RECOVERY_API_PATH, {
 			recoveryEmail: recoveryEmail,
 		});
 	},

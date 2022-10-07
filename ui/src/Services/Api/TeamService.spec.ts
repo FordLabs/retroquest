@@ -185,7 +185,7 @@ describe('Team Service', () => {
 		it('should send password reset link', async () => {
 			await TeamService.sendTeamNameRecoveryEmail('recovery@email.com');
 
-			expect(axios.post).toHaveBeenCalledWith('/api/team', {
+			expect(axios.post).toHaveBeenCalledWith('/api/email/recover-team-names', {
 				recoveryEmail: 'recovery@email.com',
 			});
 		});

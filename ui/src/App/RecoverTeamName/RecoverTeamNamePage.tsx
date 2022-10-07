@@ -19,14 +19,16 @@ import { useState } from 'react';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import Form from 'Common/AuthTemplate/Form/Form';
 import InputEmail from 'Common/InputEmail/InputEmail';
-
-import TeamService from '../../Services/Api/TeamService';
+import TeamService from 'Services/Api/TeamService';
 
 function RecoverTeamNamePage() {
 	const [recoveryEmail, setRecoveryEmail] = useState<string>('');
+	const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
 	function onSubmit() {
-		TeamService.sendTeamNameRecoveryEmail(recoveryEmail).catch(console.error);
+		TeamService.sendTeamNameRecoveryEmail(recoveryEmail).catch((error) => {
+			setErrorMessages([error.response?.data?.message]);
+		});
 	}
 
 	return (
@@ -39,6 +41,7 @@ function RecoverTeamNamePage() {
 				submitButtonText="Send me my team name"
 				onSubmit={onSubmit}
 				disableSubmitBtn={!recoveryEmail}
+				errorMessages={errorMessages}
 			>
 				<InputEmail
 					value={recoveryEmail}
