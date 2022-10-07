@@ -15,15 +15,20 @@
  * limitations under the License.
  */
 
-import { render, screen, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { mockEnvironmentConfig } from 'Services/Api/__mocks__/ConfigurationService';
+import ConfigurationService from 'Services/Api/ConfigurationService';
 import ContributorsService from 'Services/Api/ContributorsService';
 import TeamService from 'Services/Api/TeamService';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import RecoverTeamNamePage from './RecoverTeamNamePage';
 
 jest.mock('Services/Api/ContributorsService');
 jest.mock('Services/Api/TeamService');
+jest.mock('Services/Api/ConfigurationService');
 
 describe('Recover Team Name', () => {
 	it('should show title, have a field for email, and a disabled submit button', async () => {
@@ -39,13 +44,20 @@ describe('Recover Team Name', () => {
 		expect(screen.queryByText('Github')).toBeNull();
 	});
 
-	it('should type email and submit form successfully', async () => {
+	it('should type email, submit form successfully', async () => {
 		await renderRecoverTeamNamesPage();
-		typeIntoEmailField('valid@email.com');
-		const submitButton = screen.getByText('Send me my team name');
-		userEvent.click(submitButton);
-		expect(TeamService.sendTeamNameRecoveryEmail).toHaveBeenCalledWith(
-			'valid@email.com'
+		await submitFormAndConfirmApiCall('valid@email.com');
+	});
+
+	it('should see confirmation message with to and from emails after form is submitted', async () => {
+		await renderRecoverTeamNamesPage();
+		await submitFormAndConfirmApiCall('valid@email.com');
+		expect(screen.queryByText('Recover Team Name')).toBeNull();
+		expect(await screen.findByText('Check your Mail!')).toBeInTheDocument();
+		const checkYourMailConfirmation = screen.getByTestId('authTemplateContent');
+		expect(checkYourMailConfirmation).toHaveTextContent('valid@email.com');
+		expect(checkYourMailConfirmation).toHaveTextContent(
+			mockEnvironmentConfig.email_from_address
 		);
 	});
 
@@ -56,14 +68,7 @@ describe('Recover Team Name', () => {
 		});
 
 		await renderRecoverTeamNamesPage();
-		typeIntoEmailField('valid@email.com');
-		const submitButton = screen.getByText('Send me my team name');
-		userEvent.click(submitButton);
-		await waitFor(() =>
-			expect(TeamService.sendTeamNameRecoveryEmail).toHaveBeenCalledWith(
-				'valid@email.com'
-			)
-		);
+		await submitFormAndConfirmApiCall('badrecoveremail@email.com');
 		expect(screen.getByText(expectedErrorMessage)).toBeInTheDocument();
 	});
 
@@ -73,17 +78,33 @@ describe('Recover Team Name', () => {
 		typeIntoEmailField(invalidEmail);
 		const emailInputErrorMessage = 'Valid email address required';
 		expect(screen.queryByText(emailInputErrorMessage)).toBeNull();
-		const submitButton = screen.getByText('Send me my team name');
-		expect(submitButton).toBeEnabled();
+		expect(getSubmitButton()).toBeEnabled();
 	});
 });
 
 async function renderRecoverTeamNamesPage() {
-	render(<RecoverTeamNamePage />);
+	renderWithRecoilRoot(
+		<MemoryRouter>
+			<RecoverTeamNamePage />
+		</MemoryRouter>
+	);
 	await waitFor(() => expect(ContributorsService.get).toHaveBeenCalled());
+	await waitFor(() => expect(ConfigurationService.get).toHaveBeenCalled());
 }
 
 function typeIntoEmailField(email: string) {
 	const emailInput = screen.getByLabelText('Email');
 	userEvent.type(emailInput, email);
+}
+
+function getSubmitButton() {
+	return screen.getByText('Send me my team name');
+}
+
+async function submitFormAndConfirmApiCall(email: string) {
+	typeIntoEmailField(email);
+	userEvent.click(getSubmitButton());
+	await waitFor(() =>
+		expect(TeamService.sendTeamNameRecoveryEmail).toHaveBeenCalledWith(email)
+	);
 }

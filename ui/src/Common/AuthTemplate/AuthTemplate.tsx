@@ -48,7 +48,12 @@ export default function AuthTemplate(props: AuthTemplateProps): JSX.Element {
 					<h2 className="auth-heading">{header}</h2>
 					<p className="auth-sub-heading">{subHeader}</p>
 				</div>
-				<div className="auth-template-content">{children}</div>
+				<div
+					className="auth-template-content"
+					data-testid="authTemplateContent"
+				>
+					{children}
+				</div>
 				<div className="auth-template-footer">
 					{showGithubLink && (
 						<a

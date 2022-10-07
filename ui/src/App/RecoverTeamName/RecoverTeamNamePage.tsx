@@ -15,41 +15,65 @@
  * limitations under the License.
  */
 
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import Form from 'Common/AuthTemplate/Form/Form';
+import CheckYourMailConfirmation from 'Common/CheckYourMailConfirmation/CheckYourMailConfirmation';
 import InputEmail from 'Common/InputEmail/InputEmail';
+import ConfigurationService from 'Services/Api/ConfigurationService';
 import TeamService from 'Services/Api/TeamService';
 
 function RecoverTeamNamePage() {
+	const [emailFromAddress, setEmailFromAddress] = useState<string>('');
 	const [recoveryEmail, setRecoveryEmail] = useState<string>('');
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
+	const [emailSent, setEmailSent] = useState<boolean>(false);
 
 	function onSubmit() {
-		TeamService.sendTeamNameRecoveryEmail(recoveryEmail).catch((error) => {
-			setErrorMessages([error.response?.data?.message]);
-		});
+		TeamService.sendTeamNameRecoveryEmail(recoveryEmail)
+			.then(() => setEmailSent(true))
+			.catch((error) => {
+				setErrorMessages([error.response?.data?.message]);
+			});
 	}
 
+	useEffect(() => {
+		if (!emailFromAddress) {
+			ConfigurationService.get().then((config) =>
+				setEmailFromAddress(config.email_from_address)
+			);
+		}
+	});
+
 	return (
-		<AuthTemplate
-			header="Recover Team Name"
-			subHeader="Enter your email below, and we’ll send you the team name (or names!) registered to your email address."
-			showGithubLink={false}
-		>
-			<Form
-				submitButtonText="Send me my team name"
-				onSubmit={onSubmit}
-				disableSubmitBtn={!recoveryEmail}
-				errorMessages={errorMessages}
-			>
-				<InputEmail
-					value={recoveryEmail}
-					onChange={setRecoveryEmail}
-					validateInput={false}
+		<>
+			{!emailSent && (
+				<AuthTemplate
+					header="Recover Team Name"
+					subHeader="Enter your email below, and we’ll send you the team name (or names!) registered to your email address."
+					showGithubLink={false}
+				>
+					<Form
+						submitButtonText="Send me my team name"
+						onSubmit={onSubmit}
+						disableSubmitBtn={!recoveryEmail}
+						errorMessages={errorMessages}
+					>
+						<InputEmail
+							value={recoveryEmail}
+							onChange={setRecoveryEmail}
+							validateInput={false}
+						/>
+					</Form>
+				</AuthTemplate>
+			)}
+			{emailSent && (
+				<CheckYourMailConfirmation
+					paragraph1={`If any RetroQuest teams are registered to ${recoveryEmail}, we’ve sent a list of all team names that are connected to the email address.`}
+					paragraph2={`If an email doesn’t show up soon, check your spam folder. We sent it from ${emailFromAddress}.`}
 				/>
-			</Form>
-		</AuthTemplate>
+			)}
+		</>
 	);
 }
 

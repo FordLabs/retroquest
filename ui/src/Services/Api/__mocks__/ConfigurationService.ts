@@ -17,10 +17,12 @@
 
 import EnvironmentConfig from 'Types/EnvironmentConfig';
 
+export const mockEnvironmentConfig: EnvironmentConfig = {
+	email_from_address: 'mock_email_from_address@email.com',
+};
+
 const configurationService = {
-	get: jest.fn().mockResolvedValue({
-		email_from_address: 'mock@email.com',
-	} as EnvironmentConfig),
+	get: jest.fn().mockResolvedValue(mockEnvironmentConfig),
 };
 
 export default configurationService;

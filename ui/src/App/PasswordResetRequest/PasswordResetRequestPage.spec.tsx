@@ -19,11 +19,10 @@ import { MemoryRouter } from 'react-router-dom';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MutableSnapshot } from 'recoil';
+import { mockEnvironmentConfig } from 'Services/Api/__mocks__/ConfigurationService';
 import ConfigurationService from 'Services/Api/ConfigurationService';
 import ContributorsService from 'Services/Api/ContributorsService';
 import TeamService from 'Services/Api/TeamService';
-import { ThemeState } from 'State/ThemeState';
-import Theme from 'Types/Theme';
 import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import PasswordResetRequestPage from './PasswordResetRequestPage';
@@ -93,8 +92,7 @@ describe('Password Reset Request Page', () => {
 		expect(screen.getByText(confirmationMessage)).toBeInTheDocument();
 		const paragraph1 = `We’ve sent an email to test@mail.com with password reset instructions.`;
 		expect(screen.getByText(paragraph1)).toBeInTheDocument();
-		const paragraph2 =
-			"If an email doesn't show up soon, check your spam folder. We sent it from mock@email.com.";
+		const paragraph2 = `If an email doesn't show up soon, check your spam folder. We sent it from ${mockEnvironmentConfig.email_from_address}.`;
 		expect(screen.getByText(paragraph2)).toBeInTheDocument();
 		expect(screen.getByText('Return to Login')).toHaveAttribute(
 			'href',
@@ -108,30 +106,6 @@ describe('Password Reset Request Page', () => {
 			expect(screen.queryByText(confirmationMessage)).toBeNull()
 		);
 		expect(screen.getByText('Reset your Password')).toBeInTheDocument();
-	});
-
-	it('should render checkbox in confirmation screen as dark turquoise in light mode', async () => {
-		await renderPasswordResetRequestPage(({ set }) => {
-			set(ThemeState, Theme.LIGHT);
-		});
-		submitValidForm();
-
-		const checkedCheckboxIcon = await screen.findByTestId(
-			'checkedCheckboxIcon'
-		);
-		expect(checkedCheckboxIcon.getAttribute('fill')).toBe('#16a085');
-	});
-
-	it('should render checkbox in confirmation screen as light turquoise in dark mode', async () => {
-		await renderPasswordResetRequestPage(({ set }) => {
-			set(ThemeState, Theme.DARK);
-		});
-		submitValidForm();
-
-		const checkedCheckboxIcon = await screen.findByTestId(
-			'checkedCheckboxIcon'
-		);
-		expect(checkedCheckboxIcon.getAttribute('fill')).toBe('#1abc9c');
 	});
 
 	it('should show an error message if the request is not successful that persists until you type in either input', async () => {

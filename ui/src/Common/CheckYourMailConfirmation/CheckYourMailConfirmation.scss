@@ -17,7 +17,11 @@
 
 @use '../../Styles/main';
 
-.password-reset-request-page {
+.check-your-mail-confirmation {
+	.auth-sub-heading {
+		display: none;
+	}
+
 	.paragraph-1-container {
 		display: flex;
 		align-items: center;
@@ -29,6 +33,8 @@
 		}
 
 		.paragraph-1 {
+			flex-basis: fit-content;
+			flex-basis: -moz-fit-content;
 			margin-top: 1rem;
 
 			color: main.$teal;
@@ -44,7 +50,7 @@
 }
 
 @include main.dark-theme {
-	.password-reset-request-page {
+	.check-your-mail-confirmation {
 		.paragraph-1 {
 			color: main.$sea-foam;
 		}
