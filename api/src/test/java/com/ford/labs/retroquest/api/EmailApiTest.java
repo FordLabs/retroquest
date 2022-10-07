@@ -100,7 +100,7 @@ public class EmailApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_send_password_reset_request_email_when_team_is_valid() throws Exception {
+    void password_reset_request__should_send_password_reset_request_email_when_team_is_valid() throws Exception {
         Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
         teamRepository.save(expectedResetTeam);
         when(emailService.getPasswordResetEmailMessage(any(), any())).thenReturn("expectedMessage");
@@ -117,7 +117,7 @@ public class EmailApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_send_password_reset_request_email_using_secondary_email() throws Exception {
+    void password_reset_request__should_send_password_reset_request_email_using_secondary_email() throws Exception {
         Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il", "seconde@ma.il");
         teamRepository.save(expectedResetTeam);
         when(emailService.getPasswordResetEmailMessage(any(), any())).thenReturn("expectedMessage");
@@ -137,7 +137,7 @@ public class EmailApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_send_password_reset_request_email_using_secondary_email_ignoring_case() throws Exception {
+    void password_reset_request__should_send_password_reset_request_email_using_secondary_email_ignoring_case() throws Exception {
         Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il", "seconde@ma.il");
         teamRepository.save(expectedResetTeam);
         when(emailService.getPasswordResetEmailMessage(any(), any())).thenReturn("expectedMessage");
@@ -157,7 +157,7 @@ public class EmailApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_send_a_second_password_reset_request_email_when_team_is_valid() throws Exception {
+    void password_reset_request__should_send_a_second_password_reset_request_email_when_team_is_valid() throws Exception {
         Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
         teamRepository.save(expectedResetTeam);
 
@@ -168,5 +168,16 @@ public class EmailApiTest extends ApiTestBase {
                 .andExpect(status().isOk());
 
         assertThat(passwordResetTokenRepository.count()).isEqualTo(1);
+    }
+
+    @Test
+    void password_reset_request__should_not_create_password_reset_request_when_team_is_invalid() throws Exception {
+        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
+        teamRepository.save(expectedResetTeam);
+
+        mockMvc.perform(post(passwordResetRequestPath).contentType(APPLICATION_JSON).content(objectMapper.writeValueAsBytes(new RequestPasswordResetRequest("NotTeamName", "e@ma.il"))))
+                .andExpect(status().isForbidden());
+
+        assertThat(passwordResetTokenRepository.count()).isEqualTo(0);
     }
 }

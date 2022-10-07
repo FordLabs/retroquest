@@ -19,7 +19,6 @@ package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.column.ColumnRepository;
-import com.ford.labs.retroquest.email.RequestPasswordResetRequest;
 import com.ford.labs.retroquest.team.*;
 import com.ford.labs.retroquest.team.password.PasswordResetToken;
 import com.ford.labs.retroquest.team.password.PasswordResetTokenRepository;
@@ -280,17 +279,6 @@ class TeamApiTest extends ApiTestBase {
                 .andReturn();
 
         assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("false");
-    }
-
-    @Test
-    void should_not_create_password_reset_request_when_team_is_invalid() throws Exception {
-        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
-        teamRepository.save(expectedResetTeam);
-
-        mockMvc.perform(post("/api/password/request-reset").contentType(APPLICATION_JSON).content(objectMapper.writeValueAsBytes(new RequestPasswordResetRequest("NotTeamName", "e@ma.il"))))
-                .andExpect(status().isForbidden());
-
-        assertThat(passwordResetRepository.count()).isEqualTo(0);
     }
 
     @Test
