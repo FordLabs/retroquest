@@ -82,7 +82,8 @@ public class EmailApiTest extends ApiTestBase {
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(new RecoverTeamNamesRequest(recoveryEmail)))
                 )
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest())
+                .andExpect(status().reason("This email is not associated with any RetroQuest team."));
 
         verify(emailService, never()).sendUnencryptedEmail("RetroQuest Teams Names Associated with your Account", "expectedMessage", recoveryEmail);
     }

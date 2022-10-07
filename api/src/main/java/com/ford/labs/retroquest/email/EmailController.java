@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.email;
 
+import com.ford.labs.retroquest.exception.EmailNotAssociatedWithAnyTeamsException;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -47,17 +48,16 @@ public class EmailController {
     public void sendRecoverTeamNamesEmail(@RequestBody RecoverTeamNamesRequest recoverTeamNamesRequest) {
         String recoveryEmail = recoverTeamNamesRequest.getRecoveryEmail();
         List<Team> teams = teamService.getTeamsByEmail(recoveryEmail);
-        System.out.println(teams);
 
-        if (teams.size() >= 1) {
-            List<String> teamNames = new ArrayList<>();
-            for (Team t : teams) { teamNames.add(t.getName()); }
+        if (teams.isEmpty()) throw new EmailNotAssociatedWithAnyTeamsException();
 
-            emailService.sendUnencryptedEmail(
-                    "RetroQuest Teams Names Associated with your Account",
-                    emailService.getTeamNameRecoveryEmailMessage(recoveryEmail, teamNames),
-                    recoveryEmail
-            );
-        }
+        List<String> teamNames = new ArrayList<>();
+        for (Team t : teams) { teamNames.add(t.getName()); }
+
+        emailService.sendUnencryptedEmail(
+                "RetroQuest Teams Names Associated with your Account",
+                emailService.getTeamNameRecoveryEmailMessage(recoveryEmail, teamNames),
+                recoveryEmail
+        );
     }
 }

@@ -15,15 +15,7 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.security;
+package com.ford.labs.retroquest.exception;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-@Controller
-public class WebController {
-    @RequestMapping(value = {"/login/**", "/create", "/team/**", "/e2e/**", "/email/**"})
-    public String redirect() {
-        return "forward:/";
-    }
+public class EmailNotAssociatedWithAnyTeamsException extends RuntimeException {
 }
