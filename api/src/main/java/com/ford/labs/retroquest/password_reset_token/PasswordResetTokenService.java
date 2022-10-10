@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ford.labs.retroquest.team.password;
+package com.ford.labs.retroquest.password_reset_token;
 
 import com.ford.labs.retroquest.team.Team;
 import org.springframework.stereotype.Service;

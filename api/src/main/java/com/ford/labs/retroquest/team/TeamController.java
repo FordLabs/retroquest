@@ -19,8 +19,8 @@ package com.ford.labs.retroquest.team;
 
 import com.ford.labs.retroquest.exception.BadResetTokenException;
 import com.ford.labs.retroquest.security.JwtBuilder;
-import com.ford.labs.retroquest.team.password.PasswordResetToken;
-import com.ford.labs.retroquest.team.password.PasswordResetTokenRepository;
+import com.ford.labs.retroquest.password_reset_token.PasswordResetToken;
+import com.ford.labs.retroquest.password_reset_token.PasswordResetTokenRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -108,18 +108,6 @@ public class TeamController {
         if(passwordResetToken == null || passwordResetToken.isExpired()) throw new BadResetTokenException();
         teamService.changePassword(passwordResetToken.getTeam(), passwordEncoder.encode(resetPasswordRequest.getPassword()));
         passwordResetRepository.delete(passwordResetToken);
-    }
-
-    @PostMapping("/password/reset/is-valid")
-    public boolean checkResetTokenStatus(@RequestBody ResetTokenStatusRequest resetTokenStatusRequest) {
-        PasswordResetToken passwordResetToken = passwordResetRepository.findByResetToken(resetTokenStatusRequest.getResetToken());
-        return passwordResetToken != null && !passwordResetToken.isExpired();
-    }
-
-    @GetMapping("/password/reset/token-lifetime-seconds")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    public ResponseEntity<Integer> getResetTokenValiditySeconds(@Value("${retroquest.password.reset.token-lifetime-seconds:600}") int tokenSeconds){
-        return ResponseEntity.ok(tokenSeconds);
     }
 
     @GetMapping(value = "/team/{teamId}/csv", produces = "application/board.csv")

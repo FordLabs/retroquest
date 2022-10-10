@@ -21,7 +21,7 @@ import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import LinkPrimary from 'Common/LinkPrimary/LinkPrimary';
 import { useRecoilValue } from 'recoil';
 import { PASSWORD_RESET_REQUEST_PATH } from 'RouteConstants';
-import TeamService from 'Services/Api/TeamService';
+import PasswordResetTokenService from 'Services/Api/PasswordResetTokenService';
 import { ThemeState } from 'State/ThemeState';
 import Theme from 'Types/Theme';
 
@@ -34,7 +34,7 @@ function ExpiredLinkPage() {
 	const [resetTokenLifetime, setResetTokenLifetime] = useState<number>(600);
 
 	useEffect(() => {
-		TeamService.getResetTokenLifetime().then((seconds) => {
+		PasswordResetTokenService.getResetTokenLifetime().then((seconds) => {
 			setResetTokenLifetime(Math.floor(seconds / 60));
 		});
 	}, []);

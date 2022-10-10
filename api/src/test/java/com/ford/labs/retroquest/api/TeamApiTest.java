@@ -20,8 +20,8 @@ package com.ford.labs.retroquest.api;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.column.ColumnRepository;
 import com.ford.labs.retroquest.team.*;
-import com.ford.labs.retroquest.team.password.PasswordResetToken;
-import com.ford.labs.retroquest.team.password.PasswordResetTokenRepository;
+import com.ford.labs.retroquest.password_reset_token.PasswordResetToken;
+import com.ford.labs.retroquest.password_reset_token.PasswordResetTokenRepository;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -208,77 +208,6 @@ class TeamApiTest extends ApiTestBase {
         assertThat(team.getEmail()).isEqualTo(VALID_EMAIL);
         assertThat(team.getSecondaryEmail()).isEqualTo(expectedSecondaryEmail);
         assertThat(mvcResult.getResponse().getContentAsString()).isNotNull();
-    }
-
-    @Test
-    public void shouldReportCorrectPasswordTokenExpirationTime() throws Exception {
-        MvcResult mvcResult = mockMvc.perform(get("/api/password/reset/token-lifetime-seconds")).andExpect(status().isOk()).andReturn();
-        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("600");
-    }
-
-    @Test
-    void should_return_true_when_password_reset_token_is_valid() throws Exception {
-        Team team = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
-        teamRepository.save(team);
-        PasswordResetToken passwordResetToken = new PasswordResetToken();
-        passwordResetToken.setTeam(team);
-        passwordResetRepository.save(passwordResetToken);
-
-        var mvcResult = mockMvc.perform(
-                post("/api/password/reset/is-valid")
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(
-                                new ResetTokenStatusRequest(passwordResetToken.getResetToken()))
-                        )
-                )
-                .andExpect(status().is2xxSuccessful())
-                .andReturn();
-
-        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("true");
-    }
-
-    @Test
-    void should_return_false_when_password_reset_token_is_expired() throws Exception {
-        Team team = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
-        teamRepository.save(team);
-        PasswordResetToken passwordResetToken = new PasswordResetToken();
-        passwordResetToken.setDateCreated(LocalDateTime.MIN);
-        passwordResetToken.setTeam(team);
-        passwordResetRepository.save(passwordResetToken);
-
-        var mvcResult = mockMvc.perform(
-                        post("/api/password/reset/is-valid")
-                                .contentType(APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(
-                                        new ResetTokenStatusRequest(passwordResetToken.getResetToken()))
-                                )
-                )
-                .andExpect(status().is2xxSuccessful())
-                .andReturn();
-
-        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("false");
-    }
-
-    @Test
-    void should_return_false_when_password_reset_token_does_not_exist() throws Exception {
-        Team team = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
-        teamRepository.save(team);
-        PasswordResetToken passwordResetToken = new PasswordResetToken();
-        passwordResetToken.setDateCreated(LocalDateTime.MIN);
-        passwordResetToken.setTeam(team);
-        passwordResetRepository.save(passwordResetToken);
-
-        var mvcResult = mockMvc.perform(
-                        post("/api/password/reset/is-valid")
-                                .contentType(APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsBytes(
-                                        new ResetTokenStatusRequest(UUID.randomUUID().toString()))
-                                )
-                )
-                .andExpect(status().is2xxSuccessful())
-                .andReturn();
-
-        assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("false");
     }
 
     @Test

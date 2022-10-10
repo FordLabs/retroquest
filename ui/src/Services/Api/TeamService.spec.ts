@@ -169,38 +169,6 @@ describe('Team Service', () => {
 		});
 	});
 
-	describe('checkIfResetTokenIsValid', () => {
-		it('should return true when token is valid', async () => {
-			axios.post = jest.fn().mockResolvedValue({ data: true });
-			const isValidToken = await TeamService.checkIfResetTokenIsValid(
-				'valid-token'
-			);
-			expect(axios.post).toHaveBeenCalledWith('/api/password/reset/is-valid', {
-				resetToken: 'valid-token',
-			});
-			expect(isValidToken).toBeTruthy();
-		});
-
-		it('should return true when token is invalid', async () => {
-			axios.post = jest.fn().mockResolvedValue({ data: false });
-			const isValidToken = await TeamService.checkIfResetTokenIsValid(
-				'invalid-token'
-			);
-			expect(axios.post).toHaveBeenCalledWith('/api/password/reset/is-valid', {
-				resetToken: 'invalid-token',
-			});
-			expect(isValidToken).toBeFalsy();
-		});
-	});
-
-	describe('getResetTokenLifetime', () => {
-		it('should get the lifetime of the reset token', async () => {
-			axios.get = jest.fn().mockResolvedValue({ data: 500 });
-			const actualTokenLifetime = await TeamService.getResetTokenLifetime();
-			expect(actualTokenLifetime).toBe(500);
-		});
-	});
-
 	describe('onResponseInterceptRejection', () => {
 		let location: (string | Location) & Location;
 		let mockAssign = jest.fn();

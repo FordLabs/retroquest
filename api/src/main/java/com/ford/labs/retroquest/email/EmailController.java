@@ -19,10 +19,10 @@ package com.ford.labs.retroquest.email;
 
 import com.ford.labs.retroquest.exception.EmailNotAssociatedWithAnyTeamsException;
 import com.ford.labs.retroquest.exception.TeamDoesNotExistException;
+import com.ford.labs.retroquest.password_reset_token.PasswordResetToken;
+import com.ford.labs.retroquest.password_reset_token.PasswordResetTokenService;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamService;
-import com.ford.labs.retroquest.team.password.PasswordResetToken;
-import com.ford.labs.retroquest.team.password.PasswordResetTokenService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.web.bind.annotation.PostMapping;

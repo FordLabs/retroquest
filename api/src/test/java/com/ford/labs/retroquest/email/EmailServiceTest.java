@@ -18,7 +18,7 @@
 package com.ford.labs.retroquest.email;
 
 import com.ford.labs.retroquest.team.Team;
-import com.ford.labs.retroquest.team.password.PasswordResetToken;
+import com.ford.labs.retroquest.password_reset_token.PasswordResetToken;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
