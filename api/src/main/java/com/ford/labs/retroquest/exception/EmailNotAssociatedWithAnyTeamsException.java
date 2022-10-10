@@ -15,18 +15,7 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.team;
+package com.ford.labs.retroquest.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder(toBuilder=true)
-public class RequestPasswordResetRequest {
-    private String teamName;
-    private String email;
+public class EmailNotAssociatedWithAnyTeamsException extends RuntimeException {
 }

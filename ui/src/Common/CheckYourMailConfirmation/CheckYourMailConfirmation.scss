@@ -17,13 +17,9 @@
 
 @use '../../Styles/main';
 
-.password-reset-request-page {
-	.password-reset-description {
-		margin-bottom: 0;
-
-		color: main.$dark-gray;
-		font-weight: bold;
-		font-size: 1rem;
+.check-your-mail-confirmation {
+	.auth-sub-heading {
+		display: none;
 	}
 
 	.paragraph-1-container {
@@ -37,6 +33,8 @@
 		}
 
 		.paragraph-1 {
+			flex-basis: fit-content;
+			flex-basis: -moz-fit-content;
 			margin-top: 1rem;
 
 			color: main.$teal;
@@ -52,11 +50,7 @@
 }
 
 @include main.dark-theme {
-	.password-reset-request-page {
-		.password-reset-description {
-			color: main.$light-gray;
-		}
-
+	.check-your-mail-confirmation {
 		.paragraph-1 {
 			color: main.$sea-foam;
 		}

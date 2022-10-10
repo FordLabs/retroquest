@@ -24,7 +24,10 @@ import LinkSecondary from 'Common/LinkSecondary/LinkSecondary';
 import LinkTertiary from 'Common/LinkTertiary/LinkTertiary';
 import useAuth from 'Hooks/useAuth';
 import useTeamFromRoute from 'Hooks/useTeamFromRoute';
-import { CREATE_TEAM_PAGE_PATH, PASSWORD_RESET_PATH } from 'RouteConstants';
+import {
+	CREATE_TEAM_PAGE_PATH,
+	PASSWORD_RESET_REQUEST_PATH,
+} from 'RouteConstants';
 import TeamService from 'Services/Api/TeamService';
 
 import './LoginPage.scss';
@@ -81,7 +84,7 @@ function LoginPage(): JSX.Element {
 					validateInput={false}
 				/>
 			</Form>
-			<LinkTertiary to={PASSWORD_RESET_PATH}>
+			<LinkTertiary to={PASSWORD_RESET_REQUEST_PATH}>
 				Forgot your login info?
 			</LinkTertiary>
 			<HorizontalRuleWithText text="or" />

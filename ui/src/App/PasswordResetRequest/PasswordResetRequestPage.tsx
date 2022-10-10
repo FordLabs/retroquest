@@ -15,36 +15,27 @@
  * limitations under the License.
  */
 import React, { useEffect, useState } from 'react';
-import CheckedCheckboxIcon from 'Assets/CheckedCheckboxIcon';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import Form from 'Common/AuthTemplate/Form/Form';
+import CheckYourMailConfirmation from 'Common/CheckYourMailConfirmation/CheckYourMailConfirmation';
 import InputEmail from 'Common/InputEmail/InputEmail';
 import InputTeamName from 'Common/InputTeamName/InputTeamName';
-import LinkPrimary from 'Common/LinkPrimary/LinkPrimary';
-import { useRecoilValue } from 'recoil';
-import { LOGIN_PAGE_PATH } from 'RouteConstants';
+import LinkTertiary from 'Common/LinkTertiary/LinkTertiary';
 import ConfigurationService from 'Services/Api/ConfigurationService';
-import TeamService from 'Services/Api/TeamService';
-import { ThemeState } from 'State/ThemeState';
-import Theme from 'Types/Theme';
-
-import './PasswordResetRequestPage.scss';
+import EmailService from 'Services/Api/EmailService';
 
 function PasswordResetRequestPage(): JSX.Element {
 	const [emailFromAddress, setEmailFromAddress] = useState<string>('');
-	const [requestSent, setRequestSent] = useState<boolean>(false);
+	const [emailSent, setEmailSent] = useState<boolean>(false);
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
 	const [teamName, setTeamName] = useState<string>('');
 	const [email, setEmail] = useState<string>('');
 
-	const theme = useRecoilValue(ThemeState);
-	const checkboxIconColor = theme === Theme.DARK ? '#1abc9c' : '#16a085';
-
 	function submitRequest() {
 		if (!!teamName && !!email) {
-			TeamService.sendPasswordResetLink(teamName, email)
-				.then(() => setRequestSent(true))
+			EmailService.sendPasswordResetEmail(teamName, email)
+				.then(() => setEmailSent(true))
 				.catch(() =>
 					setErrorMessages([
 						'Team name or email is incorrect. Please try again.',
@@ -67,15 +58,15 @@ function PasswordResetRequestPage(): JSX.Element {
 
 	return (
 		<>
-			{!requestSent && (
+			{!emailSent && (
 				<AuthTemplate
 					header="Reset your Password"
 					subHeader={
-						<p className="password-reset-description">
+						<>
 							Enter the Team Name <u>and</u> email associated with your team's
 							account and we’ll send an email with instructions to reset your
 							password.
-						</p>
+						</>
 					}
 					className="password-reset-request-page"
 					showGithubLink={false}
@@ -103,31 +94,16 @@ function PasswordResetRequestPage(): JSX.Element {
 							validateInput={false}
 						/>
 					</Form>
+					<LinkTertiary to="/recover-team-name">
+						I don't remember my team name
+					</LinkTertiary>
 				</AuthTemplate>
 			)}
-			{requestSent && (
-				<AuthTemplate
-					header="Check your Mail!"
-					className="password-reset-request-page"
-					showGithubLink={false}
-				>
-					<div className="paragraph-1-container">
-						<CheckedCheckboxIcon
-							color={checkboxIconColor}
-							className="checkbox-icon"
-						/>
-						<p className="paragraph-1">
-							We’ve sent an email to {email} with password reset instructions.
-						</p>
-					</div>
-					<p className="paragraph-2">
-						If an email doesn't show up soon, check your spam folder. We sent it
-						from {emailFromAddress}.
-					</p>
-					<LinkPrimary className="login-button-link" to={LOGIN_PAGE_PATH}>
-						Return to Login
-					</LinkPrimary>
-				</AuthTemplate>
+			{emailSent && (
+				<CheckYourMailConfirmation
+					paragraph1={`We’ve sent an email to ${email} with password reset instructions.`}
+					paragraph2={`If an email doesn't show up soon, check your spam folder. We sent it from ${emailFromAddress}.`}
+				/>
 			)}
 		</>
 	);

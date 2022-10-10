@@ -30,8 +30,8 @@ import '@testing-library/cypress/add-commands';
 
 import { getRetroPagePathWithTeamId } from '../../src/RouteConstants';
 import {
-	CREATE_TEAM_API_PATH,
 	LOGIN_API_PATH,
+	TEAM_API_PATH,
 } from '../../src/Services/Api/ApiConstants';
 
 import TeamCredentials from './types/teamCredentials';
@@ -43,7 +43,7 @@ Cypress.Commands.add(
 	({ teamName, password, email }: TeamCredentials) => {
 		cy.log('**Creating Team via api**');
 		cy.request({
-			url: CREATE_TEAM_API_PATH,
+			url: TEAM_API_PATH,
 			failOnStatusCode: false,
 			method: 'POST',
 			body: {
