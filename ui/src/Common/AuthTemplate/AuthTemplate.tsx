@@ -46,9 +46,14 @@ export default function AuthTemplate(props: AuthTemplateProps): JSX.Element {
 				<RetroQuestLogo />
 				<div className="auth-template-header">
 					<h2 className="auth-heading">{header}</h2>
-					<span className="auth-sub-heading">{subHeader}</span>
+					<p className="auth-sub-heading">{subHeader}</p>
 				</div>
-				<div className="auth-template-content">{children}</div>
+				<div
+					className="auth-template-content"
+					data-testid="authTemplateContent"
+				>
+					{children}
+				</div>
 				<div className="auth-template-footer">
 					{showGithubLink && (
 						<a

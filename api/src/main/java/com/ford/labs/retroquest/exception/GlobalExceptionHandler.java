@@ -99,6 +99,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         // Used by Spring for Controller Advice
     }
 
+    @ExceptionHandler(EmailNotAssociatedWithAnyTeamsException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "This email is not associated with any RetroQuest team.")
+    public void emailNotAssociatedWithAnyTeamsExceptionHandler() {
+        // Used by Spring for Controller Advice
+    }
+
     @ExceptionHandler(ThoughtNotFoundException.class)
     public ResponseEntity<String> thoughtNotFoundExceptionHandler(ThoughtNotFoundException thoughtNotFoundException) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(thoughtNotFoundException.getMessage());

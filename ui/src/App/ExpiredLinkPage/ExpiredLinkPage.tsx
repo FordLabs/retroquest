@@ -20,7 +20,7 @@ import ErrorStopSignIcon from 'Assets/ErrorStopSignIcon';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import LinkPrimary from 'Common/LinkPrimary/LinkPrimary';
 import { useRecoilValue } from 'recoil';
-import { PASSWORD_RESET_PATH } from 'RouteConstants';
+import { PASSWORD_RESET_REQUEST_PATH } from 'RouteConstants';
 import PasswordResetTokenService from 'Services/Api/PasswordResetTokenService';
 import { ThemeState } from 'State/ThemeState';
 import Theme from 'Types/Theme';
@@ -58,7 +58,10 @@ function ExpiredLinkPage() {
 			<p className="paragraph-2">
 				Fear not! Click here to request a fresh, new reset link.
 			</p>
-			<LinkPrimary to={PASSWORD_RESET_PATH} className="reset-password-link">
+			<LinkPrimary
+				to={PASSWORD_RESET_REQUEST_PATH}
+				className="reset-password-link"
+			>
 				Reset my Password
 			</LinkPrimary>
 		</AuthTemplate>

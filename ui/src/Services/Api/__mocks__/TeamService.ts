@@ -32,7 +32,6 @@ const TeamService = {
 	getCSV: jest.fn().mockResolvedValue('column 1, column 2'),
 	updateEmailsWithResetToken: jest.fn().mockResolvedValue(''),
 	setPassword: jest.fn().mockResolvedValue(''),
-	sendPasswordResetLink: jest.fn().mockResolvedValue(''),
 	updateTeamEmailAddresses: jest.fn().mockResolvedValue(''),
 };
 

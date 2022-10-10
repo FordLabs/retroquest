@@ -16,7 +16,6 @@
  */
 package com.ford.labs.retroquest.email;
 
-import com.ford.labs.retroquest.team.RequestPasswordResetRequest;
 import com.ford.labs.retroquest.password_reset_token.PasswordResetToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +24,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class EmailService {
@@ -61,24 +61,39 @@ public class EmailService {
 		}
 	}
 
-	public String getPasswordResetMessage(
+	public String getPasswordResetEmailMessage(
 			PasswordResetToken passwordResetToken,
 			RequestPasswordResetRequest requestPasswordResetRequest
 	) {
 		return (
-			"Hey there! \n" +
+			"Hey there! \n\n" +
 			"You recently requested to reset your password for your RetroQuest account " +
 			requestPasswordResetRequest.getTeamName() +
 			" associated with your email account " +
 			requestPasswordResetRequest.getEmail() +
-			". No changes have been made to the account yet. \r\n" +
-			"Use the link below to reset your password. This link is only valid for the next 10 minutes. \r\n" +
+			". No changes have been made to the account yet. \r\n\n" +
+			"Use the link below to reset your password. This link is only valid for the next 10 minutes. \r\n\n" +
 			appBaseUrl +
 			"/password/reset?token=" +
 			passwordResetToken.getResetToken() +
-			"\r\n" +
-			"Thanks, \r\n" +
+			"\r\n\nThanks, \r\n" +
 			"The RetroQuest Team \r\n"
 		);
+	}
+
+	public String getTeamNameRecoveryEmailMessage(String recoveryEmail, List<String> teamNamesAssociatedWithEmail) {
+		StringBuilder message = new StringBuilder(
+			"Hey there! \n" +
+			"We’ve received a request to send you the RetroQuest name(s) associated with your email (" +
+			recoveryEmail +
+			").\r\n\n"
+		);
+
+		for (String teamName : teamNamesAssociatedWithEmail) {
+			message.append(teamName).append("\r\n");
+		}
+
+		message.append("\nThanks, \r\nThe RetroQuest Team \r\n");
+		return message.toString();
 	}
 }

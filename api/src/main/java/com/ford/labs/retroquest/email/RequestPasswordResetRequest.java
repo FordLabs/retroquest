@@ -15,21 +15,18 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.team;
+package com.ford.labs.retroquest.email;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-@Repository
-public interface TeamRepository extends JpaRepository<Team, String> {
-    Optional<Team> findTeamByNameIgnoreCase(String name);
-    Optional<Team> findTeamByUri(String uri);
-
-    List<Team> findTeamByEmailIgnoreCaseOrSecondaryEmailIgnoreCase(String email, String secondaryEmail);
-
-    long countByLastLoginDateBetween(LocalDate start, LocalDate end);
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder(toBuilder=true)
+public class RequestPasswordResetRequest {
+    private String teamName;
+    private String email;
 }

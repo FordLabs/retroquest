@@ -21,13 +21,18 @@ import Modal from 'Common/Modal/Modal';
 import { useRecoilValue } from 'recoil';
 import { getThemeClassFromUserSettings, ThemeState } from 'State/ThemeState';
 
-import { EXPIRED_LINK_PATH, PASSWORD_RESET_PATH } from '../RouteConstants';
+import {
+	EXPIRED_LINK_PATH,
+	PASSWORD_RESET_REQUEST_PATH,
+	RECOVER_TEAM_NAME_PATH,
+} from '../RouteConstants';
 
 import ChangeTeamDetailsPage from './ChangeTeamDetails/ChangeTeamDetailsPage';
 import CreateTeamPage from './CreateTeam/CreateTeamPage';
 import ExpiredLinkPage from './ExpiredLinkPage/ExpiredLinkPage';
 import LoginPage from './Login/LoginPage';
 import PasswordResetRequestPage from './PasswordResetRequest/PasswordResetRequestPage';
+import RecoverTeamNamePage from './RecoverTeamName/RecoverTeamNamePage';
 import ResetPasswordPage from './ResetPassword/ResetPasswordPage';
 import ArchivesPage from './Team/Archives/ArchivesPage';
 import RadiatorPage from './Team/Radiator/RadiatorPage';
@@ -56,8 +61,12 @@ function App() {
 				<Route path="/password/reset" element={<ResetPasswordPage />} />
 				<Route path={EXPIRED_LINK_PATH} element={<ExpiredLinkPage />} />
 				<Route
-					path={PASSWORD_RESET_PATH}
+					path={PASSWORD_RESET_REQUEST_PATH}
 					element={<PasswordResetRequestPage />}
+				/>
+				<Route
+					path={RECOVER_TEAM_NAME_PATH}
+					element={<RecoverTeamNamePage />}
 				/>
 				<Route path="/team/:teamId" element={<TeamPages />}>
 					<Route path="" element={<RetroPage />} />

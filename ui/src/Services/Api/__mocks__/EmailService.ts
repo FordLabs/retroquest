@@ -14,15 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import EnvironmentConfig from 'Types/EnvironmentConfig';
-
-export const mockEnvironmentConfig: EnvironmentConfig = {
-	email_from_address: 'mock_email_from_address@email.com',
+const EmailService = {
+	sendPasswordResetEmail: jest.fn().mockResolvedValue(''),
+	sendTeamNameRecoveryEmail: jest.fn().mockResolvedValue(''),
 };
 
-const configurationService = {
-	get: jest.fn().mockResolvedValue(mockEnvironmentConfig),
-};
-
-export default configurationService;
+export default EmailService;

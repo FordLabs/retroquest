@@ -15,14 +15,29 @@
  * limitations under the License.
  */
 
-import EnvironmentConfig from 'Types/EnvironmentConfig';
+import axios, { AxiosResponse } from 'axios';
 
-export const mockEnvironmentConfig: EnvironmentConfig = {
-	email_from_address: 'mock_email_from_address@email.com',
+import {
+	EMAIL_PASSWORD_REQUEST_API_PATH,
+	EMAIL_TEAM_NAME_RECOVERY_API_PATH,
+} from './ApiConstants';
+
+const EmailService = {
+	sendTeamNameRecoveryEmail(recoveryEmail: string): Promise<AxiosResponse> {
+		return axios.post(EMAIL_TEAM_NAME_RECOVERY_API_PATH, {
+			recoveryEmail: recoveryEmail,
+		});
+	},
+
+	sendPasswordResetEmail(
+		teamName: string,
+		email: string
+	): Promise<AxiosResponse> {
+		return axios.post(EMAIL_PASSWORD_REQUEST_API_PATH, {
+			teamName: teamName,
+			email: email,
+		});
+	},
 };
 
-const configurationService = {
-	get: jest.fn().mockResolvedValue(mockEnvironmentConfig),
-};
-
-export default configurationService;
+export default EmailService;
