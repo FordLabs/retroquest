@@ -36,7 +36,7 @@ describe('Change Team Details Page', () => {
 		expect(screen.getByText('Save Changes')).toBeInTheDocument();
 	});
 
-	it('should send emails to the backend on submission', async () => {
+	it('should successfully submit form with optional secondary email', async () => {
 		renderWithToken('');
 		submitValidForm();
 
@@ -48,9 +48,23 @@ describe('Change Team Details Page', () => {
 			)
 		);
 	});
+
+	it('should successfully submit form without optional secondary email', async () => {
+		renderWithToken('');
+		submitValidForm('email1@email1.email1', '');
+
+		await waitFor(() =>
+			expect(TeamService.updateEmailsWithResetToken).toHaveBeenCalledWith(
+				'email1@email1.email1',
+				'',
+				expect.anything()
+			)
+		);
+	});
+
 	it('should send the secret code in the url to the backend on submission', async () => {
 		renderWithToken('ABC123');
-		submitValidForm();
+		submitValidForm('a@b.c', '');
 
 		await waitFor(() =>
 			expect(TeamService.updateEmailsWithResetToken).toHaveBeenCalledWith(
@@ -60,23 +74,81 @@ describe('Change Team Details Page', () => {
 			)
 		);
 	});
+
 	it('should show "Saved!" if the backend returns 200 after submission', async () => {
 		renderWithToken('ABC321');
 		submitValidForm();
 
 		await screen.findByText('Saved!');
 	});
+
+	it('should disable submit button until a valid email is added to the first email field', () => {
+		renderWithToken('');
+		expect(getSubmitButton()).toBeDisabled();
+		typeIntoEmail1Field('a@');
+		expect(getSubmitButton()).toBeDisabled();
+		typeIntoEmail1Field('a@c');
+		expect(getSubmitButton()).toBeEnabled();
+	});
+
+	it('should have email 1 set to required', () => {
+		renderWithToken('ABC123');
+		expect(getEmail1InputField()).toHaveAttribute('required', '');
+	});
+
+	it('should not have email 2 set to required', () => {
+		renderWithToken('ABC123');
+		expect(getEmail2InputField()).not.toHaveAttribute('required', '');
+	});
+
+	describe('Form Errors', () => {
+		beforeEach(() => {
+			renderWithToken('ABC123');
+		});
+
+		it('should warn user when primary email is not valid', () => {
+			const invalidEmail = 'Aaaaa.com';
+			typeIntoEmail1Field(invalidEmail);
+
+			expect(screen.getByText('Valid email address required')).toBeDefined();
+		});
+
+		it('should warn user when secondary email is typed in and not valid', () => {
+			const invalidEmail = 'Aaaaa.com';
+			typeIntoEmail2Field(invalidEmail);
+
+			expect(screen.getByText('Valid email address required')).toBeDefined();
+		});
+	});
 });
 
-function submitValidForm() {
-	fireEvent.change(getEmail1InputField(), {
-		target: { value: 'email1@email1.email1' },
-	});
+function submitValidForm(
+	email1 = 'email1@email1.email1',
+	email2 = 'email2@email2.email2'
+) {
+	typeIntoEmail1Field(email1);
+	typeIntoEmail2Field(email2);
 	fireEvent.change(getEmail2InputField(), {
-		target: { value: 'email2@email2.email2' },
+		target: { value: email2 },
 	});
 
-	fireEvent.click(screen.getByText('Save Changes'));
+	fireEvent.click(getSubmitButton());
+}
+
+function typeIntoEmail1Field(email: string) {
+	fireEvent.change(getEmail1InputField(), {
+		target: { value: email },
+	});
+}
+
+function typeIntoEmail2Field(email: string) {
+	fireEvent.change(getEmail2InputField(), {
+		target: { value: email },
+	});
+}
+
+function getSubmitButton() {
+	return screen.getByText('Save Changes');
 }
 
 function getEmail1InputField() {

@@ -24,20 +24,36 @@ import TeamService from 'Services/Api/TeamService';
 
 import './ChangeTeamDetailsPage.scss';
 
+const blankValueWithValidity = { value: '', validity: false };
+
+interface ValueAndValidity {
+	value: string;
+	validity: boolean;
+}
+
 function ChangeTeamDetailsPage(): JSX.Element {
 	const { search } = useLocation();
 
-	const [email, setEmail] = useState<string>('');
-	const [secondaryEmail, setSecondaryEmail] = useState<string>('');
+	const [email, setEmail] = useState<ValueAndValidity>(blankValueWithValidity);
+	const [secondaryEmail, setSecondaryEmail] = useState<ValueAndValidity>({
+		value: '',
+		validity: true,
+	});
 	const [shouldShowSaved, setShouldShowSaved] = useState(false);
 
 	function submitEmails() {
 		if (email) {
 			const token = new URLSearchParams(search).get('token') || '';
-			TeamService.updateEmailsWithResetToken(email, secondaryEmail, token).then(
-				() => setShouldShowSaved(true)
-			);
+			TeamService.updateEmailsWithResetToken(
+				email.value,
+				secondaryEmail.value,
+				token
+			).then(() => setShouldShowSaved(true));
 		}
+	}
+
+	function disableSubmitButton(): boolean {
+		return !email.validity || !secondaryEmail.validity;
 	}
 
 	return (
@@ -49,20 +65,28 @@ function ChangeTeamDetailsPage(): JSX.Element {
 					Edit the current details in the boxes below and press “Save Changes”
 					to update your team’s email addresses (for password recovery).
 				</p>
-				<Form onSubmit={submitEmails} submitButtonText="Save Changes">
+				<Form
+					onSubmit={submitEmails}
+					disableSubmitBtn={disableSubmitButton()}
+					submitButtonText="Save Changes"
+				>
 					<InputEmail
 						label="Email 1"
-						onChange={setEmail}
-						value={email}
+						onChange={(value, validity) => {
+							setEmail({ value: value, validity: validity });
+						}}
+						value={email.value}
 						id="email1Id"
 						required
 					/>
 					<InputEmail
 						label="Second Teammate’s Email (optional)"
-						onChange={setSecondaryEmail}
-						value={secondaryEmail}
+						onChange={(value, validity) => {
+							setSecondaryEmail({ value: value, validity: validity });
+						}}
+						value={secondaryEmail.value}
 						id="email2Id"
-						required
+						required={false}
 					/>
 					{shouldShowSaved && <div className="success-indicator">Saved!</div>}
 				</Form>
