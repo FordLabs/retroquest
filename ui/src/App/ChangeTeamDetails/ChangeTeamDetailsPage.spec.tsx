@@ -79,7 +79,14 @@ describe('Change Team Details Page', () => {
 		renderWithToken('ABC321');
 		submitValidForm();
 
-		await screen.findByText('Saved!');
+		expect(
+			await screen.findByText('Board Owners Updated!')
+		).toBeInTheDocument();
+		expect(screen.getByText('Return to Login')).toHaveAttribute(
+			'href',
+			'/login'
+		);
+		expect(screen.queryByText('Update Board Owners')).toBeNull();
 	});
 
 	it('should disable submit button until a valid email is added to the first email field', () => {

@@ -20,6 +20,8 @@ import { useLocation } from 'react-router-dom';
 import Form from 'Common/AuthTemplate/Form/Form';
 import Header from 'Common/Header/Header';
 import InputEmail from 'Common/InputEmail/InputEmail';
+import LinkPrimary from 'Common/LinkPrimary/LinkPrimary';
+import { LOGIN_PAGE_PATH } from 'RouteConstants';
 import TeamService from 'Services/Api/TeamService';
 
 import './ChangeTeamDetailsPage.scss';
@@ -39,7 +41,7 @@ function ChangeTeamDetailsPage(): JSX.Element {
 		value: '',
 		validity: true,
 	});
-	const [shouldShowSaved, setShouldShowSaved] = useState(false);
+	const [formSubmitted, setFormSubmitted] = useState(false);
 
 	function submitEmails() {
 		if (email) {
@@ -48,7 +50,7 @@ function ChangeTeamDetailsPage(): JSX.Element {
 				email.value,
 				secondaryEmail.value,
 				token
-			).then(() => setShouldShowSaved(true));
+			).then(() => setFormSubmitted(true));
 		}
 	}
 
@@ -59,38 +61,48 @@ function ChangeTeamDetailsPage(): JSX.Element {
 	return (
 		<div className="change-team-details-page">
 			<Header name="RetroQuest" />
-			<div className="change-team-details-form">
-				<h1>Update Board Owners</h1>
-				<p>
-					Edit the current details in the boxes below and press “Save Changes”
-					to update your team’s email addresses (for password recovery).
-				</p>
-				<Form
-					onSubmit={submitEmails}
-					disableSubmitBtn={disableSubmitButton()}
-					submitButtonText="Save Changes"
-				>
-					<InputEmail
-						label="Email 1"
-						onChange={(value, validity) => {
-							setEmail({ value: value, validity: validity });
-						}}
-						value={email.value}
-						id="email1Id"
-						required
-					/>
-					<InputEmail
-						label="Second Teammate’s Email (optional)"
-						onChange={(value, validity) => {
-							setSecondaryEmail({ value: value, validity: validity });
-						}}
-						value={secondaryEmail.value}
-						id="email2Id"
-						required={false}
-					/>
-					{shouldShowSaved && <div className="success-indicator">Saved!</div>}
-				</Form>
-			</div>
+			{!formSubmitted && (
+				<div className="change-team-details-form">
+					<h1>Update Board Owners</h1>
+					<p>
+						Edit the current details in the boxes below and press “Save Changes”
+						to update your team’s email addresses (for password recovery).
+					</p>
+					<Form
+						onSubmit={submitEmails}
+						disableSubmitBtn={disableSubmitButton()}
+						submitButtonText="Save Changes"
+					>
+						<InputEmail
+							label="Email 1"
+							onChange={(value, validity) => {
+								setEmail({ value: value, validity: validity });
+							}}
+							value={email.value}
+							id="email1Id"
+							required
+						/>
+						<InputEmail
+							label="Second Teammate’s Email (optional)"
+							onChange={(value, validity) => {
+								setSecondaryEmail({ value: value, validity: validity });
+							}}
+							value={secondaryEmail.value}
+							id="email2Id"
+							required={false}
+						/>
+					</Form>
+				</div>
+			)}
+			{formSubmitted && (
+				<div className="change-team-details-confirmation">
+					<h1>Board Owners Updated!</h1>
+					<p className="description">
+						All set! Your board owners have been changed.
+					</p>
+					<LinkPrimary to={LOGIN_PAGE_PATH}>Return to Login</LinkPrimary>
+				</div>
+			)}
 		</div>
 	);
 }

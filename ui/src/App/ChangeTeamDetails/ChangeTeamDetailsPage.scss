@@ -21,4 +21,19 @@
 	.change-team-details-form {
 		@include main.white-form;
 	}
+
+	.change-team-details-confirmation {
+		@include main.white-form;
+		max-width: 36.5rem;
+
+		.description {
+			margin: 1rem 0 2rem;
+
+			color: main.$teal;
+			font-weight: 600;
+			font-size: 20px;
+			line-height: 25px;
+			text-align: center;
+		}
+	}
 }
