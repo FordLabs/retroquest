@@ -94,7 +94,7 @@ describe('Reset Password Page', () => {
 		submitValidForm();
 
 		await waitFor(() =>
-			expect(TeamService.setPassword).toHaveBeenCalledWith(
+			expect(TeamService.setPasswordWithResetToken).toHaveBeenCalledWith(
 				'P@ssw0rd',
 				expect.anything()
 			)
@@ -106,7 +106,7 @@ describe('Reset Password Page', () => {
 		submitValidForm();
 
 		await waitFor(() =>
-			expect(TeamService.setPassword).toHaveBeenCalledWith(
+			expect(TeamService.setPasswordWithResetToken).toHaveBeenCalledWith(
 				expect.anything(),
 				'ABC123'
 			)
@@ -116,7 +116,7 @@ describe('Reset Password Page', () => {
 	it('should not send to the API if there is no password', () => {
 		renderWithToken('');
 		submitValidForm('');
-		expect(TeamService.setPassword).toHaveBeenCalledTimes(0);
+		expect(TeamService.setPasswordWithResetToken).toHaveBeenCalledTimes(0);
 	});
 
 	const confirmationMessage = 'All set! Your password has been changed.';

@@ -17,6 +17,8 @@
 
 package com.ford.labs.retroquest.team;
 
+import com.ford.labs.retroquest.email_reset_token.EmailResetToken;
+import com.ford.labs.retroquest.email_reset_token.EmailResetTokenRepository;
 import com.ford.labs.retroquest.exception.BadResetTokenException;
 import com.ford.labs.retroquest.security.JwtBuilder;
 import com.ford.labs.retroquest.password_reset_token.PasswordResetToken;
@@ -25,7 +27,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -50,17 +51,19 @@ public class TeamController {
     private final JwtBuilder jwtBuilder;
     private final PasswordResetTokenRepository passwordResetRepository;
 
+    private final EmailResetTokenRepository emailResetTokenRepository;
     private final PasswordEncoder passwordEncoder;
 
     public TeamController(
             TeamService teamService,
             JwtBuilder jwtBuilder,
             PasswordResetTokenRepository passwordResetRepository,
-            PasswordEncoder passwordEncoder
+            EmailResetTokenRepository emailResetTokenRepository, PasswordEncoder passwordEncoder
     ) {
         this.teamService = teamService;
         this.jwtBuilder = jwtBuilder;
         this.passwordResetRepository = passwordResetRepository;
+        this.emailResetTokenRepository = emailResetTokenRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -103,11 +106,26 @@ public class TeamController {
     }
 
     @PostMapping("/password/reset")
+    @Operation(description = "Use password reset token to update team password")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public void resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
         PasswordResetToken passwordResetToken = passwordResetRepository.findByResetToken(resetPasswordRequest.getResetToken());
         if(passwordResetToken == null || passwordResetToken.isExpired()) throw new BadResetTokenException();
         teamService.changePassword(passwordResetToken.getTeam(), passwordEncoder.encode(resetPasswordRequest.getPassword()));
         passwordResetRepository.delete(passwordResetToken);
+    }
+
+    @PostMapping("/email/reset")
+    @Operation(description = "Use email reset token to update team email(s)")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
+    public void changeTeamEmailsWithEmailResetToken(@RequestBody ResetEmailsRequest resetEmailsRequest) {
+        EmailResetToken emailResetToken = emailResetTokenRepository.findByResetToken(resetEmailsRequest.getResetToken());
+        if(emailResetToken == null || emailResetToken.isExpired()) throw new BadResetTokenException();
+        teamService.updateTeamEmailAddresses(
+                emailResetToken.getTeam().getId(),
+                new UpdateTeamEmailAddressesRequest(resetEmailsRequest.getEmail(), resetEmailsRequest.getSecondaryEmail())
+        );
+        emailResetTokenRepository.delete(emailResetToken);
     }
 
     @GetMapping(value = "/team/{teamId}/csv", produces = "application/board.csv")

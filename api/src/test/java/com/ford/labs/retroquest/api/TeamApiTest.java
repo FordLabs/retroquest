@@ -19,6 +19,8 @@ package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.column.ColumnRepository;
+import com.ford.labs.retroquest.email_reset_token.EmailResetToken;
+import com.ford.labs.retroquest.email_reset_token.EmailResetTokenRepository;
 import com.ford.labs.retroquest.team.*;
 import com.ford.labs.retroquest.password_reset_token.PasswordResetToken;
 import com.ford.labs.retroquest.password_reset_token.PasswordResetTokenRepository;
@@ -46,7 +48,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TeamApiTest extends ApiTestBase {
 
     @Autowired
-    private PasswordResetTokenRepository passwordResetRepository;
+    private PasswordResetTokenRepository passwordResetTokenRepository;
+
+    @Autowired
+    private EmailResetTokenRepository emailResetTokenRepository;
 
     @Autowired
     private TeamRepository teamRepository;
@@ -67,6 +72,9 @@ class TeamApiTest extends ApiTestBase {
     private static final String VALID_EMAIL = "e@ma.il";
     private CreateTeamRequest.CreateTeamRequestBuilder validTeamRequestBuilder;
 
+    private final String changeEmailsWithResetTokenPath = "/api/email/reset";
+    private final String changePasswordWithResetTokenPath = "/api/password/reset";
+
     @BeforeEach
     void beforeClass() {
         clean();
@@ -78,10 +86,10 @@ class TeamApiTest extends ApiTestBase {
 
     @AfterEach
     void clean() {
-        passwordResetRepository.deleteAllInBatch();
+        passwordResetTokenRepository.deleteAllInBatch();
         teamRepository.deleteAllInBatch();
         columnRepository.deleteAllInBatch();
-        assertThat(passwordResetRepository.count()).isZero();
+        assertThat(passwordResetTokenRepository.count()).isZero();
         assertThat(teamRepository.count()).isZero();
         assertThat(columnRepository.count()).isZero();
     }
@@ -217,9 +225,9 @@ class TeamApiTest extends ApiTestBase {
 
         PasswordResetToken passwordResetToken = new PasswordResetToken();
         passwordResetToken.setTeam(expectedResetTeam);
-        passwordResetRepository.save(passwordResetToken);
+        passwordResetTokenRepository.save(passwordResetToken);
 
-        mockMvc.perform(post("/api/password/reset")
+        mockMvc.perform(post(changePasswordWithResetTokenPath)
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(
                                 new ResetPasswordRequest("Password1", passwordResetToken.getResetToken()))
@@ -230,7 +238,7 @@ class TeamApiTest extends ApiTestBase {
         Optional<Team> actualTeam = teamRepository.findTeamByUri("teamuri");
         assertThat(actualTeam.isPresent()).isTrue();
         assertThat(passwordEncoder.matches("Password1", actualTeam.get().getPassword())).isTrue();
-        assertThat(passwordResetRepository.count()).isZero();
+        assertThat(passwordResetTokenRepository.count()).isZero();
     }
 
     @Test
@@ -240,9 +248,9 @@ class TeamApiTest extends ApiTestBase {
 
         PasswordResetToken passwordResetToken = new PasswordResetToken();
         passwordResetToken.setTeam(expectedResetTeam);
-        passwordResetRepository.save(passwordResetToken);
+        passwordResetTokenRepository.save(passwordResetToken);
 
-        mockMvc.perform(post("/api/password/reset")
+        mockMvc.perform(post(changePasswordWithResetTokenPath)
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(
                                 new ResetPasswordRequest("Password1", UUID.randomUUID().toString()))
@@ -264,9 +272,104 @@ class TeamApiTest extends ApiTestBase {
         PasswordResetToken passwordResetToken = new PasswordResetToken();
         passwordResetToken.setTeam(expectedResetTeam);
         passwordResetToken.setDateCreated(LocalDateTime.MIN);
-        passwordResetRepository.save(passwordResetToken);
+        passwordResetTokenRepository.save(passwordResetToken);
 
-        mockMvc.perform(post("/api/password/reset")
+        mockMvc.perform(post(changePasswordWithResetTokenPath)
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(
+                                new ResetPasswordRequest("Password1", passwordResetToken.getResetToken()))
+                        )
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(status().reason("Reset token incorrect or expired."));
+
+        Optional<Team> actualTeam = teamRepository.findTeamByUri("teamuri");
+        assertThat(actualTeam.isPresent()).isTrue();
+        assertThat(actualTeam.get().getPassword()).isEqualTo("%$&357");
+    }
+
+    @Test
+    void change_emails_with_email_reset_token__should_change_both_emails_and_consume_token_when_reset_token_is_valid() throws Exception {
+        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
+        teamRepository.save(expectedResetTeam);
+
+        EmailResetToken emailResetToken = new EmailResetToken();
+        emailResetToken.setTeam(expectedResetTeam);
+        emailResetTokenRepository.save(emailResetToken);
+
+        mockMvc.perform(post(changeEmailsWithResetTokenPath)
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(
+                                new ResetEmailsRequest("new@email.com", "secondary@m.co", emailResetToken.getResetToken()))
+                        )
+                )
+                .andExpect(status().isOk());
+
+        Optional<Team> actualTeam = teamRepository.findTeamByUri("teamuri");
+        assertThat(actualTeam.isPresent()).isTrue();
+        assertThat(actualTeam.get().getEmail()).isEqualTo("new@email.com");
+        assertThat(actualTeam.get().getSecondaryEmail()).isEqualTo("secondary@m.co");
+        assertThat(emailResetTokenRepository.count()).isZero();
+    }
+
+    @Test
+    void change_emails_with_email_reset_token__should_change_one_email_and_consume_token_when_reset_token_is_valid() throws Exception {
+        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
+        teamRepository.save(expectedResetTeam);
+
+        EmailResetToken emailResetToken = new EmailResetToken();
+        emailResetToken.setTeam(expectedResetTeam);
+        emailResetTokenRepository.save(emailResetToken);
+
+        mockMvc.perform(post(changeEmailsWithResetTokenPath)
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(
+                                new ResetEmailsRequest("new@email.com", "", emailResetToken.getResetToken()))
+                        )
+                )
+                .andExpect(status().isOk());
+
+        Optional<Team> actualTeam = teamRepository.findTeamByUri("teamuri");
+        assertThat(actualTeam.isPresent()).isTrue();
+        assertThat(actualTeam.get().getEmail()).isEqualTo("new@email.com");
+        assertThat(actualTeam.get().getSecondaryEmail()).isEqualTo("");
+        assertThat(emailResetTokenRepository.count()).isZero();
+    }
+
+    @Test
+    void change_emails_with_email_reset_token__should_not_change_emails_when_reset_token_is_not_valid() throws Exception {
+        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
+        teamRepository.save(expectedResetTeam);
+
+        PasswordResetToken passwordResetToken = new PasswordResetToken();
+        passwordResetToken.setTeam(expectedResetTeam);
+        passwordResetTokenRepository.save(passwordResetToken);
+
+        mockMvc.perform(post(changeEmailsWithResetTokenPath)
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(
+                                new ResetPasswordRequest("Password1", UUID.randomUUID().toString()))
+                        )
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(status().reason("Reset token incorrect or expired."));
+
+        Optional<Team> actualTeam = teamRepository.findTeamByUri("teamuri");
+        assertThat(actualTeam.isPresent()).isTrue();
+        assertThat(actualTeam.get().getPassword()).isEqualTo("%$&357");
+    }
+
+    @Test
+    void change_emails_with_email_reset_token__should_not_change_emails_when_reset_token_is_expired() throws Exception {
+        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
+        teamRepository.save(expectedResetTeam);
+
+        PasswordResetToken passwordResetToken = new PasswordResetToken();
+        passwordResetToken.setTeam(expectedResetTeam);
+        passwordResetToken.setDateCreated(LocalDateTime.MIN);
+        passwordResetTokenRepository.save(passwordResetToken);
+
+        mockMvc.perform(post(changeEmailsWithResetTokenPath)
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(
                                 new ResetPasswordRequest("Password1", passwordResetToken.getResetToken()))

@@ -40,9 +40,10 @@ function ResetPasswordPage(): JSX.Element {
 
 	function submitNewPassword() {
 		if (newPassword) {
-			TeamService.setPassword(newPassword, passwordResetToken).then(() =>
-				setIsFormSubmitted(true)
-			);
+			TeamService.setPasswordWithResetToken(
+				newPassword,
+				passwordResetToken
+			).then(() => setIsFormSubmitted(true));
 		}
 	}
 
