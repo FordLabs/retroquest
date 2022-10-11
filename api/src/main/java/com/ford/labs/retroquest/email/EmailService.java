@@ -16,6 +16,7 @@
  */
 package com.ford.labs.retroquest.email;
 
+import com.ford.labs.retroquest.email_reset_token.EmailResetToken;
 import com.ford.labs.retroquest.password_reset_token.PasswordResetToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,14 +64,14 @@ public class EmailService {
 
 	public String getPasswordResetEmailMessage(
 			PasswordResetToken passwordResetToken,
-			RequestPasswordResetRequest requestPasswordResetRequest
+			ResetRequest passwordResetRequest
 	) {
 		return (
 			"Hey there! \n\n" +
 			"You recently requested to reset your password for your RetroQuest account " +
-			requestPasswordResetRequest.getTeamName() +
+			passwordResetRequest.getTeamName() +
 			" associated with your email account " +
-			requestPasswordResetRequest.getEmail() +
+			passwordResetRequest.getEmail() +
 			". No changes have been made to the account yet. \r\n\n" +
 			"Use the link below to reset your password. This link is only valid for the next 10 minutes. \r\n\n" +
 			appBaseUrl +
@@ -95,5 +96,20 @@ public class EmailService {
 
 		message.append("\nThanks, \r\nThe RetroQuest Team \r\n");
 		return message.toString();
+	}
+
+	public String getResetTeamEmailMessage(EmailResetToken emailResetToken, ResetRequest emailResetRequest) {
+		return (
+				"Hey there! \n\n" +
+				"Someone from your RetroQuest team, \"" +
+				emailResetRequest.getTeamName() +
+				"\" recently requested to reset the board owner emails. No changes have been made to the account yet. \r\n\n" +
+				"Use the link below to reset your team emails. This link is only valid for the next 10 minutes. \r\n\n" +
+				appBaseUrl +
+				"/email/reset?token=" +
+				emailResetToken.getResetToken() +
+				"\r\n\nThanks, \r\n" +
+				"The RetroQuest Team \r\n"
+		);
 	}
 }

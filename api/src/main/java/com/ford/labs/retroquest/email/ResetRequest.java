@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder=true)
-public class RequestPasswordResetRequest {
+public class ResetRequest {
     private String teamName;
     private String email;
 }

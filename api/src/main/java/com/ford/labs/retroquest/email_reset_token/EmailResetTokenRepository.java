@@ -25,6 +25,8 @@ import javax.transaction.Transactional;
 
 @Repository
 public interface EmailResetTokenRepository extends JpaRepository<EmailResetToken, String> {
+    EmailResetToken findByTeam(Team team);
+
     EmailResetToken findByResetToken(String resetToken);
 
     @Transactional
