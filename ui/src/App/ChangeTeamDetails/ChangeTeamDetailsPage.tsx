@@ -15,14 +15,16 @@
  * limitations under the License.
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Form from 'Common/AuthTemplate/Form/Form';
 import Header from 'Common/Header/Header';
 import InputEmail from 'Common/InputEmail/InputEmail';
 import LinkPrimary from 'Common/LinkPrimary/LinkPrimary';
 import { LOGIN_PAGE_PATH } from 'RouteConstants';
+import EmailResetTokenService from 'Services/Api/EmailResetTokenService';
 import TeamService from 'Services/Api/TeamService';
+import Team from 'Types/Team';
 
 import './ChangeTeamDetailsPage.scss';
 
@@ -35,6 +37,7 @@ interface ValueAndValidity {
 
 function ChangeTeamDetailsPage(): JSX.Element {
 	const { search } = useLocation();
+	const emailResetToken = new URLSearchParams(search).get('token') || '';
 
 	const [email, setEmail] = useState<ValueAndValidity>(blankValueWithValidity);
 	const [secondaryEmail, setSecondaryEmail] = useState<ValueAndValidity>({
@@ -45,11 +48,10 @@ function ChangeTeamDetailsPage(): JSX.Element {
 
 	function submitEmails() {
 		if (email) {
-			const token = new URLSearchParams(search).get('token') || '';
 			TeamService.updateEmailsWithResetToken(
 				email.value,
 				secondaryEmail.value,
-				token
+				emailResetToken
 			).then(() => setFormSubmitted(true));
 		}
 	}
@@ -57,6 +59,16 @@ function ChangeTeamDetailsPage(): JSX.Element {
 	function disableSubmitButton(): boolean {
 		return !email.validity || !secondaryEmail.validity;
 	}
+
+	useEffect(() => {
+		EmailResetTokenService.getTeamByResetToken(emailResetToken).then(
+			(team: Team) => {
+				if (team.email) setEmail({ value: team.email, validity: true });
+				if (team.secondaryEmail)
+					setSecondaryEmail({ value: team.secondaryEmail, validity: true });
+			}
+		);
+	}, [emailResetToken]);
 
 	return (
 		<div className="change-team-details-page">
