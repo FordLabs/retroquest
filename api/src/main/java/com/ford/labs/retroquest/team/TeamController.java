@@ -99,7 +99,7 @@ public class TeamController {
     }
 
     @GetMapping("/team/{teamId}/name")
-    @Operation(summary = "Get a team name given the team id", description = "getTeamName")
+    @Operation(description = "Get a team name given the team id")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public String getTeamName(@PathVariable("teamId") String teamUri) {
         return teamService.getTeamByUri(teamUri).getName();
@@ -130,7 +130,7 @@ public class TeamController {
 
     @GetMapping(value = "/team/{teamId}/csv", produces = "application/board.csv")
     @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
-    @Operation(summary = "downloads a team board", description = "downloadTeamBoard")
+    @Operation(description = "downloads a team board")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public ResponseEntity<byte[]> downloadTeamBoard(@PathVariable("teamId") String teamId) throws IOException {
         var file = teamService.buildCsvFileFromTeam(teamId);
@@ -142,14 +142,14 @@ public class TeamController {
 
     @GetMapping(value = "/team/{teamId}/validate")
     @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
-    @Operation(summary = "Validates a team id", description = "deprecated")
+    @Operation(description = "Validates a team id")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public ResponseEntity<Void> validateTeamId(@PathVariable("teamId") String teamId) {
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/team/login")
-    @Operation(summary = "Logs in a user given a login request", description = "deprecated")
+    @Operation(description = "Logs in a user given a login request")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public ResponseEntity<String> login(@RequestBody @Valid LoginRequest team) {
         var savedTeamEntity = teamService.login(team);
