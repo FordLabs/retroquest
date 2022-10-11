@@ -16,6 +16,7 @@
  */
 package com.ford.labs.retroquest.email_reset_token;
 
+import com.ford.labs.retroquest.exception.BadResetTokenException;
 import com.ford.labs.retroquest.team.Team;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -59,6 +60,7 @@ public class EmailResetTokenController {
     @Operation(description = "Get Team by reset token")
     public Team getTeamByResetToken(@PathVariable("emailResetToken") String emailResetToken) {
         EmailResetToken token = emailResetTokenRepository.findByResetToken(emailResetToken);
+        if (token == null || token.isExpired()) throw new BadResetTokenException();
         return token.getTeam();
     }
 }

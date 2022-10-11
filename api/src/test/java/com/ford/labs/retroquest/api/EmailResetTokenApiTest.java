@@ -118,11 +118,10 @@ class EmailResetTokenApiTest extends ApiTestBase {
     @Test
     void get_team_by_email_reset_token__should_get_team_successfully() throws Exception {
         EmailResetToken emailResetToken = new EmailResetToken();
-        emailResetToken.setDateCreated(LocalDateTime.MIN);
         emailResetToken.setTeam(team);
         emailResetTokenRepository.save(emailResetToken);
 
-        var resultOfGet = mockMvc.perform(get(getTeamByResetTokenPath(emailResetToken)))
+        var resultOfGet = mockMvc.perform(get(getTeamByResetTokenPath(emailResetToken.getResetToken())))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
 
@@ -134,11 +133,38 @@ class EmailResetTokenApiTest extends ApiTestBase {
         assertThat(content).doesNotContain("password");
     }
 
+    @Test
+    void get_team_by_email_reset_token__should_throw_error_when_token_does_not_exist() throws Exception {
+        var resultOfGet = mockMvc.perform(get(getTeamByResetTokenPath("non-existant-reset-token")))
+                .andExpect(status().isBadRequest())
+                .andExpect(status().reason("Reset token incorrect or expired."))
+                .andReturn();
+
+        String content = resultOfGet.getResponse().getContentAsString();
+        assertThat(content).isEmpty();
+    }
+
+    @Test
+    void get_team_by_email_reset_token__should_throw_error_when_token_is_expired() throws Exception {
+        EmailResetToken expiredEmailResetToken = new EmailResetToken();
+        expiredEmailResetToken.setDateCreated(LocalDateTime.MIN);
+        expiredEmailResetToken.setTeam(team);
+        emailResetTokenRepository.save(expiredEmailResetToken);
+
+        var resultOfGet = mockMvc.perform(get(getTeamByResetTokenPath(expiredEmailResetToken.getResetToken())))
+                .andExpect(status().isBadRequest())
+                .andExpect(status().reason("Reset token incorrect or expired."))
+                .andReturn();
+
+        String content = resultOfGet.getResponse().getContentAsString();
+        assertThat(content).isEmpty();
+    }
+
     private String getIsResetTokenValidPath(EmailResetToken emailResetToken) {
         return emailResetTokenRootPath + "/" + emailResetToken.getResetToken() + "/is-valid";
     }
 
-    private String getTeamByResetTokenPath(EmailResetToken emailResetToken) {
-        return emailResetTokenRootPath + "/" + emailResetToken.getResetToken() + "/team";
+    private String getTeamByResetTokenPath(String emailResetToken) {
+        return emailResetTokenRootPath + "/" + emailResetToken + "/team";
     }
 }
