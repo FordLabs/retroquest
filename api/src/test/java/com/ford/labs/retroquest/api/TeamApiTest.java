@@ -72,8 +72,8 @@ class TeamApiTest extends ApiTestBase {
     private static final String VALID_EMAIL = "e@ma.il";
     private CreateTeamRequest.CreateTeamRequestBuilder validTeamRequestBuilder;
 
-    private final String changeEmailsWithResetTokenPath = "/api/email/reset";
-    private final String changePasswordWithResetTokenPath = "/api/password/reset";
+    private final String changeEmailsWithResetTokenPath = "/api/team/email/reset";
+    private final String changePasswordWithResetTokenPath = "/api/team/password/reset";
 
     @BeforeEach
     void beforeClass() {

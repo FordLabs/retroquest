@@ -43,7 +43,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/api/team")
 @Tag(name = "Team Controller", description = "The controller that manages teams")
 public class TeamController {
 
@@ -67,7 +67,7 @@ public class TeamController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PostMapping("/team")
+    @PostMapping
     @Transactional(rollbackOn = URISyntaxException.class)
     @Operation(summary = "Creates a new team", description = "createTeam")
     @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Created")})
@@ -82,7 +82,7 @@ public class TeamController {
         return new ResponseEntity<>(jwt, headers, CREATED);
     }
 
-    @GetMapping("/team/{teamId}")
+    @GetMapping("/{teamId}")
     @Transactional(rollbackOn = URISyntaxException.class)
     @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Get an entire team by team id", description = "getTeam")
@@ -91,14 +91,14 @@ public class TeamController {
         return ResponseEntity.ok(teamService.getTeamByUri(teamId));
     }
 
-    @PutMapping("/team/{teamId}/email-addresses")
+    @PutMapping("/{teamId}/email-addresses")
     @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Update one or both team email addresses", description = "updateEmailAddresses")
     public void updateEmailAddresses(@PathVariable("teamId") String teamId, @RequestBody UpdateTeamEmailAddressesRequest request) {
         teamService.updateTeamEmailAddresses(teamId, request);
     }
 
-    @GetMapping("/team/{teamId}/name")
+    @GetMapping("/{teamId}/name")
     @Operation(description = "Get a team name given the team id")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public String getTeamName(@PathVariable("teamId") String teamUri) {
@@ -128,7 +128,7 @@ public class TeamController {
         emailResetTokenRepository.delete(emailResetToken);
     }
 
-    @GetMapping(value = "/team/{teamId}/csv", produces = "application/board.csv")
+    @GetMapping(value = "/{teamId}/csv", produces = "application/board.csv")
     @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(description = "downloads a team board")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
@@ -140,7 +140,7 @@ public class TeamController {
             .body(file.getCsvString().getBytes());
     }
 
-    @GetMapping(value = "/team/{teamId}/validate")
+    @GetMapping(value = "/{teamId}/validate")
     @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(description = "Validates a team id")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
@@ -148,7 +148,7 @@ public class TeamController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/team/login")
+    @PostMapping("/login")
     @Operation(description = "Logs in a user given a login request")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public ResponseEntity<String> login(@RequestBody @Valid LoginRequest team) {
