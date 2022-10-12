@@ -95,6 +95,7 @@
 
 		font-size: 2.5rem;
 		line-height: 3.125rem;
+		white-space: nowrap;
 		text-align: center;
 	}
 
@@ -102,7 +103,7 @@
 		color: colors.$dark-gray;
 
 		font-family: 'Quicksand', serif;
-		font-weight: 700;
+		font-weight: 600;
 		font-size: 1rem;
 		font-style: normal;
 		line-height: 1.25rem;

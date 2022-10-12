@@ -248,4 +248,20 @@
             <column name="secondary_email" type="VARCHAR(255)"/>
         </addColumn>
     </changeSet>
+    <changeSet id="add_email_reset_token_table" author="aclift19">
+        <preConditions>
+            <not>
+                <tableExists tableName="email_reset_token"/>
+            </not>
+        </preConditions>
+        <createTable tableName="email_reset_token">
+            <column name="reset_token" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="team_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueComputed="NULL" name="date_created" type="datetime"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

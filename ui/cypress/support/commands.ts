@@ -55,34 +55,37 @@ Cypress.Commands.add(
 	}
 );
 
+Cypress.Commands.add('login', (teamCredentials: TeamCredentials) => {
+	cy.log('**Logging in via api**');
+	cy.request({
+		url: LOGIN_API_PATH,
+		failOnStatusCode: false,
+		method: 'POST',
+		body: {
+			name: teamCredentials.teamName,
+			password: teamCredentials.password,
+		},
+	}).then((response) => {
+		if (response.status === 200) {
+			const accessToken = response.body as string;
+			cy.setCookie('token', accessToken);
+		} else {
+			cy.log('**Login via api failed with status code: **' + response.status);
+		}
+	});
+});
+
 Cypress.Commands.add(
 	'createTeamAndLogin',
 	(teamCredentials: TeamCredentials, visitOptions?: Partial<VisitOptions>) => {
 		cy.createTeam(teamCredentials).then(() => {
-			cy.log('**Logging in via api**');
-			cy.request({
-				url: LOGIN_API_PATH,
-				failOnStatusCode: false,
-				method: 'POST',
-				body: {
-					name: teamCredentials.teamName,
-					password: teamCredentials.password,
-				},
-			}).then((response) => {
-				if (response.status === 200) {
-					const token = response.body as string;
-					cy.setCookie('token', token);
-					const retroPagePath = getRetroPagePathWithTeamId(
-						teamCredentials.teamId
-					);
-					cy.visit(retroPagePath, visitOptions);
-					cy.contains(teamCredentials.teamName).should('exist');
-					cy.title().should('eq', `${teamCredentials.teamName} | RetroQuest`);
-				} else {
-					cy.log(
-						'**Login via api failed with status code: **' + response.status
-					);
-				}
+			cy.login(teamCredentials).then(() => {
+				const retroPagePath = getRetroPagePathWithTeamId(
+					teamCredentials.teamId
+				);
+				cy.visit(retroPagePath, visitOptions);
+				cy.contains(teamCredentials.teamName).should('exist');
+				cy.title().should('eq', `${teamCredentials.teamName} | RetroQuest`);
 			});
 		});
 	}

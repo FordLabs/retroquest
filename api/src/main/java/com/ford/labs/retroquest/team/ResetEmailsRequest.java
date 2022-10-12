@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Ford Motor Company
+ * Copyright (c) 2021 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,25 +15,21 @@
  * limitations under the License.
  */
 
-@use '../../Styles/main';
+package com.ford.labs.retroquest.team;
 
-.change-team-details-page {
-	.change-team-details-form {
-		@include main.white-form;
-	}
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-	.change-team-details-confirmation {
-		@include main.white-form;
-		max-width: 36.5rem;
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder(toBuilder=true)
+public class ResetEmailsRequest {
+    private String email;
 
-		.description {
-			margin: 1rem 0 2rem;
+    private String secondaryEmail;
 
-			color: main.$teal;
-			font-weight: 600;
-			font-size: 20px;
-			line-height: 25px;
-			text-align: center;
-		}
-	}
+    private String resetToken;
 }

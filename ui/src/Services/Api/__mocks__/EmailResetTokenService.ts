@@ -15,25 +15,12 @@
  * limitations under the License.
  */
 
-@use '../../Styles/main';
+import { mockTeam } from './TeamService';
 
-.change-team-details-page {
-	.change-team-details-form {
-		@include main.white-form;
-	}
+const EmailResetTokenService = {
+	checkIfResetTokenIsValid: jest.fn().mockResolvedValue(true),
+	getResetTokenLifetime: jest.fn().mockResolvedValue(800),
+	getTeamByResetToken: jest.fn().mockResolvedValue({ data: { ...mockTeam } }),
+};
 
-	.change-team-details-confirmation {
-		@include main.white-form;
-		max-width: 36.5rem;
-
-		.description {
-			margin: 1rem 0 2rem;
-
-			color: main.$teal;
-			font-weight: 600;
-			font-size: 20px;
-			line-height: 25px;
-			text-align: center;
-		}
-	}
-}
+export default EmailResetTokenService;

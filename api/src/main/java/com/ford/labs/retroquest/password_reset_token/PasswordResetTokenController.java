@@ -29,10 +29,10 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Password Reset Token Controller", description = "The controller that manages password reset tokens")
 public class PasswordResetTokenController {
 
-    private final PasswordResetTokenRepository passwordResetRepository;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
 
     public PasswordResetTokenController(PasswordResetTokenRepository passwordResetRepository) {
-        this.passwordResetRepository = passwordResetRepository;
+        this.passwordResetTokenRepository = passwordResetRepository;
     }
 
     @GetMapping("/lifetime-in-seconds")
@@ -44,9 +44,9 @@ public class PasswordResetTokenController {
 
     @GetMapping("/{passwordResetToken}/is-valid")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
-    @Operation(description = "Check if the reset token is valid")
+    @Operation(description = "Check if the password reset token is valid")
     public boolean checkResetTokenStatus(@PathVariable("passwordResetToken") String passwordResetToken) {
-        PasswordResetToken token = passwordResetRepository.findByResetToken(passwordResetToken);
+        PasswordResetToken token = passwordResetTokenRepository.findByResetToken(passwordResetToken);
         return token != null && !token.isExpired();
     }
 }

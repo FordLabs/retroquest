@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.email;
 
+import com.ford.labs.retroquest.email_reset_token.EmailResetToken;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.password_reset_token.PasswordResetToken;
 import org.junit.jupiter.api.Test;
@@ -56,7 +57,7 @@ class EmailServiceTest {
         ReflectionTestUtils.setField(underTest, "emailEnabled", true);
         ReflectionTestUtils.setField(underTest, "appBaseUrl", "something.com");
 
-        String actualMessage = underTest.getPasswordResetEmailMessage(new PasswordResetToken("t0k3n", new Team("team-name", "Team Name", "passw0rD1"), LocalDateTime.now(), 600), new RequestPasswordResetRequest("Team Name", "e@ma.il"));
+        String actualMessage = underTest.getPasswordResetEmailMessage(new PasswordResetToken("t0k3n", new Team("team-name", "Team Name", "passw0rD1"), LocalDateTime.now(), 600), new ResetRequest("Team Name", "e@ma.il"));
 
         assertThat(actualMessage).isEqualTo(
         """
@@ -97,6 +98,31 @@ class EmailServiceTest {
                 Team 3\r
                 Team 1\r
     
+                Thanks, \r
+                The RetroQuest Team \r
+                """
+        );
+    }
+
+    @Test
+    void shouldGetTheEmailResetMessage() {
+        JavaMailSender mockSender = Mockito.mock(JavaMailSender.class);
+        EmailService underTest = new EmailService(mockSender);
+        ReflectionTestUtils.setField(underTest, "emailEnabled", true);
+        ReflectionTestUtils.setField(underTest, "appBaseUrl", "something.com");
+
+        String actualMessage = underTest.getResetTeamEmailMessage(new EmailResetToken("t0k3n", new Team("team-name", "Team Name", "passw0rD1"), LocalDateTime.now(), 600), new ResetRequest("Team Name", "e@ma.il"));
+
+        assertThat(actualMessage).isEqualTo(
+        """
+                Hey there!\s
+        
+                Someone from your RetroQuest team, "Team Name" recently requested to reset the board owner emails. No changes have been made to the account yet. \r
+        
+                Use the link below to reset your team emails. This link is only valid for the next 10 minutes. \r
+        
+                something.com/email/reset?token=t0k3n\r
+        
                 Thanks, \r
                 The RetroQuest Team \r
                 """

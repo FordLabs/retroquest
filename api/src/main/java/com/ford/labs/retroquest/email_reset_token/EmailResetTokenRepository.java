@@ -15,18 +15,20 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.email;
+package com.ford.labs.retroquest.email_reset_token;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.ford.labs.retroquest.team.Team;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder(toBuilder=true)
-public class RequestPasswordResetRequest {
-    private String teamName;
-    private String email;
+import javax.transaction.Transactional;
+
+@Repository
+public interface EmailResetTokenRepository extends JpaRepository<EmailResetToken, String> {
+    EmailResetToken findByTeam(Team team);
+
+    EmailResetToken findByResetToken(String resetToken);
+
+    @Transactional
+    void deleteAllByTeam(Team team);
 }

@@ -77,13 +77,16 @@ const TeamService = {
 		token: string
 	): Promise<AxiosResponse> {
 		return axios.post(CHANGE_EMAIL_API_PATH, {
-			email1: email1,
-			email2: email2,
-			emailResetToken: token,
+			email: email1,
+			secondaryEmail: email2,
+			resetToken: token,
 		});
 	},
 
-	setPassword(password: string, token: string): Promise<AxiosResponse> {
+	setPasswordWithResetToken(
+		password: string,
+		token: string
+	): Promise<AxiosResponse> {
 		return axios.post(CHANGE_PASSWORD_API_PATH, {
 			password: password,
 			resetToken: token,

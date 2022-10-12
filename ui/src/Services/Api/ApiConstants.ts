@@ -16,8 +16,8 @@
  */
 
 export const TEAM_API_PATH = '/api/team';
-export const CHANGE_EMAIL_API_PATH = '/api/email/reset';
-export const CHANGE_PASSWORD_API_PATH = '/api/password/reset';
+export const CHANGE_EMAIL_API_PATH = '/api/team/email/reset';
+export const CHANGE_PASSWORD_API_PATH = '/api/team/password/reset';
 export const EMAIL_PASSWORD_REQUEST_API_PATH =
 	'/api/email/password-reset-request';
 export const EMAIL_TEAM_NAME_RECOVERY_API_PATH =

@@ -1,5 +1,7 @@
 package com.ford.labs.retroquest;
 
+import com.ford.labs.retroquest.email_reset_token.EmailResetToken;
+import com.ford.labs.retroquest.email_reset_token.EmailResetTokenService;
 import com.ford.labs.retroquest.security.JwtBuilder;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
@@ -9,7 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.context.annotation.Profile;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,11 +30,14 @@ public class E2ETestController {
 
     private final TeamRepository teamRepository;
 
+    private final EmailResetTokenService emailResetTokenService;
+
     private final JwtBuilder jwtBuilder;
 
-    public E2ETestController(TeamService teamService, TeamRepository teamRepository, JwtBuilder jwtBuilder) {
+    public E2ETestController(TeamService teamService, TeamRepository teamRepository, EmailResetTokenService emailResetTokenService, JwtBuilder jwtBuilder) {
         this.teamService = teamService;
         this.teamRepository = teamRepository;
+        this.emailResetTokenService = emailResetTokenService;
         this.jwtBuilder = jwtBuilder;
     }
 
@@ -63,5 +67,15 @@ public class E2ETestController {
         headers.add(HttpHeaders.LOCATION, teamId);
 
         return new ResponseEntity<>(jwt, headers, CREATED);
+    }
+
+    @PostMapping("/create-email-reset-token/{teamId}")
+    @Transactional(rollbackOn = URISyntaxException.class)
+    @Operation(description = "Create an email reset token associated with team")
+    @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Created")})
+    public String createEmailResetTokenForTeam(@PathVariable("teamId") String teamId) {
+        Team team = teamService.getTeamByUri(teamId);
+        EmailResetToken emailResetToken = emailResetTokenService.getNewEmailResetToken(team);
+        return emailResetToken.getResetToken();
     }
 }

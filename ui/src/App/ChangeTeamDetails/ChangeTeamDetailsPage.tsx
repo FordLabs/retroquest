@@ -15,59 +15,106 @@
  * limitations under the License.
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Form from 'Common/AuthTemplate/Form/Form';
 import Header from 'Common/Header/Header';
 import InputEmail from 'Common/InputEmail/InputEmail';
+import LinkPrimary from 'Common/LinkPrimary/LinkPrimary';
+import { LOGIN_PAGE_PATH } from 'RouteConstants';
+import EmailResetTokenService from 'Services/Api/EmailResetTokenService';
 import TeamService from 'Services/Api/TeamService';
+import Team from 'Types/Team';
 
 import './ChangeTeamDetailsPage.scss';
 
+const blankValueWithValidity = { value: '', validity: false };
+
+interface ValueAndValidity {
+	value: string;
+	validity: boolean;
+}
+
 function ChangeTeamDetailsPage(): JSX.Element {
 	const { search } = useLocation();
+	const emailResetToken = new URLSearchParams(search).get('token') || '';
 
-	const [email, setEmail] = useState<string>('');
-	const [secondaryEmail, setSecondaryEmail] = useState<string>('');
-	const [shouldShowSaved, setShouldShowSaved] = useState(false);
+	const [email, setEmail] = useState<ValueAndValidity>(blankValueWithValidity);
+	const [secondaryEmail, setSecondaryEmail] = useState<ValueAndValidity>({
+		value: '',
+		validity: true,
+	});
+	const [formSubmitted, setFormSubmitted] = useState(false);
 
 	function submitEmails() {
 		if (email) {
-			const token = new URLSearchParams(search).get('token') || '';
-			TeamService.updateEmailsWithResetToken(email, secondaryEmail, token).then(
-				() => setShouldShowSaved(true)
-			);
+			TeamService.updateEmailsWithResetToken(
+				email.value,
+				secondaryEmail.value,
+				emailResetToken
+			).then(() => setFormSubmitted(true));
 		}
 	}
+
+	function disableSubmitButton(): boolean {
+		return !email.validity || !secondaryEmail.validity;
+	}
+
+	useEffect(() => {
+		EmailResetTokenService.getTeamByResetToken(emailResetToken).then(
+			(team: Team) => {
+				if (team.email) setEmail({ value: team.email, validity: true });
+				if (team.secondaryEmail)
+					setSecondaryEmail({ value: team.secondaryEmail, validity: true });
+			}
+		);
+	}, [emailResetToken]);
 
 	return (
 		<div className="change-team-details-page">
 			<Header name="RetroQuest" />
-			<div className="change-team-details-form">
-				<h1>Update Team Details</h1>
-				<p>
-					Edit the current details in the boxes below and press "Update Team
-					Details" to update your team's email addresses (for password
-					recovery).
-				</p>
-				<Form onSubmit={submitEmails} submitButtonText="Save Changes">
-					<InputEmail
-						label="Email 1"
-						onChange={setEmail}
-						value={email}
-						id="email1Id"
-						required
-					/>
-					<InputEmail
-						label="Email 2"
-						onChange={setSecondaryEmail}
-						value={secondaryEmail}
-						id="email2Id"
-						required
-					/>
-					{shouldShowSaved && <div className="success-indicator">Saved!</div>}
-				</Form>
-			</div>
+			{!formSubmitted && (
+				<div className="change-team-details-form">
+					<h1>Update Board Owners</h1>
+					<p>
+						Edit the current details in the boxes below and press “Save Changes”
+						to update your team’s email addresses (for password recovery).
+					</p>
+					<Form
+						onSubmit={submitEmails}
+						disableSubmitBtn={disableSubmitButton()}
+						submitButtonText="Save Changes"
+					>
+						<InputEmail
+							label="Email 1"
+							onChange={(value, validity) => {
+								setEmail({ value: value, validity: validity });
+							}}
+							value={email.value}
+							id="email1Id"
+							required
+						/>
+						<InputEmail
+							label="Second Teammate’s Email (optional)"
+							onChange={(value, validity) => {
+								setSecondaryEmail({ value: value, validity: validity });
+							}}
+							value={secondaryEmail.value}
+							id="email2Id"
+							required={false}
+						/>
+					</Form>
+				</div>
+			)}
+			{formSubmitted && (
+				<div className="change-team-details-confirmation">
+					<h1>Board Owners Updated!</h1>
+					<p className="description">
+						All set! Your board owners have been changed.
+					</p>
+					<LinkPrimary to={LOGIN_PAGE_PATH}>Return to Login</LinkPrimary>
+				</div>
+			)}
 		</div>
 	);
 }

@@ -140,7 +140,7 @@ describe('Team Service', () => {
 		});
 	});
 
-	describe('setEmails', () => {
+	describe('updateEmailsWithResetToken', () => {
 		it('should post emails to /email/reset with the token', async () => {
 			axios.post = jest.fn();
 			await TeamService.updateEmailsWithResetToken(
@@ -149,20 +149,20 @@ describe('Team Service', () => {
 				'T0k3n'
 			);
 
-			expect(axios.post).toHaveBeenCalledWith('/api/email/reset', {
-				email1: 'e1@ma.il',
-				email2: 'e2@ma.il',
-				emailResetToken: 'T0k3n',
+			expect(axios.post).toHaveBeenCalledWith('/api/team/email/reset', {
+				email: 'e1@ma.il',
+				secondaryEmail: 'e2@ma.il',
+				resetToken: 'T0k3n',
 			});
 		});
 	});
 
-	describe('setPasswords', () => {
+	describe('setPasswordWithResetToken', () => {
 		it('should post password to /password/reset with the token', async () => {
 			axios.post = jest.fn();
-			await TeamService.setPassword('wordword', 'T0k3n');
+			await TeamService.setPasswordWithResetToken('wordword', 'T0k3n');
 
-			expect(axios.post).toHaveBeenCalledWith('/api/password/reset', {
+			expect(axios.post).toHaveBeenCalledWith('/api/team/password/reset', {
 				password: 'wordword',
 				resetToken: 'T0k3n',
 			});
