@@ -21,6 +21,7 @@ import { TeamState } from 'State/TeamState';
 import AddBoardOwnersForm, {
 	AddBoardOwnersFormProps,
 } from './AddBoardOwnersForm/AddBoardOwnersForm';
+import BoardOwnersForm from './BoardOwnersForm/BoardOwnersForm';
 
 import './AccountTab.scss';
 
@@ -39,18 +40,13 @@ function AccountTab(props: Props): JSX.Element {
 
 	return (
 		<div className="tab-body account-tab-body" data-testid="accountTab">
-			{!teamHasEmail() && (
+			{teamHasEmail() ? (
+				<BoardOwnersForm />
+			) : (
 				<AddBoardOwnersForm
 					email1={accountTabData?.email1}
 					email2={accountTabData?.email2}
 				/>
-			)}
-			{teamHasEmail() && (
-				<div>
-					<div className="label">Board Owners</div>
-					<div className="team-email">{team.email}</div>
-					<div className="team-email">{team.secondaryEmail}</div>
-				</div>
 			)}
 		</div>
 	);

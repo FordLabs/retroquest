@@ -14,10 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const EmailService = {
-	sendPasswordResetEmail: jest.fn().mockResolvedValue(''),
-	sendBoardOwnersResetEmail: jest.fn().mockResolvedValue(''),
-	sendTeamNameRecoveryEmail: jest.fn().mockResolvedValue(''),
-};
 
-export default EmailService;
+.board-owners-form {
+	.label:not(:first-of-type) {
+		margin-top: 2.5rem;
+	}
+}
