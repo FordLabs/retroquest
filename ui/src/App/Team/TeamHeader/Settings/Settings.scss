@@ -22,7 +22,8 @@
 	flex-direction: column;
 	width: 100%;
 	height: auto;
-	padding: 24px;
+	margin: .5rem 0 3rem;
+	padding: 3rem 3.5rem 4.5rem;
 
 	font-size: 1rem;
 
@@ -33,8 +34,9 @@
 	position: relative;
 
 	@include main.breakpoint-medium {
-		width: 450px;
+		width: 34.5rem;
 		min-height: 450px;
+		margin: auto;
 	}
 
 	.settings-title {
