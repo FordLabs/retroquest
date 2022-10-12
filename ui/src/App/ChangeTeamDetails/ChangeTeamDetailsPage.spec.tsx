@@ -26,21 +26,28 @@ import ChangeTeamDetailsPage from './ChangeTeamDetailsPage';
 jest.mock('Services/Api/TeamService');
 jest.mock('Services/Api/EmailResetTokenService');
 
+const mockedUsedNavigate = jest.fn();
+
+jest.mock('react-router-dom', () => ({
+	...(jest.requireActual('react-router-dom') as any),
+	useNavigate: () => mockedUsedNavigate,
+}));
+
 describe('Change Team Details Page', () => {
 	it('should have RetroQuest header', async () => {
-		await renderWithToken('');
+		await renderWithToken();
 		expect(screen.getByText('RetroQuest')).toBeDefined();
 	});
 
 	it('should have a field for email1 and email2, plus a submit button', async () => {
-		await renderWithToken('');
+		await renderWithToken();
 		expect(getEmail1InputField()).toBeInTheDocument();
 		expect(getEmail2InputField()).toBeInTheDocument();
 		expect(screen.getByText('Save Changes')).toBeInTheDocument();
 	});
 
 	it('should successfully submit form with optional secondary email', async () => {
-		await renderWithToken('');
+		await renderWithToken();
 		submitValidForm();
 
 		await waitFor(() =>
@@ -53,7 +60,7 @@ describe('Change Team Details Page', () => {
 	});
 
 	it('should successfully submit form without optional secondary email', async () => {
-		await renderWithToken('');
+		await renderWithToken();
 		submitValidForm('email1@email1.email1', '');
 
 		await waitFor(() =>
@@ -93,7 +100,7 @@ describe('Change Team Details Page', () => {
 	});
 
 	it('should disable submit button until a valid email is added to the first email field', async () => {
-		await renderWithToken('');
+		await renderWithToken();
 		expect(getSubmitButton()).toBeDisabled();
 		typeIntoEmail1Field('a@');
 		expect(getSubmitButton()).toBeDisabled();
@@ -116,7 +123,7 @@ describe('Change Team Details Page', () => {
 			.fn()
 			.mockResolvedValue(mockTeam);
 
-		await renderWithToken('fake-token');
+		await renderWithToken('valid-token');
 
 		await waitFor(() =>
 			expect(getEmail1InputField()).toHaveValue(mockTeam.email)
@@ -125,6 +132,54 @@ describe('Change Team Details Page', () => {
 			expect(getEmail2InputField()).toHaveValue(mockTeam.secondaryEmail)
 		);
 		expect(getSubmitButton()).toBeEnabled();
+	});
+
+	describe('Token Validity', () => {
+		it('should navigate to Expired Token page if getting team by reset token returns 400', async () => {
+			EmailResetTokenService.getTeamByResetToken = jest
+				.fn()
+				.mockRejectedValue({ response: { status: 400 } });
+
+			await renderWithToken('expired-token');
+			await waitFor(() =>
+				expect(EmailResetTokenService.getTeamByResetToken).toHaveBeenCalledWith(
+					'expired-token'
+				)
+			);
+			expect(mockedUsedNavigate).toHaveBeenCalledWith(
+				'/email/reset/expired-link'
+			);
+		});
+
+		it('should navigate to Expired Token page if no reset token is present in url', async () => {
+			EmailResetTokenService.getTeamByResetToken = jest
+				.fn()
+				.mockRejectedValue({ response: { status: 400 } });
+
+			await renderWithToken('');
+			await waitFor(() =>
+				expect(EmailResetTokenService.getTeamByResetToken).toHaveBeenCalledWith(
+					'invalid'
+				)
+			);
+			expect(mockedUsedNavigate).toHaveBeenCalledWith(
+				'/email/reset/expired-link'
+			);
+		});
+
+		it('should check if token is valid and stay on page if it is valid', async () => {
+			EmailResetTokenService.getTeamByResetToken = jest
+				.fn()
+				.mockResolvedValue({ response: { status: 200 } });
+
+			await renderWithToken('valid-token');
+			await waitFor(() =>
+				expect(EmailResetTokenService.getTeamByResetToken).toHaveBeenCalledWith(
+					'valid-token'
+				)
+			);
+			expect(mockedUsedNavigate).not.toHaveBeenCalled();
+		});
 	});
 
 	describe('Form Errors', () => {
@@ -187,7 +242,7 @@ function getEmail2InputField() {
 	});
 }
 
-async function renderWithToken(token: string) {
+async function renderWithToken(token: string = '') {
 	const initialEntry =
 		token !== '' ? '/change-emails?token=' + token : '/change-emails';
 	render(
@@ -200,7 +255,7 @@ async function renderWithToken(token: string) {
 
 	await waitFor(() =>
 		expect(EmailResetTokenService.getTeamByResetToken).toHaveBeenCalledWith(
-			token
+			token || 'invalid'
 		)
 	);
 }

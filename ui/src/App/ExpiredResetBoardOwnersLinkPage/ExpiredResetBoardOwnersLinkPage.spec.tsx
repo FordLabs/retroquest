@@ -19,40 +19,37 @@ import { MemoryRouter } from 'react-router-dom';
 import { screen, waitFor } from '@testing-library/react';
 import { MutableSnapshot } from 'recoil';
 import ContributorsService from 'Services/Api/ContributorsService';
-import PasswordResetTokenService from 'Services/Api/PasswordResetTokenService';
+import EmailResetTokenService from 'Services/Api/EmailResetTokenService';
 import { ThemeState } from 'State/ThemeState';
 import Theme from 'Types/Theme';
 import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
-import ExpiredLinkPage from './ExpiredLinkPage';
+import ExpiredResetBoardOwnersLinkPage from './ExpiredResetBoardOwnersLinkPage';
 
 jest.mock('Services/Api/ContributorsService');
 jest.mock('Services/Api/TeamService');
-jest.mock('Services/Api/PasswordResetTokenService');
+jest.mock('Services/Api/EmailResetTokenService');
 
-describe('Expired Link Page', () => {
-	it('should render header and link to reset password page', async () => {
+describe('Expired Reset Board Owners Link Page', () => {
+	it('should render header and link to login page', async () => {
 		await renderExpiredLinkPage();
 		expect(screen.getByText('Expired Link')).toBeDefined();
-		let resetPasswordPageLink = screen.getByText('Reset my Password');
-		expect(resetPasswordPageLink).toBeDefined();
-		expect(resetPasswordPageLink).toHaveAttribute(
-			'href',
-			'/request-password-reset'
-		);
+		const returnToLoginLink = screen.getByText('Return to Login');
+		expect(returnToLoginLink).toBeDefined();
+		expect(returnToLoginLink).toHaveAttribute('href', '/login');
 	});
 
 	it('should show token lifetime in page description', async () => {
-		PasswordResetTokenService.getResetTokenLifetime = jest
+		EmailResetTokenService.getResetTokenLifetime = jest
 			.fn()
 			.mockResolvedValue(600);
 		await renderExpiredLinkPage();
 		await waitFor(() =>
-			expect(PasswordResetTokenService.getResetTokenLifetime).toHaveBeenCalled()
+			expect(EmailResetTokenService.getResetTokenLifetime).toHaveBeenCalled()
 		);
 		expect(
 			screen.getByText(
-				'For your safety, our password reset link is only valid for 10 minutes.'
+				'For your safety, our board owner reset link is only valid for 10 minutes.'
 			)
 		).toBeDefined();
 	});
@@ -81,7 +78,7 @@ async function renderExpiredLinkPage(
 ) {
 	renderWithRecoilRoot(
 		<MemoryRouter>
-			<ExpiredLinkPage />
+			<ExpiredResetBoardOwnersLinkPage />
 		</MemoryRouter>,
 		recoilState
 	);

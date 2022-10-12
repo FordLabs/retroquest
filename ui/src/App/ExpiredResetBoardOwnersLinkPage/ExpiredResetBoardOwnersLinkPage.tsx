@@ -20,21 +20,21 @@ import ErrorStopSignIcon from 'Assets/ErrorStopSignIcon';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import LinkPrimary from 'Common/LinkPrimary/LinkPrimary';
 import { useRecoilValue } from 'recoil';
-import { PASSWORD_RESET_REQUEST_PATH } from 'RouteConstants';
-import PasswordResetTokenService from 'Services/Api/PasswordResetTokenService';
+import { LOGIN_PAGE_PATH } from 'RouteConstants';
+import EmailResetTokenService from 'Services/Api/EmailResetTokenService';
 import { ThemeState } from 'State/ThemeState';
 import Theme from 'Types/Theme';
 
-import './ExpiredLinkPage.scss';
+import './ExpiredResetBoardOwnersLinkPage.scss';
 
-function ExpiredLinkPage() {
+function ExpiredResetBoardOwnersLinkPage() {
 	const theme = useRecoilValue(ThemeState);
 	const checkboxIconColor = theme === Theme.DARK ? '#c0392b' : '#e74c3c';
 
 	const [resetTokenLifetime, setResetTokenLifetime] = useState<number>(600);
 
 	useEffect(() => {
-		PasswordResetTokenService.getResetTokenLifetime().then((seconds) => {
+		EmailResetTokenService.getResetTokenLifetime().then((seconds) => {
 			setResetTokenLifetime(Math.floor(seconds / 60));
 		});
 	}, []);
@@ -51,21 +51,18 @@ function ExpiredLinkPage() {
 					className="checkbox-icon"
 				/>
 				<p className="paragraph-1">
-					For your safety, our password reset link is only valid for{' '}
+					For your safety, our board owner reset link is only valid for{' '}
 					{resetTokenLifetime} minutes.
 				</p>
 			</div>
 			<p className="paragraph-2">
-				Fear not! Click here to request a fresh, new reset link.
+				You can request a new link in the settings menu.
 			</p>
-			<LinkPrimary
-				to={PASSWORD_RESET_REQUEST_PATH}
-				className="reset-password-link"
-			>
-				Reset my Password
+			<LinkPrimary to={LOGIN_PAGE_PATH} className="reset-password-link">
+				Return to Login
 			</LinkPrimary>
 		</AuthTemplate>
 	);
 }
 
-export default ExpiredLinkPage;
+export default ExpiredResetBoardOwnersLinkPage;
