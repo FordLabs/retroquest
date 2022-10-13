@@ -167,11 +167,11 @@ describe('Board Owners Form', () => {
 });
 
 function getSendPasswordEmailButton() {
-	return screen.getByText('Send Reset Link');
+	return screen.getByText('Send Password Reset Link');
 }
 
 function getSendBoardOwnerEmailButton() {
-	return screen.getByText('Send Update Email');
+	return screen.getByText('Send Board Owner Update Link');
 }
 
 function renderBoardOwnersForm(team: Team) {

@@ -83,7 +83,7 @@ function BoardOwnersForm() {
 				we'll send the board owners a link to reset the password.
 			</p>
 			<ButtonPrimary onClick={sendPasswordResetLink}>
-				Send Reset Link
+				Send Password Reset Link
 			</ButtonPrimary>
 			<div className="label">Change Board Owners</div>
 			<p className="description">
@@ -92,7 +92,7 @@ function BoardOwnersForm() {
 				to make the changes.
 			</p>
 			<ButtonPrimary onClick={sendBoardOwnersResetLink}>
-				Send Update Email
+				Send Board Owner Update Link
 			</ButtonPrimary>
 		</div>
 	);
