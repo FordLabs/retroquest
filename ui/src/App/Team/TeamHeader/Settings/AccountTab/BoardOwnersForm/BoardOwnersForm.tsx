@@ -16,40 +16,60 @@
  */
 
 import ButtonPrimary from 'Common/ButtonPrimary/ButtonPrimary';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import EmailService from 'Services/Api/EmailService';
+import { ModalContentsState } from 'State/ModalContentsState';
 import { TeamState } from 'State/TeamState';
+
+import EmailSentConfirmation from './EmailSentConfirmation/EmailSentConfirmation';
 
 import './BoardOwnersForm.scss';
 
 function BoardOwnersForm() {
 	const team = useRecoilValue(TeamState);
+	const setModalContents = useSetRecoilState(ModalContentsState);
 
-	function sendPasswordResetLink() {
-		if (team.email) {
-			EmailService.sendPasswordResetEmail(team.name, team.email).catch(
-				console.error
-			);
-		}
-		if (team.secondaryEmail) {
-			EmailService.sendPasswordResetEmail(team.name, team.secondaryEmail).catch(
-				console.error
-			);
-		}
+	function getStartOfParagraph1() {
+		let startOfParagraph = 'We’ve sent an email to ';
+		if (team.email) startOfParagraph += team.email;
+		if (team.secondaryEmail) startOfParagraph += ` and ${team.secondaryEmail}`;
+		return startOfParagraph;
 	}
 
-	function sendBoardOwnersResetLink() {
+	function openConfirmationModal(endOfParagraph: string) {
+		setModalContents({
+			title: 'Check your Mail!',
+			component: (
+				<EmailSentConfirmation
+					paragraph1={getStartOfParagraph1() + endOfParagraph}
+				/>
+			),
+		});
+	}
+
+	async function sendPasswordResetLink() {
 		if (team.email) {
-			EmailService.sendBoardOwnersResetEmail(team.name, team.email).catch(
-				console.error
-			);
+			await EmailService.sendPasswordResetEmail(team.name, team.email);
 		}
 		if (team.secondaryEmail) {
-			EmailService.sendBoardOwnersResetEmail(
+			await EmailService.sendPasswordResetEmail(team.name, team.secondaryEmail);
+		}
+		openConfirmationModal(' with password reset instructions.');
+	}
+
+	async function sendBoardOwnersResetLink() {
+		if (team.email) {
+			await EmailService.sendBoardOwnersResetEmail(team.name, team.email);
+		}
+		if (team.secondaryEmail) {
+			await EmailService.sendBoardOwnersResetEmail(
 				team.name,
 				team.secondaryEmail
-			).catch(console.error);
+			);
 		}
+		openConfirmationModal(
+			' with instructions on how to change the Board Owner email addresses.'
+		);
 	}
 
 	return (

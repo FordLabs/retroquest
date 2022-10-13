@@ -15,27 +15,21 @@
  * limitations under the License.
  */
 import React from 'react';
-import CheckedCheckboxIcon from 'Assets/CheckedCheckboxIcon';
-import { useRecoilValue } from 'recoil';
 import { LOGIN_PAGE_PATH } from 'RouteConstants';
-import { ThemeState } from 'State/ThemeState';
-import Theme from 'Types/Theme';
 
 import AuthTemplate from '../AuthTemplate/AuthTemplate';
 import LinkPrimary from '../LinkPrimary/LinkPrimary';
+import TealCheckedCheckboxIcon from '../TealCheckedCheckboxIcon/TealCheckedCheckboxIcon';
 
-import './CheckYourMailConfirmation.scss';
+import './CheckYourMailConfirmationPage.scss';
 
 interface Props {
 	paragraph1: string;
 	paragraph2: string;
 }
 
-function CheckYourMailConfirmation(props: Props) {
+function CheckYourMailConfirmationPage(props: Props) {
 	const { paragraph1, paragraph2 } = props;
-
-	const theme = useRecoilValue(ThemeState);
-	const checkboxIconColor = theme === Theme.DARK ? '#1abc9c' : '#16a085';
 
 	return (
 		<AuthTemplate
@@ -44,10 +38,7 @@ function CheckYourMailConfirmation(props: Props) {
 			showGithubLink={false}
 		>
 			<div className="paragraph-1-container">
-				<CheckedCheckboxIcon
-					color={checkboxIconColor}
-					className="checkbox-icon"
-				/>
+				<TealCheckedCheckboxIcon />
 				<p className="paragraph-1">{paragraph1}</p>
 			</div>
 			<p className="paragraph-2">{paragraph2}</p>
@@ -58,4 +49,4 @@ function CheckYourMailConfirmation(props: Props) {
 	);
 }
 
-export default CheckYourMailConfirmation;
+export default CheckYourMailConfirmationPage;
