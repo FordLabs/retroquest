@@ -16,19 +16,16 @@
  */
 
 import { MemoryRouter } from 'react-router-dom';
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { MutableSnapshot } from 'recoil';
-import ContributorsService from 'Services/Api/ContributorsService';
 import { ThemeState } from 'State/ThemeState';
 import Theme from 'Types/Theme';
 import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
-import CheckYourMailConfirmation from './CheckYourMailConfirmation';
+import ThemedCheckboxIcon from './ThemedCheckboxIcon';
 
-jest.mock('Services/Api/ContributorsService');
-
-describe('Check Your Mail Confirmation', () => {
-	it('should render checkbox in confirmation screen as dark turquoise in light mode', async () => {
+describe('Teal Checked Checkbox Icon', () => {
+	it('should render checkbox icon as dark turquoise in light mode', async () => {
 		await renderCheckYourMailConfirmation(({ set }) => {
 			set(ThemeState, Theme.LIGHT);
 		});
@@ -38,7 +35,7 @@ describe('Check Your Mail Confirmation', () => {
 		expect(checkedCheckboxIcon.getAttribute('fill')).toBe('#16a085');
 	});
 
-	it('should render checkbox in confirmation screen as light turquoise in dark mode', async () => {
+	it('should render checkbox icon as light turquoise in dark mode', async () => {
 		await renderCheckYourMailConfirmation(({ set }) => {
 			set(ThemeState, Theme.DARK);
 		});
@@ -54,9 +51,8 @@ async function renderCheckYourMailConfirmation(
 ) {
 	renderWithRecoilRoot(
 		<MemoryRouter>
-			<CheckYourMailConfirmation paragraph1="" paragraph2="" />
+			<ThemedCheckboxIcon />
 		</MemoryRouter>,
 		recoilState
 	);
-	await waitFor(() => expect(ContributorsService.get).toHaveBeenCalled());
 }

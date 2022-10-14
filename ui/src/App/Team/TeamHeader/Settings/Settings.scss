@@ -18,40 +18,22 @@
 @use '../../../../Styles/main';
 
 .settings {
+	@include main.white-modal-base;
+
 	display: flex;
 	flex-direction: column;
-	width: 100%;
-	height: auto;
-	padding: 24px;
-
-	font-size: 1rem;
-
-	background-color: main.$white;
-	border-radius: 6px;
-	box-shadow: 0 19px 38px rgba(main.$black, 0.3);
+	margin: 0.5rem 0 3rem;
 
 	position: relative;
 
 	@include main.breakpoint-medium {
-		width: 450px;
+		width: 34.5rem;
 		min-height: 450px;
+		margin: auto;
 	}
 
 	.settings-title {
-		width: 100%;
-		margin-bottom: 0.5rem;
-
-		font-weight: bold;
-
-		font-size: 2rem;
-		text-align: center;
-		text-transform: capitalize;
-
-		cursor: default;
-
-		@include main.breakpoint-medium {
-			font-size: 2.5rem;
-		}
+		@include main.white-modal-title;
 	}
 
 	.settings-subtitle {

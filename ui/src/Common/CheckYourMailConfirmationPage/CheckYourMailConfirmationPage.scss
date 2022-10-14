@@ -14,10 +14,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const EmailService = {
-	sendPasswordResetEmail: jest.fn().mockResolvedValue(''),
-	sendBoardOwnersResetEmail: jest.fn().mockResolvedValue(''),
-	sendTeamNameRecoveryEmail: jest.fn().mockResolvedValue(''),
-};
 
-export default EmailService;
+@use '../../Styles/main';
+
+.check-your-mail-confirmation {
+	.auth-sub-heading {
+		display: none;
+	}
+
+	.paragraph-1-container {
+		display: flex;
+		align-items: center;
+
+		.paragraph-1 {
+			flex-basis: fit-content;
+			flex-basis: -moz-fit-content;
+			margin-top: 1rem;
+
+			color: main.$teal;
+			font-weight: bold;
+		}
+	}
+
+	.paragraph-2 {
+		color: main.$dark-gray;
+		font-weight: bold;
+		text-align: center;
+	}
+}
+
+@include main.dark-theme {
+	.check-your-mail-confirmation {
+		.paragraph-1 {
+			color: main.$sea-foam;
+		}
+
+		.paragraph-2 {
+			color: main.$light-gray;
+		}
+	}
+}

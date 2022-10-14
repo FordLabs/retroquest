@@ -17,26 +17,25 @@
 
 import axios, { AxiosResponse } from 'axios';
 
-import {
-	EMAIL_PASSWORD_REQUEST_API_PATH,
-	EMAIL_TEAM_NAME_RECOVERY_API_PATH,
-} from './ApiConstants';
+const baseEmailPath = '/api/email';
 
 const EmailService = {
 	sendTeamNameRecoveryEmail(recoveryEmail: string): Promise<AxiosResponse> {
-		return axios.post(EMAIL_TEAM_NAME_RECOVERY_API_PATH, {
-			recoveryEmail: recoveryEmail,
-		});
+		const url = `${baseEmailPath}/recover-team-names`;
+		return axios.post(url, { recoveryEmail });
 	},
 
 	sendPasswordResetEmail(
 		teamName: string,
 		email: string
 	): Promise<AxiosResponse> {
-		return axios.post(EMAIL_PASSWORD_REQUEST_API_PATH, {
-			teamName: teamName,
-			email: email,
-		});
+		const url = `${baseEmailPath}/password-reset-request`;
+		return axios.post(url, { teamName, email });
+	},
+
+	sendBoardOwnersResetEmail(teamName: string, email: string) {
+		const url = `${baseEmailPath}/email-reset-request`;
+		return axios.post(url, { teamName, email });
 	},
 };
 

@@ -28,6 +28,8 @@
 
 .modal-container {
 	display: flex;
+	overflow: scroll;
+
 	z-index: 2;
 
 	&[aria-hidden='true'] {
@@ -40,6 +42,7 @@
 
 	.modal-content {
 		width: 100%;
+		height: 100%;
 		margin: auto;
 		padding: 0 0.8rem;
 
@@ -53,6 +56,7 @@
 
 		@include main.breakpoint-medium {
 			width: unset;
+			height: unset;
 		}
 
 		&.super-size {

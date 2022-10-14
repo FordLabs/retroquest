@@ -14,10 +14,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const EmailService = {
-	sendPasswordResetEmail: jest.fn().mockResolvedValue(''),
-	sendBoardOwnersResetEmail: jest.fn().mockResolvedValue(''),
-	sendTeamNameRecoveryEmail: jest.fn().mockResolvedValue(''),
-};
 
-export default EmailService;
+import React from 'react';
+import CheckedCheckboxIcon from 'Assets/CheckedCheckboxIcon';
+import { useRecoilValue } from 'recoil';
+import { ThemeState } from 'State/ThemeState';
+import Theme from 'Types/Theme';
+
+import './ThemedCheckboxIcon.scss';
+
+function ThemedCheckboxIcon() {
+	const theme = useRecoilValue(ThemeState);
+	const checkboxIconColor = theme === Theme.DARK ? '#1abc9c' : '#16a085';
+
+	return (
+		<CheckedCheckboxIcon
+			color={checkboxIconColor}
+			className="themed-checkbox-icon"
+		/>
+	);
+}
+
+export default ThemedCheckboxIcon;

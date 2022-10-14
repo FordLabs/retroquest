@@ -17,7 +17,7 @@
 import React, { useEffect, useState } from 'react';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import Form from 'Common/AuthTemplate/Form/Form';
-import CheckYourMailConfirmation from 'Common/CheckYourMailConfirmation/CheckYourMailConfirmation';
+import CheckYourMailConfirmationPage from 'Common/CheckYourMailConfirmationPage/CheckYourMailConfirmationPage';
 import InputEmail from 'Common/InputEmail/InputEmail';
 import InputTeamName from 'Common/InputTeamName/InputTeamName';
 import LinkTertiary from 'Common/LinkTertiary/LinkTertiary';
@@ -100,7 +100,7 @@ function PasswordResetRequestPage(): JSX.Element {
 				</AuthTemplate>
 			)}
 			{emailSent && (
-				<CheckYourMailConfirmation
+				<CheckYourMailConfirmationPage
 					paragraph1={`We’ve sent an email to ${email} with password reset instructions.`}
 					paragraph2={`If an email doesn't show up soon, check your spam folder. We sent it from ${emailFromAddress}.`}
 				/>

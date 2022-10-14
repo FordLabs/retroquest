@@ -43,4 +43,18 @@ describe('Email Service', () => {
 			);
 		});
 	});
+
+	describe('sendBoardOwnersResetEmail', () => {
+		it('should send email reset link', async () => {
+			await EmailService.sendBoardOwnersResetEmail('Team Name', 'a@b.c');
+
+			expect(axios.post).toHaveBeenCalledWith(
+				'/api/email/email-reset-request',
+				{
+					teamName: 'Team Name',
+					email: 'a@b.c',
+				}
+			);
+		});
+	});
 });

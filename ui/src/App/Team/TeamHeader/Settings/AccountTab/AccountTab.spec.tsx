@@ -26,6 +26,7 @@ import AccountTab from './AccountTab';
 
 describe('Account Tab', () => {
 	const addBoardOwnersFormTitle = 'Add Board Owners';
+	const boardOwnersFormTitle = 'Board Owners';
 	let activeTeam: Team;
 
 	beforeEach(() => {
@@ -43,6 +44,7 @@ describe('Account Tab', () => {
 		});
 
 		expect(await screen.findByText(addBoardOwnersFormTitle)).toBeDefined();
+		expect(screen.queryByText(boardOwnersFormTitle)).toBeNull();
 	});
 
 	it('should NOT show "Add Board Owners" form if team has a primary email', () => {
@@ -52,6 +54,7 @@ describe('Account Tab', () => {
 		});
 
 		expect(screen.queryByText(addBoardOwnersFormTitle)).toBeDefined();
+		expect(screen.getByText(boardOwnersFormTitle)).toBeDefined();
 	});
 
 	it('should NOT show "Add Board Owners" form if team has a secondary email', () => {
@@ -61,6 +64,7 @@ describe('Account Tab', () => {
 		});
 
 		expect(screen.queryByText(addBoardOwnersFormTitle)).toBeDefined();
+		expect(screen.getByText(boardOwnersFormTitle)).toBeDefined();
 	});
 });
 
