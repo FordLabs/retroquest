@@ -19,8 +19,6 @@ export const TEAM_API_PATH = '/api/team';
 export const CHANGE_EMAIL_API_PATH = '/api/team/email/reset';
 export const CHANGE_PASSWORD_API_PATH = '/api/team/password/reset';
 export const LOGIN_API_PATH = `${TEAM_API_PATH}/login`;
-export const getTeamNameApiPath = (teamId: string) =>
-	`${TEAM_API_PATH}/${teamId}/name`;
 
 export const CONTRIBUTORS_API_PATH = '/api/contributors';
 export const FEEDBACK_API_PATH = '/api/feedback/';

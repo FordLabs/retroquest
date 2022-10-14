@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import Form from 'Common/AuthTemplate/Form/Form';
 import HorizontalRuleWithText from 'Common/HorizontalRuleWithText/HorizontalRuleWithText';
@@ -23,7 +24,6 @@ import InputTeamName from 'Common/InputTeamName/InputTeamName';
 import LinkSecondary from 'Common/LinkSecondary/LinkSecondary';
 import LinkTertiary from 'Common/LinkTertiary/LinkTertiary';
 import useAuth from 'Hooks/useAuth';
-import useTeamFromRoute from 'Hooks/useTeamFromRoute';
 import {
 	CREATE_TEAM_PAGE_PATH,
 	PASSWORD_RESET_REQUEST_PATH,
@@ -33,16 +33,15 @@ import TeamService from 'Services/Api/TeamService';
 import './LoginPage.scss';
 
 function LoginPage(): JSX.Element {
+	const { teamId = '' } = useParams();
+
 	const { login } = useAuth();
-	const team = useTeamFromRoute();
 
 	const [teamName, setTeamName] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
 
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
-
-	useEffect(() => setTeamName(team.name), [team.name]);
 
 	function onLoginFormSubmit() {
 		setIsLoading(true);
@@ -56,6 +55,12 @@ function LoginPage(): JSX.Element {
 			})
 			.finally(() => setIsLoading(false));
 	}
+
+	useEffect(() => {
+		if (teamId) {
+			TeamService.getTeamName(teamId).then(setTeamName).catch(console.error);
+		}
+	}, [teamId]);
 
 	return (
 		<AuthTemplate header="Log in to your Team!" className="login-page">

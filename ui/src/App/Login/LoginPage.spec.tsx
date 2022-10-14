@@ -20,7 +20,6 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 import { RecoilRoot } from 'recoil';
-import { mockContributors } from 'Services/Api/__mocks__/ContributorsService';
 import { mockTeam } from 'Services/Api/__mocks__/TeamService';
 import ContributorsService from 'Services/Api/ContributorsService';
 import TeamService from 'Services/Api/TeamService';
@@ -29,6 +28,7 @@ import LoginPage from './LoginPage';
 
 jest.mock('Services/Api/ContributorsService');
 jest.mock('Services/Api/TeamService');
+jest.mock('Services/Api/ConfigurationService');
 
 const mockLogin = jest.fn();
 
@@ -38,19 +38,13 @@ jest.mock('Hooks/useAuth', () => {
 	});
 });
 
-jest.mock('Services/Api/ConfigurationService');
-
-describe('LoginPage.spec.tsx', () => {
+describe('Login Page', () => {
 	let container: HTMLElement;
 	let rerender: (ui: ReactElement) => void;
 	const validTeamName = mockTeam.name;
 	const validPassword = 'Password1';
 
 	beforeEach(async () => {
-		ContributorsService.get = jest.fn().mockResolvedValue(mockContributors);
-		TeamService.getTeam = jest.fn().mockResolvedValue(mockTeam);
-		TeamService.login = jest.fn().mockResolvedValue(mockTeam);
-
 		({ container, rerender } = renderComponent());
 
 		await waitFor(() => expect(ContributorsService.get).toHaveBeenCalled());
@@ -90,6 +84,9 @@ describe('LoginPage.spec.tsx', () => {
 					</Routes>
 				</MemoryRouter>
 			</RecoilRoot>
+		);
+		await waitFor(() =>
+			expect(TeamService.getTeamName).toHaveBeenCalledWith(mockTeam.id)
 		);
 		teamNameInput = getTeamNameInput();
 		await waitFor(async () => expect(teamNameInput.value).toBe(mockTeam.name));
