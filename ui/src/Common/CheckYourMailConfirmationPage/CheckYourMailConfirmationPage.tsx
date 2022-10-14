@@ -19,7 +19,7 @@ import { LOGIN_PAGE_PATH } from 'RouteConstants';
 
 import AuthTemplate from '../AuthTemplate/AuthTemplate';
 import LinkPrimary from '../LinkPrimary/LinkPrimary';
-import TealCheckedCheckboxIcon from '../TealCheckedCheckboxIcon/TealCheckedCheckboxIcon';
+import ThemedCheckboxIcon from '../ThemedCheckboxIcon/ThemedCheckboxIcon';
 
 import './CheckYourMailConfirmationPage.scss';
 
@@ -38,7 +38,7 @@ function CheckYourMailConfirmationPage(props: Props) {
 			showGithubLink={false}
 		>
 			<div className="paragraph-1-container">
-				<TealCheckedCheckboxIcon />
+				<ThemedCheckboxIcon />
 				<p className="paragraph-1">{paragraph1}</p>
 			</div>
 			<p className="paragraph-2">{paragraph2}</p>

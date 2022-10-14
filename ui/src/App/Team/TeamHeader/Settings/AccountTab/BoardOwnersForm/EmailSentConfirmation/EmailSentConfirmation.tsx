@@ -17,7 +17,7 @@
 
 import React, { useEffect, useState } from 'react';
 import ButtonPrimary from 'Common/ButtonPrimary/ButtonPrimary';
-import TealCheckedCheckboxIcon from 'Common/TealCheckedCheckboxIcon/TealCheckedCheckboxIcon';
+import ThemedCheckboxIcon from 'Common/ThemedCheckboxIcon/ThemedCheckboxIcon';
 import { useSetRecoilState } from 'recoil';
 import ConfigurationService from 'Services/Api/ConfigurationService';
 import { ModalContentsState } from 'State/ModalContentsState';
@@ -49,7 +49,7 @@ function EmailSentConfirmation(props: Props) {
 		<div className="email-sent-confirmation">
 			<div className="email-sent-confirmation-title">Check your Mail!</div>
 			<div className="paragraph-1-container">
-				<TealCheckedCheckboxIcon />
+				<ThemedCheckboxIcon />
 				<p className="paragraph-1">{paragraph1}</p>
 			</div>
 			<p className="paragraph-2">

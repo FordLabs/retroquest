@@ -30,7 +30,7 @@ jest.mock('Services/Api/ConfigurationService');
 describe('Email Sent Confirmation Modal', () => {
 	let modalContent: ModalContents | null;
 
-	it('should paragraph 1 as passed down as a prop', async () => {
+	it('should show paragraph 1 text as what was passed down as a prop', async () => {
 		renderWithRecoilRoot(<EmailSentConfirmation paragraph1="Test Paragraph" />);
 		await waitForConfigurationCall();
 		expect(screen.getByText('Test Paragraph')).toBeInTheDocument();

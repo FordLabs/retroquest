@@ -22,7 +22,7 @@ import { ThemeState } from 'State/ThemeState';
 import Theme from 'Types/Theme';
 import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
-import TealCheckedCheckboxIcon from './TealCheckedCheckboxIcon';
+import ThemedCheckboxIcon from './ThemedCheckboxIcon';
 
 describe('Teal Checked Checkbox Icon', () => {
 	it('should render checkbox icon as dark turquoise in light mode', async () => {
@@ -51,7 +51,7 @@ async function renderCheckYourMailConfirmation(
 ) {
 	renderWithRecoilRoot(
 		<MemoryRouter>
-			<TealCheckedCheckboxIcon />
+			<ThemedCheckboxIcon />
 		</MemoryRouter>,
 		recoilState
 	);
