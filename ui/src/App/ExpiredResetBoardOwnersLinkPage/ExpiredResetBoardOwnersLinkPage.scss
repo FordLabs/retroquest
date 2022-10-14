@@ -18,6 +18,10 @@
 @use '../../Styles/main';
 
 .expired-link-page {
+	.auth-sub-heading {
+		display: none;
+	}
+
 	.paragraph-1-container {
 		display: flex;
 		align-items: center;

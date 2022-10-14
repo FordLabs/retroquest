@@ -22,14 +22,16 @@ import { useRecoilValue } from 'recoil';
 import { getThemeClassFromUserSettings, ThemeState } from 'State/ThemeState';
 
 import {
-	EXPIRED_LINK_PATH,
+	EXPIRED_EMAIL_RESET_LINK_PATH,
+	EXPIRED_PASSWORD_RESET_LINK_PATH,
 	PASSWORD_RESET_REQUEST_PATH,
 	RECOVER_TEAM_NAME_PATH,
 } from '../RouteConstants';
 
 import ChangeTeamDetailsPage from './ChangeTeamDetails/ChangeTeamDetailsPage';
 import CreateTeamPage from './CreateTeam/CreateTeamPage';
-import ExpiredLinkPage from './ExpiredLinkPage/ExpiredLinkPage';
+import ExpiredResetBoardOwnersLinkPage from './ExpiredResetBoardOwnersLinkPage/ExpiredResetBoardOwnersLinkPage';
+import ExpiredResetPasswordLinkPage from './ExpiredResetPasswordLinkPage/ExpiredResetPasswordLinkPage';
 import LoginPage from './Login/LoginPage';
 import PasswordResetRequestPage from './PasswordResetRequest/PasswordResetRequestPage';
 import RecoverTeamNamePage from './RecoverTeamName/RecoverTeamNamePage';
@@ -59,7 +61,14 @@ function App() {
 				<Route path="/create" element={<CreateTeamPage />} />
 				<Route path="/email/reset" element={<ChangeTeamDetailsPage />} />
 				<Route path="/password/reset" element={<ResetPasswordPage />} />
-				<Route path={EXPIRED_LINK_PATH} element={<ExpiredLinkPage />} />
+				<Route
+					path={EXPIRED_PASSWORD_RESET_LINK_PATH}
+					element={<ExpiredResetPasswordLinkPage />}
+				/>
+				<Route
+					path={EXPIRED_EMAIL_RESET_LINK_PATH}
+					element={<ExpiredResetBoardOwnersLinkPage />}
+				/>
 				<Route
 					path={PASSWORD_RESET_REQUEST_PATH}
 					element={<PasswordResetRequestPage />}
