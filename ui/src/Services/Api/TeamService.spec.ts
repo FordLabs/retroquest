@@ -134,6 +134,9 @@ describe('Team Service', () => {
 
 			expect(actualResponse).toBe(expectedCSVData);
 			expect(axios.get).toHaveBeenCalledWith(`/api/team/${teamId}/csv`, {
+				headers: {
+					Authorization: 'Bearer fake-token',
+				},
 				responseType: 'blob',
 				timeout: 30000,
 			});

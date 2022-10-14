@@ -44,6 +44,7 @@ describe('Board Service', () => {
 			BoardService.archiveRetro(teamId);
 			expect(axios.put).toHaveBeenCalledWith(
 				`/api/team/${teamId}/end-retro`,
+				undefined,
 				mockConfig
 			);
 		});

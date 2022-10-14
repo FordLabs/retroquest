@@ -16,6 +16,7 @@
  */
 
 import { LOGIN_PAGE_PATH } from '../../src/RouteConstants';
+import { TOKEN_KEY } from '../../src/Services/CookieService';
 import { getTeamCredentials } from '../support/helpers';
 import TeamCredentials from '../support/types/teamCredentials';
 import Topic from '../support/types/Topic';
@@ -31,6 +32,10 @@ describe('Login', () => {
 
 	beforeEach(() => {
 		cy.intercept('POST', '/api/team/login').as('postTeamLogin');
+		cy.intercept('GET', '/api/team/*/name').as('getTeamNameById');
+
+		cy.clearCookie('JSESSIONID');
+		cy.clearCookie(TOKEN_KEY);
 
 		cy.visit(LOGIN_PAGE_PATH);
 		cy.contains('Log in to your Team!').should('exist');
@@ -53,6 +58,11 @@ describe('Login', () => {
 		cy.get('@teamNameInput').should('have.value', '');
 
 		cy.visit(`${LOGIN_PAGE_PATH}/${teamCredentials.teamId}`);
+
+		cy.getCookie(TOKEN_KEY).should('not.exist');
+		cy.getCookie('JSESSIONID').should('not.exist');
+
+		cy.wait('@getTeamNameById');
 		cy.get('@teamNameInput').should('have.value', teamCredentials.teamName);
 	});
 
@@ -93,7 +103,6 @@ describe('Login', () => {
 		it('Redirects to login page when action comes back unauthorized', () => {
 			cy.createTeamAndLogin(teamCredentials);
 			cy.document().setCookie('token', '');
-			cy.document().setCookie('JSESSIONID', '');
 			cy.enterThought(Topic.HAPPY, 'I have a thought');
 			cy.url().should(
 				'eq',

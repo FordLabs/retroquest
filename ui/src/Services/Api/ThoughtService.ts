@@ -16,9 +16,8 @@
  */
 
 import axios from 'axios';
-
-import CreateThoughtRequest from '../../Types/CreateThoughtRequest';
-import Thought from '../../Types/Thought';
+import CreateThoughtRequest from 'Types/CreateThoughtRequest';
+import Thought from 'Types/Thought';
 
 import { getThoughtApiPath } from './ApiConstants';
 import getAuthConfig from './getAuthConfig';
@@ -46,7 +45,7 @@ const ThoughtService = {
 
 	upvoteThought(teamId: string, thoughtId: number): Promise<void> {
 		const url = `${getThoughtApiPath(teamId)}/${thoughtId}/heart`;
-		return axios.put(url, getAuthConfig());
+		return axios.put(url, undefined, getAuthConfig());
 	},
 
 	updateDiscussionStatus(

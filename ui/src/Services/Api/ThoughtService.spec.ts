@@ -88,6 +88,7 @@ describe('Thought Service', () => {
 			ThoughtService.upvoteThought(teamId, thoughtId);
 			expect(axios.put).toHaveBeenCalledWith(
 				`/api/team/${teamId}/thought/${thoughtId}/heart`,
+				undefined,
 				mockConfig
 			);
 		});

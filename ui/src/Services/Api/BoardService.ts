@@ -46,7 +46,7 @@ export enum SortOrder {
 const BoardService = {
 	archiveRetro(teamId: string): Promise<void> {
 		const url = `/api/team/${teamId}/end-retro`;
-		return axios.put(url, getAuthConfig());
+		return axios.put(url, undefined, getAuthConfig());
 	},
 
 	getBoards(
