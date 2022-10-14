@@ -25,14 +25,18 @@ import LinkTertiary from 'Common/LinkTertiary/LinkTertiary';
 import PasswordResetTokenService from 'Services/Api/PasswordResetTokenService';
 import TeamService from 'Services/Api/TeamService';
 
-import { EXPIRED_LINK_PATH, LOGIN_PAGE_PATH } from '../../RouteConstants';
+import {
+	EXPIRED_PASSWORD_RESET_LINK_PATH,
+	LOGIN_PAGE_PATH,
+} from '../../RouteConstants';
 
 import './ResetPasswordPage.scss';
 
 function ResetPasswordPage(): JSX.Element {
 	const { search } = useLocation();
 	const navigate = useNavigate();
-	const passwordResetToken = new URLSearchParams(search).get('token') || '';
+	const passwordResetToken =
+		new URLSearchParams(search).get('token') || 'invalid';
 
 	const [newPassword, setNewPassword] = useState<string>('');
 	const [isFormSubmitted, setIsFormSubmitted] = useState(false);
@@ -50,7 +54,7 @@ function ResetPasswordPage(): JSX.Element {
 	useEffect(() => {
 		PasswordResetTokenService.checkIfResetTokenIsValid(passwordResetToken).then(
 			(isValidToken) => {
-				if (!isValidToken) navigate(EXPIRED_LINK_PATH);
+				if (!isValidToken) navigate(EXPIRED_PASSWORD_RESET_LINK_PATH);
 			}
 		);
 	}, [navigate, passwordResetToken]);

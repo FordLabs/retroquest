@@ -35,12 +35,12 @@ jest.mock('react-router-dom', () => ({
 
 describe('Reset Password Page', () => {
 	it('should have RetroQuest header', () => {
-		renderWithToken('');
+		renderWithToken();
 		expect(screen.getByText('RetroQuest')).toBeDefined();
 	});
 
 	it('should have a field for new password, a disabled submit button, and a return to login link', async () => {
-		renderWithToken('');
+		renderWithToken();
 		expect(screen.getByLabelText('New Password')).toBeInTheDocument();
 		const submitButton = screen.getByText('Reset Password');
 		expect(submitButton).toBeDisabled();
@@ -60,8 +60,25 @@ describe('Reset Password Page', () => {
 					PasswordResetTokenService.checkIfResetTokenIsValid
 				).toHaveBeenCalledWith('expired-token')
 			);
-			expect(mockedUsedNavigate).toHaveBeenCalledWith('/expired-link');
-			expect(screen.queryByText('Reset Your Password')).toBeInTheDocument();
+			expect(mockedUsedNavigate).toHaveBeenCalledWith(
+				'/password/reset/expired-link'
+			);
+		});
+
+		it('should navigate to Expired Token page if token is not present in url', async () => {
+			PasswordResetTokenService.checkIfResetTokenIsValid = jest
+				.fn()
+				.mockResolvedValue(false);
+
+			renderWithToken();
+			await waitFor(() =>
+				expect(
+					PasswordResetTokenService.checkIfResetTokenIsValid
+				).toHaveBeenCalledWith('invalid')
+			);
+			expect(mockedUsedNavigate).toHaveBeenCalledWith(
+				'/password/reset/expired-link'
+			);
 		});
 
 		it('should check if token is valid and stay on page if it is valid', async () => {
@@ -76,12 +93,11 @@ describe('Reset Password Page', () => {
 				).toHaveBeenCalledWith('valid-token')
 			);
 			expect(mockedUsedNavigate).not.toHaveBeenCalled();
-			expect(screen.getByText('Reset Your Password')).toBeInTheDocument();
 		});
 	});
 
 	it('should enable submit button once user types valid password', () => {
-		renderWithToken('');
+		renderWithToken();
 		typeIntoNewPasswordField('invalidpassword');
 		const submitButton = screen.getByText('Reset Password');
 		expect(submitButton).toBeDisabled();
@@ -90,7 +106,7 @@ describe('Reset Password Page', () => {
 	});
 
 	it('should send passwords to the backend on submission', async () => {
-		renderWithToken('');
+		renderWithToken();
 		submitValidForm();
 
 		await waitFor(() =>
@@ -114,7 +130,7 @@ describe('Reset Password Page', () => {
 	});
 
 	it('should not send to the API if there is no password', () => {
-		renderWithToken('');
+		renderWithToken();
 		submitValidForm('');
 		expect(TeamService.setPasswordWithResetToken).toHaveBeenCalledTimes(0);
 	});
@@ -150,7 +166,7 @@ function typeIntoNewPasswordField(password: string = 'P@ssw0rd') {
 	});
 }
 
-function renderWithToken(token: string) {
+function renderWithToken(token: string = '') {
 	const initialEntry =
 		token !== '' ? '/password/reset?token=' + token : '/password/reset';
 	renderWithRecoilRoot(

@@ -51,6 +51,15 @@ describe('Login Recovery', () => {
 				ensureTeamEmailsGotSavedToDB(teamCredentials);
 			});
 		});
+
+		it('Redirect to "Expired Link" page when token is invalid', () => {
+			cy.visit(`/email/reset?token=invalid-token`);
+
+			cy.findByText('Expired Link').should('exist');
+			cy.findByText('You can request a new link in the settings menu.').should(
+				'exist'
+			);
+		});
 	});
 });
 
