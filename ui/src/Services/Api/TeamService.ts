@@ -29,7 +29,6 @@ import {
 	CHANGE_EMAIL_API_PATH,
 	CHANGE_PASSWORD_API_PATH,
 	getCSVApiPath,
-	getTeamNameApiPath,
 	LOGIN_API_PATH,
 	TEAM_API_PATH,
 } from './ApiConstants';
@@ -100,8 +99,8 @@ const TeamService = {
 	},
 
 	getTeamName(teamId: string): Promise<string> {
-		const TEAM_NAME_API_PATH = getTeamNameApiPath(teamId);
-		return axios.get(TEAM_NAME_API_PATH).then((res) => res.data);
+		const url = `${TEAM_API_PATH}/${teamId}/name`;
+		return axios.get(url).then((res) => res.data);
 	},
 
 	updateTeamEmailAddresses(teamId: string, email1: string, email2: string) {
