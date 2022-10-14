@@ -118,12 +118,15 @@ function shouldBeOnArchivesPage(teamId: string) {
 }
 
 function getColumnsForTeam(teamId: string): Chainable<Column[]> {
-	return cy
-		.request({
-			url: `/api/team/${teamId}/columns`,
-			method: 'GET',
-		})
-		.then((response) => response.body as Column[]);
+	return cy.getCookie('token').then((cookie) => {
+		return cy
+			.request({
+				url: `/api/team/${teamId}/columns`,
+				method: 'GET',
+				headers: { Authorization: 'Bearer ' + cookie.value },
+			})
+			.then((response) => response.body as Column[]);
+	});
 }
 
 function addThoughtToTeam(
@@ -134,17 +137,20 @@ function addThoughtToTeam(
 	topic: ThoughtTopic,
 	columnId: number
 ) {
-	cy.request({
-		url: `/api/team/${teamId}/thought`,
-		failOnStatusCode: false,
-		method: 'POST',
-		body: {
-			message,
-			hearts,
-			discussed,
-			topic,
-			columnId,
-		},
+	cy.getCookie('token').then((cookie) => {
+		cy.request({
+			url: `/api/team/${teamId}/thought`,
+			failOnStatusCode: false,
+			method: 'POST',
+			headers: { Authorization: 'Bearer ' + cookie.value },
+			body: {
+				message,
+				hearts,
+				discussed,
+				topic,
+				columnId,
+			},
+		});
 	});
 }
 
@@ -153,23 +159,29 @@ function addCompletedActionItemToTeam(
 	task: string,
 	assignee: string
 ) {
-	cy.request({
-		url: `/api/team/${teamId}/action-item/`,
-		method: 'POST',
-		body: {
-			task,
-			completed: true,
-			assignee,
-			dateCreated: new Date(),
-			archived: true,
-		},
+	cy.getCookie('token').then((cookie) => {
+		cy.request({
+			url: `/api/team/${teamId}/action-item`,
+			method: 'POST',
+			headers: { Authorization: 'Bearer ' + cookie.value },
+			body: {
+				task,
+				completed: true,
+				assignee,
+				dateCreated: new Date(),
+				archived: true,
+			},
+		});
 	});
 }
 
 function archiveBoard(teamId: string) {
-	cy.request({
-		url: `/api/team/${teamId}/end-retro`,
-		method: 'PUT',
-		body: {},
+	cy.getCookie('token').then((cookie) => {
+		cy.request({
+			url: `/api/team/${teamId}/end-retro`,
+			method: 'PUT',
+			headers: { Authorization: 'Bearer ' + cookie.value },
+			body: {},
+		});
 	});
 }

@@ -119,6 +119,7 @@ const TeamService = {
 		const url = getCSVApiPath(teamId);
 		return axios
 			.get(url, {
+				...getAuthConfig(),
 				responseType: 'blob',
 				timeout: 30000,
 			})
