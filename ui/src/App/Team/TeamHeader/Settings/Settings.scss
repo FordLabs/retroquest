@@ -118,12 +118,6 @@
 
 @include main.dark-theme {
 	.settings {
-		background-color: main.$dark-asphalt;
-
-		.settings-title {
-			color: main.$gray-1;
-		}
-
 		.settings-subtitle {
 			color: main.$light-gray;
 		}

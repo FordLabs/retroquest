@@ -28,6 +28,10 @@
 	background-color: colors.$white;
 	border-radius: 6px;
 	box-shadow: 0 19px 38px rgba(colors.$black, 0.3);
+
+	.dark-theme & {
+		background-color: colors.$dark-asphalt;
+	}
 }
 
 @mixin white-modal-title {
@@ -44,5 +48,9 @@
 
 	@include mixins.breakpoint-medium {
 		font-size: 2.5rem;
+	}
+
+	.dark-theme & {
+		color: colors.$gray-1;
 	}
 }
