@@ -26,13 +26,40 @@ import EnvironmentConfig from 'Types/EnvironmentConfig';
 import Theme from 'Types/Theme';
 import { RecoilObserver } from 'Utils/RecoilObserver';
 
+import {
+	EXPIRED_EMAIL_RESET_LINK_PATH,
+	EXPIRED_PASSWORD_RESET_LINK_PATH,
+	PASSWORD_RESET_REQUEST_PATH,
+	RECOVER_TEAM_NAME_PATH,
+} from '../RouteConstants';
+
 import App from './App';
 
 jest.mock('Services/Api/ConfigurationService');
 jest.mock('./Login/LoginPage', () => {
 	return () => <div>Login Page</div>;
 });
-
+jest.mock('./ChangeTeamDetails/ChangeTeamDetailsPage', () => {
+	return () => <div>Change Team Details Page</div>;
+});
+jest.mock('./ResetPassword/ResetPasswordPage', () => {
+	return () => <div>Reset Password Page</div>;
+});
+jest.mock('./ExpiredResetPasswordLinkPage/ExpiredResetPasswordLinkPage', () => {
+	return () => <div>Expired Reset Password Link Page</div>;
+});
+jest.mock(
+	'./ExpiredResetBoardOwnersLinkPage/ExpiredResetBoardOwnersLinkPage',
+	() => {
+		return () => <div>Expired Reset Email Link Page</div>;
+	}
+);
+jest.mock('./PasswordResetRequest/PasswordResetRequestPage', () => {
+	return () => <div>Password Reset Request Page</div>;
+});
+jest.mock('./RecoverTeamName/RecoverTeamNamePage', () => {
+	return () => <div>Recover Team Names Page</div>;
+});
 jest.mock('Common/Modal/Modal', () => {
 	return () => <div>Root Modal</div>;
 });
@@ -118,6 +145,42 @@ describe('App', () => {
 		await waitFor(() => expect(ConfigurationService.get).toHaveBeenCalled());
 		expect(environmentConfig).toEqual(mockEnvironmentConfig);
 	});
+
+	describe('When email is disabled', () => {
+		it.each([
+			['Change Team Details Page', '/email/reset'],
+			['Reset Password Page', '/password/reset'],
+			['Expired Reset Password Link Page', EXPIRED_PASSWORD_RESET_LINK_PATH],
+			['Expired Reset Email Link Page', EXPIRED_EMAIL_RESET_LINK_PATH],
+			['Password Reset Request Page', PASSWORD_RESET_REQUEST_PATH],
+			['Recover Team Names Page', RECOVER_TEAM_NAME_PATH],
+		])(
+			'should not render the "%s" page',
+			async (pageName: string, path: string) => {
+				renderAppWithEmailEnabledSetTo(false, path);
+				expect(screen.queryByText(pageName)).toBeNull();
+				expect(screen.getByText('404')).toBeInTheDocument();
+			}
+		);
+	});
+
+	describe('When email is enabled', () => {
+		it.each([
+			['Change Team Details Page', '/email/reset'],
+			['Reset Password Page', '/password/reset'],
+			['Expired Reset Password Link Page', EXPIRED_PASSWORD_RESET_LINK_PATH],
+			['Expired Reset Email Link Page', EXPIRED_EMAIL_RESET_LINK_PATH],
+			['Password Reset Request Page', PASSWORD_RESET_REQUEST_PATH],
+			['Recover Team Names Page', RECOVER_TEAM_NAME_PATH],
+		])(
+			'should render the "%s" page',
+			async (pageName: string, path: string) => {
+				renderAppWithEmailEnabledSetTo(true, path);
+				expect(screen.getByText(pageName)).toBeInTheDocument();
+				expect(screen.queryByText('404')).toBeNull();
+			}
+		);
+	});
 });
 
 async function renderApp() {
@@ -138,4 +201,24 @@ async function renderApp() {
 	);
 
 	await waitFor(() => expect(ConfigurationService.get).toHaveBeenCalled());
+}
+
+function renderAppWithEmailEnabledSetTo(
+	emailIsEnabled: boolean,
+	routeThatShouldNotExist: string
+) {
+	render(
+		<MemoryRouter initialEntries={[routeThatShouldNotExist]}>
+			<RecoilRoot
+				initializeState={({ set }) => {
+					set(EnvironmentConfigState, {
+						email_is_enabled: emailIsEnabled,
+						email_from_address: '',
+					});
+				}}
+			>
+				<App />
+			</RecoilRoot>
+		</MemoryRouter>
+	);
 }
