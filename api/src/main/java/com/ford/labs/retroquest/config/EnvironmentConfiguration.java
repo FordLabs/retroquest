@@ -26,4 +26,7 @@ import org.springframework.stereotype.Component;
 public class EnvironmentConfiguration {
     @Value("${retroquest.email.from-address}")
     String email_from_address = "";
+
+    @Value("${retroquest.email.is-enabled}")
+    Boolean email_is_enabled;
 }

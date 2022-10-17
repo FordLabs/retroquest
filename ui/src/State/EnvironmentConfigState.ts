@@ -15,15 +15,10 @@
  * limitations under the License.
  */
 
+import { atom } from 'recoil';
 import EnvironmentConfig from 'Types/EnvironmentConfig';
 
-export const mockEnvironmentConfig: EnvironmentConfig = {
-	email_from_address: 'mock_email_from_address@email.com',
-	email_is_enabled: true,
-};
-
-const configurationService = {
-	get: jest.fn().mockResolvedValue(mockEnvironmentConfig),
-};
-
-export default configurationService;
+export const EnvironmentConfigState = atom<EnvironmentConfig | null>({
+	key: 'EnvironmentConfigState',
+	default: null,
+});

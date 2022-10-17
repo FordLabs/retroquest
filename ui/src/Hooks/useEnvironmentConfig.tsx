@@ -15,15 +15,24 @@
  * limitations under the License.
  */
 
+import { useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import ConfigurationService from 'Services/Api/ConfigurationService';
 import EnvironmentConfig from 'Types/EnvironmentConfig';
 
-export const mockEnvironmentConfig: EnvironmentConfig = {
-	email_from_address: 'mock_email_from_address@email.com',
-	email_is_enabled: true,
-};
+import { EnvironmentConfigState } from '../State/EnvironmentConfigState';
 
-const configurationService = {
-	get: jest.fn().mockResolvedValue(mockEnvironmentConfig),
-};
+function useEnvironmentConfig(): EnvironmentConfig | null {
+	const [environmentConfig, setEnvironmentConfig] = useRecoilState(
+		EnvironmentConfigState
+	);
 
-export default configurationService;
+	useEffect(() => {
+		if (!environmentConfig)
+			ConfigurationService.get().then(setEnvironmentConfig);
+	}, [environmentConfig, setEnvironmentConfig]);
+
+	return environmentConfig;
+}
+
+export default useEnvironmentConfig;

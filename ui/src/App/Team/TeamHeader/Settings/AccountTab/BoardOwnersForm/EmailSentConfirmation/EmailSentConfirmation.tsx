@@ -15,12 +15,13 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ButtonPrimary from 'Common/ButtonPrimary/ButtonPrimary';
 import ThemedCheckboxIcon from 'Common/ThemedCheckboxIcon/ThemedCheckboxIcon';
 import { useSetRecoilState } from 'recoil';
-import ConfigurationService from 'Services/Api/ConfigurationService';
 import { ModalContentsState } from 'State/ModalContentsState';
+
+import useEnvironmentConfig from '../../../../../../../Hooks/useEnvironmentConfig';
 
 import './EmailSentConfirmation.scss';
 
@@ -33,17 +34,9 @@ function EmailSentConfirmation(props: Props) {
 
 	const setModalContents = useSetRecoilState(ModalContentsState);
 
-	const [emailFromAddress, setEmailFromAddress] = useState<string>('');
+	const environmentConfig = useEnvironmentConfig();
 
 	const closeModal = () => setModalContents(null);
-
-	useEffect(() => {
-		if (!emailFromAddress) {
-			ConfigurationService.get().then((config) =>
-				setEmailFromAddress(config.email_from_address)
-			);
-		}
-	});
 
 	return (
 		<div className="email-sent-confirmation">
@@ -54,7 +47,7 @@ function EmailSentConfirmation(props: Props) {
 			</div>
 			<p className="paragraph-2">
 				If an email doesn’t show up soon, check your spam folder. We sent it
-				from {emailFromAddress}.
+				from {environmentConfig?.email_from_address}.
 			</p>
 			<ButtonPrimary onClick={closeModal}>Close</ButtonPrimary>
 		</div>

@@ -24,11 +24,13 @@ import InputTeamName from 'Common/InputTeamName/InputTeamName';
 import LinkSecondary from 'Common/LinkSecondary/LinkSecondary';
 import LinkTertiary from 'Common/LinkTertiary/LinkTertiary';
 import useAuth from 'Hooks/useAuth';
+import { useRecoilValue } from 'recoil';
 import {
 	CREATE_TEAM_PAGE_PATH,
 	PASSWORD_RESET_REQUEST_PATH,
 } from 'RouteConstants';
 import TeamService from 'Services/Api/TeamService';
+import { EnvironmentConfigState } from 'State/EnvironmentConfigState';
 
 import './LoginPage.scss';
 
@@ -36,6 +38,8 @@ function LoginPage(): JSX.Element {
 	const { teamId = '' } = useParams();
 
 	const { login } = useAuth();
+
+	const environmentConfig = useRecoilValue(EnvironmentConfigState);
 
 	const [teamName, setTeamName] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
@@ -89,9 +93,11 @@ function LoginPage(): JSX.Element {
 					validateInput={false}
 				/>
 			</Form>
-			<LinkTertiary to={PASSWORD_RESET_REQUEST_PATH}>
-				Forgot your login info?
-			</LinkTertiary>
+			{environmentConfig?.email_is_enabled && (
+				<LinkTertiary to={PASSWORD_RESET_REQUEST_PATH}>
+					Forgot your login info?
+				</LinkTertiary>
+			)}
 			<HorizontalRuleWithText text="or" />
 			<LinkSecondary
 				to={CREATE_TEAM_PAGE_PATH}

@@ -15,20 +15,20 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import Form from 'Common/AuthTemplate/Form/Form';
 import CheckYourMailConfirmationPage from 'Common/CheckYourMailConfirmationPage/CheckYourMailConfirmationPage';
 import InputEmail from 'Common/InputEmail/InputEmail';
-import ConfigurationService from 'Services/Api/ConfigurationService';
-
-import EmailService from '../../Services/Api/EmailService';
+import useEnvironmentConfig from 'Hooks/useEnvironmentConfig';
+import EmailService from 'Services/Api/EmailService';
 
 function RecoverTeamNamePage() {
-	const [emailFromAddress, setEmailFromAddress] = useState<string>('');
 	const [recoveryEmail, setRecoveryEmail] = useState<string>('');
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
 	const [emailSent, setEmailSent] = useState<boolean>(false);
+
+	const environmentConfig = useEnvironmentConfig();
 
 	function onSubmit() {
 		EmailService.sendTeamNameRecoveryEmail(recoveryEmail)
@@ -37,14 +37,6 @@ function RecoverTeamNamePage() {
 				setErrorMessages([error.response?.data?.message]);
 			});
 	}
-
-	useEffect(() => {
-		if (!emailFromAddress) {
-			ConfigurationService.get().then((config) =>
-				setEmailFromAddress(config.email_from_address)
-			);
-		}
-	});
 
 	return (
 		<>
@@ -71,7 +63,7 @@ function RecoverTeamNamePage() {
 			{emailSent && (
 				<CheckYourMailConfirmationPage
 					paragraph1={`If any RetroQuest teams are registered to ${recoveryEmail}, we’ve sent a list of all team names that are connected to the email address.`}
-					paragraph2={`If an email doesn’t show up soon, check your spam folder. We sent it from ${emailFromAddress}.`}
+					paragraph2={`If an email doesn’t show up soon, check your spam folder. We sent it from ${environmentConfig?.email_from_address}.`}
 				/>
 			)}
 		</>

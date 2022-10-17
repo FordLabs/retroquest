@@ -18,6 +18,7 @@
 import React, { useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Modal from 'Common/Modal/Modal';
+import useEnvironmentConfig from 'Hooks/useEnvironmentConfig';
 import { useRecoilValue } from 'recoil';
 import { getThemeClassFromUserSettings, ThemeState } from 'State/ThemeState';
 
@@ -47,6 +48,8 @@ import './App.scss';
 
 function App() {
 	const theme = useRecoilValue(ThemeState);
+
+	useEnvironmentConfig();
 
 	useEffect(() => {
 		document.body.className = getThemeClassFromUserSettings();

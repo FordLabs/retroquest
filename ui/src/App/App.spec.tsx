@@ -17,27 +17,34 @@
 
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { RecoilRoot } from 'recoil';
-
-import Theme from '../Types/Theme';
+import { mockEnvironmentConfig } from 'Services/Api/__mocks__/ConfigurationService';
+import ConfigurationService from 'Services/Api/ConfigurationService';
+import { EnvironmentConfigState } from 'State/EnvironmentConfigState';
+import EnvironmentConfig from 'Types/EnvironmentConfig';
+import Theme from 'Types/Theme';
+import { RecoilObserver } from 'Utils/RecoilObserver';
 
 import App from './App';
 
+jest.mock('Services/Api/ConfigurationService');
 jest.mock('./Login/LoginPage', () => {
 	return () => <div>Login Page</div>;
 });
 
-jest.mock('../Common/Modal/Modal', () => {
+jest.mock('Common/Modal/Modal', () => {
 	return () => <div>Root Modal</div>;
 });
 
+let environmentConfig: EnvironmentConfig | null;
+
 describe('App', () => {
-	describe('without local storage theme', () => {
+	describe('Without local storage theme', () => {
 		it('should default theme to dark if device prefers color scheme dark', async () => {
 			(window.matchMedia as jest.Mock).mockReturnValue({ matches: true });
 
-			renderApp();
+			await renderApp();
 
 			await screen.findByText('Login Page');
 			expect(window.matchMedia).toHaveBeenCalledWith(
@@ -46,10 +53,10 @@ describe('App', () => {
 			expect(document.body.classList).toContain('dark-theme');
 		});
 
-		it('should default theme to light if device does not prefer dark', () => {
+		it('should default theme to light if device does not prefer dark', async () => {
 			(window.matchMedia as jest.Mock).mockReturnValue({ matches: false });
 
-			renderApp();
+			await renderApp();
 
 			expect(window.matchMedia).toHaveBeenCalledWith(
 				'(prefers-color-scheme:dark)'
@@ -58,28 +65,28 @@ describe('App', () => {
 		});
 	});
 
-	describe('with local storage theme', () => {
-		it('should set theme to dark when local storage theme is "dark-theme"', () => {
+	describe('With local storage theme', () => {
+		it('should set theme to dark when local storage theme is "dark-theme"', async () => {
 			window.localStorage.setItem('theme', Theme.DARK);
 
-			renderApp();
+			await renderApp();
 
 			expect(document.body.classList).toContain('dark-theme');
 		});
 
-		it('should set theme to light when local storage theme is "light-theme"', () => {
+		it('should set theme to light when local storage theme is "light-theme"', async () => {
 			window.localStorage.setItem('theme', Theme.LIGHT);
 
-			renderApp();
+			await renderApp();
 
 			expect(document.body.classList).toContain('light-theme');
 		});
 
-		it('should set theme to dark when local storage theme is "system-theme" and system is in dark mode', () => {
+		it('should set theme to dark when local storage theme is "system-theme" and system is in dark mode', async () => {
 			window.localStorage.setItem('theme', Theme.SYSTEM);
 			(window.matchMedia as jest.Mock).mockReturnValue({ matches: true });
 
-			renderApp();
+			await renderApp();
 
 			expect(window.matchMedia).toHaveBeenCalledWith(
 				'(prefers-color-scheme:dark)'
@@ -87,11 +94,11 @@ describe('App', () => {
 			expect(document.body.classList).toContain('dark-theme');
 		});
 
-		it('should set theme to light when local storage theme is "system-theme" and system is in light mode', () => {
+		it('should set theme to light when local storage theme is "system-theme" and system is in light mode', async () => {
 			window.localStorage.setItem('theme', Theme.SYSTEM);
 			(window.matchMedia as jest.Mock).mockReturnValue({ matches: false });
 
-			renderApp();
+			await renderApp();
 
 			expect(window.matchMedia).toHaveBeenCalledWith(
 				'(prefers-color-scheme:dark)'
@@ -100,18 +107,35 @@ describe('App', () => {
 		});
 	});
 
-	it('should include root modal', () => {
-		renderApp();
+	it('should include root modal', async () => {
+		await renderApp();
 		screen.getByText('Root Modal');
+	});
+
+	it('should get environment config and store in global state', async () => {
+		await renderApp();
+
+		await waitFor(() => expect(ConfigurationService.get).toHaveBeenCalled());
+		expect(environmentConfig).toEqual(mockEnvironmentConfig);
 	});
 });
 
-const renderApp = () => {
+async function renderApp() {
+	environmentConfig = null;
+
 	render(
 		<MemoryRouter>
 			<RecoilRoot>
+				<RecoilObserver
+					recoilState={EnvironmentConfigState}
+					onChange={(value: EnvironmentConfig) => {
+						environmentConfig = value;
+					}}
+				/>
 				<App />
 			</RecoilRoot>
 		</MemoryRouter>
 	);
-};
+
+	await waitFor(() => expect(ConfigurationService.get).toHaveBeenCalled());
+}

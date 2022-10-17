@@ -19,10 +19,12 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
-import { RecoilRoot } from 'recoil';
+import { MutableSnapshot, RecoilRoot } from 'recoil';
+import { mockEnvironmentConfig } from 'Services/Api/__mocks__/ConfigurationService';
 import { mockTeam } from 'Services/Api/__mocks__/TeamService';
 import ContributorsService from 'Services/Api/ContributorsService';
 import TeamService from 'Services/Api/TeamService';
+import { EnvironmentConfigState } from 'State/EnvironmentConfigState';
 
 import LoginPage from './LoginPage';
 
@@ -40,12 +42,13 @@ jest.mock('Hooks/useAuth', () => {
 
 describe('Login Page', () => {
 	let container: HTMLElement;
+	let unmount: () => void;
 	let rerender: (ui: ReactElement) => void;
 	const validTeamName = mockTeam.name;
 	const validPassword = 'Password1';
 
 	beforeEach(async () => {
-		({ container, rerender } = renderComponent());
+		({ container, rerender, unmount } = renderComponent());
 
 		await waitFor(() => expect(ContributorsService.get).toHaveBeenCalled());
 	});
@@ -77,7 +80,11 @@ describe('Login Page', () => {
 		expect(teamNameInput.value).toBe('');
 
 		rerender(
-			<RecoilRoot>
+			<RecoilRoot
+				initializeState={({ set }: MutableSnapshot) => {
+					set(EnvironmentConfigState, mockEnvironmentConfig);
+				}}
+			>
 				<MemoryRouter initialEntries={[`/login/${mockTeam.id}`]}>
 					<Routes>
 						<Route path="/login/:teamId" element={<LoginPage />} />
@@ -113,12 +120,29 @@ describe('Login Page', () => {
 		);
 	});
 
+	it('should hide "Forgot your login info?" link if environment config says email is disabled', async () => {
+		unmount();
+		renderComponent(({ set }) => {
+			set(EnvironmentConfigState, {
+				email_from_address: '',
+				email_is_enabled: false,
+			});
+		});
+		await waitFor(() => expect(ContributorsService.get).toHaveBeenCalled());
+
+		expect(screen.queryByText('Forgot your login info?')).toBeNull();
+	});
+
 	describe('Form errors', () => {
 		it('should show error if login was unsuccessful', async () => {
 			TeamService.login = jest.fn().mockRejectedValue(new Error('Async error'));
 
 			rerender(
-				<RecoilRoot>
+				<RecoilRoot
+					initializeState={({ set }: MutableSnapshot) => {
+						set(EnvironmentConfigState, mockEnvironmentConfig);
+					}}
+				>
 					<MemoryRouter initialEntries={[`/login/${validTeamName}`]}>
 						<Routes>
 							<Route path="/login/:teamId" element={<LoginPage />} />
@@ -177,10 +201,14 @@ const typeIntoTeamNameInput = (teamName: string) => {
 	fireEvent.change(teamNameInput, { target: { value: teamName } });
 };
 
-function renderComponent() {
+function renderComponent(
+	recoilState = ({ set }: MutableSnapshot) => {
+		set(EnvironmentConfigState, mockEnvironmentConfig);
+	}
+) {
 	return render(
 		<MemoryRouter initialEntries={['/login']}>
-			<RecoilRoot>
+			<RecoilRoot initializeState={recoilState}>
 				<Routes>
 					<Route path="/login" element={<LoginPage />} />
 				</Routes>
