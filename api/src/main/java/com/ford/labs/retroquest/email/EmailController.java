@@ -80,6 +80,7 @@ public class EmailController {
     public void requestTeamPasswordReset(@RequestBody ResetRequest passwordResetRequest){
         Team team = teamService.getTeamByName(passwordResetRequest.getTeamName());
         if(team != null && teamService.isEmailOnTeam(team, passwordResetRequest.getEmail())) {
+            passwordResetTokenService.deleteAllExpiredTokensByTeam(team);
             PasswordResetToken passwordResetToken = passwordResetTokenService.getNewPasswordResetToken(team);
 
             emailService.sendUnencryptedEmail(

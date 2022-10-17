@@ -177,7 +177,26 @@ public class EmailApiTest extends ApiTestBase {
         mockMvc.perform(post(passwordResetRequestPath).contentType(APPLICATION_JSON).content(objectMapper.writeValueAsBytes(new ResetRequest("TeamName", "e@ma.il"))))
                 .andExpect(status().isOk());
 
-        assertThat(passwordResetTokenRepository.count()).isEqualTo(1);
+        assertThat(passwordResetTokenRepository.count()).isEqualTo(2);
+    }
+
+    @Test
+    void password_reset_request__should_send_a_second_password_reset_request_email_and_delete_all_expired_tokens_for_team() throws Exception {
+        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
+        teamRepository.save(expectedResetTeam);
+
+        PasswordResetToken passwordResetToken = new PasswordResetToken();
+        passwordResetToken.setDateCreated(LocalDateTime.MIN);
+        passwordResetToken.setTeam(expectedResetTeam);
+        passwordResetTokenRepository.save(passwordResetToken);
+
+        mockMvc.perform(post(passwordResetRequestPath).contentType(APPLICATION_JSON).content(objectMapper.writeValueAsBytes(new ResetRequest("TeamName", "e@ma.il"))))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post(passwordResetRequestPath).contentType(APPLICATION_JSON).content(objectMapper.writeValueAsBytes(new ResetRequest("TeamName", "e@ma.il"))))
+                .andExpect(status().isOk());
+
+        assertThat(passwordResetTokenRepository.count()).isEqualTo(2);
     }
 
     @Test

@@ -19,6 +19,8 @@ package com.ford.labs.retroquest.password_reset_token;
 import com.ford.labs.retroquest.team.Team;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PasswordResetTokenService {
     private final PasswordResetTokenRepository passwordResetTokenRepository;
@@ -30,8 +32,16 @@ public class PasswordResetTokenService {
     public PasswordResetToken getNewPasswordResetToken(Team team) {
         PasswordResetToken passwordResetToken = new PasswordResetToken();
         passwordResetToken.setTeam(team);
-        passwordResetTokenRepository.deleteAllByTeam(team);
         passwordResetTokenRepository.save(passwordResetToken);
         return passwordResetToken;
+    }
+
+    public void deleteAllExpiredTokensByTeam(Team team) {
+        List<PasswordResetToken> resetTokens = passwordResetTokenRepository.findAllByTeam(team);
+        resetTokens.forEach(token -> {
+            if (token.isExpired()) {
+                passwordResetTokenRepository.deleteByResetToken(token.getResetToken());
+            }
+        });
     }
 }
