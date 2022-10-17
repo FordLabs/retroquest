@@ -97,6 +97,7 @@ public class EmailController {
     public void requestTeamEmailReset(@RequestBody ResetRequest emailResetRequest){
         Team team = teamService.getTeamByName(emailResetRequest.getTeamName());
         if (team != null && teamService.isEmailOnTeam(team, emailResetRequest.getEmail())) {
+            emailResetTokenService.deleteAllExpiredTokensByTeam(team);
             EmailResetToken emailResetToken = emailResetTokenService.getNewEmailResetToken(team);
 
             emailService.sendUnencryptedEmail(

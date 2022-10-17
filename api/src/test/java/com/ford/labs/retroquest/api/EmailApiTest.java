@@ -32,6 +32,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.time.LocalDateTime;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -257,7 +259,26 @@ public class EmailApiTest extends ApiTestBase {
         mockMvc.perform(post(emailResetRequestPath).contentType(APPLICATION_JSON).content(objectMapper.writeValueAsBytes(new ResetRequest("TeamName", "e@ma.il"))))
                 .andExpect(status().isOk());
 
-        assertThat(emailResetTokenRepository.count()).isEqualTo(1);
+        assertThat(emailResetTokenRepository.count()).isEqualTo(2);
+    }
+
+    @Test
+    void email_reset_request__should_send_a_second_email_reset_request_and_delete_all_expired_tokens_for_team() throws Exception {
+        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
+        teamRepository.save(expectedResetTeam);
+
+        EmailResetToken emailResetToken = new EmailResetToken();
+        emailResetToken.setDateCreated(LocalDateTime.MIN);
+        emailResetToken.setTeam(expectedResetTeam);
+        emailResetTokenRepository.save(emailResetToken);
+
+        mockMvc.perform(post(emailResetRequestPath).contentType(APPLICATION_JSON).content(objectMapper.writeValueAsBytes(new ResetRequest("TeamName", "e@ma.il"))))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post(emailResetRequestPath).contentType(APPLICATION_JSON).content(objectMapper.writeValueAsBytes(new ResetRequest("TeamName", "e@ma.il"))))
+                .andExpect(status().isOk());
+
+        assertThat(emailResetTokenRepository.count()).isEqualTo(2);
     }
 
     @Test

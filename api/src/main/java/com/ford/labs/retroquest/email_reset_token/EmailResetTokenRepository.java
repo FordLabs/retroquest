@@ -22,13 +22,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 public interface EmailResetTokenRepository extends JpaRepository<EmailResetToken, String> {
     EmailResetToken findByTeam(Team team);
 
+    List<EmailResetToken> findAllByTeam(Team team);
+
     EmailResetToken findByResetToken(String resetToken);
 
     @Transactional
-    void deleteAllByTeam(Team team);
+    void deleteByResetToken(String resetToken);
 }
