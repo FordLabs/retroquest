@@ -23,6 +23,8 @@ retroquest:
   email:
     from-address: rq@fake.com
     is-enabled: true
+    reset:
+      token-lifetime-seconds: 600
   password:
     reset:
       token-lifetime-seconds: 600

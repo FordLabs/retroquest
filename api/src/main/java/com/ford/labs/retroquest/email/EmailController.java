@@ -80,6 +80,7 @@ public class EmailController {
     public void requestTeamPasswordReset(@RequestBody ResetRequest passwordResetRequest){
         Team team = teamService.getTeamByName(passwordResetRequest.getTeamName());
         if(team != null && teamService.isEmailOnTeam(team, passwordResetRequest.getEmail())) {
+            passwordResetTokenService.deleteAllExpiredTokensByTeam(team);
             PasswordResetToken passwordResetToken = passwordResetTokenService.getNewPasswordResetToken(team);
 
             emailService.sendUnencryptedEmail(
@@ -97,6 +98,7 @@ public class EmailController {
     public void requestTeamEmailReset(@RequestBody ResetRequest emailResetRequest){
         Team team = teamService.getTeamByName(emailResetRequest.getTeamName());
         if (team != null && teamService.isEmailOnTeam(team, emailResetRequest.getEmail())) {
+            emailResetTokenService.deleteAllExpiredTokensByTeam(team);
             EmailResetToken emailResetToken = emailResetTokenService.getNewEmailResetToken(team);
 
             emailService.sendUnencryptedEmail(

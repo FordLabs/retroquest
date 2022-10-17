@@ -43,7 +43,7 @@ public class EmailResetTokenController {
     @GetMapping("/lifetime-in-seconds")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     @Operation(description = "Get the number of seconds before an email reset token expires")
-    public ResponseEntity<Integer> getResetTokenValiditySeconds(@Value("${retroquest.password.reset.token-lifetime-seconds:600}") int tokenSeconds){
+    public ResponseEntity<Integer> getResetTokenValiditySeconds(@Value("${retroquest.email.reset.token-lifetime-seconds:600}") int tokenSeconds){
         return ResponseEntity.ok(tokenSeconds);
     }
 

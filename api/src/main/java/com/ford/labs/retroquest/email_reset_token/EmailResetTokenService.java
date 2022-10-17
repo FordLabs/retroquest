@@ -19,6 +19,8 @@ package com.ford.labs.retroquest.email_reset_token;
 import com.ford.labs.retroquest.team.Team;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EmailResetTokenService {
     private final EmailResetTokenRepository emailResetTokenRepository;
@@ -30,8 +32,16 @@ public class EmailResetTokenService {
     public EmailResetToken getNewEmailResetToken(Team team) {
         EmailResetToken emailResetToken = new EmailResetToken();
         emailResetToken.setTeam(team);
-        emailResetTokenRepository.deleteAllByTeam(team);
         emailResetTokenRepository.save(emailResetToken);
         return emailResetToken;
+    }
+
+    public void deleteAllExpiredTokensByTeam(Team team) {
+        List<EmailResetToken> resetTokens = emailResetTokenRepository.findAllByTeam(team);
+        resetTokens.forEach(token -> {
+            if (token.isExpired()) {
+                emailResetTokenRepository.deleteByResetToken(token.getResetToken());
+            }
+        });
     }
 }
