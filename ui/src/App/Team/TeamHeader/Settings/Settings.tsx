@@ -17,6 +17,8 @@
 
 import React, { useState } from 'react';
 import classnames from 'classnames';
+import { useRecoilValue } from 'recoil';
+import { EnvironmentConfigState } from 'State/EnvironmentConfigState';
 
 import AccountTab from './AccountTab/AccountTab';
 import { AddBoardOwnersFormProps } from './AccountTab/AddBoardOwnersForm/AddBoardOwnersForm';
@@ -39,6 +41,8 @@ interface Props {
 export function Settings(props: Props) {
 	const { activeTab = SettingsTabs.STYLES, accountTabData } = props;
 
+	const environmentConfig = useRecoilValue(EnvironmentConfigState);
+
 	const [tab, setTab] = useState<SettingsTabs>(activeTab);
 
 	const stylesTabIsActive = () => tab === SettingsTabs.STYLES;
@@ -57,12 +61,14 @@ export function Settings(props: Props) {
 					>
 						Styles
 					</button>
-					<button
-						className={classnames('tab', { selected: accountTabIsActive() })}
-						onClick={() => setTab(SettingsTabs.ACCOUNT)}
-					>
-						Account
-					</button>
+					{environmentConfig?.email_is_enabled && (
+						<button
+							className={classnames('tab', { selected: accountTabIsActive() })}
+							onClick={() => setTab(SettingsTabs.ACCOUNT)}
+						>
+							Account
+						</button>
+					)}
 					<button
 						className={classnames('tab', { selected: infoTabIsActive() })}
 						onClick={() => setTab(SettingsTabs.INFO)}

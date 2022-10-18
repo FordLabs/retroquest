@@ -42,6 +42,6 @@ public class ConfigurationApiTest {
                 .andReturn();
 
         assertThat(mvcResult.getResponse().getContentAsString())
-                .isEqualTo("{\"email_from_address\":\"test@mail.com\"}");
+                .isEqualTo("{\"email_from_address\":\"test@mail.com\",\"email_is_enabled\":true}");
     }
 }

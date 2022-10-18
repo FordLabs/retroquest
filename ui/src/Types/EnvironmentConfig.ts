@@ -16,6 +16,7 @@
  */
 
 interface EnvironmentConfig {
+	email_is_enabled: boolean;
 	email_from_address: string;
 }
 
