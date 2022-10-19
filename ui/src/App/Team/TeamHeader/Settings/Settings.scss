@@ -127,6 +127,12 @@
 		color: main.$white;
 	}
 
+	.tab-body {
+		.description {
+			color: main.$light-gray;
+		}
+	}
+
 	.tab {
 		background-color: rgba(main.$black, 0.22);
 
