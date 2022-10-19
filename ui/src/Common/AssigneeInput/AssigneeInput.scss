@@ -63,7 +63,7 @@
 		}
 
 		&:focus:not(:read-only) {
-			border-bottom-color: main.$purple;
+			border-bottom-color: main.$teal;
 
 			+ .floating-character-countdown {
 				visibility: visible;
@@ -91,7 +91,7 @@
 			border-bottom-color: main.$dark-yellow;
 
 			&:focus:not(:read-only) {
-				border-bottom-color: main.$dark-purple;
+				border-bottom-color: main.$sea-foam;
 			}
 		}
 	}
