@@ -27,8 +27,12 @@
 	font-weight: bold;
 
 	background-color: main.$white;
-	border-radius: 6px;
-	box-shadow: 0 0 0 4px main.$purple;
+	border-radius: 5px;
+	box-shadow: 0 0 0 4px main.$teal;
+
+	.column-item-button-group {
+		border: 0;
+	}
 }
 
 @include main.inside-modal {
@@ -36,8 +40,8 @@
 		width: calc(100% - 16px);
 		margin: 8px;
 
-		border-radius: 6px;
-		box-shadow: main.in-modal-column-item-shadow(main.$purple);
+		border-radius: 5px;
+		box-shadow: main.in-modal-column-item-shadow(main.$teal);
 		transform: none;
 
 		@include main.breakpoint-medium {
@@ -54,12 +58,12 @@
 		color: main.$gray-1;
 
 		background-color: main.$light-asphalt;
-		box-shadow: 0 0 0 4px main.$dark-purple;
+		box-shadow: 0 0 0 4px main.$sea-foam;
 	}
 
 	@include main.inside-modal {
 		.edit-column-item {
-			box-shadow: main.in-modal-column-item-shadow(main.$dark-purple);
+			box-shadow: main.in-modal-column-item-shadow(main.$sea-foam);
 		}
 	}
 }

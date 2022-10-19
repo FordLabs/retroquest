@@ -75,19 +75,25 @@ $opacity: 0.25;
 		&.confirm,
 		&.cancel {
 			font-size: 1rem;
+			border: 0;
 		}
 
 		&.cancel {
+			border-top: 1px solid main.$light-gray;
+
 			&:hover,
 			&:focus {
-				color: main.$purple;
+				background-color: rgba(main.$light-gray, 0.4);
 			}
 		}
 
 		&.confirm {
+			color: main.$white;
+			background-color: main.$teal;
+
 			&:hover,
 			&:focus {
-				background-color: main.$purple;
+				background-color: main.$sea-foam;
 			}
 		}
 	}
@@ -106,16 +112,21 @@ $opacity: 0.25;
 			border-color: $dark-border;
 
 			&.cancel {
+				color: inherit;
+
 				&:hover,
 				&:focus {
-					color: main.$gray-3;
+					background-color: rgba(main.$white, 0.1);
 				}
 			}
 
 			&.confirm {
+				color: main.$asphalt;
+				background-color: main.$sea-foam;
+
 				&:hover,
 				&:focus {
-					background-color: main.$dark-purple;
+					color: main.$white;
 				}
 			}
 		}
