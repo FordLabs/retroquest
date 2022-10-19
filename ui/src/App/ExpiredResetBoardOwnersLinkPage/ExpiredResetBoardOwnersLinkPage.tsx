@@ -29,7 +29,7 @@ import './ExpiredResetBoardOwnersLinkPage.scss';
 
 function ExpiredResetBoardOwnersLinkPage() {
 	const theme = useRecoilValue(ThemeState);
-	const checkboxIconColor = theme === Theme.DARK ? '#c0392b' : '#e74c3c';
+	const checkboxIconColor = theme === Theme.DARK ? '#ef8a7e' : '#e74c3c';
 
 	const [resetTokenLifetime, setResetTokenLifetime] = useState<number>(600);
 
