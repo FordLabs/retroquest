@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-@use 'Styles/main';
+@use '../../Styles/main';
 
 .dropdown {
 	box-sizing: border-box;
@@ -53,7 +53,7 @@
 
 		padding-left: 1.32rem;
 
-		color: main.$asphalt;
+		color: inherit;
 		font-family: inherit;
 		font-weight: 500;
 		font-size: 1.5rem;
@@ -78,6 +78,9 @@
 
 @include main.dark-theme {
 	.dropdown {
-		background-color: main.$gray-1;
+		color: main.$white;
+
+		background-color: main.$black-asphalt;
+		border: 2px solid main.$white;
 	}
 }

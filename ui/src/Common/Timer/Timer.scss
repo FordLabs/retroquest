@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-@use 'Styles/main';
+@use '../../Styles/main';
 
 $timer-height: 2.81rem;
 
@@ -80,7 +80,22 @@ $timer-height: 2.81rem;
 @include main.dark-theme {
 	.timer {
 		.timer-count-down {
-			background-color: main.$gray-1;
+			color: main.$white;
+
+			background-color: main.$black-asphalt;
+			border: 2px solid main.$white;
+		}
+
+		.reset-button {
+			background: main.$dark-red;
+		}
+
+		.start-button {
+			background: main.$dark-green;
+		}
+
+		.pause-button {
+			background: main.$dark-yellow;
 		}
 	}
 }
