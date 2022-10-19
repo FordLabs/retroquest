@@ -70,7 +70,6 @@ $box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.12),
 		&:hover:not(:disabled),
 		&:focus:not(:disabled) {
 			color: colors.$white;
-			background-color: colors.$teal;
 		}
 	}
 }
