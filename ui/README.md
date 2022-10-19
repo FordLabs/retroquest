@@ -85,3 +85,10 @@ Navigation through RetroQuest is managed by [React Router](https://reactrouter.c
 | team/:teamId                   | RetroPage    |
 | team/:teamId/radiator          | RadiatorPage |
 | team/:teamId/archives          | ArchivesPage |
+
+## Set up Analytics (optional)
+We support mouseflow out of the box as an example. You will need to replace mouseflow-url-placeholder
+in the `analytics-template.js` file, and copy its contents to the `analytics.js` file.
+
+You can also add google analytics, hotjar, and more by adding the config scripts
+in the `analytics.js` file
