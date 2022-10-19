@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-@use 'Styles/main';
+@use '../../../../../Styles/main';
 
 .archived-boards-list {
 	@include main.site-max-width;
@@ -50,7 +50,7 @@
 @include main.dark-theme {
 	.archived-boards-list {
 		.thoughts-archive-title {
-			color: main.$gray-1;
+			color: main.$off-white;
 		}
 	}
 }

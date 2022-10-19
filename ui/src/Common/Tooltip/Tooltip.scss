@@ -76,10 +76,10 @@
 @include main.dark-theme {
 	.tooltip {
 		color: main.$dark-asphalt;
-		background-color: main.$gray-1;
+		background-color: main.$off-white;
 
 		&::before {
-			border-bottom-color: main.$gray-1;
+			border-bottom-color: main.$off-white;
 		}
 	}
 }

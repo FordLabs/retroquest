@@ -37,7 +37,7 @@
 
 @include main.dark-theme {
 	.or-separator-line {
-		border-bottom: 1px solid main.$gray-1;
+		border-bottom: 1px solid main.$off-white;
 		span {
 			background-color: main.$dark-asphalt;
 		}

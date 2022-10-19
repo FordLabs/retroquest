@@ -36,11 +36,11 @@
 
 @include main.dark-theme {
 	.team-header-nav-link {
-		color: rgba(main.$gray-1, 0.4);
+		color: rgba(main.$off-white, 0.4);
 
 		&.selected {
-			color: main.$gray-1;
-			background-color: rgba(main.$gray-1, 0.2);
+			color: main.$off-white;
+			background-color: rgba(main.$off-white, 0.2);
 		}
 	}
 }
