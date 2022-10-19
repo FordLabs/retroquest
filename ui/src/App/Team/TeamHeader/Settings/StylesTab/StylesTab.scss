@@ -63,3 +63,13 @@
 		}
 	}
 }
+
+@include main.dark-theme {
+	.theme-buttons {
+		.theme-image {
+			&.selected {
+				box-shadow: 0 0 0 8px main.$sea-foam;
+			}
+		}
+	}
+}
