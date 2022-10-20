@@ -25,7 +25,9 @@ import './ThemedCheckboxIcon.scss';
 
 function ThemedCheckboxIcon() {
 	const theme = useRecoilValue(ThemeState);
-	const checkboxIconColor = theme === Theme.DARK ? '#1abc9c' : '#16a085';
+	const seaFoam = '#1abc9c';
+	const teal = '#16a085';
+	const checkboxIconColor = theme === Theme.DARK ? seaFoam : teal;
 
 	return (
 		<CheckedCheckboxIcon

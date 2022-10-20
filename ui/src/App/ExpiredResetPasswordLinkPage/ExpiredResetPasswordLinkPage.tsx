@@ -29,7 +29,9 @@ import './ExpiredResetPasswordLinkPage.scss';
 
 function ExpiredResetPasswordLinkPage() {
 	const theme = useRecoilValue(ThemeState);
-	const checkboxIconColor = theme === Theme.DARK ? '#ef8a7e' : '#e74c3c';
+	const lightRed = '#ef8a7e';
+	const red = '#e74c3c';
+	const checkboxIconColor = theme === Theme.DARK ? lightRed : red;
 
 	const [resetTokenLifetime, setResetTokenLifetime] = useState<number>(600);
 
