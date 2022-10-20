@@ -53,6 +53,12 @@ describe('Thought Item With Add Action', () => {
 		expect(retroItem.className).not.toContain('fade-out');
 	});
 
+	it('should show topic class on add action button', () => {
+		renderComponent(fakeThought);
+		const addActionItemButton = screen.getByText('Add Action Item');
+		expect(addActionItemButton.className).toContain('happy');
+	});
+
 	describe('Not readonly', () => {
 		beforeEach(() => {
 			renderComponent(fakeThought);

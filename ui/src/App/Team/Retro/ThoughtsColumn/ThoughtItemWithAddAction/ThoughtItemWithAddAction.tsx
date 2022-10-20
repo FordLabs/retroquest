@@ -16,6 +16,7 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
+import classNames from 'classnames';
 
 import { ThoughtTopic } from '../../../../../Types/Topic';
 import ThoughtItem from '../ThoughtItem/ThoughtItem';
@@ -53,7 +54,7 @@ function ThoughtItemWithAddAction(props: Props) {
 			/>
 			{!showAddActionItemCard && (
 				<button
-					className="add-action-item-button"
+					className={classNames('add-action-item-button', type)}
 					onClick={() => setShowAddActionItemCard(true)}
 					ref={addActionItemButtonRef}
 				>

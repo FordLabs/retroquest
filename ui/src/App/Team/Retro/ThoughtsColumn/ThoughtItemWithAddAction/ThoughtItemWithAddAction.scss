@@ -56,6 +56,39 @@
 		@media only screen and (max-width: 610px) {
 			display: none;
 		}
+
+		&.happy {
+			color: main.$green;
+			border: 2px solid main.$green;
+
+			&:hover,
+			&:focus {
+				color: main.$white;
+				background-color: main.$green;
+			}
+		}
+
+		&.confused {
+			color: main.$blue;
+			border: 2px solid main.$blue;
+
+			&:hover,
+			&:focus {
+				color: main.$white;
+				background-color: main.$blue;
+			}
+		}
+
+		&.unhappy {
+			color: main.$red;
+			border: 2px solid main.$red;
+
+			&:hover,
+			&:focus {
+				color: main.$white;
+				background-color: main.$red;
+			}
+		}
 	}
 
 	.add-action-item {
@@ -70,6 +103,39 @@
 		.add-action-item-button {
 			color: main.$off-white;
 			background-color: main.$light-asphalt;
+
+			&.happy {
+				color: main.$dark-green;
+				border: 2px solid main.$dark-green;
+
+				&:hover,
+				&:focus {
+					color: main.$white;
+					background-color: main.$dark-green;
+				}
+			}
+
+			&.confused {
+				color: main.$dark-blue;
+				border: 2px solid main.$dark-blue;
+
+				&:hover,
+				&:focus {
+					color: main.$white;
+					background-color: main.$dark-blue;
+				}
+			}
+
+			&.unhappy {
+				color: main.$dark-red;
+				border: 2px solid main.$dark-red;
+
+				&:hover,
+				&:focus {
+					color: main.$white;
+					background-color: main.$dark-red;
+				}
+			}
 		}
 	}
 }
