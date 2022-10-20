@@ -81,9 +81,9 @@ describe('Delete Column Item', () => {
 });
 
 function getConfirmDeleteButton() {
-	return screen.getByText('Yes');
+	return screen.getByText('Yes, Delete');
 }
 
 function getCancelDeleteButton() {
-	return screen.getByText('No');
+	return screen.getByText('Cancel');
 }

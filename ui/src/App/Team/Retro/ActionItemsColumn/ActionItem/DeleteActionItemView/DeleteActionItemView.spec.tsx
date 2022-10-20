@@ -66,14 +66,14 @@ describe('Delete Action Item View', () => {
 	});
 
 	it('should not delete thought when user cancels deletion', () => {
-		userEvent.click(screen.getByText('No'));
+		userEvent.click(screen.getByText('Cancel'));
 
 		expect(mockSetViewState).toHaveBeenCalledWith(ActionItemViewState.DEFAULT);
 		expect(ActionItemService.delete).not.toHaveBeenCalled();
 	});
 
 	it('should delete thought when user confirms deletion', async () => {
-		userEvent.click(screen.getByText('Yes'));
+		userEvent.click(screen.getByText('Yes, Delete'));
 
 		await waitFor(() =>
 			expect(ActionItemService.delete).toHaveBeenCalledWith(

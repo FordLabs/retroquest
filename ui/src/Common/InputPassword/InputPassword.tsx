@@ -64,7 +64,9 @@ function InputPassword(props: Props) {
 
 	const theme = useRecoilValue(ThemeState);
 	const [showPassword, setShowPassword] = useState<boolean>(false);
-	const eyeIconColor = theme === Theme.DARK ? '#ecf0f1' : '#34495E';
+	const offWhite = '#ecf0f1';
+	const asphalt = '#34495E';
+	const eyeIconColor = theme === Theme.DARK ? offWhite : asphalt;
 	const [isValidPassword, setIsValidPassword] = useState<boolean>(true);
 
 	return (

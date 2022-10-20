@@ -59,9 +59,9 @@ function DeleteColumnItem(props: DeletionOverlayProps) {
 			<div className="delete-column-item-message">{children}</div>
 			<ColumnItemButtonGroup>
 				<CancelButton onClick={onCancel} ref={cancelButtonRef}>
-					No
+					Cancel
 				</CancelButton>
-				<ConfirmButton onClick={onConfirm}>Yes</ConfirmButton>
+				<ConfirmButton onClick={onConfirm}>Yes, Delete</ConfirmButton>
 			</ColumnItemButtonGroup>
 		</div>
 	);

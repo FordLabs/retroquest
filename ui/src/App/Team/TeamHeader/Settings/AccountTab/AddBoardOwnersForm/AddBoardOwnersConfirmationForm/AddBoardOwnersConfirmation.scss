@@ -39,3 +39,12 @@
 		}
 	}
 }
+
+@include main.dark-theme {
+	.add-board-owners-confirmation-form {
+		.board-owners-container {
+			color: main.$off-white;
+			border: 2px solid main.$off-white;
+		}
+	}
+}

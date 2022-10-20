@@ -29,6 +29,21 @@
 	border-radius: 6px;
 	box-shadow: 0 0 0 4px main.$red;
 
+	.column-item-button-group {
+		border-top: 0;
+	}
+
+	.column-item-button {
+		&.confirm {
+			background-color: main.$red;
+
+			&:focus,
+			&:hover {
+				background-color: main.$light-red;
+			}
+		}
+	}
+
 	.delete-column-item-message {
 		display: flex;
 		flex: 1 1 0;
@@ -56,10 +71,26 @@
 
 @include main.dark-theme {
 	.delete-column-item {
-		color: main.$gray-1;
+		color: main.$off-white;
 
 		background-color: main.$light-asphalt;
-		box-shadow: 0 0 0 4px main.$red;
+		box-shadow: 0 0 0 4px main.$dark-red;
+
+		.column-item-button {
+			&.confirm {
+				color: inherit;
+				background-color: main.$dark-red;
+
+				&:focus,
+				&:hover {
+					background-color: main.$light-red;
+				}
+			}
+
+			&.cancel {
+				border-color: main.$asphalt;
+			}
+		}
 	}
 
 	@include main.inside-modal {

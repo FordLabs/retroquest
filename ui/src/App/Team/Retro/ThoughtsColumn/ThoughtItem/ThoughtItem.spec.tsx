@@ -79,7 +79,7 @@ describe('Thought Item', () => {
 
 		it('should show default view when user clicks cancel from delete thought item view', () => {
 			getDeleteButton().click();
-			screen.getByText('No').click();
+			screen.getByText('Cancel').click();
 			isInDefaultView(fakeThought.message);
 		});
 
@@ -152,7 +152,7 @@ function clickCheckboxToMarkItemAsDiscussed() {
 }
 
 function clickConfirmDeleteButton() {
-	userEvent.click(screen.getByText('Yes'));
+	userEvent.click(screen.getByText('Yes, Delete'));
 }
 
 function getThoughtMessageButton() {

@@ -57,7 +57,7 @@
 		font-size: 0.75rem;
 		text-transform: uppercase;
 
-		border-left: 1px solid main.$gray-1;
+		border-left: 1px solid main.$off-white;
 	}
 
 	&.error {
@@ -87,7 +87,7 @@
 
 @include main.dark-theme {
 	.toast {
-		color: main.$gray-1;
+		color: main.$off-white;
 
 		background-color: main.$asphalt;
 		border-left: 1.125rem solid main.$gray-3;

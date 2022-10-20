@@ -38,7 +38,7 @@
 
 		text-align: center;
 
-		background: main.$gray-1;
+		background: main.$off-white;
 		border-radius: 20px;
 	}
 
@@ -48,7 +48,7 @@
 
 	.view-button {
 		padding: 1rem 1.5rem;
-		border-left: 1px solid main.$gray-1;
+		border-left: 1px solid main.$off-white;
 
 		&:hover {
 			color: main.$sea-foam;
@@ -58,7 +58,7 @@
 
 @include main.dark-theme {
 	.archived-board-tile {
-		color: main.$gray-1;
+		color: main.$off-white;
 		background: main.$light-asphalt;
 
 		.thought-count {

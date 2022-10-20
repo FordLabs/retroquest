@@ -108,7 +108,7 @@
 			color: main.$asphalt;
 
 			border: 0;
-			border-top: 1px solid main.$gray-1;
+			border-top: 1px solid main.$off-white;
 			border-bottom-right-radius: 0;
 			border-bottom-left-radius: inherit;
 
@@ -126,7 +126,7 @@
 		background-color: main.$dark-asphalt;
 
 		.form-template-title {
-			color: main.$gray-1;
+			color: main.$off-white;
 		}
 
 		.form-template-subtitle {
@@ -134,7 +134,7 @@
 		}
 
 		.form-template-button.cancel {
-			color: main.$gray-1;
+			color: main.$off-white;
 			border-top: 1px solid main.$dark-gray;
 
 			&:hover,

@@ -84,7 +84,7 @@
 		white-space: nowrap;
 		text-transform: capitalize;
 
-		background-color: main.$gray-1;
+		background-color: main.$off-white;
 		cursor: pointer;
 
 		&.selected {
@@ -125,6 +125,12 @@
 
 	.tab-container {
 		color: main.$white;
+	}
+
+	.tab-body {
+		.description {
+			color: main.$light-gray;
+		}
 	}
 
 	.tab {

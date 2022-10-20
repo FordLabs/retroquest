@@ -285,11 +285,16 @@ describe('Retro Member Journey', () => {
 			cy.get(darkThemeClass).should('not.exist');
 
 			const tealBoxShadow = 'rgb(22, 160, 133) 0px 0px 0px 8px';
+			const seafoamBoxShadow = 'rgb(26, 188, 156) 0px 0px 0px 8px';
 			cy.findByAltText('Dark Theme')
-				.should('not.have.css', 'box-shadow', tealBoxShadow)
+				.should('not.have.css', 'box-shadow', seafoamBoxShadow)
 				.as('darkThemeIcon')
 				.click();
-			cy.get('@darkThemeIcon').should('have.css', 'box-shadow', tealBoxShadow);
+			cy.get('@darkThemeIcon').should(
+				'have.css',
+				'box-shadow',
+				seafoamBoxShadow
+			);
 			cy.get(darkThemeClass).should('exist');
 
 			cy.findByAltText('Light Theme')
