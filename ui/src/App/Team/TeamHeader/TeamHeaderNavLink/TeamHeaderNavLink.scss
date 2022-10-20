@@ -28,15 +28,25 @@
 
 	border-radius: 32px;
 
+	&:focus,
+	&:hover {
+		color: main.$dark-asphalt;
+	}
+
 	&.selected {
-		color: main.$asphalt;
-		background-color: rgba(main.$asphalt, 0.2);
+		color: main.$dark-asphalt;
+		background-color: rgba(main.$light-gray, 0.8);
 	}
 }
 
 @include main.dark-theme {
 	.team-header-nav-link {
 		color: rgba(main.$gray-1, 0.4);
+
+		&:focus,
+		&:hover {
+			color: main.$gray-1;
+		}
 
 		&.selected {
 			color: main.$gray-1;
