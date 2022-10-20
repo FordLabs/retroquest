@@ -77,7 +77,7 @@ describe('Action Item', () => {
 
 		it('should show default view when user clicks cancel from delete action item view', () => {
 			getDeleteButton().click();
-			screen.getByText('No').click();
+			screen.getByText('Cancel').click();
 			isInDefaultView(fakeActionItem.task);
 		});
 
@@ -145,7 +145,7 @@ function clickCheckboxToMarkItemAsCompleted() {
 }
 
 function clickConfirmDeleteButton() {
-	userEvent.click(screen.getByText('Yes'));
+	userEvent.click(screen.getByText('Yes, Delete'));
 }
 
 function getActionItemTaskButton() {

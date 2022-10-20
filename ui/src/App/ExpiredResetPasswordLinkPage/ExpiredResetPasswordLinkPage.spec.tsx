@@ -72,7 +72,7 @@ describe('Expired Reset Password Link Page', () => {
 		});
 
 		const errorStopSignIcon = await screen.findByTestId('errorStopSignIcon');
-		expect(errorStopSignIcon.getAttribute('fill')).toBe('#c0392b');
+		expect(errorStopSignIcon.getAttribute('fill')).toBe('#ef8a7e');
 	});
 });
 
