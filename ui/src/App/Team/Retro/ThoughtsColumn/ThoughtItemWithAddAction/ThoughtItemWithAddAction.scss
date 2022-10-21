@@ -45,7 +45,7 @@
 		font-weight: bolder;
 		font-size: 0.75rem;
 
-		background-color: main.$white;
+		background-color: main.$off-white;
 		border-radius: 24px;
 		box-shadow: 0 12px 24px rgba(main.$black, 0.15);
 
@@ -55,6 +55,32 @@
 
 		@media only screen and (max-width: 610px) {
 			display: none;
+		}
+
+		&:hover,
+		&:focus {
+			color: main.$white;
+		}
+
+		&.happy {
+			&:hover,
+			&:focus {
+				background-color: main.$green;
+			}
+		}
+
+		&.confused {
+			&:hover,
+			&:focus {
+				background-color: main.$blue;
+			}
+		}
+
+		&.unhappy {
+			&:hover,
+			&:focus {
+				background-color: main.$red;
+			}
 		}
 	}
 
@@ -70,6 +96,27 @@
 		.add-action-item-button {
 			color: main.$off-white;
 			background-color: main.$light-asphalt;
+
+			&.happy {
+				&:hover,
+				&:focus {
+					background-color: main.$dark-green;
+				}
+			}
+
+			&.confused {
+				&:hover,
+				&:focus {
+					background-color: main.$dark-blue;
+				}
+			}
+
+			&.unhappy {
+				&:hover,
+				&:focus {
+					background-color: main.$dark-red;
+				}
+			}
 		}
 	}
 }
