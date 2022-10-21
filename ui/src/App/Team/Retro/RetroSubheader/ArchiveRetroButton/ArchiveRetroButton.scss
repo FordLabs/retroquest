@@ -19,12 +19,19 @@
 
 .archive-button {
 	@include main.button-defaults;
+	display: none;
+
 	color: main.$white;
+
 	background-color: main.$asphalt;
 
 	&:focus,
 	&:hover {
 		background-color: main.$teal;
+	}
+
+	@include main.breakpoint-large {
+		display: initial;
 	}
 }
 
