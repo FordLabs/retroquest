@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +16,8 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
-import classNames from 'classnames';
+import { ThoughtTopic } from 'Types/Topic';
 
-import { ThoughtTopic } from '../../../../../Types/Topic';
 import ThoughtItem from '../ThoughtItem/ThoughtItem';
 
 import AddActionItem from './AddActionItem/AddActionItem';
@@ -54,7 +53,7 @@ function ThoughtItemWithAddAction(props: Props) {
 			/>
 			{!showAddActionItemCard && (
 				<button
-					className={classNames('add-action-item-button', type)}
+					className={classnames('add-action-item-button', type)}
 					onClick={() => setShowAddActionItemCard(true)}
 					ref={addActionItemButtonRef}
 				>
