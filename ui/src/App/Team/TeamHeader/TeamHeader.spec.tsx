@@ -19,8 +19,10 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
-import { RecoilRoot } from 'recoil';
+import { MutableSnapshot, RecoilRoot } from 'recoil';
+import { EnvironmentConfigState } from 'State/EnvironmentConfigState';
 import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
+import { TeamState } from 'State/TeamState';
 import * as ThemeState from 'State/ThemeState';
 import Team from 'Types/Team';
 import Theme from 'Types/Theme';
@@ -40,31 +42,12 @@ jest.mock('Hooks/useTeamFromRoute', () => {
 		secondaryEmail: '',
 	});
 });
+let modalContent: ModalContents | null;
 
 describe('Team Header', () => {
-	let modalContent: ModalContents | null;
-
 	beforeEach(() => {
 		modalContent = null;
 	});
-
-	function renderTeamHeader() {
-		return render(
-			<MemoryRouter initialEntries={[`/team/${teamId}`]}>
-				<RecoilRoot>
-					<RecoilObserver
-						recoilState={ModalContentsState}
-						onChange={(value: ModalContents) => {
-							modalContent = value;
-						}}
-					/>
-					<Routes>
-						<Route path="/team/:teamId" element={<TeamHeader />} />
-					</Routes>
-				</RecoilRoot>
-			</MemoryRouter>
-		);
-	}
 
 	it('should render without axe errors', async () => {
 		const { container } = renderTeamHeader();
@@ -127,4 +110,69 @@ describe('Team Header', () => {
 			);
 		});
 	});
+
+	describe('Change your password banner', () => {
+		const emptyTeam = {
+			id: '',
+			name: '',
+			email: '',
+			secondaryEmail: '',
+		};
+
+		it('should show banner if email is enabled & team has no email addresses saved', () => {
+			renderTeamHeader(({ set }) => {
+				set(EnvironmentConfigState, {
+					email_is_enabled: true,
+					email_from_address: '',
+				});
+				set(TeamState, emptyTeam);
+			});
+
+			expect(screen.getByTestId('banner')).toBeInTheDocument();
+		});
+
+		it('should hide banner if email is disabled', () => {
+			renderTeamHeader(({ set }) => {
+				set(EnvironmentConfigState, {
+					email_is_enabled: false,
+					email_from_address: '',
+				});
+				set(TeamState, emptyTeam);
+			});
+
+			expect(screen.queryByTestId('banner')).toBeNull();
+		});
+
+		it('should hide banner if email is enabled, but team as email addresses saved', () => {
+			renderTeamHeader(({ set }) => {
+				set(EnvironmentConfigState, {
+					email_is_enabled: false,
+					email_from_address: '',
+				});
+				set(TeamState, { ...emptyTeam, email: 'a@b.c' });
+			});
+
+			expect(screen.queryByTestId('banner')).toBeNull();
+		});
+	});
 });
+
+function renderTeamHeader(
+	recoilState?: (mutableSnapshot: MutableSnapshot) => void
+) {
+	return render(
+		<MemoryRouter initialEntries={[`/team/${teamId}`]}>
+			<RecoilRoot initializeState={recoilState}>
+				<RecoilObserver
+					recoilState={ModalContentsState}
+					onChange={(value: ModalContents) => {
+						modalContent = value;
+					}}
+				/>
+				<Routes>
+					<Route path="/team/:teamId" element={<TeamHeader />} />
+				</Routes>
+			</RecoilRoot>
+		</MemoryRouter>
+	);
+}
