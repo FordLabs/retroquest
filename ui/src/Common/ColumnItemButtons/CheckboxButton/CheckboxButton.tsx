@@ -23,11 +23,12 @@ import './CheckboxButton.scss';
 
 interface CheckmarkButtonProps extends ComponentPropsWithoutRef<'button'> {
 	checked: boolean;
+	disableTooltips?: boolean;
 }
 
 const CheckboxButton = forwardRef(
 	(props: CheckmarkButtonProps, ref: LegacyRef<HTMLButtonElement>) => {
-		const { checked, className, ...buttonProps } = props;
+		const { checked, className, disableTooltips, ...buttonProps } = props;
 
 		return (
 			<button
@@ -46,7 +47,7 @@ const CheckboxButton = forwardRef(
 						/>
 					)}
 				</div>
-				<Tooltip>{checked ? 'Open' : 'Close'}</Tooltip>
+				{!disableTooltips && <Tooltip>{checked ? 'Open' : 'Close'}</Tooltip>}
 			</button>
 		);
 	}

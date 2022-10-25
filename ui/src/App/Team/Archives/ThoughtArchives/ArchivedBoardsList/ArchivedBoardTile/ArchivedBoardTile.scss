@@ -31,7 +31,12 @@
 	border-radius: 6px;
 	box-shadow: rgba(0, 0, 0, 0.12) 0 0.25rem 1.25rem 0;
 
+	.archived-board-tile-checkbox {
+		margin: 1.5rem;
+	}
+
 	.thought-count {
+		display: inline-block;
 		width: 2rem;
 		height: 2rem;
 		margin: 1rem;
@@ -42,7 +47,7 @@
 		border-radius: 20px;
 	}
 
-	.date {
+	.date-label {
 		padding: 1rem;
 	}
 

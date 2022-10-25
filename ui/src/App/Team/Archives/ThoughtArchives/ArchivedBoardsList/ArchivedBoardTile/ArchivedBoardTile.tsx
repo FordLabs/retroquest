@@ -16,9 +16,9 @@
  */
 
 import * as React from 'react';
+import CheckboxButton from 'Common/ColumnItemButtons/CheckboxButton/CheckboxButton';
 import moment from 'moment';
-
-import Board from '../../../../../../Types/Board';
+import Board from 'Types/Board';
 
 import './ArchivedBoardTile.scss';
 
@@ -33,8 +33,17 @@ function ArchivedBoardTile(props: Props): JSX.Element {
 
 	return (
 		<li data-testid="boardArchive" className="archived-board-tile">
-			<span className="thought-count">{board.thoughts.length}</span>
-			<span className="date">
+			<div>
+				<CheckboxButton
+					checked={false}
+					onClick={() => {}}
+					disableTooltips
+					className="archived-board-tile-checkbox"
+					aria-label="Select Board"
+				/>
+				<span className="thought-count">{board.thoughts.length}</span>
+			</div>
+			<span className="date-label">
 				{moment(board.dateCreated).format('MMMM Do, yyyy')}
 			</span>
 			<div>
