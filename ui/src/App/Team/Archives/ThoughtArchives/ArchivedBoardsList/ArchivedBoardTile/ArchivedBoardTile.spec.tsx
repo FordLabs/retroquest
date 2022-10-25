@@ -17,39 +17,45 @@
 
 import * as React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-
-import { mockBoards } from '../../../../../../Services/Api/__mocks__/BoardService';
+import { mockBoards } from 'Services/Api/__mocks__/BoardService';
 
 import ArchivedBoardTile from './ArchivedBoardTile';
 
 describe('Archived Board Tile', () => {
-	it('should display the number of thoughts in a board', () => {
+	let onViewBtnClick: jest.Mock<any, any>;
+	let onDeleteBtnClick: jest.Mock<any, any>;
+
+	beforeEach(() => {
+		onViewBtnClick = jest.fn();
+		onDeleteBtnClick = jest.fn();
 		render(
-			<ArchivedBoardTile board={mockBoards[0]} onTileClicked={jest.fn()} />
+			<ArchivedBoardTile
+				board={mockBoards[0]}
+				onViewBtnClick={onViewBtnClick}
+				onDeleteBtnClick={onDeleteBtnClick}
+			/>
 		);
+	});
+
+	it('should display the number of thoughts in a board', () => {
 		screen.getByText('1');
 	});
 
 	it('should display the date the board was archived', () => {
-		render(
-			<ArchivedBoardTile board={mockBoards[0]} onTileClicked={jest.fn()} />
-		);
 		screen.getByText('October 1st, 1982');
 	});
 
 	it('should display view button', () => {
-		render(
-			<ArchivedBoardTile board={mockBoards[0]} onTileClicked={jest.fn()} />
-		);
 		screen.getByText('View');
 	});
 
-	it('should update callback when View is clicked', () => {
-		const mockOnClick = jest.fn();
-		render(
-			<ArchivedBoardTile board={mockBoards[0]} onTileClicked={mockOnClick} />
-		);
+	it('should trigger onViewButtonClick when clicking "View" button', () => {
 		fireEvent.click(screen.getByText('View'));
-		expect(mockOnClick).toHaveBeenCalledWith(mockBoards[0]);
+		expect(onViewBtnClick).toHaveBeenCalledWith(mockBoards[0]);
+	});
+
+	it('should trigger onDeleteButtonClick when clicking "Delete" button', () => {
+		fireEvent.click(screen.getByText('Delete'));
+		expect(onDeleteBtnClick).toHaveBeenCalledWith(mockBoards[0]);
 	});
 });

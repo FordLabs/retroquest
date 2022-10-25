@@ -24,19 +24,30 @@ import './ArchivedBoardTile.scss';
 
 interface Props {
 	board: Board;
-	onTileClicked(board: Board): void;
+	onViewBtnClick(board: Board): void;
+	onDeleteBtnClick(board: Board): void;
 }
 
-function ArchivedBoardTile({ board, onTileClicked }: Props): JSX.Element {
+function ArchivedBoardTile(props: Props): JSX.Element {
+	const { board, onViewBtnClick, onDeleteBtnClick } = props;
+
 	return (
 		<li data-testid="boardArchive" className="archived-board-tile">
 			<span className="thought-count">{board.thoughts.length}</span>
 			<span className="date">
 				{moment(board.dateCreated).format('MMMM Do, yyyy')}
 			</span>
-			<button className="view-button" onClick={() => onTileClicked(board)}>
-				View
-			</button>
+			<div>
+				<button className="view-button" onClick={() => onViewBtnClick(board)}>
+					View
+				</button>
+				<button
+					className="delete-button"
+					onClick={() => onDeleteBtnClick(board)}
+				>
+					Delete
+				</button>
+			</div>
 		</li>
 	);
 }
