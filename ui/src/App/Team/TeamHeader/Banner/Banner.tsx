@@ -15,16 +15,40 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { ModalContentsState } from 'State/ModalContentsState';
+
+import Settings, { SettingsTabs } from '../Settings/Settings';
 
 import './Banner.scss';
 
 function Banner() {
-	return (
+	const setModalContents = useSetRecoilState(ModalContentsState);
+
+	const [hideBanner, setHideBanner] = useState<boolean>(false);
+
+	function openSettingsModal() {
+		setModalContents({
+			title: 'Settings',
+			component: <Settings activeTab={SettingsTabs.ACCOUNT} />,
+		});
+	}
+
+	return hideBanner ? (
+		<></>
+	) : (
 		<div data-testid="banner" className="banner">
 			<span>You can now change your team’s RetroQuest password!</span>
-			<button className="go-to-settings-button">Set It Up Here</button>
-			<button aria-label="Close Banner" className="close-banner-button">
+			<button className="go-to-settings-button" onClick={openSettingsModal}>
+				Set It Up Here
+			</button>
+			<button
+				aria-label="Close Banner"
+				className="close-banner-button"
+				data-testid="closeBannerButton"
+				onClick={() => setHideBanner(true)}
+			>
 				<i className="fas fa-close close-icon" aria-hidden />
 			</button>
 		</div>

@@ -339,6 +339,28 @@ describe('Retro Facilitator Journey', () => {
 			);
 			cy.findByText('Add Email').should('be.enabled');
 		});
+
+		it('Show password reset banner if team has no emails', () => {
+			createTeamWithNoEmailsAndLogin();
+
+			cy.findByTestId('banner').should(
+				'contain',
+				'You can now change your team’s RetroQuest password!'
+			);
+
+			cy.log(
+				'**Clicking "Set It Up Here" should open Settings>Account modal**'
+			);
+			cy.findByText('Set It Up Here').click();
+
+			cy.findByText('Add Board Owners').should('exist');
+			cy.log('**Close settings modal**');
+			cy.findByTestId('closeModalButton').click();
+
+			cy.log('**Clicking banner x should close modal**');
+			cy.findByTestId('closeBannerButton').click();
+			cy.findByTestId('banner').should('not.exist');
+		});
 	});
 
 	const ensureModalIsOpen = () => {

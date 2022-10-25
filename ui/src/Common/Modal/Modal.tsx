@@ -18,11 +18,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useA11yDialog } from 'react-a11y-dialog';
 import { useRecoilState } from 'recoil';
-
-import {
-	ModalContents,
-	ModalContentsState,
-} from '../../State/ModalContentsState';
+import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
 
 import './Modal.scss';
 
@@ -79,6 +75,7 @@ function Modal() {
 					{...attr.closeButton}
 					className="modal-close-button"
 					aria-label="Close Modal"
+					data-testid="closeModalButton"
 					onClick={clearModalContents}
 				>
 					<i className="fas fa-close close-icon" aria-hidden />
