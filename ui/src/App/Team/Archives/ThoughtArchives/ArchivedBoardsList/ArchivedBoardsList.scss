@@ -19,7 +19,7 @@
 
 .archived-boards-list {
 	@include main.site-max-width;
-	max-width: 400px;
+	max-width: 46.75rem;
 	margin: 0 auto 3rem;
 
 	.thoughts-archive-title {
@@ -31,18 +31,27 @@
 		font-weight: 600;
 		font-size: 1.5rem;
 		white-space: nowrap;
-	}
 
-	.thoughts-archive-metadata {
-		margin-top: 0;
+		@include main.breakpoint-medium {
+			justify-content: unset;
+		}
 
-		color: rgba(main.$asphalt, 0.5);
-		font-weight: 500;
-		font-size: 0.8rem;
+		.thoughts-archive-metadata {
+			margin-top: 0;
+
+			color: main.$mid-gray;
+			font-weight: 500;
+			font-size: 0.8rem;
+
+			@include main.breakpoint-medium {
+				position: absolute;
+				left: 46.5%;
+			}
+		}
 	}
 
 	.list {
-		max-width: 21.875rem;
+		width: 100%;
 		margin: 0 auto 1rem;
 	}
 }
