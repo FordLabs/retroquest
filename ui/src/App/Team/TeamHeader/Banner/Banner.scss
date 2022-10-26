@@ -1,0 +1,64 @@
+/*
+ * Copyright (c) 2022 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@use '../../../../Styles/main';
+
+.banner {
+	display: none;
+	min-height: 2.875rem;
+
+	color: main.$off-white;
+
+	background-color: main.$black-asphalt;
+
+	position: relative;
+
+	.go-to-settings-button {
+		margin-left: 0.5rem;
+		padding: 0.188rem 1.25rem;
+
+		font-weight: 600;
+		font-size: 1.125rem;
+
+		background: main.$dark-gray;
+		border-radius: 2rem;
+	}
+
+	.close-banner-button {
+		position: absolute;
+		right: 5%;
+		top: 0.75rem;
+	}
+
+	@include main.breakpoint-medium {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+}
+
+@include main.dark-theme {
+	.banner {
+		color: main.$black-asphalt;
+		background-color: main.$off-white;
+
+		.go-to-settings-button {
+			color: main.$asphalt;
+			background: rgba(main.$light-gray, 0.8);
+		}
+	}
+}
