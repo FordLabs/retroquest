@@ -17,12 +17,6 @@ and [Java](https://www.java.com/en/).
   - You may also use H2 (in-memory), eliminating the need for any external tool to run your database.
 - Email server of your choosing (optional). See [docs](https://github.com/FordLabs/retroquest/blob/main/api/README.md#how-to-set-up-your-email-server-optional) to setup email server or disable email.
 
-Optional:
-- Email server of your choosing
-    - If you would like the ability to have users reset their password, recover team names associated 
-      with the team email addresses, and reset their team emails, an email server is required. 
-      See [below](https://github.com/FordLabs/retroquest/blob/main/api/README.md#how-to-set-up-your-email-server-optional) to see how to set up an email server.
-
 ---
 
 ## Start the API
