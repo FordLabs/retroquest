@@ -15,7 +15,7 @@ and [Java](https://www.java.com/en/).
   - We include a docker-compose.yml file in the `api/` subfolder to run a local Postgres database. You may use this file
     with your containerization tool of choice (docker, podman) or run a local database through any other means.
   - You may also use H2 (in-memory), eliminating the need for any external tool to run your database.
-- Email server of your choosing (optional). See [docs]() to setup email server or disable email.
+- Email server of your choosing (optional). See [docs](https://github.com/FordLabs/retroquest/blob/main/api/README.md#how-to-set-up-your-email-server-optional) to setup email server or disable email.
 
 Optional:
 - Email server of your choosing
