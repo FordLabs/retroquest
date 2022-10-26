@@ -45,14 +45,28 @@ describe('Archivist Journey', () => {
 		cy.findByText('message3').should('exist');
 		cy.findByText('message4').should('exist');
 
+		cy.intercept(
+			'GET',
+			`/api/team/${teamCredentials.teamId}/boards?pageIndex=0&pageSize=6&sortBy=dateCreated&sortOrder=DESC`
+		).as('getBoardsInDescOrder');
+
 		cy.findByText('Thoughts').click();
 		shouldBeOnArchivesPage(teamCredentials.teamId);
+
+		cy.wait('@getBoardsInDescOrder');
 
 		cy.findByText('Date').click();
 
 		cy.findAllByText('Delete').should('have.length', 3).eq(0).click();
 
+		cy.intercept(
+			'GET',
+			`/api/team/${teamCredentials.teamId}/boards?pageIndex=0&pageSize=6&sortBy=dateCreated&sortOrder=ASC`
+		).as('getBoardsInAscOrder');
+
 		cy.findByText('Yes, Delete').click();
+
+		cy.wait('@getBoardsInAscOrder');
 
 		cy.findAllByText('Delete').should('have.length', 2);
 	});

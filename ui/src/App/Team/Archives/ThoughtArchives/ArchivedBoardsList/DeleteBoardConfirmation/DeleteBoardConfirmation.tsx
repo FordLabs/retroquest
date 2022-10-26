@@ -23,10 +23,11 @@ import { TeamState } from 'State/TeamState';
 
 interface Props {
 	boardId: number;
+	onBoardDeletion(): void;
 }
 
 function DeleteBoardConfirmation(props: Props) {
-	const { boardId } = props;
+	const { boardId, onBoardDeletion } = props;
 
 	const team = useRecoilValue(TeamState);
 	const setModalContents = useSetRecoilState(ModalContentsState);
@@ -35,7 +36,10 @@ function DeleteBoardConfirmation(props: Props) {
 
 	const onSubmit = () => {
 		BoardService.deleteBoard(team.id, boardId)
-			.then(() => closeModal())
+			.then(() => {
+				onBoardDeletion();
+				closeModal();
+			})
 			.catch(console.error);
 	};
 

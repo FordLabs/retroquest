@@ -76,6 +76,10 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 		return `(showing ${paginationData?.pageRange} of ${paginationData?.totalBoardCount})`;
 	}
 
+	function onBoardDeletion() {
+		getBoardsForPage(paginationData?.pageIndex || 0);
+	}
+
 	useEffect(() => {
 		getBoards(0, 'dateCreated', SortOrder.DESC);
 	}, [getBoards]);
@@ -96,6 +100,7 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 									key={board.teamId + board.dateCreated + board.id}
 									board={board}
 									onViewBtnClick={onBoardSelection}
+									onBoardDeletion={onBoardDeletion}
 								/>
 							);
 						})}

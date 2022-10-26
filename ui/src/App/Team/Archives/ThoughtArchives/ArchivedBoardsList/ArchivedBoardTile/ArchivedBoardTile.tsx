@@ -29,17 +29,23 @@ import './ArchivedBoardTile.scss';
 interface Props {
 	board: Board;
 	onViewBtnClick(board: Board): void;
+	onBoardDeletion(): void;
 }
 
 function ArchivedBoardTile(props: Props): JSX.Element {
-	const { board, onViewBtnClick } = props;
+	const { board, onViewBtnClick, onBoardDeletion } = props;
 
 	const setModalContents = useSetRecoilState(ModalContentsState);
 
 	function onDeleteBtnClick(board: Board) {
 		setModalContents({
 			title: 'Delete Archived Thoughts?',
-			component: <DeleteBoardConfirmation boardId={board.id} />,
+			component: (
+				<DeleteBoardConfirmation
+					boardId={board.id}
+					onBoardDeletion={onBoardDeletion}
+				/>
+			),
 		});
 	}
 

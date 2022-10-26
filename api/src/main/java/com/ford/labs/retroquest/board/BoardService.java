@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,6 @@ import com.ford.labs.retroquest.column.Column;
 import com.ford.labs.retroquest.column.ColumnService;
 import com.ford.labs.retroquest.thought.ThoughtService;
 import com.ford.labs.retroquest.websocket.WebsocketService;
-import com.ford.labs.retroquest.websocket.events.WebsocketDeleteArchivedBoardEvent;
 import com.ford.labs.retroquest.websocket.events.WebsocketEndRetroEvent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -126,6 +125,5 @@ public class BoardService {
 
     public void deleteBoard(String teamId, Long boardId) {
         boardRepository.deleteBoardByTeamIdAndId(teamId, boardId);
-        websocketService.publishEvent(new WebsocketDeleteArchivedBoardEvent(teamId));
     }
 }

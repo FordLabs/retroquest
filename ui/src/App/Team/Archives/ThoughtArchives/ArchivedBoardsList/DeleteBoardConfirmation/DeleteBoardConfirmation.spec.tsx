@@ -16,7 +16,7 @@
  */
 
 import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecoilRoot } from 'recoil';
 import { mockTeam } from 'Services/Api/__mocks__/TeamService';
@@ -31,20 +31,22 @@ jest.mock('Services/Api/BoardService');
 
 describe('Delete Board Confirmation', () => {
 	let modalContent: ModalContents | null;
+	let onBoardDeletion: jest.Mock<any, any>;
 	const boardId: number = 8432;
 
 	beforeEach(() => {
 		jest.clearAllMocks();
 
 		modalContent = null;
+		onBoardDeletion = jest.fn();
 
 		render(
 			<RecoilRoot
 				initializeState={({ set }) => {
 					set(TeamState, mockTeam);
 					set(ModalContentsState, {
-						title: 'Delete Board',
-						component: <DeleteBoardConfirmation boardId={boardId} />,
+						title: 'Title',
+						component: <>component</>,
 					});
 				}}
 			>
@@ -54,7 +56,10 @@ describe('Delete Board Confirmation', () => {
 						modalContent = value;
 					}}
 				/>
-				<DeleteBoardConfirmation boardId={boardId} />
+				<DeleteBoardConfirmation
+					boardId={boardId}
+					onBoardDeletion={onBoardDeletion}
+				/>
 			</RecoilRoot>
 		);
 	});
@@ -66,12 +71,13 @@ describe('Delete Board Confirmation', () => {
 	it('should delete board and close modal', async () => {
 		userEvent.click(screen.getByText('Yes, Delete'));
 
-		await act(async () =>
+		await waitFor(() =>
 			expect(BoardService.deleteBoard).toHaveBeenCalledWith(
 				mockTeam.id,
 				boardId
 			)
 		);
+		expect(onBoardDeletion).toHaveBeenCalled();
 		expect(modalContent).toBe(null);
 	});
 
@@ -79,6 +85,7 @@ describe('Delete Board Confirmation', () => {
 		userEvent.click(screen.getByText('Cancel'));
 
 		expect(BoardService.deleteBoard).not.toHaveBeenCalled();
+		expect(onBoardDeletion).not.toHaveBeenCalled();
 		expect(modalContent).toBe(null);
 	});
 });

@@ -28,10 +28,12 @@ import ArchivedBoardTile from './ArchivedBoardTile';
 
 describe('Archived Board Tile', () => {
 	let onViewBtnClick: jest.Mock<any, any>;
+	let onBoardDeletion: jest.Mock<any, any>;
 	let modalContent: ModalContents | null;
 
 	beforeEach(() => {
 		onViewBtnClick = jest.fn();
+		onBoardDeletion = jest.fn();
 		renderWithRecoilRoot(
 			<>
 				<RecoilObserver
@@ -43,6 +45,7 @@ describe('Archived Board Tile', () => {
 				<ArchivedBoardTile
 					board={mockBoards[0]}
 					onViewBtnClick={onViewBtnClick}
+					onBoardDeletion={onBoardDeletion}
 				/>
 			</>
 		);
@@ -70,7 +73,12 @@ describe('Archived Board Tile', () => {
 		await waitFor(() =>
 			expect(modalContent).toEqual({
 				title: 'Delete Archived Thoughts?',
-				component: <DeleteBoardConfirmation boardId={mockBoards[0].id} />,
+				component: (
+					<DeleteBoardConfirmation
+						boardId={mockBoards[0].id}
+						onBoardDeletion={onBoardDeletion}
+					/>
+				),
 			})
 		);
 	});
