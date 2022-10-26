@@ -18,9 +18,11 @@
 import React from 'react';
 import Header from 'Common/Header/Header';
 import useTeamFromRoute from 'Hooks/useTeamFromRoute';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { EnvironmentConfigState } from 'State/EnvironmentConfigState';
 import { ModalContentsState } from 'State/ModalContentsState';
 
+import Banner from './Banner/Banner';
 import Settings from './Settings/Settings';
 import TeamHeaderNavLink from './TeamHeaderNavLink/TeamHeaderNavLink';
 
@@ -39,35 +41,45 @@ const LINKS: RqLink[] = [
 
 function TeamHeader() {
 	const team = useTeamFromRoute();
+	const environmentConfig = useRecoilValue(EnvironmentConfigState);
 	const setModalContents = useSetRecoilState(ModalContentsState);
 
+	function showBanner(): boolean {
+		const teamHasNoEmails = !team.email && !team.secondaryEmail;
+		const emailIsEnabled = environmentConfig?.email_is_enabled === true;
+		return emailIsEnabled && teamHasNoEmails;
+	}
+
 	return (
-		<Header name={team.name}>
-			<>
-				<nav className="center-content">
-					{LINKS.map((link) => (
-						<React.Fragment key={link.path}>
-							<TeamHeaderNavLink to={`/team/${team.id}${link.path}`}>
-								{link.label}
-							</TeamHeaderNavLink>
-						</React.Fragment>
-					))}
-				</nav>
-				<div className="right-content">
-					<button
-						className="settings-button fas fa-cog"
-						onClick={() =>
-							setModalContents({
-								title: 'Settings',
-								component: <Settings />,
-							})
-						}
-						aria-label="Settings"
-						data-testid="settingsButton"
-					/>
-				</div>
-			</>
-		</Header>
+		<>
+			{showBanner() && <Banner />}
+			<Header name={team.name}>
+				<>
+					<nav className="center-content">
+						{LINKS.map((link) => (
+							<React.Fragment key={link.path}>
+								<TeamHeaderNavLink to={`/team/${team.id}${link.path}`}>
+									{link.label}
+								</TeamHeaderNavLink>
+							</React.Fragment>
+						))}
+					</nav>
+					<div className="right-content">
+						<button
+							className="settings-button fas fa-cog"
+							onClick={() =>
+								setModalContents({
+									title: 'Settings',
+									component: <Settings />,
+								})
+							}
+							aria-label="Settings"
+							data-testid="settingsButton"
+						/>
+					</div>
+				</>
+			</Header>
+		</>
 	);
 }
 
