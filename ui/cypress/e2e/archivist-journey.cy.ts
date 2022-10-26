@@ -47,12 +47,11 @@ describe('Archivist Journey', () => {
 
 		cy.intercept(
 			'GET',
-			`/api/team/${teamCredentials.teamId}/boards?pageIndex=0&pageSize=6&sortBy=dateCreated&sortOrder=DESC`
+			`/api/team/${teamCredentials.teamId}/boards?pageIndex=0&pageSize=20&sortBy=dateCreated&sortOrder=DESC`
 		).as('getBoardsInDescOrder');
 
 		cy.findByText('Thoughts').click();
 		shouldBeOnArchivesPage(teamCredentials.teamId);
-
 		cy.wait('@getBoardsInDescOrder');
 
 		cy.findByText('Date').click();
@@ -61,7 +60,7 @@ describe('Archivist Journey', () => {
 
 		cy.intercept(
 			'GET',
-			`/api/team/${teamCredentials.teamId}/boards?pageIndex=0&pageSize=6&sortBy=dateCreated&sortOrder=ASC`
+			`/api/team/${teamCredentials.teamId}/boards?pageIndex=0&pageSize=20&sortBy=dateCreated&sortOrder=ASC`
 		).as('getBoardsInAscOrder');
 
 		cy.findByText('Yes, Delete').click();

@@ -33,6 +33,8 @@ import ArchivedBoardTile from './ArchivedBoardTile/ArchivedBoardTile';
 
 import './ArchivedBoardsList.scss';
 
+const PAGE_SIZE = 20;
+
 interface Props {
 	onBoardSelection(board: Board): void;
 }
@@ -41,7 +43,6 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 	const [boards, setBoards] = useState<Board[]>([]);
 	const [paginationData, setPaginationData] = useState<PaginationData>();
 	const team = useRecoilValue(TeamState);
-	const PAGE_SIZE = 6;
 
 	const getBoards = useCallback(
 		(pageIndex: number, sortBy: SortByType, sortOrder: SortOrder) => {
