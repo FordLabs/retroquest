@@ -21,29 +21,35 @@ import BoardService from 'Services/Api/BoardService';
 import { ModalContentsState } from 'State/ModalContentsState';
 import { TeamState } from 'State/TeamState';
 
-function ArchiveRetroConfirmation() {
+interface Props {
+	boardId: number;
+}
+
+function DeleteBoardConfirmation(props: Props) {
+	const { boardId } = props;
+
 	const team = useRecoilValue(TeamState);
 	const setModalContents = useSetRecoilState(ModalContentsState);
 
 	const closeModal = () => setModalContents(null);
 
 	const onSubmit = () => {
-		BoardService.archiveRetro(team.id)
+		BoardService.deleteBoard(team.id, boardId)
 			.then(() => closeModal())
 			.catch(console.error);
 	};
 
 	return (
 		<ConfirmationModal
-			testId="archiveRetroDialog"
-			title="End Retro for All?"
-			subtitle="Are you sure you want to end the retro for everybody? This will permanently archive all thoughts!"
+			testId="deleteBoardConfirmation"
+			title="Delete Archived Thoughts?"
+			subtitle="Are you sure you want to delete this archived thought? Doing so will permanently remove this data."
 			onSubmit={onSubmit}
 			onCancel={closeModal}
 			cancelButtonText="Cancel"
-			submitButtonText="Yes! End Retro."
+			submitButtonText="Yes, Delete"
 		/>
 	);
 }
 
-export default ArchiveRetroConfirmation;
+export default DeleteBoardConfirmation;

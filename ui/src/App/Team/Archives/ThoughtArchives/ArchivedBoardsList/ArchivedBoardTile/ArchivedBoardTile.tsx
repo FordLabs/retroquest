@@ -18,18 +18,30 @@
 import * as React from 'react';
 import CheckboxButton from 'Common/ColumnItemButtons/CheckboxButton/CheckboxButton';
 import moment from 'moment';
+import { useSetRecoilState } from 'recoil';
+import { ModalContentsState } from 'State/ModalContentsState';
 import Board from 'Types/Board';
+
+import DeleteBoardConfirmation from '../DeleteBoardConfirmation/DeleteBoardConfirmation';
 
 import './ArchivedBoardTile.scss';
 
 interface Props {
 	board: Board;
 	onViewBtnClick(board: Board): void;
-	onDeleteBtnClick(board: Board): void;
 }
 
 function ArchivedBoardTile(props: Props): JSX.Element {
-	const { board, onViewBtnClick, onDeleteBtnClick } = props;
+	const { board, onViewBtnClick } = props;
+
+	const setModalContents = useSetRecoilState(ModalContentsState);
+
+	function onDeleteBtnClick(board: Board) {
+		setModalContents({
+			title: 'Delete Archived Thoughts?',
+			component: <DeleteBoardConfirmation boardId={board.id} />,
+		});
+	}
 
 	return (
 		<li data-testid="boardArchive" className="archived-board-tile">

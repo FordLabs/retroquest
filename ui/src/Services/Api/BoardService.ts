@@ -71,8 +71,13 @@ const BoardService = {
 	},
 
 	getBoard(teamId: string, boardId: number) {
-		let url = `/api/team/${teamId}/boards/${boardId}`;
+		const url = `/api/team/${teamId}/boards/${boardId}`;
 		return axios.get(url, getAuthConfig()).then((response) => response.data);
+	},
+
+	deleteBoard(teamId: string, boardId: number) {
+		const url = `/api/team/${teamId}/boards/${boardId}`;
+		return axios.delete(url, getAuthConfig());
 	},
 };
 

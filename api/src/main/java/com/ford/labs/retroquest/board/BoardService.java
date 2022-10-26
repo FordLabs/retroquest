@@ -22,6 +22,7 @@ import com.ford.labs.retroquest.column.Column;
 import com.ford.labs.retroquest.column.ColumnService;
 import com.ford.labs.retroquest.thought.ThoughtService;
 import com.ford.labs.retroquest.websocket.WebsocketService;
+import com.ford.labs.retroquest.websocket.events.WebsocketDeleteArchivedBoardEvent;
 import com.ford.labs.retroquest.websocket.events.WebsocketEndRetroEvent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -121,5 +122,10 @@ public class BoardService {
         }
         actionItemService.archiveCompletedActionItems(teamId);
         websocketService.publishEvent(new WebsocketEndRetroEvent(teamId));
+    }
+
+    public void deleteBoard(String teamId, Long boardId) {
+        boardRepository.deleteBoardByTeamIdAndId(teamId, boardId);
+        websocketService.publishEvent(new WebsocketDeleteArchivedBoardEvent(teamId));
     }
 }

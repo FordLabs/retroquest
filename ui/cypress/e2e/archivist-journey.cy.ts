@@ -20,6 +20,7 @@ import { join } from 'path';
 import { getArchivesPagePathWithTeamId } from '../../src/RouteConstants';
 import { Column } from '../../src/Types/Column';
 import { getTeamCredentials } from '../support/helpers';
+import TeamCredentials from '../support/types/teamCredentials';
 import { ThoughtTopic } from '../support/types/Topic';
 import Chainable = Cypress.Chainable;
 
@@ -28,54 +29,17 @@ describe('Archivist Journey', () => {
 
 	before(() => {
 		cy.createTeamAndLogin(teamCredentials);
+
+		createAndArchiveBoard(teamCredentials, 3);
+		createAndArchiveBoard(teamCredentials, 1);
+		createAndArchiveBoard(teamCredentials, 4);
 	});
 
-	it('Archives page functionality', () => {
-		getColumnsForTeam(teamCredentials.teamId).then((columns) => {
-			addThoughtToTeam(
-				teamCredentials.teamId,
-				'message1',
-				0,
-				false,
-				columns[0].topic,
-				columns[0].id
-			);
-			addThoughtToTeam(
-				teamCredentials.teamId,
-				'message2',
-				1,
-				false,
-				columns[0].topic,
-				columns[0].id
-			);
-			addThoughtToTeam(
-				teamCredentials.teamId,
-				'message3',
-				2,
-				true,
-				columns[0].topic,
-				columns[0].id
-			);
-			addThoughtToTeam(
-				teamCredentials.teamId,
-				'message4',
-				0,
-				false,
-				columns[2].topic,
-				columns[2].id
-			);
-		});
-		addCompletedActionItemToTeam(
-			teamCredentials.teamId,
-			'action to take',
-			'me'
-		);
-		archiveBoard(teamCredentials.teamId);
-
+	it('Thought Archives ', () => {
 		cy.findByText('Archives').click();
 		shouldBeOnArchivesPage(teamCredentials.teamId);
 
-		cy.findByText('View').click();
+		cy.findAllByText('View').should('have.length', 3).eq(0).click();
 		cy.findByText('message1').should('exist');
 		cy.findByText('message2').should('exist');
 		cy.findByText('message3').should('exist');
@@ -84,9 +48,22 @@ describe('Archivist Journey', () => {
 		cy.findByText('Thoughts').click();
 		shouldBeOnArchivesPage(teamCredentials.teamId);
 
+		cy.findByText('Date').click();
+
+		cy.findAllByText('Delete').should('have.length', 3).eq(0).click();
+
+		cy.findByText('Yes, Delete').click();
+
+		cy.findAllByText('Delete').should('have.length', 2);
+	});
+
+	it('Action Item Archives', () => {
+		cy.findByText('Archives').click();
+		shouldBeOnArchivesPage(teamCredentials.teamId);
+
 		cy.findByText('Action Items').click();
 		cy.findByText('Action Item Archives').should('exist');
-		cy.findByText('action to take').should('exist');
+		cy.findAllByText('action to take').should('have.length', 3);
 	});
 
 	it('Download CSV Button', () => {
@@ -184,4 +161,53 @@ function archiveBoard(teamId: string) {
 			body: {},
 		});
 	});
+}
+
+function createAndArchiveBoard(
+	teamCredentials: TeamCredentials,
+	thoughtCount: number
+) {
+	getColumnsForTeam(teamCredentials.teamId).then((columns) => {
+		if (thoughtCount >= 1)
+			addThoughtToTeam(
+				teamCredentials.teamId,
+				'message1',
+				0,
+				false,
+				columns[0].topic,
+				columns[0].id
+			);
+
+		if (thoughtCount >= 2)
+			addThoughtToTeam(
+				teamCredentials.teamId,
+				'message2',
+				1,
+				false,
+				columns[0].topic,
+				columns[0].id
+			);
+
+		if (thoughtCount >= 3)
+			addThoughtToTeam(
+				teamCredentials.teamId,
+				'message3',
+				2,
+				true,
+				columns[0].topic,
+				columns[0].id
+			);
+
+		if (thoughtCount >= 4)
+			addThoughtToTeam(
+				teamCredentials.teamId,
+				'message4',
+				0,
+				false,
+				columns[2].topic,
+				columns[2].id
+			);
+	});
+	addCompletedActionItemToTeam(teamCredentials.teamId, 'action to take', 'me');
+	archiveBoard(teamCredentials.teamId);
 }

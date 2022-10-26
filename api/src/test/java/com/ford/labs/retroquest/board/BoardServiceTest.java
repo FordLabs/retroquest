@@ -21,6 +21,7 @@ import com.ford.labs.retroquest.actionitem.ActionItemService;
 import com.ford.labs.retroquest.column.ColumnService;
 import com.ford.labs.retroquest.thought.Thought;
 import com.ford.labs.retroquest.thought.ThoughtService;
+import com.ford.labs.retroquest.websocket.events.WebsocketDeleteArchivedBoardEvent;
 import com.ford.labs.retroquest.websocket.events.WebsocketEndRetroEvent;
 import com.ford.labs.retroquest.websocket.WebsocketService;
 import org.junit.jupiter.api.Test;
@@ -183,12 +184,22 @@ class BoardServiceTest {
     }
 
     @Test
-    public void endRetro_EmitsEndRetroEvent() {
+    public void endRetro_emitsEndRetroEvent() {
         var expectedTeamId = "team1";
         var expectedEvent = new WebsocketEndRetroEvent(expectedTeamId);
         when(thoughtService.fetchAllActiveThoughts(eq(expectedTeamId))).thenReturn(new ArrayList<>());
 
         boardService.endRetro(expectedTeamId);
+
+        verify(websocketService).publishEvent(expectedEvent);
+    }
+
+    @Test
+    public void deleteBoard_emitsEndRetroEvent() {
+        var expectedTeamId = "team1";
+        var expectedEvent = new WebsocketDeleteArchivedBoardEvent(expectedTeamId);
+
+        boardService.deleteBoard("team1", 123L);
 
         verify(websocketService).publishEvent(expectedEvent);
     }

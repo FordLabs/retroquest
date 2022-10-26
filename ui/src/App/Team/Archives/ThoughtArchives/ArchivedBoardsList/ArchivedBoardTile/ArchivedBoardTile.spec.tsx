@@ -16,24 +16,35 @@
  */
 
 import * as React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { mockBoards } from 'Services/Api/__mocks__/BoardService';
+import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
+import { RecoilObserver } from 'Utils/RecoilObserver';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
+
+import DeleteBoardConfirmation from '../DeleteBoardConfirmation/DeleteBoardConfirmation';
 
 import ArchivedBoardTile from './ArchivedBoardTile';
 
 describe('Archived Board Tile', () => {
 	let onViewBtnClick: jest.Mock<any, any>;
-	let onDeleteBtnClick: jest.Mock<any, any>;
+	let modalContent: ModalContents | null;
 
 	beforeEach(() => {
 		onViewBtnClick = jest.fn();
-		onDeleteBtnClick = jest.fn();
-		render(
-			<ArchivedBoardTile
-				board={mockBoards[0]}
-				onViewBtnClick={onViewBtnClick}
-				onDeleteBtnClick={onDeleteBtnClick}
-			/>
+		renderWithRecoilRoot(
+			<>
+				<RecoilObserver
+					recoilState={ModalContentsState}
+					onChange={(value: ModalContents) => {
+						modalContent = value;
+					}}
+				/>
+				<ArchivedBoardTile
+					board={mockBoards[0]}
+					onViewBtnClick={onViewBtnClick}
+				/>
+			</>
 		);
 	});
 
@@ -54,8 +65,13 @@ describe('Archived Board Tile', () => {
 		expect(onViewBtnClick).toHaveBeenCalledWith(mockBoards[0]);
 	});
 
-	it('should trigger onDeleteButtonClick when clicking "Delete" button', () => {
+	it('should open delete archived thoughts confirmation modal when clicking "Delete" button', async () => {
 		fireEvent.click(screen.getByText('Delete'));
-		expect(onDeleteBtnClick).toHaveBeenCalledWith(mockBoards[0]);
+		await waitFor(() =>
+			expect(modalContent).toEqual({
+				title: 'Delete Archived Thoughts?',
+				component: <DeleteBoardConfirmation boardId={mockBoards[0].id} />,
+			})
+		);
 	});
 });

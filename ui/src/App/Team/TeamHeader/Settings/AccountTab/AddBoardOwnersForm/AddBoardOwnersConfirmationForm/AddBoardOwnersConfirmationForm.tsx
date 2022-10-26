@@ -16,7 +16,7 @@
  */
 
 import React from 'react';
-import FormTemplate from 'Common/FormTemplate/FormTemplate';
+import ConfirmationModal from 'Common/ConfirmationModal/ConfirmationModal';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import teamService from 'Services/Api/TeamService';
 import { ModalContentsState } from 'State/ModalContentsState';
@@ -65,7 +65,7 @@ function AddBoardOwnersConfirmationForm(props: Props) {
 	}
 
 	return (
-		<FormTemplate
+		<ConfirmationModal
 			title="Add Board Owners?"
 			subtitle={`These emails will be the board owners for everyone at ${team.name}.`}
 			onSubmit={onSubmit}
@@ -79,7 +79,7 @@ function AddBoardOwnersConfirmationForm(props: Props) {
 				<div className="team-email">{email1}</div>
 				<div className="team-email">{email2}</div>
 			</div>
-		</FormTemplate>
+		</ConfirmationModal>
 	);
 }
 

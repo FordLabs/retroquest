@@ -84,6 +84,7 @@ const BoardService = {
 		paginationData: mockPaginationData,
 	} as GetBoardsResponse),
 	getBoard: jest.fn().mockResolvedValue(mockRetro),
+	deleteBoard: jest.fn().mockResolvedValue({}),
 };
 
 export default BoardService;
