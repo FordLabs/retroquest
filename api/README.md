@@ -21,7 +21,7 @@ Optional:
 - Email server of your choosing
     - If you would like the ability to have users reset their password, recover team names associated 
       with the team email addresses, and reset their team emails, an email server is required. 
-      See [below]() to see how to set up an email server.
+      See [below](https://github.com/FordLabs/retroquest/blob/main/api/README.md#how-to-set-up-your-email-server-optional) to see how to set up an email server.
 
 ---
 
