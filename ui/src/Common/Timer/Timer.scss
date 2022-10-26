@@ -80,10 +80,10 @@ $timer-height: 2.81rem;
 @include main.dark-theme {
 	.timer {
 		.timer-count-down {
-			color: main.$white;
+			color: main.$off-white;
 
 			background-color: main.$black-asphalt;
-			border: 2px solid main.$white;
+			border: 2px solid main.$off-white;
 		}
 
 		.reset-button {
