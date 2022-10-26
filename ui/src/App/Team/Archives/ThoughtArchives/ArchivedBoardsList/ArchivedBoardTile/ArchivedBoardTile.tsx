@@ -16,7 +16,6 @@
  */
 
 import * as React from 'react';
-import CheckboxButton from 'Common/ColumnItemButtons/CheckboxButton/CheckboxButton';
 import moment from 'moment';
 import { useSetRecoilState } from 'recoil';
 import { ModalContentsState } from 'State/ModalContentsState';
@@ -52,13 +51,13 @@ function ArchivedBoardTile(props: Props): JSX.Element {
 	return (
 		<li data-testid="boardArchive" className="archived-board-tile">
 			<div>
-				<CheckboxButton
-					checked={false}
-					onClick={() => {}}
-					disableTooltips
-					className="archived-board-tile-checkbox"
-					aria-label="Select Board"
-				/>
+				{/*<CheckboxButton*/}
+				{/*	checked={false}*/}
+				{/*	onClick={() => {}}*/}
+				{/*	disableTooltips*/}
+				{/*	className="archived-board-tile-checkbox"*/}
+				{/*	aria-label="Select Board"*/}
+				{/*/>*/}
 				<span className="thought-count">{board.thoughts.length}</span>
 			</div>
 			<span className="date-label">
