@@ -25,9 +25,9 @@ iteration and identify actions that can improve the team as a whole.
 * [Spring](https://spring.io/) - Development framework
 
 ## Running the Application
-- [Setup and start the UI]()
-- [Setup and start API]()
-- [Setup and start E2E Tests]()
+- [Setup and start the UI](https://github.com/FordLabs/retroquest/blob/main/ui/README.md)
+- [Setup and start API](https://github.com/FordLabs/retroquest/blob/main/api/README.md)
+- [Setup and start E2E Tests](https://github.com/FordLabs/retroquest/blob/main/ui/cypress/README.md)
 
 ## Contributing
 
