@@ -36,6 +36,12 @@
 
 		background: main.$dark-gray;
 		border-radius: 2rem;
+
+		&:focus,
+		&:hover {
+			color: main.$asphalt;
+			background: rgba(main.$light-gray, 0.8);
+		}
 	}
 
 	.close-banner-button {
@@ -59,6 +65,12 @@
 		.go-to-settings-button {
 			color: main.$asphalt;
 			background: rgba(main.$light-gray, 0.8);
+
+			&:focus,
+			&:hover {
+				color: main.$off-white;
+				background-color: main.$dark-gray;
+			}
 		}
 	}
 }
