@@ -45,7 +45,8 @@ function ActionItemArchives() {
 				<>
 					<h1 className="action-item-archives-title">Action Item Archives</h1>
 					<p className="action-item-archives-description">
-						Examine completed action items from times gone by
+						Examine completed action items from your team’s previous
+						retrospectives
 					</p>
 					<ul className="archived-action-items">
 						{actionItems.map((actionItem, index) => {
