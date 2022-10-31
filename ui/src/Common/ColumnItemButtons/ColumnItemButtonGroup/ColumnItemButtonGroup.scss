@@ -72,6 +72,11 @@ $opacity: 0.25;
 			}
 		}
 
+		&.read-only {
+			cursor: initial;
+			pointer-events: unset;
+		}
+
 		&.confirm,
 		&.cancel {
 			font-size: 1rem;
