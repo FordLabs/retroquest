@@ -153,6 +153,18 @@ describe('Reset Password Page', () => {
 		renderWithToken('ABC321');
 		expect(screen.queryByText(confirmationMessage)).not.toBeInTheDocument();
 	});
+
+	it('should redirect to Expired Reset Password Link Page if token is expired upon form submission', async () => {
+		TeamService.setPasswordWithResetToken = jest.fn().mockRejectedValue(null);
+
+		renderWithToken('expired-token');
+		submitValidForm();
+		await waitFor(() =>
+			expect(mockedUsedNavigate).toHaveBeenCalledWith(
+				'/password/reset/expired-link'
+			)
+		);
+	});
 });
 
 function submitValidForm(password: string = 'P@ssw0rd') {
