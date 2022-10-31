@@ -91,7 +91,7 @@ describe('Radiator Page', () => {
 		);
 
 		const dateCreatedField = screen.getByTestId('dateCreated');
-		expect(dateCreatedField).toHaveClass('readOnly');
+		expect(dateCreatedField).toHaveClass('read-only');
 		expect(
 			screen.getAllByTestId('assigneeInput')[0].getAttribute('readOnly')
 		).not.toBeNull();

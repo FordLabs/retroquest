@@ -35,7 +35,7 @@ export function DateCreated(props: DateCreatedProps) {
 		<div
 			className={classnames('column-item-button date-created', className, {
 				disabled,
-				readOnly,
+				'read-only': readOnly,
 			})}
 			data-testid="dateCreated"
 		>
