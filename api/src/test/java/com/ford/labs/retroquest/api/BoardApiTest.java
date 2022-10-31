@@ -37,6 +37,7 @@ import java.util.List;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -161,6 +162,40 @@ class BoardApiTest extends ApiTestBase {
         mockMvc.perform(post(format("/api/team/%s/board", teamId))
                 .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
             .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void deleteBoard_shouldDeleteSingleBoardSuccessfully() throws Exception {
+        Board boardToDelete =  boardRepository.save(Board.builder()
+                .dateCreated(LocalDate.of(2018, 3, 3))
+                .teamId(teamId)
+                .thoughts(List.of())
+                .build());
+
+        assertThat(boardRepository.count()).isEqualTo(1);
+
+        mockMvc.perform(delete(String.format("/api/team/%s/boards/%s", teamId, boardToDelete.getId()))
+                        .contentType(APPLICATION_JSON)
+                        .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk());
+
+        assertThat(boardRepository.count()).isEqualTo(0);
+    }
+
+    @Test
+    public void deleteBoard_withUnauthorizedUser_shouldReturn403() throws Exception {
+        Board boardToDelete =  boardRepository.save(Board.builder()
+                .dateCreated(LocalDate.of(2018, 3, 3))
+                .teamId(teamId)
+                .thoughts(List.of())
+                .build());
+
+        mockMvc.perform(delete(String.format("/api/team/%s/boards/%s", teamId, boardToDelete.getId()))
+                        .contentType(APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .andExpect(status().isForbidden());
+
+        assertThat(boardRepository.count()).isEqualTo(1);
     }
 
     @Test

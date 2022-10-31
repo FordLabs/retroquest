@@ -36,7 +36,7 @@ import ArchivedBoardsList from './ArchivedBoardsList';
 
 jest.mock('Services/Api/BoardService');
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 20;
 const INITIAL_PAGE_INDEX = 0;
 
 describe('Archived Boards List', () => {
@@ -58,7 +58,7 @@ describe('Archived Boards List', () => {
 	describe('Pagination', () => {
 		it('should display text telling user info about what is on the page', async () => {
 			await setUpThoughtArchives();
-			expect(screen.getByText('(showing 1-6 of 11)')).toBeDefined();
+			expect(screen.getByText('(showing 1-20 of 23)')).toBeDefined();
 		});
 
 		it('should start on first paginated page', async () => {
@@ -232,8 +232,8 @@ function getBoardsResponse(
 			pageIndex: INITIAL_PAGE_INDEX,
 			pageSize: PAGE_SIZE,
 			pageRange: '1-' + PAGE_SIZE,
-			totalBoardCount: 11,
-			totalPages: 3,
+			totalBoardCount: 23,
+			totalPages: 2,
 		},
 	};
 }

@@ -16,12 +16,11 @@
  */
 
 import React, { useState } from 'react';
+import ConfirmationModal from 'Common/ConfirmationModal/ConfirmationModal';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-
-import FormTemplate from '../../../../../Common/FormTemplate/FormTemplate';
-import FeedbackService from '../../../../../Services/Api/FeedbackService';
-import { ModalContentsState } from '../../../../../State/ModalContentsState';
-import { TeamState } from '../../../../../State/TeamState';
+import FeedbackService from 'Services/Api/FeedbackService';
+import { ModalContentsState } from 'State/ModalContentsState';
+import { TeamState } from 'State/TeamState';
 
 import FeedbackStars from './FeedbackStars/FeedbackStars';
 
@@ -51,7 +50,7 @@ function FeedbackForm() {
 	};
 
 	return (
-		<FormTemplate
+		<ConfirmationModal
 			testId="feedbackForm"
 			className="feedback-form"
 			onSubmit={onSubmit}
@@ -85,7 +84,7 @@ function FeedbackForm() {
 					onChange={(event) => setUserEmail(event.target.value)}
 				/>
 			</div>
-		</FormTemplate>
+		</ConfirmationModal>
 	);
 }
 

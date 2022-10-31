@@ -39,12 +39,18 @@ describe('Checkbox Button', () => {
 
 	it('should have tooltips', () => {
 		render(<CheckboxButton checked={false} />);
-
 		screen.getByText('Close');
 
 		render(<CheckboxButton checked={true} />);
-
 		screen.getByText('Open');
+	});
+
+	it('should not have tooltips', () => {
+		render(<CheckboxButton checked={false} disableTooltips />);
+		expect(screen.queryByText('Close')).toBeNull();
+
+		render(<CheckboxButton checked={true} disableTooltips />);
+		expect(screen.queryByText('Open')).toBeNull();
 	});
 
 	it('should handle clicks', () => {
@@ -55,7 +61,7 @@ describe('Checkbox Button', () => {
 		expect(mockCheck).toHaveBeenCalledTimes(1);
 	});
 
-	it('can be disabled', () => {
+	it('should be disabled button', () => {
 		render(
 			<CheckboxButton checked={false} onClick={mockCheck} disabled={true} />
 		);

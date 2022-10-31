@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-import FormTemplate from 'Common/FormTemplate/FormTemplate';
+import ConfirmationModal from 'Common/ConfirmationModal/ConfirmationModal';
 
 import './TimesUpDialog.scss';
 
@@ -27,7 +27,7 @@ interface Props {
 function TimesUpDialog(props: Props) {
 	const { onConfirm, onAddTime } = props;
 	return (
-		<FormTemplate
+		<ConfirmationModal
 			className="times-up-dialog"
 			title="Time's Up!"
 			subtitle="Your timer has expired."

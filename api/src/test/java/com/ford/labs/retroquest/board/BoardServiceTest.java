@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Ford Motor Company
+ * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -183,7 +183,7 @@ class BoardServiceTest {
     }
 
     @Test
-    public void endRetro_EmitsEndRetroEvent() {
+    public void endRetro_emitsEndRetroEvent() {
         var expectedTeamId = "team1";
         var expectedEvent = new WebsocketEndRetroEvent(expectedTeamId);
         when(thoughtService.fetchAllActiveThoughts(eq(expectedTeamId))).thenReturn(new ArrayList<>());
