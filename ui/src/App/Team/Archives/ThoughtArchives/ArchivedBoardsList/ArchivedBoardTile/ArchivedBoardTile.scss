@@ -59,7 +59,7 @@
 
 	.view-button {
 		&:hover {
-			color: main.$sea-foam;
+			color: main.$teal;
 		}
 	}
 
@@ -67,7 +67,10 @@
 		color: main.$red;
 
 		&:hover {
-			color: main.$dark-red;
+			color: main.$white;
+
+			background-color: main.$red;
+			border-radius: 0 6px 6px 0;
 		}
 	}
 }
@@ -97,7 +100,8 @@
 			color: main.$light-red;
 
 			&:hover {
-				color: main.$red;
+				color: main.$off-white;
+				background-color: main.$dark-red;
 			}
 		}
 	}

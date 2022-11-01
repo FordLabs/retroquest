@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-@use 'Styles/main';
+@use '../../../../Styles/main';
 
 $link-size: 2rem;
 
@@ -32,6 +32,8 @@ $link-size: 2rem;
 		width: $link-size;
 		height: $link-size;
 
+		font-weight: 600;
+
 		border-radius: 20px;
 		cursor: pointer;
 	}
@@ -43,5 +45,18 @@ $link-size: 2rem;
 	.active {
 		font-weight: bold;
 		background: rgba(main.$asphalt, 0.08);
+	}
+}
+
+@include main.dark-theme {
+	.pagination {
+		color: main.$mid-gray;
+
+		.active {
+			color: main.$asphalt;
+			font-weight: bold;
+
+			background: main.$off-white;
+		}
 	}
 }
