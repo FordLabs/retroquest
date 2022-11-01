@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Form from 'Common/AuthTemplate/Form/Form';
 import Header from 'Common/Header/Header';
@@ -42,22 +42,25 @@ function ResetPasswordPage(): JSX.Element {
 	const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 	const [isValidForm, setIsValidForm] = useState<boolean>(false);
 
+	const goToExpiredLinkPage = useCallback(() => {
+		navigate(EXPIRED_PASSWORD_RESET_LINK_PATH);
+	}, [navigate]);
+
 	function submitNewPassword() {
 		if (newPassword) {
-			TeamService.setPasswordWithResetToken(
-				newPassword,
-				passwordResetToken
-			).then(() => setIsFormSubmitted(true));
+			TeamService.setPasswordWithResetToken(newPassword, passwordResetToken)
+				.then(() => setIsFormSubmitted(true))
+				.catch(goToExpiredLinkPage);
 		}
 	}
 
 	useEffect(() => {
 		PasswordResetTokenService.checkIfResetTokenIsValid(passwordResetToken).then(
 			(isValidToken) => {
-				if (!isValidToken) navigate(EXPIRED_PASSWORD_RESET_LINK_PATH);
+				if (!isValidToken) goToExpiredLinkPage();
 			}
 		);
-	}, [navigate, passwordResetToken]);
+	}, [goToExpiredLinkPage, passwordResetToken]);
 
 	return (
 		<div className="reset-password-page">
