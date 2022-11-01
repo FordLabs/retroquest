@@ -34,6 +34,7 @@ import CreateTeamPage from './CreateTeam/CreateTeamPage';
 import ExpiredResetBoardOwnersLinkPage from './ExpiredResetBoardOwnersLinkPage/ExpiredResetBoardOwnersLinkPage';
 import ExpiredResetPasswordLinkPage from './ExpiredResetPasswordLinkPage/ExpiredResetPasswordLinkPage';
 import LoginPage from './Login/LoginPage';
+import PageNotFoundPage from './PageNotFound/PageNotFoundPage';
 import PasswordResetRequestPage from './PasswordResetRequest/PasswordResetRequestPage';
 import RecoverTeamNamePage from './RecoverTeamName/RecoverTeamNamePage';
 import ResetPasswordPage from './ResetPassword/ResetPasswordPage';
@@ -98,7 +99,7 @@ function App() {
 						element={<RecoverTeamNamePage />}
 					/>
 				)}
-				<Route path="*" element={<div>404</div>} />
+				<Route path="*" element={<PageNotFoundPage />} />
 			</Routes>
 			<Modal />
 		</div>

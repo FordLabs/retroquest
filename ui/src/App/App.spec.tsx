@@ -60,6 +60,10 @@ jest.mock('./PasswordResetRequest/PasswordResetRequestPage', () => {
 jest.mock('./RecoverTeamName/RecoverTeamNamePage', () => {
 	return () => <div>Recover Team Names Page</div>;
 });
+const pageNotFoundPageText = 'Oops!';
+jest.mock('./PageNotFound/PageNotFoundPage', () => {
+	return () => <div>{pageNotFoundPageText}</div>;
+});
 jest.mock('Common/Modal/Modal', () => {
 	return () => <div>Root Modal</div>;
 });
@@ -159,7 +163,7 @@ describe('App', () => {
 			async (pageName: string, path: string) => {
 				renderAppWithEmailEnabledSetTo(false, path);
 				expect(screen.queryByText(pageName)).toBeNull();
-				expect(screen.getByText('404')).toBeInTheDocument();
+				expect(screen.getByText(pageNotFoundPageText)).toBeInTheDocument();
 			}
 		);
 	});
@@ -177,7 +181,7 @@ describe('App', () => {
 			async (pageName: string, path: string) => {
 				renderAppWithEmailEnabledSetTo(true, path);
 				expect(screen.getByText(pageName)).toBeInTheDocument();
-				expect(screen.queryByText('404')).toBeNull();
+				expect(screen.queryByText(pageNotFoundPageText)).toBeNull();
 			}
 		);
 	});
