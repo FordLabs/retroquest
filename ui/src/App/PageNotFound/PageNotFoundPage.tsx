@@ -36,6 +36,7 @@ function PageNotFoundPage() {
 			header="Oops!"
 			className="page-not-found-page"
 			showGithubLink={false}
+			showCodeContributors={false}
 		>
 			<div className="paragraph-1-container">
 				<SadBrowser color={checkboxIconColor} className="sad-browser-icon" />

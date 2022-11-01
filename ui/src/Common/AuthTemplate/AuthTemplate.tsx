@@ -29,6 +29,7 @@ type AuthTemplateProps = React.PropsWithChildren<{
 	subHeader?: React.ReactNode;
 	className?: string;
 	showGithubLink?: boolean;
+	showCodeContributors?: boolean;
 }>;
 
 export default function AuthTemplate(props: AuthTemplateProps): JSX.Element {
@@ -38,6 +39,7 @@ export default function AuthTemplate(props: AuthTemplateProps): JSX.Element {
 		children,
 		className,
 		showGithubLink = true,
+		showCodeContributors = true,
 	} = props;
 
 	return (
@@ -68,7 +70,7 @@ export default function AuthTemplate(props: AuthTemplateProps): JSX.Element {
 					)}
 				</div>
 			</div>
-			<Contributors />
+			{showCodeContributors && <Contributors />}
 		</main>
 	);
 }

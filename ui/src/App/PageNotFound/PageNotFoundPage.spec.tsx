@@ -16,9 +16,8 @@
  */
 
 import { MemoryRouter } from 'react-router-dom';
-import { screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { MutableSnapshot } from 'recoil';
-import ContributorsService from 'Services/Api/ContributorsService';
 import { ThemeState } from 'State/ThemeState';
 import Theme from 'Types/Theme';
 import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
@@ -30,38 +29,43 @@ jest.mock('Services/Api/TeamService');
 jest.mock('Services/Api/EmailResetTokenService');
 
 describe('Page Not Found Page', () => {
-	it('should render header and link to login page', async () => {
-		await renderPageNotFoundPage();
+	it('should render header and link to login page', () => {
+		renderPageNotFoundPage();
 		expect(screen.getByText('Oops!')).toBeDefined();
 		const returnToLoginLink = screen.getByText('Return to Login');
 		expect(returnToLoginLink).toBeDefined();
 		expect(returnToLoginLink).toHaveAttribute('href', '/login');
 	});
 
-	it('should render sad browser sign icon as red in light mode', async () => {
-		await renderPageNotFoundPage(({ set }) => {
+	it('should render sad browser sign icon as red in light mode', () => {
+		renderPageNotFoundPage(({ set }) => {
 			set(ThemeState, Theme.LIGHT);
 		});
 
-		const sadBrowserIcon = await screen.findAllByTestId('sadBrowserIconPath');
+		const sadBrowserIcon = screen.getAllByTestId('sadBrowserIconPath');
 		sadBrowserIcon.forEach((icon) => {
 			expect(icon.getAttribute('fill')).toBe('#e74c3c');
 		});
 	});
 
-	it('should render checkbox in confirmation screen as light turquoise in dark mode', async () => {
-		await renderPageNotFoundPage(({ set }) => {
+	it('should render checkbox in confirmation screen as light turquoise in dark mode', () => {
+		renderPageNotFoundPage(({ set }) => {
 			set(ThemeState, Theme.DARK);
 		});
 
-		const sadBrowserIcon = await screen.findAllByTestId('sadBrowserIconPath');
+		const sadBrowserIcon = screen.getAllByTestId('sadBrowserIconPath');
 		sadBrowserIcon.forEach((icon) => {
 			expect(icon.getAttribute('fill')).toBe('#ef8a7e');
 		});
 	});
+
+	it('should not show code contributors section', async () => {
+		renderPageNotFoundPage();
+		expect(screen.queryByText('Code Contributors')).toBeNull();
+	});
 });
 
-async function renderPageNotFoundPage(
+function renderPageNotFoundPage(
 	recoilState?: (mutableSnapshot: MutableSnapshot) => void
 ) {
 	renderWithRecoilRoot(
@@ -70,6 +74,4 @@ async function renderPageNotFoundPage(
 		</MemoryRouter>,
 		recoilState
 	);
-
-	await waitFor(() => expect(ContributorsService.get).toBeCalledTimes(1));
 }
