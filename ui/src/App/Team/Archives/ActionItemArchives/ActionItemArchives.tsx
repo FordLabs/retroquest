@@ -15,14 +15,13 @@
  * limitations under the License.
  */
 
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import ArchivedActionItem from 'Common/ArchivedActionItem/ArchivedActionItem';
+import NotFoundSection from 'Common/NotFoundSection/NotFoundSection';
 import { useRecoilState, useRecoilValue } from 'recoil';
-
-import ActionItemDisplayOnly from '../../../../Common/ActionItemDisplayOnly/ActionItemDisplayOnly';
-import NotFoundSection from '../../../../Common/NotFoundSection/NotFoundSection';
-import ActionItemService from '../../../../Services/Api/ActionItemService';
-import { ActionItemState } from '../../../../State/ActionItemState';
-import { TeamState } from '../../../../State/TeamState';
+import ActionItemService from 'Services/Api/ActionItemService';
+import { ActionItemState } from 'State/ActionItemState';
+import { TeamState } from 'State/TeamState';
 
 import './ActionItemArchives.scss';
 
@@ -30,15 +29,15 @@ function ActionItemArchives() {
 	const team = useRecoilValue(TeamState);
 	const [actionItems, setActionItems] = useRecoilState(ActionItemState);
 
-	useEffect(() => {
-		if (team.id) {
-			ActionItemService.get(team.id, true)
-				.then((items) => {
-					setActionItems(items);
-				})
-				.catch(console.error);
-		}
+	const getActionItems = useCallback(() => {
+		ActionItemService.get(team.id, true)
+			.then(setActionItems)
+			.catch(console.error);
 	}, [setActionItems, team.id]);
+
+	useEffect(() => {
+		if (team.id) getActionItems();
+	}, [getActionItems, team.id]);
 
 	return (
 		<div className="action-item-archives">
@@ -46,13 +45,17 @@ function ActionItemArchives() {
 				<>
 					<h1 className="action-item-archives-title">Action Item Archives</h1>
 					<p className="action-item-archives-description">
-						Examine completed action items from times gone by
+						Examine completed action items from your team’s previous
+						retrospectives
 					</p>
 					<ul className="archived-action-items">
 						{actionItems.map((actionItem, index) => {
 							return (
 								<li key={`archived-action-${index}`}>
-									<ActionItemDisplayOnly actionItem={actionItem} />
+									<ArchivedActionItem
+										actionItem={actionItem}
+										onActionItemDeletion={getActionItems}
+									/>
 								</li>
 							);
 						})}
