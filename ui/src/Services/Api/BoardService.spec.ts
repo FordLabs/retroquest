@@ -16,9 +16,9 @@
  */
 
 import axios from 'axios';
+import Board from 'Types/Board';
 
 import { mockGetCookie } from '../../__mocks__/universal-cookie';
-import Board from '../../Types/Board';
 
 import BoardService, { SortOrder } from './BoardService';
 
@@ -123,6 +123,17 @@ describe('Board Service', () => {
 
 			expect(actualBoard).toEqual(expectedBoard);
 			expect(axios.get).toHaveBeenCalledWith(
+				`${boardUrl}/${boardId}`,
+				mockConfig
+			);
+		});
+	});
+
+	describe('deleteBoard', () => {
+		it('should delete board by teamId and boardId', async () => {
+			await BoardService.deleteBoard(teamId, boardId);
+
+			expect(axios.delete).toHaveBeenCalledWith(
 				`${boardUrl}/${boardId}`,
 				mockConfig
 			);

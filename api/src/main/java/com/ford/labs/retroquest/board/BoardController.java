@@ -40,6 +40,16 @@ public class BoardController {
         this.boardService = boardService;
     }
 
+    @PostMapping("/team/{teamId}/board")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @Operation(summary = "Saves a board given a team id", description = "saveBoard")
+    @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Created")})
+    public ResponseEntity<Void> createBoard(@PathVariable("teamId") String teamId) throws URISyntaxException {
+        var board = this.boardService.createBoard(teamId);
+        var uri = new URI(String.format("/api/team/%s/board/%s", board.getTeamId(), board.getId()));
+        return ResponseEntity.created(uri).build();
+    }
+
     @GetMapping("/team/{teamId}/boards")
     @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(summary = "Gets a retro board metadata list given a team id and page index", description = "getBoardsForTeamId")
@@ -61,14 +71,11 @@ public class BoardController {
         return this.boardService.getArchivedRetroForTeam(teamId, boardId);
     }
 
-    @PostMapping("/team/{teamId}/board")
+    @DeleteMapping("/team/{teamId}/boards/{boardId}")
     @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
-    @Operation(summary = "Saves a board given a team id", description = "saveBoard")
-    @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Created")})
-    public ResponseEntity<Void> createBoard(@PathVariable("teamId") String teamId) throws URISyntaxException {
-        var board = this.boardService.createBoard(teamId);
-        var uri = new URI(String.format("/api/team/%s/board/%s", board.getTeamId(), board.getId()));
-        return ResponseEntity.created(uri).build();
+    @Operation(description = "Deletes a single retro board given a team id and board id")
+    public void deleteBoard(@PathVariable("teamId") String teamId, @PathVariable("boardId") Long boardId) {
+        this.boardService.deleteBoard(teamId, boardId);
     }
 
     @PutMapping("/team/{teamId}/end-retro")

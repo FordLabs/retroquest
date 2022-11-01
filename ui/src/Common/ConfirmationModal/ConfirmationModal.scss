@@ -17,7 +17,7 @@
 
 @use '../../Styles/main';
 
-.form-template {
+.confirmation-modal {
 	display: flex;
 	flex-direction: column;
 
@@ -39,11 +39,11 @@
 
 	position: relative;
 
-	.form-template-body {
+	.confirmation-modal-body {
 		margin: 3rem 3.625rem 2rem;
 	}
 
-	.form-template-title {
+	.confirmation-modal-title {
 		width: 100%;
 		margin-bottom: 0.5rem;
 
@@ -60,7 +60,7 @@
 		}
 	}
 
-	.form-template-subtitle {
+	.confirmation-modal-subtitle {
 		width: 100%;
 		max-width: 33rem;
 		margin-bottom: 0.5rem;
@@ -79,7 +79,7 @@
 		}
 	}
 
-	.form-template-footer {
+	.confirmation-modal-footer {
 		display: flex;
 		justify-content: space-around;
 		width: 100%;
@@ -93,7 +93,7 @@
 			height: 4rem;
 		}
 
-		.form-template-button {
+		.confirmation-modal-button {
 			width: 50%;
 			height: 100%;
 			margin: 0;
@@ -104,7 +104,7 @@
 			box-shadow: none;
 		}
 
-		.form-template-button.cancel {
+		.confirmation-modal-button.cancel {
 			color: main.$asphalt;
 
 			border: 0;
@@ -122,18 +122,18 @@
 }
 
 @include main.dark-theme {
-	.form-template {
+	.confirmation-modal {
 		background-color: main.$dark-asphalt;
 
-		.form-template-title {
+		.confirmation-modal-title {
 			color: main.$off-white;
 		}
 
-		.form-template-subtitle {
+		.confirmation-modal-subtitle {
 			color: main.$light-gray;
 		}
 
-		.form-template-button.cancel {
+		.confirmation-modal-button.cancel {
 			color: main.$off-white;
 			border-top: 1px solid main.$dark-gray;
 

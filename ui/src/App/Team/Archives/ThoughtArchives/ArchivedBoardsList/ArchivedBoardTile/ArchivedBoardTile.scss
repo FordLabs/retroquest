@@ -31,7 +31,12 @@
 	border-radius: 6px;
 	box-shadow: rgba(0, 0, 0, 0.12) 0 0.25rem 1.25rem 0;
 
+	.archived-board-tile-checkbox {
+		margin: 1.5rem;
+	}
+
 	.thought-count {
+		display: inline-block;
 		width: 2rem;
 		height: 2rem;
 		margin: 1rem;
@@ -42,16 +47,27 @@
 		border-radius: 20px;
 	}
 
-	.date {
+	.date-label {
 		padding: 1rem;
 	}
 
+	.delete-button,
 	.view-button {
 		padding: 1rem 1.5rem;
 		border-left: 1px solid main.$off-white;
+	}
 
+	.view-button {
 		&:hover {
 			color: main.$sea-foam;
+		}
+	}
+
+	.delete-button {
+		color: main.$red;
+
+		&:hover {
+			color: main.$dark-red;
 		}
 	}
 }
@@ -65,12 +81,23 @@
 			background-color: rgba(main.$black, 0.22);
 		}
 
+		.delete-button,
 		.view-button {
 			color: main.$gray-2;
 			border-left: 1px solid main.$asphalt;
+		}
 
+		.view-button {
 			&:hover {
 				color: main.$sea-foam;
+			}
+		}
+
+		.delete-button {
+			color: main.$light-red;
+
+			&:hover {
+				color: main.$red;
 			}
 		}
 	}

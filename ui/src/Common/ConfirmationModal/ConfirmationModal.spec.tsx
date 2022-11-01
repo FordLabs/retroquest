@@ -20,7 +20,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe } from 'jest-axe';
 
-import FormTemplate from './FormTemplate';
+import ConfirmationModal from './ConfirmationModal';
 
 describe('FormTemplate', () => {
 	const mockOnSubmitCallback = jest.fn();
@@ -29,7 +29,7 @@ describe('FormTemplate', () => {
 
 	beforeEach(() => {
 		({ container } = render(
-			<FormTemplate
+			<ConfirmationModal
 				title="Form Template Header"
 				subtitle="Form Template Sub Header"
 				onSubmit={mockOnSubmitCallback}
@@ -38,7 +38,7 @@ describe('FormTemplate', () => {
 				submitButtonText="Custom Submit!"
 			>
 				<>Form Template Content</>
-			</FormTemplate>
+			</ConfirmationModal>
 		));
 	});
 

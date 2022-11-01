@@ -42,7 +42,7 @@ describe('Date Created', () => {
 	it('should be read only', () => {
 		rerender(<DateCreated date={date} readOnly={true} />);
 		const dateInput = getDateCreated();
-		expect(dateInput).toHaveClass('readOnly');
+		expect(dateInput).toHaveClass('read-only');
 	});
 });
 

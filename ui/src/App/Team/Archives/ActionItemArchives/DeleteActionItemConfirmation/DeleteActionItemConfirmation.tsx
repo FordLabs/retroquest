@@ -17,33 +17,43 @@
 import React from 'react';
 import ConfirmationModal from 'Common/ConfirmationModal/ConfirmationModal';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import BoardService from 'Services/Api/BoardService';
+import ActionItemService from 'Services/Api/ActionItemService';
 import { ModalContentsState } from 'State/ModalContentsState';
 import { TeamState } from 'State/TeamState';
 
-function ArchiveRetroConfirmation() {
+interface Props {
+	actionItemId: number;
+	onActionItemDeletion(): void;
+}
+
+function DeleteActionItemConfirmation(props: Props) {
+	const { actionItemId, onActionItemDeletion } = props;
+
 	const team = useRecoilValue(TeamState);
 	const setModalContents = useSetRecoilState(ModalContentsState);
 
 	const closeModal = () => setModalContents(null);
 
 	const onSubmit = () => {
-		BoardService.archiveRetro(team.id)
-			.then(() => closeModal())
+		ActionItemService.delete(team.id, actionItemId)
+			.then(() => {
+				onActionItemDeletion();
+				closeModal();
+			})
 			.catch(console.error);
 	};
 
 	return (
 		<ConfirmationModal
-			testId="archiveRetroDialog"
-			title="End Retro for All?"
-			subtitle="Are you sure you want to end the retro for everybody? This will permanently archive all thoughts!"
+			testId="deleteActionItemConfirmation"
+			title="Delete Action Item?"
+			subtitle="Are you sure you want to delete this archived action item? Doing so will permanently remove this data."
 			onSubmit={onSubmit}
 			onCancel={closeModal}
 			cancelButtonText="Cancel"
-			submitButtonText="Yes! End Retro."
+			submitButtonText="Yes, Delete"
 		/>
 	);
 }
 
-export default ArchiveRetroConfirmation;
+export default DeleteActionItemConfirmation;

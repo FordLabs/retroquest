@@ -17,26 +17,63 @@
 
 import * as React from 'react';
 import moment from 'moment';
+import { useSetRecoilState } from 'recoil';
+import { ModalContentsState } from 'State/ModalContentsState';
+import Board from 'Types/Board';
 
-import Board from '../../../../../../Types/Board';
+import DeleteBoardConfirmation from '../DeleteBoardConfirmation/DeleteBoardConfirmation';
 
 import './ArchivedBoardTile.scss';
 
 interface Props {
 	board: Board;
-	onTileClicked(board: Board): void;
+	onViewBtnClick(board: Board): void;
+	onBoardDeletion(): void;
 }
 
-function ArchivedBoardTile({ board, onTileClicked }: Props): JSX.Element {
+function ArchivedBoardTile(props: Props): JSX.Element {
+	const { board, onViewBtnClick, onBoardDeletion } = props;
+
+	const setModalContents = useSetRecoilState(ModalContentsState);
+
+	function onDeleteBtnClick(board: Board) {
+		setModalContents({
+			title: 'Delete Archived Thoughts?',
+			component: (
+				<DeleteBoardConfirmation
+					boardId={board.id}
+					onBoardDeletion={onBoardDeletion}
+				/>
+			),
+		});
+	}
+
 	return (
 		<li data-testid="boardArchive" className="archived-board-tile">
-			<span className="thought-count">{board.thoughts.length}</span>
-			<span className="date">
+			<div>
+				{/*<CheckboxButton*/}
+				{/*	checked={false}*/}
+				{/*	onClick={() => {}}*/}
+				{/*	disableTooltips*/}
+				{/*	className="archived-board-tile-checkbox"*/}
+				{/*	aria-label="Select Board"*/}
+				{/*/>*/}
+				<span className="thought-count">{board.thoughts.length}</span>
+			</div>
+			<span className="date-label">
 				{moment(board.dateCreated).format('MMMM Do, yyyy')}
 			</span>
-			<button className="view-button" onClick={() => onTileClicked(board)}>
-				View
-			</button>
+			<div>
+				<button className="view-button" onClick={() => onViewBtnClick(board)}>
+					View
+				</button>
+				<button
+					className="delete-button"
+					onClick={() => onDeleteBtnClick(board)}
+				>
+					Delete
+				</button>
+			</div>
 		</li>
 	);
 }

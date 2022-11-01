@@ -21,7 +21,7 @@ import classnames from 'classnames';
 import ButtonPrimary from '../ButtonPrimary/ButtonPrimary';
 import ButtonSecondary from '../ButtonSecondary/ButtonSecondary';
 
-import './FormTemplate.scss';
+import './ConfirmationModal.scss';
 
 interface Props {
 	testId?: string;
@@ -35,7 +35,7 @@ interface Props {
 	submitButtonText: string;
 }
 
-function FormTemplate(props: Props) {
+function ConfirmationModal(props: Props) {
 	const {
 		testId,
 		className,
@@ -50,27 +50,30 @@ function FormTemplate(props: Props) {
 
 	return (
 		<form
-			className={classnames('form-template', className)}
+			className={classnames('confirmation-modal', className)}
 			data-testid={testId}
 			onSubmit={(event) => {
 				event.preventDefault();
 				onSubmit(event);
 			}}
 		>
-			<div className="form-template-body">
-				<div className="form-template-title">{title}</div>
-				<p className="form-template-subtitle">{subtitle}</p>
+			<div className="confirmation-modal-body">
+				<div className="confirmation-modal-title">{title}</div>
+				<p className="confirmation-modal-subtitle">{subtitle}</p>
 				{children}
 			</div>
-			<div className="form-template-footer">
+			<div className="confirmation-modal-footer">
 				<ButtonSecondary
 					type="button"
-					className="form-template-button cancel"
+					className="confirmation-modal-button cancel"
 					onClick={onCancel}
 				>
 					{cancelButtonText}
 				</ButtonSecondary>
-				<ButtonPrimary type="submit" className="form-template-button submit">
+				<ButtonPrimary
+					type="submit"
+					className="confirmation-modal-button submit"
+				>
 					{submitButtonText}
 				</ButtonPrimary>
 			</div>
@@ -78,4 +81,4 @@ function FormTemplate(props: Props) {
 	);
 }
 
-export default FormTemplate;
+export default ConfirmationModal;
