@@ -77,6 +77,21 @@ describe('Archivist Journey', () => {
 		cy.findByText('Action Items').click();
 		cy.findByText('Action Item Archives').should('exist');
 		cy.findAllByText('action to take').should('have.length', 3);
+
+		cy.get('[data-testid=deleteButton]').should('have.length', 3).eq(0).click();
+
+		cy.contains('Delete Action Item?').should('exist');
+
+		cy.intercept(
+			'GET',
+			`/api/team/${teamCredentials.teamId}/action-item?archived=true`
+		).as('getActionItems');
+
+		cy.findByText('Yes, Delete').click();
+
+		cy.wait('@getActionItems');
+
+		cy.get('[data-testid=deleteButton]').should('have.length', 2);
 	});
 
 	it('Download CSV Button', () => {
