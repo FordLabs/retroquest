@@ -31,14 +31,22 @@
 		display: flex;
 		justify-content: space-between;
 
+		.actions-container {
+			display: flex;
+			gap: 1rem;
+			align-items: start;
+			margin: 1.5rem 0;
+		}
+
 		.delete-selected-button {
 			display: flex;
 			flex-direction: column;
 			align-items: center;
 			justify-content: space-between;
+			box-sizing: border-box;
 			width: 4.5rem;
 			height: 4rem;
-			margin: 1.5rem 0;
+			margin-top: 0.5rem;
 
 			color: main.$red;
 			font-weight: 600;

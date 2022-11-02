@@ -17,6 +17,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import ArchivedActionItem from 'Common/ArchivedActionItem/ArchivedActionItem';
+import Checkbox from 'Common/Checkbox/Checkbox';
 import NotFoundSection from 'Common/NotFoundSection/NotFoundSection';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import ActionItemService from 'Services/Api/ActionItemService';
@@ -83,16 +84,23 @@ function ActionItemArchives() {
 								retrospectives
 							</p>
 						</div>
-						<div>
+						<div className="actions-container">
 							{selectedActionItemIds.length > 0 && (
 								<button
 									className="delete-selected-button"
 									onClick={onDeleteSelectedBtnClick}
 								>
-									<i className="fa fa-trash" aria-hidden="true" />
+									<i className="fa fa-trash fa-lg" aria-hidden="true" />
 									Delete Selected
 								</button>
 							)}
+							<Checkbox
+								className="select-action-items-checkbox"
+								id="select-action-items"
+								value="Select All"
+								label="Select All"
+								onChange={(checked) => console.log('checked', checked)}
+							/>
 						</div>
 					</div>
 					<ul className="archived-action-items">
