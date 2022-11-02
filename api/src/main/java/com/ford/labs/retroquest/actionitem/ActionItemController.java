@@ -126,6 +126,15 @@ public class ActionItemController {
     @Operation(summary = "Deletes an action item given a team id and action item id", description = "deleteActionItem")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
     public void deleteActionItemByTeamIdAndId(@PathVariable("teamId") String teamId, @PathVariable("actionItemId") Long actionItemId) {
-        actionItemService.deleteActionItem(teamId, actionItemId);
+        actionItemService.deleteOneActionItem(teamId, actionItemId);
+    }
+
+    @Transactional
+    @DeleteMapping("/api/team/{teamId}/action-item")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @Operation(description = "Deletes multiple action items given a team id and action item ids")
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "OK")})
+    public void deleteActionItemsByTeamIdAndIds(@PathVariable("teamId") String teamId, @RequestBody() DeleteActionItemsRequest request) {
+        actionItemService.deleteMultipleActionItems(teamId, request.actionItemIds());
     }
 }

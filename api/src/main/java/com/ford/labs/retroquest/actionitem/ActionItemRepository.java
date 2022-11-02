@@ -20,6 +20,7 @@ package com.ford.labs.retroquest.actionitem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,5 +31,9 @@ public interface ActionItemRepository extends JpaRepository<ActionItem, Long>{
     List<ActionItem> findAllByTeamIdAndArchived(String teamId, boolean archived);
     List<ActionItem> findAllByTeamIdAndArchivedIsFalseAndCompletedIsTrue(String teamId);
 
+    @Transactional
     void deleteActionItemByTeamIdAndId(String teamId, Long id);
+
+    @Transactional
+    void deleteActionItemByTeamIdAndIdIn(String teamId, List<Long> ids);
 }
