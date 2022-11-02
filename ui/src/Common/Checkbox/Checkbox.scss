@@ -23,11 +23,20 @@
 	align-items: center;
 	justify-content: space-between;
 
-	font-weight: 600;
-
 	cursor: pointer;
 
 	position: relative;
+
+	&:focus,
+	&:hover {
+		color: main.$teal;
+	}
+
+	.label-text {
+		font-weight: 600;
+		font-size: 0.625rem;
+		line-height: 0.75rem;
+	}
 
 	.checkbox-icon {
 		width: 1.25rem;
@@ -49,5 +58,16 @@
 		position: absolute;
 		top: 0;
 		left: 30%;
+	}
+}
+
+@include main.dark-theme {
+	.checkbox-container {
+		color: main.$off-white;
+
+		&:focus,
+		&:hover {
+			color: main.$sea-foam;
+		}
 	}
 }

@@ -90,8 +90,11 @@ function ActionItemArchives() {
 									className="delete-selected-button"
 									onClick={onDeleteSelectedBtnClick}
 								>
-									<i className="fa fa-trash fa-lg" aria-hidden="true" />
-									Delete Selected
+									<i
+										className="fa fa-trash fa-lg trashcan-icon"
+										aria-hidden="true"
+									/>
+									<span className="delete-selected-text">Delete Selected</span>
 								</button>
 							)}
 							<Checkbox

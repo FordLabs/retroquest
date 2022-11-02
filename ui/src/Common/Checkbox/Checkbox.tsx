@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import classNames from 'classnames';
 
 import './Checkbox.scss';
@@ -32,9 +32,15 @@ function Checkbox(props: Props) {
 	const { id, label, value, className, onChange } = props;
 	const [isChecked, setIsChecked] = useState<boolean>(false);
 
+	function onCheckboxClick(event: ChangeEvent<HTMLInputElement>) {
+		const { checked } = event.target;
+		setIsChecked(checked);
+		onChange(checked);
+	}
+
 	return (
 		<label htmlFor={id} className={classNames('checkbox-container', className)}>
-			<div>
+			<span>
 				{isChecked ? (
 					<i
 						className="fa-solid fa-lg fa-square-check checkbox-icon"
@@ -54,14 +60,10 @@ function Checkbox(props: Props) {
 					data-checked={isChecked}
 					type="checkbox"
 					value={value}
-					onChange={(event) => {
-						const { checked } = event.target;
-						setIsChecked(checked);
-						onChange(checked);
-					}}
+					onChange={onCheckboxClick}
 				/>
-			</div>
-			{label}
+			</span>
+			<span className="label-text">{label}</span>
 		</label>
 	);
 }
