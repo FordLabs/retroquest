@@ -17,15 +17,16 @@
 
 import axios from 'axios';
 import moment from 'moment';
+import Action from 'Types/Action';
+import CreateActionItemRequest from 'Types/CreateActionItemRequest';
 
-import Action from '../../Types/Action';
-import CreateActionItemRequest from '../../Types/CreateActionItemRequest';
-
-import { getActionItemApiPath } from './ApiConstants';
 import getAuthConfig from './getAuthConfig';
 
 const ASSIGNEE_PARSE_SYMBOL = '@';
 export const ASSIGNEE_PARSE_REGEX = /(@[a-zA-Z0-9]+\b)/g;
+
+const getActionItemApiPath = (teamId: string) =>
+	`/api/team/${teamId}/action-item`;
 
 const ActionItemService = {
 	get(teamId: string, archived: boolean): Promise<Action[]> {
@@ -54,9 +55,15 @@ const ActionItemService = {
 			.then((response) => response.data);
 	},
 
-	delete(teamId: string, actionItemId: number): Promise<void> {
+	deleteOne(teamId: string, actionItemId: number): Promise<void> {
 		const url = `${getActionItemApiPath(teamId)}/${actionItemId}`;
 		return axios.delete(url, getAuthConfig());
+	},
+
+	deleteMultiple(teamId: string, actionItemIds: number[]) {
+		const url = getActionItemApiPath(teamId);
+		const configWithData = { ...getAuthConfig(), data: { actionItemIds } };
+		return axios.delete(url, configWithData);
 	},
 
 	updateTask(

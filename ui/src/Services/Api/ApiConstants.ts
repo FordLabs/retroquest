@@ -27,9 +27,5 @@ export const getCSVApiPath = (teamId: string) => `/api/team/${teamId}/csv`;
 
 export const getThoughtApiPath = (teamId: string) =>
 	`/api/team/${teamId}/thought`;
-
-export const getActionItemApiPath = (teamId: string) =>
-	`/api/team/${teamId}/action-item`;
-
 export const getArchiveRetroApiPath = (teamId: string) =>
 	`/api/team/${teamId}/end-retro`;

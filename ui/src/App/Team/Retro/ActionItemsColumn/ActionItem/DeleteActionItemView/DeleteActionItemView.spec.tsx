@@ -62,21 +62,21 @@ describe('Delete Action Item View', () => {
 		userEvent.type(document.body, '{Escape}');
 
 		expect(mockSetViewState).toHaveBeenCalledWith(ActionItemViewState.DEFAULT);
-		expect(ActionItemService.delete).not.toHaveBeenCalled();
+		expect(ActionItemService.deleteOne).not.toHaveBeenCalled();
 	});
 
 	it('should not delete thought when user cancels deletion', () => {
 		userEvent.click(screen.getByText('Cancel'));
 
 		expect(mockSetViewState).toHaveBeenCalledWith(ActionItemViewState.DEFAULT);
-		expect(ActionItemService.delete).not.toHaveBeenCalled();
+		expect(ActionItemService.deleteOne).not.toHaveBeenCalled();
 	});
 
 	it('should delete thought when user confirms deletion', async () => {
 		userEvent.click(screen.getByText('Yes, Delete'));
 
 		await waitFor(() =>
-			expect(ActionItemService.delete).toHaveBeenCalledWith(
+			expect(ActionItemService.deleteOne).toHaveBeenCalledWith(
 				mockTeam.id,
 				fakeActionItem.id
 			)

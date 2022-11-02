@@ -16,12 +16,12 @@
  */
 
 import React from 'react';
+import DeleteColumnItem from 'Common/ColumnItem/DeleteColumnItem/DeleteColumnItem';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import ActionItemService from 'Services/Api/ActionItemService';
+import { ModalContentsState } from 'State/ModalContentsState';
+import { TeamState } from 'State/TeamState';
 
-import DeleteColumnItem from '../../../../../../Common/ColumnItem/DeleteColumnItem/DeleteColumnItem';
-import ActionItemService from '../../../../../../Services/Api/ActionItemService';
-import { ModalContentsState } from '../../../../../../State/ModalContentsState';
-import { TeamState } from '../../../../../../State/TeamState';
 import { ActionItemViewState } from '../ActionItem';
 
 interface Props {
@@ -39,7 +39,7 @@ function DeleteActionItemView(props: Props) {
 	const closeModal = () => setModalContents(null);
 
 	const deleteActionItem = () => {
-		ActionItemService.delete(team.id, actionItemId)
+		ActionItemService.deleteOne(team.id, actionItemId)
 			.then(closeModal)
 			.catch(console.error);
 	};
