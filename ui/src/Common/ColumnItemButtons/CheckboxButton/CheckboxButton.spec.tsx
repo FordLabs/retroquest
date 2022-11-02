@@ -24,32 +24,36 @@ describe('Checkbox Button', () => {
 	const mockCheck = jest.fn();
 
 	it('should display not display checkmark when not checked', () => {
-		render(<CheckboxButton checked={false} />);
+		render(<CheckboxButton checked={false} onClick={jest.fn()} />);
 
 		screen.getByTestId('checkbox');
 		expect(screen.queryByTestId('checkmark')).toBeFalsy();
 	});
 
 	it('should display display checkmark when checked', () => {
-		render(<CheckboxButton checked={true} />);
+		render(<CheckboxButton checked={true} onClick={jest.fn()} />);
 
 		screen.getByTestId('checkbox');
 		screen.getByTestId('checkmark');
 	});
 
 	it('should have tooltips', () => {
-		render(<CheckboxButton checked={false} />);
+		render(<CheckboxButton checked={false} onClick={jest.fn()} />);
 		screen.getByText('Close');
 
-		render(<CheckboxButton checked={true} />);
+		render(<CheckboxButton checked={true} onClick={jest.fn()} />);
 		screen.getByText('Open');
 	});
 
 	it('should not have tooltips', () => {
-		render(<CheckboxButton checked={false} disableTooltips />);
+		render(
+			<CheckboxButton checked={false} onClick={jest.fn()} disableTooltips />
+		);
 		expect(screen.queryByText('Close')).toBeNull();
 
-		render(<CheckboxButton checked={true} disableTooltips />);
+		render(
+			<CheckboxButton checked={true} onClick={jest.fn()} disableTooltips />
+		);
 		expect(screen.queryByText('Open')).toBeNull();
 	});
 
@@ -66,10 +70,17 @@ describe('Checkbox Button', () => {
 			<CheckboxButton checked={false} onClick={mockCheck} disabled={true} />
 		);
 		const checkboxButton = screen.getByTestId('checkboxButton');
-
 		userEvent.click(checkboxButton);
 
 		expect(mockCheck).toHaveBeenCalledTimes(0);
 		expect(checkboxButton.getAttribute('disabled')).not.toBeNull();
+	});
+
+	it('should return new state of checkbox on click', () => {
+		render(<CheckboxButton checked={false} onClick={mockCheck} />);
+
+		const checkboxButton = screen.getByTestId('checkboxButton');
+		userEvent.click(checkboxButton);
+		expect(mockCheck).toHaveBeenCalledWith(true);
 	});
 });

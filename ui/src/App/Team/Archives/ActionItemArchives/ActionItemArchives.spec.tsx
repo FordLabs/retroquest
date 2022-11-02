@@ -16,13 +16,16 @@
  */
 
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import moment from 'moment';
-import { RecoilRoot } from 'recoil';
 import { mockTeam } from 'Services/Api/__mocks__/TeamService';
 import ActionItemService from 'Services/Api/ActionItemService';
+import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
 import { TeamState } from 'State/TeamState';
+import { RecoilObserver } from 'Utils/RecoilObserver';
+import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
+import DeleteMultipleActionItemsConfirmation from './DeleteMultipleActionItemsConfirmation/DeleteMultipleActionItemsConfirmation';
 import ActionItemArchives from './ActionItemArchives';
 
 jest.mock('Services/Api/ActionItemService');
@@ -44,25 +47,25 @@ const archivedActionItems = [
 		dateCreated: '2022-03-20',
 		archived: true,
 	},
+	{
+		id: 3,
+		task: 'Take another action',
+		completed: true,
+		assignee: 'Jen',
+		dateCreated: '2022-08-20',
+		archived: true,
+	},
 ];
+let modalContent: ModalContents | null;
 
 describe('Action Item Archives', () => {
-	it('should get archived action items and display them on page', async () => {
+	beforeEach(() => {
+		modalContent = null;
 		ActionItemService.get = jest.fn().mockResolvedValue(archivedActionItems);
+	});
 
-		render(
-			<RecoilRoot
-				initializeState={({ set }) => {
-					set(TeamState, mockTeam);
-				}}
-			>
-				<ActionItemArchives />
-			</RecoilRoot>
-		);
-
-		await waitFor(() =>
-			expect(ActionItemService.get).toHaveBeenCalledWith(mockTeam.id, true)
-		);
+	it('should get archived action items and display them on page', async () => {
+		await renderActionItemArchives();
 		expect(screen.getByText('Action Item Archives')).toBeDefined();
 
 		const expectedFirstActionItem = archivedActionItems[0];
@@ -88,14 +91,10 @@ describe('Action Item Archives', () => {
 		).toBeDefined();
 	});
 
-	it('should show "No Archives" message when no archived action items are present', () => {
+	it('should show "No Archives" message when no archived action items are present', async () => {
 		ActionItemService.get = jest.fn().mockResolvedValue([]);
 
-		render(
-			<RecoilRoot>
-				<ActionItemArchives />
-			</RecoilRoot>
-		);
+		await renderActionItemArchives();
 
 		screen.getByText('No archives were found.');
 		const description = screen.getByTestId('notFoundSectionDescription');
@@ -103,4 +102,81 @@ describe('Action Item Archives', () => {
 			'Archives will appear when retros are ended with <span class="bold">completed action items</span>.'
 		);
 	});
+
+	xit('should only show "Delete Selected" button once an action item has been clicked', () => {
+		expect(false).toBeTruthy();
+	});
+
+	it('should select and open confirmation modal to delete multiple action items at a time', async () => {
+		await renderActionItemArchives();
+
+		const checkboxes = screen.getAllByTestId('checkboxButton');
+		expect(checkboxes).toHaveLength(3);
+		checkboxes[0].click();
+		checkboxes[1].click();
+
+		screen.getByText('Delete Selected').click();
+
+		const expectedActionItemIds: number[] = [
+			archivedActionItems[0].id,
+			archivedActionItems[1].id,
+		];
+		await waitFor(() =>
+			expect(JSON.stringify(modalContent)).toEqual(
+				JSON.stringify(getExpectedModalContents(expectedActionItemIds))
+			)
+		);
+	});
+
+	xit('should select and unselect action items and only ask for confirmation to delete selected items', async () => {
+		await renderActionItemArchives();
+
+		const checkboxes = screen.getAllByTestId('checkboxButton');
+		expect(checkboxes).toHaveLength(3);
+		checkboxes[0].click();
+		checkboxes[1].click();
+		checkboxes[1].click();
+
+		screen.getByText('Delete Selected').click();
+
+		const expectedActionItemIds: number[] = [archivedActionItems[0].id];
+		await waitFor(() =>
+			expect(JSON.stringify(modalContent)).toEqual(
+				JSON.stringify(getExpectedModalContents(expectedActionItemIds))
+			)
+		);
+	});
 });
+
+function getExpectedModalContents(actionItemIds: number[]) {
+	return {
+		title: 'Delete Selected Items?',
+		component: (
+			<DeleteMultipleActionItemsConfirmation
+				actionItemIds={actionItemIds}
+				onActionItemDeletion={() => {}}
+			/>
+		),
+	};
+}
+
+async function renderActionItemArchives() {
+	renderWithRecoilRoot(
+		<>
+			<RecoilObserver
+				recoilState={ModalContentsState}
+				onChange={(value: ModalContents) => {
+					modalContent = value;
+				}}
+			/>
+			<ActionItemArchives />
+		</>,
+		({ set }) => {
+			set(TeamState, mockTeam);
+		}
+	);
+
+	await waitFor(() =>
+		expect(ActionItemService.get).toHaveBeenCalledWith(mockTeam.id, true)
+	);
+}

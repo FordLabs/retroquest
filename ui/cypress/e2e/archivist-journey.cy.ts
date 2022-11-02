@@ -76,9 +76,11 @@ describe('Archivist Journey', () => {
 
 		cy.findByText('Action Items').click();
 		cy.findByText('Action Item Archives').should('exist');
-		cy.findAllByText('action to take').should('have.length', 3);
+		cy.findAllByText('action to take').should('have.length', 6);
 
-		cy.get('[data-testid=deleteButton]').should('have.length', 3).eq(0).click();
+		cy.log('**Delete a single action item at a time**');
+
+		cy.get('[data-testid=deleteButton]').eq(0).click();
 
 		cy.contains('Delete Action Item?').should('exist');
 
@@ -90,6 +92,37 @@ describe('Archivist Journey', () => {
 		cy.findByText('Yes, Delete').click();
 
 		cy.wait('@getActionItems');
+
+		cy.get('[data-testid=deleteButton]').should('have.length', 5);
+
+		cy.log('**Delete multiple action items at a time**');
+
+		cy.findAllByTestId('checkboxButton').as('checkboxes');
+
+		cy.get('@checkboxes').each(($el, index) => {
+			cy.get('@checkboxes')
+				.eq(index)
+				.should('have.attr', 'data-checked', 'false');
+		});
+
+		cy.get('@checkboxes')
+			.eq(0)
+			.click()
+			.should('have.attr', 'data-checked', 'true');
+		cy.get('@checkboxes')
+			.eq(1)
+			.click()
+			.should('have.attr', 'data-checked', 'true');
+		cy.get('@checkboxes')
+			.eq(3)
+			.click()
+			.should('have.attr', 'data-checked', 'true');
+
+		cy.findByText('Delete Selected').click();
+
+		cy.contains('Delete Selected Items?').should('exist');
+
+		cy.findByText('Yes, Delete').click();
 
 		cy.get('[data-testid=deleteButton]').should('have.length', 2);
 	});
@@ -236,6 +269,7 @@ function createAndArchiveBoard(
 				columns[2].id
 			);
 	});
+	addCompletedActionItemToTeam(teamCredentials.teamId, 'action to take', 'me');
 	addCompletedActionItemToTeam(teamCredentials.teamId, 'action to take', 'me');
 	archiveBoard(teamCredentials.teamId);
 }

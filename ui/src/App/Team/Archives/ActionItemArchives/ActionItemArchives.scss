@@ -18,7 +18,7 @@
 @use '../../../../Styles/main';
 
 .action-item-archives {
-	max-width: 1162px;
+	max-width: 1146px;
 	margin: 0 auto;
 
 	text-align: center;
@@ -27,21 +27,39 @@
 		text-align: left;
 	}
 
-	.action-item-archives-title {
-		margin-bottom: 0;
+	.action-item-archives-header {
+		display: flex;
+		justify-content: space-between;
 
-		font-weight: 600;
-		font-size: 1.5rem;
-	}
+		.delete-selected-button {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: space-between;
+			width: 4.5rem;
+			height: 4rem;
+			margin: 1.5rem 0;
 
-	.action-item-archives-description {
-		margin-top: 0.5rem;
-		margin-bottom: 2rem;
+			color: main.$red;
+			font-weight: 600;
+		}
 
-		color: main.$dark-gray;
+		.action-item-archives-title {
+			margin-bottom: 0;
 
-		font-weight: 600;
-		font-size: 1.1rem;
+			font-weight: 600;
+			font-size: 1.5rem;
+		}
+
+		.action-item-archives-description {
+			margin-top: 0.5rem;
+			margin-bottom: 2rem;
+
+			color: main.$dark-gray;
+
+			font-weight: 600;
+			font-size: 1.1rem;
+		}
 	}
 
 	.archived-action-items {
@@ -63,11 +81,17 @@
 }
 
 @include main.dark-theme {
-	.action-item-archives-title {
-		color: main.$off-white;
-	}
+	.action-item-archives-header {
+		.delete-selected-button {
+			color: main.$light-red;
+		}
 
-	.action-item-archives-description {
-		color: main.$light-gray;
+		.action-item-archives-title {
+			color: main.$off-white;
+		}
+
+		.action-item-archives-description {
+			color: main.$light-gray;
+		}
 	}
 }

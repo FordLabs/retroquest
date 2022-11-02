@@ -17,7 +17,7 @@
 
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import DeleteActionItemConfirmation from 'App/Team/Archives/ActionItemArchives/DeleteActionItemConfirmation/DeleteActionItemConfirmation';
+import DeleteSingleActionItemConfirmation from 'App/Team/Archives/ActionItemArchives/DeleteSingleActionItemConfirmation/DeleteSingleActionItemConfirmation';
 import { getMockActionItem } from 'Services/Api/__mocks__/ActionItemService';
 import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
 import { TeamState } from 'State/TeamState';
@@ -65,7 +65,7 @@ describe('Archived Action Item', () => {
 			expect(modalContent).toEqual({
 				title: 'Delete Action Item?',
 				component: (
-					<DeleteActionItemConfirmation
+					<DeleteSingleActionItemConfirmation
 						actionItemId={actionItem.id}
 						onActionItemDeletion={onActionItemDeletion}
 					/>
