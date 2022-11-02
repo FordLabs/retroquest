@@ -103,8 +103,11 @@ describe('Action Item Archives', () => {
 		);
 	});
 
-	xit('should only show "Delete Selected" button once an action item has been clicked', () => {
-		expect(false).toBeTruthy();
+	it('should only show "Delete Selected" button once an action item has been clicked', async () => {
+		await renderActionItemArchives();
+		expect(screen.queryByText('Delete Selected')).toBeNull();
+		screen.getAllByTestId('checkboxButton')[0].click();
+		expect(screen.getByText('Delete Selected')).toBeDefined();
 	});
 
 	it('should select and open confirmation modal to delete multiple action items at a time', async () => {
@@ -128,7 +131,7 @@ describe('Action Item Archives', () => {
 		);
 	});
 
-	xit('should select and unselect action items and only ask for confirmation to delete selected items', async () => {
+	it('should select and unselect action items and only ask for confirmation to delete selected items', async () => {
 		await renderActionItemArchives();
 
 		const checkboxes = screen.getAllByTestId('checkboxButton');

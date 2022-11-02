@@ -33,12 +33,11 @@ describe('Archivist Journey', () => {
 		createAndArchiveBoard(teamCredentials, 3);
 		createAndArchiveBoard(teamCredentials, 1);
 		createAndArchiveBoard(teamCredentials, 4);
+		cy.findByText('Archives').click();
+		shouldBeOnArchivesPage(teamCredentials.teamId);
 	});
 
 	it('Thought Archives ', () => {
-		cy.findByText('Archives').click();
-		shouldBeOnArchivesPage(teamCredentials.teamId);
-
 		cy.findAllByText('View').should('have.length', 3).eq(0).click();
 		cy.findByText('message1').should('exist');
 		cy.findByText('message2').should('exist');
@@ -70,61 +69,57 @@ describe('Archivist Journey', () => {
 		cy.findAllByText('Delete').should('have.length', 2);
 	});
 
-	it('Action Item Archives', () => {
-		cy.findByText('Archives').click();
-		shouldBeOnArchivesPage(teamCredentials.teamId);
-
-		cy.findByText('Action Items').click();
-		cy.findByText('Action Item Archives').should('exist');
-		cy.findAllByText('action to take').should('have.length', 6);
-
-		cy.log('**Delete a single action item at a time**');
-
-		cy.get('[data-testid=deleteButton]').eq(0).click();
-
-		cy.contains('Delete Action Item?').should('exist');
-
-		cy.intercept(
-			'GET',
-			`/api/team/${teamCredentials.teamId}/action-item?archived=true`
-		).as('getActionItems');
-
-		cy.findByText('Yes, Delete').click();
-
-		cy.wait('@getActionItems');
-
-		cy.get('[data-testid=deleteButton]').should('have.length', 5);
-
-		cy.log('**Delete multiple action items at a time**');
-
-		cy.findAllByTestId('checkboxButton').as('checkboxes');
-
-		cy.get('@checkboxes').each(($el, index) => {
-			cy.get('@checkboxes')
-				.eq(index)
-				.should('have.attr', 'data-checked', 'false');
+	context('Action Item Archives', () => {
+		before(() => {
+			cy.visit(`/team/${teamCredentials.teamId}/archives`);
+			cy.findByText('Action Items').click();
+			cy.findByText('Action Item Archives').should('exist');
+			cy.findAllByText('action to take').should('have.length', 6);
 		});
 
-		cy.get('@checkboxes')
-			.eq(0)
-			.click()
-			.should('have.attr', 'data-checked', 'true');
-		cy.get('@checkboxes')
-			.eq(1)
-			.click()
-			.should('have.attr', 'data-checked', 'true');
-		cy.get('@checkboxes')
-			.eq(3)
-			.click()
-			.should('have.attr', 'data-checked', 'true');
+		it('Delete single action item via delete button', () => {
+			cy.get('[data-testid=deleteButton]').eq(0).click();
 
-		cy.findByText('Delete Selected').click();
+			cy.contains('Delete Action Item?').should('exist');
 
-		cy.contains('Delete Selected Items?').should('exist');
+			cy.intercept(
+				'GET',
+				`/api/team/${teamCredentials.teamId}/action-item?archived=true`
+			).as('getActionItems');
 
-		cy.findByText('Yes, Delete').click();
+			cy.findByText('Yes, Delete').click();
 
-		cy.get('[data-testid=deleteButton]').should('have.length', 2);
+			cy.wait('@getActionItems');
+			cy.get('[data-testid=deleteButton]').should('have.length', 5);
+		});
+
+		it('Delete multiple action items via checkboxes', () => {
+			ensureAllCheckboxesAreUnChecked();
+
+			cy.findByText('Delete Selected').should('not.exist');
+
+			cy.get('@checkboxes')
+				.eq(0)
+				.click()
+				.should('have.attr', 'data-checked', 'true');
+			cy.get('@checkboxes')
+				.eq(1)
+				.click()
+				.should('have.attr', 'data-checked', 'true');
+			cy.get('@checkboxes')
+				.eq(3)
+				.click()
+				.should('have.attr', 'data-checked', 'true');
+
+			cy.findByText('Delete Selected').click();
+
+			cy.contains('Delete Selected Items?').should('exist');
+
+			cy.findByText('Yes, Delete').click();
+
+			cy.get('[data-testid=deleteButton]').should('have.length', 2);
+			ensureAllCheckboxesAreUnChecked();
+		});
 	});
 
 	it('Download CSV Button', () => {
@@ -272,4 +267,14 @@ function createAndArchiveBoard(
 	addCompletedActionItemToTeam(teamCredentials.teamId, 'action to take', 'me');
 	addCompletedActionItemToTeam(teamCredentials.teamId, 'action to take', 'me');
 	archiveBoard(teamCredentials.teamId);
+}
+
+function ensureAllCheckboxesAreUnChecked() {
+	cy.findAllByTestId('checkboxButton')
+		.as('checkboxes')
+		.each(($el, index) => {
+			cy.get('@checkboxes')
+				.eq(index)
+				.should('have.attr', 'data-checked', 'false');
+		});
 }

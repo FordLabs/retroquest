@@ -84,19 +84,21 @@ function ActionItemArchives() {
 							</p>
 						</div>
 						<div>
-							<button
-								className="delete-selected-button"
-								onClick={onDeleteSelectedBtnClick}
-							>
-								<i className="fa fa-trash" aria-hidden="true" />
-								Delete Selected
-							</button>
+							{selectedActionItemIds.length > 0 && (
+								<button
+									className="delete-selected-button"
+									onClick={onDeleteSelectedBtnClick}
+								>
+									<i className="fa fa-trash" aria-hidden="true" />
+									Delete Selected
+								</button>
+							)}
 						</div>
 					</div>
 					<ul className="archived-action-items">
-						{actionItems.map((actionItem, index) => {
+						{actionItems.map((actionItem) => {
 							return (
-								<li key={`archived-action-${index}`}>
+								<li key={`archived-action-${actionItem.id}`}>
 									<ArchivedActionItem
 										actionItem={actionItem}
 										onActionItemDeletion={getActionItems}
