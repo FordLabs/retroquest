@@ -37,12 +37,33 @@ describe('Checkbox Button', () => {
 		screen.getByTestId('checkmark');
 	});
 
-	it('should have tooltips', () => {
+	it('should show "Close" tooltip when checkbox is not checked', () => {
 		render(<CheckboxButton checked={false} onClick={jest.fn()} />);
 		screen.getByText('Close');
+	});
 
+	it('should show "Close" tooltip when checkbox is checked', () => {
 		render(<CheckboxButton checked={true} onClick={jest.fn()} />);
 		screen.getByText('Open');
+	});
+
+	it('should show custom tooltip text if prop is provided', () => {
+		render(
+			<CheckboxButton
+				tooltipText={{ checked: 'Unselect', unchecked: 'Select' }}
+				checked={true}
+				onClick={jest.fn()}
+			/>
+		);
+		screen.getByText('Unselect');
+		render(
+			<CheckboxButton
+				tooltipText={{ checked: 'Unselect', unchecked: 'Select' }}
+				checked={false}
+				onClick={jest.fn()}
+			/>
+		);
+		screen.getByText('Select');
 	});
 
 	it('should not have tooltips', () => {

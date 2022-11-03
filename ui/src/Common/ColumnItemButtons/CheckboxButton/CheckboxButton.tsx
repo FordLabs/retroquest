@@ -27,11 +27,22 @@ interface CheckmarkButtonProps {
 	className?: string;
 	disabled?: boolean;
 	onClick(checked: boolean): void;
+	tooltipText?: {
+		checked: string;
+		unchecked: string;
+	};
 }
 
 const CheckboxButton = forwardRef(
 	(props: CheckmarkButtonProps, ref: LegacyRef<HTMLButtonElement>) => {
-		const { checked, className, disableTooltips, onClick, disabled } = props;
+		const {
+			checked,
+			className,
+			disableTooltips,
+			onClick,
+			disabled,
+			tooltipText = { checked: 'Open', unchecked: 'Close' },
+		} = props;
 
 		return (
 			<button
@@ -52,7 +63,11 @@ const CheckboxButton = forwardRef(
 						/>
 					)}
 				</div>
-				{!disableTooltips && <Tooltip>{checked ? 'Open' : 'Close'}</Tooltip>}
+				{!disableTooltips && (
+					<Tooltip>
+						{checked ? tooltipText.checked : tooltipText.unchecked}
+					</Tooltip>
+				)}
 			</button>
 		);
 	}

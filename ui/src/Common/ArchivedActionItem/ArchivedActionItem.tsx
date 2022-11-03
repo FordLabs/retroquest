@@ -77,6 +77,7 @@ function ArchivedActionItem(props: Props) {
 				<DeleteButton aria-label="Delete" onClick={deleteActionItem} />
 				<CheckboxButton
 					aria-label="Mark as complete"
+					tooltipText={{ checked: 'Unselect', unchecked: 'Select' }}
 					checked={isChecked}
 					onClick={(checked) => {
 						setIsChecked(checked);

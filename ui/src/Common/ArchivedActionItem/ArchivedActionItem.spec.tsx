@@ -74,4 +74,24 @@ describe('Archived Action Item', () => {
 			})
 		);
 	});
+
+	it('should show "Select" and "Unselect" as checkbox tooltip text', () => {
+		renderWithRecoilRoot(
+			<ArchivedActionItem
+				actionItem={actionItem}
+				isSelected={false}
+				onActionItemDeletion={jest.fn()}
+			/>
+		);
+		screen.getByText('Select');
+
+		renderWithRecoilRoot(
+			<ArchivedActionItem
+				actionItem={actionItem}
+				isSelected={true}
+				onActionItemDeletion={jest.fn()}
+			/>
+		);
+		screen.getByText('Unselect');
+	});
 });
