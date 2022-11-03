@@ -15,27 +15,43 @@
  * limitations under the License.
  */
 
-import React, { ComponentPropsWithoutRef, forwardRef, LegacyRef } from 'react';
+import React, { forwardRef, LegacyRef } from 'react';
 import classnames from 'classnames';
 import Tooltip from 'Common/Tooltip/Tooltip';
 
 import './CheckboxButton.scss';
 
-interface CheckmarkButtonProps extends ComponentPropsWithoutRef<'button'> {
+interface CheckmarkButtonProps {
 	checked: boolean;
 	disableTooltips?: boolean;
+	className?: string;
+	disabled?: boolean;
+	onClick(checked: boolean): void;
+	tooltipText?: {
+		checked: string;
+		unchecked: string;
+	};
 }
 
 const CheckboxButton = forwardRef(
 	(props: CheckmarkButtonProps, ref: LegacyRef<HTMLButtonElement>) => {
-		const { checked, className, disableTooltips, ...buttonProps } = props;
+		const {
+			checked,
+			className,
+			disableTooltips,
+			onClick,
+			disabled,
+			tooltipText = { checked: 'Open', unchecked: 'Close' },
+		} = props;
 
 		return (
 			<button
 				className={classnames('column-item-button', className)}
-				{...buttonProps}
 				ref={ref}
 				data-testid="checkboxButton"
+				data-checked={checked}
+				disabled={disabled}
+				onClick={() => onClick(!checked)}
 			>
 				<div className={classnames('checkbox', { checked })}>
 					<div className="checkbox-border" data-testid="checkbox" />
@@ -47,7 +63,11 @@ const CheckboxButton = forwardRef(
 						/>
 					)}
 				</div>
-				{!disableTooltips && <Tooltip>{checked ? 'Open' : 'Close'}</Tooltip>}
+				{!disableTooltips && (
+					<Tooltip>
+						{checked ? tooltipText.checked : tooltipText.unchecked}
+					</Tooltip>
+				)}
 			</button>
 		);
 	}

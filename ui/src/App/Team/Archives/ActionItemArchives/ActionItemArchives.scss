@@ -18,13 +18,53 @@
 @use '../../../../Styles/main';
 
 .action-item-archives {
-	max-width: 1162px;
+	max-width: 1146px;
 	margin: 0 auto;
 
 	text-align: center;
 
 	@include main.breakpoint-large {
 		text-align: left;
+	}
+}
+
+.action-item-archives-header {
+	display: flex;
+	justify-content: space-between;
+
+	.actions-container {
+		display: flex;
+		gap: 1rem;
+		align-items: flex-start;
+		margin: 1.5rem 0;
+	}
+
+	.delete-selected-button {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-between;
+		box-sizing: border-box;
+		width: 4.5rem;
+		margin-top: 0.5rem;
+
+		color: main.$red;
+
+		&:focus,
+		&:hover {
+			color: main.$dark-red;
+		}
+
+		.delete-selected-text {
+			font-weight: 600;
+			font-size: 0.625rem;
+			line-height: 0.75rem;
+		}
+
+		.trashcan-icon {
+			width: 1.25rem;
+			height: 1.25rem;
+		}
 	}
 
 	.action-item-archives-title {
@@ -43,31 +83,37 @@
 		font-weight: 600;
 		font-size: 1.1rem;
 	}
+}
 
-	.archived-action-items {
-		display: grid;
-		grid-gap: 2rem;
-		grid-template-columns: repeat(auto-fill, 80%);
-		justify-content: center;
+.archived-action-items {
+	display: grid;
+	grid-gap: 2rem;
+	grid-template-columns: repeat(auto-fill, 80%);
+	justify-content: center;
 
-		@include main.breakpoint-medium {
-			grid-template-columns: repeat(auto-fill, 350px);
-		}
+	@include main.breakpoint-medium {
+		grid-template-columns: repeat(auto-fill, 350px);
+	}
 
-		@include main.breakpoint-large {
-			grid-gap: 3rem;
-			grid-template-columns: repeat(auto-fill, 350px);
-			justify-content: left;
-		}
+	@include main.breakpoint-large {
+		grid-gap: 3rem;
+		grid-template-columns: repeat(auto-fill, 350px);
+		justify-content: left;
 	}
 }
 
 @include main.dark-theme {
-	.action-item-archives-title {
-		color: main.$off-white;
-	}
+	.action-item-archives-header {
+		.delete-selected-button {
+			color: main.$light-red;
+		}
 
-	.action-item-archives-description {
-		color: main.$light-gray;
+		.action-item-archives-title {
+			color: main.$off-white;
+		}
+
+		.action-item-archives-description {
+			color: main.$light-gray;
+		}
 	}
 }

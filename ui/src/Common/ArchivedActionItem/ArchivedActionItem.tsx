@@ -15,39 +15,56 @@
  * limitations under the License.
  */
 
-import React from 'react';
-import DeleteActionItemConfirmation from 'App/Team/Archives/ActionItemArchives/DeleteActionItemConfirmation/DeleteActionItemConfirmation';
+import React, { useEffect, useState } from 'react';
+import DeleteSingleActionItemConfirmation from 'App/Team/Archives/ActionItemArchives/DeleteSingleActionItemConfirmation/DeleteSingleActionItemConfirmation';
 import { useSetRecoilState } from 'recoil';
 import { ModalContentsState } from 'State/ModalContentsState';
 import Action from 'Types/Action';
 
 import AssigneeInput from '../AssigneeInput/AssigneeInput';
-import { ColumnItemButtonGroup, DeleteButton } from '../ColumnItemButtons';
+import {
+	CheckboxButton,
+	ColumnItemButtonGroup,
+	DeleteButton,
+} from '../ColumnItemButtons';
 import { DateCreated } from '../DateCreated/DateCreated';
 
 import './ArchivedActionItem.scss';
 
 interface Props {
 	actionItem: Action;
+	isSelected: boolean;
 	onActionItemDeletion(): void;
+	onActionItemCheckboxClick?(actionItemId: number, isChecked: boolean): void;
 }
 
 function ArchivedActionItem(props: Props) {
-	const { actionItem, onActionItemDeletion } = props;
+	const {
+		actionItem,
+		isSelected = false,
+		onActionItemDeletion,
+		onActionItemCheckboxClick,
+	} = props;
 
 	const setModalContents = useSetRecoilState(ModalContentsState);
+
+	const [isChecked, setIsChecked] = useState<boolean>(isSelected);
 
 	function deleteActionItem() {
 		setModalContents({
 			title: 'Delete Action Item?',
 			component: (
-				<DeleteActionItemConfirmation
+				<DeleteSingleActionItemConfirmation
 					actionItemId={actionItem.id}
 					onActionItemDeletion={onActionItemDeletion}
 				/>
 			),
 		});
 	}
+
+	useEffect(() => {
+		setIsChecked(isSelected);
+	}, [isSelected]);
 
 	return (
 		<div className="archived-action-item">
@@ -58,11 +75,17 @@ function ArchivedActionItem(props: Props) {
 			<ColumnItemButtonGroup>
 				<DateCreated date={actionItem.dateCreated} readOnly />
 				<DeleteButton aria-label="Delete" onClick={deleteActionItem} />
-				{/*<CheckboxButton*/}
-				{/*	aria-label="Mark as complete"*/}
-				{/*	checked={actionItem.completed}*/}
-				{/*	onClick={() => {}}*/}
-				{/*/>*/}
+				<CheckboxButton
+					aria-label="Mark as complete"
+					tooltipText={{ checked: 'Unselect', unchecked: 'Select' }}
+					checked={isChecked}
+					onClick={(checked) => {
+						setIsChecked(checked);
+						if (onActionItemCheckboxClick) {
+							onActionItemCheckboxClick(actionItem.id, checked);
+						}
+					}}
+				/>
 			</ColumnItemButtonGroup>
 		</div>
 	);

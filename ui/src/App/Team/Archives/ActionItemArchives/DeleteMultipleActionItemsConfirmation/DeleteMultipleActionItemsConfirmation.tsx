@@ -22,12 +22,12 @@ import { ModalContentsState } from 'State/ModalContentsState';
 import { TeamState } from 'State/TeamState';
 
 interface Props {
-	actionItemId: number;
+	actionItemIds: number[];
 	onActionItemDeletion(): void;
 }
 
-function DeleteActionItemConfirmation(props: Props) {
-	const { actionItemId, onActionItemDeletion } = props;
+function DeleteMultipleActionItemsConfirmation(props: Props) {
+	const { actionItemIds, onActionItemDeletion } = props;
 
 	const team = useRecoilValue(TeamState);
 	const setModalContents = useSetRecoilState(ModalContentsState);
@@ -35,7 +35,7 @@ function DeleteActionItemConfirmation(props: Props) {
 	const closeModal = () => setModalContents(null);
 
 	const onSubmit = () => {
-		ActionItemService.delete(team.id, actionItemId)
+		ActionItemService.deleteMultiple(team.id, actionItemIds)
 			.then(() => {
 				onActionItemDeletion();
 				closeModal();
@@ -45,9 +45,8 @@ function DeleteActionItemConfirmation(props: Props) {
 
 	return (
 		<ConfirmationModal
-			testId="deleteActionItemConfirmation"
-			title="Delete Action Item?"
-			subtitle="Are you sure you want to delete this archived action item? Doing so will permanently remove this data."
+			title="Delete Selected Items?"
+			subtitle="Are you sure you want to delete these selected action items? This will permanently erase this data."
 			onSubmit={onSubmit}
 			onCancel={closeModal}
 			cancelButtonText="Cancel"
@@ -56,4 +55,4 @@ function DeleteActionItemConfirmation(props: Props) {
 	);
 }
 
-export default DeleteActionItemConfirmation;
+export default DeleteMultipleActionItemsConfirmation;

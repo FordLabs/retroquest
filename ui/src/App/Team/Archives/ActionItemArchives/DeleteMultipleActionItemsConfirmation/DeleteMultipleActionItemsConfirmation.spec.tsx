@@ -25,14 +25,14 @@ import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
 import { TeamState } from 'State/TeamState';
 import { RecoilObserver } from 'Utils/RecoilObserver';
 
-import DeleteActionItemConfirmation from './DeleteActionItemConfirmation';
+import DeleteMultipleActionItemsConfirmation from './DeleteMultipleActionItemsConfirmation';
 
 jest.mock('Services/Api/ActionItemService');
 
-describe('Delete Action Item Confirmation', () => {
+describe('Delete Multiple Action Items Confirmation', () => {
 	let modalContent: ModalContents | null;
 	let onActionItemDeletion: jest.Mock<any, any>;
-	const actionItemId: number = 8432;
+	const actionItemIdsToDelete: number[] = [8432, 2343, 2577, 2333];
 
 	beforeEach(() => {
 		jest.clearAllMocks();
@@ -56,25 +56,25 @@ describe('Delete Action Item Confirmation', () => {
 						modalContent = value;
 					}}
 				/>
-				<DeleteActionItemConfirmation
-					actionItemId={actionItemId}
+				<DeleteMultipleActionItemsConfirmation
+					actionItemIds={actionItemIdsToDelete}
 					onActionItemDeletion={onActionItemDeletion}
 				/>
 			</RecoilRoot>
 		);
 	});
 
-	it('should ask user if they want to delete an archived action item', () => {
-		expect(screen.getByText('Delete Action Item?')).toBeInTheDocument();
+	it('should ask user if they want to delete multiple archived action items', () => {
+		expect(screen.getByText('Delete Selected Items?')).toBeInTheDocument();
 	});
 
-	it('should delete action item and close modal', async () => {
+	it('should delete action items and close modal', async () => {
 		userEvent.click(screen.getByText('Yes, Delete'));
 
 		await waitFor(() =>
-			expect(ActionItemService.delete).toHaveBeenCalledWith(
+			expect(ActionItemService.deleteMultiple).toHaveBeenCalledWith(
 				mockTeam.id,
-				actionItemId
+				actionItemIdsToDelete
 			)
 		);
 		expect(onActionItemDeletion).toHaveBeenCalled();
@@ -84,7 +84,7 @@ describe('Delete Action Item Confirmation', () => {
 	it('should cancel deleting of an action item', () => {
 		userEvent.click(screen.getByText('Cancel'));
 
-		expect(ActionItemService.delete).not.toHaveBeenCalled();
+		expect(ActionItemService.deleteMultiple).not.toHaveBeenCalled();
 		expect(onActionItemDeletion).not.toHaveBeenCalled();
 		expect(modalContent).toBe(null);
 	});

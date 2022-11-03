@@ -15,19 +15,28 @@
  * limitations under the License.
  */
 
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ArchivedActionItem from 'Common/ArchivedActionItem/ArchivedActionItem';
+import Checkbox from 'Common/Checkbox/Checkbox';
 import NotFoundSection from 'Common/NotFoundSection/NotFoundSection';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import ActionItemService from 'Services/Api/ActionItemService';
 import { ActionItemState } from 'State/ActionItemState';
+import { ModalContentsState } from 'State/ModalContentsState';
 import { TeamState } from 'State/TeamState';
+
+import DeleteMultipleActionItemsConfirmation from './DeleteMultipleActionItemsConfirmation/DeleteMultipleActionItemsConfirmation';
 
 import './ActionItemArchives.scss';
 
 function ActionItemArchives() {
 	const team = useRecoilValue(TeamState);
 	const [actionItems, setActionItems] = useRecoilState(ActionItemState);
+	const setModalContents = useSetRecoilState(ModalContentsState);
+
+	const [selectedActionItemIds, setSelectedActionItemIds] = useState<number[]>(
+		[]
+	);
 
 	const getActionItems = useCallback(() => {
 		ActionItemService.get(team.id, true)
@@ -39,22 +48,79 @@ function ActionItemArchives() {
 		if (team.id) getActionItems();
 	}, [getActionItems, team.id]);
 
+	function onActionItemCheckboxClick(actionItemId: number, isChecked: boolean) {
+		setSelectedActionItemIds((selectedItems: number[]) => {
+			if (isChecked) {
+				return [...selectedItems, actionItemId];
+			} else {
+				return [...selectedItems].filter((i) => i !== actionItemId);
+			}
+		});
+	}
+
+	function onDeleteSelectedBtnClick() {
+		setModalContents({
+			title: 'Delete Selected Items?',
+			component: (
+				<DeleteMultipleActionItemsConfirmation
+					actionItemIds={selectedActionItemIds}
+					onActionItemDeletion={getActionItems}
+				/>
+			),
+		});
+	}
+
+	function selectAllActionItems(selectAll: boolean) {
+		const selectedItemIds = selectAll ? actionItems.map((item) => item.id) : [];
+		setSelectedActionItemIds(selectedItemIds);
+	}
+
 	return (
 		<div className="action-item-archives">
 			{actionItems.length ? (
 				<>
-					<h1 className="action-item-archives-title">Action Item Archives</h1>
-					<p className="action-item-archives-description">
-						Examine completed action items from your team’s previous
-						retrospectives
-					</p>
+					<div className="action-item-archives-header">
+						<div>
+							<h1 className="action-item-archives-title">
+								Action Item Archives
+							</h1>
+							<p className="action-item-archives-description">
+								Examine completed action items from your team’s previous
+								retrospectives
+							</p>
+						</div>
+						<div className="actions-container">
+							{selectedActionItemIds.length > 0 && (
+								<button
+									className="delete-selected-button"
+									onClick={onDeleteSelectedBtnClick}
+								>
+									<i
+										className="fa fa-trash fa-lg trashcan-icon"
+										aria-hidden="true"
+									/>
+									<span className="delete-selected-text">Delete Selected</span>
+								</button>
+							)}
+							<Checkbox
+								className="select-action-items-checkbox"
+								id="select-action-items"
+								value="Select All"
+								label="Select All"
+								onChange={selectAllActionItems}
+							/>
+						</div>
+					</div>
 					<ul className="archived-action-items">
-						{actionItems.map((actionItem, index) => {
+						{actionItems.map((actionItem) => {
+							const isSelected = selectedActionItemIds.includes(actionItem.id);
 							return (
-								<li key={`archived-action-${index}`}>
+								<li key={`archived-action-${actionItem.id}`}>
 									<ArchivedActionItem
 										actionItem={actionItem}
+										isSelected={isSelected}
 										onActionItemDeletion={getActionItems}
+										onActionItemCheckboxClick={onActionItemCheckboxClick}
 									/>
 								</li>
 							);

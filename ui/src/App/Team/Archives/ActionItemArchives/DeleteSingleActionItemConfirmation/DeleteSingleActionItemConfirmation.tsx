@@ -14,45 +14,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import React from 'react';
-import DeleteColumnItem from 'Common/ColumnItem/DeleteColumnItem/DeleteColumnItem';
+import ConfirmationModal from 'Common/ConfirmationModal/ConfirmationModal';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import ActionItemService from 'Services/Api/ActionItemService';
 import { ModalContentsState } from 'State/ModalContentsState';
 import { TeamState } from 'State/TeamState';
 
-import { ActionItemViewState } from '../ActionItem';
-
 interface Props {
 	actionItemId: number;
-	setViewState: (viewState: ActionItemViewState) => void;
-	height: number | undefined;
+	onActionItemDeletion(): void;
 }
 
-function DeleteActionItemView(props: Props) {
-	const { actionItemId, setViewState, height } = props;
+function DeleteSingleActionItemConfirmation(props: Props) {
+	const { actionItemId, onActionItemDeletion } = props;
 
-	const setModalContents = useSetRecoilState(ModalContentsState);
 	const team = useRecoilValue(TeamState);
+	const setModalContents = useSetRecoilState(ModalContentsState);
 
 	const closeModal = () => setModalContents(null);
 
-	const deleteActionItem = () => {
+	const onSubmit = () => {
 		ActionItemService.deleteOne(team.id, actionItemId)
-			.then(closeModal)
+			.then(() => {
+				onActionItemDeletion();
+				closeModal();
+			})
 			.catch(console.error);
 	};
 
 	return (
-		<DeleteColumnItem
-			onCancel={() => setViewState(ActionItemViewState.DEFAULT)}
-			onConfirm={deleteActionItem}
-			height={height}
-		>
-			Delete this Action Item?
-		</DeleteColumnItem>
+		<ConfirmationModal
+			title="Delete Action Item?"
+			subtitle="Are you sure you want to delete this archived action item? Doing so will permanently remove this data."
+			onSubmit={onSubmit}
+			onCancel={closeModal}
+			cancelButtonText="Cancel"
+			submitButtonText="Yes, Delete"
+		/>
 	);
 }
 
-export default DeleteActionItemView;
+export default DeleteSingleActionItemConfirmation;

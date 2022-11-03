@@ -33,12 +33,11 @@ describe('Archivist Journey', () => {
 		createAndArchiveBoard(teamCredentials, 3);
 		createAndArchiveBoard(teamCredentials, 1);
 		createAndArchiveBoard(teamCredentials, 4);
+		cy.findByText('Archives').click();
+		shouldBeOnArchivesPage(teamCredentials.teamId);
 	});
 
 	it('Thought Archives ', () => {
-		cy.findByText('Archives').click();
-		shouldBeOnArchivesPage(teamCredentials.teamId);
-
 		cy.findAllByText('View').should('have.length', 3).eq(0).click();
 		cy.findByText('message1').should('exist');
 		cy.findByText('message2').should('exist');
@@ -70,28 +69,75 @@ describe('Archivist Journey', () => {
 		cy.findAllByText('Delete').should('have.length', 2);
 	});
 
-	it('Action Item Archives', () => {
-		cy.findByText('Archives').click();
-		shouldBeOnArchivesPage(teamCredentials.teamId);
+	context('Action Item Archives', () => {
+		before(() => {
+			cy.visit(`/team/${teamCredentials.teamId}/archives`);
+			cy.findByText('Action Items').click();
+			cy.findByText('Action Item Archives').should('exist');
+			cy.findAllByText('action to take').should('have.length', 6);
+		});
 
-		cy.findByText('Action Items').click();
-		cy.findByText('Action Item Archives').should('exist');
-		cy.findAllByText('action to take').should('have.length', 3);
+		it('Delete single action item via delete button', () => {
+			cy.get('[data-testid=deleteButton]')
+				.its('length')
+				.then((initialCardCount) => {
+					cy.get('[data-testid=deleteButton]').eq(0).click();
 
-		cy.get('[data-testid=deleteButton]').should('have.length', 3).eq(0).click();
+					cy.contains('Delete Action Item?').should('exist');
 
-		cy.contains('Delete Action Item?').should('exist');
+					cy.intercept(
+						'GET',
+						`/api/team/${teamCredentials.teamId}/action-item?archived=true`
+					).as('getActionItems');
 
-		cy.intercept(
-			'GET',
-			`/api/team/${teamCredentials.teamId}/action-item?archived=true`
-		).as('getActionItems');
+					cy.findByText('Yes, Delete').click();
 
-		cy.findByText('Yes, Delete').click();
+					cy.wait('@getActionItems');
+					cy.get('[data-testid=deleteButton]').should(
+						'have.length',
+						initialCardCount - 1
+					);
+				});
+		});
 
-		cy.wait('@getActionItems');
+		it('Delete multiple action items via checkboxes', () => {
+			cy.get('[data-testid=deleteButton]')
+				.its('length')
+				.then((initialCardCount) => {
+					ensureAllCheckboxesAreChecked(false);
 
-		cy.get('[data-testid=deleteButton]').should('have.length', 2);
+					cy.findByText('Delete Selected').should('not.exist');
+
+					cy.get('@checkboxes')
+						.eq(0)
+						.click()
+						.should('have.attr', 'data-checked', 'true');
+					cy.get('@checkboxes')
+						.eq(1)
+						.click()
+						.should('have.attr', 'data-checked', 'true');
+					cy.get('@checkboxes')
+						.eq(3)
+						.click()
+						.should('have.attr', 'data-checked', 'true');
+
+					deleteSelected();
+
+					const newCardCount = initialCardCount - 3;
+					cy.get('[data-testid=deleteButton]').should(
+						'have.length',
+						newCardCount
+					);
+					ensureAllCheckboxesAreChecked(false);
+
+					cy.contains('Select All').click();
+
+					ensureAllCheckboxesAreChecked(true);
+					deleteSelected();
+					cy.get('[data-testid=deleteButton]').should('have.length', 0);
+					cy.contains('No archives were found.').should('exist');
+				});
+		});
 	});
 
 	it('Download CSV Button', () => {
@@ -237,5 +283,22 @@ function createAndArchiveBoard(
 			);
 	});
 	addCompletedActionItemToTeam(teamCredentials.teamId, 'action to take', 'me');
+	addCompletedActionItemToTeam(teamCredentials.teamId, 'action to take', 'me');
 	archiveBoard(teamCredentials.teamId);
+}
+
+function ensureAllCheckboxesAreChecked(isChecked: boolean = false) {
+	cy.findAllByTestId('checkboxButton')
+		.as('checkboxes')
+		.each(($el, index) => {
+			cy.get('@checkboxes')
+				.eq(index)
+				.should('have.attr', 'data-checked', isChecked.toString());
+		});
+}
+
+function deleteSelected() {
+	cy.findByText('Delete Selected').click();
+	cy.contains('Delete Selected Items?').should('exist');
+	cy.findByText('Yes, Delete').click();
 }

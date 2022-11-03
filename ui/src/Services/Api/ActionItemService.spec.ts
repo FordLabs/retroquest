@@ -15,12 +15,11 @@
  * limitations under the License.
  */
 
+import { mockGetCookie } from '__mocks__/universal-cookie';
 import axios from 'axios';
 import moment from 'moment';
-
-import { mockGetCookie } from '../../__mocks__/universal-cookie';
-import Action from '../../Types/Action';
-import CreateActionItemRequest from '../../Types/CreateActionItemRequest';
+import Action from 'Types/Action';
+import CreateActionItemRequest from 'Types/CreateActionItemRequest';
 
 import { getMockActionItem } from './__mocks__/ActionItemService';
 import ActionItemService from './ActionItemService';
@@ -96,10 +95,22 @@ describe('Action Item Service', () => {
 		});
 	});
 
-	describe('delete', () => {
+	describe('deleteOne', () => {
 		it('should delete an action item', async () => {
-			await ActionItemService.delete(teamId, actionItemId);
+			await ActionItemService.deleteOne(teamId, actionItemId);
 			expect(axios.delete).toHaveBeenCalledWith(actionItemByIdUrl, mockConfig);
+		});
+	});
+
+	describe('deleteMultiple', () => {
+		it('should delete an action item', async () => {
+			const actionItemIds = [7, 4, 5];
+			await ActionItemService.deleteMultiple(teamId, actionItemIds);
+			const configWithData = { ...mockConfig, data: { actionItemIds } };
+			expect(axios.delete).toHaveBeenCalledWith(
+				allActionItemsUrl,
+				configWithData
+			);
 		});
 	});
 

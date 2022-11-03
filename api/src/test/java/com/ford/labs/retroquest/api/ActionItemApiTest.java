@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.ford.labs.retroquest.websocket.events.WebsocketEventType.DELETE;
@@ -142,7 +143,7 @@ class ActionItemApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_delete_action_items_for_team_in_token() throws Exception {
+    void delete_single_action_item__should_delete_action_item_for_team_in_token() throws Exception {
         var actionItem1 = actionItemRepository.save(ActionItem.builder().teamId(teamId).build());
         var actionItem2 = actionItemRepository.save(ActionItem.builder()
             .teamId(teamId)
@@ -161,7 +162,38 @@ class ActionItemApiTest extends ApiTestBase {
     }
 
     @Test
-    public void deleteActionItem_WhenActionItemOnOtherTeam_IgnoresDelete() throws Exception {
+    void delete_multiple_action_items__should_delete_action_items_for_team_in_token() throws Exception {
+        var actionItem1 = actionItemRepository.save(ActionItem.builder().task("Don't delete me").teamId(teamId).build());
+        var actionItem2 = actionItemRepository.save(ActionItem.builder()
+                .teamId(teamId)
+                .task("Delete me")
+                .build());
+        var actionItem3 = actionItemRepository.save(ActionItem.builder()
+                .teamId(teamId)
+                .task("Delete me")
+                .build());
+        var actionItem4 = actionItemRepository.save(ActionItem.builder()
+                .teamId(teamId)
+                .task("Delete me")
+                .build());
+
+        DeleteActionItemsRequest request = new DeleteActionItemsRequest(
+                Arrays.asList(actionItem2.getId(), actionItem3.getId(), actionItem4.getId())
+        );
+
+        mockMvc.perform(delete(BASE_API_URL)
+                        .content(objectMapper.writeValueAsBytes(request))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk());
+
+        var savedActionItems = actionItemRepository.findAll();
+        assertThat(savedActionItems).hasSize(1);
+        assertThat(savedActionItems.get(0)).usingRecursiveComparison().isEqualTo(actionItem1);
+    }
+
+    @Test
+    public void delete_single_action_item__whenActionItemOnOtherTeam_IgnoresDelete() throws Exception {
         String unauthorizedTeamJwt = jwtBuilder.buildJwt("not-beach-bums");
         String authorizationHeader = format("Bearer %s", unauthorizedTeamJwt);
 

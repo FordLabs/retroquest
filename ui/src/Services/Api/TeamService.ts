@@ -44,7 +44,7 @@ const FORBIDDEN_STATUS = 403;
 
 const returnTokenAndTeamId = (response: AxiosResponse): AuthResponse => ({
 	token: response.data,
-	teamId: response.headers.location,
+	teamId: response.headers.location || '',
 });
 
 const TeamService = {

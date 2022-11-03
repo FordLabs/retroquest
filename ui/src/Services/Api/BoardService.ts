@@ -65,7 +65,9 @@ const BoardService = {
 		return axios.get(url, getAuthConfig()).then((response) => {
 			return {
 				boards: response.data,
-				paginationData: getPaginatedDataFromHeaders(response.headers),
+				paginationData: getPaginatedDataFromHeaders(
+					response.headers as AxiosResponseHeaders
+				),
 			};
 		});
 	},
@@ -89,10 +91,10 @@ function getPaginatedDataFromHeaders(
 	return {
 		sortBy: headers['sort-by'] as SortByType,
 		sortOrder: headers['sort-order'] as SortOrder,
-		pageIndex: parseInt(headers['page-index'], 10),
-		pageSize: parseInt(headers['page-size'], 10),
-		pageRange: headers['page-range'],
-		totalBoardCount: parseInt(headers['total-board-count'], 10),
-		totalPages: parseInt(headers['total-pages'], 10),
+		pageIndex: parseInt(headers['page-index']!, 10),
+		pageSize: parseInt(headers['page-size']!, 10),
+		pageRange: headers['page-range']!,
+		totalBoardCount: parseInt(headers['total-board-count']!, 10),
+		totalPages: parseInt(headers['total-pages']!, 10),
 	};
 }

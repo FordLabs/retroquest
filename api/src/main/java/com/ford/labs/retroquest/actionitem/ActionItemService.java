@@ -51,12 +51,11 @@ public class ActionItemService {
         else return actionItemRepository.findAllByTeamId(teamId);
     }
 
-    public ActionItem updateCompletedStatus(String teamId, Long actionItemId, UpdateActionItemCompletedRequest request) {
+    public void updateCompletedStatus(String teamId, Long actionItemId, UpdateActionItemCompletedRequest request) {
         var savedActionItem = fetchActionItem(teamId, actionItemId);
         savedActionItem.setCompleted(request.completed());
         var updatedActionItem = actionItemRepository.save(savedActionItem);
         websocketService.publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, updatedActionItem));
-        return updatedActionItem;
     }
 
     public ActionItem updateTask(String teamId, Long actionItemId, UpdateActionItemTaskRequest request) {
@@ -75,17 +74,20 @@ public class ActionItemService {
         return updatedActionItem;
     }
 
-    public ActionItem updateArchivedStatus(String teamId, Long actionItemId, UpdateActionItemArchivedRequest request) {
+    public void updateArchivedStatus(String teamId, Long actionItemId, UpdateActionItemArchivedRequest request) {
         var savedActionItem = fetchActionItem(teamId, actionItemId);
         savedActionItem.setArchived(request.archived());
         var updatedActionItem = actionItemRepository.save(savedActionItem);
         websocketService.publishEvent(new WebsocketActionItemEvent(teamId, UPDATE, updatedActionItem));
-        return updatedActionItem;
     }
 
-    public void deleteActionItem(String teamId, Long actionItemId) {
+    public void deleteOneActionItem(String teamId, Long actionItemId) {
         actionItemRepository.deleteActionItemByTeamIdAndId(teamId, actionItemId);
         websocketService.publishEvent(new WebsocketActionItemEvent(teamId, DELETE, ActionItem.builder().id(actionItemId).build()));
+    }
+
+    public void deleteMultipleActionItems(String teamId, List<Long> actionItemIds) {
+        actionItemRepository.deleteActionItemByTeamIdAndIdIn(teamId, actionItemIds);
     }
 
     public void archiveCompletedActionItems(String teamId) {
