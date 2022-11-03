@@ -177,7 +177,7 @@ class BoardApiTest extends ApiTestBase {
 
         assertThat(boardRepository.count()).isEqualTo(1);
 
-        mockMvc.perform(delete(String.format("/api/team/%s/boards/%s", teamId, boardToDelete.getId()))
+        mockMvc.perform(delete(String.format("/api/team/%s/board/%s", teamId, boardToDelete.getId()))
                         .contentType(APPLICATION_JSON)
                         .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk());

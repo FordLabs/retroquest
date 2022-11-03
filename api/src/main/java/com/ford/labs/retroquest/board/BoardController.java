@@ -72,7 +72,7 @@ public class BoardController {
         return this.boardService.getArchivedRetroForTeam(teamId, boardId);
     }
 
-    @DeleteMapping("/team/{teamId}/boards/{boardId}")
+    @DeleteMapping("/team/{teamId}/board/{boardId}")
     @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
     @Operation(description = "Deletes a single retro board given a team id and board id")
     public void deleteBoard(@PathVariable("teamId") String teamId, @PathVariable("boardId") Long boardId) {

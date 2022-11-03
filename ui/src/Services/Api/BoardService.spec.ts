@@ -134,7 +134,7 @@ describe('Board Service', () => {
 			await BoardService.deleteBoard(teamId, boardId);
 
 			expect(axios.delete).toHaveBeenCalledWith(
-				`${boardUrl}/${boardId}`,
+				`/api/team/${teamId}/board/${boardId}`,
 				mockConfig
 			);
 		});
