@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DeleteSingleActionItemConfirmation from 'App/Team/Archives/ActionItemArchives/DeleteSingleActionItemConfirmation/DeleteSingleActionItemConfirmation';
 import { useSetRecoilState } from 'recoil';
 import { ModalContentsState } from 'State/ModalContentsState';
@@ -33,16 +33,22 @@ import './ArchivedActionItem.scss';
 
 interface Props {
 	actionItem: Action;
+	isSelected: boolean;
 	onActionItemDeletion(): void;
 	onActionItemCheckboxClick?(actionItemId: number, isChecked: boolean): void;
 }
 
 function ArchivedActionItem(props: Props) {
-	const { actionItem, onActionItemDeletion, onActionItemCheckboxClick } = props;
+	const {
+		actionItem,
+		isSelected = false,
+		onActionItemDeletion,
+		onActionItemCheckboxClick,
+	} = props;
 
 	const setModalContents = useSetRecoilState(ModalContentsState);
 
-	const [isChecked, setIsChecked] = useState<boolean>(false);
+	const [isChecked, setIsChecked] = useState<boolean>(isSelected);
 
 	function deleteActionItem() {
 		setModalContents({
@@ -55,6 +61,10 @@ function ArchivedActionItem(props: Props) {
 			),
 		});
 	}
+
+	useEffect(() => {
+		setIsChecked(isSelected);
+	}, [isSelected]);
 
 	return (
 		<div className="archived-action-item">

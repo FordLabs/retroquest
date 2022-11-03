@@ -52,6 +52,7 @@ describe('Archived Action Item', () => {
 				/>
 				<ArchivedActionItem
 					actionItem={actionItem}
+					isSelected={false}
 					onActionItemDeletion={onActionItemDeletion}
 				/>
 			</>,

@@ -149,6 +149,27 @@ describe('Action Item Archives', () => {
 			)
 		);
 	});
+
+	it('should select all action items when clicking "Select All"', async () => {
+		await renderActionItemArchives();
+
+		const selectAllCheckbox = screen.getByLabelText('Select All', {
+			selector: 'input',
+		});
+		expect(selectAllCheckbox).toHaveAttribute('data-checked', 'false');
+
+		const checkboxButtons = screen.getAllByTestId('checkboxButton');
+
+		checkboxButtons.forEach((button) => {
+			expect(button).toHaveAttribute('data-checked', 'false');
+		});
+
+		selectAllCheckbox.click();
+		expect(selectAllCheckbox).toHaveAttribute('data-checked', 'true');
+		checkboxButtons.forEach((button) => {
+			expect(button).toHaveAttribute('data-checked', 'true');
+		});
+	});
 });
 
 function getExpectedModalContents(actionItemIds: number[]) {

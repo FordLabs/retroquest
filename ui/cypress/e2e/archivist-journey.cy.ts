@@ -78,47 +78,65 @@ describe('Archivist Journey', () => {
 		});
 
 		it('Delete single action item via delete button', () => {
-			cy.get('[data-testid=deleteButton]').eq(0).click();
+			cy.get('[data-testid=deleteButton]')
+				.its('length')
+				.then((initialCardCount) => {
+					cy.get('[data-testid=deleteButton]').eq(0).click();
 
-			cy.contains('Delete Action Item?').should('exist');
+					cy.contains('Delete Action Item?').should('exist');
 
-			cy.intercept(
-				'GET',
-				`/api/team/${teamCredentials.teamId}/action-item?archived=true`
-			).as('getActionItems');
+					cy.intercept(
+						'GET',
+						`/api/team/${teamCredentials.teamId}/action-item?archived=true`
+					).as('getActionItems');
 
-			cy.findByText('Yes, Delete').click();
+					cy.findByText('Yes, Delete').click();
 
-			cy.wait('@getActionItems');
-			cy.get('[data-testid=deleteButton]').should('have.length', 5);
+					cy.wait('@getActionItems');
+					cy.get('[data-testid=deleteButton]').should(
+						'have.length',
+						initialCardCount - 1
+					);
+				});
 		});
 
 		it('Delete multiple action items via checkboxes', () => {
-			ensureAllCheckboxesAreUnChecked();
+			cy.get('[data-testid=deleteButton]')
+				.its('length')
+				.then((initialCardCount) => {
+					ensureAllCheckboxesAreChecked(false);
 
-			cy.findByText('Delete Selected').should('not.exist');
+					cy.findByText('Delete Selected').should('not.exist');
 
-			cy.get('@checkboxes')
-				.eq(0)
-				.click()
-				.should('have.attr', 'data-checked', 'true');
-			cy.get('@checkboxes')
-				.eq(1)
-				.click()
-				.should('have.attr', 'data-checked', 'true');
-			cy.get('@checkboxes')
-				.eq(3)
-				.click()
-				.should('have.attr', 'data-checked', 'true');
+					cy.get('@checkboxes')
+						.eq(0)
+						.click()
+						.should('have.attr', 'data-checked', 'true');
+					cy.get('@checkboxes')
+						.eq(1)
+						.click()
+						.should('have.attr', 'data-checked', 'true');
+					cy.get('@checkboxes')
+						.eq(3)
+						.click()
+						.should('have.attr', 'data-checked', 'true');
 
-			cy.findByText('Delete Selected').click();
+					deleteSelected();
 
-			cy.contains('Delete Selected Items?').should('exist');
+					const newCardCount = initialCardCount - 3;
+					cy.get('[data-testid=deleteButton]').should(
+						'have.length',
+						newCardCount
+					);
+					ensureAllCheckboxesAreChecked(false);
 
-			cy.findByText('Yes, Delete').click();
+					cy.contains('Select All').click();
 
-			cy.get('[data-testid=deleteButton]').should('have.length', 2);
-			ensureAllCheckboxesAreUnChecked();
+					ensureAllCheckboxesAreChecked(true);
+					deleteSelected();
+					cy.get('[data-testid=deleteButton]').should('have.length', 0);
+					cy.contains('No archives were found.').should('exist');
+				});
 		});
 	});
 
@@ -269,12 +287,18 @@ function createAndArchiveBoard(
 	archiveBoard(teamCredentials.teamId);
 }
 
-function ensureAllCheckboxesAreUnChecked() {
+function ensureAllCheckboxesAreChecked(isChecked: boolean = false) {
 	cy.findAllByTestId('checkboxButton')
 		.as('checkboxes')
 		.each(($el, index) => {
 			cy.get('@checkboxes')
 				.eq(index)
-				.should('have.attr', 'data-checked', 'false');
+				.should('have.attr', 'data-checked', isChecked.toString());
 		});
+}
+
+function deleteSelected() {
+	cy.findByText('Delete Selected').click();
+	cy.contains('Delete Selected Items?').should('exist');
+	cy.findByText('Yes, Delete').click();
 }

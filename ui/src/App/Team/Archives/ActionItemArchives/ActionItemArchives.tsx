@@ -70,6 +70,11 @@ function ActionItemArchives() {
 		});
 	}
 
+	function selectAllActionItems(selectAll: boolean) {
+		const selectedItemIds = selectAll ? actionItems.map((item) => item.id) : [];
+		setSelectedActionItemIds(selectedItemIds);
+	}
+
 	return (
 		<div className="action-item-archives">
 			{actionItems.length ? (
@@ -102,16 +107,18 @@ function ActionItemArchives() {
 								id="select-action-items"
 								value="Select All"
 								label="Select All"
-								onChange={(checked) => console.log('checked', checked)}
+								onChange={selectAllActionItems}
 							/>
 						</div>
 					</div>
 					<ul className="archived-action-items">
 						{actionItems.map((actionItem) => {
+							const isSelected = selectedActionItemIds.includes(actionItem.id);
 							return (
 								<li key={`archived-action-${actionItem.id}`}>
 									<ArchivedActionItem
 										actionItem={actionItem}
+										isSelected={isSelected}
 										onActionItemDeletion={getActionItems}
 										onActionItemCheckboxClick={onActionItemCheckboxClick}
 									/>
