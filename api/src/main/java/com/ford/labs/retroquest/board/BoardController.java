@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -76,6 +77,13 @@ public class BoardController {
     @Operation(description = "Deletes a single retro board given a team id and board id")
     public void deleteBoard(@PathVariable("teamId") String teamId, @PathVariable("boardId") Long boardId) {
         this.boardService.deleteBoard(teamId, boardId);
+    }
+
+    @DeleteMapping("/team/{teamId}/boards")
+    @PreAuthorize("@teamAuthorization.requestIsAuthorized(authentication, #teamId)")
+    @Operation(description = "Deletes multiple retro boards given a team id and board ids")
+    public void deleteBoards(@PathVariable("teamId") String teamId, @RequestBody @Valid DeleteBoardsRequest request) {
+        this.boardService.deleteBoards(teamId, request.boardIds());
     }
 
     @PutMapping("/team/{teamId}/end-retro")
