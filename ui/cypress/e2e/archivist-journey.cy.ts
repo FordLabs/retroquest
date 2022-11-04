@@ -1,3 +1,5 @@
+// noinspection SqlNoDataSourceInspection
+
 /*
  * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
@@ -36,37 +38,82 @@ describe('Archivist Journey', () => {
 		cy.findByText('Archives').click();
 		shouldBeOnArchivesPage(teamCredentials.teamId);
 	});
+	context('Thought Archives', () => {
+		it('Should be able to see archived thoughts', () => {
+			cy.findByText('Archives').click();
+			shouldBeOnArchivesPage(teamCredentials.teamId);
+			cy.findAllByText('View').should('have.length', 3).eq(0).click();
+			cy.findByText('message1').should('exist');
+			cy.findByText('message2').should('exist');
+			cy.findByText('message3').should('exist');
+			cy.findByText('message4').should('exist');
+		});
+		it('Delete single item from thought archives via delete button', () => {
+			cy.intercept(
+				'GET',
+				`/api/team/${teamCredentials.teamId}/boards?pageIndex=0&pageSize=20&sortBy=dateCreated&sortOrder=DESC`
+			).as('getBoardsInDescOrder');
+			cy.findByText('Archives').click();
+			cy.findByText('Thoughts').click();
+			shouldBeOnArchivesPage(teamCredentials.teamId);
+			cy.wait('@getBoardsInDescOrder');
 
-	it('Thought Archives ', () => {
-		cy.findAllByText('View').should('have.length', 3).eq(0).click();
-		cy.findByText('message1').should('exist');
-		cy.findByText('message2').should('exist');
-		cy.findByText('message3').should('exist');
-		cy.findByText('message4').should('exist');
+			cy.findByText('Date').click();
 
-		cy.intercept(
-			'GET',
-			`/api/team/${teamCredentials.teamId}/boards?pageIndex=0&pageSize=20&sortBy=dateCreated&sortOrder=DESC`
-		).as('getBoardsInDescOrder');
+			cy.findAllByText('Delete').should('have.length', 3).eq(0).click();
 
-		cy.findByText('Thoughts').click();
-		shouldBeOnArchivesPage(teamCredentials.teamId);
-		cy.wait('@getBoardsInDescOrder');
+			cy.intercept(
+				'GET',
+				`/api/team/${teamCredentials.teamId}/boards?pageIndex=0&pageSize=20&sortBy=dateCreated&sortOrder=ASC`
+			).as('getBoardsInAscOrder');
 
-		cy.findByText('Date').click();
+			cy.findByText('Yes, Delete').click();
 
-		cy.findAllByText('Delete').should('have.length', 3).eq(0).click();
+			cy.wait('@getBoardsInAscOrder');
 
-		cy.intercept(
-			'GET',
-			`/api/team/${teamCredentials.teamId}/boards?pageIndex=0&pageSize=20&sortBy=dateCreated&sortOrder=ASC`
-		).as('getBoardsInAscOrder');
+			cy.findAllByText('Delete').should('have.length', 2);
+		});
 
-		cy.findByText('Yes, Delete').click();
+		it('Delete Several Thought Archives via checklist', () => {
+			cy.findByText('Archives').click();
 
-		cy.wait('@getBoardsInAscOrder');
+			cy.get('[data-testid=deleteButton]')
+				.its('length')
+				.then((initialCardCount) => {
+					ensureAllCheckboxesAreChecked(false);
 
-		cy.findAllByText('Delete').should('have.length', 2);
+					cy.findByText('Delete Selected').should('not.exist');
+
+					cy.get('@checkboxes')
+						.eq(0)
+						.click()
+						.should('have.attr', 'data-checked', 'true');
+					cy.get('@checkboxes')
+						.eq(1)
+						.click()
+						.should('have.attr', 'data-checked', 'true');
+					cy.get('@checkboxes')
+						.eq(3)
+						.click()
+						.should('have.attr', 'data-checked', 'true');
+
+					deleteSelected();
+
+					const newCardCount = initialCardCount - 3;
+					cy.get('[data-testid=deleteButton]').should(
+						'have.length',
+						newCardCount
+					);
+					ensureAllCheckboxesAreChecked(false);
+
+					cy.get('[data-testid=selectAll]').click();
+
+					ensureAllCheckboxesAreChecked(true);
+					deleteSelected();
+					cy.get('[data-testid=deleteButton]').should('have.length', 0);
+					cy.contains('No archives were found.').should('exist');
+				});
+		});
 	});
 
 	context('Action Item Archives', () => {
@@ -297,7 +344,7 @@ function ensureAllCheckboxesAreChecked(isChecked: boolean = false) {
 		});
 }
 
-function deleteSelected() {
+function deleteSelected(expectedDeleteButtonText = 'Delete Selected Items?') {
 	cy.findByText('Delete Selected').click();
 	cy.contains('Delete Selected Items?').should('exist');
 	cy.findByText('Yes, Delete').click();
