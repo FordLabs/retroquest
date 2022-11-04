@@ -69,11 +69,13 @@
 }
 
 @mixin box-shadow($size, $color) {
+	/* stylelint-disable */
 	box-shadow: 0 0 0 $size $color;
-	box-shadow: 0 0 0 $size $color;
-	box-shadow: 0 0 0 $size $color;
+	-webkit-box-shadow: 0 0 0 $size $color;
+	-moz-box-shadow: 0 0 0 $size $color;
 
-	appearance: none;
+	-webkit-appearance: none;
+	/* stylelint-enable */
 }
 
 @mixin site-max-width() {
