@@ -43,6 +43,7 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 	const [boards, setBoards] = useState<Board[]>([]);
 	const [paginationData, setPaginationData] = useState<PaginationData>();
 	const team = useRecoilValue(TeamState);
+	const [selectedBoardIds, setSelectedBoardIds] = useState<number[]>([]);
 
 	const getBoards = useCallback(
 		(pageIndex: number, sortBy: SortByType, sortOrder: SortOrder) => {
@@ -85,6 +86,16 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 		getBoards(0, 'dateCreated', SortOrder.DESC);
 	}, [getBoards]);
 
+	function onBoardCheckboxClick(boardId: number, isChecked: boolean) {
+		setSelectedBoardIds((selectedItems: number[]) => {
+			if (isChecked) {
+				return [...selectedItems, boardId];
+			} else {
+				return [...selectedItems].filter((i) => i !== boardId);
+			}
+		});
+	}
+
 	return (
 		<div className="archived-boards-list">
 			{boards?.length ? (
@@ -100,8 +111,10 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 								<ArchivedBoardTile
 									key={board.teamId + board.dateCreated + board.id}
 									board={board}
+									isSelected={selectedBoardIds.includes(board.id)}
 									onViewBtnClick={onBoardSelection}
 									onBoardDeletion={onBoardDeletion}
+									onBoardCheckboxClick={onBoardCheckboxClick}
 								/>
 							);
 						})}
