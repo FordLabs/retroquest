@@ -106,9 +106,10 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 			component: (
 				<DeleteBoardsConfirmation
 					boardIds={selectedBoardIds}
-					onBoardDeletion={() =>
-						getBoardsForPage(paginationData?.pageIndex || 0)
-					}
+					onBoardDeletion={() => {
+						getBoardsForPage(paginationData?.pageIndex || 0);
+						setSelectedBoardIds([]);
+					}}
 				/>
 			),
 		});

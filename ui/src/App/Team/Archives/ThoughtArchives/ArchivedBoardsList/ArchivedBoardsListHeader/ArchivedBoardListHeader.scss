@@ -29,6 +29,13 @@
 	background: rgba(main.$asphalt, 0.08);
 	border-radius: 6px;
 
+	position: relative;
+
+	.select-all {
+		position: absolute;
+		left: 1.5rem;
+	}
+
 	.sort-button {
 		padding-right: 0.75rem;
 

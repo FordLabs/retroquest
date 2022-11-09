@@ -54,6 +54,7 @@ function ArchivedBoardListHeader(props: Props) {
 					onSelectAllClick();
 				}}
 				checked={areAllSelected}
+				className={'select-all'}
 			/>
 			<button
 				className={classnames('sort-button', {
