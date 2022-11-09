@@ -139,4 +139,14 @@ describe('Board Service', () => {
 			);
 		});
 	});
+	describe('delete multiple selected boards', () => {
+		it('should delete board by teamId and boardId array', async () => {
+			await BoardService.deleteBoards(teamId, [boardId, boardId+1]);
+
+			expect(axios.delete).toHaveBeenCalledWith(
+				`/api/team/${teamId}/boards`,
+				{...mockConfig, data:{boardIds:[boardId, boardId+1]}}
+			);
+		});
+	});
 });

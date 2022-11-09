@@ -81,6 +81,11 @@ const BoardService = {
 		const url = `/api/team/${teamId}/board/${boardId}`;
 		return axios.delete(url, getAuthConfig());
 	},
+
+	deleteBoards(teamId: string, boardIds: number[]) {
+		const url = `/api/team/${teamId}/boards`;
+		return axios.delete(url, {...getAuthConfig(), data: {"boardIds":boardIds}});
+	},
 };
 
 export default BoardService;

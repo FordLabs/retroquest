@@ -16,7 +16,7 @@
  */
 
 import React from 'react';
-import { screen, waitFor, within } from '@testing-library/react';
+import {fireEvent, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
 	mockBoard1,
@@ -191,6 +191,17 @@ describe('Archived Boards List', () => {
 			const tiles = screen.getAllByTestId('boardArchive');
 			expect(within(tiles[0]).getByText('April 22nd, 1998')).toBeDefined();
 			expect(within(tiles[1]).getByText('October 1st, 1982')).toBeDefined();
+		});
+	});
+
+	describe('Bulk Deletion', () => {
+		it('should have a Select All checkbox', () => {});
+		it('should make a Delete Selected button appear if a checkbox is checked', async () => {
+			await setUpThoughtArchives();
+			fireEvent.click(screen.getAllByTestId("checkboxButton")[0]);
+			await waitFor(()=>{
+				expect(screen.getByText("Delete Selected")).toBeInTheDocument();
+			})
 		});
 	});
 

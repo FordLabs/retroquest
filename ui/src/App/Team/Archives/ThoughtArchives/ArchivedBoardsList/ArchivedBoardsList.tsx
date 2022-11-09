@@ -105,6 +105,10 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 						<span className="thoughts-archive-metadata">{getPageData()}</span>
 					</h1>
 					<ArchivedBoardListHeader onDateClick={handleDateSort} />
+					{selectedBoardIds.length > 0 && <button
+						className={"delete-selected-button"}
+						data-testid={"deleteSelectedButton"}
+					>Delete Selected</button>}
 					<ol className="list">
 						{boards.map(function (board: Board) {
 							return (
