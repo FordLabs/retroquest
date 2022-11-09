@@ -16,7 +16,13 @@
  */
 
 import React from 'react';
-import { fireEvent, screen, waitFor, within } from '@testing-library/react';
+import {
+	fireEvent,
+	getByTestId,
+	screen,
+	waitFor,
+	within,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
 	mockBoard1,
@@ -195,7 +201,30 @@ describe('Archived Boards List', () => {
 	});
 
 	describe('Bulk Deletion', () => {
-		it('should have a Select All checkbox', () => {});
+		it('should have a Select All checkbox', async () => {
+			await setUpThoughtArchives();
+			screen.getByTestId('selectAll');
+		});
+		it('should select all when Select All is checked', async () => {
+			await setUpThoughtArchives();
+			fireEvent.click(screen.getByTestId('selectAll'));
+			const allCheckboxes = screen.getAllByTestId('checkboxButton');
+			expect(allCheckboxes.length).toEqual(2);
+			allCheckboxes.forEach((checkbox) => {
+				expect(checkbox).toHaveAttribute('data-checked', 'true');
+			});
+		});
+		it('should deselect all when Select All is unchecked', async () => {
+			await setUpThoughtArchives();
+			fireEvent.click(screen.getByTestId('selectAll'));
+			fireEvent.click(screen.getByTestId('selectAll'));
+			const allCheckboxes = screen.getAllByTestId('checkboxButton');
+			expect(allCheckboxes.length).toEqual(2);
+			allCheckboxes.forEach((checkbox) => {
+				expect(checkbox).toHaveAttribute('data-checked', 'false');
+			});
+		});
+
 		it('should make a Delete Selected button appear if a checkbox is checked', async () => {
 			await setUpThoughtArchives();
 			fireEvent.click(screen.getAllByTestId('checkboxButton')[0]);

@@ -17,6 +17,8 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
 
+import { CheckboxButton } from '../../../../../../Common/ColumnItemButtons';
+
 import './ArchivedBoardListHeader.scss';
 
 export enum SortOrder {
@@ -26,12 +28,14 @@ export enum SortOrder {
 
 interface Props {
 	onDateClick(sortOrder: SortOrder): void;
+	onSelectAllClick(isSelect: boolean): void;
 }
 
 function ArchivedBoardListHeader(props: Props) {
-	const { onDateClick } = props;
+	const { onDateClick, onSelectAllClick } = props;
 
 	const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.DESC);
+	const [areAllSelected, setAreAllSelected] = useState<boolean>(false);
 
 	function handleDateSort() {
 		const newSortOrder =
@@ -43,6 +47,15 @@ function ArchivedBoardListHeader(props: Props) {
 
 	return (
 		<div className="list-header">
+			<CheckboxButton
+				testId={'selectAll'}
+				disableTooltips={true}
+				onClick={(checked: boolean) => {
+					onSelectAllClick(checked);
+					setAreAllSelected(!areAllSelected);
+				}}
+				checked={areAllSelected}
+			/>
 			<button
 				className={classnames('sort-button', {
 					'selected-asc': sortOrder === SortOrder.ASC,

@@ -78,7 +78,7 @@ function ArchivedBoardTile(props: Props): JSX.Element {
 				</button>
 				<button
 					className="delete-button"
-					data-testId={'deleteButton'}
+					data-testid={'deleteButton'}
 					onClick={() => onDeleteBtnClick(board)}
 				>
 					Delete
