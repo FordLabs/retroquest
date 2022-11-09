@@ -114,8 +114,8 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 		});
 	}
 
-	function onSelectAllCheckboxClick(isSelect: boolean) {
-		isSelect
+	function onSelectAllCheckboxClick() {
+		selectedBoardIds.length !== boards.length
 			? setSelectedBoardIds(boards.map((board) => board.id))
 			: setSelectedBoardIds([]);
 	}
@@ -129,6 +129,7 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 						<span className="thoughts-archive-metadata">{getPageData()}</span>
 					</h1>
 					<ArchivedBoardListHeader
+						areAllSelected={selectedBoardIds.length === boards.length}
 						onDateClick={handleDateSort}
 						onSelectAllClick={onSelectAllCheckboxClick}
 					/>

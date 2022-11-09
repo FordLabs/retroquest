@@ -28,14 +28,14 @@ export enum SortOrder {
 
 interface Props {
 	onDateClick(sortOrder: SortOrder): void;
-	onSelectAllClick(isSelect: boolean): void;
+	onSelectAllClick(): void;
+	areAllSelected?: boolean;
 }
 
 function ArchivedBoardListHeader(props: Props) {
-	const { onDateClick, onSelectAllClick } = props;
+	const { onDateClick, onSelectAllClick, areAllSelected = false } = props;
 
 	const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.DESC);
-	const [areAllSelected, setAreAllSelected] = useState<boolean>(false);
 
 	function handleDateSort() {
 		const newSortOrder =
@@ -50,9 +50,8 @@ function ArchivedBoardListHeader(props: Props) {
 			<CheckboxButton
 				testId={'selectAll'}
 				disableTooltips={true}
-				onClick={(checked: boolean) => {
-					onSelectAllClick(checked);
-					setAreAllSelected(!areAllSelected);
+				onClick={() => {
+					onSelectAllClick();
 				}}
 				checked={areAllSelected}
 			/>

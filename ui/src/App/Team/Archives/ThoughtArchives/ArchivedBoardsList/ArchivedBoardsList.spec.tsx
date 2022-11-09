@@ -225,6 +225,25 @@ describe('Archived Boards List', () => {
 			});
 		});
 
+		it('should indicate when all are selected, even if via other means than Select All', async () => {
+			await setUpThoughtArchives();
+			fireEvent.click(screen.getByTestId('selectAll'));
+			expect(screen.getByTestId('selectAll')).toHaveAttribute(
+				'data-checked',
+				'true'
+			);
+			fireEvent.click(screen.getAllByTestId('checkboxButton')[0]);
+			expect(screen.getByTestId('selectAll')).toHaveAttribute(
+				'data-checked',
+				'false'
+			);
+			fireEvent.click(screen.getAllByTestId('checkboxButton')[0]);
+			expect(screen.getByTestId('selectAll')).toHaveAttribute(
+				'data-checked',
+				'true'
+			);
+		});
+
 		it('should make a Delete Selected button appear if a checkbox is checked', async () => {
 			await setUpThoughtArchives();
 			fireEvent.click(screen.getAllByTestId('checkboxButton')[0]);
