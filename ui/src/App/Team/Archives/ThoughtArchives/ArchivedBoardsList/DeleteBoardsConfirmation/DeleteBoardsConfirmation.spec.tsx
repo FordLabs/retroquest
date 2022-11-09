@@ -27,7 +27,7 @@ import { RecoilObserver } from 'Utils/RecoilObserver';
 
 import DeleteBoardConfirmation from '../DeleteBoardConfirmation/DeleteBoardConfirmation';
 
-import DeleteBoardsConfirmation from "./DeleteBoardsConfirmation";
+import DeleteBoardsConfirmation from './DeleteBoardsConfirmation';
 
 jest.mock('Services/Api/BoardService');
 
@@ -67,19 +67,22 @@ describe('Delete Boards Confirmation', () => {
 	});
 
 	it('should ask user if they want to delete archived thoughts', () => {
-		expect(screen.getByText('Delete Archived Thoughts?')).toBeInTheDocument();
-		expect(screen.getByText('Are you sure you want to delete these selected items? ' +
-			'Doing so will permanently remove this data.')).toBeInTheDocument();
+		expect(screen.getByText('Delete Selected Thoughts?')).toBeInTheDocument();
+		expect(
+			screen.getByText(
+				'Are you sure you want to delete these selected items? ' +
+					'Doing so will permanently remove this data.'
+			)
+		).toBeInTheDocument();
 	});
 
 	it('should delete board and close modal', async () => {
 		userEvent.click(screen.getByText('Yes, Delete'));
 
 		await waitFor(() =>
-			expect(BoardService.deleteBoards).toHaveBeenCalledWith(
-				mockTeam.id,
-				[boardId]
-			)
+			expect(BoardService.deleteBoards).toHaveBeenCalledWith(mockTeam.id, [
+				boardId,
+			])
 		);
 		expect(onBoardDeletion).toHaveBeenCalled();
 		expect(modalContent).toBe(null);
