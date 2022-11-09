@@ -85,7 +85,7 @@ describe('Archivist Journey', () => {
 			cy.findAllByText('Delete').should('have.length', startingBoardCount - 1);
 		});
 
-		it('Delete Several Thought Archives via checklist', () => {
+		it.only('Delete Several Thought Archives via checklist', () => {
 			ensureAllCheckboxesAreChecked(false);
 
 			cy.findByText('Delete Selected').should('not.exist');
@@ -99,9 +99,9 @@ describe('Archivist Journey', () => {
 				.click()
 				.should('have.attr', 'data-checked', 'true');
 
-			deleteSelected();
+			deleteSelected('Delete Selected Thoughts?');
 
-			const newCardCount = startingBoardCount - 3;
+			const newCardCount = startingBoardCount - 2;
 			cy.get('[data-testid=deleteButton]').should('have.length', newCardCount);
 			ensureAllCheckboxesAreChecked(false);
 
@@ -343,6 +343,6 @@ function ensureAllCheckboxesAreChecked(isChecked: boolean = false) {
 
 function deleteSelected(expectedDeleteButtonText = 'Delete Selected Items?') {
 	cy.findByText('Delete Selected').click();
-	cy.contains('Delete Selected Items?').should('exist');
+	cy.contains(expectedDeleteButtonText).should('exist');
 	cy.findByText('Yes, Delete').click();
 }

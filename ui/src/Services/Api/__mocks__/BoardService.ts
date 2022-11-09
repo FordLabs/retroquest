@@ -85,6 +85,7 @@ const BoardService = {
 	} as GetBoardsResponse),
 	getBoard: jest.fn().mockResolvedValue(mockRetro),
 	deleteBoard: jest.fn().mockResolvedValue({}),
+	deleteBoards: jest.fn().mockResolvedValue({}),
 };
 
 export default BoardService;

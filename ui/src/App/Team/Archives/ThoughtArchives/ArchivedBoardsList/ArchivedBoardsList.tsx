@@ -17,7 +17,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import NotFoundSection from 'Common/NotFoundSection/NotFoundSection';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import BoardService, {
 	PaginationData,
 	SortByType,
@@ -26,10 +26,13 @@ import BoardService, {
 import { TeamState } from 'State/TeamState';
 import Board from 'Types/Board';
 
+import { ModalContentsState } from '../../../../../State/ModalContentsState';
+import DeleteMultipleActionItemsConfirmation from '../../ActionItemArchives/DeleteMultipleActionItemsConfirmation/DeleteMultipleActionItemsConfirmation';
 import Pagination from '../../Pagination/Pagination';
 
 import ArchivedBoardListHeader from './ArchivedBoardsListHeader/ArchivedBoardListHeader';
 import ArchivedBoardTile from './ArchivedBoardTile/ArchivedBoardTile';
+import DeleteBoardsConfirmation from './DeleteBoardsConfirmation/DeleteBoardsConfirmation';
 
 import './ArchivedBoardsList.scss';
 
@@ -44,6 +47,7 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 	const [paginationData, setPaginationData] = useState<PaginationData>();
 	const team = useRecoilValue(TeamState);
 	const [selectedBoardIds, setSelectedBoardIds] = useState<number[]>([]);
+	const setModalContents = useSetRecoilState(ModalContentsState);
 
 	const getBoards = useCallback(
 		(pageIndex: number, sortBy: SortByType, sortOrder: SortOrder) => {
@@ -96,6 +100,20 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 		});
 	}
 
+	function onDeleteSelectedBtnClick() {
+		setModalContents({
+			title: 'Delete Selected Items?',
+			component: (
+				<DeleteBoardsConfirmation
+					boardIds={selectedBoardIds}
+					onBoardDeletion={() =>
+						getBoardsForPage(paginationData?.pageIndex || 0)
+					}
+				/>
+			),
+		});
+	}
+
 	return (
 		<div className="archived-boards-list">
 			{boards?.length ? (
@@ -105,10 +123,15 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 						<span className="thoughts-archive-metadata">{getPageData()}</span>
 					</h1>
 					<ArchivedBoardListHeader onDateClick={handleDateSort} />
-					{selectedBoardIds.length > 0 && <button
-						className={"delete-selected-button"}
-						data-testid={"deleteSelectedButton"}
-					>Delete Selected</button>}
+					{selectedBoardIds.length > 0 && (
+						<button
+							className={'delete-selected-button'}
+							data-testid={'deleteSelectedButton'}
+							onClick={onDeleteSelectedBtnClick}
+						>
+							Delete Selected
+						</button>
+					)}
 					<ol className="list">
 						{boards.map(function (board: Board) {
 							return (

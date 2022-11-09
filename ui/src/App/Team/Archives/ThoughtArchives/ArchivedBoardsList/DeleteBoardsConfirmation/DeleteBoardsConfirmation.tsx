@@ -46,9 +46,12 @@ function DeleteBoardsConfirmation(props: Props) {
 	return (
 		<ConfirmationModal
 			testId="deleteBoardConfirmation"
-			title="Delete Archived Thoughts?"
-			subtitle={"Are you sure you want to delete these selected items?" + "\n" +
-			"Doing so will permanently remove this data."}
+			title="Delete Selected Thoughts?"
+			subtitle={
+				'Are you sure you want to delete these selected items?' +
+				'\n' +
+				'Doing so will permanently remove this data.'
+			}
 			onSubmit={onSubmit}
 			onCancel={closeModal}
 			cancelButtonText="Cancel"
