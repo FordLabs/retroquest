@@ -110,14 +110,7 @@ function AddActionItem(props: AddActionItemProps) {
 			<AssigneeInput assignee={assignee} onAssign={setAssignee} />
 			<ColumnItemButtonGroup>
 				<CancelButton onClick={hideComponentCallback}>Discard</CancelButton>
-				<ConfirmButton onClick={onCreate}>
-					<i
-						className="fas fa-link icon"
-						aria-hidden="true"
-						style={{ marginRight: '6px' }}
-					/>
-					Create!
-				</ConfirmButton>
+				<ConfirmButton onClick={onCreate}>Add to Action Items</ConfirmButton>
 			</ColumnItemButtonGroup>
 		</div>
 	);

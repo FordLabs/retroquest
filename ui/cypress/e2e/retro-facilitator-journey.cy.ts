@@ -144,7 +144,7 @@ describe('Retro Facilitator Journey', () => {
 			.find('[data-testid="assigneeInput"]')
 			.type(actionItemAssignee, { force: true });
 
-		cy.findByText('Create!').click();
+		cy.findByText('Add to Action Items').click();
 
 		cy.get('@retroItemModal').should('not.be.visible');
 

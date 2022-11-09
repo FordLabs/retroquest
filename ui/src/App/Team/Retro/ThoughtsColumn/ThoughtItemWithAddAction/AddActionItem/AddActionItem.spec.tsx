@@ -125,7 +125,7 @@ function clickDiscard() {
 }
 
 function clickCreate() {
-	userEvent.click(screen.getByText('Create', { exact: false }));
+	userEvent.click(screen.getByText('Add to Action Items', { exact: false }));
 }
 
 function editActionItemTask(text: string) {
