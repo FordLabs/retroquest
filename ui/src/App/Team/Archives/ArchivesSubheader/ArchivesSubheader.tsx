@@ -16,7 +16,7 @@
  */
 
 import React from 'react';
-import LinkTertiary from 'Common/LinkTertiary/LinkTertiary';
+import { NavLink } from 'react-router-dom';
 
 import './ArchivesSubheader.scss';
 
@@ -25,10 +25,14 @@ function ArchivesSubheader(): JSX.Element {
 		<div className="archives-subheader">
 			<ul className="archives-subheader-links">
 				<li>
-					<LinkTertiary to="thoughts">Thoughts</LinkTertiary>
+					<NavLink to="thoughts" className="archives-subheader-link">
+						Thoughts
+					</NavLink>
 				</li>
 				<li>
-					<LinkTertiary to="action-items">Action Items</LinkTertiary>
+					<NavLink to="action-items" className="archives-subheader-link">
+						Action Items
+					</NavLink>
 				</li>
 			</ul>
 		</div>

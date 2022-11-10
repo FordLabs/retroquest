@@ -28,16 +28,40 @@
 			height: 100%;
 		}
 
-		.active {
-			color: main.$teal;
+		.archives-subheader-link {
+			margin: 0;
+			padding: 0 1.7rem;
+
+			color: main.$asphalt;
+			font-weight: bold;
+			line-height: 2.6rem;
+			text-decoration: none;
+
+			&:focus,
+			&:hover {
+				color: main.$teal;
+			}
+
+			&.active {
+				color: main.$teal;
+			}
 		}
 	}
 }
 
 @include main.dark-theme {
 	.archives-subheader-links {
-		.active {
-			color: main.$sea-foam;
+		.archives-subheader-link {
+			color: main.$off-white;
+
+			&:focus,
+			&:hover {
+				color: main.$sea-foam;
+			}
+
+			&.active {
+				color: main.$sea-foam;
+			}
 		}
 	}
 }
