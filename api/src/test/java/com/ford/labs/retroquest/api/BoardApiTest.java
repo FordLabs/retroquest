@@ -225,7 +225,7 @@ class BoardApiTest extends ApiTestBase {
                 .thoughts(List.of())
                 .build());
 
-        mockMvc.perform(delete(String.format("/api/team/%s/boards/%s", teamId, boardToDelete.getId()))
+        mockMvc.perform(delete(String.format("/api/team/%s/board/%s", teamId, boardToDelete.getId()))
                         .contentType(APPLICATION_JSON)
                         .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
                 .andExpect(status().isForbidden());
