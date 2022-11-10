@@ -35,4 +35,7 @@ public interface BoardRepository extends JpaRepository<Board, Long>, PagingAndSo
 
     @Transactional
     void deleteBoardByTeamIdAndId(String teamId, Long boardId);
+
+    @Transactional
+    void deleteBoardsByTeamIdAndIdIn(String teamId, List<Long> boardIds);
 }

@@ -41,6 +41,12 @@
 		align-items: start;
 		height: 100%;
 	}
+
+	.assignee-container {
+		.assignee {
+			border-bottom: 2px solid main.$teal;
+		}
+	}
 }
 
 @include main.dark-theme {
@@ -49,5 +55,11 @@
 
 		background-color: main.$light-asphalt;
 		box-shadow: 0 1px 2px rgba(main.$black, 0.35);
+	}
+
+	.assignee-container {
+		.assignee {
+			border-bottom-color: main.$sea-foam;
+		}
 	}
 }

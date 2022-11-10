@@ -126,4 +126,8 @@ public class BoardService {
     public void deleteBoard(String teamId, Long boardId) {
         boardRepository.deleteBoardByTeamIdAndId(teamId, boardId);
     }
+
+    public void deleteBoards(String teamId, List<Long> boardIds) {
+        boardRepository.deleteBoardsByTeamIdAndIdIn(teamId, boardIds);
+    }
 }

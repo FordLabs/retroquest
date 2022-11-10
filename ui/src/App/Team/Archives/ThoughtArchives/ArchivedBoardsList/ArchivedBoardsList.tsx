@@ -17,12 +17,13 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import NotFoundSection from 'Common/NotFoundSection/NotFoundSection';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import BoardService, {
 	PaginationData,
 	SortByType,
 	SortOrder,
 } from 'Services/Api/BoardService';
+import { ModalContentsState } from 'State/ModalContentsState';
 import { TeamState } from 'State/TeamState';
 import Board from 'Types/Board';
 
@@ -30,6 +31,7 @@ import Pagination from '../../Pagination/Pagination';
 
 import ArchivedBoardListHeader from './ArchivedBoardsListHeader/ArchivedBoardListHeader';
 import ArchivedBoardTile from './ArchivedBoardTile/ArchivedBoardTile';
+import DeleteBoardsConfirmation from './DeleteBoardsConfirmation/DeleteBoardsConfirmation';
 
 import './ArchivedBoardsList.scss';
 
@@ -43,6 +45,8 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 	const [boards, setBoards] = useState<Board[]>([]);
 	const [paginationData, setPaginationData] = useState<PaginationData>();
 	const team = useRecoilValue(TeamState);
+	const [selectedBoardIds, setSelectedBoardIds] = useState<number[]>([]);
+	const setModalContents = useSetRecoilState(ModalContentsState);
 
 	const getBoards = useCallback(
 		(pageIndex: number, sortBy: SortByType, sortOrder: SortOrder) => {
@@ -85,6 +89,37 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 		getBoards(0, 'dateCreated', SortOrder.DESC);
 	}, [getBoards]);
 
+	function onBoardCheckboxClick(boardId: number, isChecked: boolean) {
+		setSelectedBoardIds((selectedItems: number[]) => {
+			if (isChecked) {
+				return [...selectedItems, boardId];
+			} else {
+				return [...selectedItems].filter((i) => i !== boardId);
+			}
+		});
+	}
+
+	function onDeleteSelectedBtnClick() {
+		setModalContents({
+			title: 'Delete Selected Items?',
+			component: (
+				<DeleteBoardsConfirmation
+					boardIds={selectedBoardIds}
+					onBoardDeletion={() => {
+						getBoardsForPage(paginationData?.pageIndex || 0);
+						setSelectedBoardIds([]);
+					}}
+				/>
+			),
+		});
+	}
+
+	function onSelectAllCheckboxClick() {
+		selectedBoardIds.length !== boards.length
+			? setSelectedBoardIds(boards.map((board) => board.id))
+			: setSelectedBoardIds([]);
+	}
+
 	return (
 		<div className="archived-boards-list">
 			{boards?.length ? (
@@ -93,15 +128,30 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 						Thought Archives
 						<span className="thoughts-archive-metadata">{getPageData()}</span>
 					</h1>
-					<ArchivedBoardListHeader onDateClick={handleDateSort} />
+					<ArchivedBoardListHeader
+						areAllSelected={selectedBoardIds.length === boards.length}
+						onDateClick={handleDateSort}
+						onSelectAllClick={onSelectAllCheckboxClick}
+					/>
+					{selectedBoardIds.length > 0 && (
+						<button
+							className="delete-selected-button"
+							data-testid="deleteSelectedButton"
+							onClick={onDeleteSelectedBtnClick}
+						>
+							Delete Selected
+						</button>
+					)}
 					<ol className="list">
 						{boards.map(function (board: Board) {
 							return (
 								<ArchivedBoardTile
 									key={board.teamId + board.dateCreated + board.id}
 									board={board}
+									isSelected={selectedBoardIds.includes(board.id)}
 									onViewBtnClick={onBoardSelection}
 									onBoardDeletion={onBoardDeletion}
+									onBoardCheckboxClick={onBoardCheckboxClick}
 								/>
 							);
 						})}

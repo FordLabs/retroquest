@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import ArchivedBoardListHeader from './ArchivedBoardListHeader';
@@ -23,7 +23,12 @@ import ArchivedBoardListHeader from './ArchivedBoardListHeader';
 describe('Archived Board List Header', () => {
 	it('should toggle from ascending to descending and back for date click', () => {
 		const onDateClick = jest.fn();
-		render(<ArchivedBoardListHeader onDateClick={onDateClick} />);
+		render(
+			<ArchivedBoardListHeader
+				onDateClick={onDateClick}
+				onSelectAllClick={() => {}}
+			/>
+		);
 
 		clickDateSortingButton();
 		expect(onDateClick).toHaveBeenCalledWith('ASC');
@@ -33,6 +38,18 @@ describe('Archived Board List Header', () => {
 
 		clickDateSortingButton();
 		expect(onDateClick).toHaveBeenCalledWith('ASC');
+	});
+
+	it('should register select-all clicks', () => {
+		const onSelectAllClick = jest.fn();
+		render(
+			<ArchivedBoardListHeader
+				onDateClick={() => {}}
+				onSelectAllClick={onSelectAllClick}
+			/>
+		);
+		fireEvent.click(screen.getByTestId('selectAll'));
+		expect(onSelectAllClick).toHaveBeenCalled();
 	});
 });
 

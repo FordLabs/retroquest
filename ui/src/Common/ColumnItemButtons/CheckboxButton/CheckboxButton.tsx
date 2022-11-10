@@ -31,6 +31,7 @@ interface CheckmarkButtonProps {
 		checked: string;
 		unchecked: string;
 	};
+	testId?: string;
 }
 
 const CheckboxButton = forwardRef(
@@ -41,6 +42,7 @@ const CheckboxButton = forwardRef(
 			disableTooltips,
 			onClick,
 			disabled,
+			testId = 'checkboxButton',
 			tooltipText = { checked: 'Open', unchecked: 'Close' },
 		} = props;
 
@@ -48,7 +50,7 @@ const CheckboxButton = forwardRef(
 			<button
 				className={classnames('column-item-button', className)}
 				ref={ref}
-				data-testid="checkboxButton"
+				data-testid={testId}
 				data-checked={checked}
 				disabled={disabled}
 				onClick={() => onClick(!checked)}

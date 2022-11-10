@@ -20,6 +20,7 @@ package com.ford.labs.retroquest.api;
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.board.Board;
 import com.ford.labs.retroquest.board.BoardRepository;
+import com.ford.labs.retroquest.board.DeleteBoardsRequest;
 import com.ford.labs.retroquest.column.Column;
 import com.ford.labs.retroquest.column.ColumnRepository;
 import com.ford.labs.retroquest.thought.CreateThoughtRequest;
@@ -33,6 +34,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -174,12 +177,44 @@ class BoardApiTest extends ApiTestBase {
 
         assertThat(boardRepository.count()).isEqualTo(1);
 
-        mockMvc.perform(delete(String.format("/api/team/%s/boards/%s", teamId, boardToDelete.getId()))
+        mockMvc.perform(delete(String.format("/api/team/%s/board/%s", teamId, boardToDelete.getId()))
                         .contentType(APPLICATION_JSON)
                         .header("Authorization", getBearerAuthToken()))
                 .andExpect(status().isOk());
 
         assertThat(boardRepository.count()).isEqualTo(0);
+    }
+
+    @Test
+    public void deleteBoards_shouldDeleteMultipleBoardsButNotAllBoards() throws Exception {
+        Board boardToDelete =  boardRepository.save(Board.builder()
+                .dateCreated(LocalDate.of(2018, 3, 3))
+                .teamId(teamId)
+                .thoughts(List.of())
+                .build());
+        Board boardToAlsoDelete =  boardRepository.save(Board.builder()
+                .dateCreated(LocalDate.of(2018, 3, 3))
+                .teamId(teamId)
+                .thoughts(List.of())
+                .build());
+        Board boardNotToDelete =  boardRepository.save(Board.builder()
+                .dateCreated(LocalDate.of(2018, 3, 3))
+                .teamId(teamId)
+                .thoughts(List.of())
+                .build());
+
+        assertThat(boardRepository.count()).isEqualTo(3);
+
+        mockMvc.perform(delete(String.format("/api/team/%s/boards", teamId))
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(new DeleteBoardsRequest(Arrays.asList(
+                                boardToDelete.getId(),
+                                boardToAlsoDelete.getId()))))
+                        .header("Authorization", getBearerAuthToken()))
+                .andExpect(status().isOk());
+
+        assertThat(boardRepository.count()).isEqualTo(1);
+        assertThat(boardRepository.findAll().get(0).getId()).isEqualTo(boardNotToDelete.getId());
     }
 
     @Test
@@ -190,7 +225,7 @@ class BoardApiTest extends ApiTestBase {
                 .thoughts(List.of())
                 .build());
 
-        mockMvc.perform(delete(String.format("/api/team/%s/boards/%s", teamId, boardToDelete.getId()))
+        mockMvc.perform(delete(String.format("/api/team/%s/board/%s", teamId, boardToDelete.getId()))
                         .contentType(APPLICATION_JSON)
                         .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
                 .andExpect(status().isForbidden());

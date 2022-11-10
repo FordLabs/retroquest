@@ -22,12 +22,12 @@ import { ModalContentsState } from 'State/ModalContentsState';
 import { TeamState } from 'State/TeamState';
 
 interface Props {
-	boardId: number;
+	boardIds: number[];
 	onBoardDeletion(): void;
 }
 
-function DeleteBoardConfirmation(props: Props) {
-	const { boardId, onBoardDeletion } = props;
+function DeleteBoardsConfirmation(props: Props) {
+	const { boardIds, onBoardDeletion } = props;
 
 	const team = useRecoilValue(TeamState);
 	const setModalContents = useSetRecoilState(ModalContentsState);
@@ -35,7 +35,7 @@ function DeleteBoardConfirmation(props: Props) {
 	const closeModal = () => setModalContents(null);
 
 	const onSubmit = () => {
-		BoardService.deleteBoard(team.id, boardId)
+		BoardService.deleteBoards(team.id, boardIds)
 			.then(() => {
 				onBoardDeletion();
 				closeModal();
@@ -46,8 +46,12 @@ function DeleteBoardConfirmation(props: Props) {
 	return (
 		<ConfirmationModal
 			testId="deleteBoardConfirmation"
-			title="Delete Archived Thoughts?"
-			subtitle="Are you sure you want to delete this selected item? Doing so will permanently remove this data."
+			title="Delete Selected Thoughts?"
+			subtitle={
+				'Are you sure you want to delete these selected items?' +
+				'\n' +
+				'Doing so will permanently remove this data.'
+			}
 			onSubmit={onSubmit}
 			onCancel={closeModal}
 			cancelButtonText="Cancel"
@@ -56,4 +60,4 @@ function DeleteBoardConfirmation(props: Props) {
 	);
 }
 
-export default DeleteBoardConfirmation;
+export default DeleteBoardsConfirmation;

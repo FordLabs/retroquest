@@ -1,3 +1,5 @@
+// noinspection SqlNoDataSourceInspection
+
 /*
  * Copyright (c) 2022 Ford Motor Company
  * All rights reserved.
@@ -29,119 +31,161 @@ describe('Archivist Journey', () => {
 
 	before(() => {
 		cy.createTeamAndLogin(teamCredentials);
-
-		createAndArchiveBoard(teamCredentials, 3);
-		createAndArchiveBoard(teamCredentials, 1);
 		createAndArchiveBoard(teamCredentials, 4);
-		cy.findByText('Archives').click();
-		shouldBeOnArchivesPage(teamCredentials.teamId);
+		createAndArchiveBoard(teamCredentials, 4);
+		createAndArchiveBoard(teamCredentials, 4);
+		createAndArchiveBoard(teamCredentials, 4);
 	});
+	context('Thought Archives', () => {
+		let startingBoardCount: number;
+		beforeEach(() => {
+			cy.intercept(
+				'GET',
+				`/api/team/${teamCredentials.teamId}/boards?pageIndex=0&pageSize=20&sortBy=dateCreated&sortOrder=DESC`
+			).as('getBoardsInDescOrder');
 
-	it('Thought Archives ', () => {
-		cy.findAllByText('View').should('have.length', 3).eq(0).click();
-		cy.findByText('message1').should('exist');
-		cy.findByText('message2').should('exist');
-		cy.findByText('message3').should('exist');
-		cy.findByText('message4').should('exist');
+			cy.visit(`/team/${teamCredentials.teamId}/archives`);
+			cy.wait('@getBoardsInDescOrder');
+			shouldBeOnArchivesPage(teamCredentials.teamId);
+			cy.get('[data-testid=deleteButton]')
+				.its('length')
+				.then((initialCardCount) => {
+					startingBoardCount = initialCardCount;
+				});
+		});
 
-		cy.intercept(
-			'GET',
-			`/api/team/${teamCredentials.teamId}/boards?pageIndex=0&pageSize=20&sortBy=dateCreated&sortOrder=DESC`
-		).as('getBoardsInDescOrder');
+		it('Should be able to see archived thoughts', () => {
+			cy.findAllByText('View')
+				.should('have.length', startingBoardCount)
+				.eq(0)
+				.click();
+			cy.findByText('message1').should('exist');
+			cy.findByText('message2').should('exist');
+			cy.findByText('message3').should('exist');
+			cy.findByText('message4').should('exist');
+		});
 
-		cy.findByText('Thoughts').click();
-		shouldBeOnArchivesPage(teamCredentials.teamId);
-		cy.wait('@getBoardsInDescOrder');
+		it('Delete single item from thought archives via delete button', () => {
+			cy.findByText('Date').click();
 
-		cy.findByText('Date').click();
+			cy.findAllByText('Delete')
+				.should('have.length', startingBoardCount)
+				.eq(0)
+				.click();
 
-		cy.findAllByText('Delete').should('have.length', 3).eq(0).click();
+			cy.intercept(
+				'GET',
+				`/api/team/${teamCredentials.teamId}/boards?pageIndex=0&pageSize=20&sortBy=dateCreated&sortOrder=ASC`
+			).as('getBoardsInAscOrder');
 
-		cy.intercept(
-			'GET',
-			`/api/team/${teamCredentials.teamId}/boards?pageIndex=0&pageSize=20&sortBy=dateCreated&sortOrder=ASC`
-		).as('getBoardsInAscOrder');
+			cy.findByText('Yes, Delete').click();
 
-		cy.findByText('Yes, Delete').click();
+			cy.wait('@getBoardsInAscOrder');
 
-		cy.wait('@getBoardsInAscOrder');
+			cy.findAllByText('Delete').should('have.length', startingBoardCount - 1);
+		});
 
-		cy.findAllByText('Delete').should('have.length', 2);
+		it.only('Delete Several Thought Archives via checklist', () => {
+			ensureAllCheckboxesAreChecked(false);
+
+			cy.findByText('Delete Selected').should('not.exist');
+
+			cy.get('@checkboxes')
+				.eq(0)
+				.click()
+				.should('have.attr', 'data-checked', 'true');
+			cy.get('@checkboxes')
+				.eq(1)
+				.click()
+				.should('have.attr', 'data-checked', 'true');
+
+			deleteSelected('Delete Selected Thoughts?');
+
+			const newCardCount = startingBoardCount - 2;
+			cy.get('[data-testid=deleteButton]').should('have.length', newCardCount);
+			ensureAllCheckboxesAreChecked(false);
+
+			cy.get('[data-testid=selectAll]').click();
+
+			ensureAllCheckboxesAreChecked(true);
+			deleteSelected();
+			cy.get('[data-testid=deleteButton]').should('have.length', 0);
+			cy.contains('No archives were found.').should('exist');
+		});
 	});
 
 	context('Action Item Archives', () => {
-		before(() => {
+		let startingActionItemsCount = 0;
+		beforeEach(() => {
 			cy.visit(`/team/${teamCredentials.teamId}/archives`);
 			cy.findByText('Action Items').click();
 			cy.findByText('Action Item Archives').should('exist');
-			cy.findAllByText('action to take').should('have.length', 6);
+
+			cy.get('[data-testid=deleteButton]')
+				.its('length')
+				.then((initialCardCount) => {
+					startingActionItemsCount = initialCardCount;
+					cy.findAllByText('action to take').should(
+						'have.length',
+						startingActionItemsCount
+					);
+				});
 		});
 
 		it('Delete single action item via delete button', () => {
-			cy.get('[data-testid=deleteButton]')
-				.its('length')
-				.then((initialCardCount) => {
-					cy.get('[data-testid=deleteButton]').eq(0).click();
+			cy.get('[data-testid=deleteButton]').eq(0).click();
 
-					cy.contains('Delete Action Item?').should('exist');
+			cy.contains('Delete Action Item?').should('exist');
 
-					cy.intercept(
-						'GET',
-						`/api/team/${teamCredentials.teamId}/action-item?archived=true`
-					).as('getActionItems');
+			cy.intercept(
+				'GET',
+				`/api/team/${teamCredentials.teamId}/action-item?archived=true`
+			).as('getActionItems');
 
-					cy.findByText('Yes, Delete').click();
+			cy.findByText('Yes, Delete').click();
 
-					cy.wait('@getActionItems');
-					cy.get('[data-testid=deleteButton]').should(
-						'have.length',
-						initialCardCount - 1
-					);
-				});
+			cy.wait('@getActionItems');
+			cy.get('[data-testid=deleteButton]').should(
+				'have.length',
+				startingActionItemsCount - 1
+			);
 		});
 
 		it('Delete multiple action items via checkboxes', () => {
-			cy.get('[data-testid=deleteButton]')
-				.its('length')
-				.then((initialCardCount) => {
-					ensureAllCheckboxesAreChecked(false);
+			ensureAllCheckboxesAreChecked(false);
 
-					cy.findByText('Delete Selected').should('not.exist');
+			cy.findByText('Delete Selected').should('not.exist');
 
-					cy.get('@checkboxes')
-						.eq(0)
-						.click()
-						.should('have.attr', 'data-checked', 'true');
-					cy.get('@checkboxes')
-						.eq(1)
-						.click()
-						.should('have.attr', 'data-checked', 'true');
-					cy.get('@checkboxes')
-						.eq(3)
-						.click()
-						.should('have.attr', 'data-checked', 'true');
+			cy.get('@checkboxes')
+				.eq(0)
+				.click()
+				.should('have.attr', 'data-checked', 'true');
+			cy.get('@checkboxes')
+				.eq(1)
+				.click()
+				.should('have.attr', 'data-checked', 'true');
+			cy.get('@checkboxes')
+				.eq(3)
+				.click()
+				.should('have.attr', 'data-checked', 'true');
 
-					deleteSelected();
+			deleteSelected();
 
-					const newCardCount = initialCardCount - 3;
-					cy.get('[data-testid=deleteButton]').should(
-						'have.length',
-						newCardCount
-					);
-					ensureAllCheckboxesAreChecked(false);
+			const newCardCount = startingActionItemsCount - 3;
+			cy.get('[data-testid=deleteButton]').should('have.length', newCardCount);
+			ensureAllCheckboxesAreChecked(false);
 
-					cy.contains('Select All').click();
+			cy.contains('Select All').click();
 
-					ensureAllCheckboxesAreChecked(true);
-					deleteSelected();
-					cy.get('[data-testid=deleteButton]').should('have.length', 0);
-					cy.contains('No archives were found.').should('exist');
-				});
+			ensureAllCheckboxesAreChecked(true);
+			deleteSelected();
+			cy.get('[data-testid=deleteButton]').should('have.length', 0);
+			cy.contains('No archives were found.').should('exist');
 		});
 	});
 
 	it('Download CSV Button', () => {
-		cy.findByText('Retro').click();
+		cy.visit(`/team/${teamCredentials.teamId}`);
 		cy.shouldBeOnRetroPage(teamCredentials.teamId);
 
 		cy.findByText('Download CSV').as('downloadCSVButton').click();
@@ -297,8 +341,8 @@ function ensureAllCheckboxesAreChecked(isChecked: boolean = false) {
 		});
 }
 
-function deleteSelected() {
+function deleteSelected(expectedDeleteButtonText = 'Delete Selected Items?') {
 	cy.findByText('Delete Selected').click();
-	cy.contains('Delete Selected Items?').should('exist');
+	cy.contains(expectedDeleteButtonText).should('exist');
 	cy.findByText('Yes, Delete').click();
 }
