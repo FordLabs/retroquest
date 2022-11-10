@@ -23,10 +23,13 @@ import './TeamHeaderNavLink.scss';
 interface Props {
 	to: string;
 	children: ReactNode;
+	// If the end prop is set to true, it will ensure this component isn't matched as "active"
+	// when its descendant paths are matched.
+	end?: boolean;
 }
 
 function TeamHeaderNavLink(props: Props) {
-	const { to, children } = props;
+	const { to, children, end } = props;
 
 	return (
 		<NavLink
@@ -34,7 +37,7 @@ function TeamHeaderNavLink(props: Props) {
 			className={({ isActive }) =>
 				'team-header-nav-link' + (isActive ? ' selected' : '')
 			}
-			end
+			end={end}
 		>
 			{children}
 		</NavLink>

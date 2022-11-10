@@ -31,12 +31,13 @@ import './TeamHeader.scss';
 type RqLink = {
 	label: 'Retro' | 'Archives' | 'Radiator';
 	path: string;
+	end: boolean;
 };
 
 const LINKS: RqLink[] = [
-	{ label: 'Retro', path: '' },
-	{ label: 'Archives', path: '/archives' },
-	{ label: 'Radiator', path: '/radiator' },
+	{ label: 'Retro', path: '', end: true },
+	{ label: 'Archives', path: '/archives', end: false },
+	{ label: 'Radiator', path: '/radiator', end: true },
 ];
 
 function TeamHeader() {
@@ -58,7 +59,10 @@ function TeamHeader() {
 					<nav className="center-content">
 						{LINKS.map((link) => (
 							<React.Fragment key={link.path}>
-								<TeamHeaderNavLink to={`/team/${team.id}${link.path}`}>
+								<TeamHeaderNavLink
+									to={`/team/${team.id}${link.path}`}
+									end={link.end}
+								>
 									{link.label}
 								</TeamHeaderNavLink>
 							</React.Fragment>
