@@ -30,7 +30,7 @@
 
 		.archives-subheader-link {
 			margin: 0;
-			padding: 0 1.7rem;
+			padding: 0.6rem 1.7rem;
 
 			color: main.$asphalt;
 			font-weight: bold;
@@ -43,7 +43,7 @@
 			}
 
 			&.active {
-				color: main.$teal;
+				border-bottom: 5px solid main.$asphalt;
 			}
 		}
 	}
@@ -60,7 +60,7 @@
 			}
 
 			&.active {
-				color: main.$sea-foam;
+				border-bottom: 5px solid main.$off-white;
 			}
 		}
 	}
