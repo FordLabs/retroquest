@@ -21,6 +21,7 @@ import { useSetRecoilState } from 'recoil';
 import { ModalContentsState } from 'State/ModalContentsState';
 import Board from 'Types/Board';
 
+import CheckboxButton from '../../../../../../Common/ColumnItemButtons/CheckboxButton/CheckboxButton';
 import DeleteBoardConfirmation from '../DeleteBoardConfirmation/DeleteBoardConfirmation';
 
 import './ArchivedBoardTile.scss';
@@ -29,10 +30,18 @@ interface Props {
 	board: Board;
 	onViewBtnClick(board: Board): void;
 	onBoardDeletion(): void;
+	onBoardCheckboxClick(boardId: number, isChecked: boolean): void;
+	isSelected: boolean;
 }
 
 function ArchivedBoardTile(props: Props): JSX.Element {
-	const { board, onViewBtnClick, onBoardDeletion } = props;
+	const {
+		board,
+		onViewBtnClick,
+		onBoardDeletion,
+		onBoardCheckboxClick,
+		isSelected,
+	} = props;
 
 	const setModalContents = useSetRecoilState(ModalContentsState);
 
@@ -51,13 +60,13 @@ function ArchivedBoardTile(props: Props): JSX.Element {
 	return (
 		<li data-testid="boardArchive" className="archived-board-tile">
 			<div>
-				{/*<CheckboxButton*/}
-				{/*	checked={false}*/}
-				{/*	onClick={() => {}}*/}
-				{/*	disableTooltips*/}
-				{/*	className="archived-board-tile-checkbox"*/}
-				{/*	aria-label="Select Board"*/}
-				{/*/>*/}
+				<CheckboxButton
+					checked={isSelected}
+					onClick={() => onBoardCheckboxClick(board.id, !isSelected)}
+					disableTooltips
+					className="archived-board-tile-checkbox"
+					aria-label="Select Board"
+				/>
 				<span className="thought-count">{board.thoughts.length}</span>
 			</div>
 			<span className="date-label">
@@ -69,6 +78,7 @@ function ArchivedBoardTile(props: Props): JSX.Element {
 				</button>
 				<button
 					className="delete-button"
+					data-testid={'deleteButton'}
 					onClick={() => onDeleteBtnClick(board)}
 				>
 					Delete

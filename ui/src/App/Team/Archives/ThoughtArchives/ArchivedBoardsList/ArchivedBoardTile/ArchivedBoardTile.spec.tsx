@@ -28,12 +28,14 @@ import ArchivedBoardTile from './ArchivedBoardTile';
 
 describe('Archived Board Tile', () => {
 	let onViewBtnClick: jest.Mock<any, any>;
+	let onBoardCheckboxClick: jest.Mock<any, any>;
 	let onBoardDeletion: jest.Mock<any, any>;
 	let modalContent: ModalContents | null;
 
 	beforeEach(() => {
 		onViewBtnClick = jest.fn();
 		onBoardDeletion = jest.fn();
+		onBoardCheckboxClick = jest.fn();
 		renderWithRecoilRoot(
 			<>
 				<RecoilObserver
@@ -46,6 +48,8 @@ describe('Archived Board Tile', () => {
 					board={mockBoards[0]}
 					onViewBtnClick={onViewBtnClick}
 					onBoardDeletion={onBoardDeletion}
+					onBoardCheckboxClick={onBoardCheckboxClick}
+					isSelected={false}
 				/>
 			</>
 		);
@@ -66,6 +70,18 @@ describe('Archived Board Tile', () => {
 	it('should trigger onViewButtonClick when clicking "View" button', () => {
 		fireEvent.click(screen.getByText('View'));
 		expect(onViewBtnClick).toHaveBeenCalledWith(mockBoards[0]);
+	});
+
+	it('should render the deletion checkbox as checked if the props say to', () => {
+		expect(screen.getByTestId('checkboxButton')).toHaveAttribute(
+			'data-checked',
+			'false'
+		);
+	});
+
+	it('should send a callback when the checkbox is clicked', () => {
+		fireEvent.click(screen.getByTestId('checkboxButton'));
+		expect(onBoardCheckboxClick).toHaveBeenCalledWith(1, true);
 	});
 
 	it('should open delete archived thoughts confirmation modal when clicking "Delete" button', async () => {

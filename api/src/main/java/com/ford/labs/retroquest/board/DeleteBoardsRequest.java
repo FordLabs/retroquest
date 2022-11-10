@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Ford Motor Company
+ * Copyright (c) 2021 Ford Motor Company
  * All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,42 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@use '../../../Styles/main';
 
-.column-item-button {
-	.checkbox {
-		position: relative;
+package com.ford.labs.retroquest.board;
 
-		.checkbox-border {
-			$size: 15px;
-			width: $size;
-			height: $size;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-			background-color: transparent;
-			border: 2px solid;
-			border-radius: 4px;
-		}
+import java.util.List;
 
-		.fa-check {
-			font-size: 1.1rem;
-
-			position: absolute;
-			top: -1px;
-			left: -1px;
-		}
-	}
-
-	&:not(.disabled) {
-		.checked .checkbox-border {
-			opacity: 0.25;
-		}
-	}
-}
-
-@include main.dark-theme {
-	.column-item-button {
-		.checkbox {
-			color: main.$white;
-		}
-	}
-}
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record DeleteBoardsRequest(List<Long> boardIds) { }

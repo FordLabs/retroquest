@@ -16,6 +16,7 @@
  */
 import React, { useState } from 'react';
 import classnames from 'classnames';
+import CheckboxButton from 'Common/ColumnItemButtons/CheckboxButton/CheckboxButton';
 
 import './ArchivedBoardListHeader.scss';
 
@@ -26,10 +27,12 @@ export enum SortOrder {
 
 interface Props {
 	onDateClick(sortOrder: SortOrder): void;
+	onSelectAllClick(): void;
+	areAllSelected?: boolean;
 }
 
 function ArchivedBoardListHeader(props: Props) {
-	const { onDateClick } = props;
+	const { onDateClick, onSelectAllClick, areAllSelected = false } = props;
 
 	const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.DESC);
 
@@ -43,6 +46,13 @@ function ArchivedBoardListHeader(props: Props) {
 
 	return (
 		<div className="list-header">
+			<CheckboxButton
+				testId="selectAll"
+				disableTooltips
+				onClick={onSelectAllClick}
+				checked={areAllSelected}
+				className="select-all"
+			/>
 			<button
 				className={classnames('sort-button', {
 					'selected-asc': sortOrder === SortOrder.ASC,

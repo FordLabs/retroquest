@@ -37,6 +37,18 @@ describe('Checkbox Button', () => {
 		screen.getByTestId('checkmark');
 	});
 
+	it('should be searchable by custom test id', () => {
+		render(
+			<CheckboxButton
+				checked={true}
+				onClick={jest.fn()}
+				testId={'notanormaltestid'}
+			/>
+		);
+
+		screen.getByTestId('notanormaltestid');
+	});
+
 	it('should show "Close" tooltip when checkbox is not checked', () => {
 		render(<CheckboxButton checked={false} onClick={jest.fn()} />);
 		screen.getByText('Close');

@@ -50,6 +50,24 @@
 		}
 	}
 
+	.delete-selected-button {
+		width: 100%;
+		height: 2.25rem;
+		margin-bottom: 1rem;
+
+		color: main.$white;
+		font-weight: 700;
+		font-size: 1rem;
+
+		background-color: main.$red;
+		border-radius: 3px;
+
+		&:focus,
+		&:hover {
+			background-color: main.$dark-red;
+		}
+	}
+
 	.list {
 		width: 100%;
 		margin: 0 auto 1rem;
@@ -60,6 +78,16 @@
 	.archived-boards-list {
 		.thoughts-archive-title {
 			color: main.$off-white;
+		}
+
+		.delete-selected-button {
+			color: main.$off-white;
+			background-color: main.$dark-red;
+
+			&:focus,
+			&:hover {
+				background-color: main.$red;
+			}
 		}
 	}
 }
