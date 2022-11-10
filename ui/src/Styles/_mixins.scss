@@ -68,6 +68,16 @@
 	}
 }
 
+@mixin box-shadow($size, $color) {
+	/* stylelint-disable */
+	box-shadow: 0 0 0 $size $color;
+	-webkit-box-shadow: 0 0 0 $size $color;
+	-moz-box-shadow: 0 0 0 $size $color;
+
+	-webkit-appearance: none;
+	/* stylelint-enable */
+}
+
 @mixin site-max-width() {
 	max-width: sizes.$max-width;
 	margin: 0 auto;

@@ -47,7 +47,7 @@
 		border: 0;
 		border-radius: 3px;
 		outline: none;
-		box-shadow: 0 0 0 1px main.$asphalt;
+		@include main.box-shadow(1px, main.$asphalt);
 
 		@include main.breakpoint-medium {
 			font-size: 0.9rem;
@@ -58,7 +58,7 @@
 		}
 
 		&:focus {
-			box-shadow: 0 0 0 2px main.$teal;
+			@include main.box-shadow(2px, main.$teal);
 		}
 	}
 
@@ -72,7 +72,7 @@
 
 	&.invalid {
 		.input-element {
-			box-shadow: 0 0 0 2px main.$red;
+			@include main.box-shadow(2px, main.$red);
 		}
 	}
 }
@@ -81,12 +81,11 @@
 	.input-group {
 		.input-element {
 			color: main.$off-white;
-
 			background-color: main.$asphalt;
-			box-shadow: 0 0 0 1px main.$gray-3;
+			@include main.box-shadow(1px, main.$gray-3);
 
 			&:focus {
-				box-shadow: 0 0 0 2px main.$sea-foam;
+				@include main.box-shadow(2px, main.$sea-foam);
 			}
 		}
 
@@ -96,7 +95,7 @@
 
 		&.invalid {
 			.input-element {
-				box-shadow: 0 0 0 2px main.$light-red;
+				@include main.box-shadow(2px, main.$light-red);
 			}
 		}
 	}

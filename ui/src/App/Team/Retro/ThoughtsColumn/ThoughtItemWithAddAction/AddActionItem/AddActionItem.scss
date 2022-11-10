@@ -23,6 +23,32 @@
 	.column-item-button-group {
 		border: 0;
 	}
+
+	.column-item-button {
+		&.confirm {
+			background-color: main.$yellow;
+
+			&:focus,
+			&:hover {
+				background-color: rgba(main.$yellow, 0.6);
+			}
+		}
+	}
+}
+
+@include main.dark-theme {
+	.action-item.add-action-item {
+		.column-item-button {
+			&.confirm {
+				background-color: main.$dark-yellow;
+
+				&:focus,
+				&:hover {
+					color: main.$white;
+				}
+			}
+		}
+	}
 }
 
 .shake {
