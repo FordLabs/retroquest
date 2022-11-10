@@ -18,13 +18,13 @@
 import React, { ButtonHTMLAttributes } from 'react';
 import classnames from 'classnames';
 
-import './ButtonSubheader.scss';
+import './SubheaderButton.scss';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 	fontAwesomeIconClasses?: string;
 }
 
-function ButtonSubheader(props: Props) {
+function SubheaderButton(props: Props) {
 	const { fontAwesomeIconClasses, className, children, ...buttonProps } = props;
 
 	return (
@@ -43,4 +43,4 @@ function ButtonSubheader(props: Props) {
 	);
 }
 
-export default ButtonSubheader;
+export default SubheaderButton;

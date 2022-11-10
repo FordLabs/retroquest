@@ -15,42 +15,20 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import React from 'react';
 import LinkTertiary from 'Common/LinkTertiary/LinkTertiary';
 
 import './ArchivesSubheader.scss';
 
 function ArchivesSubheader(): JSX.Element {
-	// const setArchivedBoardState = useSetRecoilState(ArchivedBoardState);
-
-	// function handleThoughtsClick(): void {
-	// 	setArchivedBoardState(null);
-	// }
-
 	return (
 		<div className="archives-subheader">
 			<ul className="archives-subheader-links">
 				<li>
 					<LinkTertiary to="thoughts">Thoughts</LinkTertiary>
-					{/*<ButtonSubheader*/}
-					{/*	className={classNames({*/}
-					{/*		active: !showActionItems,*/}
-					{/*	})}*/}
-					{/*	onClick={handleThoughtsClick}*/}
-					{/*>*/}
-					{/*	Thoughts*/}
-					{/*</ButtonSubheader>*/}
 				</li>
 				<li>
 					<LinkTertiary to="action-items">Action Items</LinkTertiary>
-					{/*<ButtonSubheader*/}
-					{/*	className={classNames({*/}
-					{/*		active: showActionItems,*/}
-					{/*	})}*/}
-					{/*	onClick={() => setShowActionItems(true)}*/}
-					{/*>*/}
-					{/*	Action Items*/}
-					{/*</ButtonSubheader>*/}
 				</li>
 			</ul>
 		</div>

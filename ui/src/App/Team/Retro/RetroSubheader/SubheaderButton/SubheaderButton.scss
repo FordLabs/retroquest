@@ -15,11 +15,44 @@
  * limitations under the License.
  */
 
-import { atom } from 'recoil';
+@use '../../../../../Styles/main';
 
-import Board from '../Types/Board';
+.subheader-button {
+	@include main.button-defaults;
 
-export const ArchivedBoardState = atom<Board | null>({
-	key: 'ArchivedBoardState',
-	default: null,
-});
+	min-width: auto;
+	height: 2.81rem;
+	padding: 0 1.7rem;
+
+	&:focus,
+	&:hover {
+		color: main.$teal;
+	}
+
+	.button-icon {
+		display: block;
+
+		@include main.breakpoint-medium {
+			display: none;
+		}
+	}
+
+	.button-text {
+		display: none;
+
+		@include main.breakpoint-medium {
+			display: initial;
+		}
+	}
+}
+
+@include main.dark-theme {
+	.subheader-button {
+		color: main.$off-white;
+
+		&:focus,
+		&:hover {
+			color: main.$sea-foam;
+		}
+	}
+}
