@@ -23,11 +23,10 @@ import BoardService, {
 	SortByType,
 	SortOrder,
 } from 'Services/Api/BoardService';
+import { ModalContentsState } from 'State/ModalContentsState';
 import { TeamState } from 'State/TeamState';
 import Board from 'Types/Board';
 
-import { ModalContentsState } from '../../../../../State/ModalContentsState';
-import DeleteMultipleActionItemsConfirmation from '../../ActionItemArchives/DeleteMultipleActionItemsConfirmation/DeleteMultipleActionItemsConfirmation';
 import Pagination from '../../Pagination/Pagination';
 
 import ArchivedBoardListHeader from './ArchivedBoardsListHeader/ArchivedBoardListHeader';
@@ -136,8 +135,8 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 					/>
 					{selectedBoardIds.length > 0 && (
 						<button
-							className={'delete-selected-button'}
-							data-testid={'deleteSelectedButton'}
+							className="delete-selected-button"
+							data-testid="deleteSelectedButton"
 							onClick={onDeleteSelectedBtnClick}
 						>
 							Delete Selected
