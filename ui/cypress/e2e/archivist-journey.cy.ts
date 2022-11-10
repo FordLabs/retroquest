@@ -85,7 +85,7 @@ describe('Archivist Journey', () => {
 			cy.findAllByText('Delete').should('have.length', startingBoardCount - 1);
 		});
 
-		it.only('Delete Several Thought Archives via checklist', () => {
+		it('Delete Several Thought Archives via checklist', () => {
 			ensureAllCheckboxesAreChecked(false);
 
 			cy.findByText('Delete Selected').should('not.exist');
