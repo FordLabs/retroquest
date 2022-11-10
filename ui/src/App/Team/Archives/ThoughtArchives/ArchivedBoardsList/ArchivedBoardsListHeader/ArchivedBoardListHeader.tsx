@@ -16,8 +16,7 @@
  */
 import React, { useState } from 'react';
 import classnames from 'classnames';
-
-import { CheckboxButton } from '../../../../../../Common/ColumnItemButtons';
+import CheckboxButton from 'Common/ColumnItemButtons/CheckboxButton/CheckboxButton';
 
 import './ArchivedBoardListHeader.scss';
 
@@ -48,13 +47,11 @@ function ArchivedBoardListHeader(props: Props) {
 	return (
 		<div className="list-header">
 			<CheckboxButton
-				testId={'selectAll'}
-				disableTooltips={true}
-				onClick={() => {
-					onSelectAllClick();
-				}}
+				testId="selectAll"
+				disableTooltips
+				onClick={onSelectAllClick}
 				checked={areAllSelected}
-				className={'select-all'}
+				className="select-all"
 			/>
 			<button
 				className={classnames('sort-button', {
