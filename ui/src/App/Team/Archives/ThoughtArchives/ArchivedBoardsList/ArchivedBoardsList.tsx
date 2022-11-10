@@ -37,11 +37,7 @@ import './ArchivedBoardsList.scss';
 
 const PAGE_SIZE = 20;
 
-interface Props {
-	onBoardSelection(board: Board): void;
-}
-
-function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
+function ArchivedBoardsList(): JSX.Element {
 	const [boards, setBoards] = useState<Board[]>([]);
 	const [paginationData, setPaginationData] = useState<PaginationData>();
 	const team = useRecoilValue(TeamState);
@@ -149,7 +145,6 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 									key={board.teamId + board.dateCreated + board.id}
 									board={board}
 									isSelected={selectedBoardIds.includes(board.id)}
-									onViewBtnClick={onBoardSelection}
 									onBoardDeletion={onBoardDeletion}
 									onBoardCheckboxClick={onBoardCheckboxClick}
 								/>

@@ -16,6 +16,7 @@
  */
 
 import * as React from 'react';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { screen, waitFor, within } from '@testing-library/react';
 import { mockTeam } from 'Services/Api/__mocks__/TeamService';
 import BoardService from 'Services/Api/BoardService';
@@ -34,7 +35,7 @@ describe('Archived Board', () => {
 	});
 
 	it('should display columns', async () => {
-		await setupComponent(mockFullBoard.id);
+		await renderArchivedBoard(mockFullBoard.id);
 		const columns = getColumns();
 		expect(within(columns[0]).getByText('Happy')).toBeDefined();
 		expect(within(columns[1]).getByText('Confused')).toBeDefined();
@@ -42,7 +43,7 @@ describe('Archived Board', () => {
 	});
 
 	it('should display thoughts for column', async () => {
-		await setupComponent(mockFullBoard.id);
+		await renderArchivedBoard(mockFullBoard.id);
 		const columns = getColumns();
 		expect(within(columns[0]).getByText('I am a message4')).toBeDefined();
 		expect(within(columns[0]).getByText('I am a message1')).toBeDefined();
@@ -51,26 +52,26 @@ describe('Archived Board', () => {
 	});
 
 	it('should display number of thoughts per column', async () => {
-		await setupComponent(mockFullBoard.id);
+		await renderArchivedBoard(mockFullBoard.id);
 		const columns = getColumns();
 		expect(within(columns[0]).getByText('2')).toBeDefined();
 		expect(within(columns[1]).getByText('2')).toBeDefined();
 	});
 
 	it('should display thought heart count', async () => {
-		await setupComponent(mockFullBoard.id);
+		await renderArchivedBoard(mockFullBoard.id);
 		const thought = screen.getByTestId('thought100');
 		expect(within(thought).getByText('20')).toBeDefined();
 	});
 
 	it('should display Not Discussed if thought was not discussed', async () => {
-		await setupComponent(mockFullBoard.id);
+		await renderArchivedBoard(mockFullBoard.id);
 		const thought = screen.getByTestId('thought100');
 		expect(within(thought).getByText('Not Discussed')).toBeDefined();
 	});
 
 	it('should display Discussed if thought was discussed', async () => {
-		await setupComponent(mockFullBoard.id);
+		await renderArchivedBoard(mockFullBoard.id);
 		const thought = screen.getByTestId('thought102');
 		expect(within(thought).getByText('Discussed')).toBeDefined();
 	});
@@ -79,7 +80,7 @@ describe('Archived Board', () => {
 		BoardService.getBoard = jest
 			.fn()
 			.mockResolvedValue(singleColumnFullRetroBoard);
-		await setupComponent(singleColumnFullRetroBoard.id);
+		await renderArchivedBoard(singleColumnFullRetroBoard.id);
 		const thoughts = screen.getAllByTestId(/thought/);
 		expect(within(thoughts[0]).getByText('I am a message4')).toBeDefined();
 		expect(within(thoughts[1]).getByText('I am a message1')).toBeDefined();
@@ -88,10 +89,22 @@ describe('Archived Board', () => {
 	});
 });
 
-async function setupComponent(boardId: number) {
-	renderWithRecoilRoot(<ArchivedBoard boardId={boardId} />, ({ set }) => {
-		set(TeamState, mockTeam);
-	});
+async function renderArchivedBoard(boardId: number) {
+	renderWithRecoilRoot(
+		<MemoryRouter
+			initialEntries={[`/team/${mockTeam.id}/archives/thoughts/${boardId}`]}
+		>
+			<Routes>
+				<Route
+					path="/team/:teamId/archives/thoughts/:boardId"
+					element={<ArchivedBoard />}
+				/>
+			</Routes>
+		</MemoryRouter>,
+		({ set }) => {
+			set(TeamState, mockTeam);
+		}
+	);
 
 	await waitFor(() =>
 		expect(BoardService.getBoard).toHaveBeenCalledWith(mockTeam.id, boardId)

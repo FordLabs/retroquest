@@ -16,49 +16,41 @@
  */
 
 import * as React from 'react';
-import classNames from 'classnames';
-import ButtonSubheader from 'Common/ButtonSubheader/ButtonSubheader';
-import { useSetRecoilState } from 'recoil';
-import { ArchivedBoardState } from 'State/ArchivedBoardState';
+import LinkTertiary from 'Common/LinkTertiary/LinkTertiary';
 
 import './ArchivesSubheader.scss';
 
-interface Props {
-	showActionItems: boolean;
-	setShowActionItems(showActionItems: boolean): void;
-}
+function ArchivesSubheader(): JSX.Element {
+	// const setArchivedBoardState = useSetRecoilState(ArchivedBoardState);
 
-function ArchivesSubheader(props: Props): JSX.Element {
-	const { showActionItems, setShowActionItems } = props;
-	const setArchivedBoardState = useSetRecoilState(ArchivedBoardState);
-
-	function handleThoughtsClick(): void {
-		setArchivedBoardState(null);
-		setShowActionItems(false);
-	}
+	// function handleThoughtsClick(): void {
+	// 	setArchivedBoardState(null);
+	// }
 
 	return (
 		<div className="archives-subheader">
 			<ul className="archives-subheader-links">
 				<li>
-					<ButtonSubheader
-						className={classNames({
-							active: !showActionItems,
-						})}
-						onClick={handleThoughtsClick}
-					>
-						Thoughts
-					</ButtonSubheader>
+					<LinkTertiary to="thoughts">Thoughts</LinkTertiary>
+					{/*<ButtonSubheader*/}
+					{/*	className={classNames({*/}
+					{/*		active: !showActionItems,*/}
+					{/*	})}*/}
+					{/*	onClick={handleThoughtsClick}*/}
+					{/*>*/}
+					{/*	Thoughts*/}
+					{/*</ButtonSubheader>*/}
 				</li>
 				<li>
-					<ButtonSubheader
-						className={classNames({
-							active: showActionItems,
-						})}
-						onClick={() => setShowActionItems(true)}
-					>
-						Action Items
-					</ButtonSubheader>
+					<LinkTertiary to="action-items">Action Items</LinkTertiary>
+					{/*<ButtonSubheader*/}
+					{/*	className={classNames({*/}
+					{/*		active: showActionItems,*/}
+					{/*	})}*/}
+					{/*	onClick={() => setShowActionItems(true)}*/}
+					{/*>*/}
+					{/*	Action Items*/}
+					{/*</ButtonSubheader>*/}
 				</li>
 			</ul>
 		</div>
