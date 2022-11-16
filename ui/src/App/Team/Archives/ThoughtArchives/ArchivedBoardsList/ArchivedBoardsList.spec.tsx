@@ -16,13 +16,8 @@
  */
 
 import React from 'react';
-import {
-	fireEvent,
-	getByTestId,
-	screen,
-	waitFor,
-	within,
-} from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {
 	mockBoard1,
@@ -56,25 +51,25 @@ describe('Archived Boards List', () => {
 	});
 
 	it('should display a list of completed retros', async () => {
-		await setUpThoughtArchives();
+		await renderArchivedBoardsList();
 		expect(screen.getByText(oldestDate)).toBeDefined();
 		expect(screen.getByText(newestDate)).toBeDefined();
 	});
 
 	describe('Pagination', () => {
 		it('should display text telling user info about what is on the page', async () => {
-			await setUpThoughtArchives();
+			await renderArchivedBoardsList();
 			expect(screen.getByText('(showing 1-20 of 23)')).toBeDefined();
 		});
 
 		it('should start on first paginated page', async () => {
-			await setUpThoughtArchives();
+			await renderArchivedBoardsList();
 			const paginationButton = screen.getAllByText('1').slice(-1)[0];
 			expect(paginationButton).toHaveClass('active');
 		});
 
 		it('should paginate to second page with default sorting of date in descending order', async () => {
-			await setUpThoughtArchives();
+			await renderArchivedBoardsList();
 			const pagination2Button = screen.getAllByText('2').slice(-1)[0];
 			expect(pagination2Button).not.toHaveClass('active');
 			expect(screen.getAllByTestId('boardArchive')).toHaveLength(2);
@@ -99,7 +94,7 @@ describe('Archived Boards List', () => {
 		});
 
 		it('should paginate to second page with sorting of date in ascending order', async () => {
-			await setUpThoughtArchives();
+			await renderArchivedBoardsList();
 			const pagination2Button = screen.getAllByText('2').slice(-1)[0];
 			expect(pagination2Button).not.toHaveClass('active');
 			expect(screen.getAllByTestId('boardArchive')).toHaveLength(2);
@@ -135,7 +130,7 @@ describe('Archived Boards List', () => {
 			BoardService.getBoards = jest
 				.fn()
 				.mockResolvedValue(getBoardsResponse([mockBoard2, mockBoard1]));
-			await setUpThoughtArchives();
+			await renderArchivedBoardsList();
 
 			expect(BoardService.getBoards).toHaveBeenCalledWith(
 				mockTeam.id,
@@ -151,7 +146,7 @@ describe('Archived Boards List', () => {
 		});
 
 		it('should be sorted by date ascending when Date clicked', async () => {
-			await setUpThoughtArchives();
+			await renderArchivedBoardsList();
 
 			BoardService.getBoards = jest
 				.fn()
@@ -175,7 +170,7 @@ describe('Archived Boards List', () => {
 		});
 
 		it('should be sorted by date descending when Date clicked and already sorted by ascending', async () => {
-			await setUpThoughtArchives();
+			await renderArchivedBoardsList();
 			clickDateSortingButton();
 
 			BoardService.getBoards = jest
@@ -202,11 +197,11 @@ describe('Archived Boards List', () => {
 
 	describe('Bulk Deletion', () => {
 		it('should have a Select All checkbox', async () => {
-			await setUpThoughtArchives();
+			await renderArchivedBoardsList();
 			screen.getByTestId('selectAll');
 		});
 		it('should select all when Select All is checked', async () => {
-			await setUpThoughtArchives();
+			await renderArchivedBoardsList();
 			fireEvent.click(screen.getByTestId('selectAll'));
 			const allCheckboxes = screen.getAllByTestId('checkboxButton');
 			expect(allCheckboxes.length).toEqual(2);
@@ -215,7 +210,7 @@ describe('Archived Boards List', () => {
 			});
 		});
 		it('should deselect all when Select All is unchecked', async () => {
-			await setUpThoughtArchives();
+			await renderArchivedBoardsList();
 			fireEvent.click(screen.getByTestId('selectAll'));
 			fireEvent.click(screen.getByTestId('selectAll'));
 			const allCheckboxes = screen.getAllByTestId('checkboxButton');
@@ -226,7 +221,7 @@ describe('Archived Boards List', () => {
 		});
 
 		it('should indicate when all are selected, even if via other means than Select All', async () => {
-			await setUpThoughtArchives();
+			await renderArchivedBoardsList();
 			fireEvent.click(screen.getByTestId('selectAll'));
 			expect(screen.getByTestId('selectAll')).toHaveAttribute(
 				'data-checked',
@@ -245,7 +240,7 @@ describe('Archived Boards List', () => {
 		});
 
 		it('should make a Delete Selected button appear if a checkbox is checked', async () => {
-			await setUpThoughtArchives();
+			await renderArchivedBoardsList();
 			fireEvent.click(screen.getAllByTestId('checkboxButton')[0]);
 			await waitFor(() => {
 				expect(screen.getByText('Delete Selected')).toBeInTheDocument();
@@ -256,7 +251,7 @@ describe('Archived Boards List', () => {
 	it('should show "No Archives" message when no archived thoughts are present', async () => {
 		BoardService.getBoards = jest.fn().mockResolvedValue(getBoardsResponse([]));
 
-		renderWithRecoilRoot(<ArchivedBoardsList onBoardSelection={jest.fn()} />);
+		renderWithRecoilRoot(<ArchivedBoardsList />);
 
 		screen.getByText('No archives were found.');
 		const description = screen.getByTestId('notFoundSectionDescription');
@@ -266,9 +261,11 @@ describe('Archived Boards List', () => {
 	});
 });
 
-const setUpThoughtArchives = async () => {
+const renderArchivedBoardsList = async () => {
 	renderWithRecoilRoot(
-		<ArchivedBoardsList onBoardSelection={jest.fn()} />,
+		<MemoryRouter>
+			<ArchivedBoardsList />
+		</MemoryRouter>,
 		({ set }) => {
 			set(TeamState, mockTeam);
 		}

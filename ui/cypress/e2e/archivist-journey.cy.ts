@@ -36,15 +36,18 @@ describe('Archivist Journey', () => {
 		createAndArchiveBoard(teamCredentials, 4);
 		createAndArchiveBoard(teamCredentials, 4);
 	});
+
 	context('Thought Archives', () => {
 		let startingBoardCount: number;
+
 		beforeEach(() => {
 			cy.intercept(
 				'GET',
 				`/api/team/${teamCredentials.teamId}/boards?pageIndex=0&pageSize=20&sortBy=dateCreated&sortOrder=DESC`
 			).as('getBoardsInDescOrder');
 
-			cy.visit(`/team/${teamCredentials.teamId}/archives`);
+			cy.visit(`/team/${teamCredentials.teamId}/archives/thoughts`);
+
 			cy.wait('@getBoardsInDescOrder');
 			shouldBeOnArchivesPage(teamCredentials.teamId);
 			cy.get('[data-testid=deleteButton]')
@@ -54,18 +57,25 @@ describe('Archivist Journey', () => {
 				});
 		});
 
-		it('Should be able to see archived thoughts', () => {
+		it('Should be able to see all thoughts for a single archived board', () => {
 			cy.findAllByText('View')
 				.should('have.length', startingBoardCount)
 				.eq(0)
 				.click();
+
+			cy.location().should((loc) => {
+				expect(loc.pathname).to.include(
+					`/team/${teamCredentials.teamId}/archives/thoughts/`
+				);
+			});
+
 			cy.findByText('message1').should('exist');
 			cy.findByText('message2').should('exist');
 			cy.findByText('message3').should('exist');
 			cy.findByText('message4').should('exist');
 		});
 
-		it('Delete single item from thought archives via delete button', () => {
+		it('Delete single thought archive via delete button', () => {
 			cy.findByText('Date').click();
 
 			cy.findAllByText('Delete')
@@ -85,7 +95,7 @@ describe('Archivist Journey', () => {
 			cy.findAllByText('Delete').should('have.length', startingBoardCount - 1);
 		});
 
-		it('Delete Several Thought Archives via checklist', () => {
+		it('Delete several thought archives via checklist', () => {
 			ensureAllCheckboxesAreChecked(false);
 
 			cy.findByText('Delete Selected').should('not.exist');
@@ -116,8 +126,9 @@ describe('Archivist Journey', () => {
 
 	context('Action Item Archives', () => {
 		let startingActionItemsCount = 0;
+
 		beforeEach(() => {
-			cy.visit(`/team/${teamCredentials.teamId}/archives`);
+			cy.visit(`/team/${teamCredentials.teamId}/archives/action-items`);
 			cy.findByText('Action Items').click();
 			cy.findByText('Action Item Archives').should('exist');
 
@@ -206,7 +217,9 @@ function shouldBeOnArchivesPage(teamId: string) {
 	cy.log('**Should be on Archives page**');
 
 	const archivesPageUrl =
-		Cypress.config().baseUrl + getArchivesPagePathWithTeamId(teamId);
+		Cypress.config().baseUrl +
+		getArchivesPagePathWithTeamId(teamId) +
+		'/thoughts';
 	cy.url().should('eq', archivesPageUrl);
 
 	cy.findByText('Thought Archives').should('exist');

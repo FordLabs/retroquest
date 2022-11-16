@@ -15,50 +15,24 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
-import classNames from 'classnames';
-import ButtonSubheader from 'Common/ButtonSubheader/ButtonSubheader';
-import { useSetRecoilState } from 'recoil';
-import { ArchivedBoardState } from 'State/ArchivedBoardState';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 
 import './ArchivesSubheader.scss';
 
-interface Props {
-	showActionItems: boolean;
-	setShowActionItems(showActionItems: boolean): void;
-}
-
-function ArchivesSubheader(props: Props): JSX.Element {
-	const { showActionItems, setShowActionItems } = props;
-	const setArchivedBoardState = useSetRecoilState(ArchivedBoardState);
-
-	function handleThoughtsClick(): void {
-		setArchivedBoardState(null);
-		setShowActionItems(false);
-	}
-
+function ArchivesSubheader(): JSX.Element {
 	return (
 		<div className="archives-subheader">
 			<ul className="archives-subheader-links">
 				<li>
-					<ButtonSubheader
-						className={classNames({
-							active: !showActionItems,
-						})}
-						onClick={handleThoughtsClick}
-					>
+					<NavLink to="thoughts" className="archives-subheader-link">
 						Thoughts
-					</ButtonSubheader>
+					</NavLink>
 				</li>
 				<li>
-					<ButtonSubheader
-						className={classNames({
-							active: showActionItems,
-						})}
-						onClick={() => setShowActionItems(true)}
-					>
+					<NavLink to="action-items" className="archives-subheader-link">
 						Action Items
-					</ButtonSubheader>
+					</NavLink>
 				</li>
 			</ul>
 		</div>
