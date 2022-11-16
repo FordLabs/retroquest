@@ -20,7 +20,7 @@
 .archived-boards-list {
 	@include main.site-max-width;
 	max-width: 46.75rem;
-	margin: 0 auto 3.125rem;
+	padding: 3.125rem;
 
 	.thoughts-archive-title {
 		display: flex;
