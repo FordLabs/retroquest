@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import boardService from 'Services/Api/BoardService';
 import { TeamState } from 'State/TeamState';
-import Board from 'Types/Board';
 import { Column } from 'Types/Column';
 import Retro from 'Types/Retro';
 import Thought from 'Types/Thought';
@@ -27,13 +27,9 @@ import ArchivedBoardColumn from './ArchivedBoardColumn/ArchivedBoardColumn';
 
 import './ArchivedBoard.scss';
 
-interface Props {
-	board?: Board;
-	boardId: number;
-}
+function ArchivedBoard(): JSX.Element {
+	const { boardId } = useParams();
 
-function ArchivedBoard(props: Props): JSX.Element {
-	const { boardId } = props;
 	const team = useRecoilValue(TeamState);
 	const [fullBoard, setFullBoard] = useState<Retro>();
 
@@ -51,7 +47,8 @@ function ArchivedBoard(props: Props): JSX.Element {
 	}
 
 	useEffect(() => {
-		if (team.id) boardService.getBoard(team.id, boardId).then(setFullBoard);
+		if (team.id && boardId)
+			boardService.getBoard(team.id, parseInt(boardId, 10)).then(setFullBoard);
 	}, [boardId, setFullBoard, team.id]);
 
 	return (

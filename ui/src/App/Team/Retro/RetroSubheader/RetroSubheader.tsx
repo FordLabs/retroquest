@@ -16,7 +16,7 @@
  */
 
 import React from 'react';
-import ButtonSubheader from 'Common/ButtonSubheader/ButtonSubheader';
+import SubheaderButton from 'App/Team/Retro/RetroSubheader/SubheaderButton/SubheaderButton';
 import Timer from 'Common/Timer/Timer';
 import fileSaver from 'file-saver';
 import useAuth from 'Hooks/useAuth';
@@ -48,7 +48,7 @@ function RetroSubheader(): JSX.Element {
 				<Timer />
 				<ul className="retro-subheader-links">
 					<li>
-						<ButtonSubheader
+						<SubheaderButton
 							onClick={() =>
 								setModalContents({
 									component: <FeedbackForm />,
@@ -58,23 +58,23 @@ function RetroSubheader(): JSX.Element {
 							fontAwesomeIconClasses="far fa-comments"
 						>
 							Give Feedback
-						</ButtonSubheader>
+						</SubheaderButton>
 					</li>
 					<li>
-						<ButtonSubheader
+						<SubheaderButton
 							onClick={downloadCSV}
 							fontAwesomeIconClasses="fas fa-download"
 						>
 							Download CSV
-						</ButtonSubheader>
+						</SubheaderButton>
 					</li>
 					<li>
-						<ButtonSubheader
+						<SubheaderButton
 							onClick={logout}
 							fontAwesomeIconClasses="fa-solid fa-arrow-right-from-bracket"
 						>
 							Log Out
-						</ButtonSubheader>
+						</SubheaderButton>
 					</li>
 					<li>
 						<ArchiveRetroButton />

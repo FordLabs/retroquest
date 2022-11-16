@@ -38,7 +38,10 @@ import PageNotFoundPage from './PageNotFound/PageNotFoundPage';
 import PasswordResetRequestPage from './PasswordResetRequest/PasswordResetRequestPage';
 import RecoverTeamNamePage from './RecoverTeamName/RecoverTeamNamePage';
 import ResetPasswordPage from './ResetPassword/ResetPasswordPage';
+import ActionItemArchives from './Team/Archives/ActionItemArchives/ActionItemArchives';
 import ArchivesPage from './Team/Archives/ArchivesPage';
+import ArchivedBoard from './Team/Archives/ThoughtArchives/ArchivedBoard/ArchivedBoard';
+import ArchivedBoardsList from './Team/Archives/ThoughtArchives/ArchivedBoardsList/ArchivedBoardsList';
 import RadiatorPage from './Team/Radiator/RadiatorPage';
 import RetroPage from './Team/Retro/RetroPage';
 import TeamPages from './Team/TeamPages';
@@ -66,7 +69,12 @@ function App() {
 				<Route path="/create" element={<CreateTeamPage />} />
 				<Route path="/team/:teamId" element={<TeamPages />}>
 					<Route path="" element={<RetroPage />} />
-					<Route path="archives" element={<ArchivesPage />} />
+					<Route path="archives" element={<ArchivesPage />}>
+						<Route path="" element={<Navigate replace to="thoughts" />} />
+						<Route path="thoughts" element={<ArchivedBoardsList />} />
+						<Route path="thoughts/:boardId" element={<ArchivedBoard />} />
+						<Route path="action-items" element={<ActionItemArchives />} />
+					</Route>
 					<Route path="radiator" element={<RadiatorPage />} />
 				</Route>
 				{email_is_enabled && (

@@ -25,8 +25,6 @@ import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
 import { TeamState } from 'State/TeamState';
 import { RecoilObserver } from 'Utils/RecoilObserver';
 
-import DeleteBoardConfirmation from '../DeleteBoardConfirmation/DeleteBoardConfirmation';
-
 import DeleteBoardsConfirmation from './DeleteBoardsConfirmation';
 
 jest.mock('Services/Api/BoardService');

@@ -16,6 +16,7 @@
  */
 
 import * as React from 'react';
+import { MemoryRouter } from 'react-router-dom';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { mockBoards } from 'Services/Api/__mocks__/BoardService';
 import { ModalContents, ModalContentsState } from 'State/ModalContentsState';
@@ -27,17 +28,15 @@ import DeleteBoardConfirmation from '../DeleteBoardConfirmation/DeleteBoardConfi
 import ArchivedBoardTile from './ArchivedBoardTile';
 
 describe('Archived Board Tile', () => {
-	let onViewBtnClick: jest.Mock<any, any>;
 	let onBoardCheckboxClick: jest.Mock<any, any>;
 	let onBoardDeletion: jest.Mock<any, any>;
 	let modalContent: ModalContents | null;
 
 	beforeEach(() => {
-		onViewBtnClick = jest.fn();
 		onBoardDeletion = jest.fn();
 		onBoardCheckboxClick = jest.fn();
 		renderWithRecoilRoot(
-			<>
+			<MemoryRouter>
 				<RecoilObserver
 					recoilState={ModalContentsState}
 					onChange={(value: ModalContents) => {
@@ -46,12 +45,11 @@ describe('Archived Board Tile', () => {
 				/>
 				<ArchivedBoardTile
 					board={mockBoards[0]}
-					onViewBtnClick={onViewBtnClick}
 					onBoardDeletion={onBoardDeletion}
 					onBoardCheckboxClick={onBoardCheckboxClick}
 					isSelected={false}
 				/>
-			</>
+			</MemoryRouter>
 		);
 	});
 
@@ -67,9 +65,9 @@ describe('Archived Board Tile', () => {
 		screen.getByText('View');
 	});
 
-	it('should trigger onViewButtonClick when clicking "View" button', () => {
-		fireEvent.click(screen.getByText('View'));
-		expect(onViewBtnClick).toHaveBeenCalledWith(mockBoards[0]);
+	it('should go to single archived board on "View" button click', () => {
+		const viewButton = screen.getByText('View');
+		expect(viewButton).toHaveAttribute('href', `/${mockBoards[0].id}`);
 	});
 
 	it('should render the deletion checkbox as checked if the props say to', () => {

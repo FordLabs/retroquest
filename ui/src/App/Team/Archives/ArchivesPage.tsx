@@ -15,23 +15,17 @@
  * limitations under the License.
  */
 
-import React, { useState } from 'react';
+import React from 'react';
+import { Outlet } from 'react-router-dom';
 
-import ActionItemArchives from './ActionItemArchives/ActionItemArchives';
 import ArchivesSubheader from './ArchivesSubheader/ArchivesSubheader';
-import ThoughtArchives from './ThoughtArchives/ThoughtArchives';
 
 function ArchivesPage(): JSX.Element {
-	const [showActionItems, setShowActionItems] = useState<boolean>(false);
-
 	return (
 		<div className="archives-page">
-			<ArchivesSubheader
-				showActionItems={showActionItems}
-				setShowActionItems={setShowActionItems}
-			/>
+			<ArchivesSubheader />
 			<div className="archives-page-content">
-				{showActionItems ? <ActionItemArchives /> : <ThoughtArchives />}
+				<Outlet />
 			</div>
 		</div>
 	);

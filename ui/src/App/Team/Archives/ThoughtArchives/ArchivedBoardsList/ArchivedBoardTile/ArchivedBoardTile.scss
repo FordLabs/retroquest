@@ -58,6 +58,9 @@
 	}
 
 	.view-button {
+		color: main.$asphalt;
+		text-decoration: none;
+
 		&:hover {
 			color: main.$teal;
 		}

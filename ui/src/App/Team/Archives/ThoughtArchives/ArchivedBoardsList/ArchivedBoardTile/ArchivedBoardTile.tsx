@@ -16,32 +16,26 @@
  */
 
 import * as React from 'react';
+import { Link } from 'react-router-dom';
+import CheckboxButton from 'Common/ColumnItemButtons/CheckboxButton/CheckboxButton';
 import moment from 'moment';
 import { useSetRecoilState } from 'recoil';
 import { ModalContentsState } from 'State/ModalContentsState';
 import Board from 'Types/Board';
 
-import CheckboxButton from '../../../../../../Common/ColumnItemButtons/CheckboxButton/CheckboxButton';
 import DeleteBoardConfirmation from '../DeleteBoardConfirmation/DeleteBoardConfirmation';
 
 import './ArchivedBoardTile.scss';
 
 interface Props {
 	board: Board;
-	onViewBtnClick(board: Board): void;
 	onBoardDeletion(): void;
 	onBoardCheckboxClick(boardId: number, isChecked: boolean): void;
 	isSelected: boolean;
 }
 
 function ArchivedBoardTile(props: Props): JSX.Element {
-	const {
-		board,
-		onViewBtnClick,
-		onBoardDeletion,
-		onBoardCheckboxClick,
-		isSelected,
-	} = props;
+	const { board, onBoardDeletion, onBoardCheckboxClick, isSelected } = props;
 
 	const setModalContents = useSetRecoilState(ModalContentsState);
 
@@ -73,9 +67,9 @@ function ArchivedBoardTile(props: Props): JSX.Element {
 				{moment(board.dateCreated).format('MMMM Do, yyyy')}
 			</span>
 			<div>
-				<button className="view-button" onClick={() => onViewBtnClick(board)}>
+				<Link className="view-button" to={board.id.toString()}>
 					View
-				</button>
+				</Link>
 				<button
 					className="delete-button"
 					data-testid={'deleteButton'}
