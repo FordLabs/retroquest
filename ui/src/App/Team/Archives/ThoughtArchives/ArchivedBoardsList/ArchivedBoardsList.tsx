@@ -27,6 +27,7 @@ import { ModalContentsState } from 'State/ModalContentsState';
 import { TeamState } from 'State/TeamState';
 import Board from 'Types/Board';
 
+import LoadingScreen from '../../Loading/LoadingScreen';
 import Pagination from '../../Pagination/Pagination';
 
 import ArchivedBoardListHeader from './ArchivedBoardsListHeader/ArchivedBoardListHeader';
@@ -47,10 +48,12 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 	const team = useRecoilValue(TeamState);
 	const [selectedBoardIds, setSelectedBoardIds] = useState<number[]>([]);
 	const setModalContents = useSetRecoilState(ModalContentsState);
+	const [apiBusy, setApiBusy] = useState<boolean>(true);
 
 	const getBoards = useCallback(
 		(pageIndex: number, sortBy: SortByType, sortOrder: SortOrder) => {
 			if (team.id) {
+				setApiBusy(true);
 				BoardService.getBoards(
 					team.id,
 					pageIndex,
@@ -59,6 +62,7 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 					sortOrder
 				).then((response) => {
 					setBoards(response.boards);
+					setApiBusy(false);
 					setPaginationData(response.paginationData);
 				});
 			}
@@ -119,6 +123,8 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 			? setSelectedBoardIds(boards.map((board) => board.id))
 			: setSelectedBoardIds([]);
 	}
+
+	/*if(apiBusy)*/ return <LoadingScreen />;
 
 	return (
 		<div className="archived-boards-list">
