@@ -29,6 +29,8 @@ import Chainable = Cypress.Chainable;
 describe('Archivist Journey', () => {
 	const teamCredentials = getTeamCredentials();
 
+	// test
+
 	before(() => {
 		cy.createTeamAndLogin(teamCredentials);
 		createAndArchiveBoard(teamCredentials, 4);
