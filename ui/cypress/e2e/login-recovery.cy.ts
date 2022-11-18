@@ -112,7 +112,7 @@ describe('Login Recovery', () => {
 			).then((response) => {
 				const emailResetToken = response.body;
 				cy.visit(
-					Cypress.config().baseUrl + `/password/reset?token=${emailResetToken}`
+					`http://localhost:3000/password/reset?token=${emailResetToken}`
 				);
 
 				cy.wait('@checkIfTokenIsValidEndpoint');
