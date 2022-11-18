@@ -74,7 +74,7 @@ describe('Login Recovery', () => {
 		});
 	});
 
-	context('Reset Password', () => {
+	context.only('Reset Password', () => {
 		it('Request a password reset email, change password, and login with new password', () => {
 			cy.log('**Request a password reset email**');
 			cy.intercept('POST', '/api/email/password-reset-request').as(
@@ -112,6 +112,7 @@ describe('Login Recovery', () => {
 				cy.intercept('GET', '**/config').as('getConfigEndpoint');
 
 				const emailResetToken = response.body;
+				console.log('emailResetToken', emailResetToken);
 				cy.visit(`/password/reset?token=${emailResetToken}`);
 				cy.wait('@checkIfTokenIsValidEndpoint');
 				cy.wait('@getConfigEndpoint');

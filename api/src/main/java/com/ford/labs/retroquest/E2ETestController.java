@@ -37,16 +37,13 @@ public class E2ETestController {
 
     private final EmailResetTokenService emailResetTokenService;
 
-    private final PasswordResetTokenService passwordResetTokenService;
-
     private final JwtBuilder jwtBuilder;
 
-    public E2ETestController(TeamService teamService, TeamRepository teamRepository, PasswordResetTokenRepository passwordResetTokenRepository, EmailResetTokenService emailResetTokenService, PasswordResetTokenService passwordResetTokenService, JwtBuilder jwtBuilder) {
+    public E2ETestController(TeamService teamService, TeamRepository teamRepository, PasswordResetTokenRepository passwordResetTokenRepository, EmailResetTokenService emailResetTokenService, JwtBuilder jwtBuilder) {
         this.teamService = teamService;
         this.teamRepository = teamRepository;
         this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.emailResetTokenService = emailResetTokenService;
-        this.passwordResetTokenService = passwordResetTokenService;
         this.jwtBuilder = jwtBuilder;
     }
 
