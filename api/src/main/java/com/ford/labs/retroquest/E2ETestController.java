@@ -2,6 +2,8 @@ package com.ford.labs.retroquest;
 
 import com.ford.labs.retroquest.email_reset_token.EmailResetToken;
 import com.ford.labs.retroquest.email_reset_token.EmailResetTokenService;
+import com.ford.labs.retroquest.password_reset_token.PasswordResetToken;
+import com.ford.labs.retroquest.password_reset_token.PasswordResetTokenService;
 import com.ford.labs.retroquest.security.JwtBuilder;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
@@ -32,12 +34,15 @@ public class E2ETestController {
 
     private final EmailResetTokenService emailResetTokenService;
 
+    private final PasswordResetTokenService passwordResetTokenService;
+
     private final JwtBuilder jwtBuilder;
 
-    public E2ETestController(TeamService teamService, TeamRepository teamRepository, EmailResetTokenService emailResetTokenService, JwtBuilder jwtBuilder) {
+    public E2ETestController(TeamService teamService, TeamRepository teamRepository, EmailResetTokenService emailResetTokenService, PasswordResetTokenService passwordResetTokenService, JwtBuilder jwtBuilder) {
         this.teamService = teamService;
         this.teamRepository = teamRepository;
         this.emailResetTokenService = emailResetTokenService;
+        this.passwordResetTokenService = passwordResetTokenService;
         this.jwtBuilder = jwtBuilder;
     }
 
@@ -77,5 +82,15 @@ public class E2ETestController {
         Team team = teamService.getTeamByUri(teamId);
         EmailResetToken emailResetToken = emailResetTokenService.getNewEmailResetToken(team);
         return emailResetToken.getResetToken();
+    }
+
+    @PostMapping("/create-password-reset-token/{teamId}")
+    @Transactional(rollbackOn = URISyntaxException.class)
+    @Operation(description = "Create a password reset token associated with team")
+    @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Created")})
+    public String createPasswordResetTokenForTeam(@PathVariable("teamId") String teamId) {
+        Team team = teamService.getTeamByUri(teamId);
+        PasswordResetToken passwordResetToken = passwordResetTokenService.getNewPasswordResetToken(team);
+        return passwordResetToken.getResetToken();
     }
 }
