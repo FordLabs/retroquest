@@ -82,7 +82,7 @@
     "@types/react-router-dom": "^5.3.3",
     "axe-core": "^4.4.1",
     "css-loader": "^6.7.1",
-    "cypress": "^10.10.0",
+    "cypress": "^11.1.0",
     "cypress-axe": "^1.0.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-chai-friendly": "^0.6.0",
