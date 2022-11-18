@@ -65,7 +65,7 @@ function PasswordResetRequestPage(): JSX.Element {
 					showGithubLink={false}
 				>
 					<Form
-						submitButtonText="Send Reset Link"
+						submitButtonText="Send reset link"
 						onSubmit={submitRequest}
 						errorMessages={errorMessages}
 						disableSubmitBtn={disableSubmitButton()}

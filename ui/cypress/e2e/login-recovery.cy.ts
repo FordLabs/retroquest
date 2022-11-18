@@ -82,7 +82,9 @@ describe('Login Recovery', () => {
 			cy.findByLabelText('Team Name').type(teamCredentials.teamName);
 			cy.findByLabelText('Email').type(teamCredentials.email);
 
-			cy.contains('Send Reset Link').should('be.enabled').click();
+			cy.contains(/Send Reset Link/i)
+				.should('be.enabled')
+				.click();
 
 			cy.wait('@passwordResetRequest');
 
