@@ -60,7 +60,12 @@ describe('Login Recovery', () => {
 		});
 
 		it('Redirect to "Expired Link" page when token is invalid', () => {
+			cy.intercept('GET', `/api/email-reset-token/invalid-token/team`).as(
+				'getTeamByResetToken'
+			);
 			cy.visit(`/email/reset?token=invalid-token`);
+
+			cy.wait('@getTeamByResetToken');
 
 			cy.findByText('Expired Link').should('exist');
 			cy.findByText('You can request a new link in the settings menu.').should(
