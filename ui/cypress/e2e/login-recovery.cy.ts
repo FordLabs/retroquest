@@ -111,7 +111,9 @@ describe('Login Recovery', () => {
 				`/api/e2e/password-reset-token/${teamCredentials.teamId}`
 			).then((response) => {
 				const emailResetToken = response.body;
-				cy.visit(`/password/reset?token=${emailResetToken}`);
+				cy.visit(
+					Cypress.config().baseUrl + `/password/reset?token=${emailResetToken}`
+				);
 
 				cy.wait('@checkIfTokenIsValidEndpoint');
 				cy.wait('@getConfigEndpoint');
