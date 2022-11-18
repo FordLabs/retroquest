@@ -33,3 +33,6 @@ To submit a feature request or a bug, please open an issue.
 ### Helpful links, information, and documentation
 
 See our [README](./README.md) for more information.
+
+
+### Thanks for reading! Have a great day :)
