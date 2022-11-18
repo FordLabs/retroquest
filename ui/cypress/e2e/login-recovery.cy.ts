@@ -22,6 +22,8 @@ describe('Login Recovery', () => {
 	let teamCredentials;
 
 	beforeEach(() => {
+		cy.intercept('GET', '**/is-valid').as('checkIfTokenIsValidEndpoint');
+
 		teamCredentials = getTeamCredentials();
 
 		cy.createTeam(teamCredentials);
@@ -67,8 +69,9 @@ describe('Login Recovery', () => {
 		});
 	});
 
-	context('Reset Password (without being logged in)', () => {
-		it('Request a password reset email', () => {
+	context('Reset Password', () => {
+		it('Request a password reset email, change password, and login with new password', () => {
+			cy.log('**Request a password reset email**');
 			cy.intercept('POST', '/api/email/password-reset-request').as(
 				'passwordResetRequest'
 			);
@@ -95,16 +98,14 @@ describe('Login Recovery', () => {
 			cy.contains(
 				"If an email doesn't show up soon, check your spam folder. We sent it from rq@fake.com."
 			).should('exist');
-		});
 
-		it('Change current password', () => {
-			cy.intercept('GET', '**/is-valid').as('checkIfTokenIsValidEndpoint');
-			cy.intercept('GET', '**/config').as('getConfigEndpoint');
-
+			cy.log('**Change current password**');
 			cy.request(
-				'POST',
-				`/api/e2e/create-password-reset-token/${teamCredentials.teamId}`
+				'GET',
+				`/api/e2e/password-reset-token/${teamCredentials.teamId}`
 			).then((response) => {
+				cy.intercept('GET', '**/config').as('getConfigEndpoint');
+
 				const emailResetToken = response.body;
 				cy.visit(`/password/reset?token=${emailResetToken}`);
 				cy.wait('@checkIfTokenIsValidEndpoint');
@@ -122,6 +123,7 @@ describe('Login Recovery', () => {
 				cy.contains('All set! Your password has been changed.').should('exist');
 				cy.findByText('Return to Login').click();
 
+				cy.log('**Login with new password**');
 				cy.get('[data-testid=teamNameInput]').type(teamCredentials.teamName);
 				cy.get('[data-testid=passwordInput]').type(newPassword);
 				cy.get('[data-testid=formSubmitButton]').click();
@@ -132,6 +134,8 @@ describe('Login Recovery', () => {
 
 		it('Redirect to "Expired Link" page when token is invalid', () => {
 			cy.visit(`/password/reset?token=invalid-token`);
+
+			cy.wait('@checkIfTokenIsValidEndpoint');
 
 			cy.findByText('Expired Link').should('exist');
 			cy.findByText(

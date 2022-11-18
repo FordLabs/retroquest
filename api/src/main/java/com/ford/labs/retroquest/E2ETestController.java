@@ -3,6 +3,7 @@ package com.ford.labs.retroquest;
 import com.ford.labs.retroquest.email_reset_token.EmailResetToken;
 import com.ford.labs.retroquest.email_reset_token.EmailResetTokenService;
 import com.ford.labs.retroquest.password_reset_token.PasswordResetToken;
+import com.ford.labs.retroquest.password_reset_token.PasswordResetTokenRepository;
 import com.ford.labs.retroquest.password_reset_token.PasswordResetTokenService;
 import com.ford.labs.retroquest.security.JwtBuilder;
 import com.ford.labs.retroquest.team.Team;
@@ -32,15 +33,18 @@ public class E2ETestController {
 
     private final TeamRepository teamRepository;
 
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
+
     private final EmailResetTokenService emailResetTokenService;
 
     private final PasswordResetTokenService passwordResetTokenService;
 
     private final JwtBuilder jwtBuilder;
 
-    public E2ETestController(TeamService teamService, TeamRepository teamRepository, EmailResetTokenService emailResetTokenService, PasswordResetTokenService passwordResetTokenService, JwtBuilder jwtBuilder) {
+    public E2ETestController(TeamService teamService, TeamRepository teamRepository, PasswordResetTokenRepository passwordResetTokenRepository, EmailResetTokenService emailResetTokenService, PasswordResetTokenService passwordResetTokenService, JwtBuilder jwtBuilder) {
         this.teamService = teamService;
         this.teamRepository = teamRepository;
+        this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.emailResetTokenService = emailResetTokenService;
         this.passwordResetTokenService = passwordResetTokenService;
         this.jwtBuilder = jwtBuilder;
@@ -75,7 +79,6 @@ public class E2ETestController {
     }
 
     @PostMapping("/create-email-reset-token/{teamId}")
-    @Transactional(rollbackOn = URISyntaxException.class)
     @Operation(description = "Create an email reset token associated with team")
     @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Created")})
     public String createEmailResetTokenForTeam(@PathVariable("teamId") String teamId) {
@@ -84,13 +87,12 @@ public class E2ETestController {
         return emailResetToken.getResetToken();
     }
 
-    @PostMapping("/create-password-reset-token/{teamId}")
-    @Transactional(rollbackOn = URISyntaxException.class)
+    @GetMapping("/password-reset-token/{teamId}")
     @Operation(description = "Create a password reset token associated with team")
     @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Created")})
-    public String createPasswordResetTokenForTeam(@PathVariable("teamId") String teamId) {
+    public String getPasswordResetTokenForTeam(@PathVariable("teamId") String teamId) {
         Team team = teamService.getTeamByUri(teamId);
-        PasswordResetToken passwordResetToken = passwordResetTokenService.getNewPasswordResetToken(team);
+        PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByTeam(team);
         return passwordResetToken.getResetToken();
     }
 }
