@@ -73,7 +73,8 @@ describe('Login Recovery', () => {
 				'passwordResetRequest'
 			);
 
-			cy.visit('');
+			cy.visit('/login');
+			cy.contains('Log in to your Team!').should('exist');
 
 			cy.findByText('Forgot your login info?').click();
 
