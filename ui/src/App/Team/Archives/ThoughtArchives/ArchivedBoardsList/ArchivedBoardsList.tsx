@@ -124,7 +124,7 @@ function ArchivedBoardsList({ onBoardSelection }: Props): JSX.Element {
 			: setSelectedBoardIds([]);
 	}
 
-	/*if(apiBusy)*/ return <LoadingScreen />;
+	if(apiBusy) return <LoadingScreen />;
 
 	return (
 		<div className="archived-boards-list">

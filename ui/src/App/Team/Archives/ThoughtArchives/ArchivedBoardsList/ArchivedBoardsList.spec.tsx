@@ -181,7 +181,6 @@ describe('Archived Boards List', () => {
 			BoardService.getBoards = jest
 				.fn()
 				.mockResolvedValue(getBoardsResponse([mockBoard2, mockBoard1]));
-
 			clickDateSortingButton();
 
 			await waitFor(() =>
@@ -297,6 +296,9 @@ function getBoardsResponse(
 	};
 }
 
-function clickDateSortingButton() {
+async function clickDateSortingButton() {
+	await waitFor(() => {
+		expect(screen.getByText('Date')).toBeInTheDocument();
+	});
 	userEvent.click(screen.getByText('Date'));
 }
