@@ -37,8 +37,11 @@
 			line-height: 2.6rem;
 			text-decoration: none;
 
-			&:focus,
 			&:hover {
+				color: main.$teal;
+			}
+
+			&:focus-visible {
 				color: main.$teal;
 			}
 
