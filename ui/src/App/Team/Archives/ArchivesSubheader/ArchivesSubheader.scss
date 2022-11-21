@@ -57,8 +57,11 @@
 		.archives-subheader-link {
 			color: main.$off-white;
 
-			&:focus,
 			&:hover {
+				color: main.$sea-foam;
+			}
+
+			&:focus-visible {
 				color: main.$sea-foam;
 			}
 
