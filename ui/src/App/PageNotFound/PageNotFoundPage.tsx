@@ -15,14 +15,31 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import LinkPrimary from 'Common/LinkPrimary/LinkPrimary';
 import { LOGIN_PAGE_PATH } from 'RouteConstants';
 
 import './PageNotFoundPage.scss';
 
+const fontAwesomeIconNames = [
+	'fa-poo',
+	'fa-skull',
+	'fa-ghost',
+	'fa-face-grin-beam-sweat',
+];
+
 function PageNotFoundPage() {
+	const [randomIcon, setRandomIcon] = useState<string>('');
+
+	useEffect(() => {
+		const randomNumber = Math.floor(
+			Math.random() * fontAwesomeIconNames.length
+		);
+		setRandomIcon(fontAwesomeIconNames[randomNumber]);
+	}, []);
+
 	return (
 		<AuthTemplate
 			header="Oops!"
@@ -31,7 +48,10 @@ function PageNotFoundPage() {
 			showCodeContributors={false}
 		>
 			<div className="paragraph-1-container">
-				<i className="fa-solid fa-poo fa-3x not-found-icon" />
+				<i
+					role="presentation"
+					className={classNames('fa-solid fa-3x not-found-icon', randomIcon)}
+				/>
 				<p className="paragraph-1">
 					We can’t seem to find the page you’re looking for.
 				</p>

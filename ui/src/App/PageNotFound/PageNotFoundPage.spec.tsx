@@ -16,9 +16,7 @@
  */
 
 import { MemoryRouter } from 'react-router-dom';
-import { screen } from '@testing-library/react';
-import { MutableSnapshot } from 'recoil';
-import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
+import { render, screen } from '@testing-library/react';
 
 import PageNotFoundPage from './PageNotFoundPage';
 
@@ -35,19 +33,32 @@ describe('Page Not Found Page', () => {
 		expect(returnToLoginLink).toHaveAttribute('href', '/login');
 	});
 
+	it('should render a different icon each time', () => {
+		const expectedIconsToChooseFrom = [
+			'fa-poo',
+			'fa-skull',
+			'fa-ghost',
+			'fa-face-grin-beam-sweat',
+		];
+
+		renderPageNotFoundPage();
+
+		const hasRandomIcon = expectedIconsToChooseFrom.find((icon) => {
+			return screen.getByRole('presentation').className.includes(icon);
+		});
+		expect(hasRandomIcon).toBeTruthy();
+	});
+
 	it('should not show code contributors section', async () => {
 		renderPageNotFoundPage();
 		expect(screen.queryByText('Code Contributors')).toBeNull();
 	});
 });
 
-function renderPageNotFoundPage(
-	recoilState?: (mutableSnapshot: MutableSnapshot) => void
-) {
-	renderWithRecoilRoot(
+function renderPageNotFoundPage() {
+	render(
 		<MemoryRouter>
 			<PageNotFoundPage />
-		</MemoryRouter>,
-		recoilState
+		</MemoryRouter>
 	);
 }
