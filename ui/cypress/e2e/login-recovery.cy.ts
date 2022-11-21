@@ -30,7 +30,31 @@ describe('Login Recovery', () => {
 	});
 
 	context('Update Board Owners', () => {
-		it('Change Team Email Addresses', () => {
+		it('Request to change team owners from settings & change team owners through link', () => {
+			cy.login(teamCredentials);
+
+			cy.visit(`/team/${teamCredentials.teamId}`);
+			cy.contains('Happy').should('exist');
+
+			cy.get('[data-testid="settingsButton"]').click();
+			cy.findByText('Account').click();
+			cy.contains('Board Owners').should('exist');
+
+			cy.intercept('POST', '/api/email/email-reset-request').as(
+				'sendEmailResetRequestEmail'
+			);
+			cy.findByText('Send Board Owner Update Link').click();
+			cy.wait('@sendEmailResetRequestEmail');
+
+			cy.findByText(
+				'We’ve sent an email to login1234@mail.com with instructions on how to change the Board Owner email addresses.'
+			).should('exist');
+			cy.findByText(
+				'If an email doesn’t show up soon, check your spam folder. We sent it from rq@fake.com.'
+			).should('exist');
+
+			cy.findByText('Close').click();
+
 			cy.request(
 				'POST',
 				`/api/e2e/create-email-reset-token/${teamCredentials.teamId}`
