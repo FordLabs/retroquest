@@ -75,12 +75,7 @@ describe('Login Recovery', () => {
 	});
 
 	context('Reset Password', () => {
-		it('should go to request password reset page', () => {
-			cy.visit('/request-password-reset');
-			cy.contains('Reset your Password').should('exist');
-		});
-
-		xit('Request a password reset email, change password, and login with new password', () => {
+		it('Request a password reset email, change password, and login with new password', () => {
 			cy.log('**Request a password reset email**');
 			cy.intercept('GET', '**/config').as('getConfigEndpoint');
 			cy.intercept('POST', '/api/email/password-reset-request').as(
@@ -116,7 +111,9 @@ describe('Login Recovery', () => {
 				`/api/e2e/password-reset-token/${teamCredentials.teamId}`
 			).then((response) => {
 				const emailResetToken = response.body;
-				cy.visit(`/password/reset?token=${emailResetToken}`);
+				cy.visit(`/password/reset?token=${emailResetToken}`, {
+					failOnStatusCode: false,
+				});
 
 				cy.wait('@getConfigEndpoint');
 				cy.wait('@checkIfTokenIsValidEndpoint');
@@ -143,7 +140,9 @@ describe('Login Recovery', () => {
 		});
 
 		it('Redirect to "Expired Link" page when token is invalid', () => {
-			cy.visit(`/password/reset?token=invalid-token`);
+			cy.visit(`/password/reset?token=invalid-token`, {
+				failOnStatusCode: false,
+			});
 
 			cy.wait('@checkIfTokenIsValidEndpoint');
 
