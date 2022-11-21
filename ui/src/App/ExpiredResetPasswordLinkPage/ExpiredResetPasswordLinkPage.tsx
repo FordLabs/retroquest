@@ -35,7 +35,7 @@ function ExpiredResetPasswordLinkPage() {
 	return (
 		<AuthTemplate
 			header="Expired Link"
-			className="expired-link-page"
+			className="expired-reset-password-link-page"
 			showGithubLink={false}
 		>
 			<div className="paragraph-1-container">
