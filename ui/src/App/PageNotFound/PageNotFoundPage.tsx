@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import LinkPrimary from 'Common/LinkPrimary/LinkPrimary';
@@ -30,16 +30,10 @@ const fontAwesomeIconNames = [
 	'fa-face-grin-beam-sweat',
 ];
 
+const randomNumber = Math.floor(Math.random() * fontAwesomeIconNames.length);
+const randomIcon = fontAwesomeIconNames[randomNumber];
+
 function PageNotFoundPage() {
-	const [randomIcon, setRandomIcon] = useState<string>('');
-
-	useEffect(() => {
-		const randomNumber = Math.floor(
-			Math.random() * fontAwesomeIconNames.length
-		);
-		setRandomIcon(fontAwesomeIconNames[randomNumber]);
-	}, []);
-
 	return (
 		<AuthTemplate
 			header="Oops!"
