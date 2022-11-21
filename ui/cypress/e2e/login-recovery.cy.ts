@@ -210,6 +210,32 @@ describe('Login Recovery', () => {
 			).should('exist');
 		});
 	});
+
+	it('Request all team names associated with email', () => {
+		cy.intercept('POST', '/api/email/recover-team-names').as(
+			'recoverTeamNames'
+		);
+
+		cy.visit('/login');
+		cy.contains('Log in to your Team!').should('exist');
+
+		cy.findByText('Forgot your login info?').click();
+		cy.findByText("I don't remember my team name").click();
+
+		cy.findByText('Recover Team Name').should('exist');
+		cy.findByLabelText('Email').type(teamCredentials.email);
+
+		cy.contains(/Send Me My Team Name/i).click();
+		cy.wait('@recoverTeamNames');
+
+		cy.findByText(
+			'If any RetroQuest teams are registered to login1234@mail.com, we’ve sent a list of all team names that are connected to the email address.'
+		).should('exist');
+
+		cy.findByText(
+			'If an email doesn’t show up soon, check your spam folder. We sent it from rq@fake.com.'
+		).should('exist');
+	});
 });
 
 function ensureTeamEmailsGotSavedToDB(teamCredentials: TeamCredentials) {
