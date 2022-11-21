@@ -34,7 +34,7 @@ describe('Login Recovery', () => {
 			cy.login(teamCredentials);
 
 			cy.visit(`/team/${teamCredentials.teamId}`);
-			cy.contains('Happy').should('exist');
+			cy.shouldBeOnRetroPage(teamCredentials.teamId);
 
 			cy.get('[data-testid="settingsButton"]').click();
 			cy.findByText('Account').click();
@@ -99,7 +99,7 @@ describe('Login Recovery', () => {
 	});
 
 	context('Reset Password', () => {
-		it('Request a password reset email, change password, and login with new password', () => {
+		it('Request a password reset email through forgot login info page, change password, and login with new password', () => {
 			cy.log('**Request a password reset email**');
 			cy.intercept('GET', '**/config').as('getConfigEndpoint');
 			cy.intercept('POST', '/api/email/password-reset-request').as(
@@ -160,6 +160,67 @@ describe('Login Recovery', () => {
 				cy.get('[data-testid=formSubmitButton]').click();
 
 				cy.findByText('Happy').should('exist');
+			});
+		});
+
+		it('Request a password reset email through settings, change password, and login with new password', () => {
+			cy.log('**Request a password reset email**');
+			cy.intercept('GET', '**/config').as('getConfigEndpoint');
+			cy.intercept('POST', '/api/email/password-reset-request').as(
+				'passwordResetRequest'
+			);
+
+			cy.login(teamCredentials);
+
+			cy.visit(`/team/${teamCredentials.teamId}`);
+			cy.shouldBeOnRetroPage(teamCredentials.teamId);
+
+			cy.get('[data-testid="settingsButton"]').click();
+			cy.findByText('Account').click();
+			cy.contains('Board Owners').should('exist');
+
+			cy.findByText('Send Password Reset Link').click();
+			cy.wait('@passwordResetRequest');
+
+			cy.findByText(
+				'We’ve sent an email to login1234@mail.com with password reset instructions.'
+			).should('exist');
+			cy.findByText(
+				'If an email doesn’t show up soon, check your spam folder. We sent it from rq@fake.com.'
+			).should('exist');
+
+			cy.findByText('Close').click();
+
+			cy.log('**Change current password**');
+			cy.request(
+				'GET',
+				`/api/e2e/password-reset-token/${teamCredentials.teamId}`
+			).then((response) => {
+				const emailResetToken = response.body;
+				cy.visit(`/password/reset?token=${emailResetToken}`, {
+					failOnStatusCode: false,
+				});
+
+				cy.wait('@getConfigEndpoint');
+				cy.wait('@checkIfTokenIsValidEndpoint');
+
+				cy.contains('Reset Your Password');
+
+				const newPassword = 'NewPassword1';
+				cy.findByLabelText('New Password')
+					.should('have.value', '')
+					.type(newPassword);
+
+				cy.findByText('Reset Password').should('be.enabled').click();
+
+				cy.contains('All set! Your password has been changed.').should('exist');
+				cy.findByText('Return to Login').click();
+
+				cy.log('**Login with new password**');
+				cy.get('[data-testid=teamNameInput]').type(teamCredentials.teamName);
+				cy.get('[data-testid=passwordInput]').type(newPassword);
+				cy.get('[data-testid=formSubmitButton]').click();
+				cy.shouldBeOnRetroPage(teamCredentials.teamId);
 			});
 		});
 
