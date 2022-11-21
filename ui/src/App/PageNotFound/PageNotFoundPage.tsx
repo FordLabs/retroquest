@@ -16,21 +16,13 @@
  */
 
 import React from 'react';
-import SadBrowser from 'Assets/SadBrowser';
 import AuthTemplate from 'Common/AuthTemplate/AuthTemplate';
 import LinkPrimary from 'Common/LinkPrimary/LinkPrimary';
-import { useRecoilValue } from 'recoil';
 import { LOGIN_PAGE_PATH } from 'RouteConstants';
-import { ThemeState } from 'State/ThemeState';
-import Theme from 'Types/Theme';
 
 import './PageNotFoundPage.scss';
 
 function PageNotFoundPage() {
-	const theme = useRecoilValue(ThemeState);
-	const lightRed = '#ef8a7e';
-	const red = '#e74c3c';
-	const checkboxIconColor = theme === Theme.DARK ? lightRed : red;
 	return (
 		<AuthTemplate
 			header="Oops!"
@@ -39,7 +31,7 @@ function PageNotFoundPage() {
 			showCodeContributors={false}
 		>
 			<div className="paragraph-1-container">
-				<SadBrowser color={checkboxIconColor} className="sad-browser-icon" />
+				<i className="fa-solid fa-poo fa-3x not-found-icon" />
 				<p className="paragraph-1">
 					We can’t seem to find the page you’re looking for.
 				</p>
