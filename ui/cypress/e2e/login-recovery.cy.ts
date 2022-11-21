@@ -142,24 +142,10 @@ describe('Login Recovery', () => {
 				cy.wait('@getConfigEndpoint');
 				cy.wait('@checkIfTokenIsValidEndpoint');
 
-				cy.contains('Reset Your Password');
-
 				const newPassword = 'NewPassword1';
-				cy.findByLabelText('New Password')
-					.should('have.value', '')
-					.type(newPassword);
+				changePasswordOnResetPasswordPage(newPassword);
 
-				cy.findByText('Reset Password').should('be.enabled').click();
-
-				cy.contains('All set! Your password has been changed.').should('exist');
-				cy.findByText('Return to Login').click();
-
-				cy.log('**Login with new password**');
-				cy.get('[data-testid=teamNameInput]').type(teamCredentials.teamName);
-				cy.get('[data-testid=passwordInput]').type(newPassword);
-				cy.get('[data-testid=formSubmitButton]').click();
-
-				cy.findByText('Happy').should('exist');
+				shouldLogInWithNewCredentials(teamCredentials, newPassword);
 			});
 		});
 
@@ -204,23 +190,10 @@ describe('Login Recovery', () => {
 				cy.wait('@getConfigEndpoint');
 				cy.wait('@checkIfTokenIsValidEndpoint');
 
-				cy.contains('Reset Your Password');
-
 				const newPassword = 'NewPassword1';
-				cy.findByLabelText('New Password')
-					.should('have.value', '')
-					.type(newPassword);
+				changePasswordOnResetPasswordPage(newPassword);
 
-				cy.findByText('Reset Password').should('be.enabled').click();
-
-				cy.contains('All set! Your password has been changed.').should('exist');
-				cy.findByText('Return to Login').click();
-
-				cy.log('**Login with new password**');
-				cy.get('[data-testid=teamNameInput]').type(teamCredentials.teamName);
-				cy.get('[data-testid=passwordInput]').type(newPassword);
-				cy.get('[data-testid=formSubmitButton]').click();
-				cy.shouldBeOnRetroPage(teamCredentials.teamId);
+				shouldLogInWithNewCredentials(teamCredentials, newPassword);
 			});
 		});
 
@@ -254,4 +227,25 @@ function ensureTeamEmailsGotSavedToDB(teamCredentials: TeamCredentials) {
 			expect(team.secondaryEmail).to.eq('secondary@mail.com');
 		});
 	});
+}
+
+function shouldLogInWithNewCredentials(
+	teamCreds: TeamCredentials,
+	newPassword: string
+) {
+	cy.log('**Login with new password**');
+	cy.get('[data-testid=teamNameInput]').type(teamCreds.teamName);
+	cy.get('[data-testid=passwordInput]').type(newPassword);
+	cy.get('[data-testid=formSubmitButton]').click();
+	cy.shouldBeOnRetroPage(teamCreds.teamId);
+}
+
+function changePasswordOnResetPasswordPage(newPassword: string) {
+	cy.contains('Reset Your Password');
+	cy.findByLabelText('New Password').should('have.value', '').type(newPassword);
+
+	cy.findByText('Reset Password').should('be.enabled').click();
+
+	cy.contains('All set! Your password has been changed.').should('exist');
+	cy.findByText('Return to Login').click();
 }
