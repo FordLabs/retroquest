@@ -49,13 +49,13 @@ describe('Login', () => {
 		cy.get('@teamNameInput').type('Testing');
 		cy.get('@passwordInput').type('Testing');
 
-		cy.get('#app').matchImageSnapshot('login__light-mode');
+		cy.get('#app').matchImageSnapshot('login-page__light-mode');
 
 		cy.switchToDarkMode();
 		cy.get('@teamNameInput').type('Testing');
 		cy.get('@passwordInput').type('Testing');
 
-		cy.get('#app').matchImageSnapshot('login__dark-mode');
+		cy.get('#app').matchImageSnapshot('login-page__dark-mode');
 	});
 
 	it('Navigates to team board after successful login', () => {

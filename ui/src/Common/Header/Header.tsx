@@ -48,7 +48,9 @@ function Header(props: Props) {
 					/>
 				</a>
 				<span className="horizontal-separator" />
-				<h1 className="team-name">{name}</h1>
+				<h1 className="team-name" id="retro-page-team-name">
+					{name}
+				</h1>
 			</div>
 			{children}
 		</header>

@@ -231,7 +231,7 @@ describe('Retro Facilitator Journey', () => {
 		const assignee1 = 'Bob';
 		const task2 = 'Make our meetings shorter';
 		const actionItemsToInput = [`${task1} @${assignee1}`, `${task2} @Larry`];
-		shouldCreateActionItems(actionItemsToInput);
+		cy.shouldCreateActionItems(actionItemsToInput);
 
 		shouldEditActionItemTaskAndAssignee(task1, 'by 10%', assignee1, ', Larry');
 
@@ -421,21 +421,6 @@ function goToAccountSettings() {
 	cy.findAllByText('Settings').eq(1).should('exist');
 	cy.findByText('Account').click();
 	cy.findByText('Add Board Owners').should('exist');
-}
-
-function shouldCreateActionItems(actionItems: string[]) {
-	actionItems.forEach((actionString, index) => {
-		cy.enterActionItem(actionString);
-
-		cy.confirmNumberOfActionItemsInColumn(index + 1);
-
-		const splitActionString = actionString.split('@');
-		const action = splitActionString[0].trim();
-		const assignedTo = splitActionString[1];
-
-		cy.findByText(action).should('exist');
-		cy.findByDisplayValue(assignedTo).should('exist');
-	});
 }
 
 const getHappyColumnItems = () =>

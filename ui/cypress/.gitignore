@@ -4,3 +4,4 @@ videos/**
 artifacts/**
 fixtures/example.json
 downloads/**
+/snapshots/cypress/e2e/retro-member-journey.cy.ts/__diff_output__/

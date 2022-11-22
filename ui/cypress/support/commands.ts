@@ -40,7 +40,9 @@ import TeamCredentials from './types/teamCredentials';
 import Topic from './types/Topic';
 import VisitOptions = Cypress.VisitOptions;
 
-addMatchImageSnapshotCommand();
+addMatchImageSnapshotCommand({
+	blackout: ['#retro-page-team-name'],
+});
 
 Cypress.Commands.add(
 	'createTeam',
@@ -142,6 +144,21 @@ Cypress.Commands.add('shouldBeOnRetroPage', (teamId: string) => {
 	cy.findByText('Happy').should('exist');
 	cy.findByText('Confused').should('exist');
 	cy.findByText('Sad').should('exist');
+});
+
+Cypress.Commands.add('shouldCreateActionItems', (actionItems: string[]) => {
+	actionItems.forEach((actionString, index) => {
+		cy.enterActionItem(actionString);
+
+		cy.confirmNumberOfActionItemsInColumn(index + 1);
+
+		const splitActionString = actionString.split('@');
+		const action = splitActionString[0].trim();
+		const assignedTo = splitActionString[1];
+
+		cy.findByText(action).should('exist');
+		cy.findByDisplayValue(assignedTo).should('exist');
+	});
 });
 
 Cypress.Commands.add('switchToDarkMode', () => {

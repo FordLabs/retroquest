@@ -36,6 +36,23 @@ describe('Retro Member Journey', () => {
 		});
 	});
 
+	it('Visual Testing - compare page in light mode and dark mode', () => {
+		const happyThoughts = ['Loved our communication', 'Great team dynamic'];
+		shouldAddHappyThoughts(happyThoughts);
+		const actionItemsToInput = [
+			`Do Something @bob`,
+			`Do something else @Larry`,
+		];
+		cy.shouldCreateActionItems(actionItemsToInput);
+		cy.window().blur();
+
+		cy.get('#app').matchImageSnapshot('retro-page__light-mode');
+
+		cy.switchToDarkMode();
+
+		cy.get('#app').matchImageSnapshot('retro-page__dark-mode');
+	});
+
 	it('Add thoughts to each column', () => {
 		cy.log('**Should have "Happy" column header in green**');
 		const green = 'rgb(46, 204, 113)';
