@@ -46,11 +46,11 @@ describe('Retro Member Journey', () => {
 		cy.shouldCreateActionItems(actionItemsToInput);
 		cy.window().blur();
 
-		cy.get('#app').matchImageSnapshot('retro-page__light-mode');
+		cy.matchSnapshotIfHeadless('retro-page__light-mode');
 
 		cy.switchToDarkMode();
 
-		cy.get('#app').matchImageSnapshot('retro-page__dark-mode');
+		cy.matchSnapshotIfHeadless('retro-page__dark-mode');
 	});
 
 	it('Add thoughts to each column', () => {

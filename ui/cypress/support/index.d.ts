@@ -54,6 +54,8 @@ declare global {
 
 			switchToDarkMode(): Chainable<void>;
 			switchToLightMode(): Chainable<void>;
+
+			matchSnapshotIfHeadless(testName: string): Chainable<void>;
 		}
 	}
 }

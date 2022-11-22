@@ -170,3 +170,15 @@ Cypress.Commands.add('switchToLightMode', () => {
 	window.localStorage.setItem('theme', 'light-theme');
 	cy.reload();
 });
+
+Cypress.Commands.add('matchSnapshotIfHeadless', (testName: string) => {
+	if (Cypress.browser.isHeadless) {
+		cy.matchImageSnapshot(testName, {
+			customSnapshotIdentifier: 'in-iframe/conversation-is-open',
+			failureThreshold: 0.03,
+			failureThresholdType: 'percent',
+		});
+	} else {
+		cy.log('No screenshot taken when headed');
+	}
+});
