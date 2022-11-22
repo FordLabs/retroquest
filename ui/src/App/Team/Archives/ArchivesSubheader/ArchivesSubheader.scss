@@ -37,8 +37,11 @@
 			line-height: 2.6rem;
 			text-decoration: none;
 
-			&:focus,
 			&:hover {
+				color: main.$teal;
+			}
+
+			&:focus-visible {
 				color: main.$teal;
 			}
 
@@ -54,8 +57,11 @@
 		.archives-subheader-link {
 			color: main.$off-white;
 
-			&:focus,
 			&:hover {
+				color: main.$sea-foam;
+			}
+
+			&:focus-visible {
 				color: main.$sea-foam;
 			}
 
