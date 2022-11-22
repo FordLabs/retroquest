@@ -16,9 +16,6 @@
  */
 
 import React, { useCallback, useEffect, useState } from 'react';
-import pauseButton from 'Assets/pause-icon.svg';
-import playButton from 'Assets/play-icon.svg';
-import resetButton from 'Assets/x-icon.svg';
 import moment from 'moment';
 import { useSetRecoilState } from 'recoil';
 
@@ -133,19 +130,29 @@ function Timer(): JSX.Element {
 					<span>{formatSeconds(secondsLeft)}</span>
 				</div>
 			)}
-
 			{timerState === TimerState.RUNNING ? (
 				<button onClick={pauseTimer} className="pause-button">
-					<img src={pauseButton} alt="Pause timer" />
+					<i
+						className="fa-solid fa-lg fa-pause timer-icon"
+						role="presentation"
+					/>
+					<span className="visually-hidden">Pause Timer</span>
 				</button>
 			) : (
 				<button onClick={startTimer} className="start-button">
-					<img src={playButton} alt="Start timer" />
+					<i
+						className="fa-sharp fa-solid fa-play timer-icon"
+						role="presentation"
+					/>
+					<span className="visually-hidden">Start Timer</span>
 				</button>
 			)}
-
 			<button onClick={resetTimer} className="reset-button">
-				<img src={resetButton} alt="Reset timer" />
+				<i
+					className="fa-sharp fa-solid fa-xl fa-xmark timer-icon"
+					role="presentation"
+				/>
+				<span className="visually-hidden">Reset Timer</span>
 			</button>
 		</div>
 	);

@@ -25,6 +25,19 @@ $timer-height: 2.81rem;
 		margin-right: 0.5rem;
 	}
 
+	.visually-hidden {
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+
+		white-space: nowrap;
+
+		clip: rect(0 0 0 0);
+		clip-path: inset(50%);
+
+		position: absolute;
+	}
+
 	.timer-count-down {
 		box-sizing: border-box;
 		width: 7.25rem;
@@ -53,9 +66,8 @@ $timer-height: 2.81rem;
 
 		border-radius: 5px;
 
-		img {
-			width: 1rem;
-			height: 1rem;
+		.timer-icon {
+			color: main.$white;
 		}
 	}
 

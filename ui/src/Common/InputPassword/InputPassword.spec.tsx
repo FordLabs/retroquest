@@ -16,19 +16,15 @@
  */
 
 import { useState } from 'react';
-import { screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
-import { ThemeState } from '../../State/ThemeState';
-import Theme from '../../Types/Theme';
-import renderWithRecoilRoot from '../../Utils/renderWithRecoilRoot';
 
 import InputPassword, { validatePasswordString } from './InputPassword';
 
 describe('Input Password', () => {
 	describe('Eye Icon Toggle', () => {
 		it('should hide password and show opened eye icon by default', () => {
-			renderWithRecoilRoot(
+			render(
 				<InputPassword
 					password="HideMyPassword!"
 					onPasswordInputChange={() => {}}
@@ -40,7 +36,7 @@ describe('Input Password', () => {
 		});
 
 		it('should show password and closed eye icon when opened eye icon is clicked', () => {
-			renderWithRecoilRoot(
+			render(
 				<InputPassword
 					password="ShowMyPassword!"
 					onPasswordInputChange={() => {}}
@@ -57,7 +53,7 @@ describe('Input Password', () => {
 		});
 
 		it('should hide password and opened eye icon when closed eye icon is clicked', () => {
-			renderWithRecoilRoot(
+			render(
 				<InputPassword
 					password="HideMyPasswordAgain!"
 					onPasswordInputChange={() => {}}
@@ -70,34 +66,6 @@ describe('Input Password', () => {
 			expect(screen.queryByText('HideMyPasswordAgain!')).toBeNull();
 			shouldShowOpenedEyeIconAndNotClosedEyeIcon();
 		});
-
-		it('should eye icons should be blue in light mode', () => {
-			renderWithRecoilRoot(
-				<InputPassword password="" onPasswordInputChange={() => {}} />,
-				({ set }) => {
-					set(ThemeState, Theme.LIGHT);
-				}
-			);
-			const eyeOpenIcon = screen.getByTestId('eyeOpenIcon');
-			expect(eyeOpenIcon.getAttribute('fill')).toBe('#34495E');
-			clickOnEyeIcon('Show Password');
-			const eyeSlashIcon = screen.getByTestId('eyeSlashIcon');
-			expect(eyeSlashIcon.getAttribute('fill')).toBe('#34495E');
-		});
-
-		it('should eye icons should be off white in dark mode', () => {
-			renderWithRecoilRoot(
-				<InputPassword password="" onPasswordInputChange={() => {}} />,
-				({ set }) => {
-					set(ThemeState, Theme.DARK);
-				}
-			);
-			const eyeOpenIcon = screen.getByTestId('eyeOpenIcon');
-			expect(eyeOpenIcon.getAttribute('fill')).toBe('#ecf0f1');
-			clickOnEyeIcon('Show Password');
-			const eyeSlashIcon = screen.getByTestId('eyeSlashIcon');
-			expect(eyeSlashIcon.getAttribute('fill')).toBe('#ecf0f1');
-		});
 	});
 
 	describe('Validation Message', () => {
@@ -105,9 +73,7 @@ describe('Input Password', () => {
 			'Must have: 8+ Characters, 1 Upper Case Letter, 1 Number';
 
 		it('should show validation message on focus', () => {
-			renderWithRecoilRoot(
-				<InputPassword password="" onPasswordInputChange={() => {}} />
-			);
+			render(<InputPassword password="" onPasswordInputChange={() => {}} />);
 			expect(screen.queryByText(expectedValidationMessage)).toBeNull();
 			screen.getByTestId('passwordInput').focus();
 			expect(screen.getByText(expectedValidationMessage)).toBeDefined();
@@ -124,7 +90,7 @@ describe('Input Password', () => {
 				);
 			}
 
-			renderWithRecoilRoot(<TestComponent />);
+			render(<TestComponent />);
 			expect(screen.queryByText(expectedValidationMessage)).toBeNull();
 			const passwordInput = screen.getByTestId('passwordInput');
 			userEvent.type(passwordInput, 'Password');
@@ -146,7 +112,7 @@ describe('Input Password', () => {
 				);
 			}
 
-			renderWithRecoilRoot(<TestComponent />);
+			render(<TestComponent />);
 			expect(screen.queryByText(expectedValidationMessage)).toBeNull();
 			const passwordInput = screen.getByTestId('passwordInput');
 			userEvent.type(passwordInput, 'pass');

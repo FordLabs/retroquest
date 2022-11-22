@@ -231,13 +231,13 @@ function getSelect() {
 }
 
 function startTimer() {
-	userEvent.click(screen.getByAltText('Start timer'));
+	userEvent.click(screen.getByText('Start Timer'));
 }
 
 function pauseTimer() {
-	userEvent.click(screen.getByAltText('Pause timer'));
+	userEvent.click(screen.getByText('Pause Timer'));
 }
 
 function resetTimer() {
-	userEvent.click(screen.getByAltText('Reset timer'));
+	userEvent.click(screen.getByText('Reset Timer'));
 }

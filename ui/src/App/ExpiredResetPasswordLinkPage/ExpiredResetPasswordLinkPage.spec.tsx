@@ -16,13 +16,9 @@
  */
 
 import { MemoryRouter } from 'react-router-dom';
-import { screen, waitFor } from '@testing-library/react';
-import { MutableSnapshot } from 'recoil';
+import { render, screen, waitFor } from '@testing-library/react';
 import ContributorsService from 'Services/Api/ContributorsService';
 import PasswordResetTokenService from 'Services/Api/PasswordResetTokenService';
-import { ThemeState } from 'State/ThemeState';
-import Theme from 'Types/Theme';
-import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
 
 import ExpiredResetPasswordLinkPage from './ExpiredResetPasswordLinkPage';
 
@@ -56,34 +52,13 @@ describe('Expired Reset Password Link Page', () => {
 			)
 		).toBeDefined();
 	});
-
-	it('should render error stop sign icon in confirmation screen as red in light mode', async () => {
-		await renderExpiredLinkPage(({ set }) => {
-			set(ThemeState, Theme.LIGHT);
-		});
-
-		const errorStopSignIcon = await screen.findByTestId('errorStopSignIcon');
-		expect(errorStopSignIcon.getAttribute('fill')).toBe('#e74c3c');
-	});
-
-	it('should render checkbox in confirmation screen as light turquoise in dark mode', async () => {
-		await renderExpiredLinkPage(({ set }) => {
-			set(ThemeState, Theme.DARK);
-		});
-
-		const errorStopSignIcon = await screen.findByTestId('errorStopSignIcon');
-		expect(errorStopSignIcon.getAttribute('fill')).toBe('#ef8a7e');
-	});
 });
 
-async function renderExpiredLinkPage(
-	recoilState?: (mutableSnapshot: MutableSnapshot) => void
-) {
-	renderWithRecoilRoot(
+async function renderExpiredLinkPage() {
+	render(
 		<MemoryRouter>
 			<ExpiredResetPasswordLinkPage />
-		</MemoryRouter>,
-		recoilState
+		</MemoryRouter>
 	);
 
 	await waitFor(() => expect(ContributorsService.get).toBeCalledTimes(1));
