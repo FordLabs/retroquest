@@ -134,22 +134,25 @@ function Timer(): JSX.Element {
 				<button onClick={pauseTimer} className="pause-button">
 					<i
 						className="fa-solid fa-lg fa-pause timer-icon"
-						aria-label="Pause timer"
+						role="presentation"
 					/>
+					<span className="visually-hidden">Pause Timer</span>
 				</button>
 			) : (
 				<button onClick={startTimer} className="start-button">
 					<i
 						className="fa-sharp fa-solid fa-play timer-icon"
-						aria-label="Start timer"
+						role="presentation"
 					/>
+					<span className="visually-hidden">Start Timer</span>
 				</button>
 			)}
 			<button onClick={resetTimer} className="reset-button">
 				<i
 					className="fa-sharp fa-solid fa-xl fa-xmark timer-icon"
-					aria-label="Reset timer"
+					role="presentation"
 				/>
+				<span className="visually-hidden">Reset Timer</span>
 			</button>
 		</div>
 	);
