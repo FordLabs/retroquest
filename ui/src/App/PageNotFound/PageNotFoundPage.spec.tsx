@@ -16,11 +16,7 @@
  */
 
 import { MemoryRouter } from 'react-router-dom';
-import { screen } from '@testing-library/react';
-import { MutableSnapshot } from 'recoil';
-import { ThemeState } from 'State/ThemeState';
-import Theme from 'Types/Theme';
-import renderWithRecoilRoot from 'Utils/renderWithRecoilRoot';
+import { render, screen } from '@testing-library/react';
 
 import PageNotFoundPage from './PageNotFoundPage';
 
@@ -37,26 +33,20 @@ describe('Page Not Found Page', () => {
 		expect(returnToLoginLink).toHaveAttribute('href', '/login');
 	});
 
-	it('should render sad browser sign icon as red in light mode', () => {
-		renderPageNotFoundPage(({ set }) => {
-			set(ThemeState, Theme.LIGHT);
-		});
+	it('should render a different icon each time', () => {
+		const expectedIconsToChooseFrom = [
+			'fa-poo',
+			'fa-skull',
+			'fa-ghost',
+			'fa-face-grin-beam-sweat',
+		];
 
-		const sadBrowserIcon = screen.getAllByTestId('sadBrowserIconPath');
-		sadBrowserIcon.forEach((icon) => {
-			expect(icon.getAttribute('fill')).toBe('#e74c3c');
-		});
-	});
+		renderPageNotFoundPage();
 
-	it('should render checkbox in confirmation screen as light turquoise in dark mode', () => {
-		renderPageNotFoundPage(({ set }) => {
-			set(ThemeState, Theme.DARK);
+		const hasRandomIcon = expectedIconsToChooseFrom.find((icon) => {
+			return screen.getByRole('presentation').className.includes(icon);
 		});
-
-		const sadBrowserIcon = screen.getAllByTestId('sadBrowserIconPath');
-		sadBrowserIcon.forEach((icon) => {
-			expect(icon.getAttribute('fill')).toBe('#ef8a7e');
-		});
+		expect(hasRandomIcon).toBeTruthy();
 	});
 
 	it('should not show code contributors section', async () => {
@@ -65,13 +55,10 @@ describe('Page Not Found Page', () => {
 	});
 });
 
-function renderPageNotFoundPage(
-	recoilState?: (mutableSnapshot: MutableSnapshot) => void
-) {
-	renderWithRecoilRoot(
+function renderPageNotFoundPage() {
+	render(
 		<MemoryRouter>
 			<PageNotFoundPage />
-		</MemoryRouter>,
-		recoilState
+		</MemoryRouter>
 	);
 }
