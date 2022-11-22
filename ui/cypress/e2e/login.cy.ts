@@ -45,6 +45,19 @@ describe('Login', () => {
 		cy.get('[data-testid=formSubmitButton]').as('loginButton');
 	});
 
+	it('Visual Testing - compare page in light mode and dark mode', () => {
+		cy.get('@teamNameInput').type('Testing');
+		cy.get('@passwordInput').type('Testing');
+
+		cy.get('#app').matchImageSnapshot('login__light-mode');
+
+		cy.switchToDarkMode();
+		cy.get('@teamNameInput').type('Testing');
+		cy.get('@passwordInput').type('Testing');
+
+		cy.get('#app').matchImageSnapshot('login__dark-mode');
+	});
+
 	it('Navigates to team board after successful login', () => {
 		fillOutAndSubmitLoginForm(teamCredentials);
 		cy.url().should(

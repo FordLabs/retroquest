@@ -48,6 +48,11 @@ declare global {
 			): Chainable<void>;
 
 			shouldBeOnRetroPage(teamId: string): Chainable<void>;
+
+			switchToDarkMode(): Chainable<void>;
+			switchToLightMode(): Chainable<void>;
+
+			matchImageSnapshot(options?: any): Chainable<void>;
 		}
 	}
 }

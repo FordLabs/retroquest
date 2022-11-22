@@ -26,6 +26,8 @@
 // ***********************************************
 //
 //
+import { addMatchImageSnapshotCommand } from '@simonsmith/cypress-image-snapshot/command';
+
 import '@testing-library/cypress/add-commands';
 
 import { getRetroPagePathWithTeamId } from '../../src/RouteConstants';
@@ -37,6 +39,8 @@ import {
 import TeamCredentials from './types/teamCredentials';
 import Topic from './types/Topic';
 import VisitOptions = Cypress.VisitOptions;
+
+addMatchImageSnapshotCommand();
 
 Cypress.Commands.add(
 	'createTeam',
@@ -138,4 +142,14 @@ Cypress.Commands.add('shouldBeOnRetroPage', (teamId: string) => {
 	cy.findByText('Happy').should('exist');
 	cy.findByText('Confused').should('exist');
 	cy.findByText('Sad').should('exist');
+});
+
+Cypress.Commands.add('switchToDarkMode', () => {
+	window.localStorage.setItem('theme', 'dark-theme');
+	cy.reload();
+});
+
+Cypress.Commands.add('switchToLightMode', () => {
+	window.localStorage.setItem('theme', 'light-theme');
+	cy.reload();
 });

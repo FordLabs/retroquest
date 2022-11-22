@@ -66,6 +66,7 @@
   },
   "devDependencies": {
     "@mdx-js/react": "^2.0.0",
+    "@simonsmith/cypress-image-snapshot": "^6.0.0",
     "@testing-library/cypress": "^8.0.3",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.2",
