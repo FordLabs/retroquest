@@ -15,6 +15,7 @@
     "test:unit": "react-scripts test",
     "test:unit:ci": "CI=true react-scripts test --runInBand",
     "tests:pre-commit": "CI=true react-scripts test --findRelatedTests",
+    "cy:update-snapshot-images": "npm run cy:run --env updateSnapshots=true --reporter cypress-image-snapshot/reporter",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "start:api": "cd .. && SPRING_PROFILES_ACTIVE=local,test-e2e ./gradlew bootRun withH2",
