@@ -175,7 +175,6 @@ Cypress.Commands.add('matchSnapshotIfHeadless', (testName: string) => {
 	if (Cypress.browser.isHeadless) {
 		cy.matchImageSnapshot(testName, {
 			customSnapshotIdentifier: 'in-iframe/conversation-is-open',
-			failureThreshold: 0.03,
 			failureThresholdType: 'percent',
 		});
 	} else {
