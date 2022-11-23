@@ -42,7 +42,6 @@ import VisitOptions = Cypress.VisitOptions;
 
 addMatchImageSnapshotCommand({
 	blackout: ['#retro-page-team-name'],
-	allowSizeMismatch: false,
 });
 
 Cypress.Commands.add(
