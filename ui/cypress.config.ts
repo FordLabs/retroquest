@@ -3,8 +3,7 @@ import { defineConfig } from 'cypress';
 export default defineConfig({
 	downloadsFolder: 'cypress/downloads',
 	screenshotsFolder: 'cypress/artifacts/screenshots',
-	videosFolder: 'cypress/artifacts/videos',
-	videoUploadOnPasses: false,
+	video: false,
 	chromeWebSecurity: false,
 	e2e: {
 		baseUrl: 'http://localhost:3000',
