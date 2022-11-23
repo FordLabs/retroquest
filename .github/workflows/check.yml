@@ -98,5 +98,5 @@ jobs:
         if: ${{ failure() }}
         uses: actions/upload-artifact@v2
         with:
-          name: cypress
-          path: /home/runner/work/retroquest/retroquest/ui/cypress/
+          name: cypress-artifacts
+          path: /home/runner/work/retroquest/retroquest/ui/cypress/artifacts
