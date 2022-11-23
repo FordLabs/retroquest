@@ -55,7 +55,7 @@ describe('Login', () => {
 
 	it('Pre-populates team name', () => {
 		cy.get('[data-testid=teamNameInput]').as('teamNameInput');
-		cy.get('@teamNameInput').should('have.value', 'sdf');
+		cy.get('@teamNameInput').should('have.value', '');
 
 		cy.visit(`${LOGIN_PAGE_PATH}/${teamCredentials.teamId}`);
 
