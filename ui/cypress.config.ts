@@ -34,7 +34,9 @@ export default defineConfig({
 				if (browser.name === 'electron' && browser.isHeadless) {
 					// fullPage screenshot size is 1200x1000
 					launchOptions.preferences.width = 1200;
-					launchOptions.preferences.height = 1200;
+					launchOptions.preferences.height = 1000;
+					launchOptions.args.push('--window-size=1200,1000');
+					launchOptions.args.push('--force-device-scale-factor=1');
 				}
 
 				if (browser.name === 'firefox' && browser.isHeadless) {
