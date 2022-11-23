@@ -1,7 +1,8 @@
 # You can ignore outputs of e2e test runs https://docs.cypress.io/guides/core-concepts/writing-and-organizing-tests#Folder-Structure
 screenshots/**
 videos/**
-artifacts/**
+artifacts/screenshots/**
+artifacts/videos/**
 fixtures/example.json
 downloads/**
-/snapshots/cypress/e2e/retro-member-journey.cy.ts/__diff_output__/
+/artifacts/snapshots/cypress/e2e/retro-member-journey.cy.ts/__diff_output__/

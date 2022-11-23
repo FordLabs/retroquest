@@ -41,6 +41,7 @@ import Topic from './types/Topic';
 import VisitOptions = Cypress.VisitOptions;
 
 addMatchImageSnapshotCommand({
+	customSnapshotsDir: '<rootDir>/cypress/artifacts/snapshots',
 	blackout: ['#retro-page-team-name'],
 });
 
