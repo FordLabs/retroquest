@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - '8025:8025'
+      - '1025:1025'
+    environment:
+      MH_STORAGE: maildir
+      MH_MAILDIR_PATH: /tmp
+    volumes:
+      - maildir:/tmp
+    command: -invite-jim=1 -jim-accept=0.50
+volumes:
+  maildir: {}
