@@ -30,11 +30,6 @@ retroquest:
       token-lifetime-seconds: 600
 
 spring:
-  boot:
-    admin:
-      mail:
-        to: ${spring.mail.username}, test@mail.com
-        from: ${spring.mail.username}
   data:
     jpa:
       repositories:
@@ -47,15 +42,8 @@ spring:
   liquibase:
     change-log: db/changelog.xml
   mail:
-    host: localhost
-    port: 1025
-    username: test@mail.com
-    password: password
-    protocol: smtp
-    properties:
-      "mail.transport.protocol": smtp
-      "mail.smtp.auth": false
-      "mail.smtp.starttls.enable": true
+    host: fake-email-host.mail.com
+    port: 25
 
 
 server:

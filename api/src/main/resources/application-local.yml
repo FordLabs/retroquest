@@ -25,3 +25,6 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
+  mail:
+    host: localhost
+    port: 1025
