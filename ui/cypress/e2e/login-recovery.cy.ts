@@ -153,24 +153,45 @@ describe('Login Recovery', () => {
 				"If an email doesn't show up soon, check your spam folder. We sent it from rq@fake.com."
 			).should('exist');
 
-			cy.log('**Change current password**');
-			cy.request(
-				'GET',
-				`/api/e2e/password-reset-token/${teamCredentials.teamId}`
-			).then((response) => {
-				const emailResetToken = response.body;
-				cy.visit(`/password/reset?token=${emailResetToken}`, {
-					failOnStatusCode: false,
+			cy.log('**Confirm the email that was sent is correct**');
+			cy.mhGetMailsByRecipient(teamCredentials.email)
+				.should('have.length', 1)
+				.mhFirst()
+				.as('passwordResetLinkEmail');
+
+			cy.get('@passwordResetLinkEmail')
+				.mhGetSubject()
+				.should('eq', 'Your Password Reset Link From RetroQuest!');
+
+			let passwordResetLink: string;
+			cy.get('@passwordResetLinkEmail')
+				.mhGetBody()
+				.should(
+					'contain',
+					`You recently requested to reset your password for your RetroQuest account "${teamCredentials.teamName}" associated with your email account ${teamCredentials.email}. No changes have been made to the account yet.`
+				)
+				.should(
+					'contain',
+					`Use the link below to reset your password. This link is only valid for the next 10 minutes.`
+				)
+				.then((emailBody) => {
+					const matches = emailBody.match(/\bhttp?:\/\/\S+/gi);
+					expect(matches.length).to.equal(1);
+					passwordResetLink = matches[0];
+
+					cy.log('**Change current password**');
+					cy.visit(passwordResetLink, {
+						failOnStatusCode: false,
+					});
+
+					cy.wait('@getConfigEndpoint');
+					cy.wait('@checkIfTokenIsValidEndpoint');
+
+					const newPassword = 'NewPassword1';
+					changePasswordOnResetPasswordPage(newPassword);
+
+					shouldLogInWithNewCredentials(teamCredentials, newPassword);
 				});
-
-				cy.wait('@getConfigEndpoint');
-				cy.wait('@checkIfTokenIsValidEndpoint');
-
-				const newPassword = 'NewPassword1';
-				changePasswordOnResetPasswordPage(newPassword);
-
-				shouldLogInWithNewCredentials(teamCredentials, newPassword);
-			});
 		});
 
 		it('Request a password reset email through settings, change password, and login with new password', () => {
@@ -201,24 +222,45 @@ describe('Login Recovery', () => {
 
 			cy.findByText('Close').click();
 
-			cy.log('**Change current password**');
-			cy.request(
-				'GET',
-				`/api/e2e/password-reset-token/${teamCredentials.teamId}`
-			).then((response) => {
-				const emailResetToken = response.body;
-				cy.visit(`/password/reset?token=${emailResetToken}`, {
-					failOnStatusCode: false,
+			cy.log('**Confirm the email that was sent is correct**');
+			cy.mhGetMailsByRecipient(teamCredentials.email)
+				.should('have.length', 1)
+				.mhFirst()
+				.as('passwordResetLinkEmail');
+
+			cy.get('@passwordResetLinkEmail')
+				.mhGetSubject()
+				.should('eq', 'Your Password Reset Link From RetroQuest!');
+
+			let passwordResetLink: string;
+			cy.get('@passwordResetLinkEmail')
+				.mhGetBody()
+				.should(
+					'contain',
+					`You recently requested to reset your password for your RetroQuest account "${teamCredentials.teamName}" associated with your email account ${teamCredentials.email}. No changes have been made to the account yet.`
+				)
+				.should(
+					'contain',
+					`Use the link below to reset your password. This link is only valid for the next 10 minutes.`
+				)
+				.then((emailBody) => {
+					const matches = emailBody.match(/\bhttp?:\/\/\S+/gi);
+					expect(matches.length).to.equal(1);
+					passwordResetLink = matches[0];
+
+					cy.log('**Change current password**');
+					cy.visit(passwordResetLink, {
+						failOnStatusCode: false,
+					});
+
+					cy.wait('@getConfigEndpoint');
+					cy.wait('@checkIfTokenIsValidEndpoint');
+
+					const newPassword = 'NewPassword1';
+					changePasswordOnResetPasswordPage(newPassword);
+
+					shouldLogInWithNewCredentials(teamCredentials, newPassword);
 				});
-
-				cy.wait('@getConfigEndpoint');
-				cy.wait('@checkIfTokenIsValidEndpoint');
-
-				const newPassword = 'NewPassword1';
-				changePasswordOnResetPasswordPage(newPassword);
-
-				shouldLogInWithNewCredentials(teamCredentials, newPassword);
-			});
 		});
 
 		it('Redirect to "Expired Link" page when token is invalid', () => {
