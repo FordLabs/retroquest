@@ -19,7 +19,7 @@ import { getTeamCredentials } from '../support/helpers';
 import TeamCredentials from '../support/types/teamCredentials';
 
 describe('Login Recovery', () => {
-	let teamCredentials;
+	let teamCredentials: TeamCredentials;
 
 	beforeEach(() => {
 		cy.intercept('GET', '**/is-valid').as('checkIfTokenIsValidEndpoint');
@@ -27,6 +27,9 @@ describe('Login Recovery', () => {
 		teamCredentials = getTeamCredentials();
 
 		cy.createTeam(teamCredentials);
+		cy.mhDeleteAll()
+			.mhGetMailsByRecipient(teamCredentials.email)
+			.should('have.length', 0);
 	});
 
 	context('Update Board Owners', () => {
@@ -55,32 +58,53 @@ describe('Login Recovery', () => {
 
 			cy.findByText('Close').click();
 
-			cy.request(
-				'POST',
-				`/api/e2e/create-email-reset-token/${teamCredentials.teamId}`
-			).then((response) => {
-				const emailResetToken = response.body;
-				cy.visit(`/email/reset?token=${emailResetToken}`);
+			cy.log('**Confirm the email that was sent is correct**');
+			cy.mhGetMailsByRecipient(teamCredentials.email)
+				.should('have.length', 1)
+				.mhFirst()
+				.as('boardOwnersResetLinkEmail');
 
-				cy.log(
-					'Ensure form is pre-populated with current team email addresses'
-				);
-				cy.findByLabelText('Email 1')
-					.should('have.value', teamCredentials.email)
-					.clear()
-					.type('primary@mail.com');
+			cy.get('@boardOwnersResetLinkEmail')
+				.mhGetSubject()
+				.should('eq', 'RetroQuest Board Owner Update Request!');
 
-				cy.findByLabelText('Second Teammate’s Email (optional)')
-					.should('have.value', '')
-					.clear()
-					.type('secondary@mail.com');
+			cy.get('@boardOwnersResetLinkEmail')
+				.mhGetBody()
+				.should(
+					'contain',
+					`Someone from your RetroQuest team, "${teamCredentials.teamName}" recently requested to reset the board owner emails.`
+				)
+				.should(
+					'contain',
+					`Use the link below to reset your team emails. This link is only valid for the next 10 minutes.`
+				)
+				.then((emailBody) => {
+					const matches = emailBody.match(/\bhttp?:\/\/\S+/gi);
+					expect(matches.length).to.equal(1);
+					const url = new URL(matches[0]);
+					const boardOwnersResetLink = url.pathname + url.search;
 
-				cy.findByText('Save Changes').click();
+					cy.visit(boardOwnersResetLink);
 
-				cy.findByText('Board Owners Updated!').should('exist');
+					cy.log(
+						'Ensure form is pre-populated with current team email addresses'
+					);
+					cy.findByLabelText('Email 1')
+						.should('have.value', teamCredentials.email)
+						.clear()
+						.type('primary@mail.com');
 
-				ensureTeamEmailsGotSavedToDB(teamCredentials);
-			});
+					cy.findByLabelText('Second Teammate’s Email (optional)')
+						.should('have.value', '')
+						.clear()
+						.type('secondary@mail.com');
+
+					cy.findByText('Save Changes').click();
+
+					cy.findByText('Board Owners Updated!').should('exist');
+
+					ensureTeamEmailsGotSavedToDB(teamCredentials);
+				});
 		});
 
 		it('Redirect to "Expired Link" page when token is invalid', () => {
@@ -129,24 +153,45 @@ describe('Login Recovery', () => {
 				"If an email doesn't show up soon, check your spam folder. We sent it from rq@fake.com."
 			).should('exist');
 
-			cy.log('**Change current password**');
-			cy.request(
-				'GET',
-				`/api/e2e/password-reset-token/${teamCredentials.teamId}`
-			).then((response) => {
-				const emailResetToken = response.body;
-				cy.visit(`/password/reset?token=${emailResetToken}`, {
-					failOnStatusCode: false,
+			cy.log('**Confirm the email that was sent is correct**');
+			cy.mhGetMailsByRecipient(teamCredentials.email)
+				.should('have.length', 1)
+				.mhFirst()
+				.as('passwordResetLinkEmail');
+
+			cy.get('@passwordResetLinkEmail')
+				.mhGetSubject()
+				.should('eq', 'Your Password Reset Link From RetroQuest!');
+
+			cy.get('@passwordResetLinkEmail')
+				.mhGetBody()
+				.should(
+					'contain',
+					`You recently requested to reset your password for your RetroQuest account "${teamCredentials.teamName}" associated with your email account ${teamCredentials.email}. No changes have been made to the account yet.`
+				)
+				.should(
+					'contain',
+					`Use the link below to reset your password. This link is only valid for the next 10 minutes.`
+				)
+				.then((emailBody) => {
+					const matches = emailBody.match(/\bhttp?:\/\/\S+/gi);
+					expect(matches.length).to.equal(1);
+					const url = new URL(matches[0]);
+					const passwordResetLink = url.pathname + url.search;
+
+					cy.log('**Change current password**');
+					cy.visit(passwordResetLink, {
+						failOnStatusCode: false,
+					});
+
+					cy.wait('@getConfigEndpoint');
+					cy.wait('@checkIfTokenIsValidEndpoint');
+
+					const newPassword = 'NewPassword1';
+					changePasswordOnResetPasswordPage(newPassword);
+
+					shouldLogInWithNewCredentials(teamCredentials, newPassword);
 				});
-
-				cy.wait('@getConfigEndpoint');
-				cy.wait('@checkIfTokenIsValidEndpoint');
-
-				const newPassword = 'NewPassword1';
-				changePasswordOnResetPasswordPage(newPassword);
-
-				shouldLogInWithNewCredentials(teamCredentials, newPassword);
-			});
 		});
 
 		it('Request a password reset email through settings, change password, and login with new password', () => {
@@ -177,24 +222,45 @@ describe('Login Recovery', () => {
 
 			cy.findByText('Close').click();
 
-			cy.log('**Change current password**');
-			cy.request(
-				'GET',
-				`/api/e2e/password-reset-token/${teamCredentials.teamId}`
-			).then((response) => {
-				const emailResetToken = response.body;
-				cy.visit(`/password/reset?token=${emailResetToken}`, {
-					failOnStatusCode: false,
+			cy.log('**Confirm the email that was sent is correct**');
+			cy.mhGetMailsByRecipient(teamCredentials.email)
+				.should('have.length', 1)
+				.mhFirst()
+				.as('passwordResetLinkEmail');
+
+			cy.get('@passwordResetLinkEmail')
+				.mhGetSubject()
+				.should('eq', 'Your Password Reset Link From RetroQuest!');
+
+			cy.get('@passwordResetLinkEmail')
+				.mhGetBody()
+				.should(
+					'contain',
+					`You recently requested to reset your password for your RetroQuest account "${teamCredentials.teamName}" associated with your email account ${teamCredentials.email}. No changes have been made to the account yet.`
+				)
+				.should(
+					'contain',
+					`Use the link below to reset your password. This link is only valid for the next 10 minutes.`
+				)
+				.then((emailBody) => {
+					const matches = emailBody.match(/\bhttp?:\/\/\S+/gi);
+					expect(matches.length).to.equal(1);
+					const url = new URL(matches[0]);
+					const passwordResetLink = url.pathname + url.search;
+
+					cy.log('**Change current password**');
+					cy.visit(passwordResetLink, {
+						failOnStatusCode: false,
+					});
+
+					cy.wait('@getConfigEndpoint');
+					cy.wait('@checkIfTokenIsValidEndpoint');
+
+					const newPassword = 'NewPassword1';
+					changePasswordOnResetPasswordPage(newPassword);
+
+					shouldLogInWithNewCredentials(teamCredentials, newPassword);
 				});
-
-				cy.wait('@getConfigEndpoint');
-				cy.wait('@checkIfTokenIsValidEndpoint');
-
-				const newPassword = 'NewPassword1';
-				changePasswordOnResetPasswordPage(newPassword);
-
-				shouldLogInWithNewCredentials(teamCredentials, newPassword);
-			});
 		});
 
 		it('Redirect to "Expired Link" page when token is invalid', () => {
@@ -235,6 +301,24 @@ describe('Login Recovery', () => {
 		cy.findByText(
 			'If an email doesn’t show up soon, check your spam folder. We sent it from rq@fake.com.'
 		).should('exist');
+
+		cy.log('**Confirm the email that was sent is correct**');
+		cy.mhGetMailsByRecipient(teamCredentials.email)
+			.should('have.length', 1)
+			.mhFirst()
+			.as('teamNameRecoveryEmail');
+
+		cy.get('@teamNameRecoveryEmail')
+			.mhGetSubject()
+			.should('eq', 'RetroQuest Teams Names Associated with your Account');
+
+		cy.get('@teamNameRecoveryEmail')
+			.mhGetBody()
+			.should(
+				'contain',
+				`We've received a request to send you the RetroQuest name(s) associated with your email (${teamCredentials.email}).`
+			)
+			.should('contain', teamCredentials.teamName);
 	});
 });
 

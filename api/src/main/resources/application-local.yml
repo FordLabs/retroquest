@@ -14,6 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+retroquest:
+  app-base-url: http://localhost:3000
+
 spring:
   h2:
     console:
@@ -25,3 +28,6 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
+  mail:
+    host: localhost
+    port: 1025

@@ -29,6 +29,7 @@
 import { addMatchImageSnapshotCommand } from '@simonsmith/cypress-image-snapshot/command';
 
 import '@testing-library/cypress/add-commands';
+import 'cypress-mailhog';
 
 import { getRetroPagePathWithTeamId } from '../../src/RouteConstants';
 import {

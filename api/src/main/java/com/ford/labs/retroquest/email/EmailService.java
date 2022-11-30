@@ -68,9 +68,9 @@ public class EmailService {
 	) {
 		return (
 			"Hey there! \n\n" +
-			"You recently requested to reset your password for your RetroQuest account " +
+			"You recently requested to reset your password for your RetroQuest account \"" +
 			passwordResetRequest.getTeamName() +
-			" associated with your email account " +
+			"\" associated with your email account " +
 			passwordResetRequest.getEmail() +
 			". No changes have been made to the account yet. \r\n\n" +
 			"Use the link below to reset your password. This link is only valid for the next 10 minutes. \r\n\n" +
@@ -85,7 +85,7 @@ public class EmailService {
 	public String getTeamNameRecoveryEmailMessage(String recoveryEmail, List<String> teamNamesAssociatedWithEmail) {
 		StringBuilder message = new StringBuilder(
 			"Hey there! \n" +
-			"We’ve received a request to send you the RetroQuest name(s) associated with your email (" +
+			"We've received a request to send you the RetroQuest name(s) associated with your email (" +
 			recoveryEmail +
 			").\r\n\n"
 		);

@@ -1,10 +1,23 @@
+/*
+ * Copyright (c) 2022 Ford Motor Company
+ * All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.ford.labs.retroquest;
 
-import com.ford.labs.retroquest.email_reset_token.EmailResetToken;
 import com.ford.labs.retroquest.email_reset_token.EmailResetTokenService;
-import com.ford.labs.retroquest.password_reset_token.PasswordResetToken;
 import com.ford.labs.retroquest.password_reset_token.PasswordResetTokenRepository;
-import com.ford.labs.retroquest.password_reset_token.PasswordResetTokenService;
 import com.ford.labs.retroquest.security.JwtBuilder;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
@@ -33,17 +46,11 @@ public class E2ETestController {
 
     private final TeamRepository teamRepository;
 
-    private final PasswordResetTokenRepository passwordResetTokenRepository;
-
-    private final EmailResetTokenService emailResetTokenService;
-
     private final JwtBuilder jwtBuilder;
 
     public E2ETestController(TeamService teamService, TeamRepository teamRepository, PasswordResetTokenRepository passwordResetTokenRepository, EmailResetTokenService emailResetTokenService, JwtBuilder jwtBuilder) {
         this.teamService = teamService;
         this.teamRepository = teamRepository;
-        this.passwordResetTokenRepository = passwordResetTokenRepository;
-        this.emailResetTokenService = emailResetTokenService;
         this.jwtBuilder = jwtBuilder;
     }
 
@@ -73,23 +80,5 @@ public class E2ETestController {
         headers.add(HttpHeaders.LOCATION, teamId);
 
         return new ResponseEntity<>(jwt, headers, CREATED);
-    }
-
-    @PostMapping("/create-email-reset-token/{teamId}")
-    @Operation(description = "Create an email reset token associated with team")
-    @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Created")})
-    public String createEmailResetTokenForTeam(@PathVariable("teamId") String teamId) {
-        Team team = teamService.getTeamByUri(teamId);
-        EmailResetToken emailResetToken = emailResetTokenService.getNewEmailResetToken(team);
-        return emailResetToken.getResetToken();
-    }
-
-    @GetMapping("/password-reset-token/{teamId}")
-    @Operation(description = "Create a password reset token associated with team")
-    @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Created")})
-    public String getPasswordResetTokenForTeam(@PathVariable("teamId") String teamId) {
-        Team team = teamService.getTeamByUri(teamId);
-        PasswordResetToken passwordResetToken = passwordResetTokenRepository.findByTeam(team);
-        return passwordResetToken.getResetToken();
     }
 }
