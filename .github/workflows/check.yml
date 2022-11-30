@@ -98,6 +98,7 @@ jobs:
         working-directory: ./ui
         run: npm run test:e2e:ci
       - name: Stop containers
+        working-directory: ./ui/cypress
         if: always()
         run: docker-compose -f "docker-compose.yml" down
       - name: Upload Screenshots
