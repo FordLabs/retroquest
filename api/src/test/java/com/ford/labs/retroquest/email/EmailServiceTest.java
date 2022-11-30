@@ -63,7 +63,7 @@ class EmailServiceTest {
         """
                 Hey there!\s
 
-                You recently requested to reset your password for your RetroQuest account Team Name associated with your email account e@ma.il. No changes have been made to the account yet. \r
+                You recently requested to reset your password for your RetroQuest account "Team Name" associated with your email account e@ma.il. No changes have been made to the account yet. \r
 
                 Use the link below to reset your password. This link is only valid for the next 10 minutes. \r
 
@@ -91,7 +91,7 @@ class EmailServiceTest {
         assertThat(actualMessage).isEqualTo(
         """
                 Hey there!\s
-                We’ve received a request to send you the RetroQuest name(s) associated with your email (recovery@mail.com).\r
+                We've received a request to send you the RetroQuest name(s) associated with your email (recovery@mail.com).\r
     
                 Team 4\r
                 Team 10\r

@@ -301,6 +301,24 @@ describe('Login Recovery', () => {
 		cy.findByText(
 			'If an email doesn’t show up soon, check your spam folder. We sent it from rq@fake.com.'
 		).should('exist');
+
+		cy.log('**Confirm the email that was sent is correct**');
+		cy.mhGetMailsByRecipient(teamCredentials.email)
+			.should('have.length', 1)
+			.mhFirst()
+			.as('teamNameRecoveryEmail');
+
+		cy.get('@teamNameRecoveryEmail')
+			.mhGetSubject()
+			.should('eq', 'RetroQuest Teams Names Associated with your Account');
+
+		cy.get('@teamNameRecoveryEmail')
+			.mhGetBody()
+			.should(
+				'contain',
+				`We've received a request to send you the RetroQuest name(s) associated with your email (${teamCredentials.email}).`
+			)
+			.should('contain', teamCredentials.teamName);
 	});
 });
 
