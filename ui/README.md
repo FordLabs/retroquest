@@ -75,7 +75,7 @@ npm run test:unit
 This code base uses [Cypress](https://www.cypress.io/) to execute end to end tests as well as UI tests that require a browser to fully simulate.  Cypress tests take much
 longer to run than Jest tests so it is recommended to use them when a unit test cannot easily or fully test the functionality in question.
 
-Before starting your cypress tests, you must start the [springboot and react servers](../README.md#Running-the-Application).
+Before starting your cypress tests, you must start the [springboot server, react server, and email interceptor](../README.md#Running-the-Application).
 
 ```bash
 # Run end-to-end tests in headless mode:

@@ -91,9 +91,16 @@ jobs:
         run: |
           npm run update-version
           npm run build
+      - name: Start containers
+        working-directory: ./ui/cypress
+        run: docker-compose -f "docker-compose.yml" up
       - name: Run Cypress Tests
-        run: npm run test:e2e:ci
         working-directory: ./ui
+        run: npm run test:e2e:ci
+      - name: Stop containers
+        working-directory: ./ui/cypress
+        if: always()
+        run: docker-compose -f "docker-compose.yml" down
       - name: Upload Screenshots
         if: ${{ failure() }}
         uses: actions/upload-artifact@v3
