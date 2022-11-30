@@ -68,7 +68,6 @@ describe('Login Recovery', () => {
 				.mhGetSubject()
 				.should('eq', 'RetroQuest Board Owner Update Request!');
 
-			let boardOwnersResetLink: string;
 			cy.get('@boardOwnersResetLinkEmail')
 				.mhGetBody()
 				.should(
@@ -82,7 +81,8 @@ describe('Login Recovery', () => {
 				.then((emailBody) => {
 					const matches = emailBody.match(/\bhttp?:\/\/\S+/gi);
 					expect(matches.length).to.equal(1);
-					boardOwnersResetLink = matches[0];
+					const url = new URL(matches[0]);
+					const boardOwnersResetLink = url.pathname + url.search;
 
 					cy.visit(boardOwnersResetLink);
 
@@ -163,7 +163,6 @@ describe('Login Recovery', () => {
 				.mhGetSubject()
 				.should('eq', 'Your Password Reset Link From RetroQuest!');
 
-			let passwordResetLink: string;
 			cy.get('@passwordResetLinkEmail')
 				.mhGetBody()
 				.should(
@@ -177,7 +176,8 @@ describe('Login Recovery', () => {
 				.then((emailBody) => {
 					const matches = emailBody.match(/\bhttp?:\/\/\S+/gi);
 					expect(matches.length).to.equal(1);
-					passwordResetLink = matches[0];
+					const url = new URL(matches[0]);
+					const passwordResetLink = url.pathname + url.search;
 
 					cy.log('**Change current password**');
 					cy.visit(passwordResetLink, {
@@ -232,7 +232,6 @@ describe('Login Recovery', () => {
 				.mhGetSubject()
 				.should('eq', 'Your Password Reset Link From RetroQuest!');
 
-			let passwordResetLink: string;
 			cy.get('@passwordResetLinkEmail')
 				.mhGetBody()
 				.should(
@@ -246,7 +245,8 @@ describe('Login Recovery', () => {
 				.then((emailBody) => {
 					const matches = emailBody.match(/\bhttp?:\/\/\S+/gi);
 					expect(matches.length).to.equal(1);
-					passwordResetLink = matches[0];
+					const url = new URL(matches[0]);
+					const passwordResetLink = url.pathname + url.search;
 
 					cy.log('**Change current password**');
 					cy.visit(passwordResetLink, {
