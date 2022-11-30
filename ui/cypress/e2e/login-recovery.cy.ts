@@ -19,7 +19,7 @@ import { getTeamCredentials } from '../support/helpers';
 import TeamCredentials from '../support/types/teamCredentials';
 
 describe('Login Recovery', () => {
-	let teamCredentials;
+	let teamCredentials: TeamCredentials;
 
 	beforeEach(() => {
 		cy.intercept('GET', '**/is-valid').as('checkIfTokenIsValidEndpoint');
@@ -27,6 +27,9 @@ describe('Login Recovery', () => {
 		teamCredentials = getTeamCredentials();
 
 		cy.createTeam(teamCredentials);
+		cy.mhDeleteAll()
+			.mhGetMailsByRecipient(teamCredentials.email)
+			.should('have.length', 0);
 	});
 
 	context('Update Board Owners', () => {
@@ -55,32 +58,53 @@ describe('Login Recovery', () => {
 
 			cy.findByText('Close').click();
 
-			cy.request(
-				'POST',
-				`/api/e2e/create-email-reset-token/${teamCredentials.teamId}`
-			).then((response) => {
-				const emailResetToken = response.body;
-				cy.visit(`/email/reset?token=${emailResetToken}`);
+			cy.log('**Confirm the email that was sent is correct**');
+			cy.mhGetMailsByRecipient(teamCredentials.email)
+				.should('have.length', 1)
+				.mhFirst()
+				.as('boardOwnersResetLinkEmail');
 
-				cy.log(
-					'Ensure form is pre-populated with current team email addresses'
-				);
-				cy.findByLabelText('Email 1')
-					.should('have.value', teamCredentials.email)
-					.clear()
-					.type('primary@mail.com');
+			cy.get('@boardOwnersResetLinkEmail')
+				.mhGetSubject()
+				.should('eq', 'RetroQuest Board Owner Update Request!');
 
-				cy.findByLabelText('Second Teammate’s Email (optional)')
-					.should('have.value', '')
-					.clear()
-					.type('secondary@mail.com');
+			let boardOwnersResetLink: string;
+			cy.get('@boardOwnersResetLinkEmail')
+				.mhGetBody()
+				.should(
+					'contain',
+					`Someone from your RetroQuest team, "${teamCredentials.teamName}" recently requested to reset the board owner emails.`
+				)
+				.should(
+					'contain',
+					`Use the link below to reset your team emails. This link is only valid for the next 10 minutes.`
+				)
+				.then((emailBody) => {
+					const matches = emailBody.match(/\bhttp?:\/\/\S+/gi);
+					expect(matches.length).to.equal(1);
+					boardOwnersResetLink = matches[0];
 
-				cy.findByText('Save Changes').click();
+					cy.visit(boardOwnersResetLink);
 
-				cy.findByText('Board Owners Updated!').should('exist');
+					cy.log(
+						'Ensure form is pre-populated with current team email addresses'
+					);
+					cy.findByLabelText('Email 1')
+						.should('have.value', teamCredentials.email)
+						.clear()
+						.type('primary@mail.com');
 
-				ensureTeamEmailsGotSavedToDB(teamCredentials);
-			});
+					cy.findByLabelText('Second Teammate’s Email (optional)')
+						.should('have.value', '')
+						.clear()
+						.type('secondary@mail.com');
+
+					cy.findByText('Save Changes').click();
+
+					cy.findByText('Board Owners Updated!').should('exist');
+
+					ensureTeamEmailsGotSavedToDB(teamCredentials);
+				});
 		});
 
 		it('Redirect to "Expired Link" page when token is invalid', () => {

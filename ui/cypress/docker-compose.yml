@@ -3,14 +3,8 @@ version: '3'
 services:
   mailhog:
     image: mailhog/mailhog:latest
+    logging:
+      driver: 'none'  # disable saving logs
     ports:
-      - '8025:8025'
-      - '1025:1025'
-    environment:
-      MH_STORAGE: maildir
-      MH_MAILDIR_PATH: /tmp
-    volumes:
-      - maildir:/tmp
-    command: -invite-jim=false
-volumes:
-  maildir: {}
+      - '1025:1025' # smtp server
+      - '8025:8025' # web ui
