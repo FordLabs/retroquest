@@ -26,6 +26,8 @@ describe('Retro Member Journey', () => {
 	let teamCredentials;
 
 	beforeEach(() => {
+		window.localStorage.setItem('theme', 'light-theme');
+
 		teamCredentials = getTeamCredentials();
 		cy.createTeamAndLogin(teamCredentials, {
 			onBeforeLoad(win: Cypress.AUTWindow) {
@@ -275,6 +277,8 @@ describe('Retro Member Journey', () => {
 
 			cy.findByText('Styles').as('stylesTab');
 			cy.findByText('Account').as('accountTab');
+
+			setSystemPreferencesToLightMode();
 		});
 
 		it('Styles Tab: Change theme between light, dark, and system settings mode', () => {
@@ -359,4 +363,21 @@ function shouldAddHappyThoughts(happyThoughts: string[]) {
 		cy.findByText(happyThought).should('exist');
 		cy.confirmNumberOfThoughtsInColumn(Topic.HAPPY, index + 1);
 	});
+}
+
+function setSystemPreferencesToLightMode() {
+	cy.wrap(
+		Cypress.automation('remote:debugger:protocol', {
+			command: 'Emulation.setEmulatedMedia',
+			params: {
+				media: 'page',
+				features: [
+					{
+						name: 'prefers-color-scheme',
+						value: 'light',
+					},
+				],
+			},
+		})
+	);
 }

@@ -29,6 +29,8 @@ describe('Retro Facilitator Journey', () => {
 	const editButtonSelector = '[data-testid=editButton]';
 
 	beforeEach(() => {
+		window.localStorage.setItem('theme', 'light-theme');
+
 		teamCredentials = getTeamCredentials();
 	});
 
