@@ -21,6 +21,25 @@ From the ui folder:
 npm install && npm run start
 ```
 
+### Start the email interceptor:
+
+We use [cypress-mailhog](https://github.com/SMenigat/cypress-mailhog#readme) in order to intercept and
+test emails sent from RetroQuest within the Cypress tests. You will need to have docker setup for this.
+
+See https://docs.docker.com/ in order to install docker if not already setup on your machine.
+
+From the cypress folder:
+
+```bash
+# to start mailhog
+docker-compose up
+```
+
+```bash
+# to stop mailhog
+docker-compose down
+```
+
 ### Run Cypress tests:
 
 From the ui folder:
