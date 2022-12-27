@@ -74,7 +74,7 @@ function CreateTeamPage(): JSX.Element {
 				if (response.status === 409) {
 					errorMsg =
 						typeof response !== 'undefined'
-							? response.data.message
+							? response.data.reason
 							: error.message;
 				}
 				setErrorMessages([errorMsg]);

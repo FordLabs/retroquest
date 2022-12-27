@@ -22,87 +22,100 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
+@ResponseBody
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-    @ResponseStatus(value = HttpStatus.CONFLICT, reason = "This team name is already in use. Please try another one.")
+    private static class ErrorDetails{
+        private final String reason;
+        public ErrorDetails(String reasonForError){
+            this.reason = reasonForError;
+        }
+
+        public String getReason() {
+            return reason;
+        }
+    }
+
+    @ResponseStatus(value = HttpStatus.CONFLICT)
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public void duplicateUriConflict() {
-        // Used by Spring for Controller Advice
+    public ErrorDetails duplicateUriConflict() {
+        return new ErrorDetails("This team name is already in use. Please try another one.");
     }
 
-    @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Column Title with that ID not found")
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler(ColumnNotFoundException.class)
-    public void columnNotFound() {
-        // Used by Spring for Controller Advice
+    public ErrorDetails columnNotFound() {
+        return new ErrorDetails("Column Title with that ID not found");
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Please enter a team name without any special characters.")
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(SpecialCharacterTeamNameException.class)
-    public void badTeamNameWithSpecialCharactersRequest() {
-        // Used by Spring for Controller Advice
+    public ErrorDetails badTeamNameWithSpecialCharactersRequest() {
+        return new ErrorDetails("Please enter a team name without any special characters.");
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Please enter a team name.")
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EmptyTeamNameException.class)
-    public void emptyTeamNameRequest() {
-        // Used by Spring for Controller Advice
+    public ErrorDetails emptyTeamNameRequest() {
+        return new ErrorDetails("Please enter a team name.");
     }
 
-    @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Incorrect team name or password. Please try again.")
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
     @ExceptionHandler(TeamDoesNotExistException.class)
-    public void noTeamExceptionHandler() {
-        // Used by Spring for Controller Advice
+    public ErrorDetails noTeamExceptionHandler() {
+        return new ErrorDetails("Incorrect team name or password. Please try again.");
     }
 
-    @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Incorrect team name or password. Please try again.")
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
     @ExceptionHandler(PasswordInvalidException.class)
-    public void badPasswordExceptionHandler() {
-        // Used by Spring for Controller Advice
+    public ErrorDetails badPasswordExceptionHandler() {
+        return new ErrorDetails("Incorrect team name or password. Please try again.");
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Reset token incorrect or expired.")
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BadResetTokenException.class)
-    public void badPasswordResetTokenExceptionHandler() {
-        // Used by Spring for Controller Advice
+    public ErrorDetails badPasswordResetTokenExceptionHandler() {
+        return new ErrorDetails("Reset token incorrect or expired.");
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Password must be 8 characters or longer.")
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(PasswordTooShortException.class)
-    public void passwordTooShortExceptionHandler() {
-        // Used by Spring for Controller Advice
+    public ErrorDetails passwordTooShortExceptionHandler() {
+        return new ErrorDetails("Password must be 8 characters or longer.");
     }
 
     @ExceptionHandler(EmailNotValidException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Team email is required.")
-    public void emailRequiredExceptionHandler() {
-        // Used by Spring for Controller Advice
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorDetails emailRequiredExceptionHandler() {
+        return new ErrorDetails("Team email is required.");
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Password must contain at least one numeric character.")
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(PasswordMissingNumberException.class)
-    public void passwordMissingNumberExceptionHandler() {
-        // Used by Spring for Controller Advice
+    public ErrorDetails passwordMissingNumberExceptionHandler() {
+        return new ErrorDetails("Password must contain at least one numeric character.");
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Password must contain at least one capital letter.")
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(PasswordMissingUpperCaseAlphaException.class)
-    public void passwordMissingUpperCaseAlphaExceptionHandler() {
-        // Used by Spring for Controller Advice
+    public ErrorDetails passwordMissingUpperCaseAlphaExceptionHandler() {
+        return new ErrorDetails("Password must contain at least one capital letter.");
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Password must contain at least one lower case letter.")
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(PasswordMissingLowerCaseAlphaException.class)
-    public void passwordMissingLowerCaseAlphaExceptionHandler() {
-        // Used by Spring for Controller Advice
+    public ErrorDetails passwordMissingLowerCaseAlphaExceptionHandler() {
+        return new ErrorDetails("Password must contain at least one lower case letter.");
     }
 
     @ExceptionHandler(EmailNotAssociatedWithAnyTeamsException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "This email is not associated with any RetroQuest team.")
-    public void emailNotAssociatedWithAnyTeamsExceptionHandler() {
-        // Used by Spring for Controller Advice
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ErrorDetails emailNotAssociatedWithAnyTeamsExceptionHandler() {
+        return new ErrorDetails("This email is not associated with any RetroQuest team.");
     }
 
     @ExceptionHandler(ThoughtNotFoundException.class)
@@ -112,7 +125,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler(ActionItemDoesNotExistException.class)
-    public void actionItemDoesNotExistExceptionHandler() {
-        // Used by Spring for Controller Advice
+    public ErrorDetails actionItemDoesNotExistExceptionHandler() {
+        return new ErrorDetails("The requested action item cannot be found.");
     }
 }
