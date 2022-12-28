@@ -86,6 +86,26 @@ function CreateTeamPage(): JSX.Element {
 		createTeam();
 	}
 
+	function onTeamNameChange(updatedTeamName: string, validity: boolean) {
+		setTeamName({ value: updatedTeamName, validity: validity });
+		setErrorMessages([]);
+	}
+
+	function onPasswordChange(updatedPassword: string, isValid: boolean) {
+		setPassword({ value: updatedPassword, validity: isValid });
+		setErrorMessages([]);
+	}
+
+	function onPrimaryEmailChange(value: string, validity: boolean) {
+		setEmail({ value: value, validity: validity });
+		setErrorMessages([]);
+	}
+
+	function onSecondaryEmailChange(value: string, validity: boolean) {
+		setSecondEmail({ value: value, validity: validity });
+		setErrorMessages([]);
+	}
+
 	return (
 		<AuthTemplate header="Create a New Team!" className="create-team-page">
 			<Form
@@ -94,41 +114,23 @@ function CreateTeamPage(): JSX.Element {
 				submitButtonText="Create Team"
 				disableSubmitBtn={disableSubmitButton()}
 			>
-				<InputTeamName
-					value={teamName.value}
-					onChange={(updatedTeamName: string, validity: boolean) => {
-						setTeamName({ value: updatedTeamName, validity: validity });
-						setErrorMessages([]);
-					}}
-				/>
+				<InputTeamName value={teamName.value} onChange={onTeamNameChange} />
 				<InputPassword
 					password={password.value}
-					onPasswordInputChange={(
-						updatedPassword: string,
-						isValid: boolean
-					) => {
-						setPassword({ value: updatedPassword, validity: isValid });
-						setErrorMessages([]);
-					}}
+					onPasswordInputChange={onPasswordChange}
 				/>
 				<InputEmail
 					id="emailInput"
 					label="Email"
 					value={email.value}
-					onChange={(value, validity) => {
-						setEmail({ value: value, validity: validity });
-						setErrorMessages([]);
-					}}
+					onChange={onPrimaryEmailChange}
 				/>
 				<InputEmail
 					id="secondEmailInput"
 					label="Second Teammate's Email (optional)"
 					value={secondEmail.value}
 					required={false}
-					onChange={(value, validity) => {
-						setSecondEmail({ value: value, validity: validity });
-						setErrorMessages([]);
-					}}
+					onChange={onSecondaryEmailChange}
 				/>
 			</Form>
 			<HorizontalRuleWithText text="or" />
