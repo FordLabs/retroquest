@@ -264,4 +264,22 @@
             <column defaultValueComputed="NULL" name="date_created" type="datetime"/>
         </createTable>
     </changeSet>
+    <changeSet id="add_team2_table" author="lowbudgetman">
+        <preConditions>
+            <not>
+                <tableExists tableName="team2"/>
+            </not>
+        </preConditions>
+        <createTable tableName="team2">
+            <column name="id" type="uuid" autoIncrement="1">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="created_at" type="datetime">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

@@ -1,0 +1,10 @@
+package com.ford.labs.retroquest.team2;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+import java.util.UUID;
+
+public interface TeamRepository2 extends JpaRepository<Team2, UUID> {
+    Optional<Team2> findTeam2ByName(String name);
+}
