@@ -18,6 +18,7 @@
 package com.ford.labs.retroquest.board;
 
 import com.ford.labs.retroquest.column.Column;
+import com.ford.labs.retroquest.retro.Retro;
 import com.ford.labs.retroquest.thought.Thought;
 import org.junit.jupiter.api.Test;
 

@@ -69,6 +69,8 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpclient:4.5.13'
     implementation 'org.liquibase:liquibase-core:4.3.5'
     implementation 'org.springdoc:springdoc-openapi-ui:1.5.9'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+//    implementation 'com.nimbusds:oauth2-oidc-sdk'
 
     // https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'

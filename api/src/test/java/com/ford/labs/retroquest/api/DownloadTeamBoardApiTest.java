@@ -111,7 +111,7 @@ class DownloadTeamBoardApiTest extends ApiTestBase {
         restTemplate.postForObject("/api/team/", loginRequest, String.class);
 
         mockMvc.perform(get("/api/team/" + teamId + "/csv")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("not-beach-bums")))
+                .header("Authorization", "Bearer bad-token"))
                 .andExpect(status().isForbidden());
     }
 }

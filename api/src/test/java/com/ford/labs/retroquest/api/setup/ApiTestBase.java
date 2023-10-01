@@ -19,7 +19,6 @@ package com.ford.labs.retroquest.api.setup;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ford.labs.retroquest.contributors.ContributorController;
-import com.ford.labs.retroquest.security.JwtBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
@@ -28,7 +27,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.web.servlet.MockMvc;
 
 @AutoConfigureMockMvc
@@ -42,9 +40,6 @@ public abstract class ApiTestBase {
 
     @Autowired
     public MockMvc mockMvc;
-
-    @Autowired
-    public JwtBuilder jwtBuilder;
 
     @MockBean
     public ContributorController contributorController;
@@ -62,7 +57,7 @@ public abstract class ApiTestBase {
     public void __setup() {
         teamId = "BeachBums";
         websocketUrl = "ws://localhost:" + port + "/websocket";
-        bearerAuthToken = "Bearer " + jwtBuilder.buildJwt(teamId);
+        bearerAuthToken = "Bearer fake-jwt";
     }
 
     public String getBearerAuthToken() {

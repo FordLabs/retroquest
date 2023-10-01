@@ -16,9 +16,7 @@
  */
 package com.ford.labs.retroquest;
 
-import com.ford.labs.retroquest.email_reset_token.EmailResetTokenService;
 import com.ford.labs.retroquest.password_reset_token.PasswordResetTokenRepository;
-import com.ford.labs.retroquest.security.JwtBuilder;
 import com.ford.labs.retroquest.team.Team;
 import com.ford.labs.retroquest.team.TeamRepository;
 import com.ford.labs.retroquest.team.TeamService;
@@ -29,7 +27,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.transaction.Transactional;
 import java.net.URISyntaxException;
@@ -46,12 +46,9 @@ public class E2ETestController {
 
     private final TeamRepository teamRepository;
 
-    private final JwtBuilder jwtBuilder;
-
-    public E2ETestController(TeamService teamService, TeamRepository teamRepository, PasswordResetTokenRepository passwordResetTokenRepository, EmailResetTokenService emailResetTokenService, JwtBuilder jwtBuilder) {
+    public E2ETestController(TeamService teamService, TeamRepository teamRepository) {
         this.teamService = teamService;
         this.teamRepository = teamRepository;
-        this.jwtBuilder = jwtBuilder;
     }
 
     @PostMapping("/create-team-with-no-emails")
@@ -70,15 +67,12 @@ public class E2ETestController {
             teamService.generateColumns(teamWithNoEmail);
         } else {
             var teamToResave = teamAlreadyCreated.get();
-            teamToResave.setSecondaryEmail(null);
-            teamToResave.setEmail(null);
             teamRepository.save(teamToResave);
         }
 
-        var jwt = jwtBuilder.buildJwt(teamId);
         var headers = new HttpHeaders();
         headers.add(HttpHeaders.LOCATION, teamId);
 
-        return new ResponseEntity<>(jwt, headers, CREATED);
+        return new ResponseEntity<>(headers, CREATED);
     }
 }

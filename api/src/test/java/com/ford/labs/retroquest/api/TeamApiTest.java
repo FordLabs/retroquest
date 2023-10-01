@@ -19,24 +19,19 @@ package com.ford.labs.retroquest.api;
 
 import com.ford.labs.retroquest.api.setup.ApiTestBase;
 import com.ford.labs.retroquest.column.ColumnRepository;
-import com.ford.labs.retroquest.email_reset_token.EmailResetToken;
-import com.ford.labs.retroquest.email_reset_token.EmailResetTokenRepository;
-import com.ford.labs.retroquest.team.*;
-import com.ford.labs.retroquest.password_reset_token.PasswordResetToken;
-import com.ford.labs.retroquest.password_reset_token.PasswordResetTokenRepository;
+import com.ford.labs.retroquest.team.CreateTeamRequest;
+import com.ford.labs.retroquest.team.Team;
+import com.ford.labs.retroquest.team.TeamRepository;
 import io.micrometer.core.instrument.MeterRegistry;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MvcResult;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -46,12 +41,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Tag("api")
 class TeamApiTest extends ApiTestBase {
-
-    @Autowired
-    private PasswordResetTokenRepository passwordResetTokenRepository;
-
-    @Autowired
-    private EmailResetTokenRepository emailResetTokenRepository;
 
     @Autowired
     private TeamRepository teamRepository;
@@ -78,18 +67,13 @@ class TeamApiTest extends ApiTestBase {
     @BeforeEach
     void beforeClass() {
         clean();
-        validTeamRequestBuilder = CreateTeamRequest.builder()
-                .name(teamId)
-                .password(VALID_PASSWORD)
-                .email(VALID_EMAIL);
+        validTeamRequestBuilder = CreateTeamRequest.builder().name(teamId).password(VALID_PASSWORD);
     }
 
     @AfterEach
     void clean() {
-        passwordResetTokenRepository.deleteAllInBatch();
         teamRepository.deleteAllInBatch();
         columnRepository.deleteAllInBatch();
-        assertThat(passwordResetTokenRepository.count()).isZero();
         assertThat(teamRepository.count()).isZero();
         assertThat(columnRepository.count()).isZero();
     }
@@ -106,22 +90,18 @@ class TeamApiTest extends ApiTestBase {
 
         assertThat(mvcResult.getResponse().getHeader(HttpHeaders.LOCATION))
                 .isEqualTo("beachbums");
-
-        assertThat(mvcResult.getResponse().getContentAsString())
-                .isEqualTo(jwtBuilder.buildJwt("beachbums"));
-
         assertThat(meterRegistry.get("retroquest.teams.count").gauge().value())
                 .isEqualTo(1);
     }
 
     @Test
     void should_get_team() throws Exception {
-        Team expectedResetTeam = new Team("team-id", "TeamName", "%$&357", "e@ma.il");
+        Team expectedResetTeam = new Team("team-id", "TeamName", "%$&357");
         teamRepository.save(expectedResetTeam);
 
         MvcResult resultOfGet = mockMvc.perform(
             get("/api/team/team-id")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("team-id"))
+                .header("Authorization", "Bearer valid-token")
         ).andExpect(status().isOk()).andReturn();
         String content = resultOfGet.getResponse().getContentAsString();
         assertThat(content).contains("\"name\":\"TeamName\"");
@@ -132,51 +112,15 @@ class TeamApiTest extends ApiTestBase {
     }
 
     @Test
-    void should_update_both_team_primary_email_address() throws Exception {
-        Team expectedResetTeam = new Team("team-id", "TeamName", "%$&357", "");
-        teamRepository.save(expectedResetTeam);
-
-        mockMvc.perform(
-                put("/api/team/team-id/email-addresses")
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new UpdateTeamEmailAddressesRequest("primary@mail.com", null)))
-                        .header("Authorization", "Bearer " + jwtBuilder.buildJwt("team-id"))
-        ).andExpect(status().isOk()).andReturn();
-
-        var updatedTeam = teamRepository.findTeamByUri(expectedResetTeam.getUri()).orElseThrow();
-        assertThat(updatedTeam.getName()).contains("TeamName");
-        assertThat(updatedTeam.getEmail()).contains("primary@mail.com");
-        assertThat(updatedTeam.getSecondaryEmail()).isNull();
-    }
-
-    @Test
-    void should_update_both_team_email_addresses() throws Exception {
-        Team expectedResetTeam = new Team("team-id", "TeamName", "%$&357", "");
-        teamRepository.save(expectedResetTeam);
-
-        mockMvc.perform(
-                put("/api/team/team-id/email-addresses")
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new UpdateTeamEmailAddressesRequest("primary@mail.com", "secondary@mail.com")))
-                        .header("Authorization", "Bearer " + jwtBuilder.buildJwt("team-id"))
-        ).andExpect(status().isOk()).andReturn();
-
-        var updatedTeam = teamRepository.findTeamByUri(expectedResetTeam.getUri()).orElseThrow();
-        assertThat(updatedTeam.getName()).contains("TeamName");
-        assertThat(updatedTeam.getEmail()).contains("primary@mail.com");
-        assertThat(updatedTeam.getSecondaryEmail()).contains("secondary@mail.com");
-    }
-
-    @Test
     void should_not_get_team_with_nonexistent_id() throws Exception {
         mockMvc.perform(get("/api/team/nonExistentTeamId")
-                        .header("Authorization", "Bearer " + jwtBuilder.buildJwt("nonExistentTeamId")))
+                        .header("Authorization", "Bearer valid-token"))
                 .andExpect(status().isForbidden())
                 .andExpect(status().reason("Incorrect team name or password. Please try again."));
     }
 
     @Test
-    void should_create_team_with_valid_name_and_password_and_one_email() throws Exception {
+    void should_create_team_with_valid_name_and_password() throws Exception {
         var sentCreateTeamRequest = validTeamRequestBuilder
                 .build();
 
@@ -191,208 +135,7 @@ class TeamApiTest extends ApiTestBase {
         assertThat(team.getName()).isEqualTo(teamId);
         assertThat(team.getUri()).isEqualTo(teamId.toLowerCase());
         assertThat(team.getPassword()).hasSize(60);
-        assertThat(team.getEmail()).isEqualTo(VALID_EMAIL);
-        assertThat(team.getSecondaryEmail()).isEqualTo("");
         assertThat(mvcResult.getResponse().getContentAsString()).isNotNull();
-    }
-
-    @Test
-    void should_create_team_with_valid_name_and_password_and_two_emails() throws Exception {
-        String expectedSecondaryEmail = "seconde@ma.il";
-        var sentCreateTeamRequest = validTeamRequestBuilder.secondaryEmail(expectedSecondaryEmail)
-                .build();
-
-        var mvcResult = mockMvc.perform(post("/api/team")
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(sentCreateTeamRequest)))
-                .andExpect(status().isCreated())
-                .andReturn();
-
-        Team team = teamRepository.findById(sentCreateTeamRequest.getName().toLowerCase()).orElseThrow();
-
-        assertThat(team.getName()).isEqualTo(teamId);
-        assertThat(team.getUri()).isEqualTo(teamId.toLowerCase());
-        assertThat(team.getPassword()).hasSize(60);
-        assertThat(team.getEmail()).isEqualTo(VALID_EMAIL);
-        assertThat(team.getSecondaryEmail()).isEqualTo(expectedSecondaryEmail);
-        assertThat(mvcResult.getResponse().getContentAsString()).isNotNull();
-    }
-
-    @Test
-    void should_change_password_and_consume_token_when_reset_token_is_valid() throws Exception {
-        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
-        teamRepository.save(expectedResetTeam);
-
-        PasswordResetToken passwordResetToken = new PasswordResetToken();
-        passwordResetToken.setTeam(expectedResetTeam);
-        passwordResetTokenRepository.save(passwordResetToken);
-
-        mockMvc.perform(post(changePasswordWithResetTokenPath)
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(
-                                new ResetPasswordRequest("Password1", passwordResetToken.getResetToken()))
-                        )
-                )
-                .andExpect(status().isOk());
-
-        Optional<Team> actualTeam = teamRepository.findTeamByUri("teamuri");
-        assertThat(actualTeam.isPresent()).isTrue();
-        assertThat(passwordEncoder.matches("Password1", actualTeam.get().getPassword())).isTrue();
-        assertThat(passwordResetTokenRepository.count()).isZero();
-    }
-
-    @Test
-    void should_not_change_password_when_reset_token_is_not_valid() throws Exception {
-        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
-        teamRepository.save(expectedResetTeam);
-
-        PasswordResetToken passwordResetToken = new PasswordResetToken();
-        passwordResetToken.setTeam(expectedResetTeam);
-        passwordResetTokenRepository.save(passwordResetToken);
-
-        mockMvc.perform(post(changePasswordWithResetTokenPath)
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(
-                                new ResetPasswordRequest("Password1", UUID.randomUUID().toString()))
-                        )
-                )
-                .andExpect(status().isBadRequest())
-                .andExpect(status().reason("Reset token incorrect or expired."));
-
-        Optional<Team> actualTeam = teamRepository.findTeamByUri("teamuri");
-        assertThat(actualTeam.isPresent()).isTrue();
-        assertThat(actualTeam.get().getPassword()).isEqualTo("%$&357");
-    }
-
-    @Test
-    void should_not_change_password_when_reset_token_is_expired() throws Exception {
-        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
-        teamRepository.save(expectedResetTeam);
-
-        PasswordResetToken passwordResetToken = new PasswordResetToken();
-        passwordResetToken.setTeam(expectedResetTeam);
-        passwordResetToken.setDateCreated(LocalDateTime.MIN);
-        passwordResetTokenRepository.save(passwordResetToken);
-
-        mockMvc.perform(post(changePasswordWithResetTokenPath)
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(
-                                new ResetPasswordRequest("Password1", passwordResetToken.getResetToken()))
-                        )
-                )
-                .andExpect(status().isBadRequest())
-                .andExpect(status().reason("Reset token incorrect or expired."));
-
-        Optional<Team> actualTeam = teamRepository.findTeamByUri("teamuri");
-        assertThat(actualTeam.isPresent()).isTrue();
-        assertThat(actualTeam.get().getPassword()).isEqualTo("%$&357");
-    }
-
-    @Test
-    void change_emails_with_email_reset_token__should_change_both_emails_and_consume_token_when_reset_token_is_valid() throws Exception {
-        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
-        teamRepository.save(expectedResetTeam);
-
-        EmailResetToken emailResetToken = new EmailResetToken();
-        emailResetToken.setTeam(expectedResetTeam);
-        emailResetTokenRepository.save(emailResetToken);
-
-        mockMvc.perform(post(changeEmailsWithResetTokenPath)
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(
-                                new ResetEmailsRequest("new@email.com", "secondary@m.co", emailResetToken.getResetToken()))
-                        )
-                )
-                .andExpect(status().isOk());
-
-        Optional<Team> actualTeam = teamRepository.findTeamByUri("teamuri");
-        assertThat(actualTeam.isPresent()).isTrue();
-        assertThat(actualTeam.get().getEmail()).isEqualTo("new@email.com");
-        assertThat(actualTeam.get().getSecondaryEmail()).isEqualTo("secondary@m.co");
-        assertThat(emailResetTokenRepository.count()).isZero();
-    }
-
-    @Test
-    void change_emails_with_email_reset_token__should_change_one_email_and_consume_token_when_reset_token_is_valid() throws Exception {
-        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
-        teamRepository.save(expectedResetTeam);
-
-        EmailResetToken emailResetToken = new EmailResetToken();
-        emailResetToken.setTeam(expectedResetTeam);
-        emailResetTokenRepository.save(emailResetToken);
-
-        mockMvc.perform(post(changeEmailsWithResetTokenPath)
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(
-                                new ResetEmailsRequest("new@email.com", "", emailResetToken.getResetToken()))
-                        )
-                )
-                .andExpect(status().isOk());
-
-        Optional<Team> actualTeam = teamRepository.findTeamByUri("teamuri");
-        assertThat(actualTeam.isPresent()).isTrue();
-        assertThat(actualTeam.get().getEmail()).isEqualTo("new@email.com");
-        assertThat(actualTeam.get().getSecondaryEmail()).isEqualTo("");
-        assertThat(emailResetTokenRepository.count()).isZero();
-    }
-
-    @Test
-    void change_emails_with_email_reset_token__should_not_change_emails_when_reset_token_is_not_valid() throws Exception {
-        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
-        teamRepository.save(expectedResetTeam);
-
-        PasswordResetToken passwordResetToken = new PasswordResetToken();
-        passwordResetToken.setTeam(expectedResetTeam);
-        passwordResetTokenRepository.save(passwordResetToken);
-
-        mockMvc.perform(post(changeEmailsWithResetTokenPath)
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(
-                                new ResetPasswordRequest("Password1", UUID.randomUUID().toString()))
-                        )
-                )
-                .andExpect(status().isBadRequest())
-                .andExpect(status().reason("Reset token incorrect or expired."));
-
-        Optional<Team> actualTeam = teamRepository.findTeamByUri("teamuri");
-        assertThat(actualTeam.isPresent()).isTrue();
-        assertThat(actualTeam.get().getPassword()).isEqualTo("%$&357");
-    }
-
-    @Test
-    void change_emails_with_email_reset_token__should_not_change_emails_when_reset_token_is_expired() throws Exception {
-        Team expectedResetTeam = new Team("teamuri", "TeamName", "%$&357", "e@ma.il");
-        teamRepository.save(expectedResetTeam);
-
-        PasswordResetToken passwordResetToken = new PasswordResetToken();
-        passwordResetToken.setTeam(expectedResetTeam);
-        passwordResetToken.setDateCreated(LocalDateTime.MIN);
-        passwordResetTokenRepository.save(passwordResetToken);
-
-        mockMvc.perform(post(changeEmailsWithResetTokenPath)
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(
-                                new ResetPasswordRequest("Password1", passwordResetToken.getResetToken()))
-                        )
-                )
-                .andExpect(status().isBadRequest())
-                .andExpect(status().reason("Reset token incorrect or expired."));
-
-        Optional<Team> actualTeam = teamRepository.findTeamByUri("teamuri");
-        assertThat(actualTeam.isPresent()).isTrue();
-        assertThat(actualTeam.get().getPassword()).isEqualTo("%$&357");
-    }
-
-    @Test
-    void should_not_create_team_with_empty_email() throws Exception {
-        var sentCreateTeamRequest = validTeamRequestBuilder.email("")
-                .build();
-
-        mockMvc.perform(post("/api/team")
-                        .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(sentCreateTeamRequest)))
-                .andExpect(status().reason(containsString("Team email is required.")))
-                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -581,7 +324,7 @@ class TeamApiTest extends ApiTestBase {
         testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
 
         var actualName = mockMvc.perform(get("/api/team/beachity-bums/name")
-                        .header("Authorization", "Bearer " + jwtBuilder.buildJwt("beachity-bums")))
+                        .header("Authorization", "Bearer valid-token"))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
@@ -593,108 +336,5 @@ class TeamApiTest extends ApiTestBase {
         mockMvc.perform(get("/api/team/nonExistentTeamName/name"))
                 .andExpect(status().isForbidden())
                 .andExpect(status().reason("Incorrect team name or password. Please try again."));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "PEACHY BEACHY",
-            "peachy beachy",
-            "    PEACHY BEACHY",
-            "PEACHY BEACHY    ",
-            "    PEACHY BEACHY  "
-    })
-    void should_log_in(String attemptedLoginTeamName) throws Exception {
-        var createTeamRequest = validTeamRequestBuilder
-                .name("PEACHY BEACHY")
-                .build();
-
-        testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
-
-        var loginRequest = LoginRequest.builder()
-                .name(attemptedLoginTeamName)
-                .password(VALID_PASSWORD)
-                .build();
-
-        var mvcResult = mockMvc.perform(post("/api/team/login")
-                        .content(objectMapper.writeValueAsBytes(loginRequest))
-                        .contentType(APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        assertThat(mvcResult.getResponse().getContentAsString())
-                .isEqualTo(jwtBuilder.buildJwt("peachy-beachy"));
-
-        assertThat(mvcResult.getResponse().getHeader(HttpHeaders.LOCATION))
-                .isEqualTo("peachy-beachy");
-    }
-
-    @Test
-    void should_not_login_with_wrong_team_name() throws Exception {
-        var loginRequest = LoginRequest.builder()
-                .name("not a team")
-                .password(VALID_PASSWORD)
-                .build();
-
-        mockMvc.perform(post("/api/team/login")
-                        .content(objectMapper.writeValueAsBytes(loginRequest))
-                        .contentType(APPLICATION_JSON))
-                .andExpect(status().isForbidden())
-                .andExpect(status().reason("Incorrect team name or password. Please try again."));
-    }
-
-    @Test
-    void should_not_login_with_incorrect_password() throws Exception {
-        var createTeamRequest = CreateTeamRequest.builder()
-                .name("PEACHY BEACHY")
-                .password(VALID_PASSWORD)
-                .build();
-
-        testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
-
-        var loginRequest = LoginRequest.builder()
-                .name("PEACHY BEACHY")
-                .password("wr0ngPassw0rd")
-                .build();
-
-        mockMvc.perform(post("/api/team/login")
-                        .content(objectMapper.writeValueAsBytes(loginRequest))
-                        .contentType(APPLICATION_JSON))
-                .andExpect(status().isForbidden())
-                .andExpect(status().reason("Incorrect team name or password. Please try again."));
-    }
-
-    @Test
-    void should_not_login_with_team_name_with_middle_spaces_in_request() throws Exception {
-        var createTeamRequest = CreateTeamRequest.builder()
-                .name("PEACHY BEACHY")
-                .password(VALID_PASSWORD)
-                .build();
-
-        testRestTemplate.postForObject("/api/team/", createTeamRequest, String.class);
-
-        var loginRequest = LoginRequest.builder()
-                .name("PEACHY     BEACHY")
-                .password(VALID_PASSWORD)
-                .build();
-
-        mockMvc.perform(post("/api/team/login")
-                        .content(objectMapper.writeValueAsBytes(loginRequest))
-                        .contentType(APPLICATION_JSON))
-                .andExpect(status().isForbidden())
-                .andExpect(status().reason("Incorrect team name or password. Please try again."));
-    }
-
-    @Test
-    void should_return_ok_for_valid_token() throws Exception {
-        mockMvc.perform(get("/api/team/teamId/validate")
-                        .header("Authorization", "Bearer " + jwtBuilder.buildJwt("teamId")))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void should_return_forbidden_token_doesnt_match_teamid() throws Exception {
-        mockMvc.perform(get("/api/team/wrongTeamId/validate")
-                        .header("Authorization", "Bearer " + jwtBuilder.buildJwt("teamId")))
-                .andExpect(status().isForbidden());
     }
 }

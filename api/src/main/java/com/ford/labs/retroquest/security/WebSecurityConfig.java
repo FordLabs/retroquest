@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -30,7 +29,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
@@ -39,19 +37,10 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final JwtAuthenticationProvider jwtAuthenticationProvider;
-
     private final boolean requireHttps;
 
     @Autowired
-    public WebSecurityConfig(
-        JwtAuthenticationFilter jwtAuthenticationFilter,
-        JwtAuthenticationProvider jwtAuthenticationProvider,
-        @Value("${retroquest.security.require-https}") boolean requireHttps
-    ) {
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.jwtAuthenticationProvider = jwtAuthenticationProvider;
+    public WebSecurityConfig(@Value("${retroquest.security.require-https}") boolean requireHttps) {
         this.requireHttps = requireHttps;
     }
 
@@ -72,16 +61,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/**").permitAll()
             .anyRequest().authenticated()
             .and().exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(UNAUTHORIZED)))
-            .httpBasic()
-            .and().addFilterAfter(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
+            .oauth2ResourceServer().jwt();
 
         httpSecurity.csrf().disable();
         displayH2ConsoleToDevs(httpSecurity);
-    }
-
-    @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(jwtAuthenticationProvider);
     }
 
     private void displayH2ConsoleToDevs(HttpSecurity httpSecurity) throws Exception {

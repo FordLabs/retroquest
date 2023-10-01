@@ -17,6 +17,7 @@
 
 package com.ford.labs.retroquest.board;
 
+import com.ford.labs.retroquest.retro.Retro;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

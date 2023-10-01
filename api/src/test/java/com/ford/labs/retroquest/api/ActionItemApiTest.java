@@ -194,16 +194,13 @@ class ActionItemApiTest extends ApiTestBase {
 
     @Test
     public void delete_single_action_item__whenActionItemOnOtherTeam_IgnoresDelete() throws Exception {
-        String unauthorizedTeamJwt = jwtBuilder.buildJwt("not-beach-bums");
-        String authorizationHeader = format("Bearer %s", unauthorizedTeamJwt);
-
         ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder()
                 .task("Some Action")
                 .teamId("beach-bums")
                 .build());
 
         mockMvc.perform(delete("/api/team/not-beach-bums/action-item/%d".formatted(savedActionItem.getId()))
-                .header("Authorization", authorizationHeader))
+                .header("Authorization", "Bearer not-beach-bums"))
                 .andExpect(status().isOk());
 
         assertThat(actionItemRepository.count()).isEqualTo(1);
@@ -278,50 +275,47 @@ class ActionItemApiTest extends ApiTestBase {
 
     @Test
     void should_authenticate_all_action_item_endpoints_properly() throws Exception {
-        String unauthorizedTeamJwt = jwtBuilder.buildJwt("not-beach-bums");
-        String authorizationHeader = format("Bearer %s", unauthorizedTeamJwt);
-
         ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder()
             .task("Some Action")
             .teamId("beach-bums")
             .build());
 
         mockMvc.perform(get("/api/team/beach-bums/action-item")
-            .header("Authorization", authorizationHeader))
+            .header("Authorization", "Bearer not-beach-bums"))
             .andExpect(status().isForbidden());
 
         mockMvc.perform(post("/api/team/beach-bums/action-item")
-            .header("Authorization", authorizationHeader)
+            .header("Authorization", "Bearer not-beach-bums")
             .content("{}")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden());
 
         mockMvc.perform(put("/api/team/beach-bums/action-item/1/task")
-            .header("Authorization", authorizationHeader)
+            .header("Authorization", "Bearer not-beach-bums")
             .content("{}")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden());
 
         mockMvc.perform(put("/api/team/beach-bums/action-item/1/assignee")
-            .header("Authorization", authorizationHeader)
+            .header("Authorization", "Bearer not-beach-bums")
             .content("{}")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden());
 
         mockMvc.perform(put("/api/team/beach-bums/action-item/1/completed")
-            .header("Authorization", authorizationHeader)
+            .header("Authorization", "Bearer not-beach-bums")
             .content("{}")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden());
 
         mockMvc.perform(put("/api/team/beach-bums/action-item/1/archived")
-            .header("Authorization", authorizationHeader)
+            .header("Authorization", "Bearer not-beach-bums")
             .content("{}")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden());
 
         mockMvc.perform(delete("/api/team/beach-bums/action-item/1")
-            .header("Authorization", authorizationHeader))
+            .header("Authorization", "Bearer not-beach-bums"))
             .andExpect(status().isForbidden());
 
         assertThat(actionItemRepository.count()).isEqualTo(1);
@@ -330,8 +324,6 @@ class ActionItemApiTest extends ApiTestBase {
 
     @Test
     public void modifyingActionItem_WithActionItemForDifferentTeam_Returns404() throws Exception {
-        String unauthorizedTeamJwt = jwtBuilder.buildJwt("not-beach-bums");
-        String authorizationHeader = format("Bearer %s", unauthorizedTeamJwt);
 
         ActionItem savedActionItem = actionItemRepository.save(ActionItem.builder()
             .task("Some Action")
@@ -339,25 +331,25 @@ class ActionItemApiTest extends ApiTestBase {
             .build());
 
         mockMvc.perform(put("/api/team/not-beach-bums/action-item/%d/task".formatted(savedActionItem.getId()))
-            .header("Authorization", authorizationHeader)
+            .header("Authorization", "Bearer not-beach-bums")
             .content("{}")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
 
         mockMvc.perform(put("/api/team/not-beach-bums/action-item/%d/assignee".formatted(savedActionItem.getId()))
-            .header("Authorization", authorizationHeader)
+            .header("Authorization", "Bearer not-beach-bums")
             .content("{}")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
 
         mockMvc.perform(put("/api/team/not-beach-bums/action-item/%d/completed".formatted(savedActionItem.getId()))
-            .header("Authorization", authorizationHeader)
+            .header("Authorization", "Bearer not-beach-bums")
             .content("{}")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
 
         mockMvc.perform(put("/api/team/not-beach-bums/action-item/%d/archived".formatted(savedActionItem.getId()))
-            .header("Authorization", authorizationHeader)
+            .header("Authorization", "Bearer not-beach-bums")
             .content("{}")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());

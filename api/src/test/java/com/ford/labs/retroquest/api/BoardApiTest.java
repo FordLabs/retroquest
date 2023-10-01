@@ -163,7 +163,7 @@ class BoardApiTest extends ApiTestBase {
     @Test
     public void createBoard_WithUnauthorizedUser_Returns403() throws Exception {
         mockMvc.perform(post(format("/api/team/%s/board", teamId))
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .header("Authorization", "Bearer unauthorized"))
             .andExpect(status().isForbidden());
     }
 
@@ -227,7 +227,7 @@ class BoardApiTest extends ApiTestBase {
 
         mockMvc.perform(delete(String.format("/api/team/%s/board/%s", teamId, boardToDelete.getId()))
                         .contentType(APPLICATION_JSON)
-                        .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                        .header("Authorization", "Bearer unauthorized"))
                 .andExpect(status().isForbidden());
 
         assertThat(boardRepository.count()).isEqualTo(1);
@@ -266,7 +266,7 @@ class BoardApiTest extends ApiTestBase {
     @Test
     public void endRetro_WithUnauthorizedUser_Returns403() throws Exception {
         mockMvc.perform(put(format("/api/team/%s/end-retro", teamId))
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .header("Authorization", "Bearer unauthorized"))
             .andExpect(status().isForbidden());
     }
 

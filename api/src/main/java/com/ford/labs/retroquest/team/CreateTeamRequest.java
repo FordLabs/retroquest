@@ -17,7 +17,6 @@
 
 package com.ford.labs.retroquest.team;
 
-import com.ford.labs.retroquest.team.validation.EmailConstraint;
 import com.ford.labs.retroquest.team.validation.PasswordConstraint;
 import com.ford.labs.retroquest.team.validation.TeamNameConstraint;
 import lombok.*;
@@ -27,20 +26,9 @@ import lombok.*;
 @NoArgsConstructor
 @Builder(toBuilder=true)
 public class CreateTeamRequest {
-
     @TeamNameConstraint
     private String name;
 
     @PasswordConstraint
     private String password;
-
-    @EmailConstraint
-    private String email;
-
-    @Builder.Default
-    private String secondaryEmail = "";
-
-    public String getSecondaryEmail() {
-        return this.secondaryEmail == null ? "" : this.secondaryEmail;
-    }
 }

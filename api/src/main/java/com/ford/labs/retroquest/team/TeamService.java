@@ -21,18 +21,11 @@ import com.ford.labs.retroquest.actionitem.ActionItemRepository;
 import com.ford.labs.retroquest.column.Column;
 import com.ford.labs.retroquest.column.ColumnRepository;
 import com.ford.labs.retroquest.exception.TeamDoesNotExistException;
-import com.ford.labs.retroquest.exception.PasswordInvalidException;
 import com.ford.labs.retroquest.thought.ThoughtRepository;
 import com.ford.labs.retroquest.websocket.WebsocketService;
-import com.ford.labs.retroquest.websocket.events.WebsocketTeamEvent;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.List;
-
-import static com.ford.labs.retroquest.websocket.events.WebsocketEventType.UPDATE;
 
 @Service
 public class TeamService {
@@ -41,25 +34,19 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final PasswordEncoder passwordEncoder;
     private final ColumnRepository columnRepository;
-    private final WebsocketService websocketService;
 
     public TeamService(
         ThoughtRepository thoughtRepository,
         ActionItemRepository actionItemRepository,
         TeamRepository teamRepository,
         PasswordEncoder passwordEncoder,
-        ColumnRepository columnRepository,
-        WebsocketService websocketService) {
+        ColumnRepository columnRepository
+    ) {
         this.thoughtRepository = thoughtRepository;
         this.actionItemRepository = actionItemRepository;
         this.teamRepository = teamRepository;
         this.passwordEncoder = passwordEncoder;
         this.columnRepository = columnRepository;
-        this.websocketService = websocketService;
-    }
-
-    public boolean isEmailOnTeam(Team team, String email) {
-        return team.getEmail().equalsIgnoreCase(email) || team.getSecondaryEmail().equalsIgnoreCase(email);
     }
 
     public Team getTeamByName(String teamName) {
@@ -74,13 +61,6 @@ public class TeamService {
 
     public String convertTeamNameToURI(String teamName) {
         return teamName.toLowerCase().replace(" ", "-");
-    }
-
-    public CsvFile buildCsvFileFromTeam(String team) {
-        var thoughts = thoughtRepository.findAllByTeamIdAndBoardIdIsNullOrderByColumnId(team);
-        var actionItems = actionItemRepository.findAllByTeamIdAndArchived(team, false);
-        var columns = columnRepository.findAllByTeamId(team);
-        return new CsvFile(team, thoughts, actionItems, columns);
     }
 
     public String encodePassword(String password) {
@@ -101,29 +81,12 @@ public class TeamService {
         var team = new Team(
                 uri,
                 trimmedName,
-                encryptedPassword,
-                createTeamRequest.getEmail().trim(),
-                createTeamRequest.getSecondaryEmail().trim()
+                encryptedPassword
         );
         team = teamRepository.save(team);
         generateColumns(team);
 
         return team;
-    }
-
-    public Team login(LoginRequest loginRequest) {
-        var savedTeam = getTeamByName(loginRequest.getName());
-
-        if (loginRequest.getPassword() == null || !passwordEncoder.matches(loginRequest.getPassword(), savedTeam.getPassword())) {
-            int failedAttempts = savedTeam.getFailedAttempts() != null ? savedTeam.getFailedAttempts() : 0;
-            updateFailedAttempts(savedTeam, failedAttempts + 1);
-            throw new PasswordInvalidException();
-        }
-
-        savedTeam.setLastLoginDate(LocalDate.now());
-        teamRepository.save(savedTeam);
-        updateFailedAttempts(savedTeam, 0);
-        return savedTeam;
     }
 
     public void generateColumns(Team team) {
@@ -134,27 +97,5 @@ public class TeamService {
         columnRepository.save(happyColumn);
         columnRepository.save(confusedColumn);
         columnRepository.save(unhappyColumn);
-    }
-
-    public void changePassword(Team existingTeam, String newPassword){
-        existingTeam.setPassword(newPassword);
-        teamRepository.save(existingTeam);
-    }
-
-    private void updateFailedAttempts(Team savedTeam, int failedAttempts) {
-        savedTeam.setFailedAttempts(failedAttempts);
-        teamRepository.save(savedTeam);
-    }
-
-    public void updateTeamEmailAddresses(String teamId, UpdateTeamEmailAddressesRequest request) {
-        Team team = this.getTeamByUri(teamId);
-        team.setEmail(request.email1());
-        team.setSecondaryEmail(request.email2());
-        Team updatedTeam = teamRepository.save(team);
-        websocketService.publishEvent(new WebsocketTeamEvent(updatedTeam.getId(), UPDATE, updatedTeam));
-    }
-
-    public List<Team> getTeamsByEmail(String recoveryEmail) {
-        return teamRepository.findTeamByEmailIgnoreCaseOrSecondaryEmailIgnoreCase(recoveryEmail, recoveryEmail);
     }
 }

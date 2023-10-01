@@ -28,8 +28,4 @@ import java.util.Optional;
 public interface TeamRepository extends JpaRepository<Team, String> {
     Optional<Team> findTeamByNameIgnoreCase(String name);
     Optional<Team> findTeamByUri(String uri);
-
-    List<Team> findTeamByEmailIgnoreCaseOrSecondaryEmailIgnoreCase(String email, String secondaryEmail);
-
-    long countByLastLoginDateBetween(LocalDate start, LocalDate end);
 }

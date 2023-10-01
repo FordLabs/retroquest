@@ -71,7 +71,7 @@ public class ColumnApiTest extends ApiTestBase {
     @Test
     public void getColumns_WithInvalidCredential_Returns403() throws Exception {
         mockMvc.perform(get(format("/api/team/%s/columns", teamId))
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("not-beach-bums")))
+                .header("Authorization", "Bearer not-beach-bums"))
                 .andExpect(status().isForbidden());
     }
 
@@ -97,7 +97,7 @@ public class ColumnApiTest extends ApiTestBase {
         mockMvc.perform(put("/api/team/BeachBums/column/1/title")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(request))
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .header("Authorization", "Bearer unauthorized"))
                 .andExpect(status().isForbidden());
     }
 

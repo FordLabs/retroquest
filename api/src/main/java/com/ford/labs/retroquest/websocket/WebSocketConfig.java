@@ -18,7 +18,6 @@
 package com.ford.labs.retroquest.websocket;
 
 
-import com.ford.labs.retroquest.security.JwtAuthentication;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -74,8 +73,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                         .map(headers -> headers.get(0))
                         .map(header -> header.replace("Bearer ", ""))
                         .orElse(null);
-
-                    accessor.setUser(new JwtAuthentication(token, false, jwtSecret));
                 }
                 return message;
             }

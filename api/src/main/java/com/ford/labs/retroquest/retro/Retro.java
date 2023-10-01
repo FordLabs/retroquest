@@ -15,8 +15,9 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest.board;
+package com.ford.labs.retroquest.retro;
 
+import com.ford.labs.retroquest.board.Board;
 import com.ford.labs.retroquest.column.Column;
 import com.ford.labs.retroquest.thought.Thought;
 

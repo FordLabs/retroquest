@@ -77,7 +77,7 @@ class ThoughtApiTest extends ApiTestBase {
     @Test
     void should_not_like_thought_unauthorized() throws Exception {
         mockMvc.perform(put("/api/team/" + teamId + "/thought/" + 1 + "/heart")
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .header("Authorization", "Bearer unauthorized"))
             .andExpect(status().isForbidden());
     }
 
@@ -100,7 +100,7 @@ class ThoughtApiTest extends ApiTestBase {
         mockMvc.perform(put("/api/team/" + teamId + "/thought/" + 1 + "/discuss")
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(new UpdateThoughtDiscussedRequest(true)))
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .header("Authorization", "Bearer unauthorized"))
             .andExpect(status().isForbidden());
     }
 
@@ -126,7 +126,7 @@ class ThoughtApiTest extends ApiTestBase {
         mockMvc.perform(put("/api/team/" + teamId + "/thought/" + 1 + "/message")
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updatedThought))
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .header("Authorization", "Bearer unauthorized"))
             .andExpect(status().isForbidden());
     }
 
@@ -137,7 +137,7 @@ class ThoughtApiTest extends ApiTestBase {
         mockMvc.perform(put(format("%s/thought/%d/column-id", BASE_API_URL, 1))
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(changeRequest))
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .header("Authorization", "Bearer unauthorized"))
             .andExpect(status().isForbidden());
     }
 
@@ -221,18 +221,17 @@ class ThoughtApiTest extends ApiTestBase {
     public void should_not_delete_thoughts_by_id_unauthorized() throws Exception {
         mockMvc.perform(delete(String.format("%s/thought/%d", BASE_API_URL, 1))
                 .contentType(APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .header("Authorization", "Bearer unauthorized"))
             .andExpect(status().isForbidden());
     }
 
     @Test
     public void deleteThought_WhenThoughtOnOtherTeam_IgnoresDelete() throws Exception {
-        var unauthorizedTeamJwt = jwtBuilder.buildJwt("not-beach-bums");
         var thought = thoughtRepository.save(Thought.builder().teamId(teamId).message("hello").columnId(savedColumn.getId()).build());
 
         mockMvc.perform(delete("/api/team/%s/thought/%d".formatted("not-beach-bums", thought.getId()))
                 .contentType(APPLICATION_JSON)
-                .header("Authorization", format("Bearer %s", unauthorizedTeamJwt)))
+                .header("Authorization", "Bearer not-beach-bums"))
                 .andExpect(status().isOk());
 
         assertThat(thoughtRepository.findAll()).hasSize(1);
@@ -268,7 +267,7 @@ class ThoughtApiTest extends ApiTestBase {
         mockMvc.perform(post(String.join("", "/api/team/", teamId, "/thought"))
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createThoughtRequest))
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .header("Authorization", "Bearer unauthorized"))
             .andExpect(status().isForbidden());
     }
 
@@ -303,40 +302,37 @@ class ThoughtApiTest extends ApiTestBase {
 
         mockMvc.perform(get(BASE_API_URL + "/thoughts")
                 .contentType(APPLICATION_JSON)
-                .header("Authorization", "Bearer " + jwtBuilder.buildJwt("unauthorized")))
+                .header("Authorization", "Bearer unauthorized"))
             .andExpect(status().isForbidden());
     }
 
     @Test
     public void modifyingThought_WithThoughtForDifferentTeam_ReturnsNotFound() throws Exception {
-        String unauthorizedTeamJwt = jwtBuilder.buildJwt("not-beach-bums");
-        String authorizationHeader = format("Bearer %s", unauthorizedTeamJwt);
-
         var savedThought = thoughtRepository.save(Thought.builder()
                 .teamId("beach-bums")
                 .columnId(savedColumn.getId())
                 .build());
 
         mockMvc.perform(put("/api/team/not-beach-bums/thought/%d/heart".formatted(savedThought.getId()))
-                .header("Authorization", authorizationHeader)
+                .header("Authorization", "Bearer not-beach-bums")
                 .content("{}")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
 
         mockMvc.perform(put("/api/team/not-beach-bums/thought/%d/discuss".formatted(savedThought.getId()))
-                .header("Authorization", authorizationHeader)
+                .header("Authorization", "Bearer not-beach-bums")
                 .content("{}")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
 
         mockMvc.perform(put("/api/team/not-beach-bums/thought/%d/column-id".formatted(savedThought.getId()))
-                .header("Authorization", authorizationHeader)
+                .header("Authorization", "Bearer not-beach-bums")
                 .content("{}")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
 
         mockMvc.perform(put("/api/team/not-beach-bums/thought/%d/message".formatted(savedThought.getId()))
-                .header("Authorization", authorizationHeader)
+                .header("Authorization", "Bearer not-beach-bums")
                 .content("{}")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
