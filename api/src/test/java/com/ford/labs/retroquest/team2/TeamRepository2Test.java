@@ -20,7 +20,7 @@ class TeamRepository2Test {
 
     @Test
     void save_SavesTeamWithCreatedDate() {
-        var savedTeam = entityManager.persist(new Team2("default team"));
+        var savedTeam = entityManager.persistAndFlush(new Team("default team"));
         assertThat(savedTeam.getId()).isNotNull();
         assertThat(savedTeam.getName()).isEqualTo("default team");
         assertThat(savedTeam.getCreatedAt()).isNotNull();
@@ -28,15 +28,15 @@ class TeamRepository2Test {
 
     @Test
     void findTeamByName_ReturnsTeamWithName() {
-        entityManager.persist(new Team2("team With name"));
-        var actual = subject.findTeam2ByName("team With name").orElseThrow();
+        entityManager.persist(new Team("team With name"));
+        var actual = subject.findTeamByName("team With name").orElseThrow();
         assertThat(actual.getName()).isEqualTo("team With name");
     }
 
     @Test
     void save_WhenSameNameSavedTwice_ThrowsException() {
-        subject.saveAndFlush(new Team2("Duplicate Name"));
+        subject.saveAndFlush(new Team("Duplicate Name"));
         assertThatExceptionOfType(DataIntegrityViolationException.class)
-                .isThrownBy(() -> subject.saveAndFlush(new Team2("Duplicate Name")));
+                .isThrownBy(() -> subject.saveAndFlush(new Team("Duplicate Name")));
     }
 }
