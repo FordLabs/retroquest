@@ -282,4 +282,16 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="add-user-table" author="lowbudgetman">
+        <preConditions>
+            <not>
+                <tableExists tableName="user"/>
+            </not>
+        </preConditions>
+        <createTable tableName="user">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
