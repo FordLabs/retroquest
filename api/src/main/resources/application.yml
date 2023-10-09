@@ -18,7 +18,9 @@
 retroquest:
   security:
     require-https: false
-    jwt-signing-secret: ASLKJHDKJHikjsdkjhg1iu2heiIUGEIUQ@IUeiUIU@iyrgiu2g3i # This is a default value. Ensure you override this value on any real deployments.
+    resourceserver:
+      jwt:
+        issuer-uri: CHANGE_ME
   app-base-url: something.com
   email:
     from-address: rq@fake.com

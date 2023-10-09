@@ -3,11 +3,14 @@ package com.ford.labs.retroquest.team2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.UUID;
 
+import static java.util.Collections.emptyList;
+
 @RestController
-@RequestMapping("/api/team")
-public class TeamController {
+@RequestMapping("/api/team2")
+public class TeamController2 {
 
     @PostMapping
     public ResponseEntity createTeam(@RequestBody CreateTeamRequest createTeamRequest) {

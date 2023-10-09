@@ -5,11 +5,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TeamService {
+public class TeamService2 {
 
     private final TeamRepository2 repository;
 
-    public TeamService(TeamRepository2 repository) {
+    public TeamService2(TeamRepository2 repository) {
         this.repository = repository;
     }
     public Team createTeam(String name) throws TeamAlreadyExistsException {

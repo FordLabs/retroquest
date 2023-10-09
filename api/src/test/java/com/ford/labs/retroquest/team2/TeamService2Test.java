@@ -12,9 +12,9 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-class TeamServiceTest {
+class TeamService2Test {
     private final TeamRepository2 mockTeamRepository = mock(TeamRepository2.class);
-    private final TeamService service = new TeamService(mockTeamRepository);
+    private final TeamService2 service = new TeamService2(mockTeamRepository);
 
     @Test
     void createTeam_ShouldReturnCreatedTeam() {
