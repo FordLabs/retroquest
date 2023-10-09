@@ -1,0 +1,34 @@
+package com.ford.labs.retroquest.user;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+class UserServiceTest {
+
+    private final UserRepository mockUserRepository = mock(UserRepository.class);
+    private final UserService userService = new UserService(mockUserRepository);
+
+    @Test
+    void getOrCreateUser_WithExistingUser_ReturnsUser() {
+        var expectedUser = new User("This is an ID");
+        when(mockUserRepository.findById("This is an ID")).thenReturn(Optional.of(expectedUser));
+        var actual = userService.getOrCreateUser("This is an ID");
+        assertThat(actual).isEqualTo(expectedUser);
+    }
+
+    @Test
+    void getOrCreateUser_WithNoExistingUser_ReturnsNewlyCreatedUser() {
+        var expectedUser = new User("This is an ID");
+        when(mockUserRepository.findById("This is an ID")).thenReturn(Optional.empty());
+        when(mockUserRepository.save(expectedUser)).thenReturn(expectedUser);
+
+        var actual = userService.getOrCreateUser("This is an ID");
+
+        assertThat(actual).isEqualTo(expectedUser);
+    }
+}
