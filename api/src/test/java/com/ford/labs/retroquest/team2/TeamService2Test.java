@@ -28,9 +28,7 @@ class TeamService2Test {
     @Test
     void createTeam_WhenTeamAlreadyExists_ShouldThrowException() {
         when(mockTeamRepository.save(new Team(null, "team already exists", null, null))).thenThrow(DataIntegrityViolationException.class);
-        assertThatExceptionOfType(TeamAlreadyExistsException.class).isThrownBy(() -> {
-            service.createTeam("team already exists");
-        });
+        assertThatExceptionOfType(TeamAlreadyExistsException.class).isThrownBy(() -> service.createTeam("team already exists"));
     }
 
 }
