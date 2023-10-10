@@ -1,34 +1,29 @@
 package com.ford.labs.retroquest.team2;
 
+import com.ford.labs.retroquest.user.User;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
 import java.util.UUID;
 
-@Getter
-@Entity(name="team2")
-@NoArgsConstructor
+@Entity
 @AllArgsConstructor
-@EqualsAndHashCode
-public class Team {
-
+@NoArgsConstructor
+@Getter
+public class TeamUserMapping {
     @Id
     @GeneratedValue
     private UUID id;
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
     @CreationTimestamp
     private LocalDateTime createdAt;
-
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
-    Set<TeamUserMapping> users;
-
-    public Team(String name) {
-        this.name = name;
-    }
 }

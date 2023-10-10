@@ -2,6 +2,10 @@ package com.ford.labs.retroquest.user;
 
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+
+import static java.util.Collections.emptySet;
+
 @Service
 public class UserService {
     private final UserRepository userRepository;

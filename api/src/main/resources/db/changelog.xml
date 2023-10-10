@@ -294,4 +294,25 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="add-user-team-mapping-table" author="lowbudgetman">
+        <preConditions>
+            <not>
+                <tableExists tableName="user-team-mapping"/>
+            </not>
+        </preConditions>
+        <createTable tableName="team_user_mapping">
+            <column name="id" type="uuid" autoIncrement="1">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="team_id" type="uuid">
+                <constraints nullable="false" foreignKeyName="fk_team_mapping" references="team2(id)" />
+            </column>
+            <column name="user_id" type="VARCHAR(255)">
+                <constraints nullable="false" foreignKeyName="fk_user_mapping" references="user(id)" />
+            </column>
+            <column name="created_at" type="datetime">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
