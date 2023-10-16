@@ -1,4 +1,4 @@
-package com.ford.labs.retroquest.team2;
+package com.ford.labs.retroquest.teamusermapping;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

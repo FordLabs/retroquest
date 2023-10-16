@@ -1,7 +1,7 @@
-package com.ford.labs.retroquest.team2;
+package com.ford.labs.retroquest.teamusermapping;
 
-import com.ford.labs.retroquest.user.User;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,16 +14,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@EqualsAndHashCode
 public class TeamUserMapping {
     @Id
     @GeneratedValue
     private UUID id;
-    @ManyToOne
-    @JoinColumn(name = "team_id")
-    private Team team;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    private UUID teamId;
+    private String userId;
     @CreationTimestamp
     private LocalDateTime createdAt;
 }

@@ -308,7 +308,7 @@
                 <constraints nullable="false" foreignKeyName="fk_team_mapping" references="team2(id)" />
             </column>
             <column name="user_id" type="VARCHAR(255)">
-                <constraints nullable="false" foreignKeyName="fk_user_mapping" references="user(id)" />
+                <constraints nullable="false"/>
             </column>
             <column name="created_at" type="datetime">
                 <constraints nullable="false" />
