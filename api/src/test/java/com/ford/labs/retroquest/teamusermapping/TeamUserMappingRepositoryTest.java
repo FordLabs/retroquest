@@ -2,7 +2,6 @@ package com.ford.labs.retroquest.teamusermapping;
 
 import com.ford.labs.retroquest.team2.Team;
 import com.ford.labs.retroquest.team2.TeamRepository2;
-import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,18 +47,7 @@ class TeamUserMappingRepositoryTest {
     @Test
     void save_whenSavingTheSameUserTeamCombo_ThrowsDataIntegrityViolationException() {
         subject.saveAndFlush(new TeamUserMapping(null, savedTeam.getId(), "id", null));
-        assertThrows(UnsupportedOperationException.class, () -> subject.saveAndFlush(new TeamUserMapping(null, savedTeam.getId(), "id", null)));
-    }
-
-    @Test
-    void save_whenSavingTheSameUserTeamCombo_ThrowsDataIntegrityViolationException2() {
-        subject.saveAndFlush(new TeamUserMapping(null, savedTeam.getId(), "id", null));
-        try{
-            subject.saveAndFlush(new TeamUserMapping(null, savedTeam.getId(), "id", null));
-        } catch (DataIntegrityViolationException e) {
-            var constraintName = ((JdbcSQLIntegrityConstraintViolationException) e.getRootCause());
-            System.out.println(constraintName);
-        }
+        assertThrows(DataIntegrityViolationException.class, () -> subject.saveAndFlush(new TeamUserMapping(null, savedTeam.getId(), "id", null)));
     }
 
     @Test

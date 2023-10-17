@@ -1,6 +1,7 @@
 package com.ford.labs.retroquest.team2;
 
 import com.ford.labs.retroquest.team2.exception.TeamAlreadyExistsException;
+import com.ford.labs.retroquest.teamusermapping.TeamUserMappingService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -8,13 +9,17 @@ import org.springframework.stereotype.Service;
 public class TeamService2 {
 
     private final TeamRepository2 repository;
+    private final TeamUserMappingService teamUserMappingService;
 
-    public TeamService2(TeamRepository2 repository) {
+    public TeamService2(TeamRepository2 repository, TeamUserMappingService teamUserMappingService) {
         this.repository = repository;
+        this.teamUserMappingService = teamUserMappingService;
     }
-    public Team createTeam(String name) throws TeamAlreadyExistsException {
+    public Team createTeam(String teamName, String userId) throws TeamAlreadyExistsException {
         try {
-            return repository.save(new Team(name));
+            var savedTeam = repository.save(new Team(teamName));
+            teamUserMappingService.addUserToTeam(savedTeam.getId(), userId);
+            return savedTeam;
         } catch (DataIntegrityViolationException exception) {
             throw new TeamAlreadyExistsException();
         }
