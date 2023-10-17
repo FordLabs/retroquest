@@ -305,7 +305,7 @@
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="team_id" type="uuid">
-                <constraints nullable="false" foreignKeyName="fk_team_mapping" references="team2(id)" />
+                <constraints nullable="false" foreignKeyName="FK_TEAM_MAPPING" references="team2(id)" />
             </column>
             <column name="user_id" type="VARCHAR(255)">
                 <constraints nullable="false"/>
@@ -314,5 +314,8 @@
                 <constraints nullable="false" />
             </column>
         </createTable>
+    </changeSet>
+    <changeSet id="add-unique-constraint-to-user-team-mapping" author="lowbudgetman">
+        <addUniqueConstraint tableName="team_user_mapping" columnNames="team_id,user_id" constraintName="UNIQUE_TEAM_USER_MAPPING"/>
     </changeSet>
 </databaseChangeLog>
