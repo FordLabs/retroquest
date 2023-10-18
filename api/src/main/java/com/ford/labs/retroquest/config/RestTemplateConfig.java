@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.ford.labs.retroquest;
+package com.ford.labs.retroquest.config;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-public class ApplicationConfig {
+public class RestTemplateConfig {
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.build();
