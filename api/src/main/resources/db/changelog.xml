@@ -305,7 +305,7 @@
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="team_id" type="uuid">
-                <constraints nullable="false" foreignKeyName="FK_TEAM_MAPPING" references="team2(id)" />
+                <constraints nullable="false" foreignKeyName="FK_TEAM_USER_MAPPING_TEAM" references="team2(id)" />
             </column>
             <column name="user_id" type="VARCHAR(255)">
                 <constraints nullable="false"/>
@@ -317,5 +317,23 @@
     </changeSet>
     <changeSet id="add-unique-constraint-to-user-team-mapping" author="lowbudgetman">
         <addUniqueConstraint tableName="team_user_mapping" columnNames="team_id,user_id" constraintName="UNIQUE_TEAM_USER_MAPPING"/>
+    </changeSet>
+    <changeSet id="add-invite-table" author="lowbudgetman">
+        <preConditions>
+            <not>
+                <tableExists tableName="invite"/>
+            </not>
+        </preConditions>
+        <createTable tableName="invite">
+            <column name="id" type="uuid" autoIncrement="1">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="team_id" type="uuid">
+                <constraints nullable="false" foreignKeyName="FK_INVITE_TEAM" references="team2(id)" />
+            </column>
+            <column name="created_at" type="datetime">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
     </changeSet>
 </databaseChangeLog>

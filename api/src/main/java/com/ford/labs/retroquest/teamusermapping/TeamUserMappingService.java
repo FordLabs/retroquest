@@ -21,7 +21,7 @@ public class TeamUserMappingService {
             this.repository.save(new TeamUserMapping(null, teamId, userId, null));
         } catch (DataIntegrityViolationException e) {
             var cause = e.getRootCause();
-            if (cause instanceof ConstraintViolationException && ((ConstraintViolationException) cause).getConstraintName().equals("FK_TEAM_MAPPING")) {
+            if (cause instanceof ConstraintViolationException && ((ConstraintViolationException) cause).getConstraintName().equals("FK_TEAM_USER_MAPPING_TEAM")) {
                 throw new TeamNotFoundException();
             } else if (cause != null && !cause.getMessage().contains("UNIQUE_TEAM_USER_MAPPING")) {
                 throw e;
