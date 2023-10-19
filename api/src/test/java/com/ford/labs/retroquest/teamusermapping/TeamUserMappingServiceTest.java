@@ -1,6 +1,6 @@
 package com.ford.labs.retroquest.teamusermapping;
 
-import com.ford.labs.retroquest.teamusermapping.exception.TeamNotFoundException;
+import com.ford.labs.retroquest.team2.exception.TeamNotFoundException;
 import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.Test;

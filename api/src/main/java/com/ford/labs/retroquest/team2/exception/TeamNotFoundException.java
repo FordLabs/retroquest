@@ -1,4 +1,4 @@
-package com.ford.labs.retroquest.teamusermapping.exception;
+package com.ford.labs.retroquest.team2.exception;
 
 public class TeamNotFoundException extends RuntimeException{
 }
