@@ -1,5 +1,6 @@
 package com.ford.labs.retroquest.team2.invite;
 
+import com.ford.labs.retroquest.team2.exception.TeamNotFoundException;
 import com.ford.labs.retroquest.teamusermapping.TeamUserAuthorizationService;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.UUID;
 
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.anonymous;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
@@ -70,6 +72,18 @@ class InviteControllerTest {
         mockMvc.perform(post("/api/team2/%s/invites".formatted(teamId))
                 .with(jwt()))
             .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void createInvite_WithInvalidTeam_Throws404() throws Exception {
+        UUID teamId = UUID.randomUUID();
+        var authentication = createAuthentication();
+        when(authorizationService.isUserMemberOfTeam(authentication, teamId)).thenReturn(true);
+        doThrow(TeamNotFoundException.class).when(inviteService).createInvite(teamId);
+        mockMvc.perform(post("/api/team2/%s/invites".formatted(teamId))
+                        .with(jwt()))
+                .andExpect(status().isNotFound())
+                .andExpect(status().reason("Team not found"));
     }
 
     Authentication createAuthentication() {

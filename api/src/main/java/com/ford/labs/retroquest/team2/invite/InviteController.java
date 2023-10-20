@@ -1,5 +1,7 @@
 package com.ford.labs.retroquest.team2.invite;
 
+import com.ford.labs.retroquest.team2.exception.TeamNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +21,12 @@ public class InviteController {
 
     @PostMapping
     @PreAuthorize("@teamUserAuthorizationService.isUserMemberOfTeam(authentication, #teamId)")
-    //TODO: HANDLE THE THROWN EXCEPTIONS AS REST RESPONSE CODES
     public ResponseEntity<Void> createInvite(@PathVariable("id") UUID teamId) {
         var invite = inviteService.createInvite(teamId);
         return ResponseEntity.created(URI.create("/api/team/%s/invites/%s".formatted(teamId, invite.getId()))).build();
     }
+
+    @ResponseStatus(value= HttpStatus.NOT_FOUND, reason="Team not found")
+    @ExceptionHandler(TeamNotFoundException.class)
+    public void handleTeamNotFoundException() {}
 }
