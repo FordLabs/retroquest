@@ -15,14 +15,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @AutoConfigureMockMvc
-@SpringBootTest//(classes = TeamController2.class)
+@SpringBootTest
 class TeamController2Test {
 
     @MockBean
@@ -44,7 +46,7 @@ class TeamController2Test {
         when(service.createTeam(teamName, "user")).thenReturn(new Team(teamId, teamName, LocalDateTime.now()));
 
         mockMvc.perform(post("/api/team2")
-                .with(SecurityMockMvcRequestPostProcessors.jwt())
+                .with(jwt())
                 .content(objectMapper.writeValueAsString(new CreateTeamRequest(teamName)))
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isCreated())
@@ -58,5 +60,17 @@ class TeamController2Test {
                 .content(objectMapper.writeValueAsString(new CreateTeamRequest("Team name")))
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void addUser_WithValidInvite_Returns200() throws Exception {
+        var teamId = UUID.randomUUID();
+        var inviteId = UUID.randomUUID();
+        mockMvc.perform(post("/api/team2/%s/users".formatted(teamId.toString()))
+                .with(jwt())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(new AddUserToTeamRequest(inviteId))))
+            .andExpect(status().isOk());
+        verify(service).addUser(teamId, "user", inviteId);
     }
 }

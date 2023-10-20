@@ -29,7 +29,14 @@ public class TeamController2 {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getTeam(@PathVariable("id") UUID id){
+    public ResponseEntity getTeam(@PathVariable("id") UUID teamId){
         throw new UnsupportedOperationException();
+    }
+
+    @PostMapping("/{id}/users")
+    //TODO: HANDLE THE THROWN EXCEPTIONS AS REST RESPONSE CODES
+    public ResponseEntity<Void> addUser(@PathVariable("id") UUID teamId, @RequestBody AddUserToTeamRequest request, Principal principal) {
+        teamService.addUser(teamId, principal.getName(), request.inviteId());
+        return ResponseEntity.ok().build();
     }
 }

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,6 +39,14 @@ class InviteServiceTest {
                         null,
                         "FK_INVITE_TEAM")));
         assertThrows(TeamNotFoundException.class, () -> inviteService.createInvite(teamId));
+    }
 
+    @Test
+    void getInvite_ReturnsEntityFromRepository() {
+        var teamId = UUID.randomUUID();
+        var inviteId = UUID.randomUUID();
+        var expectedInvite = Optional.of(new Invite(inviteId, teamId, LocalDateTime.now()));
+        when(mockInviteRepository.findByIdAndTeamId(inviteId, teamId)).thenReturn(expectedInvite);
+        assertThat(inviteService.getInvite(teamId, inviteId)).isEqualTo(expectedInvite);
     }
 }

@@ -19,6 +19,7 @@ public class InviteController {
 
     @PostMapping
     @PreAuthorize("@teamUserAuthorizationService.isUserMemberOfTeam(authentication, #teamId)")
+    //TODO: HANDLE THE THROWN EXCEPTIONS AS REST RESPONSE CODES
     public ResponseEntity<Void> createInvite(@PathVariable("id") UUID teamId) {
         var invite = inviteService.createInvite(teamId);
         return ResponseEntity.created(URI.create("/api/team/%s/invites/%s".formatted(teamId, invite.getId()))).build();
