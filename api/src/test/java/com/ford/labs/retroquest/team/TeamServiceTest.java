@@ -37,7 +37,6 @@ import java.util.Optional;
 import static com.ford.labs.retroquest.websocket.events.WebsocketEventType.UPDATE;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
-import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -316,7 +315,7 @@ class TeamServiceTest {
         when(teamRepository.save(savedTeam)).thenReturn(savedTeam);
 
         teamService.updateTeamEmailAddresses(teamId, new UpdateTeamEmailAddressesRequest(email1, email2));
-        then(teamRepository).should().save(savedTeam);
-        then(websocketService).should().publishEvent(new WebsocketTeamEvent(teamId, UPDATE, savedTeam));
+        verify(teamRepository,times(1)).save(savedTeam);
+        verify(websocketService,times(1)).publishEvent(new WebsocketTeamEvent(teamId, UPDATE, savedTeam));
     }
 }
