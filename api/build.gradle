@@ -76,7 +76,7 @@ dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-    testImplementation 'com.h2database:h2:1.4.200'
+    testImplementation 'com.h2database:h2:2.2.220'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 
