@@ -81,6 +81,8 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    runtimeOnly 'org.postgresql:postgresql:42.4.0'
 }
 
 static def noProfileOrDbDefined(tasks) {
