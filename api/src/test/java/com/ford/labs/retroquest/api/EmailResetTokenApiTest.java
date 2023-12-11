@@ -33,7 +33,9 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
@@ -135,13 +137,9 @@ class EmailResetTokenApiTest extends ApiTestBase {
 
     @Test
     void get_team_by_email_reset_token__should_throw_error_when_token_does_not_exist() throws Exception {
-        var resultOfGet = mockMvc.perform(get(getTeamByResetTokenPath("non-existant-reset-token")))
+        mockMvc.perform(get(getTeamByResetTokenPath("non-existant-reset-token")))
                 .andExpect(status().isBadRequest())
-                .andExpect(status().reason("Reset token incorrect or expired."))
-                .andReturn();
-
-        String content = resultOfGet.getResponse().getContentAsString();
-        assertThat(content).isEmpty();
+                .andExpect(content().string(containsString("\"reason\":\"Reset token incorrect or expired.\"")));
     }
 
     @Test
@@ -151,13 +149,9 @@ class EmailResetTokenApiTest extends ApiTestBase {
         expiredEmailResetToken.setTeam(team);
         emailResetTokenRepository.save(expiredEmailResetToken);
 
-        var resultOfGet = mockMvc.perform(get(getTeamByResetTokenPath(expiredEmailResetToken.getResetToken())))
+        mockMvc.perform(get(getTeamByResetTokenPath(expiredEmailResetToken.getResetToken())))
                 .andExpect(status().isBadRequest())
-                .andExpect(status().reason("Reset token incorrect or expired."))
-                .andReturn();
-
-        String content = resultOfGet.getResponse().getContentAsString();
-        assertThat(content).isEmpty();
+                .andExpect(content().string(containsString("\"reason\":\"Reset token incorrect or expired.\"")));
     }
 
     private String getIsResetTokenValidPath(EmailResetToken emailResetToken) {

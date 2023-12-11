@@ -42,6 +42,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
@@ -169,10 +170,11 @@ class TeamApiTest extends ApiTestBase {
 
     @Test
     void should_not_get_team_with_nonexistent_id() throws Exception {
-        mockMvc.perform(get("/api/team/nonExistentTeamId")
+        MvcResult mvcResult = mockMvc.perform(get("/api/team/nonExistentTeamId")
                         .header("Authorization", "Bearer " + jwtBuilder.buildJwt("nonExistentTeamId")))
                 .andExpect(status().isForbidden())
-                .andExpect(status().reason("Incorrect team name or password. Please try again."));
+                .andReturn();
+        mvcResult.getResponse().getContentAsString().contains("\"reason\":\"\"Incorrect team name or password. Please try again.\"\"");
     }
 
     @Test
@@ -257,7 +259,7 @@ class TeamApiTest extends ApiTestBase {
                         )
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(status().reason("Reset token incorrect or expired."));
+                .andExpect(content().string(containsString("\"reason\":\"Reset token incorrect or expired.\"")));
 
         Optional<Team> actualTeam = teamRepository.findTeamByUri("teamuri");
         assertThat(actualTeam.isPresent()).isTrue();
@@ -281,7 +283,7 @@ class TeamApiTest extends ApiTestBase {
                         )
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(status().reason("Reset token incorrect or expired."));
+                .andExpect(content().string(containsString("\"reason\":\"Reset token incorrect or expired.\"")));
 
         Optional<Team> actualTeam = teamRepository.findTeamByUri("teamuri");
         assertThat(actualTeam.isPresent()).isTrue();
@@ -352,7 +354,7 @@ class TeamApiTest extends ApiTestBase {
                         )
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(status().reason("Reset token incorrect or expired."));
+                .andExpect(content().string(containsString("\"reason\":\"Reset token incorrect or expired.\"")));
 
         Optional<Team> actualTeam = teamRepository.findTeamByUri("teamuri");
         assertThat(actualTeam.isPresent()).isTrue();
@@ -376,7 +378,7 @@ class TeamApiTest extends ApiTestBase {
                         )
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(status().reason("Reset token incorrect or expired."));
+                .andExpect(content().string(containsString("\"reason\":\"Reset token incorrect or expired.\"")));
 
         Optional<Team> actualTeam = teamRepository.findTeamByUri("teamuri");
         assertThat(actualTeam.isPresent()).isTrue();
@@ -391,7 +393,7 @@ class TeamApiTest extends ApiTestBase {
         mockMvc.perform(post("/api/team")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(sentCreateTeamRequest)))
-                .andExpect(status().reason(containsString("Team email is required.")))
+                .andExpect(content().string(containsString("\"reason\":\"Team email is required.\"")))
                 .andExpect(status().isBadRequest());
     }
 
@@ -403,7 +405,7 @@ class TeamApiTest extends ApiTestBase {
         mockMvc.perform(post("/api/team")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(sentCreateTeamRequest)))
-                .andExpect(status().reason(containsString("Password must be 8 characters or longer.")))
+                .andExpect(content().string(containsString("\"reason\":\"Password must be 8 characters or longer.\"")))
                 .andExpect(status().isBadRequest());
     }
 
@@ -415,8 +417,7 @@ class TeamApiTest extends ApiTestBase {
         mockMvc.perform(post("/api/team")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(sentCreateTeamRequest)))
-                .andExpect(status()
-                        .reason(containsString("Please enter a team name.")))
+                .andExpect(content().string(containsString("\"reason\":\"Please enter a team name.\"")))
                 .andExpect(status().isBadRequest());
     }
 
@@ -429,7 +430,7 @@ class TeamApiTest extends ApiTestBase {
         mockMvc.perform(post("/api/team")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(sentCreateTeamRequest)))
-                .andExpect(status().reason(containsString("Please enter a team name without any special characters.")))
+                .andExpect(content().string(containsString("\"reason\":\"Please enter a team name without any special characters.\"")))
                 .andExpect(status().isBadRequest());
     }
 
@@ -446,7 +447,7 @@ class TeamApiTest extends ApiTestBase {
         mockMvc.perform(post("/api/team")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(sentCreateTeamRequest)))
-                .andExpect(status().reason(containsString("This team name is already in use. Please try another one.")))
+                .andExpect(content().string(containsString("\"reason\":\"This team name is already in use. Please try another one.\"")))
                 .andExpect(status().isConflict());
     }
 
@@ -466,8 +467,8 @@ class TeamApiTest extends ApiTestBase {
         mockMvc.perform(post("/api/team")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(lowerCaseCreateTeamRequest)))
-                .andExpect(status().reason(containsString("This team name is already in use. Please try another one.")))
-                .andExpect(status().isConflict());
+                .andExpect(status().isConflict())
+                .andExpect(content().string(containsString("\"reason\":\"This team name is already in use. Please try another one.\"")));
     }
 
     @Test
@@ -486,7 +487,7 @@ class TeamApiTest extends ApiTestBase {
         mockMvc.perform(post("/api/team")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(upperCaseCreateTeamRequest)))
-                .andExpect(status().reason(containsString("This team name is already in use. Please try another one.")))
+                .andExpect(content().string(containsString("\"reason\":\"This team name is already in use. Please try another one.\"")))
                 .andExpect(status().isConflict());
     }
 
@@ -506,7 +507,7 @@ class TeamApiTest extends ApiTestBase {
         mockMvc.perform(post("/api/team")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(leadingSpacesRequest)))
-                .andExpect(status().reason(containsString("This team name is already in use. Please try another one.")))
+                .andExpect(content().string(containsString("\"reason\":\"This team name is already in use. Please try another one.\"")))
                 .andExpect(status().isConflict());
     }
 
@@ -526,7 +527,7 @@ class TeamApiTest extends ApiTestBase {
         mockMvc.perform(post("/api/team")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsBytes(trailingSpacesRequest)))
-                .andExpect(status().reason(containsString("This team name is already in use. Please try another one.")))
+                .andExpect(content().string(containsString("\"reason\":\"This team name is already in use. Please try another one.\"")))
                 .andExpect(status().isConflict());
     }
 
@@ -592,7 +593,7 @@ class TeamApiTest extends ApiTestBase {
     void should_not_get_team_name_with_nonexistant_name() throws Exception {
         mockMvc.perform(get("/api/team/nonExistentTeamName/name"))
                 .andExpect(status().isForbidden())
-                .andExpect(status().reason("Incorrect team name or password. Please try again."));
+                .andExpect(content().string(containsString("\"reason\":\"Incorrect team name or password. Please try again.\"")));
     }
 
     @ParameterizedTest
@@ -639,7 +640,7 @@ class TeamApiTest extends ApiTestBase {
                         .content(objectMapper.writeValueAsBytes(loginRequest))
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isForbidden())
-                .andExpect(status().reason("Incorrect team name or password. Please try again."));
+                .andExpect(content().string(containsString("\"reason\":\"Incorrect team name or password. Please try again.\"")));
     }
 
     @Test
@@ -660,7 +661,8 @@ class TeamApiTest extends ApiTestBase {
                         .content(objectMapper.writeValueAsBytes(loginRequest))
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isForbidden())
-                .andExpect(status().reason("Incorrect team name or password. Please try again."));
+                .andExpect(content().string(containsString("\"reason\":\"Incorrect team name or password. Please try again.\"")));
+
     }
 
     @Test
@@ -681,7 +683,7 @@ class TeamApiTest extends ApiTestBase {
                         .content(objectMapper.writeValueAsBytes(loginRequest))
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isForbidden())
-                .andExpect(status().reason("Incorrect team name or password. Please try again."));
+                .andExpect(content().string(containsString("\"reason\":\"Incorrect team name or password. Please try again.\"")));
     }
 
     @Test

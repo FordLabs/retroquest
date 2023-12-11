@@ -64,7 +64,7 @@ describe('Recover Team Name', () => {
 	it('should show error message if error is returned from the api call', async () => {
 		const expectedErrorMessage = 'errorMessage';
 		EmailService.sendTeamNameRecoveryEmail = jest.fn().mockRejectedValue({
-			response: { data: { message: expectedErrorMessage } },
+			response: { data: { reason: expectedErrorMessage } },
 		});
 
 		await renderRecoverTeamNamesPage();

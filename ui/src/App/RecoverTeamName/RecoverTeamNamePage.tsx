@@ -34,7 +34,7 @@ function RecoverTeamNamePage() {
 		EmailService.sendTeamNameRecoveryEmail(recoveryEmail)
 			.then(() => setEmailSent(true))
 			.catch((error) => {
-				setErrorMessages([error.response?.data?.message]);
+				setErrorMessages([error.response?.data?.reason]);
 			});
 	}
 

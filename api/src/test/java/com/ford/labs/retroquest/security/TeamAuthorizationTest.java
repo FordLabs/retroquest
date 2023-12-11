@@ -21,8 +21,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.core.Authentication;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class TeamAuthorizationTest {
 
@@ -31,13 +31,13 @@ class TeamAuthorizationTest {
 
     @Test
     void requestIsAuthorized_WithMatchingPrincipal_ReturnsTrue() {
-        given(authentication.getPrincipal()).willReturn("teamId");
+        when(authentication.getPrincipal()).thenReturn("teamId");
         assertThat(teamAuthorization.requestIsAuthorized(authentication, "teamId")).isTrue();
     }
 
     @Test
     void requestIsAuthorized_WithoutMatchingPrincipal_ReturnsFalse() {
-        given(authentication.getPrincipal()).willReturn("notAuthorized");
+        when(authentication.getPrincipal()).thenReturn("notAuthorized");
         assertThat(teamAuthorization.requestIsAuthorized(authentication, "teamId")).isFalse();
     }
 

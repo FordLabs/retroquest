@@ -36,10 +36,12 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Tag("api")
@@ -104,7 +106,8 @@ public class EmailApiTest extends ApiTestBase {
                         .content(objectMapper.writeValueAsBytes(new RecoverTeamNamesRequest(recoveryEmail)))
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(status().reason("This email is not associated with any RetroQuest team."));
+                .andExpect(content().string(containsString("\"reason\":\"This email is not associated with any RetroQuest team.\"")));
+
 
         verify(emailService, never()).sendUnencryptedEmail("RetroQuest Teams Names Associated with your Account", "expectedMessage", recoveryEmail);
     }
