@@ -78,34 +78,26 @@ function App() {
 					<Route path="radiator" element={<RadiatorPage />} />
 				</Route>
 				{email_is_enabled && (
-					<Route path="/email/reset" element={<ChangeTeamDetailsPage />} />
-				)}
-				{email_is_enabled && (
-					<Route path="/password/reset" element={<ResetPasswordPage />} />
-				)}
-				{email_is_enabled && (
-					<Route
-						path={EXPIRED_PASSWORD_RESET_LINK_PATH}
-						element={<ExpiredResetPasswordLinkPage />}
-					/>
-				)}
-				{email_is_enabled && (
-					<Route
-						path={EXPIRED_EMAIL_RESET_LINK_PATH}
-						element={<ExpiredResetBoardOwnersLinkPage />}
-					/>
-				)}
-				{email_is_enabled && (
-					<Route
-						path={PASSWORD_RESET_REQUEST_PATH}
-						element={<PasswordResetRequestPage />}
-					/>
-				)}
-				{email_is_enabled && (
-					<Route
-						path={RECOVER_TEAM_NAME_PATH}
-						element={<RecoverTeamNamePage />}
-					/>
+					<>
+						<Route path="/email/reset" element={<ChangeTeamDetailsPage />} />
+						<Route path="/password/reset" element={<ResetPasswordPage />} />
+						<Route
+							path={EXPIRED_PASSWORD_RESET_LINK_PATH}
+							element={<ExpiredResetPasswordLinkPage />}
+						/>
+						<Route
+							path={EXPIRED_EMAIL_RESET_LINK_PATH}
+							element={<ExpiredResetBoardOwnersLinkPage />}
+						/>
+						<Route
+							path={PASSWORD_RESET_REQUEST_PATH}
+							element={<PasswordResetRequestPage />}
+						/>
+						<Route
+							path={RECOVER_TEAM_NAME_PATH}
+							element={<RecoverTeamNamePage />}
+						/>
+					</>
 				)}
 				<Route path="*" element={<PageNotFoundPage />} />
 			</Routes>
