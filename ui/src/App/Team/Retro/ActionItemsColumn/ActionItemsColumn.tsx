@@ -43,7 +43,7 @@ function ActionItemsColumn() {
 	);
 
 	const createActionItem = (task: string) => {
-		if (task && task.length) {
+		if (task?.length) {
 			const assigneesArray: string[] | null =
 				ActionItemService.parseAssignees(task);
 			const updatedTask: string = ActionItemService.removeAssigneesFromTask(
@@ -51,7 +51,7 @@ function ActionItemsColumn() {
 				assigneesArray
 			);
 
-			if (updatedTask && updatedTask.length) {
+			if (updatedTask?.length) {
 				const maxAssigneeLength = 50;
 				const assignees = assigneesArray
 					? assigneesArray.join(', ').substring(0, maxAssigneeLength)

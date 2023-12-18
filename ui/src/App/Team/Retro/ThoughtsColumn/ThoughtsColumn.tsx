@@ -58,7 +58,7 @@ function ThoughtsColumn(props: Props) {
 	};
 
 	const createThought = (text: string) => {
-		if (text && text.length) {
+		if (text?.length) {
 			ThoughtService.create(
 				team.id,
 				getCreateThoughtRequest(column.id, text)
