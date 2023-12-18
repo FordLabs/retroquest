@@ -30,7 +30,7 @@ interface Props {
 	accountTabData?: AddBoardOwnersFormProps;
 }
 
-function AccountTab(props: Props): React.ReactElement {
+function AccountTab(props: Readonly<Props>): React.ReactElement {
 	const { accountTabData } = props;
 
 	const team = useRecoilValue(TeamState);

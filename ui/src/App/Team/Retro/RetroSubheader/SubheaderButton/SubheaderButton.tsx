@@ -24,7 +24,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 	fontAwesomeIconClasses?: string;
 }
 
-function SubheaderButton(props: Props) {
+function SubheaderButton(props: Readonly<Props>) {
 	const { fontAwesomeIconClasses, className, children, ...buttonProps } = props;
 
 	return (

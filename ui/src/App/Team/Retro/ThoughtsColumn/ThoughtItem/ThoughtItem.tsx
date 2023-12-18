@@ -37,7 +37,7 @@ interface Props {
 	disableButtons?: boolean;
 }
 
-function ThoughtItem(props: Props) {
+function ThoughtItem(props: Readonly<Props>) {
 	const { thoughtId, type, disableButtons = false } = props;
 
 	const thought = useRecoilValue(ThoughtByIdState(thoughtId));

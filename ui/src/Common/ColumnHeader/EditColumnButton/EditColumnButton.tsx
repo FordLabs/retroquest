@@ -25,7 +25,7 @@ interface Props {
 	onClick(): void;
 }
 
-function EditColumnButton(props: Props) {
+function EditColumnButton(props: Readonly<Props>) {
 	const { title, onClick } = props;
 
 	return (

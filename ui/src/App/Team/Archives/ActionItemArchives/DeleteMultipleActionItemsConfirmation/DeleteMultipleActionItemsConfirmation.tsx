@@ -26,7 +26,7 @@ interface Props {
 	onActionItemDeletion(): void;
 }
 
-function DeleteMultipleActionItemsConfirmation(props: Props) {
+function DeleteMultipleActionItemsConfirmation(props: Readonly<Props>) {
 	const { actionItemIds, onActionItemDeletion } = props;
 
 	const team = useRecoilValue(TeamState);

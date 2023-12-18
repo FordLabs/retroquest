@@ -21,7 +21,7 @@ import './Tooltip.scss';
 
 export type Props = PropsWithChildren<unknown>;
 
-export default function Tooltip(props: Props): React.ReactElement {
+export default function Tooltip(props: Readonly<Props>): React.ReactElement {
 	const { children } = props;
 	const ref = useRef<HTMLElement>(null);
 

@@ -29,7 +29,7 @@ interface Props {
 	paragraph1: string;
 }
 
-function EmailSentConfirmation(props: Props) {
+function EmailSentConfirmation(props: Readonly<Props>) {
 	const { paragraph1 } = props;
 
 	const setModalContents = useSetRecoilState(ModalContentsState);

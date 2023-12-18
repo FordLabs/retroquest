@@ -29,7 +29,7 @@ interface Props {
 
 const TEAM_NAME_REGEX = /^[\w\s]+$/;
 
-function InputTeamName(props: Props) {
+function InputTeamName(props: Readonly<Props>) {
 	const {
 		value = '',
 		required,

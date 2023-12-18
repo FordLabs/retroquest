@@ -32,7 +32,7 @@ interface Props {
 	readOnly?: boolean;
 }
 
-function AssigneeInput(props: Props) {
+function AssigneeInput(props: Readonly<Props>) {
 	const { assignee = '', onAssign, disabled, readOnly } = props;
 	const assigneeInputRef = useRef<HTMLInputElement>(null);
 

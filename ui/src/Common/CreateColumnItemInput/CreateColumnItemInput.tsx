@@ -32,7 +32,7 @@ interface Props {
 
 const MAX_CHARACTER_COUNT = 255;
 
-function CreateColumnItemInput(props: Props): React.ReactElement {
+function CreateColumnItemInput(props: Readonly<Props>): React.ReactElement {
 	const { placeholder, type, handleSubmission, ...labelProps } = props;
 
 	const [value, setValue] = useState('');

@@ -34,7 +34,7 @@ interface Props {
 	isSelected: boolean;
 }
 
-function ArchivedBoardTile(props: Props): React.ReactElement {
+function ArchivedBoardTile(props: Readonly<Props>): React.ReactElement {
 	const { board, onBoardDeletion, onBoardCheckboxClick, isSelected } = props;
 
 	const setModalContents = useSetRecoilState(ModalContentsState);

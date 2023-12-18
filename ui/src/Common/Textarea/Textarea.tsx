@@ -32,7 +32,7 @@ interface Props {
 	className?: string;
 }
 
-function Textarea(props: Props) {
+function Textarea(props: Readonly<Props>) {
 	const {
 		initialValue,
 		onEnter = () => undefined,

@@ -41,7 +41,7 @@ interface Props {
 	column: Column;
 }
 
-function ThoughtsColumn(props: Props) {
+function ThoughtsColumn(props: Readonly<Props>) {
 	const { column } = props;
 
 	const team = useRecoilValue(TeamState);

@@ -31,7 +31,7 @@ interface Props {
 	email2?: string;
 }
 
-function AddBoardOwnersConfirmationForm(props: Props) {
+function AddBoardOwnersConfirmationForm(props: Readonly<Props>) {
 	const { email1, email2 = '' } = props;
 
 	const team = useRecoilValue(TeamState);

@@ -35,7 +35,7 @@ interface Props {
 	submitButtonText: string;
 }
 
-function ConfirmationModal(props: Props) {
+function ConfirmationModal(props: Readonly<Props>) {
 	const {
 		testId,
 		className,

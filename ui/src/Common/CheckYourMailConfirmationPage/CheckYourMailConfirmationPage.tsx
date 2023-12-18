@@ -28,7 +28,7 @@ interface Props {
 	paragraph2: string;
 }
 
-function CheckYourMailConfirmationPage(props: Props) {
+function CheckYourMailConfirmationPage(props: Readonly<Props>) {
 	const { paragraph1, paragraph2 } = props;
 
 	return (

@@ -30,7 +30,7 @@ interface Props {
 	setEditing(editing: boolean): void;
 }
 
-function ColumnHeaderInput(props: Props) {
+function ColumnHeaderInput(props: Readonly<Props>) {
 	const { initialTitle, updateTitle, setEditing } = props;
 
 	const [value, setValue] = useState(initialTitle);

@@ -33,7 +33,7 @@ interface Props {
 	index: number;
 }
 
-const DraggableRetroItem = (props: Props): React.ReactElement => {
+const DraggableRetroItem = (props: Readonly<Props>): React.ReactElement => {
 	const { thought, topic, index } = props;
 	const disableDraggable = useRecoilValue(DisableDraggableState);
 

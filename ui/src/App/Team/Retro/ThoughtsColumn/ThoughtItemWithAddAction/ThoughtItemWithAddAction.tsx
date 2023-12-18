@@ -29,7 +29,7 @@ interface Props {
 	thoughtId: number;
 }
 
-function ThoughtItemWithAddAction(props: Props) {
+function ThoughtItemWithAddAction(props: Readonly<Props>) {
 	const { type, thoughtId } = props;
 
 	const [showAddActionItemCard, setShowAddActionItemCard] = useState(false);
