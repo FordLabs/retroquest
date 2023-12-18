@@ -92,7 +92,7 @@ function ThoughtsColumn(props: Props) {
 						{...provided.droppableProps}
 					>
 						{thoughts.map((thought: Thought, index: number) => (
-							<li key={index}>
+							<li key={thought.id}>
 								<DraggableRetroItem
 									thought={thought}
 									topic={column.topic}

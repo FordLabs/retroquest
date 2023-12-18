@@ -57,9 +57,9 @@ function RadiatorPage(): React.ReactElement {
 							Take a look at all your team's active action items
 						</p>
 						<ul className="radiator-page-action-items">
-							{activeActionItems.map((actionItem, index) => {
+							{activeActionItems.map((actionItem) => {
 								return (
-									<li key={`radiator-action-item-${index}`}>
+									<li key={`radiator-action-item-${actionItem.id}`}>
 										<ActionItemDisplayOnly actionItem={actionItem} />
 									</li>
 								);
