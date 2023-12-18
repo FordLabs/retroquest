@@ -39,7 +39,7 @@ type AddActionItemProps = {
 	hideComponentCallback: () => void;
 };
 
-function AddActionItem(props: AddActionItemProps) {
+function AddActionItem(props: Readonly<AddActionItemProps>) {
 	const { hideComponentCallback, thoughtId } = props;
 
 	const team = useRecoilValue(TeamState);

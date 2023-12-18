@@ -34,7 +34,7 @@ interface DeletionOverlayProps {
 	className?: string;
 }
 
-function DeleteColumnItem(props: DeletionOverlayProps) {
+function DeleteColumnItem(props: Readonly<DeletionOverlayProps>) {
 	const { onConfirm, onCancel, children, height, className } = props;
 
 	const cancelButtonRef = useRef<HTMLButtonElement>(null);

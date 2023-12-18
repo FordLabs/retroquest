@@ -23,7 +23,7 @@ interface SeparatorProps extends HTMLAttributes<HTMLDivElement> {
 	count: number;
 }
 
-function CountSeparator(props: SeparatorProps): ReactElement {
+function CountSeparator(props: Readonly<SeparatorProps>): ReactElement {
 	const { count, ...divProps } = props;
 	return (
 		<div {...divProps} className="count-separator" data-testid="countSeparator">
