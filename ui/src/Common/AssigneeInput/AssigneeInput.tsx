@@ -36,10 +36,10 @@ function AssigneeInput(props: Props) {
 	const { assignee = '', onAssign, disabled, readOnly } = props;
 	const assigneeInputRef = useRef<HTMLInputElement>(null);
 
-	const [editAssignee, setEditAssignee] = useState<string>(assignee || '');
+	const [editAssignee, setEditAssignee] = useState<string>(assignee ?? '');
 
 	useEffect(() => {
-		setEditAssignee(assignee || '');
+		setEditAssignee(assignee ?? '');
 	}, [assignee]);
 
 	function handleEnter() {

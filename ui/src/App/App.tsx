@@ -54,7 +54,7 @@ function App() {
 	const theme = useRecoilValue(ThemeState);
 
 	const environmentConfig = useEnvironmentConfig();
-	const { email_is_enabled = true } = environmentConfig || {};
+	const { email_is_enabled = true } = environmentConfig ?? {};
 
 	useEffect(() => {
 		document.body.className = getThemeClassFromUserSettings();

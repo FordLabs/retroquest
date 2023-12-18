@@ -40,7 +40,7 @@ function Textarea(props: Props) {
 		className,
 	} = props;
 
-	const [editValue, setEditValue] = useState(initialValue || '');
+	const [editValue, setEditValue] = useState(initialValue ?? '');
 
 	const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -49,7 +49,7 @@ function Textarea(props: Props) {
 	}, [editValue, initialValue]);
 
 	useEffect(() => {
-		setEditValue(initialValue || '');
+		setEditValue(initialValue ?? '');
 		textAreaRef.current?.focus();
 		textAreaRef.current?.select();
 	}, [initialValue]);
