@@ -28,7 +28,7 @@ interface Props {
 	setSelectedIndex(index: number): void;
 }
 
-function MobileColumnNav(props: Props): JSX.Element {
+function MobileColumnNav(props: Props): React.ReactElement {
 	const { columns = [], selectedIndex, setSelectedIndex } = props;
 
 	const isSelectedIndex = (index: number): boolean => index === selectedIndex;

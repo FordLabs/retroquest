@@ -14,11 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import React from 'react';
 import { render } from '@testing-library/react';
 import { MutableSnapshot, RecoilRoot } from 'recoil';
 
 const renderWithRecoilRoot = (
-	element: JSX.Element,
+	element: React.ReactElement,
 	initializeState?: (mutableSnapshot: MutableSnapshot) => void
 ) => {
 	return render(

@@ -29,7 +29,7 @@ import { TeamState } from '../../../State/TeamState';
 
 import './RadiatorPage.scss';
 
-function RadiatorPage(): JSX.Element {
+function RadiatorPage(): React.ReactElement {
 	const team = useRecoilValue(TeamState);
 	const setActionItems = useSetRecoilState(ActionItemState);
 	const activeActionItems = useRecoilValue(ActiveActionItemsState);

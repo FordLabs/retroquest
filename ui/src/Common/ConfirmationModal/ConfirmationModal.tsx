@@ -28,7 +28,7 @@ interface Props {
 	className?: string;
 	onSubmit: FormEventHandler;
 	onCancel: () => void;
-	children?: JSX.Element[] | JSX.Element;
+	children?: React.ReactElement[] | React.ReactElement;
 	title: string;
 	subtitle: string;
 	cancelButtonText: string;

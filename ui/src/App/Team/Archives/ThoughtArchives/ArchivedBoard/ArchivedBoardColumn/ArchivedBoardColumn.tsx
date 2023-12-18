@@ -34,7 +34,7 @@ interface ThoughtProps {
 	thought: Thought;
 }
 
-function ArchivedBoardThought({ thought }: ThoughtProps): JSX.Element {
+function ArchivedBoardThought({ thought }: ThoughtProps): React.ReactElement {
 	return (
 		<li data-testid={'thought' + thought.id} className="archived-thought">
 			<p className="message">{thought.message}</p>
@@ -48,7 +48,10 @@ function ArchivedBoardThought({ thought }: ThoughtProps): JSX.Element {
 	);
 }
 
-function ArchivedBoardColumn({ column, thoughts }: ColumnProps): JSX.Element {
+function ArchivedBoardColumn({
+	column,
+	thoughts,
+}: ColumnProps): React.ReactElement {
 	return (
 		<div data-testid="archived-column" className="archived-column">
 			<ColumnHeader initialTitle={column.title} type={column.topic} />

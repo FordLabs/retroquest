@@ -23,7 +23,7 @@ interface RuleProps {
 	text: string;
 }
 
-function HorizontalRuleWithText(props: RuleProps): JSX.Element {
+function HorizontalRuleWithText(props: RuleProps): React.ReactElement {
 	const { text } = props;
 	return (
 		<div className="or-separator-line">

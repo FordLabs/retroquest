@@ -23,7 +23,7 @@ interface Props {
 	paragraph: ReactElement;
 }
 
-function NotFoundSection(props: Props): JSX.Element {
+function NotFoundSection(props: Props): React.ReactElement {
 	const { paragraph, subHeader = 'No archives were found.' } = props;
 
 	return (

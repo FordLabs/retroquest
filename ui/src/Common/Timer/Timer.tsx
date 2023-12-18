@@ -39,7 +39,7 @@ enum TimerState {
 	DEFAULT,
 }
 
-function Timer(): JSX.Element {
+function Timer(): React.ReactElement {
 	const setModalContents = useSetRecoilState(ModalContentsState);
 	const [timerState, setTimerState] = useState<TimerState>(TimerState.DEFAULT);
 	const [currentTimerOption, setCurrentTimerOption] = useState<TimerOption>(

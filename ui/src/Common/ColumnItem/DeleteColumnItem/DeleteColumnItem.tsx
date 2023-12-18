@@ -27,7 +27,7 @@ import { onKeys } from 'Utils/EventUtils';
 import './DeleteColumnItem.scss';
 
 interface DeletionOverlayProps {
-	children: JSX.Element | string;
+	children: React.ReactElement | string;
 	onConfirm: () => void;
 	onCancel: () => void;
 	height?: number;

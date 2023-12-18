@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -23,7 +24,7 @@ import AssigneeInput from './AssigneeInput';
 describe('Assignee Input', () => {
 	const assignee: string = 'Me, you';
 	const mockOnAssign = jest.fn();
-	let rerender: (arg0: JSX.Element) => void;
+	let rerender: (arg0: React.ReactElement) => void;
 
 	beforeEach(() => {
 		({ rerender } = render(

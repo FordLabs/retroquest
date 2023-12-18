@@ -35,7 +35,7 @@ interface ValueAndValidity {
 	validity: boolean;
 }
 
-function CreateTeamPage(): JSX.Element {
+function CreateTeamPage(): React.ReactElement {
 	const { login } = useAuth();
 
 	const [teamName, setTeamName] = useState<ValueAndValidity>(

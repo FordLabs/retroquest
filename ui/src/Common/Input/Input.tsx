@@ -28,7 +28,7 @@ type Props = ComponentPropsWithoutRef<'input'> & {
 	validationMessage?: string;
 };
 
-export default function Input(props: Props): JSX.Element {
+export default function Input(props: Props): React.ReactElement {
 	const {
 		id,
 		label,

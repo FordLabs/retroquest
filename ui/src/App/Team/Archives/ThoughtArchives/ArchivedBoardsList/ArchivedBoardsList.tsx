@@ -37,7 +37,7 @@ import './ArchivedBoardsList.scss';
 
 const PAGE_SIZE = 20;
 
-function ArchivedBoardsList(): JSX.Element {
+function ArchivedBoardsList(): React.ReactElement {
 	const [boards, setBoards] = useState<Board[]>([]);
 	const [paginationData, setPaginationData] = useState<PaginationData>();
 	const team = useRecoilValue(TeamState);

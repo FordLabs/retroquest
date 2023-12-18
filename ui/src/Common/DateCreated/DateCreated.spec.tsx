@@ -15,13 +15,14 @@
  * limitations under the License.
  */
 
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 
 import { DateCreated } from './DateCreated';
 
 describe('Date Created', () => {
 	const date: string = '2022-04-11';
-	let rerender: (arg0: JSX.Element) => void;
+	let rerender: (arg0: React.ReactElement) => void;
 
 	beforeEach(() => {
 		({ rerender } = render(<DateCreated date={date} />));

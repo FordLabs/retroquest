@@ -24,7 +24,7 @@ import LinkTertiary from 'Common/LinkTertiary/LinkTertiary';
 import useEnvironmentConfig from 'Hooks/useEnvironmentConfig';
 import EmailService from 'Services/Api/EmailService';
 
-function PasswordResetRequestPage(): JSX.Element {
+function PasswordResetRequestPage(): React.ReactElement {
 	const [emailSent, setEmailSent] = useState<boolean>(false);
 	const [errorMessages, setErrorMessages] = useState<string[]>([]);
 

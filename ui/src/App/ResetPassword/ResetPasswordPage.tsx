@@ -32,7 +32,7 @@ import {
 
 import './ResetPasswordPage.scss';
 
-function ResetPasswordPage(): JSX.Element {
+function ResetPasswordPage(): React.ReactElement {
 	const { search } = useLocation();
 	const navigate = useNavigate();
 	const passwordResetToken =

@@ -22,7 +22,7 @@ import versionJson from '../../../../../application-version.json';
 
 import './InfoTab.scss';
 
-function InfoTab(): JSX.Element {
+function InfoTab(): React.ReactElement {
 	return (
 		<div className="tab-body info-tab-body">
 			<RetroQuestLogo />

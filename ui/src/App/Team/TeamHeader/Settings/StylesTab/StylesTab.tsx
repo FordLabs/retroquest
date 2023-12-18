@@ -26,7 +26,7 @@ import Theme from 'Types/Theme';
 
 import './StylesTab.scss';
 
-function StylesTab(): JSX.Element {
+function StylesTab(): React.ReactElement {
 	const [theme, setTheme] = useRecoilState<Theme>(ThemeState);
 
 	return (

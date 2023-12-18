@@ -34,7 +34,7 @@ import { EnvironmentConfigState } from 'State/EnvironmentConfigState';
 
 import './LoginPage.scss';
 
-function LoginPage(): JSX.Element {
+function LoginPage(): React.ReactElement {
 	const { teamId = '' } = useParams();
 
 	const { login } = useAuth();
