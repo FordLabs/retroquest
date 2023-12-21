@@ -38,7 +38,7 @@ interface Props {
 	className?: string;
 }
 
-function EditColumnItem(props: Props) {
+function EditColumnItem(props: Readonly<Props>) {
 	const {
 		onConfirm,
 		onCancel,

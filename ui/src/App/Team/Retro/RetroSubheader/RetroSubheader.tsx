@@ -30,7 +30,7 @@ import FeedbackForm from './FeedbackForm/FeedbackForm';
 
 import './RetroSubheader.scss';
 
-function RetroSubheader(): JSX.Element {
+function RetroSubheader(): React.ReactElement {
 	const { logout } = useAuth();
 
 	const setModalContents = useSetRecoilState(ModalContentsState);

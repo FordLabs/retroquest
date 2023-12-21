@@ -30,7 +30,7 @@ interface Props {
 	height: number | undefined;
 }
 
-function DeleteActionItemView(props: Props) {
+function DeleteActionItemView(props: Readonly<Props>) {
 	const { actionItemId, setViewState, height } = props;
 
 	const setModalContents = useSetRecoilState(ModalContentsState);

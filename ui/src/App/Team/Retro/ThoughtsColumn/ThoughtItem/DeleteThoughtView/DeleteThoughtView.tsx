@@ -30,7 +30,7 @@ interface Props {
 	thoughtId: number;
 }
 
-function DeleteThoughtView(props: Props) {
+function DeleteThoughtView(props: Readonly<Props>) {
 	const { setViewState, height, thoughtId } = props;
 	const team = useRecoilValue(TeamState);
 	const setModalContents = useSetRecoilState(ModalContentsState);

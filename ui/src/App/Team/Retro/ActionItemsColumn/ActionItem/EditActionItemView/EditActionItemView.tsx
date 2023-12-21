@@ -30,7 +30,7 @@ interface Props {
 	setViewState: (viewState: ActionItemViewState) => void;
 }
 
-function EditActionItemView(props: Props) {
+function EditActionItemView(props: Readonly<Props>) {
 	const { actionItem, setViewState } = props;
 
 	const team = useRecoilValue(TeamState);

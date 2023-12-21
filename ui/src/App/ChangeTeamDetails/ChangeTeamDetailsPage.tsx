@@ -35,10 +35,10 @@ interface ValueAndValidity {
 	validity: boolean;
 }
 
-function ChangeTeamDetailsPage(): JSX.Element {
+function ChangeTeamDetailsPage(): React.ReactElement {
 	const { search } = useLocation();
 	const navigate = useNavigate();
-	const emailResetToken = new URLSearchParams(search).get('token') || 'invalid';
+	const emailResetToken = new URLSearchParams(search).get('token') ?? 'invalid';
 
 	const [email, setEmail] = useState<ValueAndValidity>(blankValueWithValidity);
 	const [secondaryEmail, setSecondaryEmail] = useState<ValueAndValidity>({

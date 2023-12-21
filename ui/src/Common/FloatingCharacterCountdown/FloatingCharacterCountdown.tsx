@@ -26,7 +26,9 @@ interface Props {
 	charsAreRunningOutThreshold?: number;
 }
 
-export default function FloatingCharacterCountdown(props: Props): ReactElement {
+export default function FloatingCharacterCountdown(
+	props: Readonly<Props>
+): ReactElement {
 	const {
 		maxCharacterCount = 255,
 		charsAreRunningOutThreshold = 20,

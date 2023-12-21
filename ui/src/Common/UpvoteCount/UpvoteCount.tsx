@@ -23,7 +23,7 @@ interface Props {
 	votes: number;
 }
 
-function UpvoteCount({ votes }: Props): JSX.Element {
+function UpvoteCount({ votes }: Readonly<Props>): React.ReactElement {
 	return (
 		<div className="upvote-count">
 			<div className="star-icon">

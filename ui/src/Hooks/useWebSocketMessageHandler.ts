@@ -76,7 +76,7 @@ function useWebSocketMessageHandler(): UseWebsocketHandlerResponse {
 
 	const columnMessageHandler = useCallback(
 		({ body }: Partial<IMessage>) => {
-			const incomingMessage: IncomingMessage = JSON.parse(body || '');
+			const incomingMessage: IncomingMessage = JSON.parse(body ?? '');
 			const newColumn = incomingMessage.payload as Column;
 			setColumns((currentState) => {
 				const updateItem =
@@ -96,7 +96,7 @@ function useWebSocketMessageHandler(): UseWebsocketHandlerResponse {
 
 	const thoughtMessageHandler = useCallback(
 		({ body }: Partial<IMessage>) => {
-			const incomingMessage: IncomingMessage = JSON.parse(body || '');
+			const incomingMessage: IncomingMessage = JSON.parse(body ?? '');
 			const thought = incomingMessage.payload as Thought;
 
 			recoilStateUpdater(setThoughts, thought, incomingMessage.type);
@@ -106,7 +106,7 @@ function useWebSocketMessageHandler(): UseWebsocketHandlerResponse {
 
 	const actionItemMessageHandler = useCallback(
 		({ body }: Partial<IMessage>) => {
-			const incomingMessage: IncomingMessage = JSON.parse(body || '');
+			const incomingMessage: IncomingMessage = JSON.parse(body ?? '');
 			const action = incomingMessage.payload as Action;
 
 			recoilStateUpdater(setActionItems, action, incomingMessage.type);
@@ -123,7 +123,7 @@ function useWebSocketMessageHandler(): UseWebsocketHandlerResponse {
 
 	const teamMessageHandler = useCallback(
 		({ body }: Partial<IMessage>) => {
-			const incomingMessage: IncomingMessage = JSON.parse(body || '');
+			const incomingMessage: IncomingMessage = JSON.parse(body ?? '');
 			const updatedTeam = incomingMessage.payload as Team;
 
 			setTeam({ ...updatedTeam });

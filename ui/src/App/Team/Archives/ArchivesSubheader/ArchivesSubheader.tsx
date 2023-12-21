@@ -20,7 +20,7 @@ import { NavLink } from 'react-router-dom';
 
 import './ArchivesSubheader.scss';
 
-function ArchivesSubheader(): JSX.Element {
+function ArchivesSubheader(): React.ReactElement {
 	return (
 		<div className="archives-subheader">
 			<ul className="archives-subheader-links">

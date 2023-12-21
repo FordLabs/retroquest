@@ -37,7 +37,7 @@ function Toast({
 	children,
 	handleClose,
 	toastLevel = ToastLevel.ERROR,
-}: React.PropsWithChildren<Props>): JSX.Element {
+}: React.PropsWithChildren<Props>): React.ReactElement {
 	return (
 		<div className={classNames('toast', toastLevel)} data-testid="toast">
 			<div>

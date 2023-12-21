@@ -28,14 +28,14 @@ interface Props {
 	className?: string;
 	onSubmit: FormEventHandler;
 	onCancel: () => void;
-	children?: JSX.Element[] | JSX.Element;
+	children?: React.ReactElement[] | React.ReactElement;
 	title: string;
 	subtitle: string;
 	cancelButtonText: string;
 	submitButtonText: string;
 }
 
-function ConfirmationModal(props: Props) {
+function ConfirmationModal(props: Readonly<Props>) {
 	const {
 		testId,
 		className,

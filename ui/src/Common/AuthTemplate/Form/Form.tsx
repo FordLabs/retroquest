@@ -28,7 +28,7 @@ interface FormProps extends ComponentPropsWithoutRef<'form'> {
 	disableSubmitBtn?: boolean;
 }
 
-function Form(props: FormProps): JSX.Element {
+function Form(props: Readonly<FormProps>): React.ReactElement {
 	const {
 		onSubmit,
 		errorMessages = [],

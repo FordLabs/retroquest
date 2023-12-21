@@ -44,7 +44,7 @@ interface Props {
 	setThoughtItemHeight: (height: number | undefined) => void;
 }
 
-function DefaultThoughtItemView(props: Props) {
+function DefaultThoughtItemView(props: Readonly<Props>) {
 	const {
 		thought,
 		type,

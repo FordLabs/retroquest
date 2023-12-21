@@ -27,7 +27,7 @@ interface Props {
 	actionItem: Action;
 }
 
-function ActionItemDisplayOnly(props: Props) {
+function ActionItemDisplayOnly(props: Readonly<Props>) {
 	const { actionItem } = props;
 
 	return (

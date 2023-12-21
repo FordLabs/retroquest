@@ -34,7 +34,7 @@ interface Props {
 	actionItemId: number;
 }
 
-function ActionItem(props: Props) {
+function ActionItem(props: Readonly<Props>) {
 	const { actionItemId } = props;
 
 	const actionItem = useRecoilValue(ActionItemByIdState(actionItemId));

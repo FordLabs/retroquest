@@ -33,7 +33,7 @@ interface ColumnHeaderProps extends HTMLAttributes<HTMLDivElement> {
 	onTitleChange?(title: string): void;
 }
 
-function ColumnHeader(props: ColumnHeaderProps): JSX.Element {
+function ColumnHeader(props: Readonly<ColumnHeaderProps>): React.ReactElement {
 	const {
 		initialTitle = '',
 		type = '',

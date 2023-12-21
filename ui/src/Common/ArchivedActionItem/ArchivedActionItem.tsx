@@ -38,7 +38,7 @@ interface Props {
 	onActionItemCheckboxClick?(actionItemId: number, isChecked: boolean): void;
 }
 
-function ArchivedActionItem(props: Props) {
+function ArchivedActionItem(props: Readonly<Props>) {
 	const {
 		actionItem,
 		isSelected = false,

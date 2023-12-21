@@ -25,7 +25,7 @@ type FeedbackStarsProps = {
 	onChange: (stars: number) => void;
 };
 
-function FeedbackStars(props: FeedbackStarsProps) {
+function FeedbackStars(props: Readonly<FeedbackStarsProps>) {
 	const { value, onChange } = props;
 	const [hoveredStarValue, setHoveredStarValue] = useState<number>(-1);
 

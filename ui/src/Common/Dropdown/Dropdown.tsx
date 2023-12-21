@@ -29,7 +29,7 @@ interface Props {
 	onChange: (value: string) => void;
 }
 
-function Dropdown(props: Props) {
+function Dropdown(props: Readonly<Props>) {
 	const { label, options, defaultValue, onChange } = props;
 
 	return (

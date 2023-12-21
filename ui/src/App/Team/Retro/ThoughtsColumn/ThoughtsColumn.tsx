@@ -41,7 +41,7 @@ interface Props {
 	column: Column;
 }
 
-function ThoughtsColumn(props: Props) {
+function ThoughtsColumn(props: Readonly<Props>) {
 	const { column } = props;
 
 	const team = useRecoilValue(TeamState);
@@ -58,7 +58,7 @@ function ThoughtsColumn(props: Props) {
 	};
 
 	const createThought = (text: string) => {
-		if (text && text.length) {
+		if (text?.length) {
 			ThoughtService.create(
 				team.id,
 				getCreateThoughtRequest(column.id, text)
@@ -92,7 +92,7 @@ function ThoughtsColumn(props: Props) {
 						{...provided.droppableProps}
 					>
 						{thoughts.map((thought: Thought, index: number) => (
-							<li key={index}>
+							<li key={thought.id}>
 								<DraggableRetroItem
 									thought={thought}
 									topic={column.topic}

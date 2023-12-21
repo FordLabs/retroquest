@@ -15,11 +15,12 @@
  * limitations under the License.
  */
 
+import React from 'react';
 import { atom } from 'recoil';
 
 export interface ModalContents {
 	title: string;
-	component: JSX.Element;
+	component: React.ReactElement;
 	superSize?: boolean;
 }
 

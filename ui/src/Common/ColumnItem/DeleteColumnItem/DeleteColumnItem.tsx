@@ -27,14 +27,14 @@ import { onKeys } from 'Utils/EventUtils';
 import './DeleteColumnItem.scss';
 
 interface DeletionOverlayProps {
-	children: JSX.Element | string;
+	children: React.ReactElement | string;
 	onConfirm: () => void;
 	onCancel: () => void;
 	height?: number;
 	className?: string;
 }
 
-function DeleteColumnItem(props: DeletionOverlayProps) {
+function DeleteColumnItem(props: Readonly<DeletionOverlayProps>) {
 	const { onConfirm, onCancel, children, height, className } = props;
 
 	const cancelButtonRef = useRef<HTMLButtonElement>(null);

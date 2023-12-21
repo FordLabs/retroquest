@@ -32,7 +32,9 @@ type AuthTemplateProps = React.PropsWithChildren<{
 	showCodeContributors?: boolean;
 }>;
 
-export default function AuthTemplate(props: AuthTemplateProps): JSX.Element {
+export default function AuthTemplate(
+	props: AuthTemplateProps
+): React.ReactElement {
 	const {
 		header,
 		subHeader,

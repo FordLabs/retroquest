@@ -27,7 +27,7 @@ import ArchivedBoardColumn from './ArchivedBoardColumn/ArchivedBoardColumn';
 
 import './ArchivedBoard.scss';
 
-function ArchivedBoard(): JSX.Element {
+function ArchivedBoard(): React.ReactElement {
 	const { boardId } = useParams();
 
 	const team = useRecoilValue(TeamState);

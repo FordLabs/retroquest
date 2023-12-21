@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-import { PropsWithChildren, useCallback } from 'react';
+import React, { PropsWithChildren, useCallback } from 'react';
 import { DragDropContext, OnDragEndResponder } from 'react-beautiful-dnd';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -27,7 +27,9 @@ import ThoughtService from '../Api/ThoughtService';
 
 type Props = {};
 
-function DragAndDrop({ children }: PropsWithChildren<Props>): JSX.Element {
+function DragAndDrop({
+	children,
+}: PropsWithChildren<Props>): React.ReactElement {
 	const team = useRecoilValue(TeamState);
 	const setThoughts = useSetRecoilState(ThoughtsState);
 	const columns = useRecoilValue(ColumnsState);

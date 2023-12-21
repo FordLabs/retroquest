@@ -29,7 +29,7 @@ interface Props {
 	setViewState: (viewState: ThoughtItemViewState) => void;
 }
 
-function EditThoughtView(props: Props) {
+function EditThoughtView(props: Readonly<Props>) {
 	const { thought, setViewState } = props;
 	const team = useRecoilValue(TeamState);
 
