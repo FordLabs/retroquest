@@ -25,7 +25,7 @@ interface Props {
 	onPageChange(pageIndex: number): void;
 }
 
-function Pagination(props: Props) {
+function Pagination(props: Readonly<Props>) {
 	const { pageCount, onPageChange } = props;
 
 	return pageCount > 1 ? (

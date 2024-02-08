@@ -28,7 +28,7 @@ interface Props {
 	children?: ReactNode;
 }
 
-function Header(props: Props) {
+function Header(props: Readonly<Props>) {
 	const { name, children } = props;
 
 	const retroquestLogo =

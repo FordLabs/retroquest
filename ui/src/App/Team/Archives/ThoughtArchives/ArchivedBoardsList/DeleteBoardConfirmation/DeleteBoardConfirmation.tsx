@@ -26,7 +26,7 @@ interface Props {
 	onBoardDeletion(): void;
 }
 
-function DeleteBoardConfirmation(props: Props) {
+function DeleteBoardConfirmation(props: Readonly<Props>) {
 	const { boardId, onBoardDeletion } = props;
 
 	const team = useRecoilValue(TeamState);

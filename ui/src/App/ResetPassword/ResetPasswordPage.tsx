@@ -32,11 +32,11 @@ import {
 
 import './ResetPasswordPage.scss';
 
-function ResetPasswordPage(): JSX.Element {
+function ResetPasswordPage(): React.ReactElement {
 	const { search } = useLocation();
 	const navigate = useNavigate();
 	const passwordResetToken =
-		new URLSearchParams(search).get('token') || 'invalid';
+		new URLSearchParams(search).get('token') ?? 'invalid';
 
 	const [newPassword, setNewPassword] = useState<string>('');
 	const [isFormSubmitted, setIsFormSubmitted] = useState(false);

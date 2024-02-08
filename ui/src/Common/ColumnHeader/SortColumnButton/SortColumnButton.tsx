@@ -26,7 +26,7 @@ interface Props {
 	onClick?(sortedState: boolean): void;
 }
 
-function SortColumnButton(props: Props) {
+function SortColumnButton(props: Readonly<Props>) {
 	const { title, onClick } = props;
 	const [sorted, setSorted] = useState(false);
 

@@ -20,7 +20,7 @@ import { Outlet } from 'react-router-dom';
 
 import ArchivesSubheader from './ArchivesSubheader/ArchivesSubheader';
 
-function ArchivesPage(): JSX.Element {
+function ArchivesPage(): React.ReactElement {
 	return (
 		<div className="archives-page">
 			<ArchivesSubheader />

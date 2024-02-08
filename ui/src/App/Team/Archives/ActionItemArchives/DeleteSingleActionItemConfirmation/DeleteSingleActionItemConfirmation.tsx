@@ -26,7 +26,7 @@ interface Props {
 	onActionItemDeletion(): void;
 }
 
-function DeleteSingleActionItemConfirmation(props: Props) {
+function DeleteSingleActionItemConfirmation(props: Readonly<Props>) {
 	const { actionItemId, onActionItemDeletion } = props;
 
 	const team = useRecoilValue(TeamState);

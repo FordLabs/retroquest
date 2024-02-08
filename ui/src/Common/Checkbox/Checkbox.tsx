@@ -28,7 +28,7 @@ interface Props {
 	onChange(checked: boolean): void;
 }
 
-function Checkbox(props: Props) {
+function Checkbox(props: Readonly<Props>) {
 	const { id, label, value, className, onChange } = props;
 	const [isChecked, setIsChecked] = useState<boolean>(false);
 

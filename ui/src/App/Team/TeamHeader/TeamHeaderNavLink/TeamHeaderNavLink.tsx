@@ -28,7 +28,7 @@ interface Props {
 	end?: boolean;
 }
 
-function TeamHeaderNavLink(props: Props) {
+function TeamHeaderNavLink(props: Readonly<Props>) {
 	const { to, children, end } = props;
 
 	return (

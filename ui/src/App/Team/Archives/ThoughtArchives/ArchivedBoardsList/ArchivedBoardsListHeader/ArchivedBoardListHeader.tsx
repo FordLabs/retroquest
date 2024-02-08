@@ -31,7 +31,7 @@ interface Props {
 	areAllSelected?: boolean;
 }
 
-function ArchivedBoardListHeader(props: Props) {
+function ArchivedBoardListHeader(props: Readonly<Props>) {
 	const { onDateClick, onSelectAllClick, areAllSelected = false } = props;
 
 	const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.DESC);

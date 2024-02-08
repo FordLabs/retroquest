@@ -28,7 +28,7 @@ type DateCreatedProps = {
 	className?: string;
 };
 
-export function DateCreated(props: DateCreatedProps) {
+export function DateCreated(props: Readonly<DateCreatedProps>) {
 	const { date, className, disabled = false, readOnly = false } = props;
 
 	return (

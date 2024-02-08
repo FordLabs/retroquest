@@ -155,7 +155,7 @@ function RetroPage(): ReactElement {
 							{columns.map((column, index) => {
 								return (
 									<div
-										key={`column-${index}`}
+										key={`column-${column.id}`}
 										className={classNames('column-container', {
 											selected: index === selectedMobileColumnIndex,
 										})}

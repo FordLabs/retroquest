@@ -31,7 +31,7 @@ interface Props {
 
 const EMAIL_REGEX = /^.+@[^@]+$/;
 
-function InputEmail(props: Props) {
+function InputEmail(props: Readonly<Props>) {
 	const {
 		value = '',
 		required = true,

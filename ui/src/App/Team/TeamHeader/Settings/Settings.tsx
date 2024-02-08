@@ -38,7 +38,7 @@ interface Props {
 	accountTabData?: AddBoardOwnersFormProps;
 }
 
-export function Settings(props: Props) {
+export function Settings(props: Readonly<Props>) {
 	const { activeTab = SettingsTabs.STYLES, accountTabData } = props;
 
 	const environmentConfig = useRecoilValue(EnvironmentConfigState);

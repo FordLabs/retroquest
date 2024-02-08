@@ -29,7 +29,7 @@ import { TeamState } from '../../../State/TeamState';
 
 import './RadiatorPage.scss';
 
-function RadiatorPage(): JSX.Element {
+function RadiatorPage(): React.ReactElement {
 	const team = useRecoilValue(TeamState);
 	const setActionItems = useSetRecoilState(ActionItemState);
 	const activeActionItems = useRecoilValue(ActiveActionItemsState);
@@ -57,9 +57,9 @@ function RadiatorPage(): JSX.Element {
 							Take a look at all your team's active action items
 						</p>
 						<ul className="radiator-page-action-items">
-							{activeActionItems.map((actionItem, index) => {
+							{activeActionItems.map((actionItem) => {
 								return (
-									<li key={`radiator-action-item-${index}`}>
+									<li key={`radiator-action-item-${actionItem.id}`}>
 										<ActionItemDisplayOnly actionItem={actionItem} />
 									</li>
 								);

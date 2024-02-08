@@ -37,7 +37,7 @@ export interface AddBoardOwnersFormProps {
 	email2?: string;
 }
 
-function AddBoardOwnersForm(props: AddBoardOwnersFormProps) {
+function AddBoardOwnersForm(props: Readonly<AddBoardOwnersFormProps>) {
 	const { email1 = '', email2 = '' } = props;
 
 	const setModalContents = useSetRecoilState(ModalContentsState);

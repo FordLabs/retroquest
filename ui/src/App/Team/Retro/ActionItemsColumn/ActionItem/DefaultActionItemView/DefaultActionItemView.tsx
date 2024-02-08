@@ -42,7 +42,7 @@ interface Props {
 	setActionItemMinHeight: (height: number | undefined) => void;
 }
 
-function DefaultActionItemView(props: Props) {
+function DefaultActionItemView(props: Readonly<Props>) {
 	const { actionItem, setViewState, setActionItemMinHeight } = props;
 
 	const team = useRecoilValue(TeamState);

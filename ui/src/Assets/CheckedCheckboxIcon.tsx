@@ -20,7 +20,7 @@ interface Props {
 	className?: string;
 }
 
-function CheckedCheckboxIcon({ color, className }: Props) {
+function CheckedCheckboxIcon({ color, className }: Readonly<Props>) {
 	return (
 		<svg
 			role="presentation"

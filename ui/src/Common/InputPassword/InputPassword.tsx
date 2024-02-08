@@ -42,7 +42,7 @@ export function validatePasswordString(password: string): boolean {
 	);
 }
 
-function InputPassword(props: Props) {
+function InputPassword(props: Readonly<Props>) {
 	const {
 		label = 'Password',
 		password,

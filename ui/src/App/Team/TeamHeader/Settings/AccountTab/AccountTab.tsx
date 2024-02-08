@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { TeamState } from 'State/TeamState';
 
@@ -29,7 +30,7 @@ interface Props {
 	accountTabData?: AddBoardOwnersFormProps;
 }
 
-function AccountTab(props: Props): JSX.Element {
+function AccountTab(props: Readonly<Props>): React.ReactElement {
 	const { accountTabData } = props;
 
 	const team = useRecoilValue(TeamState);

@@ -24,7 +24,7 @@ interface Props {
 	onAddTime(): void;
 }
 
-function TimesUpDialog(props: Props) {
+function TimesUpDialog(props: Readonly<Props>) {
 	const { onConfirm, onAddTime } = props;
 	return (
 		<ConfirmationModal
