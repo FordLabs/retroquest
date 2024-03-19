@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 import 'cypress-jest-adapter';
+import '@types/cypress-image-snapshot';
 
 import Topic from '../../src/types/Topic';
 
@@ -48,6 +49,13 @@ declare global {
 			): Chainable<void>;
 
 			shouldBeOnRetroPage(teamId: string): Chainable<void>;
+
+			shouldCreateActionItems(actionItems: string[]): Chainable<void>;
+
+			switchToDarkMode(): Chainable<void>;
+			switchToLightMode(): Chainable<void>;
+
+			matchSnapshotIfHeadless(testName: string): Chainable<void>;
 		}
 	}
 }

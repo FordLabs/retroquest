@@ -61,7 +61,7 @@ function App() {
 	}, [theme]);
 
 	return (
-		<div className="retroquest-app" data-testid="retroquest-app">
+		<div className="retroquest-app" data-testid="retroquest-app" id="app">
 			<Routes>
 				<Route path="/" element={<Navigate replace to="/login" />} />
 				<Route path="/login" element={<LoginPage />} />
