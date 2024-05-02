@@ -1,4 +1,4 @@
-# DEPRECATED Welcome to RetroQuest!
+# DEPRECATED: Welcome to RetroQuest!
 
 [![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 ![Build Status](https://github.com/fordlabs/retroquest/actions/workflows/build.yml/badge.svg?branch=main)
